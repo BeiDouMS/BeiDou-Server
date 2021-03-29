@@ -48,10 +48,10 @@ import java.util.Set;
  * A file is generated listing all the inexistent ids.
  */
 public class MapleNoItemIdFetcher {
-    static String host = "jdbc:mysql://localhost:3306/heavenms";
+    static String host = "jdbc:mysql://localhost:3306/cosmic";
     static String driver = "com.mysql.jdbc.Driver";
-    static String username = "root";
-    static String password = "";
+    static String username = "snail";
+    static String password = "shell";
 
     static String wzPath = "../../wz";
     static String newFile = "lib/result.txt";
