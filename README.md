@@ -20,13 +20,21 @@ The main objective of this effort is to try as best as possible to recreate what
 ---
 ### Download items 
 
-Server files: https://github.com/P0nk/Cosmic
+#### Source code
+Cosmic: https://github.com/P0nk/Cosmic
 
-Client files & general tools: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
+#### IDE
+IntelliJ IDEA: https://www.jetbrains.com/idea/
 
-Note: the actual client .exe that you use to launch the game is not included on Google Drive. See link below to localhost client.
+The community version of IntelliJ is free and sufficient for our needs.
 
-Java 8 SDK & NetBeans bundle: https://www.oracle.com/technetwork/pt/java/javase/downloads/jdk-netbeans-jsp-3413153-ptb.html
+#### Client files & general tools
+Ponk's Google Drive: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
+
+Note: the actual client .exe to launch the game is not included on Google Drive. See link below to localhost client.
+
+#### JDK
+Oracle: https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 
 **Important note about localhost clients**: these executables are red-flagged by antivirus tools as __potentially malicious softwares__, this happens due to the reverse engineering methods that were applied onto these software artifacts. Those depicted here have been put to use for years already and posed no harm so far, so they are soundly assumed to be safe.
 
