@@ -10,8 +10,8 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
     private static String DB_URL = "jdbc:mysql://localhost:3306/cosmic";
-    private static String DB_USER = "snail";
-    private static String DB_PASS = "shell";
+    private static String DB_USER = "cosmic_server";
+    private static String DB_PASS = "snailshell";
     
     public static final int RETURN_GENERATED_KEYS = 1;
 

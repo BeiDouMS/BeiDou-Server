@@ -46,8 +46,8 @@ import java.io.File;
 public class MapleReactorDropFetcher {
     static String host = "jdbc:mysql://localhost:3306/cosmic";
     static String driver = "com.mysql.jdbc.Driver";
-    static String username = "snail";
-    static String password = "shell";
+    static String username = "cosmic_server";
+    static String password = "snailshell";
 
     static String reactorScriptPath = "../../scripts/reactor";
     
