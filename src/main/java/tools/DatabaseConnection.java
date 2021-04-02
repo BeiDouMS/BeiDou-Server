@@ -1,9 +1,10 @@
 package tools;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.Instant;
+import java.util.concurrent.TimeUnit;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -33,6 +34,8 @@ public class DatabaseConnection {
         config.setUsername(YamlConfig.config.server.DB_USER);
         config.setPassword(YamlConfig.config.server.DB_PASS);
 
+        final int initFailTimeoutSeconds = YamlConfig.config.server.INIT_CONNECTION_POOL_TIMEOUT;
+        config.setInitializationFailTimeout(TimeUnit.SECONDS.toMillis(initFailTimeoutSeconds));
         config.setConnectionTimeout(30 * 1000); // Hikari default
         config.setMaximumPoolSize(10); // Hikari default
 
@@ -49,22 +52,17 @@ public class DatabaseConnection {
      * @return true if connection to the database initiated successfully, false if not successful
      */
     public static boolean initializeConnectionPool() {
-        final int timeoutSeconds = YamlConfig.config.server.INIT_CONNECTION_POOL_TIMEOUT;
-        final Instant timeout = Instant.now().plusSeconds(timeoutSeconds);
-
         System.out.println("Initializing connection pool...");
         final HikariConfig config = getConfig();
-        HikariDataSource hikariDataSource;
-        int attempt = 1;
-        while (Instant.now().isBefore(timeout)) {
-            try {
-                hikariDataSource = new HikariDataSource(config);
-            } catch (Exception e) {
-                System.err.printf("Failed to initialize database connection pool after %d attempt(s)%n", attempt++);
-                continue;
-            }
-            dataSource = hikariDataSource;
+        Instant initStart = Instant.now();
+        try {
+            dataSource = new HikariDataSource(config);
+            long initDuration = Duration.between(initStart, Instant.now()).toMillis();
+            System.out.printf("Connection pool initialized in %d ms%n", initDuration);
             return true;
+        } catch (Exception e) {
+            long timeout = Duration.between(initStart, Instant.now()).getSeconds();
+            System.err.printf("Failed to initialize database connection pool. Gave up after %d seconds.%n", timeout);
         }
 
         // Timed out - failed to initialize
