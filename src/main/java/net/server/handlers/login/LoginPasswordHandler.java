@@ -21,11 +21,11 @@
  */
 package net.server.handlers.login;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
+import client.DefaultDates;
 import config.YamlConfig;
 import net.MaplePacketHandler;
 import net.server.Server;
@@ -35,8 +35,7 @@ import tools.HexTool;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -100,8 +99,8 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
                 ps = con.prepareStatement("INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS); //Jayd: Added birthday, tempban
                 ps.setString(1, login);
                 ps.setString(2, YamlConfig.config.server.BCRYPT_MIGRATION ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) : hashpwSHA512(pwd));
-                ps.setString(3, "2018-06-20"); //Jayd's idea: was added to solve the MySQL 5.7 strict checking (birthday)
-                ps.setString(4, "2018-06-20"); //Jayd's idea: was added to solve the MySQL 5.7 strict checking (tempban)
+                ps.setDate(3, Date.valueOf(DefaultDates.getBirthday()));
+                ps.setTimestamp(4, Timestamp.valueOf(DefaultDates.getTempban()));
                 ps.executeUpdate();
                 
                 ResultSet rs = ps.getGeneratedKeys();
