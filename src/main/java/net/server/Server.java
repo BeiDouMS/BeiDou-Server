@@ -866,8 +866,13 @@ public class Server {
     public void init() {
         System.out.println("Cosmic v" + ServerConstants.VERSION + " starting up.\r\n");
         
-        if(YamlConfig.config.server.SHUTDOWNHOOK)
+        if(YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
+        }
+
+        if (!DatabaseConnection.initializeConnectionPool()) {
+            throw new IllegalStateException("Failed to initiate a connection to the database");
+        }
         
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
         
