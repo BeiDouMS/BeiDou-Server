@@ -49,7 +49,7 @@ public class DatabaseConnection {
      * @return true if connection to the database initiated successfully, false if not successful
      */
     public static boolean initializeConnectionPool() {
-        final int timeoutSeconds = 60;
+        final int timeoutSeconds = YamlConfig.config.server.INIT_CONNECTION_POOL_TIMEOUT;
         final Instant timeout = Instant.now().plusSeconds(timeoutSeconds);
 
         System.out.println("Initializing connection pool...");

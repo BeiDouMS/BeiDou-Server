@@ -165,6 +165,7 @@ server:
     DB_URL: "jdbc:mysql://localhost:3306/cosmic"
     DB_USER: "cosmic_server"
     DB_PASS: "snailshell"
+    INIT_CONNECTION_POOL_TIMEOUT: 60    # Seconds
 
     #Login Configuration
     WORLDS: 1                           #Initial number of worlds on the server.

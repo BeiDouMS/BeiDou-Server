@@ -8,6 +8,7 @@ public class ServerConfig {
     public String DB_URL;
     public String DB_USER;
     public String DB_PASS;
+    public int INIT_CONNECTION_POOL_TIMEOUT;
 
     //Login Configuration
     public int WORLDS;
