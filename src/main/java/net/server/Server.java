@@ -1626,8 +1626,7 @@ public class Server {
     private static void applyAllWorldTransfers() {
         try (Connection con = DatabaseConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
-                        ResultSet.TYPE_SCROLL_SENSITIVE,
-                        ResultSet.CONCUR_READ_ONLY)) {
+                        ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             ResultSet rs = ps.executeQuery();
             List<Integer> removedTransfers = new LinkedList<Integer>();
             while(rs.next()) {

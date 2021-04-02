@@ -9778,7 +9778,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public void showNote() {
         try {
             Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM notes WHERE `to` = ? AND `deleted` = 0", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM notes WHERE `to` = ? AND `deleted` = 0",
+                    ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                 ps.setString(1, this.getName());
                 try (ResultSet rs = ps.executeQuery()) {
                     rs.last();

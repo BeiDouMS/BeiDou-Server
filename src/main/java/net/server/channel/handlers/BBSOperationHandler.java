@@ -98,7 +98,8 @@ public final class BBSOperationHandler extends AbstractMaplePacketHandler {
     private static void listBBSThreads(MapleClient c, int start) {
         try {
             Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM bbs_threads WHERE guildid = ? ORDER BY localthreadid DESC")) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM bbs_threads WHERE guildid = ? ORDER BY localthreadid DESC",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
                 ps.setInt(1, c.getPlayer().getGuildId());
                 try (ResultSet rs = ps.executeQuery()) {
                     c.announce(MaplePacketCreator.BBSThreadList(rs, start));
