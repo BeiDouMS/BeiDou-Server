@@ -1,20 +1,22 @@
 version: '3'
 services:
   maplestory:
-    network_mode: "host"
     build: .
     depends_on:
       - db
+    ports:
+      - "8484:8484"
+      - "7575-7577:7575-7577"
     environment:
-      WAIT_HOSTS: localhost:3306
+      DB_HOST: "db"
     
   db:
-    network_mode: "host"
-    image: mysql:5.6
+    image: mysql:8.0.23
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
       MYSQL_DATABASE: "cosmic"
-      MYSQL_USER: "root"
-      MYSQL_PASSWORD: ""
+      MYSQL_USER: "cosmic_server"
+      MYSQL_PASSWORD: "snailshell"
     volumes:
+      - ./docker-db-data:/var/lib/mysql
       - ./sql:/docker-entrypoint-initdb.d
