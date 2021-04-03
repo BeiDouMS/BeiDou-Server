@@ -30,6 +30,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -9777,7 +9778,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public void showNote() {
         try {
             Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM notes WHERE `to` = ? AND `deleted` = 0", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM notes WHERE `to` = ? AND `deleted` = 0",
+                    ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
                 ps.setString(1, this.getName());
                 try (ResultSet rs = ps.executeQuery()) {
                     rs.last();
@@ -11036,8 +11038,13 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         try (PreparedStatement ps = con.prepareStatement("SELECT tempban FROM accounts WHERE id = ?")) {
             ps.setInt(1, accountId);
             ResultSet rs = ps.executeQuery();
-            if(!rs.next()) return "Account does not exist.";
-            if(rs.getLong("tempban") != 0 && !rs.getString("tempban").equals("2018-06-20 00:00:00.0")) return "Account has been banned.";
+            if (!rs.next()) {
+                return "Account does not exist.";
+            }
+            LocalDateTime tempban = rs.getTimestamp("tempban").toLocalDateTime();
+            if(!tempban.equals(DefaultDates.getTempban())) {
+                return "Account has been banned.";
+            }
         } catch(SQLException e) {
             e.printStackTrace();
             FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);

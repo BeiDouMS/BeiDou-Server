@@ -25,10 +25,8 @@ import java.io.*;
 import java.net.InetAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -647,23 +645,24 @@ public class MapleClient {
 		ResultSet rs = null;
 		final Calendar lTempban = Calendar.getInstance();
 		try {
-                        con = DatabaseConnection.getConnection();
+			con = DatabaseConnection.getConnection();
 			ps = con.prepareStatement("SELECT `tempban` FROM accounts WHERE id = ?");
 			ps.setInt(1, getAccID());
 			rs = ps.executeQuery();
 			if (!rs.next()) {
 				return null;
 			}
-			long blubb = rs.getLong("tempban");
-			
-			if (blubb == 0 || rs.getString("tempban").equals("2018-06-20 00:00:00.0")) { // 0000-00-00 or 2018-06-20 (default set in LoginPasswordHandler)
+
+			final Timestamp tempban = rs.getTimestamp("tempban");
+			if (tempban.toLocalDateTime().equals(DefaultDates.getTempban())) {
 				return null;
 			}
-			lTempban.setTimeInMillis(rs.getTimestamp("tempban").getTime());
+
+			lTempban.setTimeInMillis(tempban.getTime());
 			tempBanCalendar = lTempban;
 			return lTempban;
 		} catch (SQLException e) {
-                    e.printStackTrace();
+			e.printStackTrace();
 		} finally {
 			try {
 				if (ps != null) {
@@ -672,11 +671,11 @@ public class MapleClient {
 				if (rs != null) {
 					rs.close();
 				}
-                                if (con != null && !con.isClosed()) {
+				if (con != null && !con.isClosed()) {
 					con.close();
 				}
 			} catch (SQLException e) {
-                            e.printStackTrace();
+				e.printStackTrace();
 			}
 		}
 		return null;//why oh why!?!

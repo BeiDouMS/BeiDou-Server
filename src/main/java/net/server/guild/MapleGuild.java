@@ -76,7 +76,7 @@ public class MapleGuild {
             con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT * FROM guilds WHERE guildid = " + guildid);
             ResultSet rs = ps.executeQuery();
-            if (!rs.first()) {
+            if (!rs.next()) {
                 id = -1;
                 ps.close();
                 rs.close();
@@ -102,7 +102,7 @@ public class MapleGuild {
             ps = con.prepareStatement("SELECT id, name, level, job, guildrank, allianceRank FROM characters WHERE guildid = ? ORDER BY guildrank ASC, name ASC");
             ps.setInt(1, guildid);
             rs = ps.executeQuery();
-            if (!rs.first()) {
+            if (!rs.next()) {
                 rs.close();
                 ps.close();
                 return;
@@ -436,7 +436,7 @@ public class MapleGuild {
             PreparedStatement ps = con.prepareStatement("SELECT guildid FROM guilds WHERE name = ?");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-            if (rs.first()) {
+            if (rs.next()) {
                 ps.close();
                 rs.close();
                 return 0;
@@ -454,7 +454,7 @@ public class MapleGuild {
             ps = con.prepareStatement("SELECT guildid FROM guilds WHERE leader = ?");
             ps.setInt(1, leaderId);
             rs = ps.executeQuery();
-            rs.first();
+            rs.next();
             int guildId = rs.getInt("guildid");
             rs.close();
             ps.close();
@@ -779,7 +779,8 @@ public class MapleGuild {
         try {
             ResultSet rs;
             Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT `name`, `GP`, `logoBG`, `logoBGColor`, `logo`, `logoColor` FROM guilds ORDER BY `GP` DESC LIMIT 50")) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT `name`, `GP`, `logoBG`, `logoBGColor`, `logo`, `logoColor` FROM guilds ORDER BY `GP` DESC LIMIT 50",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
                 rs = ps.executeQuery();
                 c.announce(MaplePacketCreator.showGuildRanks(npcid, rs));
             }

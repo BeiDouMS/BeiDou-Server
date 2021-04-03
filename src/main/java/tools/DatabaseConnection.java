@@ -1,10 +1,11 @@
 package tools;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.concurrent.TimeUnit;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -16,82 +17,64 @@ import config.YamlConfig;
  * @author Ronan - some connection pool to this beautiful code
  */
 public class DatabaseConnection {
-    private static HikariDataSource ds;
-    
-    public static Connection getConnection() throws SQLException {
-        if(ds != null) {
-            try {
-                return ds.getConnection();
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-            }
-        }
-        
-        int denies = 0;
-        while(true) {   // There is no way it can pass with a null out of here?
-            try {
-                return DriverManager.getConnection(YamlConfig.config.server.DB_URL, YamlConfig.config.server.DB_USER, YamlConfig.config.server.DB_PASS);
-            } catch (SQLException sqle) {
-                denies++;
-                
-                if(denies == 3) {
-                    // Give up, throw exception. Nothing good will come from this.
-                    FilePrinter.printError(FilePrinter.SQL_EXCEPTION, "SQL Driver refused to give a connection after " + denies + " tries. Problem: " + sqle.getMessage());
-                    throw sqle;
-                }
-            }
-        }
-    }
-    
-    private static int getNumberOfAccounts() {
-        try {
-            Connection con = DriverManager.getConnection(YamlConfig.config.server.DB_URL, YamlConfig.config.server.DB_USER, YamlConfig.config.server.DB_PASS);
-            try (PreparedStatement ps = con.prepareStatement("SELECT count(*) FROM accounts")) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    rs.next();
-                    return rs.getInt(1);
-                }
-            } finally {
-                con.close();
-            }
-        } catch(SQLException sqle) {
-            return 20;
-        }
-    }
-    
-    public DatabaseConnection() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver"); // touch the mysql driver
-        } catch (ClassNotFoundException e) {
-            System.out.println("[SEVERE] SQL Driver Not Found. Consider death by clams.");
-            e.printStackTrace();
-        }
-        
-        ds = null;
-        
-        if(YamlConfig.config.server.DB_CONNECTION_POOL) {
-            // Connection Pool on database ftw!
-            
-            HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(YamlConfig.config.server.DB_URL);
-            
-            config.setUsername(YamlConfig.config.server.DB_USER);
-            config.setPassword(YamlConfig.config.server.DB_PASS);
-            
-            // Make sure pool size is comfortable for the worst case scenario.
-            // Under 100 accounts? Make it 10. Over 10000 accounts? Make it 30.
-            int poolSize = (int)Math.ceil(0.00202020202 * getNumberOfAccounts() + 9.797979798);
-            if(poolSize < 10) poolSize = 10;
-            else if(poolSize > 30) poolSize = 30;
-            
-            config.setConnectionTimeout(30 * 1000);
-            config.setMaximumPoolSize(poolSize);
-            
-            config.addDataSourceProperty("cachePrepStmts", true);
-            config.addDataSourceProperty("prepStmtCacheSize", 25);
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+    private static HikariDataSource dataSource;
 
-            ds = new HikariDataSource(config);
+    public static Connection getConnection() throws SQLException {
+        if (dataSource == null) {
+            throw new IllegalStateException("Unable to get connection from uninitialized connection pool");
         }
+
+        return dataSource.getConnection();
+    }
+
+    private static String getDbUrl() {
+        // Environment variables override what's defined in the config file
+        // This feature is used for the Docker support
+        String hostOverride = System.getenv("DB_HOST");
+        String host = hostOverride != null ? hostOverride : YamlConfig.config.server.DB_HOST;
+        String dbUrl = String.format(YamlConfig.config.server.DB_URL_FORMAT, host);
+        return dbUrl;
+    }
+
+    private static HikariConfig getConfig() {
+        HikariConfig config = new HikariConfig();
+
+        config.setJdbcUrl(getDbUrl());
+        config.setUsername(YamlConfig.config.server.DB_USER);
+        config.setPassword(YamlConfig.config.server.DB_PASS);
+
+        final int initFailTimeoutSeconds = YamlConfig.config.server.INIT_CONNECTION_POOL_TIMEOUT;
+        config.setInitializationFailTimeout(TimeUnit.SECONDS.toMillis(initFailTimeoutSeconds));
+        config.setConnectionTimeout(30 * 1000); // Hikari default
+        config.setMaximumPoolSize(10); // Hikari default
+
+        config.addDataSourceProperty("cachePrepStmts", true);
+        config.addDataSourceProperty("prepStmtCacheSize", 25);
+        config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
+
+        return config;
+    }
+
+    /**
+     * Initiate connection to the database
+     *
+     * @return true if connection to the database initiated successfully, false if not successful
+     */
+    public static boolean initializeConnectionPool() {
+        System.out.println("Initializing connection pool...");
+        final HikariConfig config = getConfig();
+        Instant initStart = Instant.now();
+        try {
+            dataSource = new HikariDataSource(config);
+            long initDuration = Duration.between(initStart, Instant.now()).toMillis();
+            System.out.printf("Connection pool initialized in %d ms%n", initDuration);
+            return true;
+        } catch (Exception e) {
+            long timeout = Duration.between(initStart, Instant.now()).getSeconds();
+            System.err.printf("Failed to initialize database connection pool. Gave up after %d seconds.%n", timeout);
+        }
+
+        // Timed out - failed to initialize
+        return false;
     }
 }

@@ -30,7 +30,6 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import client.processor.npc.FredrickProcessor;
-import com.mysql.jdbc.Statement;
 import config.YamlConfig;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -309,7 +308,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                             }
                             merchantMesos += price;
                             
-                            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
                                 ps.setInt(1, (int) Math.min(merchantMesos, Integer.MAX_VALUE));
                                 ps.setInt(2, ownerId);
                                 ps.executeUpdate();
@@ -383,7 +382,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         } else {
                 try {
                         Connection con = DatabaseConnection.getConnection();
-                        PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0 WHERE id = ?", Statement.RETURN_GENERATED_KEYS);
+                        PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0 WHERE id = ?", PreparedStatement.RETURN_GENERATED_KEYS);
                         ps.setInt(1, ownerId);
                         ps.executeUpdate();
 
@@ -442,7 +441,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                     player.setHasMerchant(false);
             } else {
                     Connection con = DatabaseConnection.getConnection();
-                    try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0 WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                    try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0 WHERE id = ?", PreparedStatement.RETURN_GENERATED_KEYS)) {
                             ps.setInt(1, ownerId);
                             ps.executeUpdate();
                     }

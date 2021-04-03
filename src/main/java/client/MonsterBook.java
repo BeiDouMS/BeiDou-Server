@@ -247,9 +247,10 @@ public final class MonsterBook {
     public static int[] getCardTierSize() {
         try {
             Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM monstercarddata GROUP BY floor(cardid / 1000);");
+            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM monstercarddata GROUP BY floor(cardid / 1000);",
+                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             ResultSet rs = ps.executeQuery();
-            
+
             rs.last();
             int[] tierSizes = new int[rs.getRow()];
             rs.beforeFirst();

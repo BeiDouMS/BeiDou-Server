@@ -866,8 +866,13 @@ public class Server {
     public void init() {
         System.out.println("Cosmic v" + ServerConstants.VERSION + " starting up.\r\n");
         
-        if(YamlConfig.config.server.SHUTDOWNHOOK)
+        if(YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
+        }
+
+        if (!DatabaseConnection.initializeConnectionPool()) {
+            throw new IllegalStateException("Failed to initiate a connection to the database");
+        }
         
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
         
@@ -1620,7 +1625,8 @@ public class Server {
     
     private static void applyAllWorldTransfers() {
         try (Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL")) {
+                PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
+                        ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             ResultSet rs = ps.executeQuery();
             List<Integer> removedTransfers = new LinkedList<Integer>();
             while(rs.next()) {

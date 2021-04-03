@@ -1,13 +1,20 @@
-# Docker support, thanks to xinyifly
+# Initial Docker support thanks to xinyifly
 
-FROM openjdk:8u171-jdk-alpine
-RUN apk -U add tini
-WORKDIR /mnt
+#
+# Build stage
+#
+FROM maven:3.6.3-jdk-8 AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
+
+#
+# Package stage
+#
+FROM openjdk:8
+COPY --from=build /home/app/target/Cosmic.jar /usr/local/lib/Cosmic.jar
 COPY ./ ./
-RUN sh ./posix-compile.sh
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.6.0/wait /wait
-RUN chmod +x /wait
-
 EXPOSE 8484 7575 7576 7577
-ENTRYPOINT ["tini", "--"]
-CMD /wait && sh ./posix-launch.sh
+ENTRYPOINT ["java", "-jar", "/usr/local/lib/Cosmic.jar"]
+
+
