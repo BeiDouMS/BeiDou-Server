@@ -21,12 +21,15 @@
 */
 package server;
 
-import client.inventory.manipulator.MapleInventoryManipulator;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
+import tools.DatabaseConnection;
+import tools.MaplePacketCreator;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -35,8 +38,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
 
 /**
  *
@@ -238,48 +239,48 @@ public class MapleShop {
     public static MapleShop createFromDB(int id, boolean isShopId) {
         MapleShop ret = null;
         int shopId;
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps;
+        try (Connection con = DatabaseConnection.getConnection()) {
+            final String query;
             if (isShopId) {
-                ps = con.prepareStatement("SELECT * FROM shops WHERE shopid = ?");
+                query = "SELECT * FROM shops WHERE shopid = ?";
             } else {
-                ps = con.prepareStatement("SELECT * FROM shops WHERE npcid = ?");
+                query = "SELECT * FROM shops WHERE npcid = ?";
             }
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                shopId = rs.getInt("shopid");
-                ret = new MapleShop(shopId, rs.getInt("npcid"));
-                rs.close();
-                ps.close();
-            } else {
-                rs.close();
-                ps.close();
-                con.close();
-                return null;
-            }
-            ps = con.prepareStatement("SELECT itemid, price, pitch FROM shopitems WHERE shopid = ? ORDER BY position DESC");
-            ps.setInt(1, shopId);
-            rs = ps.executeQuery();
-            List<Integer> recharges = new ArrayList<>(rechargeableItems);
-            while (rs.next()) {
-                if (ItemConstants.isRechargeable(rs.getInt("itemid"))) {
-                    MapleShopItem starItem = new MapleShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
-                    ret.addItem(starItem);
-                    if (rechargeableItems.contains(starItem.getItemId())) {
-                        recharges.remove(Integer.valueOf(starItem.getItemId()));
+
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, id);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        shopId = rs.getInt("shopid");
+                        ret = new MapleShop(shopId, rs.getInt("npcid"));
+                    } else {
+                        return null;
                     }
-                } else {
-                    ret.addItem(new MapleShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
                 }
             }
-            for (Integer recharge : recharges) {
-                ret.addItem(new MapleShopItem((short) 1000, recharge.intValue(), 0, 0));
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT itemid, price, pitch FROM shopitems WHERE shopid = ? ORDER BY position DESC")) {
+                ps.setInt(1, shopId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    List<Integer> recharges = new ArrayList<>(rechargeableItems);
+                    while (rs.next()) {
+                        if (ItemConstants.isRechargeable(rs.getInt("itemid"))) {
+                            MapleShopItem starItem = new MapleShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
+                            ret.addItem(starItem);
+                            if (rechargeableItems.contains(starItem.getItemId())) {
+                                recharges.remove(Integer.valueOf(starItem.getItemId()));
+                            }
+                        } else {
+                            ret.addItem(new MapleShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
+                        }
+                    }
+                    for (Integer recharge : recharges) {
+                        ret.addItem(new MapleShopItem((short) 1000, recharge.intValue(), 0, 0));
+                    }
+                }
             }
-            rs.close();
-            ps.close();
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
