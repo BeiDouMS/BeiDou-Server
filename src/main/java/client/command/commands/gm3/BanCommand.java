@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import server.TimerManager;
 import tools.DatabaseConnection;
@@ -54,19 +54,15 @@ public class BanCommand extends Command {
             String readableTargetName = MapleCharacter.makeMapleReadable(target.getName());
             String ip = target.getClient().getSession().getRemoteAddress().toString().split(":")[0];
             //Ban ip
-            PreparedStatement ps = null;
-            try {
-                Connection con = DatabaseConnection.getConnection();
+            try (Connection con = DatabaseConnection.getConnection()) {
                 if (ip.matches("/[0-9]{1,3}\\..*")) {
-                    ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?, ?)");
-                    ps.setString(1, ip);
-                    ps.setString(2, String.valueOf(target.getClient().getAccID()));
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?, ?)")) {
+                        ps.setString(1, ip);
+                        ps.setString(2, String.valueOf(target.getClient().getAccID()));
 
-                    ps.executeUpdate();
-                    ps.close();
+                        ps.executeUpdate();
+                    }
                 }
-
-                con.close();
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 c.getPlayer().message("Error occured while banning IP address");

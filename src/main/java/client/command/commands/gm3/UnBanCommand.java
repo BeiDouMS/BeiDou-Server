@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import tools.DatabaseConnection;
 
 import java.sql.Connection;
@@ -44,20 +44,20 @@ public class UnBanCommand extends Command {
             return;
         }
 
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             int aid = MapleCharacter.getAccountIdByName(params[0]);
 
-            PreparedStatement p = con.prepareStatement("UPDATE accounts SET banned = -1 WHERE id = " + aid);
-            p.executeUpdate();
+            try (PreparedStatement p = con.prepareStatement("UPDATE accounts SET banned = -1 WHERE id = " + aid)) {
+                p.executeUpdate();
+            }
 
-            p = con.prepareStatement("DELETE FROM ipbans WHERE aid = " + aid);
-            p.executeUpdate();
+            try (PreparedStatement p = con.prepareStatement("DELETE FROM ipbans WHERE aid = " + aid)) {
+                p.executeUpdate();
+            }
 
-            p = con.prepareStatement("DELETE FROM macbans WHERE aid = " + aid);
-            p.executeUpdate();
-
-            con.close();
+            try (PreparedStatement p = con.prepareStatement("DELETE FROM macbans WHERE aid = " + aid)) {
+                p.executeUpdate();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             player.message("Failed to unban " + params[0]);
