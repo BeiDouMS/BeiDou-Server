@@ -21,26 +21,25 @@
  */
 package net.server.handlers.login;
 
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.Calendar;
-
 import client.DefaultDates;
+import client.MapleClient;
 import config.YamlConfig;
 import net.MaplePacketHandler;
 import net.server.Server;
+import net.server.coordinator.session.MapleSessionCoordinator;
+import org.apache.mina.core.session.IoSession;
 import tools.BCrypt;
 import tools.DatabaseConnection;
 import tools.HexTool;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleClient;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import net.server.coordinator.session.MapleSessionCoordinator;
-import org.apache.mina.core.session.IoSession;
+import java.sql.*;
+import java.util.Calendar;
 
 public final class LoginPasswordHandler implements MaplePacketHandler {
 
@@ -51,14 +50,14 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
 
     private static String hashpwSHA512(String pwd) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest digester = MessageDigest.getInstance("SHA-512");
-        digester.update(pwd.getBytes("UTF-8"), 0, pwd.length());
+        digester.update(pwd.getBytes(StandardCharsets.UTF_8), 0, pwd.length());
         return HexTool.toString(digester.digest()).replace(" ", "").toLowerCase();
     }
 
     private static String getRemoteIp(IoSession session) {
         return MapleSessionCoordinator.getSessionRemoteAddress(session);
     }
-    
+
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         String remoteHost = getRemoteIp(c.getSession());
@@ -80,53 +79,47 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
             c.announce(MaplePacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
             return;
         }
-        
+
         String login = slea.readMapleAsciiString();
         String pwd = slea.readMapleAsciiString();
         c.setAccountName(login);
-        
+
         slea.skip(6);   // localhost masked the initial part with zeroes...
         byte[] hwidNibbles = slea.read(4);
         String nibbleHwid = HexTool.toCompressedString(hwidNibbles);
         int loginok = c.login(login, pwd, nibbleHwid);
-        
-        Connection con = null;
-        PreparedStatement ps = null;
+
 
         if (YamlConfig.config.server.AUTOMATIC_REGISTER && loginok == 5) {
-            try {
-                con = DatabaseConnection.getConnection();
-                ps = con.prepareStatement("INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS); //Jayd: Added birthday, tempban
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS)) { //Jayd: Added birthday, tempban
                 ps.setString(1, login);
                 ps.setString(2, YamlConfig.config.server.BCRYPT_MIGRATION ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) : hashpwSHA512(pwd));
                 ps.setDate(3, Date.valueOf(DefaultDates.getBirthday()));
                 ps.setTimestamp(4, Timestamp.valueOf(DefaultDates.getTempban()));
                 ps.executeUpdate();
-                
-                ResultSet rs = ps.getGeneratedKeys();
-                rs.next();
-                c.setAccID(rs.getInt(1));
-                rs.close();
+
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    rs.next();
+                    c.setAccID(rs.getInt(1));
+                }
             } catch (SQLException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
                 c.setAccID(-1);
                 e.printStackTrace();
             } finally {
-                disposeSql(con, ps);
                 loginok = c.login(login, pwd, nibbleHwid);
             }
         }
 
         if (YamlConfig.config.server.BCRYPT_MIGRATION && (loginok <= -10)) { // -10 means migration to bcrypt, -23 means TOS wasn't accepted
-            try {
-                con = DatabaseConnection.getConnection();
-                ps = con.prepareStatement("UPDATE accounts SET password = ? WHERE name = ?;");
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("UPDATE accounts SET password = ? WHERE name = ?;")) {
                 ps.setString(1, BCrypt.hashpw(pwd, BCrypt.gensalt(12)));
                 ps.setString(2, login);
                 ps.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-                disposeSql(con, ps);
                 loginok = (loginok == -10) ? 0 : 23;
             }
         }
@@ -157,22 +150,8 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
         }
     }
 
-    private static void login(MapleClient c){
+    private static void login(MapleClient c) {
         c.announce(MaplePacketCreator.getAuthSuccess(c));//why the fk did I do c.getAccountName()?
         Server.getInstance().registerLoginState(c);
-    }
-
-    private static void disposeSql(Connection con, PreparedStatement ps) {
-        try {
-            if (con != null) {
-                con.close();
-            }
-
-            if (ps != null) {
-                ps.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
