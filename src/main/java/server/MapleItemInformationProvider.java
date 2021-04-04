@@ -21,55 +21,29 @@
  */
 package server;
 
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.HashSet;
-
-import config.YamlConfig;
-import net.server.Server;
-import provider.MapleData;
-import provider.MapleDataDirectoryEntry;
-import provider.MapleDataFileEntry;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
-import tools.DatabaseConnection;
-import tools.FilePrinter;
-import tools.MaplePacketCreator;
-import tools.Pair;
-import tools.Randomizer;
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleJob;
-import client.Skill;
-import client.SkillFactory;
+import client.*;
 import client.autoban.AutobanFactory;
-import client.inventory.Equip;
-import client.inventory.Item;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.MapleWeaponType;
+import client.inventory.*;
+import config.YamlConfig;
 import constants.inventory.EquipSlot;
 import constants.inventory.ItemConstants;
 import constants.skills.Assassin;
 import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
-import java.sql.Connection;
+import net.server.Server;
+import provider.*;
 import server.MakerItemFactory.MakerItemCreateEntry;
-import server.life.MapleMonsterInformationProvider;
 import server.life.MapleLifeFactory;
-import tools.StringUtil;
+import server.life.MapleMonsterInformationProvider;
+import tools.*;
+
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -1407,35 +1381,14 @@ public class MapleItemInformationProvider {
     }
 
     private void loadCardIdData() {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-            ps = con.prepareStatement("SELECT cardid, mobid FROM monstercarddata");
-            rs = ps.executeQuery();
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT cardid, mobid FROM monstercarddata");
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 monsterBookID.put(rs.getInt(1), rs.getInt(2));
             }
-            rs.close();
-            ps.close();
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null && !rs.isClosed()) {
-                    rs.close();
-                }
-                if (ps != null && !ps.isClosed()) {
-                    ps.close();
-                }
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -1915,25 +1868,25 @@ public class MapleItemInformationProvider {
     public Pair<String, Integer> getMakerReagentStatUpgrade(int itemId) {
         try {
             Pair<String, Integer> statUpgd = statUpgradeMakerCache.get(itemId);
-            if(statUpgd != null) {
+            if (statUpgd != null) {
                 return statUpgd;
-            } else if(statUpgradeMakerCache.containsKey(itemId)) {
+            } else if (statUpgradeMakerCache.containsKey(itemId)) {
                 return null;
             }
 
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT stat, value FROM makerreagentdata WHERE itemid = ?");
-            ps.setInt(1, itemId);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                String statType = rs.getString("stat");
-                int statGain = rs.getInt("value");
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("SELECT stat, value FROM makerreagentdata WHERE itemid = ?")) {
+                ps.setInt(1, itemId);
 
-                statUpgd = new Pair<>(statType, statGain);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String statType = rs.getString("stat");
+                        int statGain = rs.getInt("value");
+
+                        statUpgd = new Pair<>(statType, statGain);
+                    }
+                }
             }
-            rs.close();
-            ps.close();
-            con.close();
 
             statUpgradeMakerCache.put(itemId, statUpgd);
             return statUpgd;
@@ -1946,23 +1899,23 @@ public class MapleItemInformationProvider {
     public int getMakerCrystalFromLeftover(Integer leftoverId) {
         try {
             Integer itemid = mobCrystalMakerCache.get(leftoverId);
-            if(itemid != null) {
+            if (itemid != null) {
                 return itemid;
             }
 
             itemid = -1;
 
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? ORDER BY dropperid;");
-            ps.setInt(1, leftoverId);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                int dropperid = rs.getInt("dropperid");
-                itemid = getCrystalForLevel(MapleLifeFactory.getMonsterLevel(dropperid) - 1);
+            try (Connection con = DatabaseConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? ORDER BY dropperid;")) {
+                ps.setInt(1, leftoverId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        int dropperid = rs.getInt("dropperid");
+                        itemid = getCrystalForLevel(MapleLifeFactory.getMonsterLevel(dropperid) - 1);
+                    }
+                }
             }
-            rs.close();
-            ps.close();
-            con.close();
 
             mobCrystalMakerCache.put(leftoverId, itemid);
             return itemid;
@@ -1979,34 +1932,35 @@ public class MapleItemInformationProvider {
         if ((makerEntry = makerItemCache.get(toCreate)) != null) {
             return new MakerItemCreateEntry(makerEntry);
         } else {
-            try {
-                Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("SELECT req_level, req_maker_level, req_meso, quantity FROM makercreatedata WHERE itemid = ?");
-                ps.setInt(1, toCreate);
-                ResultSet rs = ps.executeQuery();
+            try (Connection con = DatabaseConnection.getConnection()) {
                 int reqLevel = -1;
                 int reqMakerLevel = -1;
                 int cost = -1;
                 int toGive = -1;
-                if (rs.next()) {
-                    reqLevel = rs.getInt("req_level");
-                    reqMakerLevel = rs.getInt("req_maker_level");
-                    cost = rs.getInt("req_meso");
-                    toGive = rs.getInt("quantity");
+                try (PreparedStatement ps = con.prepareStatement("SELECT req_level, req_maker_level, req_meso, quantity FROM makercreatedata WHERE itemid = ?")) {
+                    ps.setInt(1, toCreate);
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            reqLevel = rs.getInt("req_level");
+                            reqMakerLevel = rs.getInt("req_maker_level");
+                            cost = rs.getInt("req_meso");
+                            toGive = rs.getInt("quantity");
+                        }
+                    }
                 }
-                ps.close();
-                rs.close();
+
                 makerEntry = new MakerItemCreateEntry(cost, reqLevel, reqMakerLevel);
                 makerEntry.addGainItem(toCreate, toGive);
-                ps = con.prepareStatement("SELECT req_item, count FROM makerrecipedata WHERE itemid = ?");
-                ps.setInt(1, toCreate);
-                rs = ps.executeQuery();
-                while (rs.next()) {
-                    makerEntry.addReqItem(rs.getInt("req_item"), rs.getInt("count"));
+
+                try (PreparedStatement ps = con.prepareStatement("SELECT req_item, count FROM makerrecipedata WHERE itemid = ?")) {
+                    ps.setInt(1, toCreate);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) {
+                            makerEntry.addReqItem(rs.getInt("req_item"), rs.getInt("count"));
+                        }
+                    }
                 }
-                rs.close();
-                ps.close();
-                con.close();
                 makerItemCache.put(toCreate, new MakerItemCreateEntry(makerEntry));
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
@@ -2039,21 +1993,16 @@ public class MapleItemInformationProvider {
 
     public List<Pair<Integer, Integer>> getMakerDisassembledItems(Integer itemId) {
         List<Pair<Integer, Integer>> items = new LinkedList<>();
-        
-        Connection con;
-        try {
-            con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT req_item, count FROM makerrecipedata WHERE itemid = ? AND req_item >= 4260000 AND req_item < 4270000");
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT req_item, count FROM makerrecipedata WHERE itemid = ? AND req_item >= 4260000 AND req_item < 4270000")) {
             ps.setInt(1, itemId);
-            ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
-                items.add(new Pair<>(rs.getInt("req_item"), rs.getInt("count") / 2));   // return to the player half of the crystals needed
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    items.add(new Pair<>(rs.getInt("req_item"), rs.getInt("count") / 2));   // return to the player half of the crystals needed
+                }
             }
-
-            rs.close();
-            ps.close();
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2063,22 +2012,17 @@ public class MapleItemInformationProvider {
 
     public int getMakerDisassembledFee(Integer itemId) {
         int fee = -1;
-        Connection con;
-        try {
-            con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT req_meso FROM makercreatedata WHERE itemid = ?");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT req_meso FROM makercreatedata WHERE itemid = ?")) {
             ps.setInt(1, itemId);
-            ResultSet rs = ps.executeQuery();
 
-            if(rs.next()) {   // cost is 13.6363~ % of the original value, trim by 1000.
-                float val = (float) (rs.getInt("req_meso") * 0.13636363636364);
-                fee = (int) (val / 1000);
-                fee *= 1000;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {   // cost is 13.6363~ % of the original value, trim by 1000.
+                    float val = (float) (rs.getInt("req_meso") * 0.13636363636364);
+                    fee = (int) (val / 1000);
+                    fee *= 1000;
+                }
             }
-
-            rs.close();
-            ps.close();
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2108,21 +2052,18 @@ public class MapleItemInformationProvider {
 
     public Set<String> getWhoDrops(Integer itemId) {
         Set<String> list = new HashSet<>();
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? LIMIT 50");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? LIMIT 50")) {
             ps.setInt(1, itemId);
-            ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
-                String resultName = MapleMonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
-                if (!resultName.isEmpty()) {
-                    list.add(resultName);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String resultName = MapleMonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
+                    if (!resultName.isEmpty()) {
+                        list.add(resultName);
+                    }
                 }
             }
-            rs.close();
-            ps.close();
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -21,36 +21,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server;
 
-import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.locks.Lock;
-
+import client.inventory.*;
 import config.YamlConfig;
+import constants.inventory.ItemConstants;
 import net.server.Server;
+import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import tools.DatabaseConnection;
 import tools.Pair;
-import client.inventory.Equip;
-import client.inventory.Item;
-import client.inventory.ItemFactory;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import constants.inventory.ItemConstants;
-import java.util.Collections;
-import net.server.audit.locks.MonitoredLockType;
+
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.locks.Lock;
 
 /*
  * @author Flav
@@ -99,7 +90,7 @@ public class CashShop {
             if (ItemConstants.isPet(itemId)) {
                 petid = MaplePet.createPet(itemId);
             }
-            
+
             if (ItemConstants.getInventoryType(itemId).equals(MapleInventoryType.EQUIP)) {
                 item = MapleItemInformationProvider.getInstance().getEquipById(itemId);
             } else {
@@ -107,28 +98,28 @@ public class CashShop {
             }
 
             if (ItemConstants.EXPIRING_ITEMS) {
-                    if(period == 1) {
-                            if(itemId == 5211048 || itemId == 5360042) { // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
-                                    item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 4));
+                if (period == 1) {
+                    if (itemId == 5211048 || itemId == 5360042) { // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
+                        item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 4));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
                                     item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 3));
                             */
-                            } else if(itemId == 5211060) { // 2 Hour 3X coupons.
-                                    item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 2));
-                            } else {
-                                    item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 24));
-                            }
+                    } else if (itemId == 5211060) { // 2 Hour 3X coupons.
+                        item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 2));
                     } else {
-                            item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 24 * period));
+                        item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 24));
                     }
+                } else {
+                    item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 24 * period));
+                }
             }
-            
+
             item.setSN(sn);
             return item;
         }
     }
-    
+
     public static class SpecialCashItem {
         private int sn, modifier;
         private byte info; //?
@@ -181,43 +172,33 @@ public class CashShop {
 
                 packages.put(Integer.parseInt(cashPackage.getName()), cPackage);
             }
-            
-            for(Entry<Integer, CashItem> e : items.entrySet()) {
-                if(e.getValue().isOnSale()) {
+
+            for (Entry<Integer, CashItem> e : items.entrySet()) {
+                if (e.getValue().isOnSale()) {
                     randomitemsns.add(e.getKey());
                 }
             }
-            
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Connection con = null;
-            try {
-                con = DatabaseConnection.getConnection();
-                ps = con.prepareStatement("SELECT * FROM specialcashitems");
-                rs = ps.executeQuery();
+
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("SELECT * FROM specialcashitems");
+                 ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     specialcashitems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-            } finally {
-                try {
-                    if (rs != null && !rs.isClosed()) rs.close();
-                    if (ps != null && !ps.isClosed()) ps.close();
-                    if (con != null && !con.isClosed()) con.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
             }
         }
 
         public static CashItem getRandomCashItem() {
-            if(randomitemsns.isEmpty()) return null;
-            
-            int rnd = (int)(Math.random() * randomitemsns.size());
+            if (randomitemsns.isEmpty()) {
+                return null;
+            }
+
+            int rnd = (int) (Math.random() * randomitemsns.size());
             return items.get(randomitemsns.get(rnd));
         }
-        
+
         public static CashItem getItem(int sn) {
             return items.get(sn);
         }
@@ -239,33 +220,21 @@ public class CashShop {
         public static List<SpecialCashItem> getSpecialCashItems() {
             return specialcashitems;
         }
-        
+
         public static void reloadSpecialCashItems() {//Yay?
             specialcashitems.clear();
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Connection con = null;
-            try {
-                con = DatabaseConnection.getConnection();
-                ps = con.prepareStatement("SELECT * FROM specialcashitems");
-                rs = ps.executeQuery();
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("SELECT * FROM specialcashitems");
+                 ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     specialcashitems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-            } finally {
-                try {
-                    if (rs != null && !rs.isClosed()) rs.close();
-                    if (ps != null && !ps.isClosed()) ps.close();
-                    if (con != null && !con.isClosed()) con.close();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }            
+            }
         }
     }
-    
+
     private int accountId, characterId, nxCredit, maplePoint, nxPrepaid;
     private boolean opened;
     private ItemFactory factory;
@@ -290,42 +259,32 @@ public class CashShop {
             factory = ItemFactory.CASH_OVERALL;
         }
 
-        Connection con = DatabaseConnection.getConnection();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            ps = con.prepareStatement("SELECT `nxCredit`, `maplePoint`, `nxPrepaid` FROM `accounts` WHERE `id` = ?");
-            ps.setInt(1, accountId);
-            rs = ps.executeQuery();
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT `nxCredit`, `maplePoint`, `nxPrepaid` FROM `accounts` WHERE `id` = ?")) {
+                ps.setInt(1, accountId);
 
-            if (rs.next()) {
-                this.nxCredit = rs.getInt("nxCredit");
-                this.maplePoint = rs.getInt("maplePoint");
-                this.nxPrepaid = rs.getInt("nxPrepaid");
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        this.nxCredit = rs.getInt("nxCredit");
+                        this.maplePoint = rs.getInt("maplePoint");
+                        this.nxPrepaid = rs.getInt("nxPrepaid");
+                    }
+                }
             }
-
-            rs.close();
-            ps.close();
 
             for (Pair<Item, MapleInventoryType> item : factory.loadItems(accountId, false)) {
                 inventory.add(item.getLeft());
             }
 
-            ps = con.prepareStatement("SELECT `sn` FROM `wishlists` WHERE `charid` = ?");
-            ps.setInt(1, characterId);
-            rs = ps.executeQuery();
+            try (PreparedStatement ps = con.prepareStatement("SELECT `sn` FROM `wishlists` WHERE `charid` = ?")) {
+                ps.setInt(1, characterId);
 
-            while (rs.next()) {
-                wishList.add(rs.getInt("sn"));
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        wishList.add(rs.getInt("sn"));
+                    }
+                }
             }
-
-            rs.close();
-            ps.close();
-            con.close();
-        } finally {
-            if (ps != null && !ps.isClosed()) ps.close();
-            if (rs != null && !rs.isClosed()) rs.close();
-            if (con != null && !con.isClosed()) con.close();
         }
     }
 
@@ -355,10 +314,12 @@ public class CashShop {
                 break;
         }
     }
-    
+
     public void gainCash(int type, CashItem buyItem, int world) {
         gainCash(type, -buyItem.getPrice());
-        if(!YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSN());
+        if (!YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
+            Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSN());
+        }
     }
 
     public boolean isOpened() {
@@ -388,7 +349,7 @@ public class CashShop {
             } else {
                 isRing = false;
             }
-            
+
             if ((item.getPetId() > -1 ? item.getPetId() : isRing ? equip.getRingId() : item.getCashId()) == cashId) {
                 return item;
             }
@@ -432,70 +393,58 @@ public class CashShop {
     }
 
     public void gift(int recipient, String from, String message, int sn, int ringid) {
-        PreparedStatement ps = null;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-            ps = con.prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO `gifts` VALUES (DEFAULT, ?, ?, ?, ?, ?)")) {
             ps.setInt(1, recipient);
             ps.setString(2, from);
             ps.setString(3, message);
             ps.setInt(4, sn);
             ps.setInt(5, ringid);
             ps.executeUpdate();
-            con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-        } finally {
-            try {
-                if (ps != null && !ps.isClosed()) ps.close();
-                if (con != null && !con.isClosed()) con.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
     }
 
     public List<Pair<Item, String>> loadGifts() {
         List<Pair<Item, String>> gifts = new ArrayList<>();
-        Connection con = null;
 
-        try {
-            con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM `gifts` WHERE `to` = ?");
-            ps.setInt(1, characterId);
-            ResultSet rs = ps.executeQuery();
+        try (Connection con = DatabaseConnection.getConnection()) {
 
-            while (rs.next()) {
-                notes++;
-                CashItem cItem = CashItemFactory.getItem(rs.getInt("sn"));
-                Item item = cItem.toItem();
-                Equip equip = null;
-                item.setGiftFrom(rs.getString("from"));
-                if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
-                    equip = (Equip) item;
-                    equip.setRingId(rs.getInt("ringid"));
-                    gifts.add(new Pair<Item, String>(equip, rs.getString("message")));
-                } else
-                    gifts.add(new Pair<>(item, rs.getString("message")));
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM `gifts` WHERE `to` = ?")) {
+                ps.setInt(1, characterId);
 
-                if (CashItemFactory.isPackage(cItem.getItemId())) { //Packages never contains a ring
-                    for (Item packageItem : CashItemFactory.getPackage(cItem.getItemId())) {
-                        packageItem.setGiftFrom(rs.getString("from"));
-                        addToInventory(packageItem);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        notes++;
+                        CashItem cItem = CashItemFactory.getItem(rs.getInt("sn"));
+                        Item item = cItem.toItem();
+                        Equip equip = null;
+                        item.setGiftFrom(rs.getString("from"));
+                        if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+                            equip = (Equip) item;
+                            equip.setRingId(rs.getInt("ringid"));
+                            gifts.add(new Pair<>(equip, rs.getString("message")));
+                        } else {
+                            gifts.add(new Pair<>(item, rs.getString("message")));
+                        }
+
+                        if (CashItemFactory.isPackage(cItem.getItemId())) { //Packages never contains a ring
+                            for (Item packageItem : CashItemFactory.getPackage(cItem.getItemId())) {
+                                packageItem.setGiftFrom(rs.getString("from"));
+                                addToInventory(packageItem);
+                            }
+                        } else {
+                            addToInventory(equip == null ? item : equip);
+                        }
                     }
-                } else {
-                    addToInventory(equip == null ? item : equip);
                 }
             }
 
-            rs.close();
-            ps.close();
-            ps = con.prepareStatement("DELETE FROM `gifts` WHERE `to` = ?");
-            ps.setInt(1, characterId);
-            ps.executeUpdate();
-            ps.close();
-            con.close();
+            try (PreparedStatement ps = con.prepareStatement("DELETE FROM `gifts` WHERE `to` = ?")) {
+                ps.setInt(1, characterId);
+                ps.executeUpdate();
+            }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
@@ -512,13 +461,14 @@ public class CashShop {
     }
 
     public void save(Connection con) throws SQLException {
-        PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `nxCredit` = ?, `maplePoint` = ?, `nxPrepaid` = ? WHERE `id` = ?");
-        ps.setInt(1, nxCredit);
-        ps.setInt(2, maplePoint);
-        ps.setInt(3, nxPrepaid);
-        ps.setInt(4, accountId);
-        ps.executeUpdate();
-        ps.close();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE `accounts` SET `nxCredit` = ?, `maplePoint` = ?, `nxPrepaid` = ? WHERE `id` = ?")) {
+            ps.setInt(1, nxCredit);
+            ps.setInt(2, maplePoint);
+            ps.setInt(3, nxPrepaid);
+            ps.setInt(4, accountId);
+            ps.executeUpdate();
+        }
+
         List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
 
         List<Item> inv = getInventory();
@@ -527,53 +477,55 @@ public class CashShop {
         }
 
         factory.saveItems(itemsWithType, accountId, con);
-        ps = con.prepareStatement("DELETE FROM `wishlists` WHERE `charid` = ?");
-        ps.setInt(1, characterId);
-        ps.executeUpdate();
-        ps.close();
-        ps = con.prepareStatement("INSERT INTO `wishlists` VALUES (DEFAULT, ?, ?)");
-        ps.setInt(1, characterId);
 
-        for (int sn : wishList) {
-            ps.setInt(2, sn);
+        try (PreparedStatement ps = con.prepareStatement("DELETE FROM `wishlists` WHERE `charid` = ?")) {
+            ps.setInt(1, characterId);
             ps.executeUpdate();
         }
 
-        ps.close();
+        try (PreparedStatement ps = con.prepareStatement("INSERT INTO `wishlists` VALUES (DEFAULT, ?, ?)")) {
+            ps.setInt(1, characterId);
+
+            for (int sn : wishList) {
+                // TODO: batch insert
+                ps.setInt(2, sn);
+                ps.executeUpdate();
+            }
+        }
     }
-    
+
     private Item getCashShopItemByItemid(int itemid) {
         lock.lock();
         try {
-            for(Item it : inventory) {
-                if(it.getItemId() == itemid) {
+            for (Item it : inventory) {
+                if (it.getItemId() == itemid) {
                     return it;
                 }
             }
         } finally {
             lock.unlock();
         }
-        
+
         return null;
     }
-    
+
     public synchronized Pair<Item, Item> openCashShopSurprise() {
         Item css = getCashShopItemByItemid(5222000);
-        
-        if(css != null) {
+
+        if (css != null) {
             CashItem cItem = CashItemFactory.getRandomCashItem();
-            
-            if(cItem != null) {
-                if(css.getQuantity() > 1) {
+
+            if (cItem != null) {
+                if (css.getQuantity() > 1) {
                     /* if(NOT ENOUGH SPACE) { looks like we're not dealing with cash inventory limit whatsoever, k then
                         return null;
                     } */
-                    
+
                     css.setQuantity((short) (css.getQuantity() - 1));
                 } else {
                     removeFromInventory(css);
                 }
-                
+
                 Item item = cItem.toItem();
                 addToInventory(item);
 
@@ -585,7 +537,7 @@ public class CashShop {
             return null;
         }
     }
-    
+
     public static Item generateCouponItem(int itemId, short quantity) {
         CashItem it = new CashItem(77777777, itemId, 7777, ItemConstants.isPet(itemId) ? 30 : 0, quantity, true);
         return it.toItem();

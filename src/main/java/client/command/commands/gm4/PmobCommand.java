@@ -23,19 +23,19 @@
 */
 package client.command.commands.gm4;
 
+import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
+import net.server.channel.Channel;
+import server.life.MapleLifeFactory;
+import server.life.MapleMonster;
+import server.maps.MapleMap;
+import tools.DatabaseConnection;
+
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
-import net.server.channel.Channel;
-import server.life.MapleLifeFactory;
-import server.maps.MapleMap;
-import client.command.Command;
-import client.MapleCharacter;
-import client.MapleClient;
-import java.awt.Point;
-import server.life.MapleMonster;
-import tools.DatabaseConnection;
 
 public class PmobCommand extends Command {
     {
@@ -54,12 +54,12 @@ public class PmobCommand extends Command {
         int mapId = player.getMapId();
         int mobId = Integer.parseInt(params[0]);
         int mobTime = (params.length > 1) ? Integer.parseInt(params[1]) : -1;
-        
+
         Point checkpos = player.getMap().getGroundBelow(player.getPosition());
         int xpos = checkpos.x;
         int ypos = checkpos.y;
         int fh = player.getMap().getFootholds().findBelow(checkpos).getId();
-        
+
         MapleMonster mob = MapleLifeFactory.getMonster(mobId);
         if (mob != null && !mob.getName().equals("MISSINGNO")) {
             mob.setPosition(checkpos);
@@ -67,9 +67,8 @@ public class PmobCommand extends Command {
             mob.setRx0(xpos + 50);
             mob.setRx1(xpos - 50);
             mob.setFh(fh);
-            try {
-                Connection con = DatabaseConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement("INSERT INTO plife ( life, f, fh, cy, rx0, rx1, type, x, y, world, map, mobtime, hide ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )");
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("INSERT INTO plife ( life, f, fh, cy, rx0, rx1, type, x, y, world, map, mobtime, hide ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )")) {
                 ps.setInt(1, mobId);
                 ps.setInt(2, 0);
                 ps.setInt(3, fh);
@@ -84,15 +83,13 @@ public class PmobCommand extends Command {
                 ps.setInt(12, mobTime);
                 ps.setInt(13, 0);
                 ps.executeUpdate();
-                ps.close();
-                con.close();
-                
-                for (Channel ch: player.getWorldServer().getChannels()) {
+
+                for (Channel ch : player.getWorldServer().getChannels()) {
                     MapleMap map = ch.getMapFactory().getMap(mapId);
                     map.addMonsterSpawn(mob, mobTime, -1);
                     map.addAllMonsterSpawn(mob, mobTime, -1);
                 }
-                
+
                 player.yellowMessage("Pmob created.");
             } catch (SQLException e) {
                 e.printStackTrace();

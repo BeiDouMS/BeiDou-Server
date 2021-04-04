@@ -19,23 +19,24 @@
 */
 package server;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import scripting.event.EventInstanceManager;
+import scripting.event.EventManager;
+import tools.DatabaseConnection;
+import tools.Pair;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import scripting.event.EventManager;
-import tools.DatabaseConnection;
-import tools.Pair;
 
 /**
  *
@@ -118,10 +119,8 @@ public class MapleMarriage extends EventInstanceManager {
     public static boolean claimGiftItems(MapleClient c, MapleCharacter chr) {
         List<Item> gifts = loadGiftItemsFromDb(c, chr.getId());
         if (MapleInventory.checkSpot(chr, gifts)) {
-            try {
-                Connection con = DatabaseConnection.getConnection();
-                ItemFactory.MARRIAGE_GIFTS.saveItems(new LinkedList<Pair<Item, MapleInventoryType>>(), chr.getId(), con);
-                con.close();
+            try (Connection con = DatabaseConnection.getConnection()) {
+                ItemFactory.MARRIAGE_GIFTS.saveItems(new LinkedList<>(), chr.getId(), con);
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
             }
@@ -159,11 +158,9 @@ public class MapleMarriage extends EventInstanceManager {
         for (Item it : giftItems) {
             items.add(new Pair<>(it, it.getInventoryType()));
         }
-        
-        try {
-            Connection con = DatabaseConnection.getConnection();
+
+        try (Connection con = DatabaseConnection.getConnection()) {
             ItemFactory.MARRIAGE_GIFTS.saveItems(items, cid, con);
-            con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }

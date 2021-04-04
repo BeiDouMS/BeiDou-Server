@@ -29,15 +29,7 @@ import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.LinkedList;
-import java.util.List;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import java.util.Collections;
 import net.server.Server;
 import net.server.world.World;
 import server.MapleItemInformationProvider;
@@ -46,6 +38,11 @@ import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.Pair;
+
+import java.sql.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -100,10 +97,8 @@ public class FredrickProcessor {
     }
     
     public static void removeFredrickLog(int cid) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             removeFredrickLog(con, cid);
-            con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
@@ -112,22 +107,19 @@ public class FredrickProcessor {
     private static void removeFredrickLog(Connection con, int cid) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM `fredstorage` WHERE `cid` = ?")) {
             ps.setInt(1, cid);
-            ps.execute();
+            ps.executeUpdate();
         }
     }
     
     public static void insertFredrickLog(int cid) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            
+        try (Connection con = DatabaseConnection.getConnection()) {
+
             removeFredrickLog(con, cid);
             try (PreparedStatement ps = con.prepareStatement("INSERT INTO `fredstorage` (`cid`, `daynotes`, `timestamp`) VALUES (?, 0, ?)")) {
                 ps.setInt(1, cid);
                 ps.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
-                ps.execute();
+                ps.executeUpdate();
             }
-            
-            con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
@@ -145,64 +137,59 @@ public class FredrickProcessor {
                 expiredCnames.add(name);
             }
         }
-        
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM `notes` WHERE `from` LIKE ? AND `to` LIKE ?")) {
-                ps.setString(1, "FREDRICK");
-                
-                for (String cname : expiredCnames) {
-                    ps.setString(2, cname);
-                    ps.executeBatch();
-                }
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM `notes` WHERE `from` LIKE ? AND `to` LIKE ?")) {
+            ps.setString(1, "FREDRICK");
+
+            for (String cname : expiredCnames) {
+                ps.setString(2, cname);
+                ps.executeBatch();
             }
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     
     public static void runFredrickSchedule() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            
+        try (Connection con = DatabaseConnection.getConnection()) {
             List<Pair<Integer, Integer>> expiredCids = new LinkedList<>();
             List<Pair<Pair<Integer, String>, Integer>> notifCids = new LinkedList<>();
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM fredstorage f LEFT JOIN (SELECT id, name, world, lastLogoutTime FROM characters) AS c ON c.id = f.cid")) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    long curTime = System.currentTimeMillis();
-                    
-                    while (rs.next()) {
-                        int cid = rs.getInt("cid");
-                        int world = rs.getInt("world");
-                        Timestamp ts = rs.getTimestamp("timestamp");
-                        int daynotes = Math.min(dailyReminders.length - 1, rs.getInt("daynotes"));
-                        
-                        int elapsedDays = timestampElapsedDays(ts, curTime);
-                        if (elapsedDays > 100) {
-                            expiredCids.add(new Pair<>(cid, world));
-                        } else {
-                            int notifDay = dailyReminders[daynotes];
-                            
-                            if (elapsedDays >= notifDay) {
-                                do {
-                                    daynotes++;
-                                    notifDay = dailyReminders[daynotes];
-                                } while (elapsedDays >= notifDay);
-                                
-                                Timestamp logoutTs = rs.getTimestamp("lastLogoutTime");
-                                int inactivityDays = timestampElapsedDays(logoutTs, curTime);
-                                
-                                if (inactivityDays < 7 || daynotes >= dailyReminders.length - 1) {  // don't spam inactive players
-                                    String name = rs.getString("name");
-                                    notifCids.add(new Pair<>(new Pair<>(cid, name), daynotes));
-                                }
+            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM fredstorage f LEFT JOIN (SELECT id, name, world, lastLogoutTime FROM characters) AS c ON c.id = f.cid");
+                 ResultSet rs = ps.executeQuery()) {
+                long curTime = System.currentTimeMillis();
+
+                while (rs.next()) {
+                    int cid = rs.getInt("cid");
+                    int world = rs.getInt("world");
+                    Timestamp ts = rs.getTimestamp("timestamp");
+                    int daynotes = Math.min(dailyReminders.length - 1, rs.getInt("daynotes"));
+
+                    int elapsedDays = timestampElapsedDays(ts, curTime);
+                    if (elapsedDays > 100) {
+                        expiredCids.add(new Pair<>(cid, world));
+                    } else {
+                        int notifDay = dailyReminders[daynotes];
+
+                        if (elapsedDays >= notifDay) {
+                            do {
+                                daynotes++;
+                                notifDay = dailyReminders[daynotes];
+                            } while (elapsedDays >= notifDay);
+
+                            Timestamp logoutTs = rs.getTimestamp("lastLogoutTime");
+                            int inactivityDays = timestampElapsedDays(logoutTs, curTime);
+
+                            if (inactivityDays < 7 || daynotes >= dailyReminders.length - 1) {  // don't spam inactive players
+                                String name = rs.getString("name");
+                                notifCids.add(new Pair<>(new Pair<>(cid, name), daynotes));
                             }
                         }
                     }
                 }
+
             }
-            
+
             if (!expiredCids.isEmpty()) {
                 try (PreparedStatement ps = con.prepareStatement("DELETE FROM `inventoryitems` WHERE `type` = ? AND `characterid` = ?")) {
                     ps.setInt(1, ItemFactory.MERCHANT.getValue());
@@ -211,15 +198,15 @@ public class FredrickProcessor {
                         ps.setInt(2, cid.getLeft());
                         ps.addBatch();
                     }
-                    
+
                     ps.executeBatch();
                 }
-                
+
                 try (PreparedStatement ps = con.prepareStatement("UPDATE `characters` SET `MerchantMesos` = 0 WHERE `id` = ?")) {
                     for (Pair<Integer, Integer> cid : expiredCids) {
                         ps.setInt(1, cid.getLeft());
                         ps.addBatch();
-                        
+
                         World wserv = Server.getInstance().getWorld(cid.getRight());
                         if (wserv != null) {
                             MapleCharacter chr = wserv.getPlayerStorage().getCharacterById(cid.getLeft());
@@ -228,52 +215,48 @@ public class FredrickProcessor {
                             }
                         }
                     }
-                    
+
                     ps.executeBatch();
                 }
-                
+
                 removeFredrickReminders(expiredCids);
-                
+
                 try (PreparedStatement ps = con.prepareStatement("DELETE FROM `fredstorage` WHERE `cid` = ?")) {
                     for (Pair<Integer, Integer> cid : expiredCids) {
                         ps.setInt(1, cid.getLeft());
                         ps.addBatch();
                     }
-                    
+
                     ps.executeBatch();
                 }
             }
-            
+
             if (!notifCids.isEmpty()) {
                 try (PreparedStatement ps = con.prepareStatement("UPDATE `fredstorage` SET `daynotes` = ? WHERE `cid` = ?")) {
                     for (Pair<Pair<Integer, String>, Integer> cid : notifCids) {
                         ps.setInt(1, cid.getRight());
                         ps.setInt(2, cid.getLeft().getLeft());
                         ps.addBatch();
-                        
+
                         String msg = fredrickReminderMessage(cid.getRight() - 1);
                         MapleCharacter.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
                     }
-                    
+
                     ps.executeBatch();
                 }
             }
-            
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     private static boolean deleteFredrickItems(int cid) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM `inventoryitems` WHERE `type` = ? AND `characterid` = ?")) {
-                ps.setInt(1, ItemFactory.MERCHANT.getValue());
-                ps.setInt(2, cid);
-                ps.execute();
-            }
-            con.close();
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM `inventoryitems` WHERE `type` = ? AND `characterid` = ?")) {
+            ps.setInt(1, ItemFactory.MERCHANT.getValue());
+            ps.setInt(2, cid);
+            ps.executeUpdate();
+
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

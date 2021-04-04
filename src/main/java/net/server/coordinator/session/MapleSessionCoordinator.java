@@ -19,14 +19,13 @@
 */
 package net.server.coordinator.session;
 
-import net.server.coordinator.login.LoginStorage;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
-
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import net.server.coordinator.login.LoginStorage;
 import org.apache.mina.core.session.IoSession;
 import tools.DatabaseConnection;
 
@@ -34,16 +33,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -148,10 +139,9 @@ public class MapleSessionCoordinator {
     }
     
     private static boolean associateHwidAccountIfAbsent(String remoteHwid, int accountId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             int hwidCount = 0;
-            
+
             try (PreparedStatement ps = con.prepareStatement("SELECT SQL_CACHE hwid FROM hwidaccounts WHERE accountid = ?")) {
                 ps.setInt(1, accountId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -160,7 +150,7 @@ public class MapleSessionCoordinator {
                         if (rsHwid.contentEquals(remoteHwid)) {
                             return false;
                         }
-                        
+
                         hwidCount++;
                     }
                 }
@@ -169,8 +159,6 @@ public class MapleSessionCoordinator {
                     registerAccessAccount(con, remoteHwid, accountId);
                     return true;
                 }
-            } finally {
-                con.close();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -180,12 +168,12 @@ public class MapleSessionCoordinator {
     }
 
     private static boolean attemptAccessAccount(String nibbleHwid, int accountId, boolean routineCheck) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             int hwidCount = 0;
 
             try (PreparedStatement ps = con.prepareStatement("SELECT SQL_CACHE * FROM hwidaccounts WHERE accountid = ?")) {
                 ps.setInt(1, accountId);
+
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         String rsHwid = rs.getString("hwid");
@@ -207,8 +195,6 @@ public class MapleSessionCoordinator {
                 if (hwidCount < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
                     return true;
                 }
-            } finally {
-                con.close();
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -563,17 +549,13 @@ public class MapleSessionCoordinator {
     }
     
     public void runUpdateHwidHistory() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM hwidaccounts WHERE expiresat < CURRENT_TIMESTAMP")) {
-                ps.execute();
-            } finally {
-                con.close();
-            }
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM hwidaccounts WHERE expiresat < CURRENT_TIMESTAMP")) {
+            ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
+
         long timeNow = Server.getInstance().getCurrentTime();
         List<String> toRemove = new LinkedList<>();
         for (Entry<String, Long> cht : cachedHostTimeout.entrySet()) {
@@ -581,7 +563,7 @@ public class MapleSessionCoordinator {
                 toRemove.add(cht.getKey());
             }
         }
-        
+
         if (!toRemove.isEmpty()) {
             for (String s : toRemove) {
                 cachedHostHwids.remove(s);

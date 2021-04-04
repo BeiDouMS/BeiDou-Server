@@ -23,21 +23,21 @@
 */
 package client.command.commands.gm4;
 
+import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
+import net.server.channel.Channel;
+import server.maps.MapleMap;
+import tools.DatabaseConnection;
+import tools.Pair;
+
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.server.channel.Channel;
-import server.maps.MapleMap;
-import client.command.Command;
-import client.MapleCharacter;
-import client.MapleClient;
-import java.awt.Point;
-import tools.DatabaseConnection;
-import tools.Pair;
 
 public class PmobRemoveCommand extends Command {
     {
@@ -47,19 +47,17 @@ public class PmobRemoveCommand extends Command {
     @Override
     public void execute(MapleClient c, String[] params) {
         MapleCharacter player = c.getPlayer();
-        
+
         int mapId = player.getMapId();
         int mobId = params.length > 0 ? Integer.parseInt(params[0]) : -1;
-        
+
         Point pos = player.getPosition();
         int xpos = pos.x;
         int ypos = pos.y;
-        
+
         List<Pair<Integer, Pair<Integer, Integer>>> toRemove = new LinkedList<>();
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps;
-            
+        try (Connection con = DatabaseConnection.getConnection()) {
+            final PreparedStatement ps;
             if (mobId > -1) {
                 String select = "SELECT * FROM plife WHERE world = ? AND map = ? AND type LIKE ? AND life = ?";
                 ps = con.prepareStatement(select, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -78,28 +76,26 @@ public class PmobRemoveCommand extends Command {
                 ps.setInt(6, ypos - 50);
                 ps.setInt(7, ypos + 50);
             }
-            
-            ResultSet rs = ps.executeQuery();
-            while (true) {
-                rs.beforeFirst();
-                if (!rs.next()) {
-                    break;
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (true) {
+                    rs.beforeFirst();
+                    if (!rs.next()) {
+                        break;
+                    }
+
+                    toRemove.add(new Pair<>(rs.getInt("life"), new Pair<>(rs.getInt("x"), rs.getInt("y"))));
+                    rs.deleteRow();
                 }
-                
-                toRemove.add(new Pair<>(rs.getInt("life"), new Pair<>(rs.getInt("x"), rs.getInt("y"))));
-                rs.deleteRow();
             }
-            
-            rs.close();
             ps.close();
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
             player.dropMessage(5, "Failed to remove pmob from the database.");
         }
-        
+
         if (!toRemove.isEmpty()) {
-            for (Channel ch: player.getWorldServer().getChannels()) {
+            for (Channel ch : player.getWorldServer().getChannels()) {
                 MapleMap map = ch.getMapFactory().getMap(mapId);
 
                 for (Pair<Integer, Pair<Integer, Integer>> r : toRemove) {
@@ -108,7 +104,7 @@ public class PmobRemoveCommand extends Command {
                 }
             }
         }
-        
+
         player.yellowMessage("Cleared " + toRemove.size() + " pmob placements.");
     }
 }

@@ -21,13 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.MapleRing;
 import client.inventory.Equip;
 import client.inventory.Item;
@@ -35,15 +30,20 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.processor.npc.DueyProcessor;
 import net.AbstractMaplePacketHandler;
-import net.server.world.World;
 import net.server.channel.Channel;
-import server.MapleItemInformationProvider;
+import net.server.world.World;
 import scripting.event.EventInstanceManager;
+import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
-import tools.Pair;
 import tools.MaplePacketCreator;
+import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.Wedding;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Jvlaple
@@ -131,47 +131,41 @@ public final class RingActionHandler extends AbstractMaplePacketHandler {
     }
     
     private static void eraseEngagementOffline(int characterId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             eraseEngagementOffline(characterId, con);
-            con.close();
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
     }
     
     private static void eraseEngagementOffline(int characterId, Connection con) throws SQLException {
-        PreparedStatement ps = con.prepareStatement("UPDATE characters SET marriageItemId=-1, partnerId=-1 WHERE id=?");
-        ps.setInt(1, characterId);
-        ps.executeUpdate();
-
-        ps.close();
+        try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET marriageItemId=-1, partnerId=-1 WHERE id=?")) {
+            ps.setInt(1, characterId);
+            ps.executeUpdate();
+        }
     }
     
     private static void breakEngagementOffline(int characterId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT marriageItemId FROM characters WHERE id=?");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT marriageItemId FROM characters WHERE id=?")) {
             ps.setInt(1, characterId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                int marriageItemId = rs.getInt("marriageItemId");
-                
-                if (marriageItemId > 0) {
-                    PreparedStatement ps2 = con.prepareStatement("UPDATE inventoryitems SET expiration=0 WHERE itemid=? AND characterid=?");
-                    ps2.setInt(1, marriageItemId);
-                    ps2.setInt(2, characterId);
-                    
-                    ps2.executeUpdate();
-                    ps2.close();
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int marriageItemId = rs.getInt("marriageItemId");
+
+                    if (marriageItemId > 0) {
+                        try (PreparedStatement ps2 = con.prepareStatement("UPDATE inventoryitems SET expiration=0 WHERE itemid=? AND characterid=?")) {
+                            ps2.setInt(1, marriageItemId);
+                            ps2.setInt(2, characterId);
+
+                            ps2.executeUpdate();
+                        }
+                    }
                 }
             }
-            rs.close();
-            ps.close();
-            
+
             eraseEngagementOffline(characterId, con);
-            
-            con.close();
         } catch (SQLException ex) {
             System.out.println("Error updating offline breakup " + ex.getMessage());
         }

@@ -21,22 +21,23 @@
 */
 package client.inventory;
 
+import client.MapleCharacter;
+import client.inventory.manipulator.MapleCashidGenerator;
 import constants.game.ExpTable;
-import java.awt.Point;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import tools.DatabaseConnection;
 import server.MapleItemInformationProvider;
 import server.movement.AbsoluteLifeMovement;
 import server.movement.LifeMovement;
 import server.movement.LifeMovementFragment;
-import client.MapleCharacter;
-import client.inventory.manipulator.MapleCashidGenerator;
-import java.sql.Connection;
+import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 import tools.Pair;
+
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -75,22 +76,20 @@ public class MaplePet extends Item {
     }
 
     public static MaplePet loadFromDb(int itemid, short position, int petid) {
-        try {
-            MaplePet ret = new MaplePet(itemid, position, petid);
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT name, level, closeness, fullness, summoned, flag FROM pets WHERE petid = ?"); // Get pet details..
+        MaplePet ret = new MaplePet(itemid, position, petid);
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT name, level, closeness, fullness, summoned, flag FROM pets WHERE petid = ?")) { // Get the pet details...
             ps.setInt(1, petid);
-            ResultSet rs = ps.executeQuery();
-            rs.next();
-            ret.setName(rs.getString("name"));
-            ret.setCloseness(Math.min(rs.getInt("closeness"), 30000));
-            ret.setLevel((byte) Math.min(rs.getByte("level"), 30));
-            ret.setFullness(Math.min(rs.getInt("fullness"), 100));
-            ret.setSummoned(rs.getInt("summoned") == 1);
-            ret.setPetFlag(rs.getInt("flag"));
-            rs.close();
-            ps.close();
-            con.close();
+
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                ret.setName(rs.getString("name"));
+                ret.setCloseness(Math.min(rs.getInt("closeness"), 30000));
+                ret.setLevel((byte) Math.min(rs.getByte("level"), 30));
+                ret.setFullness(Math.min(rs.getInt("fullness"), 100));
+                ret.setSummoned(rs.getInt("summoned") == 1);
+                ret.setPetFlag(rs.getInt("flag"));
+            }
             return ret;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,16 +98,11 @@ public class MaplePet extends Item {
     }
     
     public static void deleteFromDb(MapleCharacter owner, int petid) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            
-            PreparedStatement ps = con.prepareStatement("DELETE FROM pets WHERE `petid` = ?");  // thanks Vcoc for detecting petignores remaining after deletion
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM pets WHERE `petid` = ?")) {
+            // thanks Vcoc for detecting petignores remaining after deletion
             ps.setInt(1, petid);
-            ps.executeUpdate();
-            ps.close();
-            
-            con.close();
-            
+
             owner.resetExcluded(petid);
             MapleCashidGenerator.freeCashId(petid);
         } catch (SQLException ex) {
@@ -117,9 +111,8 @@ public class MaplePet extends Item {
     }
     
     public void saveToDb() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, summoned = ?, flag = ? WHERE petid = ?");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, summoned = ?, flag = ? WHERE petid = ?")) {
             ps.setString(1, getName());
             ps.setInt(2, getLevel());
             ps.setInt(3, getCloseness());
@@ -128,23 +121,18 @@ public class MaplePet extends Item {
             ps.setInt(6, getPetFlag());
             ps.setInt(7, getUniqueId());
             ps.executeUpdate();
-            ps.close();
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public static int createPet(int itemid) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, 1, 0, 100, 0, 0)");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, 1, 0, 100, 0, 0)")) {
             int ret = MapleCashidGenerator.generateCashId();
             ps.setInt(1, ret);
             ps.setString(2, MapleItemInformationProvider.getInstance().getName(itemid));
             ps.executeUpdate();
-            ps.close();
-            con.close();
             return ret;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -153,9 +141,8 @@ public class MaplePet extends Item {
     }
 
     public static int createPet(int itemid, byte level, int closeness, int fullness) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, ?, ?, ?, 0, 0)");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, ?, ?, ?, 0, 0)")) {
             int ret = MapleCashidGenerator.generateCashId();
             ps.setInt(1, ret);
             ps.setString(2, MapleItemInformationProvider.getInstance().getName(itemid));
@@ -163,8 +150,6 @@ public class MaplePet extends Item {
             ps.setInt(4, closeness);
             ps.setInt(5, fullness);
             ps.executeUpdate();
-            ps.close();
-            con.close();
             return ret;
         } catch (SQLException e) {
             e.printStackTrace();

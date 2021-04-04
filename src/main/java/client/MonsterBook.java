@@ -21,22 +21,19 @@
 */
 package client;
 
+import net.server.audit.locks.MonitoredLockType;
+import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import tools.DatabaseConnection;
+import tools.MaplePacketCreator;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.Semaphore;
-import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import java.util.concurrent.locks.Lock;
 
 public final class MonsterBook {
     private static final Semaphore semaphore = new Semaphore(10);
@@ -158,30 +155,28 @@ public final class MonsterBook {
 
     public void loadCards(final int charid) throws SQLException {
         lock.lock();
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("SELECT cardid, level FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
-                ps.setInt(1, charid);
-                try (ResultSet rs = ps.executeQuery()) {
-                    int cardid, level;
-                    while (rs.next()) {
-                        cardid = rs.getInt("cardid");
-                        level = rs.getInt("level");
-                        if (cardid / 1000 >= 2388) {
-                            specialCard++;
-                        } else {
-                            normalCard++;
-                        }
-                        cards.put(cardid, level);
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT cardid, level FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
+            ps.setInt(1, charid);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                int cardid;
+                int level;
+                while (rs.next()) {
+                    cardid = rs.getInt("cardid");
+                    level = rs.getInt("level");
+                    if (cardid / 1000 >= 2388) {
+                        specialCard++;
+                    } else {
+                        normalCard++;
                     }
+                    cards.put(cardid, level);
                 }
             }
-
-            con.close();
         } finally {
             lock.unlock();
         }
-        
+
         calculateLevel();
     }
 
@@ -224,45 +219,37 @@ public final class MonsterBook {
     
     public void saveCards(final int charid) {
         Set<Entry<Integer, Integer>> cardSet = getCardSet();
-        
+
         if (cardSet.isEmpty()) {
             return;
         }
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("DELETE FROM monsterbook WHERE charid = ?");
-            ps.setInt(1, charid);
-            ps.execute();
-            ps.close();
-            
-            ps = con.prepareStatement(getSaveString(charid, cardSet));
-            ps.execute();
-            ps.close();
-            con.close();
+
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("DELETE FROM monsterbook WHERE charid = ?")) {
+                ps.setInt(1, charid);
+                ps.executeUpdate();
+            }
+
+            try (PreparedStatement ps = con.prepareStatement(getSaveString(charid, cardSet))) {
+                ps.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     
     public static int[] getCardTierSize() {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM monstercarddata GROUP BY floor(cardid / 1000);",
-                    ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            ResultSet rs = ps.executeQuery();
-
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM monstercarddata GROUP BY floor(cardid / 1000);", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+             ResultSet rs = ps.executeQuery()) {
             rs.last();
             int[] tierSizes = new int[rs.getRow()];
             rs.beforeFirst();
-            
+
             while (rs.next()) {
                 tierSizes[rs.getRow() - 1] = rs.getInt(1);
             }
-            
-            rs.close();
-            ps.close();
-            con.close();
-            
+
             return tierSizes;
         } catch (SQLException e) {
             e.printStackTrace();

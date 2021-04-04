@@ -19,18 +19,14 @@
 */
 package server.expeditions;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
-
 import config.YamlConfig;
 import tools.DatabaseConnection;
 import tools.Pair;
+
+import java.sql.*;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -123,18 +119,14 @@ public class MapleExpeditionBossLog {
     private static void resetBossLogTable(boolean week, Calendar c) {
         List<Pair<Timestamp, BossLogEntry>> resetTimestamps = BossLogEntry.getBossLogResetTimestamps(c, week);
         
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            
+        try (Connection con = DatabaseConnection.getConnection()) {
             for (Pair<Timestamp, BossLogEntry> p : resetTimestamps) {
-                PreparedStatement ps = con.prepareStatement("DELETE FROM " + getBossLogTable(week) + " WHERE attempttime <= ? AND bosstype LIKE ?");
-                ps.setTimestamp(1, p.getLeft());
-                ps.setString(2, p.getRight().name());
-                ps.executeUpdate();
-                ps.close();
+                try (PreparedStatement ps = con.prepareStatement("DELETE FROM " + getBossLogTable(week) + " WHERE attempttime <= ? AND bosstype LIKE ?")) {
+                    ps.setTimestamp(1, p.getLeft());
+                    ps.setString(2, p.getRight().name());
+                    ps.executeUpdate();
+                }
             }
-            
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,21 +138,18 @@ public class MapleExpeditionBossLog {
 
     private static int countPlayerEntries(int cid, BossLogEntry boss) {
         int ret_count = 0;
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps;
-            ps = con.prepareStatement("SELECT COUNT(*) FROM " + getBossLogTable(boss.week) + " WHERE characterid = ? AND bosstype LIKE ?");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM " + getBossLogTable(boss.week) + " WHERE characterid = ? AND bosstype LIKE ?")) {
             ps.setInt(1, cid);
             ps.setString(2, boss.name());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                ret_count = rs.getInt(1);
-            } else {
-                ret_count = -1;
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ret_count = rs.getInt(1);
+                } else {
+                    ret_count = -1;
+                }
             }
-            rs.close();
-            ps.close();
-            con.close();
             return ret_count;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,14 +158,11 @@ public class MapleExpeditionBossLog {
     }
 
     private static void insertPlayerEntry(int cid, BossLogEntry boss) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("INSERT INTO " + getBossLogTable(boss.week) + " (characterid, bosstype) VALUES (?,?)");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO " + getBossLogTable(boss.week) + " (characterid, bosstype) VALUES (?,?)")) {
             ps.setInt(1, cid);
             ps.setString(2, boss.name());
             ps.executeUpdate();
-            ps.close();
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

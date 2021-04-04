@@ -23,20 +23,10 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import server.CashShop;
@@ -46,6 +36,13 @@ import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -58,33 +55,32 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
         Map<Integer, Integer> couponItems = new HashMap<>();
         Map<Integer, Integer> couponPoints = new HashMap<>(5);
         
-        PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode_items WHERE codeid = ?");
-        ps.setInt(1, codeid);
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode_items WHERE codeid = ?")) {
+            ps.setInt(1, codeid);
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            int type = rs.getInt("type"), quantity = rs.getInt("quantity");
-            if (type < 5) {
-                Integer i = couponPoints.get(type);
-                if (i != null) {
-                    couponPoints.put(type, i + quantity);
-                } else {
-                    couponPoints.put(type, quantity);
-                }
-            } else {
-                int item = rs.getInt("item");
-                
-                Integer i = couponItems.get(item);
-                if (i != null) {
-                    couponItems.put(item, i + quantity);
-                } else {
-                    couponItems.put(item, quantity);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int type = rs.getInt("type"), quantity = rs.getInt("quantity");
+                    if (type < 5) {
+                        Integer i = couponPoints.get(type);
+                        if (i != null) {
+                            couponPoints.put(type, i + quantity);
+                        } else {
+                            couponPoints.put(type, quantity);
+                        }
+                    } else {
+                        int item = rs.getInt("item");
+
+                        Integer i = couponItems.get(item);
+                        if (i != null) {
+                            couponItems.put(item, i + quantity);
+                        } else {
+                            couponItems.put(item, quantity);
+                        }
+                    }
                 }
             }
         }
-        
-        rs.close();
-        ps.close();
         
         List<Pair<Integer, Pair<Integer, Integer>>> ret = new LinkedList<>();
         if (!couponItems.isEmpty()) {
@@ -122,44 +118,43 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
             if (!c.attemptCsCoupon()) {
                 return new Pair<>(-5, null);
             }
-            
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode WHERE code = ?");
-            ps.setString(1, code);
-            
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                return new Pair<>(-1, null);
+
+            try (Connection con = DatabaseConnection.getConnection()) {
+                try (PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode WHERE code = ?")) {
+                    ps.setString(1, code);
+
+                    try (ResultSet rs = ps.executeQuery()) {
+                        if (!rs.next()) {
+                            return new Pair<>(-1, null);
+                        }
+
+                        if (rs.getString("retriever") != null) {
+                            return new Pair<>(-2, null);
+                        }
+
+                        if (rs.getLong("expiration") < Server.getInstance().getCurrentTime()) {
+                            return new Pair<>(-3, null);
+                        }
+
+                        final int codeid = rs.getInt("id");
+
+                        ret = getNXCodeItems(chr, con, codeid);
+                        if (ret == null) {
+                            return new Pair<>(-4, null);
+                        }
+                    }
+                }
+
+                try (PreparedStatement ps = con.prepareStatement("UPDATE nxcode SET retriever = ? WHERE code = ?")) {
+                    ps.setString(1, chr.getName());
+                    ps.setString(2, code);
+                    ps.executeUpdate();
+                }
             }
-            
-            if (rs.getString("retriever") != null) {
-                return new Pair<>(-2, null);
-            }
-            
-            if (rs.getLong("expiration") < Server.getInstance().getCurrentTime()) {
-                return new Pair<>(-3, null);
-            }
-            
-            int codeid = rs.getInt("id");
-            rs.close();
-            ps.close();
-            
-            ret = getNXCodeItems(chr, con, codeid);
-            if (ret == null) {
-                return new Pair<>(-4, null);
-            }
-            
-            ps = con.prepareStatement("UPDATE nxcode SET retriever = ? WHERE code = ?");
-            ps.setString(1, chr.getName());
-            ps.setString(2, code);
-            ps.executeUpdate();
-            
-            ps.close();
-            con.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        
+
         c.resetCsCoupon();
         return new Pair<>(0, ret);
     }

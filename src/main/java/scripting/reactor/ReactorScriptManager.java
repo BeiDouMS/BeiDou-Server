@@ -22,6 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting.reactor;
 
 import client.MapleClient;
+import jdk.nashorn.api.scripting.NashornScriptEngine;
+import scripting.AbstractScriptManager;
+import server.maps.MapleReactor;
+import server.maps.ReactorDropEntry;
+import tools.DatabaseConnection;
+import tools.FilePrinter;
+
+import javax.script.ScriptException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,14 +37,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javax.script.ScriptException;
-
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import scripting.AbstractScriptManager;
-import server.maps.MapleReactor;
-import server.maps.ReactorDropEntry;
-import tools.DatabaseConnection;
-import tools.FilePrinter;
 
 /**
  * @author Lerk
@@ -83,8 +83,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
         List<ReactorDropEntry> ret = drops.get(rid);
         if (ret == null) {
             ret = new LinkedList<>();
-            try {
-                Connection con = DatabaseConnection.getConnection();
+            try (Connection con = DatabaseConnection.getConnection()) {
                 try (PreparedStatement ps = con.prepareStatement("SELECT itemid, chance, questid FROM reactordrops WHERE reactorid = ? AND chance >= 0")) {
                     ps.setInt(1, rid);
                     try (ResultSet rs = ps.executeQuery()) {
@@ -93,8 +92,6 @@ public class ReactorScriptManager extends AbstractScriptManager {
                         }
                     }
                 }
-                
-                con.close();
             } catch (Throwable e) {
                 FilePrinter.printError(FilePrinter.REACTOR + rid + ".txt", e);
             }
