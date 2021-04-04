@@ -141,26 +141,24 @@ public class BuddyList {
     }
 
     public void loadFromDb(int characterId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            
-            PreparedStatement ps = con.prepareStatement("SELECT b.buddyid, b.pending, b.group, c.name as buddyname FROM buddies as b, characters as c WHERE c.id = b.buddyid AND b.characterid = ?");
-            ps.setInt(1, characterId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                if (rs.getInt("pending") == 1) {
-                    pendingRequests.push(new CharacterNameAndId(rs.getInt("buddyid"), rs.getString("buddyname")));
-                } else {
-                    put(new BuddylistEntry(rs.getString("buddyname"), rs.getString("group"), rs.getInt("buddyid"), (byte) -1, true));
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT b.buddyid, b.pending, b.group, c.name as buddyname FROM buddies as b, characters as c WHERE c.id = b.buddyid AND b.characterid = ?")) {
+                ps.setInt(1, characterId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        if (rs.getInt("pending") == 1) {
+                            pendingRequests.push(new CharacterNameAndId(rs.getInt("buddyid"), rs.getString("buddyname")));
+                        } else {
+                            put(new BuddylistEntry(rs.getString("buddyname"), rs.getString("group"), rs.getInt("buddyid"), (byte) -1, true));
+                        }
+                    }
                 }
             }
-            rs.close();
-            ps.close();
-            ps = con.prepareStatement("DELETE FROM buddies WHERE pending = 1 AND characterid = ?");
-            ps.setInt(1, characterId);
-            ps.executeUpdate();
-            ps.close();
-            con.close();
+
+            try (PreparedStatement ps = con.prepareStatement("DELETE FROM buddies WHERE pending = 1 AND characterid = ?")) {
+                ps.setInt(1, characterId);
+                ps.executeUpdate();
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
