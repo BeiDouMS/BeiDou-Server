@@ -22,15 +22,16 @@
 package scripting.portal;
 
 import client.MapleClient;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import scripting.AbstractPlayerInteraction;
 import scripting.map.MapScriptManager;
 import server.maps.MaplePortal;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
 
@@ -44,49 +45,31 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
     public MaplePortal getPortal() {
         return portal;
     }
-    
+
     public void runMapScript() {
         MapScriptManager msm = MapScriptManager.getInstance();
         msm.runMapScript(c, "onUserEnter/" + portal.getScriptName(), false);
     }
 
     public boolean hasLevel30Character() {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-            ps = con.prepareStatement("SELECT `level` FROM `characters` WHERE accountid = ?");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT `level` FROM `characters` WHERE accountid = ?")) {
             ps.setInt(1, getPlayer().getAccountID());
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                if (rs.getInt("level") >= 30) {
-                    ps.close();
-                    rs.close();
-                    return true;
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    if (rs.getInt("level") >= 30) {
+                        return true;
+                    }
                 }
             }
         } catch (SQLException sqle) {
             sqle.printStackTrace();
-        } finally {
-            try {
-                if (ps != null && !ps.isClosed()) {
-                    ps.close();
-                }
-                if (rs != null && !rs.isClosed()) {
-                    rs.close();
-                }
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
         }
-        
+
         return getPlayer().getLevel() >= 30;
     }
-    
+
     public void blockPortal() {
         c.getPlayer().blockPortal(getPortal().getScriptName());
     }

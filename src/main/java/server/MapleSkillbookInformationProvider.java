@@ -19,28 +19,22 @@
 */
 package server;
 
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import client.MapleCharacter;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import tools.DatabaseConnection;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -165,25 +159,18 @@ public class MapleSkillbookInformationProvider {
     }
     
     private static void fetchSkillbooksFromReactors() {
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-            
-            PreparedStatement ps = con.prepareStatement("SELECT itemid FROM reactordrops WHERE itemid >= ? AND itemid < ?;");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT itemid FROM reactordrops WHERE itemid >= ? AND itemid < ?;")) {
             ps.setInt(1, skillbookMinItemid);
             ps.setInt(2, skillbookMaxItemid);
-            ResultSet rs = ps.executeQuery();
 
-            if (rs.isBeforeFirst()) {
-                while(rs.next()) {
-                    foundSkillbooks.put(rs.getInt("itemid"), SkillBookEntry.REACTOR);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.isBeforeFirst()) {
+                    while (rs.next()) {
+                        foundSkillbooks.put(rs.getInt("itemid"), SkillBookEntry.REACTOR);
+                    }
                 }
             }
-
-            rs.close();
-            ps.close();
-            
-            con.close();
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }

@@ -68,8 +68,6 @@ public class MapleGuild {
                  ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) {
                     id = -1;
-                    ps.close();
-                    rs.close();
                     return;
                 }
                 id = guildid;
@@ -514,17 +512,13 @@ public class MapleGuild {
                         if (mgc.isOnline()) {
                             Server.getInstance().getWorld(mgc.getWorld()).setGuildAndRank(cid, 0, 5);
                         } else {
-                            try {
-                                Connection con = DatabaseConnection.getConnection();
-                                try (PreparedStatement ps = con.prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`) VALUES (?, ?, ?, ?)")) {
-                                    ps.setString(1, mgc.getName());
-                                    ps.setString(2, initiator.getName());
-                                    ps.setString(3, "You have been expelled from the guild.");
-                                    ps.setLong(4, System.currentTimeMillis());
-                                    ps.executeUpdate();
-                                }
-
-                                con.close();
+                            try (Connection con = DatabaseConnection.getConnection();
+                                 PreparedStatement ps = con.prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`) VALUES (?, ?, ?, ?)")) {
+                                ps.setString(1, mgc.getName());
+                                ps.setString(2, initiator.getName());
+                                ps.setString(3, "You have been expelled from the guild.");
+                                ps.setLong(4, System.currentTimeMillis());
+                                ps.executeUpdate();
                             } catch (SQLException e) {
                                 e.printStackTrace();
                                 System.out.println("expelMember - MapleGuild " + e);
