@@ -21,19 +21,19 @@
  */
 package net.server.channel.handlers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-
+import client.MapleCharacter;
+import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleCharacter;
-import client.MapleClient;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 /*
  * 
@@ -84,10 +84,8 @@ public final class ReportHandler extends AbstractMaplePacketHandler {
 	public void addReport(int reporterid, int victimid, int reason, String description, String chatlog) {
 		Calendar calendar = Calendar.getInstance();
 		Timestamp currentTimestamp = new java.sql.Timestamp(calendar.getTime().getTime());
-		Connection con;
-		try {
-                        con = DatabaseConnection.getConnection();
-			PreparedStatement ps = con.prepareStatement("INSERT INTO reports (`reporttime`, `reporterid`, `victimid`, `reason`, `chatlog`, `description`) VALUES (?, ?, ?, ?, ?, ?)");
+		try (Connection con = DatabaseConnection.getConnection();
+			 PreparedStatement ps = con.prepareStatement("INSERT INTO reports (`reporttime`, `reporterid`, `victimid`, `reason`, `chatlog`, `description`) VALUES (?, ?, ?, ?, ?, ?)")) {
 			ps.setString(1, currentTimestamp.toGMTString().toString());
 			ps.setInt(2, reporterid);
 			ps.setInt(3, victimid);
@@ -96,8 +94,6 @@ public final class ReportHandler extends AbstractMaplePacketHandler {
 			ps.setString(6, description);
 			ps.addBatch();
 			ps.executeBatch();
-			ps.close();
-                        con.close();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
