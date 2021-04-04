@@ -29,83 +29,42 @@ import client.MapleCharacter;
 import client.MapleFamily;
 import config.YamlConfig;
 import constants.game.GameConstants;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import java.util.Set;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.WeakHashMap;
-import java.util.concurrent.ScheduledFuture;
-
-import scripting.event.EventInstanceManager;
-import server.MapleStorage;
-import server.TimerManager;
-import server.maps.AbstractMapleMapObject;
-import server.maps.MapleHiredMerchant;
-import server.maps.MapleMap;
-import server.maps.MapleMiniDungeon;
-import server.maps.MapleMiniDungeonInfo;
-import server.maps.MaplePlayerShop;
-import server.maps.MaplePlayerShopItem;
 import net.server.PlayerStorage;
 import net.server.Server;
 import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
+import net.server.audit.locks.*;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
+import net.server.coordinator.matchchecker.MapleMatchCheckerCoordinator;
+import net.server.coordinator.partysearch.MaplePartySearchCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.matchchecker.MapleMatchCheckerCoordinator;
-import net.server.coordinator.partysearch.MaplePartySearchCoordinator;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.guild.MapleGuildSummary;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.WorldServices;
-import net.server.task.CharacterAutosaverTask;
-import net.server.task.FamilyDailyResetTask;
-import net.server.task.FishingTask;
-import net.server.task.HiredMerchantTask;
-import net.server.task.MapOwnershipTask;
-import net.server.task.MountTirednessTask;
-import net.server.task.PartySearchTask;
-import net.server.task.PetFullnessTask;
-import net.server.task.ServerMessageTask;
-import net.server.task.TimedMapObjectTask;
-import net.server.task.TimeoutTask;
-import net.server.task.WeddingReservationTask;
+import net.server.task.*;
+import scripting.event.EventInstanceManager;
+import server.MapleStorage;
+import server.TimerManager;
+import server.maps.*;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.packets.Fishing;
+
+import java.sql.*;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
@@ -693,16 +652,12 @@ public class World {
     }
 
     public void setOfflineGuildStatus(int guildid, int guildrank, int cid) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = ?, guildrank = ? WHERE id = ?")) {
-                ps.setInt(1, guildid);
-                ps.setInt(2, guildrank);
-                ps.setInt(3, cid);
-                ps.execute();
-            }
-            
-            con.close();
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = ?, guildrank = ? WHERE id = ?")) {
+            ps.setInt(1, guildid);
+            ps.setInt(2, guildrank);
+            ps.setInt(3, cid);
+            ps.executeUpdate();
         } catch (SQLException se) {
             se.printStackTrace();
         }
@@ -1808,42 +1763,42 @@ public class World {
     }
     
     private static void executePlayerNpcMapDataUpdate(Connection con, boolean isPodium, Map<Integer, ?> pnpcData, int value, int worldid, int mapid) throws SQLException {
-        PreparedStatement ps;
-        if(pnpcData.containsKey(mapid)) {
-            ps = con.prepareStatement("UPDATE playernpcs_field SET " + (isPodium ? "podium" : "step") + " = ? WHERE world = ? AND map = ?");
+        final String query;
+        if (pnpcData.containsKey(mapid)) {
+            query = "UPDATE playernpcs_field SET " + (isPodium ? "podium" : "step") + " = ? WHERE world = ? AND map = ?";
         } else {
-            ps = con.prepareStatement("INSERT INTO playernpcs_field (" + (isPodium ? "podium" : "step") + ", world, map) VALUES (?, ?, ?)");
+            query = "INSERT INTO playernpcs_field (" + (isPodium ? "podium" : "step") + ", world, map) VALUES (?, ?, ?)";
         }
 
-        ps.setInt(1, value);
-        ps.setInt(2, worldid);
-        ps.setInt(3, mapid);
-        ps.executeUpdate();
-
-        ps.close();
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, value);
+            ps.setInt(2, worldid);
+            ps.setInt(3, mapid);
+            ps.executeUpdate();
+        }
     }
     
     private void setPlayerNpcMapData(int mapid, int step, int podium, boolean silent) {
-        if(!silent) {
-            try {
-                Connection con = DatabaseConnection.getConnection();
-                
-                if(step != -1) {
+        if (!silent) {
+            try (Connection con = DatabaseConnection.getConnection()) {
+                if (step != -1) {
                     executePlayerNpcMapDataUpdate(con, false, pnpcStep, step, id, mapid);
                 }
-                
-                if(podium != -1) {
+
+                if (podium != -1) {
                     executePlayerNpcMapDataUpdate(con, true, pnpcPodium, podium, id, mapid);
                 }
-                
-                con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        
-        if(step != -1) pnpcStep.put(mapid, (byte) step);
-        if(podium != -1) pnpcPodium.put(mapid, (short) podium);
+
+        if (step != -1) {
+            pnpcStep.put(mapid, (byte) step);
+        }
+        if (podium != -1) {
+            pnpcPodium.put(mapid, (short) podium);
+        }
     }
     
     public int getPlayerNpcMapStep(int mapid) {
@@ -1945,12 +1900,11 @@ public class World {
     }
     
     private static Pair<Integer, Pair<Integer, Integer>> getRelationshipCoupleFromDb(int id, boolean usingMarriageId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             Integer mid = null, hid = null, wid = null;
-            
+
             PreparedStatement ps;
-            if(usingMarriageId) {
+            if (usingMarriageId) {
                 ps = con.prepareStatement("SELECT * FROM marriages WHERE marriageid = ?");
                 ps.setInt(1, id);
             } else {
@@ -1958,18 +1912,17 @@ public class World {
                 ps.setInt(1, id);
                 ps.setInt(2, id);
             }
-            
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                mid = rs.getInt("marriageid");
-                hid = rs.getInt("husbandid");
-                wid = rs.getInt("wifeid");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    mid = rs.getInt("marriageid");
+                    hid = rs.getInt("husbandid");
+                    wid = rs.getInt("wifeid");
+                }
             }
-            
-            rs.close();
+
             ps.close();
-            con.close();
-            
+
             return (mid == null) ? null : new Pair<>(mid, new Pair<>(hid, wid));
         } catch (SQLException se) {
             se.printStackTrace();
@@ -1985,22 +1938,17 @@ public class World {
     }
     
     private static int addRelationshipToDb(int groomId, int brideId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-
-            PreparedStatement ps = con.prepareStatement("INSERT INTO marriages (husbandid, wifeid) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("INSERT INTO marriages (husbandid, wifeid) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, groomId);
             ps.setInt(2, brideId);
             ps.executeUpdate();
 
-            ResultSet rs = ps.getGeneratedKeys();
-            rs.next();
-            int ret = rs.getInt(1);
-            
-            rs.close();
-            ps.close();
-            con.close();
-            return ret;
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                rs.next();
+                int ret = rs.getInt(1);
+                return ret;
+            }
         } catch (SQLException se) {
             se.printStackTrace();
             return -1;
@@ -2017,14 +1965,10 @@ public class World {
     }
     
     private static void deleteRelationshipFromDb(int playerId) {
-        try {
-            Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("DELETE FROM marriages WHERE marriageid = ?");
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("DELETE FROM marriages WHERE marriageid = ?")) {
             ps.setInt(1, playerId);
             ps.executeUpdate();
-            
-            ps.close();
-            con.close();
         } catch (SQLException se) {
             se.printStackTrace();
         }
