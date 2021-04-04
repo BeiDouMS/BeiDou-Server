@@ -8168,159 +8168,151 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         meso.set(recipe.getMeso());
 
         List<Pair<Skill, Integer>> startingSkills = recipe.getStartingSkillLevel();
-        for(Pair<Skill, Integer> skEntry : startingSkills) {
+        for (Pair<Skill, Integer> skEntry : startingSkills) {
             Skill skill = skEntry.getLeft();
             this.changeSkillLevel(skill, skEntry.getRight().byteValue(), skill.getMaxLevel(), -1);
         }
 
         List<Pair<Item, MapleInventoryType>> itemsWithType = recipe.getStartingItems();
-        for(Pair<Item, MapleInventoryType> itEntry : itemsWithType) {
+        for (Pair<Item, MapleInventoryType> itEntry : itemsWithType) {
             this.getInventory(itEntry.getRight()).addItem(itEntry.getLeft());
         }
-        
+
         this.events.put("rescueGaga", new RescueGaga(0));
 
-        Connection con = null;
-        PreparedStatement ps = null;
 
-        try {
-            con = DatabaseConnection.getConnection();
-            
-            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
+        try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
-            ps = con.prepareStatement("INSERT INTO characters (str, dex, luk, `int`, gm, skincolor, gender, job, hair, face, map, meso, spawnpoint, accountid, name, world, hp, mp, maxhp, maxmp, level, ap, sp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1, str);
-            ps.setInt(2, dex);
-            ps.setInt(3, luk);
-            ps.setInt(4, int_);
-            ps.setInt(5, gmLevel);
-            ps.setInt(6, skinColor.getId());
-            ps.setInt(7, gender);
-            ps.setInt(8, getJob().getId());
-            ps.setInt(9, hair);
-            ps.setInt(10, face);
-            ps.setInt(11, mapid);
-            ps.setInt(12, Math.abs(meso.get()));
-            ps.setInt(13, 0);
-            ps.setInt(14, accountid);
-            ps.setString(15, name);
-            ps.setInt(16, world);
-            ps.setInt(17, hp);
-            ps.setInt(18, mp);
-            ps.setInt(19, maxhp);
-            ps.setInt(20, maxmp);
-            ps.setInt(21, level);
-            ps.setInt(22, remainingAp);
-            
-            StringBuilder sps = new StringBuilder();
-            for (int i = 0; i < remainingSp.length; i++) {
-                sps.append(remainingSp[i]);
-                sps.append(",");
-            }
-            String sp = sps.toString();
-            ps.setString(23, sp.substring(0, sp.length() - 1));
+            con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
-            int updateRows = ps.executeUpdate();
-            if (updateRows < 1) {
-                ps.close();
-                FilePrinter.printError(FilePrinter.INSERT_CHAR, "Error trying to insert " + name);
-                return false;
-            }
-            ResultSet rs = ps.getGeneratedKeys();
-            if (rs.next()) {
-                this.id = rs.getInt(1);
-                rs.close();
-                ps.close();
-            } else {
-                rs.close();
-                ps.close();
-                FilePrinter.printError(FilePrinter.INSERT_CHAR, "Inserting char failed " + name);
-                return false;
-            }
+            try {
+                // Character info
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO characters (str, dex, luk, `int`, gm, skincolor, gender, job, hair, face, map, meso, spawnpoint, accountid, name, world, hp, mp, maxhp, maxmp, level, ap, sp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+                    ps.setInt(1, str);
+                    ps.setInt(2, dex);
+                    ps.setInt(3, luk);
+                    ps.setInt(4, int_);
+                    ps.setInt(5, gmLevel);
+                    ps.setInt(6, skinColor.getId());
+                    ps.setInt(7, gender);
+                    ps.setInt(8, getJob().getId());
+                    ps.setInt(9, hair);
+                    ps.setInt(10, face);
+                    ps.setInt(11, mapid);
+                    ps.setInt(12, Math.abs(meso.get()));
+                    ps.setInt(13, 0);
+                    ps.setInt(14, accountid);
+                    ps.setString(15, name);
+                    ps.setInt(16, world);
+                    ps.setInt(17, hp);
+                    ps.setInt(18, mp);
+                    ps.setInt(19, maxhp);
+                    ps.setInt(20, maxmp);
+                    ps.setInt(21, level);
+                    ps.setInt(22, remainingAp);
 
-            // Select a keybinding method
-            int[] selectedKey;
-            int[] selectedType;
-            int[] selectedAction;
+                    StringBuilder sps = new StringBuilder();
+                    for (int j : remainingSp) {
+                        sps.append(j);
+                        sps.append(",");
+                    }
+                    String sp = sps.toString();
+                    ps.setString(23, sp.substring(0, sp.length() - 1));
 
-            if(YamlConfig.config.server.USE_CUSTOM_KEYSET) {
-                selectedKey = GameConstants.getCustomKey(true);
-                selectedType = GameConstants.getCustomType(true);
-                selectedAction = GameConstants.getCustomAction(true);
-            } else {
-                selectedKey = GameConstants.getCustomKey(false);
-                selectedType = GameConstants.getCustomType(false);
-                selectedAction = GameConstants.getCustomAction(false);
-            }
-            
-            ps = con.prepareStatement("INSERT INTO keymap (characterid, `key`, `type`, `action`) VALUES (?, ?, ?, ?)");
-            ps.setInt(1, id);
-            for (int i = 0; i < selectedKey.length; i++) {
-                ps.setInt(2, selectedKey[i]);
-                ps.setInt(3, selectedType[i]);
-                ps.setInt(4, selectedAction[i]);
-                ps.execute();
-            }
-            ps.close();
-            
-            // No quickslots, or no change.
-            boolean bQuickslotEquals = this.m_pQuickslotKeyMapped == null || (this.m_aQuickslotLoaded != null && Arrays.equals(this.m_pQuickslotKeyMapped.GetKeybindings(), this.m_aQuickslotLoaded));
-            if (!bQuickslotEquals) {
-                long nQuickslotKeymapped = LongTool.BytesToLong(this.m_pQuickslotKeyMapped.GetKeybindings());
-                
-                try (final PreparedStatement pInsertStatement = con.prepareStatement("INSERT INTO quickslotkeymapped (accountid, keymap) VALUES (?, ?) ON DUPLICATE KEY UPDATE keymap = ?;")) {
-                    pInsertStatement.setInt(1, this.getAccountID());
-                    pInsertStatement.setLong(2, nQuickslotKeymapped);
-                    pInsertStatement.setLong(3, nQuickslotKeymapped);
-                    pInsertStatement.executeUpdate();
+                    int updateRows = ps.executeUpdate();
+                    if (updateRows < 1) {
+                        FilePrinter.printError(FilePrinter.INSERT_CHAR, "Error trying to insert " + name);
+                        return false;
+                    }
+
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            this.id = rs.getInt(1);
+                        } else {
+                            FilePrinter.printError(FilePrinter.INSERT_CHAR, "Inserting char failed " + name);
+                            return false;
+                        }
+                    }
                 }
-            }
 
-            itemsWithType = new ArrayList<>();
-            for (MapleInventory iv : inventory) {
-                for (Item item : iv.list()) {
-                    itemsWithType.add(new Pair<>(item, iv.getType()));
-                }
-            }
+                // Select a keybinding method
+                int[] selectedKey;
+                int[] selectedType;
+                int[] selectedAction;
 
-            ItemFactory.INVENTORY.saveItems(itemsWithType, id, con);
-            
-            if(!skills.isEmpty()) {
-                ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)");
-                ps.setInt(1, id);
-                for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
-                    ps.setInt(2, skill.getKey().getId());
-                    ps.setInt(3, skill.getValue().skillevel);
-                    ps.setInt(4, skill.getValue().masterlevel);
-                    ps.setLong(5, skill.getValue().expiration);
-                    ps.addBatch();
+                if (YamlConfig.config.server.USE_CUSTOM_KEYSET) {
+                    selectedKey = GameConstants.getCustomKey(true);
+                    selectedType = GameConstants.getCustomType(true);
+                    selectedAction = GameConstants.getCustomAction(true);
+                } else {
+                    selectedKey = GameConstants.getCustomKey(false);
+                    selectedType = GameConstants.getCustomType(false);
+                    selectedAction = GameConstants.getCustomAction(false);
                 }
-                ps.executeBatch();
-                ps.close();
+
+                // Key config
+                try (PreparedStatement ps = con.prepareStatement("INSERT INTO keymap (characterid, `key`, `type`, `action`) VALUES (?, ?, ?, ?)")) {
+                    ps.setInt(1, id);
+                    for (int i = 0; i < selectedKey.length; i++) {
+                        ps.setInt(2, selectedKey[i]);
+                        ps.setInt(3, selectedType[i]);
+                        ps.setInt(4, selectedAction[i]);
+                        ps.executeUpdate();
+                    }
+                }
+
+                // No quickslots, or no change.
+                boolean bQuickslotEquals = this.m_pQuickslotKeyMapped == null || (this.m_aQuickslotLoaded != null && Arrays.equals(this.m_pQuickslotKeyMapped.GetKeybindings(), this.m_aQuickslotLoaded));
+                if (!bQuickslotEquals) {
+                    long nQuickslotKeymapped = LongTool.BytesToLong(this.m_pQuickslotKeyMapped.GetKeybindings());
+
+                    // Quickslot key config
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO quickslotkeymapped (accountid, keymap) VALUES (?, ?) ON DUPLICATE KEY UPDATE keymap = ?;")) {
+                        ps.setInt(1, this.getAccountID());
+                        ps.setLong(2, nQuickslotKeymapped);
+                        ps.setLong(3, nQuickslotKeymapped);
+                        ps.executeUpdate();
+                    }
+                }
+
+                itemsWithType = new ArrayList<>();
+                for (MapleInventory iv : inventory) {
+                    for (Item item : iv.list()) {
+                        itemsWithType.add(new Pair<>(item, iv.getType()));
+                    }
+                }
+
+                ItemFactory.INVENTORY.saveItems(itemsWithType, id, con);
+
+                if (!skills.isEmpty()) {
+                    // Skills
+                    try (PreparedStatement ps = con.prepareStatement("INSERT INTO skills (characterid, skillid, skilllevel, masterlevel, expiration) VALUES (?, ?, ?, ?, ?)")) {
+                        ps.setInt(1, id);
+                        for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
+                            ps.setInt(2, skill.getKey().getId());
+                            ps.setInt(3, skill.getValue().skillevel);
+                            ps.setInt(4, skill.getValue().masterlevel);
+                            ps.setLong(5, skill.getValue().expiration);
+                            ps.addBatch();
+                        }
+                        ps.executeBatch();
+                    }
+                }
+
+                con.commit();
+                return true;
+            }  catch (Exception e) {
+                con.rollback();
+                throw e;
+            } finally {
+                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+                con.setAutoCommit(true);
             }
-            
-            con.commit();
-            return true;
         } catch (Throwable t) {
             FilePrinter.printError(FilePrinter.INSERT_CHAR, t, "Error creating " + name + " Level: " + level + " Job: " + job.getId());
-            try {
-                con.rollback();
-            } catch (SQLException se) {
-                FilePrinter.printError(FilePrinter.INSERT_CHAR, se, "Error trying to rollback " + name);
-            }
-            return false;
-        } finally {
-            try {
-                if (ps != null && !ps.isClosed()) {
-                    ps.close();
-                }
-                con.setAutoCommit(true);
-                con.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
-                con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+
+        return false;
     }
 
     public void saveCharToDB() {
