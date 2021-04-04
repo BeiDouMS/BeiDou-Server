@@ -22,18 +22,6 @@ package server.life;
 
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -42,6 +30,13 @@ import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
 import tools.Randomizer;
+
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class MapleMonsterInformationProvider {
     // Author : LightPepsi
@@ -92,45 +87,20 @@ public class MapleMonsterInformationProvider {
     }
 
     private void retrieveGlobal() {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection con = null;
-
-        try {
-            con = DatabaseConnection.getConnection();
-            ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0");
-            rs = ps.executeQuery();
-
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM drop_data_global WHERE chance > 0");
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                globaldrops.add(
-                        new MonsterGlobalDropEntry(
-                                rs.getInt("itemid"),
-                                rs.getInt("chance"),
-                                rs.getByte("continent"),
-                                rs.getInt("minimum_quantity"),
-                                rs.getInt("maximum_quantity"),
-                                rs.getShort("questid")));
+                globaldrops.add(new MonsterGlobalDropEntry(
+                        rs.getInt("itemid"),
+                        rs.getInt("chance"),
+                        rs.getByte("continent"),
+                        rs.getInt("minimum_quantity"),
+                        rs.getInt("maximum_quantity"),
+                        rs.getShort("questid")));
             }
-
-            rs.close();
-            ps.close();
-            con.close();
         } catch (SQLException e) {
             System.err.println("Error retrieving drop" + e);
-        } finally {
-            try {
-                if (ps != null && !ps.isClosed()) {
-                    ps.close();
-                }
-                if (rs != null && !rs.isClosed()) {
-                    rs.close();
-                }
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                }
-            } catch (SQLException ignore) {
-                ignore.printStackTrace();
-            }
         }
     }
 
@@ -182,40 +152,21 @@ public class MapleMonsterInformationProvider {
             return drops.get(monsterId);
         }
         final List<MonsterDropEntry> ret = new LinkedList<>();
-        
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        Connection con = null;
-        try {
-            con = DatabaseConnection.getConnection();
-            ps = con.prepareStatement("SELECT itemid, chance, minimum_quantity, maximum_quantity, questid FROM drop_data WHERE dropperid = ?");
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT itemid, chance, minimum_quantity, maximum_quantity, questid FROM drop_data WHERE dropperid = ?")) {
             ps.setInt(1, monsterId);
-            rs = ps.executeQuery();
 
-            while (rs.next()) {
-                ret.add(new MonsterDropEntry(rs.getInt("itemid"), rs.getInt("chance"), rs.getInt("minimum_quantity"), rs.getInt("maximum_quantity"), rs.getShort("questid")));
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ret.add(new MonsterDropEntry(rs.getInt("itemid"), rs.getInt("chance"), rs.getInt("minimum_quantity"), rs.getInt("maximum_quantity"), rs.getShort("questid")));
+                }
             }
-
-            con.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return ret;
-        } finally {
-            try {
-                if (ps != null && !ps.isClosed()) {
-                    ps.close();
-                }
-                if (rs != null && !rs.isClosed()) {
-                    rs.close();
-                }
-                if (con != null && !con.isClosed()) {
-                    con.close();
-                }
-            } catch (SQLException ignore) {
-                ignore.printStackTrace();
-                return ret;
-            }
         }
+
         drops.put(monsterId, ret);
         return ret;
     }
