@@ -21,14 +21,15 @@
 */
 package net.server.task;
 
+import client.MapleJob;
+import config.YamlConfig;
+import net.server.Server;
+import tools.DatabaseConnection;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import client.MapleJob;
-import config.YamlConfig;
-import tools.DatabaseConnection;
-import net.server.Server;
 
 /**
  * @author Matze
@@ -36,13 +37,14 @@ import net.server.Server;
  * @author Ronan
  */
 public class RankingLoginTask implements Runnable {
-    private Connection con;
     private long lastUpdate = System.currentTimeMillis();
     
     private void resetMoveRank(boolean job) throws SQLException {
-        String query = "UPDATE characters SET " + (job == true ? "jobRankMove = 0" : "rankMove = 0");
-        PreparedStatement reset = con.prepareStatement(query);
-        reset.executeUpdate();
+        String query = "UPDATE characters SET " + (job ? "jobRankMove = 0" : "rankMove = 0");
+        try (Connection con = DatabaseConnection.getConnection()) {
+            PreparedStatement reset = con.prepareStatement(query);
+            reset.executeUpdate();
+        }
     }
 
     private void updateRanking(int job, int world) throws SQLException {
@@ -51,66 +53,63 @@ public class RankingLoginTask implements Runnable {
             sqlCharSelect += "AND c.job DIV 100 = ? ";
         }
         sqlCharSelect += "ORDER BY c.level DESC , c.exp DESC , c.lastExpGainTime ASC, c.fame DESC , c.meso DESC";
-        
-        PreparedStatement charSelect = con.prepareStatement(sqlCharSelect);
-        charSelect.setInt(1, world);
-        if (job != -1) {
-            charSelect.setInt(2, job);
-        }
-        ResultSet rs = charSelect.executeQuery();
-        PreparedStatement ps = con.prepareStatement("UPDATE characters SET " + (job != -1 ? "jobRank = ?, jobRankMove = ? " : "rank = ?, rankMove = ? ") + "WHERE id = ?");
-        int rank = 0;
-        
-        while (rs.next()) {
-            int rankMove = 0;
-            rank++;
-            if (rs.getLong("lastlogin") < lastUpdate || rs.getInt("loggedin") > 0) {
-                rankMove = rs.getInt((job != -1 ? "jobRankMove" : "rankMove"));
+
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement charSelect = con.prepareStatement(sqlCharSelect)) {
+            charSelect.setInt(1, world);
+            if (job != -1) {
+                charSelect.setInt(2, job);
             }
-            rankMove += rs.getInt((job != -1 ? "jobRank" : "rank")) - rank;
-            ps.setInt(1, rank);
-            ps.setInt(2, rankMove);
-            ps.setInt(3, rs.getInt("id"));
-            ps.executeUpdate();
+
+            try (ResultSet rs = charSelect.executeQuery();
+                 PreparedStatement ps = con.prepareStatement("UPDATE characters SET " + (job != -1 ? "jobRank = ?, jobRankMove = ? " : "rank = ?, rankMove = ? ") + "WHERE id = ?")) {
+                int rank = 0;
+
+                while (rs.next()) {
+                    int rankMove = 0;
+                    rank++;
+                    if (rs.getLong("lastlogin") < lastUpdate || rs.getInt("loggedin") > 0) {
+                        rankMove = rs.getInt((job != -1 ? "jobRankMove" : "rankMove"));
+                    }
+                    rankMove += rs.getInt((job != -1 ? "jobRank" : "rank")) - rank;
+                    ps.setInt(1, rank);
+                    ps.setInt(2, rankMove);
+                    ps.setInt(3, rs.getInt("id"));
+                    ps.executeUpdate();
+                }
+            }
         }
-        
-        rs.close();
-        charSelect.close();
-        ps.close();
     }
     
     @Override
     public void run() {
-        try {
-            con = DatabaseConnection.getConnection();
+        try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
-            
-            if(YamlConfig.config.server.USE_REFRESH_RANK_MOVE == true) {
-                resetMoveRank(true);
-                resetMoveRank(false);
-            }
-            
-            for(int j = 0; j < Server.getInstance().getWorldsSize(); j++) {
-                updateRanking(-1, j);    //overall ranking
-                for (int i = 0; i <= MapleJob.getMax(); i++) {
-                    updateRanking(i, j);
-                }
-                con.commit();
-            }
-            
-            con.setAutoCommit(true);
-            lastUpdate = System.currentTimeMillis();
-            con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            
+
             try {
-                con.rollback();
+                if (YamlConfig.config.server.USE_REFRESH_RANK_MOVE) {
+                    resetMoveRank(true);
+                    resetMoveRank(false);
+                }
+
+                for (int j = 0; j < Server.getInstance().getWorldsSize(); j++) {
+                    updateRanking(-1, j);    //overall ranking
+                    for (int i = 0; i <= MapleJob.getMax(); i++) {
+                        updateRanking(i, j);
+                    }
+                    con.commit();
+                }
+
                 con.setAutoCommit(true);
-                if(!con.isClosed()) con.close();
-            } catch (SQLException ex2) {
-                ex2.printStackTrace();
+                lastUpdate = System.currentTimeMillis();
+            } catch (SQLException ex) {
+                con.rollback();
+                throw ex;
+            } finally {
+                con.setAutoCommit(true);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
