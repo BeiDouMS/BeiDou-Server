@@ -7223,14 +7223,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             PreparedStatement ps2, ps3;
             ResultSet rs2, rs3;
             
-            ps3 = con.prepareStatement("SELECT petid FROM inventoryitems WHERE characterid = ? AND petid IS NOT NULL");
+            ps3 = con.prepareStatement("SELECT petid FROM inventoryitems WHERE characterid = ? AND petid > -1");
             ps3.setInt(1, charid);
             rs3 = ps3.executeQuery();
-            while(rs3.next()) {
-                int petId = rs3.getInt("petid");
-                if (rs3.wasNull()) {
-                    petId = -1;
-                }
+            while (rs3.next()) {
+                final int petId = rs3.getInt("petid");
 
                 ps2 = con.prepareStatement("SELECT itemid FROM petignores WHERE petid = ?");
                 ps2.setInt(1, petId);
