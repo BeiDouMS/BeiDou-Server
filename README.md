@@ -7,12 +7,16 @@ This document is currently being worked on, so some errors may occur.
 
 ***This emulator is not production ready.***  
 
-It can be useful for testing things locally or for trying out ideas, but launching a new private server with no real changes is not recommended.
+It can be useful for testing things locally or for trying out ideas, but launching a new private server based on this with no real changes is not recommended.
 
 ---
 ### Development information
 
-Status: <span style="color:SkyBlue">__in development__</span>.
+Status: <span style="color:SkyBlue">__in development__</span>  
+
+#### Community
+GitHub: https://github.com/P0nk/Cosmic  
+Discord: https://discord.gg/JU5aQapVZK
 
 #### Mission
 
