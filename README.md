@@ -1,50 +1,77 @@
 ﻿# Cosmic - MapleStory v83
-Cosmic launched as a continuation of HeavenMS on March 21st 2021.
+Cosmic launched as a successor to HeavenMS on March 21st 2021.
 
-## Words from previous head developer, Ronan C. P. Lana
+This document is currently being worked on, so some errors may occur.
 
-Besides myself for maintaining this repository, credits are to be given to Wizet/Nexon (owners of MapleStory & it's IP contents), the original MapleSolaxia staff and other colaborators, as just some changes/patches on the game were applied by myself, in which some of them diverged from the original v83 patch contents (alright, not just "some patches" by now since a whole lot of major server core changes have been applied on this development).
+## Beware
 
-Regarding distributability and usage of the code presented here: like it was before, this MapleStory server is open-source. By that, it is meant that anyone is **free to install, use, modify and redistribute the contents**, as long as there is **no kind of commercial trading involved** and the **credits to the original creators are maintained** within the codes.
+***This emulator is not production ready.***  
 
-This server source should be built and run on Java 8 in order to run properly -- used to be ran in Java 7, thanks kolakcc (Familiar) for the Java 8 support!
-
-Consider using an IDE for setting up the server source into a project. Once mounted the project, build it on your machine and run the server using the "launch.bat" application.
-
-In this project, many gameplay-wise issues generated from either the original WZ files and the server source have been partially or completely solved. Considering the use of the provided edited WZ's and server-side wz.xml files should be of the greatest importance when dealing with this instance of server source, in order to perceive it at it's full potential. My opinion, though!
-
-- In other case, as fallback from the provided ones, consider using **whole clean set**. Selecting part of the provided ones to play pretty much *may eventually* lead to unexpected issues.
-
-The main objective of this effort is to try as best as possible to recreate what once was the original MapleStory v83, while adding up some flavors that spices up the gameplay. In other words, aim to get the best of the MapleStory of that era.
+It can be useful for testing things locally or for trying out ideas, but launching a new private server with no real changes is not recommended.
 
 ---
-### Download items 
+### Development information
 
-#### Source code
-Cosmic: https://github.com/P0nk/Cosmic
+Status: <span style="color:SkyBlue">__in development__</span>.
 
-#### IDE
-IntelliJ IDEA: https://www.jetbrains.com/idea/
+#### Mission
 
-The community version of IntelliJ is free and sufficient for our needs.
+With non-profitting means intended, provide nostalgic pre-BB maplers world-wide a quality local server for freestyle entertainment.
 
-#### Client files & general tools
-Ponk's Google Drive: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
+#### Vision
 
-Note: the actual client .exe to launch the game is not included on Google Drive. See link below to localhost client.
+By taking the v83 MapleStory as the angular stone, incrementally look forward to improve the gaming experience whilst still retaining the "clean v83" conservative ideal. Also, through reviewing distinguished aspects of the server's behavior that could be classified as a potential server threat, in the long run look for ways to improve or even stabilize some of it's uncertain aspects.
 
-#### JDK
-Oracle: https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
+#### Values
 
-**Important note about localhost clients**: these executables are red-flagged by antivirus tools as __potentially malicious softwares__, this happens due to the reverse engineering methods that were applied onto these software artifacts. Those depicted here have been put to use for years already and posed no harm so far, so they are soundly assumed to be safe.
+* Autonomy, seek self-improvement for tackling issues head-on;
+* Adventurous, take no fear of failures on the path of progress;
+* Light-hearted support, general people out there didn't experience what you've already had;
+* Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had.
 
-  Latest localhost client: https://hostr.co/amuX5SLeeVZx
+---
 
-  The following list, in bottom-up chronological order, holds information regarding all changes that were applied from the starting localhost used in this development. Some lines have a link attached, that will lead you to a snapshot of the localhost at that version of the artifact. Naturally, later versions holds all previous changes along with the proposed changes.
+## Tools
+* **Java 8 SDK** - 
+  * Link: https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
+	
+
+* **IntelliJ IDEA** - Java IDE and your main tool for working with the source code. Community edition is good enough.
+  * Link: https://www.jetbrains.com/idea/
+	
+
+* **MySQL Community Server 8** - Database for game data.  
+  * Link: https://dev.mysql.com/downloads/mysql/
+	
+
+* **MySQL Workbench 8** - Client for interacting with the database. Other clients exist. 
+  * Link: https://dev.mysql.com/downloads/workbench/
+	
+
+* **Docker Desktop** (optional) - For launching the game locally with less hassle.  
+  * Link: https://www.docker.com/products/docker-desktop
+	
+
+* **Client files and general tools**
+  * Link: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
+	
+
+## Client 
+
+Latest localhost client: https://hostr.co/amuX5SLeeVZx
+
+**Important note about localhost clients**: these executables are red-flagged by antivirus tools as __potentially malicious software__,
+this happens due to the reverse engineering methods that were applied onto these software artifacts. 
+Those depicted here have been put to use for years already and posed no harm so far, so they are soundly assumed to be safe.
+
+The following list, in bottom-up chronological order, 
+holds information regarding all changes that were applied from the starting localhost used in this development. 
+Some lines have a link attached, that will lead you to a snapshot of the localhost at that version of the artifact. 
+Naturally, later versions holds all previous changes along with the proposed changes.
 
 **Change log:**
 
-  * Fixed Monster Magnet crashing the caster when trying to pull fixed mobs, credits to Shavit. https://gofile.io/?c=BW7dVM
+  * Fixed Monster Magnet crashing the caster when trying to pull fixed mobs, credits to Shavit. https://gofile.io/?c=BW7dVM (dead link)
 
   * Cleared need for administrator privileges (OS) to play the game, credits to Ubaware.
 
@@ -83,137 +110,16 @@ Continuing from where **SYJourney**'s JourneyClient has finished contributions (
 
 Newer implementations are being maintained by **頼晏 (ryantpayton)** and aims to offer higher display resolution, bring recent UI contents for the pre-BB gameplay and incremental support on overall gaming perspective.
 
-HeavenClient Github: https://github.com/ryantpayton/HeavenClient
+HeavenClient GitHub: https://github.com/ryantpayton/HeavenClient
 
 ---
-### Development information
 
-Status: <span style="color:SkyBlue">__in development__</span>.
+## Getting started
+* Install the client
+* Install the server
 
-#### Mission
+### Installing the client
 
-With non-profitting means intended, provide nostalgic pre-BB maplers world-wide a quality local server for freestyle entertainment.
-
-#### Vision
-
-By taking the v83 MapleStory as the angular stone, incrementally look forward to improve the gaming experience whilst still retaining the "clean v83" conservative ideal. Also, through reviewing distinguished aspects of the server's behavior that could be classified as a potential server threat, in the long run look for ways to improve or even stabilize some of it's uncertain aspects.
-
-#### Values
-
-* Autonomy, seek self-improvement for tackling issues head-on;
-* Adventurous, take no fear of failures on the path of progress;
-* Light-hearted support, general people out there didn't experience what you've already had;
-* Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had;
-
-#### Announcements
-
-HeavenMS development as we can see right now achieved an acceptable state-of-the-art. A heartfelt thanks for everyone that contributed in some way for the progress of this server!
-
-A case study has been conducted with the objective of overview results achieved during HeavenMS development. Those can be checked out on: https://heavenms-survey.home.blog/2019/12/24/project-visualizations/
-
-#### Support HeavenMS
-
-If you liked this project, please don't forget to __star__ the repo ;) .
-
-It's never enough to tell this, thanks to everyone that have been contributing something for the continuous improvement of the server! Be it through bug reports, donation, code snippets and/or pull requests.
-
-Our Discord channel is still available on: https://discord.gg/Q7wKxHX
-
-<hr id="donate" />
-
-[//]: <> (If you REALLY liked what you have seen on this project, please feel free to donate a little something as a helping hand for my contributions towards Maple development. Also remember to **support Nexon**!)
-
-### Disclaimer
-
-[//]: <> (* HeavenMS development is decisively __ONLY accepting donations__ from the Paypal link aforementioned, in the __ronancpl/HeavenMS__ repository readme \(no patreons or other revenue resources\).)
-
-* HeavenMS staff has __no current intention__ to publicly open a server with this source, if that ever comes to happen this note will be lifted. __Don't be scammed!__
-
-* This server source is __NOT intended to be stable__ as is. Proper deadlock review and other maintenance contributions are needed in order to make it steps ahead on viability.
-
----
-### Preparing the ambient 
-
-The following link teaches on how to install a MapleStory v83 private server, however IT DIFFERS on what is used here: http://forum.ragezone.com/f428/maplestory-private-server-v83-741739/
-
-Use that link ONLY AS AN ORIENTATION on where here things start to become ambiguous.
-
-Firstly, install all the general tools required to run the server:
-
-* WampServer2.0i.exe -> recipient of the MySQL server.
-* mysql-query-browser.msi -> MySQL client component, visually shows the DB data and hubs queries.
-* hamachi.msi -> used for establishing a tunnelling route for the server/client communication.
-
-Now install the Java 8 SDK & NetBeans bundle (or any other IDE of your liking):
-* jdk-8u111-nb-8_2-windows-x64.exe -> JDK/JRE 8 & IDE for building the server.
-
-Now that the tools have been installed, test if they are working.
-
-For WampServer:
-
-* Once you're done installing it, run it and you will see the Wamp icon on the bottom right corner. Left click it and click 'Put Online'.
-* In case of ORANGE ICON, change port 80 at "httpd.conf" to another, as it clashes with a Windows default port. Then Left click it again and click 'Start All Services'.
-* The Wamp icon must look completely green (if its orange or red, you have a problem).
-
-For Hamachi:
-
-* Try opening it. It's that simple.
-
-Hamachi is optional, though. You don't have to install Hamachi if you want to make the server just for use on your own machine. However, if you want to let other players access your server, consider alternatively using port-forwarding methods.
-
----
-### Installing the SERVER 
-
-By downloading through the Github download button, you may have obtained a ZIP file with a single "Cosmic-master" folder on it. EXTRACT that folder.
-
-For expediency, "Cosmic-master" folder on this guide will be referred just as "Cosmic". Rename it for convenience. Then, set "Cosmic" the folder on a place of your preference. It is recommended to use "C:\Nexon\Cosmic".
-
-Setting up the SQL: open MySQL Query Browser, then create a new session with the parameters below, then click OK.
-
-* Server Host: localhost
-* Port: 3306
-* Username: root
-
-Now it must be done CAREFULLY:
-
-1. File -> Open Script... -> Browse for "C:\Nexon\Cosmic\sql" -> db_database.sql, and execute it.
-
-2. File -> Open Script... -> Browse for "C:\Nexon\Cosmic\sql" -> db_drops.sql, and execute it.
-
-Now it is OPTIONAL, you don't need to run it if you don't want, as it will simply change some NPC shops to set some new goods, not present in the original MapleStory, to sell:
-
-3. File -> Open Script... -> Browse for "C:\Nexon\Cosmic\sql" -> db_shopupdate.sql, and execute it.
-
-At the end of the execution of these SQLs, you should have installed a database schema named "cosmic". REGISTER YOUR FIRST ACCOUNT to be used in-game by **creating manually** an entry on the table "accounts" at that database with a login and a password.
-
-Configure the IP you want to use for your MapleStory server in "configuration.ini" file, or set it as "localhost" if you want to run it only on your machine. Alternatively, you can use the IP given by Hamachi to use on a Hamachi network, or you can use a non-Hamachi method of port-forwarding. Neither will be approached here.
-
-#### Configuring the project
-
-Now open NetBeans, and click "New project...". Opt for creating one "with existent code".
-
-In doubt where the project should be located, consider placing it on the same directory you've opted to place the server files.
-
-When prompted for location of source packages, navigate through the file system reaching the server files, and select the "src" folder. Next, click "Finish".
-
-Inside the project you might encounter some code errors, you have yet to set the core JARs of the project.
-
-From the project hierarchy, right-click the project and select "Properties" -> "Libraries" -> "Add JAR/Folder".
-
-Locate the folder "cores" inside the root directory of the server files and manually configure those cores on NetBeans (mina-core, slf4j-api, ...).
-
-Finally, select "Clean and Build project" to build the JAR file for the MapleStory server.
-
-#### Launching the server
-
-Once done, make sure both WampServer and Hamachi are on and functional, then execute "launch.bat" on the base folder of the server files. If no errors were raised from this action, your MapleStory server is now online.
-
----
-### Installing the CLIENT 
-
-#### Setting up client-side ambient
-
-The client's set-up is quite straightforward:
 
 1. From "MapleGlobal-v83-setup.exe", install MapleStory on your folder of preference (e.g. "C:\Nexon\MapleStory") and follow their instructions.
 2. Once done, erase these files: "HShield" (folder), "ASPLnchr.exe", "MapleStory.exe" and "Patcher.exe".
@@ -230,9 +136,12 @@ To hex-edit, install the Neo Hex Editor from "free-hex-editor-neo.exe" and follo
 
 #### Testing the localhost
 
-Open the "localhost.exe" client. If by any means the program did not open, and checking the server log your ping has been listened by the server and you are using Windows 8 or 10, it probably might be some compatibility issue.
+Open the "localhost.exe" client. 
+If by any means the program did not open, and checking the server log your ping has been listened by the server 
+and you are using Windows 8 or 10, it probably might be some compatibility issue.
 
-In that case, extract "lolwut.exe" from "lolwut-v0.01.rar" and place it on the MapleStory client folder ("C:\Nexon\MapleStory"). Your "localhost.exe" property settings must follow these:
+In that case, extract "lolwut.exe" from "lolwut-v0.01.rar" and place it on the MapleStory client folder ("C:\Nexon\MapleStory"). 
+Your "localhost.exe" property settings must follow these:
 
 Note: "lolwut.exe" is currently not available in the Google Drive.
 
@@ -246,22 +155,91 @@ Note: "lolwut.exe" is currently not available in the Google Drive.
 Important: should the client be refused a connection to the game server, it may be because of firewall issues. Head to the end of this file to proceed in allowing this connection through the computer's firewall. Alternatively, one can deactivate the firewall and try opening the client again.
 
 ---
-### Creating an account and logging in the game
+### Installing the server 
+1. Configure the project
+2. Set up the database
+3. Launch the server
+
+If you are using Docker (quick start):
+1. Configure the project
+2. Launch the server
+
+#### Configuring the project
+
+The easiest way to set up your project is to load the repository directly into a new IntelliJ project.
+
+1. Install IntelliJ
+2. Create a new "Project from Version Control..."
+3. Enter the URL to this GitHub repository: "https://github.com/P0nk/Cosmic.git"
+4. Click on "Clone". A new project will now be created with all the files from the repository.
+
+#### Setting up the database
+
+1. Install MySQL Server 8 and MySQL Workbench 8.  
+2. Using Workbench, create a new user with username "cosmic_server" and password "snailshell". 
+   These are the defaults used in Cosmic.
+   * (Optional) Restrict the Schema Privileges for this new user for improved security. 
+	 Add a new entry with "Schemas matching pattern: cosmic" and only select "SELECT", "INSERT", "UPDATE", "DELETE" under "Object Rights"
+3. Run the sql scripts in the "sql" directory of the project in the order indicated by their names. 
+	* Make sure you are connected to the database with the "root" user.
+	* Run scripts through the menu: "File" -> "Run SQL Script" -> select the script file to run -> "Run"
+	* The 3rd script "3-db_shopupdate" is optional. It adds custom shop items for certain NPCs.
+
+Use this info when you connect to MySQL Server for the first time:
+* Server Host: localhost
+* Port: 3306
+* Username: root
+* Password: whatever you entered in during the installation of MySQL Server
+
+At the end of the execution of these sql scripts, you should have installed a database schema named "cosmic". 
+REGISTER YOUR FIRST ACCOUNT to be used in-game by **manually creating** an entry in the table "accounts" in the database with a username and password.
+
+
+### Launching the server
+
+Configure the IP you want to use for your MapleStory server in "config.yaml" file, or set it as "localhost" if you want to run it only on your machine.
+Alternatively, you can use the IP given by Hamachi to use on a Hamachi network, or you can use a non-Hamachi method of port-forwarding. Neither will be approached here.
+
+
+To launch the server, you may either:
+* Launch inside IntelliJ
+* Launch a jar file
+* Launch with Docker
+
+#### Launch inside IntelliJ
+1. Open the file src/main/java/net/server/Server.java.
+2. Click the green arrow to the left of the class definition "public class Server", and then "Run Cosmic". 
+   * Alternatively (recommended), create a new Configuration that points to "net.server.Server".
+3. The server launches in a terminal window inside IntelliJ.
+
+#### Launch a jar file
+1. Create the jar file
+   * The jar file is created by the Maven assembly plugin in the package lifecycle.
+   * If you have Maven installed on your computer, simply run the command "mvn clean install" to create the jar file.
+   * IntelliJ also comes with built in Maven support. Open a new terminal window inside IntelliJ, type "mvn clean install" (your command should be marked green), then Ctrl+Enter to create the jar file.
+2. Launch the jar file
+   * Double click on "launch.bat"
+    
+#### Launch with Docker
+Run the command "docker compose up" at the root of the project.
+
+---
+### Creating an account and logging into the game
 
 By default, the server source is set to allow AUTO-REGISTERING. This means that, by simply typing in a "Login ID" and a "Password", you're able to create a new account.
 
-After creating a character, experiment typing in all-chat "@commands". This will display all available commands for the current GM level your character has.
+After creating a character, experiment typing in all-chat "@commands". 
+This will display all available commands for the current GM level your character has.
 
 To change a character's GM level, make sure that character is not logged in, then:
 
-* Open MySQL Query Browser;
-* Double-click "cosmic" schema;
-* Double click "characters" table;
-* Execute the selected query;
-* Mark "Edit" flag on the MySQL Query Browser UI screen;
-* Locate your character's row on the displayed ResultSet;
-* Edit your character's GM level;
-* Hit APPLY CHANGES.
+1. Open MySQL Workbench;
+2. Expand "cosmic" schema;
+3. Expand "Tables";
+4. Right-click "characters" and click "Select Rows"
+5. Find your character in Result Grid. Scroll to the right and find the "gm" column.
+6. Edit your character's gm value and click "Apply", and then "Apply" again in the window that appeared, then "Finish".
+	* 0 is what ordinary players start with, and 6 is the highest gm value. Higher level gms have access to more commands in game.
 
 ---
 ### Some notes about WZ/WZ.XML EDITING 
@@ -318,3 +296,65 @@ It is not done yet, sometimes the firewalls will block connections between the L
 These rules must target "one application", "enable connections" and must target your MapleStory client (aka localhost).
 
 After all these steps, the portforwarding process should now be complete.
+
+---
+
+---
+
+---
+
+# HeavenMS
+
+Old sections left from the HeavenMS README that might still be relevant.
+
+## Head developer, Ronan C. P. Lana
+
+Besides myself for maintaining this repository, credits are to be given to Wizet/Nexon (owners of MapleStory & it's IP contents), the original MapleSolaxia staff and other colaborators, as just some changes/patches on the game were applied by myself, in which some of them diverged from the original v83 patch contents (alright, not just "some patches" by now since a whole lot of major server core changes have been applied on this development).
+
+Regarding distributability and usage of the code presented here: like it was before, this MapleStory server is open-source. By that, it is meant that anyone is **free to install, use, modify and redistribute the contents**, as long as there is **no kind of commercial trading involved** and the **credits to the original creators are maintained** within the codes.
+
+This server source should be built and run on Java 8 in order to run properly -- used to be ran in Java 7, thanks kolakcc (Familiar) for the Java 8 support!
+
+Consider using an IDE for setting up the server source into a project. Once mounted the project, build it on your machine and run the server using the "launch.bat" application.
+
+In this project, many gameplay-wise issues generated from either the original WZ files and the server source have been partially or completely solved. Considering the use of the provided edited WZ's and server-side wz.xml files should be of the greatest importance when dealing with this instance of server source, in order to perceive it at it's full potential. My opinion, though!
+
+- In other case, as fallback from the provided ones, consider using **whole clean set**. Selecting part of the provided ones to play pretty much *may eventually* lead to unexpected issues.
+
+The main objective of this effort is to try as best as possible to recreate what once was the original MapleStory v83, while adding up some flavors that spices up the gameplay. In other words, aim to get the best of the MapleStory of that era.
+
+#### Preparing the ambient
+
+For Hamachi:
+
+* Try opening it. It's that simple.
+
+Hamachi is optional, though. You don't have to install Hamachi if you want to make the server just for use on your own machine.
+However, if you want to let other players access your server, consider alternatively using port-forwarding methods.
+
+
+#### Announcements
+
+HeavenMS development as we can see right now achieved an acceptable state-of-the-art. A heartfelt thanks for everyone that contributed in some way for the progress of this server!
+
+A case study has been conducted with the objective of overview results achieved during HeavenMS development. Those can be checked out on: https://heavenms-survey.home.blog/2019/12/24/project-visualizations/
+
+#### Support HeavenMS
+
+If you liked this project, please don't forget to __star__ the repo ;) .
+
+It's never enough to tell this, thanks to everyone that have been contributing something for the continuous improvement of the server! Be it through bug reports, donation, code snippets and/or pull requests.
+
+Our Discord channel is still available on: https://discord.gg/Q7wKxHX
+
+<hr id="donate" />
+
+[//]: <> (If you REALLY liked what you have seen on this project, please feel free to donate a little something as a helping hand for my contributions towards Maple development. Also remember to **support Nexon**!)
+
+### Disclaimer
+
+[//]: <> (* HeavenMS development is decisively __ONLY accepting donations__ from the Paypal link aforementioned, in the __ronancpl/HeavenMS__ repository readme \(no patreons or other revenue resources\).)
+
+* HeavenMS staff has __no current intention__ to publicly open a server with this source, if that ever comes to happen this note will be lifted. __Don't be scammed!__
+
+* This server source is __NOT intended to be stable__ as is. Proper deadlock review and other maintenance contributions are needed in order to make it steps ahead on viability.
