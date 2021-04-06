@@ -41,7 +41,7 @@ import java.util.List;
 
 public class PnpcRemoveCommand extends Command {
     {
-        setDescription("");
+        setDescription("Remove a permanent NPC on the map.");
     }
 
     @Override

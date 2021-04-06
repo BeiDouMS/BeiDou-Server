@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import server.life.MapleLifeFactory;
 import tools.MaplePacketCreator;
 
 public class BombCommand extends Command {
     {
-        setDescription("");
+        setDescription("Bomb a player, dealing damage.");
     }
 
     @Override

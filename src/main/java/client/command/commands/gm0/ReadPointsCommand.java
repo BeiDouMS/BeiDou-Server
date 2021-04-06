@@ -6,7 +6,7 @@ import client.command.Command;
 
 public class ReadPointsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show point total.");
     }
 
     @Override

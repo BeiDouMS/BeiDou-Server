@@ -23,18 +23,19 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
 import server.maps.MapleMapObject;
+
 import java.util.HashSet;
 
 public class WhereaMiCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show info about objects on current map.");
     }
 
     @Override

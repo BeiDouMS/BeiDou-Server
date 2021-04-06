@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm2;
 
+import client.MapleCharacter;
+import client.MapleClient;
 import client.MapleStat;
 import client.command.Command;
-import client.MapleClient;
-import client.MapleCharacter;
 import config.YamlConfig;
 
 public class MaxStatCommand extends Command {
     {
-        setDescription("");
+        setDescription("Max out all character stats.");
     }
 
     @Override

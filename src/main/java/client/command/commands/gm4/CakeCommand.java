@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 
 public class CakeCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn Cake boss with specified HP.");
     }
 
     @Override

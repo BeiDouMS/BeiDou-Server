@@ -19,13 +19,14 @@
 */
 package client.command.commands.gm5;
 
-import java.util.Collection;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.command.Command;
 import constants.game.GameConstants;
 import net.server.Server;
 import net.server.world.World;
+
+import java.util.Collection;
 
 /**
  *
@@ -35,7 +36,7 @@ import net.server.world.World;
  */
 public class IpListCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show IP of all players.");
     }
 
     @Override

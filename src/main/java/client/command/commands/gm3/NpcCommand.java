@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleLifeFactory;
 import server.life.MapleNPC;
 import tools.MaplePacketCreator;
 
 public class NpcCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn an NPC on your location.");
     }
 
     @Override

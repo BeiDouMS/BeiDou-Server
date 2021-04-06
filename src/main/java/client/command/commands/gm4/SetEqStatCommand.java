@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.Equip;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -33,7 +33,7 @@ import constants.inventory.ItemConstants;
 
 public class SetEqStatCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set stats of all equips in inventory.");
     }
 
     @Override

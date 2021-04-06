@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleLifeFactory;
 
 public class PianusCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn Pianus (R) on your location.");
     }
 
     @Override

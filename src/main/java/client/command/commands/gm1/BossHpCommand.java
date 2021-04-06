@@ -24,13 +24,13 @@
 package client.command.commands.gm1;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import server.life.MapleMonster;
 
 public class BossHpCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show HP of bosses on current map.");
     }
 
     @Override

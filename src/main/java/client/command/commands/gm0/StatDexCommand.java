@@ -30,7 +30,7 @@ import config.YamlConfig;
 
 public class StatDexCommand extends Command {
     {
-        setDescription("");
+        setDescription("Assign AP into DEX.");
     }
 
     @Override

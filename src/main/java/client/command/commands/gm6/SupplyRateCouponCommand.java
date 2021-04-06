@@ -26,7 +26,7 @@ import config.YamlConfig;
 
 public class SupplyRateCouponCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set availability of coupons in Cash Shop.");
     }
 
     @Override

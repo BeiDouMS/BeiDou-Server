@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import config.YamlConfig;
 
 public class ApCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set available AP.");
     }
 
     @Override

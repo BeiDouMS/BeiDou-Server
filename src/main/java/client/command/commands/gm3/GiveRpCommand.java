@@ -6,7 +6,7 @@ import client.command.Command;
 
 public class GiveRpCommand extends Command {
     {
-        setDescription("");
+        setDescription("Give reward points to a player.");
     }
 
     @Override

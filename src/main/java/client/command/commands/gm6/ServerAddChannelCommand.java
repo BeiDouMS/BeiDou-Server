@@ -24,14 +24,14 @@
 package client.command.commands.gm6;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import server.ThreadManager;
 
 public class ServerAddChannelCommand extends Command {
     {
-        setDescription("");
+        setDescription("Add a new channel to a world.");
     }
 
     @Override

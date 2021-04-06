@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.MaplePet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import server.maps.MapleMapItem;
@@ -38,7 +38,7 @@ import java.util.List;
 
 public class ForceVacCommand extends Command {
     {
-        setDescription("");
+        setDescription("Loot all drops on the map.");
     }
 
     @Override

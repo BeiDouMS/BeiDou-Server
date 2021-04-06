@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class HpMpCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set HP/MP of a player.");
     }
 
     @Override

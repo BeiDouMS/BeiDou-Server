@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm6;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class SetGmLevelCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set GM level of a player.");
     }
 
     @Override

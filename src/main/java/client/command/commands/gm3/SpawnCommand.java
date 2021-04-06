@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 
 public class SpawnCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn mob(s) on your location.");
     }
 
     @Override

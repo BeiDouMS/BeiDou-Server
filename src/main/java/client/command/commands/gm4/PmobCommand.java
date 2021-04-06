@@ -39,7 +39,7 @@ import java.sql.SQLException;
 
 public class PmobCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn a permanent mob on your location.");
     }
 
     @Override

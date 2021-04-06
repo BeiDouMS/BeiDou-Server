@@ -33,7 +33,7 @@ import java.util.Collection;
 
 public class WarpAreaCommand extends Command {
     {
-        setDescription("");
+        setDescription("Warp all nearby players to a new map.");
     }
 
     @Override

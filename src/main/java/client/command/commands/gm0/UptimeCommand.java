@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 
 public class UptimeCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show server online time.");
     }
 
     @Override

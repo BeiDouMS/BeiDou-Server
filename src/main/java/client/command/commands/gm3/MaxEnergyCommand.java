@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import tools.MaplePacketCreator;
 
 public class MaxEnergyCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set dojo energy to max value.");
     }
 
     @Override

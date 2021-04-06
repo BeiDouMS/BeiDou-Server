@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm5;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
-import server.maps.MaplePortal;
 import server.TimerManager;
 import server.life.MapleMonster;
 import server.life.SpawnPoint;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
+import server.maps.MaplePortal;
 import server.maps.MapleReactor;
 
 import java.awt.*;
@@ -43,7 +43,7 @@ public class DebugCommand extends Command {
     private final static String debugTypes[] = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
     
     {
-        setDescription("");
+        setDescription("Show a debug message.");
     }
 
     @Override

@@ -37,7 +37,7 @@ import java.sql.SQLException;
 
 public class BanCommand extends Command {
     {
-        setDescription("");
+        setDescription("Ban a player.");
     }
 
     @Override

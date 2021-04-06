@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import net.server.coordinator.login.MapleLoginBypassCoordinator;
 
 public class EnableAuthCommand extends Command {
     {
-        setDescription("");
+        setDescription("Enable PIC code by resetting the cooldown.");
     }
 
     @Override

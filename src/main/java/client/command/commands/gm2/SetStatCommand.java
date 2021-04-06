@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class SetStatCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set all primary stats to new value.");
     }
 
     @Override

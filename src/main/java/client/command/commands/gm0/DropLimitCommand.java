@@ -29,7 +29,7 @@ import config.YamlConfig;
 
 public class DropLimitCommand extends Command {
     {
-        setDescription("");
+        setDescription("Check drop limit of current map.");
     }
     
     @Override

@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
 import tools.FilePrinter;
@@ -42,7 +42,7 @@ import java.util.Properties;
 
 public class PeCommand extends Command {
     {
-        setDescription("");
+        setDescription("Handle synthesized packets from file, and handle them as if sent from a client");
     }
 
     @Override

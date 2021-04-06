@@ -28,7 +28,7 @@ import client.command.Command;
 
 public class StaffCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show credits. These people made the server possible.");
     }
 
     @Override

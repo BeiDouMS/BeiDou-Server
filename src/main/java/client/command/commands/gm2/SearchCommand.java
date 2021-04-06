@@ -23,20 +23,18 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
-import tools.MaplePacketCreator;
 import tools.Pair;
 
 import java.io.File;
-import java.util.List;
 
 public class SearchCommand extends Command {
     private static MapleData npcStringData;
@@ -45,7 +43,7 @@ public class SearchCommand extends Command {
     private static MapleData mapStringData;
     
     {
-        setDescription("");
+        setDescription("Search String.wz.");
         
         MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
         npcStringData = dataProvider.getData("Npc.img");

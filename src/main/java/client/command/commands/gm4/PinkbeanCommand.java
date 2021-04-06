@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleLifeFactory;
 
 public class PinkbeanCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn Pink Bean on your location.");
     }
 
     @Override

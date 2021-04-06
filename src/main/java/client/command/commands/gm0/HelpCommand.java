@@ -28,7 +28,7 @@ import client.command.Command;
 
 public class HelpCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show available commands.");
     }
 
     @Override

@@ -28,7 +28,7 @@ import client.command.Command;
 
 public class StopMapEventCommand extends Command {
     {
-        setDescription("");
+        setDescription("Stop ongoing \"classic\" event.");
     }
 
     @Override

@@ -32,7 +32,7 @@ import java.io.File;
 
 public class MaxSkillCommand extends Command {
     {
-        setDescription("");
+        setDescription("Max out all job skills.");
     }
 
     @Override

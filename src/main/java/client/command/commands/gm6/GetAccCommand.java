@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm6;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class GetAccCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show account name of an online player.");
     }
 
     @Override

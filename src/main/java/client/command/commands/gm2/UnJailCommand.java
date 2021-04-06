@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class UnJailCommand extends Command {
     {
-        setDescription("");
+        setDescription("Free a player from jail.");
     }
 
     @Override

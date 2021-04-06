@@ -23,10 +23,10 @@
 */
 package client.command.commands.gm3;
 
+import client.MapleCharacter;
+import client.MapleClient;
 import client.MapleDisease;
 import client.command.Command;
-import client.MapleClient;
-import client.MapleCharacter;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.maps.MapleMapObject;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 
 public class DebuffCommand extends Command {
     {
-        setDescription("");
+        setDescription("Put a debuff on all nearby players.");
     }
 
     @Override

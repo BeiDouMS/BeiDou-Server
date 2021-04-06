@@ -30,7 +30,7 @@ import config.YamlConfig;
 
 public class StatLukCommand extends Command {
     {
-        setDescription("");
+        setDescription("Assign AP into LUK.");
     }
 
     @Override

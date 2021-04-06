@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import scripting.portal.PortalScriptManager;
 
 public class ReloadPortalsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Reload all portal scripts.");
     }
 
     @Override

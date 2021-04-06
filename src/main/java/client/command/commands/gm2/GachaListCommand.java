@@ -28,7 +28,7 @@ import client.command.Command;
  */
 public class GachaListCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show gachapon rewards.");
     }
 
     @Override

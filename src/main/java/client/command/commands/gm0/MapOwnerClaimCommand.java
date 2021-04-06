@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleCharacter;
 import client.MapleClient;
+import client.command.Command;
 import config.YamlConfig;
 import server.maps.MapleMap;
 
 public class MapOwnerClaimCommand extends Command {
     {
-        setDescription("");
+        setDescription("Claim ownership of the current map.");
     }
 
     @Override

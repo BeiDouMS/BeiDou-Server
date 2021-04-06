@@ -41,7 +41,7 @@ import java.util.List;
 
 public class PmobRemoveCommand extends Command {
     {
-        setDescription("");
+        setDescription("Remove all permanent mobs of the same type on the map.");
     }
 
     @Override

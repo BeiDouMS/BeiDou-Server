@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 
 public class EquipLvCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show levels of all equipped items.");
     }
 
     @Override

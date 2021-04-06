@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.Item;
 
 import java.awt.*;
 
 public class SeedCommand extends Command {
     {
-        setDescription("");
+        setDescription("Drop all seeds inside Henesys PQ.");
     }
 
     @Override

@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class EndEventCommand extends Command {
     {
-        setDescription("");
+        setDescription("Close entry for ongoing event.");
     }
 
     @Override
