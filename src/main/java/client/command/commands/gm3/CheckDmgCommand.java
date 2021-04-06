@@ -24,13 +24,13 @@
 package client.command.commands.gm3;
 
 import client.MapleBuffStat;
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class CheckDmgCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show stats and damage of a player.");
     }
 
     @Override

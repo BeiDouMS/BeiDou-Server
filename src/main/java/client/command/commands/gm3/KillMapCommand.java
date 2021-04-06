@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class KillMapCommand extends Command {
     {
-        setDescription("");
+        setDescription("Kill all players in the map.");
     }
 
     @Override

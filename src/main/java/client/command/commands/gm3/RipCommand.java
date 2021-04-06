@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import tools.MaplePacketCreator;
 
 public class RipCommand extends Command {
     {
-        setDescription("");
+        setDescription("Send a RIP notice.");
     }
 
     @Override

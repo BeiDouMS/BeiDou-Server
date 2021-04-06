@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import net.server.channel.Channel;
 import server.expeditions.MapleExpedition;
@@ -35,7 +35,7 @@ import java.util.Map.Entry;
 
 public class ExpedsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show all ongoing boss expeditions.");
     }
 
     @Override

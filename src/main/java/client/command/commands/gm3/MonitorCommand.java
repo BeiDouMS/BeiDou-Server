@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import tools.MapleLogger;
 import tools.MaplePacketCreator;
 
 public class MonitorCommand extends Command {
     {
-        setDescription("");
+        setDescription("Toggle logging the packets of a player.");
     }
 
     @Override

@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import server.MapleShopFactory;
 
 
 public class ReloadShopsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Reload popup shops and NPC shops.");
     }
 
     @Override

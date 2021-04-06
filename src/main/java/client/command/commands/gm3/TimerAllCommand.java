@@ -30,7 +30,7 @@ import tools.MaplePacketCreator;
 
 public class TimerAllCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set a server wide timer.");
     }
 
     @Override

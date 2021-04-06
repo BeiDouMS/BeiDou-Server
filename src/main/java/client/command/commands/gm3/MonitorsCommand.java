@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import tools.MapleLogger;
 
 public class MonitorsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show all players having their packets logged.");
     }
 
     @Override

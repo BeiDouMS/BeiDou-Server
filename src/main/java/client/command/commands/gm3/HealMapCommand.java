@@ -23,14 +23,13 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleStat;
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class HealMapCommand extends Command {
     {
-        setDescription("");
+        setDescription("Heal all HP/MP of all players in the map.");
     }
 
     @Override

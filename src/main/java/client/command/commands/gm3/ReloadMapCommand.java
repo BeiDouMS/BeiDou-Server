@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.MapleMap;
 
 import java.util.Collection;
 
 public class ReloadMapCommand extends Command {
     {
-        setDescription("");
+        setDescription("Reload the map.");
     }
 
     @Override

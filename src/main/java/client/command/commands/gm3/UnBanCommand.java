@@ -33,7 +33,7 @@ import java.sql.PreparedStatement;
 
 public class UnBanCommand extends Command {
     {
-        setDescription("");
+        setDescription("Unban a player.");
     }
 
     @Override

@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm3;
 
+import client.MapleCharacter;
+import client.MapleClient;
 import client.MapleStat;
 import client.command.Command;
-import client.MapleClient;
-import client.MapleCharacter;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
 
 public class HairCommand extends Command {
     {
-        setDescription("");
+        setDescription("Change hair of a player.");
     }
 
     @Override

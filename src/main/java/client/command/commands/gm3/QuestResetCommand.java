@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.quest.MapleQuest;
 
 public class QuestResetCommand extends Command {
     {
-        setDescription("");
+        setDescription("Reset a completed quest.");
     }
 
     @Override

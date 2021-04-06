@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm3;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -36,7 +36,7 @@ import java.util.List;
 
 public class KillAllCommand extends Command {
     {
-        setDescription("");
+        setDescription("Kill all mobs in the map.");
     }
 
     @Override
