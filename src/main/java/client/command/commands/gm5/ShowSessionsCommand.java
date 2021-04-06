@@ -29,7 +29,7 @@ import net.server.coordinator.session.MapleSessionCoordinator;
  */
 public class ShowSessionsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show online sessions.");
     }
 
     @Override

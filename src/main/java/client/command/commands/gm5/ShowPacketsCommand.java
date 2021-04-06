@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm5;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import config.YamlConfig;
 
 public class ShowPacketsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Toggle show received packets in console.");
     }
 
     @Override
