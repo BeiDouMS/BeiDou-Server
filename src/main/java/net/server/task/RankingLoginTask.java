@@ -48,7 +48,7 @@ public class RankingLoginTask implements Runnable {
     }
 
     private void updateRanking(int job, int world) throws SQLException {
-        String sqlCharSelect = "SELECT c.id, " + (job != -1 ? "c.jobRank, c.jobRankMove" : "c.rank, c.rankMove") + ", a.lastlogin AS lastlogin, a.loggedin FROM characters AS c LEFT JOIN accounts AS a ON c.accountid = a.id WHERE c.gm < 2 AND c.world = ? ";
+        String sqlCharSelect = "SELECT c.id, " + (job != -1 ? "c.jobRank, c.jobRankMove" : "c.`rank`, c.rankMove") + ", a.lastlogin AS lastlogin, a.loggedin FROM characters AS c LEFT JOIN accounts AS a ON c.accountid = a.id WHERE c.gm < 2 AND c.world = ? ";
         if (job != -1) {
             sqlCharSelect += "AND c.job DIV 100 = ? ";
         }
@@ -62,13 +62,15 @@ public class RankingLoginTask implements Runnable {
             }
 
             try (ResultSet rs = charSelect.executeQuery();
-                 PreparedStatement ps = con.prepareStatement("UPDATE characters SET " + (job != -1 ? "jobRank = ?, jobRankMove = ? " : "rank = ?, rankMove = ? ") + "WHERE id = ?")) {
+                 PreparedStatement ps = con.prepareStatement("UPDATE characters SET " + (job != -1 ? "jobRank = ?, jobRankMove = ? " : "`rank` = ?, rankMove = ? ") + "WHERE id = ?")) {
                 int rank = 0;
 
                 while (rs.next()) {
                     int rankMove = 0;
                     rank++;
-                    if (rs.getLong("lastlogin") < lastUpdate || rs.getInt("loggedin") > 0) {
+
+                    final long lastlogin = rs.getTimestamp("lastlogin").getTime();
+                    if (lastlogin < lastUpdate || rs.getInt("loggedin") > 0) {
                         rankMove = rs.getInt((job != -1 ? "jobRankMove" : "rankMove"));
                     }
                     rankMove += rs.getInt((job != -1 ? "jobRank" : "rank")) - rank;
