@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm6;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import tools.MaplePacketCreator;
 
@@ -34,7 +34,7 @@ import java.net.UnknownHostException;
 
 public class WarpWorldCommand extends Command {
     {
-        setDescription("");
+        setDescription("Warp to a different world.");
     }
 
     @Override

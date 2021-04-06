@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm6;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import net.server.world.World;
 import tools.MaplePacketCreator;
 
 public class SaveAllCommand extends Command {
     {
-        setDescription("");
+        setDescription("Save all characters.");
     }
 
     @Override

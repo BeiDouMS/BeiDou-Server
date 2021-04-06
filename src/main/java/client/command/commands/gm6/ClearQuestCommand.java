@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm6;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.quest.MapleQuest;
 
 public class ClearQuestCommand extends Command {
     {
-        setDescription("");
+        setDescription("Clear cache of a quest.");
     }
 
     @Override

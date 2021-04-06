@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm6;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MaplePlayerNPC;
 
 public class SpawnAllPNpcsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn player NPCs of all existing players.");
     }
 
     @Override

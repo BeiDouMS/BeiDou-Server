@@ -24,14 +24,14 @@
 package client.command.commands.gm6;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import server.ThreadManager;
 
 public class ServerRemoveWorldCommand extends Command {
     {
-        setDescription("");
+        setDescription("Remove a world.");
     }
 
     @Override
