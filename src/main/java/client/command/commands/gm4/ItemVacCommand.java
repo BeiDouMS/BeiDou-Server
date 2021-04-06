@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class ItemVacCommand extends Command {
     {
-        setDescription("");
+        setDescription("Loot all drops on the map.");
     }
 
     @Override

@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.MapleMap;
 
 import java.awt.*;
 
 public class HorntailCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn Horntail on your location.");
     }
 
     @Override

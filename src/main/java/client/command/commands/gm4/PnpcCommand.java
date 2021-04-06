@@ -40,7 +40,7 @@ import java.sql.SQLException;
 
 public class PnpcCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn a permanent NPC on your location.");
     }
 
     @Override

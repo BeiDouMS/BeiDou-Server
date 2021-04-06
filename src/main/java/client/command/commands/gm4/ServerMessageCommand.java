@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class ServerMessageCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set scrolling server message.");
     }
 
     @Override

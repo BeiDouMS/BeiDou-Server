@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.life.MaplePlayerNPC;
 
 public class PlayerNpcRemoveCommand extends Command {
     {
-        setDescription("");
+        setDescription("Remove a \"lv 200\" player NPC.");
     }
 
     @Override

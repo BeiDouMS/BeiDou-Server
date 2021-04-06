@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm4;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
@@ -35,7 +35,7 @@ import server.MapleItemInformationProvider;
 
 public class ProItemCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn an item with custom stats.");
     }
 
     @Override
