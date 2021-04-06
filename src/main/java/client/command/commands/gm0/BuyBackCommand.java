@@ -29,7 +29,7 @@ import client.processor.action.BuybackProcessor;
 
 public class BuyBackCommand extends Command {
     {
-        setDescription("");
+        setDescription("Revive yourself after a death.");
     }
     
     @Override

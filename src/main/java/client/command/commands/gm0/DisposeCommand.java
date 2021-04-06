@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
 import tools.MaplePacketCreator;
 
 public class DisposeCommand extends Command {
     {
-        setDescription("");
+        setDescription("Dispose to fix NPC chat.");
     }
     
     @Override

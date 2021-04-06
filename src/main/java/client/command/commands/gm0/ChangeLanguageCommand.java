@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 
 public class ChangeLanguageCommand extends Command {
     {
-        setDescription("");
+        setDescription("Change language settings.");
     }
 
     @Override

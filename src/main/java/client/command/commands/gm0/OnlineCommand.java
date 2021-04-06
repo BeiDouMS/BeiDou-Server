@@ -24,14 +24,14 @@
 package client.command.commands.gm0;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import net.server.channel.Channel;
 
 public class OnlineCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show all online players.");
     }
 
     @Override

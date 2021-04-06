@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import server.MapleItemInformationProvider;
 import server.gachapon.MapleGachapon;
 
 public class GachaCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show gachapon rewards.");
     }
 
     @Override

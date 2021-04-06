@@ -33,7 +33,7 @@ import java.util.TimeZone;
 
 public class TimeCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show current server time.");
     }
     
     @Override

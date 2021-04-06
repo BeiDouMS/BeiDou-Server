@@ -24,14 +24,14 @@
 package client.command.commands.gm0;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import server.events.gm.MapleEvent;
 import server.maps.FieldLimit;
 
 public class JoinEventCommand extends Command {
     {
-        setDescription("");
+        setDescription("Join active event.");
     }
 
     @Override

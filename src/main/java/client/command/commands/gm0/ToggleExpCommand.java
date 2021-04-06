@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm0;
 
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 
 public class ToggleExpCommand extends Command {
     {
-        setDescription("");
+        setDescription("Toggle enable/disable all exp gain.");
     }
 
     @Override
