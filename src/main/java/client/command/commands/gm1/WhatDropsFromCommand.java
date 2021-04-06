@@ -24,8 +24,8 @@
 package client.command.commands.gm1;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import server.MapleItemInformationProvider;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
@@ -35,7 +35,7 @@ import java.util.Iterator;
 
 public class WhatDropsFromCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show what items drop from a mob.");
     }
 
     @Override

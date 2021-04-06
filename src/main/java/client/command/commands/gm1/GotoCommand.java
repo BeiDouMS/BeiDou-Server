@@ -24,27 +24,18 @@
 package client.command.commands.gm1;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import constants.game.GameConstants;
-import java.util.ArrayList;
-import java.util.Collections;
-import server.maps.MaplePortal;
-import server.maps.FieldLimit;
-import server.maps.MapleMap;
-import server.maps.MapleMapFactory;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.*;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class GotoCommand extends Command {
     
     {
-        setDescription("");
+        setDescription("Warp to a predefined map.");
         
         List<Entry<String, Integer>> towns = new ArrayList<>(GameConstants.GOTO_TOWNS.entrySet());
         sortGotoEntries(towns);

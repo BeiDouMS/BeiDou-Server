@@ -38,7 +38,7 @@ import java.util.Iterator;
 
 public class WhoDropsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Show what drops an item.");
     }
 
     @Override
