@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.SavedLocationType;
 
 public class ClearSavedLocationsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Clear saved locations for a player.");
     }
 
     @Override

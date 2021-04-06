@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm2;
 
+import client.MapleCharacter;
+import client.MapleClient;
 import client.SkillFactory;
 import client.command.Command;
-import client.MapleClient;
-import client.MapleCharacter;
 
 public class BuffMapCommand extends Command {
     {
-        setDescription("");
+        setDescription("Give GM buffs to the whole map.");
     }
 
     @Override

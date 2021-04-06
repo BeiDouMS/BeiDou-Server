@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.MaplePet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
@@ -34,7 +34,7 @@ import server.MapleItemInformationProvider;
 
 public class ItemCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn an item into your inventory.");
     }
 
     @Override

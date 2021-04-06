@@ -3,17 +3,19 @@ package client.command.commands.gm2;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
+import server.ThreadManager;
 import tools.exceptions.IdTypeNotSupportedException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
-import server.ThreadManager;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class IdCommand extends Command {
     {
-        setDescription("");
+        setDescription("Search in handbook.");
     }
 
     private final Map<String, String> handbookDirectory = new HashMap<>();

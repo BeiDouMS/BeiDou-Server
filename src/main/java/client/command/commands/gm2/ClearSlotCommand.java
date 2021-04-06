@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 
 public class ClearSlotCommand extends Command {
     {
-        setDescription("");
+        setDescription("Clear all items in an inventory tab.");
     }
 
     @Override

@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
-import server.maps.MapleMap;
+import client.MapleClient;
+import client.command.Command;
 import net.server.Server;
 import net.server.channel.Channel;
+import server.maps.MapleMap;
 
 public class SummonCommand extends Command {
     {
-        setDescription("");
+        setDescription("Move a player to your location.");
     }
 
     @Override

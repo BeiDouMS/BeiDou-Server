@@ -24,8 +24,8 @@
 package client.command.commands.gm2;
 
 import client.MapleCharacter;
-import client.command.Command;
 import client.MapleClient;
+import client.command.Command;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import constants.inventory.ItemConstants;
@@ -33,7 +33,7 @@ import server.MapleItemInformationProvider;
 
 public class RechargeCommand extends Command {
     {
-        setDescription("");
+        setDescription("Recharge and refill all USE items.");
     }
 
     @Override

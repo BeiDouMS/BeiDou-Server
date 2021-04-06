@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 
 public class ClearDropsCommand extends Command {
     {
-        setDescription("");
+        setDescription("Clear drops by player.");
     }
 
     @Override

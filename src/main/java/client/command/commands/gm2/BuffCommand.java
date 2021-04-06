@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm2;
 
+import client.MapleCharacter;
+import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import client.command.Command;
-import client.MapleClient;
-import client.MapleCharacter;
 
 public class BuffCommand extends Command {
     {
-        setDescription("");
+        setDescription("Activate a buff.");
     }
 
     @Override

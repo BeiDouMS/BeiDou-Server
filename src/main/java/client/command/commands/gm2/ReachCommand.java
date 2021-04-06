@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.MapleMap;
 
 public class ReachCommand extends Command {
     {
-        setDescription("");
+        setDescription("Warp to a player.");
     }
 
     @Override

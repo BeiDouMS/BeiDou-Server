@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
@@ -35,7 +35,7 @@ import server.MapleItemInformationProvider;
 
 public class ItemDropCommand extends Command {
     {
-        setDescription("");
+        setDescription("Spawn an item onto the ground.");
     }
 
     @Override

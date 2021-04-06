@@ -32,7 +32,7 @@ import java.io.File;
 
 public class ResetSkillCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set all skill levels to 0.");
     }
 
     @Override

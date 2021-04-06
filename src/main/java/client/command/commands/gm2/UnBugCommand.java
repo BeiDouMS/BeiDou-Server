@@ -23,14 +23,13 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
 import client.MapleClient;
-import client.MapleCharacter;
+import client.command.Command;
 import tools.MaplePacketCreator;
 
 public class UnBugCommand extends Command {
     {
-        setDescription("");
+        setDescription("Unbug self.");
     }
 
     @Override

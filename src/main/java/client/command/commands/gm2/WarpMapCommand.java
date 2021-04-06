@@ -32,7 +32,7 @@ import java.util.Collection;
 
 public class WarpMapCommand extends Command {
     {
-        setDescription("");
+        setDescription("Warp all characters on current map to a new map.");
     }
 
     @Override

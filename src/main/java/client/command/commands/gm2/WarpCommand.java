@@ -23,16 +23,16 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import server.maps.MapleMiniDungeonInfo;
 
 public class WarpCommand extends Command {
     {
-        setDescription("");
+        setDescription("Warp to a map.");
     }
 
     @Override

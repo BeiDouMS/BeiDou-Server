@@ -23,12 +23,13 @@
 */
 package client.command.commands.gm2;
 
-import client.*;
+import client.MapleCharacter;
+import client.MapleClient;
 import client.command.Command;
 
 public class SetSlotCommand extends Command {
     {
-        setDescription("");
+        setDescription("Set amount of inventory slots in all tabs.");
     }
 
     @Override

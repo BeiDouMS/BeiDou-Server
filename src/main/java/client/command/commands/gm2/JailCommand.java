@@ -23,15 +23,15 @@
 */
 package client.command.commands.gm2;
 
-import client.command.Command;
-import client.MapleClient;
 import client.MapleCharacter;
-import server.maps.MaplePortal;
+import client.MapleClient;
+import client.command.Command;
 import server.maps.MapleMap;
+import server.maps.MaplePortal;
 
 public class JailCommand extends Command {
     {
-        setDescription("");
+        setDescription("Move a player to the jail.");
     }
 
     @Override
