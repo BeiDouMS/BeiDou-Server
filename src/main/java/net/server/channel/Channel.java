@@ -403,7 +403,7 @@ public final class Channel {
         int[] retArr = new int[ret.size()];
         int pos = 0;
         for (Integer i : ret) {
-            retArr[pos++] = i.intValue();
+            retArr[pos++] = i;
         }
         return retArr;
     }

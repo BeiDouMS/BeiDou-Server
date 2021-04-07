@@ -157,7 +157,7 @@ public class EventManager {
         
         if (ServerConstants.JAVA_8) {
             for (Object d: list) {
-                intList.add(((Integer) d).intValue());
+                intList.add((Integer) d);
             }
         } else {
             for (Object d: list) {

@@ -1014,7 +1014,7 @@ public class MaplePacketCreator {
                                 } else if (statupdate.getLeft().getValue() == 0x20000) {
                                         mplew.writeShort(statupdate.getRight().shortValue());
                                 } else {
-                                        mplew.writeInt(statupdate.getRight().intValue());
+                                        mplew.writeInt(statupdate.getRight());
                                 }
                         }
                 }
@@ -1885,7 +1885,7 @@ public class MaplePacketCreator {
                 }
                 if (chr.getBuffedValue(MapleBuffStat.COMBO) != null) {
                         buffmask |= MapleBuffStat.COMBO.getValue();
-                        buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.COMBO).intValue());
+                        buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.COMBO));
                 }
                 if (chr.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null) {
                         buffmask |= MapleBuffStat.SHADOWPARTNER.getValue();
@@ -1894,7 +1894,7 @@ public class MaplePacketCreator {
                         buffmask |= MapleBuffStat.SOULARROW.getValue();
                 }
                 if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) {
-                        buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.MORPH).intValue());
+                        buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.MORPH));
                 }
                 mplew.writeInt((int) ((buffmask >> 32) & 0xffffffffL));
                 if (buffvalue != null) {
@@ -2418,13 +2418,13 @@ public class MaplePacketCreator {
                 for (Integer oned : damage.keySet()) {
                         List<Integer> onedList = damage.get(oned);
                         if (onedList != null) {
-                                lew.writeInt(oned.intValue());
+                                lew.writeInt(oned);
                                 lew.write(0x0);
                                 if (skill == 4211006) {
                                         lew.write(onedList.size());
                                 }
                                 for (Integer eachd : onedList) {
-                                        lew.writeInt(eachd.intValue());
+                                        lew.writeInt(eachd);
                                 }
                         }
                 }

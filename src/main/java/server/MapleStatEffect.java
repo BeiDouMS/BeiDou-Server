@@ -21,102 +21,34 @@
  */
 package server;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import config.YamlConfig;
-import net.server.Server;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.life.MapleMonster;
-import server.maps.FieldLimit;
-import server.maps.MapleDoor;
-import server.maps.MapleMap;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
-import server.maps.MapleMist;
-import server.maps.MaplePortal;
-import server.maps.MapleSummon;
-import server.maps.SummonMovementType;
-import tools.ArrayMap;
-import tools.MaplePacketCreator;
-import tools.Pair;
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleDisease;
-import client.MapleJob;
-import client.MapleMount;
-import client.Skill;
-import client.SkillFactory;
+import client.*;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
+import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import constants.skills.Aran;
-import constants.skills.Assassin;
-import constants.skills.Bandit;
-import constants.skills.Beginner;
-import constants.skills.Bishop;
-import constants.skills.BlazeWizard;
-import constants.skills.Bowmaster;
-import constants.skills.Brawler;
-import constants.skills.Buccaneer;
-import constants.skills.ChiefBandit;
-import constants.skills.Cleric;
-import constants.skills.Corsair;
-import constants.skills.Crossbowman;
-import constants.skills.Crusader;
-import constants.skills.DarkKnight;
-import constants.skills.DawnWarrior;
-import constants.skills.DragonKnight;
-import constants.skills.Evan;
-import constants.skills.FPArchMage;
-import constants.skills.FPMage;
-import constants.skills.FPWizard;
-import constants.skills.Fighter;
-import constants.skills.GM;
-import constants.skills.Gunslinger;
-import constants.skills.Hermit;
-import constants.skills.Hero;
-import constants.skills.Hunter;
-import constants.skills.ILArchMage;
-import constants.skills.ILMage;
-import constants.skills.ILWizard;
-import constants.skills.Legend;
-import constants.skills.Magician;
-import constants.skills.Marauder;
-import constants.skills.Marksman;
-import constants.skills.NightLord;
-import constants.skills.NightWalker;
-import constants.skills.Noblesse;
-import constants.skills.Outlaw;
-import constants.skills.Page;
-import constants.skills.Paladin;
-import constants.skills.Pirate;
-import constants.skills.Priest;
-import constants.skills.Ranger;
-import constants.skills.Rogue;
-import constants.skills.Shadower;
-import constants.skills.Sniper;
-import constants.skills.Spearman;
-import constants.skills.SuperGM;
-import constants.skills.ThunderBreaker;
-import constants.skills.WhiteKnight;
-import constants.skills.WindArcher;
+import constants.skills.*;
+import net.server.Server;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import provider.MapleData;
+import provider.MapleDataTool;
+import server.life.MapleMonster;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.maps.*;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
+import tools.ArrayMap;
+import tools.MaplePacketCreator;
+import tools.Pair;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  * @author Matze
@@ -221,7 +153,7 @@ public class MapleStatEffect {
     }
 
     private static void addBuffStatPairToListIfNotZero(List<Pair<MapleBuffStat, Integer>> list, MapleBuffStat buffstat, Integer val) {
-        if (val.intValue() != 0) {
+        if (val != 0) {
             list.add(new Pair<>(buffstat, val));
         }
     }

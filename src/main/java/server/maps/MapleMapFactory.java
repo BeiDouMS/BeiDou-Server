@@ -141,7 +141,7 @@ public class MapleMapFactory {
         float monsterRate = 0;
         MapleData mobRate = infoData.getChildByPath("mobRate");
         if (mobRate != null) {
-            monsterRate = ((Float) mobRate.getData()).floatValue();
+            monsterRate = (Float) mobRate.getData();
         }
         map = new MapleMap(mapid, world, channel, MapleDataTool.getInt("returnMap", infoData), monsterRate);
         map.setEventInstance(event);

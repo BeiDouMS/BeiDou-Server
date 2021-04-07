@@ -150,7 +150,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
             if (attack.skill == ChiefBandit.MESO_EXPLOSION) {
                 int delay = 0;
                 for (Integer oned : attack.allDamage.keySet()) {
-                    MapleMapObject mapobject = map.getMapObject(oned.intValue());
+                    MapleMapObject mapobject = map.getMapObject(oned);
                     if (mapobject != null && mapobject.getType() == MapleMapObjectType.ITEM) {
                         final MapleMapItem mapitem = (MapleMapItem) mapobject;
                             if (mapitem.getMeso() == 0) { //Maybe it is possible some how?
@@ -183,7 +183,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                 }
             }
             for (Integer oned : attack.allDamage.keySet()) {
-                final MapleMonster monster = map.getMonsterByOid(oned.intValue());
+                final MapleMonster monster = map.getMonsterByOid(oned);
                 if (monster != null) { 
                     double distance = player.getPosition().distanceSq(monster.getPosition());
                     double distanceToDetect = 200000.0;
@@ -253,7 +253,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                         int picklv = (player.isGM()) ? pickpocket.getMaxLevel() : player.getSkillLevel(pickpocket);
                         if(picklv > 0) {
                             int delay = 0;
-                            final int maxmeso = player.getBuffedValue(MapleBuffStat.PICKPOCKET).intValue();
+                            final int maxmeso = player.getBuffedValue(MapleBuffStat.PICKPOCKET);
                             for (Integer eachd : onedList) {				
                                 eachd += Integer.MAX_VALUE;
 

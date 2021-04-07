@@ -21,17 +21,13 @@
 */
 package server.life;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import server.life.MapleLifeFactory.BanishInfo;
 import server.life.MapleLifeFactory.loseItem;
 import server.life.MapleLifeFactory.selfDestruction;
 import tools.Pair;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @author Frz
@@ -134,7 +130,7 @@ public class MapleMonsterStats {
         if (ret == null) {
             return 500;
         }
-        return ret.intValue();
+        return ret;
     }
 
     public boolean isMobile() {

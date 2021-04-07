@@ -21,18 +21,15 @@
  */
 package scripting;
 
-import java.awt.Point;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import client.Skill;
+import client.*;
+import client.MapleCharacter.DelayedQuestUpdate;
+import client.inventory.*;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
+import constants.game.GameConstants;
+import constants.inventory.ItemConstants;
+import constants.net.ServerConstants;
 import net.server.Server;
-import net.server.channel.Channel;
 import net.server.guild.MapleGuild;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
@@ -40,12 +37,11 @@ import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
 import scripting.npc.NPCScriptManager;
 import server.MapleItemInformationProvider;
+import server.MapleMarriage;
 import server.expeditions.MapleExpedition;
+import server.expeditions.MapleExpeditionBossLog;
 import server.expeditions.MapleExpeditionType;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
-import server.life.MobSkill;
-import server.life.MobSkillFactory;
+import server.life.*;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -53,27 +49,11 @@ import server.partyquest.PartyQuest;
 import server.partyquest.Pyramid;
 import server.quest.MapleQuest;
 import tools.MaplePacketCreator;
-import client.MapleCharacter;
-import client.MapleCharacter.DelayedQuestUpdate;
-import client.MapleClient;
-import client.MapleJob;
-import client.MapleQuestStatus;
-import client.SkillFactory;
-import client.inventory.Equip;
-import client.inventory.Item;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryProof;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import client.inventory.ModifyInventory;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import constants.game.GameConstants;
-import constants.inventory.ItemConstants;
-import constants.net.ServerConstants;
-import server.MapleMarriage;
-import server.expeditions.MapleExpeditionBossLog;
-import server.life.MapleNPC;
 import tools.Pair;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public class AbstractPlayerInteraction {
 
@@ -243,7 +223,7 @@ public class AbstractPlayerInteraction {
                 
                 if (ServerConstants.JAVA_8) {
                         for (Object d: list) {
-                                intList.add(((Integer) d).intValue());
+                                intList.add((Integer) d);
                         }
                 } else {
                         for (Object d: list) {
