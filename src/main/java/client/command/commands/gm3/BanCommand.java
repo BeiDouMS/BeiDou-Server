@@ -75,12 +75,7 @@ public class BanCommand extends Command {
             target.yellowMessage("Reason: " + reason);
             c.announce(MaplePacketCreator.getGMEffect(4, (byte) 0));
             final MapleCharacter rip = target;
-            TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    rip.getClient().disconnect(false, false);
-                }
-            }, 5000); //5 Seconds
+            TimerManager.getInstance().schedule(() -> rip.getClient().disconnect(false, false), 5000); //5 Seconds
             Server.getInstance().broadcastMessage(c.getWorld(), MaplePacketCreator.serverNotice(6, "[RIP]: " + ign + " has been banned."));
         } else if (MapleCharacter.ban(ign, reason, false)) {
             c.announce(MaplePacketCreator.getGMEffect(4, (byte) 0));

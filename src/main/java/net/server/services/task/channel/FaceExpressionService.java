@@ -19,17 +19,18 @@
 */
 package net.server.services.task.channel;
 
-import net.server.services.BaseService;
 import client.MapleCharacter;
 import config.YamlConfig;
-import java.util.Collections;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.BaseScheduler;
+import net.server.services.BaseService;
 import server.maps.MapleMap;
 import tools.MaplePacketCreator;
+
+import java.util.Collections;
 
 /**
  *
@@ -54,12 +55,7 @@ public class FaceExpressionService extends BaseService {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     @Override
@@ -77,12 +73,9 @@ public class FaceExpressionService extends BaseService {
     public void registerFaceExpression(final MapleMap map, final MapleCharacter chr, int emote) {
         int lockid = getChannelSchedulerIndex(map.getId());
         
-        Runnable cancelAction = new Runnable() {
-            @Override
-            public void run() {
-                if(chr.isLoggedinWorld()) {
-                    map.broadcastMessage(chr, MaplePacketCreator.facialExpression(chr, 0), false);
-                }
+        Runnable cancelAction = () -> {
+            if(chr.isLoggedinWorld()) {
+                map.broadcastMessage(chr, MaplePacketCreator.facialExpression(chr, 0), false);
             }
         };
         

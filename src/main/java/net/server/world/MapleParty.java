@@ -24,17 +24,9 @@ package net.server.world;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map.Entry;
-import java.util.Map;
-import java.util.Comparator;
 import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.MonitoredLockType;
+import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.matchchecker.MapleMatchCheckerCoordinator;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
@@ -43,6 +35,9 @@ import server.maps.MapleDoor;
 import server.maps.MapleMap;
 import server.partyquest.MonsterCarnival;
 import tools.MaplePacketCreator;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class MapleParty {
 
@@ -216,12 +211,7 @@ public class MapleParty {
             lock.unlock();
         }
 
-        Collections.sort(histList, new Comparator<Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2) {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
+        Collections.sort(histList, (o1, o2) -> (o1.getValue()).compareTo(o2.getValue()));
 
         List<Integer> histSort = new LinkedList<>();
         for (Entry<Integer, Integer> e : histList) {
@@ -292,12 +282,7 @@ public class MapleParty {
     }
 
     public void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
 
     private void emptyLocks() {

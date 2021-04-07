@@ -22,10 +22,11 @@
 package server.maps;
 
 import client.MapleCharacter;
-import java.util.List;
 import net.server.Server;
 import server.TimerManager;
 import tools.MaplePacketCreator;
+
+import java.util.List;
 
 /*
  * MapleTVEffect
@@ -58,12 +59,7 @@ public class MapleTVEffect {
 			} else if (type == 5) {
 				delay = 60000;
 			}
-			TimerManager.getInstance().schedule(new Runnable() {
-				@Override
-				public void run() {
-					broadcastTV(false, userWorld, null, null, -1, null);
-				}
-			}, delay);
+			TimerManager.getInstance().schedule(() -> broadcastTV(false, userWorld, null, null, -1, null), delay);
 		} else {
 			server.broadcastMessage(userWorld, MaplePacketCreator.removeTV());
 		}

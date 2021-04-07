@@ -19,29 +19,21 @@
 */
 package net.server.coordinator.world;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import config.YamlConfig;
 import client.MapleCharacter;
-import java.util.concurrent.ScheduledFuture;
+import config.YamlConfig;
 import net.server.Server;
 import net.server.audit.LockCollector;
-import server.life.MapleMonster;
-import server.maps.MapleMap;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
+import server.life.MapleMonster;
+import server.maps.MapleMap;
 import tools.Pair;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  *
@@ -95,12 +87,9 @@ public class MapleMonsterAggroCoordinator {
         try {
             if (aggroMonitor != null) return;
             
-            aggroMonitor = TimerManager.getInstance().register(new Runnable() {
-                @Override
-                public void run() {
-                    runAggroUpdate(1);
-                    runSortLeadingCharactersAggro();
-                }
+            aggroMonitor = TimerManager.getInstance().register(() -> {
+                runAggroUpdate(1);
+                runSortLeadingCharactersAggro();
             }, YamlConfig.config.server.MOB_STATUS_AGGRO_INTERVAL, YamlConfig.config.server.MOB_STATUS_AGGRO_INTERVAL);
         } finally {
             idleLock.unlock();
@@ -244,12 +233,8 @@ public class MapleMonsterAggroCoordinator {
                         }
 
                         if (!toRemoveIdx.isEmpty()) {
-                            Collections.sort(toRemoveIdx, new Comparator<Integer>() {   // last to first indexes
-                                @Override
-                                public int compare(Integer p1, Integer p2) {
-                                    return p1 < p2 ? 1 : p1.equals(p2) ? 0 : -1;
-                                }
-                            });
+                            // last to first indexes
+                            Collections.sort(toRemoveIdx, (p1, p2) -> p1 < p2 ? 1 : p1.equals(p2) ? 0 : -1);
 
                             for (int idx : toRemoveIdx) {
                                 sortedAggro.remove(idx);
@@ -387,12 +372,7 @@ public class MapleMonsterAggroCoordinator {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {

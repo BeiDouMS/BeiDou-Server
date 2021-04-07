@@ -19,22 +19,9 @@
 */
 package maplecashcosmeticschecker;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Set;
 
 /**
  *
@@ -595,25 +582,17 @@ public class MapleCashCosmeticsChecker {
                 il.add(i);
             }
             
-            Collections.sort(il, new Comparator<Integer>() {
-                @Override
-                public int compare(Integer o1, Integer o2) {
-                    return o1 - o2;
-                }
-            });
+            Collections.sort(il, (o1, o2) -> o1 - o2);
             
             list.add(new Pair<>(e.getKey(), il));
         }
         
-        Collections.sort(list, new Comparator<Pair<Pair<Integer, String>, List<Integer>>>() {
-            @Override
-            public int compare(Pair<Pair<Integer, String>, List<Integer>> o1, Pair<Pair<Integer, String>, List<Integer>> o2) {
-                int cmp = o1.getLeft().getLeft() - o2.getLeft().getLeft();
-                if (cmp == 0) {
-                    return o1.getLeft().getRight().compareTo(o2.getLeft().getRight());
-                } else {
-                    return cmp;
-                }
+        Collections.sort(list, (o1, o2) -> {
+            int cmp = o1.getLeft().getLeft() - o2.getLeft().getLeft();
+            if (cmp == 0) {
+                return o1.getLeft().getRight().compareTo(o2.getLeft().getRight());
+            } else {
+                return cmp;
             }
         });
         

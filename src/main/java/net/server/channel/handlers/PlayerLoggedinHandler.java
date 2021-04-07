@@ -451,12 +451,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
             timedBuffs.add(new Pair<>(curtime - pb.usedTime, pb));
         }
         
-        Collections.sort(timedBuffs, new Comparator<Pair<Long, PlayerBuffValueHolder>>() {
-            @Override
-            public int compare(Pair<Long, PlayerBuffValueHolder> p1, Pair<Long, PlayerBuffValueHolder> p2) {
-                return p1.getLeft().compareTo(p2.getLeft());
-            }
-        });
+        Collections.sort(timedBuffs, (p1, p2) -> p1.getLeft().compareTo(p2.getLeft()));
         
         return timedBuffs;
     }

@@ -19,15 +19,9 @@
 */
 package mapleskillmakerreagentindexer;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -154,12 +148,7 @@ public class MapleSkillMakerReagentIndexer {
     }
     
     private static void SortReagentList() {
-        Collections.sort(reagentList, new Comparator<Pair<Integer, Pair<String, Integer>>>() {
-            @Override
-            public int compare(Pair<Integer, Pair<String, Integer>> p1, Pair<Integer, Pair<String, Integer>> p2) {
-                return p1.getLeft().compareTo(p2.getLeft());
-            }
-        });
+        Collections.sort(reagentList, (p1, p2) -> p1.getLeft().compareTo(p2.getLeft()));
     }
     
     private static void WriteMakerReagentTableFile() {

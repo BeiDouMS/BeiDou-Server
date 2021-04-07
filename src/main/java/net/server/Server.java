@@ -1856,21 +1856,11 @@ public class Server {
     }
 
     private void disconnectIdlesOnLoginTask() {
-        TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                disconnectIdlesOnLoginState();
-            }
-        }, 300000);
+        TimerManager.getInstance().register(() -> disconnectIdlesOnLoginState(), 300000);
     }
 
     public final Runnable shutdown(final boolean restart) {//no player should be online when trying to shutdown!
-        return new Runnable() {
-            @Override
-            public void run() {
-                shutdownInternal(restart);
-            }
-        };
+        return () -> shutdownInternal(restart);
     }
 
     private synchronized void shutdownInternal(boolean restart) {
@@ -1928,12 +1918,7 @@ public class Server {
         acceptor.unbind();
         acceptor = null;
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    System.exit(0);
-                }
-            }).start();
+            new Thread(() -> System.exit(0)).start();
         } else {
             System.out.println("\r\nRestarting the server....\r\n");
             try {

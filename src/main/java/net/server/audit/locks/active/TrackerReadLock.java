@@ -20,24 +20,21 @@
 package net.server.audit.locks.active;
 
 import config.YamlConfig;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.ScheduledFuture;
-import server.TimerManager;
-
 import net.server.audit.ThreadTracker;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.empty.EmptyReadLock;
+import server.TimerManager;
 
-import tools.FilePrinter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  *
@@ -109,12 +106,7 @@ public class TrackerReadLock extends ReentrantReadWriteLock.ReadLock implements 
         
             if(reentrantCount.incrementAndGet() == 1) {
                 final Thread t = Thread.currentThread();
-                timeoutSchedule = TimerManager.getInstance().schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        issueDeadlock(t);
-                    }
-                }, YamlConfig.config.server.LOCK_MONITOR_TIME);
+                timeoutSchedule = TimerManager.getInstance().schedule(() -> issueDeadlock(t), YamlConfig.config.server.LOCK_MONITOR_TIME);
             }
         } finally {
             state.unlock();

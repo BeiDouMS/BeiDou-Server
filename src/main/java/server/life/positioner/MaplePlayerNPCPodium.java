@@ -20,12 +20,6 @@
 package server.life.positioner;
 
 import config.YamlConfig;
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import net.server.Server;
 import net.server.channel.Channel;
 import server.life.MaplePlayerNPC;
@@ -33,6 +27,12 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.MaplePacketCreator;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -92,11 +92,8 @@ public class MaplePlayerNPCPodium {
                 playerNpcs.add((MaplePlayerNPC) mmo);
             }
             
-            Collections.sort(playerNpcs, new Comparator<MaplePlayerNPC>() {
-                @Override
-                public int compare(MaplePlayerNPC p1, MaplePlayerNPC p2) {
-                    return p1.getScriptId() - p2.getScriptId(); // scriptid as playernpc history
-                }
+            Collections.sort(playerNpcs, (p1, p2) -> {
+                return p1.getScriptId() - p2.getScriptId(); // scriptid as playernpc history
             });
             
             for(Channel ch : Server.getInstance().getChannelsFromWorld(map.getWorld())) {

@@ -19,21 +19,8 @@
 */
 package mapleworldmapchecker;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -282,22 +269,12 @@ public class MapleWorldmapChecker {
                 List<Pair<String, List<Pair<Integer, String>>>> unreferencedEntries = new ArrayList<>(20);
                 for (Entry<String, List<Pair<Integer, String>>> e : unreferencedMapids.entrySet()) {
                     List<Pair<Integer, String>> list = new ArrayList<>(e.getValue());
-                    Collections.sort(list, new Comparator<Pair<Integer, String>>() {
-                        @Override
-                        public int compare(Pair<Integer, String> o1, Pair<Integer, String> o2) {
-                            return o1.getLeft().compareTo(o2.getLeft());
-                        }
-                    });
+                    Collections.sort(list, (o1, o2) -> o1.getLeft().compareTo(o2.getLeft()));
 
                     unreferencedEntries.add(new Pair<>(e.getKey(), list));
                 }
                 
-                Collections.sort(unreferencedEntries, new Comparator<Pair<String, List<Pair<Integer, String>>>>() {
-                    @Override
-                    public int compare(Pair<String, List<Pair<Integer, String>>> o1, Pair<String, List<Pair<Integer, String>>> o2) {
-                        return o1.getLeft().compareTo(o2.getLeft());
-                    }
-                });
+                Collections.sort(unreferencedEntries, (o1, o2) -> o1.getLeft().compareTo(o2.getLeft()));
 
                 printReportFileResults(unreferencedEntries);
             }

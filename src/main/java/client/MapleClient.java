@@ -807,12 +807,7 @@ public class MapleClient {
 
         public final void disconnect(final boolean shutdown, final boolean cashshop) {
                 if (canDisconnect()) {
-                        ThreadManager.getInstance().newTask(new Runnable() {
-                                @Override
-                                public void run() {
-                                        disconnectInternal(shutdown, cashshop);
-                                }
-                        });
+                        ThreadManager.getInstance().newTask(() -> disconnectInternal(shutdown, cashshop));
                 }
         }
         

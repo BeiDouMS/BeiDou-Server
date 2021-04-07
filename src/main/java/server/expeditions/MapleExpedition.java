@@ -22,31 +22,25 @@
 
 package server.expeditions;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ScheduledFuture;
-
+import client.MapleCharacter;
 import net.server.PlayerStorage;
 import net.server.Server;
+import net.server.audit.locks.MonitoredLockType;
+import net.server.audit.locks.MonitoredReentrantLock;
+import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import net.server.channel.Channel;
 import server.TimerManager;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import tools.LogHelper;
 import tools.MaplePacketCreator;
-import client.MapleCharacter;
-import java.util.Iterator;
-import java.util.Properties;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.channel.Channel;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  *
@@ -133,17 +127,14 @@ public class MapleExpedition {
 		final MapleExpedition exped = this;
                 startTime = System.currentTimeMillis() + type.getRegistrationTime() * 60 * 1000;
                 
-		schedule = TimerManager.getInstance().schedule(new Runnable() { 
-			@Override
-			public void run() {
-				if (registering){
-                                        exped.removeChannelExpedition(startMap.getChannelServer());
-					if (!silent) startMap.broadcastMessage(MaplePacketCreator.serverNotice(6, "[Expedition] The time limit has been reached. Expedition has been disbanded."));
-                                        
-                                        dispose(false);
-				}
-			}
-		}, type.getRegistrationTime() * 60 * 1000);
+		schedule = TimerManager.getInstance().schedule(() -> {
+            if (registering){
+exped.removeChannelExpedition(startMap.getChannelServer());
+                if (!silent) startMap.broadcastMessage(MaplePacketCreator.serverNotice(6, "[Expedition] The time limit has been reached. Expedition has been disbanded."));
+
+dispose(false);
+            }
+        }, type.getRegistrationTime() * 60 * 1000);
 	}
 
 	public void dispose(boolean log){

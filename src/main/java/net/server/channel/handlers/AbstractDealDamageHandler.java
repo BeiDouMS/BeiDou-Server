@@ -21,25 +21,19 @@
  */
 package net.server.channel.handlers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
+import client.*;
+import client.autoban.AutobanFactory;
+import client.status.MonsterStatus;
+import client.status.MonsterStatusEffect;
 import config.YamlConfig;
+import constants.game.GameConstants;
+import constants.skills.*;
 import net.AbstractMaplePacketHandler;
+import net.server.PlayerBuffValueHolder;
+import scripting.AbstractPlayerInteraction;
 import server.MapleStatEffect;
 import server.TimerManager;
-import server.life.Element;
-import server.life.ElementalEffectiveness;
-import server.life.MapleMonster;
-import server.life.MapleMonsterInformationProvider;
-import server.life.MobSkill;
-import server.life.MobSkillFactory;
-import server.life.MonsterDropEntry;
+import server.life.*;
 import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
@@ -48,62 +42,10 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 import tools.data.input.LittleEndianAccessor;
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleJob;
-import client.Skill;
-import client.SkillFactory;
-import client.autoban.AutobanFactory;
-import client.status.MonsterStatus;
-import client.status.MonsterStatusEffect;
-import constants.game.GameConstants;
-import constants.skills.Aran;
-import constants.skills.Assassin;
-import constants.skills.Bandit;
-import constants.skills.Beginner;
-import constants.skills.Bishop;
-import constants.skills.BlazeWizard;
-import constants.skills.Bowmaster;
-import constants.skills.Brawler;
-import constants.skills.Buccaneer;
-import constants.skills.ChiefBandit;
-import constants.skills.Cleric;
-import constants.skills.Corsair;
-import constants.skills.Crossbowman;
-import constants.skills.Crusader;
-import constants.skills.DawnWarrior;
-import constants.skills.DragonKnight;
-import constants.skills.Evan;
-import constants.skills.FPArchMage;
-import constants.skills.FPMage;
-import constants.skills.FPWizard;
-import constants.skills.Fighter;
-import constants.skills.Gunslinger;
-import constants.skills.Hermit;
-import constants.skills.Hero;
-import constants.skills.Hunter;
-import constants.skills.ILArchMage;
-import constants.skills.ILMage;
-import constants.skills.Legend;
-import constants.skills.Marauder;
-import constants.skills.Marksman;
-import constants.skills.NightLord;
-import constants.skills.NightWalker;
-import constants.skills.Noblesse;
-import constants.skills.Outlaw;
-import constants.skills.Page;
-import constants.skills.Paladin;
-import constants.skills.Ranger;
-import constants.skills.Rogue;
-import constants.skills.Shadower;
-import constants.skills.Sniper;
-import constants.skills.Spearman;
-import constants.skills.SuperGM;
-import constants.skills.ThunderBreaker;
-import constants.skills.WhiteKnight;
-import constants.skills.WindArcher;
-import net.server.PlayerBuffValueHolder;
-import scripting.AbstractPlayerInteraction;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandler {
 
@@ -220,18 +162,15 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                                 if (mapitem.isPickedUp()) {
                                     return;
                                 }
-                                TimerManager.getInstance().schedule(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mapitem.lockItem();
-                                        try {
-                                            if (mapitem.isPickedUp()) {
-                                                return;
-                                            }
-                                            map.pickItemDrop(MaplePacketCreator.removeItemFromMap(mapitem.getObjectId(), 4, 0), mapitem);
-                                        } finally {
-                                            mapitem.unlockItem();
+                                TimerManager.getInstance().schedule(() -> {
+                                    mapitem.lockItem();
+                                    try {
+                                        if (mapitem.isPickedUp()) {
+                                            return;
                                         }
+                                        map.pickItemDrop(MaplePacketCreator.removeItemFromMap(mapitem.getObjectId(), 4, 0), mapitem);
+                                    } finally {
+                                        mapitem.unlockItem();
                                     }
                                 }, delay);
                                 delay += 100;
@@ -325,12 +264,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                                     else
                                             eachdf = eachd;
 
-                                    TimerManager.getInstance().schedule(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            map.spawnMesoDrop(Math.min((int) Math.max(((double) eachdf / (double) 20000) * (double) maxmeso, (double) 1), maxmeso), new Point((int) (monster.getPosition().getX() + Randomizer.nextInt(100) - 50), (int) (monster.getPosition().getY())), monster, player, true, (byte) 2);
-                                        }
-                                    }, delay);
+                                    TimerManager.getInstance().schedule(() -> map.spawnMesoDrop(Math.min((int) Math.max(((double) eachdf / (double) 20000) * (double) maxmeso, (double) 1), maxmeso), new Point((int) (monster.getPosition().getX() + Randomizer.nextInt(100) - 50), (int) (monster.getPosition().getY())), monster, player, true, (byte) 2), delay);
                                     delay += 100;
                                 }
                             }
@@ -580,12 +514,9 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
         else animationTime = fixedTime;
         
         if(animationTime > 0) { // be sure to only use LIMITED ATTACKS with animation time here
-            TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    map.broadcastMessage(MaplePacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
-                    map.damageMonster(attacker, monster, damage);
-                }
+            TimerManager.getInstance().schedule(() -> {
+                map.broadcastMessage(MaplePacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
+                map.damageMonster(attacker, monster, damage);
             }, animationTime);
         } else {
             map.broadcastMessage(MaplePacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());

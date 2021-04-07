@@ -1,6 +1,5 @@
 package server.partyquest;
 
-import java.util.concurrent.ScheduledFuture;
 import client.MapleCharacter;
 import config.YamlConfig;
 import constants.string.LanguageConstants;
@@ -12,6 +11,8 @@ import server.TimerManager;
 import server.maps.MapleMap;
 import server.maps.MapleReactor;
 import tools.MaplePacketCreator;
+
+import java.util.concurrent.ScheduledFuture;
 
 /**
  * @author Drago (Dragohe4rt)
@@ -95,24 +96,9 @@ public class MonsterCarnival {
             
             // thanks Atoot, Vcoc for noting double CPQ functional being sent to players in CPQ start
             
-            timer = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    timeUp();
-                }
-            }, map.getTimeDefault() * 1000); // thanks Atoot for noticing an irregular "event extended" issue here
-            effectTimer = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    complete();
-                }
-            }, map.getTimeDefault() * 1000 - 10 * 1000);
-            respawnTask = TimerManager.getInstance().register(new Runnable() {
-                @Override
-                public void run() {
-                    respawn();
-                }
-            }, YamlConfig.config.server.RESPAWN_INTERVAL);
+            timer = TimerManager.getInstance().schedule(() -> timeUp(), map.getTimeDefault() * 1000); // thanks Atoot for noticing an irregular "event extended" issue here
+            effectTimer = TimerManager.getInstance().schedule(() -> complete(), map.getTimeDefault() * 1000 - 10 * 1000);
+            respawnTask = TimerManager.getInstance().register(() -> respawn(), YamlConfig.config.server.RESPAWN_INTERVAL);
             
             cs.initMonsterCarnival(cpq1, room);
         } catch (Exception e) {
@@ -362,19 +348,8 @@ public class MonsterCarnival {
         
         map.broadcastMessage(MaplePacketCreator.getClock(3 * 60));
         
-        timer = TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                timeUp();
-            }
-        }, map.getTimeExpand() * 1000);
-        effectTimer = TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                complete();
-            }
-
-        }, map.getTimeExpand() * 1000 - 10 * 1000); // thanks Vcoc for noticing a time set issue here
+        timer = TimerManager.getInstance().schedule(() -> timeUp(), map.getTimeExpand() * 1000);
+        effectTimer = TimerManager.getInstance().schedule(() -> complete(), map.getTimeExpand() * 1000 - 10 * 1000); // thanks Vcoc for noticing a time set issue here
     }
 
     public void complete() {

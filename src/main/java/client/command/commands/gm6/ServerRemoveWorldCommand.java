@@ -44,20 +44,17 @@ public class ServerRemoveWorldCommand extends Command {
             return;
         }
 
-        ThreadManager.getInstance().newTask(new Runnable() {
-            @Override
-            public void run() {
-                if(Server.getInstance().removeWorld()) {
-                    if(player.isLoggedinWorld()) {
-                        player.dropMessage(5, "Successfully removed a world. Current world count: " + Server.getInstance().getWorldsSize() + ".");
-                    }
-                } else {
-                    if(player.isLoggedinWorld()) {
-                        if(rwid < 0) {
-                            player.dropMessage(5, "No registered worlds to remove.");
-                        } else {
-                            player.dropMessage(5, "Failed to remove world " + rwid + ". Check if there are people currently playing there.");
-                        }
+        ThreadManager.getInstance().newTask(() -> {
+            if(Server.getInstance().removeWorld()) {
+                if(player.isLoggedinWorld()) {
+                    player.dropMessage(5, "Successfully removed a world. Current world count: " + Server.getInstance().getWorldsSize() + ".");
+                }
+            } else {
+                if(player.isLoggedinWorld()) {
+                    if(rwid < 0) {
+                        player.dropMessage(5, "No registered worlds to remove.");
+                    } else {
+                        player.dropMessage(5, "Failed to remove world " + rwid + ". Check if there are people currently playing there.");
                     }
                 }
             }

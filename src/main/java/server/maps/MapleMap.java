@@ -34,27 +34,7 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
+import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -62,36 +42,22 @@ import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import java.lang.ref.WeakReference;
-import net.server.Server;
-import net.server.coordinator.world.MapleMonsterAggroCoordinator;
 import net.server.channel.Channel;
-import net.server.services.type.ChannelServices;
+import net.server.coordinator.world.MapleMonsterAggroCoordinator;
 import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.channel.MobMistService;
 import net.server.services.task.channel.OverallService;
+import net.server.services.type.ChannelServices;
 import net.server.world.MapleParty;
 import net.server.world.World;
+import scripting.event.EventInstanceManager;
 import scripting.map.MapScriptManager;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.TimerManager;
-import server.events.gm.MapleCoconut;
-import server.events.gm.MapleFitness;
-import server.events.gm.MapleOla;
-import server.events.gm.MapleOxQuiz;
-import server.events.gm.MapleSnowball;
-import server.life.MapleLifeFactory;
+import server.events.gm.*;
+import server.life.*;
 import server.life.MapleLifeFactory.selfDestruction;
-import server.life.MapleMonster;
-import server.life.MapleMonsterInformationProvider;
-import server.life.MapleNPC;
-import server.life.MonsterDropEntry;
-import server.life.MonsterGlobalDropEntry;
-import server.life.SpawnPoint;
-import scripting.event.EventInstanceManager;
-import server.life.MaplePlayerNPC;
-import server.life.MonsterListener;
 import server.partyquest.GuardianSpawnPoint;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
@@ -99,6 +65,15 @@ import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.Randomizer;
+
+import java.awt.*;
+import java.lang.ref.WeakReference;
+import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
 
 public class MapleMap {
     
@@ -823,49 +798,41 @@ public class MapleMap {
                 return;
             }
             
-            itemMonitor = TimerManager.getInstance().register(new Runnable() {
-                @Override
-                public void run() {
-                    chrWLock.lock();
-                    try {
-                        if (characters.isEmpty()) {
-                            if(itemMonitorTimeout == 0) {
-                                if(itemMonitor != null) {
-                                    stopItemMonitor();
-                                    aggroMonitor.stopAggroCoordinator();
-                                }
-                                
-                                return;
-                            } else {
-                                itemMonitorTimeout--;
+            itemMonitor = TimerManager.getInstance().register(() -> {
+                chrWLock.lock();
+                try {
+                    if (characters.isEmpty()) {
+                        if(itemMonitorTimeout == 0) {
+                            if(itemMonitor != null) {
+                                stopItemMonitor();
+                                aggroMonitor.stopAggroCoordinator();
                             }
+
+                            return;
                         } else {
-                            itemMonitorTimeout = 1;
+                            itemMonitorTimeout--;
                         }
-                    } finally {
-                        chrWLock.unlock();
+                    } else {
+                        itemMonitorTimeout = 1;
                     }
-                    
-                    boolean tryClean;
-                    objectRLock.lock();
-                    try {
-                        tryClean = registeredDrops.size() > 70;
-                    } finally {
-                        objectRLock.unlock();
-                    }
-                    
-                    if (tryClean) {
-                        cleanItemMonitor();
-                    }
+                } finally {
+                    chrWLock.unlock();
+                }
+
+                boolean tryClean;
+                objectRLock.lock();
+                try {
+                    tryClean = registeredDrops.size() > 70;
+                } finally {
+                    objectRLock.unlock();
+                }
+
+                if (tryClean) {
+                    cleanItemMonitor();
                 }
             }, YamlConfig.config.server.ITEM_MONITOR_TIME, YamlConfig.config.server.ITEM_MONITOR_TIME);
             
-            expireItemsTask = TimerManager.getInstance().register(new Runnable() {
-                @Override
-                public void run() {
-                    makeDisappearExpiredItemDrops();
-                }
-            }, YamlConfig.config.server.ITEM_EXPIRE_CHECK, YamlConfig.config.server.ITEM_EXPIRE_CHECK);
+            expireItemsTask = TimerManager.getInstance().register(() -> makeDisappearExpiredItemDrops(), YamlConfig.config.server.ITEM_EXPIRE_CHECK, YamlConfig.config.server.ITEM_EXPIRE_CHECK);
             
             if(YamlConfig.config.server.USE_SPAWN_LOOT_ON_ANIMATION) {
                 lootLock.lock();
@@ -875,20 +842,10 @@ public class MapleMap {
                     lootLock.unlock();
                 }
 
-                mobSpawnLootTask = TimerManager.getInstance().register(new Runnable() {
-                    @Override
-                    public void run() {
-                        spawnMobItemDrops();
-                    }
-                }, 200, 200);
+                mobSpawnLootTask = TimerManager.getInstance().register(() -> spawnMobItemDrops(), 200, 200);
             }
             
-            characterStatUpdateTask = TimerManager.getInstance().register(new Runnable() {
-                @Override
-                public void run() {
-                    runCharacterStatUpdate();
-                }
-            }, 200, 200);
+            characterStatUpdateTask = TimerManager.getInstance().register(() -> runCharacterStatUpdate(), 200, 200);
                     
             itemMonitorTimeout = 1;
         } finally {
@@ -1145,18 +1102,15 @@ public class MapleMap {
     private void spawnDrop(final Item idrop, final Point dropPos, final MapleMapObject dropper, final MapleCharacter chr, final byte droptype, final short questid) {
         final MapleMapItem mdrop = new MapleMapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
-        spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                MapleCharacter chr = c.getPlayer();
-                
-                if (chr.needQuestItem(questid, idrop.getItemId())) {
-                    mdrop.lockItem();
-                    try {
-                        c.announce(MaplePacketCreator.dropItemFromMapObject(chr, mdrop, dropper.getPosition(), dropPos, (byte) 1));
-                    } finally {
-                        mdrop.unlockItem();
-                    }
+        spawnAndAddRangedMapObject(mdrop, c -> {
+            MapleCharacter chr1 = c.getPlayer();
+
+            if (chr1.needQuestItem(questid, idrop.getItemId())) {
+                mdrop.lockItem();
+                try {
+                    c.announce(MaplePacketCreator.dropItemFromMapObject(chr1, mdrop, dropper.getPosition(), dropPos, (byte) 1));
+                } finally {
+                    mdrop.unlockItem();
                 }
             }
         }, null);
@@ -1170,15 +1124,12 @@ public class MapleMap {
         final MapleMapItem mdrop = new MapleMapItem(meso, droppos, dropper, owner, owner.getClient(), droptype, playerDrop);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
 
-        spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                mdrop.lockItem();
-                try {
-                    c.announce(MaplePacketCreator.dropItemFromMapObject(c.getPlayer(), mdrop, dropper.getPosition(), droppos, (byte) 1));
-                } finally {
-                    mdrop.unlockItem();
-                }
+        spawnAndAddRangedMapObject(mdrop, c -> {
+            mdrop.lockItem();
+            try {
+                c.announce(MaplePacketCreator.dropItemFromMapObject(c.getPlayer(), mdrop, dropper.getPosition(), droppos, (byte) 1));
+            } finally {
+                mdrop.unlockItem();
             }
         }, null);
 
@@ -1916,12 +1867,7 @@ public class MapleMap {
             getEventInstance().registerMonster(monster);
         }
 
-        spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                c.announce(MaplePacketCreator.spawnMonster(monster, false));
-            }
-        });
+        spawnAndAddRangedMapObject(monster, c -> c.announce(MaplePacketCreator.spawnMonster(monster, false)));
         
         monster.aggroUpdateController();
         updateBossSpawn(monster);
@@ -1937,21 +1883,11 @@ public class MapleMap {
             Runnable removeAfterAction;
             
             if (selfDestruction == null) {
-                removeAfterAction = new Runnable() {
-                    @Override
-                    public void run() {
-                        killMonster(monster, null, false);
-                    }
-                };
+                removeAfterAction = () -> killMonster(monster, null, false);
                 
                 registerMapSchedule(removeAfterAction, monster.getStats().removeAfter() * 1000);
             } else {
-                removeAfterAction = new Runnable() {
-                    @Override
-                    public void run() {
-                        killMonster(monster, null, false, selfDestruction.getAction());
-                    }
-                };
+                removeAfterAction = () -> killMonster(monster, null, false, selfDestruction.getAction());
                 
                 registerMapSchedule(removeAfterAction, selfDestruction.removeAfter() * 1000);
             }
@@ -2018,12 +1954,7 @@ public class MapleMap {
             getEventInstance().registerMonster(monster);
         }
         
-        spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                c.announce(MaplePacketCreator.spawnMonster(monster, true));
-            }
-        }, null);
+        spawnAndAddRangedMapObject(monster, c -> c.announce(MaplePacketCreator.spawnMonster(monster, true)), null);
         
         monster.aggroUpdateController();
         updateBossSpawn(monster);
@@ -2084,12 +2015,7 @@ public class MapleMap {
         monster.setPosition(spos);
         monster.setSpawnEffect(effect);
         
-        spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                c.announce(MaplePacketCreator.spawnMonster(monster, true, effect));
-            }
-        });
+        spawnAndAddRangedMapObject(monster, c -> c.announce(MaplePacketCreator.spawnMonster(monster, true, effect)));
         
         monster.aggroUpdateController();
         updateBossSpawn(monster);
@@ -2102,12 +2028,7 @@ public class MapleMap {
     public void spawnFakeMonster(final MapleMonster monster) {
         monster.setMap(this);
         monster.setFake(true);
-        spawnAndAddRangedMapObject(monster, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                c.announce(MaplePacketCreator.spawnFakeMonster(monster, 0));
-            }
-        });
+        spawnAndAddRangedMapObject(monster, c -> c.announce(MaplePacketCreator.spawnFakeMonster(monster, 0)));
         
         spawnedMonstersOnMap.incrementAndGet();
         addSelfDestructive(monster);
@@ -2122,30 +2043,17 @@ public class MapleMap {
 
     public void spawnReactor(final MapleReactor reactor) {
         reactor.setMap(this);
-        spawnAndAddRangedMapObject(reactor, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                c.announce(reactor.makeSpawnData());
-            }
-        });
+        spawnAndAddRangedMapObject(reactor, c -> c.announce(reactor.makeSpawnData()));
     }
 
     public void spawnDoor(final MapleDoorObject door) {
-        spawnAndAddRangedMapObject(door, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                MapleCharacter chr = c.getPlayer();
-                if (chr != null) {
-                    door.sendSpawnData(c, false);
-                    chr.addVisibleMapObject(door);
-                }
+        spawnAndAddRangedMapObject(door, c -> {
+            MapleCharacter chr = c.getPlayer();
+            if (chr != null) {
+                door.sendSpawnData(c, false);
+                chr.addVisibleMapObject(door);
             }
-        }, new SpawnCondition() {
-            @Override
-            public boolean canSpawn(MapleCharacter chr) {
-                return chr.getMapId() == door.getFrom().getId();
-            }
-        });
+        }, chr -> chr.getMapId() == door.getFrom().getId());
     }
     
     public MaplePortal getDoorPortal(int doorid) {
@@ -2159,12 +2067,9 @@ public class MapleMap {
     }
     
     public void spawnSummon(final MapleSummon summon) {
-        spawnAndAddRangedMapObject(summon, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                if (summon != null) {
-                    c.announce(MaplePacketCreator.spawnSummon(summon, true));
-                }
+        spawnAndAddRangedMapObject(summon, c -> {
+            if (summon != null) {
+                c.announce(MaplePacketCreator.spawnSummon(summon, true));
             }
         }, null);
     }
@@ -2175,30 +2080,24 @@ public class MapleMap {
         TimerManager tMan = TimerManager.getInstance();
         final ScheduledFuture<?> poisonSchedule;
         if (poison) {
-            Runnable poisonTask = new Runnable() {
-                @Override
-                public void run() {
-                    List<MapleMapObject> affectedMonsters = getMapObjectsInBox(mist.getBox(), Collections.singletonList(MapleMapObjectType.MONSTER));
-                    for (MapleMapObject mo : affectedMonsters) {
-                        if (mist.makeChanceResult()) {
-                            MonsterStatusEffect poisonEffect = new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.POISON, 1), mist.getSourceSkill(), null, false);
-                            ((MapleMonster) mo).applyStatus(mist.getOwner(), poisonEffect, true, duration);
-                        }
+            Runnable poisonTask = () -> {
+                List<MapleMapObject> affectedMonsters = getMapObjectsInBox(mist.getBox(), Collections.singletonList(MapleMapObjectType.MONSTER));
+                for (MapleMapObject mo : affectedMonsters) {
+                    if (mist.makeChanceResult()) {
+                        MonsterStatusEffect poisonEffect = new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.POISON, 1), mist.getSourceSkill(), null, false);
+                        ((MapleMonster) mo).applyStatus(mist.getOwner(), poisonEffect, true, duration);
                     }
                 }
             };
             poisonSchedule = tMan.register(poisonTask, 2000, 2500);
         } else if (recovery) {
-            Runnable poisonTask = new Runnable() {
-                @Override
-                public void run() {
-                    List<MapleMapObject> players = getMapObjectsInBox(mist.getBox(), Collections.singletonList(MapleMapObjectType.PLAYER));
-                    for (MapleMapObject mo : players) {
-                        if (mist.makeChanceResult()) {
-                            MapleCharacter chr = (MapleCharacter) mo;
-                            if (mist.getOwner().getId() == chr.getId() || mist.getOwner().getParty() != null && mist.getOwner().getParty().containsMembers(chr.getMPC())) {	                        	
-                                chr.addMP((int) mist.getSourceSkill().getEffect(chr.getSkillLevel(mist.getSourceSkill().getId())).getX() * chr.getMp() / 100);
-                            }
+            Runnable poisonTask = () -> {
+                List<MapleMapObject> players = getMapObjectsInBox(mist.getBox(), Collections.singletonList(MapleMapObjectType.PLAYER));
+                for (MapleMapObject mo : players) {
+                    if (mist.makeChanceResult()) {
+                        MapleCharacter chr = (MapleCharacter) mo;
+                        if (mist.getOwner().getId() == chr.getId() || mist.getOwner().getParty() != null && mist.getOwner().getParty().containsMembers(chr.getMPC())) {
+                            chr.addMP((int) mist.getSourceSkill().getEffect(chr.getSkillLevel(mist.getSourceSkill().getId())).getX() * chr.getMp() / 100);
                         }
                     }
                 }
@@ -2208,15 +2107,12 @@ public class MapleMap {
             poisonSchedule = null;
         }
         
-        Runnable mistSchedule = new Runnable() {
-            @Override
-            public void run() {
-                removeMapObject(mist);
-                if (poisonSchedule != null) {
-                    poisonSchedule.cancel(false);
-                }
-                broadcastMessage(mist.makeDestroyData());
+        Runnable mistSchedule = () -> {
+            removeMapObject(mist);
+            if (poisonSchedule != null) {
+                poisonSchedule.cancel(false);
             }
+            broadcastMessage(mist.makeDestroyData());
         };
         
         MobMistService service = (MobMistService) this.getChannelServer().getServiceAccess(ChannelServices.MOB_MIST);
@@ -2227,12 +2123,9 @@ public class MapleMap {
         addMapObject(kite);
         broadcastMessage(kite.makeSpawnData());
         
-        Runnable expireKite = new Runnable() {
-            @Override
-            public void run() {
-                removeMapObject(kite);
-                broadcastMessage(kite.makeDestroyData());
-            }
+        Runnable expireKite = () -> {
+            removeMapObject(kite);
+            broadcastMessage(kite.makeDestroyData());
         };
         
         getWorldServer().registerTimedMapObject(expireKite, YamlConfig.config.server.KITE_EXPIRE_TIME);
@@ -2252,15 +2145,12 @@ public class MapleMap {
         final MapleMapItem mdrop = new MapleMapItem(item, droppos, dropper, owner, owner.getClient(), dropType, playerDrop);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
 
-        spawnAndAddRangedMapObject(mdrop, new DelayedPacketCreation() {
-            @Override
-            public void sendPackets(MapleClient c) {
-                mdrop.lockItem();
-                try {
-                    c.announce(MaplePacketCreator.dropItemFromMapObject(c.getPlayer(), mdrop, dropper.getPosition(), droppos, (byte) 1));
-                } finally {
-                    mdrop.unlockItem();
-                }
+        spawnAndAddRangedMapObject(mdrop, c -> {
+            mdrop.lockItem();
+            try {
+                c.announce(MaplePacketCreator.dropItemFromMapObject(c.getPlayer(), mdrop, dropper.getPosition(), droppos, (byte) 1));
+            } finally {
+                mdrop.unlockItem();
             }
         }, null);
         
@@ -2392,12 +2282,9 @@ public class MapleMap {
         mapEffect = new MapleMapEffect(msg, itemId);
         broadcastMessage(mapEffect.makeStartData());
         
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                broadcastMessage(mapEffect.makeDestroyData());
-                mapEffect = null;
-            }
+        Runnable r = () -> {
+            broadcastMessage(mapEffect.makeDestroyData());
+            mapEffect = null;
         };
         
         registerMapSchedule(r, time);
@@ -2516,73 +2403,49 @@ public class MapleMap {
         if (mapid == 200090060) { // To Rien
             int travelTime = getWorldServer().getTransportationTime(1 * 60 * 1000);
             chr.announce(MaplePacketCreator.getClock(travelTime / 1000));
-            TimerManager.getInstance().schedule(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (chr.getMapId() == 200090060) {
-                        chr.changeMap(140020300, 0);
-                    }
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == 200090060) {
+                    chr.changeMap(140020300, 0);
                 }
             }, travelTime);
         } else if (mapid == 200090070) { // To Lith Harbor
             int travelTime = getWorldServer().getTransportationTime(1 * 60 * 1000);
             chr.announce(MaplePacketCreator.getClock(travelTime / 1000));
-            TimerManager.getInstance().schedule(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (chr.getMapId() == 200090070) {
-                        chr.changeMap(104000000, 3);
-                    }
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == 200090070) {
+                    chr.changeMap(104000000, 3);
                 }
             }, travelTime);
         } else if (mapid == 200090030) { // To Ereve (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime(2 * 60 * 1000);
             chr.announce(MaplePacketCreator.getClock(travelTime / 1000));
-            TimerManager.getInstance().schedule(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (chr.getMapId() == 200090030) {
-                        chr.changeMap(130000210, 0);
-                    }
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == 200090030) {
+                    chr.changeMap(130000210, 0);
                 }
             }, travelTime);
         } else if (mapid == 200090031) { // To Victoria Island (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime(2 * 60 * 1000);
             chr.announce(MaplePacketCreator.getClock(travelTime / 1000));
-            TimerManager.getInstance().schedule(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (chr.getMapId() == 200090031) {
-                        chr.changeMap(101000400, 0);
-                    }
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == 200090031) {
+                    chr.changeMap(101000400, 0);
                 }
             }, travelTime);
         } else if (mapid == 200090021) { // To Orbis (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime(8 * 60 * 1000);
             chr.announce(MaplePacketCreator.getClock(travelTime / 1000));
-            TimerManager.getInstance().schedule(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (chr.getMapId() == 200090021) {
-                        chr.changeMap(200000161, 0);
-                    }
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == 200090021) {
+                    chr.changeMap(200000161, 0);
                 }
             }, travelTime);
         } else if (mapid == 200090020) { // To Ereve From Orbis (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime(8 * 60 * 1000);
             chr.announce(MaplePacketCreator.getClock(travelTime / 1000));
-            TimerManager.getInstance().schedule(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (chr.getMapId() == 200090020) {
-                        chr.changeMap(130000210, 0);
-                    }
+            TimerManager.getInstance().schedule(() -> {
+                if (chr.getMapId() == 200090020) {
+                    chr.changeMap(130000210, 0);
                 }
             }, travelTime);
         } else if (MapleMiniDungeonInfo.isDungeonMap(mapid)) {
@@ -3590,17 +3453,14 @@ public class MapleMap {
                                 MapleMap reactorMap = reactor.getMap();
                                 
                                 OverallService service = (OverallService) reactorMap.getChannelServer().getServiceAccess(ChannelServices.OVERALL);
-                                service.registerOverallAction(reactorMap.getId(), new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        reactor.lockReactor();
-                                        try {
-                                            reactor.resetReactorActions(0);
-                                            reactor.setAlive(true);
-                                            broadcastMessage(MaplePacketCreator.triggerReactor(reactor, 0));
-                                        } finally {
-                                            reactor.unlockReactor();
-                                        }
+                                service.registerOverallAction(reactorMap.getId(), () -> {
+                                    reactor.lockReactor();
+                                    try {
+                                        reactor.resetReactorActions(0);
+                                        reactor.setAlive(true);
+                                        broadcastMessage(MaplePacketCreator.triggerReactor(reactor, 0));
+                                    } finally {
+                                        reactor.unlockReactor();
                                     }
                                 }, reactor.getDelay());
                             }

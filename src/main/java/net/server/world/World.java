@@ -461,12 +461,7 @@ public class World {
             list.add(e);
         }
         
-        Collections.sort(list, new Comparator<Entry<Integer, SortedMap<Integer, MapleCharacter>>>() {
-            @Override
-            public int compare(Entry<Integer, SortedMap<Integer, MapleCharacter>> o1, Entry<Integer, SortedMap<Integer, MapleCharacter>> o2) {
-                return o1.getKey() - o2.getKey();
-            }
-        });
+        Collections.sort(list, (o1, o2) -> o1.getKey() - o2.getKey());
         
         return list;
     }
@@ -1359,13 +1354,9 @@ public class World {
     
     private List<Integer> getMostSellerOnTab(List<Pair<Integer, Integer>> tabSellers) {
         List<Integer> tabLeaderboards;
-        
-        Comparator<Pair<Integer, Integer>> comparator = new Comparator<Pair<Integer, Integer>>() {  // descending order
-            @Override
-            public int compare(Pair<Integer, Integer> p1, Pair<Integer, Integer> p2) {
-                return p2.getRight().compareTo(p1.getRight());
-            }
-        };
+
+        // descending order
+        Comparator<Pair<Integer, Integer>> comparator = (p1, p2) -> p2.getRight().compareTo(p1.getRight());
 
         PriorityQueue<Pair<Integer, Integer>> queue = new PriorityQueue<>(Math.max(1, tabSellers.size()), comparator);
         for(Pair<Integer, Integer> p : tabSellers) {
@@ -1853,12 +1844,7 @@ public class World {
             }
         }
 
-        Collections.sort(hmsAvailable, new Comparator<Pair<MaplePlayerShopItem, AbstractMapleMapObject>>() {
-            @Override
-            public int compare(Pair<MaplePlayerShopItem, AbstractMapleMapObject> p1, Pair<MaplePlayerShopItem, AbstractMapleMapObject> p2) {
-                return p1.getLeft().getPrice() - p2.getLeft().getPrice();
-            }
-        });
+        Collections.sort(hmsAvailable, (p1, p2) -> p1.getLeft().getPrice() - p2.getLeft().getPrice());
 
         hmsAvailable.subList(0, Math.min(hmsAvailable.size(), 200));    //truncates the list to have up to 200 elements
         return hmsAvailable;
@@ -2049,12 +2035,7 @@ public class World {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {

@@ -21,22 +21,15 @@ package maplearrowfetcher;
 
 import life.MapleLifeFactory;
 import life.MapleMonsterStats;
+import tools.DatabaseConnection;
+import tools.Pair;
 
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import java.io.*;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import tools.DatabaseConnection;
-import tools.Pair;
 
 /**
  *
@@ -123,14 +116,11 @@ public class MapleArrowFetcher {
         
         List<Entry<Integer, List<Integer>>> listEntries = new ArrayList<>(existingEntries.entrySet());
         
-        Collections.sort(listEntries, new Comparator<Entry<Integer, List<Integer>>>() {
-                                @Override
-                                public int compare(Entry<Integer, List<Integer>> o1, Entry<Integer, List<Integer>> o2) {
-                                        int val1 = o1.getKey();
-                                        int val2 = o2.getKey();
-                                        return (val1 < val2 ? -1 : (val1 == val2 ? 0 : 1));
-                                }
-                        });
+        Collections.sort(listEntries, (o1, o2) -> {
+                int val1 = o1.getKey();
+                int val2 = o2.getKey();
+                return (val1 < val2 ? -1 : (val1 == val2 ? 0 : 1));
+        });
         
         for(Entry<Integer, List<Integer>> ee : listEntries) {
             int mobid = ee.getKey();

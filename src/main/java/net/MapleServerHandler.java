@@ -21,28 +21,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicLong;
-
-import config.YamlConfig;
-import org.apache.mina.core.service.IoHandlerAdapter;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.core.session.IoSession;
-
 import client.MapleClient;
+import config.YamlConfig;
 import constants.net.ServerConstants;
-import java.net.InetSocketAddress;
-
 import net.server.Server;
+import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.session.MapleSessionCoordinator;
-
+import org.apache.mina.core.service.IoHandlerAdapter;
+import org.apache.mina.core.session.IdleStatus;
+import org.apache.mina.core.session.IoSession;
+import server.TimerManager;
 import tools.FilePrinter;
 import tools.MapleAESOFB;
 import tools.MapleLogger;
@@ -50,15 +41,14 @@ import tools.MaplePacketCreator;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
-import java.util.Arrays;
 
-import java.util.concurrent.ScheduledFuture;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Map.Entry;
-import net.server.audit.LockCollector;
-import server.TimerManager;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MapleServerHandler extends IoHandlerAdapter {
     private final static Set<Short> ignoredDebugRecvPackets = new HashSet<>(Arrays.asList((short) 167, (short) 197, (short) 89, (short) 91, (short) 41, (short) 188, (short) 107));
@@ -274,12 +264,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
     
     private void idleManagerTask() {
-        this.idleManager = TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                manageIdleSessions();
-            }
-        }, 10000);
+        this.idleManager = TimerManager.getInstance().register(() -> manageIdleSessions(), 10000);
     }
     
     private void cancelIdleManagerTask() {
@@ -288,12 +273,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
 
     private void emptyLocks() {

@@ -225,12 +225,7 @@ public final class Channel {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {
@@ -606,29 +601,26 @@ public final class Channel {
             if (this.dojoTask[slot] != null) {
                 this.dojoTask[slot].cancel(false);
             }
-            this.dojoTask[slot] = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    final int delta = (dojoMapId) % 100;
-                    final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
-                    MapleParty party = null;
+            this.dojoTask[slot] = TimerManager.getInstance().schedule(() -> {
+                final int delta = (dojoMapId) % 100;
+                final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
+                MapleParty party = null;
 
-                    for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
-                        if (stage + i > 38) {
-                            break;
-                        }
-
-                        MapleMap dojoExit = getMapFactory().getMap(925020002);
-                        for(MapleCharacter chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
-                            if(GameConstants.isDojo(chr.getMap().getId())) {
-                                chr.changeMap(dojoExit);
-                            }
-                            party = chr.getParty();
-                        }
+                for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
+                    if (stage + i > 38) {
+                        break;
                     }
 
-                    freeDojoSlot(slot, party);
+                    MapleMap dojoExit = getMapFactory().getMap(925020002);
+                    for(MapleCharacter chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
+                        if(GameConstants.isDojo(chr.getMap().getId())) {
+                            chr.changeMap(dojoExit);
+                        }
+                        party = chr.getParty();
+                    }
                 }
+
+                freeDojoSlot(slot, party);
             }, clockTime + 3000);   // let the TIMES UP display for 3 seconds, then warp
         } finally {
             lock.unlock();
@@ -857,12 +849,7 @@ public final class Channel {
         
         ongoingStartTime = System.currentTimeMillis();
         if(weddingId != null) {
-            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    closeOngoingWedding(cathedral);
-                }
-            }, YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT * 60 * 1000);
+            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(() -> closeOngoingWedding(cathedral), YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT * 60 * 1000);
             
             if(cathedral) {
                 cathedralReservationTask = weddingTask;

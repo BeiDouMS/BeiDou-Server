@@ -20,46 +20,12 @@
  */
 package tools;
 
-import java.awt.Point;
-import java.net.InetAddress;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import client.BuddylistEntry;
-import client.MapleBuffStat;
-import client.MapleCharacter;
+import client.*;
 import client.MapleCharacter.SkillEntry;
-import client.MapleClient;
-import client.MapleDisease;
-import client.MapleFamilyEntitlement;
-import client.MapleFamilyEntry;
+import client.inventory.*;
+import client.inventory.Equip.ScrollResult;
 import client.keybind.MapleKeyBinding;
 import client.keybind.MapleQuickslotBinding;
-import client.MapleMount;
-import client.MapleQuestStatus;
-import client.MapleRing;
-import client.MapleStat;
-import client.MonsterBook;
-import client.Skill;
-import client.SkillMacro;
-import client.inventory.Equip;
-import client.inventory.Equip.ScrollResult;
-import client.inventory.Item;
-import client.inventory.ItemFactory;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import client.inventory.ModifyInventory;
 import client.newyear.NewYearCardRecord;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -67,7 +33,6 @@ import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
-import constants.net.ServerConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
@@ -88,35 +53,26 @@ import net.server.world.World;
 import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
-import server.DueyPackage;
-import server.MTSItemInfo;
-import server.MapleItemInformationProvider;
-import server.MapleShopItem;
-import server.MapleTrade;
+import server.*;
 import server.events.gm.MapleSnowball;
 import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
 import server.life.MobSkill;
-import server.maps.AbstractMapleMapObject;
-import server.maps.MapleDoor;
-import server.maps.MapleDoorObject;
-import server.maps.MapleDragon;
-import server.maps.MapleHiredMerchant;
-import server.maps.MapleMap;
-import server.maps.MapleMapItem;
-import server.maps.MapleMiniGame;
+import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
-import server.maps.MapleMist;
-import server.maps.MaplePlayerShop;
-import server.maps.MaplePlayerShopItem;
-import server.maps.MapleReactor;
-import server.maps.MapleSummon;
 import server.movement.LifeMovementFragment;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.data.output.LittleEndianWriter;
 import tools.data.output.MaplePacketLittleEndianWriter;
-import java.util.TimeZone;
+
+import java.awt.*;
+import java.net.InetAddress;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -1032,13 +988,10 @@ public class MaplePacketCreator {
                 }
                 List<Pair<MapleStat, Integer>> mystats = stats;
                 if (mystats.size() > 1) {
-                        Collections.sort(mystats, new Comparator<Pair<MapleStat, Integer>>() {
-                                @Override
-                                public int compare(Pair<MapleStat, Integer> o1, Pair<MapleStat, Integer> o2) {
-                                        int val1 = o1.getLeft().getValue();
-                                        int val2 = o2.getLeft().getValue();
-                                        return (val1 < val2 ? -1 : (val1 == val2 ? 0 : 1));
-                                }
+                        Collections.sort(mystats, (o1, o2) -> {
+                                int val1 = o1.getLeft().getValue();
+                                int val2 = o2.getLeft().getValue();
+                                return (val1 < val2 ? -1 : (val1 == val2 ? 0 : 1));
                         });
                 }
                 mplew.writeInt(updateMask);

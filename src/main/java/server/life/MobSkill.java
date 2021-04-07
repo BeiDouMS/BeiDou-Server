@@ -21,25 +21,22 @@
  */
 package server.life;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import client.MapleCharacter;
 import client.MapleDisease;
 import client.status.MonsterStatus;
 import constants.game.GameConstants;
-import java.util.LinkedList;
-import java.util.Map;
-import net.server.services.type.ChannelServices;
 import net.server.services.task.channel.OverallService;
-import tools.Randomizer;
+import net.server.services.type.ChannelServices;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleMist;
 import tools.ArrayMap;
+import tools.Randomizer;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -108,12 +105,9 @@ public class MobSkill {
     }
 
     public void applyDelayedEffect(final MapleCharacter player, final MapleMonster monster, final boolean skill, int animationTime) {
-        Runnable toRun = new Runnable() {
-            @Override
-            public void run() {
-                if (monster.isAlive()) {
-                    applyEffect(player, monster, skill, null);
-                }
+        Runnable toRun = () -> {
+            if (monster.isAlive()) {
+                applyEffect(player, monster, skill, null);
             }
         };
 
