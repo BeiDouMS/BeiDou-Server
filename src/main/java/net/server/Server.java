@@ -59,6 +59,8 @@ import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.CashShop.CashItemFactory;
 import server.MapleSkillbookInformationProvider;
 import server.ThreadManager;
@@ -84,7 +86,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
 public class Server {
-
+    private static final Logger log = LoggerFactory.getLogger(Server.class);
     private static Server instance = null;
 
     public static Server getInstance() {
@@ -385,7 +387,7 @@ public class Server {
             wldRLock.unlock();
         }
 
-        System.out.println("Starting world " + i);
+        log.info("Starting world {}", i);
 
         int exprate = YamlConfig.config.worlds.get(i).exp_rate;
         int mesorate = YamlConfig.config.worlds.get(i).meso_rate;
@@ -431,10 +433,10 @@ public class Server {
         if (canDeploy) {
             world.setServerMessage(YamlConfig.config.worlds.get(i).server_message);
 
-            System.out.println("Finished loading world " + i + "\r\n");
+            log.info("Finished loading world {}", i);
             return i;
         } else {
-            System.out.println("Could not load world " + i + "...\r\n");
+            log.error("Could not load world {}...", i);
             world.shutdown();
             return -2;
         }
@@ -815,7 +817,7 @@ public class Server {
     }
 
     public void init() {
-        System.out.println("Cosmic v" + ServerConstants.VERSION + " starting up.\r\n");
+        log.info("Cosmic v{} starting up.", ServerConstants.VERSION);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
@@ -853,16 +855,19 @@ public class Server {
 
         long timeToTake = System.currentTimeMillis();
         SkillFactory.loadAllSkills();
-        System.out.println("Skills loaded in " + ((System.currentTimeMillis() - timeToTake) / 1000.0) + " seconds");
+        final double skillLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
+        log.info("Skills loaded in {} seconds", skillLoadTime);
 
         timeToTake = System.currentTimeMillis();
 
         CashItemFactory.getSpecialCashItems();
-        System.out.println("Items loaded in " + ((System.currentTimeMillis() - timeToTake) / 1000.0) + " seconds");
+        final double itemLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
+        log.info("Items loaded in {} seconds", itemLoadTime);
 
         timeToTake = System.currentTimeMillis();
         MapleQuest.loadAllQuest();
-        System.out.println("Quest loaded in " + ((System.currentTimeMillis() - timeToTake) / 1000.0) + " seconds\r\n");
+        final double questLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
+        log.info("Quest loaded in {} seconds", questLoadTime);
 
         NewYearCardRecord.startPendingNewYearCardRequests();
 
@@ -882,19 +887,16 @@ public class Server {
             loadPlayerNpcMapStepFromDb();
         } catch (Exception e) {
             e.printStackTrace();//For those who get errors
-            System.out.println("[SEVERE] Syntax error in 'world.ini'.");
+            log.error("[SEVERE] Syntax error in 'world.ini'.");
             System.exit(0);
         }
-
-        System.out.println();
 
         if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             timeToTake = System.currentTimeMillis();
             MapleFamily.loadAllFamilies();
-            System.out.println("Families loaded in " + ((System.currentTimeMillis() - timeToTake) / 1000.0) + " seconds\r\n");
+            final double familyLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
+            log.info("Families loaded in {} seconds", familyLoadTime);
         }
-
-        System.out.println();
 
         IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan
         IoBuffer.setAllocator(new SimpleBufferAllocator());
@@ -908,9 +910,9 @@ public class Server {
             ex.printStackTrace();
         }
 
-        System.out.println("Listening on port 8484\r\n\r\n");
+        log.info("Listening on port 8484");
 
-        System.out.println("Cosmic is now online.\r\n");
+        log.info("Cosmic is now online.");
         online = true;
 
         MapleSkillbookInformationProvider.getInstance();
