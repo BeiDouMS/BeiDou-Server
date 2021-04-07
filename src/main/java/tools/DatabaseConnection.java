@@ -1,15 +1,16 @@
 package tools;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import config.YamlConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
-
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
-import config.YamlConfig;
 
 /**
  * @author Frz (Big Daddy)
@@ -17,6 +18,7 @@ import config.YamlConfig;
  * @author Ronan - some connection pool to this beautiful code
  */
 public class DatabaseConnection {
+    private static final Logger log = LoggerFactory.getLogger(DatabaseConnection.class);
     private static HikariDataSource dataSource;
 
     public static Connection getConnection() throws SQLException {
@@ -61,17 +63,17 @@ public class DatabaseConnection {
      * @return true if connection to the database initiated successfully, false if not successful
      */
     public static boolean initializeConnectionPool() {
-        System.out.println("Initializing connection pool...");
+        log.info("Initializing connection pool...");
         final HikariConfig config = getConfig();
         Instant initStart = Instant.now();
         try {
             dataSource = new HikariDataSource(config);
             long initDuration = Duration.between(initStart, Instant.now()).toMillis();
-            System.out.printf("Connection pool initialized in %d ms%n", initDuration);
+            log.info("Connection pool initialized in {} ms", initDuration);
             return true;
         } catch (Exception e) {
             long timeout = Duration.between(initStart, Instant.now()).getSeconds();
-            System.err.printf("Failed to initialize database connection pool. Gave up after %d seconds.%n", timeout);
+            log.error("Failed to initialize database connection pool. Gave up after {} seconds.", timeout);
         }
 
         // Timed out - failed to initialize

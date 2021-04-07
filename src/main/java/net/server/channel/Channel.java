@@ -21,42 +21,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel;
 
-import java.io.File;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.WeakHashMap;
-import java.util.concurrent.ScheduledFuture;
-
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredWriteLock;
-import net.server.audit.locks.factory.MonitoredReadLockFactory;
-import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-
+import client.MapleCharacter;
 import config.YamlConfig;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-
+import constants.game.GameConstants;
 import net.MapleServerHandler;
 import net.mina.MapleCodecFactory;
-
 import net.server.PlayerStorage;
 import net.server.Server;
-
-import net.server.world.World;
+import net.server.audit.LockCollector;
+import net.server.audit.locks.*;
+import net.server.audit.locks.factory.MonitoredReadLockFactory;
+import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import net.server.audit.locks.factory.MonitoredWriteLockFactory;
+import net.server.services.BaseService;
+import net.server.services.ServicesManager;
+import net.server.services.type.ChannelServices;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
-
+import net.server.world.World;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.buffer.SimpleBufferAllocator;
 import org.apache.mina.core.filterchain.IoFilter;
@@ -65,26 +47,25 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.SocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
-
-import client.MapleCharacter;
-import constants.game.GameConstants;
-import net.server.services.ServicesManager;
-import net.server.services.BaseService;
-import net.server.services.type.ChannelServices;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.EventScriptManager;
 import server.TimerManager;
 import server.events.gm.MapleEvent;
 import server.expeditions.MapleExpedition;
 import server.expeditions.MapleExpeditionType;
-import server.maps.MapleHiredMerchant;
-import server.maps.MapleMap;
-import server.maps.MapleMapManager;
-import server.maps.MapleMiniDungeon;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.*;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
+
 public final class Channel {
+    private static final Logger log = LoggerFactory.getLogger(Channel.class);
 
     private int port = 7575;
     private PlayerStorage players = new PlayerStorage();
@@ -173,7 +154,7 @@ public final class Channel {
             
             services = new ServicesManager(ChannelServices.OVERALL);
             
-            System.out.println("    Channel " + getId() + ": Listening on port " + port);
+            log.info("Channel {}: Listening on port {}", getId(), port);
         } catch (Exception e) {
             e.printStackTrace();
         }
