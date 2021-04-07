@@ -1,7 +1,7 @@
 ﻿# Cosmic - MapleStory v83
 Cosmic launched as a successor to HeavenMS on March 21st 2021.
 
-This document is currently being worked on, so some errors may occur.
+This document is currently being worked on, so it may not be fully accurate.
 
 ## Beware
 
@@ -11,32 +11,23 @@ It can be useful for testing things locally or for trying out ideas, but launchi
 
 ---
 ### Development information
+#### Status
+The current status is: <span style="color:LightGreen">*in development and gladly accepting contributions*</span>
 
-Status: <span style="color:SkyBlue">__in development__</span>  
+#### Ways to contribute
+
+* Submit a Pull Request (fork -> commit -> PR)
+* Submit a bug report (add a new issue on GitHub, or post in `bug-report` on Discord)
+* Spread the word about Cosmic
 
 #### Community
 GitHub: https://github.com/P0nk/Cosmic  
 Discord: https://discord.gg/JU5aQapVZK
 
-#### Mission
-
-With non-profitting means intended, provide nostalgic pre-BB maplers world-wide a quality local server for freestyle entertainment.
-
-#### Vision
-
-By taking the v83 MapleStory as the angular stone, incrementally look forward to improve the gaming experience whilst still retaining the "clean v83" conservative ideal. Also, through reviewing distinguished aspects of the server's behavior that could be classified as a potential server threat, in the long run look for ways to improve or even stabilize some of it's uncertain aspects.
-
-#### Values
-
-* Autonomy, seek self-improvement for tackling issues head-on;
-* Adventurous, take no fear of failures on the path of progress;
-* Light-hearted support, general people out there didn't experience what you've already had;
-* Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had.
-
 ---
 
 ## Tools
-* **Java 8 SDK** - 
+* **Java 8 SDK** 
   * Link: https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
 	
 
@@ -48,7 +39,7 @@ By taking the v83 MapleStory as the angular stone, incrementally look forward to
   * Link: https://dev.mysql.com/downloads/mysql/
 	
 
-* **MySQL Workbench 8** - Client for interacting with the database. Other clients exist. 
+* **MySQL Workbench 8** - Client for interacting with the database. Other clients do exist. 
   * Link: https://dev.mysql.com/downloads/workbench/
 	
 
@@ -76,45 +67,21 @@ Naturally, later versions holds all previous changes along with the proposed cha
 **Change log:**
 
   * Fixed Monster Magnet crashing the caster when trying to pull fixed mobs, credits to Shavit. https://gofile.io/?c=BW7dVM (dead link)
-
   * Cleared need for administrator privileges (OS) to play the game, credits to Ubaware.
-
   * Set a higher cap for AP assigning with AP Reset, credits to Ubaware.
-
   * Fixed Monster Magnet crashing the caster when trying to pull bosses. Drawback: Dojo HPBar becomes unavailable. https://hostr.co/SvnSKrGzXhG0
-
   * Fixed some 'rn' problems with quest icons & removed "tab" from party leader changed message. https://hostr.co/tsYsQzzV6xT0
-
   * Removed block on applying attack-based strengthening gems on non-weapon equipments. https://hostr.co/m2bVtnizCtmD
-
   * Set a higher cap for SPEED.
-
   * Removed the AP assigning block for beginners below level 10. https://hostr.co/AHAHzneCti9B
-
   * Removed block on party for beginners level 10 or below. https://hostr.co/JZq53mMtToCz
-
   * Removed block on MTS entering in some maps, rendering the buyback option available.
-
   * Removed "AP excess" popup and limited actions on Admin/MWLB, credits to kevintjuh93.
-
   * Removed "You've gained a level!" popup, credits to PrinceReborn.
-
   * Removed caps for WATK, WDEF, MDEF, ACC, AVOID.
-
   * 'n' problem fixed.
-
   * Fraysa's https://hostr.co/gJbLZITRVHmv
-
   * Eric's MapleSilver starting on window-mode.
-
----
-### Open-source client development - HeavenClient
-
-Continuing from where **SYJourney**'s JourneyClient has finished contributions (as of 5 Jul 2016), an open-source development of a software artifact designed to handle both gaming operations and interactions with the server is being conducted.
-
-Newer implementations are being maintained by **頼晏 (ryantpayton)** and aims to offer higher display resolution, bring recent UI contents for the pre-BB gameplay and incremental support on overall gaming perspective.
-
-HeavenClient GitHub: https://github.com/ryantpayton/HeavenClient
 
 ---
 
@@ -123,7 +90,6 @@ HeavenClient GitHub: https://github.com/ryantpayton/HeavenClient
 * Install the server
 
 ### Installing the client
-
 
 1. From "MapleGlobal-v83-setup.exe", install MapleStory on your folder of preference (e.g. "C:\Nexon\MapleStory") and follow their instructions.
 2. Once done, erase these files: "HShield" (folder), "ASPLnchr.exe", "MapleStory.exe" and "Patcher.exe".
@@ -259,29 +225,6 @@ NOTE: Be extremely wary when using server-side's XMLs data being reimported into
 
 **These steps are IMPORTANT, to maintain synchronization** between the server and client modules.
 
-#### The MobBookUpdate example
-
-As an example of client WZ editing, consider the MapleMobBookUpdate tool project I developed, it updates all reported drop data on the Monster Book with what is currently being hold on the database:
-
-To make it happen:
-
-* Open the MobBookUpdate project on NetBeans, located at "tools\MapleMobBookUpdate", and build it.
-* At the subfolder "lib", copy the file "MonsterBook.img.xml". This is from the original WZ v83.
-* Paste it on the "dist" subfolder.
-* Inside "dist", open the command prompt by alt+right clicking there.
-* Execute "java -jar MobBookUpdate.jar". It will generate a "MonsterBook_updated.img.xml" file.
-* At last, overwrite the "MonsterBook.img.xml" on "C:\Nexon\Cosmic\wz\String.wz" with this file, renaming it back to "MonsterBook.img.xml".
-
-At this point, **just the server-side** Monster Book has been updated with the current state of the database's drop data.
-
-To **update the client as well**, open HaRepacker 4.2.2 and load "String.wz" from "C:\Nexon\MapleStory". Drop the "MonsterBook.img" node by removing it from the hierarchy tree, then import the server's "MonsterBook.img.xml".
-
-**Note:** On this case, a server-to-client data transfer has been instanced. This kind of action **could cause** problems on the client-side if done unwary, however the nodes being updated on client-side and server-side provides no conflicts whatsoever, so this is fine. Remember, server-to-client data reimport may be problematic, whereas client-to-server data reimport is fine.
-
-The client's WZ now has the proper item drops described by the DB updated into the MobBook drop list.
-
-**Save the changes and overwrite the older WZ** on the MapleStory client folder.
-
 ---
 ### Portforwarding the SERVER
 
@@ -327,6 +270,25 @@ In this project, many gameplay-wise issues generated from either the original WZ
 
 The main objective of this effort is to try as best as possible to recreate what once was the original MapleStory v83, while adding up some flavors that spices up the gameplay. In other words, aim to get the best of the MapleStory of that era.
 
+---
+
+#### Mission
+
+With non-profitting means intended, provide nostalgic pre-BB maplers world-wide a quality local server for freestyle entertainment.
+
+#### Vision
+
+By taking the v83 MapleStory as the angular stone, incrementally look forward to improve the gaming experience whilst still retaining the "clean v83" conservative ideal. Also, through reviewing distinguished aspects of the server's behavior that could be classified as a potential server threat, in the long run look for ways to improve or even stabilize some of it's uncertain aspects.
+
+#### Values
+
+* Autonomy, seek self-improvement for tackling issues head-on;
+* Adventurous, take no fear of failures on the path of progress;
+* Light-hearted support, general people out there didn't experience what you've already had;
+* Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had.
+
+---
+
 #### Preparing the ambient
 
 For Hamachi:
@@ -336,12 +298,47 @@ For Hamachi:
 Hamachi is optional, though. You don't have to install Hamachi if you want to make the server just for use on your own machine.
 However, if you want to let other players access your server, consider alternatively using port-forwarding methods.
 
+---
+
+#### The MobBookUpdate example
+
+As an example of client WZ editing, consider the MapleMobBookUpdate tool project I developed, it updates all reported drop data on the Monster Book with what is currently being hold on the database:
+
+To make it happen:
+
+* Open the MobBookUpdate project on NetBeans, located at "tools\MapleMobBookUpdate", and build it.
+* At the subfolder "lib", copy the file "MonsterBook.img.xml". This is from the original WZ v83.
+* Paste it on the "dist" subfolder.
+* Inside "dist", open the command prompt by alt+right clicking there.
+* Execute "java -jar MobBookUpdate.jar". It will generate a "MonsterBook_updated.img.xml" file.
+* At last, overwrite the "MonsterBook.img.xml" on "C:\Nexon\Cosmic\wz\String.wz" with this file, renaming it back to "MonsterBook.img.xml".
+
+At this point, **just the server-side** Monster Book has been updated with the current state of the database's drop data.
+
+To **update the client as well**, open HaRepacker 4.2.2 and load "String.wz" from "C:\Nexon\MapleStory". Drop the "MonsterBook.img" node by removing it from the hierarchy tree, then import the server's "MonsterBook.img.xml".
+
+**Note:** On this case, a server-to-client data transfer has been instanced. This kind of action **could cause** problems on the client-side if done unwary, however the nodes being updated on client-side and server-side provides no conflicts whatsoever, so this is fine. Remember, server-to-client data reimport may be problematic, whereas client-to-server data reimport is fine.
+
+The client's WZ now has the proper item drops described by the DB updated into the MobBook drop list.
+
+**Save the changes and overwrite the older WZ** on the MapleStory client folder.
+
+---
 
 #### Announcements
 
 HeavenMS development as we can see right now achieved an acceptable state-of-the-art. A heartfelt thanks for everyone that contributed in some way for the progress of this server!
 
 A case study has been conducted with the objective of overview results achieved during HeavenMS development. Those can be checked out on: https://heavenms-survey.home.blog/2019/12/24/project-visualizations/
+
+---
+### Open-source client development - HeavenClient
+
+Continuing from where **SYJourney**'s JourneyClient has finished contributions (as of 5 Jul 2016), an open-source development of a software artifact designed to handle both gaming operations and interactions with the server is being conducted.
+
+Newer implementations are being maintained by **頼晏 (ryantpayton)** and aims to offer higher display resolution, bring recent UI contents for the pre-BB gameplay and incremental support on overall gaming perspective.
+
+HeavenClient GitHub: https://github.com/ryantpayton/HeavenClient
 
 #### Support HeavenMS
 
