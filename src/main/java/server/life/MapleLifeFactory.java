@@ -281,7 +281,7 @@ public class MapleLifeFactory {
 
     private static void decodeElementalString(MapleMonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
-            stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.valueOf(String.valueOf(elemAttr.charAt(i + 1)))));
+            stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.parseInt(String.valueOf(elemAttr.charAt(i + 1)))));
         }
     }
 

@@ -425,7 +425,7 @@ public class AbstractPlayerInteraction {
         
         public int getQuestProgressInt(int id) {
                 try {
-                        return Integer.valueOf(getQuestProgress(id));
+                        return Integer.parseInt(getQuestProgress(id));
                 } catch (NumberFormatException nfe) {
                         return 0;
                 }
@@ -433,7 +433,7 @@ public class AbstractPlayerInteraction {
         
         public int getQuestProgressInt(int id, int infoNumber) {
                 try {
-                        return Integer.valueOf(getQuestProgress(id, infoNumber));
+                        return Integer.parseInt(getQuestProgress(id, infoNumber));
                 } catch (NumberFormatException nfe) {
                         return 0;
                 }

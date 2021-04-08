@@ -22,20 +22,6 @@ package net.server.coordinator.partysearch;
 import client.MapleCharacter;
 import client.MapleJob;
 import config.YamlConfig;
-import java.io.File;
-import net.server.world.MapleParty;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import tools.MaplePacketCreator;
-import tools.Pair;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -43,9 +29,17 @@ import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.MapleInviteCoordinator;
+import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
+import net.server.world.MapleParty;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import tools.MaplePacketCreator;
+import tools.Pair;
+
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -77,7 +71,7 @@ public class MaplePartySearchCoordinator {
         MapleData data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "Etc.wz")).getData("MapNeighbors.img");
         if (data != null) {
             for (MapleData mapdata : data.getChildren()) {
-                int mapid = Integer.valueOf(mapdata.getName());
+                int mapid = Integer.parseInt(mapdata.getName());
 
                 Set<Integer> neighborMaps = new HashSet<>();
                 mapLinks.put(mapid, neighborMaps);

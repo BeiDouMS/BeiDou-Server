@@ -40,9 +40,9 @@ public class HpMpCommand extends Command {
 
         if (params.length == 2) {
             victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
-            statUpdate = Integer.valueOf(params[1]);
+            statUpdate = Integer.parseInt(params[1]);
         } else if (params.length == 1) {
-            statUpdate = Integer.valueOf(params[0]);
+            statUpdate = Integer.parseInt(params[0]);
         } else {
             player.yellowMessage("Syntax: !hpmp [<playername>] <value>");
         }
