@@ -234,7 +234,7 @@ public class MapleMonsterAggroCoordinator {
 
                         if (!toRemoveIdx.isEmpty()) {
                             // last to first indexes
-                            Collections.sort(toRemoveIdx, (p1, p2) -> p1 < p2 ? 1 : p1.equals(p2) ? 0 : -1);
+                            toRemoveIdx.sort((p1, p2) -> p1 < p2 ? 1 : p1.equals(p2) ? 0 : -1);
 
                             for (int idx : toRemoveIdx) {
                                 sortedAggro.remove(idx);

@@ -986,7 +986,7 @@ public class MaplePacketCreator {
                 }
                 List<Pair<MapleStat, Integer>> mystats = stats;
                 if (mystats.size() > 1) {
-                        Collections.sort(mystats, (o1, o2) -> {
+                        mystats.sort((o1, o2) -> {
                                 int val1 = o1.getLeft().getValue();
                                 int val2 = o2.getLeft().getValue();
                                 return (val1 < val2 ? -1 : (val1 == val2 ? 0 : 1));

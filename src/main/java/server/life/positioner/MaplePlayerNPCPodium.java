@@ -31,7 +31,6 @@ import tools.MaplePacketCreator;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -92,7 +91,7 @@ public class MaplePlayerNPCPodium {
                 playerNpcs.add((MaplePlayerNPC) mmo);
             }
             
-            Collections.sort(playerNpcs, (p1, p2) -> {
+            playerNpcs.sort((p1, p2) -> {
                 return p1.getScriptId() - p2.getScriptId(); // scriptid as playernpc history
             });
             

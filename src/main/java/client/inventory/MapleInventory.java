@@ -188,7 +188,7 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (ret.size() > 1) {
-            Collections.sort(ret, (i1, i2) -> i1.getPosition() - i2.getPosition());
+            ret.sort((i1, i2) -> i1.getPosition() - i2.getPosition());
         }
         
         return ret;
@@ -203,7 +203,7 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (ret.size() > 1) {
-            Collections.sort(ret, (i1, i2) -> i1.getPosition() - i2.getPosition());
+            ret.sort((i1, i2) -> i1.getPosition() - i2.getPosition());
         }
         
         return ret;

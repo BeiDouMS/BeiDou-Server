@@ -29,7 +29,10 @@ import client.command.Command;
 import constants.game.GameConstants;
 import server.maps.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class GotoCommand extends Command {
@@ -65,7 +68,7 @@ public class GotoCommand extends Command {
     public static String GOTO_AREAS_INFO = "";
     
     private static void sortGotoEntries(List<Entry<String, Integer>> listEntries) {
-        Collections.sort(listEntries, (e1, e2) -> e1.getValue().compareTo(e2.getValue()));
+        listEntries.sort((e1, e2) -> e1.getValue().compareTo(e2.getValue()));
     }
 
     @Override

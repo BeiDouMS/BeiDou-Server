@@ -79,7 +79,7 @@ public class ItemAction extends MapleQuestAction {
 			items.add(new ItemData(Integer.parseInt(iEntry.getName()), id, count, prop, job, gender, period));
 		}
                 
-                Collections.sort(items, (o1, o2) -> o1.map - o2.map);
+                items.sort((o1, o2) -> o1.map - o2.map);
 	}
 	
 	@Override

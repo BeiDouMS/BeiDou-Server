@@ -461,7 +461,7 @@ public class World {
             list.add(e);
         }
         
-        Collections.sort(list, (o1, o2) -> o1.getKey() - o2.getKey());
+        list.sort((o1, o2) -> o1.getKey() - o2.getKey());
         
         return list;
     }
@@ -1844,7 +1844,7 @@ public class World {
             }
         }
 
-        Collections.sort(hmsAvailable, (p1, p2) -> p1.getLeft().getPrice() - p2.getLeft().getPrice());
+        hmsAvailable.sort((p1, p2) -> p1.getLeft().getPrice() - p2.getLeft().getPrice());
 
         hmsAvailable.subList(0, Math.min(hmsAvailable.size(), 200));    //truncates the list to have up to 200 elements
         return hmsAvailable;

@@ -92,9 +92,9 @@ public class AssignAPProcessor {
                 statUpdate[2] = chr.getLuk();
                 statUpdate[3] = chr.getInt();
 
-                Collections.sort(eqpStrList, Collections.reverseOrder());
-                Collections.sort(eqpDexList, Collections.reverseOrder());
-                Collections.sort(eqpLukList, Collections.reverseOrder());
+                eqpStrList.sort(Collections.reverseOrder());
+                eqpDexList.sort(Collections.reverseOrder());
+                eqpLukList.sort(Collections.reverseOrder());
 
                 //Autoassigner looks up the 1st/2nd placed equips for their stats to calculate the optimal upgrade.
                 int eqpStr = getNthHighestStat(eqpStrList, (short) 0) + getNthHighestStat(eqpStrList, (short) 1);

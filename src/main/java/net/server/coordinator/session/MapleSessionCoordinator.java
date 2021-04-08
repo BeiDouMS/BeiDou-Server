@@ -579,7 +579,7 @@ public class MapleSessionCoordinator {
     public void printSessionTrace() {
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, MapleClient>> elist = new ArrayList<>(onlineClients.entrySet());
-            Collections.sort(elist, (e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
             
             System.out.println("Current online clients: ");
             for (Entry<Integer, MapleClient> e : elist) {
@@ -600,7 +600,7 @@ public class MapleSessionCoordinator {
         if (!loginRemoteHosts.isEmpty()) {
             List<Entry<String, Set<IoSession>>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             
-            Collections.sort(elist, (e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
             
             System.out.println("Current login sessions: ");
             for (Entry<String, Set<IoSession>> e : elist) {
@@ -614,7 +614,7 @@ public class MapleSessionCoordinator {
         
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, MapleClient>> elist = new ArrayList<>(onlineClients.entrySet());
-            Collections.sort(elist, (e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
             
             str += ("Current online clients:\r\n");
             for (Entry<Integer, MapleClient> e : elist) {
@@ -635,7 +635,7 @@ public class MapleSessionCoordinator {
         if (!loginRemoteHosts.isEmpty()) {
             List<Entry<String, Set<IoSession>>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             
-            Collections.sort(elist, (e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
             
             str += ("Current login sessions:\r\n");
             for (Entry<String, Set<IoSession>> e : elist) {

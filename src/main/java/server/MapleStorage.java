@@ -233,7 +233,7 @@ public class MapleStorage {
         
         lock.lock();
         try {
-            Collections.sort(items, (o1, o2) -> {
+            items.sort((o1, o2) -> {
                 if (o1.getInventoryType().getType() < o2.getInventoryType().getType()) {
                     return -1;
                 } else if (o1.getInventoryType() == o2.getInventoryType()) {

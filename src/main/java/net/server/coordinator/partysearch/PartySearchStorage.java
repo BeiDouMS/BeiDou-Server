@@ -82,7 +82,7 @@ public class PartySearchStorage {
             pscList.add(new PartySearchCharacter(chr));
         }
 
-        Collections.sort(pscList, (c1, c2) -> {
+        pscList.sort((c1, c2) -> {
             int levelP1 = c1.getLevel(), levelP2 = c2.getLevel();
             return levelP1 > levelP2 ? 1 : (levelP1 == levelP2 ? 0 : -1);
         });

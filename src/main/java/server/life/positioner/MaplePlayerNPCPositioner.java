@@ -29,8 +29,10 @@ import server.maps.MapleMapObjectType;
 import tools.MaplePacketCreator;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
 
 /**
  *
@@ -141,7 +143,7 @@ public class MaplePlayerNPCPositioner {
                 playerNpcs.add((MaplePlayerNPC) mmo);
             }
             
-            Collections.sort(playerNpcs, (p1, p2) -> {
+            playerNpcs.sort((p1, p2) -> {
                 return p1.getScriptId() - p2.getScriptId(); // scriptid as playernpc history
             });
             
