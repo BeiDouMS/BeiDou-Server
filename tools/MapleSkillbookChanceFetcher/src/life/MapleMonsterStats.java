@@ -21,16 +21,12 @@
 */
 package life;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import life.MapleLifeFactory.BanishInfo;
 import life.MapleLifeFactory.loseItem;
 import life.MapleLifeFactory.selfDestruction;
 import tools.Pair;
+
+import java.util.*;
 
 /**
  * @author Frz
@@ -193,9 +189,7 @@ public class MapleMonsterStats {
     }
 
     public void setSkills(List<Pair<Integer, Integer>> skills) {
-        for (Pair<Integer, Integer> skill : skills) {
-            this.skills.add(skill);
-        }
+        this.skills.addAll(skills);
     }
 
     public List<Pair<Integer, Integer>> getSkills() {

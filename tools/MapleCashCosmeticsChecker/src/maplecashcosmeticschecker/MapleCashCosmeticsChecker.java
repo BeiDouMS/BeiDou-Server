@@ -578,9 +578,7 @@ public class MapleCashCosmeticsChecker {
         List<Pair<Pair<Integer, String>, List<Integer>>> list = new ArrayList<>(map.size());
         for(Entry<Pair<Integer, String>, Set<Integer>> e : map.entrySet()) {
             List<Integer> il = new ArrayList<>(2);
-            for(Integer i : e.getValue()) {
-                il.add(i);
-            }
+            il.addAll(e.getValue());
             
             Collections.sort(il, (o1, o2) -> o1 - o2);
             

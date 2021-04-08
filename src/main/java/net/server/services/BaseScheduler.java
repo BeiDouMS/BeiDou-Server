@@ -53,10 +53,8 @@ public abstract class BaseScheduler {
     // NOTE: practice EXTREME caution when adding external locks to the scheduler system, if you don't know what you're doing DON'T USE THIS.
     protected BaseScheduler(MonitoredLockType lockType, List<MonitoredReentrantLock> extLocks) {
         schedulerLock = MonitoredReentrantLockFactory.createLock(lockType, true);
-        
-        for(MonitoredReentrantLock lock : extLocks) {
-            externalLocks.add(lock);
-        }
+
+        externalLocks.addAll(extLocks);
     }
     
     protected void addListener(SchedulerListener listener) {

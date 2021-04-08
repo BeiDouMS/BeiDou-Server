@@ -130,9 +130,7 @@ public final class Channel {
             acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
             acceptor.bind(new InetSocketAddress(port));
             ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
-            for (MapleExpeditionType exped : MapleExpeditionType.values()) {
-            	expedType.add(exped);
-            }
+            expedType.addAll(Arrays.asList(MapleExpeditionType.values()));
             
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
                 eventSM = new EventScriptManager(this, getEvents());

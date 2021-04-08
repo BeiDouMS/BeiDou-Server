@@ -259,9 +259,7 @@ public class Server {
         try {
             List<Channel> channelz = new ArrayList<>();
             for (World world : this.getWorlds()) {
-                for (Channel ch : world.getChannels()) {
-                    channelz.add(ch);
-                }
+                channelz.addAll(world.getChannels());
             }
             return channelz;
         } catch (NullPointerException npe) {

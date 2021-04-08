@@ -609,7 +609,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         if(!open.get()) return list;
         
         synchronized (items) {
-            for(MaplePlayerShopItem mpsi : items) all.add(mpsi);
+            all.addAll(items);
         }
         
         for(MaplePlayerShopItem mpsi : all) {
@@ -679,9 +679,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     public List<Pair<String, Byte>> getMessages() {
         synchronized (messages) {
             List<Pair<String, Byte>> msgList = new LinkedList<>();
-            for(Pair<String, Byte> m : messages) {
-                msgList.add(m);
-            }
+            msgList.addAll(messages);
             
             return msgList;
         }

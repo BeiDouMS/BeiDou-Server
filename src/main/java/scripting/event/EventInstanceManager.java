@@ -944,9 +944,7 @@ public class EventInstanceManager {
                 
                 wL.lock();
                 try {
-                        for(Integer item: exclusive) {
-                                exclusiveItems.add(item);
-                        }
+                    exclusiveItems.addAll(exclusive);
                 } finally {
                         wL.unlock();
                 }

@@ -62,9 +62,7 @@ public class MobSkill {
     }
 
     public void addSummons(List<Integer> toSummon) {
-        for (Integer summon : toSummon) {
-            this.toSummon.add(summon);
-        }
+        this.toSummon.addAll(toSummon);
     }
 
     public void setSpawnEffect(int spawnEffect) {
@@ -186,9 +184,7 @@ public class MobSkill {
                 break;
             case 129: // Banish
                 if (lt != null && rb != null && skill) {
-                    for (MapleCharacter chr : getPlayersInRange(monster)) {
-                        banishPlayers.add(chr);
-                    }
+                    banishPlayers.addAll(getPlayersInRange(monster));
                 } else {
                     banishPlayers.add(player);
                 }

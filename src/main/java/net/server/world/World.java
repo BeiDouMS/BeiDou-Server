@@ -457,9 +457,7 @@ public class World {
     
     private static List<Entry<Integer, SortedMap<Integer, MapleCharacter>>> getSortedAccountCharacterView(Map<Integer, SortedMap<Integer, MapleCharacter>> map) {
         List<Entry<Integer, SortedMap<Integer, MapleCharacter>>> list = new ArrayList<>(map.size());
-        for(Entry<Integer, SortedMap<Integer, MapleCharacter>> e : map.entrySet()) {
-            list.add(e);
-        }
+        list.addAll(map.entrySet());
         
         list.sort((o1, o2) -> o1.getKey() - o2.getKey());
         
@@ -483,9 +481,7 @@ public class World {
         }
         
         for (Entry<Integer, SortedMap<Integer, MapleCharacter>> e : getSortedAccountCharacterView(accChars)) {
-            for (MapleCharacter chr : e.getValue().values()) {
-                chrList.add(chr);
-            }
+            chrList.addAll(e.getValue().values());
         }
         
         return chrList;
@@ -1359,9 +1355,7 @@ public class World {
         Comparator<Pair<Integer, Integer>> comparator = (p1, p2) -> p2.getRight().compareTo(p1.getRight());
 
         PriorityQueue<Pair<Integer, Integer>> queue = new PriorityQueue<>(Math.max(1, tabSellers.size()), comparator);
-        for(Pair<Integer, Integer> p : tabSellers) {
-            queue.add(p);
-        }
+        queue.addAll(tabSellers);
 
         tabLeaderboards = new LinkedList<>();
         for(int i = 0; i < Math.min(tabSellers.size(), 5); i++) {
@@ -1548,9 +1542,7 @@ public class World {
         List<MaplePlayerShop> psList = new ArrayList<>();
         activePlayerShopsLock.lock();
         try {
-            for(MaplePlayerShop mps : activePlayerShops.values()) {
-                psList.add(mps);
-            }
+            psList.addAll(activePlayerShops.values());
             
             return psList;
         } finally {

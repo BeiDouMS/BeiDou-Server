@@ -28,21 +28,17 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.Lock;
 import net.opcodes.SendOpcode;
-import tools.MaplePacketCreator;
-import tools.Pair;
-import tools.data.output.MaplePacketLittleEndianWriter;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.MapleTrade;
+import tools.MaplePacketCreator;
+import tools.Pair;
+import tools.data.output.MaplePacketLittleEndianWriter;
+
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -556,7 +552,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         List<MaplePlayerShopItem> all = new ArrayList<>();
         
         synchronized (items) {
-            for(MaplePlayerShopItem mpsi : items) all.add(mpsi);
+            all.addAll(items);
         }
         
         for(MaplePlayerShopItem mpsi : all) {
