@@ -450,9 +450,9 @@ public class MaplePacketCreator {
                 List<Item> equippedCash = new ArrayList<>(equippedC.size());
                 for (Item item : equippedC) {
                         if (item.getPosition() <= -100) {
-                                equippedCash.add((Item) item);
+                                equippedCash.add(item);
                         } else {
-                                equipped.add((Item) item);
+                                equipped.add(item);
                         }
                 }
                 for (Item item : equipped) {    // equipped doesn't actually need sorting, thanks Pllsz

@@ -955,7 +955,7 @@ public class MapleStatEffect {
                 if (projectile == null) {
                     return false;
                 } else {
-                    MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, projectile.getPosition(), (short) projectileConsume, false, true);
+                    MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, projectile.getPosition(), projectileConsume, false, true);
                 }
             } finally {
                 use.unlockInventory();

@@ -21,41 +21,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleClient;
-import client.Skill;
-import client.SkillFactory;
+import client.*;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.skills.Aran;
-
-import java.awt.Point;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.AbstractMaplePacketHandler;
-import client.inventory.manipulator.MapleInventoryManipulator;
 import server.MapleStatEffect;
 import server.life.MapleLifeFactory.loseItem;
-import server.life.MapleMonster;
-import server.life.MobAttackInfo;
-import server.life.MobAttackInfoFactory;
-import server.life.MobSkill;
-import server.life.MobSkillFactory;
+import server.life.*;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public final class TakeDamageHandler extends AbstractMaplePacketHandler {
 
@@ -128,7 +119,7 @@ public final class TakeDamageHandler extends AbstractMaplePacketHandler {
                                         }
 
                                         for (byte b = 0; b < qty; b++) {
-                                            pos.x = (int) (playerpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2))));
+                                            pos.x = playerpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2)));
                                             map.spawnItemDrop(chr, chr, new Item(loseItem.getId(), (short) 0, (short) 1), map.calcDropPos(pos, chr.getPosition()), true, true);
                                             d++;
                                         }

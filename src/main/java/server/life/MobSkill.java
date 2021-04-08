@@ -277,7 +277,7 @@ public class MobSkill {
                                     case 8510100: //Pianus bomb
                                         if (Math.ceil(Math.random() * 5) == 1) {
                                             ypos = 78;
-                                            xpos = (int) Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
+                                            xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
                                         } else {
                                             xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
                                         }

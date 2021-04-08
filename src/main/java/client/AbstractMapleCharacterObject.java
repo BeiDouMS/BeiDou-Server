@@ -21,10 +21,6 @@ package client;
 
 import config.YamlConfig;
 import constants.game.GameConstants;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -34,6 +30,11 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import server.maps.AbstractAnimatedMapleMapObject;
 import server.maps.MapleMap;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -315,7 +316,7 @@ public abstract class AbstractMapleCharacterObject extends AbstractAnimatedMaple
                 short newHp = (short) (hpMpPool >> 48);
                 short newMp = (short) (hpMpPool >> 32);
                 short newMaxHp = (short) (hpMpPool >> 16);
-                short newMaxMp = (short) (hpMpPool.shortValue());
+                short newMaxMp = hpMpPool.shortValue();
                 
                 if (newMaxHp != Short.MIN_VALUE) {
                     if (newMaxHp < 50) {
@@ -354,7 +355,7 @@ public abstract class AbstractMapleCharacterObject extends AbstractAnimatedMaple
                 short newStr = (short) (strDexIntLuk >> 48);
                 short newDex = (short) (strDexIntLuk >> 32);
                 short newInt = (short) (strDexIntLuk >> 16);
-                short newLuk = (short) (strDexIntLuk.shortValue());
+                short newLuk = strDexIntLuk.shortValue();
 
                 if (newStr >= 4) {
                     setStr(newStr);
@@ -386,7 +387,7 @@ public abstract class AbstractMapleCharacterObject extends AbstractAnimatedMaple
             
             if (newSp != null) {
                 short sp = (short) (newSp >> 16);
-                short skillbook = (short) (newSp.shortValue());
+                short skillbook = newSp.shortValue();
                 
                 setRemainingSp(sp, skillbook);
                 statUpdates.put(MapleStat.AVAILABLESP, remainingSp[skillbook]);

@@ -232,8 +232,8 @@ public class MapleInventory implements Iterable<Item> {
     public void move(short sSlot, short dSlot, short slotMax) {
         lock.lock();
         try {
-            Item source = (Item) inventory.get(sSlot);
-            Item target = (Item) inventory.get(dSlot);
+            Item source = inventory.get(sSlot);
+            Item target = inventory.get(dSlot);
             if (source == null) {
                 return;
             }

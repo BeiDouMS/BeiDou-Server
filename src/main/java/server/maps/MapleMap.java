@@ -597,7 +597,7 @@ public class MapleMap {
      */
     public static String getRoundedCoordinate(double angle) {
         String[] directions = {"E", "SE", "S", "SW", "W", "NW", "N", "NE", "E"};
-        return directions[ (int)Math.round((  ((double)angle % 360) / 45)) ];
+        return directions[ (int)Math.round((  (angle % 360) / 45)) ];
     }
     
     public Pair<String, Integer> getDoorPositionStatus(Point pos) {
@@ -646,9 +646,9 @@ public class MapleMap {
             
             if (Randomizer.nextInt(999999) < dropChance) {
                 if (droptype == 3) {
-                    pos.x = (int) (mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2))));
+                    pos.x = mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2)));
                 } else {
-                    pos.x = (int) (mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2))));
+                    pos.x = mobpos + ((d % 2 == 0) ? (25 * ((d + 1) / 2)) : -(25 * (d / 2)));
                 }
                 if (de.itemId == 0) { // meso
                     int mesos = Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum;
@@ -688,9 +688,9 @@ public class MapleMap {
         for (final MonsterGlobalDropEntry de : globalEntry) {
             if (Randomizer.nextInt(999999) < de.chance) {
                 if (droptype == 3) {
-                    pos.x = (int) (mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2))));
+                    pos.x = mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2)));
                 } else {
-                    pos.x = (int) (mobpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2))));
+                    pos.x = mobpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2)));
                 }
                 if (de.itemId != 0) {
                     if (ItemConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
@@ -890,7 +890,7 @@ public class MapleMap {
         objectWLock.lock();
         try {
             registerItemDrop(mdrop);
-            registeredDrops.add(new WeakReference<>((MapleMapObject) mdrop));
+            registeredDrops.add(new WeakReference<>(mdrop));
         } finally {
             objectWLock.unlock();
         }
@@ -1606,13 +1606,13 @@ public class MapleMap {
         try {
             for (MapleMapObject o : mapobjects.values()) {
                 if (o.getType() == MapleMapObjectType.REACTOR) {
-                    points.add(((MapleReactor) o).getPosition());
+                    points.add(o.getPosition());
                 }
             }
             Collections.shuffle(points);
             for (MapleMapObject o : mapobjects.values()) {
                 if (o.getType() == MapleMapObjectType.REACTOR) {
-                    ((MapleReactor) o).setPosition(points.remove(points.size() - 1));
+                    o.setPosition(points.remove(points.size() - 1));
                 }
             }
         } finally {
@@ -2097,7 +2097,7 @@ public class MapleMap {
                     if (mist.makeChanceResult()) {
                         MapleCharacter chr = (MapleCharacter) mo;
                         if (mist.getOwner().getId() == chr.getId() || mist.getOwner().getParty() != null && mist.getOwner().getParty().containsMembers(chr.getMPC())) {
-                            chr.addMP((int) mist.getSourceSkill().getEffect(chr.getSkillLevel(mist.getSourceSkill().getId())).getX() * chr.getMp() / 100);
+                            chr.addMP(mist.getSourceSkill().getEffect(chr.getSkillLevel(mist.getSourceSkill().getId())).getX() * chr.getMp() / 100);
                         }
                     }
                 }

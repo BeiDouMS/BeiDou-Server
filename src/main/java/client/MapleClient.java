@@ -602,7 +602,7 @@ public class MapleClient {
 		long ipAddress = 0;
 		for (int i = 0; i < 4; i++) {
 			int quad = Integer.parseInt(quads[i]);
-			ipAddress += (long) (quad % 256) * (long) Math.pow(256, (double) (4 - i));
+			ipAddress += (long) (quad % 256) * (long) Math.pow(256, 4 - i);
 		}
 		return ipAddress;
 	}

@@ -574,7 +574,7 @@ public class World {
     
     public Collection<MapleFamily> getFamilies() {
         synchronized(families) {
-            return Collections.unmodifiableCollection((Collection<MapleFamily>) families.values());
+            return Collections.unmodifiableCollection(families.values());
         }
     }
 
@@ -1832,7 +1832,7 @@ public class World {
             List<MaplePlayerShopItem> itemBundles = hm.sendAvailableBundles(itemid);
 
             for(MaplePlayerShopItem mpsi : itemBundles) {
-                hmsAvailable.add(new Pair<>(mpsi, (AbstractMapleMapObject) hm));
+                hmsAvailable.add(new Pair<>(mpsi, hm));
             }
         }
 
@@ -1840,7 +1840,7 @@ public class World {
             List<MaplePlayerShopItem> itemBundles = ps.sendAvailableBundles(itemid);
 
             for(MaplePlayerShopItem mpsi : itemBundles) {
-                hmsAvailable.add(new Pair<>(mpsi, (AbstractMapleMapObject) ps));
+                hmsAvailable.add(new Pair<>(mpsi, ps));
             }
         }
 

@@ -104,7 +104,7 @@ public enum ItemFactory {
         equip.setWatk((short) rs.getInt("watk"));
         equip.setWdef((short) rs.getInt("wdef"));
         equip.setUpgradeSlots((byte) rs.getInt("upgradeslots"));
-        equip.setLevel((byte) rs.getByte("level"));
+        equip.setLevel(rs.getByte("level"));
         equip.setItemExp(rs.getInt("itemexp"));
         equip.setItemLevel(rs.getByte("itemlevel"));
         equip.setExpiration(rs.getLong("expiration"));

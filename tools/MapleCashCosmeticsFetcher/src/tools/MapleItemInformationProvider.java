@@ -21,45 +21,10 @@
  */
 package tools;
 
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import provider.*;
 
-//import net.server.Server;
-import provider.MapleData;
-import provider.MapleDataDirectoryEntry;
-import provider.MapleDataFileEntry;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
-import tools.DatabaseConnection;
-//import tools.MaplePacketCreator;
-import tools.Pair;
-//import client.MapleCharacter;
-//import client.MapleClient;
-//import client.MapleJob;
-//import client.Skill;
-//import client.SkillFactory;
-//import client.autoban.AutobanFactory;
-//import client.inventory.Equip;
-//import client.inventory.Item;
-//import client.inventory.MapleInventory;
-//import client.inventory.MapleInventoryType;
-//import client.inventory.MapleWeaponType;
-//import constants.ServerConstants;
-//import constants.EquipSlot;
-//import constants.ItemConstants;
-//import constants.skills.Assassin;
-//import constants.skills.Gunslinger;
-//import constants.skills.NightWalker;
-import java.sql.Connection;
+import java.io.File;
+import java.util.*;
 //import server.life.MapleMonsterInformationProvider;
 
 /**
@@ -311,7 +276,7 @@ public class MapleItemInformationProvider {
     public short getSlotMax(int itemId) {
         Short slotMax = slotMaxCache.get(itemId);
         if (slotMax != null) {
-            return (short)(slotMax);
+            return slotMax;
         }
         short ret = 0;
         MapleData item = getItemData(itemId);
@@ -325,7 +290,7 @@ public class MapleItemInformationProvider {
         }
         
         slotMaxCache.put(itemId, ret);
-        return (short)(ret);
+        return ret;
     }
 
     public int getMeso(int itemId) {
@@ -378,7 +343,7 @@ public class MapleItemInformationProvider {
             try {
                 pEntry = MapleDataTool.getDouble(pData);
             } catch (Exception e) {
-                pEntry = (double) MapleDataTool.getInt(pData);
+                pEntry = MapleDataTool.getInt(pData);
             }
         } else {
             pData = item.getChildByPath("info/price");
@@ -386,7 +351,7 @@ public class MapleItemInformationProvider {
                 return -1;
             }
             try {
-                pEntry = (double) MapleDataTool.getInt(pData);
+                pEntry = MapleDataTool.getInt(pData);
             } catch(Exception e) {
                 priceCache.put(itemId, 0.0);
                 return 0;

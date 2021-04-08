@@ -193,7 +193,7 @@ public class MapleShop {
             return;
         }
         
-        Item item = c.getPlayer().getInventory(type).getItem((short) slot);
+        Item item = c.getPlayer().getInventory(type).getItem(slot);
         if(canSell(item, quantity)) {
             quantity = getSellingQuantity(item, quantity);
             MapleInventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);

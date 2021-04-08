@@ -28,12 +28,13 @@ import client.SkillFactory;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
-import java.util.Map;
-import net.AbstractMaplePacketHandler;
 import client.inventory.manipulator.MapleInventoryManipulator;
+import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.Map;
 
 public final class SkillBookHandler extends AbstractMaplePacketHandler {
     @Override
@@ -44,7 +45,7 @@ public final class SkillBookHandler extends AbstractMaplePacketHandler {
         }
         
         slea.readInt();
-        short slot = (short) slea.readShort();
+        short slot = slea.readShort();
         int itemId = slea.readInt();
         
         boolean canuse;

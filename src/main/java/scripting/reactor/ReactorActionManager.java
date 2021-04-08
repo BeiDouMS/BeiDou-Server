@@ -169,7 +169,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
             
             byte p = 1;
             for (ReactorDropEntry d : items) {
-                dropPos.x = (int) (posX + ((p % 2 == 0) ? (25 * ((p + 1) / 2)) : -(25 * (p / 2))));
+                dropPos.x = posX + ((p % 2 == 0) ? (25 * ((p + 1) / 2)) : -(25 * (p / 2)));
                 p++;
                 
                 if (d.itemId == 0) {

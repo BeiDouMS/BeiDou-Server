@@ -629,9 +629,9 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
             short newBundle = pItems.getBundles();
             
             if (shutdown) { //is "shutdown" really necessary?
-                newItem.setQuantity((short) (pItems.getItem().getQuantity()));
+                newItem.setQuantity(pItems.getItem().getQuantity());
             } else {
-                newItem.setQuantity((short) (pItems.getItem().getQuantity()));
+                newItem.setQuantity(pItems.getItem().getQuantity());
             }
             if (newBundle > 0) {
                 itemsWithType.add(new Pair<>(newItem, newItem.getInventoryType()));

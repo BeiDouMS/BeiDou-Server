@@ -19,25 +19,9 @@
 */
 package maplegachaponitemidretriever;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Collections;
+import java.io.*;
+import java.sql.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -168,7 +152,7 @@ public class MapleGachaponItemidRetriever {
         
         @Override    
         public int hashCode() {
-            int result = (int) (prop ^ (prop >>> 32));
+            int result = prop ^ (prop >>> 32);
             result = 31 * result + (header != null ? header.hashCode() : 0);        
             result = 31 * result + (target != null ? target.hashCode() : 0);
             result = 31 * result + (buff != null ? buff.hashCode() : 0);

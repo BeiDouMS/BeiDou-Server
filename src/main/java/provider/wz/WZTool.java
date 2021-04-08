@@ -104,7 +104,7 @@ public class WZTool {
             if (b == 0x7F) {
                 strLength = llea.readInt();
             } else {
-                strLength = (int) b;
+                strLength = b;
             }
             if (strLength < 0) {
                 return "";
@@ -173,7 +173,7 @@ public class WZTool {
         if (b == -128) {
             return lea.readInt();
         } else {
-            return ((int) b);
+            return b;
         }
     }
 

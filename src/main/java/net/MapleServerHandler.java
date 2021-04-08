@@ -133,7 +133,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
         ivRecv[3] = (byte) (Math.random() * 255);
         ivSend[3] = (byte) (Math.random() * 255);
         MapleAESOFB sendCypher = new MapleAESOFB(ivSend, (short) (0xFFFF - ServerConstants.VERSION));
-        MapleAESOFB recvCypher = new MapleAESOFB(ivRecv, (short) ServerConstants.VERSION);
+        MapleAESOFB recvCypher = new MapleAESOFB(ivRecv, ServerConstants.VERSION);
         MapleClient client = new MapleClient(sendCypher, recvCypher, session);
         client.setWorld(world);
         client.setChannel(channel);

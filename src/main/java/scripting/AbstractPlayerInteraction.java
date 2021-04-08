@@ -642,7 +642,7 @@ public class AbstractPlayerInteraction {
 				if (randomStats) {
 					MapleInventoryManipulator.addFromDrop(c, ii.randomizeStats((Equip) item), false, petId);
 				} else {
-					MapleInventoryManipulator.addFromDrop(c, (Equip) item, false, petId);
+					MapleInventoryManipulator.addFromDrop(c, item, false, petId);
 				}
 			} else {
 				MapleInventoryManipulator.addFromDrop(c, item, false, petId);

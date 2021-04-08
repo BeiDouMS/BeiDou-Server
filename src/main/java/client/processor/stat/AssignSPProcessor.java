@@ -30,7 +30,6 @@ import client.SkillFactory;
 import client.autoban.AutobanFactory;
 import constants.game.GameConstants;
 import constants.skills.Aran;
-import server.ThreadManager;
 import tools.FilePrinter;
 import tools.MaplePacketCreator;
 
@@ -87,12 +86,12 @@ public class AssignSPProcessor {
                 }
                 if (skill.getId() == Aran.FULL_SWING) {
                     player.changeSkillLevel(skill, (byte) (curLevel + 1), player.getMasterLevel(skill), player.getSkillExpiration(skill));
-                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_FULL_DOUBLE), (byte) player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
-                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_FULL_TRIPLE), (byte) player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));            
+                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_FULL_DOUBLE), player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
+                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_FULL_TRIPLE), player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
                 } else if (skill.getId() == Aran.OVER_SWING) {
                     player.changeSkillLevel(skill, (byte) (curLevel + 1), player.getMasterLevel(skill), player.getSkillExpiration(skill));
-                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_OVER_DOUBLE), (byte) player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
-                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_OVER_TRIPLE), (byte) player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
+                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_OVER_DOUBLE), player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
+                    player.changeSkillLevel(SkillFactory.getSkill(Aran.HIDDEN_OVER_TRIPLE), player.getSkillLevel(skill), player.getMasterLevel(skill),  player.getSkillExpiration(skill));
                 } else {
                     player.changeSkillLevel(skill, (byte) (curLevel + 1), player.getMasterLevel(skill), player.getSkillExpiration(skill));
                 }

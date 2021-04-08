@@ -839,7 +839,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             MapleMap map = m.getMap();
             List<MapleCharacter> chrList = map.getAllPlayers();
             if (!chrList.isEmpty()) {
-                MapleCharacter chr = (MapleCharacter) chrList.get(0);
+                MapleCharacter chr = chrList.get(0);
 
                 EventInstanceManager eim = map.getEventInstance();
                 if (eim != null) {
