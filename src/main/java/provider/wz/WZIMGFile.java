@@ -21,15 +21,12 @@
 */
 package provider.wz;
 
-import java.awt.Point;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.RandomAccessByteStream;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.awt.*;
+import java.io.*;
 
 public class WZIMGFile {
     private WZFileEntry file;
@@ -91,19 +88,19 @@ public class WZIMGFile {
             case 2:
             case 11: //??? no idea, since 0.49
                 entry.setType(MapleDataType.SHORT);
-                entry.setData(Short.valueOf(slea.readShort()));
+                entry.setData(slea.readShort());
                 break;
             case 3:
                 entry.setType(MapleDataType.INT);
-                entry.setData(Integer.valueOf(WZTool.readValue(slea)));
+                entry.setData(WZTool.readValue(slea));
                 break;
             case 4:
                 entry.setType(MapleDataType.FLOAT);
-                entry.setData(Float.valueOf(WZTool.readFloatValue(slea)));
+                entry.setData(WZTool.readFloatValue(slea));
                 break;
             case 5:
                 entry.setType(MapleDataType.DOUBLE);
-                entry.setData(Double.valueOf(slea.readDouble()));
+                entry.setData(slea.readDouble());
                 break;
             case 8:
                 entry.setType(MapleDataType.STRING);

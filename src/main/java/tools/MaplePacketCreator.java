@@ -3639,7 +3639,7 @@ public class MaplePacketCreator {
                 mplew.writeShort(SendOpcode.KEYMAP.getValue());
                 mplew.write(0);
                 for (int x = 0; x < 90; x++) {
-                        MapleKeyBinding binding = keybindings.get(Integer.valueOf(x));
+                        MapleKeyBinding binding = keybindings.get(x);
                         if (binding != null) {
                                 mplew.write(binding.getType());
                                 mplew.writeInt(binding.getAction());

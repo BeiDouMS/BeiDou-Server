@@ -240,13 +240,13 @@ public class MapleLifeFactory {
     
     public static MapleMonster getMonster(int mid) {
         try {
-            MapleMonsterStats stats = monsterStats.get(Integer.valueOf(mid));
+            MapleMonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 Pair<MapleMonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
                 
-                monsterStats.put(Integer.valueOf(mid), stats);
+                monsterStats.put(mid, stats);
             }
             MapleMonster ret = new MapleMonster(mid, stats);
             return ret;
@@ -260,7 +260,7 @@ public class MapleLifeFactory {
     
     public static int getMonsterLevel(int mid) {
         try {
-            MapleMonsterStats stats = monsterStats.get(Integer.valueOf(mid));
+            MapleMonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 MapleData monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
                 if (monsterData == null) {

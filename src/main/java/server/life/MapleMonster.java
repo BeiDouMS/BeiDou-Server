@@ -1195,7 +1195,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         if (poison) {
             int poisonLevel = from.getSkillLevel(status.getSkill());
             int poisonDamage = Math.min(Short.MAX_VALUE, (int) (getMaxHp() / (70.0 - poisonLevel) + 0.999));
-            status.setValue(MonsterStatus.POISON, Integer.valueOf(poisonDamage));
+            status.setValue(MonsterStatus.POISON, poisonDamage);
             animationTime = broadcastStatusEffect(status);
             
             overtimeAction = new DamageTask(poisonDamage, from, status, 0);
@@ -1221,8 +1221,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                     poisonDamage += (Randomizer.nextInt(gap) + minDmg);
                 }
                 poisonDamage = Math.min(Short.MAX_VALUE, poisonDamage);
-                status.setValue(MonsterStatus.VENOMOUS_WEAPON, Integer.valueOf(poisonDamage));
-                status.setValue(MonsterStatus.POISON, Integer.valueOf(poisonDamage));
+                status.setValue(MonsterStatus.VENOMOUS_WEAPON, poisonDamage);
+                status.setValue(MonsterStatus.POISON, poisonDamage);
                 animationTime = broadcastStatusEffect(status);
                 
                 overtimeAction = new DamageTask(poisonDamage, from, status, 0);
@@ -1244,7 +1244,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             final byte level = from.getSkillLevel(skill);
             final int damage = (int) ((from.getStr() + from.getLuk()) * ((3.7 * skill.getEffect(level).getDamage()) / 100));
             
-            status.setValue(MonsterStatus.NINJA_AMBUSH, Integer.valueOf(damage));
+            status.setValue(MonsterStatus.NINJA_AMBUSH, damage);
             animationTime = broadcastStatusEffect(status);
             
             overtimeAction = new DamageTask(damage, from, status, 2);

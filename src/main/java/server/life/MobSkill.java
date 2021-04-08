@@ -123,22 +123,22 @@ public class MobSkill {
             case 100:
             case 110:
             case 150:
-                stats.put(MonsterStatus.WEAPON_ATTACK_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
                 break;
             case 101:
             case 111:
             case 151:
-                stats.put(MonsterStatus.MAGIC_ATTACK_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
                 break;
             case 102:
             case 112:
             case 152:
-                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
                 break;
             case 103:
             case 113:
             case 153:
-                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
                 break;
             case 114:
                 if (lt != null && rb != null && skill) {
@@ -204,12 +204,12 @@ public class MobSkill {
                 break;
             case 140:
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
-                    stats.put(MonsterStatus.WEAPON_IMMUNITY, Integer.valueOf(x));
+                    stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 }
                 break;
             case 141:
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
-                    stats.put(MonsterStatus.MAGIC_IMMUNITY, Integer.valueOf(x));
+                    stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 }
                 break;
             case 143: // Weapon Reflect
@@ -230,13 +230,13 @@ public class MobSkill {
                 reflection.add(x);
                 break;
             case 154:
-                stats.put(MonsterStatus.ACC, Integer.valueOf(x));
+                stats.put(MonsterStatus.ACC, x);
                 break;
             case 155:
-                stats.put(MonsterStatus.AVOID, Integer.valueOf(x));
+                stats.put(MonsterStatus.AVOID, x);
                 break;
             case 156:
-                stats.put(MonsterStatus.SPEED, Integer.valueOf(x));
+                stats.put(MonsterStatus.SPEED, x);
                 break;
             case 200: // summon
                 int skillLimit = this.getLimit();

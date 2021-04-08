@@ -465,7 +465,7 @@ public class MapleMap {
     public void removeMapObject(int num) {
         objectWLock.lock();
         try {
-            this.mapobjects.remove(Integer.valueOf(num));
+            this.mapobjects.remove(num);
         } finally {
             objectWLock.unlock();
         }
@@ -611,7 +611,7 @@ public class MapleMap {
         }
         
         distn = Math.sqrt(distn);
-        return new Pair<>(getRoundedCoordinate(angle), Integer.valueOf((int)distn));
+        return new Pair<>(getRoundedCoordinate(angle), (int) distn);
     }
 
     private static void sortDropEntries(List<MonsterDropEntry> from, List<MonsterDropEntry> item, List<MonsterDropEntry> visibleQuest, List<MonsterDropEntry> otherQuest, MapleCharacter chr) {
@@ -1730,7 +1730,7 @@ public class MapleMap {
                     broadcastMessage(MaplePacketCreator.removeNPCController(obj.getObjectId()));
                     broadcastMessage(MaplePacketCreator.removeNPC(obj.getObjectId()));
                     
-                    this.mapobjects.remove(Integer.valueOf(obj.getObjectId()));
+                    this.mapobjects.remove(obj.getObjectId());
                 }
             }
         } finally {
@@ -2520,7 +2520,7 @@ public class MapleMap {
         }
         objectWLock.lock();
         try {
-            this.mapobjects.put(Integer.valueOf(chr.getObjectId()), chr);
+            this.mapobjects.put(chr.getObjectId(), chr);
         } finally {
             objectWLock.unlock();
         }

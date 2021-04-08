@@ -36,7 +36,7 @@ public class SkillFactory {
 
     public static Skill getSkill(int id) {
         if (!skills.isEmpty()) {
-            return skills.get(Integer.valueOf(id));
+            return skills.get(id);
         }
         return null;
     }

@@ -558,7 +558,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                 for (int j = 0; j < bullets; j++) {
                     int mesoid = lea.readInt();
                     lea.skip(1);
-                    ret.allDamage.put(Integer.valueOf(mesoid), null);
+                    ret.allDamage.put(mesoid, null);
                 }
                 return ret;
             } else {
@@ -572,16 +572,16 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                     List<Integer> allDamageNumbers = new ArrayList<>();
                     for (int j = 0; j < bullets; j++) {
                         int damage = lea.readInt();
-                        allDamageNumbers.add(Integer.valueOf(damage));
+                        allDamageNumbers.add(damage);
                     }
-                    ret.allDamage.put(Integer.valueOf(oid), allDamageNumbers);
+                    ret.allDamage.put(oid, allDamageNumbers);
                     lea.skip(4);
                 } else {
                     int bullets = lea.readByte();
                     for (int j = 0; j < bullets; j++) {
                         int mesoid = lea.readInt();
                         lea.skip(1);
-                        ret.allDamage.put(Integer.valueOf(mesoid), null);
+                        ret.allDamage.put(mesoid, null);
                     }
                 }
             }
@@ -859,7 +859,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
             if (ret.skill != Corsair.RAPID_FIRE || ret.skill != Aran.HIDDEN_FULL_DOUBLE || ret.skill != Aran.HIDDEN_FULL_TRIPLE || ret.skill != Aran.HIDDEN_OVER_DOUBLE || ret.skill != Aran.HIDDEN_OVER_TRIPLE) {
             	lea.skip(4);
             }
-            ret.allDamage.put(Integer.valueOf(oid), allDamageNumbers);
+            ret.allDamage.put(oid, allDamageNumbers);
         }
         if (ret.skill == NightWalker.POISON_BOMB) { // Poison Bomb
             lea.skip(4);

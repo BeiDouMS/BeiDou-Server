@@ -360,7 +360,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
 
                     if(diseases != null) {
                         for(Entry<MapleDisease, Pair<Long, MobSkill>> e : diseases.entrySet()) {
-                            final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), Integer.valueOf(e.getValue().getRight().getX())));
+                            final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), e.getValue().getRight().getX()));
                             c.announce(MaplePacketCreator.giveDebuff(debuff, e.getValue().getRight()));
                         }
                     }
