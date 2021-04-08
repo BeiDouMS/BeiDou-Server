@@ -21,14 +21,15 @@
 */
 package server.life;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import tools.StringUtil;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -46,7 +47,7 @@ public class MobAttackInfoFactory {
         synchronized (mobAttacks) {
             ret = mobAttacks.get(mob.getId() + "" + attack);
             if (ret == null) {
-                MapleData mobData = dataSource.getData(StringUtil.getLeftPaddedStr(Integer.toString(mob.getId()) + ".img", '0', 11));
+                MapleData mobData = dataSource.getData(StringUtil.getLeftPaddedStr(mob.getId() + ".img", '0', 11));
                 if (mobData != null) {
 //					MapleData infoData = mobData.getChildByPath("info");
                     String linkedmob = MapleDataTool.getString("link", mobData, "");

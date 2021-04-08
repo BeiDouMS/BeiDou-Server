@@ -811,7 +811,7 @@ public class BCrypt {
             throw new IllegalArgumentException(
                     "rounds exceeds maximum (30)");
         }
-        rs.append(Integer.toString(rounds));
+        rs.append(rounds);
         rs.append("$");
         rs.append(encode_base64(saltb, saltb.length));
         rs.append(encode_base64(hashed,
@@ -855,7 +855,7 @@ public class BCrypt {
             throw new IllegalArgumentException(
                     "log_rounds exceeds maximum (30)");
         }
-        rs.append(Integer.toString(log_rounds));
+        rs.append(log_rounds);
         rs.append("$");
         rs.append(encode_base64(rnd, rnd.length));
         return rs.toString();

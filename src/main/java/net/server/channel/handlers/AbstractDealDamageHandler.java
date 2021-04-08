@@ -411,7 +411,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                     if (attack.skill != 0) {
                         if (attackEffect.getFixDamage() != -1) {
                             if (totDamageToOneMonster != attackEffect.getFixDamage() && totDamageToOneMonster != 0) {
-                                AutobanFactory.FIX_DAMAGE.autoban(player, String.valueOf(totDamageToOneMonster) + " damage");
+                                AutobanFactory.FIX_DAMAGE.autoban(player, totDamageToOneMonster + " damage");
                             }
                             
                             int threeSnailsId = player.getJobType() * 10000000 + 1000;
