@@ -776,9 +776,9 @@ public class AbstractPlayerInteraction {
 
 	public void removeHPQItems() {
 		int[] items = {4001095, 4001096, 4001097, 4001098, 4001099, 4001100, 4001101};
-		for (int i = 0; i < items.length; i ++) {
-			removePartyItems(items[i]);
-		}
+        for (int item : items) {
+            removePartyItems(item);
+        }
 	}
 
 	public void removePartyItems(int id) {

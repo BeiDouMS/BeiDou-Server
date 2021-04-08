@@ -21,9 +21,10 @@
 */
 package tools.data.output;
 
-import java.awt.Point;
-import java.nio.charset.Charset;
 import constants.string.CharsetConstants.MapleLanguageType;
+
+import java.awt.*;
+import java.nio.charset.Charset;
 
 /**
  * Provides a generic writer of a little-endian sequence of bytes.
@@ -59,8 +60,8 @@ public class GenericLittleEndianWriter implements LittleEndianWriter {
      */
     @Override
     public void write(byte[] b) {
-        for (int x = 0; x < b.length; x++) {
-            bos.writeByte(b[x]);
+        for (byte value : b) {
+            bos.writeByte(value);
         }
     }
 

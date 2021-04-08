@@ -13,8 +13,8 @@ public abstract class AbstractEmptyLock {
         String df = dateFormat.format(new Date());
         
         String s = "\r\n" + df + "\r\n";
-        for(int i = 0; i < list.length; i++) {
-            s += ("    " + list[i].toString() + "\r\n");
+        for (StackTraceElement stackTraceElement : list) {
+            s += ("    " + stackTraceElement.toString() + "\r\n");
         }
         s += "----------------------------\r\n\r\n";
         

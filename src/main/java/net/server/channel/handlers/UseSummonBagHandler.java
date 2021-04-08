@@ -24,12 +24,12 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
-import tools.Randomizer;
-import net.AbstractMaplePacketHandler;
 import client.inventory.manipulator.MapleInventoryManipulator;
+import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
 import server.life.MapleLifeFactory;
 import tools.MaplePacketCreator;
+import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -52,8 +52,7 @@ public final class UseSummonBagHandler extends AbstractMaplePacketHandler {
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
             MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
             int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(itemId);
-            for (int z = 0; z < toSpawn.length; z++) {
-                int[] toSpawnChild = toSpawn[z];
+            for (int[] toSpawnChild : toSpawn) {
                 if (Randomizer.nextInt(100) < toSpawnChild[1]) {
                     c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                 }

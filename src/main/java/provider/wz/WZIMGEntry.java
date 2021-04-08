@@ -62,10 +62,10 @@ public class WZIMGEntry implements MapleData {
             return ((MapleData) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
         }
         MapleData ret = this;
-        for (int x = 0; x < segments.length; x++) {
+        for (String segment : segments) {
             boolean foundChild = false;
             for (MapleData child : ret.getChildren()) {
-                if (child.getName().equals(segments[x])) {
+                if (child.getName().equals(segment)) {
                     ret = child;
                     foundChild = true;
                     break;

@@ -112,11 +112,11 @@ public class MaplePacketCreator {
         private static void addRemainingSkillInfo(final MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
                 int[] remainingSp = chr.getRemainingSps();
                 int effectiveLength = 0;
-                for (int i = 0; i < remainingSp.length; i++) {
-                        if (remainingSp[i] > 0) {
-                                effectiveLength++;
-                        }
+            for (int j : remainingSp) {
+                if (j > 0) {
+                    effectiveLength++;
                 }
+            }
 
                 mplew.write(effectiveLength);
                 for (int i = 0; i < remainingSp.length; i++) {
@@ -489,25 +489,23 @@ public class MaplePacketCreator {
                 Map<Skill, MapleCharacter.SkillEntry> skills = chr.getSkills();
                 int skillsSize = skills.size();
                 // We don't want to include any hidden skill in this, so subtract them from the size list and ignore them.
-                for (Iterator<Entry<Skill, SkillEntry>> it = skills.entrySet().iterator(); it.hasNext();) {
-                        Entry<Skill, MapleCharacter.SkillEntry> skill = it.next();
-                        if (GameConstants.isHiddenSkills(skill.getKey().getId())) {
-                                skillsSize--;
-                        }
+            for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
+                if (GameConstants.isHiddenSkills(skill.getKey().getId())) {
+                    skillsSize--;
                 }
+            }
                 mplew.writeShort(skillsSize);
-                for (Iterator<Entry<Skill, SkillEntry>> it = skills.entrySet().iterator(); it.hasNext();) {
-                        Entry<Skill, MapleCharacter.SkillEntry> skill = it.next();
-                        if (GameConstants.isHiddenSkills(skill.getKey().getId())) {
-                                continue;
-                        }
-                        mplew.writeInt(skill.getKey().getId());
-                        mplew.writeInt(skill.getValue().skillevel);
-                        addExpirationTime(mplew, skill.getValue().expiration);
-                        if (skill.getKey().isFourthJob()) {
-                                mplew.writeInt(skill.getValue().masterlevel);
-                        }
+            for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
+                if (GameConstants.isHiddenSkills(skill.getKey().getId())) {
+                    continue;
                 }
+                mplew.writeInt(skill.getKey().getId());
+                mplew.writeInt(skill.getValue().skillevel);
+                addExpirationTime(mplew, skill.getValue().expiration);
+                if (skill.getKey().isFourthJob()) {
+                    mplew.writeInt(skill.getValue().masterlevel);
+                }
+            }
                 mplew.writeShort(chr.getAllCooldowns().size());
                 for (PlayerCoolDownValueHolder cooling : chr.getAllCooldowns()) {
                         mplew.writeInt(cooling.skillId);
@@ -2767,11 +2765,10 @@ public class MaplePacketCreator {
                 final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.RECOMMENDED_WORLD_MESSAGE.getValue());
                 mplew.write(worlds.size());//size
-                for (Iterator<Pair<Integer, String>> it = worlds.iterator(); it.hasNext();) {
-                        Pair<Integer, String> world = it.next();
-                        mplew.writeInt(world.getLeft());
-                        mplew.writeMapleAsciiString(world.getRight());
-                }
+            for (Pair<Integer, String> world : worlds) {
+                mplew.writeInt(world.getLeft());
+                mplew.writeMapleAsciiString(world.getRight());
+            }
                 return mplew.getPacket();
         }
 
@@ -3151,10 +3148,10 @@ public class MaplePacketCreator {
                                 masks[pos + i] |= statup.getValue() >> 32 * i;
                         }
                 }
-                
-                for (int i = 0; i < masks.length; i++) {
-                        mplew.writeInt(masks[i]);
-                }
+
+            for (int mask : masks) {
+                mplew.writeInt(mask);
+            }
         }
 
         public static byte[] cancelDebuff(long mask) {
@@ -3483,9 +3480,9 @@ public class MaplePacketCreator {
                 mplew.write(0); //speaker
                 mplew.writeMapleAsciiString(talk);
                 mplew.write(styles.length);
-                for (int i = 0; i < styles.length; i++) {
-                        mplew.writeInt(styles[i]);
-                }
+            for (int style : styles) {
+                mplew.writeInt(style);
+            }
                 return mplew.getPacket();
         }
 
@@ -5586,9 +5583,9 @@ public class MaplePacketCreator {
                         List<Pair<Item, MapleInventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
                         mplew.write(items.size());
 
-                        for (int i = 0; i < items.size(); i++) {
-                                addItemInfo(mplew, items.get(i).getLeft(), true);
-                        }
+                    for (Pair<Item, MapleInventoryType> item : items) {
+                        addItemInfo(mplew, item.getLeft(), true);
+                    }
                 } catch (SQLException e) {
                         e.printStackTrace();
                 }
@@ -5771,10 +5768,10 @@ public class MaplePacketCreator {
                         List<Pair<String, Byte>> msgList = hm.getMessages();
                     
                         mplew.writeShort(msgList.size());
-                        for (int i = 0; i < msgList.size(); i++) {
-                                mplew.writeMapleAsciiString(msgList.get(i).getLeft());
-                                mplew.write(msgList.get(i).getRight());
-                        }
+                    for (Pair<String, Byte> stringBytePair : msgList) {
+                        mplew.writeMapleAsciiString(stringBytePair.getLeft());
+                        mplew.write(stringBytePair.getRight());
+                    }
                 } else {
                         mplew.writeShort(0);
                 }
@@ -6042,20 +6039,19 @@ public class MaplePacketCreator {
                 mplew.writeInt(page);
                 mplew.write(1);
                 mplew.write(1);
-                for (int i = 0; i < items.size(); i++) {
-                        MTSItemInfo item = items.get(i);
-                        addItemInfo(mplew, item.getItem(), true);
-                        mplew.writeInt(item.getID()); //id
-                        mplew.writeInt(item.getTaxes()); //this + below = price
-                        mplew.writeInt(item.getPrice()); //price
-                        mplew.writeInt(0);
-                        mplew.writeLong(getTime(item.getEndingDate()));
-                        mplew.writeMapleAsciiString(item.getSeller()); //account name (what was nexon thinking?)
-                        mplew.writeMapleAsciiString(item.getSeller()); //char name
-                        for (int j = 0; j < 28; j++) {
-                                mplew.write(0);
-                        }
+            for (MTSItemInfo item : items) {
+                addItemInfo(mplew, item.getItem(), true);
+                mplew.writeInt(item.getID()); //id
+                mplew.writeInt(item.getTaxes()); //this + below = price
+                mplew.writeInt(item.getPrice()); //price
+                mplew.writeInt(0);
+                mplew.writeLong(getTime(item.getEndingDate()));
+                mplew.writeMapleAsciiString(item.getSeller()); //account name (what was nexon thinking?)
+                mplew.writeMapleAsciiString(item.getSeller()); //char name
+                for (int j = 0; j < 28; j++) {
+                    mplew.write(0);
                 }
+            }
                 mplew.write(1);
                 return mplew.getPacket();
         }

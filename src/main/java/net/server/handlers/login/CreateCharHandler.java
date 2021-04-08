@@ -22,7 +22,9 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import client.creator.novice.*;
+import client.creator.novice.BeginnerCreator;
+import client.creator.novice.LegendCreator;
+import client.creator.novice.NoblesseCreator;
 import net.AbstractMaplePacketHandler;
 import tools.FilePrinter;
 import tools.MaplePacketCreator;
@@ -66,8 +68,8 @@ public final class CreateCharHandler extends AbstractMaplePacketHandler {
                 int gender = slea.readByte();
                 
                 int [] items = new int [] {weapon, top, bottom, shoes, hair, face};
-		for (int i = 0; i < items.length; i++){
-			if (!isLegal(items[i])) {
+		for (int item : items) {
+			if (!isLegal(item)) {
 				FilePrinter.printError(FilePrinter.EXPLOITS + name + ".txt", "Owner from account '" + c.getAccountName() + "' tried to packet edit in char creation.");
 				c.disconnect(true, false);
 				return;

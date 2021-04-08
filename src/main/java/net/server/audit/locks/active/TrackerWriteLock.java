@@ -136,8 +136,8 @@ public class TrackerWriteLock extends ReentrantReadWriteLock.WriteLock implement
     
     private static String printStackTrace(StackTraceElement[] list) {
         String s = "";
-        for(int i = 0; i < list.length; i++) {
-            s += ("    " + list[i].toString() + "\r\n");
+        for (StackTraceElement stackTraceElement : list) {
+            s += ("    " + stackTraceElement.toString() + "\r\n");
         }
         
         return s;

@@ -2187,13 +2187,13 @@ public class MapleMap {
         
         final Point dropPos = new Point(pos);
         dropPos.x -= (12 * list.size());
-        
-        for(int i = 0; i < list.size(); i++) {
-            if(list.get(i) == 0) {
+
+        for (Integer integer : list) {
+            if (integer == 0) {
                 spawnMesoDrop(owner != null ? 10 * owner.getMesoRate() : 10, calcDropPos(dropPos, pos), dropper, owner, playerDrop, (byte) (ffaDrop ? 2 : 0));
             } else {
                 final Item drop;
-                int randomedId = list.get(i);
+                int randomedId = integer;
 
                 if (ItemConstants.getInventoryType(randomedId) != MapleInventoryType.EQUIP) {
                     drop = new Item(randomedId, (short) 0, (short) (rnd.nextInt(copies) + minCopies));
@@ -2203,7 +2203,7 @@ public class MapleMap {
 
                 spawnItemDrop(dropper, owner, drop, calcDropPos(dropPos, pos), ffaDrop, playerDrop);
             }
-            
+
             dropPos.x += 25;
         }
     }
@@ -2459,10 +2459,10 @@ public class MapleMap {
         }
         
         MaplePet[] pets = chr.getPets();
-        for (int i = 0; i < pets.length; i++) {
-            if (pets[i] != null) {
-                pets[i].setPos(getGroundBelow(chr.getPosition()));
-                chr.announce(MaplePacketCreator.showPet(chr, pets[i], false, false));
+        for (MaplePet pet : pets) {
+            if (pet != null) {
+                pet.setPos(getGroundBelow(chr.getPosition()));
+                chr.announce(MaplePacketCreator.showPet(chr, pet, false, false));
             } else {
                 break;
             }

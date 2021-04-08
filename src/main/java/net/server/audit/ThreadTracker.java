@@ -120,8 +120,8 @@ public class ThreadTracker {
     
     private static String printThreadStack(StackTraceElement[] list, String dateFormat) {
         String s = "----------------------------\r\n" + dateFormat + "\r\n";
-        for(int i = 0; i < list.length; i++) {
-            s += ("    " + list[i].toString() + "\r\n");
+        for (StackTraceElement stackTraceElement : list) {
+            s += ("    " + stackTraceElement.toString() + "\r\n");
         }
         
         return s;
