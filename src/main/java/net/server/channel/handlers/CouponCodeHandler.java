@@ -190,8 +190,8 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
                 if (type < 0) {
                     c.announce(MaplePacketCreator.showCashShopMessage((byte) parseCouponResult(type)));
                 } else {
-                    List<Item> cashItems = new LinkedList<Item>();
-                    List<Pair<Integer, Integer>> items = new LinkedList<Pair<Integer, Integer>>();
+                    List<Item> cashItems = new LinkedList<>();
+                    List<Pair<Integer, Integer>> items = new LinkedList<>();
                     int nxCredit = 0;
                     int maplePoints = 0;
                     int nxPrepaid = 0;
@@ -245,7 +245,7 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
                                     cashItems.add(it);
                                 } else {
                                     MapleInventoryManipulator.addById(c, item, qty, "", -1);
-                                    items.add(new Pair<Integer, Integer>((int)qty, item));
+                                    items.add(new Pair<>((int) qty, item));
                                 }
                                 break;
                         }

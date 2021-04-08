@@ -21,15 +21,14 @@
 */
 package server.maps;
 
-import java.awt.Point;
-import java.util.Collection;
-
+import client.MapleCharacter;
 import config.YamlConfig;
+import net.server.services.task.channel.OverallService;
+import net.server.services.type.ChannelServices;
 import tools.Pair;
 
-import client.MapleCharacter;
-import net.server.services.type.ChannelServices;
-import net.server.services.task.channel.OverallService;
+import java.awt.*;
+import java.util.Collection;
 
 /**
  *
@@ -134,11 +133,8 @@ public class MapleDoor {
                 MapleMap town = destroyDoor.getTown();
                 
                 OverallService service = (OverallService) town.getChannelServer().getServiceAccess(ChannelServices.OVERALL);
-                service.registerOverallAction(town.getId(), new Runnable() {
-                    @Override
-                    public void run() {
-                        destroyDoor.broadcastRemoveDoor(owner);   // thanks BHB88 for noticing doors crashing players when instantly cancelling buff
-                    }
+                service.registerOverallAction(town.getId(), () -> {
+                    destroyDoor.broadcastRemoveDoor(owner);   // thanks BHB88 for noticing doors crashing players when instantly cancelling buff
                 }, effectTimeLeft);
             } else {
                 destroyDoor.broadcastRemoveDoor(owner);

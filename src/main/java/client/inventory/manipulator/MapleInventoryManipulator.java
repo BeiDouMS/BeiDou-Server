@@ -24,26 +24,20 @@ package client.inventory.manipulator;
 import client.MapleBuffStat;
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.Equip;
-import client.inventory.Item;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import client.inventory.ModifyInventory;
+import client.inventory.*;
 import client.newyear.NewYearCardRecord;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
+import server.MapleItemInformationProvider;
+import server.maps.MapleMap;
+import tools.FilePrinter;
+import tools.MaplePacketCreator;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import server.MapleItemInformationProvider;
-import server.maps.MapleMap;
-import tools.FilePrinter;
-
-import tools.MaplePacketCreator;
 
 /**
  *
@@ -91,7 +85,7 @@ public class MapleInventoryManipulator {
                     Iterator<Item> i = existing.iterator();
                     while (quantity > 0) {
                         if (i.hasNext()) {
-                            Item eItem = (Item) i.next();
+                            Item eItem = i.next();
                             short oldQ = eItem.getQuantity();
                             if (oldQ < slotMax && ((eItem.getOwner().equals(owner) || owner == null) && eItem.getFlag() == flag)) {
                                 short newQ = (short) Math.min(oldQ + quantity, slotMax);
@@ -202,7 +196,7 @@ public class MapleInventoryManipulator {
                     Iterator<Item> i = existing.iterator();
                     while (quantity > 0) {
                         if (i.hasNext()) {
-                            Item eItem = (Item) i.next();
+                            Item eItem = i.next();
                             short oldQ = eItem.getQuantity();
                             if (oldQ < slotMax && item.getFlag() == eItem.getFlag() && item.getOwner().equals(eItem.getOwner())) {
                                 short newQ = (short) Math.min(oldQ + quantity, slotMax);

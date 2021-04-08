@@ -40,7 +40,7 @@ public class BuffRequirement extends MapleQuestRequirement {
 	@Override
 	public void processData(MapleData data) {
                 // item buffs are negative
-		buffId = -1 * Integer.valueOf(MapleDataTool.getString(data));
+		buffId = -1 * Integer.parseInt(MapleDataTool.getString(data));
 	}
 	
 	@Override

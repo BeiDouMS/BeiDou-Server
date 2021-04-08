@@ -9,7 +9,7 @@ public class ServerConstants {
     public static final boolean JAVA_8 = getJavaVersion() >= 8;         //Max amount of times a party leader is allowed to persist on the Party Search before entry expiration (thus needing to manually restart the Party Search to be able to search for members).
     
     //Debug Variables
-    public static int DEBUG_VALUES[] = new int[10];             // Field designed for packet testing purposes
+    public static int[] DEBUG_VALUES = new int[10];             // Field designed for packet testing purposes
     
     // https://github.com/openstreetmap/josm/blob/a3a6e8a6b657cf4c5b4c64ea14d6e87be6280d65/src/org/openstreetmap/josm/tools/Utils.java#L1566-L1585
     // Added by kolakcc (Familiar)

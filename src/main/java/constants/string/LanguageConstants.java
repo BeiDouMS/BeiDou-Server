@@ -25,19 +25,19 @@ public class LanguageConstants {
         
     }
     
-    public static String CPQBlue[] = new String[3];
-    public static String CPQError[] = new String[3];
-    public static String CPQEntry[] = new String[3];
-    public static String CPQFindError[] = new String[3];
-    public static String CPQRed[] = new String[3];
-    public static String CPQPlayerExit[] = new String[3];
-    public static String CPQEntryLobby[] = new String[3];
-    public static String CPQPickRoom[] = new String[3];
-    public static String CPQExtendTime[] = new String[3];
-    public static String CPQLeaderNotFound[] = new String[3];
-    public static String CPQChallengeRoomAnswer[] = new String[3];
-    public static String CPQChallengeRoomSent[] = new String[3];
-    public static String CPQChallengeRoomDenied[] = new String[3];
+    public static String[] CPQBlue = new String[3];
+    public static String[] CPQError = new String[3];
+    public static String[] CPQEntry = new String[3];
+    public static String[] CPQFindError = new String[3];
+    public static String[] CPQRed = new String[3];
+    public static String[] CPQPlayerExit = new String[3];
+    public static String[] CPQEntryLobby = new String[3];
+    public static String[] CPQPickRoom = new String[3];
+    public static String[] CPQExtendTime = new String[3];
+    public static String[] CPQLeaderNotFound = new String[3];
+    public static String[] CPQChallengeRoomAnswer = new String[3];
+    public static String[] CPQChallengeRoomSent = new String[3];
+    public static String[] CPQChallengeRoomDenied = new String[3];
     
     static {
         int lang;

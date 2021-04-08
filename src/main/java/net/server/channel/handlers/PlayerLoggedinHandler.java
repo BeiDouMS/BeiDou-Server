@@ -234,7 +234,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 player.visitMap(player.getMap());
 
                 BuddyList bl = player.getBuddylist();
-                int buddyIds[] = bl.getBuddyIds();
+                int[] buddyIds = bl.getBuddyIds();
                 wserv.loggedOn(player.getName(), player.getId(), c.getChannel(), buddyIds);
                 for (CharacterIdChannelPair onlineBuddy : wserv.multiBuddyFind(player.getId(), buddyIds)) {
                     BuddylistEntry ble = bl.get(onlineBuddy.getCharacterId());
@@ -360,7 +360,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
 
                     if(diseases != null) {
                         for(Entry<MapleDisease, Pair<Long, MobSkill>> e : diseases.entrySet()) {
-                            final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), Integer.valueOf(e.getValue().getRight().getX())));
+                            final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), e.getValue().getRight().getX()));
                             c.announce(MaplePacketCreator.giveDebuff(debuff, e.getValue().getRight()));
                         }
                     }
@@ -451,12 +451,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
             timedBuffs.add(new Pair<>(curtime - pb.usedTime, pb));
         }
         
-        Collections.sort(timedBuffs, new Comparator<Pair<Long, PlayerBuffValueHolder>>() {
-            @Override
-            public int compare(Pair<Long, PlayerBuffValueHolder> p1, Pair<Long, PlayerBuffValueHolder> p2) {
-                return p1.getLeft().compareTo(p2.getLeft());
-            }
-        });
+        timedBuffs.sort((p1, p2) -> p1.getLeft().compareTo(p2.getLeft()));
         
         return timedBuffs;
     }

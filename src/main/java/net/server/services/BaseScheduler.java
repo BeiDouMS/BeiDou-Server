@@ -20,14 +20,6 @@
 package net.server.services;
 
 import config.YamlConfig;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ScheduledFuture;
-
 import net.server.Server;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
@@ -35,6 +27,10 @@ import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
 import tools.Pair;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  *
@@ -48,12 +44,7 @@ public abstract class BaseScheduler {
     
     private ScheduledFuture<?> schedulerTask = null;
     private MonitoredReentrantLock schedulerLock;
-    private Runnable monitorTask = new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            runBaseSchedule();
-                                        }
-                                    };
+    private Runnable monitorTask = () -> runBaseSchedule();
     
     protected BaseScheduler(MonitoredLockType lockType) {
         schedulerLock = MonitoredReentrantLockFactory.createLock(lockType, true);
@@ -62,10 +53,8 @@ public abstract class BaseScheduler {
     // NOTE: practice EXTREME caution when adding external locks to the scheduler system, if you don't know what you're doing DON'T USE THIS.
     protected BaseScheduler(MonitoredLockType lockType, List<MonitoredReentrantLock> extLocks) {
         schedulerLock = MonitoredReentrantLockFactory.createLock(lockType, true);
-        
-        for(MonitoredReentrantLock lock : extLocks) {
-            externalLocks.add(lock);
-        }
+
+        externalLocks.addAll(extLocks);
     }
     
     protected void addListener(SchedulerListener listener) {
@@ -201,12 +190,7 @@ public abstract class BaseScheduler {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {

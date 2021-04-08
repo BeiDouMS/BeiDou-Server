@@ -19,33 +19,14 @@
 */
 package maplequestitemfetcher;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.apache.commons.io.FileUtils;
-import java.io.File;
 import tools.MapleItemInformationProvider;
-
 import tools.Pair;
+
+import java.io.*;
+import java.sql.*;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *
@@ -430,32 +411,18 @@ public class MapleQuestItemFetcher {
     
     private static List<Entry<Integer, Integer>> getSortedMapEntries0(Map<Integer, Integer> map) {
         List<Entry<Integer, Integer>> list = new ArrayList<>(map.size());
-        for(Entry<Integer, Integer> e : map.entrySet()) {
-            list.add(e);
-        }
+        list.addAll(map.entrySet());
         
-        Collections.sort(list, new Comparator<Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Entry<Integer, Integer> o1, Entry<Integer, Integer> o2) {
-                return o1.getKey() - o2.getKey();
-            }
-        });
+        Collections.sort(list, (o1, o2) -> o1.getKey() - o2.getKey());
         
         return list;
     }
     
     private static List<Entry<Integer, int[]>> getSortedMapEntries1(Map<Integer, int[]> map) {
         List<Entry<Integer, int[]>> list = new ArrayList<>(map.size());
-        for(Entry<Integer, int[]> e : map.entrySet()) {
-            list.add(e);
-        }
+        list.addAll(map.entrySet());
         
-        Collections.sort(list, new Comparator<Entry<Integer, int[]>>() {
-            @Override
-            public int compare(Entry<Integer, int[]> o1, Entry<Integer, int[]> o2) {
-                return o1.getKey() - o2.getKey();
-            }
-        });
+        Collections.sort(list, (o1, o2) -> o1.getKey() - o2.getKey());
         
         return list;
     }
@@ -464,26 +431,14 @@ public class MapleQuestItemFetcher {
         List<Pair<Integer, List<Integer>>> list = new ArrayList<>(map.size());
         for(Entry<Integer, Set<Integer>> e : map.entrySet()) {
             List<Integer> il = new ArrayList<>(2);
-            for(Integer i : e.getValue()) {
-                il.add(i);
-            }
+            il.addAll(e.getValue());
             
-            Collections.sort(il, new Comparator<Integer>() {
-                @Override
-                public int compare(Integer o1, Integer o2) {
-                    return o1 - o2;
-                }
-            });
+            Collections.sort(il, (o1, o2) -> o1 - o2);
             
             list.add(new Pair<>(e.getKey(), il));
         }
         
-        Collections.sort(list, new Comparator<Pair<Integer, List<Integer>>>() {
-            @Override
-            public int compare(Pair<Integer, List<Integer>> o1, Pair<Integer, List<Integer>> o2) {
-                return o1.getLeft() - o2.getLeft();
-            }
-        });
+        Collections.sort(list, (o1, o2) -> o1.getLeft() - o2.getLeft());
         
         return list;
     }

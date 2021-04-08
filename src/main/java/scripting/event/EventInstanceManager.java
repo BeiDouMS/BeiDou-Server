@@ -21,55 +21,44 @@
  */
 package scripting.event;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Iterator;
-import java.util.Properties;
-import javax.script.ScriptException;
-
+import client.MapleCharacter;
+import client.Skill;
+import client.SkillFactory;
 import config.YamlConfig;
+import constants.inventory.ItemConstants;
+import constants.net.ServerConstants;
 import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.MonitoredReadLock;
-import net.server.audit.locks.MonitoredReentrantReadWriteLock;
-import net.server.audit.locks.MonitoredWriteLock;
+import net.server.audit.locks.*;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
+import net.server.coordinator.world.MapleEventRecallCoordinator;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
-import server.maps.MaplePortal;
-import server.TimerManager;
-import server.MapleStatEffect;
-import server.expeditions.MapleExpedition;
-import server.life.MapleMonster;
-import server.maps.MapleMap;
-import server.maps.MapleMapManager;
-import server.maps.MapleReactor;
-import client.MapleCharacter;
-import client.SkillFactory;
-import client.Skill;
-import constants.inventory.ItemConstants;
-import constants.net.ServerConstants;
-import java.awt.Point;
-import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.server.coordinator.world.MapleEventRecallCoordinator;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleItemInformationProvider;
+import server.MapleStatEffect;
 import server.ThreadManager;
+import server.TimerManager;
+import server.expeditions.MapleExpedition;
 import server.life.MapleLifeFactory;
+import server.life.MapleMonster;
 import server.life.MapleNPC;
+import server.maps.MapleMap;
+import server.maps.MapleMapManager;
+import server.maps.MaplePortal;
+import server.maps.MapleReactor;
 import tools.MaplePacketCreator;
 import tools.Pair;
+
+import javax.script.ScriptException;
+import java.awt.*;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -297,16 +286,13 @@ public class EventInstanceManager {
                         chr.announce(MaplePacketCreator.getClock((int) (time / 1000)));
                 }
                 
-                event_schedule = TimerManager.getInstance().schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                                dismissEventTimer();
-                                
-                                try {
-                                        invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
-                                } catch (ScriptException | NoSuchMethodException ex) {
-                                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement scheduledTimeout function.", ex);
-                                }
+                event_schedule = TimerManager.getInstance().schedule(() -> {
+                        dismissEventTimer();
+
+                        try {
+                                invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
+                        } catch (ScriptException | NoSuchMethodException ex) {
+                                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement scheduledTimeout function.", ex);
                         }
                 }, time);
 	}
@@ -317,16 +303,13 @@ public class EventInstanceManager {
                                 long nextTime = getTimeLeft() + time;
                                 eventTime += time;
 
-                                event_schedule = TimerManager.getInstance().schedule(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                                dismissEventTimer();
+                                event_schedule = TimerManager.getInstance().schedule(() -> {
+                                        dismissEventTimer();
 
-                                                try {
-                                                        invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
-                                                } catch (ScriptException | NoSuchMethodException ex) {
-                                                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement scheduledTimeout function.", ex);
-                                                }
+                                        try {
+                                                invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
+                                        } catch (ScriptException | NoSuchMethodException ex) {
+                                                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement scheduledTimeout function.", ex);
                                         }
                                 }, nextTime);
                         }
@@ -539,13 +522,10 @@ public class EventInstanceManager {
 	}
 
 	public void playerKilled(final MapleCharacter chr) {
-                ThreadManager.getInstance().newTask(new Runnable() {
-                        @Override
-                        public void run() {
-                                try {
-                                        invokeScriptFunction("playerDead", EventInstanceManager.this, chr);
-                                } catch (ScriptException | NoSuchMethodException ex) {} // optional
-                        }
+                ThreadManager.getInstance().newTask(() -> {
+                        try {
+                                invokeScriptFunction("playerDead", EventInstanceManager.this, chr);
+                        } catch (ScriptException | NoSuchMethodException ex) {} // optional
                 });
 	}
 
@@ -660,30 +640,22 @@ public class EventInstanceManager {
                         sL.unlock();
                 }
                 
-                TimerManager.getInstance().schedule(new Runnable() {
-                        @Override
-                        public void run() {
-                                mapManager.dispose();   // issues from instantly disposing some event objects found thanks to MedicOP
-                                wL.lock();
-                                try {
-                                        mapManager = null;
-                                        em = null;
-                                } finally {
-                                        wL.unlock();
-                                }
-
-                                disposeLocks();
+                TimerManager.getInstance().schedule(() -> {
+                        mapManager.dispose();   // issues from instantly disposing some event objects found thanks to MedicOP
+                        wL.lock();
+                        try {
+                                mapManager = null;
+                                em = null;
+                        } finally {
+                                wL.unlock();
                         }
+
+                        disposeLocks();
                 }, 60 * 1000);
 	}
         
         private void disposeLocks() {
-            LockCollector.getInstance().registerDisposeAction(new Runnable() {
-                @Override
-                public void run() {
-                    emptyLocks();
-                }
-            });
+            LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
         }
         
         private void emptyLocks() {
@@ -699,14 +671,11 @@ public class EventInstanceManager {
                 rL.lock();
                 try {
                         if (ess != null) {
-                                Runnable r = new Runnable() {
-                                        @Override
-                                        public void run() {
-                                                try {
-                                                        invokeScriptFunction(methodName, EventInstanceManager.this);
-                                                } catch (ScriptException | NoSuchMethodException ex) {
-                                                        ex.printStackTrace();
-                                                }
+                                Runnable r = () -> {
+                                        try {
+                                                invokeScriptFunction(methodName, EventInstanceManager.this);
+                                        } catch (ScriptException | NoSuchMethodException ex) {
+                                                ex.printStackTrace();
                                         }
                                 };
 
@@ -923,7 +892,7 @@ public class EventInstanceManager {
             
             if (ServerConstants.JAVA_8) {
                 for (Object d: list) {
-                    intList.add(((Integer) d).intValue());
+                    intList.add((Integer) d);
                 }
             } else {
                 for (Object d: list) {
@@ -975,9 +944,7 @@ public class EventInstanceManager {
                 
                 wL.lock();
                 try {
-                        for(Integer item: exclusive) {
-                                exclusiveItems.add(item);
-                        }
+                    exclusiveItems.addAll(exclusive);
                 } finally {
                         wL.unlock();
                 }
@@ -1142,7 +1109,7 @@ public class EventInstanceManager {
                 
                 if(!eventCleared && leavingEventMap && !isEventTeamLeaderOn()) return true;
                 if(getPlayerCount() < minPlayers) return true;
-                
+
                 return false;
         }
         
@@ -1153,7 +1120,7 @@ public class EventInstanceManager {
                         // thanks Conrad for noticing expeditions don't need to have neither the leader nor meet the minimum requirement inside the event
                         if(getPlayerCount() <= 1) return true;
                 }
-                
+
                 return false;
         }
         
@@ -1164,7 +1131,7 @@ public class EventInstanceManager {
                         if(leavingEventMap && getLeaderId() == quitter.getId()) return true;
                         if(getPlayerCount() <= minPlayers) return true;
                 }
-                
+
                 return false;
         }
         

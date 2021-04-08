@@ -138,7 +138,7 @@ public class World {
     private ScheduledFuture<?> timedMapObjectsSchedule;
     private MonitoredReentrantLock timedMapObjectLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MAPOBJS, true);
     
-    private Map<MapleCharacter, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<MapleCharacter, Integer>());
+    private Map<MapleCharacter, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
     
     private ScheduledFuture<?> charactersSchedule;
     private ScheduledFuture<?> marriagesSchedule;
@@ -165,7 +165,7 @@ public class World {
         mountUpdate = petUpdate;
         
         for (int i = 0; i < 9; i++) {
-            cashItemBought.add(new LinkedHashMap<Integer, Integer>());
+            cashItemBought.add(new LinkedHashMap<>());
         }
         
         TimerManager tman = TimerManager.getInstance();
@@ -457,16 +457,9 @@ public class World {
     
     private static List<Entry<Integer, SortedMap<Integer, MapleCharacter>>> getSortedAccountCharacterView(Map<Integer, SortedMap<Integer, MapleCharacter>> map) {
         List<Entry<Integer, SortedMap<Integer, MapleCharacter>>> list = new ArrayList<>(map.size());
-        for(Entry<Integer, SortedMap<Integer, MapleCharacter>> e : map.entrySet()) {
-            list.add(e);
-        }
+        list.addAll(map.entrySet());
         
-        Collections.sort(list, new Comparator<Entry<Integer, SortedMap<Integer, MapleCharacter>>>() {
-            @Override
-            public int compare(Entry<Integer, SortedMap<Integer, MapleCharacter>> o1, Entry<Integer, SortedMap<Integer, MapleCharacter>> o2) {
-                return o1.getKey() - o2.getKey();
-            }
-        });
+        list.sort((o1, o2) -> o1.getKey() - o2.getKey());
         
         return list;
     }
@@ -488,9 +481,7 @@ public class World {
         }
         
         for (Entry<Integer, SortedMap<Integer, MapleCharacter>> e : getSortedAccountCharacterView(accChars)) {
-            for (MapleCharacter chr : e.getValue().values()) {
-                chrList.add(chr);
-            }
+            chrList.addAll(e.getValue().values());
         }
         
         return chrList;
@@ -506,7 +497,7 @@ public class World {
             if(accChars != null) {
                 chrList = new LinkedList<>(accChars.values());
             } else {
-                accountChars.put(accountId, new TreeMap<Integer, MapleCharacter>());
+                accountChars.put(accountId, new TreeMap<>());
                 chrList = null;
             }
         } finally {
@@ -579,7 +570,7 @@ public class World {
     
     public Collection<MapleFamily> getFamilies() {
         synchronized(families) {
-            return Collections.unmodifiableCollection((Collection<MapleFamily>) families.values());
+            return Collections.unmodifiableCollection(families.values());
         }
     }
 
@@ -1246,7 +1237,7 @@ public class World {
         updateBuddies(characterId, channel, buddies, true);
     }
 
-    public void loggedOn(String name, int characterId, int channel, int buddies[]) {
+    public void loggedOn(String name, int characterId, int channel, int[] buddies) {
         updateBuddies(characterId, channel, buddies, false);
     }
 
@@ -1359,18 +1350,12 @@ public class World {
     
     private List<Integer> getMostSellerOnTab(List<Pair<Integer, Integer>> tabSellers) {
         List<Integer> tabLeaderboards;
-        
-        Comparator<Pair<Integer, Integer>> comparator = new Comparator<Pair<Integer, Integer>>() {  // descending order
-            @Override
-            public int compare(Pair<Integer, Integer> p1, Pair<Integer, Integer> p2) {
-                return p2.getRight().compareTo(p1.getRight());
-            }
-        };
+
+        // descending order
+        Comparator<Pair<Integer, Integer>> comparator = (p1, p2) -> p2.getRight().compareTo(p1.getRight());
 
         PriorityQueue<Pair<Integer, Integer>> queue = new PriorityQueue<>(Math.max(1, tabSellers.size()), comparator);
-        for(Pair<Integer, Integer> p : tabSellers) {
-            queue.add(p);
-        }
+        queue.addAll(tabSellers);
 
         tabLeaderboards = new LinkedList<>();
         for(int i = 0; i < Math.min(tabSellers.size(), 5); i++) {
@@ -1460,7 +1445,7 @@ public class World {
             MapleCharacter chr = this.getPlayerStorage().getCharacterById(dp.getKey() / 4);
             if(chr == null || !chr.isLoggedinWorld()) continue;
             
-            Integer dpVal = dp.getValue() + 1;
+            int dpVal = dp.getValue() + 1;
             if(dpVal == YamlConfig.config.server.PET_EXHAUST_COUNT) {
                 chr.runFullnessSchedule(dp.getKey() % 4);
                 dpVal = 0;
@@ -1557,9 +1542,7 @@ public class World {
         List<MaplePlayerShop> psList = new ArrayList<>();
         activePlayerShopsLock.lock();
         try {
-            for(MaplePlayerShop mps : activePlayerShops.values()) {
-                psList.add(mps);
-            }
+            psList.addAll(activePlayerShops.values());
             
             return psList;
         } finally {
@@ -1841,7 +1824,7 @@ public class World {
             List<MaplePlayerShopItem> itemBundles = hm.sendAvailableBundles(itemid);
 
             for(MaplePlayerShopItem mpsi : itemBundles) {
-                hmsAvailable.add(new Pair<>(mpsi, (AbstractMapleMapObject) hm));
+                hmsAvailable.add(new Pair<>(mpsi, hm));
             }
         }
 
@@ -1849,16 +1832,11 @@ public class World {
             List<MaplePlayerShopItem> itemBundles = ps.sendAvailableBundles(itemid);
 
             for(MaplePlayerShopItem mpsi : itemBundles) {
-                hmsAvailable.add(new Pair<>(mpsi, (AbstractMapleMapObject) ps));
+                hmsAvailable.add(new Pair<>(mpsi, ps));
             }
         }
 
-        Collections.sort(hmsAvailable, new Comparator<Pair<MaplePlayerShopItem, AbstractMapleMapObject>>() {
-            @Override
-            public int compare(Pair<MaplePlayerShopItem, AbstractMapleMapObject> p1, Pair<MaplePlayerShopItem, AbstractMapleMapObject> p2) {
-                return p1.getLeft().getPrice() - p2.getLeft().getPrice();
-            }
-        });
+        hmsAvailable.sort((p1, p2) -> p1.getLeft().getPrice() - p2.getLeft().getPrice());
 
         hmsAvailable.subList(0, Math.min(hmsAvailable.size(), 200));    //truncates the list to have up to 200 elements
         return hmsAvailable;
@@ -2049,12 +2027,7 @@ public class World {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {

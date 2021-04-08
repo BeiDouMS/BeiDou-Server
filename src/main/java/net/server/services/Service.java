@@ -31,7 +31,7 @@ public class Service <T extends BaseService> {
     public Service(Class<T> s) {
         try {
             cls = s;
-            service = (BaseService) cls.getConstructor().newInstance();
+            service = cls.getConstructor().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }

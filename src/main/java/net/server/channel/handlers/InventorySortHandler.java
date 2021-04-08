@@ -21,22 +21,18 @@
  */
 package net.server.channel.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.Item;
-import client.inventory.Equip;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.ModifyInventory;
-import server.MapleItemInformationProvider;
+import client.inventory.*;
+import config.YamlConfig;
+import net.AbstractMaplePacketHandler;
 import net.server.Server;
+import server.MapleItemInformationProvider;
+import tools.MaplePacketCreator;
+import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -159,7 +155,7 @@ class PairedQuicksort {
             if (i <= j) {
                 w = (Equip)A.get(i);
                 A.set(i, A.get(j));
-                A.set(j, (Item)w);
+                A.set(j, w);
 
                 i++;
                 j--;
@@ -290,7 +286,7 @@ public final class InventorySortHandler extends AbstractMaplePacketHandler {
             for (short i = 1; i <= inventory.getSlotLimit(); i++) {
                 Item item = inventory.getItem(i);
                 if (item != null) {
-                    itemarray.add((Item) item.copy());
+                    itemarray.add(item.copy());
                 }
             }
 

@@ -25,15 +25,10 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 import provider.MapleData;
 import provider.MapleDataTool;
-import client.inventory.manipulator.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -41,6 +36,11 @@ import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.Randomizer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -79,14 +79,7 @@ public class ItemAction extends MapleQuestAction {
 			items.add(new ItemData(Integer.parseInt(iEntry.getName()), id, count, prop, job, gender, period));
 		}
                 
-                Collections.sort(items, new Comparator<ItemData>()
-                {
-                    @Override
-                    public int compare( ItemData o1, ItemData o2 )
-                    {
-                        return o1.map - o2.map;
-                    }
-                });
+                items.sort((o1, o2) -> o1.map - o2.map);
 	}
 	
 	@Override

@@ -21,25 +21,22 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
-import client.inventory.Equip;
+import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
-import client.inventory.Item;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.ModifyInventory;
-import constants.inventory.ItemConstants;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import net.AbstractMaplePacketHandler;
 import client.inventory.manipulator.MapleInventoryManipulator;
+import constants.inventory.ItemConstants;
+import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Matze
@@ -81,7 +78,7 @@ public final class ScrollHandler extends AbstractMaplePacketHandler {
                         announceCannotScroll(c, legendarySpirit);
                         return;
                     }
-                } else if (!ItemConstants.isModifierScroll(scroll.getItemId()) && ((Equip) toScroll).getUpgradeSlots() < 1) {
+                } else if (!ItemConstants.isModifierScroll(scroll.getItemId()) && toScroll.getUpgradeSlots() < 1) {
                     announceCannotScroll(c, legendarySpirit);   // thanks onechord for noticing zero upgrade slots freezing Legendary Scroll UI
                     return;
                 }

@@ -20,13 +20,13 @@
 package net.server.coordinator.login;
 
 import config.YamlConfig;
+import net.server.Server;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-
-import net.server.Server;
 
 /**
  *
@@ -39,7 +39,7 @@ public class LoginStorage {
     public boolean registerLogin(int accountId) {
         List<Long> accHist = loginHistory.get(accountId);
         if (accHist == null) {
-            accHist = new LinkedList<Long>();
+            accHist = new LinkedList<>();
             loginHistory.put(accountId, accHist);
         }
         

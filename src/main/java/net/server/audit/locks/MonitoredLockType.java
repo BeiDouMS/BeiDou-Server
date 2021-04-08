@@ -108,5 +108,5 @@ public enum MonitoredLockType {
     MAP_AGGRO_IDLE,
     MINIDUNGEON,
     REACTOR,
-    REACTOR_HIT;
+    REACTOR_HIT
 }

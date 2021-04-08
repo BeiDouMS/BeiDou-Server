@@ -22,10 +22,11 @@
 package server.maps;
 
 import client.MapleCharacter;
-import java.util.List;
 import net.server.Server;
 import server.TimerManager;
 import tools.MaplePacketCreator;
+
+import java.util.List;
 
 /*
  * MapleTVEffect
@@ -34,7 +35,7 @@ import tools.MaplePacketCreator;
  */
 public class MapleTVEffect {
 	
-	private final static boolean ACTIVE[] = new boolean[Server.getInstance().getWorldsSize()];
+	private final static boolean[] ACTIVE = new boolean[Server.getInstance().getWorldsSize()];
 	
 	public static synchronized boolean broadcastMapleTVIfNotActive(MapleCharacter player, MapleCharacter victim, List<String> messages, int tvType){
                 int w = player.getWorld();
@@ -58,12 +59,7 @@ public class MapleTVEffect {
 			} else if (type == 5) {
 				delay = 60000;
 			}
-			TimerManager.getInstance().schedule(new Runnable() {
-				@Override
-				public void run() {
-					broadcastTV(false, userWorld, null, null, -1, null);
-				}
-			}, delay);
+			TimerManager.getInstance().schedule(() -> broadcastTV(false, userWorld, null, null, -1, null), delay);
 		} else {
 			server.broadcastMessage(userWorld, MaplePacketCreator.removeTV());
 		}

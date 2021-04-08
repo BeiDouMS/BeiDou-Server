@@ -21,7 +21,7 @@
  */
 package tools.data.output;
 
-import java.awt.Point;
+import java.awt.*;
 
 /**
  * Provides an interface to a writer class that writes a little-endian sequence
@@ -38,44 +38,44 @@ public interface LittleEndianWriter {
      *
      * @param b The bytes to write.
      */
-    public void write(byte b[]);
+    void write(byte[] b);
 
     /**
      * Write a byte to the sequence.
      *
      * @param b The byte to write.
      */
-    public void write(byte b);
+    void write(byte b);
 
     /**
      * Write a byte in integer form to the sequence.
      *
      * @param b The byte as an <code>Integer</code> to write.
      */
-    public void write(int b);
+    void write(int b);
 
-    public void skip(int b);
+    void skip(int b);
 
     /**
      * Writes an integer to the sequence.
      *
      * @param i The integer to write.
      */
-    public void writeInt(int i);
+    void writeInt(int i);
 
     /**
      * Write a short integer to the sequence.
      *
      * @param s The short integer to write.
      */
-    public void writeShort(int s);
+    void writeShort(int s);
 
     /**
      * Write a long integer to the sequence.
      *
      * @param l The long integer to write.
      */
-    public void writeLong(long l);
+    void writeLong(long l);
 
     /**
      * Writes an ASCII string the the sequence.

@@ -21,29 +21,18 @@
 */
 package net.server.channel.handlers;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
+import client.*;
 import config.YamlConfig;
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleJob;
-import client.Skill;
-import client.SkillFactory;
 import constants.game.GameConstants;
-import constants.skills.Crusader;
-import constants.skills.DawnWarrior;
-import constants.skills.DragonKnight;
-import constants.skills.Hero;
-import constants.skills.NightWalker;
-import constants.skills.Rogue;
-import constants.skills.WindArcher;
+import constants.skills.*;
 import server.MapleStatEffect;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
     
@@ -78,7 +67,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         Integer comboBuff = chr.getBuffedValue(MapleBuffStat.COMBO);
         if (GameConstants.isFinisherSkill(attack.skill)) {
             if (comboBuff != null) {
-                numFinisherOrbs = comboBuff.intValue() - 1;
+                numFinisherOrbs = comboBuff - 1;
             }
             chr.handleOrbconsume();
         } else if (attack.numAttacked > 0) {
@@ -129,7 +118,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             int totDamageToOneMonster = 0; // sacrifice attacks only 1 mob with 1 attack
             final Iterator<List<Integer>> dmgIt = attack.allDamage.values().iterator();
             if (dmgIt.hasNext()) {
-                totDamageToOneMonster = dmgIt.next().get(0).intValue();
+                totDamageToOneMonster = dmgIt.next().get(0);
             }
             
             chr.safeAddHP(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100);

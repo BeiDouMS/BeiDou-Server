@@ -20,22 +20,21 @@
 package net.server.audit.locks.active;
 
 import config.YamlConfig;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.ScheduledFuture;
-import server.TimerManager;
 import net.server.audit.ThreadTracker;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.empty.EmptyWriteLock;
-import tools.FilePrinter;
+import server.TimerManager;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  *
@@ -107,12 +106,7 @@ public class TrackerWriteLock extends ReentrantReadWriteLock.WriteLock implement
         
             if(reentrantCount.incrementAndGet() == 1) {
                 final Thread t = Thread.currentThread();
-                timeoutSchedule = TimerManager.getInstance().schedule(new Runnable() {
-                    @Override
-                    public void run() {
-                        issueDeadlock(t);
-                    }
-                }, YamlConfig.config.server.LOCK_MONITOR_TIME);
+                timeoutSchedule = TimerManager.getInstance().schedule(() -> issueDeadlock(t), YamlConfig.config.server.LOCK_MONITOR_TIME);
             }
         } finally {
             state.unlock();
@@ -142,8 +136,8 @@ public class TrackerWriteLock extends ReentrantReadWriteLock.WriteLock implement
     
     private static String printStackTrace(StackTraceElement[] list) {
         String s = "";
-        for(int i = 0; i < list.length; i++) {
-            s += ("    " + list[i].toString() + "\r\n");
+        for (StackTraceElement stackTraceElement : list) {
+            s += ("    " + stackTraceElement.toString() + "\r\n");
         }
         
         return s;

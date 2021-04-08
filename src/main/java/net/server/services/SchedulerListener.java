@@ -26,5 +26,5 @@ import java.util.List;
  * @author Ronan
  */
 public interface SchedulerListener {
-    public void removedScheduledEntries(List<Object> entries, boolean update);
+    void removedScheduledEntries(List<Object> entries, boolean update);
 }

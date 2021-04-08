@@ -19,25 +19,18 @@
 */
 package net.server.audit;
 
+import net.server.audit.locks.MonitoredLockType;
+import server.TimerManager;
+import tools.FilePrinter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TimeZone;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import net.server.audit.locks.MonitoredLockType;
-import server.TimerManager;
-import tools.FilePrinter;
 
 /**
  *
@@ -127,8 +120,8 @@ public class ThreadTracker {
     
     private static String printThreadStack(StackTraceElement[] list, String dateFormat) {
         String s = "----------------------------\r\n" + dateFormat + "\r\n";
-        for(int i = 0; i < list.length; i++) {
-            s += ("    " + list[i].toString() + "\r\n");
+        for (StackTraceElement stackTraceElement : list) {
+            s += ("    " + stackTraceElement.toString() + "\r\n");
         }
         
         return s;
@@ -277,12 +270,7 @@ public class ThreadTracker {
     }
     
     public void registerThreadTrackerTask() {
-        threadTrackerSchedule = TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                accessThreadTracker(true, false, MonitoredLockType.UNDEFINED, -1);
-            }
-        }, 10000, 10000);
+        threadTrackerSchedule = TimerManager.getInstance().register(() -> accessThreadTracker(true, false, MonitoredLockType.UNDEFINED, -1), 10000, 10000);
     }
     
     public void cancelThreadTrackerTask() {

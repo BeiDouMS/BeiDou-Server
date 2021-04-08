@@ -23,22 +23,20 @@ package server.maps;
 
 import client.MapleClient;
 import config.YamlConfig;
-
-import java.awt.Rectangle;
-import java.util.List;
-
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.locks.Lock;
+import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-
+import net.server.services.task.channel.OverallService;
+import net.server.services.type.ChannelServices;
 import scripting.reactor.ReactorScriptManager;
 import server.TimerManager;
+import server.partyquest.GuardianSpawnPoint;
 import tools.MaplePacketCreator;
 import tools.Pair;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.services.type.ChannelServices;
-import net.server.services.task.channel.OverallService;
-import server.partyquest.GuardianSpawnPoint;
+
+import java.awt.*;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -232,23 +230,15 @@ public class MapleReactor extends AbstractMapleMapObject {
         if (timeOut > -1) {
             final byte nextState = stats.getTimeoutState(state);
 
-            timeoutTask = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    timeoutTask = null;
-                    tryForceHitReactor(nextState);
-                }
+            timeoutTask = TimerManager.getInstance().schedule(() -> {
+                timeoutTask = null;
+                tryForceHitReactor(nextState);
             }, timeOut);
         }
     }
 
     public void delayedHitReactor(final MapleClient c, long delay) {
-        TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                hitReactor(c);
-            }
-        }, delay);
+        TimerManager.getInstance().schedule(() -> hitReactor(c), delay);
     }
 
     public void hitReactor(MapleClient c) {
@@ -371,12 +361,9 @@ public class MapleReactor extends AbstractMapleMapObject {
     }
     
     public void delayedRespawn() {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                delayedRespawnRun = null;
-                respawn();
-            }
+        Runnable r = () -> {
+            delayedRespawnRun = null;
+            respawn();
         };
         
         delayedRespawnRun = r;

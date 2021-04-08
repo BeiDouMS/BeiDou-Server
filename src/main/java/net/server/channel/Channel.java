@@ -41,7 +41,6 @@ import net.server.world.MaplePartyCharacter;
 import net.server.world.World;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.buffer.SimpleBufferAllocator;
-import org.apache.mina.core.filterchain.IoFilter;
 import org.apache.mina.core.service.IoAcceptor;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
@@ -81,7 +80,7 @@ public final class Channel {
     private Map<MapleExpeditionType, MapleExpedition> expeditions = new HashMap<>();
     private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
     private List<MapleExpeditionType> expedType = new ArrayList<>();
-    private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<MapleMap, Boolean>()));
+    private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
     private MapleEvent event;
     private boolean finishedShutdown = false;
     private Set<Integer> usedMC = new HashSet<>();
@@ -109,7 +108,7 @@ public final class Channel {
     private MonitoredReadLock merchRlock = MonitoredReadLockFactory.createLock(merchantLock);
     private MonitoredWriteLock merchWlock = MonitoredWriteLockFactory.createLock(merchantLock);
     
-    private MonitoredReentrantLock faceLock[] = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
     
     private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL, true);
     
@@ -128,12 +127,10 @@ public final class Channel {
             acceptor = new NioSocketAcceptor();
             acceptor.setHandler(new MapleServerHandler(world, channel));
             acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
-            acceptor.getFilterChain().addLast("codec", (IoFilter) new ProtocolCodecFilter(new MapleCodecFactory()));
+            acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
             acceptor.bind(new InetSocketAddress(port));
             ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
-            for (MapleExpeditionType exped : MapleExpeditionType.values()) {
-            	expedType.add(exped);
-            }
+            expedType.addAll(Arrays.asList(MapleExpeditionType.values()));
             
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
                 eventSM = new EventScriptManager(this, getEvents());
@@ -225,12 +222,7 @@ public final class Channel {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {
@@ -408,7 +400,7 @@ public final class Channel {
         int[] retArr = new int[ret.size()];
         int pos = 0;
         for (Integer i : ret) {
-            retArr[pos++] = i.intValue();
+            retArr[pos++] = i;
         }
         return retArr;
     }
@@ -461,7 +453,7 @@ public final class Channel {
     }
     
     private static String [] getEvents(){
-    	List<String> events = new ArrayList<String>();
+    	List<String> events = new ArrayList<>();
     	for (File file : new File("scripts/event").listFiles()){
             events.add(file.getName().substring(0, file.getName().length() - 3));
     	}
@@ -606,29 +598,26 @@ public final class Channel {
             if (this.dojoTask[slot] != null) {
                 this.dojoTask[slot].cancel(false);
             }
-            this.dojoTask[slot] = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    final int delta = (dojoMapId) % 100;
-                    final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
-                    MapleParty party = null;
+            this.dojoTask[slot] = TimerManager.getInstance().schedule(() -> {
+                final int delta = (dojoMapId) % 100;
+                final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
+                MapleParty party = null;
 
-                    for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
-                        if (stage + i > 38) {
-                            break;
-                        }
-
-                        MapleMap dojoExit = getMapFactory().getMap(925020002);
-                        for(MapleCharacter chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
-                            if(GameConstants.isDojo(chr.getMap().getId())) {
-                                chr.changeMap(dojoExit);
-                            }
-                            party = chr.getParty();
-                        }
+                for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
+                    if (stage + i > 38) {
+                        break;
                     }
 
-                    freeDojoSlot(slot, party);
+                    MapleMap dojoExit = getMapFactory().getMap(925020002);
+                    for(MapleCharacter chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
+                        if(GameConstants.isDojo(chr.getMap().getId())) {
+                            chr.changeMap(dojoExit);
+                        }
+                        party = chr.getParty();
+                    }
                 }
+
+                freeDojoSlot(slot, party);
             }, clockTime + 3000);   // let the TIMES UP display for 3 seconds, then warp
         } finally {
             lock.unlock();
@@ -857,12 +846,7 @@ public final class Channel {
         
         ongoingStartTime = System.currentTimeMillis();
         if(weddingId != null) {
-            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(new Runnable() {
-                @Override
-                public void run() {
-                    closeOngoingWedding(cathedral);
-                }
-            }, YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT * 60 * 1000);
+            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(() -> closeOngoingWedding(cathedral), YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT * 60 * 1000);
             
             if(cathedral) {
                 cathedralReservationTask = weddingTask;

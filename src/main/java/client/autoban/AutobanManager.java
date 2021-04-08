@@ -7,10 +7,11 @@ package client.autoban;
 
 import client.MapleCharacter;
 import config.YamlConfig;
-import java.util.HashMap;
-import java.util.Map;
 import net.server.Server;
 import tools.FilePrinter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -23,9 +24,9 @@ public class AutobanManager {
     private int misses = 0;
     private int lastmisses = 0;
     private int samemisscount = 0;
-    private long spam[] = new long[20];
-    private int timestamp[] = new int[20];
-    private byte timestampcounter[] = new byte[20];
+    private long[] spam = new long[20];
+    private int[] timestamp = new int[20];
+    private byte[] timestampcounter = new byte[20];
 
 
     public AutobanManager(MapleCharacter chr) {

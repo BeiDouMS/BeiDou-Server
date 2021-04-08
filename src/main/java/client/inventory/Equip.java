@@ -25,14 +25,15 @@ import client.MapleClient;
 import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.inventory.ItemConstants;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import server.MapleItemInformationProvider;
 import tools.MaplePacketCreator;
 import tools.Pair;
 import tools.Randomizer;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class Equip extends Item {
 
@@ -383,7 +384,7 @@ public class Equip extends Item {
     public Pair<String, Pair<Boolean, Boolean>> gainStats(List<Pair<StatUpgrade, Integer>> stats) {
         boolean gotSlot = false, gotVicious = false;
         String lvupStr = "";
-        Integer statUp, maxStat = YamlConfig.config.server.MAX_EQUIPMNT_STAT;
+        int statUp, maxStat = YamlConfig.config.server.MAX_EQUIPMNT_STAT;
         for (Pair<StatUpgrade, Integer> stat : stats) {
             switch (stat.getLeft()) {
                 case incDEX:

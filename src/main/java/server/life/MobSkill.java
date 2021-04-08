@@ -21,25 +21,22 @@
  */
 package server.life;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import client.MapleCharacter;
 import client.MapleDisease;
 import client.status.MonsterStatus;
 import constants.game.GameConstants;
-import java.util.LinkedList;
-import java.util.Map;
-import net.server.services.type.ChannelServices;
 import net.server.services.task.channel.OverallService;
-import tools.Randomizer;
+import net.server.services.type.ChannelServices;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleMist;
 import tools.ArrayMap;
+import tools.Randomizer;
+
+import java.awt.*;
+import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -48,7 +45,7 @@ import tools.ArrayMap;
 public class MobSkill {
 
     private int skillId, skillLevel, mpCon;
-    private List<Integer> toSummon = new ArrayList<Integer>();
+    private List<Integer> toSummon = new ArrayList<>();
     private int spawnEffect, hp, x, y;
     private long duration, cooltime;
     private float prop;
@@ -65,9 +62,7 @@ public class MobSkill {
     }
 
     public void addSummons(List<Integer> toSummon) {
-        for (Integer summon : toSummon) {
-            this.toSummon.add(summon);
-        }
+        this.toSummon.addAll(toSummon);
     }
 
     public void setSpawnEffect(int spawnEffect) {
@@ -108,12 +103,9 @@ public class MobSkill {
     }
 
     public void applyDelayedEffect(final MapleCharacter player, final MapleMonster monster, final boolean skill, int animationTime) {
-        Runnable toRun = new Runnable() {
-            @Override
-            public void run() {
-                if (monster.isAlive()) {
-                    applyEffect(player, monster, skill, null);
-                }
+        Runnable toRun = () -> {
+            if (monster.isAlive()) {
+                applyEffect(player, monster, skill, null);
             }
         };
 
@@ -123,28 +115,28 @@ public class MobSkill {
 
     public void applyEffect(MapleCharacter player, MapleMonster monster, boolean skill, List<MapleCharacter> banishPlayers) {
         MapleDisease disease = null;
-        Map<MonsterStatus, Integer> stats = new ArrayMap<MonsterStatus, Integer>();
-        List<Integer> reflection = new LinkedList<Integer>();
+        Map<MonsterStatus, Integer> stats = new ArrayMap<>();
+        List<Integer> reflection = new LinkedList<>();
         switch (skillId) {
             case 100:
             case 110:
             case 150:
-                stats.put(MonsterStatus.WEAPON_ATTACK_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
                 break;
             case 101:
             case 111:
             case 151:
-                stats.put(MonsterStatus.MAGIC_ATTACK_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
                 break;
             case 102:
             case 112:
             case 152:
-                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
                 break;
             case 103:
             case 113:
             case 153:
-                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, Integer.valueOf(x));
+                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
                 break;
             case 114:
                 if (lt != null && rb != null && skill) {
@@ -192,9 +184,7 @@ public class MobSkill {
                 break;
             case 129: // Banish
                 if (lt != null && rb != null && skill) {
-                    for (MapleCharacter chr : getPlayersInRange(monster)) {
-                        banishPlayers.add(chr);
-                    }
+                    banishPlayers.addAll(getPlayersInRange(monster));
                 } else {
                     banishPlayers.add(player);
                 }
@@ -210,12 +200,12 @@ public class MobSkill {
                 break;
             case 140:
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
-                    stats.put(MonsterStatus.WEAPON_IMMUNITY, Integer.valueOf(x));
+                    stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 }
                 break;
             case 141:
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
-                    stats.put(MonsterStatus.MAGIC_IMMUNITY, Integer.valueOf(x));
+                    stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 }
                 break;
             case 143: // Weapon Reflect
@@ -236,13 +226,13 @@ public class MobSkill {
                 reflection.add(x);
                 break;
             case 154:
-                stats.put(MonsterStatus.ACC, Integer.valueOf(x));
+                stats.put(MonsterStatus.ACC, x);
                 break;
             case 155:
-                stats.put(MonsterStatus.AVOID, Integer.valueOf(x));
+                stats.put(MonsterStatus.AVOID, x);
                 break;
             case 156:
-                stats.put(MonsterStatus.SPEED, Integer.valueOf(x));
+                stats.put(MonsterStatus.SPEED, x);
                 break;
             case 200: // summon
                 int skillLimit = this.getLimit();
@@ -283,7 +273,7 @@ public class MobSkill {
                                     case 8510100: //Pianus bomb
                                         if (Math.ceil(Math.random() * 5) == 1) {
                                             ypos = 78;
-                                            xpos = (int) Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
+                                            xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
                                         } else {
                                             xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
                                         }

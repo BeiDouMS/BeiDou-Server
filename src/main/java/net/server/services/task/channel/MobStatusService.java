@@ -19,19 +19,19 @@
 */
 package net.server.services.task.channel;
 
-import net.server.services.BaseService;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.BaseScheduler;
-import net.server.services.SchedulerListener;
+import net.server.services.BaseService;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -39,7 +39,7 @@ import net.server.services.SchedulerListener;
  */
 public class MobStatusService extends BaseService {
     
-    private MobStatusScheduler mobStatusSchedulers[] = new MobStatusScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MobStatusScheduler[] mobStatusSchedulers = new MobStatusScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public MobStatusService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
@@ -97,32 +97,29 @@ public class MobStatusService extends BaseService {
         public MobStatusScheduler() {
             super(MonitoredLockType.CHANNEL_MOBSTATUS);
 
-            super.addListener(new SchedulerListener() {
-                @Override
-                public void removedScheduledEntries(List<Object> toRemove, boolean update) {
-                    List<Runnable> toRun = new ArrayList<>();
+            super.addListener((toRemove, update) -> {
+                List<Runnable> toRun = new ArrayList<>();
 
-                    overtimeStatusLock.lock();
-                    try {
-                        for(Object mseo : toRemove) {
-                            MonsterStatusEffect mse = (MonsterStatusEffect) mseo;
-                            registeredMobStatusOvertime.remove(mse);
-                        }
-
-                        if(update) {
-                            // it's probably ok to use one thread for both management & overtime actions
-                            List<MobStatusOvertimeEntry> mdoeList = new ArrayList<>(registeredMobStatusOvertime.values());
-                            for(MobStatusOvertimeEntry mdoe : mdoeList) {
-                                mdoe.update(toRun);
-                            }
-                        }
-                    } finally {
-                        overtimeStatusLock.unlock();
+                overtimeStatusLock.lock();
+                try {
+                    for(Object mseo : toRemove) {
+                        MonsterStatusEffect mse = (MonsterStatusEffect) mseo;
+                        registeredMobStatusOvertime.remove(mse);
                     }
 
-                    for(Runnable r : toRun) {
-                        r.run();
+                    if(update) {
+                        // it's probably ok to use one thread for both management & overtime actions
+                        List<MobStatusOvertimeEntry> mdoeList = new ArrayList<>(registeredMobStatusOvertime.values());
+                        for(MobStatusOvertimeEntry mdoe : mdoeList) {
+                            mdoe.update(toRun);
+                        }
                     }
+                } finally {
+                    overtimeStatusLock.unlock();
+                }
+
+                for(Runnable r : toRun) {
+                    r.run();
                 }
             });
         }
@@ -153,12 +150,7 @@ public class MobStatusService extends BaseService {
         }
 
         private void disposeLocks() {
-            LockCollector.getInstance().registerDisposeAction(new Runnable() {
-                @Override
-                public void run() {
-                    emptyLocks();
-                }
-            });
+            LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
         }
 
         private void emptyLocks() {

@@ -19,15 +19,16 @@
 */
 package tools;
 
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-import java.util.List;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
+
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -65,7 +66,7 @@ public class IntervalBuilder {
             newLimitX2 = newTo;
         }
 
-        intervalLimits.add(st, new Line2D.Float((float) newLimitX1, 0, (float) newLimitX2, 0));
+        intervalLimits.add(st, new Line2D.Float(newLimitX1, 0, newLimitX2, 0));
     }
 
     private int bsearchInterval(int point) {

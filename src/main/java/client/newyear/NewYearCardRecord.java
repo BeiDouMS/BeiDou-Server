@@ -20,6 +20,10 @@
 package client.newyear;
 
 import client.MapleCharacter;
+import net.server.Server;
+import server.TimerManager;
+import tools.DatabaseConnection;
+import tools.MaplePacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,10 +32,6 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
-import net.server.Server;
-import server.TimerManager;
-import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
 
 /**
  *
@@ -244,23 +244,20 @@ public class NewYearCardRecord {
     public void startNewYearCardTask() {
         if(sendTask != null) return;
         
-        sendTask = TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                Server server = Server.getInstance();
-                
-                int world = server.getCharacterWorld(receiverId);
-                if(world == -1) {
-                    sendTask.cancel(false);
-                    sendTask = null;
-                    
-                    return;
-                }
-                
-                MapleCharacter target = server.getWorld(world).getPlayerStorage().getCharacterById(receiverId);
-                if(target != null && target.isLoggedinWorld()) {
-                    target.announce(MaplePacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
-                }
+        sendTask = TimerManager.getInstance().register(() -> {
+            Server server = Server.getInstance();
+
+            int world = server.getCharacterWorld(receiverId);
+            if(world == -1) {
+                sendTask.cancel(false);
+                sendTask = null;
+
+                return;
+            }
+
+            MapleCharacter target = server.getWorld(world).getPlayerStorage().getCharacterById(receiverId);
+            if(target != null && target.isLoggedinWorld()) {
+                target.announce(MaplePacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
             }
         }, 1000 * 60 * 60); //1 Hour
     }

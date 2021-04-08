@@ -26,9 +26,9 @@ import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.opcodes.SendOpcode;
 import net.server.Server;
+import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
-import net.server.guild.MapleAlliance;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.data.output.MaplePacketLittleEndianWriter;
@@ -170,7 +170,7 @@ public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
                 break;
             }
             case 0x08:
-                String ranks[] = new String[5];
+                String[] ranks = new String[5];
                 for (int i = 0; i < 5; i++) {
                     ranks[i] = slea.readMapleAsciiString();
                 }

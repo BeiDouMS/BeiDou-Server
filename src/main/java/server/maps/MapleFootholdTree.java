@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class MapleFootholdTree {
     private MapleFootholdTree ne = null;
     private MapleFootholdTree sw = null;
     private MapleFootholdTree se = null;
-    private List<MapleFoothold> footholds = new LinkedList<MapleFoothold>();
+    private List<MapleFoothold> footholds = new LinkedList<>();
     private Point p1;
     private Point p2;
     private Point center;
@@ -96,7 +96,7 @@ public class MapleFootholdTree {
     }
 
     private List<MapleFoothold> getRelevants(Point p) {
-        return getRelevants(p, new LinkedList<MapleFoothold>());
+        return getRelevants(p, new LinkedList<>());
     }
 
     private List<MapleFoothold> getRelevants(Point p, List<MapleFoothold> list) {
@@ -161,7 +161,7 @@ public class MapleFootholdTree {
 
     public MapleFoothold findBelow(Point p) {
         List<MapleFoothold> relevants = getRelevants(p);
-        List<MapleFoothold> xMatches = new LinkedList<MapleFoothold>();
+        List<MapleFoothold> xMatches = new LinkedList<>();
         for (MapleFoothold fh : relevants) {
             if (fh.getX1() <= p.x && fh.getX2() >= p.x) {
                 xMatches.add(fh);

@@ -44,7 +44,7 @@ public class JailCommand extends Command {
 
         int minutesJailed = 5;
         if (params.length >= 2) {
-            minutesJailed = Integer.valueOf(params[1]);
+            minutesJailed = Integer.parseInt(params[1]);
             if (minutesJailed <= 0) {
                 player.yellowMessage("Syntax: !jail <playername> [<minutes>]");
                 return;

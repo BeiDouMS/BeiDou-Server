@@ -193,7 +193,7 @@ public class MapleShop {
             return;
         }
         
-        Item item = c.getPlayer().getInventory(type).getItem((short) slot);
+        Item item = c.getPlayer().getInventory(type).getItem(slot);
         if(canSell(item, quantity)) {
             quantity = getSellingQuantity(item, quantity);
             MapleInventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
@@ -277,7 +277,7 @@ public class MapleShop {
                         }
                     }
                     for (Integer recharge : recharges) {
-                        ret.addItem(new MapleShopItem((short) 1000, recharge.intValue(), 0, 0));
+                        ret.addItem(new MapleShopItem((short) 1000, recharge, 0, 0));
                     }
                 }
             }

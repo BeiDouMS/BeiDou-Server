@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.MaplePet;
 import client.inventory.PetCommand;
 import client.inventory.PetDataFactory;
-import client.inventory.MaplePet;
 import net.AbstractMaplePacketHandler;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
@@ -47,7 +47,7 @@ public final class PetCommandHandler extends AbstractMaplePacketHandler {
         slea.readInt();
         slea.readByte();
         byte command = slea.readByte();
-        PetCommand petCommand = PetDataFactory.getPetCommand(pet.getItemId(), (int) command);
+        PetCommand petCommand = PetDataFactory.getPetCommand(pet.getItemId(), command);
         if (petCommand == null) {
             return;
         }

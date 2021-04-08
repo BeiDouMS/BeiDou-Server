@@ -19,19 +19,13 @@
 */
 package server;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import config.YamlConfig;
-import constants.inventory.ItemConstants;
-
 import client.MapleClient;
 import client.inventory.Equip;
 import client.inventory.Item;
-import java.util.ArrayList;
+import config.YamlConfig;
+import constants.inventory.ItemConstants;
+
+import java.util.*;
 
 /**
  *
@@ -128,7 +122,7 @@ class PairedQuicksort {
             if (i <= j) {
                 w = (Equip)A.get(i);
                 A.set(i, A.get(j));
-                A.set(j, (Item)w);
+                A.set(j, w);
 
                 i++;
                 j--;
@@ -221,8 +215,8 @@ public class MapleStorageInventory {
     }
     
     private void move(short sSlot, short dSlot, short slotMax) {
-        Item source = (Item) inventory.get(sSlot);
-        Item target = (Item) inventory.get(dSlot);
+        Item source = inventory.get(sSlot);
+        Item target = inventory.get(dSlot);
         if (source == null) {
             return;
         }
@@ -350,7 +344,7 @@ public class MapleStorageInventory {
         for (short i = 1; i <= this.getSlotLimit(); i++) {
             Item item = this.getItem(i);
             if (item != null) {
-            	itemarray.add((Item) item.copy());
+            	itemarray.add(item.copy());
             }
         }
         

@@ -21,17 +21,18 @@
 */
 package provider.wz;
 
+import provider.MapleData;
+import provider.MapleDataEntity;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import provider.MapleData;
-import provider.MapleDataEntity;
 
 public class WZIMGEntry implements MapleData {
     private String name;
     private MapleDataType type;
-    private List<MapleData> children = new ArrayList<MapleData>(10);
+    private List<MapleData> children = new ArrayList<>(10);
     private Object data;
     private MapleDataEntity parent;
 
@@ -56,15 +57,15 @@ public class WZIMGEntry implements MapleData {
 
     @Override
     public MapleData getChildByPath(String path) {
-        String segments[] = path.split("/");
+        String[] segments = path.split("/");
         if (segments[0].equals("..")) {
             return ((MapleData) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
         }
         MapleData ret = this;
-        for (int x = 0; x < segments.length; x++) {
+        for (String segment : segments) {
             boolean foundChild = false;
             for (MapleData child : ret.getChildren()) {
-                if (child.getName().equals(segments[x])) {
+                if (child.getName().equals(segment)) {
                     ret = child;
                     foundChild = true;
                     break;

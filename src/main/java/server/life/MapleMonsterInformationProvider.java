@@ -228,13 +228,13 @@ public class MapleMonsterInformationProvider {
 
     public static ArrayList<Pair<Integer, String>> getMobsIDsFromName(String search) {
         MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
-        ArrayList<Pair<Integer, String>> retMobs = new ArrayList<Pair<Integer, String>>();
+        ArrayList<Pair<Integer, String>> retMobs = new ArrayList<>();
         MapleData data = dataProvider.getData("Mob.img");
-        List<Pair<Integer, String>> mobPairList = new LinkedList<Pair<Integer, String>>();
+        List<Pair<Integer, String>> mobPairList = new LinkedList<>();
         for (MapleData mobIdData : data.getChildren()) {
             int mobIdFromData = Integer.parseInt(mobIdData.getName());
             String mobNameFromData = MapleDataTool.getString(mobIdData.getChildByPath("name"), "NO-NAME");
-            mobPairList.add(new Pair<Integer, String>(mobIdFromData, mobNameFromData));
+            mobPairList.add(new Pair<>(mobIdFromData, mobNameFromData));
         }
         for (Pair<Integer, String> mobPair : mobPairList) {
             if (mobPair.getRight().toLowerCase().contains(search.toLowerCase())) {

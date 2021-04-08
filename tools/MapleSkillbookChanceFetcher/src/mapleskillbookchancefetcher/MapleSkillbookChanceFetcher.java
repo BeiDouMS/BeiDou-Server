@@ -21,23 +21,16 @@ package mapleskillbookchancefetcher;
 
 import life.MapleLifeFactory;
 import life.MapleMonsterStats;
+import tools.DatabaseConnection;
+import tools.Pair;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-
-import java.io.*;
-import java.util.Collections;
-import java.util.Comparator;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-
-import tools.DatabaseConnection;
-import tools.Pair;
 
 /**
  *
@@ -63,15 +56,12 @@ public class MapleSkillbookChanceFetcher {
     private static List<Entry<Pair<Integer, Integer>, Integer>> sortedSkillbookChances() {
         List<Entry<Pair<Integer, Integer>, Integer>> skillbookChancesList = new ArrayList<>(skillbookChances.entrySet());
         
-        Collections.sort(skillbookChancesList, new Comparator<Entry<Pair<Integer, Integer>, Integer>>() {
-            @Override
-            public int compare(Entry<Pair<Integer, Integer>, Integer> o1, Entry<Pair<Integer, Integer>, Integer> o2) {
-                if (o1.getKey().getLeft().equals(o2.getKey().getLeft())) {
-                    return o1.getKey().getRight() < o2.getKey().getRight() ? -1 : (o1.getKey().getRight().equals(o2.getKey().getRight()) ? 0 : 1);
-                }
-                
-                return (o1.getKey().getLeft() < o2.getKey().getLeft()) ? -1 : 1;
+        Collections.sort(skillbookChancesList, (o1, o2) -> {
+            if (o1.getKey().getLeft().equals(o2.getKey().getLeft())) {
+                return o1.getKey().getRight() < o2.getKey().getRight() ? -1 : (o1.getKey().getRight().equals(o2.getKey().getRight()) ? 0 : 1);
             }
+
+            return (o1.getKey().getLeft() < o2.getKey().getLeft()) ? -1 : 1;
         });
         
         return skillbookChancesList;

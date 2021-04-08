@@ -21,70 +21,14 @@
 */
 package client;
 
-import constants.skills.Aran;
-import constants.skills.Archer;
-import constants.skills.Assassin;
-import constants.skills.Bandit;
-import constants.skills.Beginner;
-import constants.skills.Bishop;
-import constants.skills.BlazeWizard;
-import constants.skills.Bowmaster;
-import constants.skills.Buccaneer;
-import constants.skills.ChiefBandit;
-import constants.skills.Cleric;
-import constants.skills.Corsair;
-import constants.skills.Crossbowman;
-import constants.skills.Crusader;
-import constants.skills.DarkKnight;
-import constants.skills.DawnWarrior;
-import constants.skills.DragonKnight;
-import constants.skills.Evan;
-import constants.skills.FPArchMage;
-import constants.skills.FPMage;
-import constants.skills.FPWizard;
-import constants.skills.Fighter;
-import constants.skills.GM;
-import constants.skills.Gunslinger;
-import constants.skills.Hermit;
-import constants.skills.Hero;
-import constants.skills.Hunter;
-import constants.skills.ILArchMage;
-import constants.skills.ILMage;
-import constants.skills.ILWizard;
-import constants.skills.Legend;
-import constants.skills.Magician;
-import constants.skills.Marauder;
-import constants.skills.Marksman;
-import constants.skills.NightLord;
-import constants.skills.NightWalker;
-import constants.skills.Noblesse;
-import constants.skills.Page;
-import constants.skills.Paladin;
-import constants.skills.Pirate;
-import constants.skills.Priest;
-import constants.skills.Ranger;
-import constants.skills.Rogue;
-import constants.skills.Shadower;
-import constants.skills.Sniper;
-import constants.skills.Spearman;
-import constants.skills.SuperGM;
-import constants.skills.Warrior;
-import constants.skills.ThunderBreaker;
-import constants.skills.WhiteKnight;
-import constants.skills.WindArcher;
+import constants.skills.*;
+import provider.*;
+import server.MapleStatEffect;
+import server.life.Element;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import provider.MapleData;
-import provider.MapleDataDirectoryEntry;
-import provider.MapleDataFileEntry;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
-import server.MapleStatEffect;
-import server.life.Element;
 
 public class SkillFactory {
     private static Map<Integer, Skill> skills = new HashMap<>();
@@ -92,7 +36,7 @@ public class SkillFactory {
 
     public static Skill getSkill(int id) {
         if (!skills.isEmpty()) {
-            return skills.get(Integer.valueOf(id));
+            return skills.get(id);
         }
         return null;
     }
@@ -389,10 +333,10 @@ public class SkillFactory {
     public static String getSkillName(int skillid) {
         MapleData data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img");
         StringBuilder skill = new StringBuilder();
-        skill.append(String.valueOf(skillid));
+        skill.append(skillid);
         if (skill.length() == 4) {
             skill.delete(0, 4);
-            skill.append("000").append(String.valueOf(skillid));
+            skill.append("000").append(skillid);
         }
         if (data.getChildByPath(skill.toString()) != null) {
             for (MapleData skilldata : data.getChildByPath(skill.toString()).getChildren()) {

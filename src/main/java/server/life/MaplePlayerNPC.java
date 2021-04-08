@@ -514,9 +514,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
             e.printStackTrace();
         }
 
-        for (Integer i : updateMapids) {
-            mapids.add(i);
-        }
+        mapids.addAll(updateMapids);
 
         return mapids;
     }

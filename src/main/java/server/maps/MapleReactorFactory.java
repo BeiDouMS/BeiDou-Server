@@ -21,11 +21,6 @@
 */
 package server.maps;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -34,24 +29,30 @@ import server.maps.MapleReactorStats.StateData;
 import tools.Pair;
 import tools.StringUtil;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class MapleReactorFactory {
     private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Reactor.wz"));
-    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<Integer, MapleReactorStats>();
+    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
 
     
     public static final MapleReactorStats getReactorS(int rid) {
-        MapleReactorStats stats = reactorStats.get(Integer.valueOf(rid));
+        MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
-            MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(infoId) + ".img", '0', 11));
+            MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
             MapleData link = reactorData.getChildByPath("info/link");
             if (link != null) {
                 infoId = MapleDataTool.getIntConvert("info/link", reactorData);
-                stats = reactorStats.get(Integer.valueOf(infoId));
+                stats = reactorStats.get(infoId);
             }
             if (stats == null) {
                 stats = new MapleReactorStats();
-                reactorData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(infoId) + ".img", '0', 11));
+                reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
                 if (reactorData == null) {
                     return stats;
                 }
@@ -69,7 +70,7 @@ public class MapleReactorFactory {
                         Pair<Integer, Integer> reactItem = null;
                         int type = MapleDataTool.getIntConvert("type", reactorInfoData);
                         if (type == 100) { //reactor waits for item
-                            reactItem = new Pair<Integer, Integer>(MapleDataTool.getIntConvert("0", reactorInfoData), MapleDataTool.getIntConvert("1", reactorInfoData, 1));
+                            reactItem = new Pair<>(MapleDataTool.getIntConvert("0", reactorInfoData), MapleDataTool.getIntConvert("1", reactorInfoData, 1));
                             if (!areaSet) { //only set area of effect for item-triggered reactors once
                                 stats.setTL(MapleDataTool.getPoint("lt", reactorInfoData));
                                 stats.setBR(MapleDataTool.getPoint("rb", reactorInfoData));
@@ -82,26 +83,26 @@ public class MapleReactorFactory {
                         stats.addState(i, 999, null, (byte) (foundState ? -1 : (i + 1)), 0, (byte) 0);
                     }
                 }
-                reactorStats.put(Integer.valueOf(infoId), stats);
+                reactorStats.put(infoId, stats);
                 if (rid != infoId) {
-                    reactorStats.put(Integer.valueOf(rid), stats);
+                    reactorStats.put(rid, stats);
                 }
             } else { // stats exist at infoId but not rid; add to map
-                reactorStats.put(Integer.valueOf(rid), stats);
+                reactorStats.put(rid, stats);
             }
         }
         return stats;
     }
     
     public static MapleReactorStats getReactor(int rid) {
-        MapleReactorStats stats = reactorStats.get(Integer.valueOf(rid));
+        MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
-            MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(infoId) + ".img", '0', 11));
+            MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
             MapleData link = reactorData.getChildByPath("info/link");
             if (link != null) {
                 infoId = MapleDataTool.getIntConvert("info/link", reactorData);
-                stats = reactorStats.get(Integer.valueOf(infoId));
+                stats = reactorStats.get(infoId);
             }
             MapleData activateOnTouch = reactorData.getChildByPath("info/activateByTouch");
             boolean loadArea = false;
@@ -109,7 +110,7 @@ public class MapleReactorFactory {
                 loadArea = MapleDataTool.getInt("info/activateByTouch", reactorData, 0) != 0;
             }
             if (stats == null) {
-                reactorData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(infoId) + ".img", '0', 11));
+                reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
                 MapleData reactorInfoData = reactorData.getChildByPath("0");
                 stats = new MapleReactorStats();
                 List<StateData> statedatas = new ArrayList<>();
@@ -128,7 +129,7 @@ public class MapleReactorFactory {
                                     Pair<Integer, Integer> reactItem = null;
                                     int type = MapleDataTool.getIntConvert("type", fknexon);
                                     if (type == 100) { //reactor waits for item
-                                        reactItem = new Pair<Integer, Integer>(MapleDataTool.getIntConvert("0", fknexon), MapleDataTool.getIntConvert("1", fknexon));
+                                        reactItem = new Pair<>(MapleDataTool.getIntConvert("0", fknexon), MapleDataTool.getIntConvert("1", fknexon));
                                         if (!areaSet || loadArea) { //only set area of effect for item-triggered reactors once
                                             stats.setTL(MapleDataTool.getPoint("lt", fknexon));
                                             stats.setBR(MapleDataTool.getPoint("rb", fknexon));
@@ -138,7 +139,7 @@ public class MapleReactorFactory {
                                     MapleData activeSkillID = fknexon.getChildByPath("activeSkillID");
                                     List<Integer> skillids = null;
                                     if (activeSkillID != null) {
-                                        skillids = new ArrayList<Integer>();
+                                        skillids = new ArrayList<>();
                                         for (MapleData skill : activeSkillID.getChildren()) {
                                             skillids.add(MapleDataTool.getInt(skill));
                                         }
@@ -158,13 +159,13 @@ public class MapleReactorFactory {
                     statedatas.add(new StateData(999, null, null, (byte) 0));
                     stats.addState((byte) 0, statedatas, -1);
                 }
-                reactorStats.put(Integer.valueOf(infoId), stats);
+                reactorStats.put(infoId, stats);
                 if (rid != infoId) {
-                    reactorStats.put(Integer.valueOf(rid), stats);
+                    reactorStats.put(rid, stats);
                 }
             } else // stats exist at infoId but not rid; add to map
             {
-                reactorStats.put(Integer.valueOf(rid), stats);
+                reactorStats.put(rid, stats);
             }
         }
         return stats;

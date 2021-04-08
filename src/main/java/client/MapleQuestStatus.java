@@ -21,13 +21,10 @@
 */
 package client;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import server.quest.MapleQuest;
 import tools.StringUtil;
+
+import java.util.*;
 
 /**
  *
@@ -61,8 +58,8 @@ public class MapleQuestStatus {
     private short questID;
     private Status status;
     //private boolean updated;   //maybe this can be of use for someone?
-    private final Map<Integer, String> progress = new LinkedHashMap<Integer, String>();
-    private final List<Integer> medalProgress = new LinkedList<Integer>();
+    private final Map<Integer, String> progress = new LinkedHashMap<>();
+    private final List<Integer> medalProgress = new LinkedList<>();
     private int npc;
     private long completionTime, expirationTime;
     private int forfeited = 0, completed = 0;

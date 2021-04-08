@@ -139,7 +139,7 @@ public class Fishing {
     }
     
     private static void debugFishingLikelihood() {
-        long a[] = new long[365], b[] = new long[365];
+        long[] a = new long[365], b = new long[365];
         long hits = 0, hits10 = 0, total = 0;
         
         for (int i = 0; i < 365; i++) {

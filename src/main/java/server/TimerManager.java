@@ -21,16 +21,17 @@
 */
 package server;
 
+import net.server.Server;
+import tools.FilePrinter;
+
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import net.server.Server;
-import javax.management.MBeanServer;
-import javax.management.ObjectName;
-import tools.FilePrinter;
 
 public class TimerManager implements TimerManagerMBean {
     private static TimerManager instance = new TimerManager();
@@ -79,12 +80,9 @@ public class TimerManager implements TimerManagerMBean {
     }
 	
     public Runnable purge() {//Yay?
-        return new Runnable() {
-            @Override
-            public void run() {
-                Server.getInstance().forceUpdateCurrentTime();
-                ses.purge();
-            }
+        return () -> {
+            Server.getInstance().forceUpdateCurrentTime();
+            ses.purge();
         };
     }
     

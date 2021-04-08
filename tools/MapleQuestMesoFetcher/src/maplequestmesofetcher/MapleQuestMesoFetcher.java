@@ -19,22 +19,10 @@
 */
 package maplequestmesofetcher;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -248,12 +236,7 @@ public class MapleQuestMesoFetcher {
         if(!result.isEmpty() || !error.isEmpty()) {
             printWriter.println("MISMATCH INFORMATION ON '" + (testingCheck ? "check" : "act") + "':");
             if(!result.isEmpty()) {
-                Collections.sort(result, new Comparator<Integer>() {
-                    @Override
-                    public int compare(Integer o1, Integer o2) {
-                        return o1 - o2;
-                    }
-                });
+                Collections.sort(result, (o1, o2) -> o1 - o2);
                 
                 printWriter.println("# MISSING");
                 
@@ -271,12 +254,7 @@ public class MapleQuestMesoFetcher {
             }
             
             if(!error.isEmpty() && testingCheck) {
-                Collections.sort(error, new Comparator<Integer>() {
-                    @Override
-                    public int compare(Integer o1, Integer o2) {
-                        return o1 - o2;
-                    }
-                });
+                Collections.sort(error, (o1, o2) -> o1 - o2);
                 
                 printWriter.println("# WRONG VALUE");
                 

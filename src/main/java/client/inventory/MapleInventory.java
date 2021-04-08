@@ -21,28 +21,20 @@
 */
 package client.inventory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Map;
-import java.util.concurrent.locks.Lock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-
-import tools.Pair;
 import client.MapleCharacter;
 import client.MapleClient;
-import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import tools.FilePrinter;
+import constants.inventory.ItemConstants;
 import net.server.audit.locks.MonitoredLockType;
+import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import server.MapleItemInformationProvider;
 import server.ThreadManager;
+import tools.FilePrinter;
+import tools.Pair;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -196,12 +188,7 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (ret.size() > 1) {
-            Collections.sort(ret, new Comparator<Item>() {
-                @Override
-                public int compare(Item i1, Item i2) {
-                    return i1.getPosition() - i2.getPosition();
-                }
-            });
+            ret.sort((i1, i2) -> i1.getPosition() - i2.getPosition());
         }
         
         return ret;
@@ -216,12 +203,7 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (ret.size() > 1) {
-            Collections.sort(ret, new Comparator<Item>() {
-                @Override
-                public int compare(Item i1, Item i2) {
-                    return i1.getPosition() - i2.getPosition();
-                }
-            });
+            ret.sort((i1, i2) -> i1.getPosition() - i2.getPosition());
         }
         
         return ret;
@@ -250,8 +232,8 @@ public class MapleInventory implements Iterable<Item> {
     public void move(short sSlot, short dSlot, short slotMax) {
         lock.lock();
         try {
-            Item source = (Item) inventory.get(sSlot);
-            Item target = (Item) inventory.get(dSlot);
+            Item source = inventory.get(sSlot);
+            Item target = inventory.get(dSlot);
             if (source == null) {
                 return;
             }
@@ -334,12 +316,8 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (ItemConstants.isRateCoupon(item.getItemId())) {
-            ThreadManager.getInstance().newTask(new Runnable() {    // deadlocks with coupons rates found thanks to GabrielSin & Masterrulax
-                @Override
-                public void run() {
-                    owner.updateCouponRates();
-                }
-            });
+            // deadlocks with coupons rates found thanks to GabrielSin & Masterrulax
+            ThreadManager.getInstance().newTask(() -> owner.updateCouponRates());
         }
 
         return slotId;
@@ -354,12 +332,7 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (ItemConstants.isRateCoupon(item.getItemId())) {
-            ThreadManager.getInstance().newTask(new Runnable() {
-                @Override
-                public void run() {
-                    owner.updateCouponRates();
-                }
-            });
+            ThreadManager.getInstance().newTask(() -> owner.updateCouponRates());
         }
     }
     
@@ -373,12 +346,7 @@ public class MapleInventory implements Iterable<Item> {
         }
         
         if (item != null && ItemConstants.isRateCoupon(item.getItemId())) {
-            ThreadManager.getInstance().newTask(new Runnable() {
-                @Override
-                public void run() {
-                    owner.updateCouponRates();
-                }
-            });
+            ThreadManager.getInstance().newTask(() -> owner.updateCouponRates());
         }
     }
 

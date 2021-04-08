@@ -19,12 +19,6 @@
 */
 package server.partyquest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.ScheduledFuture;
 import client.MapleCharacter;
 import constants.game.GameConstants;
 import server.TimerManager;
@@ -32,6 +26,13 @@ import server.expeditions.MapleExpedition;
 import server.expeditions.MapleExpeditionType;
 import server.maps.MapleMap;
 import tools.MaplePacketCreator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ScheduledFuture;
 
 /**
  *
@@ -78,26 +79,11 @@ public class AriantColiseum {
             mc.announce(MaplePacketCreator.updateAriantPQRanking(score));
         }
         
-        setAriantScoreBoard(TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                showArenaResults();
-            }
-        }, pqTimerBoard));
+        setAriantScoreBoard(TimerManager.getInstance().schedule(() -> showArenaResults(), pqTimerBoard));
         
-        setArenaFinish(TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                enterKingsRoom();
-            }
-        }, pqTimer));
+        setArenaFinish(TimerManager.getInstance().schedule(() -> enterKingsRoom(), pqTimer));
         
-        setArenaUpdate(TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                broadcastAriantScoreUpdate();
-            }
-        }, 500, 500));
+        setArenaUpdate(TimerManager.getInstance().register(() -> broadcastAriantScoreUpdate(), 500, 500));
     }
     
     private void setArenaUpdate(ScheduledFuture<?> ariantUpdate) {
@@ -234,7 +220,7 @@ public class AriantColiseum {
     }
     
     public void distributeAriantPoints() {
-        Integer firstTop = -1, secondTop = -1;
+        int firstTop = -1, secondTop = -1;
         MapleCharacter winner = null;
         List<Integer> runnerups = new ArrayList<>();
         
@@ -289,13 +275,10 @@ public class AriantColiseum {
                 chr.changeMap(980010000, 0);
             }
             
-            map.getWorldServer().registerTimedMapObject(new Runnable() {
-                @Override
-                public void run() {
-                    score.clear();
-                    exped = null;
-                    map = null;
-                }
+            map.getWorldServer().registerTimedMapObject(() -> {
+                score.clear();
+                exped = null;
+                map = null;
             }, 5 * 60 * 1000);
         }
     }

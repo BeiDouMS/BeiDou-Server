@@ -35,7 +35,7 @@ public class MapleCustomEncryption {
         return (byte) ((tmp & 0xFF) | (tmp >>> 8));
     }
 
-    public static byte[] encryptData(byte data[]) {
+    public static byte[] encryptData(byte[] data) {
         for (int j = 0; j < 6; j++) {
             byte remember = 0;
             byte dataLength = (byte) (data.length & 0xFF);
@@ -69,7 +69,7 @@ public class MapleCustomEncryption {
         return data;
     }
 
-    public static byte[] decryptData(byte data[]) {
+    public static byte[] decryptData(byte[] data) {
         for (int j = 1; j <= 6; j++) {
             byte remember = 0;
             byte dataLength = (byte) (data.length & 0xFF);

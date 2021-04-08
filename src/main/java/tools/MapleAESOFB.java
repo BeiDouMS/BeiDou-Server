@@ -21,16 +21,16 @@
 */
 package tools;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public class MapleAESOFB {
-    private byte iv[];
+    private byte[] iv;
     private Cipher cipher;
     private short mapleVersion;
     private final static SecretKeySpec skey = new SecretKeySpec(
@@ -54,7 +54,7 @@ public class MapleAESOFB {
         (byte) 0xD3, (byte) 0xAB, (byte) 0x91, (byte) 0xB9, (byte) 0x84, (byte) 0x7F, (byte) 0x61, (byte) 0x1E, (byte) 0xCF, (byte) 0xC5, (byte) 0xD1, (byte) 0x56, (byte) 0x3D, (byte) 0xCA, (byte) 0xF4, (byte) 0x05,
         (byte) 0xC6, (byte) 0xE5, (byte) 0x08, (byte) 0x49};
 
-    public MapleAESOFB(byte iv[], short mapleVersion) {
+    public MapleAESOFB(byte[] iv, short mapleVersion) {
         try {
             cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, skey);
@@ -142,13 +142,13 @@ public class MapleAESOFB {
     }
 
     public boolean checkPacket(int packetHeader) {
-        byte packetHeaderBuf[] = new byte[2];
+        byte[] packetHeaderBuf = new byte[2];
         packetHeaderBuf[0] = (byte) ((packetHeader >> 24) & 0xFF);
         packetHeaderBuf[1] = (byte) ((packetHeader >> 16) & 0xFF);
         return checkPacket(packetHeaderBuf);
     }
 
-    public static byte[] getNewIv(byte oldIv[]) {
+    public static byte[] getNewIv(byte[] oldIv) {
         byte[] in = {(byte) 0xf2, 0x53, (byte) 0x50, (byte) 0xc6};
         for (int x = 0; x < 4; x++) {
             funnyShit(oldIv[x], in);

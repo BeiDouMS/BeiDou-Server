@@ -21,21 +21,22 @@
 */
 package server.life;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import tools.StringUtil;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Danny (Leifde)
  */
 public class MobAttackInfoFactory {
-    private static Map<String, MobAttackInfo> mobAttacks = new HashMap<String, MobAttackInfo>();
+    private static Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
     private static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Mob.wz"));
 
     public static MobAttackInfo getMobAttackInfo(MapleMonster mob, int attack) {
@@ -46,7 +47,7 @@ public class MobAttackInfoFactory {
         synchronized (mobAttacks) {
             ret = mobAttacks.get(mob.getId() + "" + attack);
             if (ret == null) {
-                MapleData mobData = dataSource.getData(StringUtil.getLeftPaddedStr(Integer.toString(mob.getId()) + ".img", '0', 11));
+                MapleData mobData = dataSource.getData(StringUtil.getLeftPaddedStr(mob.getId() + ".img", '0', 11));
                 if (mobData != null) {
 //					MapleData infoData = mobData.getChildByPath("info");
                     String linkedmob = MapleDataTool.getString("link", mobData, "");

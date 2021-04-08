@@ -21,50 +21,39 @@
 */
 package scripting.event;
 
+import client.MapleCharacter;
 import config.YamlConfig;
+import constants.game.GameConstants;
+import constants.net.ServerConstants;
+import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.api.scripting.ScriptUtils;
-import tools.exceptions.EventInstanceInProgressException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.script.ScriptException;
-
-import constants.net.ServerConstants;
-import constants.game.GameConstants;
-import client.MapleCharacter;
 import net.server.Server;
-import net.server.world.World;
-import net.server.channel.Channel;
-import net.server.guild.MapleGuild;
-import net.server.world.MapleParty;
-import net.server.world.MaplePartyCharacter;
-import scripting.event.scheduler.EventScriptScheduler;
-import server.MapleMarriage;
-import server.expeditions.MapleExpedition;
-import server.maps.MapleMap;
-import server.life.MapleMonster;
-import server.life.MapleLifeFactory;
-import server.quest.MapleQuest;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import net.server.channel.Channel;
+import net.server.guild.MapleGuild;
+import net.server.world.MapleParty;
+import net.server.world.MaplePartyCharacter;
+import net.server.world.World;
+import scripting.event.scheduler.EventScriptScheduler;
+import server.MapleMarriage;
 import server.ThreadManager;
+import server.expeditions.MapleExpedition;
+import server.life.MapleLifeFactory;
+import server.life.MapleMonster;
+import server.maps.MapleMap;
+import server.quest.MapleQuest;
+import tools.exceptions.EventInstanceInProgressException;
+
+import javax.script.ScriptException;
+import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //import jdk.nashorn.api.scripting.ScriptUtils;
 
 /**
@@ -78,8 +67,8 @@ public class EventManager {
     private World wserv;
     private Server server;
     private EventScriptScheduler ess = new EventScriptScheduler();
-    private Map<String, EventInstanceManager> instances = new HashMap<String, EventInstanceManager>();
-    private Map<String, Integer> instanceLocks = new HashMap<String, Integer>();
+    private Map<String, EventInstanceManager> instances = new HashMap<>();
+    private Map<String, Integer> instanceLocks = new HashMap<>();
     private final Queue<Integer> queuedGuilds = new LinkedList<>();
     private final Map<Integer, Integer> queuedGuildLeaders = new HashMap<>();
     private List<Boolean> openedLobbys;
@@ -154,12 +143,7 @@ public class EventManager {
     }
     
     private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(new Runnable() {
-            @Override
-            public void run() {
-                emptyLocks();
-            }
-        });
+        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
     
     private void emptyLocks() {
@@ -173,7 +157,7 @@ public class EventManager {
         
         if (ServerConstants.JAVA_8) {
             for (Object d: list) {
-                intList.add(((Integer) d).intValue());
+                intList.add((Integer) d);
             }
         } else {
             for (Object d: list) {
@@ -216,14 +200,11 @@ public class EventManager {
     }
 
     public EventScheduledFuture schedule(final String methodName, final EventInstanceManager eim, long delay) {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    iv.invokeFunction(methodName, eim);
-                } catch (ScriptException | NoSuchMethodException ex) {
-                    Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        Runnable r = () -> {
+            try {
+                iv.invokeFunction(methodName, eim);
+            } catch (ScriptException | NoSuchMethodException ex) {
+                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         };
         
@@ -234,14 +215,11 @@ public class EventManager {
     }
 
     public EventScheduledFuture scheduleAtTimestamp(final String methodName, long timestamp) {
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    iv.invokeFunction(methodName, (Object) null);
-                } catch (ScriptException | NoSuchMethodException ex) {
-                    Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        Runnable r = () -> {
+            try {
+                iv.invokeFunction(methodName, (Object) null);
+            } catch (ScriptException | NoSuchMethodException ex) {
+                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
         };
         
@@ -304,14 +282,11 @@ public class EventManager {
     }
 
     public void disposeInstance(final String name) {
-        ess.registerEntry(new Runnable() {
-            @Override
-            public void run() {
-                freeLobbyInstance(name);
-                
-                synchronized (instances) {
-                    instances.remove(name);
-                }
+        ess.registerEntry(() -> {
+            freeLobbyInstance(name);
+
+            synchronized (instances) {
+                instances.remove(name);
             }
         }, YamlConfig.config.server.EVENT_LOBBY_DELAY * 1000);
     }

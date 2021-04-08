@@ -19,10 +19,10 @@
 */
 package net.server.services.task.channel;
 
-import net.server.services.BaseService;
 import config.YamlConfig;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
+import net.server.services.BaseService;
 
 /**
  *
@@ -30,7 +30,7 @@ import net.server.services.BaseScheduler;
  */
 public class MobMistService extends BaseService {
     
-    private MobMistScheduler mobMistSchedulers[] = new MobMistScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MobMistScheduler[] mobMistSchedulers = new MobMistScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public MobMistService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {

@@ -141,7 +141,7 @@ public class MapleMapFactory {
         float monsterRate = 0;
         MapleData mobRate = infoData.getChildByPath("mobRate");
         if (mobRate != null) {
-            monsterRate = ((Float) mobRate.getData()).floatValue();
+            monsterRate = (Float) mobRate.getData();
         }
         map = new MapleMap(mapid, world, channel, MapleDataTool.getInt("returnMap", infoData), monsterRate);
         map.setEventInstance(event);
@@ -163,7 +163,7 @@ public class MapleMapFactory {
             map.setTimeMob(MapleDataTool.getInt(timeMob.getChildByPath("id")), MapleDataTool.getString(timeMob.getChildByPath("message")));
         }
 
-        int bounds[] = new int[4];
+        int[] bounds = new int[4];
         bounds[0] = MapleDataTool.getInt(infoData.getChildByPath("VRTop"));
         bounds[1] = MapleDataTool.getInt(infoData.getChildByPath("VRBottom"));
 

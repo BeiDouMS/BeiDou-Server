@@ -21,15 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.life;
 
-import java.awt.Point;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -37,6 +28,11 @@ import provider.MapleDataTool;
 import provider.wz.MapleDataType;
 import tools.Pair;
 import tools.StringUtil;
+
+import java.awt.*;
+import java.io.File;
+import java.util.List;
+import java.util.*;
 
 public class MapleLifeFactory {
 
@@ -95,7 +91,7 @@ public class MapleLifeFactory {
     }
     
     private static Pair<MapleMonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
-        MapleData monsterData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(mid) + ".img", '0', 11));
+        MapleData monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
         if (monsterData == null) {
             return null;
         }
@@ -244,13 +240,13 @@ public class MapleLifeFactory {
     
     public static MapleMonster getMonster(int mid) {
         try {
-            MapleMonsterStats stats = monsterStats.get(Integer.valueOf(mid));
+            MapleMonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 Pair<MapleMonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
                 
-                monsterStats.put(Integer.valueOf(mid), stats);
+                monsterStats.put(mid, stats);
             }
             MapleMonster ret = new MapleMonster(mid, stats);
             return ret;
@@ -264,9 +260,9 @@ public class MapleLifeFactory {
     
     public static int getMonsterLevel(int mid) {
         try {
-            MapleMonsterStats stats = monsterStats.get(Integer.valueOf(mid));
+            MapleMonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
-                MapleData monsterData = data.getData(StringUtil.getLeftPaddedStr(Integer.toString(mid) + ".img", '0', 11));
+                MapleData monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
                 if (monsterData == null) {
                     return -1;
                 }
@@ -285,7 +281,7 @@ public class MapleLifeFactory {
 
     private static void decodeElementalString(MapleMonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
-            stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.valueOf(String.valueOf(elemAttr.charAt(i + 1)))));
+            stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.parseInt(String.valueOf(elemAttr.charAt(i + 1)))));
         }
     }
 

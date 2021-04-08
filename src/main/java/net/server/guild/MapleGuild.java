@@ -115,7 +115,7 @@ public class MapleGuild {
             if (notifications.keySet().size() != chs.size()) {
                 notifications.clear();
                 for (Integer ch : chs) {
-                    notifications.put(ch, new LinkedList<Integer>());
+                    notifications.put(ch, new LinkedList<>());
                 }
             } else {
                 for (List<Integer> l : notifications.values()) {

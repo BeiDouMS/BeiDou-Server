@@ -29,7 +29,7 @@ import java.util.List;
 public final class MapleMessenger {
 	
     private int id;
-    private List<MapleMessengerCharacter> members = new ArrayList<MapleMessengerCharacter>(3);
+    private List<MapleMessengerCharacter> members = new ArrayList<>(3);
     private boolean[] pos = new boolean[3];
 
     public MapleMessenger(int id, MapleMessengerCharacter chrfor) {

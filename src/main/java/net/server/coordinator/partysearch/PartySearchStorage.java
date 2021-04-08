@@ -20,23 +20,15 @@
 package net.server.coordinator.partysearch;
 
 import client.MapleCharacter;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-
 import tools.IntervalBuilder;
+
+import java.util.*;
 
 /**
  *
@@ -90,13 +82,9 @@ public class PartySearchStorage {
             pscList.add(new PartySearchCharacter(chr));
         }
 
-        Collections.sort(pscList, new Comparator<PartySearchCharacter>() {
-            @Override
-            public int compare(PartySearchCharacter c1, PartySearchCharacter c2)
-            {
-                int levelP1 = c1.getLevel(), levelP2 = c2.getLevel();
-                return levelP1 > levelP2 ? 1 : (levelP1 == levelP2 ? 0 : -1);
-            }
+        pscList.sort((c1, c2) -> {
+            int levelP1 = c1.getLevel(), levelP2 = c2.getLevel();
+            return levelP1 > levelP2 ? 1 : (levelP1 == levelP2 ? 0 : -1);
         });
         
         psWLock.lock();

@@ -21,9 +21,11 @@
  */
 package net.server.channel.handlers;
 
-import java.util.Arrays;
-import java.util.List;
-
+import client.MapleCharacter;
+import client.MapleClient;
+import client.inventory.MapleInventory;
+import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
 import server.life.MapleLifeFactory;
@@ -34,11 +36,9 @@ import server.quest.MapleQuest;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleCharacter;
-import client.MapleClient;
-import client.inventory.MapleInventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class AdminCommandHandler extends AbstractMaplePacketHandler {
 
@@ -53,8 +53,7 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
         switch (mode) {
             case 0x00: // Level1~Level8 & Package1~Package2
                 int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(slea.readInt());
-                for (int z = 0; z < toSpawn.length; z++) {
-                    int[] toSpawnChild = toSpawn[z];
+                for (int[] toSpawnChild : toSpawn) {
                     if (Randomizer.nextInt(100) < toSpawnChild[1]) {
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                     }

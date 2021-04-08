@@ -23,11 +23,12 @@ package server;
 
 import config.YamlConfig;
 import constants.inventory.EquipType;
+import tools.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import tools.Pair;
 
 /**
  *
@@ -160,14 +161,10 @@ public class MakerItemFactory {
             this.cost = mi.cost;
             this.reqLevel = mi.reqLevel;
             this.reqMakerLevel = mi.reqMakerLevel;
-            
-            for(Pair<Integer, Integer> p : mi.reqItems) {
-                reqItems.add(p);
-            }
-            
-            for(Pair<Integer, Integer> p : mi.gainItems) {
-                gainItems.add(p);
-            }
+
+            reqItems.addAll(mi.reqItems);
+
+            gainItems.addAll(mi.gainItems);
         }
 
         public List<Pair<Integer, Integer>> getReqItems() {

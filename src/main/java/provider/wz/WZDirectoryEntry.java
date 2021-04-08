@@ -21,20 +21,17 @@
 */
 package provider.wz;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import provider.MapleDataDirectoryEntry;
 import provider.MapleDataEntity;
 import provider.MapleDataEntry;
 import provider.MapleDataFileEntry;
 
+import java.util.*;
+
 public class WZDirectoryEntry extends WZEntry implements MapleDataDirectoryEntry {
-    private List<MapleDataDirectoryEntry> subdirs = new ArrayList<MapleDataDirectoryEntry>();
-    private List<MapleDataFileEntry> files = new ArrayList<MapleDataFileEntry>();
-    private Map<String, MapleDataEntry> entries = new HashMap<String, MapleDataEntry>();
+    private List<MapleDataDirectoryEntry> subdirs = new ArrayList<>();
+    private List<MapleDataFileEntry> files = new ArrayList<>();
+    private Map<String, MapleDataEntry> entries = new HashMap<>();
 
     public WZDirectoryEntry(String name, int size, int checksum, MapleDataEntity parent) {
         super(name, size, checksum, parent);

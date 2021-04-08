@@ -25,12 +25,12 @@ package net.server.audit.locks;
  */
 public interface MonitoredReentrantLock {
     
-    public void lock();
+    void lock();
     
-    public void unlock();
+    void unlock();
     
-    public boolean tryLock();
+    boolean tryLock();
     
-    public MonitoredReentrantLock dispose();
+    MonitoredReentrantLock dispose();
     
 }

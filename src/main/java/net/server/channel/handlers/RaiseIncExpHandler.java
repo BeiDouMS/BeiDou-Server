@@ -1,19 +1,19 @@
 package net.server.channel.handlers;
 
-import java.util.Map;
-
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
-import net.AbstractMaplePacketHandler;
 import client.inventory.manipulator.MapleInventoryManipulator;
+import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.QuestConsItem;
 import server.quest.MapleQuest;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.Map;
 
 /**
  *
@@ -55,7 +55,7 @@ public class RaiseIncExpHandler extends AbstractMaplePacketHandler {
                         return;
                     }
 
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.getByType(inventorytype), (short) slot, (short) 1, false, true);
+                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.getByType(inventorytype), slot, (short) 1, false, true);
                 } finally {
                     inv.unlockInventory();
                 }

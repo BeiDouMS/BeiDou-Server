@@ -19,16 +19,16 @@
 */
 package server.maps;
 
-import server.TimerManager;
 import client.MapleCharacter;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.locks.Lock;
-import tools.MaplePacketCreator;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import server.TimerManager;
+import tools.MaplePacketCreator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
@@ -46,12 +46,7 @@ public class MapleMiniDungeon {
         baseMap = base;
         expireTime = timeLimit * 1000;
         
-        timeoutTask = TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                close();
-            }
-        }, expireTime);
+        timeoutTask = TimerManager.getInstance().schedule(() -> close(), expireTime);
         
         expireTime += System.currentTimeMillis();
     }

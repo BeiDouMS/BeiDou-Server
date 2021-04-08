@@ -19,18 +19,16 @@
 */
 package net.server.services.task.channel;
 
-import net.server.services.BaseService;
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import net.server.audit.LockCollector;
+import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.BaseScheduler;
-import net.server.services.SchedulerListener;
+import net.server.services.BaseService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -38,7 +36,7 @@ import net.server.services.SchedulerListener;
  */
 public class MobAnimationService extends BaseService {
     
-    private MobAnimationScheduler mobAnimationSchedulers[] = new MobAnimationScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MobAnimationScheduler[] mobAnimationSchedulers = new MobAnimationScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public MobAnimationService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
@@ -59,11 +57,9 @@ public class MobAnimationService extends BaseService {
     public boolean registerMobOnAnimationEffect(int mapid, int mobHash, long delay) {
         return mobAnimationSchedulers[getChannelSchedulerIndex(mapid)].registerAnimationMode(mobHash, delay);
     }
-    
-    private static Runnable r = new Runnable() {
-        @Override
-        public void run() {}    // do nothing
-    };
+
+    // do nothing
+    private static Runnable r = () -> {};
     
     private class MobAnimationScheduler extends BaseScheduler {
         Set<Integer> onAnimationMobs = new HashSet<>(1000);
@@ -72,18 +68,15 @@ public class MobAnimationService extends BaseService {
         public MobAnimationScheduler() {
             super(MonitoredLockType.CHANNEL_MOBACTION);
 
-            super.addListener(new SchedulerListener() {
-                @Override
-                public void removedScheduledEntries(List<Object> toRemove, boolean update) {
-                    animationLock.lock();
-                    try {
-                        for(Object hashObj : toRemove) {
-                            Integer mobHash = (Integer) hashObj;
-                            onAnimationMobs.remove(mobHash);
-                        }
-                    } finally {
-                        animationLock.unlock();
+            super.addListener((toRemove, update) -> {
+                animationLock.lock();
+                try {
+                    for(Object hashObj : toRemove) {
+                        Integer mobHash = (Integer) hashObj;
+                        onAnimationMobs.remove(mobHash);
                     }
+                } finally {
+                    animationLock.unlock();
                 }
             });
         }
@@ -110,12 +103,7 @@ public class MobAnimationService extends BaseService {
         }
 
         private void disposeLocks() {
-            LockCollector.getInstance().registerDisposeAction(new Runnable() {
-                @Override
-                public void run() {
-                    emptyLocks();
-                }
-            });
+            LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
         }
 
         private void emptyLocks() {
