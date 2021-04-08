@@ -81,7 +81,7 @@ public final class Channel {
     private Map<MapleExpeditionType, MapleExpedition> expeditions = new HashMap<>();
     private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
     private List<MapleExpeditionType> expedType = new ArrayList<>();
-    private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<MapleMap, Boolean>()));
+    private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
     private MapleEvent event;
     private boolean finishedShutdown = false;
     private Set<Integer> usedMC = new HashSet<>();
@@ -456,7 +456,7 @@ public final class Channel {
     }
     
     private static String [] getEvents(){
-    	List<String> events = new ArrayList<String>();
+    	List<String> events = new ArrayList<>();
     	for (File file : new File("scripts/event").listFiles()){
             events.add(file.getName().substring(0, file.getName().length() - 3));
     	}

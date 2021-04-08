@@ -36,8 +36,8 @@ public class MapleShopFactory {
         return instance;
     }
     
-    private Map<Integer, MapleShop> shops = new HashMap<Integer, MapleShop>();
-    private Map<Integer, MapleShop> npcShops = new HashMap<Integer, MapleShop>();
+    private Map<Integer, MapleShop> shops = new HashMap<>();
+    private Map<Integer, MapleShop> npcShops = new HashMap<>();
 
     private MapleShop loadShop(int id, boolean isShopId) {
         MapleShop ret = MapleShop.createFromDB(id, isShopId);

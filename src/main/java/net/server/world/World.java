@@ -138,7 +138,7 @@ public class World {
     private ScheduledFuture<?> timedMapObjectsSchedule;
     private MonitoredReentrantLock timedMapObjectLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MAPOBJS, true);
     
-    private Map<MapleCharacter, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<MapleCharacter, Integer>());
+    private Map<MapleCharacter, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
     
     private ScheduledFuture<?> charactersSchedule;
     private ScheduledFuture<?> marriagesSchedule;
@@ -165,7 +165,7 @@ public class World {
         mountUpdate = petUpdate;
         
         for (int i = 0; i < 9; i++) {
-            cashItemBought.add(new LinkedHashMap<Integer, Integer>());
+            cashItemBought.add(new LinkedHashMap<>());
         }
         
         TimerManager tman = TimerManager.getInstance();
@@ -501,7 +501,7 @@ public class World {
             if(accChars != null) {
                 chrList = new LinkedList<>(accChars.values());
             } else {
-                accountChars.put(accountId, new TreeMap<Integer, MapleCharacter>());
+                accountChars.put(accountId, new TreeMap<>());
                 chrList = null;
             }
         } finally {

@@ -41,7 +41,7 @@ public class MapleSnowball {
     private boolean hittable = false;
     private int team;
     private boolean winner = false;
-    List<MapleCharacter> characters = new LinkedList<MapleCharacter>();
+    List<MapleCharacter> characters = new LinkedList<>();
 
     public MapleSnowball(int team, MapleMap map) {
         this.map = map;

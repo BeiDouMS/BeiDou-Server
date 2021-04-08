@@ -45,7 +45,7 @@ import java.util.*;
 public class MobSkill {
 
     private int skillId, skillLevel, mpCon;
-    private List<Integer> toSummon = new ArrayList<Integer>();
+    private List<Integer> toSummon = new ArrayList<>();
     private int spawnEffect, hp, x, y;
     private long duration, cooltime;
     private float prop;
@@ -117,8 +117,8 @@ public class MobSkill {
 
     public void applyEffect(MapleCharacter player, MapleMonster monster, boolean skill, List<MapleCharacter> banishPlayers) {
         MapleDisease disease = null;
-        Map<MonsterStatus, Integer> stats = new ArrayMap<MonsterStatus, Integer>();
-        List<Integer> reflection = new LinkedList<Integer>();
+        Map<MonsterStatus, Integer> stats = new ArrayMap<>();
+        List<Integer> reflection = new LinkedList<>();
         switch (skillId) {
             case 100:
             case 110:

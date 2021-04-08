@@ -36,8 +36,8 @@ import java.util.Map;
  */
 public class PetDataFactory {
     private static MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Item.wz"));
-    private static Map<String, PetCommand> petCommands = new HashMap<String, PetCommand>();
-    private static Map<Integer, Integer> petHunger = new HashMap<Integer, Integer>();
+    private static Map<String, PetCommand> petCommands = new HashMap<>();
+    private static Map<Integer, Integer> petHunger = new HashMap<>();
 
     public static PetCommand getPetCommand(int petId, int skillId) {
         PetCommand ret = petCommands.get(petId + "" + skillId);

@@ -21,6 +21,13 @@
  */
 package client;
 
+import net.server.Server;
+import net.server.world.World;
+import tools.DatabaseConnection;
+import tools.FilePrinter;
+import tools.MaplePacketCreator;
+import tools.Pair;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,13 +39,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.server.Server;
-import net.server.world.World;
-import tools.DatabaseConnection;
-import tools.FilePrinter;
-import tools.MaplePacketCreator;
-import tools.Pair;
-
 /**
  *
  * @author Jay Estrella - Mr.Trash :3
@@ -49,7 +49,7 @@ public class MapleFamily {
     private static final AtomicInteger familyIDCounter = new AtomicInteger();
 
     private final int id, world;
-    private final Map<Integer, MapleFamilyEntry> members = new ConcurrentHashMap<Integer, MapleFamilyEntry>();
+    private final Map<Integer, MapleFamilyEntry> members = new ConcurrentHashMap<>();
     private MapleFamilyEntry leader;
     private String name;
     private String preceptsMessage = "";
@@ -184,7 +184,7 @@ public class MapleFamily {
 
     public static void loadAllFamilies() {
         try(Connection con = DatabaseConnection.getConnection()) {
-            List<Pair<Pair<Integer, Integer>, MapleFamilyEntry>> unmatchedJuniors = new ArrayList<Pair<Pair<Integer, Integer>, MapleFamilyEntry>>(200); // <<world, seniorid> familyEntry>
+            List<Pair<Pair<Integer, Integer>, MapleFamilyEntry>> unmatchedJuniors = new ArrayList<>(200); // <<world, seniorid> familyEntry>
             try(PreparedStatement psEntries = con.prepareStatement("SELECT * FROM family_character")) {
                 ResultSet rsEntries = psEntries.executeQuery();
                 while(rsEntries.next()) { // can be optimized
@@ -236,7 +236,7 @@ public class MapleFamily {
                     if(senior != null) {
                         familyEntry.setSenior(family.getEntryByID(seniorid), false);
                     } else {
-                        if(seniorid > 0) unmatchedJuniors.add(new Pair<Pair<Integer, Integer>, MapleFamilyEntry>(new Pair<Integer, Integer>(world, seniorid), familyEntry));
+                        if(seniorid > 0) unmatchedJuniors.add(new Pair<>(new Pair<>(world, seniorid), familyEntry));
                     }
                     familyEntry.setReputation(reputation);
                     familyEntry.setTodaysRep(todaysRep);

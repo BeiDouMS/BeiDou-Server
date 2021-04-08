@@ -6540,7 +6540,7 @@ public class MaplePacketCreator {
                 final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.FAMILY_CHART_RESULT.getValue());
                 mplew.writeInt(entry.getChrId()); //ID of viewed player's pedigree, can't be leader?
-                List<MapleFamilyEntry> superJuniors = new ArrayList<MapleFamilyEntry>(4);
+                List<MapleFamilyEntry> superJuniors = new ArrayList<>(4);
                 boolean hasOtherJunior = false;
                 int entryCount = 2; //2 guaranteed, leader and self
                 entryCount += Math.min(2, entry.getTotalSeniors());

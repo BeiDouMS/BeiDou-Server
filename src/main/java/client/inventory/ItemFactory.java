@@ -135,7 +135,7 @@ public enum ItemFactory {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Integer cid = rs.getInt("characterid");
-                        items.add(new Pair<Item, Integer>(loadEquipFromResultSet(rs), cid));
+                        items.add(new Pair<>(loadEquipFromResultSet(rs), cid));
                     }
                 }
             }
@@ -295,7 +295,7 @@ public enum ItemFactory {
                         MapleInventoryType mit = MapleInventoryType.getByType(rs.getByte("inventorytype"));
 
                         if (mit.equals(MapleInventoryType.EQUIP) || mit.equals(MapleInventoryType.EQUIPPED)) {
-                            items.add(new Pair<Item, MapleInventoryType>(loadEquipFromResultSet(rs), mit));
+                            items.add(new Pair<>(loadEquipFromResultSet(rs), mit));
                         } else {
                             if (bundles > 0) {
                                 int petid = rs.getInt("petid");

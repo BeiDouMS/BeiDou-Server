@@ -37,7 +37,7 @@ import java.util.Map;
 
 public class MapleReactorFactory {
     private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Reactor.wz"));
-    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<Integer, MapleReactorStats>();
+    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
 
     
     public static final MapleReactorStats getReactorS(int rid) {
@@ -70,7 +70,7 @@ public class MapleReactorFactory {
                         Pair<Integer, Integer> reactItem = null;
                         int type = MapleDataTool.getIntConvert("type", reactorInfoData);
                         if (type == 100) { //reactor waits for item
-                            reactItem = new Pair<Integer, Integer>(MapleDataTool.getIntConvert("0", reactorInfoData), MapleDataTool.getIntConvert("1", reactorInfoData, 1));
+                            reactItem = new Pair<>(MapleDataTool.getIntConvert("0", reactorInfoData), MapleDataTool.getIntConvert("1", reactorInfoData, 1));
                             if (!areaSet) { //only set area of effect for item-triggered reactors once
                                 stats.setTL(MapleDataTool.getPoint("lt", reactorInfoData));
                                 stats.setBR(MapleDataTool.getPoint("rb", reactorInfoData));
@@ -129,7 +129,7 @@ public class MapleReactorFactory {
                                     Pair<Integer, Integer> reactItem = null;
                                     int type = MapleDataTool.getIntConvert("type", fknexon);
                                     if (type == 100) { //reactor waits for item
-                                        reactItem = new Pair<Integer, Integer>(MapleDataTool.getIntConvert("0", fknexon), MapleDataTool.getIntConvert("1", fknexon));
+                                        reactItem = new Pair<>(MapleDataTool.getIntConvert("0", fknexon), MapleDataTool.getIntConvert("1", fknexon));
                                         if (!areaSet || loadArea) { //only set area of effect for item-triggered reactors once
                                             stats.setTL(MapleDataTool.getPoint("lt", fknexon));
                                             stats.setBR(MapleDataTool.getPoint("rb", fknexon));
@@ -139,7 +139,7 @@ public class MapleReactorFactory {
                                     MapleData activeSkillID = fknexon.getChildByPath("activeSkillID");
                                     List<Integer> skillids = null;
                                     if (activeSkillID != null) {
-                                        skillids = new ArrayList<Integer>();
+                                        skillids = new ArrayList<>();
                                         for (MapleData skill : activeSkillID.getChildren()) {
                                             skillids.add(MapleDataTool.getInt(skill));
                                         }

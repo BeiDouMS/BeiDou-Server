@@ -172,7 +172,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     public void addSummonedMob(MapleMonster mob) {
         Set<Integer> calledOids = this.calledMobOids;
         if (calledOids == null) {
-            calledOids = Collections.synchronizedSet(new HashSet<Integer>());
+            calledOids = Collections.synchronizedSet(new HashSet<>());
             this.calledMobOids = calledOids;
         }
         
@@ -1269,7 +1269,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
     
     public final void dispelSkill(final MobSkill skillId) {
-        List<MonsterStatus> toCancel = new ArrayList<MonsterStatus>();
+        List<MonsterStatus> toCancel = new ArrayList<>();
         for (Entry<MonsterStatus, MonsterStatusEffect> effects : stati.entrySet()) {
             MonsterStatusEffect mse = effects.getValue();
             if (mse.getMobSkill() != null && mse.getMobSkill().getSkillId() == skillId.getSkillId()) { //not checking for level.

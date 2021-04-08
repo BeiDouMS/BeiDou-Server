@@ -37,11 +37,11 @@ public class MapleMonsterStats {
     public int exp, hp, mp, level, PADamage, PDDamage, MADamage, MDDamage, dropPeriod, cp, buffToGive = -1, removeAfter;
     public boolean boss, undead, ffaLoot, isExplosiveReward, firstAttack, removeOnMiss;
     public String name;
-    public Map<String, Integer> animationTimes = new HashMap<String, Integer>();
-    public Map<Element, ElementalEffectiveness> resistance = new HashMap<Element, ElementalEffectiveness>();
+    public Map<String, Integer> animationTimes = new HashMap<>();
+    public Map<Element, ElementalEffectiveness> resistance = new HashMap<>();
     public List<Integer> revives = Collections.emptyList();
     public byte tagColor, tagBgColor;
-    public List<Pair<Integer, Integer>> skills = new ArrayList<Pair<Integer, Integer>>();
+    public List<Pair<Integer, Integer>> skills = new ArrayList<>();
     public Pair<Integer, Integer> cool = null;
     public BanishInfo banish = null;
     public List<loseItem> loseItem = null;
@@ -267,7 +267,7 @@ public class MapleMonsterStats {
 
     public void addLoseItem(loseItem li) {
         if (loseItem == null) {
-            loseItem = new LinkedList<loseItem>();
+            loseItem = new LinkedList<>();
         }
         loseItem.add(li);
     }

@@ -702,7 +702,7 @@ public class Server {
             try {
                 if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
                     for (int i = playerRanking.size(); i <= worldid; i++) {
-                        playerRanking.add(new ArrayList<Pair<String, Integer>>(0));
+                        playerRanking.add(new ArrayList<>(0));
                     }
 
                     playerRanking.add(worldid, ranking.get(0).getRight());
@@ -746,7 +746,7 @@ public class Server {
             try {
                 if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
                     for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
-                        playerRanking.add(new ArrayList<Pair<String, Integer>>(0));
+                        playerRanking.add(new ArrayList<>(0));
                     }
 
                     for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
@@ -763,7 +763,7 @@ public class Server {
 
     private void initWorldPlayerRanking() {
         if (YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-            playerRanking.add(new ArrayList<Pair<String, Integer>>(0));
+            playerRanking.add(new ArrayList<>(0));
         }
         updateWorldPlayerRanking();
     }
@@ -1465,7 +1465,7 @@ public class Server {
                 if (wchars == null) {
                     if (!accountChars.containsKey(accountId)) {
                         accountCharacterCount.put(accountId, (short) 0);
-                        accountChars.put(accountId, new HashSet<Integer>());    // not advisable at all to write on the map on a read-protected environment
+                        accountChars.put(accountId, new HashSet<>());    // not advisable at all to write on the map on a read-protected environment
                     }                                                           // yet it's known there's no problem since no other point in the source does
                 } else if (!wchars.isEmpty()) {                                  // this action.
                     lastwchars = wchars;
@@ -1485,7 +1485,7 @@ public class Server {
         short characterCount = 0;
         List<List<MapleCharacter>> wchars = new ArrayList<>(wlen);
         for (int i = 0; i < wlen; i++) {
-            wchars.add(i, new LinkedList<MapleCharacter>());
+            wchars.add(i, new LinkedList<>());
         }
 
         List<MapleCharacter> chars = new LinkedList<>();
@@ -1567,7 +1567,7 @@ public class Server {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
              ResultSet rs = ps.executeQuery()) {
-            List<Pair<String, String>> changedNames = new LinkedList<Pair<String, String>>(); //logging only
+            List<Pair<String, String>> changedNames = new LinkedList<>(); //logging only
             while (rs.next()) {
                 con.setAutoCommit(false);
                 int nameChangeId = rs.getInt("id");
@@ -1578,7 +1578,7 @@ public class Server {
                 if (!success) {
                     con.rollback(); //discard changes
                 } else {
-                    changedNames.add(new Pair<String, String>(oldName, newName));
+                    changedNames.add(new Pair<>(oldName, newName));
                 }
                 con.setAutoCommit(true);
             }
@@ -1597,7 +1597,7 @@ public class Server {
              PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
                      ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
              ResultSet rs = ps.executeQuery()) {
-            List<Integer> removedTransfers = new LinkedList<Integer>();
+            List<Integer> removedTransfers = new LinkedList<>();
             while (rs.next()) {
                 int nameChangeId = rs.getInt("id");
                 int characterId = rs.getInt("characterId");
@@ -1617,7 +1617,7 @@ public class Server {
                 }
             }
             rs.beforeFirst();
-            List<Pair<Integer, Pair<Integer, Integer>>> worldTransfers = new LinkedList<Pair<Integer, Pair<Integer, Integer>>>(); //logging only <charid, <oldWorld, newWorld>>
+            List<Pair<Integer, Pair<Integer, Integer>>> worldTransfers = new LinkedList<>(); //logging only <charid, <oldWorld, newWorld>>
             while (rs.next()) {
                 con.setAutoCommit(false);
                 int nameChangeId = rs.getInt("id");
@@ -1631,7 +1631,7 @@ public class Server {
                 if (!success) {
                     con.rollback();
                 } else {
-                    worldTransfers.add(new Pair<Integer, Pair<Integer, Integer>>(characterId, new Pair<Integer, Integer>(oldWorld, newWorld)));
+                    worldTransfers.add(new Pair<>(characterId, new Pair<>(oldWorld, newWorld)));
                 }
                 con.setAutoCommit(true);
             }

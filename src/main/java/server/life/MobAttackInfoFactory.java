@@ -36,7 +36,7 @@ import java.util.Map;
  * @author Danny (Leifde)
  */
 public class MobAttackInfoFactory {
-    private static Map<String, MobAttackInfo> mobAttacks = new HashMap<String, MobAttackInfo>();
+    private static Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
     private static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Mob.wz"));
 
     public static MobAttackInfo getMobAttackInfo(MapleMonster mob, int attack) {

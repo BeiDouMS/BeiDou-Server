@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class MobSkillFactory {
 
-    private static Map<String, MobSkill> mobSkills = new HashMap<String, MobSkill>();
+    private static Map<String, MobSkill> mobSkills = new HashMap<>();
     private final static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Skill.wz"));
     private static MapleData skillRoot = dataSource.getData("MobSkill.img");
     private final static MonitoredReentrantReadWriteLock dataLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MOBSKILL_FACTORY);
@@ -71,7 +71,7 @@ public class MobSkillFactory {
                 MapleData skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
                 if (skillData != null) {
                     int mpCon = MapleDataTool.getInt(skillData.getChildByPath("mpCon"), 0);
-                    List<Integer> toSummon = new ArrayList<Integer>();
+                    List<Integer> toSummon = new ArrayList<>();
                     for (int i = 0; i > -1; i++) {
                         if (skillData.getChildByPath(String.valueOf(i)) == null) {
                             break;

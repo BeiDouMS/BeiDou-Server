@@ -181,7 +181,7 @@ public class MapleStatEffect {
         ret.prop = iprop / 100.0;
 
         ret.cp = MapleDataTool.getInt("cp", source, 0);
-        List<MapleDisease> cure = new ArrayList<MapleDisease>(5);
+        List<MapleDisease> cure = new ArrayList<>(5);
         if (MapleDataTool.getInt("poison", source, 0) > 0) {
             cure.add(MapleDisease.POISON);
         }

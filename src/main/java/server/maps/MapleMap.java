@@ -82,8 +82,8 @@ public class MapleMap {
     
     private Map<Integer, MapleMapObject> mapobjects = new LinkedHashMap<>();
     private Set<Integer> selfDestructives = new LinkedHashSet<>();
-    private Collection<SpawnPoint> monsterSpawn = Collections.synchronizedList(new LinkedList<SpawnPoint>());
-    private Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<SpawnPoint>());
+    private Collection<SpawnPoint> monsterSpawn = Collections.synchronizedList(new LinkedList<>());
+    private Collection<SpawnPoint> allMonsterSpawn = Collections.synchronizedList(new LinkedList<>());
     private AtomicInteger spawnedMonstersOnMap = new AtomicInteger(0);
     private AtomicInteger droppedItemCount = new AtomicInteger(0);
     private Collection<MapleCharacter> characters = new LinkedHashSet<>();
@@ -2500,7 +2500,7 @@ public class MapleMap {
             broadcastGMSpawnPlayerMapObjectMessage(chr, chr, true);
             chr.announce(MaplePacketCreator.getGMEffect(0x10, (byte) 1));
 
-            List<Pair<MapleBuffStat, Integer>> dsstat = Collections.singletonList(new Pair<MapleBuffStat, Integer>(MapleBuffStat.DARKSIGHT, 0));
+            List<Pair<MapleBuffStat, Integer>> dsstat = Collections.singletonList(new Pair<>(MapleBuffStat.DARKSIGHT, 0));
             broadcastGMMessage(chr, MaplePacketCreator.giveForeignBuff(chr.getId(), dsstat), false);
         } else {
             broadcastSpawnPlayerMapObjectMessage(chr, chr, true);
@@ -4346,7 +4346,7 @@ public class MapleMap {
     }
 
     public final void addMobSpawn(int mobId, int spendCP) {
-        this.mobsToSpawn.add(new Pair<Integer, Integer>(mobId, spendCP));
+        this.mobsToSpawn.add(new Pair<>(mobId, spendCP));
     }
 
     public final List<Pair<Integer, Integer>> getMobsToSpawn() {

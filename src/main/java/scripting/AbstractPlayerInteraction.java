@@ -285,7 +285,7 @@ public class AbstractPlayerInteraction {
             
             List<List<Pair<Integer, Integer>>> invList = new ArrayList<>(6);
             for(int i = MapleInventoryType.UNDEFINED.getType(); i < MapleInventoryType.CASH.getType(); i++) {
-                invList.add(new LinkedList<Pair<Integer, Integer>>());
+                invList.add(new LinkedList<>());
             }
             
             for(int i = 0; i < size; i++) {
