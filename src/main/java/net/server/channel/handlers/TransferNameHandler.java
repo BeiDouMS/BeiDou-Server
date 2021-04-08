@@ -20,13 +20,6 @@
 
 package net.server.channel.handlers;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.sql.Connection;
-
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
@@ -34,6 +27,9 @@ import net.AbstractMaplePacketHandler;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.sql.*;
+import java.util.Calendar;
 
 /**
  *
@@ -76,7 +72,7 @@ public final class TransferNameHandler extends AbstractMaplePacketHandler {
                 } else if(completedTimestamp.getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > System.currentTimeMillis()) {
                     c.announce(MaplePacketCreator.sendNameTransferRules(3));
                     return;
-                };
+                }
             }
         } catch(SQLException e) {
             e.printStackTrace();

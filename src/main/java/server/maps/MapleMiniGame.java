@@ -24,10 +24,11 @@ package server.maps;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.server.Server;
+import tools.MaplePacketCreator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import tools.MaplePacketCreator;
 
 /**
  *
@@ -68,7 +69,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
     }
     
     public static enum MiniGameResult {
-        WIN, LOSS, TIE;
+        WIN, LOSS, TIE
     }
     
     public MapleMiniGame(MapleCharacter owner, String description, String password) {

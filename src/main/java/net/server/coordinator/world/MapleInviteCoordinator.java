@@ -22,10 +22,10 @@ package net.server.coordinator.world;
 import client.MapleCharacter;
 import tools.Pair;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -37,7 +37,7 @@ public class MapleInviteCoordinator {
     public enum InviteResult {
         ACCEPTED,
         DENIED,
-        NOT_FOUND;
+        NOT_FOUND
     }
     
     public enum InviteType {

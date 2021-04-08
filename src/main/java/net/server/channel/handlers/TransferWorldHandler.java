@@ -20,12 +20,6 @@
 
 package net.server.channel.handlers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
@@ -34,6 +28,8 @@ import net.server.Server;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.sql.*;
 
 /**
  *
@@ -73,7 +69,7 @@ public final class TransferWorldHandler extends AbstractMaplePacketHandler {
                 } else if(completedTimestamp.getTime() + YamlConfig.config.server.WORLD_TRANSFER_COOLDOWN > System.currentTimeMillis()) {
                     c.announce(MaplePacketCreator.sendWorldTransferRules(7, c));
                     return;
-                };
+                }
             }
         } catch(SQLException e) {
             e.printStackTrace();
