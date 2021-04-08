@@ -3665,12 +3665,12 @@ public class MapleMap {
         return retP + retI;
     }
 
-    private static interface DelayedPacketCreation {
+    private interface DelayedPacketCreation {
 
         void sendPackets(MapleClient c);
     }
 
-    private static interface SpawnCondition {
+    private interface SpawnCondition {
 
         boolean canSpawn(MapleCharacter chr);
     }

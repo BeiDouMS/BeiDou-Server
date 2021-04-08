@@ -3,7 +3,7 @@ import client.MapleCharacter;
 
 public interface MonsterListener {
     
-    public void monsterKilled(int aniTime);
-    public void monsterDamaged(MapleCharacter from, int trueDmg);
-    public void monsterHealed(int trueHeal);
+    void monsterKilled(int aniTime);
+    void monsterDamaged(MapleCharacter from, int trueDmg);
+    void monsterHealed(int trueHeal);
 }
