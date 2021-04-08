@@ -21,7 +21,7 @@
  */
 package tools.data.output;
 
-import java.awt.Point;
+import java.awt.*;
 
 /**
  * Provides an interface to a writer class that writes a little-endian sequence
@@ -38,7 +38,7 @@ public interface LittleEndianWriter {
      *
      * @param b The bytes to write.
      */
-    public void write(byte b[]);
+    public void write(byte[] b);
 
     /**
      * Write a byte to the sequence.

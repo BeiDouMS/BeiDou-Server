@@ -234,7 +234,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 player.visitMap(player.getMap());
 
                 BuddyList bl = player.getBuddylist();
-                int buddyIds[] = bl.getBuddyIds();
+                int[] buddyIds = bl.getBuddyIds();
                 wserv.loggedOn(player.getName(), player.getId(), c.getChannel(), buddyIds);
                 for (CharacterIdChannelPair onlineBuddy : wserv.multiBuddyFind(player.getId(), buddyIds)) {
                     BuddylistEntry ble = bl.get(onlineBuddy.getCharacterId());

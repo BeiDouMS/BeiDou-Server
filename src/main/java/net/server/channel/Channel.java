@@ -109,7 +109,7 @@ public final class Channel {
     private MonitoredReadLock merchRlock = MonitoredReadLockFactory.createLock(merchantLock);
     private MonitoredWriteLock merchWlock = MonitoredWriteLockFactory.createLock(merchantLock);
     
-    private MonitoredReentrantLock faceLock[] = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
     
     private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL, true);
     

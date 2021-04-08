@@ -38,8 +38,8 @@ import java.util.Collections;
  */
 public class FaceExpressionService extends BaseService {
     
-    private FaceExpressionScheduler faceExpressionSchedulers[] = new FaceExpressionScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
-    private MonitoredReentrantLock faceLock[] = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
+    private FaceExpressionScheduler[] faceExpressionSchedulers = new FaceExpressionScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public FaceExpressionService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {

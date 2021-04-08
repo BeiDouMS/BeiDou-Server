@@ -21,15 +21,16 @@
 */
 package provider.wz;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import tools.data.input.LittleEndianAccessor;
+import tools.data.input.SeekableLittleEndianAccessor;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import tools.data.input.LittleEndianAccessor;
-import tools.data.input.SeekableLittleEndianAccessor;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 /*
  * Ported Code, see WZFile.java for more info
@@ -108,7 +109,7 @@ public class WZTool {
             if (strLength < 0) {
                 return "";
             }
-            byte str[] = new byte[strLength * 2];
+            byte[] str = new byte[strLength * 2];
             for (int i = 0; i < strLength * 2; i++) {
                 str[i] = llea.readByte();
             }
@@ -122,7 +123,7 @@ public class WZTool {
             if (strLength < 0) {
                 return "";
             }
-            byte str[] = new byte[strLength];
+            byte[] str = new byte[strLength];
             for (int i = 0; i < strLength; i++) {
                 str[i] = llea.readByte();
             }

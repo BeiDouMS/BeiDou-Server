@@ -110,7 +110,7 @@ public class MaplePacketCreator {
         }  
 
         private static void addRemainingSkillInfo(final MaplePacketLittleEndianWriter mplew, MapleCharacter chr) {
-                int remainingSp[] = chr.getRemainingSps();
+                int[] remainingSp = chr.getRemainingSps();
                 int effectiveLength = 0;
                 for (int i = 0; i < remainingSp.length; i++) {
                         if (remainingSp[i] > 0) {
@@ -3143,7 +3143,7 @@ public class MaplePacketCreator {
         }
         
         private static void writeLongEncodeTemporaryMask(final MaplePacketLittleEndianWriter mplew, Collection<MonsterStatus> stati) {
-                int masks[] = new int[4];
+                int[] masks = new int[4];
                 
                 for (MonsterStatus statup : stati) {
                         int pos = statup.isFirst() ? 0 : 2;
@@ -3370,7 +3370,7 @@ public class MaplePacketCreator {
                 addCharLook(mplew, shop.getOwner(), false);
                 mplew.writeMapleAsciiString(shop.getOwner().getName());
                 
-                MapleCharacter visitors[] = shop.getVisitors();
+                MapleCharacter[] visitors = shop.getVisitors();
                 for(int i = 0; i < 3; i++) {
                     if(visitors[i] != null) {
                         mplew.write(i + 1);
@@ -3474,7 +3474,7 @@ public class MaplePacketCreator {
                 return mplew.getPacket();
         }
 
-        public static byte[] getNPCTalkStyle(int npc, String talk, int styles[]) {
+        public static byte[] getNPCTalkStyle(int npc, String talk, int[] styles) {
                 final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.NPC_TALK.getValue());
                 mplew.write(4); // ?
@@ -5758,7 +5758,7 @@ public class MaplePacketCreator {
                 mplew.writeInt(hm.getItemId());
                 mplew.writeMapleAsciiString("Hired Merchant");
                 
-                MapleCharacter visitors[] = hm.getVisitors();
+                MapleCharacter[] visitors = hm.getVisitors();
                 for (int i = 0; i < 3; i++) {
                         if (visitors[i] != null) {
                                 mplew.write(i + 1);

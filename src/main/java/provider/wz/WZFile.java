@@ -21,21 +21,13 @@
 */
 package provider.wz;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
 import provider.MapleData;
 import provider.MapleDataDirectoryEntry;
 import provider.MapleDataFileEntry;
 import provider.MapleDataProvider;
-import tools.data.input.GenericLittleEndianAccessor;
-import tools.data.input.GenericSeekableLittleEndianAccessor;
-import tools.data.input.InputStreamByteStream;
-import tools.data.input.LittleEndianAccessor;
-import tools.data.input.RandomAccessByteStream;
-import tools.data.input.SeekableLittleEndianAccessor;
+import tools.data.input.*;
+
+import java.io.*;
 
 public class WZFile implements MapleDataProvider {
     static {
@@ -116,7 +108,7 @@ public class WZFile implements MapleDataProvider {
     }
 
     public WZIMGFile getImgFile(String path) throws IOException {
-        String segments[] = path.split("/");
+        String[] segments = path.split("/");
         WZDirectoryEntry dir = root;
         for (int x = 0; x < segments.length - 1; x++) {
             dir = (WZDirectoryEntry) dir.getEntry(segments[x]);

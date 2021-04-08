@@ -19,10 +19,10 @@
 */
 package net.server.services.task.channel;
 
-import net.server.services.BaseService;
 import config.YamlConfig;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
+import net.server.services.BaseService;
 
 /**
  *
@@ -30,7 +30,7 @@ import net.server.services.BaseScheduler;
  */
 public class OverallService extends BaseService {   // thanks Alex for suggesting a refactor over the several channel schedulers unnecessarily populating the Channel class
     
-    private OverallScheduler channelSchedulers[] = new OverallScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private OverallScheduler[] channelSchedulers = new OverallScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public OverallService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {

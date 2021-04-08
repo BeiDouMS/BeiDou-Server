@@ -948,7 +948,7 @@ public class Server {
         tMan.register(new BossLogTask(), 24 * 60 * 60 * 1000, timeLeft);
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         System.setProperty("wzpath", "wz");
         Security.setProperty("crypto.policy", "unlimited");
         AutoJCE.removeCryptographyRestrictions();

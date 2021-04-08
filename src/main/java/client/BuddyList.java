@@ -21,19 +21,15 @@
 */
 package client;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
 import net.server.PlayerStorage;
 import tools.DatabaseConnection;
 import tools.MaplePacketCreator;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 public class BuddyList {
     public enum BuddyOperation {
@@ -121,7 +117,7 @@ public class BuddyList {
 
     public int[] getBuddyIds() {
         synchronized(buddies) {
-            int buddyIds[] = new int[buddies.size()];
+            int[] buddyIds = new int[buddies.size()];
             int i = 0;
             for (BuddylistEntry ble : buddies.values()) {
                 buddyIds[i++] = ble.getCharacterId();

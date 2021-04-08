@@ -1241,7 +1241,7 @@ public class World {
         updateBuddies(characterId, channel, buddies, true);
     }
 
-    public void loggedOn(String name, int characterId, int channel, int buddies[]) {
+    public void loggedOn(String name, int characterId, int channel, int[] buddies) {
         updateBuddies(characterId, channel, buddies, false);
     }
 

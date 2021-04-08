@@ -163,7 +163,7 @@ public class MapleMapFactory {
             map.setTimeMob(MapleDataTool.getInt(timeMob.getChildByPath("id")), MapleDataTool.getString(timeMob.getChildByPath("message")));
         }
 
-        int bounds[] = new int[4];
+        int[] bounds = new int[4];
         bounds[0] = MapleDataTool.getInt(infoData.getChildByPath("VRTop"));
         bounds[1] = MapleDataTool.getInt(infoData.getChildByPath("VRBottom"));
 

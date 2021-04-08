@@ -36,7 +36,7 @@ import java.util.Set;
  */
 public class MobAnimationService extends BaseService {
     
-    private MobAnimationScheduler mobAnimationSchedulers[] = new MobAnimationScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private MobAnimationScheduler[] mobAnimationSchedulers = new MobAnimationScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public MobAnimationService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {

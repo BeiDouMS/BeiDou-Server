@@ -596,7 +596,7 @@ public class MapleMap {
      * @return correspondent coordinate.
      */
     public static String getRoundedCoordinate(double angle) {
-        String directions[] = {"E", "SE", "S", "SW", "W", "NW", "N", "NE", "E"};
+        String[] directions = {"E", "SE", "S", "SW", "W", "NW", "N", "NE", "E"};
         return directions[ (int)Math.round((  ((double)angle % 360) / 45)) ];
     }
     

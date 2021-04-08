@@ -49,7 +49,7 @@ public enum ItemFactory {
     private final boolean account;
     
     private static final int lockCount = 400;
-    private static final Lock locks[] = new Lock[lockCount];  // thanks Masterrulax for pointing out a bottleneck issue here
+    private static final Lock[] locks = new Lock[lockCount];  // thanks Masterrulax for pointing out a bottleneck issue here
     
     static {
         for (int i = 0; i < lockCount; i++) {

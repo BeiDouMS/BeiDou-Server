@@ -19,10 +19,10 @@
 */
 package net.server.services.task.channel;
 
-import net.server.services.BaseService;
 import config.YamlConfig;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
+import net.server.services.BaseService;
 
 /**
  *
@@ -30,7 +30,7 @@ import net.server.services.BaseScheduler;
  */
 public class EventService extends BaseService {
     
-    private EventScheduler eventSchedulers[] = new EventScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private EventScheduler[] eventSchedulers = new EventScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
     
     public EventService() {
         for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {

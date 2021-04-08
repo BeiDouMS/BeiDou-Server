@@ -23,31 +23,21 @@
 */
 package client.processor.stat;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleJob;
-import client.MapleStat;
-import client.Skill;
-import client.SkillFactory;
+import client.*;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
-import constants.skills.BlazeWizard;
-import constants.skills.Brawler;
-import constants.skills.DawnWarrior;
-import constants.skills.Magician;
-import constants.skills.ThunderBreaker;
-import constants.skills.Warrior;
+import constants.skills.*;
+import tools.MaplePacketCreator;
+import tools.Randomizer;
+import tools.data.input.SeekableLittleEndianAccessor;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import server.ThreadManager;
-import tools.MaplePacketCreator;
-import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -374,7 +364,7 @@ public class AssignAPProcessor {
         return(statList.size() <= rank ? 0 : statList.get(rank));
     }
     
-    private static int gainStatByType(MapleStat type, int[] statGain, int gain, int statUpdate[]) {
+    private static int gainStatByType(MapleStat type, int[] statGain, int gain, int[] statUpdate) {
         if(gain <= 0) return 0;
         
         int newVal = 0;

@@ -196,7 +196,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 		getClient().announce(MaplePacketCreator.getNPCTalk(npc, (byte) 4, text, "", speaker));
 	}
 
-	public void sendStyle(String text, int styles[]) {
+	public void sendStyle(String text, int[] styles) {
                 if (styles.length > 0) {
                         getClient().announce(MaplePacketCreator.getNPCTalkStyle(npc, text, styles));
                 } else {    // thanks Conrad for noticing empty styles crashing players

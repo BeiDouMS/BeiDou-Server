@@ -21,22 +21,23 @@
 */
 package net.server.channel.handlers;
 
-import config.YamlConfig;
-import net.server.guild.MapleGuildResponse;
-import net.server.guild.MapleGuild;
-import constants.game.GameConstants;
-import client.MapleClient;
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
-import tools.MaplePacketCreator;
 import client.MapleCharacter;
-import java.util.HashSet;
-import java.util.Set;
+import client.MapleClient;
+import config.YamlConfig;
+import constants.game.GameConstants;
+import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import net.server.guild.MapleAlliance;
+import net.server.guild.MapleGuild;
+import net.server.guild.MapleGuildResponse;
 import net.server.world.MapleParty;
 import net.server.world.World;
+import tools.MaplePacketCreator;
+import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public final class GuildOperationHandler extends AbstractMaplePacketHandler {
     private boolean isGuildNameAcceptable(String name) {
@@ -187,7 +188,7 @@ public final class GuildOperationHandler extends AbstractMaplePacketHandler {
                     System.out.println("[Hack] " + mc.getName() + " tried to change guild rank titles when s/he does not have permission.");
                     return;
                 }
-                String ranks[] = new String[5];
+                String[] ranks = new String[5];
                 for (int i = 0; i < 5; i++) {
                     ranks[i] = slea.readMapleAsciiString();
                 }
