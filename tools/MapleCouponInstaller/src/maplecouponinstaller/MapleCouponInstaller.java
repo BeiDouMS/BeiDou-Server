@@ -221,8 +221,8 @@ public class MapleCouponInstaller {
                 if(d.contains("rate")) {
                     String r = getNodeValue(token);
                     
-                    Double db = Double.parseDouble(r);
-                    itemMultiplier = db.intValue();
+                    double db = Double.parseDouble(r);
+                    itemMultiplier = (int) db;
                 }
             }
         }

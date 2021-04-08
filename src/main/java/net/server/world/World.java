@@ -1445,7 +1445,7 @@ public class World {
             MapleCharacter chr = this.getPlayerStorage().getCharacterById(dp.getKey() / 4);
             if(chr == null || !chr.isLoggedinWorld()) continue;
             
-            Integer dpVal = dp.getValue() + 1;
+            int dpVal = dp.getValue() + 1;
             if(dpVal == YamlConfig.config.server.PET_EXHAUST_COUNT) {
                 chr.runFullnessSchedule(dp.getKey() % 4);
                 dpVal = 0;

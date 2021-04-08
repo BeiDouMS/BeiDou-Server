@@ -447,7 +447,7 @@ public class MapleMap {
     private int getUsableOID() {
         objectRLock.lock();
         try {
-            Integer curOid;
+            int curOid;
             
             // clashes with playernpc on curOid >= 2147000000, developernpc uses >= 2147483000
             do {

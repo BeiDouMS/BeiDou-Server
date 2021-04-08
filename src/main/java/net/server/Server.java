@@ -873,7 +873,7 @@ public class Server {
         }
 
         try {
-            Integer worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
+            int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
 
             for (int i = 0; i < worldCount; i++) {
                 initWorld();

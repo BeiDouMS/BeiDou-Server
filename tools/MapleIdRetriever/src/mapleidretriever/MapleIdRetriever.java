@@ -20,11 +20,7 @@
 package mapleidretriever;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 /**
@@ -175,9 +171,9 @@ public class MapleIdRetriever {
                 
                 String str = "";
                 while(rs.next()) {
-                    Integer id = rs.getInt("id");
+                    int id = rs.getInt("id");
                     
-                    str += id.toString();
+                    str += Integer.toString(id);
                     str += " ";
                 }
                 

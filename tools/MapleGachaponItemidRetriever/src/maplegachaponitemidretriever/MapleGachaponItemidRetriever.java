@@ -238,9 +238,9 @@ public class MapleGachaponItemidRetriever {
 
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                Integer id = rs.getInt("id");
+                int id = rs.getInt("id");
 
-                str += id.toString();
+                str += Integer.toString(id);
                 str += " ";
             }
 

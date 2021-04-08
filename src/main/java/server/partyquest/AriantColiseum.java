@@ -220,7 +220,7 @@ public class AriantColiseum {
     }
     
     public void distributeAriantPoints() {
-        Integer firstTop = -1, secondTop = -1;
+        int firstTop = -1, secondTop = -1;
         MapleCharacter winner = null;
         List<Integer> runnerups = new ArrayList<>();
         

@@ -258,7 +258,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                                 eachd += Integer.MAX_VALUE;
 
                                 if (pickpocket.getEffect(picklv).makeChanceResult()) {
-                                    final Integer eachdf;
+                                    final int eachdf;
                                     if(eachd < 0)
                                             eachdf = eachd + Integer.MAX_VALUE;
                                     else
@@ -280,7 +280,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                                 MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
                                 List<Integer> dropPool = mi.retrieveDropPool(monster.getId());
                                 if(!dropPool.isEmpty()) {
-                                    Integer rndPool = (int) Math.floor(Math.random() * dropPool.get(dropPool.size() - 1));
+                                    int rndPool = (int) Math.floor(Math.random() * dropPool.get(dropPool.size() - 1));
                                     
                                     int i = 0;
                                     while(rndPool >= dropPool.get(i)) i++;
