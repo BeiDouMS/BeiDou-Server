@@ -206,7 +206,47 @@ public class MapleSessionCoordinator {
     private Lock getCoodinatorLock(String remoteHost) {
         return poolLock.get(Math.abs(remoteHost.hashCode()) % 100);
     }
+    
+    private static List<Pattern> localComms = loadLocalCommPatterns();
+    
+    private static List<Pattern> loadLocalCommPatterns() {
+        String[] localComms = {"10\\.", "192\\.168\\.", "172\\.(1[6-9]|2[0-9]|3[0-1])\\."};
+        List<Pattern> llc = new ArrayList<>(localComms.length);
 
+        for (String lc : localComms) {
+            llc.add(Pattern.compile(lc));
+        }
+        
+        return llc;
+    }
+    
+    private static boolean matchesLanAddress(Pattern inetPattern, String inetAddress) {
+        Matcher searchM = inetPattern.matcher(inetAddress);
+        return searchM.find();
+    }
+    
+    public static boolean isLanAddress(String inetAddress) {
+        for (Pattern lanPattern : localComms) {
+            if (matchesLanAddress(lanPattern, inetAddress)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    public static boolean isLocalAddress(String inetAddress) {
+        return inetAddress.startsWith("127.");
+    }
+    
+    public static String fetchRemoteAddress(String inetAddress) {
+        if (isLocalAddress(inetAddress) || isLanAddress(inetAddress)) {
+            return YamlConfig.config.server.HOST;
+        } else {
+            return inetAddress;
+        }
+    }
+    
     public static String getSessionRemoteAddress(IoSession session) {
         return (String) session.getAttribute(MapleClient.CLIENT_REMOTE_ADDRESS);
     }

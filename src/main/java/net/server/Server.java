@@ -286,8 +286,18 @@ public class Server {
     }
 
     public String[] getInetSocket(int world, int channel) {
+        public String[] getInetSocket(IoSession session, int world, int channel) {
+        String remoteIp = MapleSessionCoordinator.getSessionRemoteAddress(session);
+
+        String[] hostAddress = getIP(world, channel).split(":");
+        if (MapleSessionCoordinator.isLocalAddress(remoteIp)) {
+            hostAddress[0] = YamlConfig.config.server.LOCALHOST;
+        } else if (MapleSessionCoordinator.isLanAddress(remoteIp)) {
+            hostAddress[0] = YamlConfig.config.server.LANHOST;
+        }
+
         try {
-            return getIP(world, channel).split(":");
+            return hostAddress;
         } catch (Exception e) {
             return null;
         }
