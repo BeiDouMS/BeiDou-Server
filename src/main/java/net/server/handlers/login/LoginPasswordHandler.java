@@ -61,21 +61,7 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         String remoteHost = getRemoteIp(c.getSession());
-        if (!remoteHost.contentEquals("null")) {
-            if (YamlConfig.config.server.USE_IP_VALIDATION) {    // thanks Alex-0000 (CanIGetaPR) for suggesting IP validation as a server flag
-                if (remoteHost.startsWith("127.")) {
-                    if (!YamlConfig.config.server.LOCALSERVER) { // thanks Mills for noting HOST can also have a field named "localhost"
-                        c.announce(MaplePacketCreator.getLoginFailed(13));  // cannot login as localhost if it's not a local server
-                        return;
-                    }
-                } else {
-                    if (YamlConfig.config.server.LOCALSERVER) {
-                        c.announce(MaplePacketCreator.getLoginFailed(13));  // cannot login as non-localhost if it's a local server
-                        return;
-                    }
-                }
-            }
-        } else {
+        if (remoteHost.contentEquals("null")) {
             c.announce(MaplePacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
             return;
         }

@@ -1341,7 +1341,7 @@ public class MapleClient {
 			return;
                 }
                 
-                String[] socket = Server.getInstance().getInetSocket(getWorld(), channel);
+                String[] socket = Server.getInstance().getInetSocket(this.getSession(), getWorld(), channel);
                 if(socket == null) {
                         announce(MaplePacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
                         announce(MaplePacketCreator.enableActions());

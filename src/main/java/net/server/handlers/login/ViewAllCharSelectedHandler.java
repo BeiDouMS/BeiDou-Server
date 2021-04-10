@@ -105,7 +105,7 @@ public final class ViewAllCharSelectedHandler extends AbstractMaplePacketHandler
             c.setChannel(1);
         }
         
-        String[] socket = server.getInetSocket(c.getWorld(), c.getChannel());
+        String[] socket = server.getInetSocket(session, c.getWorld(), c.getChannel());
         if(socket == null) {
             c.announce(MaplePacketCreator.getAfterLoginError(10));
             return;
