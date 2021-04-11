@@ -1575,18 +1575,23 @@ public class Server {
              PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
              ResultSet rs = ps.executeQuery()) {
             List<Pair<String, String>> changedNames = new LinkedList<>(); //logging only
-            while (rs.next()) {
-                con.setAutoCommit(false);
-                int nameChangeId = rs.getInt("id");
-                int characterId = rs.getInt("characterId");
-                String oldName = rs.getString("old");
-                String newName = rs.getString("new");
-                boolean success = MapleCharacter.doNameChange(con, characterId, oldName, newName, nameChangeId);
-                if (!success) {
-                    con.rollback(); //discard changes
-                } else {
-                    changedNames.add(new Pair<>(oldName, newName));
+
+            con.setAutoCommit(false);
+            try {
+                while (rs.next()) {
+                    int nameChangeId = rs.getInt("id");
+                    int characterId = rs.getInt("characterId");
+                    String oldName = rs.getString("old");
+                    String newName = rs.getString("new");
+                    boolean success = MapleCharacter.doNameChange(con, characterId, oldName, newName, nameChangeId);
+                    if (!success) {
+                        con.rollback(); //discard changes
+                    } else {
+                        con.commit();
+                        changedNames.add(new Pair<>(oldName, newName));
+                    }
                 }
+            } finally {
                 con.setAutoCommit(true);
             }
             //log
@@ -1625,23 +1630,29 @@ public class Server {
             }
             rs.beforeFirst();
             List<Pair<Integer, Pair<Integer, Integer>>> worldTransfers = new LinkedList<>(); //logging only <charid, <oldWorld, newWorld>>
-            while (rs.next()) {
-                con.setAutoCommit(false);
-                int nameChangeId = rs.getInt("id");
-                if (removedTransfers.contains(nameChangeId)) {
-                    continue;
+
+            con.setAutoCommit(false);
+            try {
+                while (rs.next()) {
+                    int nameChangeId = rs.getInt("id");
+                    if (removedTransfers.contains(nameChangeId)) {
+                        continue;
+                    }
+                    int characterId = rs.getInt("characterId");
+                    int oldWorld = rs.getInt("from");
+                    int newWorld = rs.getInt("to");
+                    boolean success = MapleCharacter.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
+                    if (!success) {
+                        con.rollback();
+                    } else {
+                        con.commit();
+                        worldTransfers.add(new Pair<>(characterId, new Pair<>(oldWorld, newWorld)));
+                    }
                 }
-                int characterId = rs.getInt("characterId");
-                int oldWorld = rs.getInt("from");
-                int newWorld = rs.getInt("to");
-                boolean success = MapleCharacter.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
-                if (!success) {
-                    con.rollback();
-                } else {
-                    worldTransfers.add(new Pair<>(characterId, new Pair<>(oldWorld, newWorld)));
-                }
+            } finally {
                 con.setAutoCommit(true);
             }
+
             //log
             for (Pair<Integer, Pair<Integer, Integer>> worldTransferPair : worldTransfers) {
                 int charId = worldTransferPair.getLeft();
