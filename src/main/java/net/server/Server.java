@@ -80,6 +80,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
@@ -821,6 +822,7 @@ public class Server {
     }
 
     public void init() {
+        Instant beforeInit = Instant.now();
         log.info("Cosmic v{} starting up.", ServerConstants.VERSION);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
@@ -909,8 +911,9 @@ public class Server {
 
         log.info("Listening on port 8484");
 
-        log.info("Cosmic is now online.");
         online = true;
+        Duration initDuration = Duration.between(beforeInit, Instant.now());
+        log.info("Cosmic is now online after {} ms.", initDuration.toMillis());
 
         MapleSkillbookInformationProvider.getInstance();
         OpcodeConstants.generateOpcodeNames();
