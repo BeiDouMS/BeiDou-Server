@@ -80,6 +80,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicLong;
@@ -625,7 +626,7 @@ public class Server {
         }
     }
 
-    public void updateActiveCoupons() throws SQLException {
+    public void updateActiveCoupons(Connection con) throws SQLException {
         synchronized (activeCoupons) {
             activeCoupons.clear();
             Calendar c = Calendar.getInstance();
@@ -633,23 +634,19 @@ public class Server {
             int weekDay = c.get(Calendar.DAY_OF_WEEK);
             int hourDay = c.get(Calendar.HOUR_OF_DAY);
 
-            try (Connection con = DatabaseConnection.getConnection()) {
+            int weekdayMask = (1 << weekDay);
+            PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour <= ? AND endhour > ?");
+            ps.setInt(1, weekdayMask);
+            ps.setInt(2, weekdayMask);
+            ps.setInt(3, hourDay);
+            ps.setInt(4, hourDay);
 
-                int weekdayMask = (1 << weekDay);
-                PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour <= ? AND endhour > ?");
-                ps.setInt(1, weekdayMask);
-                ps.setInt(2, weekdayMask);
-                ps.setInt(3, hourDay);
-                ps.setInt(4, hourDay);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        activeCoupons.add(rs.getInt("couponid"));
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    activeCoupons.add(rs.getInt("couponid"));
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
+
         }
     }
 
@@ -837,25 +834,18 @@ public class Server {
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
         try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0")) {
-                ps.executeUpdate();
-            }
-
+            setAllLoggedOut(con);
+            setAllMerchantsInactive(con);
             cleanNxcodeCoupons(con);
             loadCouponRates(con);
-            updateActiveCoupons();
+            updateActiveCoupons(con);
+            MapleCashidGenerator.loadExistentCashIdsFromDb(con);
+            applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
+            applyAllWorldTransfers(con);
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
+            log.error("Failed to run all startup-bound database tasks", sqle);
+            throw new IllegalStateException(sqle);
         }
-
-        applyAllNameChanges(); // -- name changes can be missed by INSTANT_NAME_CHANGE --
-        applyAllWorldTransfers();
-        //MaplePet.clearMissingPetsFromDb();    // thanks Optimist for noticing this taking too long to run
-        MapleCashidGenerator.loadExistentCashIdsFromDb();
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
@@ -928,6 +918,18 @@ public class Server {
 
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
+        }
+    }
+
+    private static void setAllLoggedOut(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
+            ps.executeUpdate();
+        }
+    }
+
+    private static void setAllMerchantsInactive(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0")) {
+            ps.executeUpdate();
         }
     }
 
@@ -1570,9 +1572,8 @@ public class Server {
         }
     }
 
-    private static void applyAllNameChanges() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
+    private static void applyAllNameChanges(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
              ResultSet rs = ps.executeQuery()) {
             List<Pair<String, String>> changedNames = new LinkedList<>(); //logging only
 
@@ -1596,18 +1597,17 @@ public class Server {
             }
             //log
             for (Pair<String, String> namePair : changedNames) {
-                FilePrinter.print(FilePrinter.CHANGE_CHARACTER_NAME, "Name change applied : from \"" + namePair.getLeft() + "\" to \"" + namePair.getRight() + "\" at " + Calendar.getInstance().getTime().toString());
+                log.info("Name change applied - from: \"{}\" to \"{}\" at {}", namePair.getLeft(), namePair.getRight(), Instant.now());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to retrieve list of pending name changes.");
+            log.warn("Failed to retrieve list of pending name changes", e);
+            throw e;
         }
     }
 
-    private static void applyAllWorldTransfers() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
-                     ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    private static void applyAllWorldTransfers(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
              ResultSet rs = ps.executeQuery()) {
             List<Integer> removedTransfers = new LinkedList<>();
             while (rs.next()) {
@@ -1658,11 +1658,11 @@ public class Server {
                 int charId = worldTransferPair.getLeft();
                 int oldWorld = worldTransferPair.getRight().getLeft();
                 int newWorld = worldTransferPair.getRight().getRight();
-                FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer applied : Character ID " + charId + " from World " + oldWorld + " to World " + newWorld + " at " + Calendar.getInstance().getTime().toString());
+                log.info("World transfer applied - character id {} from world {} to world {} at {}", charId, oldWorld, newWorld, Instant.now());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to retrieve list of pending world transfers.");
+            log.warn("Failed to retrieve list of pending world transfers", e);
+            throw e;
         }
     }
 

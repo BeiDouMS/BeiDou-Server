@@ -19,6 +19,8 @@
 */
 package client.inventory.manipulator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
 
 import java.sql.Connection;
@@ -32,7 +34,7 @@ import java.util.Set;
  * @author RonanLana
  */
 public class MapleCashidGenerator {
-
+    private static final Logger log = LoggerFactory.getLogger(MapleCashidGenerator.class);
     private final static Set<Integer> existentCashids = new HashSet<>(10000);
     private static Integer runningCashid = 0;
 
@@ -49,13 +51,9 @@ public class MapleCashidGenerator {
         }
     }
 
-    public static synchronized void loadExistentCashIdsFromDb() {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            loadExistentCashIdsFromQuery(con, "SELECT id FROM rings");
-            loadExistentCashIdsFromQuery(con, "SELECT petid FROM pets");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+    public static synchronized void loadExistentCashIdsFromDb(Connection con) throws SQLException {
+        loadExistentCashIdsFromQuery(con, "SELECT id FROM rings");
+        loadExistentCashIdsFromQuery(con, "SELECT petid FROM pets");
 
         runningCashid = 0;
         do {
@@ -67,7 +65,11 @@ public class MapleCashidGenerator {
         runningCashid++;
         if (runningCashid >= 777000000) {
             existentCashids.clear();
-            loadExistentCashIdsFromDb();
+            try (Connection con = DatabaseConnection.getConnection()) {
+                loadExistentCashIdsFromDb(con);
+            } catch (SQLException e) {
+                log.warn("Failed to reset overflowing cash ids", e);
+            }
         }
     }
 
