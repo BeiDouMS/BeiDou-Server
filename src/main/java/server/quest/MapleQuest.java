@@ -21,20 +21,10 @@
  */
 package server.quest;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import client.MapleCharacter;
 import client.MapleQuestStatus;
 import client.MapleQuestStatus.Status;
 import config.YamlConfig;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.Map.Entry;
-import java.util.Set;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -44,6 +34,10 @@ import server.quest.requirements.*;
 import tools.MaplePacketCreator;
 import tools.StringUtil;
 
+import java.io.File;
+import java.util.*;
+import java.util.Map.Entry;
+
 /**
  *
  * @author Matze
@@ -51,8 +45,8 @@ import tools.StringUtil;
  */
 public class MapleQuest {
 
-    private static Map<Integer, MapleQuest> quests = new HashMap<>();
-    private static Map<Integer, Integer> infoNumberQuests = new HashMap<>();
+    private static volatile Map<Integer, MapleQuest> quests = new HashMap<>();
+    private static volatile Map<Integer, Integer> infoNumberQuests = new HashMap<>();
     private static Map<Short, Integer> medals = new HashMap<>();
     
     private static final Set<Short> exploitableQuests = new HashSet<>();
@@ -459,9 +453,7 @@ public class MapleQuest {
         }
 	
 	public static void clearCache(int quest) {
-		if(quests.containsKey(quest)){
-			quests.remove(quest);
-		}
+        quests.remove(quest);
 	}
 	
 	public static void clearCache() {
@@ -656,29 +648,31 @@ public class MapleQuest {
                 
                 return ret;
         }
-        
-	public static void loadAllQuest() {
-		try {
-			for(MapleData quest : questInfo.getChildren()) {
-				int questID = Integer.parseInt(quest.getName());
-				
-                                MapleQuest q = new MapleQuest(questID);
-				quests.put(questID, q);
-                                
-                                int infoNumber;
-                                
-                                infoNumber = q.getInfoNumber(Status.STARTED);
-                                if (infoNumber > 0) {
-                                        infoNumberQuests.put(infoNumber, questID);
-                                }
-                                
-                                infoNumber = q.getInfoNumber(Status.COMPLETED);
-                                if (infoNumber > 0) {
-                                        infoNumberQuests.put(infoNumber, questID);
-                                }
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+
+    public static void loadAllQuests() {
+        final Map<Integer, MapleQuest> loadedQuests = new HashMap<>();
+        final Map<Integer, Integer> loadedInfoNumberQuests = new HashMap<>();
+
+        for (MapleData quest : questInfo.getChildren()) {
+            int questID = Integer.parseInt(quest.getName());
+
+            MapleQuest q = new MapleQuest(questID);
+            loadedQuests.put(questID, q);
+
+            int infoNumber;
+
+            infoNumber = q.getInfoNumber(Status.STARTED);
+            if (infoNumber > 0) {
+                loadedInfoNumberQuests.put(infoNumber, questID);
+            }
+
+            infoNumber = q.getInfoNumber(Status.COMPLETED);
+            if (infoNumber > 0) {
+                loadedInfoNumberQuests.put(infoNumber, questID);
+            }
+        }
+
+        MapleQuest.quests = loadedQuests;
+        MapleQuest.infoNumberQuests = loadedInfoNumberQuests;
+    }
 }

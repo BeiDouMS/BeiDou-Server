@@ -856,14 +856,10 @@ public class Server {
         final List<Future<?>> futures = new ArrayList<>();
         futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
         futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
+        futures.add(initExecutor.submit(() -> MapleQuest.loadAllQuests()));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
-
-        long timeToTake = System.currentTimeMillis();
-        MapleQuest.loadAllQuest();
-        final double questLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-        log.info("Quest loaded in {} seconds", questLoadTime);
 
         NewYearCardRecord.startPendingNewYearCardRequests();
 
@@ -888,7 +884,7 @@ public class Server {
         }
 
         if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-            timeToTake = System.currentTimeMillis();
+            long timeToTake = System.currentTimeMillis();
             MapleFamily.loadAllFamilies();
             final double familyLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
             log.info("Families loaded in {} seconds", familyLoadTime);
