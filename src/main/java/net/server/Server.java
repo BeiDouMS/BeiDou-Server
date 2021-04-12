@@ -84,6 +84,9 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
@@ -824,6 +827,7 @@ public class Server {
     public void init() {
         Instant beforeInit = Instant.now();
         log.info("Cosmic v{} starting up.", ServerConstants.VERSION);
+        final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
@@ -849,15 +853,13 @@ public class Server {
             throw new IllegalStateException(sqle);
         }
 
+        final List<Future<?>> futures = new ArrayList<>();
+        futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
+
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
 
         long timeToTake = System.currentTimeMillis();
-        SkillFactory.loadAllSkills();
-        final double skillLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-        log.info("Skills loaded in {} seconds", skillLoadTime);
-
-        timeToTake = System.currentTimeMillis();
 
         CashItemFactory.getSpecialCashItems();
         final double itemLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
@@ -895,6 +897,15 @@ public class Server {
             MapleFamily.loadAllFamilies();
             final double familyLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
             log.info("Families loaded in {} seconds", familyLoadTime);
+        }
+
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (Exception e) {
+                log.error("Failed to run all startup-bound loading tasks", e);
+                throw new IllegalStateException(e);
+            }
         }
 
         IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan

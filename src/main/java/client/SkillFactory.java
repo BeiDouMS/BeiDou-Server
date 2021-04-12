@@ -31,33 +31,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SkillFactory {
-    private static Map<Integer, Skill> skills = new HashMap<>();
-    private static MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(MapleDataProviderFactory.fileInWZPath("Skill.wz"));
+    private static volatile Map<Integer, Skill> skills = new HashMap<>();
+    private static final MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(MapleDataProviderFactory.fileInWZPath("Skill.wz"));
 
     public static Skill getSkill(int id) {
-        if (!skills.isEmpty()) {
-            return skills.get(id);
-        }
-        return null;
+        return skills.get(id);
     }
 
     public static void loadAllSkills() {
+        final Map<Integer, Skill> loadedSkills = new HashMap<>();
         final MapleDataDirectoryEntry root = datasource.getRoot();
-        int skillid;    
         for (MapleDataFileEntry topDir : root.getFiles()) { // Loop thru jobs
             if (topDir.getName().length() <= 8) {
                 for (MapleData data : datasource.getData(topDir.getName())) { // Loop thru each jobs
                     if (data.getName().equals("skill")) {
                         for (MapleData data2 : data) { // Loop thru each jobs
                             if (data2 != null) {
-                                skillid = Integer.parseInt(data2.getName());
-                                skills.put(skillid, loadFromData(skillid, data2));
+                                int skillId = Integer.parseInt(data2.getName());
+                                loadedSkills.put(skillId, loadFromData(skillId, data2));
                             }
                         }
                     }
                 }
             }
         }
+
+        skills = loadedSkills;
     }
     
     private static Skill loadFromData(int id, MapleData data) {
