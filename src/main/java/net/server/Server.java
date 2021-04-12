@@ -855,17 +855,12 @@ public class Server {
 
         final List<Future<?>> futures = new ArrayList<>();
         futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
+        futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
 
         long timeToTake = System.currentTimeMillis();
-
-        CashItemFactory.getSpecialCashItems();
-        final double itemLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-        log.info("Items loaded in {} seconds", itemLoadTime);
-
-        timeToTake = System.currentTimeMillis();
         MapleQuest.loadAllQuest();
         final double questLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
         log.info("Quest loaded in {} seconds", questLoadTime);
