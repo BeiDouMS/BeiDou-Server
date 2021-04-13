@@ -853,10 +853,12 @@ public class Server {
             throw new IllegalStateException(sqle);
         }
 
+        // Run slow operations asynchronously to make startup faster
         final List<Future<?>> futures = new ArrayList<>();
         futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
         futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
         futures.add(initExecutor.submit(() -> MapleQuest.loadAllQuests()));
+        futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
@@ -890,6 +892,7 @@ public class Server {
             log.info("Families loaded in {} seconds", familyLoadTime);
         }
 
+        // Wait on all async tasks to complete
         for (Future<?> future : futures) {
             try {
                 future.get();
@@ -917,7 +920,6 @@ public class Server {
         Duration initDuration = Duration.between(beforeInit, Instant.now());
         log.info("Cosmic is now online after {} ms.", initDuration.toMillis());
 
-        MapleSkillbookInformationProvider.getInstance();
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
 
