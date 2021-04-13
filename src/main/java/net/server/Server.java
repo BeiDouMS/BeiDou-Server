@@ -139,7 +139,7 @@ public class Server {
     private final AtomicLong currentTime = new AtomicLong(0);
     private long serverCurrentTime = 0;
 
-    private boolean availableDeveloperRoom = false;
+    private volatile boolean availableDeveloperRoom = false;
     private boolean online = false;
     public static long uptime = System.currentTimeMillis();
 
@@ -827,7 +827,6 @@ public class Server {
     public void init() {
         Instant beforeInit = Instant.now();
         log.info("Cosmic v{} starting up.", ServerConstants.VERSION);
-        final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
@@ -853,12 +852,14 @@ public class Server {
             throw new IllegalStateException(sqle);
         }
 
+        final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
         // Run slow operations asynchronously to make startup faster
         final List<Future<?>> futures = new ArrayList<>();
         futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
         futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
         futures.add(initExecutor.submit(() -> MapleQuest.loadAllQuests()));
         futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
+        futures.add(initExecutor.submit(() -> MaplePlayerNPCFactory.loadFactoryMetadata()));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
@@ -877,7 +878,6 @@ public class Server {
             }
             initWorldPlayerRanking();
 
-            MaplePlayerNPCFactory.loadFactoryMetadata();
             loadPlayerNpcMapStepFromDb();
         } catch (Exception e) {
             e.printStackTrace();//For those who get errors

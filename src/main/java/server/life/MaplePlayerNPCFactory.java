@@ -19,16 +19,17 @@
 */
 package server.life;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
-import java.util.LinkedList;
 import net.server.Server;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -41,11 +42,11 @@ public class MaplePlayerNPCFactory {
     private static final Map<Integer, List<MaplePlayerNPC>> dnpcMaps = new HashMap<>();
     private static Integer runningDeveloperOid = 2147483000;  // 647 slots, long enough
     
-    public static boolean isExistentScriptid(int scriptid) {
+    public synchronized static boolean isExistentScriptid(int scriptid) {
         return npcData.getData(scriptid + ".img") != null;
     }
     
-    public static void loadDeveloperRoomMetadata(MapleDataProvider npc) {
+    private static void loadDeveloperRoomMetadata(MapleDataProvider npc) {
         MapleData thisData = npc.getData("9977777.img");
         if(thisData != null) {
             MapleDataProvider map = MapleDataProviderFactory.getDataProvider(new File("wz/Map.wz"));
@@ -65,7 +66,7 @@ public class MaplePlayerNPCFactory {
         }
     }
     
-    public static void loadFactoryMetadata() {
+    public synchronized static void loadFactoryMetadata() {
         MapleDataProvider npc = npcData;
         loadDeveloperRoomMetadata(npc);
 
@@ -134,7 +135,7 @@ public class MaplePlayerNPCFactory {
         }
     }
     
-    public static List<MaplePlayerNPC> getDeveloperNpcsFromMapid(int mapid) {
+    public synchronized static List<MaplePlayerNPC> getDeveloperNpcsFromMapid(int mapid) {
         return dnpcMaps.get(mapid);
     }
 }
