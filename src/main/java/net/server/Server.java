@@ -704,7 +704,7 @@ public class Server {
     }
 
     private void installWorldPlayerRanking(int worldid) {
-        List<Pair<Integer, List<Pair<String, Integer>>>> ranking = updatePlayerRankingFromDB(worldid);
+        List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(worldid);
         if (!ranking.isEmpty()) {
             wldWLock.lock();
             try {
@@ -736,7 +736,7 @@ public class Server {
                 wldWLock.unlock();
             }
         } else {
-            List<Pair<Integer, List<Pair<String, Integer>>>> ranking = updatePlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
+            List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
 
             wldWLock.lock();
             try {
@@ -748,40 +748,47 @@ public class Server {
     }
 
     public void updateWorldPlayerRanking() {
-        List<Pair<Integer, List<Pair<String, Integer>>>> rankUpdates = updatePlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
-        if (!rankUpdates.isEmpty()) {
-            wldWLock.lock();
-            try {
-                if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                    for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
-                        playerRanking.add(new ArrayList<>(0));
-                    }
-
-                    for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
-                        playerRanking.set(wranks.getLeft(), wranks.getRight());
-                    }
-                } else {
-                    playerRanking.set(0, rankUpdates.get(0).getRight());
-                }
-            } finally {
-                wldWLock.unlock();
-            }
+        List<Pair<Integer, List<Pair<String, Integer>>>> rankUpdates = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
+        if (rankUpdates.isEmpty()) {
+            return;
         }
+
+        wldWLock.lock();
+        try {
+            if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
+                for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
+                    playerRanking.add(new ArrayList<>(0));
+                }
+
+                for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
+                    playerRanking.set(wranks.getLeft(), wranks.getRight());
+                }
+            } else {
+                playerRanking.set(0, rankUpdates.get(0).getRight());
+            }
+        } finally {
+            wldWLock.unlock();
+        }
+
     }
 
     private void initWorldPlayerRanking() {
         if (YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-            playerRanking.add(new ArrayList<>(0));
+            wldWLock.lock();
+            try {
+                playerRanking.add(new ArrayList<>(0));
+            } finally {
+                wldWLock.unlock();
+            }
         }
+
         updateWorldPlayerRanking();
     }
 
-    private static List<Pair<Integer, List<Pair<String, Integer>>>> updatePlayerRankingFromDB(int worldid) {
+    private static List<Pair<Integer, List<Pair<String, Integer>>>> loadPlayerRankingFromDB(int worldid) {
         List<Pair<Integer, List<Pair<String, Integer>>>> rankSystem = new ArrayList<>();
-        List<Pair<String, Integer>> rankUpdate = new ArrayList<>(0);
 
         try (Connection con = DatabaseConnection.getConnection()) {
-
             String worldQuery;
             if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
                 if (worldid >= 0) {
@@ -793,6 +800,7 @@ public class Server {
                 worldQuery = (" AND `characters`.`world` >= 0 AND `characters`.`world` <= " + Math.abs(worldid));
             }
 
+            List<Pair<String, Integer>> rankUpdate = new ArrayList<>(0);
             try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`name`, `characters`.`level`, `characters`.`world` FROM `characters` LEFT JOIN accounts ON accounts.id = characters.accountid WHERE `characters`.`gm` < 2 AND `accounts`.`banned` = '0'" + worldQuery + " ORDER BY " + (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING ? "world, " : "") + "level DESC, exp DESC, lastExpGainTime ASC LIMIT 50");
                  ResultSet rs = ps.executeQuery()) {
 
@@ -836,22 +844,6 @@ public class Server {
             throw new IllegalStateException("Failed to initiate a connection to the database");
         }
 
-        TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
-
-        try (Connection con = DatabaseConnection.getConnection()) {
-            setAllLoggedOut(con);
-            setAllMerchantsInactive(con);
-            cleanNxcodeCoupons(con);
-            loadCouponRates(con);
-            updateActiveCoupons(con);
-            MapleCashidGenerator.loadExistentCashIdsFromDb(con);
-            applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
-            applyAllWorldTransfers(con);
-        } catch (SQLException sqle) {
-            log.error("Failed to run all startup-bound database tasks", sqle);
-            throw new IllegalStateException(sqle);
-        }
-
         final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
         // Run slow operations asynchronously to make startup faster
         final List<Future<?>> futures = new ArrayList<>();
@@ -861,10 +853,29 @@ public class Server {
         futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
         futures.add(initExecutor.submit(() -> MaplePlayerNPCFactory.loadFactoryMetadata()));
 
+        TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
+
+        try (Connection con = DatabaseConnection.getConnection()) {
+            setAllLoggedOut(con);
+            setAllMerchantsInactive(con);
+            cleanNxcodeCoupons(con);
+            loadCouponRates(con);
+            updateActiveCoupons(con);
+            NewYearCardRecord.startPendingNewYearCardRequests(con);
+            MapleCashidGenerator.loadExistentCashIdsFromDb(con);
+            applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
+            applyAllWorldTransfers(con);
+
+            if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+                MapleFamily.loadAllFamilies(con);
+            }
+        } catch (SQLException sqle) {
+            log.error("Failed to run all startup-bound database tasks", sqle);
+            throw new IllegalStateException(sqle);
+        }
+
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
-
-        NewYearCardRecord.startPendingNewYearCardRequests();
 
         if (YamlConfig.config.server.USE_THREAD_TRACKER) {
             ThreadTracker.getInstance().registerThreadTrackerTask();
@@ -883,13 +894,6 @@ public class Server {
             e.printStackTrace();//For those who get errors
             log.error("[SEVERE] Syntax error in 'world.ini'.");
             System.exit(0);
-        }
-
-        if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-            long timeToTake = System.currentTimeMillis();
-            MapleFamily.loadAllFamilies();
-            final double familyLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-            log.info("Families loaded in {} seconds", familyLoadTime);
         }
 
         // Wait on all async tasks to complete
