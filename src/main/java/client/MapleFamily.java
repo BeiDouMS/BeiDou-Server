@@ -182,97 +182,95 @@ public class MapleFamily {
         }
     }
 
-    public static void loadAllFamilies() {
-        try(Connection con = DatabaseConnection.getConnection()) {
-            List<Pair<Pair<Integer, Integer>, MapleFamilyEntry>> unmatchedJuniors = new ArrayList<>(200); // <<world, seniorid> familyEntry>
-            try(PreparedStatement psEntries = con.prepareStatement("SELECT * FROM family_character")) {
-                ResultSet rsEntries = psEntries.executeQuery();
-                while(rsEntries.next()) { // can be optimized
-                    int cid = rsEntries.getInt("cid");
-                    String name = null;
-                    int level = -1;
-                    int jobID = -1;
-                    int world = -1;
-                    try(PreparedStatement ps = con.prepareStatement("SELECT world, name, level, job FROM characters WHERE id = ?")) {
-                        ps.setInt(1, cid);
-                        ResultSet rs = ps.executeQuery();
-                        if(rs.next()) {
-                            world = rs.getInt("world");
-                            name = rs.getString("name");
-                            level = rs.getInt("level");
-                            jobID = rs.getInt("job");
-                        } else {
-                            FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Could not load character information of " + cid + " in loadAllFamilies(). (RECORD DOES NOT EXIST)");
-                            continue;
-                        }
-                    } catch(SQLException e) {
-                        FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not load character information of " + cid + " in loadAllFamilies(). (SQL ERROR)");
-                        continue;
-                    }
-                    int familyid = rsEntries.getInt("familyid");
-                    int seniorid = rsEntries.getInt("seniorid");
-                    int reputation = rsEntries.getInt("reputation");
-                    int todaysRep = rsEntries.getInt("todaysrep");
-                    int totalRep = rsEntries.getInt("totalreputation");
-                    int repsToSenior = rsEntries.getInt("reptosenior");
-                    String precepts = rsEntries.getString("precepts");
-                    //Timestamp lastResetTime = rsEntries.getTimestamp("lastresettime"); //taken care of by FamilyDailyResetTask
-                    World wserv = Server.getInstance().getWorld(world);
-                    if (wserv == null) {
-                        continue;
-                    }
-                    MapleFamily family = wserv.getFamily(familyid);
-                    if(family == null) {
-                        family = new MapleFamily(familyid, world);
-                        Server.getInstance().getWorld(world).addFamily(familyid, family);
-                    }
-                    MapleFamilyEntry familyEntry = new MapleFamilyEntry(family, cid, name, level, MapleJob.getById(jobID));
-                    family.addEntry(familyEntry);
-                    if(seniorid <= 0) {
-                        family.setLeader(familyEntry);
-                        family.setMessage(precepts, false);
-                    }
-                    MapleFamilyEntry senior = family.getEntryByID(seniorid);
-                    if(senior != null) {
-                        familyEntry.setSenior(family.getEntryByID(seniorid), false);
+    public static void loadAllFamilies(Connection con) {
+        List<Pair<Pair<Integer, Integer>, MapleFamilyEntry>> unmatchedJuniors = new ArrayList<>(200); // <<world, seniorid> familyEntry>
+        try (PreparedStatement psEntries = con.prepareStatement("SELECT * FROM family_character")) {
+            ResultSet rsEntries = psEntries.executeQuery();
+            while (rsEntries.next()) { // can be optimized
+                int cid = rsEntries.getInt("cid");
+                String name = null;
+                int level = -1;
+                int jobID = -1;
+                int world = -1;
+                try (PreparedStatement ps = con.prepareStatement("SELECT world, name, level, job FROM characters WHERE id = ?")) {
+                    ps.setInt(1, cid);
+                    ResultSet rs = ps.executeQuery();
+                    if (rs.next()) {
+                        world = rs.getInt("world");
+                        name = rs.getString("name");
+                        level = rs.getInt("level");
+                        jobID = rs.getInt("job");
                     } else {
-                        if(seniorid > 0) unmatchedJuniors.add(new Pair<>(new Pair<>(world, seniorid), familyEntry));
+                        FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Could not load character information of " + cid + " in loadAllFamilies(). (RECORD DOES NOT EXIST)");
+                        continue;
                     }
-                    familyEntry.setReputation(reputation);
-                    familyEntry.setTodaysRep(todaysRep);
-                    familyEntry.setTotalReputation(totalRep);
-                    familyEntry.setRepsToSenior(repsToSenior);
-                    //load used entitlements
-                    try (PreparedStatement ps = con.prepareStatement("SELECT entitlementid FROM family_entitlement WHERE charid = ?")) {
-                        ps.setInt(1, familyEntry.getChrId());
-                        ResultSet rs = ps.executeQuery();
-                        while(rs.next()) {
-                            familyEntry.setEntitlementUsed(rs.getInt("entitlementid"));
-                        }
-                    }
+                } catch (SQLException e) {
+                    FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not load character information of " + cid + " in loadAllFamilies(). (SQL ERROR)");
+                    continue;
                 }
-            } catch(SQLException e) {
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get family_character entries.");
-                e.printStackTrace();
-            }
-            // link missing ones (out of order)
-            for(Pair<Pair<Integer, Integer>, MapleFamilyEntry> unmatchedJunior : unmatchedJuniors) {
-                int world = unmatchedJunior.getLeft().getLeft();
-                int seniorid = unmatchedJunior.getLeft().getRight();
-                MapleFamilyEntry junior = unmatchedJunior.getRight();
-                MapleFamilyEntry senior = Server.getInstance().getWorld(world).getFamily(junior.getFamily().getID()).getEntryByID(seniorid);
-                if(senior != null) {
-                    junior.setSenior(senior, false);
+                int familyid = rsEntries.getInt("familyid");
+                int seniorid = rsEntries.getInt("seniorid");
+                int reputation = rsEntries.getInt("reputation");
+                int todaysRep = rsEntries.getInt("todaysrep");
+                int totalRep = rsEntries.getInt("totalreputation");
+                int repsToSenior = rsEntries.getInt("reptosenior");
+                String precepts = rsEntries.getString("precepts");
+                //Timestamp lastResetTime = rsEntries.getTimestamp("lastresettime"); //taken care of by FamilyDailyResetTask
+                World wserv = Server.getInstance().getWorld(world);
+                if (wserv == null) {
+                    continue;
+                }
+                MapleFamily family = wserv.getFamily(familyid);
+                if (family == null) {
+                    family = new MapleFamily(familyid, world);
+                    Server.getInstance().getWorld(world).addFamily(familyid, family);
+                }
+                MapleFamilyEntry familyEntry = new MapleFamilyEntry(family, cid, name, level, MapleJob.getById(jobID));
+                family.addEntry(familyEntry);
+                if (seniorid <= 0) {
+                    family.setLeader(familyEntry);
+                    family.setMessage(precepts, false);
+                }
+                MapleFamilyEntry senior = family.getEntryByID(seniorid);
+                if (senior != null) {
+                    familyEntry.setSenior(family.getEntryByID(seniorid), false);
                 } else {
-                    FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Missing senior for character " + junior.getName() + " in world " + world);
+                    if (seniorid > 0) {
+                        unmatchedJuniors.add(new Pair<>(new Pair<>(world, seniorid), familyEntry));
+                    }
+                }
+                familyEntry.setReputation(reputation);
+                familyEntry.setTodaysRep(todaysRep);
+                familyEntry.setTotalReputation(totalRep);
+                familyEntry.setRepsToSenior(repsToSenior);
+                //load used entitlements
+                try (PreparedStatement ps = con.prepareStatement("SELECT entitlementid FROM family_entitlement WHERE charid = ?")) {
+                    ps.setInt(1, familyEntry.getChrId());
+                    ResultSet rs = ps.executeQuery();
+                    while (rs.next()) {
+                        familyEntry.setEntitlementUsed(rs.getInt("entitlementid"));
+                    }
                 }
             }
-        } catch(SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get DB connection.");
+        } catch (SQLException e) {
+            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get family_character entries.");
             e.printStackTrace();
         }
-        for(World world : Server.getInstance().getWorlds()) {
-            for(MapleFamily family : world.getFamilies()) {
+        // link missing ones (out of order)
+        for (Pair<Pair<Integer, Integer>, MapleFamilyEntry> unmatchedJunior : unmatchedJuniors) {
+            int world = unmatchedJunior.getLeft().getLeft();
+            int seniorid = unmatchedJunior.getLeft().getRight();
+            MapleFamilyEntry junior = unmatchedJunior.getRight();
+            MapleFamilyEntry senior = Server.getInstance().getWorld(world).getFamily(junior.getFamily().getID()).getEntryByID(seniorid);
+            if (senior != null) {
+                junior.setSenior(senior, false);
+            } else {
+                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Missing senior for character " + junior.getName() + " in world " + world);
+            }
+        }
+
+        for (World world : Server.getInstance().getWorlds()) {
+            for (MapleFamily family : world.getFamilies()) {
                 family.getLeader().doFullCount();
             }
         }

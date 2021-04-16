@@ -80,8 +80,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
@@ -134,7 +139,7 @@ public class Server {
     private final AtomicLong currentTime = new AtomicLong(0);
     private long serverCurrentTime = 0;
 
-    private boolean availableDeveloperRoom = false;
+    private volatile boolean availableDeveloperRoom = false;
     private boolean online = false;
     public static long uptime = System.currentTimeMillis();
 
@@ -625,7 +630,7 @@ public class Server {
         }
     }
 
-    public void updateActiveCoupons() throws SQLException {
+    public void updateActiveCoupons(Connection con) throws SQLException {
         synchronized (activeCoupons) {
             activeCoupons.clear();
             Calendar c = Calendar.getInstance();
@@ -633,23 +638,19 @@ public class Server {
             int weekDay = c.get(Calendar.DAY_OF_WEEK);
             int hourDay = c.get(Calendar.HOUR_OF_DAY);
 
-            try (Connection con = DatabaseConnection.getConnection()) {
+            int weekdayMask = (1 << weekDay);
+            PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour <= ? AND endhour > ?");
+            ps.setInt(1, weekdayMask);
+            ps.setInt(2, weekdayMask);
+            ps.setInt(3, hourDay);
+            ps.setInt(4, hourDay);
 
-                int weekdayMask = (1 << weekDay);
-                PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour <= ? AND endhour > ?");
-                ps.setInt(1, weekdayMask);
-                ps.setInt(2, weekdayMask);
-                ps.setInt(3, hourDay);
-                ps.setInt(4, hourDay);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        activeCoupons.add(rs.getInt("couponid"));
-                    }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    activeCoupons.add(rs.getInt("couponid"));
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
             }
+
         }
     }
 
@@ -703,7 +704,7 @@ public class Server {
     }
 
     private void installWorldPlayerRanking(int worldid) {
-        List<Pair<Integer, List<Pair<String, Integer>>>> ranking = updatePlayerRankingFromDB(worldid);
+        List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(worldid);
         if (!ranking.isEmpty()) {
             wldWLock.lock();
             try {
@@ -735,7 +736,7 @@ public class Server {
                 wldWLock.unlock();
             }
         } else {
-            List<Pair<Integer, List<Pair<String, Integer>>>> ranking = updatePlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
+            List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
 
             wldWLock.lock();
             try {
@@ -747,40 +748,47 @@ public class Server {
     }
 
     public void updateWorldPlayerRanking() {
-        List<Pair<Integer, List<Pair<String, Integer>>>> rankUpdates = updatePlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
-        if (!rankUpdates.isEmpty()) {
-            wldWLock.lock();
-            try {
-                if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                    for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
-                        playerRanking.add(new ArrayList<>(0));
-                    }
-
-                    for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
-                        playerRanking.set(wranks.getLeft(), wranks.getRight());
-                    }
-                } else {
-                    playerRanking.set(0, rankUpdates.get(0).getRight());
-                }
-            } finally {
-                wldWLock.unlock();
-            }
+        List<Pair<Integer, List<Pair<String, Integer>>>> rankUpdates = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
+        if (rankUpdates.isEmpty()) {
+            return;
         }
+
+        wldWLock.lock();
+        try {
+            if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
+                for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
+                    playerRanking.add(new ArrayList<>(0));
+                }
+
+                for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
+                    playerRanking.set(wranks.getLeft(), wranks.getRight());
+                }
+            } else {
+                playerRanking.set(0, rankUpdates.get(0).getRight());
+            }
+        } finally {
+            wldWLock.unlock();
+        }
+
     }
 
     private void initWorldPlayerRanking() {
         if (YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-            playerRanking.add(new ArrayList<>(0));
+            wldWLock.lock();
+            try {
+                playerRanking.add(new ArrayList<>(0));
+            } finally {
+                wldWLock.unlock();
+            }
         }
+
         updateWorldPlayerRanking();
     }
 
-    private static List<Pair<Integer, List<Pair<String, Integer>>>> updatePlayerRankingFromDB(int worldid) {
+    private static List<Pair<Integer, List<Pair<String, Integer>>>> loadPlayerRankingFromDB(int worldid) {
         List<Pair<Integer, List<Pair<String, Integer>>>> rankSystem = new ArrayList<>();
-        List<Pair<String, Integer>> rankUpdate = new ArrayList<>(0);
 
         try (Connection con = DatabaseConnection.getConnection()) {
-
             String worldQuery;
             if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
                 if (worldid >= 0) {
@@ -792,6 +800,7 @@ public class Server {
                 worldQuery = (" AND `characters`.`world` >= 0 AND `characters`.`world` <= " + Math.abs(worldid));
             }
 
+            List<Pair<String, Integer>> rankUpdate = new ArrayList<>(0);
             try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`name`, `characters`.`level`, `characters`.`world` FROM `characters` LEFT JOIN accounts ON accounts.id = characters.accountid WHERE `characters`.`gm` < 2 AND `accounts`.`banned` = '0'" + worldQuery + " ORDER BY " + (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING ? "world, " : "") + "level DESC, exp DESC, lastExpGainTime ASC LIMIT 50");
                  ResultSet rs = ps.executeQuery()) {
 
@@ -824,6 +833,7 @@ public class Server {
     }
 
     public void init() {
+        Instant beforeInit = Instant.now();
         log.info("Cosmic v{} starting up.", ServerConstants.VERSION);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
@@ -834,49 +844,38 @@ public class Server {
             throw new IllegalStateException("Failed to initiate a connection to the database");
         }
 
+        final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
+        // Run slow operations asynchronously to make startup faster
+        final List<Future<?>> futures = new ArrayList<>();
+        futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
+        futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
+        futures.add(initExecutor.submit(() -> MapleQuest.loadAllQuests()));
+        futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
+        futures.add(initExecutor.submit(() -> MaplePlayerNPCFactory.loadFactoryMetadata()));
+
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
         try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0")) {
-                ps.executeUpdate();
-            }
-
+            setAllLoggedOut(con);
+            setAllMerchantsInactive(con);
             cleanNxcodeCoupons(con);
             loadCouponRates(con);
-            updateActiveCoupons();
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
+            updateActiveCoupons(con);
+            NewYearCardRecord.startPendingNewYearCardRequests(con);
+            MapleCashidGenerator.loadExistentCashIdsFromDb(con);
+            applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
+            applyAllWorldTransfers(con);
 
-        applyAllNameChanges(); // -- name changes can be missed by INSTANT_NAME_CHANGE --
-        applyAllWorldTransfers();
-        //MaplePet.clearMissingPetsFromDb();    // thanks Optimist for noticing this taking too long to run
-        MapleCashidGenerator.loadExistentCashIdsFromDb();
+            if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+                MapleFamily.loadAllFamilies(con);
+            }
+        } catch (SQLException sqle) {
+            log.error("Failed to run all startup-bound database tasks", sqle);
+            throw new IllegalStateException(sqle);
+        }
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
-
-        long timeToTake = System.currentTimeMillis();
-        SkillFactory.loadAllSkills();
-        final double skillLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-        log.info("Skills loaded in {} seconds", skillLoadTime);
-
-        timeToTake = System.currentTimeMillis();
-
-        CashItemFactory.getSpecialCashItems();
-        final double itemLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-        log.info("Items loaded in {} seconds", itemLoadTime);
-
-        timeToTake = System.currentTimeMillis();
-        MapleQuest.loadAllQuest();
-        final double questLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-        log.info("Quest loaded in {} seconds", questLoadTime);
-
-        NewYearCardRecord.startPendingNewYearCardRequests();
 
         if (YamlConfig.config.server.USE_THREAD_TRACKER) {
             ThreadTracker.getInstance().registerThreadTrackerTask();
@@ -890,7 +889,6 @@ public class Server {
             }
             initWorldPlayerRanking();
 
-            MaplePlayerNPCFactory.loadFactoryMetadata();
             loadPlayerNpcMapStepFromDb();
         } catch (Exception e) {
             e.printStackTrace();//For those who get errors
@@ -898,11 +896,14 @@ public class Server {
             System.exit(0);
         }
 
-        if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-            timeToTake = System.currentTimeMillis();
-            MapleFamily.loadAllFamilies();
-            final double familyLoadTime = (System.currentTimeMillis() - timeToTake) / 1000.0;
-            log.info("Families loaded in {} seconds", familyLoadTime);
+        // Wait on all async tasks to complete
+        for (Future<?> future : futures) {
+            try {
+                future.get();
+            } catch (Exception e) {
+                log.error("Failed to run all startup-bound loading tasks", e);
+                throw new IllegalStateException(e);
+            }
         }
 
         IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan
@@ -919,15 +920,27 @@ public class Server {
 
         log.info("Listening on port 8484");
 
-        log.info("Cosmic is now online.");
         online = true;
+        Duration initDuration = Duration.between(beforeInit, Instant.now());
+        log.info("Cosmic is now online after {} ms.", initDuration.toMillis());
 
-        MapleSkillbookInformationProvider.getInstance();
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
 
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
+        }
+    }
+
+    private static void setAllLoggedOut(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
+            ps.executeUpdate();
+        }
+    }
+
+    private static void setAllMerchantsInactive(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0")) {
+            ps.executeUpdate();
         }
     }
 
@@ -1570,39 +1583,42 @@ public class Server {
         }
     }
 
-    private static void applyAllNameChanges() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
+    private static void applyAllNameChanges(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
              ResultSet rs = ps.executeQuery()) {
             List<Pair<String, String>> changedNames = new LinkedList<>(); //logging only
-            while (rs.next()) {
-                con.setAutoCommit(false);
-                int nameChangeId = rs.getInt("id");
-                int characterId = rs.getInt("characterId");
-                String oldName = rs.getString("old");
-                String newName = rs.getString("new");
-                boolean success = MapleCharacter.doNameChange(con, characterId, oldName, newName, nameChangeId);
-                if (!success) {
-                    con.rollback(); //discard changes
-                } else {
-                    changedNames.add(new Pair<>(oldName, newName));
+
+            con.setAutoCommit(false);
+            try {
+                while (rs.next()) {
+                    int nameChangeId = rs.getInt("id");
+                    int characterId = rs.getInt("characterId");
+                    String oldName = rs.getString("old");
+                    String newName = rs.getString("new");
+                    boolean success = MapleCharacter.doNameChange(con, characterId, oldName, newName, nameChangeId);
+                    if (!success) {
+                        con.rollback(); //discard changes
+                    } else {
+                        con.commit();
+                        changedNames.add(new Pair<>(oldName, newName));
+                    }
                 }
+            } finally {
                 con.setAutoCommit(true);
             }
             //log
             for (Pair<String, String> namePair : changedNames) {
-                FilePrinter.print(FilePrinter.CHANGE_CHARACTER_NAME, "Name change applied : from \"" + namePair.getLeft() + "\" to \"" + namePair.getRight() + "\" at " + Calendar.getInstance().getTime().toString());
+                log.info("Name change applied - from: \"{}\" to \"{}\" at {}", namePair.getLeft(), namePair.getRight(), Instant.now());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to retrieve list of pending name changes.");
+            log.warn("Failed to retrieve list of pending name changes", e);
+            throw e;
         }
     }
 
-    private static void applyAllWorldTransfers() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
-                     ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    private static void applyAllWorldTransfers(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
+                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
              ResultSet rs = ps.executeQuery()) {
             List<Integer> removedTransfers = new LinkedList<>();
             while (rs.next()) {
@@ -1625,33 +1641,39 @@ public class Server {
             }
             rs.beforeFirst();
             List<Pair<Integer, Pair<Integer, Integer>>> worldTransfers = new LinkedList<>(); //logging only <charid, <oldWorld, newWorld>>
-            while (rs.next()) {
-                con.setAutoCommit(false);
-                int nameChangeId = rs.getInt("id");
-                if (removedTransfers.contains(nameChangeId)) {
-                    continue;
+
+            con.setAutoCommit(false);
+            try {
+                while (rs.next()) {
+                    int nameChangeId = rs.getInt("id");
+                    if (removedTransfers.contains(nameChangeId)) {
+                        continue;
+                    }
+                    int characterId = rs.getInt("characterId");
+                    int oldWorld = rs.getInt("from");
+                    int newWorld = rs.getInt("to");
+                    boolean success = MapleCharacter.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
+                    if (!success) {
+                        con.rollback();
+                    } else {
+                        con.commit();
+                        worldTransfers.add(new Pair<>(characterId, new Pair<>(oldWorld, newWorld)));
+                    }
                 }
-                int characterId = rs.getInt("characterId");
-                int oldWorld = rs.getInt("from");
-                int newWorld = rs.getInt("to");
-                boolean success = MapleCharacter.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
-                if (!success) {
-                    con.rollback();
-                } else {
-                    worldTransfers.add(new Pair<>(characterId, new Pair<>(oldWorld, newWorld)));
-                }
+            } finally {
                 con.setAutoCommit(true);
             }
+
             //log
             for (Pair<Integer, Pair<Integer, Integer>> worldTransferPair : worldTransfers) {
                 int charId = worldTransferPair.getLeft();
                 int oldWorld = worldTransferPair.getRight().getLeft();
                 int newWorld = worldTransferPair.getRight().getRight();
-                FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer applied : Character ID " + charId + " from World " + oldWorld + " to World " + newWorld + " at " + Calendar.getInstance().getTime().toString());
+                log.info("World transfer applied - character id {} from world {} to world {} at {}", charId, oldWorld, newWorld, Instant.now());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to retrieve list of pending world transfers.");
+            log.warn("Failed to retrieve list of pending world transfers", e);
+            throw e;
         }
     }
 

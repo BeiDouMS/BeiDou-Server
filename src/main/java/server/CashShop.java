@@ -40,7 +40,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 
 /*
@@ -144,15 +143,16 @@ public class CashShop {
     }
 
     public static class CashItemFactory {
+        private static volatile Map<Integer, CashItem> items = new HashMap<>();
+        private static volatile List<Integer> randomitemsns = new ArrayList<>();
+        private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
+        private static volatile List<SpecialCashItem> specialcashitems = new ArrayList<>();
 
-        private static final Map<Integer, CashItem> items = new HashMap<>();
-        private static final Map<Integer, List<Integer>> packages = new HashMap<>();
-        private static final List<SpecialCashItem> specialcashitems = new ArrayList<>();
-        private static final List<Integer> randomitemsns = new ArrayList<>();
-
-        static {
+        public static void loadAllCashItems() {
             MapleDataProvider etc = MapleDataProviderFactory.getDataProvider(new File("wz/Etc.wz"));
 
+            Map<Integer, CashItem> loadedItems = new HashMap<>();
+            List<Integer> onSaleItems = new ArrayList<>();
             for (MapleData item : etc.getData("Commodity.img").getChildren()) {
                 int sn = MapleDataTool.getIntConvert("SN", item);
                 int itemId = MapleDataTool.getIntConvert("ItemId", item);
@@ -160,9 +160,16 @@ public class CashShop {
                 long period = MapleDataTool.getIntConvert("Period", item, 1);
                 short count = (short) MapleDataTool.getIntConvert("Count", item, 1);
                 boolean onSale = MapleDataTool.getIntConvert("OnSale", item, 0) == 1;
-                items.put(sn, new CashItem(sn, itemId, price, period, count, onSale));
-            }
+                loadedItems.put(sn, new CashItem(sn, itemId, price, period, count, onSale));
 
+                if (onSale) {
+                    onSaleItems.add(sn);
+                }
+            }
+            CashItemFactory.items = loadedItems;
+            CashItemFactory.randomitemsns = onSaleItems;
+
+            Map<Integer, List<Integer>> loadedPackages = new HashMap<>();
             for (MapleData cashPackage : etc.getData("CashPackage.img").getChildren()) {
                 List<Integer> cPackage = new ArrayList<>();
 
@@ -170,24 +177,21 @@ public class CashShop {
                     cPackage.add(Integer.parseInt(item.getData().toString()));
                 }
 
-                packages.put(Integer.parseInt(cashPackage.getName()), cPackage);
+                loadedPackages.put(Integer.parseInt(cashPackage.getName()), cPackage);
             }
+            CashItemFactory.packages = loadedPackages;
 
-            for (Entry<Integer, CashItem> e : items.entrySet()) {
-                if (e.getValue().isOnSale()) {
-                    randomitemsns.add(e.getKey());
-                }
-            }
-
+            List<SpecialCashItem> loadedSpecialItems = new ArrayList<>();
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("SELECT * FROM specialcashitems");
                  ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    specialcashitems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
+                    loadedSpecialItems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            CashItemFactory.specialcashitems = loadedSpecialItems;
         }
 
         public static CashItem getRandomCashItem() {
@@ -222,16 +226,17 @@ public class CashShop {
         }
 
         public static void reloadSpecialCashItems() {//Yay?
-            specialcashitems.clear();
+            List<SpecialCashItem> loadedSpecialItems = new ArrayList<>();
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("SELECT * FROM specialcashitems");
                  ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    specialcashitems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
+                    loadedSpecialItems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            CashItemFactory.specialcashitems = loadedSpecialItems;
         }
     }
 

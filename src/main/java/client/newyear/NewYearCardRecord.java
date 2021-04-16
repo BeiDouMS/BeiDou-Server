@@ -339,22 +339,18 @@ public class NewYearCardRecord {
             }
         }
     }
-    
-    public static void startPendingNewYearCardRequests() {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM newyear WHERE timereceived = 0 AND senderdiscard = 0")) {
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        NewYearCardRecord newyear = new NewYearCardRecord(rs.getInt("senderid"), rs.getString("sendername"), rs.getInt("receiverid"), rs.getString("receivername"), rs.getString("message"));
-                        newyear.setExtraNewYearCardRecord(rs.getInt("id"), rs.getBoolean("senderdiscard"), rs.getBoolean("receiverdiscard"), rs.getBoolean("received"), rs.getLong("timesent"), rs.getLong("timereceived"));
-                        
-                        Server.getInstance().setNewYearCard(newyear);
-                        newyear.startNewYearCardTask();
-                    }
+
+    public static void startPendingNewYearCardRequests(Connection con) throws SQLException {
+        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM newyear WHERE timereceived = 0 AND senderdiscard = 0")) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    NewYearCardRecord newyear = new NewYearCardRecord(rs.getInt("senderid"), rs.getString("sendername"), rs.getInt("receiverid"), rs.getString("receivername"), rs.getString("message"));
+                    newyear.setExtraNewYearCardRecord(rs.getInt("id"), rs.getBoolean("senderdiscard"), rs.getBoolean("receiverdiscard"), rs.getBoolean("received"), rs.getLong("timesent"), rs.getLong("timereceived"));
+
+                    Server.getInstance().setNewYearCard(newyear);
+                    newyear.startNewYearCardTask();
                 }
             }
-        } catch(SQLException sqle) {
-            sqle.printStackTrace();
         }
     }
 }

@@ -570,7 +570,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         
         public Object[] getAvailableSkillBooks() {
                 List<Integer> ret = MapleItemInformationProvider.getInstance().usableSkillBooks(this.getPlayer());
-                ret.addAll(MapleSkillbookInformationProvider.getInstance().getTeachableSkills(this.getPlayer()));
+                ret.addAll(MapleSkillbookInformationProvider.getTeachableSkills(this.getPlayer()));
                 
                 return ret.toArray();
         }
@@ -580,7 +580,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         
         public String getSkillBookInfo(int itemid) {
-                SkillBookEntry sbe = MapleSkillbookInformationProvider.getInstance().getSkillbookAvailability(itemid);
+                SkillBookEntry sbe = MapleSkillbookInformationProvider.getSkillbookAvailability(itemid);
                 switch (sbe) {
                         case UNAVAILABLE:
                                 return "";
