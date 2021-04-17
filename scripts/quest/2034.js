@@ -1,5 +1,3 @@
-importPackage(Packages.client);
-
 var item;
 var status = -1;
 var item;
@@ -16,29 +14,32 @@ function end(mode, type, selection) {
 	}
 
 	else if(status == 1) {
-	    if(qm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.EQUIP).getNumFreeSlot() < 1) {
-		qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
-		qm.dispose();
-		return;
+	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+	    if(qm.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 1) {
+		    qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
+		    qm.dispose();
+		    return;
 	    }
 
-            var stance = qm.getPlayer().getJobStyle();
-            if(stance == Packages.client.MapleJob.WARRIOR) item = 1072003;
-            else if(stance == Packages.client.MapleJob.MAGICIAN) item = 1072077;
-            else if(stance == Packages.client.MapleJob.BOWMAN || stance == Packages.client.MapleJob.CROSSBOWMAN) item = 1072081;
-            else if(stance == Packages.client.MapleJob.THIEF) item = 1072035;
-            else if(stance == Packages.client.MapleJob.BRAWLER || stance == Packages.client.MapleJob.GUNSLINGER) item = 1072294;
-            else item = 1072018;
-         
-            qm.gainItem(item, 1);
-            qm.gainItem(4000007, -150);
-            qm.gainExp(2200);
-            qm.completeQuest();
-            
-            qm.sendOk("Alright, if you need work sometime down the road, feel free to come back and see me. This town sure can use a person like you for help~");
-        }
+	    var stance = qm.getPlayer().getJobStyle();
 
-        else if (status == 2) {
-            qm.dispose();
-        }
+	    const MapleJob = Java.type('client.MapleJob');
+        if(stance == MapleJob.WARRIOR) item = 1072003;
+        else if(stance == MapleJob.MAGICIAN) item = 1072077;
+        else if(stance == MapleJob.BOWMAN || stance == MapleJob.CROSSBOWMAN) item = 1072081;
+        else if(stance == MapleJob.THIEF) item = 1072035;
+        else if(stance == MapleJob.BRAWLER || stance == MapleJob.GUNSLINGER) item = 1072294;
+        else item = 1072018;
+
+        qm.gainItem(item, 1);
+        qm.gainItem(4000007, -150);
+        qm.gainExp(2200);
+        qm.completeQuest();
+
+        qm.sendOk("Alright, if you need work sometime down the road, feel free to come back and see me. This town sure can use a person like you for help~");
+	}
+
+	else if (status == 2) {
+	    qm.dispose();
+	}
 }

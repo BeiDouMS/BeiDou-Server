@@ -18,8 +18,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {

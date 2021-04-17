@@ -18,8 +18,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.constants.game);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -60,6 +58,7 @@ function end(mode, type, selection) {
             status--;
         
         if (status == 0) {
+            const GameConstants = Java.type('constants.game.GameConstants');
             if(GameConstants.getJobBranch(qm.getPlayer().getJob()) == 1) {
                 qm.sendNext("Eh, didn't you get the #r2nd job advancement#k yet?");
                 qm.dispose();

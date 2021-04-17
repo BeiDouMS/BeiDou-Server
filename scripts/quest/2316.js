@@ -8,8 +8,6 @@ Version 1.0 - Script Done.(18/7/2010)
 =============================================================
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -36,14 +34,14 @@ function start(mode, type, selection) {
 function end(mode, type, selection) {
     status++;
 	if (mode != 1) {
-	    if(type == 1 && mode == 0)
-		    status -= 2;
-		else{
+	    if(type == 1 && mode == 0) {
+			status -= 2;
+		} else {
 			qm.dispose();
 			return;
 		}
 	}
-	if (status == 0)
+	if (status == 0) {
 		qm.sendOk("Ah, so you're the explorer people were talking about. I'm #bScarrs, the Royal Mushroom Scholar#k representing the Kingdom of Mushroom. So you need some #kKiller Mushroom Spores#k?");
 	} else if (status == 1){
                 qm.forceCompleteQuest();
@@ -51,6 +49,6 @@ function end(mode, type, selection) {
 		qm.sendOk("#kKiller Mushroom Spores#k... I think i've heard of them before...");
 	} else if (status == 2) {
                 qm.dispose();
-        }
+	}
 }
 	

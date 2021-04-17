@@ -1,5 +1,3 @@
-importPackage(Packages.client);
-
 var item;
 var stance;
 var status = -1;
@@ -24,11 +22,12 @@ function end(mode, type, selection) {
             var talkStr = "Do you like the glove? I've kept this for a while, and I was planning on using it someday, but it looks much better on you. Please put it to good use; besides, I got so much stuff from the Sector, that I don't need it anymore.";
             stance = qm.getPlayer().getJobStyle();
             
-            if(stance == Packages.client.MapleJob.WARRIOR) item = 1082024;
-            else if(stance == Packages.client.MapleJob.MAGICIAN) item = 1082063;
-            else if(stance == Packages.client.MapleJob.BOWMAN || stance == Packages.client.MapleJob.CROSSBOWMAN) item = 1082072;
-            else if(stance == Packages.client.MapleJob.THIEF) item = 1082076;
-            else if(stance == Packages.client.MapleJob.BRAWLER || stance == Packages.client.MapleJob.GUNSLINGER) item = 1082195;
+            const MapleJob = Java.type('client.MapleJob');
+            if(stance == MapleJob.WARRIOR) item = 1082024;
+            else if(stance == MapleJob.MAGICIAN) item = 1082063;
+            else if(stance == MapleJob.BOWMAN || stance == MapleJob.CROSSBOWMAN) item = 1082072;
+            else if(stance == MapleJob.THIEF) item = 1082076;
+            else if(stance == MapleJob.BRAWLER || stance == MapleJob.GUNSLINGER) item = 1082195;
             else item = 1082149;
             
             qm.sendNext(talkStr);

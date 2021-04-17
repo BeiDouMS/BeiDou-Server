@@ -2,8 +2,6 @@
  * Cygnus 1st Job advancement - Thunder Breaker
  */
 
-importPackage(Packages.client);
-
 var status = -1;
 var jobType = 5;
 var canTryFirstJob = true;
@@ -39,6 +37,7 @@ function end(mode, type, selection) {
 
                 qm.gainItem(1482014, 1);
                 qm.gainItem(1142066, 1);
+                const MapleJob = Java.type('client.MapleJob');
                 qm.getPlayer().changeJob(MapleJob.THUNDERBREAKER1);
                 qm.getPlayer().resetStats();
             }
