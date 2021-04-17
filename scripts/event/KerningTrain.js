@@ -1,5 +1,3 @@
-importPackage(Packages.tools);
-
 var returnTo = new Array(103000100, 103000310);
 var rideTo = new Array(103000310, 103000100);
 var trainRide = new Array(103000301, 103000302);
@@ -34,7 +32,8 @@ function playerEntry(eim, player) {
         returnMap = eim.getMapFactory().getMap(returnTo[myRide]);
         onRide = eim.getMapFactory().getMap(trainRide[myRide]);
         player.changeMap(onRide, onRide.getPortal(0));
-        
+
+        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         player.getClient().announce(MaplePacketCreator.getClock(rideTime / 1000));
         player.getClient().announce(MaplePacketCreator.earnTitleMessage("The next stop is at Kerning " + (myRide == 0 ? "Square" : "Subway") + " Station. The exit is to your left."));
         eim.schedule("timeOut", rideTime);

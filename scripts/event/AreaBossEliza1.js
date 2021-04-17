@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 var setupTask;
 
 function init() {
@@ -45,16 +43,20 @@ function cancelSchedule() {
 }
 
 function start() {
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var eliza = MapleLifeFactory.getMonster(8220000);
     var stairwayToTheSky2 = em.getChannelServer().getMapFactory().getMap(200010300);
-    var eliza = Packages.server.life.MapleLifeFactory.getMonster(8220000);
-	
+
 	if(stairwayToTheSky2.getMonsterById(8220000) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
 	}
-	
-    stairwayToTheSky2.spawnMonsterOnGroundBelow(eliza, new Packages.java.awt.Point(208, 83));
-    stairwayToTheSky2.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Eliza has appeared with a black whirlwind."));
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const Point = Java.type('java.awt.Point');
+	const spawnpoint = new Point(208, 83);
+    stairwayToTheSky2.spawnMonsterOnGroundBelow(eliza, spawnpoint);
+    stairwayToTheSky2.broadcastMessage(MaplePacketCreator.serverNotice(6, "Eliza has appeared with a black whirlwind."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

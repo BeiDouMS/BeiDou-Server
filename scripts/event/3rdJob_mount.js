@@ -21,7 +21,6 @@
  * @Author Ronan
  * 3rd Job Event - Kenta's Mount Quest
 **/
-importPackage(Packages.tools);
 
 var entryMap = 923010000;
 var exitMap = 923010100;
@@ -84,7 +83,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 0);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

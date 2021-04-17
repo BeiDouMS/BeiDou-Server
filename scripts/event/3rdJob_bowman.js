@@ -21,7 +21,6 @@
  * @Author Ronan
  * 3rd Job Event - Bowman
 **/
-importPackage(Packages.tools);
 
 var entryMap = 108010100;
 var exitMap = 105040305;
@@ -54,7 +53,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 0);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

@@ -21,7 +21,6 @@
  * @Author Ronan
  * Event - Balrog Quest
 **/
-importPackage(Packages.tools);
 
 var entryMap = 910520000;
 var exitMap = 105100100;
@@ -63,7 +62,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 1);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }
@@ -96,7 +96,8 @@ function isBalrog(mob) {
 
 function monsterKilled(mob, eim) {
     if(isBalrog(mob)) {
-        eim.spawnNpc(1061015, new java.awt.Point(0, 115), mob.getMap());
+        const Point = Java.type('java.awt.Point');
+        eim.spawnNpc(1061015, new Point(0, 115), mob.getMap());
     }
 }
 function monsterValue(eim, mobId) {

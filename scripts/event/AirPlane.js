@@ -1,5 +1,3 @@
-importPackage(Packages.tools);
-
 var KC_bfd;
 var Plane_to_CBD;
 var CBD_docked;

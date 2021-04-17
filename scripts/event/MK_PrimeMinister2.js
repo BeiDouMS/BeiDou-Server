@@ -1,6 +1,3 @@
-importPackage(Packages.tools);
-importPackage(Packages.server.life);
-
 var eventTime = 10 * 60 * 1000;     // 10 minutes
 var entryMap = 106021601;
 var exitMap = 106021402;
@@ -57,7 +54,9 @@ function respawn(eim){
 
                 var weddinghall = eim.getMapInstance(entryMap);
                 weddinghall.getPortal(1).setPortalState(false);
-                weddinghall.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new java.awt.Point(292, 143));
+                const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                const Point = Java.type('java.awt.Point');
+                weddinghall.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(292, 143));
         } else {
                 eim.schedule("respawn", 10000);
         }

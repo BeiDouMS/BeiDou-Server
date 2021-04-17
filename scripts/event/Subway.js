@@ -1,5 +1,3 @@
-importPackage(Packages.tools);
-
 var KC_Waiting;
 var Subway_to_KC;
 var KC_docked;
@@ -38,6 +36,8 @@ function stopEntry() {
 }
 
 function takeoff() {
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+
     //sound src: https://www.soundjay.com/transportation/metro-door-close-01.mp3
     KC_docked.broadcastMessage(MaplePacketCreator.playSound("subway/whistle"));
     NLC_docked.broadcastMessage(MaplePacketCreator.playSound("subway/whistle"));
@@ -52,7 +52,8 @@ function arrived() {
     Subway_to_KC.warpEveryone(KC_docked.getId(), 0);
     Subway_to_NLC.warpEveryone(NLC_docked.getId(), 0);
     scheduleNew();
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     KC_docked.broadcastMessage(MaplePacketCreator.playSound("subway/whistle"));
     NLC_docked.broadcastMessage(MaplePacketCreator.playSound("subway/whistle"));
 }

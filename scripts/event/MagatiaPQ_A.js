@@ -23,8 +23,6 @@
  * @event: Magatia PQ (Alcadno)
 */
 
-importPackage(Packages.server.life);
-
 var isPq = true;
 var minPlayers = 4, maxPlayers = 4;
 var minLevel = 71, maxLevel = 85;
@@ -144,11 +142,12 @@ function setup(level, lobbyid) {
         
         eim.getInstanceMap(926110201).shuffleReactors(2518000, 2612004);
         eim.getInstanceMap(926110202).shuffleReactors(2518000, 2612004);
-        
-        eim.spawnNpc(2112010, new java.awt.Point(252, 243), eim.getInstanceMap(926110203));
-        eim.spawnNpc(2112010, new java.awt.Point(200, 100), eim.getInstanceMap(926110401));
-        eim.spawnNpc(2112011, new java.awt.Point(200, 100), eim.getInstanceMap(926110500));
-        eim.spawnNpc(2112018, new java.awt.Point(200, 100), eim.getInstanceMap(926110600));
+
+        const Point = Java.type('java.awt.Point');
+        eim.spawnNpc(2112010, new Point(252, 243), eim.getInstanceMap(926110203));
+        eim.spawnNpc(2112010, new Point(200, 100), eim.getInstanceMap(926110401));
+        eim.spawnNpc(2112011, new Point(200, 100), eim.getInstanceMap(926110500));
+        eim.spawnNpc(2112018, new Point(200, 100), eim.getInstanceMap(926110600));
         
         respawnStages(eim);
         eim.startEventTimer(eventTime * 60000);
@@ -245,15 +244,17 @@ function respawnStages(eim) {
             var mapobj = eim.getMapInstance(926110401);
             var mobcount = mapobj.countMonster(9300150);
             var mobobj;
+            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+            const Point = Java.type('java.awt.Point');
             if(mobcount == 0) {
                 mobobj = MapleLifeFactory.getMonster(9300150);
-                mapobj.spawnMonsterOnGroundBelow(mobobj, new Packages.java.awt.Point(-278, -126));
+                mapobj.spawnMonsterOnGroundBelow(mobobj, new Point(-278, -126));
 
                 mobobj = MapleLifeFactory.getMonster(9300150);
-                mapobj.spawnMonsterOnGroundBelow(mobobj, new Packages.java.awt.Point(-542, -126));
+                mapobj.spawnMonsterOnGroundBelow(mobobj, new Point(-542, -126));
             } else if(mobcount == 1) {
                 mobobj = MapleLifeFactory.getMonster(9300150);
-                mapobj.spawnMonsterOnGroundBelow(mobobj, new Packages.java.awt.Point(-542, -126));
+                mapobj.spawnMonsterOnGroundBelow(mobobj, new Point(-542, -126));
             }
         }
         
@@ -311,14 +312,16 @@ function yuleteAction(eim) {
         var mob1 = 9300143, mob2 = 9300144;
         
         mapobj.destroyNPC(2112010);
-        
+
+        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const Point = Java.type('java.awt.Point');
         var mobobj1, mobobj2;
         for(var i = 0; i < 5; i++) {
                 mobobj1 = MapleLifeFactory.getMonster(mob1);
                 mobobj2 = MapleLifeFactory.getMonster(mob2);
             
-                mapobj.spawnMonsterOnGroundBelow(mobobj1, new Packages.java.awt.Point(-455, 135));
-                mapobj.spawnMonsterOnGroundBelow(mobobj2, new Packages.java.awt.Point(-455, 135));
+                mapobj.spawnMonsterOnGroundBelow(mobobj1, new Point(-455, 135));
+                mapobj.spawnMonsterOnGroundBelow(mobobj2, new Point(-455, 135));
         }
         
 
@@ -326,8 +329,8 @@ function yuleteAction(eim) {
                 mobobj1 = MapleLifeFactory.getMonster(mob1);
                 mobobj2 = MapleLifeFactory.getMonster(mob2);
             
-                mapobj.spawnMonsterOnGroundBelow(mobobj1, new Packages.java.awt.Point(0, 135));
-                mapobj.spawnMonsterOnGroundBelow(mobobj2, new Packages.java.awt.Point(0, 135));
+                mapobj.spawnMonsterOnGroundBelow(mobobj1, new Point(0, 135));
+                mapobj.spawnMonsterOnGroundBelow(mobobj2, new Point(0, 135));
         }
         
         
@@ -335,8 +338,8 @@ function yuleteAction(eim) {
                 mobobj1 = MapleLifeFactory.getMonster(mob1);
                 mobobj2 = MapleLifeFactory.getMonster(mob2);
             
-                mapobj.spawnMonsterOnGroundBelow(mobobj1, new Packages.java.awt.Point(360, 135));
-                mapobj.spawnMonsterOnGroundBelow(mobobj2, new Packages.java.awt.Point(360, 135));
+                mapobj.spawnMonsterOnGroundBelow(mobobj1, new Point(360, 135));
+                mapobj.spawnMonsterOnGroundBelow(mobobj2, new Point(360, 135));
         }
 }
 

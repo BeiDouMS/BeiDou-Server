@@ -3,8 +3,6 @@
  * @author: Ronan
 */
 
-importPackage(Packages.tools);
-
 var isPq = true;
 var minPlayers = 1, maxPlayers = 1;
 var minLevel = 12, maxLevel = 255;
@@ -102,7 +100,8 @@ function respawnStages(eim) {}
 function playerEntry(eim, player) {
         var map = eim.getMapInstance(entryMap);
         player.changeMap(map, map.getPortal(0));
-        
+
+        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         player.announce(MaplePacketCreator.showEffect("event/space/start"));
         player.startMapEffect("Please rescue Gaga within the time limit.", 5120027);
 }
@@ -199,7 +198,8 @@ function clearPQ(eim) {
 }
 
 function spawnGrandpaBunny(eim) {
-        eim.spawnNpc(9001105, new java.awt.Point(175, -20), eim.getInstanceMap(maxMapId));
+        const Point = Java.type('java.awt.Point');
+        eim.spawnNpc(9001105, new Point(175, -20), eim.getInstanceMap(maxMapId));
 }
 
 function monsterKilled(mob, eim) {}

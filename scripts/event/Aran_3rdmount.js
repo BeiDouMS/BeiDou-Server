@@ -21,7 +21,6 @@
  * @Author Ronan
  * Event - Wolves' Mount Quest
 **/
-importPackage(Packages.tools);
 
 var entryMap = 914030000;
 var exitMap = 140010210;
@@ -61,7 +60,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 1);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

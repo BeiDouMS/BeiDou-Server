@@ -22,7 +22,6 @@
 /**
  *Dollhouse Event
 **/
-importPackage(Packages.tools);
 
 var entryMap = 922000010;
 var exitMap = 221024400;
@@ -46,7 +45,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 0);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

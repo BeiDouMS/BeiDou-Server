@@ -23,8 +23,6 @@
  * @event: Zakum Battle
 */
 
-importPackage(Packages.server.life);
-
 var isPq = true;
 var minPlayers = 6, maxPlayers = 30;
 var minLevel = 50, maxLevel = 255;

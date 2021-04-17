@@ -23,8 +23,6 @@
  * @event: Vs Balrog
 */
 
-importPackage(Packages.server.life);
-
 var isPq = true;
 var minPlayers = 3, maxPlayers = 30;
 var minLevel = 50, maxLevel = 255;
@@ -136,14 +134,17 @@ function releaseLeftClaw(eim) {
 
 function spawnBalrog(eim) {
         var mapObj = eim.getInstanceMap(entryMap);
-    
-        mapObj.spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830007), new Packages.java.awt.Point(412, 258));
-        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830009), new Packages.java.awt.Point(412, 258));
-        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830013), new Packages.java.awt.Point(412, 258));
+
+        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const Point = Java.type('java.awt.Point');
+        mapObj.spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830007), new Point(412, 258));
+        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830009), new Point(412, 258));
+        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830013), new Point(412, 258));
 }
 
 function spawnSealedBalrog(eim) {
-        eim.getInstanceMap(entryMap).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(bossMobId), new Packages.java.awt.Point(412, 258));
+        const Point = Java.type('java.awt.Point');
+        eim.getInstanceMap(entryMap).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(bossMobId), new Point(412, 258));
 }
 
 function playerEntry(eim, player) {

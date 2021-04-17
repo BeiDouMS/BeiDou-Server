@@ -23,8 +23,6 @@
  * @event: Cafe PQ 4
 */
 
-importPackage(Packages.client.inventory);
-
 var isPq = true;
 var minPlayers = 3, maxPlayers = 6;
 var minLevel = 21, maxLevel = 120;
@@ -255,6 +253,7 @@ function monsterKilled(mob, eim) {
         if(eim.isEventCleared()) return;
         
         var mapObj = mob.getMap();
+        const Item = Java.type('client.inventory.Item');
         var itemObj = new Item(4001007, 0, getDroppedQuantity(mob));
         var dropper = eim.getPlayers().get(0);
 
