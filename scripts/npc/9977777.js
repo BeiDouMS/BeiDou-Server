@@ -22,8 +22,6 @@
 	HeavenMS developer info.
  */
 
-importPackage(Packages.tools);
-
 var status;
 
 var anthemSong = "Field/anthem/brazil";     // sound src: https://c7.rbxcdn.com/f91060652a6e9fbfbf92cb1418435448
@@ -310,6 +308,7 @@ function writeAllFeatures() {
 }
 
 function start() {
+        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         cm.getPlayer().announce(MaplePacketCreator.musicChange(anthemSong));
         status = -1;
         writeAllFeatures();
@@ -317,6 +316,7 @@ function start() {
 }
 
 function action(mode, type, selection) {
+        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         if (mode == -1) {
                 cm.getPlayer().announce(MaplePacketCreator.musicChange(ambientSong));
                 cm.dispose();

@@ -9,10 +9,6 @@
 	Dragon Evolver
 */
 
-importPackage(Packages.client.inventory);
-importPackage(Packages.client.inventory.manipulator);
-importPackage(Packages.server);
-
 var status;
 
 function start() {
@@ -105,6 +101,8 @@ function action(mode, type, selection) {
 			}
 		} else if (status == 2) {
 			if (selection == 0) {
+				const MapleInventoryManipulator = Java.type('client.inventory.manipulator.MapleInventoryManipulator');
+				const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
 				MapleInventoryManipulator.removeFromSlot(cm.getClient(), MapleInventoryType.CASH, 1, 1, true);
 				cm.sendOk("Your cash first slot is removed.");
 			} else if (selection == 1) {

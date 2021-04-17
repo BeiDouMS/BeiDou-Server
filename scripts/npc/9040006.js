@@ -6,8 +6,6 @@
  * Guild Quest Stage 3
  */
 
-importPackage(Packages.tools);
-
 function clearStage(stage, eim) {
         eim.setProperty("stage" + stage + "clear", "true");
         eim.showClearEffect(true);
@@ -213,6 +211,8 @@ function randX() {
 }
 
 function spawnMob(id, x, y, map) {
-	var mob = Packages.server.life.MapleLifeFactory.getMonster(id);
-	map.spawnMonsterOnGroundBelow(mob, new Packages.java.awt.Point(x, y));
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
+	var mob = MapleLifeFactory.getMonster(id);
+	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

@@ -1,6 +1,5 @@
 var status = 0;
 var section = 0;
-importPackage(java.lang);
 //questid 29931, infoquest 7662
 
 function start() {

@@ -23,16 +23,13 @@
  *@author Ronan
  */
 
-importPackage(Packages.server.expeditions);
-importPackage(Packages.tools);
-importPackage(Packages.scripting.event);
-
 var status = 0;
 var expedition;
 var expedMembers;
 var player;
 var em;
-var exped = MapleExpeditionType.BALROG_NORMAL;
+const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
+const exped = MapleExpeditionType.BALROG_NORMAL;
 var expedName = "Balrog";
 var expedBoss = "Balrog";
 var expedMap = "Balrog's Tomb";
@@ -159,6 +156,7 @@ function action(mode, type, selection) {
                 cm.sendOk("The expedition will begin and you will now be escorted to the #b" + expedMap + "#k.");
                 status = 4;
             } else if (selection == 3) {
+                const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
                 player.getMap().broadcastMessage(MaplePacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("The expedition has now ended. Sometimes the best strategy is to run away.");

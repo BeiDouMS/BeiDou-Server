@@ -3,9 +3,6 @@
  *@author Jvlaple
  */
 
-importPackage(Packages.server.expeditions);
-
-
 var status = 0;
 var toBan = -1;
 var choice;
@@ -13,6 +10,7 @@ var arena;
 var arenaName;
 var type;
 var map;
+const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
 var exped;
 var expedicao;
 var expedMembers;

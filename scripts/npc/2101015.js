@@ -1,8 +1,6 @@
 var arena;
 var status = 0;
 
-importPackage(Packages.client);
-
 function start() {
     arena = cm.getPlayer().getAriantColiseum();
     if (arena == null) {

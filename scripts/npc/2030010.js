@@ -28,7 +28,6 @@
  * Zakum Quest NPC 
  * Helps players leave the map
  */
- importPackage(Packages.server.expeditions);
  
 function start() {
     if(cm.getMapId() == 280030000) {

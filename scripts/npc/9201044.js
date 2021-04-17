@@ -29,8 +29,6 @@
 @	Description: Used to find the combo to unlock the next door. Players stand on 5 different crates to guess the combo.
 */
 
-importPackage(Packages.server.life);
-
 var debug = false;
 var autopass = false;
 
@@ -39,6 +37,8 @@ function spawnMobs(maxSpawn) {
     var spawnPosY;
 
     var mapObj = cm.getMap();
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
     if (stage == 2) {
         spawnPosX = [619, 299, 47, -140, -471];
         spawnPosY = [-840, -840, -840, -840, -840];
@@ -49,9 +49,9 @@ function spawnMobs(maxSpawn) {
                 var mobObj2 = MapleLifeFactory.getMonster(9400516);
                 var mobObj3 = MapleLifeFactory.getMonster(9400517);
 
-                mapObj.spawnMonsterOnGroundBelow(mobObj1, new Packages.java.awt.Point(spawnPosX[i], spawnPosY[i]));
-                mapObj.spawnMonsterOnGroundBelow(mobObj2, new Packages.java.awt.Point(spawnPosX[i], spawnPosY[i]));
-                mapObj.spawnMonsterOnGroundBelow(mobObj3, new Packages.java.awt.Point(spawnPosX[i], spawnPosY[i]));
+                mapObj.spawnMonsterOnGroundBelow(mobObj1, new Point(spawnPosX[i], spawnPosY[i]));
+                mapObj.spawnMonsterOnGroundBelow(mobObj2, new Point(spawnPosX[i], spawnPosY[i]));
+                mapObj.spawnMonsterOnGroundBelow(mobObj3, new Point(spawnPosX[i], spawnPosY[i]));
             }
         }
     } else {
@@ -63,7 +63,7 @@ function spawnMobs(maxSpawn) {
             var rndPos = Math.floor(Math.random() * 5);
 
             var mobObj = MapleLifeFactory.getMonster(rndMob);
-            mapObj.spawnMonsterOnGroundBelow(mobObj, new Packages.java.awt.Point(spawnPosX[rndPos], spawnPosY[rndPos]));
+            mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(spawnPosX[rndPos], spawnPosY[rndPos]));
         }
     }
 }

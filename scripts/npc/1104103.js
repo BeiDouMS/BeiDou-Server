@@ -18,8 +18,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.server.life);
-
 var npcid = 1104103;
 var baseJob = 14;
 var status;
@@ -64,7 +62,9 @@ function action(mode, type, selection) {
 function spawnMob(x, y, id, map) {
 	if(map.getMonsterById(id) != null)
 		return;
-		
+
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const Point = Java.type('java.awt.Point');
 	var mob = MapleLifeFactory.getMonster(id);
-	map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(x, y));
+	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }
