@@ -71,9 +71,11 @@ function setEventRewards(eim) {
 
 function spawnCakeBoss(eim) {
         var mapObj = eim.getMapInstance(680000400);
-        var mobObj = Packages.server.life.MapleLifeFactory.getMonster(9400606);
 
-        mapObj.spawnMonsterOnGroundBelow(mobObj, new Packages.java.awt.Point(777, -177));
+        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const Point = Java.type('java.awt.Point');
+        var mobObj = MapleLifeFactory.getMonster(9400606);
+        mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(777, -177));
 }
 
 function setup(level, lobbyid) {
@@ -125,10 +127,11 @@ function stopBlessings(eim) {
 
 function sendWeddingAction(eim, type) {
         var chr = eim.getLeader();
+        const Wedding = Java.type('tools.packets.Wedding');
         if(chr.getGender() == 0) {
-                chr.getMap().broadcastMessage(Packages.tools.packets.Wedding.OnWeddingProgress(type == 2, eim.getIntProperty("groomId"), eim.getIntProperty("brideId"), type + 1));
+                chr.getMap().broadcastMessage(Wedding.OnWeddingProgress(type == 2, eim.getIntProperty("groomId"), eim.getIntProperty("brideId"), type + 1));
         } else {
-                chr.getMap().broadcastMessage(Packages.tools.packets.Wedding.OnWeddingProgress(type == 2, eim.getIntProperty("brideId"), eim.getIntProperty("groomId"), type + 1));
+                chr.getMap().broadcastMessage(Wedding.OnWeddingProgress(type == 2, eim.getIntProperty("brideId"), eim.getIntProperty("groomId"), type + 1));
         }
 }
 
@@ -137,12 +140,14 @@ function hidePriestMsg(eim) {
 }
 
 function showStartMsg(eim) {
-        eim.getMapInstance(entryMap + 10).broadcastMessage(Packages.tools.packets.Wedding.OnWeddingProgress(false, 0, 0, 0));
+        const Wedding = Java.type('tools.packets.Wedding');
+        eim.getMapInstance(entryMap + 10).broadcastMessage(Wedding.OnWeddingProgress(false, 0, 0, 0));
         eim.schedule("hidePriestMsg", forceHideMsgTime * 1000);
 }
 
 function showBlessMsg(eim) {
-        eim.getMapInstance(entryMap + 10).broadcastMessage(Packages.tools.packets.Wedding.OnWeddingProgress(false, 0, 0, 1));
+        const Wedding = Java.type('tools.packets.Wedding');
+        eim.getMapInstance(entryMap + 10).broadcastMessage(Wedding.OnWeddingProgress(false, 0, 0, 1));
         eim.setIntProperty("guestBlessings", 1);
         eim.schedule("hidePriestMsg", forceHideMsgTime * 1000);
 }

@@ -44,7 +44,8 @@ function end(mode, type, selection) {
             status--;
         
         if (status == 0) {
-            if(qm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).getNumFreeSlot() < 1) {
+            const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+            if(qm.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() < 1) {
                 qm.sendOk("Make room on your ETC inventory first.");
                 qm.dispose();		
                 return;

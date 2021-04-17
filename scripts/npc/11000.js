@@ -19,6 +19,7 @@
 */
 
 function start() {
-    Packages.server.MapleShopFactory.getInstance().getShop(11000).sendShop(cm.getClient());
+    const MapleShopFactory = Java.type('server.MapleShopFactory');
+    MapleShopFactory.getInstance().getShop(11000).sendShop(cm.getClient());
     cm.dispose();
 }

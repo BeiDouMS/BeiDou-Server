@@ -41,15 +41,19 @@ function cancelSchedule() {
 
 function start() {
     var graysPrairie = em.getChannelServer().getMapFactory().getMap(221040301);
-    var zeno = Packages.server.life.MapleLifeFactory.getMonster(6220001);
 	
 	if(graysPrairie.getMonsterById(6220001) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);
 		return;
 	}
-	
-    graysPrairie.spawnMonsterOnGroundBelow(zeno, new Packages.java.awt.Point(-4224, 776));
-    graysPrairie.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Zeno has appeared with a heavy sound of machinery."));
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+
+    var zeno = MapleLifeFactory.getMonster(6220001);
+    graysPrairie.spawnMonsterOnGroundBelow(zeno, new Point(-4224, 776));
+    graysPrairie.broadcastMessage(MaplePacketCreator.serverNotice(6, "Zeno has appeared with a heavy sound of machinery."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

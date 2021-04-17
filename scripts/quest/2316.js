@@ -23,10 +23,10 @@ function start(mode, type, selection) {
 	}
 	if (status == 0)
 		qm.sendAcceptDecline("I think i've heard of a potion that breaks these kinds of barriers. I think it's called #bKiller Mushroom Spores#k? Hmmm... outside, you'll find the Mushroom Scholar #bScarrs#k waiting outside. #bScarrs#k is an expert on mushrooms, so go talk to him.");
-	else if (status == 1){
+	else if (status == 1) {
 		qm.forceStartQuest();
 		qm.sendOk("I am confident #kScarrs#k will do everything to help you.");
-        else if (status == 2){
+	} else if (status == 2){
 		qm.dispose();
 	}
 }

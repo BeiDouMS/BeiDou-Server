@@ -29,9 +29,10 @@ var feeMultiplier = 7.0;
 
 function start() {
     status = -1;
-    
-    if (!Packages.config.YamlConfig.config.server.USE_CPQ) {
-        if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+
+    const YamlConfig = Java.type('config.YamlConfig');
+    if (!YamlConfig.config.server.USE_CPQ) {
+        if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
             status = 0;
             action(1, 0, 4);
         } else {
@@ -57,7 +58,8 @@ function action(mode, type, selection) {
             status++;
         else
             status--;
-        
+
+        const YamlConfig = Java.type('config.YamlConfig');
         if (cm.getPlayer().getMapId() == 980000010) {
             if (status == 0) {
                 cm.sendNext("I hope you had fun at the Monster Carnival!");
@@ -221,9 +223,9 @@ function action(mode, type, selection) {
                     }
                 } else {
                     var party = cm.getParty().getMembers();
-                    if ((selection >= 0 && selection <= 3) && party.size() < (Packages.config.YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 2)) {
+                    if ((selection >= 0 && selection <= 3) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 2)) {
                         cm.sendOk("You need at least 2 players to participate in the battle!");
-                    } else if ((selection >= 4 && selection <= 5) && party.size() < (Packages.config.YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 3)) {
+                    } else if ((selection >= 4 && selection <= 5) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 3)) {
                         cm.sendOk("You need at least 3 players to participate in the battle!");
                     } else {
                         cm.cpqLobby(selection);
@@ -236,7 +238,7 @@ function action(mode, type, selection) {
         } else {
             if (status == 0) {
                 var talk = "What would you like to do? If you have never participate in the Monster Carnival, you will need to know a few things before participating! \r\n#b#L0# Go to the Monster Carnival 1.#l \r\n#L3# Go to the Monster Carnival 2.#l \r\n#L1# Learn about the Monster Carnival.#l\r\n#L2# Trade #t4001129#.#l";
-                if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+                if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
                     talk += "\r\n#L4# ... Can I just refine my ores?#l";
                 }
                 cm.sendSimple(talk);
@@ -497,8 +499,9 @@ function refineItems(refineType) {
     
     var refineFees = [[300,300,300,500,500,500,800,270],[500,500,500,500,500,500,500,1000,3000],[5000,5000,5000,5000,1000000]];
     var itemCount = {};
-    
-    var iter = cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).iterator();
+
+    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+    var iter = cm.getPlayer().getInventory(MapleInventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();
@@ -551,7 +554,8 @@ function refineRockItems() {
     var rockItems = [4011007, 4021009];
     var rockFees = [10000, 15000];
 
-    var iter = cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).iterator();
+    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+    var iter = cm.getPlayer().getInventory(MapleInventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();

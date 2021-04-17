@@ -6,8 +6,10 @@ function enter(pi) {
         if(mapobj1.countPlayers() == 0 && mapobj2.countPlayers() == 0) {
             mapobj1.resetPQ(1);
             mapobj2.resetPQ(1);
-            
-            mapobj2.spawnMonsterOnGroundBelow(Packages.server.life.MapleLifeFactory.getMonster(9300348), new Packages.java.awt.Point(591, -34));
+
+            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+            const Point = Java.type('java.awt.Point');
+            mapobj2.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300348), new Point(591, -34));
             
             pi.playPortalSound(); pi.warp(920030000,2);
             return true;

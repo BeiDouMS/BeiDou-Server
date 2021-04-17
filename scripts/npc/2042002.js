@@ -29,8 +29,9 @@ var feeMultiplier = 7.0;
 function start() {
     status = -1;
     
-    if (!Packages.config.YamlConfig.config.server.USE_CPQ) {
-        if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+    const YamlConfig = Java.type('config.YamlConfig');
+    if (!YamlConfig.config.server.USE_CPQ) {
+        if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
             status = 0;
             action(1, 0, 4);
         } else {
@@ -235,7 +236,9 @@ function action(mode, type, selection) {
         } else {
             if (status == 0) {
                 var talk = "What would you like to do? If you have never participate in the Monster Carnival, you will need to know a few things before participating! \r\n#b#L0# Go to the Monster Carnival 1.#l \r\n#L3# Go to the Monster Carnival 2.#l \r\n#L1# Learn about the Monster Carnival.#l\r\n#L2# Trade #t4001129#.#l";
-                if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+
+                const YamlConfig = Java.type('config.YamlConfig');
+                if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
                     talk += "\r\n#L4# ... Can I just refine my ores?#l";
                 }
                 cm.sendSimple(talk);
@@ -496,8 +499,9 @@ function refineItems(refineType) {
     
     var refineFees = [[300,300,300,500,500,500,800,270],[500,500,500,500,500,500,500,1000,3000],[5000,5000,5000,5000,1000000]];
     var itemCount = {};
-    
-    var iter = cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).iterator();
+
+    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+    var iter = cm.getPlayer().getInventory(MapleInventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();
@@ -550,7 +554,8 @@ function refineRockItems() {
     var rockItems = [4011007, 4021009];
     var rockFees = [10000, 15000];
 
-    var iter = cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).iterator();
+    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+    var iter = cm.getPlayer().getInventory(MapleInventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();
