@@ -24,10 +24,7 @@ package scripting;
 import client.MapleClient;
 import tools.FilePrinter;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -49,7 +46,10 @@ public abstract class AbstractScriptManager {
         if (!scriptFile.exists()) {
             return null;
         }
+
         ScriptEngine engine = sef.getScriptEngine();
+        applyLooserGraalSecurity(engine);
+
         try (FileReader fr = new FileReader(scriptFile)) {
             engine.eval(fr);
         } catch (final ScriptException | IOException t) {
@@ -68,6 +68,12 @@ public abstract class AbstractScriptManager {
         }
 
         return engine;
+    }
+
+    private void applyLooserGraalSecurity(ScriptEngine scriptEngine) {
+        Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.put("polyglot.js.allowHostAccess", true);
+        bindings.put("polyglot.js.allowHostClassLookup", true);
     }
 
     protected void resetContext(String path, MapleClient c) {

@@ -60,7 +60,9 @@ function takeoff() {
     
     em.setProperty("docked","false");
     
-    if(Math.random() < 0.42) em.schedule("approach", (invasionStartTime + (Math.random() * invasionDelayTime)));
+    if (Math.random() < 0.42) {
+        em.schedule("approach", (invasionStartTime + Math.trunc((Math.random() * invasionDelayTime))));
+    }
     em.schedule("arrived", rideTime);
 }
 
