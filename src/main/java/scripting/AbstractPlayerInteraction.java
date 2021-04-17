@@ -28,7 +28,6 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
-import constants.net.ServerConstants;
 import net.server.Server;
 import net.server.guild.MapleGuild;
 import net.server.world.MapleParty;
@@ -217,45 +216,30 @@ public class AbstractPlayerInteraction {
         public boolean canHold(int itemid, int quantity, int removeItemid, int removeQuantity) {
                 return canHoldAllAfterRemoving(Collections.singletonList(itemid), Collections.singletonList(quantity), Collections.singletonList(removeItemid), Collections.singletonList(removeQuantity));
         }
-        
-        private List<Integer> convertToIntegerArray(List<Object> list) {
-                List<Integer> intList = new ArrayList<>();      // JAVA 7 Rhino script engine. Thanks Bruno, felipepm10 for noticing a typecast issue here.
-                
-                if (ServerConstants.JAVA_8) {
-                        for (Object d: list) {
-                                intList.add((Integer) d);
-                        }
-                } else {
-                        for (Object d: list) {
-                                intList.add(((Double) d).intValue());
-                        }
-                }
 
-                return intList;
+    private List<Integer> convertToIntegerList(List<Object> objects) {
+        List<Integer> intList = new ArrayList<>();
+
+        for (Object object : objects) {
+            intList.add((Integer) object);
         }
-        
-        public boolean canHoldAll(List<Object> itemids) {
-                List<Object> quantity = new LinkedList<>();
-                
-                if (ServerConstants.JAVA_8) {
-                        Integer intOne = 1;
-                    
-                        for (int i = 0; i < itemids.size(); i++) {
-                                quantity.add(intOne);
-                        }
-                } else {
-                        Double doubleOne = 1.0;
-                    
-                        for (int i = 0; i < itemids.size(); i++) {
-                                quantity.add(doubleOne);
-                        }
-                }
-                
-                return canHoldAll(itemids, quantity);
+
+        return intList;
+    }
+
+    public boolean canHoldAll(List<Object> itemids) {
+        List<Object> quantity = new LinkedList<>();
+
+        final int intOne = 1;
+        for (int i = 0; i < itemids.size(); i++) {
+            quantity.add(intOne);
         }
+
+        return canHoldAll(itemids, quantity);
+    }
         
         public boolean canHoldAll(List<Object> itemids, List<Object> quantity) {
-                return canHoldAll(convertToIntegerArray(itemids), convertToIntegerArray(quantity), true);
+                return canHoldAll(convertToIntegerList(itemids), convertToIntegerList(quantity), true);
         }
         
         private boolean canHoldAll(List<Integer> itemids, List<Integer> quantity, boolean isInteger) {

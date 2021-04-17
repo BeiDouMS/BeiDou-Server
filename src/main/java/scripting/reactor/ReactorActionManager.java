@@ -28,7 +28,6 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
@@ -44,6 +43,8 @@ import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
 import tools.MaplePacketCreator;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.awt.*;
 import java.util.ArrayList;
@@ -59,10 +60,10 @@ import java.util.logging.Logger;
  */
 public class ReactorActionManager extends AbstractPlayerInteraction {
     private MapleReactor reactor;
-    private NashornScriptEngine iv;
+    private ScriptEngine iv;
     private ScheduledFuture<?> sprayTask = null;
 
-    public ReactorActionManager(MapleClient c, MapleReactor reactor, NashornScriptEngine iv) {
+    public ReactorActionManager(MapleClient c, MapleReactor reactor, ScriptEngine iv) {
         super(c);
         this.reactor = reactor;
         this.iv = iv;
@@ -319,7 +320,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public ScheduledFuture<?> schedule(final String methodName, final EventInstanceManager eim, long delay) {
         return TimerManager.getInstance().schedule(() -> {
             try {
-                iv.invokeFunction(methodName, eim);
+                ((Invocable) iv).invokeFunction(methodName, eim);
             } catch (ScriptException | NoSuchMethodException ex) {
                 Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -329,7 +330,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public ScheduledFuture<?> scheduleAtTimestamp(final String methodName, long timestamp) {
         return TimerManager.getInstance().scheduleAtTimestamp(() -> {
             try {
-                iv.invokeFunction(methodName, (Object) null);
+                ((Invocable) iv).invokeFunction(methodName, (Object) null);
             } catch (ScriptException | NoSuchMethodException ex) {
                 Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }

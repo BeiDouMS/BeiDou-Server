@@ -22,35 +22,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting.portal;
 
 import client.MapleClient;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.HashMap;
-import java.util.Map;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import scripting.AbstractScriptManager;
 import server.maps.MaplePortal;
 import tools.FilePrinter;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptEngineManager;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class PortalScriptManager extends AbstractScriptManager {
 
-    private static PortalScriptManager instance = new PortalScriptManager();
+    private static final PortalScriptManager instance = new PortalScriptManager();
     
     public static PortalScriptManager getInstance() {
         return instance;
     }
     
-    private Map<String, NashornScriptEngine> scripts = new HashMap<>();
-    private ScriptEngineFactory sef;
+    private Map<String, ScriptEngine> scripts = new HashMap<>();
+    private final ScriptEngineFactory sef;
 
     private PortalScriptManager() {
         ScriptEngineManager sem = new ScriptEngineManager();
-        sef = sem.getEngineByName("javascript").getFactory();
+        sef = sem.getEngineByName("graal.js").getFactory();
     }
 
-    private NashornScriptEngine getPortalScript(String scriptName) {
+    private ScriptEngine getPortalScript(String scriptName) {
         String scriptPath = "portal/" + scriptName + ".js";
-        NashornScriptEngine iv = scripts.get(scriptPath);
+        ScriptEngine iv = scripts.get(scriptPath);
         if (iv != null) {
             return iv;
         }
@@ -66,9 +68,9 @@ public class PortalScriptManager extends AbstractScriptManager {
 
     public boolean executePortalScript(MaplePortal portal, MapleClient c) {
         try {
-            NashornScriptEngine iv = getPortalScript(portal.getScriptName());
+            ScriptEngine iv = getPortalScript(portal.getScriptName());
             if (iv != null) {
-                boolean couldWarp = (boolean) iv.invokeFunction("enter", new PortalPlayerInteraction(c, portal));
+                boolean couldWarp = (boolean) ((Invocable) iv).invokeFunction("enter", new PortalPlayerInteraction(c, portal));
                 return couldWarp;
             }
         } catch (UndeclaredThrowableException ute) {

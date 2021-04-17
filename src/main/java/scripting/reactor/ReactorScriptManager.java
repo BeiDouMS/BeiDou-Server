@@ -22,13 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting.reactor;
 
 import client.MapleClient;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import scripting.AbstractScriptManager;
 import server.maps.MapleReactor;
 import server.maps.ReactorDropEntry;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -53,12 +54,12 @@ public class ReactorScriptManager extends AbstractScriptManager {
     
     public void onHit(MapleClient c, MapleReactor reactor) {
         try {
-            NashornScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
+            ScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
             if (iv == null) return;
             
             ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
             iv.put("rm", rm);
-            iv.invokeFunction("hit");
+            ((Invocable) iv).invokeFunction("hit");
         } catch (final NoSuchMethodException e) {} //do nothing, hit is OPTIONAL
         
           catch (final ScriptException | NullPointerException e) {
@@ -68,12 +69,12 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
     public void act(MapleClient c, MapleReactor reactor) {
         try {
-            NashornScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
+            ScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
             if (iv == null) return;
             
             ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
             iv.put("rm", rm);
-            iv.invokeFunction("act");
+            ((Invocable) iv).invokeFunction("act");
         } catch (final ScriptException | NoSuchMethodException | NullPointerException e) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", e);
         }
@@ -114,15 +115,15 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
     private void touching(MapleClient c, MapleReactor reactor, boolean touching) {
         try {
-            NashornScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
+            ScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
             if (iv == null) return;
             
             ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
             iv.put("rm", rm);
             if (touching) {
-                iv.invokeFunction("touch");
+                ((Invocable) iv).invokeFunction("touch");
             } else {
-                iv.invokeFunction("untouch");
+                ((Invocable) iv).invokeFunction("untouch");
             }
         } catch (final ScriptException | NoSuchMethodException | NullPointerException ute) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", ute);

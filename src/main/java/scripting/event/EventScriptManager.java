@@ -21,18 +21,18 @@
  */
 package scripting.event;
 
-import java.util.concurrent.ConcurrentHashMap;
+import net.server.channel.Channel;
+import scripting.AbstractScriptManager;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-
-import net.server.channel.Channel;
-import scripting.AbstractScriptManager;
 
 /**
  *
@@ -42,11 +42,11 @@ public class EventScriptManager extends AbstractScriptManager {
 
     private class EventEntry {
 
-        public EventEntry(NashornScriptEngine iv, EventManager em) {
+        public EventEntry(ScriptEngine iv, EventManager em) {
             this.iv = iv;
             this.em = em;
         }
-        public NashornScriptEngine iv;
+        public ScriptEngine iv;
         public EventManager em;
     }
     
@@ -58,7 +58,7 @@ public class EventScriptManager extends AbstractScriptManager {
         super();
         for (String script : scripts) {
             if (!script.equals("")) {
-                NashornScriptEngine iv = getScriptEngine("event/" + script + ".js");
+                ScriptEngine iv = getScriptEngine("event/" + script + ".js");
                 events.put(script, new EventEntry(iv, new EventManager(cserv, iv, script)));
             }
         }
@@ -83,7 +83,7 @@ public class EventScriptManager extends AbstractScriptManager {
         for (EventEntry entry : events.values()) {
             try {
                 entry.iv.put("em", entry.em);
-                entry.iv.invokeFunction("init", (Object) null);
+                ((Invocable) entry.iv).invokeFunction("init", (Object) null);
             } catch (Exception ex) {
                 Logger.getLogger(EventScriptManager.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Error on script: " + entry.em.getName());
@@ -102,7 +102,7 @@ public class EventScriptManager extends AbstractScriptManager {
         Channel cserv = eventEntries.iterator().next().getValue().em.getChannelServer();
         for (Entry<String, EventEntry> entry : eventEntries) {
             String script = entry.getKey();
-            NashornScriptEngine iv = getScriptEngine("event/" + script + ".js");
+            ScriptEngine iv = getScriptEngine("event/" + script + ".js");
             events.put(script, new EventEntry(iv, new EventManager(cserv, iv, script)));
         }
     }

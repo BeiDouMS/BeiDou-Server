@@ -23,15 +23,16 @@ package scripting.map;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import java.lang.reflect.UndeclaredThrowableException;
-import java.util.HashMap;
-import java.util.Map;
+import scripting.AbstractScriptManager;
+import tools.FilePrinter;
+
+import javax.script.Invocable;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import scripting.AbstractScriptManager;
-import tools.FilePrinter;
+import java.lang.reflect.UndeclaredThrowableException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapScriptManager extends AbstractScriptManager {
 
@@ -41,12 +42,12 @@ public class MapScriptManager extends AbstractScriptManager {
         return instance;
     }
     
-    private Map<String, NashornScriptEngine> scripts = new HashMap<>();
-    private ScriptEngineFactory sef;
+    private Map<String, Invocable> scripts = new HashMap<>();
+    private final ScriptEngineFactory sef;
 
     private MapScriptManager() {
         ScriptEngineManager sem = new ScriptEngineManager();
-        sef = sem.getEngineByName("javascript").getFactory();
+        sef = sem.getEngineByName("graal.js").getFactory();
     }
 
     public void reloadScripts() {
@@ -64,7 +65,7 @@ public class MapScriptManager extends AbstractScriptManager {
             }
         }
         
-        NashornScriptEngine iv = scripts.get(mapScriptPath);
+        Invocable iv = scripts.get(mapScriptPath);
         if (iv != null) {
             try {
                 iv.invokeFunction("start", new MapScriptMethods(c));
@@ -75,13 +76,13 @@ public class MapScriptManager extends AbstractScriptManager {
         }
         
         try {
-            iv = getScriptEngine("map/" + mapScriptPath + ".js");
+            iv = (Invocable) getScriptEngine("map/" + mapScriptPath + ".js");
             if (iv == null) {
                 return false;
             }
             
             scripts.put(mapScriptPath, iv);
-            iv.invokeFunction("start", new MapScriptMethods(c));
+            ((Invocable) iv).invokeFunction("start", new MapScriptMethods(c));
             return true;
         } catch (final UndeclaredThrowableException | ScriptException ute) {
             FilePrinter.printError(FilePrinter.MAP_SCRIPT + mapScriptPath + ".txt", ute);
