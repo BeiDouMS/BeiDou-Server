@@ -27,37 +27,26 @@ import server.maps.MaplePortal;
 import tools.FilePrinter;
 
 import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PortalScriptManager extends AbstractScriptManager {
-
     private static final PortalScriptManager instance = new PortalScriptManager();
-    
+
+    private final Map<String, Invocable> scripts = new HashMap<>();
+
     public static PortalScriptManager getInstance() {
         return instance;
     }
-    
-    private Map<String, ScriptEngine> scripts = new HashMap<>();
-    private final ScriptEngineFactory sef;
 
-    private PortalScriptManager() {
-        ScriptEngineManager sem = new ScriptEngineManager();
-        sef = sem.getEngineByName("graal.js").getFactory();
-    }
-
-    private ScriptEngine getPortalScript(String scriptName) {
+    private Invocable getPortalScript(String scriptName) {
         String scriptPath = "portal/" + scriptName + ".js";
-        ScriptEngine iv = scripts.get(scriptPath);
+        Invocable iv = scripts.get(scriptPath);
         if (iv != null) {
             return iv;
         }
         
-        iv = getScriptEngine(scriptPath);
+        iv = (Invocable) getInvocableScriptEngine(scriptPath);
         if (iv == null) {
             return null;
         }
@@ -68,14 +57,12 @@ public class PortalScriptManager extends AbstractScriptManager {
 
     public boolean executePortalScript(MaplePortal portal, MapleClient c) {
         try {
-            ScriptEngine iv = getPortalScript(portal.getScriptName());
+            Invocable iv = getPortalScript(portal.getScriptName());
             if (iv != null) {
-                boolean couldWarp = (boolean) ((Invocable) iv).invokeFunction("enter", new PortalPlayerInteraction(c, portal));
+                boolean couldWarp = (boolean) iv.invokeFunction("enter", new PortalPlayerInteraction(c, portal));
                 return couldWarp;
             }
-        } catch (UndeclaredThrowableException ute) {
-            FilePrinter.printError(FilePrinter.PORTAL + portal.getScriptName() + ".txt", ute);
-        } catch (final Exception e) {
+        } catch (Exception e) {
             FilePrinter.printError(FilePrinter.PORTAL + portal.getScriptName() + ".txt", e);
         }
         return false;

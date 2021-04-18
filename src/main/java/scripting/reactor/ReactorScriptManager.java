@@ -43,23 +43,25 @@ import java.util.Map;
  * @author Lerk
  */
 public class ReactorScriptManager extends AbstractScriptManager {
-
-    private static ReactorScriptManager instance = new ReactorScriptManager();
+    private static final ReactorScriptManager instance = new ReactorScriptManager();
     
+    private final Map<Integer, List<ReactorDropEntry>> drops = new HashMap<>();
+
     public static ReactorScriptManager getInstance() {
         return instance;
     }
     
-    private Map<Integer, List<ReactorDropEntry>> drops = new HashMap<>();
-    
     public void onHit(MapleClient c, MapleReactor reactor) {
         try {
-            ScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
-            if (iv == null) return;
-            
+            ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
+            if (engine == null) {
+                return;
+            }
+
+            Invocable iv = (Invocable) engine;
             ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
-            iv.put("rm", rm);
-            ((Invocable) iv).invokeFunction("hit");
+            engine.put("rm", rm);
+            iv.invokeFunction("hit");
         } catch (final NoSuchMethodException e) {} //do nothing, hit is OPTIONAL
         
           catch (final ScriptException | NullPointerException e) {
@@ -69,12 +71,15 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
     public void act(MapleClient c, MapleReactor reactor) {
         try {
-            ScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
-            if (iv == null) return;
-            
+            ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
+            if (engine == null) {
+                return;
+            }
+
+            Invocable iv = (Invocable) engine;
             ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
-            iv.put("rm", rm);
-            ((Invocable) iv).invokeFunction("act");
+            engine.put("rm", rm);
+            iv.invokeFunction("act");
         } catch (final ScriptException | NoSuchMethodException | NullPointerException e) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", e);
         }
@@ -115,15 +120,18 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
     private void touching(MapleClient c, MapleReactor reactor, boolean touching) {
         try {
-            ScriptEngine iv = getScriptEngine("reactor/" + reactor.getId() + ".js", c);
-            if (iv == null) return;
-            
+            ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
+            if (engine == null) {
+                return;
+            }
+
+            Invocable iv = (Invocable) engine;
             ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
-            iv.put("rm", rm);
+            engine.put("rm", rm);
             if (touching) {
-                ((Invocable) iv).invokeFunction("touch");
+                iv.invokeFunction("touch");
             } else {
-                ((Invocable) iv).invokeFunction("untouch");
+                iv.invokeFunction("untouch");
             }
         } catch (final ScriptException | NoSuchMethodException | NullPointerException ute) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", ute);

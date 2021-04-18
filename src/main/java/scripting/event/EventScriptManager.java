@@ -39,27 +39,29 @@ import java.util.logging.Logger;
  * @author Matze
  */
 public class EventScriptManager extends AbstractScriptManager {
+    private static final String INJECTED_VARIABLE = "em";
+    private static EventEntry fallback;
+    private final Map<String, EventEntry> events = new ConcurrentHashMap<>();
+    private boolean active = false;
 
-    private class EventEntry {
+    private static class EventEntry {
 
-        public EventEntry(ScriptEngine iv, EventManager em) {
+        public EventEntry(Invocable iv, EventManager em) {
             this.iv = iv;
             this.em = em;
         }
-        public ScriptEngine iv;
+        public Invocable iv;
         public EventManager em;
     }
-    
-    private static EventEntry fallback;
-    private Map<String, EventEntry> events = new ConcurrentHashMap<>();
-    private boolean active = false;
-    
-    public EventScriptManager(Channel cserv, String[] scripts) {
-        super();
+
+    public EventScriptManager(final Channel channel, String[] scripts) {
         for (String script : scripts) {
-            if (!script.equals("")) {
-                ScriptEngine iv = getScriptEngine("event/" + script + ".js");
-                events.put(script, new EventEntry(iv, new EventManager(cserv, iv, script)));
+            if (!script.isEmpty()) {
+                ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
+                Invocable iv = (Invocable) engine;
+                EventManager eventManager = new EventManager(channel, iv, script);
+                engine.put(INJECTED_VARIABLE, eventManager);
+                events.put(script, new EventEntry(iv, eventManager));
             }
         }
         
@@ -82,8 +84,7 @@ public class EventScriptManager extends AbstractScriptManager {
     public final void init() {
         for (EventEntry entry : events.values()) {
             try {
-                entry.iv.put("em", entry.em);
-                ((Invocable) entry.iv).invokeFunction("init", (Object) null);
+                entry.iv.invokeFunction("init", (Object) null);
             } catch (Exception ex) {
                 Logger.getLogger(EventScriptManager.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Error on script: " + entry.em.getName());
@@ -102,11 +103,15 @@ public class EventScriptManager extends AbstractScriptManager {
         Channel cserv = eventEntries.iterator().next().getValue().em.getChannelServer();
         for (Entry<String, EventEntry> entry : eventEntries) {
             String script = entry.getKey();
-            ScriptEngine iv = getScriptEngine("event/" + script + ".js");
-            events.put(script, new EventEntry(iv, new EventManager(cserv, iv, script)));
+            ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
+            Invocable iv = (Invocable) engine;
+            EventManager eventManager = new EventManager(cserv, iv, script);
+            engine.put(INJECTED_VARIABLE, eventManager);
+            events.put(script, new EventEntry(iv, eventManager));
         }
     }
 
+    // Is never being called
     public void reload() {
         cancel();
         reloadScripts();

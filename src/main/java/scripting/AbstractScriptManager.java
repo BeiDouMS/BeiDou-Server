@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting;
 
 import client.MapleClient;
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import tools.FilePrinter;
 
 import javax.script.*;
@@ -40,7 +41,7 @@ public abstract class AbstractScriptManager {
         sef = new ScriptEngineManager().getEngineByName("graal.js").getFactory();
     }
 
-    protected ScriptEngine getScriptEngine(String path) {
+    protected ScriptEngine getInvocableScriptEngine(String path) {
         path = "scripts/" + path;
         File scriptFile = new File(path);
         if (!scriptFile.exists()) {
@@ -48,7 +49,11 @@ public abstract class AbstractScriptManager {
         }
 
         ScriptEngine engine = sef.getScriptEngine();
-        applyLooserGraalSecurity(engine);
+        if (!(engine instanceof GraalJSScriptEngine graalScriptEngine)) {
+            throw new IllegalStateException("ScriptEngineFactory did not provide a GraalJSScriptEngine");
+        }
+
+        enableScriptHostAccess(graalScriptEngine);
 
         try (FileReader fr = new FileReader(scriptFile)) {
             engine.eval(fr);
@@ -57,21 +62,24 @@ public abstract class AbstractScriptManager {
             return null;
         }
 
-        return engine;
+        return graalScriptEngine;
     }
 
-    protected ScriptEngine getScriptEngine(String path, MapleClient c) {
+    protected ScriptEngine getInvocableScriptEngine(String path, MapleClient c) {
         ScriptEngine engine = c.getScriptEngine("scripts/" + path);
         if (engine == null) {
-            engine = getScriptEngine(path);
+            engine = getInvocableScriptEngine(path);
             c.setScriptEngine(path, engine);
         }
 
         return engine;
     }
 
-    private void applyLooserGraalSecurity(ScriptEngine scriptEngine) {
-        Bindings bindings = scriptEngine.getBindings(ScriptContext.ENGINE_SCOPE);
+    /**
+     * Allow usage of "Java.type()" in script to look up host class
+     */
+    private void enableScriptHostAccess(GraalJSScriptEngine engine) {
+        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
         bindings.put("polyglot.js.allowHostAccess", true);
         bindings.put("polyglot.js.allowHostClassLookup", true);
     }

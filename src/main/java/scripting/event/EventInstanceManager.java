@@ -51,7 +51,6 @@ import server.maps.MapleReactor;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
-import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.awt.*;
 import java.util.List;
@@ -214,10 +213,10 @@ public class EventInstanceManager {
                 }
                 
 	}
-        
+
         public Object invokeScriptFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
                 if (!disposed) {
-                        return ((Invocable) em.getIv()).invokeFunction(name, args);
+                        return em.getIv().invokeFunction(name, args);
                 } else {
                         return null;
                 }

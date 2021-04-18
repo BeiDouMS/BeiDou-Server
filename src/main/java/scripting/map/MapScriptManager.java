@@ -27,27 +27,17 @@ import scripting.AbstractScriptManager;
 import tools.FilePrinter;
 
 import javax.script.Invocable;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MapScriptManager extends AbstractScriptManager {
+    private static final MapScriptManager instance = new MapScriptManager();
 
-    private static MapScriptManager instance = new MapScriptManager();
-    
+    private final Map<String, Invocable> scripts = new HashMap<>();
+
     public static MapScriptManager getInstance() {
         return instance;
-    }
-    
-    private Map<String, Invocable> scripts = new HashMap<>();
-    private final ScriptEngineFactory sef;
-
-    private MapScriptManager() {
-        ScriptEngineManager sem = new ScriptEngineManager();
-        sef = sem.getEngineByName("graal.js").getFactory();
     }
 
     public void reloadScripts() {
@@ -76,20 +66,18 @@ public class MapScriptManager extends AbstractScriptManager {
         }
         
         try {
-            iv = (Invocable) getScriptEngine("map/" + mapScriptPath + ".js");
+            iv = (Invocable) getInvocableScriptEngine("map/" + mapScriptPath + ".js");
             if (iv == null) {
                 return false;
             }
             
             scripts.put(mapScriptPath, iv);
-            ((Invocable) iv).invokeFunction("start", new MapScriptMethods(c));
+            iv.invokeFunction("start", new MapScriptMethods(c));
             return true;
-        } catch (final UndeclaredThrowableException | ScriptException ute) {
-            FilePrinter.printError(FilePrinter.MAP_SCRIPT + mapScriptPath + ".txt", ute);
         } catch (final Exception e) {
             FilePrinter.printError(FilePrinter.MAP_SCRIPT + mapScriptPath + ".txt", e);
         }
-        
+
         return false;
     }
 }

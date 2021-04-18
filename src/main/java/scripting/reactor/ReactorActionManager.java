@@ -44,7 +44,6 @@ import server.partyquest.MapleCarnivalFactory.MCSkill;
 import tools.MaplePacketCreator;
 
 import javax.script.Invocable;
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.awt.*;
 import java.util.ArrayList;
@@ -59,11 +58,11 @@ import java.util.logging.Logger;
  * @author Ronan
  */
 public class ReactorActionManager extends AbstractPlayerInteraction {
-    private MapleReactor reactor;
-    private ScriptEngine iv;
+    private final MapleReactor reactor;
+    private final Invocable iv;
     private ScheduledFuture<?> sprayTask = null;
 
-    public ReactorActionManager(MapleClient c, MapleReactor reactor, ScriptEngine iv) {
+    public ReactorActionManager(MapleClient c, MapleReactor reactor, Invocable iv) {
         super(c);
         this.reactor = reactor;
         this.iv = iv;
@@ -320,7 +319,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public ScheduledFuture<?> schedule(final String methodName, final EventInstanceManager eim, long delay) {
         return TimerManager.getInstance().schedule(() -> {
             try {
-                ((Invocable) iv).invokeFunction(methodName, eim);
+                iv.invokeFunction(methodName, eim);
             } catch (ScriptException | NoSuchMethodException ex) {
                 Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -330,7 +329,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public ScheduledFuture<?> scheduleAtTimestamp(final String methodName, long timestamp) {
         return TimerManager.getInstance().scheduleAtTimestamp(() -> {
             try {
-                ((Invocable) iv).invokeFunction(methodName, (Object) null);
+                iv.invokeFunction(methodName, (Object) null);
             } catch (ScriptException | NoSuchMethodException ex) {
                 Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -45,7 +45,6 @@ import server.quest.MapleQuest;
 import tools.exceptions.EventInstanceInProgressException;
 
 import javax.script.Invocable;
-import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -60,7 +59,7 @@ import java.util.logging.Logger;
  * @author Ronan
  */
 public class EventManager {
-    private ScriptEngine iv;
+    private Invocable iv;
     private Channel cserv;
     private World wserv;
     private Server server;
@@ -83,7 +82,7 @@ public class EventManager {
     
     private static final int maxLobbys = 8;     // an event manager holds up to this amount of concurrent lobbys
     
-    public EventManager(Channel cserv, ScriptEngine iv, String name) {
+    public EventManager(Channel cserv, Invocable iv, String name) {
         this.server = Server.getInstance();
         this.iv = iv;
         this.cserv = cserv;
@@ -102,7 +101,7 @@ public class EventManager {
         ess.dispose();
         
         try {
-            ((Invocable) iv).invokeFunction("cancelSchedule", (Object) null);
+            iv.invokeFunction("cancelSchedule", (Object) null);
         } catch (ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }
@@ -166,7 +165,7 @@ public class EventManager {
     
     private List<Integer> getLobbyRange() {
         try {
-            List<Object> objects = (List<Object>) ((Invocable) iv).invokeFunction("setLobbyRange", (Object) null);
+            List<Object> objects = (List<Object>) iv.invokeFunction("setLobbyRange", (Object) null);
             return convertToIntegerList(objects);
         } catch (ScriptException | NoSuchMethodException ex) { // they didn't define a lobby range
             List<Integer> defaultRange = new ArrayList<>();
@@ -184,7 +183,7 @@ public class EventManager {
     public EventScheduledFuture schedule(final String methodName, final EventInstanceManager eim, long delay) {
         Runnable r = () -> {
             try {
-                ((Invocable) iv).invokeFunction(methodName, eim);
+                iv.invokeFunction(methodName, eim);
             } catch (ScriptException | NoSuchMethodException ex) {
                 Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -199,7 +198,7 @@ public class EventManager {
     public EventScheduledFuture scheduleAtTimestamp(final String methodName, long timestamp) {
         Runnable r = () -> {
             try {
-                ((Invocable) iv).invokeFunction(methodName, (Object) null);
+                iv.invokeFunction(methodName, (Object) null);
             } catch (ScriptException | NoSuchMethodException ex) {
                 Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -217,7 +216,7 @@ public class EventManager {
         return cserv;
     }
     
-    public ScriptEngine getIv() {
+    public Invocable getIv() {
         return iv;
     }
 
@@ -368,7 +367,7 @@ public class EventManager {
     }
     
     private EventInstanceManager createInstance(String name, Object... args) throws ScriptException, NoSuchMethodException {
-        return (EventInstanceManager) ((Invocable) iv).invokeFunction(name, args);
+        return (EventInstanceManager) iv.invokeFunction(name, args);
     }
     
     private void registerEventInstance(String eventName, int lobbyId) {
@@ -690,7 +689,7 @@ public class EventManager {
                         registerEventInstance(eim.getName(), lobbyId);
                         eim.setLeader(leader);
 
-                        ((Invocable) iv).invokeFunction("setup", eim);
+                        iv.invokeFunction("setup", eim);
                         eim.setProperty("leader", ldr);
 
                         eim.startEvent();
@@ -717,7 +716,7 @@ public class EventManager {
             return(new ArrayList<>());
         }
         try {
-            Object p = ((Invocable) iv).invokeFunction("getEligibleParty", party.getPartyMembersOnline());
+            Object p = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
             
             if(p != null) {
                 final List<MaplePartyCharacter> lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
@@ -733,7 +732,7 @@ public class EventManager {
     
     public void clearPQ(EventInstanceManager eim) {
         try {
-            ((Invocable) iv).invokeFunction("clearPQ", eim);
+            iv.invokeFunction("clearPQ", eim);
         } catch (ScriptException | NoSuchMethodException ex) {
             Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -741,7 +740,7 @@ public class EventManager {
     
     public void clearPQ(EventInstanceManager eim, MapleMap toMap) {
         try {
-            ((Invocable) iv).invokeFunction("clearPQ", eim, toMap);
+            iv.invokeFunction("clearPQ", eim, toMap);
         } catch (ScriptException | NoSuchMethodException ex) {
             Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
         }

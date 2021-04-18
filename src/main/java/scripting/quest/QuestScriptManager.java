@@ -39,22 +39,22 @@ import java.util.Map;
  * @author RMZero213
  */
 public class QuestScriptManager extends AbstractScriptManager {
-    private static QuestScriptManager instance = new QuestScriptManager();
-
-	public static QuestScriptManager getInstance() {
-		return instance;
-	}
+    private static final QuestScriptManager instance = new QuestScriptManager();
     
-	private Map<MapleClient, QuestActionManager> qms = new HashMap<>();
-	private Map<MapleClient, ScriptEngine> scripts = new HashMap<>();
+	private final Map<MapleClient, QuestActionManager> qms = new HashMap<>();
+	private final Map<MapleClient, Invocable> scripts = new HashMap<>();
+
+    public static QuestScriptManager getInstance() {
+        return instance;
+    }
 
     private ScriptEngine getQuestScriptEngine(MapleClient c, short questid) {
-        ScriptEngine iv = getScriptEngine("quest/" + questid + ".js", c);
-        if (iv == null && GameConstants.isMedalQuest(questid)) {
-            iv = getScriptEngine("quest/medalQuest.js", c);   // start generic medal quest
+        ScriptEngine engine = getInvocableScriptEngine("quest/" + questid + ".js", c);
+        if (engine == null && GameConstants.isMedalQuest(questid)) {
+            engine = getInvocableScriptEngine("quest/medalQuest.js", c);   // start generic medal quest
         }
 
-        return iv;
+        return engine;
     }
         
 	public void start(MapleClient c, short questid, int npc) {
@@ -72,17 +72,19 @@ public class QuestScriptManager extends AbstractScriptManager {
                     return;
                 }
 
-                ScriptEngine iv = getQuestScriptEngine(c, questid);
-                if (iv == null) {
+                ScriptEngine engine = getQuestScriptEngine(c, questid);
+                if (engine == null) {
                     FilePrinter.printError(FilePrinter.QUEST_UNCODED, "START Quest " + questid + " is uncoded.");
                     qm.dispose();
                     return;
                 }
 
-                iv.put("qm", qm);
+                engine.put("qm", qm);
+
+                Invocable iv = (Invocable) engine;
                 scripts.put(c, iv);
                 c.setClickedNPC();
-                ((Invocable) iv).invokeFunction("start", (byte) 1, (byte) 0, 0);
+                iv.invokeFunction("start", (byte) 1, (byte) 0, 0);
             }
         } catch (final UndeclaredThrowableException ute) {
             FilePrinter.printError(FilePrinter.QUEST + questid + ".txt", ute);
@@ -94,19 +96,16 @@ public class QuestScriptManager extends AbstractScriptManager {
     }
 
 	public void start(MapleClient c, byte mode, byte type, int selection) {
-		ScriptEngine iv = scripts.get(c);
+		Invocable iv = scripts.get(c);
 		if (iv != null) {
 			try {
 				c.setClickedNPC();
-                ((Invocable) iv).invokeFunction("start", mode, type, selection);
-			} catch (final UndeclaredThrowableException ute) {
-				FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", ute);
-				dispose(c);
-			} catch (final Throwable t) {
-				FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", t);
+                iv.invokeFunction("start", mode, type, selection);
+			} catch (final Exception e) {
+				FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", e);
 				dispose(c);
 			}
-		}
+        }
 	}
         
 	public void end(MapleClient c, short questid, int npc) {
@@ -128,17 +127,19 @@ public class QuestScriptManager extends AbstractScriptManager {
                     return;
                 }
 
-                ScriptEngine iv = getQuestScriptEngine(c, questid);
-                if (iv == null) {
+                ScriptEngine engine = getQuestScriptEngine(c, questid);
+                if (engine == null) {
                     FilePrinter.printError(FilePrinter.QUEST_UNCODED, "END Quest " + questid + " is uncoded.");
                     qm.dispose();
                     return;
                 }
 
-                iv.put("qm", qm);
+                engine.put("qm", qm);
+
+                Invocable iv = (Invocable) engine;
                 scripts.put(c, iv);
                 c.setClickedNPC();
-                ((Invocable) iv).invokeFunction("end", (byte) 1, (byte) 0, 0);
+                iv.invokeFunction("end", (byte) 1, (byte) 0, 0);
             }
         } catch (final UndeclaredThrowableException ute) {
             FilePrinter.printError(FilePrinter.QUEST + questid + ".txt", ute);
@@ -150,19 +151,16 @@ public class QuestScriptManager extends AbstractScriptManager {
     }
 
 	public void end(MapleClient c, byte mode, byte type, int selection) {
-		ScriptEngine iv = scripts.get(c);
+		Invocable iv = scripts.get(c);
 		if (iv != null) {
 			try {
 				c.setClickedNPC();
-                ((Invocable) iv).invokeFunction("end", mode, type, selection);
-			} catch (final UndeclaredThrowableException ute) {
-				FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", ute);
-				dispose(c);
-			} catch (final Throwable t) {
-				FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", t);
+                iv.invokeFunction("end", mode, type, selection);
+			} catch (final Exception e) {
+				FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", e);
 				dispose(c);
 			}
-		}
+        }
 	}
 
         public void raiseOpen(MapleClient c, short questid, int npc) {
@@ -174,17 +172,19 @@ public class QuestScriptManager extends AbstractScriptManager {
                 if (c.canClickNPC()) {
                     qms.put(c, qm);
 
-                    ScriptEngine iv = getQuestScriptEngine(c, questid);
-                    if (iv == null) {
+                    ScriptEngine engine = getQuestScriptEngine(c, questid);
+                    if (engine == null) {
                         //FilePrinter.printError(FilePrinter.QUEST_UNCODED, "RAISE Quest " + questid + " is uncoded.");
                         qm.dispose();
                         return;
                     }
 
-                    iv.put("qm", qm);
+                    engine.put("qm", qm);
+
+                    Invocable iv = (Invocable) engine;
                     scripts.put(c, iv);
                     c.setClickedNPC();
-                    ((Invocable) iv).invokeFunction("raiseOpen");
+                    iv.invokeFunction("raiseOpen");
                 }
             } catch (final UndeclaredThrowableException ute) {
                 FilePrinter.printError(FilePrinter.QUEST + questid + ".txt", ute);
@@ -195,13 +195,13 @@ public class QuestScriptManager extends AbstractScriptManager {
             }
         }
 
-	public void dispose(QuestActionManager qm, MapleClient c) {
-		qms.remove(c);
-		scripts.remove(c);
-                c.getPlayer().setNpcCooldown(System.currentTimeMillis());
-		resetContext("quest/" + qm.getQuest() + ".js", c);
-                c.getPlayer().flushDelayedUpdateQuests();
-	}
+    public void dispose(QuestActionManager qm, MapleClient c) {
+        qms.remove(c);
+        scripts.remove(c);
+        c.getPlayer().setNpcCooldown(System.currentTimeMillis());
+        resetContext("quest/" + qm.getQuest() + ".js", c);
+        c.getPlayer().flushDelayedUpdateQuests();
+    }
 
 	public void dispose(MapleClient c) {
 		QuestActionManager qm = qms.get(c);
@@ -210,12 +210,12 @@ public class QuestScriptManager extends AbstractScriptManager {
 		}
 	}
 
-	public QuestActionManager getQM(MapleClient c) {
-		return qms.get(c);
-	}
-        
-        public void reloadQuestScripts() {
-                scripts.clear();
-                qms.clear();
-        }
+    public QuestActionManager getQM(MapleClient c) {
+        return qms.get(c);
+    }
+
+    public void reloadQuestScripts() {
+        scripts.clear();
+        qms.clear();
+    }
 }
