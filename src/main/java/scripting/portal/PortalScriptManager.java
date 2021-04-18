@@ -22,48 +22,56 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting.portal;
 
 import client.MapleClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
 import server.maps.MaplePortal;
-import tools.FilePrinter;
 
 import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class PortalScriptManager extends AbstractScriptManager {
+    private static final Logger log = LoggerFactory.getLogger(PortalScriptManager.class);
     private static final PortalScriptManager instance = new PortalScriptManager();
 
-    private final Map<String, Invocable> scripts = new HashMap<>();
+    private final Map<String, PortalScript> scripts = new HashMap<>();
 
     public static PortalScriptManager getInstance() {
         return instance;
     }
 
-    private Invocable getPortalScript(String scriptName) {
+    private PortalScript getPortalScript(String scriptName) throws ScriptException {
         String scriptPath = "portal/" + scriptName + ".js";
-        Invocable iv = scripts.get(scriptPath);
-        if (iv != null) {
-            return iv;
+        PortalScript script = scripts.get(scriptPath);
+        if (script != null) {
+            return script;
         }
         
-        iv = (Invocable) getInvocableScriptEngine(scriptPath);
-        if (iv == null) {
+        ScriptEngine engine = getInvocableScriptEngine(scriptPath);
+        if (!(engine instanceof Invocable iv)) {
             return null;
         }
-        
-        scripts.put(scriptPath, iv);
-        return iv;
+
+        script = iv.getInterface(PortalScript.class);
+        if (script == null) {
+            throw new ScriptException(String.format("Portal script \"%s\" fails to implement the PortalScript interface", scriptName));
+        }
+
+        scripts.put(scriptPath, script);
+        return script;
     }
 
     public boolean executePortalScript(MaplePortal portal, MapleClient c) {
         try {
-            Invocable iv = getPortalScript(portal.getScriptName());
-            if (iv != null) {
-                boolean couldWarp = (boolean) iv.invokeFunction("enter", new PortalPlayerInteraction(c, portal));
-                return couldWarp;
+            PortalScript script = getPortalScript(portal.getScriptName());
+            if (script != null) {
+                return script.enter(new PortalPlayerInteraction(c, portal));
             }
         } catch (Exception e) {
-            FilePrinter.printError(FilePrinter.PORTAL + portal.getScriptName() + ".txt", e);
+            log.warn("Portal script {}", portal.getScriptName(), e);
         }
         return false;
     }
