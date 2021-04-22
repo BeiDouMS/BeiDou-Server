@@ -1037,7 +1037,12 @@ public class MaplePacketCreator {
                 mplew.writeInt(to.getId());
                 mplew.write(spawnPoint);
                 mplew.writeShort(chr.getHp());
-                mplew.writeBool(false);
+                mplew.writeBool(chr.isChasing());
+                if (chr.isChasing()) {
+                        chr.setChasing(false);
+                        mplew.writeInt(chr.getPosition().x);
+                        mplew.writeInt(chr.getPosition().y);
+                }
                 mplew.writeLong(getTime(Server.getInstance().getCurrentTime()));
                 return mplew.getPacket();
         }

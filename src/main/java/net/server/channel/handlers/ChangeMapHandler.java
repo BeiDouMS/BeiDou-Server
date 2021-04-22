@@ -33,6 +33,7 @@ import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
+import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
@@ -79,7 +80,13 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                 String startwp = slea.readMapleAsciiString();
                 MaplePortal portal = chr.getMap().getPortal(startwp);
                 slea.readByte();
-                boolean wheel = slea.readShort() > 0;
+                boolean wheel = slea.readByte() > 0;
+
+                boolean chasing = slea.readByte() == 1 && chr.isGM();
+                if (chasing) {
+                    chr.setChasing(true);
+                    chr.setPosition(new Point(slea.readInt(), slea.readInt()));
+                }
 
                 if (targetid != -1) {
                     if (!chr.isAlive()) {
