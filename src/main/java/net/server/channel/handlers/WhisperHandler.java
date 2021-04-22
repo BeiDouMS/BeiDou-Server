@@ -77,7 +77,7 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
             } else if (target.getClient().getChannel() == user.getClient().getChannel()) {
                 user.announce(MaplePacketCreator.getFindResult(target, RT_SAME_CHANNEL, target.getMapId(), flag));
             } else {
-                user.announce(MaplePacketCreator.getFindResult(target, RT_DIFFERENT_CHANNEL, target.getClient().getChannel(), flag));
+                user.announce(MaplePacketCreator.getFindResult(target, RT_DIFFERENT_CHANNEL, target.getClient().getChannel() - 1, flag));
             }
         } else {
             // not found for whisper is the same message
@@ -104,7 +104,7 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
 
         target.announce(MaplePacketCreator.getWhisperReceive(user.getName(), user.getClient().getChannel() - 1, user.isGM(), message));
 
-        boolean hidden = target.isHidden() && target.gmLevel() >= user.gmLevel();
+        boolean hidden = target.isHidden() && target.gmLevel() > user.gmLevel();
         user.announce(MaplePacketCreator.getWhisperResult(target.getName(), !hidden));
     }
 }
