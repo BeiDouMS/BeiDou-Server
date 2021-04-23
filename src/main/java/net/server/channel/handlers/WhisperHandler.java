@@ -49,24 +49,25 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
         String name = slea.readMapleAsciiString();
         MapleCharacter target = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
 
-        if (target != null) {
-            switch (request) {
-                case WhisperFlag.LOCATION | WhisperFlag.REQUEST:
-                    handleFind(c.getPlayer(), target, WhisperFlag.LOCATION);
-                    break;
-                case WhisperFlag.WHISPER | WhisperFlag.REQUEST:
-                    String message = slea.readMapleAsciiString();
-                    handleWhisper(message, c.getPlayer(), target);
-                    break;
-                case WhisperFlag.LOCATION_FRIEND | WhisperFlag.REQUEST:
-                    handleFind(c.getPlayer(), target, WhisperFlag.LOCATION_FRIEND);
-                    break;
-                default:
-                    FilePrinter.printError(FilePrinter.PACKET_HANDLER + c.getPlayer().getName() + ".txt", "Unknown request " + request + " triggered by " + c.getPlayer().getName());
-                    break;
-            }
-        } else {
+        if (target == null) {
             c.announce(MaplePacketCreator.getWhisperResult(name, false));
+            return;
+        }
+
+        switch (request) {
+            case WhisperFlag.LOCATION | WhisperFlag.REQUEST:
+                handleFind(c.getPlayer(), target, WhisperFlag.LOCATION);
+                break;
+            case WhisperFlag.WHISPER | WhisperFlag.REQUEST:
+                String message = slea.readMapleAsciiString();
+                handleWhisper(message, c.getPlayer(), target);
+                break;
+            case WhisperFlag.LOCATION_FRIEND | WhisperFlag.REQUEST:
+                handleFind(c.getPlayer(), target, WhisperFlag.LOCATION_FRIEND);
+                break;
+            default:
+                FilePrinter.printError(FilePrinter.PACKET_HANDLER + c.getPlayer().getName() + ".txt", "Unknown request " + request + " triggered by " + c.getPlayer().getName());
+                break;
         }
     }
 
