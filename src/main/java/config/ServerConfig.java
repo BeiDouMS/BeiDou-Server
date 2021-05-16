@@ -1,7 +1,5 @@
 package config;
 
-import tools.Pair;
-
 import java.util.*;
 
 public class ServerConfig {
