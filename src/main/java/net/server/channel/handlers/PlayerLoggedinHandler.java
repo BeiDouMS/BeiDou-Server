@@ -26,7 +26,6 @@ import client.inventory.*;
 import client.keybind.MapleKeyBinding;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import constants.game.ScriptableNPCConstants;
 import net.AbstractMaplePacketHandler;
 import net.server.PlayerBuffValueHolder;
 import net.server.Server;
@@ -409,7 +408,14 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 }
                 
                 if (YamlConfig.config.server.USE_NPCS_SCRIPTABLE) {
-                    c.announce(MaplePacketCreator.setNPCScriptable(ScriptableNPCConstants.SCRIPTABLE_NPCS));
+                    List<Integer> npcsIds = YamlConfig.config.server.NPCS_SCRIPTABLE;
+
+                    // Any npc be specified as the rebirth npc. Allow the npc to use custom scripts explicitly.
+                    if (YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+                        npcsIds.add(YamlConfig.config.server.REBIRTH_NPC_ID);
+                    }
+
+                    c.announce(MaplePacketCreator.setNPCScriptable(YamlConfig.config.server.NPCS_SCRIPTABLE));
                 }
                 
                 if(newcomer) player.setLoginTime(System.currentTimeMillis());

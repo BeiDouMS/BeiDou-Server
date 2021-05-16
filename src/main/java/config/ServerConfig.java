@@ -1,5 +1,9 @@
 package config;
 
+import tools.Pair;
+
+import java.util.*;
+
 public class ServerConfig {
     //Thread Tracker Configuration
     public boolean USE_THREAD_TRACKER;
@@ -163,7 +167,7 @@ public class ServerConfig {
     public long NAME_CHANGE_COOLDOWN;
     public long WORLD_TRANSFER_COOLDOWN=NAME_CHANGE_COOLDOWN;//Cooldown for world tranfers, default is same as name change (30 days).
     public boolean INSTANT_NAME_CHANGE;
-    public long REBIRTH_NPC_ID;
+    public int REBIRTH_NPC_ID;
 
     //Dangling Items/Locks Configuration
     public int ITEM_EXPIRE_TIME ;
@@ -305,4 +309,6 @@ public class ServerConfig {
     //Event End Timestamp
     public long EVENT_END_TIMESTAMP;
 
+    //Custom NPC overrides. NPC ID to Name pair.
+    public List<Integer> NPCS_SCRIPTABLE = new ArrayList<>();
 }
