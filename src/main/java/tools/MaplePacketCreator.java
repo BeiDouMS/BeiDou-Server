@@ -2663,6 +2663,9 @@ public class MaplePacketCreator {
                 mplew.writeShort(SendOpcode.DAMAGE_PLAYER.getValue());
                 mplew.writeInt(cid);
                 mplew.write(skill);
+                if (skill == -3) {
+                        mplew.writeInt(0);
+                }
                 mplew.writeInt(damage);
                 if(skill != -4) {
                         mplew.writeInt(monsteridfrom);
