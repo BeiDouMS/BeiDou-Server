@@ -1439,7 +1439,12 @@ public class MaplePacketCreator {
         
         private static void encodeTemporary(MaplePacketLittleEndianWriter mplew, Map<MonsterStatus, MonsterStatusEffect> stati) {
                 int pCounter = -1, mCounter = -1;
-            
+
+                Map<MonsterStatus, MonsterStatusEffect> stati = life.getStati().entrySet()  // to patch some status crashing players
+                        .stream()
+                        .filter(e -> !(e.getKey().equals(MonsterStatus.WATK) || e.getKey().equals(MonsterStatus.WDEF)))
+                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+                
                 writeLongEncodeTemporaryMask(mplew, stati.keySet());    // packet structure mapped thanks to Eric
                 
                 for (Entry<MonsterStatus, MonsterStatusEffect> s : stati.entrySet()) {
