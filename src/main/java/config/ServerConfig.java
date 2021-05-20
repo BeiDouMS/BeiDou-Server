@@ -307,6 +307,6 @@ public class ServerConfig {
     //Event End Timestamp
     public long EVENT_END_TIMESTAMP;
 
-    //Custom NPC overrides. NPC ID to Name pair.
+    //Custom NPC overrides. List of NPC IDs.
     public List<Integer> NPCS_SCRIPTABLE = new ArrayList<>();
 }

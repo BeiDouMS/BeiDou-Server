@@ -408,14 +408,16 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 }
                 
                 if (YamlConfig.config.server.USE_NPCS_SCRIPTABLE) {
-                    List<Integer> npcsIds = YamlConfig.config.server.NPCS_SCRIPTABLE;
+
+                    // Create a set to remove duplicate entries if they exist.
+                    Set<Integer> npcsIds = new HashSet<>(YamlConfig.config.server.NPCS_SCRIPTABLE);
 
                     // Any npc be specified as the rebirth npc. Allow the npc to use custom scripts explicitly.
                     if (YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
                         npcsIds.add(YamlConfig.config.server.REBIRTH_NPC_ID);
                     }
 
-                    c.announce(MaplePacketCreator.setNPCScriptable(YamlConfig.config.server.NPCS_SCRIPTABLE));
+                    c.announce(MaplePacketCreator.setNPCScriptable(npcsIds));
                 }
                 
                 if(newcomer) player.setLoginTime(System.currentTimeMillis());

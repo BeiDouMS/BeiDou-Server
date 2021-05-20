@@ -8326,7 +8326,7 @@ public class MaplePacketCreator {
          * @param scriptableNpcIds Ids of npcs to enable scripts for.
          * @return a packet which makes the npc's provided scriptable.
          */
-        public static byte[] setNPCScriptable(List<Integer> scriptableNpcIds) {  // thanks to GabrielSin
+        public static byte[] setNPCScriptable(Set<Integer> scriptableNpcIds) {  // thanks to GabrielSin
                 MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.SET_NPC_SCRIPTABLE.getValue());
                 mplew.write(scriptableNpcIds.size());
