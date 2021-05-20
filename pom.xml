@@ -18,6 +18,7 @@
         <mainClass>net.server.Server</mainClass>
 
         <log4j.version>2.14.1</log4j.version>
+        <graalvm.version>21.1.0</graalvm.version>
     </properties>
 
     <dependencies>
@@ -73,12 +74,12 @@
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js</artifactId>
-            <version>21.0.0.2</version>
+            <version>${graalvm.version}</version>
         </dependency>
         <dependency>
             <groupId>org.graalvm.js</groupId>
             <artifactId>js-scriptengine</artifactId>
-            <version>21.0.0.2</version>
+            <version>${graalvm.version}</version>
         </dependency>
     </dependencies>
 

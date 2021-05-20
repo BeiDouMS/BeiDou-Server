@@ -8,6 +8,7 @@ import javax.script.ScriptException;
 /**
  * Thread safe wrapper around Invocable.
  * Thread safety is achieved by synchronizing all methods.
+ * Needed to get around the restriction that GraalVM imposes on evaluated scripts: no concurrent access allowed.
  */
 @ThreadSafe
 public class SynchronizedInvocable implements Invocable {
