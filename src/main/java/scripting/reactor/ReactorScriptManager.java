@@ -23,6 +23,7 @@ package scripting.reactor;
 
 import client.MapleClient;
 import scripting.AbstractScriptManager;
+import scripting.SynchronizedInvocable;
 import server.maps.MapleReactor;
 import server.maps.ReactorDropEntry;
 import tools.DatabaseConnection;
@@ -53,14 +54,11 @@ public class ReactorScriptManager extends AbstractScriptManager {
     
     public void onHit(MapleClient c, MapleReactor reactor) {
         try {
-            ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
-            if (engine == null) {
+            Invocable iv = initializeInvocable(c, reactor);
+            if (iv == null) {
                 return;
             }
 
-            Invocable iv = (Invocable) engine;
-            ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
-            engine.put("rm", rm);
             iv.invokeFunction("hit");
         } catch (final NoSuchMethodException e) {} //do nothing, hit is OPTIONAL
         
@@ -71,14 +69,11 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
     public void act(MapleClient c, MapleReactor reactor) {
         try {
-            ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
-            if (engine == null) {
+            Invocable iv = initializeInvocable(c, reactor);
+            if (iv == null) {
                 return;
             }
 
-            Invocable iv = (Invocable) engine;
-            ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
-            engine.put("rm", rm);
             iv.invokeFunction("act");
         } catch (final ScriptException | NoSuchMethodException | NullPointerException e) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", e);
@@ -120,14 +115,11 @@ public class ReactorScriptManager extends AbstractScriptManager {
 
     private void touching(MapleClient c, MapleReactor reactor, boolean touching) {
         try {
-            ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
-            if (engine == null) {
+            Invocable iv = initializeInvocable(c, reactor);
+            if (iv == null) {
                 return;
             }
 
-            Invocable iv = (Invocable) engine;
-            ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
-            engine.put("rm", rm);
             if (touching) {
                 iv.invokeFunction("touch");
             } else {
@@ -136,5 +128,18 @@ public class ReactorScriptManager extends AbstractScriptManager {
         } catch (final ScriptException | NoSuchMethodException | NullPointerException ute) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", ute);
         }
+    }
+
+    private Invocable initializeInvocable(MapleClient c, MapleReactor reactor) {
+        ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
+        if (engine == null) {
+            return null;
+        }
+
+        Invocable iv = SynchronizedInvocable.of((Invocable) engine);
+        ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
+        engine.put("rm", rm);
+
+        return iv;
     }
 }

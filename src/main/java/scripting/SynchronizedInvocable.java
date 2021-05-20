@@ -13,8 +13,12 @@ import javax.script.ScriptException;
 public class SynchronizedInvocable implements Invocable {
     private final Invocable invocable;
 
-    public SynchronizedInvocable(Invocable invocable) {
+    private SynchronizedInvocable(Invocable invocable) {
         this.invocable = invocable;
+    }
+
+    public static Invocable of(Invocable invocable) {
+        return new SynchronizedInvocable(invocable);
     }
 
     @Override
