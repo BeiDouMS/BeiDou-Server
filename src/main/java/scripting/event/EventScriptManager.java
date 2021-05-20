@@ -23,6 +23,7 @@ package scripting.event;
 
 import net.server.channel.Channel;
 import scripting.AbstractScriptManager;
+import scripting.SynchronizedInvocable;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -39,7 +40,7 @@ import java.util.logging.Logger;
  * @author Matze
  */
 public class EventScriptManager extends AbstractScriptManager {
-    private static final String INJECTED_VARIABLE = "em";
+    private static final String INJECTED_VARIABLE_NAME = "em";
     private static EventEntry fallback;
     private final Map<String, EventEntry> events = new ConcurrentHashMap<>();
     private boolean active = false;
@@ -57,11 +58,7 @@ public class EventScriptManager extends AbstractScriptManager {
     public EventScriptManager(final Channel channel, String[] scripts) {
         for (String script : scripts) {
             if (!script.isEmpty()) {
-                ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
-                Invocable iv = (Invocable) engine;
-                EventManager eventManager = new EventManager(channel, iv, script);
-                engine.put(INJECTED_VARIABLE, eventManager);
-                events.put(script, new EventEntry(iv, eventManager));
+                events.put(script, initializeEventEntry(script, channel));
             }
         }
         
@@ -100,15 +97,19 @@ public class EventScriptManager extends AbstractScriptManager {
             return;
         }
 
-        Channel cserv = eventEntries.iterator().next().getValue().em.getChannelServer();
+        Channel channel = eventEntries.iterator().next().getValue().em.getChannelServer();
         for (Entry<String, EventEntry> entry : eventEntries) {
             String script = entry.getKey();
-            ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
-            Invocable iv = (Invocable) engine;
-            EventManager eventManager = new EventManager(cserv, iv, script);
-            engine.put(INJECTED_VARIABLE, eventManager);
-            events.put(script, new EventEntry(iv, eventManager));
+            events.put(script, initializeEventEntry(script, channel));
         }
+    }
+
+    private EventEntry initializeEventEntry(String script, Channel channel) {
+        ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
+        Invocable iv = SynchronizedInvocable.of((Invocable) engine);
+        EventManager eventManager = new EventManager(channel, iv, script);
+        engine.put(INJECTED_VARIABLE_NAME, eventManager);
+        return new EventEntry(iv, eventManager);
     }
 
     // Is never being called
