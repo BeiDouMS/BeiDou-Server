@@ -1,5 +1,3 @@
-
-importPackage(Packages.client);
 var status = -1;
 
 function start(mode, type, selection) {

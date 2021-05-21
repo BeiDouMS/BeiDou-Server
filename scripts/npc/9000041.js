@@ -42,7 +42,8 @@ function action(mode, type, selection) {
     }
 
     if (status == 0) {
-        if (!Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+        const YamlConfig = Java.type('config.YamlConfig');
+        if (!YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
             cm.sendOk("The medal ranking system is currently unavailable...");
             cm.dispose();
             return;

@@ -25,9 +25,7 @@
  */
 
 var status;
- 
-importPackage(Packages.server.life);
- 
+
 function start() {
         status = -1;
         action(1, 0, 0);
@@ -92,6 +90,8 @@ function action(mode, type, selection) {
                                 } else {
                                         var state = eim.getIntProperty("yuletePassed");
 
+                                        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                                        const Point = Java.type('java.awt.Point');
                                         if(state == -1) {
                                                 cm.sendOk("Behold! The pinnacle of Magatia's alchemy studies! Hahahahahahaha...");
                                         } else if(state == 0) {
@@ -100,7 +100,7 @@ function action(mode, type, selection) {
 
                                                 var mapobj = eim.getMapInstance(926110401);
                                                 var bossobj = MapleLifeFactory.getMonster(9300151);
-                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Packages.java.awt.Point(250, 100));
+                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Point(250, 100));
 
                                                 eim.setIntProperty("statusStg7", 1);
                                                 eim.setIntProperty("yuletePassed", -1);
@@ -110,7 +110,7 @@ function action(mode, type, selection) {
 
                                                 var mapobj = eim.getMapInstance(926110401);
                                                 var bossobj = MapleLifeFactory.getMonster(9300152);
-                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Packages.java.awt.Point(250, 100));
+                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Point(250, 100));
 
                                                 eim.setIntProperty("statusStg7", 2);
                                                 eim.setIntProperty("yuletePassed", -1);

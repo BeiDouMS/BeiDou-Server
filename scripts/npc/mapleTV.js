@@ -24,7 +24,8 @@
 var status;
  
 function start() {
-        if (Packages.config.YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+        const YamlConfig = Java.type('config.YamlConfig');
+        if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
                 cm.dispose();
                 cm.openNpc(9201088, "scroll_generator");
                 return;

@@ -21,8 +21,6 @@
 	Hidden Street - Eliza’s Garden (200010303)
  */
 
-importPackage(Packages.tools);
-
 var status;
 var harpNote = 'D';
 var harpSounds = ["do", "re", "mi", "pa", "sol", "la", "si"];   // musical order detected thanks to Arufonsu
@@ -45,8 +43,9 @@ function action(mode, type, selection) {
                         status++;
                 else
                         status--;
-    
+
                 if(status == 0) {
+                        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
                         cm.getMap().broadcastMessage(MaplePacketCreator.playSound("orbis/" + harpSounds[cm.getNpc() - 2012027]));
                         
                         if(cm.isQuestStarted(3114)) {

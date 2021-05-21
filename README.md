@@ -27,8 +27,8 @@ Discord: https://discord.gg/JU5aQapVZK
 ---
 
 ## Tools
-* **Java 8 SDK** 
-  * Link: https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
+* **Java 16 SDK** - Needed to compile and run Java code. Install manually or through IntelliJ depending on how you prefer to launch the server. Not required for launching with Docker.
+  * Link: https://jdk.java.net/16/
 	
 
 * **IntelliJ IDEA** - Java IDE and your main tool for working with the source code. Community edition is good enough.
@@ -260,10 +260,6 @@ Besides myself for maintaining this repository, credits are to be given to Wizet
 
 Regarding distributability and usage of the code presented here: like it was before, this MapleStory server is open-source. By that, it is meant that anyone is **free to install, use, modify and redistribute the contents**, as long as there is **no kind of commercial trading involved** and the **credits to the original creators are maintained** within the codes.
 
-This server source should be built and run on Java 8 in order to run properly -- used to be ran in Java 7, thanks kolakcc (Familiar) for the Java 8 support!
-
-Consider using an IDE for setting up the server source into a project. Once mounted the project, build it on your machine and run the server using the "launch.bat" application.
-
 In this project, many gameplay-wise issues generated from either the original WZ files and the server source have been partially or completely solved. Considering the use of the provided edited WZ's and server-side wz.xml files should be of the greatest importance when dealing with this instance of server source, in order to perceive it at it's full potential. My opinion, though!
 
 - In other case, as fallback from the provided ones, consider using **whole clean set**. Selecting part of the provided ones to play pretty much *may eventually* lead to unexpected issues.
@@ -286,17 +282,6 @@ By taking the v83 MapleStory as the angular stone, incrementally look forward to
 * Adventurous, take no fear of failures on the path of progress;
 * Light-hearted support, general people out there didn't experience what you've already had;
 * Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had.
-
----
-
-#### Preparing the ambient
-
-For Hamachi:
-
-* Try opening it. It's that simple.
-
-Hamachi is optional, though. You don't have to install Hamachi if you want to make the server just for use on your own machine.
-However, if you want to let other players access your server, consider alternatively using port-forwarding methods.
 
 ---
 
@@ -350,11 +335,7 @@ Our Discord channel is still available on: https://discord.gg/Q7wKxHX
 
 <hr id="donate" />
 
-[//]: <> (If you REALLY liked what you have seen on this project, please feel free to donate a little something as a helping hand for my contributions towards Maple development. Also remember to **support Nexon**!)
-
 ### Disclaimer
-
-[//]: <> (* HeavenMS development is decisively __ONLY accepting donations__ from the Paypal link aforementioned, in the __ronancpl/HeavenMS__ repository readme \(no patreons or other revenue resources\).)
 
 * HeavenMS staff has __no current intention__ to publicly open a server with this source, if that ever comes to happen this note will be lifted. __Don't be scammed!__
 

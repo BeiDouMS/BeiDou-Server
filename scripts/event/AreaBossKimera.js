@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -43,8 +41,9 @@ function cancelSchedule() {
 }
 
 function start() {
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
     var labSecretBasementPath = em.getChannelServer().getMapFactory().getMap(261030000);
-    var chimera = Packages.server.life.MapleLifeFactory.getMonster(8220002);
+    var chimera = MapleLifeFactory.getMonster(8220002);
 	
 	if(labSecretBasementPath.getMonsterById(8220002) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
@@ -54,8 +53,12 @@ function start() {
     var posX;
     var posY = 180;
     posX =  (Math.floor(Math.random() * 900) - 900);
-    labSecretBasementPath.spawnMonsterOnGroundBelow(chimera, new Packages.java.awt.Point(posX, posY));
-    labSecretBasementPath.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    labSecretBasementPath.spawnMonsterOnGroundBelow(chimera, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    labSecretBasementPath.broadcastMessage(MaplePacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

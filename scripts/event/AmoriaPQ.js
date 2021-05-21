@@ -37,14 +37,14 @@ var maxMapId = 670010800;
 
 var eventTime = 75;     // 75 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -107,7 +107,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers && mask == 3)) eligible = [];
         if(onlyMarriedPlayers && hasNotMarried) eligible = [];
-        return eligible;
+        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -147,8 +147,11 @@ function setup(level, lobbyid) {
         eim.getInstanceMap(670010800).shuffleReactors();
         
         var mapObj = eim.getInstanceMap(670010700);
-        var mobObj = Packages.server.life.MapleLifeFactory.getMonster(9400536);
-        mapObj.spawnMonsterOnGroundBelow(mobObj, new Packages.java.awt.Point(942, 478));
+
+        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const Point = Java.type('java.awt.Point');
+        var mobObj = MapleLifeFactory.getMonster(9400536);
+        mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(942, 478));
         
         respawnStages(eim);
         

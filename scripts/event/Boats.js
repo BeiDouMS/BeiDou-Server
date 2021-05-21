@@ -1,7 +1,3 @@
-importPackage(Packages.client);
-importPackage(Packages.tools);
-importPackage(Packages.server.life);
-
 var Orbis_btf;
 var Boat_to_Orbis;
 var Orbis_Boat_Cabin;
@@ -64,7 +60,9 @@ function takeoff() {
     
     em.setProperty("docked","false");
     
-    if(Math.random() < 0.42) em.schedule("approach", (invasionStartTime + (Math.random() * invasionDelayTime)));
+    if (Math.random() < 0.42) {
+        em.schedule("approach", (invasionStartTime + Math.trunc((Math.random() * invasionDelayTime))));
+    }
     em.schedule("arrived", rideTime);
 }
 
@@ -88,6 +86,7 @@ function approach() {
         em.setProperty("haveBalrog","true");
         Boat_to_Orbis.broadcastEnemyShip(true);
         Boat_to_Ellinia.broadcastEnemyShip(true);
+        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         Boat_to_Orbis.broadcastMessage(MaplePacketCreator.musicChange("Bgm04/ArabPirate"));
         Boat_to_Ellinia.broadcastMessage(MaplePacketCreator.musicChange("Bgm04/ArabPirate"));
         
@@ -96,6 +95,8 @@ function approach() {
 }
 
 function invasion() {
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+
     var map1 = Boat_to_Ellinia;
     var pos1 = new java.awt.Point(-538, 143);
     map1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos1);

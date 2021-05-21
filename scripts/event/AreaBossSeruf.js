@@ -28,8 +28,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -45,7 +43,8 @@ function cancelSchedule() {
 
 function start() {
     var theSeaweedTower = em.getChannelServer().getMapFactory().getMap(230020100);
-    var seruf = Packages.server.life.MapleLifeFactory.getMonster(4220001);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var seruf = MapleLifeFactory.getMonster(4220001);
 	
 	if(theSeaweedTower.getMonsterById(4220001) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);
@@ -55,8 +54,12 @@ function start() {
     var posX;
     var posY = 520;
     posX =  Math.floor((Math.random() * 2300) - 1500);
-    theSeaweedTower.spawnMonsterOnGroundBelow(seruf, new Packages.java.awt.Point(posX, posY));
-    theSeaweedTower.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    theSeaweedTower.spawnMonsterOnGroundBelow(seruf, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    theSeaweedTower.broadcastMessage(MaplePacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

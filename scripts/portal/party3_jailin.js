@@ -1,5 +1,3 @@
-importPackage(Packages.tools);
-
 var leverSequenceExit = false;
 
 function enterLeverSequence(pi) {
@@ -30,6 +28,7 @@ function enterLeverSequence(pi) {
             }
         }
 
+        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         if(countMiss > 0) {
             map.broadcastMessage(MaplePacketCreator.showEffect("quest/party/wrong_kor"));
             map.broadcastMessage(MaplePacketCreator.playSound("Party1/Failed"));

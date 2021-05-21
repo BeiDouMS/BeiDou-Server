@@ -24,8 +24,6 @@
 	Maplemas PQ coordinator
  */
 
-importPackage(Packages.server.life);
-
 var prizeTree = [[[2000002, 1002850], [20, 1]], [[2000006, 1012011], [20, 1]]];
 
 var state;
@@ -131,6 +129,9 @@ function insidePqAction(mode, type, selection) {
                         }
                 }
         } else if(status == 1) {
+                const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                const Point = Java.type('java.awt.Point');
+
                 if(stg == -1) {
                         if(!cm.isEventLeader()) {
                                 cm.sendOk("Please let your party leader talk to me for further details on the mission.");
@@ -140,7 +141,7 @@ function insidePqAction(mode, type, selection) {
 
                         mapobj.allowSummonState(true);
                         var snowman = MapleLifeFactory.getMonster(9400317 + (5 * difficulty));
-                        mapobj.spawnMonsterOnGroundBelow(snowman, new java.awt.Point(-180, 15));
+                        mapobj.spawnMonsterOnGroundBelow(snowman, new Point(-180, 15));
                         eim.setIntProperty("snowmanLevel", 1);
                         eim.dropMessage(5, "The snowman appeared on the field! Protect it using all means necessary!");
 
@@ -158,7 +159,7 @@ function insidePqAction(mode, type, selection) {
                         eim.getEm().getIv().invokeFunction("snowmanHeal", eim);
 
                         var boss = MapleLifeFactory.getMonster(9400318 + difficulty);
-                        mapobj.spawnMonsterOnGroundBelow(boss, new java.awt.Point(-180, 15));
+                        mapobj.spawnMonsterOnGroundBelow(boss, new Point(-180, 15));
                         eim.setProperty("spawnedBoss", "true");
 
                         eim.setIntProperty("statusStg1", 1);

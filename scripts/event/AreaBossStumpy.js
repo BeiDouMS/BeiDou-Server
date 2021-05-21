@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -44,7 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var eastRockyMountain5 = em.getChannelServer().getMapFactory().getMap(101030404);
-    var stumpy = Packages.server.life.MapleLifeFactory.getMonster(3220000);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var stumpy = MapleLifeFactory.getMonster(3220000);
 	
     if(eastRockyMountain5.getMonsterById(3220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
@@ -54,8 +53,12 @@ function start() {
     var posX;
     var posY = 1280;
     posX = Math.floor((Math.random() * 800) + 400);
-    eastRockyMountain5.spawnMonsterOnGroundBelow(stumpy, new Packages.java.awt.Point(posX, posY));
-    eastRockyMountain5.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Stumpy has appeared with a stumping sound that rings the Stone Mountain."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    eastRockyMountain5.spawnMonsterOnGroundBelow(stumpy, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    eastRockyMountain5.broadcastMessage(MaplePacketCreator.serverNotice(6, "Stumpy has appeared with a stumping sound that rings the Stone Mountain."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

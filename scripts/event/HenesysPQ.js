@@ -36,14 +36,14 @@ var maxMapId = 910010400;
 
 var eventTime = 10;     // 10 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -98,7 +98,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return eligible;
+        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -249,8 +249,9 @@ function friendlyItemDrop(eim, mob) {
         if (mob.getId() == 9300061) {
                 var cakes = eim.getIntProperty("bunnyCake") + 1;
                 eim.setIntProperty("bunnyCake", cakes);
-                
-                mob.getMap().broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
+
+                const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+                mob.getMap().broadcastMessage(MaplePacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
         }
 }
 
@@ -258,7 +259,8 @@ function friendlyDamaged(eim, mob) {
         if (mob.getId() == 9300061) {
                 var bunnyDamage = eim.getIntProperty("bunnyDamaged") + 1;
                 if (bunnyDamage > 5) {
-                        broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
+                        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+                        broadcastMessage(MaplePacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
                         eim.setIntProperty("bunnyDamaged", 0);
                 }
         }

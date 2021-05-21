@@ -21,45 +21,44 @@
  */
 package scripting.event;
 
-import java.util.concurrent.ConcurrentHashMap;
+import net.server.channel.Channel;
+import scripting.AbstractScriptManager;
+import scripting.SynchronizedInvocable;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-
-import net.server.channel.Channel;
-import scripting.AbstractScriptManager;
 
 /**
  *
  * @author Matze
  */
 public class EventScriptManager extends AbstractScriptManager {
+    private static final String INJECTED_VARIABLE_NAME = "em";
+    private static EventEntry fallback;
+    private final Map<String, EventEntry> events = new ConcurrentHashMap<>();
+    private boolean active = false;
 
-    private class EventEntry {
+    private static class EventEntry {
 
-        public EventEntry(NashornScriptEngine iv, EventManager em) {
+        public EventEntry(Invocable iv, EventManager em) {
             this.iv = iv;
             this.em = em;
         }
-        public NashornScriptEngine iv;
+        public Invocable iv;
         public EventManager em;
     }
-    
-    private static EventEntry fallback;
-    private Map<String, EventEntry> events = new ConcurrentHashMap<>();
-    private boolean active = false;
-    
-    public EventScriptManager(Channel cserv, String[] scripts) {
-        super();
+
+    public EventScriptManager(final Channel channel, String[] scripts) {
         for (String script : scripts) {
-            if (!script.equals("")) {
-                NashornScriptEngine iv = getScriptEngine("event/" + script + ".js");
-                events.put(script, new EventEntry(iv, new EventManager(cserv, iv, script)));
+            if (!script.isEmpty()) {
+                events.put(script, initializeEventEntry(script, channel));
             }
         }
         
@@ -82,7 +81,6 @@ public class EventScriptManager extends AbstractScriptManager {
     public final void init() {
         for (EventEntry entry : events.values()) {
             try {
-                entry.iv.put("em", entry.em);
                 entry.iv.invokeFunction("init", (Object) null);
             } catch (Exception ex) {
                 Logger.getLogger(EventScriptManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -99,14 +97,22 @@ public class EventScriptManager extends AbstractScriptManager {
             return;
         }
 
-        Channel cserv = eventEntries.iterator().next().getValue().em.getChannelServer();
+        Channel channel = eventEntries.iterator().next().getValue().em.getChannelServer();
         for (Entry<String, EventEntry> entry : eventEntries) {
             String script = entry.getKey();
-            NashornScriptEngine iv = getScriptEngine("event/" + script + ".js");
-            events.put(script, new EventEntry(iv, new EventManager(cserv, iv, script)));
+            events.put(script, initializeEventEntry(script, channel));
         }
     }
 
+    private EventEntry initializeEventEntry(String script, Channel channel) {
+        ScriptEngine engine = getInvocableScriptEngine("event/" + script + ".js");
+        Invocable iv = SynchronizedInvocable.of((Invocable) engine);
+        EventManager eventManager = new EventManager(channel, iv, script);
+        engine.put(INJECTED_VARIABLE_NAME, eventManager);
+        return new EventEntry(iv, eventManager);
+    }
+
+    // Is never being called
     public void reload() {
         cancel();
         reloadScripts();

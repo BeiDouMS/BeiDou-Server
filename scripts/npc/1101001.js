@@ -3,9 +3,9 @@
 	Map(s): 		Erev
 	Description: 		3rd job KoC Buff
 */
-importPackage(Packages.constants.game);
 
 function start() {
+    const GameConstants = Java.type('constants.game.GameConstants');
     if (cm.getPlayer().isCygnus() && GameConstants.getJobBranch(cm.getJob()) > 2) {
         cm.useItem(2022458);
         cm.sendOk("Let me cast you my blessings, my Knight. Please protect the world of Maple....");

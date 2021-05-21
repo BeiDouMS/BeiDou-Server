@@ -21,7 +21,6 @@
  * @Author Ronan
  * 3rd Job Event - Pirate
 **/
-importPackage(Packages.tools);
 
 var entryMap = 108010500;
 var exitMap = 105070200;
@@ -31,10 +30,10 @@ var maxMapId = 108010501;
 
 var eventTime = 20; //20 minutes
 
-var lobbyRange = [0, 7];
+const maxLobbies = 7;
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function init() {
@@ -46,7 +45,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 0);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

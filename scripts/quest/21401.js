@@ -1,5 +1,3 @@
-importPackage(Packages.server.life);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -76,7 +74,9 @@ function end(mode, type, selection) {
 function spawnMob(x, y, id, map) {
 	if(map.getMonsterById(id) != null)
 		return;
-		
+
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const Point = Java.type('java.awt.Point');
 	var mob = MapleLifeFactory.getMonster(id);
-	map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(x, y));
+	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

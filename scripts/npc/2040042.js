@@ -31,8 +31,6 @@
 @	Description: You need a ranged person here. The ranged person must kill the three Ratz, and they'll trigger something. What's next is for you to find out! Get me 3 passes!
 */
 
-importPackage(Packages.server.life);
-
 var status = 0;
 var curMap, stage;
 

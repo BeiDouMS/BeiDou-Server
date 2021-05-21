@@ -2,8 +2,6 @@
  * Cygnus 1st Job advancement - Wind Archer
  */
 
-importPackage(Packages.client);
-
 var status = -1;
 var jobType = 3;
 var canTryFirstJob = true;
@@ -40,6 +38,7 @@ function end(mode, type, selection) {
                 qm.gainItem(2060000, 2000);
                 qm.gainItem(1452051, 1);
                 qm.gainItem(1142066, 1);
+                const MapleJob = Java.type('client.MapleJob');
                 qm.changeJob(MapleJob.WINDARCHER1);
                 qm.getPlayer().resetStats();
             }

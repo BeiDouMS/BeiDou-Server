@@ -34,7 +34,8 @@ spawnPnpcFee = 7000000;
 jobType = 3;
 
 function start() {
-    if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(Packages.constants.game.GameConstants.getHallOfFameMapid(cm.getJob()))) {
+    const GameConstants = Java.type('constants.game.GameConstants');
+    if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
         
         var sendStr = "You have walked a long way to reach the power, wisdom and courage you hold today, haven't you? What do you say about having right now #ra NPC on the Hall of Fame holding the current image of your character#k? Do you like it?";
@@ -92,8 +93,10 @@ function action(mode, type, selection) {
                     cm.dispose();
                     return;
                 }
-                
-                if(Packages.server.life.MaplePlayerNPC.spawnPlayerNPC(Packages.constants.game.GameConstants.getHallOfFameMapid(cm.getJob()), cm.getPlayer())) {
+
+                const MaplePlayerNPC = Java.type('server.life.MaplePlayerNPC');
+                const GameConstants = Java.type('constants.game.GameConstants');
+                if(MaplePlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(cm.getJob()), cm.getPlayer())) {
                     cm.sendOk("There you go! Hope you will like it.");
                     cm.gainMeso(-spawnPnpcFee);
                 } else {

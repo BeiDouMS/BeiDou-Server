@@ -20,10 +20,9 @@
 /* Steal queen's silk
  */
 
-importPackage(Packages.client);
-
 function isTigunMorphed(ch) {
-        return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
+    const MapleBuffStat = Java.type('client.MapleBuffStat');
+    return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
 }
 
 var status = -1;

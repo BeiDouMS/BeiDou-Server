@@ -22,13 +22,12 @@
 //@Author Moogra, Ronan
 //Fixed grammar, javascript syntax
 
-importPackage(Packages.client);
-
 var status = 0;
 var price = 100000;
 
 function isTransformed(ch) {
-        return ch.getBuffSource(MapleBuffStat.MORPH) == 2210003;
+    const MapleBuffStat = Java.type('client.MapleBuffStat');
+    return ch.getBuffSource(MapleBuffStat.MORPH) == 2210003;
 }
 
 function start() {

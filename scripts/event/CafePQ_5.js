@@ -23,8 +23,6 @@
  * @event: Cafe PQ 5
 */
 
-importPackage(Packages.client.inventory);
-
 var isPq = true;
 var minPlayers = 3, maxPlayers = 6;
 var minLevel = 21, maxLevel = 120;
@@ -40,14 +38,14 @@ var eventMaps = [196000000, 196010000];
 var eventTime = 45;         // 45 minutes
 var couponsNeeded = 500;    // total of coupons to complete the event
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -102,7 +100,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return eligible;
+        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -255,6 +253,7 @@ function monsterKilled(mob, eim) {
         if(eim.isEventCleared()) return;
         
         var mapObj = mob.getMap();
+        const Item = Java.type('client.inventory.Item');
         var itemObj = new Item(4001007, 0, getDroppedQuantity(mob));
         var dropper = eim.getPlayers().get(0);
 

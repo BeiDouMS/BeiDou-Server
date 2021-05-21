@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -44,15 +42,19 @@ function cancelSchedule() {
 
 function start() {
     var theForestOfEvil1 = em.getChannelServer().getMapFactory().getMap(100040105);
-    var faust1 = Packages.server.life.MapleLifeFactory.getMonster(5220002);
-	
 	if(theForestOfEvil1.getMonsterById(5220002) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
 	}
-	
-    theForestOfEvil1.spawnMonsterOnGroundBelow(faust1, new Packages.java.awt.Point(456, 278));
-    theForestOfEvil1.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const Point = Java.type('java.awt.Point');
+
+    var faust1 = MapleLifeFactory.getMonster(5220002);
+    const spawnpoint = new Point(456, 278);
+    theForestOfEvil1.spawnMonsterOnGroundBelow(faust1, spawnpoint);
+    theForestOfEvil1.broadcastMessage(MaplePacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

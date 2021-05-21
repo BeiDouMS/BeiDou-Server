@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -44,7 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var territoryOfWanderingBear = em.getChannelServer().getMapFactory().getMap(250010304);
-    var taeRoon = Packages.server.life.MapleLifeFactory.getMonster(7220000);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var taeRoon = MapleLifeFactory.getMonster(7220000);
 	
 	if(territoryOfWanderingBear.getMonsterById(7220000) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);
@@ -54,8 +53,12 @@ function start() {
     var posX;
     var posY = 390;
     posX =  Math.floor((Math.random() * 700) - 800);
-    territoryOfWanderingBear.spawnMonsterOnGroundBelow(taeRoon, new Packages.java.awt.Point(posX, posY));
-    territoryOfWanderingBear.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Tae Roon has appeared with a soft whistling sound."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    territoryOfWanderingBear.spawnMonsterOnGroundBelow(taeRoon, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    territoryOfWanderingBear.broadcastMessage(MaplePacketCreator.serverNotice(6, "Tae Roon has appeared with a soft whistling sound."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

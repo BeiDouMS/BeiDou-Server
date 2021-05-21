@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -44,7 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var moonRidge = em.getChannelServer().getMapFactory().getMap(222010310);
-    var nineTailedFox = Packages.server.life.MapleLifeFactory.getMonster(7220001);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var nineTailedFox = MapleLifeFactory.getMonster(7220001);
 	if(moonRidge.getMonsterById(7220001) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
@@ -52,8 +51,12 @@ function start() {
     var posX;
     var posY = 33;
     posX =  Math.floor((Math.random() * 1300) - 800);
-    moonRidge.spawnMonsterOnGroundBelow(nineTailedFox, new Packages.java.awt.Point(posX, posY));
-    moonRidge.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    moonRidge.spawnMonsterOnGroundBelow(nineTailedFox, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    moonRidge.broadcastMessage(MaplePacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

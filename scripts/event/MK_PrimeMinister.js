@@ -1,6 +1,3 @@
-importPackage(Packages.tools);
-importPackage(Packages.server.life);
-
 var eventTime = 10 * 60 * 1000;     // 10 minutes
 var entryMap = 106021600;
 var exitMap = 106021402;
@@ -34,7 +31,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return eligible;
+        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
 }
 
 function setup(difficulty, lobbyId){
@@ -66,7 +63,9 @@ function respawn(eim){
 
                 var weddinghall = eim.getMapInstance(entryMap);
                 weddinghall.getPortal(1).setPortalState(false);
-                weddinghall.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new java.awt.Point(292, 143));
+                const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                const Point = Java.type('java.awt.Point');
+                weddinghall.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(292, 143));
         } else {
                 eim.schedule("respawn", 10000);
         }

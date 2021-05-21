@@ -25,12 +25,6 @@
         * @author Ronan Lana
 */
 
-importPackage(Packages.client);
-importPackage(Packages.config);
-importPackage(Packages.constants.game);
-importPackage(Packages.server);
-importPackage(Packages.server.life);
-
 var status;
 
 var jobWeaponRestricted = [[[2043000, 2043100, 2044000, 2044100, 2043200, 2044200]], [[2043000, 2043100, 2044000, 2044100], [2043000, 2043200, 2044000, 2044200], [2044300, 2044400]], [[2043700, 2043800], [2043700, 2043800], [2043700, 2043800]], [[2044500], [2044600]], [[2044700], [2043300]], [[2044800], [2044900]]];
@@ -150,7 +144,8 @@ function getJobTierScrolls() {
 
     var job = cm.getPlayer().getJob();
     var jobScrolls = jobWeaponRestricted[Math.floor(cm.getPlayer().getJobStyle().getId() / 100)];
-    
+
+    const GameConstants = Java.type('constants.game.GameConstants');
     var jobBranch = GameConstants.getJobBranch(job);
     if (jobBranch >= 2) {
         Array.prototype.push.apply(scrolls, jobScrolls[Math.floor((job.getId() / 10) % 10) - 1]);
@@ -200,6 +195,7 @@ function getScrollTier(scrollStats) {
 function getScrollSuccessTier(scrollStats) {
     var prop = scrollStats.get("success");
 
+    const YamlConfig = Java.type('config.YamlConfig');
     if (prop > 90) {
         return 3;
     } else if (prop < 50) {
@@ -211,6 +207,7 @@ function getScrollSuccessTier(scrollStats) {
 
 function getAvailableScrollsPool(baseScrolls, rewardTier, successTier) {
     var scrolls = [];
+    const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
     var ii = MapleItemInformationProvider.getInstance();
     
     for (var i = 0; i < baseScrolls.length; i++) {
@@ -247,6 +244,8 @@ function getPlayerCardTierPower() {
         countTier[ceTier] += ce.getValue();
 
         if (ceTier >= 8) {  // is special card
+            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+            const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
             var mobLevel = MapleLifeFactory.getMonsterLevel(MapleItemInformationProvider.getInstance().getCardMobId(cardid));
             var mobTier = getLevelTier(mobLevel) - 1;
 
@@ -280,6 +279,7 @@ function calculateMobBookBuckets() {
         playerLevelTier = 8;
     }
 
+    const MonsterBook = Java.type('client.MonsterBook');
     var tierSize = MonsterBook.getCardTierSize();
     var playerCards = getPlayerCardTierPower();
     
@@ -421,7 +421,8 @@ function performExchange(sgItemid, sgCount) {
 }
 
 function generateRandomScroll() {
-    if (cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+    if (cm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
         var itemid = getRandomScroll(calculateScrollTiers());
         if (itemid != -1) {
             if (performExchange(itemid, 1)) {

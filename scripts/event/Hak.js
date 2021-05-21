@@ -1,5 +1,3 @@
-importPackage(Packages.tools);
-
 var returnTo = new Array(200000141, 250000100);
 var rideTo = new Array(250000100, 200000141);
 var birdRide = new Array(200090300, 200090310);
@@ -33,7 +31,8 @@ function playerEntry(eim, player) {
         returnMap = eim.getMapFactory().getMap(returnTo[myRide]);
         onRide = eim.getMapFactory().getMap(birdRide[myRide]);
         player.changeMap(onRide, onRide.getPortal(0));
-        
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
         player.getClient().announce(MaplePacketCreator.getClock(rideTime / 1000));
         eim.schedule("timeOut", rideTime);
 }

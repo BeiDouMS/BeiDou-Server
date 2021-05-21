@@ -4,7 +4,7 @@
 #
 # Cosmic JAR creation stage
 #
-FROM maven:3.6.3-jdk-8 AS jar
+FROM maven:3.8.1-openjdk-16 AS jar
 
 # Build in a separated location which won't have permissions issues.
 WORKDIR /opt/cosmic
@@ -21,7 +21,7 @@ RUN mvn -f ./pom.xml clean package -Dmaven.test.skip -T 1C
 #
 # Server creation stage
 #
-FROM openjdk:8
+FROM openjdk:16
 
 # Host the server in a location that won't have permissions issues.
 WORKDIR /opt/server

@@ -41,15 +41,19 @@ function cancelSchedule() {
 
 function start() {
     var royalCatthusDesert = em.getChannelServer().getMapFactory().getMap(260010201);
-    var deo = Packages.server.life.MapleLifeFactory.getMonster(3220001);
 	
 	if(royalCatthusDesert.getMonsterById(3220001) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
 	}
-	
-    royalCatthusDesert.spawnMonsterOnGroundBelow(deo, new Packages.java.awt.Point(645, 275));
-    royalCatthusDesert.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Deo slowly appeared out of the sand dust."));
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+
+    var deo = MapleLifeFactory.getMonster(3220001);
+    royalCatthusDesert.spawnMonsterOnGroundBelow(deo, new Point(645, 275));
+    royalCatthusDesert.broadcastMessage(MaplePacketCreator.serverNotice(6, "Deo slowly appeared out of the sand dust."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

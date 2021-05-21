@@ -2,8 +2,6 @@
  * Cygnus 1st Job advancement - Night Walker
  */
 
-importPackage(Packages.client);
-
 var status = -1;
 var jobType = 4;
 var canTryFirstJob = true;
@@ -40,6 +38,7 @@ function end(mode, type, selection) {
                 qm.gainItem(1472061, 1);
                 qm.gainItem(2070000, 800);
                 qm.gainItem(1142066, 1);
+                const MapleJob = Java.type('client.MapleJob');
                 qm.changeJob(MapleJob.NIGHTWALKER1);
                 qm.getPlayer().resetStats();
             }

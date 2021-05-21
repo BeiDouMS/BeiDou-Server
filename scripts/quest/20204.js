@@ -54,7 +54,8 @@ function end(mode, type, selection) {
 					}
                     qm.gainItem(4032099, -30);
                     qm.gainItem(1142067, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.NIGHTWALKER2);
+                    const MapleJob = Java.type('client.MapleJob');
+                    qm.getPlayer().changeJob(MapleJob.NIGHTWALKER2);
                     qm.completeQuest();
                 }
                 qm.sendNext("You are no longer a Knight-in-Training. You have officially become a Cygnus Knight.");

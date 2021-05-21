@@ -1,5 +1,3 @@
-importPackage(Packages.server.life);
-
 function start(ms){
 
 	if(ms.getQuestStatus(2175) == 1){
@@ -11,6 +9,8 @@ function start(ms){
 			return;   	       
 		}
 
-		map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new java.awt.Point(-1027, 216));
+		const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+		const Point = Java.type('java.awt.Point');
+		map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(-1027, 216));
 	}
 }

@@ -21,17 +21,13 @@
 	Marriage NPC
  */
 
-importPackage(Packages.config);
-importPackage(Packages.net.server.channel.handlers);
-importPackage(Packages.tools);
-importPackage(Packages.tools.packets);
-
 var status;
 var state;
 var eim;
 var weddingEventName = "WeddingChapel";
 var cathedralWedding = false;
 var weddingIndoors;
+const YamlConfig = Java.type('config.YamlConfig');
 var weddingBlessingExp = YamlConfig.config.server.WEDDING_BLESS_EXP;
 
 function detectPlayerItemid(player) {
@@ -174,6 +170,7 @@ function action(mode, type, selection) {
             if(state == 0) {    // give player blessings
                 eim.gridInsert(cm.getPlayer(), 1);
 
+                const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
                 if(YamlConfig.config.server.WEDDING_BLESSER_SHOWFX) {
                     var target = cm.getPlayer();
                     target.announce(MaplePacketCreator.showSpecialEffect(9));
@@ -224,6 +221,7 @@ function action(mode, type, selection) {
                                         cm.gainItem(playerItemId, -1);
                                         cmPartner.gainItem(partnerItemId, -1);
 
+                                        const RingActionHandler = Java.type('net.server.channel.handlers.RingActionHandler');
                                         RingActionHandler.giveMarriageRings(player, partner, marriageRingId);
                                         player.setMarriageItemId(marriageRingId);
                                         partner.setMarriageItemId(marriageRingId);

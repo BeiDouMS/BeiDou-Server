@@ -26,8 +26,6 @@
 	ThreeStep - based on xQuasar's King Clang spawner
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -43,7 +41,8 @@ function cancelSchedule() {
 
 function start() {
     var whirlpoolOfTime = em.getChannelServer().getMapFactory().getMap(220050100);
-    var timer1 = Packages.server.life.MapleLifeFactory.getMonster(5220003);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var timer1 = MapleLifeFactory.getMonster(5220003);
 	
 	if(whirlpoolOfTime.getMonsterById(5220003) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);
@@ -53,8 +52,12 @@ function start() {
     var posX;
     var posY = 1030;
     posX =  Math.floor((Math.random() * 770) - 770);
-    whirlpoolOfTime.spawnMonsterOnGroundBelow(timer1, new Packages.java.awt.Point(posX, posY));
-    whirlpoolOfTime.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    whirlpoolOfTime.spawnMonsterOnGroundBelow(timer1, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    whirlpoolOfTime.broadcastMessage(MaplePacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

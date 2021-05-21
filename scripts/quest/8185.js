@@ -25,8 +25,6 @@
 	Description: 		Quest - Pet Evolution2
 */
 
-importPackage (Packages.net.server.channel.handlers);
-
 var status = -1;
 
 function end(mode, type, selection) {

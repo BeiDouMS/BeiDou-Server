@@ -18,12 +18,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function isPillUsed(ch) {
-        return ch.getBuffSource(MapleBuffStat.HPREC) == 2022198;
+    const MapleBuffStat = Java.type('client.MapleBuffStat');
+    return ch.getBuffSource(MapleBuffStat.HPREC) == 2022198;
 }
 
 function end(mode, type, selection) {

@@ -21,7 +21,6 @@
  * @Author Ronan
  * Event - Scadur's Mount Quest
 **/
-importPackage(Packages.tools);
 
 var entryMap = 921110000;
 var exitMap = 211050000;
@@ -31,10 +30,10 @@ var maxMapId = 921110000;
 
 var eventTime = 3; //3 minutes
 
-var lobbyRange = [0, 7];
+const maxLobbies = 7;
 
-function setLobbyRange() {
-    return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function init() {
@@ -60,7 +59,8 @@ function playerEntry(eim, player) {
     
     player.changeMap(entryMap, 2);
     em.setProperty("noEntry","true");
-    
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
     player.getClient().announce(MaplePacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

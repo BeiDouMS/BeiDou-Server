@@ -28,8 +28,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -45,7 +43,8 @@ function cancelSchedule() {
 
 function start() {
     var lostTime2 = em.getChannelServer().getMapFactory().getMap(220050200);
-    var timer3 = Packages.server.life.MapleLifeFactory.getMonster(5220003);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var timer3 = MapleLifeFactory.getMonster(5220003);
 	
 	if(lostTime2.getMonsterById(5220003) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);
@@ -55,8 +54,12 @@ function start() {
     var posX;
     var posY = 1030;
     posX =  Math.floor((Math.random() * 1400) - 700);
-    lostTime2.spawnMonsterOnGroundBelow(timer3, new Packages.java.awt.Point(posX, posY));
-    lostTime2.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    lostTime2.spawnMonsterOnGroundBelow(timer3, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    lostTime2.broadcastMessage(MaplePacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

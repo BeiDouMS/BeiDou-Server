@@ -24,7 +24,6 @@ package client;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -50,6 +49,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMiniDungeonInfo;
 import tools.*;
 
+import javax.script.ScriptEngine;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -85,7 +85,7 @@ public class MapleClient {
 	private long lastPong;
 	private int gmlevel;
 	private Set<String> macs = new HashSet<>();
-	private Map<String, NashornScriptEngine> engines = new HashMap<>();
+	private Map<String, ScriptEngine> engines = new HashMap<>();
 	private byte characterSlots = 3;
 	private byte loginattempt = 0;
 	private String pin = "";
@@ -1041,11 +1041,11 @@ public class MapleClient {
 		gmlevel = level;
 	}
 
-	public void setScriptEngine(String name, NashornScriptEngine e) {
-                engines.put(name, e);
+	public void setScriptEngine(String name, ScriptEngine e) {
+		engines.put(name, e);
 	}
 
-	public NashornScriptEngine getScriptEngine(String name) {
+	public ScriptEngine getScriptEngine(String name) {
 		return engines.get(name);
 	}
 
