@@ -38,14 +38,14 @@ var tdBossId = 7220005;
 
 var eventTime = 10;     // 10 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {

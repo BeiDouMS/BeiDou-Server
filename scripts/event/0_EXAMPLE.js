@@ -12,14 +12,14 @@ var maxMapId;
 
 var eventTime;                  // Max time allotted for the event, in minutes.
 
-var lobbyRange = [0, 0];        // Range of concurrent lobbies (min range is 0, max range is 7).
+const maxLobbies = 7;        // Max amount of concurrent active lobbies.
 
 function init() {
     // After loading, ChannelServer
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {

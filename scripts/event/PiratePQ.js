@@ -38,14 +38,14 @@ var maxMapId = 925100500;
 
 var eventTime = 4;     // 4 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {

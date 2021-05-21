@@ -163,16 +163,11 @@ public class EventManager {
         return YamlConfig.config.server.EVENT_LOBBY_DELAY;
     }
     
-    private List<Integer> getLobbyRange() {
+    private int getMaxLobbies() {
         try {
-            List<Object> objects = (List<Object>) iv.invokeFunction("setLobbyRange", (Object) null);
-            return convertToIntegerList(objects);
+            return (int) iv.invokeFunction("getMaxLobbies");
         } catch (ScriptException | NoSuchMethodException ex) { // they didn't define a lobby range
-            List<Integer> defaultRange = new ArrayList<>();
-            defaultRange.add(0);
-            defaultRange.add(maxLobbys);
-            
-            return defaultRange;
+            return maxLobbys;
         }
     }
 
@@ -332,23 +327,19 @@ public class EventManager {
     public String getName() {
         return name;
     }
-    
+
     private int availableLobbyInstance() {
-            List<Integer> lr = getLobbyRange();
-            int lb = 0, hb = 0;
-            
-            if(lr.size() >= 2) {
-                lb = Math.max(lr.get(0), 0);
-                hb = Math.min(lr.get(1), maxLobbys - 1);
+        int maxLobbies = getMaxLobbies();
+
+        if (maxLobbies > 0) {
+            for (int i = 0; i < maxLobbies; i++) {
+                if (startLobbyInstance(i)) {
+                    return i;
+                }
             }
-        
-            for(int i = lb; i <= hb; i++) {
-                    if(startLobbyInstance(i)) {
-                            return i;
-                    }
-            }
-            
-            return -1;
+        }
+
+        return -1;
     }
     
     private String getInternalScriptExceptionMessage(Throwable a) {

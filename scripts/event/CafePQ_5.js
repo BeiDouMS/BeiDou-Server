@@ -38,14 +38,14 @@ var eventMaps = [196000000, 196010000];
 var eventTime = 45;         // 45 minutes
 var couponsNeeded = 500;    // total of coupons to complete the event
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {

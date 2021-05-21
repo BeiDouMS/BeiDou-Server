@@ -41,14 +41,14 @@ var bossMobId = 8830010;
 var eventTime = 60;         // 60 minutes
 var releaseClawTime = 1;
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {

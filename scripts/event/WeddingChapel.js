@@ -44,12 +44,12 @@ var forceHideMsgTime = 10;  // unfortunately, EIM weddings don't send wedding ta
 var eventBoss = true;   // spawns a Cake boss at the hunting ground
 var isCathedral = false;
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {}
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventExclusives(eim) {

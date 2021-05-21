@@ -38,14 +38,14 @@ var waitTime = 3;       //  3 minutes
 var eventTime = 90;     // 90 minutes
 var bonusTime = 0.5;    // 30 seconds
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {
