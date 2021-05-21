@@ -713,21 +713,21 @@ public class EventManager {
     
     public List<MaplePartyCharacter> getEligibleParty(MapleParty party) {
         if (party == null) {
-            return(new ArrayList<>());
+            return new ArrayList<>();
         }
         try {
-            Object p = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
+            Object o = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
             
-            if(p != null) {
-                final List<MaplePartyCharacter> lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
-                party.setEligibleMembers(lmpc);
-                return lmpc;
+            if (o instanceof MaplePartyCharacter[] partyChrs) {
+                final List<MaplePartyCharacter> eligibleParty = new ArrayList<>(Arrays.asList(partyChrs));
+                party.setEligibleMembers(eligibleParty);
+                return eligibleParty;
             }
         } catch (ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }
 
-        return(new ArrayList<>());
+        return new ArrayList<>();
     }
     
     public void clearPQ(EventInstanceManager eim) {
