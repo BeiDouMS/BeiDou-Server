@@ -23,7 +23,6 @@ package scripting.reactor;
 
 import client.MapleClient;
 import scripting.AbstractScriptManager;
-import scripting.SynchronizedInvocable;
 import server.maps.MapleReactor;
 import server.maps.ReactorDropEntry;
 import tools.DatabaseConnection;
@@ -136,7 +135,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
             return null;
         }
 
-        Invocable iv = SynchronizedInvocable.of((Invocable) engine);
+        Invocable iv = (Invocable) engine;
         ReactorActionManager rm = new ReactorActionManager(c, reactor, iv);
         engine.put("rm", rm);
 

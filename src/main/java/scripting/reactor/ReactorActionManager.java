@@ -29,8 +29,6 @@ import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import scripting.AbstractPlayerInteraction;
-import scripting.event.EventInstanceManager;
-import scripting.event.EventManager;
 import server.MapleItemInformationProvider;
 import server.TimerManager;
 import server.life.MapleLifeFactory;
@@ -44,14 +42,11 @@ import server.partyquest.MapleCarnivalFactory.MCSkill;
 import tools.MaplePacketCreator;
 
 import javax.script.Invocable;
-import javax.script.ScriptException;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Lerk
@@ -311,29 +306,21 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void spawnFakeMonster(int id) {
         reactor.getMap().spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), getPosition());
     }
-    
-    public ScheduledFuture<?> schedule(String methodName, long delay) {
-        return schedule(methodName, null, delay);
+
+    /**
+     * Used for Targa and Scarlion
+     */
+    public void summonBossDelayed(final int mobId, final int delayMs, final int x, final int y, final String bgm,
+                                  final String summonMessage) {
+        TimerManager.getInstance().schedule(() -> {
+            summonBoss(mobId, x, y, bgm, summonMessage);
+        }, delayMs);
     }
 
-    public ScheduledFuture<?> schedule(final String methodName, final EventInstanceManager eim, long delay) {
-        return TimerManager.getInstance().schedule(() -> {
-            try {
-                iv.invokeFunction(methodName, eim);
-            } catch (ScriptException | NoSuchMethodException ex) {
-                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }, delay);
-    }
-
-    public ScheduledFuture<?> scheduleAtTimestamp(final String methodName, long timestamp) {
-        return TimerManager.getInstance().scheduleAtTimestamp(() -> {
-            try {
-                iv.invokeFunction(methodName, (Object) null);
-            } catch (ScriptException | NoSuchMethodException ex) {
-                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }, timestamp);
+    private void summonBoss(int mobId, int x, int y, String bgmName, String summonMessage) {
+        spawnMonster(mobId, x, y);
+        changeMusic(bgmName);
+        mapMessage(6, summonMessage);
     }
     
     public void dispelAllMonsters(int num, int team) { //dispels all mobs, cpq
