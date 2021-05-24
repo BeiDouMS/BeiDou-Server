@@ -136,7 +136,7 @@ If you are using Docker (quick start):
 
 #### Configuring the project
 
-The easiest way to set up your project is to load the repository directly into a new IntelliJ project.
+The easiest way to set up your project is to clone the repository directly into a new IntelliJ project.
 
 1. Install IntelliJ
 2. Create a new "Project from Version Control..."
@@ -147,19 +147,20 @@ The easiest way to set up your project is to load the repository directly into a
 
 1. Install MySQL Server 8 and MySQL Workbench 8.  
 2. Using Workbench, create a new user with username "cosmic_server" and password "snailshell". 
-   These are the defaults used in Cosmic.
+   This the default configuration in Cosmic.
    * (Optional) Restrict the Schema Privileges for this new user for improved security. 
 	 Add a new entry with "Schemas matching pattern: cosmic" and only select "SELECT", "INSERT", "UPDATE", "DELETE" under "Object Rights"
-3. Run the sql scripts in the "sql" directory of the project in the order indicated by their names. 
-	* Make sure you are connected to the database with the "root" user.
-	* Run scripts through the menu: "File" -> "Run SQL Script" -> select the script file to run -> "Run"
+3. Run the sql scripts in the "database/sql" directory of the project in the order indicated by their names. 
+	* Make sure you are connected to the database with the "root" user to be able to run the scripts.
+	* Run scripts one by one through the menu: "File" -> "Run SQL Script" -> select the script file to run -> "Run"
 	* The 3rd script "3-db_shopupdate" is optional. It adds custom shop items for certain NPCs.
+    * The 4th script "4-db_admin" is also optional, but recommended if you are new. It adds an admin account to simplify the setup.
 
 Use this info when you connect to MySQL Server for the first time:
 * Server Host: localhost
 * Port: 3306
 * Username: root
-* Password: whatever you entered in during the installation of MySQL Server
+* Password: <whatever password you set during MySQL Server installation>
 
 At the end of the execution of these sql scripts, you should have installed a database schema named "cosmic". 
 REGISTER YOUR FIRST ACCOUNT to be used in-game by **manually creating** an entry in the table "accounts" in the database with a username and password.
@@ -173,7 +174,7 @@ Alternatively, you can use the IP given by Hamachi to use on a Hamachi network, 
 
 To launch the server, you may either:
 * Launch inside IntelliJ
-* Launch a jar file
+* Launch a built jar file
 * Launch with Docker
 
 #### Launch inside IntelliJ
@@ -185,16 +186,24 @@ To launch the server, you may either:
 #### Launch a jar file
 1. Create the jar file
    * The jar file is created by the Maven assembly plugin in the package lifecycle.
-   * If you have Maven installed on your computer, simply run the command "mvn clean install" to create the jar file.
-   * IntelliJ also comes with built in Maven support. Open a new terminal window inside IntelliJ, type "mvn clean install" (your command should be marked green), then Ctrl+Enter to create the jar file.
+   * If you already have Maven installed, simply run the command "mvn clean install" to create the jar file.
+   * IntelliJ also comes with built-in Maven support. Open a new terminal window inside IntelliJ, type "mvn clean install" (your command should now be marked green), then Ctrl+Enter to build the jar file.
 2. Launch the jar file
    * Double click on "launch.bat"
     
 #### Launch with Docker
-Run the command "docker compose up" at the root of the project.
+1. Start Docker
+2. Run the command "docker compose up" at the root of the project.
+    * If you make any changes to the code, make sure you append the "--build" option at the end of the command to force rebuild the server image.
 
 ---
 ### Creating an account and logging into the game
+
+If you ran the admin sql script, there already exists an account in your database with an admin character on it. You don't need to change its GM level. Log in using these credentials:
+* Username: "admin"
+* Password: "admin"
+* Pin: "0000"
+* Pic: "000000"
 
 By default, the server source is set to allow AUTO-REGISTERING. This means that, by simply typing in a "Login ID" and a "Password", you're able to create a new account.
 
