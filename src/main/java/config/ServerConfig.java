@@ -308,5 +308,5 @@ public class ServerConfig {
     public long EVENT_END_TIMESTAMP;
 
     //Custom NPC overrides. List of NPC IDs.
-    public List<Integer> NPCS_SCRIPTABLE = new ArrayList<>();
+    public Map<String, String> NPCS_SCRIPTABLE = new HashMap<>();
 }

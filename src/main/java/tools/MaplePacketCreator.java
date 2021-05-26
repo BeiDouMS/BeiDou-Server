@@ -8326,13 +8326,14 @@ public class MaplePacketCreator {
          * @param scriptableNpcIds Ids of npcs to enable scripts for.
          * @return a packet which makes the npc's provided scriptable.
          */
-        public static byte[] setNPCScriptable(Set<Integer> scriptableNpcIds) {  // thanks to GabrielSin
+        public static byte[] setNPCScriptable(Map<Integer, String> scriptableNpcIds) {  // thanks to GabrielSin
                 MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.SET_NPC_SCRIPTABLE.getValue());
                 mplew.write(scriptableNpcIds.size());
-                scriptableNpcIds.forEach(id -> {
+                scriptableNpcIds.forEach((id, name) -> {
                         mplew.writeInt(id);
-                        mplew.writeMapleAsciiString("NPC " + id); // The client needs a name for the npc, but it doesn't seem to do anything.
+                        // The client needs a name for the npc conversation, which is displayed under etc when the npc has a quest available.
+                        mplew.writeMapleAsciiString(name);
                         mplew.writeInt(0); // start time
                         mplew.writeInt(Integer.MAX_VALUE); // end time
                 });
