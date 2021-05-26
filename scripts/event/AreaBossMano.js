@@ -26,8 +26,6 @@
 	ThreeStep - based on xQuasar's King Clang spawner
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -43,14 +41,19 @@ function cancelSchedule() {
 
 function start() {
     var thicketAroundTheBeach3 = em.getChannelServer().getMapFactory().getMap(104000400);
-    var mano = Packages.server.life.MapleLifeFactory.getMonster(2220000);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var mano = MapleLifeFactory.getMonster(2220000);
     if(thicketAroundTheBeach3.getMonsterById(2220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;
     }
-	
-    thicketAroundTheBeach3.spawnMonsterOnGroundBelow(mano, new Packages.java.awt.Point(279, -496));
-    thicketAroundTheBeach3.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
+
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(279, -496);
+    thicketAroundTheBeach3.spawnMonsterOnGroundBelow(mano, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    thicketAroundTheBeach3.broadcastMessage(MaplePacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
     em.schedule("start", 3 * 60 *60 * 1000);
 }
 

@@ -18,9 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-importPackage(Packages.client);
-
 function isTigunMorphed(ch) {
+    const MapleBuffStat = Java.type('client.MapleBuffStat');
         return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
 }
 

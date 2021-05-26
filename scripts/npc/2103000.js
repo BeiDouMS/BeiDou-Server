@@ -20,10 +20,10 @@
 /* Oasis near Ariant Castle
  */
 
-importPackage(Packages.client);
 
 function isTigunMorphed(ch) {
-        return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
+    const MapleBuffStat = Java.type('client.MapleBuffStat');
+    return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
 }
 
 function start() {

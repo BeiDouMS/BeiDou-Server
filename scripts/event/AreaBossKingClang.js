@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 var hotSand;
 
 function init() {
@@ -50,12 +48,18 @@ function start() {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
 	}
-    var kingClang = Packages.server.life.MapleLifeFactory.getMonster(5220001);
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var kingClang = MapleLifeFactory.getMonster(5220001);
     var posX;
     var posY = 140;
     posX =  Math.floor((Math.random() * 2400) - 1600);
-    hotSand.spawnMonsterOnGroundBelow(kingClang, new Packages.java.awt.Point(posX, posY));
-    hotSand.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    hotSand.spawnMonsterOnGroundBelow(kingClang, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    hotSand.broadcastMessage(MaplePacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

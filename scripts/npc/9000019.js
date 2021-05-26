@@ -17,15 +17,17 @@ function action(mode, type, selection) {
                         status++;
                 else
                         status--;
-    
+
                 if(status == 0) {
-                        if(cm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.ETC).getNumFreeSlot() < 1) {
+                        const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+                        if(cm.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() < 1) {
                                 cm.sendNext("Check for a available slot on your ETC inventory.");
                                 cm.dispose();
                                 return;
                         }
-                    
-                        cm.getClient().announce(Packages.tools.MaplePacketCreator.openRPSNPC());
+
+                        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+                        cm.getClient().announce(MaplePacketCreator.openRPSNPC());
                         cm.dispose();
                 }
         }

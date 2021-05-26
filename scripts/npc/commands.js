@@ -6,8 +6,6 @@
         Script: commands.js
 */
 
-importPackage(Packages.client.command);
-
 var status;
 
 var common_heading = "@";
@@ -17,6 +15,7 @@ var levels = ["Common", "Donator", "JrGM", "GM", "SuperGM", "Developer", "Admin"
 var commands;
 
 function writeHeavenMSCommands() {
+        const CommandsExecutor = Java.type('client.command.CommandsExecutor');
         commands = CommandsExecutor.getInstance().getGmCommands();
 }
 

@@ -1,9 +1,8 @@
-importPackage(Packages.server.life);
-
 function start(ms) {
-        var pos = new java.awt.Point(251, -841);
+	const Point = Java.type('java.awt.Point');
+	var pos = new Point(251, -841);
 	var mobId = 9400613;
-        var mobName = "Valefor";
+	var mobName = "Valefor";
         
 	var player = ms.getPlayer();
 	var map = player.getMap();
@@ -12,6 +11,7 @@ function start(ms) {
 		return;   	       
 	}
 
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
 	map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), pos);
 	player.message(mobName + " has appeared!");
 }

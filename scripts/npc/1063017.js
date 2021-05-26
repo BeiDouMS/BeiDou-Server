@@ -29,8 +29,10 @@ function action(mode, type, selection) {
                         if(cm.getClient().getChannelServer().getMapFactory().getMap(925020010).getCharacters().size() > 0) {
                             cm.sendOk("Someone is already challenging the Master. Try again later.");
                         } else {
-                            cm.getWarpMap(910510202).spawnMonsterOnGroundBelow(Packages.server.life.MapleLifeFactory.getMonster(9300346), new java.awt.Point(95, 200));
-                            cm.warp(910510202, 0);
+                                const MapleLifeFactoroy = Java.type('server.life.MapleLifeFactoroy');
+                                const Point = Java.type('java.awt.Point');
+                                cm.getWarpMap(910510202).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300346), new Point(95, 200));
+                                cm.warp(910510202, 0);
                         }
                     
                         cm.dispose();

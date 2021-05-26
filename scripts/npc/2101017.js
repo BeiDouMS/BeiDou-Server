@@ -3,9 +3,6 @@
  *@author Jvlaple
  */
 
-importPackage(Packages.server.expeditions);
-
-
 var status = 0;
 var toBan = -1;
 var choice;
@@ -13,6 +10,7 @@ var arena;
 var arenaName;
 var type;
 var map;
+const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
 var exped;
 var expedicao;
 var expedMembers;
@@ -31,6 +29,7 @@ function action(mode, type, selection) {
             return;
         }
 
+        const GameConstants = Java.type('constants.game.GameConstants');
         if (cm.getPlayer().getMapId() == 980010100 || cm.getPlayer().getMapId() == 980010200 || cm.getPlayer().getMapId() == 980010300) {
             if (cm.getPlayer().getMapId() == 980010100) {
                 exped = MapleExpeditionType.ARIANT;
@@ -115,7 +114,7 @@ function action(mode, type, selection) {
                     status = 2;
                 }
             }
-        } else if (Packages.constants.game.GameConstants.isAriantColiseumArena(cm.getPlayer().getMapId())) {
+        } else if (GameConstants.isAriantColiseumArena(cm.getPlayer().getMapId())) {
             if (cm.getPlayer().getMapId() == 980010101) {
                 exped = MapleExpeditionType.ARIANT;
                 expedicao = cm.getExpedition(exped);

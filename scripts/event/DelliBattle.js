@@ -35,14 +35,14 @@ var maxMapId = 925010300;
 
 var eventTime = 6;     // 6 minutes
 
-var lobbyRange = [0, 7];
+const maxLobbies = 7;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -80,7 +80,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return eligible;
+        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {

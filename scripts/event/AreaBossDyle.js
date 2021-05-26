@@ -26,8 +26,6 @@
 	ThreeStep - based on xQuasar's King Clang spawner
 
 **/
-importPackage(Packages.server.life);
-importPackage(Packages.tools);
 
 function init() {
     scheduleNew();
@@ -48,7 +46,12 @@ function start() {
 		setupTask = em.schedule("start", 3 * 60 * 60 * 1000);
 		return;
 	}
-    dangeroudCroko1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(6220000), new Packages.java.awt.Point(90, 119));
+
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+	const Point = Java.type('java.awt.Point');
+	const spawnpoint = new Point(90, 119);
+    dangeroudCroko1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(6220000), spawnpoint);
     dangeroudCroko1.broadcastMessage(MaplePacketCreator.serverNotice(6, "The huge crocodile Dyle has come out from the swamp."));
 	setupTask = em.schedule("start", 3 * 60 * 60 * 1000);
 }

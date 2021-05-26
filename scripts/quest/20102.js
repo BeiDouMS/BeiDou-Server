@@ -2,8 +2,6 @@
  * Cygnus 1st Job advancement - Blaze Wizard
  */
 
-importPackage(Packages.client);
-
 var status = -1;
 var jobType = 2;
 var canTryFirstJob = true;
@@ -39,6 +37,7 @@ function end(mode, type, selection) {
 
                 qm.gainItem(1372043, 1);
                 qm.gainItem(1142066, 1);
+                const MapleJob = Java.type('client.MapleJob');
                 qm.changeJob(MapleJob.BLAZEWIZARD1);
                 qm.getPlayer().resetStats();
             }

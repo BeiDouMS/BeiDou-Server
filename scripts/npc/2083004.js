@@ -23,16 +23,14 @@
  *@author Alan (SharpAceX)
  *@author Ronan
  */
-importPackage(Packages.server.expeditions);
-importPackage(Packages.tools);
-importPackage(Packages.scripting.event);
 
 var status = 0;
 var expedition;
 var expedMembers;
 var player;
 var em;
-var exped = MapleExpeditionType.HORNTAIL;
+const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
+const exped = MapleExpeditionType.HORNTAIL;
 var expedName = "Horntail";
 var expedBoss = "mighty Horntail";
 
@@ -153,6 +151,7 @@ function action(mode, type, selection) {
                 cm.sendOk("Good luck! All of Leafre is counting on you.");
                 status = 4;
             } else if (selection == 3) {
+                const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
                 player.getMap().broadcastMessage(MaplePacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("The expedition has now ended. Sometimes the best strategy is to run away.");

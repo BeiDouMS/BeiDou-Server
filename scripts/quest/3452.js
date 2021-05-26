@@ -1,5 +1,3 @@
-importPackage(Packages.tools);
-
 var status = -1;
 
 function end(mode, type, selection) {
@@ -12,7 +10,8 @@ function end(mode, type, selection) {
             qm.sendNext("Take these #bMana Elixir Pills#k as a token of my gratitude.");
         }
 	else if (status == 1) {
-		if(qm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+		if(qm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
 			qm.gainItem(4000099, -1);
 			qm.gainItem(2000011, 50);
 			qm.gainExp(8000);

@@ -23,8 +23,6 @@
  * The sorcerer who sells emotions
 */
 
-importPackage(Packages.client);
-
 var status = -1;
 
 function start(mode, type, selection) {
@@ -46,7 +44,8 @@ function start(mode, type, selection) {
 }
 
 function usedPotion(ch) {
-        return ch.getBuffSource(MapleBuffStat.HPREC) == 2022337;
+    const MapleBuffStat = Java.type('client.MapleBuffStat');
+    return ch.getBuffSource(MapleBuffStat.HPREC) == 2022337;
 }
 
 function end(mode, type, selection) {

@@ -26,7 +26,6 @@ import client.Skill;
 import client.SkillFactory;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import constants.net.ServerConstants;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.*;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
@@ -214,7 +213,7 @@ public class EventInstanceManager {
                 }
                 
 	}
-        
+
         public Object invokeScriptFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
                 if (!disposed) {
                         return em.getIv().invokeFunction(name, args);
@@ -557,31 +556,25 @@ public class EventInstanceManager {
 	}
         
 	public void monsterKilled(MapleCharacter chr, final MapleMonster mob) {
-                try {
-                        int inc;
-                        
-                        if (ServerConstants.JAVA_8) {
-                                inc = (int)invokeScriptFunction("monsterValue", EventInstanceManager.this, mob.getId());
-                        } else {
-                                inc = ((Double) invokeScriptFunction("monsterValue", EventInstanceManager.this, mob.getId())).intValue();
-                        }
-                        
-                        if (inc != 0) {
-                                Integer kc = killCount.get(chr);
-                                if (kc == null) {
-                                        kc = inc;
-                                } else {
-                                        kc += inc;
-                                }
-                                killCount.put(chr, kc);
-                                if (expedition != null){
-                                        expedition.monsterKilled(chr, mob);
-                                }
-                        }
-                } catch (ScriptException | NoSuchMethodException ex) {
-                        ex.printStackTrace();
-                }
-	}
+            try {
+                    final int inc = (int) invokeScriptFunction("monsterValue", EventInstanceManager.this, mob.getId());
+
+                    if (inc != 0) {
+                            Integer kc = killCount.get(chr);
+                            if (kc == null) {
+                                    kc = inc;
+                            } else {
+                                    kc += inc;
+                            }
+                            killCount.put(chr, kc);
+                            if (expedition != null) {
+                                    expedition.monsterKilled(chr, mob);
+                            }
+                    }
+            } catch (ScriptException | NoSuchMethodException ex) {
+                    ex.printStackTrace();
+            }
+    }
 
 	public int getKillCount(MapleCharacter chr) {
 		Integer kc = killCount.get(chr);
@@ -886,31 +879,25 @@ public class EventInstanceManager {
         public MapleMonster getMonster(int mid) {
                 return(MapleLifeFactory.getMonster(mid));
         }
-        
-        private List<Integer> convertToIntegerArray(List<Object> list) {
-            List<Integer> intList = new ArrayList<>();
-            
-            if (ServerConstants.JAVA_8) {
-                for (Object d: list) {
-                    intList.add((Integer) d);
+
+        private List<Integer> convertToIntegerList(List<Object> objects) {
+                List<Integer> intList = new ArrayList<>();
+
+                for (Object object : objects) {
+                        intList.add((Integer) object);
                 }
-            } else {
-                for (Object d: list) {
-                    intList.add(((Double) d).intValue());
-                }
-            }
-            
-            return intList;
+
+                return intList;
         }
         
         public void setEventClearStageExp(List<Object> gain) {
                 onMapClearExp.clear();
-                onMapClearExp.addAll(convertToIntegerArray(gain));
+                onMapClearExp.addAll(convertToIntegerList(gain));
         }
         
         public void setEventClearStageMeso(List<Object> gain) {
                 onMapClearMeso.clear();
-                onMapClearMeso.addAll(convertToIntegerArray(gain));
+                onMapClearMeso.addAll(convertToIntegerList(gain));
         }
         
         public Integer getClearStageExp(int stage) {    //stage counts from ONE.
@@ -940,7 +927,7 @@ public class EventInstanceManager {
         }
         
         public final void setExclusiveItems(List<Object> items) {
-                List<Integer> exclusive = convertToIntegerArray(items);
+                List<Integer> exclusive = convertToIntegerList(items);
                 
                 wL.lock();
                 try {
@@ -968,8 +955,8 @@ public class EventInstanceManager {
                 if(eventLevel <= 0 || eventLevel > YamlConfig.config.server.MAX_EVENT_LEVELS) return;
                 eventLevel--;    //event level starts from 1
 
-                List<Integer> rewardIds = convertToIntegerArray(rwds);
-                List<Integer> rewardQtys = convertToIntegerArray(qtys);
+                List<Integer> rewardIds = convertToIntegerList(rwds);
+                List<Integer> rewardQtys = convertToIntegerList(qtys);
 
                 //rewardsSet and rewardsQty hold temporary values
                 wL.lock();

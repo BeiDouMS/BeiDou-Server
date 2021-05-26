@@ -73,6 +73,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -1439,7 +1440,12 @@ public class MaplePacketCreator {
         
         private static void encodeTemporary(MaplePacketLittleEndianWriter mplew, Map<MonsterStatus, MonsterStatusEffect> stati) {
                 int pCounter = -1, mCounter = -1;
-            
+
+                stati = stati.entrySet()  // to patch some status crashing players
+                        .stream()
+                        .filter(e -> !(e.getKey().equals(MonsterStatus.WATK) || e.getKey().equals(MonsterStatus.WDEF)))
+                        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+                
                 writeLongEncodeTemporaryMask(mplew, stati.keySet());    // packet structure mapped thanks to Eric
                 
                 for (Entry<MonsterStatus, MonsterStatusEffect> s : stati.entrySet()) {
@@ -2663,6 +2669,9 @@ public class MaplePacketCreator {
                 mplew.writeShort(SendOpcode.DAMAGE_PLAYER.getValue());
                 mplew.writeInt(cid);
                 mplew.write(skill);
+                if (skill == -3) {
+                        mplew.writeInt(0);
+                }
                 mplew.writeInt(damage);
                 if(skill != -4) {
                         mplew.writeInt(monsteridfrom);

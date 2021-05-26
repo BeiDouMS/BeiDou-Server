@@ -25,9 +25,7 @@
  */
 
 var status;
- 
-importPackage(Packages.server.life);
- 
+
 function start() {
         status = -1;
         action(1, 0, 0);
@@ -92,6 +90,8 @@ function action(mode, type, selection) {
                                 } else {
                                         var state = eim.getIntProperty("yuletePassed");
 
+                                        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                                        const Point = Java.type('java.awt.Point');
                                         if(state == -1) {
                                                 cm.sendOk("Behold! The pinnacle of Magatia's alchemy studies! Hahahahahahaha...");
                                         } else if(state == 0) {
@@ -102,7 +102,7 @@ function action(mode, type, selection) {
                                                 var bossobj = MapleLifeFactory.getMonster(9300139);
                                                 
                                                 //mapobj.spawnMonsterWithEffect(bossobj, 13, new Packages.java.awt.Point(250, 100));
-                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Packages.java.awt.Point(250, 100));
+                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Point(250, 100));
 
                                                 eim.setIntProperty("statusStg7", 1);
                                                 eim.setIntProperty("yuletePassed", -1);
@@ -114,7 +114,7 @@ function action(mode, type, selection) {
                                                 var bossobj = MapleLifeFactory.getMonster(9300140);
                                                 
                                                 //mapobj.spawnMonsterWithEffect(bossobj, 14, new Packages.java.awt.Point(250, 100));
-                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Packages.java.awt.Point(250, 100));
+                                                mapobj.spawnMonsterOnGroundBelow(bossobj, new Point(250, 100));
 
                                                 eim.setIntProperty("statusStg7", 2);
                                                 eim.setIntProperty("yuletePassed", -1);

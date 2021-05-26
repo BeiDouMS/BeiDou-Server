@@ -27,9 +27,6 @@
  * @func: Kerning PQ
 */
 
-importPackage(Packages.tools);
-importPackage(java.awt);
-
 var stage1Questions = Array(
     "Here's the question. Collect the same number of coupons as the minimum level required to make the first job advancement as warrior.",
     "Here's the question. Collect the same number of coupons as the minimum amount of STR needed to make the first job advancement as a warrior.",
@@ -40,6 +37,7 @@ var stage1Questions = Array(
     "Here's the question. Collect the same number of coupons as the minimum level required to make the first job advancement as a magician.");
 var stage1Answers = Array(10, 35, 20, 25, 25, 30, 8);
 
+const Rectangle = Java.type('java.awt.Rectangle');
 var stage2Rects = Array(new Rectangle(-755,-132,4,218),new Rectangle(-721,-340,4,166),new Rectangle(-586,-326,4,150),new Rectangle(-483,-181,4,222));
 var stage3Rects = Array(new Rectangle(608,-180,140,50),new Rectangle(791,-117,140,45),
     new Rectangle(958,-180,140,50),new Rectangle(876,-238,140,45),

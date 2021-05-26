@@ -43,9 +43,10 @@ function action(mode, type, selection) {
         else
             status--;
         if (status == 0) {
+            const YamlConfig = Java.type('config.YamlConfig');
             if(cm.haveItem(4001086)) {
                 cm.sendYesNo("Do you want to access #b#m240050400##k right now?");
-            } else if(Packages.config.YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS) {
+            } else if(YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS) {
                 if(canBypassHTPQ()) {
                     cm.sendYesNo("Do you want to access #b#m240050400##k right now?");
                 } else {

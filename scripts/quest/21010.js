@@ -22,7 +22,6 @@
 /*	
 	Author : kevintjuh93
 */
-importPackage(Packages.client);
 
 var status = -1;
 

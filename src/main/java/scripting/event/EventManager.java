@@ -24,10 +24,6 @@ package scripting.event;
 import client.MapleCharacter;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import constants.net.ServerConstants;
-import jdk.nashorn.api.scripting.NashornScriptEngine;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.api.scripting.ScriptUtils;
 import net.server.Server;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
@@ -48,6 +44,7 @@ import server.maps.MapleMap;
 import server.quest.MapleQuest;
 import tools.exceptions.EventInstanceInProgressException;
 
+import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -62,7 +59,7 @@ import java.util.logging.Logger;
  * @author Ronan
  */
 public class EventManager {
-    private NashornScriptEngine iv;
+    private Invocable iv;
     private Channel cserv;
     private World wserv;
     private Server server;
@@ -85,7 +82,7 @@ public class EventManager {
     
     private static final int maxLobbys = 8;     // an event manager holds up to this amount of concurrent lobbys
     
-    public EventManager(Channel cserv, NashornScriptEngine iv, String name) {
+    public EventManager(Channel cserv, Invocable iv, String name) {
         this.server = Server.getInstance();
         this.iv = iv;
         this.cserv = cserv;
@@ -151,20 +148,14 @@ public class EventManager {
         queueLock = queueLock.dispose();
         startLock = startLock.dispose();
     }
-    
-    private List<Integer> convertToIntegerArray(List<Object> list) {
+
+    private List<Integer> convertToIntegerList(List<Object> objects) {
         List<Integer> intList = new ArrayList<>();
-        
-        if (ServerConstants.JAVA_8) {
-            for (Object d: list) {
-                intList.add((Integer) d);
-            }
-        } else {
-            for (Object d: list) {
-                intList.add(((Double) d).intValue());
-            }
+
+        for (Object object : objects) {
+            intList.add((Integer) object);
         }
-        
+
         return intList;
     }
     
@@ -172,26 +163,11 @@ public class EventManager {
         return YamlConfig.config.server.EVENT_LOBBY_DELAY;
     }
     
-    private List<Integer> getLobbyRange() {
+    private int getMaxLobbies() {
         try {
-            if (!ServerConstants.JAVA_8) {
-                return convertToIntegerArray((List<Object>)iv.invokeFunction("setLobbyRange", (Object) null));
-            } else {  // java 8 support here thanks to MedicOP
-                ScriptObjectMirror object = (ScriptObjectMirror) iv.invokeFunction("setLobbyRange", (Object) null);
-                int[] to = object.to(int[].class);
-                List<Integer> list = new ArrayList<>();
-                for (int i : to) {
-                    list.add(i);
-                }
-                return list;
-
-            }
+            return (int) iv.invokeFunction("getMaxLobbies");
         } catch (ScriptException | NoSuchMethodException ex) { // they didn't define a lobby range
-            List<Integer> defaultRange = new ArrayList<>();
-            defaultRange.add(0);
-            defaultRange.add(maxLobbys);
-            
-            return defaultRange;
+            return maxLobbys;
         }
     }
 
@@ -235,7 +211,7 @@ public class EventManager {
         return cserv;
     }
     
-    public NashornScriptEngine getIv() {
+    public Invocable getIv() {
         return iv;
     }
 
@@ -351,23 +327,19 @@ public class EventManager {
     public String getName() {
         return name;
     }
-    
+
     private int availableLobbyInstance() {
-            List<Integer> lr = getLobbyRange();
-            int lb = 0, hb = 0;
-            
-            if(lr.size() >= 2) {
-                lb = Math.max(lr.get(0), 0);
-                hb = Math.min(lr.get(1), maxLobbys - 1);
+        int maxLobbies = getMaxLobbies();
+
+        if (maxLobbies > 0) {
+            for (int i = 0; i < maxLobbies; i++) {
+                if (startLobbyInstance(i)) {
+                    return i;
+                }
             }
-        
-            for(int i = lb; i <= hb; i++) {
-                    if(startLobbyInstance(i)) {
-                            return i;
-                    }
-            }
-            
-            return -1;
+        }
+
+        return -1;
     }
     
     private String getInternalScriptExceptionMessage(Throwable a) {
@@ -707,7 +679,7 @@ public class EventManager {
                         }
                         registerEventInstance(eim.getName(), lobbyId);
                         eim.setLeader(leader);
-                        
+
                         iv.invokeFunction("setup", eim);
                         eim.setProperty("leader", ldr);
 
@@ -732,28 +704,21 @@ public class EventManager {
     
     public List<MaplePartyCharacter> getEligibleParty(MapleParty party) {
         if (party == null) {
-            return(new ArrayList<>());
+            return new ArrayList<>();
         }
         try {
-            Object p = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
+            Object o = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
             
-            if(p != null) {
-                List<MaplePartyCharacter> lmpc;
-                
-                if(ServerConstants.JAVA_8) {
-                    lmpc = new ArrayList<>(((Map<String, MaplePartyCharacter>)(ScriptUtils.convert(p, Map.class))).values());
-                } else {
-                    lmpc = new ArrayList<>((List<MaplePartyCharacter>) p);
-                }
-
-                party.setEligibleMembers(lmpc);
-                return lmpc;
+            if (o instanceof MaplePartyCharacter[] partyChrs) {
+                final List<MaplePartyCharacter> eligibleParty = new ArrayList<>(Arrays.asList(partyChrs));
+                party.setEligibleMembers(eligibleParty);
+                return eligibleParty;
             }
         } catch (ScriptException | NoSuchMethodException ex) {
             ex.printStackTrace();
         }
 
-        return(new ArrayList<>());
+        return new ArrayList<>();
     }
     
     public void clearPQ(EventInstanceManager eim) {

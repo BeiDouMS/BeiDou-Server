@@ -1,5 +1,3 @@
-importPackage(Packages.client);
-
 var item;
 var stance;
 var status = -1;
@@ -17,7 +15,8 @@ function end(mode, type, selection) {
 	}
 
 	else if(status == 1) {
-	    if(qm.getPlayer().getInventory(Packages.client.inventory.MapleInventoryType.USE).getNumFreeSlot() < 1) {
+	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+	    if(qm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1) {
 		qm.getPlayer().dropMessage(1, "USE inventory full.");
 		qm.dispose();
 		return;
@@ -25,11 +24,12 @@ function end(mode, type, selection) {
 
             var talkStr = "Okay, now choose the scroll of your liking ... The odds of winning are 10% each. \r\n\r\n#rSELECT A ITEM\r\n#b";
             stance = qm.getPlayer().getJobStyle();
-            
-            if(stance == Packages.client.MapleJob.WARRIOR || stance == Packages.client.MapleJob.BEGINNER) vecItem = new Array(2043002, 2043102, 2043202, 2044002, 2044102, 2044202, 2044402, 2044302);
-            else if(stance == Packages.client.MapleJob.MAGICIAN) vecItem = new Array(2043702, 2043802);
-            else if(stance == Packages.client.MapleJob.BOWMAN || stance == Packages.client.MapleJob.CROSSBOWMAN) vecItem = new Array(2044502, 2044602);
-            else if(stance == Packages.client.MapleJob.THIEF) vecItem = new Array(2043302, 2044702);
+
+            const MapleJob = Java.type('client.MapleJob');
+            if(stance == MapleJob.WARRIOR || stance == MapleJob.BEGINNER) vecItem = new Array(2043002, 2043102, 2043202, 2044002, 2044102, 2044202, 2044402, 2044302);
+            else if(stance == MapleJob.MAGICIAN) vecItem = new Array(2043702, 2043802);
+            else if(stance == MapleJob.BOWMAN || stance == MapleJob.CROSSBOWMAN) vecItem = new Array(2044502, 2044602);
+            else if(stance == MapleJob.THIEF) vecItem = new Array(2043302, 2044702);
             else vecItem = new Array(2044802, 2044902);
             
             for (var i = 0; i < vecItem.length; i++)

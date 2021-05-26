@@ -41,15 +41,19 @@ function cancelSchedule() {
 
 function start() {
     var herbGarden = em.getChannelServer().getMapFactory().getMap(251010102);
-    var gcent = Packages.server.life.MapleLifeFactory.getMonster(5220004);
 	
 	if(herbGarden.getMonsterById(5220004) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
 	}
-	
-    herbGarden.spawnMonsterOnGroundBelow(gcent, new Packages.java.awt.Point(560, 50));
-    herbGarden.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "From the mists surrounding the herb garden, the gargantuous Giant Centipede appears."));
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+
+    var gcent = MapleLifeFactory.getMonster(5220004);
+    herbGarden.spawnMonsterOnGroundBelow(gcent, new Point(560, 50));
+    herbGarden.broadcastMessage(MaplePacketCreator.serverNotice(6, "From the mists surrounding the herb garden, the gargantuous Giant Centipede appears."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

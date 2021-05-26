@@ -41,17 +41,21 @@ function start() {
     var bossMobid = 9400612;
     var bossMapid = 677000001;
     var bossMsg = "Marbas has appeared!";
-    var bossPos = new Packages.java.awt.Point(461, 61);
     
     var map = em.getChannelServer().getMapFactory().getMap(bossMapid);
     if (map.getMonsterById(bossMobid) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;
     }
-    
-    var boss = Packages.server.life.MapleLifeFactory.getMonster(bossMobid);
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+
+    var boss = MapleLifeFactory.getMonster(bossMobid);
+    var bossPos = new Point(461, 61);
     map.spawnMonsterOnGroundBelow(boss, bossPos);
-    map.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, bossMsg));
+    map.broadcastMessage(MaplePacketCreator.serverNotice(6, bossMsg));
     
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

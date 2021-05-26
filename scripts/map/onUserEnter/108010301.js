@@ -1,6 +1,4 @@
-importPackage(Packages.server.life);
-
-function start(ms) {   	       
+function start(ms) {
 	if(ms.getMapId() == 108010101) { // Archer
 		spawnMob(188, 20, 9001002, ms.getPlayer().getMap());
 	} else if(ms.getMapId() == 108010301) { // Warrior 
@@ -17,7 +15,9 @@ function start(ms) {
 function spawnMob(x, y, id, map) {
 	if(map.getMonsterById(id) != null)
 		return;
-		
+
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const Point = Java.type('java.awt.Point');
 	var mob = MapleLifeFactory.getMonster(id);
-	map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(x, y));
+	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

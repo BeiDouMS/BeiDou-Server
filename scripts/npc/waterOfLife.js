@@ -23,9 +23,6 @@
 	Handles Water of Life
  */
 
-importPackage(Packages.client.inventory);
-importPackage(Packages.server);
-
 var status;
 var dList;
  
@@ -79,7 +76,8 @@ function action(mode, type, selection) {
                         
                         if(sPet != null) {
                             cm.sendNext("Your doll has now reawaken as your pet! However, my magic isn't perfect, so I can't promise an eternal life for your pet... Please take care of that pet before the Water of Life dries. Well then, good bye...");
-                            
+
+                            const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
                             var it = cm.getPlayer().getInventory(MapleInventoryType.CASH).getItem(sPet.getPosition());
                             it.setExpiration(Date.now() + (1000 * 60 * 60 * 24 * 90));
                             cm.getPlayer().forceUpdateItem(it);

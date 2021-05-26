@@ -53,7 +53,8 @@ function start(mode, type, selection) {
                     qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
                 } else {
                     qm.gainItem(1142068, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.THUNDERBREAKER3);
+                    const MapleJob = Java.type('client.MapleJob');
+                    qm.getPlayer().changeJob(MapleJob.THUNDERBREAKER3);
                     qm.completeQuest();
                     qm.sendOk("#h #, from here on out, you will become an Advanced Knight of the Knights of Cygnus! As your standing rises, so does the difficulty of the tasks you will be receiving. But challenge is good, right? You have to enjoy life. Enjoy what's given to you!");
                 }

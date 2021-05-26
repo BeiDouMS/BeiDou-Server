@@ -22,8 +22,6 @@
 	Wedding info.
  */
 
-importPackage(Packages.net.server.channel.handlers);
-
 var status;
 
 var rings = [1112806, 1112803, 1112807, 1112809];
@@ -125,6 +123,7 @@ function action(mode, type, selection) {
             }
             
             cm.gainMeso(-divorceFee);
+            const RingActionHandler = Java.type('net.server.channel.handlers.RingActionHandler');
             RingActionHandler.breakMarriageRing(cm.getPlayer(), ringObj.getItemId());
             cm.gainItem(ringObj.getItemId(), -1);
             

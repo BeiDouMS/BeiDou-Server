@@ -27,8 +27,6 @@
 
 **/
 
-importPackage(Packages.client);
-
 function init() {
     scheduleNew();
 }
@@ -44,7 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var leviathansCanyon = em.getChannelServer().getMapFactory().getMap(240040401);
-    var leviathan = Packages.server.life.MapleLifeFactory.getMonster(8220003);
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    var leviathan = MapleLifeFactory.getMonster(8220003);
     if(leviathansCanyon.getMonsterById(8220003) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;
@@ -53,8 +52,12 @@ function start() {
 	var posX;
     var posY = 1125;
     posX =  Math.floor((Math.random() * 600) - 300);
-    leviathansCanyon.spawnMonsterOnGroundBelow(leviathan, new Packages.java.awt.Point(posX, posY));
-    leviathansCanyon.broadcastMessage(Packages.tools.MaplePacketCreator.serverNotice(6, "Leviathan emerges from the canyon and the cold icy wind blows."));
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(posX, posY);
+    leviathansCanyon.spawnMonsterOnGroundBelow(leviathan, spawnpoint);
+
+    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    leviathansCanyon.broadcastMessage(MaplePacketCreator.serverNotice(6, "Leviathan emerges from the canyon and the cold icy wind blows."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

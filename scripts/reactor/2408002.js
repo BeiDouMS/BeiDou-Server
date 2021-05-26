@@ -25,8 +25,6 @@
  *@author Jvlaple
 */
 
-importPackage(Packages.client.inventory);
-
 function act() {
     var eim = rm.getPlayer().getEventInstance();
     var womanfred = eim.getMapFactory().getMap(240050100);
@@ -64,7 +62,8 @@ function act() {
     }
     
     eim.setIntProperty(vvpStage + "stageclear", 1);
-    
+
+    const Item = Java.type('client.inventory.Item');
     var tehWomanfred = new Item(vvpKey, 0, 1);
     var theWomanfred = womanfred.getReactorByName("keyDrop1");
     var dropper = eim.getPlayers().get(0);

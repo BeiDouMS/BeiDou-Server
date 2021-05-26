@@ -21,8 +21,6 @@
 	Marriage NPC
  */
 
-importPackage(Packages.net.server.channel);
-
 var status;
 var wid;
 var isMarrying;
@@ -253,6 +251,7 @@ function action(mode, type, selection) {
                             if(cm.canHold(weddingSendTicket, 3)) {
                                 cm.gainItem(5251100, -1);
 
+                                const Channel = Java.type('net.server.channel.Channel');
                                 var expirationTime = Channel.getRelativeWeddingTicketExpireTime(resStatus);
                                 cm.gainItem(weddingSendTicket,3,false,true,expirationTime);
                             } else {

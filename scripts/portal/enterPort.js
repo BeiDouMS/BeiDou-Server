@@ -19,7 +19,6 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-importPackage(Packages.server.life);
 
 function enter(pi) {
 	if(pi.isQuestStarted(21301) && pi.getQuestProgressInt(21301, 9001013) == 0) {
@@ -42,7 +41,9 @@ function enter(pi) {
 function spawnMob(x, y, id, map) {
 	if(map.getMonsterById(id) != null)
 		return;
-		
+
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const Point = Java.type('java.awt.Point');
 	var mob = MapleLifeFactory.getMonster(id);
-	map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(x, y));
+	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

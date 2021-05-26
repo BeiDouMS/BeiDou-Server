@@ -23,9 +23,6 @@
  * @event: Pink Bean Battle
 */
 
-importPackage(Packages.server.life);
-importPackage(Packages.client.inventory);
-
 var isPq = true;
 var minPlayers = 6, maxPlayers = 30;
 var minLevel = 120, maxLevel = 255;
@@ -39,14 +36,14 @@ var maxMapId = 270050300;
 
 var eventTime = 140;     // 140 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -104,10 +101,12 @@ function setup(channel) {
     eim.getInstanceMap(270050100).resetPQ(level);
     eim.getInstanceMap(270050200).resetPQ(level);
     eim.getInstanceMap(270050300).resetPQ(level);
-    
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
     var mob = MapleLifeFactory.getMonster(8820000);
     mob.disableDrops();
-    eim.getInstanceMap(270050100).spawnMonsterOnGroundBelow(mob, new java.awt.Point(0, -42));
+    eim.getInstanceMap(270050100).spawnMonsterOnGroundBelow(mob, new Point(0, -42));
     
     eim.startEventTimer(eventTime * 60000);
     setEventRewards(eim);
@@ -234,7 +233,8 @@ function spawnJrBoss(mobObj, gotKilled) {
         mobObj.getMap().killMonster(mobObj.getId());
         spawnid = mobObj.getId() - 17;
     }
-    
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
     var mob = MapleLifeFactory.getMonster(spawnid);
     mobObj.getMap().spawnMonsterOnGroundBelow(mob, mobObj.getPosition());
 }
@@ -254,6 +254,7 @@ function monsterKilled(mob, eim) {
             
             if(stage == 5) {
                 var iid = 4001193;
+                const Item = Java.type('client.inventory.Item');
                 var itemObj = new Item(iid, 0, 1);
                 var mapObj = eim.getMapFactory().getMap(270050100);
                 var reactObj = mapObj.getReactorById(2708000);

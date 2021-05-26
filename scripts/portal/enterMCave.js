@@ -1,6 +1,3 @@
-importPackage(Packages.server.quest);
-importPackage(Packages.server.life);
-
 function enter(pi) {
 	if(pi.isQuestStarted(21201)) { // Second Job
 		for (var i = 108000700; i < 108000709; i++){
@@ -36,7 +33,9 @@ function enter(pi) {
 function spawnMob(x, y, id, map) {
 	if(map.getMonsterById(id) != null)
 		return;
-		
+
+	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const Point = Java.type('java.awt.Point');
 	var mob = MapleLifeFactory.getMonster(id);
-	map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(x, y));
+	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

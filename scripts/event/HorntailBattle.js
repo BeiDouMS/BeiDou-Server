@@ -23,8 +23,6 @@
  * @event: Horntail Battle
 */
 
-importPackage(Packages.server.life);
-
 var isPq = true;
 var minPlayers = 6, maxPlayers = 30;
 var minLevel = 100, maxLevel = 255;
@@ -38,14 +36,14 @@ var maxMapId = 240060200;
 
 var eventTime = 120;     // 120 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+    return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -97,15 +95,17 @@ function setup(channel) {
     eim.getInstanceMap(240060000).resetPQ(level);
     eim.getInstanceMap(240060100).resetPQ(level);
     eim.getInstanceMap(240060200).resetPQ(level);
-    
+
+    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const Point = Java.type('java.awt.Point');
     var map, mob;
     map = eim.getInstanceMap(240060000);
     mob = MapleLifeFactory.getMonster(8810000);
-    map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(960, 120));
+    map.spawnMonsterOnGroundBelow(mob, new Point(960, 120));
     
     map = eim.getInstanceMap(240060100);
     mob = MapleLifeFactory.getMonster(8810001);
-    map.spawnMonsterOnGroundBelow(mob, new java.awt.Point(-420, 120));
+    map.spawnMonsterOnGroundBelow(mob, new Point(-420, 120));
     
     eim.startEventTimer(eventTime * 60000);
     setEventRewards(eim);

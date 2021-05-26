@@ -27,8 +27,8 @@ Discord: https://discord.gg/JU5aQapVZK
 ---
 
 ## Tools
-* **Java 8 SDK** 
-  * Link: https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html
+* **Java 16 SDK** - Needed to compile and run Java code. Install manually or through IntelliJ depending on how you prefer to launch the server. Not required for launching with Docker.
+  * Link: https://jdk.java.net/16/
 	
 
 * **IntelliJ IDEA** - Java IDE and your main tool for working with the source code. Community edition is good enough.
@@ -136,7 +136,7 @@ If you are using Docker (quick start):
 
 #### Configuring the project
 
-The easiest way to set up your project is to load the repository directly into a new IntelliJ project.
+The easiest way to set up your project is to clone the repository directly into a new IntelliJ project.
 
 1. Install IntelliJ
 2. Create a new "Project from Version Control..."
@@ -147,19 +147,20 @@ The easiest way to set up your project is to load the repository directly into a
 
 1. Install MySQL Server 8 and MySQL Workbench 8.  
 2. Using Workbench, create a new user with username "cosmic_server" and password "snailshell". 
-   These are the defaults used in Cosmic.
+   This the default configuration in Cosmic.
    * (Optional) Restrict the Schema Privileges for this new user for improved security. 
 	 Add a new entry with "Schemas matching pattern: cosmic" and only select "SELECT", "INSERT", "UPDATE", "DELETE" under "Object Rights"
-3. Run the sql scripts in the "sql" directory of the project in the order indicated by their names. 
-	* Make sure you are connected to the database with the "root" user.
-	* Run scripts through the menu: "File" -> "Run SQL Script" -> select the script file to run -> "Run"
+3. Run the sql scripts in the "database/sql" directory of the project in the order indicated by their names. 
+	* Make sure you are connected to the database with the "root" user to be able to run the scripts.
+	* Run scripts one by one through the menu: "File" -> "Run SQL Script" -> select the script file to run -> "Run"
 	* The 3rd script "3-db_shopupdate" is optional. It adds custom shop items for certain NPCs.
+    * The 4th script "4-db_admin" is also optional, but recommended if you are new. It adds an admin account to simplify the setup.
 
 Use this info when you connect to MySQL Server for the first time:
 * Server Host: localhost
 * Port: 3306
 * Username: root
-* Password: whatever you entered in during the installation of MySQL Server
+* Password: <whatever password you set during MySQL Server installation>
 
 At the end of the execution of these sql scripts, you should have installed a database schema named "cosmic". 
 REGISTER YOUR FIRST ACCOUNT to be used in-game by **manually creating** an entry in the table "accounts" in the database with a username and password.
@@ -173,7 +174,7 @@ Alternatively, you can use the IP given by Hamachi to use on a Hamachi network, 
 
 To launch the server, you may either:
 * Launch inside IntelliJ
-* Launch a jar file
+* Launch a built jar file
 * Launch with Docker
 
 #### Launch inside IntelliJ
@@ -185,16 +186,24 @@ To launch the server, you may either:
 #### Launch a jar file
 1. Create the jar file
    * The jar file is created by the Maven assembly plugin in the package lifecycle.
-   * If you have Maven installed on your computer, simply run the command "mvn clean install" to create the jar file.
-   * IntelliJ also comes with built in Maven support. Open a new terminal window inside IntelliJ, type "mvn clean install" (your command should be marked green), then Ctrl+Enter to create the jar file.
+   * If you already have Maven installed, simply run the command "mvn clean install" to create the jar file.
+   * IntelliJ also comes with built-in Maven support. Open a new terminal window inside IntelliJ, type "mvn clean install" (your command should now be marked green), then Ctrl+Enter to build the jar file.
 2. Launch the jar file
    * Double click on "launch.bat"
     
 #### Launch with Docker
-Run the command "docker compose up" at the root of the project.
+1. Start Docker
+2. Run the command "docker compose up" at the root of the project.
+    * If you make any changes to the code, make sure you append the "--build" option at the end of the command to force rebuild the server image.
 
 ---
 ### Creating an account and logging into the game
+
+If you ran the admin sql script, there already exists an account in your database with an admin character on it. You don't need to change its GM level. Log in using these credentials:
+* Username: "admin"
+* Password: "admin"
+* Pin: "0000"
+* Pic: "000000"
 
 By default, the server source is set to allow AUTO-REGISTERING. This means that, by simply typing in a "Login ID" and a "Password", you're able to create a new account.
 
@@ -260,10 +269,6 @@ Besides myself for maintaining this repository, credits are to be given to Wizet
 
 Regarding distributability and usage of the code presented here: like it was before, this MapleStory server is open-source. By that, it is meant that anyone is **free to install, use, modify and redistribute the contents**, as long as there is **no kind of commercial trading involved** and the **credits to the original creators are maintained** within the codes.
 
-This server source should be built and run on Java 8 in order to run properly -- used to be ran in Java 7, thanks kolakcc (Familiar) for the Java 8 support!
-
-Consider using an IDE for setting up the server source into a project. Once mounted the project, build it on your machine and run the server using the "launch.bat" application.
-
 In this project, many gameplay-wise issues generated from either the original WZ files and the server source have been partially or completely solved. Considering the use of the provided edited WZ's and server-side wz.xml files should be of the greatest importance when dealing with this instance of server source, in order to perceive it at it's full potential. My opinion, though!
 
 - In other case, as fallback from the provided ones, consider using **whole clean set**. Selecting part of the provided ones to play pretty much *may eventually* lead to unexpected issues.
@@ -286,17 +291,6 @@ By taking the v83 MapleStory as the angular stone, incrementally look forward to
 * Adventurous, take no fear of failures on the path of progress;
 * Light-hearted support, general people out there didn't experience what you've already had;
 * Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had.
-
----
-
-#### Preparing the ambient
-
-For Hamachi:
-
-* Try opening it. It's that simple.
-
-Hamachi is optional, though. You don't have to install Hamachi if you want to make the server just for use on your own machine.
-However, if you want to let other players access your server, consider alternatively using port-forwarding methods.
 
 ---
 
@@ -350,11 +344,7 @@ Our Discord channel is still available on: https://discord.gg/Q7wKxHX
 
 <hr id="donate" />
 
-[//]: <> (If you REALLY liked what you have seen on this project, please feel free to donate a little something as a helping hand for my contributions towards Maple development. Also remember to **support Nexon**!)
-
 ### Disclaimer
-
-[//]: <> (* HeavenMS development is decisively __ONLY accepting donations__ from the Paypal link aforementioned, in the __ronancpl/HeavenMS__ repository readme \(no patreons or other revenue resources\).)
 
 * HeavenMS staff has __no current intention__ to publicly open a server with this source, if that ever comes to happen this note will be lifted. __Don't be scammed!__
 

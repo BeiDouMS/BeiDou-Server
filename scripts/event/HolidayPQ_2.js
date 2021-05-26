@@ -25,9 +25,6 @@
 
 // GMS-like event string data thanks to iHealForLove
 
-importPackage(Packages.client.inventory);
-importPackage(Packages.server.life);
-
 var isPq = true;
 var minPlayers = 3, maxPlayers = 6;
 var minLevel = 31, maxLevel = 40;
@@ -41,14 +38,14 @@ var maxMapId = 889100011;
 
 var eventTime = 20;     // 20 minutes
 
-var lobbyRange = [0, 0];
+const maxLobbies = 1;
 
 function init() {
         setEventRequirements();
 }
 
-function setLobbyRange() {
-        return lobbyRange;
+function getMaxLobbies() {
+        return maxLobbies;
 }
 
 function setEventRequirements() {
@@ -113,7 +110,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return eligible;
+        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -277,6 +274,7 @@ function monsterKilled(mob, eim) {
                 }
                 
                 var mapObj = mob.getMap();
+                const Item = Java.type('client.inventory.Item');
                 var itemObj = new Item((forceDrop || Math.random() < 0.77) ? 4032094 : 4032095, 0, 1);   // 77% chance of not fake
                 var dropper = eim.getPlayers().get(0);
 
@@ -305,9 +303,11 @@ function snowmanEvolve(eim, curLevel) {
     
         eim.setIntProperty("snowmanLevel", curLevel + 2);   // increment by 2 to decrement by 1 on friendlyKilled
         mapobj.killMonster(snowman, null, false, 2);
-        
+
+        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const Point = Java.type('java.awt.Point');
         var snowman = MapleLifeFactory.getMonster(9400317 + (5 * difficulty) + curLevel);
-        mapobj.spawnMonsterOnGroundBelow(snowman, new java.awt.Point(-180, 15));
+        mapobj.spawnMonsterOnGroundBelow(snowman, new Point(-180, 15));
         
         if(curLevel >= 4) {
                 mapobj.allowSummonState(false);

@@ -34,8 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
-
-    private MaplePortal portal;
+    private final MaplePortal portal;
 
     public PortalPlayerInteraction(MapleClient c, MaplePortal portal) {
         super(c);
