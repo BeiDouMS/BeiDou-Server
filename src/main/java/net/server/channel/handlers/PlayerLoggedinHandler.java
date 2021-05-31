@@ -26,7 +26,6 @@ import client.inventory.*;
 import client.keybind.MapleKeyBinding;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import constants.game.ScriptableNPCConstants;
 import net.AbstractMaplePacketHandler;
 import net.server.PlayerBuffValueHolder;
 import net.server.Server;
@@ -55,6 +54,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
 
@@ -407,9 +407,23 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                         eim.registerPlayer(player);
                     }
                 }
-                
+
+                // Tell the client to use the custom scripts available for the NPCs provided, instead of the WZ entries.
                 if (YamlConfig.config.server.USE_NPCS_SCRIPTABLE) {
-                    c.announce(MaplePacketCreator.setNPCScriptable(ScriptableNPCConstants.SCRIPTABLE_NPCS));
+
+                    // Create a copy to prevent always adding entries to the server's list.
+                    Map<Integer, String> npcsIds = YamlConfig.config.server.NPCS_SCRIPTABLE
+                            .entrySet().stream().collect(Collectors.toMap(
+                                    entry -> Integer.parseInt(entry.getKey()),
+                                    Entry::getValue
+                            ));
+
+                    // Any npc be specified as the rebirth npc. Allow the npc to use custom scripts explicitly.
+                    if (YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+                        npcsIds.put(YamlConfig.config.server.REBIRTH_NPC_ID, "Rebirth");
+                    }
+
+                    c.announce(MaplePacketCreator.setNPCScriptable(npcsIds));
                 }
                 
                 if(newcomer) player.setLoginTime(System.currentTimeMillis());
