@@ -24,6 +24,10 @@ package client;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
+import net.netty.ClientCyphers;
+import net.netty.InvalidPacketHeaderException;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -61,7 +65,7 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 
-public class MapleClient {
+public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
@@ -118,10 +122,30 @@ public class MapleClient {
         return lastPacket;
     }
 
+    public MapleClient(ClientCyphers cyphers) {
+        this.send = cyphers.getSendCypher();
+        this.receive = cyphers.getReceiveCypher();
+        this.session = null; // TODO remove once the other constructor is removed
+    }
+
     public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
         this.send = send;
         this.receive = receive;
         this.session = session;
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        super.channelRead(ctx, msg);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (cause instanceof InvalidPacketHeaderException) {
+            // TODO close session through MapleSessionCoordinator
+        }
+
+        super.exceptionCaught(ctx, cause);
     }
 
     public MapleAESOFB getReceiveCrypto() {

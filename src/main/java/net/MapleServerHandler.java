@@ -24,6 +24,7 @@ package net;
 import client.MapleClient;
 import config.YamlConfig;
 import constants.net.ServerConstants;
+import net.netty.InitializationVector;
 import net.server.Server;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
@@ -130,10 +131,8 @@ public class MapleServerHandler extends IoHandlerAdapter {
             FilePrinter.print(FilePrinter.SESSION, "IoSession with " + session.getRemoteAddress() + " opened on " + sdf.format(Calendar.getInstance().getTime()), false);
         }
 
-        byte[] ivRecv = {70, 114, 122, 82};
-        byte[] ivSend = {82, 48, 120, 115};
-        ivRecv[3] = (byte) (Math.random() * 255);
-        ivSend[3] = (byte) (Math.random() * 255);
+        final InitializationVector ivSend = InitializationVector.generateSend();
+        final InitializationVector ivRecv = InitializationVector.generateReceive();
         MapleAESOFB sendCypher = new MapleAESOFB(ivSend, (short) (0xFFFF - ServerConstants.VERSION));
         MapleAESOFB recvCypher = new MapleAESOFB(ivRecv, ServerConstants.VERSION);
         MapleClient client = new MapleClient(sendCypher, recvCypher, session);
