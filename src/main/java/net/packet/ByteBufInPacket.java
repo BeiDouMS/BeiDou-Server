@@ -12,14 +12,11 @@ public class ByteBufInPacket implements InPacket {
     }
 
     @Override
-    public short getHeader() {
-        return byteBuf.getShortLE(0);
-    }
-
-    @Override
     public byte[] getBytes() {
-        // TODO implement
-        throw new UnsupportedOperationException();
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        int readerIndex = byteBuf.readerIndex();
+        byteBuf.getBytes(readerIndex, bytes);
+        return bytes;
     }
 
     @Override
@@ -51,20 +48,25 @@ public class ByteBufInPacket implements InPacket {
 
     @Override
     public String readString() {
-        // TODO
-        return null;
+        short length = readShort();
+        char[] characters = new char[length];
+        for(int i = 0; i < length; i++) {
+            characters[i] = (char) readByte();
+        }
+
+        return String.valueOf(characters);
     }
 
     @Override
-    public byte[] readBytes(int bytesToRead) {
-        byte[] bytes = new byte[bytesToRead];
+    public byte[] readBytes(int numberOfBytes) {
+        byte[] bytes = new byte[numberOfBytes];
         byteBuf.readBytes(bytes);
         return bytes;
     }
 
     @Override
-    public void skip(int bytesToSkip) {
-        byteBuf.skipBytes(bytesToSkip);
+    public void skip(int numberOfBytes) {
+        byteBuf.skipBytes(numberOfBytes);
     }
 
     @Override

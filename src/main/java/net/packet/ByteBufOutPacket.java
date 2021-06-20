@@ -24,14 +24,11 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public short getHeader() {
-        return byteBuf.getShortLE(0);
-    }
-
-    @Override
     public byte[] getBytes() {
-        // TODO implement
-        throw new UnsupportedOperationException();
+        byte[] bytes = new byte[byteBuf.readableBytes()];
+        int readerIndex = byteBuf.readerIndex();
+        byteBuf.getBytes(readerIndex, bytes);
+        return bytes;
     }
 
     @Override
@@ -50,7 +47,7 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public void writeShort(short value) {
+    public void writeShort(int value) {
         byteBuf.writeShortLE(value);
     }
 
@@ -82,7 +79,7 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public void skip(int bytesToSkip) {
-        writeBytes(new byte[bytesToSkip]);
+    public void skip(int numberOfBytes) {
+        writeBytes(new byte[numberOfBytes]);
     }
 }

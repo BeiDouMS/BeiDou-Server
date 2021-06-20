@@ -10,7 +10,7 @@ public interface OutPacket extends Packet {
     void writeByte(byte value);
     void writeByte(int value);
     void writeBytes(byte[] value);
-    void writeShort(short value);
+    void writeShort(int value);
     void writeInt(int value);
     void writeLong(long value);
     void writeBoolean(boolean value);
