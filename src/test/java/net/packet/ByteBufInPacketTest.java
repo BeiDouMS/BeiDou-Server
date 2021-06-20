@@ -20,6 +20,12 @@ class ByteBufInPacketTest {
         this.inPacket = new ByteBufInPacket(byteBuf);
     }
 
+    private void givenWrittenBytes(int... bytes) {
+        for (int b : bytes) {
+            byteBuf.writeByte(b);
+        }
+    }
+
     @Test
     void readByte() {
         final byte writtenByte = 123;
@@ -85,8 +91,7 @@ class ByteBufInPacketTest {
 
     @Test
     void readBytes() {
-        byte[] writtenBytes = {10, 11, 12, 13, 14, 15};
-        byteBuf.writeBytes(writtenBytes);
+        givenWrittenBytes(10, 11, 12, 13, 14, 15);
 
         byte[] byteBatch1 = inPacket.readBytes(1);
         assertEquals(1, byteBatch1.length);
@@ -106,8 +111,7 @@ class ByteBufInPacketTest {
 
     @Test
     void skip() {
-        byte[] writtenBytes = {20, 21, 22, 23, 24, 25};
-        byteBuf.writeBytes(writtenBytes);
+        givenWrittenBytes(20, 21, 22, 23, 24, 25);
 
         byte firstByte = inPacket.readByte();
         assertEquals(20, firstByte);
@@ -120,8 +124,7 @@ class ByteBufInPacketTest {
 
     @Test
     void available() {
-        byte[] writtenBytes = {30, 31, 32, 33, 34, 35};
-        byteBuf.writeBytes(writtenBytes);
+        givenWrittenBytes(30, 31, 32, 33, 34, 35);
 
         assertEquals(6, inPacket.available());
 
@@ -134,8 +137,7 @@ class ByteBufInPacketTest {
 
     @Test
     void seek() {
-        byte[] writtenBytes = {40, 41, 42, 43, 44, 45};
-        byteBuf.writeBytes(writtenBytes);
+        givenWrittenBytes(40, 41, 42, 43, 44, 45);
 
         inPacket.seek(2);
         assertEquals(4, inPacket.available());
@@ -149,8 +151,7 @@ class ByteBufInPacketTest {
 
     @Test
     void getPosition() {
-        byte[] writtenBytes = {50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60};
-        byteBuf.writeBytes(writtenBytes);
+        givenWrittenBytes(50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60);
 
         assertEquals(0, inPacket.getPosition());
 
