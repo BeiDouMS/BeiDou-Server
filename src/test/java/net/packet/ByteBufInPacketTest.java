@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.nio.charset.StandardCharsets;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ByteBufInPacketTest {
@@ -166,5 +167,27 @@ class ByteBufInPacketTest {
 
         inPacket.seek(5);
         assertEquals(5, inPacket.getPosition());
+    }
+
+    @Test
+    void getBytes() {
+        givenWrittenBytes(20, 19, 21, 18, 22);
+
+        byte[] bytes = inPacket.getBytes();
+
+        assertArrayEquals(new byte[]{20, 19, 21, 18, 22}, bytes);
+    }
+
+    @Test
+    void whenGetBytes_shouldBeRepeatable() {
+        givenWrittenBytes(1, 2, 3, 4, 5);
+
+        byte[] bytes = inPacket.getBytes();
+        assertEquals(5, bytes.length);
+
+        byte[] sameBytes = inPacket.getBytes();
+        assertEquals(5, sameBytes.length);
+
+        assertArrayEquals(bytes, sameBytes);
     }
 }

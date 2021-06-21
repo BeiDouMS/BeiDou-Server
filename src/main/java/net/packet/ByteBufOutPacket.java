@@ -1,6 +1,7 @@
 package net.packet;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.jcip.annotations.NotThreadSafe;
 import net.opcodes.SendOpcode;
@@ -25,10 +26,7 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public byte[] getBytes() {
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        int readerIndex = byteBuf.readerIndex();
-        byteBuf.getBytes(readerIndex, bytes);
-        return bytes;
+        return ByteBufUtil.getBytes(byteBuf);
     }
 
     @Override

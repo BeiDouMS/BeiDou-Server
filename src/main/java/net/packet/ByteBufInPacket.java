@@ -1,6 +1,7 @@
 package net.packet;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 
 import java.awt.*;
 
@@ -13,10 +14,7 @@ public class ByteBufInPacket implements InPacket {
 
     @Override
     public byte[] getBytes() {
-        byte[] bytes = new byte[byteBuf.readableBytes()];
-        int readerIndex = byteBuf.readerIndex();
-        byteBuf.getBytes(readerIndex, bytes);
-        return bytes;
+        return ByteBufUtil.getBytes(byteBuf);
     }
 
     @Override
