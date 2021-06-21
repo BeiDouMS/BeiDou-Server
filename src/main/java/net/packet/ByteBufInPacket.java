@@ -47,12 +47,9 @@ public class ByteBufInPacket implements InPacket {
     @Override
     public String readString() {
         short length = readShort();
-        char[] characters = new char[length];
-        for(int i = 0; i < length; i++) {
-            characters[i] = (char) readByte();
-        }
-
-        return String.valueOf(characters);
+        byte[] stringBytes = new byte[length];
+        byteBuf.readBytes(stringBytes);
+        return new String(stringBytes, STRING_CHARSET);
     }
 
     @Override
