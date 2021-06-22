@@ -158,12 +158,12 @@ public class MapleAESOFB {
         return packetLength;
     }
 
-    public boolean checkPacket(byte[] packet) {
+    private boolean checkPacket(byte[] packet) {
         return ((((packet[0] ^ iv[2]) & 0xFF) == ((mapleVersion >> 8) & 0xFF)) &&
                 (((packet[1] ^ iv[3]) & 0xFF) == (mapleVersion & 0xFF)));
     }
 
-    public boolean checkPacket(int packetHeader) {
+    public boolean isValidHeader(int packetHeader) {
         byte[] packetHeaderBuf = new byte[2];
         packetHeaderBuf[0] = (byte) ((packetHeader >> 24) & 0xFF);
         packetHeaderBuf[1] = (byte) ((packetHeader >> 16) & 0xFF);

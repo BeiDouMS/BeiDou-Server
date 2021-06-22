@@ -59,7 +59,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
         MapleAESOFB rcvdCrypto = client.getReceiveCrypto();
         if (in.remaining() >= 4 && decoderState.packetlength == -1) {
             int packetHeader = in.getInt();
-            if (!rcvdCrypto.checkPacket(packetHeader)) {
+            if (!rcvdCrypto.isValidHeader(packetHeader)) {
                 MapleSessionCoordinator.getInstance().closeSession(session, true);
                 return false;
             }

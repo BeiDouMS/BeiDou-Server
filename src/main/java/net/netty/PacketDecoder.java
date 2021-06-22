@@ -19,7 +19,7 @@ public class PacketDecoder extends ReplayingDecoder<Void> {
     protected void decode(ChannelHandlerContext context, ByteBuf in, List<Object> out) {
         final int header = in.readInt();
 
-        if (!receiveCypher.checkPacket(header)) {
+        if (!receiveCypher.isValidHeader(header)) {
             throw new InvalidPacketHeaderException("Attempted to decode a packet with an invalid header", header);
         }
 

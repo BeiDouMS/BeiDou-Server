@@ -14,7 +14,7 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
         final String clientIp = socketChannel.remoteAddress().getHostName();
         log.debug("Client initiated new connection from: {}", clientIp);
 
-        MapleClient client = new MapleClient(ClientCyphers.generateNew());
-        socketChannel.pipeline().addLast("MapleClient", client);
+        socketChannel.pipeline().addLast("PacketCodec", new PacketCodec(ClientCyphers.generateNew()));
+        socketChannel.pipeline().addLast("MapleClient", new MapleClient());
     }
 }

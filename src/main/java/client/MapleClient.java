@@ -26,7 +26,6 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import net.netty.ClientCyphers;
 import net.netty.InvalidPacketHeaderException;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
@@ -122,9 +121,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return lastPacket;
     }
 
-    public MapleClient(ClientCyphers cyphers) {
-        this.send = cyphers.getSendCypher();
-        this.receive = cyphers.getReceiveCypher();
+    public MapleClient() {
         this.session = null; // TODO remove once the other constructor is removed
     }
 
