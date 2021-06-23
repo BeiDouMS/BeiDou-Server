@@ -62,6 +62,7 @@ import tools.data.input.GenericSeekableLittleEndianAccessor;
 import javax.script.ScriptEngine;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -81,7 +82,10 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final String CLIENT_HWID = "HWID";
     public static final String CLIENT_NIBBLEHWID = "HWID2";
     public static final String CLIENT_REMOTE_ADDRESS = "REMOTE_IP";
-    public static final String CLIENT_TRANSITION = "TRANSITION";
+
+    private String hostAddress;
+    private volatile boolean inTransition;
+
     private MapleAESOFB send;
     private MapleAESOFB receive;
     private final IoSession session;
@@ -144,6 +148,17 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        String hostAddress = "null";
+        try {
+            hostAddress = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+        } catch (NullPointerException npe) {
+            log.warn("Unable to get remote address for client", npe);
+        }
+        this.hostAddress = hostAddress;
+    }
+
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // InPacket packet = new ByteBufInPacket((ByteBuf) msg);
         if (!(msg instanceof InPacket packet)) {
@@ -189,6 +204,14 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public IoSession getSession() {
         return session;
+    }
+
+    public String getHostAddress() {
+        return hostAddress;
+    }
+
+    public boolean isInTransition() {
+        return inTransition;
     }
 
     public EventManager getEventManager(String event) {
@@ -997,7 +1020,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void setCharacterOnSessionTransitionState(int cid) {
         this.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION);
-        session.setAttribute(MapleClient.CLIENT_TRANSITION);
+        this.inTransition = true;
         Server.getInstance().setCharacteridInTransition(this, cid);
     }
 
