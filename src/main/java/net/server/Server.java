@@ -37,6 +37,7 @@ import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
 import net.MapleServerHandler;
 import net.mina.MapleCodecFactory;
+import net.netty.LoginServer;
 import net.server.audit.ThreadTracker;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
@@ -106,6 +107,7 @@ public class Server {
     private static final List<Integer> activeCoupons = new LinkedList<>();
 
     private IoAcceptor acceptor;
+    private LoginServer loginServer;
     private List<Map<Integer, String>> channels = new LinkedList<>();
     private List<World> worlds = new ArrayList<>();
     private final Properties subnetInfo = new Properties();
@@ -906,17 +908,8 @@ public class Server {
             }
         }
 
-        IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan
-        IoBuffer.setAllocator(new SimpleBufferAllocator());
-        acceptor = new NioSocketAcceptor();
-        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
-        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
-        acceptor.setHandler(new MapleServerHandler());
-        try {
-            acceptor.bind(new InetSocketAddress(8484));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        // acceptor = initAcceptor(8484);
+        loginServer = initLoginServer(8484);
 
         log.info("Listening on port 8484");
 
@@ -930,6 +923,28 @@ public class Server {
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
         }
+    }
+
+    private LoginServer initLoginServer(int port) {
+        LoginServer loginServer = new LoginServer(port);
+        loginServer.start();
+        return loginServer;
+    }
+
+    private IoAcceptor initAcceptor(int port) {
+        IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan
+        IoBuffer.setAllocator(new SimpleBufferAllocator());
+        acceptor = new NioSocketAcceptor();
+        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
+        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
+        acceptor.setHandler(new MapleServerHandler());
+        try {
+            acceptor.bind(new InetSocketAddress(port));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return acceptor;
     }
 
     private static void setAllLoggedOut(Connection con) throws SQLException {

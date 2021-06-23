@@ -21,6 +21,7 @@
  */
 package net;
 
+import net.netty.LoginServer;
 import net.opcodes.RecvOpcode;
 import net.server.channel.handlers.*;
 import net.server.handlers.CustomPacketHandler;
@@ -47,7 +48,7 @@ public final class PacketProcessor {
     }
 
     public static PacketProcessor getLoginServerProcessor() {
-        return getProcessor(-1, -1);
+        return getProcessor(LoginServer.WORLD, LoginServer.CHANNEL);
     }
 
     public static PacketProcessor getChannelServerProcessor(int world, int channel) {

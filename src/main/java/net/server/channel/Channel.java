@@ -26,6 +26,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import net.MapleServerHandler;
 import net.mina.MapleCodecFactory;
+import net.netty.ChannelServer;
 import net.server.PlayerStorage;
 import net.server.Server;
 import net.server.audit.LockCollector;
@@ -58,6 +59,7 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.Map.Entry;
@@ -69,6 +71,7 @@ public final class Channel {
     private int port = 7575;
     private PlayerStorage players = new PlayerStorage();
     private int world, channel;
+    private ChannelServer channelServer;
     private IoAcceptor acceptor;
     private String ip, serverMessage;
     private MapleMapManager mapManager;
@@ -122,14 +125,8 @@ public final class Channel {
             port = 7575 + this.channel - 1;
             port += (world * 100);
             ip = YamlConfig.config.server.HOST + ":" + port;
-            IoBuffer.setUseDirectBuffer(false);
-            IoBuffer.setAllocator(new SimpleBufferAllocator());
-            acceptor = new NioSocketAcceptor();
-            acceptor.setHandler(new MapleServerHandler(world, channel));
-            acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
-            acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
-            acceptor.bind(new InetSocketAddress(port));
-            ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
+            // acceptor = initAcceptor();
+            channelServer = initServer(port, world, channel);
             expedType.addAll(Arrays.asList(MapleExpeditionType.values()));
             
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
@@ -155,6 +152,24 @@ public final class Channel {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private IoAcceptor initAcceptor() throws IOException {
+        IoBuffer.setUseDirectBuffer(false);
+        IoBuffer.setAllocator(new SimpleBufferAllocator());
+        IoAcceptor acceptor = new NioSocketAcceptor();
+        acceptor.setHandler(new MapleServerHandler(world, channel));
+        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
+        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
+        acceptor.bind(new InetSocketAddress(port));
+        ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
+        return acceptor;
+    }
+
+    private ChannelServer initServer(int port, int world, int channel) {
+        this.channelServer = new ChannelServer(port, world, channel);
+        channelServer.start();
+        return channelServer;
     }
     
     public synchronized void reloadEventScriptManager(){

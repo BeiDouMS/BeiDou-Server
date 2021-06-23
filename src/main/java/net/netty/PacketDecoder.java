@@ -1,9 +1,11 @@
 package net.netty;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 import net.mina.MapleCustomEncryption;
+import net.packet.ByteBufInPacket;
 import tools.MapleAESOFB;
 
 import java.util.List;
@@ -28,7 +30,7 @@ public class PacketDecoder extends ReplayingDecoder<Void> {
         in.readBytes(packet);
         receiveCypher.crypt(packet);
         MapleCustomEncryption.decryptData(packet);
-        out.add(packet);
+        out.add(new ByteBufInPacket(Unpooled.wrappedBuffer(packet)));
         // TODO conditionally log the packet
     }
 

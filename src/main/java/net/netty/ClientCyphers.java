@@ -12,9 +12,9 @@ public class ClientCyphers {
         this.receive = receive;
     }
 
-    public static ClientCyphers generateNew() {
-        MapleAESOFB send = new MapleAESOFB(InitializationVector.generateSend(), ServerConstants.VERSION);
-        MapleAESOFB receive = new MapleAESOFB(InitializationVector.generateReceive(), ServerConstants.VERSION);
+    public static ClientCyphers of(InitializationVector sendIv, InitializationVector receiveIv) {
+        MapleAESOFB send = new MapleAESOFB(sendIv, (short) (0xFFFF - ServerConstants.VERSION));
+        MapleAESOFB receive = new MapleAESOFB(receiveIv, ServerConstants.VERSION);
         return new ClientCyphers(send, receive);
     }
 

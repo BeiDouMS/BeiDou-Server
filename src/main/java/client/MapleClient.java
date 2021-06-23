@@ -26,7 +26,10 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import net.MaplePacketHandler;
+import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -38,6 +41,8 @@ import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.world.*;
 import org.apache.mina.core.session.IoSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
@@ -51,6 +56,8 @@ import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import server.maps.MapleMiniDungeonInfo;
 import tools.*;
+import tools.data.input.ByteArrayByteStream;
+import tools.data.input.GenericSeekableLittleEndianAccessor;
 
 import javax.script.ScriptEngine;
 import java.io.IOException;
@@ -65,6 +72,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 
 public class MapleClient extends ChannelInboundHandlerAdapter {
+    private static final Logger log = LoggerFactory.getLogger(MapleClient.class);
 
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
@@ -77,6 +85,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private MapleAESOFB send;
     private MapleAESOFB receive;
     private final IoSession session;
+    private PacketProcessor packetProcessor;
     private MapleCharacter player;
     private int channel = 1;
     private int accId = -4;
@@ -121,7 +130,10 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return lastPacket;
     }
 
-    public MapleClient() {
+    public MapleClient(PacketProcessor packetProcessor, int world, int channel) {
+        this.packetProcessor = packetProcessor;
+        this.world = world;
+        this.channel = channel;
         this.session = null; // TODO remove once the other constructor is removed
     }
 
@@ -133,6 +145,28 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        // InPacket packet = new ByteBufInPacket((ByteBuf) msg);
+        if (!(msg instanceof InPacket packet)) {
+            log.warn("Received invalid message: {}", msg);
+            return;
+        }
+
+        short opcode = packet.readShort();
+        final MaplePacketHandler handler = packetProcessor.getHandler(opcode);
+        if (handler != null && handler.validateState(this)) {
+            // TODO: pass InPacket directly to handler once all handlers have been ported,
+            // this is just a temporary workaround
+            GenericSeekableLittleEndianAccessor accessor = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(packet.getBytes()));
+            try {
+                MapleLogger.logRecv(this, opcode, msg);
+                handler.handlePacket(accessor, this);
+            } catch (final Throwable t) {
+                FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + accessor);
+                //client.announce(MaplePacketCreator.enableActions());//bugs sometimes
+            }
+        }
+
+        updateLastPacket();
         super.channelRead(ctx, msg);
     }
 
