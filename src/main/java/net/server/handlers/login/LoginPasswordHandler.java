@@ -26,8 +26,6 @@ import client.MapleClient;
 import config.YamlConfig;
 import net.MaplePacketHandler;
 import net.server.Server;
-import net.server.coordinator.session.MapleSessionCoordinator;
-import org.apache.mina.core.session.IoSession;
 import tools.BCrypt;
 import tools.DatabaseConnection;
 import tools.HexTool;
@@ -54,13 +52,9 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
         return HexTool.toString(digester.digest()).replace(" ", "").toLowerCase();
     }
 
-    private static String getRemoteIp(IoSession session) {
-        return MapleSessionCoordinator.getSessionRemoteAddress(session);
-    }
-
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        String remoteHost = getRemoteIp(c.getSession());
+        String remoteHost = c.getRemoteAddress();
         if (remoteHost.contentEquals("null")) {
             c.announce(MaplePacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
             return;

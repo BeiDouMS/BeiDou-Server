@@ -26,6 +26,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleStateEvent;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
@@ -51,6 +52,7 @@ import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestActionManager;
 import scripting.quest.QuestScriptManager;
 import server.ThreadManager;
+import server.TimerManager;
 import server.life.MapleMonster;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
@@ -70,10 +72,12 @@ import java.sql.*;
 import java.util.Date;
 import java.util.*;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 public class MapleClient extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(MapleClient.class);
+    private static final Set<Short> ignoredDebugRecvPackets = Set.of((short) 167, (short) 197, (short) 89, (short) 91, (short) 41, (short) 188, (short) 107);
 
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
@@ -83,12 +87,14 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final String CLIENT_NIBBLEHWID = "HWID2";
     public static final String CLIENT_REMOTE_ADDRESS = "REMOTE_IP";
 
-    private String hostAddress;
+    private String remoteAddress;
     private volatile boolean inTransition;
 
     private MapleAESOFB send;
     private MapleAESOFB receive;
     private final IoSession session;
+
+    private io.netty.channel.Channel ioChannel;
     private PacketProcessor packetProcessor;
     private MapleCharacter player;
     private int channel = 1;
@@ -98,7 +104,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private Calendar birthday = null;
     private String accountName = null;
     private int world;
-    private long lastPong;
+    private volatile long lastPong;
     private int gmlevel;
     private Set<String> macs = new HashSet<>();
     private Map<String, ScriptEngine> engines = new HashMap<>();
@@ -149,13 +155,19 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        if (!Server.getInstance().isOnline()) {
+            ctx.channel().close();
+            return;
+        }
+
         String hostAddress = "null";
         try {
             hostAddress = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
         } catch (NullPointerException npe) {
             log.warn("Unable to get remote address for client", npe);
         }
-        this.hostAddress = hostAddress;
+        this.remoteAddress = hostAddress;
+        this.ioChannel = ctx.channel();
     }
 
     @Override
@@ -168,6 +180,11 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         short opcode = packet.readShort();
         final MaplePacketHandler handler = packetProcessor.getHandler(opcode);
+
+        if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !ignoredDebugRecvPackets.contains(opcode)) {
+            log.debug("Received packet id {}", opcode);
+        }
+
         if (handler != null && handler.validateState(this)) {
             // TODO: pass InPacket directly to handler once all handlers have been ported,
             // this is just a temporary workaround
@@ -186,12 +203,47 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object event) {
+        if (event instanceof IdleStateEvent idleEvent) {
+            checkIfIdle(idleEvent);
+        }
+    }
+
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        if (player != null) {
+            log.warn("Exception caught by {}", player, cause);
+        }
+
         if (cause instanceof InvalidPacketHeaderException) {
             // TODO close session through MapleSessionCoordinator
+        } else if (cause instanceof IOException) {
+            closeSession();
+        } else {
+
         }
 
         super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        try {
+            // client freeze issues on session transition states found thanks to yolinlin, Omo Oppa, Nozphex
+            if (!inTransition) {
+                disconnect(false, false);
+            }
+        } catch (Throwable t) {
+            log.warn("Account stuck", t);
+        }
+    }
+
+    public void closeSession() {
+        ioChannel.close();
+    }
+
+    public void disconnectSession() {
+        ioChannel.disconnect();
     }
 
     public MapleAESOFB getReceiveCrypto() {
@@ -206,8 +258,8 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return session;
     }
 
-    public String getHostAddress() {
-        return hostAddress;
+    public String getRemoteAddress() {
+        return remoteAddress;
     }
 
     public boolean isInTransition() {
@@ -1099,6 +1151,24 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+    }
+
+    public void checkIfIdle(final IdleStateEvent event) {
+        final long pingedAt = System.currentTimeMillis();
+        announce(MaplePacketCreator.getPing());
+        TimerManager.getInstance().schedule(() -> {
+            try {
+                if (lastPong < pingedAt) {
+                    if (ioChannel.isActive()) {
+                        log.info("Disconnected {} due to being idle. Idle state: {}", remoteAddress, event.state());
+                        updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+                        disconnectSession();
+                    }
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }, TimeUnit.SECONDS.toMillis(15));
     }
 
     public String getHWID() {
