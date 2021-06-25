@@ -11,11 +11,11 @@ public class LoginServerInitializer extends ServerChannelInitializer {
 
     @Override
     public void initChannel(SocketChannel socketChannel) {
-        final String clientIp = socketChannel.remoteAddress().getHostName();
+        final String clientIp = socketChannel.remoteAddress().getHostString();
         log.debug("Client connected to login server from {} ", clientIp);
 
         PacketProcessor packetProcessor = PacketProcessor.getLoginServerProcessor();
-        final MapleClient client = new MapleClient(packetProcessor, LoginServer.WORLD, LoginServer.CHANNEL);
+        final MapleClient client = new MapleClient(packetProcessor, LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
         client.setSessionId(sessionId.getAndIncrement());
 
         initPipeline(socketChannel, client);

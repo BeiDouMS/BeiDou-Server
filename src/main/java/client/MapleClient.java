@@ -30,7 +30,9 @@ import io.netty.handler.timeout.IdleStateEvent;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
+import net.packet.ByteBufOutPacket;
 import net.packet.InPacket;
+import net.packet.OutPacket;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -1160,7 +1162,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             try {
                 if (lastPong < pingedAt) {
                     if (ioChannel.isActive()) {
-                        log.info("Disconnected {} due to being idle. Idle state: {}", remoteAddress, event.state());
+                        log.info("Disconnected {} due to being idle. Cause: {}", remoteAddress, event.state());
                         updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
                         disconnectSession();
                     }
@@ -1462,10 +1464,34 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
     }
 
+    @Deprecated(forRemoval = true, since = "Netty migration")
     public void announce(final byte[] packet) {     // thanks GitGud for noticing an opportunity for improvement by overcoming "synchronized announce"
         announcerLock.lock();
         try {
-            session.write(packet);
+            // session.write(packet);
+            sendPacket(packet);
+        } finally {
+            announcerLock.unlock();
+        }
+    }
+
+    // Workaround for old packets. All uses of Client#announce(byte[]) should be migrated to Client#sendPacket(OutPacket)
+    private void sendPacket(final byte[] packet) {
+        announcerLock.lock();
+        try {
+            OutPacket outPacket = new ByteBufOutPacket();
+            outPacket.writeBytes(packet);
+
+            ioChannel.writeAndFlush(outPacket);
+        } finally {
+            announcerLock.unlock();
+        }
+    }
+
+    public void sendPacket(OutPacket outPacket) {
+        announcerLock.lock();
+        try {
+            ioChannel.writeAndFlush(outPacket.getBytes());
         } finally {
             announcerLock.unlock();
         }
