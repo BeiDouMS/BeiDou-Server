@@ -47,6 +47,7 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
+import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
@@ -297,9 +298,9 @@ public class Server {
         String remoteIp = MapleSessionCoordinator.getSessionRemoteAddress(session);
 
         String[] hostAddress = getIP(world, channel).split(":");
-        if (MapleSessionCoordinator.isLocalAddress(remoteIp)) {
+        if (IpAddresses.isLocalAddress(remoteIp)) {
             hostAddress[0] = YamlConfig.config.server.LOCALHOST;
-        } else if (MapleSessionCoordinator.isLanAddress(remoteIp)) {
+        } else if (IpAddresses.isLanAddress(remoteIp)) {
             hostAddress[0] = YamlConfig.config.server.LANHOST;
         }
 

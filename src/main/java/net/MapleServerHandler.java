@@ -30,6 +30,7 @@ import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
@@ -105,7 +106,7 @@ public class MapleServerHandler extends IoHandlerAdapter {
             if (remoteHost == null) {
                 remoteHost = "null";
             } else {
-                remoteHost = MapleSessionCoordinator.fetchRemoteAddress(remoteHost);   // thanks dyz for noticing Local/LAN/WAN connections not interacting properly
+                remoteHost = IpAddresses.evaluateRemoteAddress(remoteHost);   // thanks dyz for noticing Local/LAN/WAN connections not interacting properly
             }
         } catch (NullPointerException npe) {    // thanks Agassy, Alchemist for pointing out possibility of remoteHost = null.
             remoteHost = "null";
