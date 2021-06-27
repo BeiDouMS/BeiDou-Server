@@ -33,13 +33,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -129,38 +129,23 @@ public class MapleSessionCoordinator {
             ps.executeUpdate();
         }
     }
-    
-    private static void registerAccessAccount(Connection con, String remoteHwid, int accountId) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("INSERT INTO hwidaccounts (accountid, hwid, expiresat) VALUES (?, ?, ?)")) {
-            ps.setInt(1, accountId);
-            ps.setString(2, remoteHwid);
-            ps.setTimestamp(3, new java.sql.Timestamp(Server.getInstance().getCurrentTime() + hwidExpirationUpdate(0)));
-            
-            ps.executeUpdate();
-        }
-    }
-    
+
+    /**
+     * @return false if it was already associated, true if a new association was created in this call
+     */
     private static boolean associateHwidAccountIfAbsent(String remoteHwid, int accountId) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            int hwidCount = 0;
+            List<String> hwids = SessionDAO.getHwidsForAccount(con, accountId);
 
-            try (PreparedStatement ps = con.prepareStatement("SELECT SQL_CACHE hwid FROM hwidaccounts WHERE accountid = ?")) {
-                ps.setInt(1, accountId);
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        String rsHwid = rs.getString("hwid");
-                        if (rsHwid.contentEquals(remoteHwid)) {
-                            return false;
-                        }
+            boolean containsRemoteHwid = hwids.stream().anyMatch(hwid -> hwid.contentEquals(remoteHwid));
+            if (containsRemoteHwid) {
+                return false;
+            }
 
-                        hwidCount++;
-                    }
-                }
-
-                if (hwidCount < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
-                    registerAccessAccount(con, remoteHwid, accountId);
-                    return true;
-                }
+            if (hwids.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
+                Instant expiry = Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + hwidExpirationUpdate(0));
+                SessionDAO.registerAccountAccess(con, accountId, remoteHwid, expiry);
+                return true;
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -551,12 +536,7 @@ public class MapleSessionCoordinator {
     }
     
     public void runUpdateHwidHistory() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM hwidaccounts WHERE expiresat < CURRENT_TIMESTAMP")) {
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        SessionDAO.deleteExpiredHwidAccounts();
 
         long timeNow = Server.getInstance().getCurrentTime();
         List<String> toRemove = new LinkedList<>();
@@ -581,12 +561,13 @@ public class MapleSessionCoordinator {
     public void printSessionTrace() {
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, MapleClient>> elist = new ArrayList<>(onlineClients.entrySet());
-            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            String commaSeparatedClients = elist.stream()
+                    .map(Entry::getKey)
+                    .sorted(Integer::compareTo)
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
             
-            System.out.println("Current online clients: ");
-            for (Entry<Integer, MapleClient> e : elist) {
-                System.out.println("  " + e.getKey());
-            }
+            System.out.println("Current online clients: " + commaSeparatedClients);
         }
         
         if (!onlineRemoteHwids.isEmpty()) {
@@ -601,8 +582,7 @@ public class MapleSessionCoordinator {
         
         if (!loginRemoteHosts.isEmpty()) {
             List<Entry<String, Set<IoSession>>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
-            
-            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            elist.sort(Entry.comparingByKey());
             
             System.out.println("Current login sessions: ");
             for (Entry<String, Set<IoSession>> e : elist) {
@@ -616,7 +596,7 @@ public class MapleSessionCoordinator {
         
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, MapleClient>> elist = new ArrayList<>(onlineClients.entrySet());
-            elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
+            elist.sort(Entry.comparingByKey());
             
             str += ("Current online clients:\r\n");
             for (Entry<Integer, MapleClient> e : elist) {
