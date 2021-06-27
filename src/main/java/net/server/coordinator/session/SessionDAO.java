@@ -50,4 +50,36 @@ public class SessionDAO {
             ps.executeUpdate();
         }
     }
+
+    public static List<HwidRelevance> getHwidRelevance(Connection con, int accountId) throws SQLException {
+        final List<HwidRelevance> hwidRelevances = new ArrayList<>();
+
+        final String query = "SELECT * FROM hwidaccounts WHERE accountid = ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, accountId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String hwid = rs.getString("hwid");
+                    int relevance = rs.getInt("relevance");
+                    hwidRelevances.add(new HwidRelevance(hwid, relevance));
+                }
+            }
+        }
+
+        return hwidRelevances;
+    }
+
+    public static void updateAccountAccess(Connection con, String remoteHwid, int accountId, Instant expiry, int loginRelevance)
+            throws SQLException {
+        final String query = "UPDATE hwidaccounts SET relevance = ?, expiresat = ? WHERE accountid = ? AND hwid LIKE ?";
+        try (PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, loginRelevance);
+            ps.setTimestamp(2, Timestamp.from(expiry));
+            ps.setInt(3, accountId);
+            ps.setString(4, remoteHwid);
+
+            ps.executeUpdate();
+        }
+    }
 }

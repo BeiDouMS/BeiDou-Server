@@ -27,6 +27,8 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.login.LoginStorage;
 import org.apache.mina.core.session.IoSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
 
 import java.sql.Connection;
@@ -46,8 +48,8 @@ import java.util.stream.Collectors;
  * @author Ronan
  */
 public class MapleSessionCoordinator {
-    
-    private final static MapleSessionCoordinator instance = new MapleSessionCoordinator();
+    private static final Logger log = LoggerFactory.getLogger(MapleSessionCoordinator.class);
+    private static final MapleSessionCoordinator instance = new MapleSessionCoordinator();
     
     public static MapleSessionCoordinator getInstance() {
         return instance;
@@ -78,9 +80,15 @@ public class MapleSessionCoordinator {
             poolLock.add(MonitoredReentrantLockFactory.createLock(MonitoredLockType.SERVER_LOGIN_COORD));
         }
     }
+
+    private static Instant getHwidAccountExpiry(int relevance) {
+        return Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + hwidExpirationUpdate(relevance));
+    }
     
     private static long hwidExpirationUpdate(int relevance) {
-        int degree = 1, i = relevance, subdegree;
+        int degree = 1;
+        int i = relevance;
+        int subdegree;
         while ((subdegree = 5 * degree) <= i) {
             i -= subdegree;
             degree++;
@@ -113,22 +121,6 @@ public class MapleSessionCoordinator {
         
         return 3600000 * (baseTime + subdegreeTime);
     }
-    
-    private static void updateAccessAccount(Connection con, String remoteHwid, int accountId, int loginRelevance) throws SQLException {
-        java.sql.Timestamp nextTimestamp = new java.sql.Timestamp(Server.getInstance().getCurrentTime() + hwidExpirationUpdate(loginRelevance));
-        if(loginRelevance < Byte.MAX_VALUE) {
-            loginRelevance++;
-        }
-        
-        try (PreparedStatement ps = con.prepareStatement("UPDATE hwidaccounts SET relevance = ?, expiresat = ? WHERE accountid = ? AND hwid LIKE ?")) {
-            ps.setInt(1, loginRelevance);
-            ps.setTimestamp(2, nextTimestamp);
-            ps.setInt(3, accountId);
-            ps.setString(4, remoteHwid);
-            
-            ps.executeUpdate();
-        }
-    }
 
     /**
      * @return false if it was already associated, true if a new association was created in this call
@@ -143,7 +135,7 @@ public class MapleSessionCoordinator {
             }
 
             if (hwids.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
-                Instant expiry = Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + hwidExpirationUpdate(0));
+                Instant expiry = getHwidAccountExpiry(0);
                 SessionDAO.registerAccountAccess(con, accountId, remoteHwid, expiry);
                 return true;
             }
@@ -154,37 +146,31 @@ public class MapleSessionCoordinator {
         return false;
     }
 
-    private static boolean attemptAccessAccount(String nibbleHwid, int accountId, boolean routineCheck) {
+    private static boolean attemptAccountAccess(int accountId, String nibbleHwid, boolean routineCheck) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            int hwidCount = 0;
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT SQL_CACHE * FROM hwidaccounts WHERE accountid = ?")) {
-                ps.setInt(1, accountId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        String rsHwid = rs.getString("hwid");
-                        if (rsHwid.endsWith(nibbleHwid)) {
-                            if (!routineCheck) {
-                                // better update HWID relevance as soon as the login is authenticated
-
-                                int loginRelevance = rs.getInt("relevance");
-                                updateAccessAccount(con, rsHwid, accountId, loginRelevance);
-                            }
-
-                            return true;
+            List<HwidRelevance> hwidRelevances = SessionDAO.getHwidRelevance(con, accountId);
+            for (HwidRelevance hwidRelevance : hwidRelevances) {
+                if (hwidRelevance.hwid().endsWith(nibbleHwid)) {
+                    if (!routineCheck) {
+                        // better update HWID relevance as soon as the login is authenticated
+                        Instant expiry = getHwidAccountExpiry(hwidRelevance.relevance());
+                        int relevance = hwidRelevance.relevance();
+                        if (relevance < Byte.MAX_VALUE) {
+                            relevance++;
                         }
 
-                        hwidCount++;
+                        SessionDAO.updateAccountAccess(con, nibbleHwid, accountId, expiry, relevance);
                     }
-                }
 
-                if (hwidCount < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
                     return true;
                 }
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+
+            if (hwidRelevances.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
+                return true;
+            }
+        } catch (SQLException e) {
+            log.warn("Failed to update account access. Account id: {}, nibbleHwid: {}", accountId, nibbleHwid, e);
         }
 
         return false;
@@ -363,14 +349,14 @@ public class MapleSessionCoordinator {
                     return AntiMulticlientResult.REMOTE_LOGGEDIN;
                 }
 
-                if (!attemptAccessAccount(nibbleHwid, accountId, routineCheck)) {
+                if (!attemptAccountAccess(accountId, nibbleHwid, routineCheck)) {
                     return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
                 }
 
                 session.setAttribute(MapleClient.CLIENT_NIBBLEHWID, nibbleHwid);
                 onlineRemoteHwids.add(nibbleHwid);
             } else {
-                if (!attemptAccessAccount(nibbleHwid, accountId, routineCheck)) {
+                if (!attemptAccountAccess(accountId, nibbleHwid, routineCheck)) {
                     return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
                 }
             }
