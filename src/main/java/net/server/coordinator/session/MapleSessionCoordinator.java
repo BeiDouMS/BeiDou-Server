@@ -23,8 +23,6 @@ import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.login.LoginStorage;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
@@ -38,8 +36,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
 /**
@@ -63,7 +59,8 @@ public class MapleSessionCoordinator {
         MANY_ACCOUNT_ATTEMPTS,
         COORDINATOR_ERROR
     }
-    
+
+    private final SessionInitialization sessionInit = new SessionInitialization();
     private final LoginStorage loginStorage = new LoginStorage();
     private final Map<Integer, MapleClient> onlineClients = new HashMap<>();
     private final Set<String> onlineRemoteHwids = new HashSet<>();
@@ -72,12 +69,8 @@ public class MapleSessionCoordinator {
     
     private final ConcurrentHashMap<String, String> cachedHostHwids = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, Long> cachedHostTimeout = new ConcurrentHashMap<>();
-    private final List<ReentrantLock> poolLock = new ArrayList<>(100);
     
     private MapleSessionCoordinator() {
-        for(int i = 0; i < 100; i++) {
-            poolLock.add(MonitoredReentrantLockFactory.createLock(MonitoredLockType.SERVER_LOGIN_COORD));
-        }
     }
 
     private static boolean attemptAccountAccess(int accountId, String nibbleHwid, boolean routineCheck) {
@@ -108,10 +101,6 @@ public class MapleSessionCoordinator {
         }
 
         return false;
-    }
-
-    private Lock getCoodinatorLock(String remoteHost) {
-        return poolLock.get(Math.abs(remoteHost.hashCode()) % 100);
     }
     
     public static String getSessionRemoteAddress(IoSession session) {
@@ -152,9 +141,8 @@ public class MapleSessionCoordinator {
         }
 
         String remoteHost = getSessionRemoteHost(session);
-        Lock lock = getCoodinatorLock(remoteHost);
-        AntiMulticlientResult result = addToRemoteHostPoolWithRetries(lock, remoteHost);
-        switch (result) {
+        final InitializationResult initResult = sessionInit.initialize(remoteHost);
+        switch (initResult.getAntiMulticlientResult()) {
             case REMOTE_PROCESSING -> {
                 return false;
             }
@@ -181,12 +169,7 @@ public class MapleSessionCoordinator {
 
             return true;
         } finally {
-            lock.lock();
-            try {
-                pooledRemoteHosts.remove(remoteHost);
-            } finally {
-                lock.unlock();
-            }
+            sessionInit.finalize(remoteHost);
         }
     }
 
@@ -224,10 +207,9 @@ public class MapleSessionCoordinator {
         }
 
         String remoteHost = getSessionRemoteHost(session);
-        final Lock lock = getCoodinatorLock(remoteHost);
-        AntiMulticlientResult hostPoolAdditionResult = addToRemoteHostPoolWithRetries(lock, remoteHost);
-        if (hostPoolAdditionResult != AntiMulticlientResult.SUCCESS) {
-            return hostPoolAdditionResult;
+        InitializationResult initResult = sessionInit.initialize(remoteHost);
+        if (initResult != InitializationResult.SUCCESS) {
+            return initResult.getAntiMulticlientResult();
         }
 
         try {
@@ -254,12 +236,7 @@ public class MapleSessionCoordinator {
 
             return AntiMulticlientResult.SUCCESS;
         } finally {
-            lock.lock();
-            try {
-                pooledRemoteHosts.remove(remoteHost);
-            } finally {
-                lock.unlock();
-            }
+            sessionInit.finalize(remoteHost);
         }
     }
 
@@ -271,10 +248,9 @@ public class MapleSessionCoordinator {
             return AntiMulticlientResult.SUCCESS;
         }
 
-        final Lock lock = getCoodinatorLock(remoteHost);
-        AntiMulticlientResult hostPoolAdditionResult = addToRemoteHostPoolWithRetries(lock, remoteHost);
-        if (hostPoolAdditionResult != AntiMulticlientResult.SUCCESS) {
-            return hostPoolAdditionResult;
+        final InitializationResult initResult = sessionInit.initialize(remoteHost);
+        if (initResult != InitializationResult.SUCCESS) {
+            return initResult.getAntiMulticlientResult();
         }
         
         try {
@@ -303,46 +279,8 @@ public class MapleSessionCoordinator {
 
             return AntiMulticlientResult.SUCCESS;
         } finally {
-            lock.lock();
-            try {
-                pooledRemoteHosts.remove(remoteHost);
-            } finally {
-                lock.unlock();
-            }
+            sessionInit.finalize(remoteHost);
         }
-    }
-
-    private AntiMulticlientResult addToRemoteHostPoolWithRetries(Lock lock, String remoteHost) {
-        try {
-            int tries = 0;
-            while (true) {
-                if (lock.tryLock()) {
-                    try {
-                        if (pooledRemoteHosts.contains(remoteHost)) {
-                            return AntiMulticlientResult.REMOTE_PROCESSING;
-                        }
-
-                        pooledRemoteHosts.add(remoteHost);
-                    } finally {
-                        lock.unlock();
-                    }
-
-                    break;
-                } else {
-                    if(tries == 2) {
-                        return AntiMulticlientResult.COORDINATOR_ERROR;
-                    }
-                    tries++;
-
-                    Thread.sleep(1777);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return AntiMulticlientResult.COORDINATOR_ERROR;
-        }
-
-        return AntiMulticlientResult.SUCCESS;
     }
 
     private static void associateHwidAccountIfAbsent(String remoteHwid, int accountId) {
