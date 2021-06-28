@@ -399,7 +399,7 @@ public class MapleSessionCoordinator {
     }
     
     public void runUpdateLoginHistory() {
-        loginStorage.updateLoginHistory();
+        loginStorage.clearExpiredAttempts();
     }
     
     public void printSessionTrace() {
