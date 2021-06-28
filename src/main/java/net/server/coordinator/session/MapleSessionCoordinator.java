@@ -81,47 +81,6 @@ public class MapleSessionCoordinator {
         }
     }
 
-    private static Instant getHwidAccountExpiry(int relevance) {
-        return Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + hwidExpirationUpdate(relevance));
-    }
-    
-    private static long hwidExpirationUpdate(int relevance) {
-        int degree = 1;
-        int i = relevance;
-        int subdegree;
-        while ((subdegree = 5 * degree) <= i) {
-            i -= subdegree;
-            degree++;
-        }
-        
-        degree--;
-        int baseTime, subdegreeTime;
-        if (degree > 2) {
-            subdegreeTime = 10;
-        } else {
-            subdegreeTime = 1 + (3 * degree);
-        }
-        
-        switch(degree) {
-            case 0:
-                baseTime = 2;       // 2 hours
-                break;
-                
-            case 1:
-                baseTime = 24;      // 1 day
-                break;
-                
-            case 2:
-                baseTime = 168;     // 7 days
-                break;
-                
-            default:
-                baseTime = 1680;    // 70 days
-        }
-        
-        return 3600000 * (baseTime + subdegreeTime);
-    }
-
     /**
      * @return false if it was already associated, true if a new association was created in this call
      */
@@ -135,7 +94,7 @@ public class MapleSessionCoordinator {
             }
 
             if (hwids.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
-                Instant expiry = getHwidAccountExpiry(0);
+                Instant expiry = HwidAssociationExpiry.getHwidAccountExpiry(0);
                 SessionDAO.registerAccountAccess(con, accountId, remoteHwid, expiry);
                 return true;
             }
@@ -153,7 +112,7 @@ public class MapleSessionCoordinator {
                 if (hwidRelevance.hwid().endsWith(nibbleHwid)) {
                     if (!routineCheck) {
                         // better update HWID relevance as soon as the login is authenticated
-                        Instant expiry = getHwidAccountExpiry(hwidRelevance.relevance());
+                        Instant expiry = HwidAssociationExpiry.getHwidAccountExpiry(hwidRelevance.relevance());
                         int relevance = hwidRelevance.relevance();
                         if (relevance < Byte.MAX_VALUE) {
                             relevance++;
@@ -518,7 +477,11 @@ public class MapleSessionCoordinator {
     
     private void associateRemoteHostHwid(String remoteHost, String remoteHwid) {
         cachedHostHwids.put(remoteHost, remoteHwid);
-        cachedHostTimeout.put(remoteHost, Server.getInstance().getCurrentTime() + 604800000);   // 1 week-time entry
+        cachedHostTimeout.put(remoteHost, getHostTimeout());
+    }
+
+    private static long getHostTimeout() {
+        return Server.getInstance().getCurrentTime() + TimeUnit.DAYS.toMillis(7);  // 1 week-time entry
     }
     
     public void runUpdateHwidHistory() {
