@@ -29,6 +29,6 @@ public class LoginCoordinatorTask implements Runnable {
     
     @Override
     public void run() {
-        MapleSessionCoordinator.getInstance().runUpdateHwidHistory();
+        MapleSessionCoordinator.getInstance().clearExpiredHwidHistory();
     }
 }
