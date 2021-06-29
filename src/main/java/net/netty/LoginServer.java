@@ -7,8 +7,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 public class LoginServer extends AbstractServer {
-    public static final int WORLD = -1;
-    public static final int CHANNEL = -1;
+    public static final int WORLD_ID = -1;
+    public static final int CHANNEL_ID = -1;
     private Channel channel;
 
     public LoginServer(int port) {

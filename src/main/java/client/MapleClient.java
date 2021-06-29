@@ -38,6 +38,8 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.login.MapleLoginBypassCoordinator;
+import net.server.coordinator.session.Hwid;
+import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
 import net.server.guild.MapleGuild;
@@ -157,24 +159,32 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
+        final io.netty.channel.Channel channel = ctx.channel();
         if (!Server.getInstance().isOnline()) {
-            ctx.channel().close();
+            channel.close();
             return;
         }
 
-        String hostAddress = "null";
+        this.remoteAddress = getRemoteAddress(channel);
+        this.ioChannel = channel;
+    }
+
+    private static String getRemoteAddress(io.netty.channel.Channel channel) {
+        String remoteAddress = "null";
         try {
-            hostAddress = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+            String hostAddress = ((InetSocketAddress) channel.remoteAddress()).getAddress().getHostAddress();
+            if (hostAddress != null) {
+                remoteAddress = IpAddresses.evaluateRemoteAddress(hostAddress); // thanks dyz for noticing Local/LAN/WAN connections not interacting properly
+            }
         } catch (NullPointerException npe) {
             log.warn("Unable to get remote address for client", npe);
         }
-        this.remoteAddress = hostAddress;
-        this.ioChannel = ctx.channel();
+
+        return remoteAddress;
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        // InPacket packet = new ByteBufInPacket((ByteBuf) msg);
         if (!(msg instanceof InPacket packet)) {
             log.warn("Received invalid message: {}", msg);
             return;
@@ -799,17 +809,17 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return accId;
     }
 
-    public void updateLoginState(int newstate) {
+    public void updateLoginState(int newState) {
         // rules out possibility of multiple account entries
-        if (newstate == LOGIN_LOGGEDIN) {
-            MapleSessionCoordinator.getInstance().updateOnlineSession(this.getSession());
+        if (newState == LOGIN_LOGGEDIN) {
+            MapleSessionCoordinator.getInstance().updateOnlineClient(session);
         }
 
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = ?, lastlogin = ? WHERE id = ?")) {
             // using sql currenttime here could potentially break the login, thanks Arnah for pointing this out
 
-            ps.setInt(1, newstate);
+            ps.setInt(1, newState);
             ps.setTimestamp(2, new java.sql.Timestamp(Server.getInstance().getCurrentTime()));
             ps.setInt(3, getAccID());
             ps.executeUpdate();
@@ -817,12 +827,12 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             e.printStackTrace();
         }
 
-        if (newstate == LOGIN_NOTLOGGEDIN) {
+        if (newState == LOGIN_NOTLOGGEDIN) {
             loggedIn = false;
             serverTransition = false;
             setAccID(0);
         } else {
-            serverTransition = (newstate == LOGIN_SERVER_TRANSITION);
+            serverTransition = (newState == LOGIN_SERVER_TRANSITION);
             loggedIn = !serverTransition;
         }
     }
@@ -1165,7 +1175,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             try {
                 if (lastPong < pingedAt) {
                     if (ioChannel.isActive()) {
-                        log.info("Disconnected {} due to being idle. Cause: {}", remoteAddress, event.state());
+                        log.info("Disconnected {} due to idling. Reason: {}", remoteAddress, event.state());
                         updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
                         disconnectSession();
                     }

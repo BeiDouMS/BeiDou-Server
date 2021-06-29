@@ -48,7 +48,7 @@ public final class PacketProcessor {
     }
 
     public static PacketProcessor getLoginServerProcessor() {
-        return getProcessor(LoginServer.WORLD, LoginServer.CHANNEL);
+        return getProcessor(LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
     }
 
     public static PacketProcessor getChannelServerProcessor(int world, int channel) {

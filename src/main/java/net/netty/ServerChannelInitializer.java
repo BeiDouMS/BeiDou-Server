@@ -16,7 +16,16 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
     void initPipeline(SocketChannel socketChannel, MapleClient client) {
         final InitializationVector sendIv = InitializationVector.generateSend();
         final InitializationVector recvIv = InitializationVector.generateReceive();
+        writeInitialUnencryptedHelloPacket(socketChannel, sendIv, recvIv);
+        setUpHandlers(socketChannel, sendIv, recvIv, client);
+    }
+
+    private void writeInitialUnencryptedHelloPacket(SocketChannel socketChannel, InitializationVector sendIv, InitializationVector recvIv) {
         socketChannel.writeAndFlush(Unpooled.wrappedBuffer(MaplePacketCreator.getHello(ServerConstants.VERSION, sendIv, recvIv)));
+    }
+
+    private void setUpHandlers(SocketChannel socketChannel, InitializationVector sendIv, InitializationVector recvIv,
+                               MapleClient client) {
         socketChannel.pipeline().addFirst("IdleStateHandler", new IdleStateHandler(30, 30, 0));
         socketChannel.pipeline().addLast("PacketCodec", new PacketCodec(ClientCyphers.of(sendIv, recvIv)));
         socketChannel.pipeline().addLast("MapleClient", client);
