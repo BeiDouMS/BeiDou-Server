@@ -26,6 +26,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
+import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
 import net.server.world.World;
@@ -61,7 +62,7 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
         String macs = slea.readMapleAsciiString();
         String hwid = slea.readMapleAsciiString();
         
-        if (!hwid.matches("[0-9A-F]{12}_[0-9A-F]{8}")) {
+        if (!Hwid.isValidHwid(hwid)) {
             c.announce(MaplePacketCreator.getAfterLoginError(17));
             return;
         }

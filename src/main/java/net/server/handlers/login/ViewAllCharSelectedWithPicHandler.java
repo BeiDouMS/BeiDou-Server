@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
+import net.server.coordinator.session.Hwid;
 import net.server.world.World;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
@@ -45,7 +46,7 @@ public class ViewAllCharSelectedWithPicHandler extends AbstractMaplePacketHandle
         String macs = slea.readMapleAsciiString();
         String hwid = slea.readMapleAsciiString();
         
-        if (!hwid.matches("[0-9A-F]{12}_[0-9A-F]{8}")) {
+        if (!Hwid.isValidHwid(hwid)) {
             c.announce(MaplePacketCreator.getAfterLoginError(17));
             return;
         }
