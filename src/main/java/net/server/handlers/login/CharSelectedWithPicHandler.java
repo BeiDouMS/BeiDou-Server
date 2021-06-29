@@ -43,13 +43,13 @@ public class CharSelectedWithPicHandler extends AbstractMaplePacketHandler {
         String macs = slea.readMapleAsciiString();
         String hwid = slea.readMapleAsciiString();
         
-        if (!Hwid.isValidHwid(hwid)) {
+        if (!Hwid.isValidRawHwid(hwid)) {
             c.announce(MaplePacketCreator.getAfterLoginError(17));
             return;
         }
         
         c.updateMacs(macs);
-        c.updateHWID(hwid);
+        c.updateHwid(hwid);
         
         IoSession session = c.getSession();
         

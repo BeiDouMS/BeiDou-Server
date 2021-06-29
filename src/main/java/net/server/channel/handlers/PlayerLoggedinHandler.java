@@ -31,6 +31,7 @@ import net.server.PlayerBuffValueHolder;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
+import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import net.server.coordinator.world.MapleEventRecallCoordinator;
 import net.server.guild.MapleAlliance;

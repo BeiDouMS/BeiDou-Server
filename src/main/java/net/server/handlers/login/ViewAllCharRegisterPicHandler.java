@@ -44,13 +44,13 @@ public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHand
         String mac = slea.readMapleAsciiString();
         String hwid = slea.readMapleAsciiString();
         
-        if (!Hwid.isValidHwid(hwid)) {
+        if (!Hwid.isValidRawHwid(hwid)) {
             c.announce(MaplePacketCreator.getAfterLoginError(17));
             return;
         }
         
         c.updateMacs(mac);
-        c.updateHWID(hwid);
+        c.updateHwid(hwid);
         
         if (c.hasBannedMac() || c.hasBannedHWID()) {
             MapleSessionCoordinator.getInstance().closeSession(c.getSession(), true);

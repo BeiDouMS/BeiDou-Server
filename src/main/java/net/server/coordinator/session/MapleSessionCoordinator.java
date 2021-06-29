@@ -297,8 +297,9 @@ public class MapleSessionCoordinator {
             return null;
         }
 
-        int hwidLen = remoteHwid.length();
-        if (hwidLen <= 8) {
+        final int hwidLen = remoteHwid.length();
+        final boolean isOnlyNibbleHwid = hwidLen <= 8;
+        if (isOnlyNibbleHwid) {
             session.setAttribute(MapleClient.CLIENT_NIBBLEHWID, remoteHwid);
         } else {
             session.setAttribute(MapleClient.CLIENT_HWID, remoteHwid);
@@ -326,9 +327,11 @@ public class MapleSessionCoordinator {
         }
         
         String hwid = (String) session.removeAttribute(MapleClient.CLIENT_NIBBLEHWID); // making sure to clean up calls to this function on login phase
+        // TODO: client.setNibbleHwid(null);
         onlineRemoteHwids.remove(hwid);
         
         hwid = (String) session.removeAttribute(MapleClient.CLIENT_HWID);
+        // TODO: client.setHwid(null);
         onlineRemoteHwids.remove(hwid);
 
         if (client != null) {

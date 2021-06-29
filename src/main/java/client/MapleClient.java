@@ -89,6 +89,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final String CLIENT_NIBBLEHWID = "HWID2";
     public static final String CLIENT_REMOTE_ADDRESS = "REMOTE_IP";
 
+    private Hwid hwid;
     private String remoteAddress;
     private volatile boolean inTransition;
 
@@ -116,7 +117,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private int pinattempt = 0;
     private String pic = "";
     private int picattempt = 0;
-    private String hwid = null;
     private byte csattempt = 0;
     private byte gender = -1;
     private boolean disconnecting = false;
@@ -260,6 +260,14 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return session;
     }
 
+    public Hwid getHwid() {
+        return hwid;
+    }
+
+    public void setHwid(Hwid hwid) {
+        this.hwid = hwid;
+    }
+
     public String getRemoteAddress() {
         return remoteAddress;
     }
@@ -387,7 +395,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         boolean ret = false;
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM hwidbans WHERE hwid LIKE ?")) {
-            ps.setString(1, hwid);
+            ps.setString(1, hwid.hwid());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs != null && rs.next()) {
@@ -445,7 +453,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        hwid = rs.getString("hwid");
+                        hwid = new Hwid(rs.getString("hwid"));
                     }
                 }
             }
@@ -477,7 +485,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("INSERT INTO hwidbans (hwid) VALUES (?)")) {
-                ps.setString(1, hwid);
+                ps.setString(1, hwid.hwid());
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
@@ -739,30 +747,25 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return ipAddress;
     }
 
-    public void updateHWID(String newHwid) {
-        String[] split = newHwid.split("_");
-        if (split.length > 1 && split[1].length() == 8) {
-            StringBuilder hwid = new StringBuilder();
-            String convert = split[1];
+    public void updateHwid(String hwidClientString) {
+        final Hwid hwid;
+        try {
+            hwid = Hwid.fromClientString(hwidClientString);
+        } catch (IllegalArgumentException e) {
+            log.warn("Failed to create hwid from client string: {}", hwidClientString, e);
+            this.disconnect(false, false);
+            return;
+        }
 
-            int len = convert.length();
-            for (int i = len - 2; i >= 0; i -= 2) {
-                hwid.append(convert, i, i + 2);
-            }
-            hwid.insert(4, "-");
+        this.hwid = hwid;
 
-            this.hwid = hwid.toString();
-
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("UPDATE accounts SET hwid = ? WHERE id = ?")) {
-                ps.setString(1, this.hwid);
-                ps.setInt(2, accId);
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            this.disconnect(false, false); // Invalid HWID...
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET hwid = ? WHERE id = ?")) {
+            ps.setString(1, hwid.hwid());
+            ps.setInt(2, accId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1171,14 +1174,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 e.printStackTrace();
             }
         }, TimeUnit.SECONDS.toMillis(15));
-    }
-
-    public String getHWID() {
-        return hwid;
-    }
-
-    public void setHWID(String hwid) {
-        this.hwid = hwid;
     }
 
     public Set<String> getMacs() {
