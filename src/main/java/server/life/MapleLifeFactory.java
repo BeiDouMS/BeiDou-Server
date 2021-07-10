@@ -322,7 +322,7 @@ public class MapleLifeFactory {
         private int id;
         private byte chance, x;
 
-        private loseItem(int id, byte chance, byte x) {
+        public loseItem(int id, byte chance, byte x) {
             this.id = id;
             this.chance = chance;
             this.x = x;
@@ -347,7 +347,7 @@ public class MapleLifeFactory {
         private int removeAfter;
         private int hp;
 
-        private selfDestruction(byte action, int removeAfter, int hp) {
+        public selfDestruction(byte action, int removeAfter, int hp) {
             this.action = action;
             this.removeAfter = removeAfter;
             this.hp = hp;
