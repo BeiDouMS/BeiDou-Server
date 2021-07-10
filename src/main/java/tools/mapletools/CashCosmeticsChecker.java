@@ -21,7 +21,6 @@ import java.util.*;
  * Estimated parse time: 1 minute
  */
 public class CashCosmeticsChecker {
-    private static final String HANDBOOK_PATH = "handbook";
     private static final String INPUT_DIRECTORY_PATH = ToolConstants.getInputFile("care").getPath();
     private static final File OUTPUT_FILE = ToolConstants.getOutputFile("cash_cosmetics_result.txt");
     private static final boolean IGNORE_CURRENT_SCRIPT_COSMETICS = false; // Toggle to preference
@@ -481,7 +480,7 @@ public class CashCosmeticsChecker {
     }
 
     private static String getHandbookFileName(String fileName) {
-        return HANDBOOK_PATH + fileName;
+        return ToolConstants.HANDBOOK_PATH + fileName;
     }
 
     private static List<Integer> fetchExpectedCosmetics(String[] cosmeticList, boolean gender) {
