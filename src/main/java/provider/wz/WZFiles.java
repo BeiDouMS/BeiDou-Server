@@ -21,15 +21,15 @@ public enum WZFiles {
 
     private final String fileName;
 
-    WZFiles(String fileName) {
-        this.fileName = fileName;
+    WZFiles(String name) {
+        this.fileName = name + ".wz";
     }
 
     public File getFile() {
-        return new File(getFilePath());
+        return new File(DIRECTORY, fileName);
     }
 
     public String getFilePath() {
-        return String.format("%s/%s.wz", DIRECTORY, fileName);
+        return getFile().getPath();
     }
 }
