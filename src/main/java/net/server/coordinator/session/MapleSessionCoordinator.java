@@ -155,14 +155,14 @@ public class MapleSessionCoordinator {
                 return false;
             }
 
-            addRemoteHostSession(remoteHost, session);
+            addLoginRemoteHostSession(remoteHost, session);
             return true;
         } finally {
             sessionInit.finalize(remoteHost);
         }
     }
 
-    private void addRemoteHostSession(String remoteHost, IoSession session) {
+    private void addLoginRemoteHostSession(String remoteHost, IoSession session) {
         Set<IoSession> sessions = new HashSet<>(2);
         sessions.add(session);
         loginRemoteHosts.put(remoteHost, sessions);
