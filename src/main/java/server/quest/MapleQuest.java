@@ -29,12 +29,12 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import server.quest.actions.*;
 import server.quest.requirements.*;
 import tools.MaplePacketCreator;
 import tools.StringUtil;
 
-import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -68,7 +68,7 @@ public class MapleQuest {
     private boolean autoPreComplete, autoComplete;
     private boolean repeatable = false;
     private String name = "", parent = "";
-    private final static MapleDataProvider questData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Quest.wz"));
+    private final static MapleDataProvider questData = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
     private final static MapleData questInfo = questData.getData("QuestInfo.img");
     private final static MapleData questAct = questData.getData("Act.img");
     private final static MapleData questReq = questData.getData("Check.img");

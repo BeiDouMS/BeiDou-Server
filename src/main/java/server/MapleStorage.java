@@ -29,12 +29,12 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -310,7 +310,7 @@ public class MapleStorage {
         if(fee == null) {
             fee = 100;
             
-            MapleDataProvider npc = MapleDataProviderFactory.getDataProvider(new File("wz/Npc.wz"));
+            MapleDataProvider npc = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
             MapleData npcData = npc.getData(npcId + ".img");
             if(npcData != null) {
                 fee = MapleDataTool.getIntConvert("info/trunkPut", npcData, 100);
@@ -328,7 +328,7 @@ public class MapleStorage {
         if(fee == null) {
             fee = 0;
             
-            MapleDataProvider npc = MapleDataProviderFactory.getDataProvider(new File("wz/Npc.wz"));
+            MapleDataProvider npc = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
             MapleData npcData = npc.getData(npcId + ".img");
             if(npcData != null) {
                 fee = MapleDataTool.getIntConvert("info/trunkGet", npcData, 0);

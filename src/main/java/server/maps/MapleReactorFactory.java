@@ -25,18 +25,18 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import server.maps.MapleReactorStats.StateData;
 import tools.Pair;
 import tools.StringUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class MapleReactorFactory {
-    private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Reactor.wz"));
+    private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.REACTOR);
     private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
 
     

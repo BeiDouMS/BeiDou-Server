@@ -21,7 +21,6 @@
 */
 package provider.wz;
 
-import provider.MapleDataProviderFactory;
 import tools.data.input.GenericLittleEndianAccessor;
 import tools.data.input.InputStreamByteStream;
 import tools.data.input.LittleEndianAccessor;
@@ -69,7 +68,7 @@ public class ListWZFile {
         if (listWz != null) {
             ListWZFile listwz;
             try {
-                listwz = new ListWZFile(MapleDataProviderFactory.fileInWZPath("List.wz"));
+                listwz = new ListWZFile(WZFiles.LIST.getFile());
                 modernImgs = new HashSet<>(listwz.getEntries());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();

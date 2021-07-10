@@ -31,10 +31,10 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 import tools.Pair;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -149,7 +149,7 @@ public class CashShop {
         private static volatile List<SpecialCashItem> specialcashitems = new ArrayList<>();
 
         public static void loadAllCashItems() {
-            MapleDataProvider etc = MapleDataProviderFactory.getDataProvider(new File("wz/Etc.wz"));
+            MapleDataProvider etc = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, CashItem> loadedItems = new HashMap<>();
             List<Integer> onSaleItems = new ArrayList<>();
