@@ -22,7 +22,6 @@ import java.util.*;
  */
 public class CashCosmeticsChecker {
     private static final String HANDBOOK_PATH = "handbook";
-    private static final String SCRIPTS_PATH = "scripts";
     private static final String INPUT_DIRECTORY_PATH = ToolConstants.getInputFile("care").getPath();
     private static final File OUTPUT_FILE = ToolConstants.getOutputFile("cash_cosmetics_result.txt");
     private static final boolean IGNORE_CURRENT_SCRIPT_COSMETICS = false; // Toggle to preference
@@ -189,7 +188,7 @@ public class CashCosmeticsChecker {
 
     private static void loadScripts() throws IOException {
         ArrayList<File> files = new ArrayList<>();
-        listFiles(SCRIPTS_PATH + "/npc", files);
+        listFiles(ToolConstants.SCRIPTS_PATH + "/npc", files);
 
         for (File f : files) {
             Integer npcid = getNpcIdFromFilename(f.getName());
