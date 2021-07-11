@@ -1,102 +1,72 @@
-/*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package maplequestitemfetcher;
+package tools.mapletools;
 
 import org.apache.commons.io.FileUtils;
-import tools.MapleItemInformationProvider;
+import provider.wz.WZFiles;
+import server.MapleItemInformationProvider;
+import tools.DatabaseConnection;
 import tools.Pair;
 
 import java.io.*;
-import java.sql.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
-import java.util.Map.Entry;
 
 /**
- *
  * @author RonanLana
- * 
+ * <p>
  * This application haves 2 objectives: fetch missing drop data relevant to quests,
  * and update the questid from items that are labeled as "Quest Item" on the DB.
- * 
- * To test a server instance with this feature, MapleQuestItemFetcher must be set
- * just like it is displayed on the HeavenMS source: 2 folders ahead
- * of the root of the main source.
- * 
- * Running it should generate a report file under "lib" folder with the search results.
- * 
+ * <p>
+ * Running it should generate a report file under "output" folder with the search results.
+ * <p>
  * Estimated parse time: 1 minute
  */
-public class MapleQuestItemFetcher {
-    static MapleItemInformationProvider ii;
-    
-    static String host = "jdbc:mysql://localhost:3306/cosmic";
-    static String driver = "com.mysql.jdbc.Driver";
-    static String username = "cosmic_server";
-    static String password = "snailshell";
+public class QuestItemFetcher {
+    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("quest_report.txt");
+    private static final int INITIAL_STRING_LENGTH = 50;
+    private static final int INITIAL_LENGTH = 200;
+    private static final boolean DISPLAY_EXTRA_INFO = true;     // display items with zero quantity over the quest act WZ
 
-    static String wzPath = "../../wz";
-    static String directoryName = "../..";
-    static String newFile = "lib/QuestReport.txt";
+    private static final Connection con = SimpleDatabaseConnection.getConnection();
+    private static final Map<Integer, Set<Integer>> startQuestItems = new HashMap<>(INITIAL_LENGTH);
+    private static final Map<Integer, Set<Integer>> completeQuestItems = new HashMap<>(INITIAL_LENGTH);
+    private static final Map<Integer, Set<Integer>> zeroedStartQuestItems = new HashMap<>();
+    private static final Map<Integer, Set<Integer>> zeroedCompleteQuestItems = new HashMap<>();
+    private static final Map<Integer, int[]> mixedQuestidItems = new HashMap<>();
+    private static final Set<Integer> limitedQuestids = new HashSet<>();
 
-    static Connection con = null;
-    static PrintWriter printWriter = null;
-    static InputStreamReader fileReader = null;
-    static BufferedReader bufferedReader = null;
-    
-    static int initialLength = 200;
-    static int initialStringLength = 50;
-    static boolean displayExtraInfo = true;     // display items with zero quantity over the quest act WZ
-    
-    static Map<Integer, Set<Integer>> startQuestItems = new HashMap<>(initialLength);
-    static Map<Integer, Set<Integer>> completeQuestItems = new HashMap<>(initialLength);
-    
-    static Map<Integer, Set<Integer>> zeroedStartQuestItems = new HashMap<>();
-    static Map<Integer, Set<Integer>> zeroedCompleteQuestItems = new HashMap<>();
-    static Map<Integer, int[]> mixedQuestidItems = new HashMap<>();
-    static Set<Integer> limitedQuestids = new HashSet<>();
-    
-    static byte status = 0;
-    static int questId = -1;
-    static int isCompleteState = 0;
-    
-    static int currentItemid = 0;
-    static int currentCount = 0;
+    private static MapleItemInformationProvider ii;
+    private static PrintWriter printWriter = null;
+    private static BufferedReader bufferedReader = null;
+    private static byte status = 0;
+    private static int questId = -1;
+    private static int isCompleteState = 0;
+    private static int currentItemid = 0;
+    private static int currentCount = 0;
 
     private static String getName(String token) {
         int i, j;
         char[] dest;
         String d;
-        
+
         i = token.lastIndexOf("name");
         i = token.indexOf("\"", i) + 1; //lower bound of the string
         j = token.indexOf("\"", i);     //upper bound
 
-        if(j < i) return "0";           //node value containing 'name' in it's scope, cheap fix since we don't deal with strings anyway
-        
-        dest = new char[initialStringLength];
+        if (j < i) {
+            return "0";           //node value containing 'name' in it's scope, cheap fix since we don't deal with strings anyway
+        }
+
+        dest = new char[INITIAL_STRING_LENGTH];
         token.getChars(i, j, dest, 0);
 
         d = new String(dest);
-        return(d.trim());
+        return (d.trim());
     }
-    
+
     private static String getValue(String token) {
         int i, j;
         char[] dest;
@@ -106,56 +76,53 @@ public class MapleQuestItemFetcher {
         i = token.indexOf("\"", i) + 1; //lower bound of the string
         j = token.indexOf("\"", i);     //upper bound
 
-        dest = new char[initialStringLength];
+        dest = new char[INITIAL_STRING_LENGTH];
         token.getChars(i, j, dest, 0);
 
         d = new String(dest);
-        return(d.trim());
+        return (d.trim());
     }
-    
+
     private static void forwardCursor(int st) {
         String line = null;
 
         try {
-            while(status >= st && (line = bufferedReader.readLine()) != null) {
+            while (status >= st && (line = bufferedReader.readLine()) != null) {
                 simpleToken(line);
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private static void simpleToken(String token) {
-        if(token.contains("/imgdir")) {
+        if (token.contains("/imgdir")) {
             status -= 1;
-        }
-        else if(token.contains("imgdir")) {
+        } else if (token.contains("imgdir")) {
             status += 1;
         }
     }
-    
+
     private static void inspectQuestItemList(int st) {
         String line = null;
 
         try {
-            while(status >= st && (line = bufferedReader.readLine()) != null) {
+            while (status >= st && (line = bufferedReader.readLine()) != null) {
                 readItemToken(line);
             }
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private static void processCurrentItem() {
         try {
-            if(ii.isQuestItem(currentItemid)) {
-                if(currentCount != 0) {
-                    if(isCompleteState == 1) {
-                        if(currentCount < 0) {
+            if (ii.isQuestItem(currentItemid)) {
+                if (currentCount != 0) {
+                    if (isCompleteState == 1) {
+                        if (currentCount < 0) {
                             Set<Integer> qi = completeQuestItems.get(questId);
-                            if(qi == null) {
+                            if (qi == null) {
                                 Set<Integer> newSet = new HashSet<>();
                                 newSet.add(currentItemid);
 
@@ -165,9 +132,9 @@ public class MapleQuestItemFetcher {
                             }
                         }
                     } else {
-                        if(currentCount > 0) {
+                        if (currentCount > 0) {
                             Set<Integer> qi = startQuestItems.get(questId);
-                            if(qi == null) {
+                            if (qi == null) {
                                 Set<Integer> newSet = new HashSet<>();
                                 newSet.add(currentItemid);
 
@@ -178,9 +145,9 @@ public class MapleQuestItemFetcher {
                         }
                     }
                 } else {
-                    if(isCompleteState == 1) {
+                    if (isCompleteState == 1) {
                         Set<Integer> qi = zeroedCompleteQuestItems.get(questId);
-                        if(qi == null) {
+                        if (qi == null) {
                             Set<Integer> newSet = new HashSet<>();
                             newSet.add(currentItemid);
 
@@ -190,7 +157,7 @@ public class MapleQuestItemFetcher {
                         }
                     } else {
                         Set<Integer> qi = zeroedStartQuestItems.get(questId);
-                        if(qi == null) {
+                        if (qi == null) {
                             Set<Integer> newSet = new HashSet<>();
                             newSet.add(currentItemid);
 
@@ -201,27 +168,26 @@ public class MapleQuestItemFetcher {
                     }
                 }
             }
-        } catch(Exception e) {}
+        } catch (Exception e) {
+        }
     }
-    
+
     private static void readItemToken(String token) {
-        if(token.contains("/imgdir")) {
+        if (token.contains("/imgdir")) {
             status -= 1;
-            
+
             processCurrentItem();
-            
+
             currentItemid = 0;
             currentCount = 0;
-        }
-        else if(token.contains("imgdir")) {
+        } else if (token.contains("imgdir")) {
             status += 1;
-        }
-        else {
+        } else {
             String d = getName(token);
-            
-            if(d.equals("id")) {
+
+            if (d.equals("id")) {
                 currentItemid = Integer.parseInt(getValue(token));
-            } else if(d.equals("count")) {
+            } else if (d.equals("count")) {
                 currentCount = Integer.parseInt(getValue(token));
             }
         }
@@ -231,22 +197,19 @@ public class MapleQuestItemFetcher {
         String d;
         int temp;
 
-        if(token.contains("/imgdir")) {
+        if (token.contains("/imgdir")) {
             status -= 1;
-        }
-        else if(token.contains("imgdir")) {
-            if(status == 1) {           //getting QuestId
+        } else if (token.contains("imgdir")) {
+            if (status == 1) {           //getting QuestId
                 d = getName(token);
                 questId = Integer.parseInt(d);
-            }
-            else if(status == 2) {      //start/complete
+            } else if (status == 2) {      //start/complete
                 d = getName(token);
                 isCompleteState = Integer.parseInt(d);
-            }
-            else if(status == 3) {
+            } else if (status == 3) {
                 d = getName(token);
 
-                if(d.contains("item")) {
+                if (d.contains("item")) {
                     temp = status;
                     inspectQuestItemList(temp);
                 } else {
@@ -256,41 +219,38 @@ public class MapleQuestItemFetcher {
 
             status += 1;
         } else {
-            if(status == 3) {
+            if (status == 3) {
                 d = getName(token);
 
-                if(d.equals("end")) {
+                if (d.equals("end")) {
                     limitedQuestids.add(questId);
                 }
             }
         }
     }
-    
+
     private static void translateCheckToken(String token) {
         String d;
 
-        if(token.contains("/imgdir")) {
+        if (token.contains("/imgdir")) {
             status -= 1;
-        }
-        else if(token.contains("imgdir")) {
-            if(status == 1) {           //getting QuestId
+        } else if (token.contains("imgdir")) {
+            if (status == 1) {           //getting QuestId
                 d = getName(token);
                 questId = Integer.parseInt(d);
-            }
-            else if(status == 2) {      //start/complete
+            } else if (status == 2) {      //start/complete
                 d = getName(token);
                 isCompleteState = Integer.parseInt(d);
-            }
-            else if(status == 3) {
+            } else if (status == 3) {
                 forwardCursor(status);
             }
 
             status += 1;
         } else {
-            if(status == 3) {
+            if (status == 3) {
                 d = getName(token);
 
-                if(d.equals("end")) {
+                if (d.equals("end")) {
                     limitedQuestids.add(questId);
                 }
             }
@@ -299,14 +259,14 @@ public class MapleQuestItemFetcher {
 
     private static void calculateQuestItemDiff() {
         // This will remove started quest items from the "to complete" item set.
-        
-        for(Entry<Integer, Set<Integer>> qd : startQuestItems.entrySet()) {
-            for(Integer qi : qd.getValue()) {
+
+        for (Map.Entry<Integer, Set<Integer>> qd : startQuestItems.entrySet()) {
+            for (Integer qi : qd.getValue()) {
                 Set<Integer> questSet = completeQuestItems.get(qd.getKey());
-                
-                if(questSet != null) {
-                    if(questSet.remove(qi)) {
-                        if(completeQuestItems.isEmpty()) {
+
+                if (questSet != null) {
+                    if (questSet.remove(qi)) {
+                        if (completeQuestItems.isEmpty()) {
                             completeQuestItems.remove(qd.getKey());
                         }
                     }
@@ -314,37 +274,37 @@ public class MapleQuestItemFetcher {
             }
         }
     }
-    
+
     private static List<Pair<Integer, Integer>> getPairsQuestItem() {   // quest items not gained at WZ's quest start
-        List<Pair<Integer, Integer>> list = new ArrayList<>(initialLength);
-        
-        for(Entry<Integer, Set<Integer>> qd : completeQuestItems.entrySet()) {
-            for(Integer qi : qd.getValue()) {
+        List<Pair<Integer, Integer>> list = new ArrayList<>(INITIAL_LENGTH);
+
+        for (Map.Entry<Integer, Set<Integer>> qd : completeQuestItems.entrySet()) {
+            for (Integer qi : qd.getValue()) {
                 list.add(new Pair<>(qi, qd.getKey()));
             }
         }
-        
+
         return list;
     }
-    
+
     private static String getTableName(boolean dropdata) {
         return dropdata ? "drop_data" : "reactordrops";
     }
-    
+
     private static void filterQuestDropsOnTable(Pair<Integer, Integer> iq, List<Pair<Integer, Integer>> itemsWithQuest, boolean dropdata) throws SQLException {
         PreparedStatement ps = con.prepareStatement("SELECT questid FROM " + getTableName(dropdata) + " WHERE itemid = ?;");
         ps.setInt(1, iq.getLeft());
         ResultSet rs = ps.executeQuery();
 
         if (rs.isBeforeFirst()) {
-            while(rs.next()) {
+            while (rs.next()) {
                 int curQuest = rs.getInt(1);
-                if(curQuest != iq.getRight()) {
+                if (curQuest != iq.getRight()) {
                     Set<Integer> sqSet = startQuestItems.get(curQuest);
-                    if(sqSet != null && sqSet.contains(iq.getLeft())) {
+                    if (sqSet != null && sqSet.contains(iq.getLeft())) {
                         continue;
                     }
-                    
+
                     int[] mixed = new int[3];
                     mixed[0] = iq.getLeft();
                     mixed[1] = curQuest;
@@ -360,176 +320,171 @@ public class MapleQuestItemFetcher {
         rs.close();
         ps.close();
     }
-    
+
     private static void filterQuestDropsOnDB(List<Pair<Integer, Integer>> itemsWithQuest) throws SQLException {
         List<Pair<Integer, Integer>> copyItemsWithQuest = new ArrayList<>(itemsWithQuest);
         try {
-            for(Pair<Integer, Integer> iq : copyItemsWithQuest) {
+            for (Pair<Integer, Integer> iq : copyItemsWithQuest) {
                 filterQuestDropsOnTable(iq, itemsWithQuest, true);
                 filterQuestDropsOnTable(iq, itemsWithQuest, false);
             }
-        }
-        catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-    
-    private static void filterDirectorySearchMatchingData(String path, List<Pair<Integer, Integer>> itemsWithQuest) {
-        Iterator iter = FileUtils.iterateFiles(new File(directoryName + "/" + path), new String[]{"sql", "js", "txt","java"}, true);
 
-        while(iter.hasNext()) {
-            File file = (File) iter.next();
+    private static void filterDirectorySearchMatchingData(String path, List<Pair<Integer, Integer>> itemsWithQuest) {
+        Iterator<File> iter = FileUtils.iterateFiles(new File(path), new String[]{"sql", "js", "txt", "java"}, true);
+
+        while (iter.hasNext()) {
+            File file = iter.next();
             fileSearchMatchingData(file, itemsWithQuest);
         }
     }
-    
+
     private static boolean foundMatchingDataOnFile(String fileContent, String searchStr) {
         return fileContent.contains(searchStr);
     }
-    
+
     private static void fileSearchMatchingData(File file, List<Pair<Integer, Integer>> itemsWithQuest) {
         try {
-            String fileContent = FileUtils.readFileToString(file, "UTF-8");
-            
+            String fileContent = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+
             List<Pair<Integer, Integer>> copyItemsWithQuest = new ArrayList<>(itemsWithQuest);
-            for(Pair<Integer, Integer> iq : copyItemsWithQuest) {
-                if(foundMatchingDataOnFile(fileContent, String.valueOf(iq.getLeft()))) {
+            for (Pair<Integer, Integer> iq : copyItemsWithQuest) {
+                if (foundMatchingDataOnFile(fileContent, String.valueOf(iq.getLeft()))) {
                     itemsWithQuest.remove(iq);
                 }
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             System.out.println("Failed to read file: " + file.getAbsolutePath());
             ioe.printStackTrace();
         }
     }
-    
+
     private static void printReportFileHeader() {
         printWriter.println(" # Report File autogenerated from the MapleQuestItemFetcher feature by Ronan Lana.");
         printWriter.println(" # Generated data takes into account several data info from the underlying DB, server source files and the server-side WZ.xmls.");
         printWriter.println();
     }
-    
-    private static List<Entry<Integer, Integer>> getSortedMapEntries0(Map<Integer, Integer> map) {
-        List<Entry<Integer, Integer>> list = new ArrayList<>(map.size());
+
+    private static List<Map.Entry<Integer, Integer>> getSortedMapEntries0(Map<Integer, Integer> map) {
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.size());
         list.addAll(map.entrySet());
-        
-        Collections.sort(list, (o1, o2) -> o1.getKey() - o2.getKey());
-        
+
+        list.sort((o1, o2) -> o1.getKey() - o2.getKey());
+
         return list;
     }
-    
-    private static List<Entry<Integer, int[]>> getSortedMapEntries1(Map<Integer, int[]> map) {
-        List<Entry<Integer, int[]>> list = new ArrayList<>(map.size());
+
+    private static List<Map.Entry<Integer, int[]>> getSortedMapEntries1(Map<Integer, int[]> map) {
+        List<Map.Entry<Integer, int[]>> list = new ArrayList<>(map.size());
         list.addAll(map.entrySet());
-        
-        Collections.sort(list, (o1, o2) -> o1.getKey() - o2.getKey());
-        
+
+        list.sort((o1, o2) -> o1.getKey() - o2.getKey());
+
         return list;
     }
-    
+
     private static List<Pair<Integer, List<Integer>>> getSortedMapEntries2(Map<Integer, Set<Integer>> map) {
         List<Pair<Integer, List<Integer>>> list = new ArrayList<>(map.size());
-        for(Entry<Integer, Set<Integer>> e : map.entrySet()) {
+        for (Map.Entry<Integer, Set<Integer>> e : map.entrySet()) {
             List<Integer> il = new ArrayList<>(2);
             il.addAll(e.getValue());
-            
-            Collections.sort(il, (o1, o2) -> o1 - o2);
-            
+
+            il.sort((o1, o2) -> o1 - o2);
+
             list.add(new Pair<>(e.getKey(), il));
         }
-        
-        Collections.sort(list, (o1, o2) -> o1.getLeft() - o2.getLeft());
-        
+
+        list.sort((o1, o2) -> o1.getLeft() - o2.getLeft());
+
         return list;
     }
-    
+
     private static String getExpiredStringLabel(int questid) {
         return (!limitedQuestids.contains(questid) ? "" : " EXPIRED");
     }
-    
-    private static void ReportQuestItemData() {
+
+    private static void reportQuestItemData() {
         // This will reference one line at a time
         String line = null;
         String fileName = null;
 
         try {
-            Class.forName(driver).newInstance();
-            
             System.out.println("Reading WZs...");
-    
-            fileName = wzPath + "/Quest.wz/Check.img.xml";
-            fileReader = new InputStreamReader(new FileInputStream(fileName), "UTF-8");
+
+            fileName = WZFiles.QUEST.getFilePath() + "/Check.img.xml";
+            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(fileReader);
 
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 translateCheckToken(line);  // fetch expired quests through here as well
             }
-            
+
             bufferedReader.close();
             fileReader.close();
-            
-            fileName = wzPath + "/Quest.wz/Act.img.xml";
-            fileReader = new InputStreamReader(new FileInputStream(fileName), "UTF-8");
+
+            fileName = WZFiles.QUEST.getFilePath() + "/Act.img.xml";
+            fileReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(fileReader);
 
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 translateActToken(line);
             }
-            
+
             bufferedReader.close();
             fileReader.close();
-            
+
             System.out.println("Calculating table diffs...");
             calculateQuestItemDiff();
-            
+
             System.out.println("Filtering drops on DB...");
             List<Pair<Integer, Integer>> itemsWithQuest = getPairsQuestItem();
-            
-            // filter drop data on DB
-            con = DriverManager.getConnection(host, username, password);
+
             filterQuestDropsOnDB(itemsWithQuest);
             con.close();
-            
+
             System.out.println("Filtering drops on project files...");
             // finally, filter whether this item is mentioned on the source code or not.
             filterDirectorySearchMatchingData("scripts", itemsWithQuest);
             filterDirectorySearchMatchingData("sql", itemsWithQuest);
             filterDirectorySearchMatchingData("src", itemsWithQuest);
-            
+
             System.out.println("Reporting results...");
             // report suspects of missing quest drop data, as well as those drop data that may have incorrect questids.
-            printWriter = new PrintWriter(newFile, "UTF-8");
-            
+            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+
             printReportFileHeader();
-            
-            if(!mixedQuestidItems.isEmpty()) {
+
+            if (!mixedQuestidItems.isEmpty()) {
                 printWriter.println("INCORRECT QUESTIDS ON DB");
-                for(Entry<Integer, int[]> emqi : getSortedMapEntries1(mixedQuestidItems)) {
+                for (Map.Entry<Integer, int[]> emqi : getSortedMapEntries1(mixedQuestidItems)) {
                     int[] mqi = emqi.getValue();
                     printWriter.println(mqi[0] + " : " + mqi[1] + " -> " + mqi[2] + getExpiredStringLabel(mqi[2]));
                 }
                 printWriter.println("\n\n\n\n\n");
             }
-            
-            if(!itemsWithQuest.isEmpty()) {
+
+            if (!itemsWithQuest.isEmpty()) {
                 Map<Integer, Integer> mapIwq = new HashMap<>(itemsWithQuest.size());
-                for(Pair<Integer, Integer> iwq : itemsWithQuest) {
+                for (Pair<Integer, Integer> iwq : itemsWithQuest) {
                     mapIwq.put(iwq.getLeft(), iwq.getRight());
                 }
-                
+
                 printWriter.println("ITEMS WITH NO QUEST DROP DATA ON DB");
-                for(Entry<Integer, Integer> iwq : getSortedMapEntries0(mapIwq)) {
+                for (Map.Entry<Integer, Integer> iwq : getSortedMapEntries0(mapIwq)) {
                     printWriter.println(iwq.getKey() + " - " + iwq.getValue() + getExpiredStringLabel(iwq.getValue()));
                 }
                 printWriter.println("\n\n\n\n\n");
             }
-            
-            if(displayExtraInfo) {
-                if(!zeroedStartQuestItems.isEmpty()) {
+
+            if (DISPLAY_EXTRA_INFO) {
+                if (!zeroedStartQuestItems.isEmpty()) {
                     printWriter.println("START QUEST ITEMS WITH ZERO QUANTITY");
-                    for(Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedStartQuestItems)) {
+                    for (Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedStartQuestItems)) {
                         printWriter.println(iwq.getLeft() + getExpiredStringLabel(iwq.getLeft()) + ":");
-                        for(Integer i : iwq.getRight()) {
+                        for (Integer i : iwq.getRight()) {
                             printWriter.println("  " + i);
                         }
                         printWriter.println();
@@ -537,11 +492,11 @@ public class MapleQuestItemFetcher {
                     printWriter.println("\n\n\n\n\n");
                 }
 
-                if(!zeroedCompleteQuestItems.isEmpty()) {
+                if (!zeroedCompleteQuestItems.isEmpty()) {
                     printWriter.println("COMPLETE QUEST ITEMS WITH ZERO QUANTITY");
-                    for(Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedCompleteQuestItems)) {
+                    for (Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedCompleteQuestItems)) {
                         printWriter.println(iwq.getLeft() + getExpiredStringLabel(iwq.getLeft()) + ":");
-                        for(Integer i : iwq.getRight()) {
+                        for (Integer i : iwq.getRight()) {
                             printWriter.println("  " + i);
                         }
                         printWriter.println();
@@ -552,40 +507,23 @@ public class MapleQuestItemFetcher {
 
             printWriter.close();
             System.out.println("Done!");
-        }
-
-        catch(FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + fileName + "'");
-        }
-        catch(IOException ex) {
+        } catch (IOException ex) {
             System.out.println("Error reading file '" + fileName + "'");
-        }
-
-        catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Warning: Could not establish connection to database to report quest data.");
             System.out.println(e.getMessage());
-        }
-
-        catch(ClassNotFoundException e) {
-            System.out.println("Error: could not find class");
-            System.out.println(e.getMessage());
-        }
-
-        catch(InstantiationException e) {
-            System.out.println("Error: instantiation failure");
-            System.out.println(e.getMessage());
-        }
-
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     public static void main(String[] args) {
-        System.setProperty("wzpath", wzPath);
+        DatabaseConnection.initializeConnectionPool(); // MapleItemInformationProvider loads some unrelated db data
         ii = MapleItemInformationProvider.getInstance();
-        
-        ReportQuestItemData();
+
+        reportQuestItemData();
     }
-    
 }
+
