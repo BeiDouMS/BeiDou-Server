@@ -8327,17 +8327,25 @@ public class MaplePacketCreator {
                 mplew.writeInt(transition);
                 return mplew.getPacket();
         }
-        
-        public static byte[] setNPCScriptable(Set<Pair<Integer, String>> scriptNpcDescriptions) {  // thanks to GabrielSin
+
+        /**
+         * Makes the NPCs provided set as scriptable, informing the client to search for js scripts for these NPCs even
+         * if they already have entries within the wz files.
+         *
+         * @param scriptableNpcIds Ids of npcs to enable scripts for.
+         * @return a packet which makes the npc's provided scriptable.
+         */
+        public static byte[] setNPCScriptable(Map<Integer, String> scriptableNpcIds) {  // thanks to GabrielSin
                 MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.SET_NPC_SCRIPTABLE.getValue());
-                mplew.write(scriptNpcDescriptions.size());
-                for (Pair<Integer, String> p : scriptNpcDescriptions) {
-                        mplew.writeInt(p.getLeft());
-                        mplew.writeMapleAsciiString(p.getRight());
+                mplew.write(scriptableNpcIds.size());
+                scriptableNpcIds.forEach((id, name) -> {
+                        mplew.writeInt(id);
+                        // The client needs a name for the npc conversation, which is displayed under etc when the npc has a quest available.
+                        mplew.writeMapleAsciiString(name);
                         mplew.writeInt(0); // start time
                         mplew.writeInt(Integer.MAX_VALUE); // end time
-                }
+                });
                 return mplew.getPacket();
         }
         
@@ -8383,17 +8391,17 @@ public class MaplePacketCreator {
                 final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.TOURNAMENT_SET_PRIZE.getValue());
 				
-		//0 = "You have failed the set the prize. Please check the item number again."
-		//1 = "You have successfully set the prize."
-		mplew.write(bSetPrize);
-		
-		mplew.write(bHasPrize);
-		
-		if(bHasPrize != 0)
-		{
-			mplew.writeInt(nItemID1);
-			mplew.writeInt(nItemID2);
-		}
+                //0 = "You have failed the set the prize. Please check the item number again."
+                //1 = "You have successfully set the prize."
+                mplew.write(bSetPrize);
+
+                mplew.write(bHasPrize);
+
+                if(bHasPrize != 0)
+                {
+                    mplew.writeInt(nItemID1);
+                    mplew.writeInt(nItemID2);
+                }
 		
                 return mplew.getPacket();
         }
@@ -8402,11 +8410,11 @@ public class MaplePacketCreator {
                 final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.TOURNAMENT_UEW.getValue());
 				
-		//Is this a bitflag o.o ?
-		//2 = "You have reached the finals by default."
-		//4 = "You have reached the semifinals by default."
-		//8 or 16 = "You have reached the round of %n by default." | Encodes nState as %n ?!
-		mplew.write(nState);
+                //Is this a bitflag o.o ?
+                //2 = "You have reached the finals by default."
+                //4 = "You have reached the semifinals by default."
+                //8 or 16 = "You have reached the round of %n by default." | Encodes nState as %n ?!
+                mplew.write(nState);
 			
                 return mplew.getPacket();
         }
