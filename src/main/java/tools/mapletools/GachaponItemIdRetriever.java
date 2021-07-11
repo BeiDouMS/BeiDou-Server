@@ -1,68 +1,36 @@
-/*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2018 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package maplegachaponitemidretriever;
+package tools.mapletools;
 
 import java.io.*;
-import java.sql.*;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author RonanLana
- * 
+ * <p>
  * This application reads metadata for the gachapons found on the "gachapon_items.txt"
  * recipe file, then checks up the Handbook DB (installed through MapleIdRetriever)
  * and translates the item names from the recipe file into their respective itemids.
  * The translated itemids are then stored in specific gachapon files inside the
  * "lib/gachapons" folder.
- *
+ * <p>
  * Estimated parse time: 1 minute
  */
-public class MapleGachaponItemidRetriever {
+public class GachaponItemIdRetriever {
+    private static final File INPUT_FILE = ToolConstants.getInputFile("gachapon_items.txt");
+    private static final File OUTPUT_DIRECTORY = ToolConstants.getOutputFile("gachapons");
+    private static final Connection con = SimpleDatabaseConnection.getConnection();
+    private static final Pattern pattern = Pattern.compile("(\\d*)%");
+    private static final int[] scrollsChances = new int[]{10, 15, 30, 60, 65, 70, 100};
+    private static final Map<GachaponScroll, List<Integer>> scrollItemids = new HashMap<>();
 
-    static String host = "jdbc:mysql://localhost:3306/cosmic";
-    static String driver = "com.mysql.jdbc.Driver";
-    static String username = "cosmic_server";
-    static String password = "snailshell";
-    
-    static Connection con = null;
-    static InputStreamReader fileReader = null;
-    static BufferedReader bufferedReader = null;
-    static PrintWriter printWriter = null;
-    
-    // ------- SET-UP section arguments --------
-    
-    static String directoryName = "./handbook/";
-    
-    // ------- SEARCH section arguments --------
-    
-    static String inputName = "lib/gachapon_items.txt";
-    static String outputPath = "lib/gachapons/";
-    
-    static Pattern p = Pattern.compile("(\\d*)%");
-    static int[] scrollsChances = new int[]{10, 15, 30, 60, 65, 70, 100};
-    
-    static Map<GachaponScroll, List<Integer>> scrollItemids = new HashMap<>();
-    
+    private static PrintWriter printWriter = null;
+
     private static void insertGachaponScrollItemid(Integer id, String name, String description, boolean both) {
         GachaponScroll gachaScroll = getGachaponScroll(name, description, both);
 
@@ -74,25 +42,25 @@ public class MapleGachaponItemidRetriever {
 
         list.add(id);
     }
-    
+
     private static void loadHandbookUseNames() throws SQLException {
         PreparedStatement ps = con.prepareStatement("SELECT * FROM `handbook` WHERE `id` >= 2040000 AND `id` < 2050000 ORDER BY `id` ASC;");
         ResultSet rs = ps.executeQuery();
 
-        while(rs.next()) {
+        while (rs.next()) {
             Integer id = rs.getInt("id");
             String name = rs.getString("name");
-            
+
             if (isUpgradeScroll(name)) {
                 String description = rs.getString("description");
                 insertGachaponScrollItemid(id, name, description, false);
                 insertGachaponScrollItemid(id, name, description, true);
             }
         }
-        
+
         rs.close();
         ps.close();
-        
+
         /*
         for (Entry<GachaponScroll, List<Integer>> e : scrollItemids.entrySet()) {
             System.out.println(e);
@@ -100,41 +68,41 @@ public class MapleGachaponItemidRetriever {
         System.out.println("------------");
         */
     }
-    
+
     private static class GachaponScroll {
         private String header;
         private String target;
         private String buff;
         private int prop;
-        
+
         private GachaponScroll(GachaponScroll from, int prop) {
             this.header = from.header;
             this.target = from.target;
             this.buff = from.buff;
             this.prop = prop;
         }
-        
+
         private GachaponScroll(String name, String description, boolean both) {
             String[] params = name.split(" for ");
             if (params.length < 3) {
                 return;
             }
-            
+
             String header = both ? "scroll" : " " + params[0];
             String target = params[1];
 
             int prop = 0;
             String buff = params[2];
 
-            Matcher m = p.matcher(buff);
+            Matcher m = pattern.matcher(buff);
             if (m.find()) {
-                prop = Integer.valueOf(m.group(1));
+                prop = Integer.parseInt(m.group(1));
                 buff = buff.substring(0, m.start() - 1).trim();
             } else {
-                m = p.matcher(description);
-                
+                m = pattern.matcher(description);
+
                 if (m.find()) {
-                    prop = Integer.valueOf(m.group(1));
+                    prop = Integer.parseInt(m.group(1));
                 }
             }
 
@@ -143,45 +111,54 @@ public class MapleGachaponItemidRetriever {
                 buff = buff.substring(0, idx);
             }
             buff = buff.replace(".", "");
-            
+
             this.header = header;
             this.target = target;
             this.buff = buff;
             this.prop = prop;
         }
-        
-        @Override    
+
+        @Override
         public int hashCode() {
             int result = prop ^ (prop >>> 32);
-            result = 31 * result + (header != null ? header.hashCode() : 0);        
+            result = 31 * result + (header != null ? header.hashCode() : 0);
             result = 31 * result + (target != null ? target.hashCode() : 0);
             result = 31 * result + (buff != null ? buff.hashCode() : 0);
-            return result;    
+            return result;
         }
-        
-        @Override    
-        public boolean equals(Object o) {        
-            if (this == o) return true;        
-            if (o == null || getClass() != o.getClass()) return false;        
-            GachaponScroll sc = (GachaponScroll) o;        
-            if (header != null ? !header.equals(sc.header) : sc.header != null) return false;        
-            if (target != null ? !target.equals(sc.target) : sc.target != null) return false;        
-            if (buff != null ? !buff.equals(sc.buff) : sc.buff != null) return false;
-            if (prop != sc.prop) return false;
-            return true;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            GachaponScroll sc = (GachaponScroll) o;
+            if (header != null ? !header.equals(sc.header) : sc.header != null) {
+                return false;
+            }
+            if (target != null ? !target.equals(sc.target) : sc.target != null) {
+                return false;
+            }
+            if (buff != null ? !buff.equals(sc.buff) : sc.buff != null) {
+                return false;
+            }
+            return prop == sc.prop;
         }
-        
+
         @Override
         public String toString() {
             return header + " for " + target + " for " + buff + " - " + prop + "%";
         }
-        
+
     }
-    
+
     private static String getGachaponScrollResults(String line, boolean both) {
         String str = "";
         List<GachaponScroll> gachaScrollList;
-            
+
         GachaponScroll gachaScroll = getGachaponScroll(line, "", both);
         if (gachaScroll.prop != 0) {
             gachaScrollList = Collections.singletonList(gachaScroll);
@@ -192,7 +169,7 @@ public class MapleGachaponItemidRetriever {
                 gachaScrollList.add(new GachaponScroll(gachaScroll, prop));
             }
         }
-        
+
         for (GachaponScroll gs : gachaScrollList) {
             List<Integer> gachaItemids = scrollItemids.get(gs);
             if (gachaItemids != null) {
@@ -209,10 +186,10 @@ public class MapleGachaponItemidRetriever {
                 }
             }
         }
-        
+
         return str;
     }
-    
+
     private static GachaponScroll getGachaponScroll(String name, String description, boolean both) {
         name = name.toLowerCase();
         name = name.replace("for acc ", "for accuracy ");
@@ -222,22 +199,22 @@ public class MapleGachaponItemidRetriever {
         name = name.replace("for attack", "for att");
         name = name.replace("1-handed", "one-handed");
         name = name.replace("2-handed", "two-handed");
-        
+
         return new GachaponScroll(name, description, both);
     }
-    
+
     private static boolean isUpgradeScroll(String name) {
         return name.matches("^(([D|d]ark )?[S|s]croll for).*");
     }
-    
+
     private static void fetchLineOnMapleHandbook(String line, String rarity) throws SQLException {
         String str = "";
         if (!isUpgradeScroll(line)) {
-            PreparedStatement ps = con.prepareStatement("SELECT `id` FROM `handbook` WHERE `name` LIKE ? COLLATE latin1_general_ci ORDER BY `id` ASC;");
+            PreparedStatement ps = con.prepareStatement("SELECT `id` FROM `handbook` WHERE `name` LIKE ? ORDER BY `id` ASC;");
             ps.setString(1, line);
 
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 int id = rs.getInt("id");
 
                 str += Integer.toString(id);
@@ -250,37 +227,37 @@ public class MapleGachaponItemidRetriever {
             str += getGachaponScrollResults(line, false);
             if (str.isEmpty()) {
                 str += getGachaponScrollResults(line, true);
-                
+
                 if (str.isEmpty()) {
                     System.out.println("NONE for '" + line + "' : " + getGachaponScroll(line, "", false));
                 }
             }
         }
-        
+
         if (str.isEmpty()) {
             str += line;
         }
-        
+
         if (rarity != null) {
             str += ("- " + rarity);
         }
 
         printWriter.println(str);
     }
-    
+
     private static void fetchDataOnMapleHandbook() throws SQLException {
         String line;
-        
+
         try {
-            fileReader = new InputStreamReader(new FileInputStream(inputName), "UTF-8");
-            bufferedReader = new BufferedReader(fileReader);
-            
+            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
             int skip = 0;
             boolean lineHeader = false;
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 if (skip > 0) {
                     skip--;
-                    
+
                     if (lineHeader) {
                         if (!line.isEmpty()) {
                             lineHeader = false;
@@ -291,14 +268,19 @@ public class MapleGachaponItemidRetriever {
                 } else if (line.isEmpty()) {
                     printWriter.println("");
                 } else if (line.startsWith("Gachapon ")) {
-                    String s[] = line.split("� ");
+                    String[] s = line.split("� ");
                     String gachaponName = s[s.length - 1];
                     gachaponName = gachaponName.replace(" ", "_");
                     gachaponName = gachaponName.toLowerCase();
-                    
-                    if (printWriter != null) printWriter.close();
-                    printWriter = new PrintWriter(outputPath + gachaponName + ".txt", "UTF-8");
-                    
+
+                    if (printWriter != null) {
+                        printWriter.close();
+                    }
+                    File outputFile = new File(OUTPUT_DIRECTORY, gachaponName + ".txt");
+                    setupDirectories(outputFile);
+
+                    printWriter = new PrintWriter(outputFile, StandardCharsets.UTF_8);
+
                     skip = 2;
                     lineHeader = true;
                 } else if (line.startsWith(".")) {
@@ -316,44 +298,33 @@ public class MapleGachaponItemidRetriever {
                 }
             }
 
-            if (printWriter != null) printWriter.close();
+            if (printWriter != null) {
+                printWriter.close();
+            }
             bufferedReader.close();
             fileReader.close();
-        }
-        catch(FileNotFoundException ex) {
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
-        }
-        catch(IOException ex) {
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
     }
-    
+
+    private static void setupDirectories(File file) {
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+    }
+
     public static void main(String[] args) {
-        
         try {
-            Class.forName(driver).newInstance();
-            con = DriverManager.getConnection(host, username, password);
-            
             loadHandbookUseNames();
             fetchDataOnMapleHandbook();
 
             con.close();
-        }
-        
-        catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Error: invalid SQL syntax");
             System.out.println(e.getMessage());
         }
-        
-        catch(ClassNotFoundException e) {
-            System.out.println("Error: could not find class");
-            System.out.println(e.getMessage());
-        }
-
-        catch(InstantiationException | IllegalAccessException e) {
-            System.out.println("Error: instantiation failure");
-            System.out.println(e.getMessage());
-        }
     }
-    
 }
+
