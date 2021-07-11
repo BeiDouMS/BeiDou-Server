@@ -24,6 +24,7 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 
 import java.io.File;
@@ -115,7 +116,7 @@ public class MapleSkillbookInformationProvider {
     }
     
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromQuests() {
-        MapleDataProvider questDataProvider = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "Quest.wz"));
+        MapleDataProvider questDataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
         MapleData actData = questDataProvider.getData("Act.img");
         MapleData checkData = questDataProvider.getData("Check.img");
 

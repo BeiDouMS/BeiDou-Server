@@ -23,16 +23,16 @@ package client;
 
 import constants.skills.*;
 import provider.*;
+import provider.wz.WZFiles;
 import server.MapleStatEffect;
 import server.life.Element;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SkillFactory {
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
-    private static final MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(MapleDataProviderFactory.fileInWZPath("Skill.wz"));
+    private static final MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
 
     public static Skill getSkill(int id) {
         return skills.get(id);
@@ -330,7 +330,7 @@ public class SkillFactory {
     }
 
     public static String getSkillName(int skillid) {
-        MapleData data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img");
+        MapleData data = MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img");
         StringBuilder skill = new StringBuilder();
         skill.append(skillid);
         if (skill.length() == 4) {

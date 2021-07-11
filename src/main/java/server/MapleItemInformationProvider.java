@@ -32,12 +32,12 @@ import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
 import net.server.Server;
 import provider.*;
+import provider.wz.WZFiles;
 import server.MakerItemFactory.MakerItemCreateEntry;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonsterInformationProvider;
 import tools.*;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -116,10 +116,10 @@ public class MapleItemInformationProvider {
 
     private MapleItemInformationProvider() {
         loadCardIdData();
-        itemData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Item.wz"));
-        equipData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Character.wz"));
-        stringData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/String.wz"));
-        etcData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Etc.wz"));
+        itemData = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
+        equipData = MapleDataProviderFactory.getDataProvider(WZFiles.CHARACTER);
+        stringData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+        etcData = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
         cashStringData = stringData.getData("Cash.img");
         consumeStringData = stringData.getData("Consume.img");
         eqpStringData = stringData.getData("Eqp.img");

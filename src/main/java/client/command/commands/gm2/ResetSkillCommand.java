@@ -27,8 +27,7 @@ import client.*;
 import client.command.Command;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
-
-import java.io.File;
+import provider.wz.WZFiles;
 
 public class ResetSkillCommand extends Command {
     {
@@ -38,7 +37,7 @@ public class ResetSkillCommand extends Command {
     @Override
     public void execute(MapleClient c, String[] params) {
         MapleCharacter player = c.getPlayer();
-        for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img").getChildren()) {
+        for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {
                 Skill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
                 player.changeSkillLevel(skill, (byte) 0, skill.getMaxLevel(), -1);

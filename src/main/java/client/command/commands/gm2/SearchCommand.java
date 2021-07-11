@@ -30,11 +30,10 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import tools.Pair;
-
-import java.io.File;
 
 public class SearchCommand extends Command {
     private static MapleData npcStringData;
@@ -45,7 +44,7 @@ public class SearchCommand extends Command {
     {
         setDescription("Search String.wz.");
         
-        MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
+        MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
         npcStringData = dataProvider.getData("Npc.img");
         mobStringData = dataProvider.getData("Mob.img");
         skillStringData = dataProvider.getData("Skill.img");

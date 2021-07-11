@@ -34,10 +34,10 @@ import net.server.world.MapleParty;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import tools.MaplePacketCreator;
 import tools.Pair;
 
-import java.io.File;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -68,7 +68,7 @@ public class MaplePartySearchCoordinator {
     private static Map<Integer, Set<Integer>> fetchNeighbouringMaps() {
         Map<Integer, Set<Integer>> mapLinks = new HashMap<>();
         
-        MapleData data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "Etc.wz")).getData("MapNeighbors.img");
+        MapleData data = MapleDataProviderFactory.getDataProvider(WZFiles.ETC).getData("MapNeighbors.img");
         if (data != null) {
             for (MapleData mapdata : data.getChildren()) {
                 int mapid = Integer.parseInt(mapdata.getName());

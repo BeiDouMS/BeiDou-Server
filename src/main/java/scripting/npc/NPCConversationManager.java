@@ -38,6 +38,7 @@ import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
+import provider.wz.WZFiles;
 import scripting.AbstractPlayerInteraction;
 import server.*;
 import server.MapleSkillbookInformationProvider.SkillBookEntry;
@@ -62,7 +63,6 @@ import tools.MaplePacketCreator;
 import tools.packets.Wedding;
 
 import java.awt.*;
-import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
@@ -382,7 +382,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
 	public void maxMastery() {
-		for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/" + "String.wz")).getData("Skill.img").getChildren()) {
+		for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
 			try {
 				Skill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
 				getPlayer().changeSkillLevel(skill, (byte) 0, skill.getMaxLevel(), -1);

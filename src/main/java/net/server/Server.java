@@ -985,7 +985,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        System.setProperty("wzpath", "wz");
         Security.setProperty("crypto.policy", "unlimited");
         AutoJCE.removeCryptographyRestrictions();
         Server.getInstance().init();

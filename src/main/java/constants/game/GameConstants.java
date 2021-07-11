@@ -5,11 +5,11 @@ import client.MapleJob;
 import config.YamlConfig;
 import constants.skills.Aran;
 import provider.*;
+import provider.wz.WZFiles;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import server.quest.MapleQuest;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -676,7 +676,7 @@ public class GameConstants {
     }
     
     private static int getMaxObstacleMobDamageFromWz() {
-        MapleDataProvider mapSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Map.wz"));
+        MapleDataProvider mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
         int maxMobDmg = 0;
         
         MapleDataDirectoryEntry root = mapSource.getRoot();

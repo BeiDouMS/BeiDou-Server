@@ -26,18 +26,18 @@ import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.MapleDataType;
+import provider.wz.WZFiles;
 import tools.Pair;
 import tools.StringUtil;
 
 import java.awt.*;
-import java.io.File;
 import java.util.List;
 import java.util.*;
 
 public class MapleLifeFactory {
 
-    private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Mob.wz"));
-    private final static MapleDataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/String.wz"));
+    private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
+    private final static MapleDataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
     private static MapleData mobStringData = stringDataWZ.getData("Mob.img");
     private static MapleData npcStringData = stringDataWZ.getData("Npc.img");
     private static Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
@@ -46,7 +46,7 @@ public class MapleLifeFactory {
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
         
-        MapleDataProvider uiDataWZ = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/UI.wz"));
+        MapleDataProvider uiDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.UI);
         for (MapleData bossData : uiDataWZ.getData("UIWindow.img").getChildByPath("MobGage/Mob").getChildren()) {
             ret.add(Integer.valueOf(bossData.getName()));
         }
@@ -322,7 +322,7 @@ public class MapleLifeFactory {
         private int id;
         private byte chance, x;
 
-        private loseItem(int id, byte chance, byte x) {
+        public loseItem(int id, byte chance, byte x) {
             this.id = id;
             this.chance = chance;
             this.x = x;
@@ -347,7 +347,7 @@ public class MapleLifeFactory {
         private int removeAfter;
         private int hp;
 
-        private selfDestruction(byte action, int removeAfter, int hp) {
+        public selfDestruction(byte action, int removeAfter, int hp) {
             this.action = action;
             this.removeAfter = removeAfter;
             this.hp = hp;
