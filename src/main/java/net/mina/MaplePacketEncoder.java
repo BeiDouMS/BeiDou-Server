@@ -21,19 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.mina;
 
-import config.YamlConfig;
 import client.MapleClient;
+import config.YamlConfig;
 import constants.net.OpcodeConstants;
-import net.server.coordinator.session.MapleSessionCoordinator;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
-import tools.MapleAESOFB;
+import tools.FilePrinter;
 import tools.HexTool;
+import tools.MapleAESOFB;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericLittleEndianAccessor;
-import tools.FilePrinter;
 
 public class MaplePacketEncoder implements ProtocolEncoder {
 
@@ -59,7 +58,7 @@ public class MaplePacketEncoder implements ProtocolEncoder {
                                 System.out.println("UnknownPacket:" + RecvTo);
                             }
                         } else {
-                            FilePrinter.print(FilePrinter.PACKET_STREAM + MapleSessionCoordinator.getSessionRemoteAddress(session) + ".txt", HexTool.toString(new byte[]{input[0], input[1]}) + " ...");
+                            FilePrinter.print(FilePrinter.PACKET_STREAM + ".txt", HexTool.toString(new byte[]{input[0], input[1]}) + " ...");
                         }
                     }
 

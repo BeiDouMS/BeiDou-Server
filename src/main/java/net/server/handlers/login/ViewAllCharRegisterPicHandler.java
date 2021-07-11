@@ -1,18 +1,18 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
 import net.server.world.World;
-import org.apache.mina.core.session.IoSession;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHandler {
 
@@ -53,12 +53,11 @@ public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHand
         c.updateHwid(hwid);
         
         if (c.hasBannedMac() || c.hasBannedHWID()) {
-            MapleSessionCoordinator.getInstance().closeSession(c.getSession(), true);
+            MapleSessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
-        
-        IoSession session = c.getSession();
-        AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptGameSession(session, c.getAccID(), hwid);
+
+        AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptGameSession(c, c.getAccID(), hwid);
         if (res != AntiMulticlientResult.SUCCESS) {
             c.announce(MaplePacketCreator.getAfterLoginError(parseAntiMulticlientError(res)));
             return;
@@ -66,7 +65,7 @@ public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHand
         
         Server server = Server.getInstance();
         if(!server.haveCharacterEntry(c.getAccID(), charId)) {
-            MapleSessionCoordinator.getInstance().closeSession(c.getSession(), true);
+            MapleSessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
         
@@ -83,7 +82,7 @@ public final class ViewAllCharRegisterPicHandler extends AbstractMaplePacketHand
         String pic = slea.readMapleAsciiString();
         c.setPic(pic);
         
-        String[] socket = server.getInetSocket(session, c.getWorld(), channel);
+        String[] socket = server.getInetSocket(c, c.getWorld(), channel);
         if (socket == null) {
             c.announce(MaplePacketCreator.getAfterLoginError(10));
             return;

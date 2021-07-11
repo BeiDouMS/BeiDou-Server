@@ -115,21 +115,8 @@ public class MapleServerHandler extends IoHandlerAdapter {
         session.setAttribute(MapleClient.CLIENT_REMOTE_ADDRESS, remoteHost);
         
         if (!Server.getInstance().isOnline()) {
-            MapleSessionCoordinator.getInstance().closeSession(session, true);
+            MapleSessionCoordinator.getInstance().closeSession(MapleClient.getPlaceholder(), true);
             return;
-        }
-        
-        if (!isLoginServerHandler()) {
-            if (Server.getInstance().getChannel(world, channel) == null) {
-                MapleSessionCoordinator.getInstance().closeSession(session, true);
-                return;
-            }
-        } else {
-            if (!MapleSessionCoordinator.getInstance().canStartLoginSession(session)) {
-                return;
-            }
-            
-            FilePrinter.print(FilePrinter.SESSION, "IoSession with " + session.getRemoteAddress() + " opened on " + sdf.format(Calendar.getInstance().getTime()), false);
         }
 
         final InitializationVector ivSend = InitializationVector.generateSend();
@@ -137,6 +124,20 @@ public class MapleServerHandler extends IoHandlerAdapter {
         MapleAESOFB sendCypher = new MapleAESOFB(ivSend, (short) (0xFFFF - ServerConstants.VERSION));
         MapleAESOFB recvCypher = new MapleAESOFB(ivRecv, ServerConstants.VERSION);
         MapleClient client = new MapleClient(sendCypher, recvCypher, session);
+
+        if (!isLoginServerHandler()) {
+            if (Server.getInstance().getChannel(world, channel) == null) {
+                MapleSessionCoordinator.getInstance().closeSession(MapleClient.getPlaceholder(), true);
+                return;
+            }
+        } else {
+            if (!MapleSessionCoordinator.getInstance().canStartLoginSession(client)) {
+                return;
+            }
+            
+            FilePrinter.print(FilePrinter.SESSION, "IoSession with " + session.getRemoteAddress() + " opened on " + sdf.format(Calendar.getInstance().getTime()), false);
+        }
+
         client.setWorld(world);
         client.setChannel(channel);
         client.setSessionId(sessionId.getAndIncrement()); // Generates a reasonable session id.
@@ -146,9 +147,9 @@ public class MapleServerHandler extends IoHandlerAdapter {
 
     private void closeMapleSession(IoSession session) {
         if (isLoginServerHandler()) {
-            MapleSessionCoordinator.getInstance().closeLoginSession(session);
+            MapleSessionCoordinator.getInstance().closeLoginSession(MapleClient.getPlaceholder());
         } else {
-            MapleSessionCoordinator.getInstance().closeSession(session, null);
+            MapleSessionCoordinator.getInstance().closeSession(MapleClient.getPlaceholder(), null);
         }
         
         MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);

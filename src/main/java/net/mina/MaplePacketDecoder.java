@@ -46,7 +46,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
     protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
         final MapleClient client = (MapleClient) session.getAttribute(MapleClient.CLIENT_KEY);
         if(client == null) {
-            MapleSessionCoordinator.getInstance().closeSession(session, true);
+            MapleSessionCoordinator.getInstance().closeSession(MapleClient.getPlaceholder(), true);
             return false;
         }
         
@@ -60,7 +60,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
         if (in.remaining() >= 4 && decoderState.packetlength == -1) {
             int packetHeader = in.getInt();
             if (!rcvdCrypto.isValidHeader(packetHeader)) {
-                MapleSessionCoordinator.getInstance().closeSession(session, true);
+                MapleSessionCoordinator.getInstance().closeSession(MapleClient.getPlaceholder(), true);
                 return false;
             }
             decoderState.packetlength = MapleAESOFB.getPacketLength(packetHeader);
@@ -87,7 +87,7 @@ public class MaplePacketDecoder extends CumulativeProtocolDecoder {
                         System.out.println("UnknownPacket:" + SendTo);
                     }
                 } else {
-                    FilePrinter.print(FilePrinter.PACKET_STREAM + MapleSessionCoordinator.getSessionRemoteAddress(session) + ".txt", HexTool.toString(new byte[]{decryptedPacket[0], decryptedPacket[1]}) + "...");
+                    FilePrinter.print(FilePrinter.PACKET_STREAM + ".txt", HexTool.toString(new byte[]{decryptedPacket[0], decryptedPacket[1]}) + "...");
                 }
             }
             return true;

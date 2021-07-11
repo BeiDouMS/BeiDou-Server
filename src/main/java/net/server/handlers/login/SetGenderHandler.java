@@ -44,7 +44,7 @@ public class SetGenderHandler extends AbstractMaplePacketHandler {
 
                 Server.getInstance().registerLoginState(c);
             } else {
-                MapleSessionCoordinator.getInstance().closeSession(c.getSession(), null);
+                MapleSessionCoordinator.getInstance().closeSession(c, null);
                 c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
             }
         }

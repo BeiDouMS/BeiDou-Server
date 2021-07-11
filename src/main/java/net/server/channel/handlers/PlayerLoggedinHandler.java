@@ -39,7 +39,6 @@ import net.server.guild.MapleGuild;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
-import org.apache.mina.core.session.IoSession;
 import scripting.event.EventInstanceManager;
 import server.life.MobSkill;
 import tools.DatabaseConnection;
@@ -112,11 +111,10 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
             }
 
             MapleCharacter player = wserv.getPlayerStorage().getCharacterById(cid);
-            IoSession session = c.getSession();
 
             String remoteHwid;
             if (player == null) {
-                remoteHwid = MapleSessionCoordinator.getInstance().pickLoginSessionHwid(session);
+                remoteHwid = MapleSessionCoordinator.getInstance().pickLoginSessionHwid(c);
                 if (remoteHwid == null) {
                     c.disconnect(true, false);
                     return;
@@ -126,10 +124,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
                 remoteHwid = clientHwid == null ? null : clientHwid.hwid();
             }
 
-            int hwidLen = remoteHwid.length();
-            session.setAttribute(MapleClient.CLIENT_HWID, remoteHwid);
-            String nibbleHwid = remoteHwid.substring(hwidLen - 8, hwidLen);
-            session.setAttribute(MapleClient.CLIENT_NIBBLEHWID, nibbleHwid);
+            c.setRemoteHwid(remoteHwid);
             c.setHwid(new Hwid(remoteHwid));
 
             if (!server.validateCharacteridInTransition(c, cid)) {
@@ -393,7 +388,10 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
             if (player.getMap().getHPDec() > 0) player.resetHpDecreaseTask();
 
             player.resetPlayerRates();
-            if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL == true) player.setPlayerRates();
+            if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
+                player.setPlayerRates();
+            }
+
             player.setWorldRates();
             player.updateCouponRates();
 

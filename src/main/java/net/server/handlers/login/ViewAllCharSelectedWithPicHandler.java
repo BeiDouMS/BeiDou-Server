@@ -1,19 +1,18 @@
 package net.server.handlers.login;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
+import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
+import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
 import net.server.world.World;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
-import client.MapleClient;
-import net.server.coordinator.session.MapleSessionCoordinator;
-import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
-import org.apache.mina.core.session.IoSession;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class ViewAllCharSelectedWithPicHandler extends AbstractMaplePacketHandler {
 
@@ -55,15 +54,13 @@ public class ViewAllCharSelectedWithPicHandler extends AbstractMaplePacketHandle
         c.updateHwid(hwid);
         
         if (c.hasBannedMac() || c.hasBannedHWID()) {
-            MapleSessionCoordinator.getInstance().closeSession(c.getSession(), true);
+            MapleSessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
-        
-        IoSession session = c.getSession();
-        
+
         Server server = Server.getInstance();
         if(!server.haveCharacterEntry(c.getAccID(), charId)) {
-            MapleSessionCoordinator.getInstance().closeSession(c.getSession(), true);
+            MapleSessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
         
@@ -78,13 +75,13 @@ public class ViewAllCharSelectedWithPicHandler extends AbstractMaplePacketHandle
         c.setChannel(channel);
         
         if (c.checkPic(pic)) {
-            String[] socket = server.getInetSocket(session, c.getWorld(), c.getChannel());
+            String[] socket = server.getInetSocket(c, c.getWorld(), c.getChannel());
             if(socket == null) {
                 c.announce(MaplePacketCreator.getAfterLoginError(10));
                 return;
             }
             
-            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptGameSession(session, c.getAccID(), hwid);
+            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptGameSession(c, c.getAccID(), hwid);
             if (res != AntiMulticlientResult.SUCCESS) {
                 c.announce(MaplePacketCreator.getAfterLoginError(parseAntiMulticlientError(res)));
                 return;

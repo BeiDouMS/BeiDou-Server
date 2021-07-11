@@ -12,6 +12,10 @@ public record Hwid (String hwid) {
     }
 
     public static Hwid fromClientString(String clientString) throws IllegalArgumentException {
+        if (clientString == null) {
+            throw new IllegalArgumentException("clientString must not be null");
+        }
+
         String[] split = clientString.split("_");
         if (split.length != 2 || split[1].length() != HWID_LENGTH) {
             throw new IllegalArgumentException("Hwid validation failed for hwid: " + clientString);

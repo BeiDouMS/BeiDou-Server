@@ -92,12 +92,12 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final String CLIENT_REMOTE_ADDRESS = "REMOTE_IP";
 
     private Hwid hwid;
+    private String remoteHwid; // Mac address + hwid in one. Retrieved from client when attempting to enter game.
     private String remoteAddress;
     private volatile boolean inTransition;
 
     private MapleAESOFB send;
     private MapleAESOFB receive;
-    private final IoSession session;
 
     private io.netty.channel.Channel ioChannel;
     private PacketProcessor packetProcessor;
@@ -148,13 +148,11 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         this.packetProcessor = packetProcessor;
         this.world = world;
         this.channel = channel;
-        this.session = null; // TODO remove once the other constructor is removed
     }
 
     public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
         this.send = send;
         this.receive = receive;
-        this.session = session;
     }
 
     @Override
@@ -266,16 +264,20 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return send;
     }
 
-    public IoSession getSession() {
-        return session;
-    }
-
     public Hwid getHwid() {
         return hwid;
     }
 
     public void setHwid(Hwid hwid) {
         this.hwid = hwid;
+    }
+
+    public String getRemoteHwid() {
+        return remoteHwid;
+    }
+
+    public void setRemoteHwid(String remoteHwid) {
+        this.remoteHwid = remoteHwid;
     }
 
     public String getRemoteAddress() {
@@ -352,7 +354,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         boolean ret = false;
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM ipbans WHERE ? LIKE CONCAT(ip, '%')")) {
-            ps.setString(1, session.getRemoteAddress().toString());
+            ps.setString(1, remoteAddress);
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 if (rs.getInt(1) > 0) {
@@ -576,7 +578,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         pinattempt++;
         if (pinattempt > 5) {
-            MapleSessionCoordinator.getInstance().closeSession(session, false);
+            MapleSessionCoordinator.getInstance().closeSession(this, false);
         }
         if (pin.equals(other)) {
             pinattempt = 0;
@@ -609,7 +611,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         picattempt++;
         if (picattempt > 5) {
-            MapleSessionCoordinator.getInstance().closeSession(session, false);
+            MapleSessionCoordinator.getInstance().closeSession(this, false);
         }
         if (pic.equals(other)) {    // thanks ryantpayton (HeavenClient) for noticing null pics being checked here
             picattempt = 0;
@@ -625,7 +627,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         loginattempt++;
         if (loginattempt > 4) {
             loggedIn = false;
-            MapleSessionCoordinator.getInstance().closeSession(session, false);
+            MapleSessionCoordinator.getInstance().closeSession(this, false);
             return 6;   // thanks Survival_Project for finding out an issue with AUTOMATIC_REGISTER here
         }
 
@@ -677,7 +679,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptLoginSession(session, nibbleHwid, accId, loginok == 4);
+            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptLoginSession(this, nibbleHwid, accId, loginok == 4);
 
             switch (res) {
                 case SUCCESS:
@@ -812,7 +814,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public void updateLoginState(int newState) {
         // rules out possibility of multiple account entries
         if (newState == LOGIN_LOGGEDIN) {
-            MapleSessionCoordinator.getInstance().updateOnlineClient(session);
+            MapleSessionCoordinator.getInstance().updateOnlineClient(this);
         }
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -1046,18 +1048,14 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 }
             }
         }
+
+        MapleSessionCoordinator.getInstance().closeSession(this, false);
+
         if (!serverTransition && isLoggedIn()) {
-            MapleSessionCoordinator.getInstance().closeSession(session, false);
             updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
-            session.removeAttribute(MapleClient.CLIENT_KEY); // prevents double dcing during login
 
             clear();
         } else {
-            if (session.containsAttribute(MapleClient.CLIENT_KEY)) {
-                MapleSessionCoordinator.getInstance().closeSession(session, false);
-                session.removeAttribute(MapleClient.CLIENT_KEY);
-            }
-
             if (!Server.getInstance().hasCharacteridInTransition(this)) {
                 updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
             }
@@ -1154,18 +1152,9 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         lastPong = Server.getInstance().getCurrentTime();
     }
 
+    @Deprecated(forRemoval = true)
     public void testPing(long timeThen) {
-        try {
-            if (lastPong < timeThen) {
-                if (session != null && session.isConnected()) {
-                    MapleSessionCoordinator.getInstance().closeSession(session, false);
-                    updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
-                    session.removeAttribute(MapleClient.CLIENT_KEY);
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        throw new UnsupportedOperationException();
     }
 
     public void checkIfIdle(final IdleStateEvent event) {
@@ -1522,7 +1511,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             return;
         }
 
-        String[] socket = Server.getInstance().getInetSocket(this.getSession(), getWorld(), channel);
+        String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
             announce(MaplePacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
             announce(MaplePacketCreator.enableActions());
@@ -1619,8 +1608,13 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         announce(MaplePacketCreator.enableCSUse(player));
     }
 
+    @Deprecated
     public String getNibbleHWID() {
-        return (String) session.getAttribute(MapleClient.CLIENT_NIBBLEHWID);
+        if (hwid != null) {
+            return hwid.hwid();
+        }
+
+        return null;
     }
 
     public boolean canBypassPin() {
@@ -1637,5 +1631,9 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void setLanguage(int lingua) {
         this.lang = lingua;
+    }
+
+    public static MapleClient getPlaceholder() {
+        return null;
     }
 }
