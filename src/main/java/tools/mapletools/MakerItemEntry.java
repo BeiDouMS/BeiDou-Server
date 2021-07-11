@@ -17,7 +17,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package mapleskillmakerfetcher;
+package tools.mapletools;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author RonanLana
  */
-public class MapleMakerItemEntry {
+public class MakerItemEntry {
     public int id = -1;
     public int itemid = -1;
     public int reqLevel = -1;
@@ -43,7 +43,7 @@ public class MapleMakerItemEntry {
     public List<int[]> recipeList = null;
     public List<int[]> randomList = null;
     
-    public MapleMakerItemEntry(int id, int itemid, int reqLevel, int reqMakerLevel, int reqItem, int reqMeso, int reqEquip, int catalyst, int quantity, int tuc, int recipeCount, int recipeItem, List<int[]> recipeList, List<int[]> randomList) {
+    MakerItemEntry(int id, int itemid, int reqLevel, int reqMakerLevel, int reqItem, int reqMeso, int reqEquip, int catalyst, int quantity, int tuc, int recipeCount, int recipeItem, List<int[]> recipeList, List<int[]> randomList) {
         this.id = id;
         this.itemid = itemid;
         this.reqLevel = reqLevel;
