@@ -25,9 +25,9 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import tools.StringUtil;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class MobAttackInfoFactory {
     private static Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
-    private static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Mob.wz"));
+    private static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
 
     public static MobAttackInfo getMobAttackInfo(MapleMonster mob, int attack) {
         MobAttackInfo ret = mobAttacks.get(mob.getId() + "" + attack);

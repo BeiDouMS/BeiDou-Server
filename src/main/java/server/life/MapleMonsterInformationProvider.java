@@ -26,12 +26,12 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
 import tools.Randomizer;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -227,7 +227,7 @@ public class MapleMonsterInformationProvider {
     }
 
     public static ArrayList<Pair<Integer, String>> getMobsIDsFromName(String search) {
-        MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
+        MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
         ArrayList<Pair<Integer, String>> retMobs = new ArrayList<>();
         MapleData data = dataProvider.getData("Mob.img");
         List<Pair<Integer, String>> mobPairList = new LinkedList<>();
@@ -267,7 +267,7 @@ public class MapleMonsterInformationProvider {
     public String getMobNameFromId(int id) {
         String mobName = mobNameCache.get(id);
         if (mobName == null) {
-            MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(new File("wz/String.wz"));
+            MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
             MapleData mobData = dataProvider.getData("Mob.img");
             
             mobName = MapleDataTool.getString(mobData.getChildByPath(id + "/name"), "");

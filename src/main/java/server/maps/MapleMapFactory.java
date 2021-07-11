@@ -25,6 +25,7 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import scripting.event.EventInstanceManager;
 import server.life.*;
 import server.partyquest.GuardianSpawnPoint;
@@ -32,7 +33,6 @@ import tools.DatabaseConnection;
 import tools.StringUtil;
 
 import java.awt.*;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,8 +47,8 @@ public class MapleMapFactory {
     private static MapleDataProvider mapSource;
     
     static {
-        nameData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/String.wz")).getData("Map.img");
-        mapSource = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Map.wz"));
+        nameData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+        mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
     }
     
     private static void loadLifeFromWz(MapleMap map, MapleData mapData) {

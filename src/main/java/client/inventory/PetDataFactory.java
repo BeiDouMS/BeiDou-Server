@@ -25,8 +25,8 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Danny (Leifde)
  */
 public class PetDataFactory {
-    private static MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Item.wz"));
+    private static MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
     private static Map<String, PetCommand> petCommands = new HashMap<>();
     private static Map<Integer, Integer> petHunger = new HashMap<>();
 

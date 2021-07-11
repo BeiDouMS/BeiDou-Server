@@ -21,18 +21,18 @@
 */
 package provider;
 
-import java.io.File;
-import java.io.IOException;
 import provider.wz.WZFile;
+import provider.wz.WZFiles;
 import provider.wz.XMLWZFile;
 
-public class MapleDataProviderFactory {
-    private final static String wzPath = System.getProperty("wzpath");
+import java.io.File;
+import java.io.IOException;
 
-    private static MapleDataProvider getWZ(File in, boolean provideImages) {
+public class MapleDataProviderFactory {
+    private static MapleDataProvider getWZ(File in) {
         if (in.getName().toLowerCase().endsWith("wz") && !in.isDirectory()) {
             try {
-                return new WZFile(in, provideImages);
+                return new WZFile(in, false);
             } catch (IOException e) {
                 throw new RuntimeException("Loading WZ File failed", e);
             }
@@ -41,15 +41,7 @@ public class MapleDataProviderFactory {
         }
     }
 
-    public static MapleDataProvider getDataProvider(File in) {
-        return getWZ(in, false);
-    }
-
-    public static MapleDataProvider getImageProvidingDataProvider(File in) {
-        return getWZ(in, true);
-    }
-
-    public static File fileInWZPath(String filename) {
-        return new File(wzPath, filename);
+    public static MapleDataProvider getDataProvider(WZFiles in) {
+        return getWZ(in.getFile());
     }
 }

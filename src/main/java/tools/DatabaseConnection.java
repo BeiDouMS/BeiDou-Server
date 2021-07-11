@@ -63,6 +63,10 @@ public class DatabaseConnection {
      * @return true if connection to the database initiated successfully, false if not successful
      */
     public static boolean initializeConnectionPool() {
+        if (dataSource != null) {
+            return true;
+        }
+
         log.info("Initializing connection pool...");
         final HikariConfig config = getConfig();
         Instant initStart = Instant.now();

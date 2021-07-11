@@ -25,12 +25,12 @@ import client.MapleCharacter;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
+import provider.wz.WZFiles;
 import server.TimerManager;
 import server.maps.MapleMap;
 import tools.MaplePacketCreator;
 import tools.Randomizer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +43,7 @@ public final class MapleOxQuiz {
     private int question = 1;
     private MapleMap map = null;
     private int expGain = 200;
-    private static MapleDataProvider stringData = MapleDataProviderFactory.getDataProvider(new File(System.getProperty("wzpath") + "/Etc.wz"));
+    private static MapleDataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
 
     public MapleOxQuiz(MapleMap map) {
         this.map = map;
