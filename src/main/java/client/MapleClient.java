@@ -1149,7 +1149,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void pongReceived() {
-        lastPong = Server.getInstance().getCurrentTime();
+        lastPong = System.currentTimeMillis();
     }
 
     @Deprecated(forRemoval = true)

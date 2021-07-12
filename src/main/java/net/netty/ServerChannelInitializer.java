@@ -12,6 +12,7 @@ import tools.MaplePacketCreator;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
+    private static final int IDLE_TIME_SECONDS = 30;
     static final AtomicLong sessionId = new AtomicLong(7777);
 
     void initPipeline(SocketChannel socketChannel, MapleClient client) {
@@ -27,7 +28,7 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
 
     private void setUpHandlers(ChannelPipeline pipeline, InitializationVector sendIv, InitializationVector recvIv,
                                MapleClient client) {
-        pipeline.addFirst("IdleStateHandler", new IdleStateHandler(30, 30, 0));
+        pipeline.addLast("IdleStateHandler", new IdleStateHandler(0, 0, IDLE_TIME_SECONDS));
         pipeline.addLast("PacketCodec", new PacketCodec(ClientCyphers.of(sendIv, recvIv)));
         pipeline.addLast("MapleClient", client);
     }
