@@ -91,6 +91,8 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final String CLIENT_NIBBLEHWID = "HWID2";
     public static final String CLIENT_REMOTE_ADDRESS = "REMOTE_IP";
 
+    private final Type type;
+
     private Hwid hwid;
     private String remoteHwid; // Mac address + hwid in one. Retrieved from client when attempting to enter game.
     private String remoteAddress;
@@ -136,6 +138,11 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private long lastPacket = System.currentTimeMillis();
     private int lang = 0;
 
+    public enum Type {
+        LOGIN,
+        CHANNEL
+    }
+
     public void updateLastPacket() {
         lastPacket = System.currentTimeMillis();
     }
@@ -144,15 +151,21 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return lastPacket;
     }
 
-    public MapleClient(PacketProcessor packetProcessor, int world, int channel) {
+    public MapleClient(Type type, PacketProcessor packetProcessor, int world, int channel) {
+        this.type = type;
         this.packetProcessor = packetProcessor;
         this.world = world;
         this.channel = channel;
     }
 
     public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
+        this.type = null;
         this.send = send;
         this.receive = receive;
+    }
+
+    public static MapleClient createMock() {
+        return new MapleClient(null, null, -123, -123);
     }
 
     @Override
@@ -209,7 +222,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         updateLastPacket();
-        super.channelRead(ctx, msg);
     }
 
     @Override
@@ -226,18 +238,23 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         if (cause instanceof InvalidPacketHeaderException) {
-            // TODO close session through MapleSessionCoordinator
+            MapleSessionCoordinator.getInstance().closeSession(this, true);
         } else if (cause instanceof IOException) {
-            closeSession();
-        } else {
-
+            closeMapleSession();
         }
-
-        super.exceptionCaught(ctx, cause);
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
+        closeMapleSession();
+    }
+
+    private void closeMapleSession() {
+        switch (type) {
+            case LOGIN -> MapleSessionCoordinator.getInstance().closeLoginSession(this);
+            case CHANNEL -> MapleSessionCoordinator.getInstance().closeSession(this, null);
+        }
+
         try {
             // client freeze issues on session transition states found thanks to yolinlin, Omo Oppa, Nozphex
             if (!inTransition) {
@@ -245,6 +262,8 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             }
         } catch (Throwable t) {
             log.warn("Account stuck", t);
+        } finally {
+            closeSession();
         }
     }
 

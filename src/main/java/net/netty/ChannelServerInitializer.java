@@ -3,6 +3,8 @@ package net.netty;
 import client.MapleClient;
 import io.netty.channel.socket.SocketChannel;
 import net.PacketProcessor;
+import net.server.Server;
+import net.server.coordinator.session.MapleSessionCoordinator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +22,17 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
     @Override
     public void initChannel(SocketChannel socketChannel) {
         final String clientIp = socketChannel.remoteAddress().getHostName();
-        log.debug("Client connected to world {}, channel {} from {}", world, channel, clientIp);
+        log.debug("Client connecting to world {}, channel {} from {}", world, channel, clientIp);
 
         PacketProcessor packetProcessor = PacketProcessor.getChannelServerProcessor(world, channel);
-        final MapleClient client = new MapleClient(packetProcessor, world, channel);
+        final MapleClient client = new MapleClient(MapleClient.Type.CHANNEL, packetProcessor, world, channel);
         client.setSessionId(sessionId.getAndIncrement());
+
+        if (Server.getInstance().getChannel(world, channel) == null) {
+            MapleSessionCoordinator.getInstance().closeSession(client, true);
+            socketChannel.close();
+            return;
+        }
 
         initPipeline(socketChannel, client);
     }

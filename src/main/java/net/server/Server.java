@@ -35,8 +35,6 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
-import net.MapleServerHandler;
-import net.mina.MapleCodecFactory;
 import net.netty.LoginServer;
 import net.server.audit.ThreadTracker;
 import net.server.audit.locks.MonitoredLockType;
@@ -54,12 +52,6 @@ import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.task.*;
 import net.server.world.World;
-import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.buffer.SimpleBufferAllocator;
-import org.apache.mina.core.service.IoAcceptor;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.CashShop.CashItemFactory;
@@ -74,8 +66,6 @@ import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.Pair;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.security.Security;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -106,7 +96,6 @@ public class Server {
     private static final Map<Integer, Integer> couponRates = new HashMap<>(30);
     private static final List<Integer> activeCoupons = new LinkedList<>();
 
-    private IoAcceptor acceptor;
     private LoginServer loginServer;
     private List<Map<Integer, String>> channels = new LinkedList<>();
     private List<World> worlds = new ArrayList<>();
@@ -929,22 +918,6 @@ public class Server {
         LoginServer loginServer = new LoginServer(port);
         loginServer.start();
         return loginServer;
-    }
-
-    private IoAcceptor initAcceptor(int port) {
-        IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan
-        IoBuffer.setAllocator(new SimpleBufferAllocator());
-        acceptor = new NioSocketAcceptor();
-        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
-        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
-        acceptor.setHandler(new MapleServerHandler());
-        try {
-            acceptor.bind(new InetSocketAddress(port));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return acceptor;
     }
 
     private static void setAllLoggedOut(Connection con) throws SQLException {
@@ -1958,8 +1931,7 @@ public class Server {
         TimerManager.getInstance().stop();
 
         System.out.println("Worlds + Channels are offline.");
-        acceptor.unbind();
-        acceptor = null;
+        loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             new Thread(() -> System.exit(0)).start();
         } else {

@@ -295,7 +295,7 @@ public class MapleSessionCoordinator {
             client.setHwid(Hwid.fromClientString(remoteHwid));
         }
 
-        MapleClient fakeClient = new MapleClient(null, null, null);
+        MapleClient fakeClient = MapleClient.createMock();
         Integer chrId = Server.getInstance().freeCharacteridInTransition(client);
         if (chrId != null) {
             try {
@@ -313,15 +313,14 @@ public class MapleSessionCoordinator {
             client = fetchInTransitionSessionClient(client);
         }
         
-        Hwid hwid = client.getHwid();
+        final Hwid hwid = client.getHwid();
         client.setHwid(null); // making sure to clean up calls to this function on login phase
         if (hwid != null) {
             onlineRemoteHwids.remove(hwid.hwid());
         }
         
-        String remoteHwid = client.getRemoteHwid();
+        final String remoteHwid = client.getRemoteHwid();
         client.setRemoteHwid(null);
-        // TODO: client.setHwid(null);
         if (remoteHwid != null) {
             onlineRemoteHwids.remove(remoteHwid);
         }

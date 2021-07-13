@@ -24,8 +24,6 @@ package net.server.channel;
 import client.MapleCharacter;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import net.MapleServerHandler;
-import net.mina.MapleCodecFactory;
 import net.netty.ChannelServer;
 import net.server.PlayerStorage;
 import net.server.Server;
@@ -40,13 +38,6 @@ import net.server.services.type.ChannelServices;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.World;
-import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.buffer.SimpleBufferAllocator;
-import org.apache.mina.core.service.IoAcceptor;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.transport.socket.SocketSessionConfig;
-import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventScriptManager;
@@ -59,21 +50,22 @@ import tools.MaplePacketCreator;
 import tools.Pair;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 
 public final class Channel {
     private static final Logger log = LoggerFactory.getLogger(Channel.class);
+    private static final int BASE_PORT = 7575;
 
-    private int port = 7575;
+    private final int port;
+    private final String ip;
+    private final int world;
+    private final int channel;
+
     private PlayerStorage players = new PlayerStorage();
-    private int world, channel;
     private ChannelServer channelServer;
-    private IoAcceptor acceptor;
-    private String ip, serverMessage;
+    private String serverMessage;
     private MapleMapManager mapManager;
     private EventScriptManager eventSM;
     private ServicesManager services;
@@ -121,12 +113,11 @@ public final class Channel {
         
         this.ongoingStartTime = startTime + 10000;  // rude approach to a world's last channel boot time, placeholder for the 1st wedding reservation ever
         this.mapManager = new MapleMapManager(null, world, channel);
+        this.port = BASE_PORT + (this.channel - 1) + (world * 100);
+        this.ip = YamlConfig.config.server.HOST + ":" + port;
+
         try {
-            port = 7575 + this.channel - 1;
-            port += (world * 100);
-            ip = YamlConfig.config.server.HOST + ":" + port;
-            // acceptor = initAcceptor();
-            channelServer = initServer(port, world, channel);
+            this.channelServer = initServer(port, world, channel);
             expedType.addAll(Arrays.asList(MapleExpeditionType.values()));
             
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
@@ -150,24 +141,12 @@ public final class Channel {
             
             log.info("Channel {}: Listening on port {}", getId(), port);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Error during channel initialization", e);
         }
     }
 
-    private IoAcceptor initAcceptor() throws IOException {
-        IoBuffer.setUseDirectBuffer(false);
-        IoBuffer.setAllocator(new SimpleBufferAllocator());
-        IoAcceptor acceptor = new NioSocketAcceptor();
-        acceptor.setHandler(new MapleServerHandler(world, channel));
-        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
-        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
-        acceptor.bind(new InetSocketAddress(port));
-        ((SocketSessionConfig) acceptor.getSessionConfig()).setTcpNoDelay(true);
-        return acceptor;
-    }
-
     private ChannelServer initServer(int port, int world, int channel) {
-        this.channelServer = new ChannelServer(port, world, channel);
+        ChannelServer channelServer = new ChannelServer(port, world, channel);
         channelServer.start();
         return channelServer;
     }
@@ -202,10 +181,8 @@ public final class Channel {
             
             closeChannelSchedules();
             players = null;
-            
-            MapleServerHandler handler = (MapleServerHandler) acceptor.getHandler();
-            handler.dispose();
-            acceptor.unbind();
+
+            channelServer.stop();
             
             finishedShutdown = true;
             System.out.println("Successfully shut down Channel " + channel + " on World " + world + "\r\n");
