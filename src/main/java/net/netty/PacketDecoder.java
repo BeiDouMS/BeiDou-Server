@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
-import net.mina.MapleCustomEncryption;
+import net.MapleCustomEncryption;
 import net.packet.ByteBufInPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

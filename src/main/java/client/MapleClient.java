@@ -45,7 +45,6 @@ import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientRes
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.world.*;
-import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.AbstractPlayerInteraction;
@@ -86,10 +85,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
     public static final int LOGIN_LOGGEDIN = 2;
-    public static final String CLIENT_KEY = "CLIENT";
-    public static final String CLIENT_HWID = "HWID";
-    public static final String CLIENT_NIBBLEHWID = "HWID2";
-    public static final String CLIENT_REMOTE_ADDRESS = "REMOTE_IP";
 
     private final Type type;
 
@@ -97,9 +92,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private String remoteHwid; // Mac address + hwid in one. Retrieved from client when attempting to enter game.
     private String remoteAddress;
     private volatile boolean inTransition;
-
-    private MapleAESOFB send;
-    private MapleAESOFB receive;
 
     private io.netty.channel.Channel ioChannel;
     private PacketProcessor packetProcessor;
@@ -156,12 +148,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         this.packetProcessor = packetProcessor;
         this.world = world;
         this.channel = channel;
-    }
-
-    public MapleClient(MapleAESOFB send, MapleAESOFB receive, IoSession session) {
-        this.type = null;
-        this.send = send;
-        this.receive = receive;
     }
 
     public static MapleClient createMock() {
@@ -273,14 +259,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void disconnectSession() {
         ioChannel.disconnect();
-    }
-
-    public MapleAESOFB getReceiveCrypto() {
-        return receive;
-    }
-
-    public MapleAESOFB getSendCrypto() {
-        return send;
     }
 
     public Hwid getHwid() {
@@ -1097,9 +1075,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         this.birthday = null;
         this.engines = null;
         this.player = null;
-        this.receive = null;
-        this.send = null;
-        //this.session = null;
     }
 
     public void setCharacterOnSessionTransitionState(int cid) {
@@ -1169,11 +1144,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void pongReceived() {
         lastPong = System.currentTimeMillis();
-    }
-
-    @Deprecated(forRemoval = true)
-    public void testPing(long timeThen) {
-        throw new UnsupportedOperationException();
     }
 
     public void checkIfIdle(final IdleStateEvent event) {
