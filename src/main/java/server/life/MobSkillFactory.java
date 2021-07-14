@@ -82,6 +82,7 @@ public class MobSkillFactory {
                     int hp = MapleDataTool.getInt("hp", skillData, 100);
                     int x = MapleDataTool.getInt("x", skillData, 1);
                     int y = MapleDataTool.getInt("y", skillData, 1);
+                    int count = MapleDataTool.getInt("count", skillData, 1);
                     long duration = MapleDataTool.getInt("time", skillData, 0) * 1000;
                     long cooltime = MapleDataTool.getInt("interval", skillData, 0) * 1000;
                     int iprop = MapleDataTool.getInt("prop", skillData, 100);
@@ -103,6 +104,7 @@ public class MobSkillFactory {
                     ret.setSpawnEffect(effect);
                     ret.setX(x);
                     ret.setY(y);
+                    ret.setCount(count);
                     ret.setProp(prop);
                     ret.setLimit(limit);
                     ret.setLtRb(lt, rb);
