@@ -93,10 +93,10 @@ public class MapleSessionCoordinator {
     }
     
     public static String getSessionRemoteHost(MapleClient client) {
-        String nibbleHwid = client.getNibbleHWID();
+        Hwid hwid = client.getHwid();
         
-        if (nibbleHwid != null) {
-            return client.getRemoteAddress() + "-" + nibbleHwid;
+        if (hwid != null) {
+            return client.getRemoteAddress() + "-" + hwid.hwid();
         } else {
             return client.getRemoteAddress();
         }

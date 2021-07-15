@@ -579,7 +579,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
         if (pin.equals(other)) {
             pinattempt = 0;
-            MapleLoginBypassCoordinator.getInstance().registerLoginBypassEntry(getNibbleHWID(), accId, false);
+            MapleLoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, false);
             return true;
         }
         return false;
@@ -612,7 +612,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
         if (pic.equals(other)) {    // thanks ryantpayton (HeavenClient) for noticing null pics being checked here
             picattempt = 0;
-            MapleLoginBypassCoordinator.getInstance().registerLoginBypassEntry(getNibbleHWID(), accId, true);
+            MapleLoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, true);
             return true;
         }
         return false;
@@ -1597,21 +1597,12 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         announce(MaplePacketCreator.enableCSUse(player));
     }
 
-    @Deprecated
-    public String getNibbleHWID() {
-        if (hwid != null) {
-            return hwid.hwid();
-        }
-
-        return null;
-    }
-
     public boolean canBypassPin() {
-        return MapleLoginBypassCoordinator.getInstance().canLoginBypass(getNibbleHWID(), accId, false);
+        return MapleLoginBypassCoordinator.getInstance().canLoginBypass(hwid, accId, false);
     }
 
     public boolean canBypassPic() {
-        return MapleLoginBypassCoordinator.getInstance().canLoginBypass(getNibbleHWID(), accId, true);
+        return MapleLoginBypassCoordinator.getInstance().canLoginBypass(hwid, accId, true);
     }
 
     public int getLanguage() {
@@ -1620,9 +1611,5 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void setLanguage(int lingua) {
         this.lang = lingua;
-    }
-
-    public static MapleClient getPlaceholder() {
-        return null;
     }
 }
