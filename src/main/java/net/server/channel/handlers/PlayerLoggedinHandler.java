@@ -112,20 +112,18 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
 
             MapleCharacter player = wserv.getPlayerStorage().getCharacterById(cid);
 
-            String remoteHwid;
+            final Hwid hwid;
             if (player == null) {
-                remoteHwid = MapleSessionCoordinator.getInstance().pickLoginSessionHwid(c);
-                if (remoteHwid == null) {
+                hwid = MapleSessionCoordinator.getInstance().pickLoginSessionHwid(c);
+                if (hwid == null) {
                     c.disconnect(true, false);
                     return;
                 }
             } else {
-                Hwid clientHwid = player.getClient().getHwid();
-                remoteHwid = clientHwid == null ? null : clientHwid.hwid();
+                hwid = player.getClient().getHwid();
             }
 
-            c.setRemoteHwid(remoteHwid);
-            c.setHwid(new Hwid(remoteHwid));
+            c.setHwid(hwid);
 
             if (!server.validateCharacteridInTransition(c, cid)) {
                 c.disconnect(true, false);

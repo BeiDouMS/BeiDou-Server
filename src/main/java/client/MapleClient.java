@@ -89,7 +89,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private final Type type;
 
     private Hwid hwid;
-    private String remoteHwid; // Mac address + hwid in one. Retrieved from client when attempting to enter game.
     private String remoteAddress;
     private volatile boolean inTransition;
 
@@ -267,14 +266,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void setHwid(Hwid hwid) {
         this.hwid = hwid;
-    }
-
-    public String getRemoteHwid() {
-        return remoteHwid;
-    }
-
-    public void setRemoteHwid(String remoteHwid) {
-        this.remoteHwid = remoteHwid;
     }
 
     public String getRemoteAddress() {
@@ -618,7 +609,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return false;
     }
 
-    public int login(String login, String pwd, String nibbleHwid) {
+    public int login(String login, String pwd, Hwid hwid) {
         int loginok = 5;
 
         loginattempt++;
@@ -676,7 +667,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptLoginSession(this, nibbleHwid, accId, loginok == 4);
+            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
 
             switch (res) {
                 case SUCCESS:
@@ -756,16 +747,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return ipAddress;
     }
 
-    public void updateHwid(String hwidClientString) {
-        final Hwid hwid;
-        try {
-            hwid = Hwid.fromClientString(hwidClientString);
-        } catch (IllegalArgumentException e) {
-            log.warn("Failed to create hwid from client string: {}", hwidClientString, e);
-            this.disconnect(false, false);
-            return;
-        }
-
+    public void updateHwid(Hwid hwid) {
         this.hwid = hwid;
 
         try (Connection con = DatabaseConnection.getConnection();

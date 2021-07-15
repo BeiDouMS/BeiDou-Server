@@ -27,20 +27,20 @@ class HostHwidCache {
         }
     }
 
-    void addEntry(String remoteHost, String remoteHwid) {
-        hostHwidCache.put(remoteHost, HostHwid.createWithDefaultExpiry(remoteHwid));
+    void addEntry(String remoteHost, Hwid hwid) {
+        hostHwidCache.put(remoteHost, HostHwid.createWithDefaultExpiry(hwid));
     }
 
     HostHwid getEntry(String remoteHost) {
         return hostHwidCache.get(remoteHost);
     }
 
-    String removeEntryAndGetItsHwid(String remoteHost) {
+    Hwid removeEntryAndGetItsHwid(String remoteHost) {
         HostHwid hostHwid = hostHwidCache.remove(remoteHost);
         return hostHwid == null ? null : hostHwid.hwid();
     }
 
-    String getEntryHwid(String remoteHost) {
+    Hwid getEntryHwid(String remoteHost) {
         HostHwid hostHwid = hostHwidCache.get(remoteHost);
         return hostHwid == null ? null : hostHwid.hwid();
     }

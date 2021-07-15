@@ -26,6 +26,7 @@ import client.MapleClient;
 import config.YamlConfig;
 import net.MaplePacketHandler;
 import net.server.Server;
+import net.server.coordinator.session.Hwid;
 import tools.BCrypt;
 import tools.DatabaseConnection;
 import tools.HexTool;
@@ -66,8 +67,8 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
 
         slea.skip(6);   // localhost masked the initial part with zeroes...
         byte[] hwidNibbles = slea.read(4);
-        String nibbleHwid = HexTool.toCompressedString(hwidNibbles);
-        int loginok = c.login(login, pwd, nibbleHwid);
+        Hwid hwid = new Hwid(HexTool.bytesToHex(hwidNibbles));
+        int loginok = c.login(login, pwd, hwid);
 
 
         if (YamlConfig.config.server.AUTOMATIC_REGISTER && loginok == 5) {
@@ -87,7 +88,7 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
                 c.setAccID(-1);
                 e.printStackTrace();
             } finally {
-                loginok = c.login(login, pwd, nibbleHwid);
+                loginok = c.login(login, pwd, hwid);
             }
         }
 

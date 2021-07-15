@@ -60,22 +60,22 @@ public class MapleSessionCoordinator {
     private final SessionInitialization sessionInit = new SessionInitialization();
     private final LoginStorage loginStorage = new LoginStorage();
     private final Map<Integer, MapleClient> onlineClients = new HashMap<>(); // Key: account id
-    private final Set<String> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
+    private final Set<Hwid> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
     private final Map<String, Set<MapleClient>> loginRemoteHosts = new HashMap<>(); // Key: Ip (+ nibblehwid)
     private final HostHwidCache hostHwidCache = new HostHwidCache();
     
     private MapleSessionCoordinator() {
     }
 
-    private static boolean attemptAccountAccess(int accountId, String nibbleHwid, boolean routineCheck) {
+    private static boolean attemptAccountAccess(int accountId, Hwid hwid, boolean routineCheck) {
         try (Connection con = DatabaseConnection.getConnection()) {
             List<HwidRelevance> hwidRelevances = SessionDAO.getHwidRelevance(con, accountId);
             for (HwidRelevance hwidRelevance : hwidRelevances) {
-                if (hwidRelevance.hwid().endsWith(nibbleHwid)) {
+                if (hwidRelevance.hwid().endsWith(hwid.hwid())) {
                     if (!routineCheck) {
                         // better update HWID relevance as soon as the login is authenticated
                         Instant expiry = HwidAssociationExpiry.getHwidAccountExpiry(hwidRelevance.relevance());
-                        SessionDAO.updateAccountAccess(con, nibbleHwid, accountId, expiry, hwidRelevance.getIncrementedRelevance());
+                        SessionDAO.updateAccountAccess(con, hwid, accountId, expiry, hwidRelevance.getIncrementedRelevance());
                     }
 
                     return true;
@@ -86,7 +86,7 @@ public class MapleSessionCoordinator {
                 return true;
             }
         } catch (SQLException e) {
-            log.warn("Failed to update account access. Account id: {}, nibbleHwid: {}", accountId, nibbleHwid, e);
+            log.warn("Failed to update account access. Account id: {}, nibbleHwid: {}", accountId, hwid, e);
         }
 
         return false;
@@ -188,9 +188,9 @@ public class MapleSessionCoordinator {
         }
     }
 
-    public AntiMulticlientResult attemptLoginSession(MapleClient client, String nibbleHwid, int accountId, boolean routineCheck) {
+    public AntiMulticlientResult attemptLoginSession(MapleClient client, Hwid hwid, int accountId, boolean routineCheck) {
         if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
-            client.setHwid(new Hwid(nibbleHwid));
+            client.setHwid(hwid);
             return AntiMulticlientResult.SUCCESS;
         }
 
@@ -203,16 +203,16 @@ public class MapleSessionCoordinator {
         try {
             if (!loginStorage.registerLogin(accountId)) {
                 return AntiMulticlientResult.MANY_ACCOUNT_ATTEMPTS;
-            } else if (routineCheck && !attemptAccountAccess(accountId, nibbleHwid, routineCheck)) {
+            } else if (routineCheck && !attemptAccountAccess(accountId, hwid, routineCheck)) {
                 return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
-            } else if (onlineRemoteHwids.contains(nibbleHwid)) {
+            } else if (onlineRemoteHwids.contains(hwid)) {
                 return AntiMulticlientResult.REMOTE_LOGGEDIN;
-            } else if (!attemptAccountAccess(accountId, nibbleHwid, routineCheck)) {
+            } else if (!attemptAccountAccess(accountId, hwid, routineCheck)) {
                 return AntiMulticlientResult.REMOTE_REACHED_LIMIT;
             }
 
-            client.setHwid(new Hwid(nibbleHwid));
-            onlineRemoteHwids.add(nibbleHwid);
+            client.setHwid(hwid);
+            onlineRemoteHwids.add(hwid);
 
             return AntiMulticlientResult.SUCCESS;
         } finally {
@@ -220,11 +220,11 @@ public class MapleSessionCoordinator {
         }
     }
 
-    public AntiMulticlientResult attemptGameSession(MapleClient client, int accountId, String remoteHwid) {
+    public AntiMulticlientResult attemptGameSession(MapleClient client, int accountId, Hwid hwid) {
         final String remoteHost = getSessionRemoteHost(client);
         if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
-            hostHwidCache.addEntry(remoteHost, remoteHwid);
-            hostHwidCache.addEntry(client.getRemoteAddress(), remoteHwid); // no HWID information on the loggedin newcomer session...
+            hostHwidCache.addEntry(remoteHost, hwid);
+            hostHwidCache.addEntry(client.getRemoteAddress(), hwid); // no HWID information on the loggedin newcomer session...
             return AntiMulticlientResult.SUCCESS;
         }
 
@@ -234,26 +234,26 @@ public class MapleSessionCoordinator {
         }
         
         try {
-            Hwid nibbleHwid = client.getHwid(); // thanks Paxum for noticing account stuck after PIC failure
-            if (nibbleHwid == null) {
+            Hwid clientHwid = client.getHwid(); // thanks Paxum for noticing account stuck after PIC failure
+            if (clientHwid == null) {
                 return AntiMulticlientResult.REMOTE_NO_MATCH;
             }
 
-            onlineRemoteHwids.remove(nibbleHwid);
+            onlineRemoteHwids.remove(clientHwid);
 
-            if (!remoteHwid.endsWith(nibbleHwid.hwid())) {
+            if (!hwid.equals(clientHwid)) {
                 return AntiMulticlientResult.REMOTE_NO_MATCH;
-            } else if (onlineRemoteHwids.contains(remoteHwid)) {
+            } else if (onlineRemoteHwids.contains(hwid)) {
                 return AntiMulticlientResult.REMOTE_LOGGEDIN;
             }
 
             // assumption: after a SUCCESSFUL login attempt, the incoming client WILL receive a new IoSession from the game server
 
             // updated session CLIENT_HWID attribute will be set when the player log in the game
-            onlineRemoteHwids.add(remoteHwid);
-            hostHwidCache.addEntry(remoteHost, remoteHwid);
-            hostHwidCache.addEntry(client.getRemoteAddress(), remoteHwid);
-            associateHwidAccountIfAbsent(remoteHwid, accountId);
+            onlineRemoteHwids.add(hwid);
+            hostHwidCache.addEntry(remoteHost, hwid);
+            hostHwidCache.addEntry(client.getRemoteAddress(), hwid);
+            associateHwidAccountIfAbsent(hwid, accountId);
 
             return AntiMulticlientResult.SUCCESS;
         } finally {
@@ -261,41 +261,32 @@ public class MapleSessionCoordinator {
         }
     }
 
-    private static void associateHwidAccountIfAbsent(String remoteHwid, int accountId) {
+    private static void associateHwidAccountIfAbsent(Hwid hwid, int accountId) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            List<String> hwids = SessionDAO.getHwidsForAccount(con, accountId);
+            List<Hwid> hwids = SessionDAO.getHwidsForAccount(con, accountId);
 
-            boolean containsRemoteHwid = hwids.stream().anyMatch(hwid -> hwid.contentEquals(remoteHwid));
+            boolean containsRemoteHwid = hwids.stream().anyMatch(accountHwid -> accountHwid.equals(hwid));
             if (containsRemoteHwid) {
                 return;
             }
 
             if (hwids.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
                 Instant expiry = HwidAssociationExpiry.getHwidAccountExpiry(0);
-                SessionDAO.registerAccountAccess(con, accountId, remoteHwid, expiry);
+                SessionDAO.registerAccountAccess(con, accountId, hwid, expiry);
             }
         } catch (SQLException ex) {
-            log.warn("Failed to associate hwid {} with account id {}", remoteHwid, accountId, ex);
+            log.warn("Failed to associate hwid {} with account id {}", hwid, accountId, ex);
         }
     }
     
     private static MapleClient fetchInTransitionSessionClient(MapleClient client) {
-        String remoteHwid = MapleSessionCoordinator.getInstance().getGameSessionHwid(client);
-        if (remoteHwid == null) {   // maybe this session was currently in-transition?
+        Hwid hwid = MapleSessionCoordinator.getInstance().getGameSessionHwid(client);
+        if (hwid == null) {   // maybe this session was currently in-transition?
             return null;
         }
 
-        final int hwidLen = remoteHwid.length();
-        final boolean isOnlyNibbleHwid = hwidLen <= 8;
-        if (isOnlyNibbleHwid) {
-            client.setHwid(new Hwid(remoteHwid));
-
-        } else {
-            client.setRemoteHwid(remoteHwid);
-            client.setHwid(Hwid.fromClientString(remoteHwid));
-        }
-
         MapleClient fakeClient = MapleClient.createMock();
+        fakeClient.setHwid(hwid);
         Integer chrId = Server.getInstance().freeCharacteridInTransition(client);
         if (chrId != null) {
             try {
@@ -316,26 +307,18 @@ public class MapleSessionCoordinator {
         final Hwid hwid = client.getHwid();
         client.setHwid(null); // making sure to clean up calls to this function on login phase
         if (hwid != null) {
-            onlineRemoteHwids.remove(hwid.hwid());
-        }
-        
-        final String remoteHwid = client.getRemoteHwid();
-        client.setRemoteHwid(null);
-        if (remoteHwid != null) {
-            onlineRemoteHwids.remove(remoteHwid);
+            onlineRemoteHwids.remove(hwid);
         }
 
-        if (client != null) {
-            final boolean isGameSession = hwid != null || remoteHwid != null;
-            if (isGameSession) {
+        final boolean isGameSession = hwid != null;
+        if (isGameSession) {
+            onlineClients.remove(client.getAccID());
+        } else {
+            MapleClient loggedClient = onlineClients.get(client.getAccID());
+
+            // do not remove an online game session here, only login session
+            if (loggedClient != null && loggedClient.getSessionId() == client.getSessionId()) {
                 onlineClients.remove(client.getAccID());
-            } else {
-                MapleClient loggedClient = onlineClients.get(client.getAccID());
-                
-                // do not remove an online game session here, only login session
-                if (loggedClient != null && loggedClient.getSessionId() == client.getSessionId()) {
-                    onlineClients.remove(client.getAccID());
-                }
             }
         }
 
@@ -343,14 +326,14 @@ public class MapleSessionCoordinator {
             client.closeSession();
         }
     }
-    
-    public String pickLoginSessionHwid(MapleClient client) {
+
+    public Hwid pickLoginSessionHwid(MapleClient client) {
         String remoteHost = client.getRemoteAddress();
         // thanks BHB, resinate for noticing players from same network not being able to login
         return hostHwidCache.removeEntryAndGetItsHwid(remoteHost);
     }
     
-    public String getGameSessionHwid(MapleClient client) {
+    public Hwid getGameSessionHwid(MapleClient client) {
         String remoteHost = getSessionRemoteHost(client);
         return hostHwidCache.getEntryHwid(remoteHost);
     }
@@ -376,11 +359,11 @@ public class MapleSessionCoordinator {
         }
         
         if (!onlineRemoteHwids.isEmpty()) {
-            List<String> slist = new ArrayList<>(onlineRemoteHwids);
-            Collections.sort(slist);
+            List<Hwid> hwids = new ArrayList<>(onlineRemoteHwids);
+            hwids.sort(Comparator.comparing(Hwid::hwid));
             
             System.out.println("Current online HWIDs: ");
-            for (String s : slist) {
+            for (Hwid s : hwids) {
                 System.out.println("  " + s);
             }
         }
@@ -410,11 +393,11 @@ public class MapleSessionCoordinator {
         }
         
         if (!onlineRemoteHwids.isEmpty()) {
-            List<String> slist = new ArrayList<>(onlineRemoteHwids);
-            Collections.sort(slist);
+            List<Hwid> hwids = new ArrayList<>(onlineRemoteHwids);
+            hwids.sort(Comparator.comparing(Hwid::hwid));
             
             str += ("Current online HWIDs:\r\n");
-            for (String s : slist) {
+            for (Hwid s : hwids) {
                 str += ("  " + s + "\r\n");
             }
         }

@@ -5,8 +5,8 @@ import net.server.Server;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
-record HostHwid(String hwid, Instant expiry) {
-    static HostHwid createWithDefaultExpiry(String hwid) {
+record HostHwid(Hwid hwid, Instant expiry) {
+    static HostHwid createWithDefaultExpiry(Hwid hwid) {
         return new HostHwid(hwid, getDefaultExpiry());
     }
 

@@ -22,8 +22,8 @@ public class SessionDAO {
         }
     }
 
-    public static List<String> getHwidsForAccount(Connection con, int accountId) throws SQLException {
-        final List<String> hwids = new ArrayList<>();
+    public static List<Hwid> getHwidsForAccount(Connection con, int accountId) throws SQLException {
+        final List<Hwid> hwids = new ArrayList<>();
 
         final String query = "SELECT hwid FROM hwidaccounts WHERE accountid = ?";
         try (PreparedStatement ps = con.prepareStatement(query)) {
@@ -31,7 +31,7 @@ public class SessionDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    hwids.add(rs.getString("hwid"));
+                    hwids.add(new Hwid(rs.getString("hwid")));
                 }
             }
         }
@@ -39,12 +39,16 @@ public class SessionDAO {
         return hwids;
     }
 
-    public static void registerAccountAccess(Connection con, int accountId, String remoteHwid, Instant expiry)
+    public static void registerAccountAccess(Connection con, int accountId, Hwid hwid, Instant expiry)
             throws SQLException {
+        if (hwid == null) {
+            throw new IllegalArgumentException("Hwid must not be null");
+        }
+
         final String query = "INSERT INTO hwidaccounts (accountid, hwid, expiresat) VALUES (?, ?, ?)";
         try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, accountId);
-            ps.setString(2, remoteHwid);
+            ps.setString(2, hwid.hwid());
             ps.setTimestamp(3, Timestamp.from(expiry));
 
             ps.executeUpdate();
@@ -70,14 +74,14 @@ public class SessionDAO {
         return hwidRelevances;
     }
 
-    public static void updateAccountAccess(Connection con, String remoteHwid, int accountId, Instant expiry, int loginRelevance)
+    public static void updateAccountAccess(Connection con, Hwid hwid, int accountId, Instant expiry, int loginRelevance)
             throws SQLException {
         final String query = "UPDATE hwidaccounts SET relevance = ?, expiresat = ? WHERE accountid = ? AND hwid LIKE ?";
         try (PreparedStatement ps = con.prepareStatement(query)) {
             ps.setInt(1, loginRelevance);
             ps.setTimestamp(2, Timestamp.from(expiry));
             ps.setInt(3, accountId);
-            ps.setString(4, remoteHwid);
+            ps.setString(4, hwid.hwid());
 
             ps.executeUpdate();
         }

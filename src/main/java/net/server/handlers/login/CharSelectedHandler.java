@@ -28,6 +28,8 @@ import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.MapleSessionCoordinator;
 import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -35,6 +37,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public final class CharSelectedHandler extends AbstractMaplePacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(CharSelectedHandler.class);
     
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {
         return switch (res) {
@@ -51,9 +54,13 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
         int charId = slea.readInt();
         
         String macs = slea.readMapleAsciiString();
-        String hwid = slea.readMapleAsciiString();
-        
-        if (!Hwid.isValidRawHwid(hwid)) {
+        String hostString = slea.readMapleAsciiString();
+
+        final Hwid hwid;
+        try {
+            hwid = Hwid.fromHostString(hostString);
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid host string: {}", hostString, e);
             c.announce(MaplePacketCreator.getAfterLoginError(17));
             return;
         }
