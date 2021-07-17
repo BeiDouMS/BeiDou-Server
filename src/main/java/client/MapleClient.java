@@ -134,14 +134,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         CHANNEL
     }
 
-    public void updateLastPacket() {
-        lastPacket = System.currentTimeMillis();
-    }
-
-    public long getLastPacket() {
-        return lastPacket;
-    }
-
     public MapleClient(Type type, PacketProcessor packetProcessor, int world, int channel) {
         this.type = type;
         this.packetProcessor = packetProcessor;
@@ -250,6 +242,14 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         } finally {
             closeSession();
         }
+    }
+
+    public void updateLastPacket() {
+        lastPacket = System.currentTimeMillis();
+    }
+
+    public long getLastPacket() {
+        return lastPacket;
     }
 
     public void closeSession() {
