@@ -3,7 +3,6 @@ package net.encryption;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import net.MapleCustomEncryption;
 import net.packet.OutPacket;
 
 public class PacketEncoder extends MessageToByteEncoder<OutPacket> {
