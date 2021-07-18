@@ -1,7 +1,6 @@
-package net.netty;
+package net.encryption;
 
 import constants.net.ServerConstants;
-import tools.MapleAESOFB;
 
 public class ClientCyphers {
     private final MapleAESOFB send;

@@ -1,12 +1,12 @@
-package net.netty;
+package net.encryption;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 import net.MapleCustomEncryption;
+import net.netty.InvalidPacketHeaderException;
 import net.packet.ByteBufInPacket;
-import tools.MapleAESOFB;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package net.netty;
+package net.encryption;
 
 import io.netty.channel.CombinedChannelDuplexHandler;
 

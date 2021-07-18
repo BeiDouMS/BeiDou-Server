@@ -27,7 +27,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
-import tools.MapleLogger;
+import net.packet.logging.MapleLogger;
 import tools.MaplePacketCreator;
 
 public class IgnoreCommand extends Command {

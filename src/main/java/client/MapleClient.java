@@ -31,7 +31,7 @@ import net.MaplePacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
 import net.packet.logging.LoggingUtil;
-import net.packet.logging.PacketLogger;
+import net.packet.logging.MapleLogger;
 import net.packet.ByteBufOutPacket;
 import net.packet.InPacket;
 import net.packet.OutPacket;
@@ -189,9 +189,10 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         if (handler != null && handler.validateState(this)) {
             // TODO: pass InPacket directly to handler once all handlers have been ported,
             // this is just a temporary workaround
-            GenericSeekableLittleEndianAccessor accessor = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(packet.getBytes()));
+            final byte[] content = packet.getBytes();
+            GenericSeekableLittleEndianAccessor accessor = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(content));
             try {
-                MapleLogger.logRecv(this, opcode, msg);
+                MapleLogger.logRecv(this, opcode, content);
                 handler.handlePacket(accessor, this);
             } catch (final Throwable t) {
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + accessor);

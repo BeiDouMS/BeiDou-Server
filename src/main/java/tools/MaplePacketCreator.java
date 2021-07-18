@@ -36,7 +36,7 @@ import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
-import net.netty.InitializationVector;
+import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
 import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;

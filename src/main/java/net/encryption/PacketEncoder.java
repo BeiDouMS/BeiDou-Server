@@ -1,11 +1,10 @@
-package net.netty;
+package net.encryption;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import net.MapleCustomEncryption;
 import net.packet.OutPacket;
-import tools.MapleAESOFB;
 
 public class PacketEncoder extends MessageToByteEncoder<OutPacket> {
     private final MapleAESOFB sendCypher;

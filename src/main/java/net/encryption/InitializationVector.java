@@ -1,4 +1,4 @@
-package net.netty;
+package net.encryption;
 
 public class InitializationVector {
     private final byte[] bytes;

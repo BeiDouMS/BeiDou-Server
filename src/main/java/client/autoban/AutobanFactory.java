@@ -26,7 +26,7 @@ import client.MapleCharacter;
 import config.YamlConfig;
 import net.server.Server;
 import tools.FilePrinter;
-import tools.MapleLogger;
+import net.packet.logging.MapleLogger;
 import tools.MaplePacketCreator;
 
 /**

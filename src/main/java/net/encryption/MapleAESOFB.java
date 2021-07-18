@@ -19,11 +19,11 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package tools;
+package net.encryption;
 
-import net.netty.InitializationVector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.HexTool;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
