@@ -16,8 +16,9 @@ public class LoginServerInitializer extends ServerChannelInitializer {
         log.debug("Client connected to login server from {} ", clientIp);
 
         PacketProcessor packetProcessor = PacketProcessor.getLoginServerProcessor();
-        final MapleClient client = new MapleClient(MapleClient.Type.LOGIN, packetProcessor, LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
-        client.setSessionId(sessionId.getAndIncrement());
+        final long clientSessionId = sessionId.getAndIncrement();
+        final String remoteAddress = getRemoteAddress(socketChannel);
+        final MapleClient client = MapleClient.createLoginClient(clientSessionId, remoteAddress, packetProcessor, LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
 
         if (!MapleSessionCoordinator.getInstance().canStartLoginSession(client)) {
             socketChannel.close();

@@ -88,13 +88,14 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public static final int LOGIN_LOGGEDIN = 2;
 
     private final Type type;
+    private final long sessionId;
+    private final PacketProcessor packetProcessor;
 
     private Hwid hwid;
     private String remoteAddress;
     private volatile boolean inTransition;
 
     private io.netty.channel.Channel ioChannel;
-    private PacketProcessor packetProcessor;
     private MapleCharacter player;
     private int channel = 1;
     private int accId = -4;
@@ -126,7 +127,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private int voteTime = -1;
     private int visibleWorlds;
     private long lastNpcClick;
-    private long sessionId;
     private long lastPacket = System.currentTimeMillis();
     private int lang = 0;
 
@@ -135,15 +135,27 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         CHANNEL
     }
 
-    public MapleClient(Type type, PacketProcessor packetProcessor, int world, int channel) {
+    public MapleClient(Type type, long sessionId, String remoteAddress, PacketProcessor packetProcessor, int world, int channel) {
         this.type = type;
+        this.sessionId = sessionId;
+        this.remoteAddress = remoteAddress;
         this.packetProcessor = packetProcessor;
         this.world = world;
         this.channel = channel;
     }
 
+    public static MapleClient createLoginClient(long sessionId, String remoteAddress, PacketProcessor packetProcessor,
+                                                int world, int channel) {
+        return new MapleClient(Type.LOGIN, sessionId, remoteAddress, packetProcessor, world, channel);
+    }
+
+    public static MapleClient createChannelClient(long sessionId, String remoteAddress, PacketProcessor packetProcessor,
+                                                  int world, int channel) {
+        return new MapleClient(Type.CHANNEL, sessionId, remoteAddress, packetProcessor, world, channel);
+    }
+
     public static MapleClient createMock() {
-        return new MapleClient(null, null, -123, -123);
+        return new MapleClient(null, -1,null, null, -123, -123);
     }
 
     @Override
@@ -1526,10 +1538,6 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public long getSessionId() {
         return this.sessionId;
-    }
-
-    public void setSessionId(long sessionId) {
-        this.sessionId = sessionId;
     }
 
     public boolean canRequestCharlist() {

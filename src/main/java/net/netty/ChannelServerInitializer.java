@@ -25,8 +25,9 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
         log.debug("Client connecting to world {}, channel {} from {}", world, channel, clientIp);
 
         PacketProcessor packetProcessor = PacketProcessor.getChannelServerProcessor(world, channel);
-        final MapleClient client = new MapleClient(MapleClient.Type.CHANNEL, packetProcessor, world, channel);
-        client.setSessionId(sessionId.getAndIncrement());
+        final long clientSessionId = sessionId.getAndIncrement();
+        final String remoteAddress = getRemoteAddress(socketChannel);
+        final MapleClient client = MapleClient.createChannelClient(clientSessionId, remoteAddress, packetProcessor, world, channel);
 
         if (Server.getInstance().getChannel(world, channel) == null) {
             MapleSessionCoordinator.getInstance().closeSession(client, true);
