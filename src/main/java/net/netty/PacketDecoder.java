@@ -1,23 +1,16 @@
 package net.netty;
 
-import config.YamlConfig;
-import constants.net.OpcodeConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 import net.MapleCustomEncryption;
 import net.packet.ByteBufInPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import tools.HexTool;
 import tools.MapleAESOFB;
 
 import java.util.List;
 
 public class PacketDecoder extends ReplayingDecoder<Void> {
-    private static final Logger log = LoggerFactory.getLogger(PacketDecoder.class);
-    private static final boolean LOG_PACKETS = YamlConfig.config.server.USE_DEBUG_SHOW_PACKET;
     private final MapleAESOFB receiveCypher;
 
     public PacketDecoder(MapleAESOFB receiveCypher) {
@@ -38,10 +31,6 @@ public class PacketDecoder extends ReplayingDecoder<Void> {
         receiveCypher.crypt(packet);
         MapleCustomEncryption.decryptData(packet);
         out.add(new ByteBufInPacket(Unpooled.wrappedBuffer(packet)));
-
-        if (LOG_PACKETS){
-            logPacket(packet);
-        }
     }
 
     /**
@@ -56,28 +45,5 @@ public class PacketDecoder extends ReplayingDecoder<Void> {
         int length = ((header >>> 16) ^ (header & 0xFFFF));
         length = ((length << 8) & 0xFF00) | ((length >>> 8) & 0xFF);
         return length;
-    }
-
-    private void logPacket(byte[] packet) {
-        final int packetLength = packet.length;
-
-        if (packetLength <= 3000) {
-            final int opcode = readFirstShort(packet);
-            final String opcodeHex = Integer.toHexString(opcode).toUpperCase();
-            final String opcodeName = getRecvOpcodeName(opcode);
-            final String prefix = opcodeName == null ? "<UnknownPacket> " : "";
-            log.info("{}ClientSend:{} [{}] ({}) - hex:{} - text:{}", prefix, opcodeName, opcodeHex, packetLength,
-                    HexTool.toString(packet), HexTool.toStringFromAscii(packet));
-        } else {
-            log.debug(HexTool.toString(new byte[]{packet[0], packet[1]}) + "...");
-        }
-    }
-
-    private static int readFirstShort(byte[] bytes) {
-        return new ByteBufInPacket(Unpooled.wrappedBuffer(bytes)).readShort();
-    }
-
-    private String getRecvOpcodeName(int opcode) {
-        return OpcodeConstants.recvOpcodeNames.get(opcode);
     }
 }

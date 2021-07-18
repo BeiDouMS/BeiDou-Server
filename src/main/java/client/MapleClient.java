@@ -30,6 +30,8 @@ import io.netty.handler.timeout.IdleStateEvent;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
+import net.packet.logging.LoggingUtil;
+import net.packet.logging.PacketLogger;
 import net.packet.ByteBufOutPacket;
 import net.packet.InPacket;
 import net.packet.OutPacket;
@@ -80,7 +82,6 @@ import java.util.concurrent.locks.Lock;
 
 public class MapleClient extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(MapleClient.class);
-    private static final Set<Short> ignoredDebugRecvPackets = Set.of((short) 167, (short) 197, (short) 89, (short) 91, (short) 41, (short) 188, (short) 107);
 
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
@@ -181,7 +182,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         short opcode = packet.readShort();
         final MaplePacketHandler handler = packetProcessor.getHandler(opcode);
 
-        if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !ignoredDebugRecvPackets.contains(opcode)) {
+        if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
             log.debug("Received packet id {}", opcode);
         }
 

@@ -5,8 +5,11 @@
     </Properties>
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout>
+                    <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
         </Console>
+
         <RollingFile name="File"
                      fileName="logs/${filename}.log"
                      filePattern="logs/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/${filename}-%d{yyyy-MM-dd_HH-mm-ss}-%i.log">
