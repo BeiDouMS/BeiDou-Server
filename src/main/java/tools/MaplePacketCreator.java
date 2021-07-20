@@ -6335,7 +6335,7 @@ public class MaplePacketCreator {
                 public static final byte WHISPER = 0x02;
                 public static final byte REQUEST = 0x04;
                 public static final byte RESULT = 0x08;
-                public static final byte RECIEVE = 0x10;
+                public static final byte RECEIVE = 0x10;
                 public static final byte BLOCKED = 0x20;
                 public static final byte LOCATION_FRIEND = 0x40;
         }
@@ -6382,7 +6382,7 @@ public class MaplePacketCreator {
                 MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.WHISPER.getValue());
 
-                mplew.write(WhisperFlag.WHISPER | WhisperFlag.RECIEVE);
+                mplew.write(WhisperFlag.WHISPER | WhisperFlag.RECEIVE);
                 mplew.writeMapleAsciiString(sender);
                 mplew.write(channel);
                 mplew.writeBool(fromAdmin);
