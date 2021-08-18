@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -61,7 +62,7 @@ public class MapleSessionCoordinator {
     private final LoginStorage loginStorage = new LoginStorage();
     private final Map<Integer, MapleClient> onlineClients = new HashMap<>(); // Key: account id
     private final Set<Hwid> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
-    private final Map<String, Set<MapleClient>> loginRemoteHosts = new HashMap<>(); // Key: Ip (+ nibblehwid)
+    private final Map<String, MapleClient> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
     private final HostHwidCache hostHwidCache = new HostHwidCache();
     
     private MapleSessionCoordinator() {
@@ -144,27 +145,20 @@ public class MapleSessionCoordinator {
                 return false;
             }
 
-            addLoginRemoteHostClient(remoteHost, client);
+            loginRemoteHosts.put(remoteHost, client);
             return true;
         } finally {
             sessionInit.finalize(remoteHost);
         }
     }
 
-    private void addLoginRemoteHostClient(String remoteHost, MapleClient client) {
-        Set<MapleClient> clients = new HashSet<>(2);
-        clients.add(client);
-        loginRemoteHosts.put(remoteHost, clients);
-    }
-
     public void closeLoginSession(MapleClient client) {
-        String remoteHost = getSessionRemoteHost(client);
-        removeRemoteHostClient(remoteHost, client);
+        clearLoginRemoteHost(client);
 
         Hwid nibbleHwid = client.getHwid();
         client.setHwid(null);
         if (nibbleHwid != null) {
-            onlineRemoteHwids.remove(nibbleHwid.hwid());
+            onlineRemoteHwids.remove(nibbleHwid);
 
             if (client != null) {
                 MapleClient loggedClient = onlineClients.get(client.getAccID());
@@ -177,15 +171,10 @@ public class MapleSessionCoordinator {
         }
     }
 
-    private void removeRemoteHostClient(String remoteHost, MapleClient client) {
-        Set<MapleClient> clients = loginRemoteHosts.get(remoteHost);
-        if (clients != null) {
-            clients.remove(client);
-
-            if (clients.isEmpty()) {
-                loginRemoteHosts.remove(remoteHost);
-            }
-        }
+    private void clearLoginRemoteHost(MapleClient client) {
+        String remoteHost = getSessionRemoteHost(client);
+        loginRemoteHosts.remove(client.getRemoteAddress());
+        loginRemoteHosts.remove(remoteHost);
     }
 
     public AntiMulticlientResult attemptLoginSession(MapleClient client, Hwid hwid, int accountId, boolean routineCheck) {
@@ -369,12 +358,12 @@ public class MapleSessionCoordinator {
         }
         
         if (!loginRemoteHosts.isEmpty()) {
-            List<Entry<String, Set<MapleClient>>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
+            List<Entry<String, MapleClient>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             elist.sort(Entry.comparingByKey());
             
             System.out.println("Current login sessions: ");
-            for (Entry<String, Set<MapleClient>> e : elist) {
-                System.out.println("  " + e.getKey() + ", size: " + e.getValue().size());
+            for (Entry<String, MapleClient> e : elist) {
+                System.out.println("  " + e.getKey() + ", client: " + e.getValue());
             }
         }
     }
@@ -403,13 +392,13 @@ public class MapleSessionCoordinator {
         }
         
         if (!loginRemoteHosts.isEmpty()) {
-            List<Entry<String, Set<MapleClient>>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
+            List<Entry<String, MapleClient>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             
             elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
             
             str += ("Current login sessions:\r\n");
-            for (Entry<String, Set<MapleClient>> e : elist) {
-                str += ("  " + e.getKey() + ", IP: " + e.getValue() + "\r\n");
+            for (Entry<String, MapleClient> e : elist) {
+                str += ("  " + e.getKey() + ", IP: " + e.getValue().getRemoteAddress() + "\r\n");
             }
         }
         
