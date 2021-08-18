@@ -25,7 +25,7 @@ package net.server.handlers.login;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -44,7 +44,7 @@ public class SetGenderHandler extends AbstractMaplePacketHandler {
 
                 Server.getInstance().registerLoginState(c);
             } else {
-                MapleSessionCoordinator.getInstance().closeSession(c.getSession(), null);
+                SessionCoordinator.getInstance().closeSession(c, null);
                 c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
             }
         }

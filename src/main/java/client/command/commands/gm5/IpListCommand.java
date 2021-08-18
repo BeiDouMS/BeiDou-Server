@@ -50,7 +50,7 @@ public class IpListCommand extends Command {
                 str += "\r\n" + GameConstants.WORLD_NAMES[w.getId()] + "\r\n";
                 
                 for (MapleCharacter chr : chars) {
-                    str += "  " + chr.getName() + " - " + chr.getClient().getSession().getRemoteAddress() + "\r\n";
+                    str += "  " + chr.getName() + " - " + chr.getClient().getRemoteAddress() + "\r\n";
                 }
             }
         }

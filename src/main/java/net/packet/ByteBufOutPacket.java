@@ -12,6 +12,11 @@ import java.awt.*;
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;
 
+    @Deprecated(forRemoval = true)
+    public ByteBufOutPacket() {
+        this.byteBuf = Unpooled.buffer();
+    }
+
     public ByteBufOutPacket(SendOpcode op) {
         ByteBuf byteBuf = Unpooled.buffer();
         byteBuf.writeShortLE((short) op.getValue());

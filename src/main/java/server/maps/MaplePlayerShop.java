@@ -386,8 +386,9 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
     }
 
     public void broadcast(final byte[] packet) {
-        if (owner.getClient() != null && owner.getClient().getSession() != null) {
-            owner.getClient().announce(packet);
+        MapleClient client = owner.getClient();
+        if (client != null) {
+            client.announce(packet);
         }
         broadcastToVisitors(packet);
     }

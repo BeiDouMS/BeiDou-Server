@@ -588,7 +588,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         World wserv = Server.getInstance().getWorld(world);
         if (wserv == null) return;
 
-        MapleClient c = new MapleClient(null, null, null);  // mock client
+        MapleClient c = MapleClient.createMock();
         c.setWorld(world);
         c.setChannel(1);
 

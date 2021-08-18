@@ -36,6 +36,7 @@ import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
+import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
 import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;
@@ -547,14 +548,14 @@ public class MaplePacketCreator {
          * @param recvIv the IV in use by the server for receiving
          * @return
          */
-        public static byte[] getHello(short mapleVersion, byte[] sendIv, byte[] recvIv) {
+        public static byte[] getHello(short mapleVersion, InitializationVector sendIv, InitializationVector recvIv) {
                 final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter(8);
                 mplew.writeShort(0x0E);
                 mplew.writeShort(mapleVersion);
                 mplew.writeShort(1);
                 mplew.write(49);
-                mplew.write(recvIv);
-                mplew.write(sendIv);
+                mplew.write(recvIv.getBytes());
+                mplew.write(sendIv.getBytes());
                 mplew.write(8);
                 return mplew.getPacket();
         }

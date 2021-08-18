@@ -19,7 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package net.mina;
+package net.encryption;
 
 public class MapleCustomEncryption {
     private static byte rollLeft(byte in, int count) {

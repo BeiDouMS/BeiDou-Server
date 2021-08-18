@@ -22,6 +22,7 @@
 package tools;
 
 import constants.string.CharsetConstants;
+import io.netty.buffer.ByteBufUtil;
 
 import java.io.ByteArrayOutputStream;
 
@@ -105,4 +106,14 @@ public class HexTool {
         return "";
     }
 
+    /**
+     * Get upper case hex dump
+     */
+    public static String bytesToHex(byte[] bytes) {
+        return ByteBufUtil.hexDump(bytes).toUpperCase();
+    }
+
+    public static byte[] hexToBytes(String hex) {
+        return ByteBufUtil.decodeHexDump(hex);
+    }
 }

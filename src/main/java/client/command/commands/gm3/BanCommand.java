@@ -52,7 +52,7 @@ public class BanCommand extends Command {
         MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(ign);
         if (target != null) {
             String readableTargetName = MapleCharacter.makeMapleReadable(target.getName());
-            String ip = target.getClient().getSession().getRemoteAddress().toString().split(":")[0];
+            String ip = target.getClient().getRemoteAddress();
             //Ban ip
             try (Connection con = DatabaseConnection.getConnection()) {
                 if (ip.matches("/[0-9]{1,3}\\..*")) {

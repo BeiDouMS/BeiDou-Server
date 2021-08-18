@@ -49,7 +49,7 @@ public class WarpWorldCommand extends Command {
         byte worldb = Byte.parseByte(params[0]);
         if (worldb <= (server.getWorldsSize() - 1)) {
             try {
-                String[] socket = server.getInetSocket(c.getSession(), worldb, c.getChannel());
+                String[] socket = server.getInetSocket(c, worldb, c.getChannel());
                 c.getWorldServer().removePlayer(player);
                 player.getMap().removePlayer(player);//LOL FORGOT THIS ><
                 player.setSessionTransitionState();

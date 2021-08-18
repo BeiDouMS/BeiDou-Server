@@ -35,8 +35,7 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
-import net.MapleServerHandler;
-import net.mina.MapleCodecFactory;
+import net.netty.LoginServer;
 import net.server.audit.ThreadTracker;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
@@ -46,19 +45,13 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.IpAddresses;
+import net.server.coordinator.session.SessionCoordinator;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.task.*;
 import net.server.world.World;
-import org.apache.mina.core.buffer.IoBuffer;
-import org.apache.mina.core.buffer.SimpleBufferAllocator;
-import org.apache.mina.core.service.IoAcceptor;
-import org.apache.mina.core.session.IdleStatus;
-import org.apache.mina.core.session.IoSession;
-import org.apache.mina.filter.codec.ProtocolCodecFilter;
-import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.CashShop.CashItemFactory;
@@ -73,8 +66,6 @@ import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.Pair;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.security.Security;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -105,7 +96,7 @@ public class Server {
     private static final Map<Integer, Integer> couponRates = new HashMap<>(30);
     private static final List<Integer> activeCoupons = new LinkedList<>();
 
-    private IoAcceptor acceptor;
+    private LoginServer loginServer;
     private List<Map<Integer, String>> channels = new LinkedList<>();
     private List<World> worlds = new ArrayList<>();
     private final Properties subnetInfo = new Properties();
@@ -291,13 +282,13 @@ public class Server {
         }
     }
 
-    public String[] getInetSocket(IoSession session, int world, int channel) {
-        String remoteIp = MapleSessionCoordinator.getSessionRemoteAddress(session);
+    public String[] getInetSocket(MapleClient client, int world, int channel) {
+        String remoteIp = client.getRemoteAddress();
 
         String[] hostAddress = getIP(world, channel).split(":");
-        if (MapleSessionCoordinator.isLocalAddress(remoteIp)) {
+        if (IpAddresses.isLocalAddress(remoteIp)) {
             hostAddress[0] = YamlConfig.config.server.LOCALHOST;
-        } else if (MapleSessionCoordinator.isLanAddress(remoteIp)) {
+        } else if (IpAddresses.isLanAddress(remoteIp)) {
             hostAddress[0] = YamlConfig.config.server.LANHOST;
         }
 
@@ -906,17 +897,8 @@ public class Server {
             }
         }
 
-        IoBuffer.setUseDirectBuffer(false);     // join IO operations performed by lxconan
-        IoBuffer.setAllocator(new SimpleBufferAllocator());
-        acceptor = new NioSocketAcceptor();
-        acceptor.getFilterChain().addLast("codec", new ProtocolCodecFilter(new MapleCodecFactory()));
-        acceptor.getSessionConfig().setIdleTime(IdleStatus.BOTH_IDLE, 30);
-        acceptor.setHandler(new MapleServerHandler());
-        try {
-            acceptor.bind(new InetSocketAddress(8484));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        // acceptor = initAcceptor(8484);
+        loginServer = initLoginServer(8484);
 
         log.info("Listening on port 8484");
 
@@ -930,6 +912,12 @@ public class Server {
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
         }
+    }
+
+    private LoginServer initLoginServer(int port) {
+        LoginServer loginServer = new LoginServer(port);
+        loginServer.start();
+        return loginServer;
     }
 
     private static void setAllLoggedOut(Connection con) throws SQLException {
@@ -1776,7 +1764,7 @@ public class Server {
     }
 
     private static String getRemoteHost(MapleClient client) {
-        return MapleSessionCoordinator.getSessionRemoteHost(client.getSession());
+        return SessionCoordinator.getSessionRemoteHost(client);
     }
 
     public void setCharacteridInTransition(MapleClient client, int charId) {
@@ -1878,7 +1866,7 @@ public class Server {
             if (c.isLoggedIn()) {
                 c.disconnect(false, false);
             } else {
-                MapleSessionCoordinator.getInstance().closeSession(c.getSession(), true);
+                SessionCoordinator.getInstance().closeSession(c, true);
             }
         }
     }
@@ -1943,8 +1931,7 @@ public class Server {
         TimerManager.getInstance().stop();
 
         System.out.println("Worlds + Channels are offline.");
-        acceptor.unbind();
-        acceptor = null;
+        loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             new Thread(() -> System.exit(0)).start();
         } else {

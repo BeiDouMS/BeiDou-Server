@@ -19,7 +19,7 @@
 */
 package net.server.task;
 
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.login.MapleLoginBypassCoordinator;
 
 /**
@@ -30,7 +30,7 @@ public class LoginStorageTask implements Runnable {
     
     @Override
     public void run() {
-        MapleSessionCoordinator.getInstance().runUpdateLoginHistory();
+        SessionCoordinator.getInstance().runUpdateLoginHistory();
         MapleLoginBypassCoordinator.getInstance().runUpdateLoginBypass();
     }
 }

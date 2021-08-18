@@ -19,7 +19,14 @@
 */
 package net.server.coordinator.login;
 
+import client.MapleCharacter;
+import client.MapleClient;
 import config.YamlConfig;
+import net.server.Server;
+import net.server.coordinator.session.Hwid;
+import net.server.world.World;
+import tools.Pair;
+
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,62 +34,56 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import net.server.world.World;
-import net.server.Server;
-import tools.Pair;
-
 /**
- *
  * @author Ronan
  */
 public class MapleLoginBypassCoordinator {
-    
     private final static MapleLoginBypassCoordinator instance = new MapleLoginBypassCoordinator();
-    
+
     public static MapleLoginBypassCoordinator getInstance() {
         return instance;
     }
-    
-    private final ConcurrentHashMap<Pair<String, Integer>, Pair<Boolean, Long>> loginBypass = new ConcurrentHashMap<>();   // optimized PIN & PIC check
-    
-    public boolean canLoginBypass(String nibbleHwid, int accId, boolean pic) {
+
+    private final ConcurrentHashMap<Pair<Hwid, Integer>, Pair<Boolean, Long>> loginBypass = new ConcurrentHashMap<>();   // optimized PIN & PIC check
+
+    public boolean canLoginBypass(Hwid hwid, int accId, boolean pic) {
         try {
-            Pair<String, Integer> entry = new Pair<>(nibbleHwid, accId);
+            Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);
             Boolean p = loginBypass.get(entry).getLeft();
-            
+
             return !pic || p;
         } catch (NullPointerException npe) {
             return false;
         }
     }
-    
-    public void registerLoginBypassEntry(String nibbleHwid, int accId, boolean pic) {
+
+    public void registerLoginBypassEntry(Hwid hwid, int accId, boolean pic) {
         long expireTime = (pic ? YamlConfig.config.server.BYPASS_PIC_EXPIRATION : YamlConfig.config.server.BYPASS_PIN_EXPIRATION);
         if (expireTime > 0) {
-            Pair<String, Integer> entry = new Pair<>(nibbleHwid, accId);
+            Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);
             expireTime = Server.getInstance().getCurrentTime() + expireTime * 60 * 1000;
             try {
                 pic |= loginBypass.get(entry).getLeft();
                 expireTime = Math.max(loginBypass.get(entry).getRight(), expireTime);
-            } catch (NullPointerException npe) {}
-            
+            } catch (NullPointerException npe) {
+            }
+
             loginBypass.put(entry, new Pair<>(pic, expireTime));
         }
     }
-    
-    public void unregisterLoginBypassEntry(String nibbleHwid, int accId) {
-        Pair<String, Integer> entry = new Pair<>(nibbleHwid, accId);
+
+    public void unregisterLoginBypassEntry(Hwid hwid, int accId) {
+        String hwidValue = hwid == null ? null : hwid.hwid();
+        Pair<String, Integer> entry = new Pair<>(hwidValue, accId);
         loginBypass.remove(entry);
     }
-    
+
     public void runUpdateLoginBypass() {
         if (!loginBypass.isEmpty()) {
-            List<Pair<String, Integer>> toRemove = new LinkedList<>();
+            List<Pair<Hwid, Integer>> toRemove = new LinkedList<>();
             Set<Integer> onlineAccounts = new HashSet<>();
             long timeNow = Server.getInstance().getCurrentTime();
-            
+
             for (World w : Server.getInstance().getWorlds()) {
                 for (MapleCharacter chr : w.getPlayerStorage().getAllCharacters()) {
                     MapleClient c = chr.getClient();
@@ -91,8 +92,8 @@ public class MapleLoginBypassCoordinator {
                     }
                 }
             }
-            
-            for (Entry<Pair<String, Integer>, Pair<Boolean, Long>> e : loginBypass.entrySet()) {
+
+            for (Entry<Pair<Hwid, Integer>, Pair<Boolean, Long>> e : loginBypass.entrySet()) {
                 if (onlineAccounts.contains(e.getKey().getRight())) {
                     long expireTime = timeNow + 2 * 60 * 1000;
                     if (expireTime > e.getValue().getRight()) {
@@ -102,13 +103,13 @@ public class MapleLoginBypassCoordinator {
                     toRemove.add(e.getKey());
                 }
             }
-            
+
             if (!toRemove.isEmpty()) {
-                for (Pair<String, Integer> p : toRemove) {
+                for (Pair<Hwid, Integer> p : toRemove) {
                     loginBypass.remove(p);
                 }
             }
         }
     }
-    
+
 }

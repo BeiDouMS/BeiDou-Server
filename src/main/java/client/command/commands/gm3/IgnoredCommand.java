@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import tools.MapleLogger;
+import net.packet.logging.MapleLogger;
 
 public class IgnoredCommand extends Command {
     {

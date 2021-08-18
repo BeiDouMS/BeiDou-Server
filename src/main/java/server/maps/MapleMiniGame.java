@@ -156,7 +156,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
 
     public void broadcastToOwner(final byte[] packet) {
         MapleClient c = owner.getClient();
-        if (c != null && c.getSession() != null) {
+        if (c != null) {
             c.announce(packet);
         }
     }
