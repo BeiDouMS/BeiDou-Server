@@ -4,7 +4,7 @@ import client.MapleClient;
 import io.netty.channel.socket.SocketChannel;
 import net.PacketProcessor;
 import net.server.Server;
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +30,7 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
         final MapleClient client = MapleClient.createChannelClient(clientSessionId, remoteAddress, packetProcessor, world, channel);
 
         if (Server.getInstance().getChannel(world, channel) == null) {
-            MapleSessionCoordinator.getInstance().closeSession(client, true);
+            SessionCoordinator.getInstance().closeSession(client, true);
             socketChannel.close();
             return;
         }

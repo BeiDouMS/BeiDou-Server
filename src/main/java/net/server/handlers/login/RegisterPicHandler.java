@@ -4,8 +4,8 @@ import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
-import net.server.coordinator.session.MapleSessionCoordinator;
-import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
+import net.server.coordinator.session.SessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,20 +48,20 @@ public final class RegisterPicHandler extends AbstractMaplePacketHandler {
         c.updateMacs(macs);
         c.updateHwid(hwid);
         
-        AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptGameSession(c, c.getAccID(), hwid);
+        AntiMulticlientResult res = SessionCoordinator.getInstance().attemptGameSession(c, c.getAccID(), hwid);
         if (res != AntiMulticlientResult.SUCCESS) {
             c.announce(MaplePacketCreator.getAfterLoginError(parseAntiMulticlientError(res)));
             return;
         }
         
         if (c.hasBannedMac() || c.hasBannedHWID()) {
-            MapleSessionCoordinator.getInstance().closeSession(c, true);
+            SessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
         
         Server server = Server.getInstance();
         if(!server.haveCharacterEntry(c.getAccID(), charId)) {
-            MapleSessionCoordinator.getInstance().closeSession(c, true);
+            SessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
 		
@@ -91,7 +91,7 @@ public final class RegisterPicHandler extends AbstractMaplePacketHandler {
                 e.printStackTrace();
             }
         } else {
-            MapleSessionCoordinator.getInstance().closeSession(c, true);
+            SessionCoordinator.getInstance().closeSession(c, true);
         }
     }
 }

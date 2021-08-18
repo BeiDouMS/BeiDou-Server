@@ -1,6 +1,6 @@
 package net.server.coordinator.session;
 
-import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
+import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
 
 enum InitializationResult {
     SUCCESS(AntiMulticlientResult.SUCCESS),

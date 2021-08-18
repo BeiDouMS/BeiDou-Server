@@ -3,7 +3,7 @@ package net.netty;
 import client.MapleClient;
 import io.netty.channel.socket.SocketChannel;
 import net.PacketProcessor;
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +20,7 @@ public class LoginServerInitializer extends ServerChannelInitializer {
         final String remoteAddress = getRemoteAddress(socketChannel);
         final MapleClient client = MapleClient.createLoginClient(clientSessionId, remoteAddress, packetProcessor, LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
 
-        if (!MapleSessionCoordinator.getInstance().canStartLoginSession(client)) {
+        if (!SessionCoordinator.getInstance().canStartLoginSession(client)) {
             socketChannel.close();
             return;
         }

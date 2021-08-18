@@ -40,11 +40,11 @@ import java.util.stream.Collectors;
  *
  * @author Ronan
  */
-public class MapleSessionCoordinator {
-    private static final Logger log = LoggerFactory.getLogger(MapleSessionCoordinator.class);
-    private static final MapleSessionCoordinator instance = new MapleSessionCoordinator();
+public class SessionCoordinator {
+    private static final Logger log = LoggerFactory.getLogger(SessionCoordinator.class);
+    private static final SessionCoordinator instance = new SessionCoordinator();
     
-    public static MapleSessionCoordinator getInstance() {
+    public static SessionCoordinator getInstance() {
         return instance;
     }
     
@@ -65,7 +65,7 @@ public class MapleSessionCoordinator {
     private final Map<String, MapleClient> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
     private final HostHwidCache hostHwidCache = new HostHwidCache();
     
-    private MapleSessionCoordinator() {
+    private SessionCoordinator() {
     }
 
     private static boolean attemptAccountAccess(int accountId, Hwid hwid, boolean routineCheck) {
@@ -269,7 +269,7 @@ public class MapleSessionCoordinator {
     }
     
     private static MapleClient fetchInTransitionSessionClient(MapleClient client) {
-        Hwid hwid = MapleSessionCoordinator.getInstance().getGameSessionHwid(client);
+        Hwid hwid = SessionCoordinator.getInstance().getGameSessionHwid(client);
         if (hwid == null) {   // maybe this session was currently in-transition?
             return null;
         }

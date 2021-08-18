@@ -19,7 +19,7 @@
 */
 package net.server.task;
 
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 
 /**
  *
@@ -29,6 +29,6 @@ public class LoginCoordinatorTask implements Runnable {
     
     @Override
     public void run() {
-        MapleSessionCoordinator.getInstance().clearExpiredHwidHistory();
+        SessionCoordinator.getInstance().clearExpiredHwidHistory();
     }
 }

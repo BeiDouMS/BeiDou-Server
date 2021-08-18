@@ -32,7 +32,7 @@ import net.server.Server;
 import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
 import net.server.coordinator.session.Hwid;
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.world.MapleEventRecallCoordinator;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
@@ -114,7 +114,7 @@ public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
 
             final Hwid hwid;
             if (player == null) {
-                hwid = MapleSessionCoordinator.getInstance().pickLoginSessionHwid(c);
+                hwid = SessionCoordinator.getInstance().pickLoginSessionHwid(c);
                 if (hwid == null) {
                     c.disconnect(true, false);
                     return;

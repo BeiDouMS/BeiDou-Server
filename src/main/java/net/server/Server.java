@@ -46,7 +46,7 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.session.IpAddresses;
-import net.server.coordinator.session.MapleSessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
@@ -1764,7 +1764,7 @@ public class Server {
     }
 
     private static String getRemoteHost(MapleClient client) {
-        return MapleSessionCoordinator.getSessionRemoteHost(client);
+        return SessionCoordinator.getSessionRemoteHost(client);
     }
 
     public void setCharacteridInTransition(MapleClient client, int charId) {
@@ -1866,7 +1866,7 @@ public class Server {
             if (c.isLoggedIn()) {
                 c.disconnect(false, false);
             } else {
-                MapleSessionCoordinator.getInstance().closeSession(c, true);
+                SessionCoordinator.getInstance().closeSession(c, true);
             }
         }
     }

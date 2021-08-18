@@ -42,8 +42,8 @@ import net.server.channel.Channel;
 import net.server.coordinator.login.MapleLoginBypassCoordinator;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.IpAddresses;
-import net.server.coordinator.session.MapleSessionCoordinator;
-import net.server.coordinator.session.MapleSessionCoordinator.AntiMulticlientResult;
+import net.server.coordinator.session.SessionCoordinator;
+import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.world.*;
@@ -229,7 +229,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         if (cause instanceof InvalidPacketHeaderException) {
-            MapleSessionCoordinator.getInstance().closeSession(this, true);
+            SessionCoordinator.getInstance().closeSession(this, true);
         } else if (cause instanceof IOException) {
             closeMapleSession();
         }
@@ -242,8 +242,8 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     private void closeMapleSession() {
         switch (type) {
-            case LOGIN -> MapleSessionCoordinator.getInstance().closeLoginSession(this);
-            case CHANNEL -> MapleSessionCoordinator.getInstance().closeSession(this, null);
+            case LOGIN -> SessionCoordinator.getInstance().closeLoginSession(this);
+            case CHANNEL -> SessionCoordinator.getInstance().closeSession(this, null);
         }
 
         try {
@@ -580,7 +580,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         pinattempt++;
         if (pinattempt > 5) {
-            MapleSessionCoordinator.getInstance().closeSession(this, false);
+            SessionCoordinator.getInstance().closeSession(this, false);
         }
         if (pin.equals(other)) {
             pinattempt = 0;
@@ -613,7 +613,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         picattempt++;
         if (picattempt > 5) {
-            MapleSessionCoordinator.getInstance().closeSession(this, false);
+            SessionCoordinator.getInstance().closeSession(this, false);
         }
         if (pic.equals(other)) {    // thanks ryantpayton (HeavenClient) for noticing null pics being checked here
             picattempt = 0;
@@ -629,7 +629,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         loginattempt++;
         if (loginattempt > 4) {
             loggedIn = false;
-            MapleSessionCoordinator.getInstance().closeSession(this, false);
+            SessionCoordinator.getInstance().closeSession(this, false);
             return 6;   // thanks Survival_Project for finding out an issue with AUTOMATIC_REGISTER here
         }
 
@@ -681,7 +681,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         if (loginok == 0 || loginok == 4) {
-            AntiMulticlientResult res = MapleSessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
+            AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
 
             switch (res) {
                 case SUCCESS:
@@ -807,7 +807,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     public void updateLoginState(int newState) {
         // rules out possibility of multiple account entries
         if (newState == LOGIN_LOGGEDIN) {
-            MapleSessionCoordinator.getInstance().updateOnlineClient(this);
+            SessionCoordinator.getInstance().updateOnlineClient(this);
         }
 
         try (Connection con = DatabaseConnection.getConnection();
@@ -1042,7 +1042,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             }
         }
 
-        MapleSessionCoordinator.getInstance().closeSession(this, false);
+        SessionCoordinator.getInstance().closeSession(this, false);
 
         if (!serverTransition && isLoggedIn()) {
             updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
