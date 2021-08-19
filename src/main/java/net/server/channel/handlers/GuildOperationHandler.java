@@ -33,7 +33,7 @@ import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildResponse;
 import net.server.world.MapleParty;
 import net.server.world.World;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.HashSet;
@@ -59,7 +59,7 @@ public final class GuildOperationHandler extends AbstractMaplePacketHandler {
         int allianceId = -1;
         switch (type) {
             case 0x00:
-                //c.announce(MaplePacketCreator.showGuildInfo(mc));
+                //c.announce(PacketCreator.showGuildInfo(mc));
                 break;
             case 0x02:
                 if (mc.getGuildId() > 0) {
@@ -140,14 +140,14 @@ public final class GuildOperationHandler extends AbstractMaplePacketHandler {
                     return;
                 }
                 
-                c.announce(MaplePacketCreator.showGuildInfo(mc));
+                c.announce(PacketCreator.showGuildInfo(mc));
                 
                 allianceId = mc.getGuild().getAllianceId();
                 if(allianceId > 0) Server.getInstance().getAlliance(allianceId).updateAlliancePackets(mc);
                 
                 mc.saveGuildStatus(); // update database
-                mc.getMap().broadcastMessage(mc, MaplePacketCreator.guildNameChanged(mc.getId(), mc.getGuild().getName())); // thanks Vcoc for pointing out an issue with updating guild tooltip to players in the map
-                mc.getMap().broadcastMessage(mc, MaplePacketCreator.guildMarkChanged(mc.getId(), mc.getGuild()));
+                mc.getMap().broadcastMessage(mc, PacketCreator.guildNameChanged(mc.getId(), mc.getGuild().getName())); // thanks Vcoc for pointing out an issue with updating guild tooltip to players in the map
+                mc.getMap().broadcastMessage(mc, PacketCreator.guildMarkChanged(mc.getId(), mc.getGuild()));
                 break;
             case 0x07:
                 cid = slea.readInt();
@@ -159,16 +159,16 @@ public final class GuildOperationHandler extends AbstractMaplePacketHandler {
                 
                 allianceId = mc.getGuild().getAllianceId();
                 
-                c.announce(MaplePacketCreator.updateGP(mc.getGuildId(), 0));
+                c.announce(PacketCreator.updateGP(mc.getGuildId(), 0));
                 Server.getInstance().leaveGuild(mc.getMGC());
                 
-                c.announce(MaplePacketCreator.showGuildInfo(null));
+                c.announce(PacketCreator.showGuildInfo(null));
                 if(allianceId > 0) Server.getInstance().getAlliance(allianceId).updateAlliancePackets(mc);
                 
                 mc.getMGC().setGuildId(0);
                 mc.getMGC().setGuildRank(5);
                 mc.saveGuildStatus();
-                mc.getMap().broadcastMessage(mc, MaplePacketCreator.guildNameChanged(mc.getId(), ""));
+                mc.getMap().broadcastMessage(mc, PacketCreator.guildNameChanged(mc.getId(), ""));
                 break;
             case 0x08:
                 allianceId = mc.getGuild().getAllianceId();
@@ -213,7 +213,7 @@ public final class GuildOperationHandler extends AbstractMaplePacketHandler {
                     return;
                 }
                 if (mc.getMeso() < YamlConfig.config.server.CHANGE_EMBLEM_COST) {
-                    c.announce(MaplePacketCreator.serverNotice(1, "You do not have " + GameConstants.numberWithCommas(YamlConfig.config.server.CHANGE_EMBLEM_COST) + " mesos to change the Guild emblem."));
+                    c.announce(PacketCreator.serverNotice(1, "You do not have " + GameConstants.numberWithCommas(YamlConfig.config.server.CHANGE_EMBLEM_COST) + " mesos to change the Guild emblem."));
                     return;
                 }
                 short bg = slea.readShort();
@@ -224,7 +224,7 @@ public final class GuildOperationHandler extends AbstractMaplePacketHandler {
                 
                 if (mc.getGuild() != null && mc.getGuild().getAllianceId() > 0) {
                     MapleAlliance alliance = mc.getAlliance();
-                    Server.getInstance().allianceMessage(alliance.getId(), MaplePacketCreator.getGuildAlliances(alliance, c.getWorld()), -1, -1);
+                    Server.getInstance().allianceMessage(alliance.getId(), PacketCreator.getGuildAlliances(alliance, c.getWorld()), -1, -1);
                 }
                 
                 mc.gainMeso(-YamlConfig.config.server.CHANGE_EMBLEM_COST, true, false, true);

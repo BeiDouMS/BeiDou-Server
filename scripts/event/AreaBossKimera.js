@@ -57,8 +57,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     labSecretBasementPath.spawnMonsterOnGroundBelow(chimera, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    labSecretBasementPath.broadcastMessage(MaplePacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    labSecretBasementPath.broadcastMessage(PacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

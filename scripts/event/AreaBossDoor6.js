@@ -50,12 +50,12 @@ function start() {
 
     const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
     const Point = Java.type('java.awt.Point');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
 
     var boss = MapleLifeFactory.getMonster(bossMobid);
     var bossPos = new Point(171, 50);
     map.spawnMonsterOnGroundBelow(boss, bossPos);
-    map.broadcastMessage(MaplePacketCreator.serverNotice(6, bossMsg));
+    map.broadcastMessage(PacketCreator.serverNotice(6, bossMsg));
     
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

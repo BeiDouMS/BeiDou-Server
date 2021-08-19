@@ -21,13 +21,14 @@
 */
 package net.server.channel.handlers;
 
-import java.util.List;
 import client.MapleCharacter;
 import client.MapleClient;
 import server.movement.LifeMovementFragment;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.exceptions.EmptyMovementException;
+
+import java.util.List;
 
 public final class MovePetHandler extends AbstractMovementPacketHandler {
     @Override
@@ -48,6 +49,6 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
             return;
         }
         player.getPet(slot).updatePosition(res);
-        player.getMap().broadcastMessage(player, MaplePacketCreator.movePet(player.getId(), petId, slot, res), false);
+        player.getMap().broadcastMessage(player, PacketCreator.movePet(player.getId(), petId, slot, res), false);
     }
 }

@@ -151,8 +151,8 @@ function action(mode, type, selection) {
                 cm.sendOk("Good luck! All of Leafre is counting on you.");
                 status = 4;
             } else if (selection == 3) {
-                const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-                player.getMap().broadcastMessage(MaplePacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
+                const PacketCreator = Java.type('tools.PacketCreator');
+                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("The expedition has now ended. Sometimes the best strategy is to run away.");
                 cm.dispose();

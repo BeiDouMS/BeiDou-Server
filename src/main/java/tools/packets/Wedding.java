@@ -6,13 +6,14 @@
 
 package tools.packets;
 
-import client.inventory.Item;
 import client.MapleCharacter;
-import java.util.ArrayList;
-import java.util.List;
-import tools.MaplePacketCreator;
+import client.inventory.Item;
+import tools.PacketCreator;
 import tools.StringUtil;
 import tools.data.output.MaplePacketLittleEndianWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CField_Wedding, CField_WeddingPhoto, CWeddingMan, OnMarriageResult, and all Wedding/Marriage enum/structs.
@@ -21,7 +22,7 @@ import tools.data.output.MaplePacketLittleEndianWriter;
  * 
  * Wishlists edited by Drago (Dragohe4rt)
  */
-public class Wedding extends MaplePacketCreator {
+public class Wedding extends PacketCreator {
     private static final short MARRIAGE_REQUEST = 0x48;
     private static final short MARRIAGE_RESULT = 0x49;
     private static final short WEDDING_GIFT_RESULT = 0x4A;

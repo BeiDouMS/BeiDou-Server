@@ -50,9 +50,9 @@ function start() {
 	}
 
 	const Point = Java.type('java.awt.Point');
-	const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+	const PacketCreator = Java.type('tools.PacketCreator');
     mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(560, 50));
-    mapObj.broadcastMessage(MaplePacketCreator.serverNotice(6, "From amongst the ruins shrouded by the mists, Bamboo Warrior appears."));
+    mapObj.broadcastMessage(PacketCreator.serverNotice(6, "From amongst the ruins shrouded by the mists, Bamboo Warrior appears."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

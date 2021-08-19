@@ -33,9 +33,9 @@ function playerEntry(eim, player) {
         onRide = eim.getMapFactory().getMap(trainRide[myRide]);
         player.changeMap(onRide, onRide.getPortal(0));
 
-        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-        player.getClient().announce(MaplePacketCreator.getClock(rideTime / 1000));
-        player.getClient().announce(MaplePacketCreator.earnTitleMessage("The next stop is at Kerning " + (myRide == 0 ? "Square" : "Subway") + " Station. The exit is to your left."));
+        const PacketCreator = Java.type('tools.PacketCreator');
+        player.getClient().announce(PacketCreator.getClock(rideTime / 1000));
+        player.getClient().announce(PacketCreator.earnTitleMessage("The next stop is at Kerning " + (myRide == 0 ? "Square" : "Subway") + " Station. The exit is to your left."));
         eim.schedule("timeOut", rideTime);
 }
 

@@ -21,9 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import java.util.Map;
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -32,8 +31,10 @@ import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleMap;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.Map;
 
 /**
  *
@@ -65,7 +66,7 @@ public final class MobDamageMobHandler extends AbstractMaplePacketHandler {
             }
             
             map.damageMonster(chr, damaged, dmg);
-            map.broadcastMessage(chr, MaplePacketCreator.damageMonster(to, dmg), false);
+            map.broadcastMessage(chr, PacketCreator.damageMonster(to, dmg), false);
         }
     }
     

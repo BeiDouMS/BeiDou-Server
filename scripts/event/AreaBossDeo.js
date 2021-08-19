@@ -49,11 +49,11 @@ function start() {
 
     const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
     const Point = Java.type('java.awt.Point');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
 
     var deo = MapleLifeFactory.getMonster(3220001);
     royalCatthusDesert.spawnMonsterOnGroundBelow(deo, new Point(645, 275));
-    royalCatthusDesert.broadcastMessage(MaplePacketCreator.serverNotice(6, "Deo slowly appeared out of the sand dust."));
+    royalCatthusDesert.broadcastMessage(PacketCreator.serverNotice(6, "Deo slowly appeared out of the sand dust."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

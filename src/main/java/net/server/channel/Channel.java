@@ -46,7 +46,7 @@ import server.events.gm.MapleEvent;
 import server.expeditions.MapleExpedition;
 import server.expeditions.MapleExpeditionType;
 import server.maps.*;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.io.File;
@@ -263,7 +263,7 @@ public final class Channel {
     
     public void addPlayer(MapleCharacter chr) {
         players.addPlayer(chr);
-        chr.announce(MaplePacketCreator.serverMessage(serverMessage));
+        chr.announce(PacketCreator.serverMessage(serverMessage));
     }
     
     public String getServerMessage() {
@@ -440,7 +440,7 @@ public final class Channel {
     
     public void setServerMessage(String message) {
         this.serverMessage = message;
-        broadcastPacket(MaplePacketCreator.serverMessage(message));
+        broadcastPacket(PacketCreator.serverMessage(message));
         getWorldServer().resetDisabledServerMessages();
     }
     

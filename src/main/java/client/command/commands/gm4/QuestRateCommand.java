@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class QuestRateCommand extends Command {
     {
@@ -43,7 +43,7 @@ public class QuestRateCommand extends Command {
 
         int questrate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setQuestRate(questrate);
-        c.getWorldServer().broadcastPacket(MaplePacketCreator.serverNotice(6, "[Rate] Quest Rate has been changed to " + questrate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Quest Rate has been changed to " + questrate + "x."));
 
     }
 }

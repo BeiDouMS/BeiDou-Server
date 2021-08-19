@@ -22,14 +22,15 @@ package net.server.coordinator.matchchecker.listener;
 import client.MapleCharacter;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import net.server.Server;
 import net.server.coordinator.matchchecker.AbstractMatchCheckerListener;
 import net.server.coordinator.matchchecker.MatchCheckerListenerRecipe;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
-import java.util.Set;
-import net.server.Server;
 import net.server.world.MapleParty;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
+
+import java.util.Set;
 
 /**
  *
@@ -40,7 +41,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
     private static void broadcastGuildCreationDismiss(Set<MapleCharacter> nonLeaderMatchPlayers) {
         for (MapleCharacter chr : nonLeaderMatchPlayers) {
             if (chr.isLoggedinWorld()) {
-                chr.announce(MaplePacketCreator.genericGuildMessage((byte) 0x26));
+                chr.announce(PacketCreator.genericGuildMessage((byte) 0x26));
             }
         }
     }
@@ -55,7 +56,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
             
             @Override
             public void onMatchCreated(MapleCharacter leader, Set<MapleCharacter> nonLeaderMatchPlayers, String message) {
-                byte[] createGuildPacket = MaplePacketCreator.createGuildMessage(leader.getName(), message);
+                byte[] createGuildPacket = PacketCreator.createGuildMessage(leader.getName(), message);
                 
                 for (MapleCharacter chr : nonLeaderMatchPlayers) {
                     if (chr.isLoggedinWorld()) {
@@ -111,7 +112,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                 
                 int gid = Server.getInstance().createGuild(leader.getId(), message);
                 if (gid == 0) {
-                    leader.announce(MaplePacketCreator.genericGuildMessage((byte) 0x23));
+                    leader.announce(PacketCreator.genericGuildMessage((byte) 0x23));
                     broadcastGuildCreationDismiss(matchPlayers);
                     return;
                 }
@@ -121,7 +122,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                 MapleGuild guild = Server.getInstance().getGuild(leader.getGuildId(), leader.getWorld(), leader);  // initialize guild structure
                 Server.getInstance().changeRank(gid, leader.getId(), 1);
                 
-                leader.announce(MaplePacketCreator.showGuildInfo(leader));
+                leader.announce(PacketCreator.showGuildInfo(leader));
                 leader.dropMessage(1, "You have successfully created a Guild.");
                 
                 for (MapleCharacter chr : matchPlayers) {
@@ -135,7 +136,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                     Server.getInstance().addGuildMember(mgc, chr);
                     
                     if (chr.isLoggedinWorld()) {
-                        chr.announce(MaplePacketCreator.showGuildInfo(chr));
+                        chr.announce(PacketCreator.showGuildInfo(chr));
                         
                         if (cofounder) {
                             chr.dropMessage(1, "You have successfully cofounded a Guild.");
@@ -159,7 +160,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                     }
                     
                     if (chr.isLoggedinWorld()) {
-                        chr.announce(MaplePacketCreator.genericGuildMessage((byte)0x26));
+                        chr.announce(PacketCreator.genericGuildMessage((byte)0x26));
                     }
                 }
             }
@@ -189,7 +190,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                     
                     if (chr.isLoggedinWorld()) {
                         chr.message(msg);
-                        chr.announce(MaplePacketCreator.genericGuildMessage((byte)0x26));
+                        chr.announce(PacketCreator.genericGuildMessage((byte)0x26));
                     }
                 }
             }

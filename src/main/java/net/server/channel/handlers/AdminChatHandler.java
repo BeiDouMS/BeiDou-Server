@@ -4,7 +4,7 @@ import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
 import tools.LogHelper;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -21,7 +21,7 @@ public class AdminChatHandler extends AbstractMaplePacketHandler {
         byte mode = slea.readByte();
         //not saving slides...
         String message = slea.readMapleAsciiString();
-        byte[] packet = MaplePacketCreator.serverNotice(slea.readByte(), message);//maybe I should make a check for the slea.readByte()... but I just hope gm's don't fuck things up :)
+        byte[] packet = PacketCreator.serverNotice(slea.readByte(), message);//maybe I should make a check for the slea.readByte()... but I just hope gm's don't fuck things up :)
         switch (mode) {
             case 0:// /alertall, /noticeall, /slideall
                 c.getWorldServer().broadcastPacket(packet);

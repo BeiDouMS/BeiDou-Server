@@ -55,8 +55,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     moonRidge.spawnMonsterOnGroundBelow(nineTailedFox, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    moonRidge.broadcastMessage(MaplePacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    moonRidge.broadcastMessage(PacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

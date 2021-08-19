@@ -58,8 +58,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     hotSand.spawnMonsterOnGroundBelow(kingClang, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    hotSand.broadcastMessage(MaplePacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    hotSand.broadcastMessage(PacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

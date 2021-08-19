@@ -58,8 +58,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     lostTime2.spawnMonsterOnGroundBelow(timer3, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    lostTime2.broadcastMessage(MaplePacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    lostTime2.broadcastMessage(PacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

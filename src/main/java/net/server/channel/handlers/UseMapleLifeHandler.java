@@ -22,7 +22,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -37,18 +37,18 @@ public class UseMapleLifeHandler extends AbstractMaplePacketHandler {
         
         if(timeNow - player.getLastUsedCashItem() < 3000) {
             player.dropMessage(5, "Please wait a moment before trying again.");
-            c.announce(MaplePacketCreator.sendMapleLifeError(3));
-            c.announce(MaplePacketCreator.enableActions());
+            c.announce(PacketCreator.sendMapleLifeError(3));
+            c.announce(PacketCreator.enableActions());
             return;
         }
         player.setLastUsedCashItem(timeNow);
         
         String name = slea.readMapleAsciiString();
         if(MapleCharacter.canCreateChar(name)) {
-            c.announce(MaplePacketCreator.sendMapleLifeCharacterInfo());
+            c.announce(PacketCreator.sendMapleLifeCharacterInfo());
         } else {
-            c.announce(MaplePacketCreator.sendMapleLifeNameError());
+            c.announce(PacketCreator.sendMapleLifeNameError());
         }
-        c.announce(MaplePacketCreator.enableActions());
+        c.announce(PacketCreator.enableActions());
     }
 }

@@ -30,11 +30,11 @@ import io.netty.handler.timeout.IdleStateEvent;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
-import net.packet.logging.LoggingUtil;
-import net.packet.logging.MapleLogger;
 import net.packet.ByteBufOutPacket;
 import net.packet.InPacket;
 import net.packet.OutPacket;
+import net.packet.logging.LoggingUtil;
+import net.packet.logging.MapleLogger;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -208,7 +208,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 handler.handlePacket(accessor, this);
             } catch (final Throwable t) {
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + accessor);
-                //client.announce(MaplePacketCreator.enableActions());//bugs sometimes
+                //client.announce(PacketCreator.enableActions());//bugs sometimes
             }
         }
 
@@ -307,7 +307,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void sendCharList(int server) {
-        this.announce(MaplePacketCreator.getCharList(this, server, 0));
+        this.announce(PacketCreator.getCharList(this, server, 0));
     }
 
     public List<MapleCharacter> loadCharacters(int serverId) {
@@ -999,7 +999,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                             if (guild != null) {
                                 final Server server = Server.getInstance();
                                 server.setGuildMemberOnline(player, false, player.getClient().getChannel());
-                                player.getClient().announce(MaplePacketCreator.showGuildInfo(player));
+                                player.getClient().announce(PacketCreator.showGuildInfo(player));
                             }
                             if (bl != null) {
                                 wserv.loggedOff(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
@@ -1144,7 +1144,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void checkIfIdle(final IdleStateEvent event) {
         final long pingedAt = System.currentTimeMillis();
-        announce(MaplePacketCreator.getPing());
+        announce(PacketCreator.getPing());
         TimerManager.getInstance().schedule(() -> {
             try {
                 if (lastPong < pingedAt) {
@@ -1414,12 +1414,12 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     private void announceDisableServerMessage() {
         if (!this.getWorldServer().registerDisabledServerMessage(player.getId())) {
-            announce(MaplePacketCreator.serverMessage(""));
+            announce(PacketCreator.serverMessage(""));
         }
     }
 
     public void announceServerMessage() {
-        announce(MaplePacketCreator.serverMessage(this.getChannelServer().getServerMessage()));
+        announce(PacketCreator.serverMessage(this.getChannelServer().getServerMessage()));
     }
 
     public synchronized void announceBossHpBar(MapleMonster mm, final int mobHash, final byte[] packet) {
@@ -1477,8 +1477,8 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void announceHint(String msg, int length) {
-        announce(MaplePacketCreator.sendHint(msg, length, 10));
-        announce(MaplePacketCreator.enableActions());
+        announce(PacketCreator.sendHint(msg, length, 10));
+        announce(PacketCreator.enableActions());
     }
 
     public void changeChannel(int channel) {
@@ -1488,18 +1488,18 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             return;
         }
         if (!player.isAlive() || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
-            announce(MaplePacketCreator.enableActions());
+            announce(PacketCreator.enableActions());
             return;
         } else if (MapleMiniDungeonInfo.isDungeonMap(player.getMapId())) {
-            announce(MaplePacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
-            announce(MaplePacketCreator.enableActions());
+            announce(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
+            announce(PacketCreator.enableActions());
             return;
         }
 
         String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
-            announce(MaplePacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
-            announce(MaplePacketCreator.enableActions());
+            announce(PacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
+            announce(PacketCreator.enableActions());
             return;
         }
 
@@ -1530,7 +1530,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         player.setSessionTransitionState();
         try {
-            announce(MaplePacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
+            announce(PacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1586,7 +1586,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void enableCSActions() {
-        announce(MaplePacketCreator.enableCSUse(player));
+        announce(PacketCreator.enableCSUse(player));
     }
 
     public boolean canBypassPin() {

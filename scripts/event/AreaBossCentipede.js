@@ -49,11 +49,11 @@ function start() {
 
     const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
     const Point = Java.type('java.awt.Point');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
 
     var gcent = MapleLifeFactory.getMonster(5220004);
     herbGarden.spawnMonsterOnGroundBelow(gcent, new Point(560, 50));
-    herbGarden.broadcastMessage(MaplePacketCreator.serverNotice(6, "From the mists surrounding the herb garden, the gargantuous Giant Centipede appears."));
+    herbGarden.broadcastMessage(PacketCreator.serverNotice(6, "From the mists surrounding the herb garden, the gargantuous Giant Centipede appears."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

@@ -81,7 +81,7 @@ import java.util.stream.Collectors;
  *
  * @author Frz
  */
-public class MaplePacketCreator {
+public class PacketCreator {
 
         public static final List<Pair<MapleStat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
         private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari

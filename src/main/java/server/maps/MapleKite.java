@@ -1,9 +1,10 @@
 package server.maps;
 
-import java.awt.Point;
 import client.MapleCharacter;
 import client.MapleClient;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
+
+import java.awt.*;
 
 public class MapleKite extends AbstractMapleMapObject {
 
@@ -51,10 +52,10 @@ public class MapleKite extends AbstractMapleMapObject {
     }
 
     public final byte[] makeSpawnData() {
-        return MaplePacketCreator.spawnKite(getObjectId(), itemid, owner.getName(), text, pos, ft);
+        return PacketCreator.spawnKite(getObjectId(), itemid, owner.getName(), text, pos, ft);
     }
 
     public final byte[] makeDestroyData() {
-        return MaplePacketCreator.removeKite(getObjectId(), 0);
+        return PacketCreator.removeKite(getObjectId(), 0);
     }
 }

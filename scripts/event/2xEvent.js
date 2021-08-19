@@ -57,18 +57,18 @@ function cancelSchedule() {
 
 function start() {
     const Server = Java.type('net.server.Server');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
     world.setExpRate(8);
-    world.broadcastPacket(MaplePacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
+    world.broadcastPacket(PacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
 }
 
 function stop() {
     const Server = Java.type('net.server.Server');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
     world.setExpRate(4);
-    world.broadcastPacket(MaplePacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
+    world.broadcastPacket(PacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
 }
 
 // ---------- FILLER FUNCTIONS ----------

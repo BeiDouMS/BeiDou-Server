@@ -19,15 +19,16 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
-import java.awt.Point;
 import tools.FilePrinter;
+import tools.PacketCreator;
+import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.awt.*;
 
 /*
  * @author GabrielSin
@@ -46,7 +47,7 @@ public class GrenadeEffectHandler extends AbstractMaplePacketHandler {
             case Gunslinger.GRENADE:
                 int skillLevel = chr.getSkillLevel(skillId);
                 if (skillLevel > 0) {
-                    chr.getMap().broadcastMessage(chr, MaplePacketCreator.throwGrenade(chr.getId(), position, keyDown, skillId, skillLevel), position);
+                    chr.getMap().broadcastMessage(chr, PacketCreator.throwGrenade(chr.getId(), position, keyDown, skillId, skillLevel), position);
                 }
                 break;
             default:

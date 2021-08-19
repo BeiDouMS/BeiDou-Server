@@ -57,8 +57,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     eastRockyMountain5.spawnMonsterOnGroundBelow(stumpy, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    eastRockyMountain5.broadcastMessage(MaplePacketCreator.serverNotice(6, "Stumpy has appeared with a stumping sound that rings the Stone Mountain."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    eastRockyMountain5.broadcastMessage(PacketCreator.serverNotice(6, "Stumpy has appeared with a stumping sound that rings the Stone Mountain."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

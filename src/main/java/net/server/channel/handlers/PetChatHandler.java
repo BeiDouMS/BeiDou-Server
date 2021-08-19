@@ -27,7 +27,7 @@ import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
 import tools.FilePrinter;
 import tools.LogHelper;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class PetChatHandler extends AbstractMaplePacketHandler {
@@ -49,7 +49,7 @@ public final class PetChatHandler extends AbstractMaplePacketHandler {
         	c.disconnect(true, false);
         	return;
         }
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), MaplePacketCreator.petChat(c.getPlayer().getId(), pet, act, text), true);
+        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.petChat(c.getPlayer().getId(), pet, act, text), true);
         if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
             LogHelper.logChat(c, "Pet", text);
         }

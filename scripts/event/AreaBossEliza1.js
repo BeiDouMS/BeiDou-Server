@@ -52,11 +52,11 @@ function start() {
 		return;
 	}
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
     const Point = Java.type('java.awt.Point');
 	const spawnpoint = new Point(208, 83);
     stairwayToTheSky2.spawnMonsterOnGroundBelow(eliza, spawnpoint);
-    stairwayToTheSky2.broadcastMessage(MaplePacketCreator.serverNotice(6, "Eliza has appeared with a black whirlwind."));
+    stairwayToTheSky2.broadcastMessage(PacketCreator.serverNotice(6, "Eliza has appeared with a black whirlwind."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 
