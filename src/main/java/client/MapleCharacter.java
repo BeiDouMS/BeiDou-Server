@@ -255,6 +255,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private long lastExpGainTime;
     private boolean pendingNameChange; //only used to change name on logout, not to be relied upon elsewhere
     private long loginTime;
+    private boolean chasing = false;
     
     private MapleCharacter() {
         super.setListener(new AbstractCharacterListener() {
@@ -11323,5 +11324,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public int getLanguage() {
         return getClient().getLanguage();
     }
-    
+
+    public boolean isChasing() {
+        return chasing;
+    }
+
+    public void setChasing(boolean chasing) {
+        this.chasing = chasing;
+    }
 }

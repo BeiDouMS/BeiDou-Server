@@ -43,6 +43,7 @@ import net.server.Server;
 import net.server.channel.Channel;
 import net.server.channel.handlers.PlayerInteractionHandler;
 import net.server.channel.handlers.SummonDamageHandler.SummonAttackEntry;
+import net.server.channel.handlers.WhisperHandler;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
@@ -1038,7 +1039,12 @@ public class MaplePacketCreator {
                 mplew.writeInt(to.getId());
                 mplew.write(spawnPoint);
                 mplew.writeShort(chr.getHp());
-                mplew.writeBool(false);
+                mplew.writeBool(chr.isChasing());
+                if (chr.isChasing()) {
+                        chr.setChasing(false);
+                        mplew.writeInt(chr.getPosition().x);
+                        mplew.writeInt(chr.getPosition().y);
+                }
                 mplew.writeLong(getTime(Server.getInstance().getCurrentTime()));
                 return mplew.getPacket();
         }
@@ -3669,31 +3675,6 @@ public class MaplePacketCreator {
                 pQuickslot.Encode(pOutPacket);
 
                 return pOutPacket.getPacket();
-        }
-
-        public static byte[] getWhisper(String sender, int channel, String text) {
-                final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-                mplew.writeShort(SendOpcode.WHISPER.getValue());
-                mplew.write(0x12);
-                mplew.writeMapleAsciiString(sender);
-                mplew.writeShort(channel - 1); // I guess this is the channel
-                mplew.writeMapleAsciiString(text);
-                return mplew.getPacket();
-        }
-
-        /**
-         *
-         * @param target name of the target character
-         * @param reply error code: 0x0 = cannot find char, 0x1 = success
-         * @return the MaplePacket
-         */
-        public static byte[] getWhisperReply(String target, byte reply) {
-                final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-                mplew.writeShort(SendOpcode.WHISPER.getValue());
-                mplew.write(0x0A); // whisper?
-                mplew.writeMapleAsciiString(target);
-                mplew.write(reply);
-                return mplew.getPacket();
         }
 
         public static byte[] getInventoryFull() {
@@ -6359,43 +6340,64 @@ public class MaplePacketCreator {
                 return showCash(mc);
         }
 
-        /**
-         *
-         * @param target
-         * @param mapid
-         * @param MTSmapCSchannel 0: MTS 1: Map 2: CS 3: Different Channel
-         * @return
-         */
-        public static byte[] getFindReply(String target, int mapid, int MTSmapCSchannel) {
-                final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-                mplew.writeShort(SendOpcode.WHISPER.getValue());
-                mplew.write(9);
-                mplew.writeMapleAsciiString(target);
-                mplew.write(MTSmapCSchannel); // 0: mts 1: map 2: cs
-                mplew.writeInt(mapid); // -1 if mts, cs
-                if (MTSmapCSchannel == 1) {
-                        mplew.write(new byte[8]);
-                }
-                return mplew.getPacket();
+        public static class WhisperFlag {
+                public static final byte LOCATION = 0x01;
+                public static final byte WHISPER = 0x02;
+                public static final byte REQUEST = 0x04;
+                public static final byte RESULT = 0x08;
+                public static final byte RECEIVE = 0x10;
+                public static final byte BLOCKED = 0x20;
+                public static final byte LOCATION_FRIEND = 0x40;
         }
 
         /**
+         * User for /find, buddy find and /c (chase)
+         * CField::OnWhisper
          *
-         * @param target
-         * @param mapid
-         * @param MTSmapCSchannel 0: MTS 1: Map 2: CS 3: Different Channel
-         * @return
+         * @param target Name String from the command parameter
+         * @param type Location of the target
+         * @param fieldOrChannel If true & chr is not null, shows different channel message
+         * @param flag LOCATION or LOCATION_FRIEND
+         * @return packet structure
          */
-        public static byte[] getBuddyFindReply(String target, int mapid, int MTSmapCSchannel) {
-                final MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+        public static byte[] getFindResult(MapleCharacter target, byte type, int fieldOrChannel, byte flag) {
+                MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
                 mplew.writeShort(SendOpcode.WHISPER.getValue());
-                mplew.write(72);
-                mplew.writeMapleAsciiString(target);
-                mplew.write(MTSmapCSchannel); // 0: mts 1: map 2: cs
-                mplew.writeInt(mapid); // -1 if mts, cs
-                if (MTSmapCSchannel == 1) {
-                        mplew.write(new byte[8]);
+
+                mplew.write(flag | WhisperFlag.RESULT);
+                mplew.writeMapleAsciiString(target.getName());
+                mplew.write(type);
+                mplew.writeInt(fieldOrChannel);
+
+                if (type == WhisperHandler.RT_SAME_CHANNEL) {
+                        mplew.writeInt(target.getPosition().x);
+                        mplew.writeInt(target.getPosition().y);
                 }
+
+                return mplew.getPacket();
+        }
+
+        public static byte[] getWhisperResult(String target, boolean success) {
+                MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+                mplew.writeShort(SendOpcode.WHISPER.getValue());
+
+                mplew.write(WhisperFlag.WHISPER | WhisperFlag.RESULT);
+                mplew.writeMapleAsciiString(target);
+                mplew.writeBool(success);
+
+                return mplew.getPacket();
+        }
+
+        public static byte[] getWhisperReceive(String sender, int channel, boolean fromAdmin, String message) {
+                MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+                mplew.writeShort(SendOpcode.WHISPER.getValue());
+
+                mplew.write(WhisperFlag.WHISPER | WhisperFlag.RECEIVE);
+                mplew.writeMapleAsciiString(sender);
+                mplew.write(channel);
+                mplew.writeBool(fromAdmin);
+                mplew.writeMapleAsciiString(message);
+
                 return mplew.getPacket();
         }
 

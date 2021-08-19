@@ -1190,12 +1190,6 @@ public class World {
         return getPlayerStorage().getCharacterByName(charName) != null;
     }
 
-    public void whisper(String sender, String target, int channel, String message) {
-        if (isConnected(target)) {
-            getPlayerStorage().getCharacterByName(target).getClient().announce(MaplePacketCreator.getWhisper(sender, channel, message));
-        }
-    }
-
     public BuddyAddResult requestBuddyAdd(String addName, int channelFrom, int cidFrom, String nameFrom) {
         MapleCharacter addChar = getPlayerStorage().getCharacterByName(addName);
         if (addChar != null) {
