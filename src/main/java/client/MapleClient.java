@@ -33,6 +33,7 @@ import net.netty.InvalidPacketHeaderException;
 import net.packet.ByteBufOutPacket;
 import net.packet.InPacket;
 import net.packet.OutPacket;
+import net.packet.Packet;
 import net.packet.logging.LoggingUtil;
 import net.packet.logging.MapleLogger;
 import net.server.Server;
@@ -1467,10 +1468,10 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
     }
 
-    public void sendPacket(OutPacket outPacket) {
+    public void sendPacket(Packet packet) {
         announcerLock.lock();
         try {
-            ioChannel.writeAndFlush(outPacket.getBytes());
+            ioChannel.writeAndFlush(packet.getBytes());
         } finally {
             announcerLock.unlock();
         }

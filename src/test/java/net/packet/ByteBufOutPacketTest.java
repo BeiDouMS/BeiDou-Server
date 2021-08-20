@@ -143,7 +143,7 @@ class ByteBufOutPacketTest {
 
     @Test
     void writeBoolean_true() {
-        outPacket.writeBoolean(true);
+        outPacket.writeBool(true);
 
         ByteBuf wrapped = wrapExplicitlyWrittenBytes(outPacket);
         byte readByte = wrapped.readByte();
@@ -153,7 +153,7 @@ class ByteBufOutPacketTest {
 
     @Test
     void writeBoolean_false() {
-        outPacket.writeBoolean(false);
+        outPacket.writeBool(false);
 
         ByteBuf wrapped = wrapExplicitlyWrittenBytes(outPacket);
         byte readByte = wrapped.readByte();
@@ -202,5 +202,16 @@ class ByteBufOutPacketTest {
         assertEquals(0, wrapped.readByte());
         assertEquals(0, wrapped.readByte());
         assertEquals(secondWrittenByte, wrapped.readByte());
+    }
+
+    @Test
+    void whenGettingBytesRepeatedly_bytesShouldBeLockedInPlace() {
+        outPacket.writeByte(1);
+        byte[] initialWrite = outPacket.getBytes();
+
+        outPacket.writeByte(2);
+        byte[] afterWritingAgain = outPacket.getBytes();
+
+        assertArrayEquals(initialWrite, afterWritingAgain);
     }
 }

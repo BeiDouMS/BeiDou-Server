@@ -3,9 +3,9 @@ package net.encryption;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import net.packet.OutPacket;
+import net.packet.Packet;
 
-public class PacketEncoder extends MessageToByteEncoder<OutPacket> {
+public class PacketEncoder extends MessageToByteEncoder<Packet> {
     private final MapleAESOFB sendCypher;
 
     public PacketEncoder(MapleAESOFB sendCypher) {
@@ -13,7 +13,7 @@ public class PacketEncoder extends MessageToByteEncoder<OutPacket> {
     }
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, OutPacket in, ByteBuf out) {
+    protected void encode(ChannelHandlerContext ctx, Packet in, ByteBuf out) {
         byte[] packet = in.getBytes();
         out.writeBytes(getEncodedHeader(packet.length));
 

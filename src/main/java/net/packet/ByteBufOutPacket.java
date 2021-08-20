@@ -11,6 +11,7 @@ import java.awt.*;
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;
+    private byte[] bytes;
 
     @Deprecated(forRemoval = true)
     public ByteBufOutPacket() {
@@ -31,7 +32,12 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public byte[] getBytes() {
-        return ByteBufUtil.getBytes(byteBuf);
+        if (bytes == null) {
+            // Avoid creating new byte arrays when the packet is broadcast
+            bytes = ByteBufUtil.getBytes(byteBuf);
+        }
+
+        return bytes;
     }
 
     @Override
@@ -65,7 +71,7 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public void writeBoolean(boolean value) {
+    public void writeBool(boolean value) {
         byteBuf.writeByte(value ? 1 : 0);
     }
 
