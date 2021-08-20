@@ -42,7 +42,7 @@ public final class CharInfoRequestHandler extends AbstractMaplePacketHandler {
                 if(c.getPlayer().getId() != player.getId()) {
                     player.exportExcludedItems(c);
                 }
-                c.announce(PacketCreator.charInfo(player));
+                c.sendPacket(PacketCreator.charInfo(player));
             }
         }
     }

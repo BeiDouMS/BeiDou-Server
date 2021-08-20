@@ -41,7 +41,7 @@ public class AssignSPProcessor {
     
     public static boolean canSPAssign(MapleClient c, int skillid) {
         if (skillid == Aran.HIDDEN_FULL_DOUBLE || skillid == Aran.HIDDEN_FULL_TRIPLE || skillid == Aran.HIDDEN_OVER_DOUBLE || skillid == Aran.HIDDEN_OVER_TRIPLE) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return false;
         }
 
@@ -82,7 +82,7 @@ public class AssignSPProcessor {
                 if (!isBeginnerSkill) {
                     player.gainSp(-1, GameConstants.getSkillBook(skillid/10000), false);
                 } else {
-                    player.announce(PacketCreator.enableActions());
+                    player.sendPacket(PacketCreator.enableActions());
                 }
                 if (skill.getId() == Aran.FULL_SWING) {
                     player.changeSkillLevel(skill, (byte) (curLevel + 1), player.getMasterLevel(skill), player.getSkillExpiration(skill));

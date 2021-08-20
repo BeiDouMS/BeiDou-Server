@@ -32,7 +32,7 @@ public class FamilySummonResponseHandler extends AbstractMaplePacketHandler {
         } else {
             inviterEntry.refundEntitlement(MapleFamilyEntitlement.SUMMON_FAMILY);
             inviterEntry.gainReputation(MapleFamilyEntitlement.SUMMON_FAMILY.getRepCost(), false); //refund rep cost if declined
-            inviter.announce(PacketCreator.getFamilyInfo(inviterEntry));
+            inviter.sendPacket(PacketCreator.getFamilyInfo(inviterEntry));
             inviter.dropMessage(5, c.getPlayer().getName() + " has denied the summon request.");
         }
     }

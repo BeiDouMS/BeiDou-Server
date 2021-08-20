@@ -51,11 +51,11 @@ public final class ReportHandler extends AbstractMaplePacketHandler {
 					c.getPlayer().decreaseReports();
 					c.getPlayer().gainMeso(-300, true);
 				} else {
-					c.announce(PacketCreator.reportResponse((byte) 4));
+					c.sendPacket(PacketCreator.reportResponse((byte) 4));
 					return;
 				}
 			} else {
-				c.announce(PacketCreator.reportResponse((byte) 2));
+				c.sendPacket(PacketCreator.reportResponse((byte) 2));
 				return;
 			}
 			Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(6, victim + " was reported for: " + description));
@@ -70,7 +70,7 @@ public final class ReportHandler extends AbstractMaplePacketHandler {
 					c.getPlayer().decreaseReports();
 					c.getPlayer().gainMeso(-300, true);
 				} else {
-					c.announce(PacketCreator.reportResponse((byte) 4));
+					c.sendPacket(PacketCreator.reportResponse((byte) 4));
 					return;
 				}
 			}

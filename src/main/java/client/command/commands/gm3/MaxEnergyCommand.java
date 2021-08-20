@@ -37,6 +37,6 @@ public class MaxEnergyCommand extends Command {
     public void execute(MapleClient c, String[] params) {
         MapleCharacter player = c.getPlayer();
         c.getPlayer().setDojoEnergy(10000);
-        c.announce(PacketCreator.getEnergy("energy", 10000));
+        c.sendPacket(PacketCreator.getEnergy("energy", 10000));
     }
 }

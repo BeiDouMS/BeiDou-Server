@@ -267,7 +267,7 @@ public final class InventorySortHandler extends AbstractMaplePacketHandler {
         chr.getAutobanManager().setTimestamp(3, Server.getInstance().getCurrentTimestamp(), 4);
         
         if(!YamlConfig.config.server.USE_ITEM_SORT) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         
@@ -308,8 +308,8 @@ public final class InventorySortHandler extends AbstractMaplePacketHandler {
             inventory.unlockInventory();
         }
         
-        c.announce(PacketCreator.modifyInventory(true, mods));
-        c.announce(PacketCreator.finishedSort2(invType));
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        c.sendPacket(PacketCreator.finishedSort2(invType));
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

@@ -38,7 +38,7 @@ public final class OwlWarpHandler extends AbstractMaplePacketHandler {
         int mapid = slea.readInt();
         
         if(ownerid == c.getPlayer().getId()) {
-            c.announce(PacketCreator.serverNotice(1, "You cannot visit your own shop."));
+            c.sendPacket(PacketCreator.serverNotice(1, "You cannot visit your own shop."));
             return;
         }
         
@@ -47,8 +47,8 @@ public final class OwlWarpHandler extends AbstractMaplePacketHandler {
         if(hm == null || hm.getMapId() != mapid || !hm.hasItem(c.getPlayer().getOwlSearch())) {
             ps = c.getWorldServer().getPlayerShop(ownerid);
             if(ps == null || ps.getMapId() != mapid || !ps.hasItem(c.getPlayer().getOwlSearch())) {
-                if(hm == null && ps == null) c.announce(PacketCreator.getOwlMessage(1));
-                else c.announce(PacketCreator.getOwlMessage(3));
+                if(hm == null && ps == null) c.sendPacket(PacketCreator.getOwlMessage(1));
+                else c.sendPacket(PacketCreator.getOwlMessage(3));
                 return;
             }
             
@@ -59,22 +59,22 @@ public final class OwlWarpHandler extends AbstractMaplePacketHandler {
 
                         if(ps.isOpen()) {   //change map has a delay, must double check
                             if(!ps.visitShop(c.getPlayer())) {
-                                if(!ps.isBanned(c.getPlayer().getName())) c.announce(PacketCreator.getOwlMessage(2));
-                                else c.announce(PacketCreator.getOwlMessage(17));
+                                if(!ps.isBanned(c.getPlayer().getName())) c.sendPacket(PacketCreator.getOwlMessage(2));
+                                else c.sendPacket(PacketCreator.getOwlMessage(17));
                             }
                         } else {
-                            //c.announce(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
-                            c.announce(PacketCreator.getOwlMessage(18));
+                            //c.sendPacket(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
+                            c.sendPacket(PacketCreator.getOwlMessage(18));
                         }
                     } else {
-                        c.announce(PacketCreator.serverNotice(1, "That shop is currently located in another channel. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
+                        c.sendPacket(PacketCreator.serverNotice(1, "That shop is currently located in another channel. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
                     }
                 } else {
-                    c.announce(PacketCreator.serverNotice(1, "That shop is currently located outside of the FM area. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
+                    c.sendPacket(PacketCreator.serverNotice(1, "That shop is currently located outside of the FM area. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
                 }
             } else {
-                //c.announce(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
-                c.announce(PacketCreator.getOwlMessage(18));
+                //c.sendPacket(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
+                c.sendPacket(PacketCreator.getOwlMessage(18));
             }
         } else {
             if(hm.isOpen()) {
@@ -84,25 +84,25 @@ public final class OwlWarpHandler extends AbstractMaplePacketHandler {
 
                         if(hm.isOpen()) {   //change map has a delay, must double check
                             if(hm.addVisitor(c.getPlayer())) {
-                                c.announce(PacketCreator.getHiredMerchant(c.getPlayer(), hm, false));
+                                c.sendPacket(PacketCreator.getHiredMerchant(c.getPlayer(), hm, false));
                                 c.getPlayer().setHiredMerchant(hm);
                             } else {
-                                //c.announce(PacketCreator.serverNotice(1, hm.getOwner() + "'s merchant is full. Wait awhile before trying again."));
-                                c.announce(PacketCreator.getOwlMessage(2));
+                                //c.sendPacket(PacketCreator.serverNotice(1, hm.getOwner() + "'s merchant is full. Wait awhile before trying again."));
+                                c.sendPacket(PacketCreator.getOwlMessage(2));
                             }
                         } else {
-                            //c.announce(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
-                            c.announce(PacketCreator.getOwlMessage(18));
+                            //c.sendPacket(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
+                            c.sendPacket(PacketCreator.getOwlMessage(18));
                         }
                     } else {
-                        c.announce(PacketCreator.serverNotice(1, "That merchant is currently located in another channel. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
+                        c.sendPacket(PacketCreator.serverNotice(1, "That merchant is currently located in another channel. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
                     }
                 } else {
-                    c.announce(PacketCreator.serverNotice(1, "That merchant is currently located outside of the FM area. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
+                    c.sendPacket(PacketCreator.serverNotice(1, "That merchant is currently located outside of the FM area. Current location: Channel " + hm.getChannel() + ", '" + hm.getMap().getMapName() + "'."));
                 }
             } else {
-                //c.announce(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
-                c.announce(PacketCreator.getOwlMessage(18));
+                //c.sendPacket(PacketCreator.serverNotice(1, "That merchant has either been closed or is under maintenance."));
+                c.sendPacket(PacketCreator.getOwlMessage(18));
             }
         }
     }

@@ -90,7 +90,7 @@ public abstract class CharacterFactory {
                 if (!newchar.insertNewChar(recipe)) {
                         return -2;
                 }
-                c.announce(PacketCreator.addNewCharEntry(newchar));
+                c.sendPacket(PacketCreator.addNewCharEntry(newchar));
                 
                 Server.getInstance().createCharacterEntry(newchar);
                 Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + " has created a new character with IGN " + name));

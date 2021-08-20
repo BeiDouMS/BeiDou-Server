@@ -96,7 +96,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                 theSkill = SkillFactory.getSkill(attack.skill); // thanks Conrad for noticing some Aran skills not consuming MP
                 attackEffect = attack.getAttackEffect(player, theSkill); //returns back the player's attack effect so we are gucci
                 if (attackEffect == null) {
-                    player.announce(PacketCreator.enableActions());
+                    player.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
@@ -127,7 +127,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                             }
                         }
                     } else {
-                        player.announce(PacketCreator.enableActions());
+                        player.sendPacket(PacketCreator.enableActions());
                     }
                 }
                 

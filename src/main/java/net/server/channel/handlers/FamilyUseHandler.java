@@ -51,7 +51,7 @@ public final class FamilyUseHandler extends AbstractMaplePacketHandler {
         if(entry.getReputation() < cost || entry.isEntitlementUsed(type)) {
             return; // shouldn't even be able to request it
         }
-        c.announce(PacketCreator.getFamilyInfo(entry));
+        c.sendPacket(PacketCreator.getFamilyInfo(entry));
         MapleCharacter victim;
         if(type == MapleFamilyEntitlement.FAMILY_REUINION || type == MapleFamilyEntitlement.SUMMON_FAMILY) {
             victim = c.getChannelServer().getPlayerStorage().getCharacterByName(slea.readMapleAsciiString());
@@ -67,7 +67,7 @@ public final class FamilyUseHandler extends AbstractMaplePacketHandler {
                                 c.getPlayer().changeMap(victim.getMap(), victim.getMap().getPortal(0));
                                 useEntitlement(entry, type);
                             } else {
-                                c.announce(PacketCreator.sendFamilyMessage(75, 0)); // wrong message, but close enough. (client should check this first anyway)
+                                c.sendPacket(PacketCreator.sendFamilyMessage(75, 0)); // wrong message, but close enough. (client should check this first anyway)
                                 return;
                             }
                         } else {
@@ -75,20 +75,20 @@ public final class FamilyUseHandler extends AbstractMaplePacketHandler {
                                     && (ownMap.getForcedReturnId() == 999999999 || ownMap.getId() < 100000000) && ownMap.getEventInstance() == null) {
                                 
                                 if(MapleInviteCoordinator.hasInvite(InviteType.FAMILY_SUMMON, victim.getId())) {
-                                    c.announce(PacketCreator.sendFamilyMessage(74, 0));
+                                    c.sendPacket(PacketCreator.sendFamilyMessage(74, 0));
                                     return;
                                 }
                                 MapleInviteCoordinator.createInvite(InviteType.FAMILY_SUMMON, c.getPlayer(), victim, victim.getId(), c.getPlayer().getMap());
-                                victim.announce(PacketCreator.sendFamilySummonRequest(c.getPlayer().getFamily().getName(), c.getPlayer().getName()));
+                                victim.sendPacket(PacketCreator.sendFamilySummonRequest(c.getPlayer().getFamily().getName(), c.getPlayer().getName()));
                                 useEntitlement(entry, type);
                             } else {
-                                c.announce(PacketCreator.sendFamilyMessage(75, 0));
+                                c.sendPacket(PacketCreator.sendFamilyMessage(75, 0));
                                 return;
                             }
                         }
                     }
                 } else {
-                    c.announce(PacketCreator.sendFamilyMessage(67, 0));
+                    c.sendPacket(PacketCreator.sendFamilyMessage(67, 0));
                 }
             }
         } else if(type == MapleFamilyEntitlement.FAMILY_BONDING) {
@@ -133,7 +133,7 @@ public final class FamilyUseHandler extends AbstractMaplePacketHandler {
     private boolean useEntitlement(MapleFamilyEntry entry, MapleFamilyEntitlement entitlement) {
         if(entry.useEntitlement(entitlement)) {
             entry.gainReputation(-entitlement.getRepCost(), false);
-            entry.getChr().announce(PacketCreator.getFamilyInfo(entry));
+            entry.getChr().sendPacket(PacketCreator.getFamilyInfo(entry));
             return true;
         }
         return false;

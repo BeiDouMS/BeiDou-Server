@@ -40,7 +40,7 @@ public class SetGenderHandler extends AbstractMaplePacketHandler {
             byte confirmed = slea.readByte();
             if (confirmed == 0x01) {
                 c.setGender(slea.readByte());
-                c.announce(PacketCreator.getAuthSuccess(c));
+                c.sendPacket(PacketCreator.getAuthSuccess(c));
 
                 Server.getInstance().registerLoginState(c);
             } else {

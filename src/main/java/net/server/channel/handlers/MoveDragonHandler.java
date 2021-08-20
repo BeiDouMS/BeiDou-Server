@@ -45,7 +45,7 @@ public class MoveDragonHandler extends AbstractMovementPacketHandler {
                 slea.seek(movementDataStart);
                 
                 if (chr.isHidden()) {
-                    chr.getMap().broadcastGMMessage(chr, PacketCreator.moveDragon(dragon, startPos, slea, movementDataLength));
+                    chr.getMap().broadcastGMPacket(chr, PacketCreator.moveDragon(dragon, startPos, slea, movementDataLength));
                 } else {
                     chr.getMap().broadcastMessage(chr, PacketCreator.moveDragon(dragon, startPos, slea, movementDataLength), dragon.getPosition());
                 }

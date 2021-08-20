@@ -23,9 +23,9 @@ public final class AcceptToSHandler extends AbstractMaplePacketHandler {
             return;
         }
         if (c.finishLogin() == 0) {
-            c.announce(PacketCreator.getAuthSuccess(c));
+            c.sendPacket(PacketCreator.getAuthSuccess(c));
         } else {
-            c.announce(PacketCreator.getLoginFailed(9));//shouldn't happen XD
+            c.sendPacket(PacketCreator.getLoginFailed(9));//shouldn't happen XD
         }
     }
 }

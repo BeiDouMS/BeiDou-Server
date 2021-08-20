@@ -44,10 +44,10 @@ public class TimerCommand extends Command {
         MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             if (params[1].equalsIgnoreCase("remove")) {
-                victim.announce(PacketCreator.removeClock());
+                victim.sendPacket(PacketCreator.removeClock());
             } else {
                 try {
-                    victim.announce(PacketCreator.getClock(Integer.parseInt(params[1])));
+                    victim.sendPacket(PacketCreator.getClock(Integer.parseInt(params[1])));
                 } catch (NumberFormatException e) {
                     player.yellowMessage("Syntax: !timer <playername> <seconds>|remove");
                 }

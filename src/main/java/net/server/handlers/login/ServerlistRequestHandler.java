@@ -40,10 +40,10 @@ public final class ServerlistRequestHandler extends AbstractMaplePacketHandler {
         c.requestedServerlist(worlds.size());
         
         for (World world : worlds) {
-            c.announce(PacketCreator.getServerList(world.getId(), GameConstants.WORLD_NAMES[world.getId()], world.getFlag(), world.getEventMessage(), world.getChannels()));
+            c.sendPacket(PacketCreator.getServerList(world.getId(), GameConstants.WORLD_NAMES[world.getId()], world.getFlag(), world.getEventMessage(), world.getChannels()));
         }
-        c.announce(PacketCreator.getEndOfServerList());
-        c.announce(PacketCreator.selectWorld(0));//too lazy to make a check lol
-        c.announce(PacketCreator.sendRecommended(server.worldRecommendedList()));
+        c.sendPacket(PacketCreator.getEndOfServerList());
+        c.sendPacket(PacketCreator.selectWorld(0));//too lazy to make a check lol
+        c.sendPacket(PacketCreator.sendRecommended(server.worldRecommendedList()));
     }
 }

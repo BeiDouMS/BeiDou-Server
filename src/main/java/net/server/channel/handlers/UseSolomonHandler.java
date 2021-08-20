@@ -75,6 +75,6 @@ public final class UseSolomonHandler extends AbstractMaplePacketHandler {
             }
         }
         
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

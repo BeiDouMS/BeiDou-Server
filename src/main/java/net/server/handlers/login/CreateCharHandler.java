@@ -84,12 +84,12 @@ public final class CreateCharHandler extends AbstractMaplePacketHandler {
 		} else if (job == 2) { // Aran
 			status = LegendCreator.createCharacter(c, name, face, hair + haircolor, skincolor, top, bottom, shoes, weapon, gender);
 		} else {
-			c.announce(PacketCreator.deleteCharResponse(0, 9));
+			c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
 			return;
 		}
                 
                 if (status == -2) {
-                        c.announce(PacketCreator.deleteCharResponse(0, 9));
+                        c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
                 }
 	}
 }

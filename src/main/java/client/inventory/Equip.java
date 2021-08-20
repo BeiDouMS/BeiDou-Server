@@ -532,8 +532,8 @@ public class Equip extends Item {
         showLevelupMessage(showStr, c); // thanks to Polaris dev team !
         c.getPlayer().dropMessage(6, lvupStr);
         
-        c.announce(PacketCreator.showEquipmentLevelUp());
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignEffect(c.getPlayer().getId(), 15));
+        c.sendPacket(PacketCreator.showEquipmentLevelUp());
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PacketCreator.showForeignEffect(c.getPlayer().getId(), 15));
         c.getPlayer().forceUpdateItem(this);
     }
 

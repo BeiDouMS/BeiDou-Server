@@ -176,9 +176,9 @@ class ByteBufOutPacketTest {
     }
 
     @Test
-    void writePoint() {
+    void writePosition() {
         final Point writtenPoint = new Point(23, 42);
-        outPacket.writePoint(writtenPoint);
+        outPacket.writePos(writtenPoint);
 
         ByteBuf wrapped = wrapExplicitlyWrittenBytes(outPacket);
         short readX = wrapped.readShortLE();

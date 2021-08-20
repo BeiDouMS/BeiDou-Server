@@ -6,8 +6,8 @@ function start(ms) {
 
 	if(map.getDocked()) {
 		const PacketCreator = Java.type('tools.PacketCreator');
-		ms.getClient().announce(PacketCreator.musicChange("Bgm04/ArabPirate"));
-		ms.getClient().announce(PacketCreator.crogBoatPacket(true));
+		ms.getClient().sendPacket(PacketCreator.musicChange("Bgm04/ArabPirate"));
+		ms.getClient().sendPacket(PacketCreator.crogBoatPacket(true));
 	}
 
 	return true;

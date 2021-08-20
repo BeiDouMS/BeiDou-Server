@@ -188,7 +188,7 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
                 Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> codeRes = getNXCodeResult(c.getPlayer(), code.toUpperCase());
                 int type = codeRes.getLeft();
                 if (type < 0) {
-                    c.announce(PacketCreator.showCashShopMessage((byte) parseCouponResult(type)));
+                    c.sendPacket(PacketCreator.showCashShopMessage((byte) parseCouponResult(type)));
                 } else {
                     List<Item> cashItems = new LinkedList<>();
                     List<Pair<Integer, Integer>> items = new LinkedList<>();
@@ -260,9 +260,9 @@ public final class CouponCodeHandler extends AbstractMaplePacketHandler {
                         }
                     }
                     if (nxCredit != 0 || nxPrepaid != 0) { //coupon packet can only show maple points (afaik)
-                        c.announce(PacketCreator.showBoughtQuestItem(0));
+                        c.sendPacket(PacketCreator.showBoughtQuestItem(0));
                     } else {
-                        c.announce(PacketCreator.showCouponRedeemedItems(c.getAccID(), maplePoints, mesos, cashItems, items));
+                        c.sendPacket(PacketCreator.showCouponRedeemedItems(c.getAccID(), maplePoints, mesos, cashItems, items));
                     }
                     c.enableCSActions();
                 }

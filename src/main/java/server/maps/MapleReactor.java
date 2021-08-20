@@ -23,6 +23,7 @@ package server.maps;
 
 import client.MapleClient;
 import config.YamlConfig;
+import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.task.channel.OverallService;
@@ -166,21 +167,21 @@ public class MapleReactor extends AbstractMapleMapObject {
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.announce(makeDestroyData());
+        client.sendPacket(makeDestroyData());
     }
 
-    public final byte[] makeDestroyData() {
+    public final Packet makeDestroyData() {
         return PacketCreator.destroyReactor(this);
     }
 
     @Override
     public void sendSpawnData(MapleClient client) {
         if (this.isAlive()) {
-            client.announce(makeSpawnData());
+            client.sendPacket(makeSpawnData());
         }
     }
 
-    public final byte[] makeSpawnData() {
+    public final Packet makeSpawnData() {
         return PacketCreator.spawnReactor(this);
     }
 

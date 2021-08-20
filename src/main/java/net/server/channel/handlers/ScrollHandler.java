@@ -171,7 +171,7 @@ public final class ScrollHandler extends AbstractMaplePacketHandler {
                     mods.add(new ModifyInventory(3, scrolled));
                     mods.add(new ModifyInventory(0, scrolled));
                 }
-                c.announce(PacketCreator.modifyInventory(true, mods));
+                c.sendPacket(PacketCreator.modifyInventory(true, mods));
                 chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, whiteScroll));
                 if (dst < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE)) {
                     chr.equipChanged();
@@ -184,9 +184,9 @@ public final class ScrollHandler extends AbstractMaplePacketHandler {
     
     private static void announceCannotScroll(MapleClient c, boolean legendarySpirit) {
         if (legendarySpirit) {
-            c.announce(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, false, false));
+            c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, false, false));
         } else {
-            c.announce(PacketCreator.getInventoryFull());
+            c.sendPacket(PacketCreator.getInventoryFull());
         }
     }
 

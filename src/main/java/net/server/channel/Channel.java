@@ -25,6 +25,7 @@ import client.MapleCharacter;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.netty.ChannelServer;
+import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
 import net.server.audit.LockCollector;
@@ -263,7 +264,7 @@ public final class Channel {
     
     public void addPlayer(MapleCharacter chr) {
         players.addPlayer(chr);
-        chr.announce(PacketCreator.serverMessage(serverMessage));
+        chr.sendPacket(PacketCreator.serverMessage(serverMessage));
     }
     
     public String getServerMessage() {
@@ -282,9 +283,9 @@ public final class Channel {
         return (int)(Math.ceil(((float) players.getAllCharacters().size() / YamlConfig.config.server.CHANNEL_LOAD) * 800));
     }
 
-    public void broadcastPacket(final byte[] data) {
+    public void broadcastPacket(Packet packet) {
         for (MapleCharacter chr : players.getAllCharacters()) {
-            chr.announce(data);
+            chr.sendPacket(packet);
         }
     }
     
@@ -308,10 +309,10 @@ public final class Channel {
         return eventSM;
     }
 
-    public void broadcastGMPacket(final byte[] data) {
+    public void broadcastGMPacket(Packet packet) {
         for (MapleCharacter chr : players.getAllCharacters()) {
             if (chr.isGM()) {
-                chr.announce(data);
+                chr.sendPacket(packet);
             }
         }
     }

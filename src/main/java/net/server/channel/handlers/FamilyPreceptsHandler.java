@@ -17,7 +17,7 @@ public class FamilyPreceptsHandler extends AbstractMaplePacketHandler {
         if(newPrecepts.length() > 200) return;
         family.setMessage(newPrecepts, true);
         //family.broadcastFamilyInfoUpdate(); //probably don't need to broadcast for this?
-        c.announce(PacketCreator.getFamilyInfo(c.getPlayer().getFamilyEntry()));
+        c.sendPacket(PacketCreator.getFamilyInfo(c.getPlayer().getFamilyEntry()));
     }
 
 }

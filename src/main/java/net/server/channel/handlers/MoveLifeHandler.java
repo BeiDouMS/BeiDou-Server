@@ -150,9 +150,9 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 if (aggro == null) return;
 
                 if (nextUse != null) {
-                        c.announce(PacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro, nextSkillId, nextSkillLevel));
+                        c.sendPacket(PacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro, nextSkillId, nextSkillLevel));
 		} else {
-			c.announce(PacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro));
+			c.sendPacket(PacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro));
 		}
                 
                 

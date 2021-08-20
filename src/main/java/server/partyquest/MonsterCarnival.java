@@ -374,12 +374,12 @@ public class MonsterCarnival {
             MapleCharacter mc = mpc.getPlayer();
             if (mc != null) {
                 if (redWin) {
-                    mc.getClient().announce(PacketCreator.showEffect("quest/carnival/win"));
-                    mc.getClient().announce(PacketCreator.playSound("MobCarnival/Win"));
+                    mc.sendPacket(PacketCreator.showEffect("quest/carnival/win"));
+                    mc.sendPacket(PacketCreator.playSound("MobCarnival/Win"));
                     mc.dispelDebuffs();
                 } else {
-                    mc.getClient().announce(PacketCreator.showEffect("quest/carnival/lose"));
-                    mc.getClient().announce(PacketCreator.playSound("MobCarnival/Lose"));
+                    mc.sendPacket(PacketCreator.showEffect("quest/carnival/lose"));
+                    mc.sendPacket(PacketCreator.playSound("MobCarnival/Lose"));
                     mc.dispelDebuffs();
                 }
             }
@@ -388,12 +388,12 @@ public class MonsterCarnival {
             MapleCharacter mc = mpc.getPlayer();
             if (mc != null) {
                 if (!redWin) {
-                    mc.getClient().announce(PacketCreator.showEffect("quest/carnival/win"));
-                    mc.getClient().announce(PacketCreator.playSound("MobCarnival/Win"));
+                    mc.sendPacket(PacketCreator.showEffect("quest/carnival/win"));
+                    mc.sendPacket(PacketCreator.playSound("MobCarnival/Win"));
                     mc.dispelDebuffs();
                 } else {
-                    mc.getClient().announce(PacketCreator.showEffect("quest/carnival/lose"));
-                    mc.getClient().announce(PacketCreator.playSound("MobCarnival/Lose"));
+                    mc.sendPacket(PacketCreator.showEffect("quest/carnival/lose"));
+                    mc.sendPacket(PacketCreator.playSound("MobCarnival/Lose"));
                     mc.dispelDebuffs();
                 }
             }

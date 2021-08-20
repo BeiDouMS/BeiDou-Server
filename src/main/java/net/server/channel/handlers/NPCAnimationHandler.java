@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.opcodes.SendOpcode;
+import net.packet.OutPacket;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.data.output.MaplePacketLittleEndianWriter;
 
 public final class NPCAnimationHandler extends AbstractMaplePacketHandler {
     @Override
@@ -33,20 +33,17 @@ public final class NPCAnimationHandler extends AbstractMaplePacketHandler {
         if (c.getPlayer().isChangingMaps()) {   // possible cause of error 38 in some map transition scenarios, thanks Arnah
             return;
         }
-        
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
+
+        OutPacket p = OutPacket.create(SendOpcode.NPC_ACTION);
         int length = (int) slea.available();
         if (length == 6) { // NPC Talk
-            mplew.writeShort(SendOpcode.NPC_ACTION.getValue());
-            mplew.writeInt(slea.readInt());
-            mplew.write(slea.readByte());   // 2 bytes, thanks resinate
-            mplew.write(slea.readByte());
-            c.announce(mplew.getPacket());
+            p.writeInt(slea.readInt());
+            p.writeByte(slea.readByte());   // 2 bytes, thanks resinate
+            p.writeByte(slea.readByte());
         } else if (length > 6) { // NPC Move
             byte[] bytes = slea.read(length - 9);
-            mplew.writeShort(SendOpcode.NPC_ACTION.getValue());
-            mplew.write(bytes);
-            c.announce(mplew.getPacket());
+            p.writeBytes(bytes);
         }
+        c.sendPacket(p);
     }
 }

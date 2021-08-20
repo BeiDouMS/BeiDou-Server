@@ -36,7 +36,7 @@ public final class OpenFamilyPedigreeHandler extends AbstractMaplePacketHandler 
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(slea.readMapleAsciiString());
         if(target != null && target.getFamily() != null) {
-            c.announce(PacketCreator.showPedigree(target.getFamilyEntry()));
+            c.sendPacket(PacketCreator.showPedigree(target.getFamilyEntry()));
         }
     }
 }

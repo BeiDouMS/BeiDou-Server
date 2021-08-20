@@ -1,6 +1,6 @@
 package client.keybind;
 
-import tools.data.output.MaplePacketLittleEndianWriter;
+import net.packet.OutPacket;
 
 import java.util.Arrays;
 
@@ -31,25 +31,22 @@ public class MapleQuickslotBinding
         this.m_aQuickslotKeyMapped = aKeys.clone();
     }
 
-    public void Encode(MaplePacketLittleEndianWriter oPacket)
+    public void encode(OutPacket p)
     {
         // Quickslots are default.
         // The client will skip them and call CQuickslotKeyMappedMan::DefaultQuickslotKeyMap.
-        if(Arrays.equals(this.m_aQuickslotKeyMapped, DEFAULT_QUICKSLOTS))
-        {
-            oPacket.writeBool(false);
-
+        if (Arrays.equals(this.m_aQuickslotKeyMapped, DEFAULT_QUICKSLOTS)) {
+            p.writeBool(false);
             return;
         }
 
-        oPacket.writeBool(true);
+        p.writeBool(true);
 
-        for(byte nKey : this.m_aQuickslotKeyMapped)
-        {
+        for(byte nKey : this.m_aQuickslotKeyMapped) {
             // For some reason Nexon sends these as integers, similar to CFuncKeyMappedMan.
             // However there's no evidence any key can be above 0xFF anyhow.
             // Regardless, we need to encode an integer to avoid an error 38 crash; as CFuncKeyMapped::m_aQuickslotKeyMapped is int[8].
-            oPacket.writeInt(nKey);
+            p.writeInt(nKey);
         }
     }
     

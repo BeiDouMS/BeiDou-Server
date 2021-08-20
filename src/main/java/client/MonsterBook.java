@@ -84,10 +84,10 @@ public final class MonsterBook {
                 calculateLevel();
             }
             
-            c.announce(PacketCreator.addCard(false, cardid, qty + 1));
-            c.announce(PacketCreator.showGainCard());
+            c.sendPacket(PacketCreator.addCard(false, cardid, qty + 1));
+            c.sendPacket(PacketCreator.showGainCard());
         } else {
-            c.announce(PacketCreator.addCard(true, cardid, 5));
+            c.sendPacket(PacketCreator.addCard(true, cardid, 5));
         }
     }
 

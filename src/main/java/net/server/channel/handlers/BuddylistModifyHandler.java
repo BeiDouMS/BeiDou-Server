@@ -54,7 +54,7 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
     private void nextPendingRequest(MapleClient c) {
         CharacterNameAndId pendingBuddyRequest = c.getPlayer().getBuddylist().pollPendingRequest();
         if (pendingBuddyRequest != null) {
-            c.announce(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), c.getPlayer().getId(), pendingBuddyRequest.getName()));
+            c.sendPacket(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), c.getPlayer().getId(), pendingBuddyRequest.getName()));
         }
     }
 
@@ -88,9 +88,9 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
             }
             BuddylistEntry ble = buddylist.get(addName);
             if (ble != null && !ble.isVisible() && group.equals(ble.getGroup())) {
-                c.announce(PacketCreator.serverNotice(1, "You already have \"" + ble.getName() + "\" on your Buddylist"));
+                c.sendPacket(PacketCreator.serverNotice(1, "You already have \"" + ble.getName() + "\" on your Buddylist"));
             } else if (buddylist.isFull() && ble == null) {
-                c.announce(PacketCreator.serverNotice(1, "Your buddylist is already full"));
+                c.sendPacket(PacketCreator.serverNotice(1, "Your buddylist is already full"));
             } else if (ble == null) {
                 try {
                     World world = c.getWorldServer();
@@ -135,7 +135,7 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
                             }
                         }
                         if (buddyAddResult == BuddyAddResult.BUDDYLIST_FULL) {
-                            c.announce(PacketCreator.serverNotice(1, "\"" + addName + "\"'s Buddylist is full"));
+                            c.sendPacket(PacketCreator.serverNotice(1, "\"" + addName + "\"'s Buddylist is full"));
                         } else {
                             int displayChannel;
                             displayChannel = -1;
@@ -152,17 +152,17 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
                                 }
                             }
                             buddylist.put(new BuddylistEntry(charWithId.getName(), group, otherCid, displayChannel, true));
-                            c.announce(PacketCreator.updateBuddylist(buddylist.getBuddies()));
+                            c.sendPacket(PacketCreator.updateBuddylist(buddylist.getBuddies()));
                         }
                     } else {
-                        c.announce(PacketCreator.serverNotice(1, "A character called \"" + addName + "\" does not exist"));
+                        c.sendPacket(PacketCreator.serverNotice(1, "A character called \"" + addName + "\" does not exist"));
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             } else {
                 ble.changeGroup(group);
-                c.announce(PacketCreator.updateBuddylist(buddylist.getBuddies()));
+                c.sendPacket(PacketCreator.updateBuddylist(buddylist.getBuddies()));
             }
         } else if (mode == 2) { // accept buddy
             int otherCid = slea.readInt();
@@ -187,7 +187,7 @@ public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
                     }
                     if (otherName != null) {
                         buddylist.put(new BuddylistEntry(otherName, "Default Group", otherCid, channel, true));
-                        c.announce(PacketCreator.updateBuddylist(buddylist.getBuddies()));
+                        c.sendPacket(PacketCreator.updateBuddylist(buddylist.getBuddies()));
                         notifyRemoteChannel(c, channel, otherCid, ADDED);
                     }
                 } catch (SQLException e) {

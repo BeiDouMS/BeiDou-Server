@@ -43,18 +43,18 @@ public final class TransferWorldHandler extends AbstractMaplePacketHandler {
         slea.readInt(); //cid
         int birthday = slea.readInt();
         if (!CashOperationHandler.checkBirthday(c, birthday)) {
-            c.announce(PacketCreator.showCashShopMessage((byte) 0xC4));
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC4));
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         MapleCharacter chr = c.getPlayer();
         if(!YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER || Server.getInstance().getWorldsSize() <= 1) {
-            c.announce(PacketCreator.sendWorldTransferRules(9, c));
+            c.sendPacket(PacketCreator.sendWorldTransferRules(9, c));
             return;
         }
         int worldTransferError = chr.checkWorldTransferEligibility();
         if(worldTransferError != 0) {
-            c.announce(PacketCreator.sendWorldTransferRules(worldTransferError, c));
+            c.sendPacket(PacketCreator.sendWorldTransferRules(worldTransferError, c));
             return;
         }
         try (Connection con = DatabaseConnection.getConnection();
@@ -64,10 +64,10 @@ public final class TransferWorldHandler extends AbstractMaplePacketHandler {
             while(rs.next()) {
                 Timestamp completedTimestamp = rs.getTimestamp("completionTime");
                 if(completedTimestamp == null) { //has pending world transfer
-                    c.announce(PacketCreator.sendWorldTransferRules(6, c));
+                    c.sendPacket(PacketCreator.sendWorldTransferRules(6, c));
                     return;
                 } else if(completedTimestamp.getTime() + YamlConfig.config.server.WORLD_TRANSFER_COOLDOWN > System.currentTimeMillis()) {
-                    c.announce(PacketCreator.sendWorldTransferRules(7, c));
+                    c.sendPacket(PacketCreator.sendWorldTransferRules(7, c));
                     return;
                 }
             }
@@ -75,6 +75,6 @@ public final class TransferWorldHandler extends AbstractMaplePacketHandler {
             e.printStackTrace();
             return;
         }
-        c.announce(PacketCreator.sendWorldTransferRules(0, c));
+        c.sendPacket(PacketCreator.sendWorldTransferRules(0, c));
     }
 }

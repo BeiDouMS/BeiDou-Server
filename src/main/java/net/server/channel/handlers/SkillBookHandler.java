@@ -40,7 +40,7 @@ public final class SkillBookHandler extends AbstractMaplePacketHandler {
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         if (!c.getPlayer().isAlive()) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         

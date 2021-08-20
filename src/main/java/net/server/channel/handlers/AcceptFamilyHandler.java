@@ -67,7 +67,7 @@ public final class AcceptFamilyHandler extends AbstractMaplePacketHandler {
                         MapleFamilyEntry newEntry = new MapleFamilyEntry(inviter.getFamily(), chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
                         newEntry.setCharacter(chr);
                         if(!newEntry.setSenior(inviter.getFamilyEntry(), true)) {
-                            inviter.announce(PacketCreator.sendFamilyMessage(1, 0));
+                            inviter.sendPacket(PacketCreator.sendFamilyMessage(1, 0));
                             return;
                         } else {
                             // save
@@ -81,15 +81,15 @@ public final class AcceptFamilyHandler extends AbstractMaplePacketHandler {
                         if(inviter.getFamily().getTotalGenerations() + targetFamily.getTotalGenerations() <= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
                             targetEntry.join(inviter.getFamilyEntry());
                         } else {
-                            inviter.announce(PacketCreator.sendFamilyMessage(76, 0));
-                            chr.announce(PacketCreator.sendFamilyMessage(76, 0));
+                            inviter.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
+                            chr.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
                             return;
                         }
                     }
                 } else { // create new family
                     if(chr.getFamily() != null && inviter.getFamily() != null && chr.getFamily().getTotalGenerations() + inviter.getFamily().getTotalGenerations() >= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
-                        inviter.announce(PacketCreator.sendFamilyMessage(76, 0));
-                        chr.announce(PacketCreator.sendFamilyMessage(76, 0));
+                        inviter.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
+                        chr.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
                         return;
                     }
                     MapleFamily newFamily = new MapleFamily(-1, c.getWorld());
@@ -113,14 +113,14 @@ public final class AcceptFamilyHandler extends AbstractMaplePacketHandler {
                     }
                 }
                 c.getPlayer().getFamily().broadcast(PacketCreator.sendFamilyJoinResponse(true, c.getPlayer().getName()), c.getPlayer().getId());
-                c.announce(PacketCreator.getSeniorMessage(inviter.getName()));
-                c.announce(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
+                c.sendPacket(PacketCreator.getSeniorMessage(inviter.getName()));
+                c.sendPacket(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
                 chr.getFamilyEntry().updateSeniorFamilyInfo(true);
             } else {
-                inviter.announce(PacketCreator.sendFamilyJoinResponse(false, c.getPlayer().getName()));
+                inviter.sendPacket(PacketCreator.sendFamilyJoinResponse(false, c.getPlayer().getName()));
             }
         }
-        c.announce(PacketCreator.sendFamilyMessage(0, 0));
+        c.sendPacket(PacketCreator.sendFamilyMessage(0, 0));
     }
 
     private static void insertNewFamilyRecord(int characterID, int familyID, int seniorID, boolean updateChar) {

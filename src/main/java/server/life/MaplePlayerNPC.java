@@ -200,14 +200,14 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.announce(PacketCreator.spawnPlayerNPC(this));
-        client.announce(PacketCreator.getPlayerNPC(this));
+        client.sendPacket(PacketCreator.spawnPlayerNPC(this));
+        client.sendPacket(PacketCreator.getPlayerNPC(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.announce(PacketCreator.removeNPCController(this.getObjectId()));
-        client.announce(PacketCreator.removePlayerNPC(this.getObjectId()));
+        client.sendPacket(PacketCreator.removeNPCController(this.getObjectId()));
+        client.sendPacket(PacketCreator.removePlayerNPC(this.getObjectId()));
     }
 
     private static void getRunningMetadata() {

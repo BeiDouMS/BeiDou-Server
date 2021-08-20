@@ -57,7 +57,7 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         String remoteHost = c.getRemoteAddress();
         if (remoteHost.contentEquals("null")) {
-            c.announce(PacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
+            c.sendPacket(PacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
             return;
         }
 
@@ -106,33 +106,33 @@ public final class LoginPasswordHandler implements MaplePacketHandler {
         }
 
         if (c.hasBannedIP() || c.hasBannedMac()) {
-            c.announce(PacketCreator.getLoginFailed(3));
+            c.sendPacket(PacketCreator.getLoginFailed(3));
             return;
         }
         Calendar tempban = c.getTempBanCalendarFromDB();
         if (tempban != null) {
             if (tempban.getTimeInMillis() > Calendar.getInstance().getTimeInMillis()) {
-                c.announce(PacketCreator.getTempBan(tempban.getTimeInMillis(), c.getGReason()));
+                c.sendPacket(PacketCreator.getTempBan(tempban.getTimeInMillis(), c.getGReason()));
                 return;
             }
         }
         if (loginok == 3) {
-            c.announce(PacketCreator.getPermBan(c.getGReason()));//crashes but idc :D
+            c.sendPacket(PacketCreator.getPermBan(c.getGReason()));//crashes but idc :D
             return;
         } else if (loginok != 0) {
-            c.announce(PacketCreator.getLoginFailed(loginok));
+            c.sendPacket(PacketCreator.getLoginFailed(loginok));
             return;
         }
         if (c.finishLogin() == 0) {
             c.checkChar(c.getAccID());
             login(c);
         } else {
-            c.announce(PacketCreator.getLoginFailed(7));
+            c.sendPacket(PacketCreator.getLoginFailed(7));
         }
     }
 
     private static void login(MapleClient c) {
-        c.announce(PacketCreator.getAuthSuccess(c));//why the fk did I do c.getAccountName()?
+        c.sendPacket(PacketCreator.getAuthSuccess(c));//why the fk did I do c.getAccountName()?
         Server.getInstance().registerLoginState(c);
     }
 }

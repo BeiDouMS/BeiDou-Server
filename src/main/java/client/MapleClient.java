@@ -30,9 +30,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
-import net.packet.ByteBufOutPacket;
 import net.packet.InPacket;
-import net.packet.OutPacket;
 import net.packet.Packet;
 import net.packet.logging.LoggingUtil;
 import net.packet.logging.MapleLogger;
@@ -45,6 +43,7 @@ import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
+import net.server.guild.GuildPackets;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.world.*;
@@ -209,7 +208,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 handler.handlePacket(accessor, this);
             } catch (final Throwable t) {
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + accessor);
-                //client.announce(PacketCreator.enableActions());//bugs sometimes
+                //client.sendPacket(PacketCreator.enableActions());//bugs sometimes
             }
         }
 
@@ -308,7 +307,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void sendCharList(int server) {
-        this.announce(PacketCreator.getCharList(this, server, 0));
+        this.sendPacket(PacketCreator.getCharList(this, server, 0));
     }
 
     public List<MapleCharacter> loadCharacters(int serverId) {
@@ -1000,7 +999,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                             if (guild != null) {
                                 final Server server = Server.getInstance();
                                 server.setGuildMemberOnline(player, false, player.getClient().getChannel());
-                                player.getClient().announce(PacketCreator.showGuildInfo(player));
+                                player.sendPacket(GuildPackets.showGuildInfo(player));
                             }
                             if (bl != null) {
                                 wserv.loggedOff(player.getName(), player.getId(), channel, player.getBuddylist().getBuddyIds());
@@ -1145,7 +1144,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public void checkIfIdle(final IdleStateEvent event) {
         final long pingedAt = System.currentTimeMillis();
-        announce(PacketCreator.getPing());
+        sendPacket(PacketCreator.getPing());
         TimerManager.getInstance().schedule(() -> {
             try {
                 if (lastPong < pingedAt) {
@@ -1415,15 +1414,15 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     private void announceDisableServerMessage() {
         if (!this.getWorldServer().registerDisabledServerMessage(player.getId())) {
-            announce(PacketCreator.serverMessage(""));
+            sendPacket(PacketCreator.serverMessage(""));
         }
     }
 
     public void announceServerMessage() {
-        announce(PacketCreator.serverMessage(this.getChannelServer().getServerMessage()));
+        sendPacket(PacketCreator.serverMessage(this.getChannelServer().getServerMessage()));
     }
 
-    public synchronized void announceBossHpBar(MapleMonster mm, final int mobHash, final byte[] packet) {
+    public synchronized void announceBossHpBar(MapleMonster mm, final int mobHash, Packet packet) {
         long timeNow = System.currentTimeMillis();
         int targetHash = player.getTargetHpBarHash();
 
@@ -1431,55 +1430,31 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             if (timeNow - player.getTargetHpBarTime() >= 5 * 1000) {
                 // is there a way to INTERRUPT this annoying thread running on the client that drops the boss bar after some time at every attack?
                 announceDisableServerMessage();
-                announce(packet);
+                sendPacket(packet);
 
                 player.setTargetHpBarHash(mobHash);
                 player.setTargetHpBarTime(timeNow);
             }
         } else {
             announceDisableServerMessage();
-            announce(packet);
+            sendPacket(packet);
 
             player.setTargetHpBarTime(timeNow);
-        }
-    }
-
-    @Deprecated(forRemoval = true, since = "Netty migration")
-    public void announce(final byte[] packet) {     // thanks GitGud for noticing an opportunity for improvement by overcoming "synchronized announce"
-        announcerLock.lock();
-        try {
-            // session.write(packet);
-            sendPacket(packet);
-        } finally {
-            announcerLock.unlock();
-        }
-    }
-
-    // Workaround for old packets. All uses of Client#announce(byte[]) should be migrated to Client#sendPacket(OutPacket)
-    private void sendPacket(final byte[] packet) {
-        announcerLock.lock();
-        try {
-            OutPacket outPacket = new ByteBufOutPacket();
-            outPacket.writeBytes(packet);
-
-            ioChannel.writeAndFlush(outPacket);
-        } finally {
-            announcerLock.unlock();
         }
     }
 
     public void sendPacket(Packet packet) {
         announcerLock.lock();
         try {
-            ioChannel.writeAndFlush(packet.getBytes());
+            ioChannel.writeAndFlush(packet);
         } finally {
             announcerLock.unlock();
         }
     }
 
     public void announceHint(String msg, int length) {
-        announce(PacketCreator.sendHint(msg, length, 10));
-        announce(PacketCreator.enableActions());
+        sendPacket(PacketCreator.sendHint(msg, length, 10));
+        sendPacket(PacketCreator.enableActions());
     }
 
     public void changeChannel(int channel) {
@@ -1489,18 +1464,18 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
             return;
         }
         if (!player.isAlive() || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
-            announce(PacketCreator.enableActions());
+            sendPacket(PacketCreator.enableActions());
             return;
         } else if (MapleMiniDungeonInfo.isDungeonMap(player.getMapId())) {
-            announce(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
-            announce(PacketCreator.enableActions());
+            sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
+            sendPacket(PacketCreator.enableActions());
             return;
         }
 
         String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
-            announce(PacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
-            announce(PacketCreator.enableActions());
+            sendPacket(PacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
+            sendPacket(PacketCreator.enableActions());
             return;
         }
 
@@ -1531,7 +1506,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
         player.setSessionTransitionState();
         try {
-            announce(PacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
+            sendPacket(PacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1587,7 +1562,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void enableCSActions() {
-        announce(PacketCreator.enableCSUse(player));
+        sendPacket(PacketCreator.enableCSUse(player));
     }
 
     public boolean canBypassPin() {

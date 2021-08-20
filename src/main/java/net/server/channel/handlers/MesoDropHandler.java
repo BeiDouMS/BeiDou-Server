@@ -37,7 +37,7 @@ public final class MesoDropHandler extends AbstractMaplePacketHandler {
         public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
             MapleCharacter player = c.getPlayer();
             if (!player.isAlive()) {
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
             slea.skip(4);
@@ -48,14 +48,14 @@ public final class MesoDropHandler extends AbstractMaplePacketHandler {
                     if (meso <= player.getMeso() && meso > 9 && meso < 50001) {
                         player.gainMeso(-meso, false, true, false);
                     } else {
-                        c.announce(PacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return;
                     }
                 } finally {
                     c.releaseClient();
                 }
             } else {
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
 

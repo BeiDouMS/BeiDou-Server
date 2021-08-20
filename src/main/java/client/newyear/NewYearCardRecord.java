@@ -257,7 +257,7 @@ public class NewYearCardRecord {
 
             MapleCharacter target = server.getWorld(world).getPlayerStorage().getCharacterById(receiverId);
             if(target != null && target.isLoggedinWorld()) {
-                target.announce(PacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
+                target.sendPacket(PacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
             }
         }, 1000 * 60 * 60); //1 Hour
     }

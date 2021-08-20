@@ -26,6 +26,7 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import constants.skills.*;
+import net.packet.Packet;
 import server.MapleStatEffect;
 import server.life.MapleMonster;
 import server.life.MobSkill;
@@ -128,18 +129,18 @@ public class MapleMist extends AbstractMapleMapObject {
         throw new UnsupportedOperationException();
     }
 
-    public final byte[] makeDestroyData() {
+    public final Packet makeDestroyData() {
         return PacketCreator.removeMist(getObjectId());
     }
 
-    public final byte[] makeSpawnData() {
+    public final Packet makeSpawnData() {
         if (owner != null) {
             return PacketCreator.spawnMist(getObjectId(), owner.getId(), getSourceSkill().getId(), owner.getSkillLevel(SkillFactory.getSkill(source.getSourceId())), this);
         }
         return PacketCreator.spawnMist(getObjectId(), mob.getId(), skill.getSkillId(), skill.getSkillLevel(), this);
     }
 
-    public final byte[] makeFakeSpawnData(int level) {
+    public final Packet makeFakeSpawnData(int level) {
         if (owner != null) {
             return PacketCreator.spawnMist(getObjectId(), owner.getId(), getSourceSkill().getId(), level, this);
         }
@@ -148,12 +149,12 @@ public class MapleMist extends AbstractMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.announce(makeSpawnData());
+        client.sendPacket(makeSpawnData());
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.announce(makeDestroyData());
+        client.sendPacket(makeDestroyData());
     }
 
     public boolean makeChanceResult() {

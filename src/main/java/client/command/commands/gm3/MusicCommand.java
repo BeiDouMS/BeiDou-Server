@@ -53,7 +53,7 @@ public class MusicCommand extends Command {
             sendMsg += "Syntax: #r!music <song>#k\r\n\r\n";
             sendMsg += getSongList();
             
-            c.announce(PacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
+            c.sendPacket(PacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
             return;
         }
         
@@ -70,6 +70,6 @@ public class MusicCommand extends Command {
         sendMsg += "Song not found, please enter a song below.\r\n\r\n";
         sendMsg += getSongList();
         
-        c.announce(PacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
+        c.sendPacket(PacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
     }
 }

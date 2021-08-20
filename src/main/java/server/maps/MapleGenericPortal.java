@@ -156,7 +156,7 @@ public class MapleGenericPortal implements MaplePortal {
             }
         }
         if (!changed) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
         }
     }
 

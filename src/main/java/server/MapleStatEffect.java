@@ -31,6 +31,7 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
+import net.packet.Packet;
 import net.server.Server;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
@@ -826,8 +827,8 @@ public class MapleStatEffect {
                         if (absorbMp > 0) {
                             mob.setMp(mob.getMp() - absorbMp);
                             applyto.addMP(absorbMp);
-                            applyto.announce(PacketCreator.showOwnBuffEffect(sourceid, 1));
-                            applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffeffect(applyto.getId(), sourceid, 1), false);
+                            applyto.sendPacket(PacketCreator.showOwnBuffEffect(sourceid, 1));
+                            applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffEffect(applyto.getId(), sourceid, 1), false);
                         }
                     }
                     break;
@@ -875,7 +876,7 @@ public class MapleStatEffect {
         if (primary) {
             if (itemConNo != 0) {
                 if (!applyto.getAbstractPlayerInteraction().hasItem(itemCon, itemConNo)) {
-                    applyto.announce(PacketCreator.enableActions());
+                    applyto.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 MapleInventoryManipulator.removeById(applyto.getClient(), ItemConstants.getInventoryType(itemCon), itemCon, itemConNo, false, true);
@@ -899,7 +900,7 @@ public class MapleStatEffect {
          } */
 
         if (!applyto.applyHpMpChange(hpCon, hpchange, mpchange)) {
-            applyto.announce(PacketCreator.enableActions());
+            applyto.sendPacket(PacketCreator.enableActions());
             return false;
         }
 
@@ -970,7 +971,7 @@ public class MapleStatEffect {
                     applyto.cancelBuffStats(MapleBuffStat.SUMMON);
                 }
 
-                applyto.announce(PacketCreator.enableActions());
+                applyto.sendPacket(PacketCreator.enableActions());
             }
 
             applyBuffEffect(applyfrom, applyto, primary);
@@ -1108,8 +1109,8 @@ public class MapleStatEffect {
             affectedc += affectedp.size();   // used for heal
             for (MapleCharacter affected : affectedp) {
                 applyTo(applyfrom, affected, false, null, useMaxRange, affectedc);
-                affected.announce(PacketCreator.showOwnBuffEffect(sourceid, 2));
-                affected.getMap().broadcastMessage(affected, PacketCreator.showBuffeffect(affected.getId(), sourceid, 2), false);
+                affected.sendPacket(PacketCreator.showOwnBuffEffect(sourceid, 2));
+                affected.getMap().broadcastMessage(affected, PacketCreator.showBuffEffect(affected.getId(), sourceid, 2), false);
             }
         }
 
@@ -1182,7 +1183,7 @@ public class MapleStatEffect {
 
     public final void applyComboBuff(final MapleCharacter applyto, int combo) {
         final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ARAN_COMBO, combo));
-        applyto.announce(PacketCreator.giveBuff(sourceid, 99999, stat));
+        applyto.sendPacket(PacketCreator.giveBuff(sourceid, 99999, stat));
 
         final long starttime = Server.getInstance().getCurrentTime();
 //	final CancelEffectAction cancelAction = new CancelEffectAction(applyto, this, starttime);
@@ -1192,7 +1193,7 @@ public class MapleStatEffect {
 
     public final void applyBeaconBuff(final MapleCharacter applyto, int objectid) { // thanks Thora & Hyun for reporting an issue with homing beacon autoflagging mobs when changing maps
         final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.HOMING_BEACON, objectid));
-        applyto.announce(PacketCreator.giveBuff(1, sourceid, stat));
+        applyto.sendPacket(PacketCreator.giveBuff(1, sourceid, stat));
 
         final long starttime = Server.getInstance().getCurrentTime();
         applyto.registerEffect(this, starttime, Long.MAX_VALUE, false);
@@ -1205,9 +1206,9 @@ public class MapleStatEffect {
         long leftDuration = (starttime + localDuration) - Server.getInstance().getCurrentTime();
         if (leftDuration > 0) {
             if (isDash() || isInfusion()) {
-                target.announce(PacketCreator.givePirateBuff(activeStats, (skill ? sourceid : -sourceid), (int) leftDuration));
+                target.sendPacket(PacketCreator.givePirateBuff(activeStats, (skill ? sourceid : -sourceid), (int) leftDuration));
             } else {
-                target.announce(PacketCreator.giveBuff((skill ? sourceid : -sourceid), (int) leftDuration, activeStats));
+                target.sendPacket(PacketCreator.giveBuff((skill ? sourceid : -sourceid), (int) leftDuration, activeStats));
             }
         }
     }
@@ -1260,11 +1261,11 @@ public class MapleStatEffect {
         }
         if (primary) {
             localDuration = alchemistModifyVal(applyfrom, localDuration, false);
-            applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffeffect(applyto.getId(), sourceid, 1, (byte) 3), false);
+            applyto.getMap().broadcastMessage(applyto, PacketCreator.showBuffEffect(applyto.getId(), sourceid, 1, (byte) 3), false);
         }
         if (localstatups.size() > 0) {
-            byte[] buff = null;
-            byte[] mbuff = null;
+            Packet buff = null;
+            Packet mbuff = null;
             if (this.isActive(applyto)) {
                 buff = PacketCreator.giveBuff((skill ? sourceid : -sourceid), localDuration, localstatups);
             }
@@ -1320,7 +1321,7 @@ public class MapleStatEffect {
                 //Thanks flav for such a simple release! :)
                 //Thanks Conrad, Atoot for noticing summons not using buff icon
                 
-                applyto.announce(buff);
+                applyto.sendPacket(buff);
             }
             
             long starttime = Server.getInstance().getCurrentTime();

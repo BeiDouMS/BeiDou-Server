@@ -82,30 +82,30 @@ public final class MessengerHandler extends AbstractMaplePacketHandler {
                         break;
                     case 0x03:
                         if (messenger == null) {
-                            c.announce(PacketCreator.messengerChat(player.getName() + " : This Maple Messenger is currently unavailable. Please quit this chat."));
+                            c.sendPacket(PacketCreator.messengerChat(player.getName() + " : This Maple Messenger is currently unavailable. Please quit this chat."));
                         } else if (messenger.getMembers().size() < 3) {
                             input = slea.readMapleAsciiString();
                             MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
                             if (target != null) {
                                 if (target.getMessenger() == null) {
                                     if (MapleInviteCoordinator.createInvite(InviteType.MESSENGER, c.getPlayer(), messenger.getId(), target.getId())) {
-                                        target.getClient().announce(PacketCreator.messengerInvite(c.getPlayer().getName(), messenger.getId()));
-                                        c.announce(PacketCreator.messengerNote(input, 4, 1));
+                                        target.sendPacket(PacketCreator.messengerInvite(c.getPlayer().getName(), messenger.getId()));
+                                        c.sendPacket(PacketCreator.messengerNote(input, 4, 1));
                                     } else {
-                                        c.announce(PacketCreator.messengerChat(player.getName() + " : " + input + " is already managing a Maple Messenger invitation"));
+                                        c.sendPacket(PacketCreator.messengerChat(player.getName() + " : " + input + " is already managing a Maple Messenger invitation"));
                                     }
                                 } else {
-                                    c.announce(PacketCreator.messengerChat(player.getName() + " : " + input + " is already using Maple Messenger"));
+                                    c.sendPacket(PacketCreator.messengerChat(player.getName() + " : " + input + " is already using Maple Messenger"));
                                 }
                             } else {
                                 if (world.find(input) > -1) {
                                     world.messengerInvite(c.getPlayer().getName(), messenger.getId(), input, c.getChannel());
                                 } else {
-                                    c.announce(PacketCreator.messengerNote(input, 4, 0));
+                                    c.sendPacket(PacketCreator.messengerNote(input, 4, 0));
                                 }
                             }
                         } else {
-                            c.announce(PacketCreator.messengerChat(player.getName() + " : You cannot have more than 3 people in the Maple Messenger"));
+                            c.sendPacket(PacketCreator.messengerChat(player.getName() + " : You cannot have more than 3 people in the Maple Messenger"));
                         }
                         break;
                     case 0x05:

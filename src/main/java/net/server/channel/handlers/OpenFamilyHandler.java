@@ -35,7 +35,7 @@ public final class OpenFamilyHandler extends AbstractMaplePacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         MapleCharacter chr = c.getPlayer();
-        c.announce(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
+        c.sendPacket(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
     }
 }
 

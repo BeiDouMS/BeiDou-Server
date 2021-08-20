@@ -32,6 +32,6 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class UseHammerHandler extends AbstractMaplePacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        c.announce(PacketCreator.sendHammerMessage());
+        c.sendPacket(PacketCreator.sendHammerMessage());
     }
 }

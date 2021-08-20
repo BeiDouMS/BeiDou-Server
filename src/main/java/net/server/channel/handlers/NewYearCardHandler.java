@@ -72,21 +72,21 @@ public final class NewYearCardHandler extends AbstractMaplePacketHandler {
 
                                 Server.getInstance().setNewYearCard(newyear);
                                 newyear.startNewYearCardTask();
-                                player.announce(PacketCreator.onNewYearCardRes(player, newyear, 4, 0));    // successfully sent
+                                player.sendPacket(PacketCreator.onNewYearCardRes(player, newyear, 4, 0));    // successfully sent
                             } else {
-                                player.announce(PacketCreator.onNewYearCardRes(player, -1, 5, 0xF));   // cannot send to yourself
+                                player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, 0xF));   // cannot send to yourself
                             }
                         } else {
-                            player.announce(PacketCreator.onNewYearCardRes(player, -1, 5, 0x13));  // cannot find such character
+                            player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, 0x13));  // cannot find such character
                         }
                     } else {
-                        player.announce(PacketCreator.onNewYearCardRes(player, -1, 5, 0x10));  // inventory full
+                        player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, 0x10));  // inventory full
                     }
                 } else {
-                    player.announce(PacketCreator.onNewYearCardRes(player, -1, 5, status));  // item and inventory errors
+                    player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, status));  // item and inventory errors
                 }
             } else {
-                player.announce(PacketCreator.onNewYearCardRes(player, -1, 5, 0x11));  // have no card to send
+                player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, 0x11));  // have no card to send
             }
         } else {    //receiver accepted the card
             int cardid = slea.readInt();
@@ -103,7 +103,7 @@ public final class NewYearCardHandler extends AbstractMaplePacketHandler {
                         if(!newyear.getMessage().isEmpty()) player.dropMessage(6, "[New Year] " + newyear.getSenderName() + ": " + newyear.getMessage());
 
                         player.addNewYearRecord(newyear);
-                        player.announce(PacketCreator.onNewYearCardRes(player, newyear, 6, 0));    // successfully rcvd
+                        player.sendPacket(PacketCreator.onNewYearCardRes(player, newyear, 6, 0));    // successfully rcvd
 
                         player.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(player, newyear, 0xD, 0));
 
@@ -113,7 +113,7 @@ public final class NewYearCardHandler extends AbstractMaplePacketHandler {
                             sender.dropMessage(6, "[New Year] Your addressee successfully received the New Year card.");
                         }
                     } else {
-                        player.announce(PacketCreator.onNewYearCardRes(player, -1, 5, 0x10));  // inventory full
+                        player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, 0x10));  // inventory full
                     }
                 } else {
                     player.dropMessage(6, "[New Year] The sender of the New Year card already dropped it. Nothing to receive.");

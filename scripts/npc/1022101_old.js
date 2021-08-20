@@ -137,7 +137,7 @@ function action(mode, type, selection) {
 					
 				cm.getPlayer().getCashShop().gainCash(1, nxAmount);
 				const PacketCreator = Java.type('tools.PacketCreator');
-				cm.getPlayer().announce(PacketCreator.earnTitleMessage("You have earned " + nxAmount + " NX"));
+				cm.getPlayer().sendPacket(PacketCreator.earnTitleMessage("You have earned " + nxAmount + " NX"));
 				cm.logLeaf(nxAmount + " NX");
 				cm.dispose();
 			} else if(choice == 2) {

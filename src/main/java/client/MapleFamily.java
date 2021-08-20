@@ -21,6 +21,7 @@
  */
 package client;
 
+import net.packet.Packet;
 import net.server.Server;
 import net.server.world.World;
 import tools.DatabaseConnection;
@@ -151,16 +152,16 @@ public class MapleFamily {
         return members.get(cid);
     }
 
-    public void broadcast(byte[] packet) {
+    public void broadcast(Packet packet) {
         broadcast(packet, -1);
     }
 
-    public void broadcast(byte[] packet, int ignoreID) {
+    public void broadcast(Packet packet, int ignoreID) {
         for(MapleFamilyEntry entry : members.values()) {
             MapleCharacter chr = entry.getChr();
             if(chr != null) {
                 if(chr.getId() == ignoreID) continue;
-                chr.getClient().announce(packet);
+                chr.sendPacket(packet);
             }
         }
     }
@@ -169,7 +170,7 @@ public class MapleFamily {
         for(MapleFamilyEntry entry : members.values()) {
             MapleCharacter chr = entry.getChr();
             if(chr != null) {
-                chr.getClient().announce(PacketCreator.getFamilyInfo(entry));
+                chr.sendPacket(PacketCreator.getFamilyInfo(entry));
             }
         }
     }

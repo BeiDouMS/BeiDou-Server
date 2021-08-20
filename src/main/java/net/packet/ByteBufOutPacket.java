@@ -13,7 +13,6 @@ public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;
     private byte[] bytes;
 
-    @Deprecated(forRemoval = true)
     public ByteBufOutPacket() {
         this.byteBuf = Unpooled.buffer();
     }
@@ -82,7 +81,12 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public void writePoint(Point value) {
+    public void writeFixedString(String value) {
+        writeBytes(value.getBytes(STRING_CHARSET));
+    }
+
+    @Override
+    public void writePos(Point value) {
         writeShort((short) value.getX());
         writeShort((short) value.getY());
     }

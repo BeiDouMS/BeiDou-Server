@@ -31,7 +31,7 @@ public final class MonsterBookCoverHandler extends AbstractMaplePacketHandler {
         int id = slea.readInt();
         if (id == 0 || id / 10000 == 238) {
             c.getPlayer().setMonsterBookCover(id);
-            c.announce(PacketCreator.changeCover(id));
+            c.sendPacket(PacketCreator.changeCover(id));
         }
     }
 }

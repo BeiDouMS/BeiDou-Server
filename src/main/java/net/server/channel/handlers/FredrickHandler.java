@@ -40,7 +40,7 @@ public class FredrickHandler extends AbstractMaplePacketHandler {
 
         switch (operation) {
             case 0x19: //Will never come...
-                //c.announce(PacketCreator.getFredrick((byte) 0x24));
+                //c.sendPacket(PacketCreator.getFredrick((byte) 0x24));
                 break;
             case 0x1A:
                 FredrickProcessor.fredrickRetrieveItems(c);

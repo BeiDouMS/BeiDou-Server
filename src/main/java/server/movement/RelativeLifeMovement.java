@@ -21,8 +21,9 @@
 */
 package server.movement;
 
-import java.awt.Point;
-import tools.data.output.LittleEndianWriter;
+import net.packet.OutPacket;
+
+import java.awt.*;
 
 public class RelativeLifeMovement extends AbstractLifeMovement {
     public RelativeLifeMovement(int type, Point position, int duration, int newstate) {
@@ -30,11 +31,10 @@ public class RelativeLifeMovement extends AbstractLifeMovement {
     }
 
     @Override
-    public void serialize(LittleEndianWriter lew) {
-        lew.write(getType());
-        lew.writeShort(getPosition().x);
-        lew.writeShort(getPosition().y);
-        lew.write(getNewstate());
-        lew.writeShort(getDuration());
+    public void serialize(OutPacket p) {
+        p.writeByte(getType());
+        p.writePos(getPosition());
+        p.writeByte(getNewstate());
+        p.writeShort(getDuration());
     }
 }

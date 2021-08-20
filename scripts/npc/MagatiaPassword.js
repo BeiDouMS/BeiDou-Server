@@ -22,7 +22,7 @@ function action(mode, type, selection){
                 if(cm.getText() == cm.getQuestProgress(3360)){
                         cm.setQuestProgress(3360, 1);
                         const PacketCreator = Java.type('tools.PacketCreator');
-                        cm.getPlayer().announce(PacketCreator.playPortalSound());
+                        cm.getPlayer().sendPacket(PacketCreator.playPortalSound());
                         cm.warp(261030000, "sp_" + ((cm.getMapId() == 261010000) ? "jenu" : "alca"));
                 }
                 else {

@@ -43,7 +43,7 @@ public final class InventoryMergeHandler extends AbstractMaplePacketHandler {
         chr.getAutobanManager().setTimestamp(2, Server.getInstance().getCurrentTimestamp(), 4);
         
         if(!YamlConfig.config.server.USE_ITEM_SORT) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
 	}
         
@@ -106,7 +106,7 @@ public final class InventoryMergeHandler extends AbstractMaplePacketHandler {
             inventory.unlockInventory();
         }
         
-        c.announce(PacketCreator.finishedSort(inventoryType.getType()));
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

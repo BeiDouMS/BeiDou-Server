@@ -53,7 +53,7 @@ public class MapleMiniDungeon {
     
     public boolean registerPlayer(MapleCharacter chr) {
         int time = (int)((expireTime - System.currentTimeMillis()) / 1000);
-        if(time > 0) chr.getClient().announce(PacketCreator.getClock(time));
+        if(time > 0) chr.sendPacket(PacketCreator.getClock(time));
         
         lock.lock();
         try {
@@ -68,7 +68,7 @@ public class MapleMiniDungeon {
     }
     
     public boolean unregisterPlayer(MapleCharacter chr) {
-        chr.getClient().announce(PacketCreator.removeClock());
+        chr.sendPacket(PacketCreator.removeClock());
         
         lock.lock();
         try {

@@ -58,7 +58,7 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                     }
                 }
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
                 break;
             case 0x01: { // /d (inv)
                 byte type = slea.readByte();
@@ -94,11 +94,11 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                         target.block(type, duration, description);
                         target.sendPolice(duration, reason, 6000);
                     }
-                    c.announce(PacketCreator.getGMEffect(4, (byte) 0));
+                    c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
                 } else if (MapleCharacter.ban(victim, reason, false)) {
-                    c.announce(PacketCreator.getGMEffect(4, (byte) 0));
+                    c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
                 } else {
-                    c.announce(PacketCreator.getGMEffect(6, (byte) 1));
+                    c.sendPacket(PacketCreator.getGMEffect(6, (byte) 1));
                 }
                 break;
             case 0x10: // /h, information added by vana -- <and tele mode f1> ... hide ofcourse
@@ -160,10 +160,10 @@ public final class AdminCommandHandler extends AbstractMaplePacketHandler {
                 String message = slea.readMapleAsciiString();
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
-                    target.getClient().announce(PacketCreator.serverNotice(1, message));
-                    c.announce(PacketCreator.getGMEffect(0x1E, (byte) 1));
+                    target.getClient().sendPacket(PacketCreator.serverNotice(1, message));
+                    c.sendPacket(PacketCreator.getGMEffect(0x1E, (byte) 1));
                 } else {
-                    c.announce(PacketCreator.getGMEffect(0x1E, (byte) 0));
+                    c.sendPacket(PacketCreator.getGMEffect(0x1E, (byte) 0));
                 }
                 break;
             case 0x24:// /Artifact Ranking

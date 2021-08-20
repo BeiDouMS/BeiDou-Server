@@ -330,7 +330,7 @@ public class MapleParty {
         MapleParty party = player.getParty();
         if (party == null) {
             if (player.getLevel() < 10 && !YamlConfig.config.server.USE_PARTY_FOR_STARTERS) {
-                player.announce(PacketCreator.partyStatusMessage(10));
+                player.sendPacket(PacketCreator.partyStatusMessage(10));
                 return false;
             } else if (player.getAriantColiseum() != null) {
                 player.dropMessage(5, "You cannot request a party creation while participating the Ariant Battle Arena.");
@@ -347,12 +347,12 @@ public class MapleParty {
             player.updatePartySearchAvailability(false);
             player.partyOperationUpdate(party, null);
             
-            player.announce(PacketCreator.partyCreated(party, partyplayer.getId()));
+            player.sendPacket(PacketCreator.partyCreated(party, partyplayer.getId()));
             
             return true;
         } else {
             if (!silentCheck) {
-                player.announce(PacketCreator.partyStatusMessage(16));
+                player.sendPacket(PacketCreator.partyStatusMessage(16));
             }
             
             return false;
@@ -380,15 +380,15 @@ public class MapleParty {
                     return true;
                 } else {
                     if (!silentCheck) {
-                        player.announce(PacketCreator.partyStatusMessage(17));
+                        player.sendPacket(PacketCreator.partyStatusMessage(17));
                     }
                 }
             } else {
-                player.announce(PacketCreator.serverNotice(5, "You couldn't join the party since it had already been disbanded."));
+                player.sendPacket(PacketCreator.serverNotice(5, "You couldn't join the party since it had already been disbanded."));
             }
         } else {
             if (!silentCheck) {
-                player.announce(PacketCreator.serverNotice(5, "You can't join the party as you are already in one."));
+                player.sendPacket(PacketCreator.serverNotice(5, "You can't join the party as you are already in one."));
             }
         }
         

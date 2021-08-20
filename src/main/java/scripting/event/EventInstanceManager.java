@@ -282,7 +282,7 @@ public class EventInstanceManager {
 		eventTime = time;
                 
                 for(MapleCharacter chr: getPlayers()) {
-                        chr.announce(PacketCreator.getClock((int) (time / 1000)));
+                        chr.sendPacket(PacketCreator.getClock((int) (time / 1000)));
                 }
                 
                 event_schedule = TimerManager.getInstance().schedule(() -> {
@@ -295,7 +295,7 @@ public class EventInstanceManager {
                         }
                 }, time);
 	}
-        
+
         public void addEventTimer(long time) {
                 if (event_schedule != null) {
                         if (event_schedule.cancel(false)) {
@@ -316,23 +316,23 @@ public class EventInstanceManager {
                         startEventTimer(time);
                 }
         }
-        
+
         private void dismissEventTimer() {
-                for(MapleCharacter chr: getPlayers()) {
-                        chr.getClient().announce(PacketCreator.removeClock());
+                for (MapleCharacter chr : getPlayers()) {
+                        chr.sendPacket(PacketCreator.removeClock());
                 }
-                
+
                 event_schedule = null;
                 eventTime = 0;
                 timeStarted = 0;
         }
-        
+
         public void stopEventTimer() {
-                if(event_schedule != null) {
+                if (event_schedule != null) {
                         event_schedule.cancel(false);
                         event_schedule = null;
                 }
-                
+
                 dismissEventTimer();
         }
         
@@ -1262,7 +1262,7 @@ public class EventInstanceManager {
                 }
                 
                 if(gateData != null) {
-                        chr.announce(PacketCreator.environmentChange(gateData.getLeft(), gateData.getRight()));
+                        chr.sendPacket(PacketCreator.environmentChange(gateData.getLeft(), gateData.getRight()));
                 }
         }
         

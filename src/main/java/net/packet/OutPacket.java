@@ -13,7 +13,8 @@ public interface OutPacket extends Packet {
     void writeLong(long value);
     void writeBool(boolean value);
     void writeString(String value);
-    void writePoint(Point value);
+    void writeFixedString(String value);
+    void writePos(Point value);
     void skip(int numberOfBytes);
 
     static OutPacket create(SendOpcode opcode) {

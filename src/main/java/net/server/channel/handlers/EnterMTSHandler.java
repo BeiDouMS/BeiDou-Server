@@ -51,38 +51,38 @@ public final class EnterMTSHandler extends AbstractMaplePacketHandler {
         
         if(!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {
             BuybackProcessor.processBuyback(c);
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
         } else {
             if (!YamlConfig.config.server.USE_MTS) {
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
 
             if(chr.getEventInstance() != null) {
-                c.announce(PacketCreator.serverNotice(5, "Entering Cash Shop or MTS are disabled when registered on an event."));
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.serverNotice(5, "Entering Cash Shop or MTS are disabled when registered on an event."));
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
             
             if(MapleMiniDungeonInfo.isDungeonMap(chr.getMapId())) {
-                c.announce(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
             
             if (FieldLimit.CANNOTMIGRATE.check(chr.getMap().getFieldLimit())) {
                 chr.dropMessage(1, "You can't do it here in this map.");
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
 
             if (!chr.isAlive()) {
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
             if (chr.getLevel() < 10) {
-                c.announce(PacketCreator.blockedMessage2(5));
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.blockedMessage2(5));
+                c.sendPacket(PacketCreator.enableActions());
                 return;
             }
 
@@ -110,14 +110,14 @@ public final class EnterMTSHandler extends AbstractMaplePacketHandler {
             c.getChannelServer().removePlayer(chr);
             chr.getMap().removePlayer(c.getPlayer());
             try {
-                c.announce(PacketCreator.openCashShop(c, true));
+                c.sendPacket(PacketCreator.openCashShop(c, true));
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
             chr.getCashShop().open(true);// xD
             c.enableCSActions();
-            c.announce(PacketCreator.MTSWantedListingOver(0, 0));
-            c.announce(PacketCreator.showMTSCash(c.getPlayer()));
+            c.sendPacket(PacketCreator.MTSWantedListingOver(0, 0));
+            c.sendPacket(PacketCreator.showMTSCash(c.getPlayer()));
             List<MTSItemInfo> items = new ArrayList<>();
             int pages = 0;
             try (Connection con = DatabaseConnection.getConnection()) {
@@ -171,9 +171,9 @@ public final class EnterMTSHandler extends AbstractMaplePacketHandler {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            c.announce(PacketCreator.sendMTS(items, 1, 0, 0, pages));
-            c.announce(PacketCreator.transferInventory(getTransfer(chr.getId())));
-            c.announce(PacketCreator.notYetSoldInv(getNotYetSold(chr.getId())));
+            c.sendPacket(PacketCreator.sendMTS(items, 1, 0, 0, pages));
+            c.sendPacket(PacketCreator.transferInventory(getTransfer(chr.getId())));
+            c.sendPacket(PacketCreator.notYetSoldInv(getNotYetSold(chr.getId())));
         }
     }
 

@@ -32,6 +32,6 @@ public final class CheckCharNameHandler extends AbstractMaplePacketHandler {
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         String name = slea.readMapleAsciiString();
-        c.announce(PacketCreator.charNameResponse(name, !MapleCharacter.canCreateChar(name)));
+        c.sendPacket(PacketCreator.charNameResponse(name, !MapleCharacter.canCreateChar(name)));
     }
 }

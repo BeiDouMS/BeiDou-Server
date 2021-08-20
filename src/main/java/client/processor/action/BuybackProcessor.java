@@ -77,7 +77,7 @@ public class BuybackProcessor {
             map.broadcastMessage(PacketCreator.playSound("Buyback/" + jobString));
             map.broadcastMessage(PacketCreator.earnTitleMessage(chr.getName() + " just bought back into the game!"));
 
-            chr.announce(PacketCreator.showBuybackEffect());
+            chr.sendPacket(PacketCreator.showBuybackEffect());
             map.broadcastMessage(chr, PacketCreator.showForeignBuybackEffect(chr.getId()), false);
         }
     }

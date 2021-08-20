@@ -91,7 +91,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
     public void warp(final MapleCharacter chr) {
         MapleParty party = chr.getParty();
         if (chr.getId() == ownerId || (party != null && party.getMemberById(ownerId) != null)) {
-            chr.announce(PacketCreator.playPortalSound());
+            chr.sendPacket(PacketCreator.playPortalSound());
             
             if(!inTown() && party == null) {
                 chr.changeMap(to, getLinkedPortalId());
@@ -99,8 +99,8 @@ public class MapleDoorObject extends AbstractMapleMapObject {
                 chr.changeMap(to, getLinkedPortalPosition());
             }
         } else {
-            chr.getClient().announce(PacketCreator.blockedMessage(6));
-            chr.getClient().announce(PacketCreator.enableActions());
+            chr.sendPacket(PacketCreator.blockedMessage(6));
+            chr.sendPacket(PacketCreator.enableActions());
         }
     }
 
@@ -113,12 +113,12 @@ public class MapleDoorObject extends AbstractMapleMapObject {
         MapleCharacter chr = client.getPlayer();
         if (this.getFrom().getId() == chr.getMapId()) {
             if (chr.getParty() != null && (this.getOwnerId() == chr.getId() || chr.getParty().getMemberById(this.getOwnerId()) != null)) {
-                chr.announce(PacketCreator.partyPortal(this.getFrom().getId(), this.getTo().getId(), this.toPosition()));
+                chr.sendPacket(PacketCreator.partyPortal(this.getFrom().getId(), this.getTo().getId(), this.toPosition()));
             }
 
-            chr.announce(PacketCreator.spawnPortal(this.getFrom().getId(), this.getTo().getId(), this.toPosition()));
+            chr.sendPacket(PacketCreator.spawnPortal(this.getFrom().getId(), this.getTo().getId(), this.toPosition()));
             if (!this.inTown()) {
-                chr.announce(PacketCreator.spawnDoor(this.getOwnerId(), this.getPosition(), launched));
+                chr.sendPacket(PacketCreator.spawnDoor(this.getOwnerId(), this.getPosition(), launched));
             }
         }
     }
@@ -129,16 +129,16 @@ public class MapleDoorObject extends AbstractMapleMapObject {
         if (from.getId() == chr.getMapId()) {
             MapleParty party = chr.getParty();
             if (party != null && (ownerId == chr.getId() || party.getMemberById(ownerId) != null)) {
-                client.announce(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
+                client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
             }
-            client.announce(PacketCreator.removeDoor(ownerId, inTown()));
+            client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));
         }
     }
     
     public void sendDestroyData(MapleClient client, boolean partyUpdate) {
         if (client != null && from.getId() == client.getPlayer().getMapId()) {
-            client.announce(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
-            client.announce(PacketCreator.removeDoor(ownerId, inTown()));
+            client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
+            client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));
         }
     }
     

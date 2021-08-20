@@ -42,13 +42,13 @@ public class RemoteStoreHandler extends AbstractMaplePacketHandler {
             if (hm.getChannel() == chr.getClient().getChannel()) {
                 hm.visitShop(chr);
             } else {
-                c.announce(PacketCreator.remoteChannelChange((byte) (hm.getChannel() - 1)));
+                c.sendPacket(PacketCreator.remoteChannelChange((byte) (hm.getChannel() - 1)));
             }
             return;
         } else {
            chr.dropMessage(1, "You don't have a Merchant open.");
         }
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 
     private static MapleHiredMerchant getMerchant(MapleClient c) {

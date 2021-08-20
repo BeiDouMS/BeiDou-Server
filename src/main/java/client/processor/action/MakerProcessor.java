@@ -65,8 +65,8 @@ public class MakerProcessor {
                     int fromLeftover = toCreate;
                     toCreate = ii.getMakerCrystalFromLeftover(toCreate);
                     if(toCreate == -1) {
-                        c.announce(PacketCreator.serverNotice(1, ii.getName(fromLeftover) + " is unavailable for Monster Crystal conversion."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, ii.getName(fromLeftover) + " is unavailable for Monster Crystal conversion."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         return;
                     }
                     
@@ -83,13 +83,13 @@ public class MakerProcessor {
                         if(p != null) {
                             recipe = MakerItemFactory.generateDisassemblyCrystalEntry(toDisassemble, p.getLeft(), p.getRight());
                         } else {
-                            c.announce(PacketCreator.serverNotice(1, ii.getName(toCreate) + " is unavailable for Monster Crystal disassembly."));
-                            c.announce(PacketCreator.makerEnableActions());
+                            c.sendPacket(PacketCreator.serverNotice(1, ii.getName(toCreate) + " is unavailable for Monster Crystal disassembly."));
+                            c.sendPacket(PacketCreator.makerEnableActions());
                             return;
                         }
                     } else {
-                        c.announce(PacketCreator.serverNotice(1, "An unknown error occurred when trying to apply that item for disassembly."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "An unknown error occurred when trying to apply that item for disassembly."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         return;
                     }
                 } else {
@@ -136,8 +136,8 @@ public class MakerProcessor {
 
                         if(!reagentids.isEmpty()) {
                             if(!removeOddMakerReagents(toCreate, reagentids)) {
-                                c.announce(PacketCreator.serverNotice(1, "You can only use WATK and MATK Strengthening Gems on weapon items."));
-                                c.announce(PacketCreator.makerEnableActions());
+                                c.sendPacket(PacketCreator.serverNotice(1, "You can only use WATK and MATK Strengthening Gems on weapon items."));
+                                c.sendPacket(PacketCreator.makerEnableActions());
                                 return;
                             }
                         }
@@ -151,33 +151,33 @@ public class MakerProcessor {
                 switch(createStatus) {
                     case -1:// non-available for Maker itemid has been tried to forge
                         FilePrinter.printError(FilePrinter.EXPLOITS, "Player " + c.getPlayer().getName() + " tried to craft itemid " + toCreate + " using the Maker skill.");
-                        c.announce(PacketCreator.serverNotice(1, "The requested item could not be crafted on this operation."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "The requested item could not be crafted on this operation."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         break;
 
                     case 1: // no items
-                        c.announce(PacketCreator.serverNotice(1, "You don't have all required items in your inventory to make " + ii.getName(toCreate) + "."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "You don't have all required items in your inventory to make " + ii.getName(toCreate) + "."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         break;
 
                     case 2: // no meso
-                        c.announce(PacketCreator.serverNotice(1, "You don't have enough mesos (" + GameConstants.numberWithCommas(recipe.getCost()) + ") to complete this operation."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "You don't have enough mesos (" + GameConstants.numberWithCommas(recipe.getCost()) + ") to complete this operation."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         break;
 
                     case 3: // no req level
-                        c.announce(PacketCreator.serverNotice(1, "You don't have enough level to complete this operation."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "You don't have enough level to complete this operation."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         break;
 
                     case 4: // no req skill level
-                        c.announce(PacketCreator.serverNotice(1, "You don't have enough Maker level to complete this operation."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "You don't have enough Maker level to complete this operation."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         break;
                         
                     case 5: // inventory full
-                        c.announce(PacketCreator.serverNotice(1, "Your inventory is full."));
-                        c.announce(PacketCreator.makerEnableActions());
+                        c.sendPacket(PacketCreator.serverNotice(1, "Your inventory is full."));
+                        c.sendPacket(PacketCreator.makerEnableActions());
                         break;
 
                     default:
@@ -214,14 +214,14 @@ public class MakerProcessor {
 
                         // thanks inhyuk for noticing missing MAKER_RESULT packets
                         if (type == 3) {
-                            c.announce(PacketCreator.makerResultCrystal(recipe.getGainItems().get(0).getLeft(), recipe.getReqItems().get(0).getLeft()));
+                            c.sendPacket(PacketCreator.makerResultCrystal(recipe.getGainItems().get(0).getLeft(), recipe.getReqItems().get(0).getLeft()));
                         } else if (type == 4) {
-                            c.announce(PacketCreator.makerResultDesynth(recipe.getReqItems().get(0).getLeft(), recipe.getCost(), recipe.getGainItems()));
+                            c.sendPacket(PacketCreator.makerResultDesynth(recipe.getReqItems().get(0).getLeft(), recipe.getCost(), recipe.getGainItems()));
                         } else {
-                            c.announce(PacketCreator.makerResult(makerSucceeded, recipe.getGainItems().get(0).getLeft(), recipe.getGainItems().get(0).getRight(), recipe.getCost(), recipe.getReqItems(), stimulantid, new LinkedList<>(reagentids.keySet())));
+                            c.sendPacket(PacketCreator.makerResult(makerSucceeded, recipe.getGainItems().get(0).getLeft(), recipe.getGainItems().get(0).getRight(), recipe.getCost(), recipe.getReqItems(), stimulantid, new LinkedList<>(reagentids.keySet())));
                         }
                         
-                        c.announce(PacketCreator.showMakerEffect(makerSucceeded));
+                        c.sendPacket(PacketCreator.showMakerEffect(makerSucceeded));
                         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignMakerEffect(c.getPlayer().getId(), makerSucceeded), false);
 
                         if(toCreate == 4260003 && type == 3 && c.getPlayer().getQuestStatus(6033) == 1) {

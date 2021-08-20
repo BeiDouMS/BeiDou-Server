@@ -78,6 +78,6 @@ public class PortalPlayerInteraction extends AbstractPlayerInteraction {
     }
 
     public void playPortalSound() {
-        c.announce(PacketCreator.playPortalSound());
+        c.sendPacket(PacketCreator.playPortalSound());
     }
 }

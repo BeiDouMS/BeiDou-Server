@@ -31,6 +31,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
+import net.packet.Packet;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import tools.PacketCreator;
@@ -62,7 +63,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
         
         if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
-            c.announce(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+            c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
         
         if (attack.skill == Buccaneer.ENERGY_ORB || attack.skill == ThunderBreaker.SPARK || attack.skill == Shadower.TAUNT || attack.skill == NightLord.TAUNT) {
@@ -101,7 +102,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 effect = attack.getAttackEffect(chr, null);
                 bulletCount = effect.getBulletCount();
                 if (effect.getCooldown() > 0) {
-                    c.announce(PacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
+                    c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
                 }
                 
                 if(attack.skill == 4111004) {   // shadow meso
@@ -187,7 +188,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     visProjectile = 0;
                 }
                 
-                byte[] packet;
+                final Packet packet;
                 switch (attack.skill) {
                     case 3121004: // Hurricane
                     case 3221001: // Pierce
@@ -208,7 +209,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         if (chr.skillIsCooling(attack.skill)) {
                             return;
                         } else {
-                            c.announce(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
+                            c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
                             chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
                         }
                     }

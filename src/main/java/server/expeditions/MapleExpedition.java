@@ -23,6 +23,7 @@
 package server.expeditions;
 
 import client.MapleCharacter;
+import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
@@ -115,10 +116,10 @@ public class MapleExpedition {
 
 	public void beginRegistration() {
 		registering = true;
-                leader.announce(PacketCreator.getClock(type.getRegistrationTime() * 60));
+                leader.sendPacket(PacketCreator.getClock(type.getRegistrationTime() * 60));
 		if (!silent) {
                         startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, "[Expedition] " + leader.getName() + " has been declared the expedition captain. Please register for the expedition."), false);
-                        leader.announce(PacketCreator.serverNotice(6, "[Expedition] You have become the expedition captain. Gather enough people for your team then talk to the NPC to start."));
+                        leader.sendPacket(PacketCreator.serverNotice(6, "[Expedition] You have become the expedition captain. Gather enough people for your team then talk to the NPC to start."));
                 }
 		scheduleRegistrationEnd();
 	}
@@ -137,18 +138,18 @@ dispose(false);
         }, type.getRegistrationTime() * 60 * 1000);
 	}
 
-	public void dispose(boolean log){
-                broadcastExped(PacketCreator.removeClock());
-            
-                if (schedule != null){
-			schedule.cancel(false);
-		}
-		if (log && !registering){
-			LogHelper.logExpedition(this);
-		}
-	}
+    public void dispose(boolean log) {
+        broadcastExped(PacketCreator.removeClock());
+
+        if (schedule != null) {
+            schedule.cancel(false);
+        }
+        if (log && !registering) {
+            LogHelper.logExpedition(this);
+        }
+    }
         
-        public void finishRegistration() {
+    public void finishRegistration() {
                 registering = false;
         }
 
@@ -178,7 +179,7 @@ dispose(false);
                 }
                 
                 members.put(player.getId(), player.getName());
-                player.announce(PacketCreator.getClock((int)(startTime - System.currentTimeMillis()) / 1000));
+                player.sendPacket(PacketCreator.getClock((int)(startTime - System.currentTimeMillis()) / 1000));
                 if (!silent) broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + player.getName() + " has joined the expedition!"));
                 return "You have registered for the expedition successfully!";
 	}
@@ -195,7 +196,7 @@ dispose(false);
                 }
 
                 members.put(player.getId(), player.getName());
-                player.announce(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
+                player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
                 if (!silent) broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + player.getName() + " has joined the expedition!"));
                 return 0; //"You have registered for the expedition successfully!";
         }
@@ -208,15 +209,15 @@ dispose(false);
                 }
         }
         
-	private void broadcastExped(byte[] packet){
+	private void broadcastExped(Packet packet){
 		for (MapleCharacter chr : getActiveMembers()){
-                        chr.announce(packet);
+		    chr.sendPacket(packet);
 		}
 	}
         
 	public boolean removeMember(MapleCharacter chr) {
 		if(members.remove(chr.getId()) != null) {
-                    chr.announce(PacketCreator.removeClock());
+                    chr.sendPacket(PacketCreator.removeClock());
                     if (!silent) {
                         broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + chr.getName() + " has left the expedition."));
                         chr.dropMessage(6, "[Expedition] You have left this expedition.");
@@ -237,7 +238,7 @@ dispose(false);
 
                 MapleCharacter player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
                 if (player != null && player.isLoggedinWorld()) {
-                    player.announce(PacketCreator.removeClock());
+                    player.sendPacket(PacketCreator.removeClock());
                     if (!silent) player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
                     if (MapleExpeditionType.ARIANT.equals(type) || MapleExpeditionType.ARIANT1.equals(type) || MapleExpeditionType.ARIANT2.equals(type)) {
                         player.changeMap(980010000);

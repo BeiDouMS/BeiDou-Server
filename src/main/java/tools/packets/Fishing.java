@@ -119,7 +119,7 @@ public class Fishing {
             chr.getMap().dropMessage(6, chr.getName() + " found " + rewardStr);
         }
 
-        chr.announce(PacketCreator.showInfo(fishingEffect));
+        chr.sendPacket(PacketCreator.showInfo(fishingEffect));
         chr.getMap().broadcastMessage(chr, PacketCreator.showForeignInfo(chr.getId(), fishingEffect), false);
     } 
     

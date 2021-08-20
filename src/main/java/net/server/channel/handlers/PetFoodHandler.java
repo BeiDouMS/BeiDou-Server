@@ -41,14 +41,14 @@ public final class PetFoodHandler extends AbstractMaplePacketHandler {
         MapleCharacter chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
         if (abm.getLastSpam(2) + 500 > currentServerTime()) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         abm.spam(2);
         slea.readInt(); // timestamp issue detected thanks to Masterrulax
         abm.setTimestamp(1, Server.getInstance().getCurrentTimestamp(), 3);
         if (chr.getNoPets() == 0) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         int previousFullness = 100;

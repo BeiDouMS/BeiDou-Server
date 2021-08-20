@@ -54,7 +54,7 @@ public final class ItemRewardHandler extends AbstractMaplePacketHandler {
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
         for (RewardItem reward : rewards.getRight()) {
             if (!MapleInventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
-                c.announce(PacketCreator.getShowInventoryFull());
+                c.sendPacket(PacketCreator.getShowInventoryFull());
                 break;
             }
             if (Randomizer.nextInt(rewards.getLeft()) < reward.prob) {//Is it even possible to get an item with prob 1?
@@ -77,6 +77,6 @@ public final class ItemRewardHandler extends AbstractMaplePacketHandler {
                 break;
             }
         }
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

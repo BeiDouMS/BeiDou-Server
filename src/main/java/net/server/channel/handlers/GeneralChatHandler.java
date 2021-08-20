@@ -38,7 +38,7 @@ public final class GeneralChatHandler extends AbstractMaplePacketHandler {
                 String s = slea.readMapleAsciiString();
                 MapleCharacter chr = c.getPlayer();
                 if(chr.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
-                        c.announce(PacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return;
                 }
                 if (s.length() > Byte.MAX_VALUE && !chr.isGM()) {

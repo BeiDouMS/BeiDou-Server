@@ -57,7 +57,7 @@ public final class GiveFameHandler extends AbstractMaplePacketHandler {
                 player.message("Could not process the request, since this character currently has the minimum/maximum level of fame.");
             }
         } else {
-            c.announce(PacketCreator.giveFameErrorResponse(status == FameStatus.NOT_TODAY ? 3 : 4));
+            c.sendPacket(PacketCreator.giveFameErrorResponse(status == FameStatus.NOT_TODAY ? 3 : 4));
         }
     }
 }

@@ -169,8 +169,8 @@ public final class TakeDamageHandler extends AbstractMaplePacketHandler {
                                 }
                                 map.damageMonster(chr, attacker, bouncedamage);
                                 map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), true);
-                                chr.getClient().announce(PacketCreator.showOwnBuffEffect(id, 5));
-                                map.broadcastMessage(chr, PacketCreator.showBuffeffect(chr.getId(), id, 5), false);
+                                chr.sendPacket(PacketCreator.showOwnBuffEffect(id, 5));
+                                map.broadcastMessage(chr, PacketCreator.showBuffEffect(chr.getId(), id, 5), false);
                             }
                         }
                     }
@@ -274,7 +274,7 @@ public final class TakeDamageHandler extends AbstractMaplePacketHandler {
         }
         if (GameConstants.isDojo(map.getId())) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_DMG);
-            c.announce(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+            c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
         
         for (MapleCharacter player : banishPlayers) {  // chill, if this list ever gets non-empty an attacker does exist, trust me :)

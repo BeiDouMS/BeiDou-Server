@@ -41,7 +41,7 @@ public final class DoorHandler extends AbstractMaplePacketHandler {
         
         MapleCharacter chr = c.getPlayer();
         if (chr.isChangingMaps() || chr.isBanned()) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         
@@ -55,7 +55,7 @@ public final class DoorHandler extends AbstractMaplePacketHandler {
             }
         }
         
-        c.announce(PacketCreator.blockedMessage(6));
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.blockedMessage(6));
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

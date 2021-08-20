@@ -53,11 +53,11 @@ public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
 
                     MaplePlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {
-                        chr.announce(PacketCreator.getMiniRoomError(13));
+                        chr.sendPacket(PacketCreator.getMiniRoomError(13));
                         return;
                     }
                 } else {
-                    chr.announce(PacketCreator.getMiniRoomError(13));
+                    chr.sendPacket(PacketCreator.getMiniRoomError(13));
                     return;
                 }
             }
@@ -65,7 +65,7 @@ public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
             Point cpos = chr.getPosition();
             MaplePortal portal = chr.getMap().findClosestTeleportPortal(cpos);
             if (portal != null && portal.getPosition().distance(cpos) < 120.0) {
-                chr.announce(PacketCreator.getMiniRoomError(10));
+                chr.sendPacket(PacketCreator.getMiniRoomError(10));
                 return;
             }
         } catch (Exception e) {
@@ -76,9 +76,9 @@ public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
             if (!chr.hasMerchant()) {
                 try {
                     if (ItemFactory.MERCHANT.loadItems(chr.getId(), false).isEmpty() && chr.getMerchantMeso() == 0) {
-                        c.announce(PacketCreator.hiredMerchantBox());
+                        c.sendPacket(PacketCreator.hiredMerchantBox());
                     } else {
-                        chr.announce(PacketCreator.retrieveFirstMessage());
+                        chr.sendPacket(PacketCreator.retrieveFirstMessage());
                     }
                 } catch (SQLException ex) {
                     ex.printStackTrace();

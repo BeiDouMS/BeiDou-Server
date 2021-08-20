@@ -44,7 +44,7 @@ public final class UseItemHandler extends AbstractMaplePacketHandler {
         MapleCharacter chr = c.getPlayer();
         
         if (!chr.isAlive()) {
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -108,6 +108,6 @@ public final class UseItemHandler extends AbstractMaplePacketHandler {
 
     private void remove(MapleClient c, short slot) {
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

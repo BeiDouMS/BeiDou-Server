@@ -61,7 +61,7 @@ function playerEntry(eim, player) {
     em.setProperty("noEntry","true");
 
     const PacketCreator = Java.type('tools.PacketCreator');
-    player.getClient().announce(PacketCreator.getClock(eventTime * 60));
+    player.sendPacket(PacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }
 

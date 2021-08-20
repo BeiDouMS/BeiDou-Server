@@ -151,7 +151,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                     }
                 }
             } else {
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
             }
             return true;
         } catch (final Exception ute) {

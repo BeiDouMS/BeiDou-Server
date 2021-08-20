@@ -22,27 +22,28 @@
 package server.maps;
 
 import client.MapleClient;
+import net.packet.Packet;
 import tools.PacketCreator;
 
 public class MapleMapEffect {
-    private String msg;
-    private int itemId;
-    private boolean active = true;
+    private final String msg;
+    private final int itemId;
+    private final boolean active = true;
 
     public MapleMapEffect(String msg, int itemId) {
         this.msg = msg;
         this.itemId = itemId;
     }
 
-    public final byte[] makeDestroyData() {
+    public final Packet makeDestroyData() {
         return PacketCreator.removeMapEffect();
     }
 
-    public final byte[] makeStartData() {
+    public final Packet makeStartData() {
         return PacketCreator.startMapEffect(msg, itemId, active);
     }
 
     public void sendStartData(MapleClient client) {
-        client.announce(makeStartData());
+        client.sendPacket(makeStartData());
     }
 }

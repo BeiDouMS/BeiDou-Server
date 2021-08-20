@@ -33,7 +33,7 @@ public final class DueyHandler extends AbstractMaplePacketHandler {
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
     	if (!YamlConfig.config.server.USE_DUEY){
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
     	}
         

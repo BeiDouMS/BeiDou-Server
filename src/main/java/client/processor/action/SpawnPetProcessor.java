@@ -52,7 +52,7 @@ public class SpawnPetProcessor {
                 {
                     if (chr.haveItem(petid + 1)) {
                         chr.dropMessage(5, "You can't hatch your " + (petid == 5000028 ? "Dragon egg" : "Robo egg") + " if you already have a Baby " + (petid == 5000028 ? "Dragon." : "Robo."));
-                        c.announce(PacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return;
                     } else {
                         int evolveid = MapleDataTool.getInt("info/evol1", dataRoot.getData("Pet/" + petid + ".img"));
@@ -64,7 +64,7 @@ public class SpawnPetProcessor {
                         MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, petid, (short) 1, false, false);
                         MapleInventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
                         
-                        c.announce(PacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return;
                     }
                 }
@@ -86,8 +86,8 @@ public class SpawnPetProcessor {
                     pet.saveToDb();
                     chr.addPet(pet);
                     chr.getMap().broadcastMessage(c.getPlayer(), PacketCreator.showPet(c.getPlayer(), pet, false, false), true);
-                    c.announce(PacketCreator.petStatUpdate(c.getPlayer()));
-                    c.announce(PacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.petStatUpdate(c.getPlayer()));
+                    c.sendPacket(PacketCreator.enableActions());
 
                     chr.commitExcludedItems();
                     chr.getClient().getWorldServer().registerPetHunger(chr, chr.getPetIndex(pet));

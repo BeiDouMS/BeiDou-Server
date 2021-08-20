@@ -102,7 +102,7 @@ function playerEntry(eim, player) {
         player.changeMap(map, map.getPortal(0));
 
         const PacketCreator = Java.type('tools.PacketCreator');
-        player.announce(PacketCreator.showEffect("event/space/start"));
+        player.sendPacket(PacketCreator.showEffect("event/space/start"));
         player.startMapEffect("Please rescue Gaga within the time limit.", 5120027);
 }
 

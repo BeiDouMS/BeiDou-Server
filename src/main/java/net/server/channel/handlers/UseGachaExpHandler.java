@@ -50,6 +50,6 @@ public class UseGachaExpHandler extends AbstractMaplePacketHandler {
             }
         }
         
-        c.announce(PacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

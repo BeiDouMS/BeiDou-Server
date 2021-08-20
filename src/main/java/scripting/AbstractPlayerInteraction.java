@@ -527,8 +527,8 @@ public class AbstractPlayerInteraction {
             getPlayer().addPet(evolved);
             
             getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showPet(c.getPlayer(), evolved, false, false), true);
-            c.announce(PacketCreator.petStatUpdate(c.getPlayer()));
-            c.announce(PacketCreator.enableActions());
+            c.sendPacket(PacketCreator.petStatUpdate(c.getPlayer()));
+            c.sendPacket(PacketCreator.enableActions());
             chr.getClient().getWorldServer().registerPetHunger(chr, chr.getPetIndex(evolved));
             */
             
@@ -635,7 +635,7 @@ public class AbstractPlayerInteraction {
 			MapleInventoryManipulator.removeById(c, ItemConstants.getInventoryType(id), id, -quantity, true, false);
 		}
 		if (showMessage) {
-			c.announce(PacketCreator.getShowItemGain(id, quantity, true));
+			c.sendPacket(PacketCreator.getShowItemGain(id, quantity, true));
 		}
 
 		return item;
@@ -650,7 +650,7 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void playerMessage(int type, String message) {
-		c.announce(PacketCreator.serverNotice(type, message));
+		c.sendPacket(PacketCreator.serverNotice(type, message));
 	}
 
 	public void message(String message) {
@@ -666,11 +666,11 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void mapEffect(String path) {
-		c.announce(PacketCreator.mapEffect(path));
+		c.sendPacket(PacketCreator.mapEffect(path));
 	}
 
 	public void mapSound(String path) {
-		c.announce(PacketCreator.mapSound(path));
+		c.sendPacket(PacketCreator.mapSound(path));
 	}
 
 	public void displayAranIntro() {
@@ -699,12 +699,12 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void showIntro(String path) {
-		c.announce(PacketCreator.showIntro(path));
+		c.sendPacket(PacketCreator.showIntro(path));
 	}
 
 	public void showInfo(String path) {
-		c.announce(PacketCreator.showInfo(path));
-		c.announce(PacketCreator.enableActions());
+		c.sendPacket(PacketCreator.showInfo(path));
+		c.sendPacket(PacketCreator.enableActions());
 	}
 
 	public void guildMessage(int type, String message) {
@@ -754,7 +754,7 @@ public class AbstractPlayerInteraction {
 			} else {
 				MapleInventoryManipulator.removeById(cl, ItemConstants.getInventoryType(id), id, -quantity, true, false);
 			}
-			cl.announce(PacketCreator.getShowItemGain(id, quantity, true));
+			cl.sendPacket(PacketCreator.getShowItemGain(id, quantity, true));
 		}
 	}
 
@@ -847,7 +847,7 @@ public class AbstractPlayerInteraction {
 			int possesed = iv.countById(id);
 			if (possesed > 0) {
 				MapleInventoryManipulator.removeById(c, ItemConstants.getInventoryType(id), id, possesed, true, false);
-				chr.announce(PacketCreator.getShowItemGain(id, (short) -possesed, true));
+				chr.sendPacket(PacketCreator.getShowItemGain(id, (short) -possesed, true));
 			}
 		}
 	}
@@ -861,13 +861,13 @@ public class AbstractPlayerInteraction {
 		int possessed = cl.getPlayer().getInventory(invType).countById(id);
 		if (possessed > 0) {
 			MapleInventoryManipulator.removeById(cl, ItemConstants.getInventoryType(id), id, possessed, true, false);
-			cl.announce(PacketCreator.getShowItemGain(id, (short) -possessed, true));
+			cl.sendPacket(PacketCreator.getShowItemGain(id, (short) -possessed, true));
 		}
 		
 		if(invType == MapleInventoryType.EQUIP) {
 			if(cl.getPlayer().getInventory(MapleInventoryType.EQUIPPED).countById(id) > 0) {
 				MapleInventoryManipulator.removeById(cl, MapleInventoryType.EQUIPPED, id, 1, true, false);
-				cl.announce(PacketCreator.getShowItemGain(id, (short) -1, true));
+				cl.sendPacket(PacketCreator.getShowItemGain(id, (short) -1, true));
 			}
 		}
 	}
@@ -881,12 +881,12 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void showInstruction(String msg, int width, int height) {
-		c.announce(PacketCreator.sendHint(msg, width, height));
-		c.announce(PacketCreator.enableActions());
+		c.sendPacket(PacketCreator.sendHint(msg, width, height));
+		c.sendPacket(PacketCreator.enableActions());
 	}
 
 	public void disableMinimap() {
-		c.announce(PacketCreator.disableMinimap());
+		c.sendPacket(PacketCreator.disableMinimap());
 	}
 
         public boolean isAllReactorState(final int reactorId, final int state) {
@@ -904,7 +904,7 @@ public class AbstractPlayerInteraction {
 
 	public void useItem(int id) {
 		MapleItemInformationProvider.getInstance().getItemEffect(id).applyTo(c.getPlayer());
-		c.announce(PacketCreator.getItemMessage(id));//Useful shet :3
+		c.sendPacket(PacketCreator.getItemMessage(id));//Useful shet :3
 	}
 
 	public void cancelItem(final int id) {
@@ -924,7 +924,7 @@ public class AbstractPlayerInteraction {
                     return;
                 }
             } else if (GameConstants.isAranSkills(skillid)) {
-                c.announce(PacketCreator.showInfo("Effect/BasicEff.img/AranGetSkill"));
+                c.sendPacket(PacketCreator.showInfo("Effect/BasicEff.img/AranGetSkill"));
             }
             
             getPlayer().changeSkillLevel(skill, level, masterLevel, expiration);
@@ -943,7 +943,7 @@ public class AbstractPlayerInteraction {
 		final Item newItem = MapleItemInformationProvider.getInstance().getEquipById(itemid);
 		newItem.setPosition(slot);
 		c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).addItemFromDB(newItem);
-		c.announce(PacketCreator.modifyInventory(false, Collections.singletonList(new ModifyInventory(0, newItem))));
+		c.sendPacket(PacketCreator.modifyInventory(false, Collections.singletonList(new ModifyInventory(0, newItem))));
 	}
         
         public void spawnNpc(int npcId, Point pos, MapleMap map) {
@@ -974,19 +974,19 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void spawnGuide() {
-		c.announce(PacketCreator.spawnGuide(true));
+		c.sendPacket(PacketCreator.spawnGuide(true));
 	}
 
 	public void removeGuide() {
-		c.announce(PacketCreator.spawnGuide(false));
+		c.sendPacket(PacketCreator.spawnGuide(false));
 	}
 
 	public void displayGuide(int num) {
-		c.announce(PacketCreator.showInfo("UI/tutorial.img/" + num));
+		c.sendPacket(PacketCreator.showInfo("UI/tutorial.img/" + num));
 	}
 
 	public void goDojoUp() {
-		c.announce(PacketCreator.dojoWarpUp());
+		c.sendPacket(PacketCreator.dojoWarpUp());
 	}
         
         public void resetDojoEnergy() {
@@ -1000,28 +1000,28 @@ public class AbstractPlayerInteraction {
         }
 
 	public void enableActions() {
-		c.announce(PacketCreator.enableActions());
+		c.sendPacket(PacketCreator.enableActions());
 	}
 
 	public void showEffect(String effect){
-		c.announce(PacketCreator.showEffect(effect));
+		c.sendPacket(PacketCreator.showEffect(effect));
 	}
 
 	public void dojoEnergy() {
-		c.announce(PacketCreator.getEnergy("energy", getPlayer().getDojoEnergy()));
+		c.sendPacket(PacketCreator.getEnergy("energy", getPlayer().getDojoEnergy()));
 	}
 
 	public void talkGuide(String message) {
-		c.announce(PacketCreator.talkGuide(message));
+		c.sendPacket(PacketCreator.talkGuide(message));
 	}
 
 	public void guideHint(int hint) {
-		c.announce(PacketCreator.guideHint(hint));
+		c.sendPacket(PacketCreator.guideHint(hint));
 	}
 
 	public void updateAreaInfo(Short area, String info) {
 		c.getPlayer().updateAreaInfo(area, info);
-		c.announce(PacketCreator.enableActions());//idk, nexon does the same :P
+		c.sendPacket(PacketCreator.enableActions());//idk, nexon does the same :P
 	}
 
 	public boolean containsAreaInfo(short area, String info) {
@@ -1029,25 +1029,25 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void earnTitle(String msg) {
-		c.announce(PacketCreator.earnTitleMessage(msg));
+		c.sendPacket(PacketCreator.earnTitleMessage(msg));
 	}
 
 	public void showInfoText(String msg) {
-		c.announce(PacketCreator.showInfoText(msg));
+		c.sendPacket(PacketCreator.showInfoText(msg));
 	}
 
 	public void openUI(byte ui) {
-		c.announce(PacketCreator.openUI(ui));
+		c.sendPacket(PacketCreator.openUI(ui));
 	}
 
 	public void lockUI() {
-		c.announce(PacketCreator.disableUI(true));
-		c.announce(PacketCreator.lockUI(true));
+		c.sendPacket(PacketCreator.disableUI(true));
+		c.sendPacket(PacketCreator.lockUI(true));
 	}
 
 	public void unlockUI() {
-		c.announce(PacketCreator.disableUI(false));
-		c.announce(PacketCreator.lockUI(false));
+		c.sendPacket(PacketCreator.disableUI(false));
+		c.sendPacket(PacketCreator.lockUI(false));
 	}
 
 	public void playSound(String sound) {
@@ -1183,7 +1183,7 @@ public class AbstractPlayerInteraction {
         }
         
         public void npcTalk(int npcid, String message) {
-                c.announce(PacketCreator.getNPCTalk(npcid, (byte) 0, message, "00 00", (byte) 0));
+                c.sendPacket(PacketCreator.getNPCTalk(npcid, (byte) 0, message, "00 00", (byte) 0));
         }
 
         public long getCurrentTime() {

@@ -45,7 +45,7 @@ public final class TrockAddMapHandler extends AbstractMaplePacketHandler {
                 chr.deleteFromVipTrocks(mapId);
             else
                 chr.deleteFromTrocks(mapId);
-            c.announce(PacketCreator.trockRefreshMapList(chr, true, vip));
+            c.sendPacket(PacketCreator.trockRefreshMapList(chr, true, vip));
         } else if (type == 0x01) {
             if (!FieldLimit.CANNOTVIPROCK.check(chr.getMap().getFieldLimit())) {
                 if (vip)
@@ -53,7 +53,7 @@ public final class TrockAddMapHandler extends AbstractMaplePacketHandler {
                 else
                     chr.addTrockMap();
 
-                 c.announce(PacketCreator.trockRefreshMapList(chr, false, vip));
+                 c.sendPacket(PacketCreator.trockRefreshMapList(chr, false, vip));
             } else {
                 chr.message("You may not save this map.");
             }

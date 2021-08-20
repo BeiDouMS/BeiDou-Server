@@ -42,7 +42,7 @@ public class RaiseIncExpHandler extends AbstractMaplePacketHandler {
                 MapleCharacter chr = c.getPlayer();
                 MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
                 if (!chr.getQuest(quest).getStatus().equals(MapleQuestStatus.Status.STARTED)) {
-                    c.announce(PacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
                 
@@ -64,7 +64,7 @@ public class RaiseIncExpHandler extends AbstractMaplePacketHandler {
                 int nextValue = Math.min(consumables.get(consId) + c.getAbstractPlayerInteraction().getQuestProgressInt(questid, infoNumber), consItem.exp * consItem.grade);
                 c.getAbstractPlayerInteraction().setQuestProgress(questid, infoNumber, nextValue);
                 
-                c.announce(PacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
             } finally {
                 c.releaseClient();
             }

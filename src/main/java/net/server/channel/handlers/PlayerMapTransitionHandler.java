@@ -49,7 +49,7 @@ public final class PlayerMapTransitionHandler extends AbstractMaplePacketHandler
             chr.cancelBuffStats(MapleBuffStat.HOMING_BEACON);
             
             final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.HOMING_BEACON, 0));
-            chr.announce(PacketCreator.giveBuff(1, beaconid, stat));
+            chr.sendPacket(PacketCreator.giveBuff(1, beaconid, stat));
         }
         
         if (!chr.isHidden()) {  // thanks Lame (Conrad) for noticing hidden characters controlling mobs
@@ -57,7 +57,7 @@ public final class PlayerMapTransitionHandler extends AbstractMaplePacketHandler
                 MapleMonster m = (MapleMonster) mo;
                 if (m.getSpawnEffect() == 0 || m.getHp() < m.getMaxHp()) {     // avoid effect-spawning mobs
                     if (m.getController() == chr) {
-                        c.announce(PacketCreator.stopControllingMonster(m.getObjectId()));
+                        c.sendPacket(PacketCreator.stopControllingMonster(m.getObjectId()));
                         m.sendDestroyData(c);
                         m.aggroRemoveController();
                     } else {
