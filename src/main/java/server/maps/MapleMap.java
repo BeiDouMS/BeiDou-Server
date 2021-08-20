@@ -3314,10 +3314,10 @@ public class MapleMap {
     }
     
     // not really costly to keep generating imo
-    public void sendNightEffect(MapleCharacter mc) {
+    public void sendNightEffect(MapleCharacter chr) {
         for (Entry<Integer, Integer> types : backgroundTypes.entrySet()) {
             if (types.getValue() >= 3) { // 3 is a special number
-                mc.announce(PacketCreator.changeBackgroundEffect(true, types.getKey(), 0));
+                chr.sendPacket(PacketCreator.changeBackgroundEffect(true, types.getKey(), 0));
             }
         }
     }

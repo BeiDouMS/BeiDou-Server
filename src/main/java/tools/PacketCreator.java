@@ -38,6 +38,8 @@ import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
 import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
+import net.packet.OutPacket;
+import net.packet.Packet;
 import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;
 import net.server.channel.Channel;
@@ -8337,14 +8339,13 @@ public class PacketCreator {
      * @param transition the time it takes to transition the effect.
      * @return a packet to change the background effect of a specified layer.
      */
-    public static byte[] changeBackgroundEffect(boolean remove, int layer, int transition) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.writeShort(SendOpcode.SET_BACK_EFFECT.getValue());
-        mplew.writeBool(remove);
-        mplew.writeInt(0); // not sure what this int32 does yet
-        mplew.write(layer);
-        mplew.writeInt(transition);
-        return mplew.getPacket();
+    public static Packet changeBackgroundEffect(boolean remove, int layer, int transition) {
+        OutPacket p = OutPacket.create(SendOpcode.SET_BACK_EFFECT);
+        p.writeBool(remove);
+        p.writeInt(0); // not sure what this int32 does yet
+        p.writeByte(layer);
+        p.writeInt(transition);
+        return p;
     }
 
     /**
@@ -8354,18 +8355,17 @@ public class PacketCreator {
      * @param scriptableNpcIds Ids of npcs to enable scripts for.
      * @return a packet which makes the npc's provided scriptable.
      */
-    public static byte[] setNPCScriptable(Map<Integer, String> scriptableNpcIds) {  // thanks to GabrielSin
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.writeShort(SendOpcode.SET_NPC_SCRIPTABLE.getValue());
-        mplew.write(scriptableNpcIds.size());
+    public static Packet setNPCScriptable(Map<Integer, String> scriptableNpcIds) {  // thanks to GabrielSin
+        OutPacket p = OutPacket.create(SendOpcode.SET_NPC_SCRIPTABLE);
+        p.writeByte(scriptableNpcIds.size());
         scriptableNpcIds.forEach((id, name) -> {
-            mplew.writeInt(id);
+            p.writeInt(id);
             // The client needs a name for the npc conversation, which is displayed under etc when the npc has a quest available.
-            mplew.writeMapleAsciiString(name);
-            mplew.writeInt(0); // start time
-            mplew.writeInt(Integer.MAX_VALUE); // end time
+            p.writeString(name);
+            p.writeInt(0); // start time
+            p.writeInt(Integer.MAX_VALUE); // end time
         });
-        return mplew.getPacket();
+        return p;
     }
 
     private static byte[] MassacreResult(byte nRank, int nIncExp) {

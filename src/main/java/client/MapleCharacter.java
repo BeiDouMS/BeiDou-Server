@@ -38,6 +38,7 @@ import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
+import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;
@@ -10048,8 +10049,13 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         announce(PacketCreator.updatePlayerStats(Collections.singletonList(new Pair<>(stat, Integer.valueOf(newval))), itemReaction, this));
     }
 
+    @Deprecated(forRemoval = true)
     public void announce(final byte[] packet) {
         client.announce(packet);
+    }
+
+    public void sendPacket(Packet packet) {
+        client.sendPacket(packet);
     }
 
     @Override
