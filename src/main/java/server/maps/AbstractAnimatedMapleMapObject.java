@@ -23,29 +23,17 @@ package server.maps;
 
 import java.util.Arrays;
 
+import net.packet.ByteBufOutPacket;
+import net.packet.OutPacket;
+import net.packet.Packet;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.data.output.MaplePacketLittleEndianWriter;
 
 public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObject implements AnimatedMapleMapObject {
-    
-	static {
-		MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter((int) getIdleMovementDataLength());
-    	mplew.write(1); //movement command count
-    	mplew.write(0);
-    	mplew.writeShort(-1); //x
-    	mplew.writeShort(-1); //y
-    	mplew.writeShort(0); //xwobble
-    	mplew.writeShort(0); //ywobble
-    	mplew.writeShort(0); //fh
-    	mplew.write(-1); //stance
-    	mplew.writeShort(0); //duration
-    	idleMovementPacketData = mplew.getPacket();
-	}
-	
-	private static final byte[] idleMovementPacketData;
-	
+	public static final int IDLE_MOVEMENT_PACKET_LENGTH = 15;
+	private static final Packet IDLE_MOVEMENT_PACKET = createIdleMovementPacket();
+
 	private int stance;
 
     @Override
@@ -64,7 +52,8 @@ public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObj
     }
     
     public SeekableLittleEndianAccessor getIdleMovement() {
-    	byte[] movementData = Arrays.copyOf(idleMovementPacketData, idleMovementPacketData.length);
+    	final byte[] idleMovementBytes = IDLE_MOVEMENT_PACKET.getBytes();
+    	byte[] movementData = Arrays.copyOf(idleMovementBytes, idleMovementBytes.length);
     	//seems wasteful to create a whole packet writer when only a few values are changed
     	int x = getPosition().x;
     	int y = getPosition().y;
@@ -75,8 +64,18 @@ public abstract class AbstractAnimatedMapleMapObject extends AbstractMapleMapObj
     	movementData[12] = (byte) (getStance() & 0xFF);
     	return new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(movementData));
     }
-    
-    public static long getIdleMovementDataLength() {
-    	return 15;
-    }
+
+    private static Packet createIdleMovementPacket() {
+		OutPacket p = new ByteBufOutPacket();
+		p.writeByte(1); //movement command count
+		p.writeByte(0);
+		p.writeShort(-1); //x
+		p.writeShort(-1); //y
+		p.writeShort(0); //xwobble
+		p.writeShort(0); //ywobble
+		p.writeShort(0); //fh
+		p.writeByte(-1); //stance
+		p.writeShort(0); //duration
+		return p;
+	}
 }

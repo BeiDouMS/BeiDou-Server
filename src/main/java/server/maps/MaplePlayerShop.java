@@ -28,14 +28,12 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
-import net.opcodes.SendOpcode;
 import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.MapleTrade;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.output.MaplePacketLittleEndianWriter;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -375,15 +373,6 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         if (owner != null) {
             forceRemoveVisitor(owner);
         }
-    }
-
-    public static byte[] shopErrorMessage(int error, int type) {
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.writeShort(SendOpcode.PLAYER_INTERACTION.getValue());
-        mplew.write(0x0A);
-        mplew.write(type);
-        mplew.write(error);
-        return mplew.getPacket();
     }
 
     public void broadcast(Packet packet) {

@@ -28,12 +28,13 @@ import client.MapleClient;
 import client.command.Command;
 import net.MaplePacketHandler;
 import net.PacketProcessor;
+import net.packet.ByteBufOutPacket;
+import net.packet.OutPacket;
 import tools.FilePrinter;
 import tools.HexTool;
 import tools.data.input.ByteArrayByteStream;
 import tools.data.input.GenericSeekableLittleEndianAccessor;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.data.output.MaplePacketLittleEndianWriter;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -61,9 +62,9 @@ public class PeCommand extends Command {
             return;
 
         }
-        MaplePacketLittleEndianWriter mplew = new MaplePacketLittleEndianWriter();
-        mplew.write(HexTool.getByteArrayFromHexString(packet));
-        SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(mplew.getPacket()));
+        OutPacket p = new ByteBufOutPacket();
+        p.writeBytes(HexTool.getByteArrayFromHexString(packet));
+        SeekableLittleEndianAccessor slea = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(p.getBytes()));
         short packetId = slea.readShort();
         final MaplePacketHandler packetHandler = PacketProcessor.getProcessor(0, c.getChannel()).getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(c)) {

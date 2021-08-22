@@ -540,4 +540,51 @@ public class GuildPackets {
         p.writeByte(guild.getLogoColor());
         return p;
     }
+
+
+    public static Packet sendShowInfo(int allianceid, int playerid) {
+        OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
+        p.writeByte(0x02);
+        p.writeInt(allianceid);
+        p.writeInt(playerid);
+        return p;
+    }
+
+    public static Packet sendInvitation(int allianceid, int playerid, final String guildname) {
+        OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
+        p.writeByte(0x05);
+        p.writeInt(allianceid);
+        p.writeInt(playerid);
+        p.writeString(guildname);
+        return p;
+    }
+
+    public static Packet sendChangeGuild(int allianceid, int playerid, int guildid, int option) {
+        OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
+        p.writeByte(0x07);
+        p.writeInt(allianceid);
+        p.writeInt(guildid);
+        p.writeInt(playerid);
+        p.writeByte(option);
+        return p;
+    }
+
+    public static Packet sendChangeLeader(int allianceid, int playerid, int victim) {
+        OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
+        p.writeByte(0x08);
+        p.writeInt(allianceid);
+        p.writeInt(playerid);
+        p.writeInt(victim);
+        return p;
+    }
+
+    public static Packet sendChangeRank(int allianceid, int playerid, int int1, byte byte1) {
+        OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
+        p.writeByte(0x09);
+        p.writeInt(allianceid);
+        p.writeInt(playerid);
+        p.writeInt(int1);
+        p.writeInt(byte1);
+        return p;
+    }
 }
