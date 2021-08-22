@@ -72,7 +72,7 @@ class ByteBufInPacketTest {
         byteBuf.writeShortLE((short) writtenPoint.getX());
         byteBuf.writeShortLE((short) writtenPoint.getY());
 
-        Point readPoint = inPacket.readPoint();
+        Point readPoint = inPacket.readPos();
 
         assertEquals(writtenPoint, readPoint);
     }

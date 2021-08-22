@@ -38,7 +38,7 @@ public class ByteBufInPacket implements InPacket {
     }
 
     @Override
-    public Point readPoint() {
+    public Point readPos() {
         final short x = byteBuf.readShortLE();
         final short y = byteBuf.readShortLE();
         return new Point(x, y);
