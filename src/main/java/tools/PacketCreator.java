@@ -2127,9 +2127,9 @@ public class PacketCreator {
     }
 
     /**
-     * Adds a announcement box to an existing MaplePacketLittleEndianWriter.
+     * Adds an announcement box to an existing OutPacket.
      *
-     * @param p The MaplePacketLittleEndianWriter to add an announcement box
+     * @param p The OutPacket to add an announcement box
      *              to.
      * @param shop  The shop to announce.
      */
@@ -5844,7 +5844,7 @@ public class PacketCreator {
         boolean hasOtherJunior = false;
         int entryCount = 2; //2 guaranteed, leader and self
         entryCount += Math.min(2, entry.getTotalSeniors());
-        //needed since MaplePacketLittleEndianWriter doesn't have any seek functionality
+        //needed since OutPacket doesn't have any seek functionality
         if (entry.getSenior() != null) {
             if (entry.getSenior().getJuniorCount() == 2) {
                 entryCount++;
