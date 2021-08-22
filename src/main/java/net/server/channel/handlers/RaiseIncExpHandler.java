@@ -10,7 +10,7 @@ import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.QuestConsItem;
 import server.quest.MapleQuest;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Map;
@@ -42,7 +42,7 @@ public class RaiseIncExpHandler extends AbstractMaplePacketHandler {
                 MapleCharacter chr = c.getPlayer();
                 MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
                 if (!chr.getQuest(quest).getStatus().equals(MapleQuestStatus.Status.STARTED)) {
-                    c.announce(MaplePacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
                 
@@ -64,7 +64,7 @@ public class RaiseIncExpHandler extends AbstractMaplePacketHandler {
                 int nextValue = Math.min(consumables.get(consId) + c.getAbstractPlayerInteraction().getQuestProgressInt(questid, infoNumber), consItem.exp * consItem.grade);
                 c.getAbstractPlayerInteraction().setQuestProgress(questid, infoNumber, nextValue);
                 
-                c.announce(MaplePacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
             } finally {
                 c.releaseClient();
             }

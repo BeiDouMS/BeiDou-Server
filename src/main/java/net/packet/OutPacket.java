@@ -1,5 +1,7 @@
 package net.packet;
 
+import net.opcodes.SendOpcode;
+
 import java.awt.*;
 
 public interface OutPacket extends Packet {
@@ -9,8 +11,13 @@ public interface OutPacket extends Packet {
     void writeShort(int value);
     void writeInt(int value);
     void writeLong(long value);
-    void writeBoolean(boolean value);
+    void writeBool(boolean value);
     void writeString(String value);
-    void writePoint(Point value);
+    void writeFixedString(String value);
+    void writePos(Point value);
     void skip(int numberOfBytes);
+
+    static OutPacket create(SendOpcode opcode) {
+        return new ByteBufOutPacket(opcode);
+    }
 }

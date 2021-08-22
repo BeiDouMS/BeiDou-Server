@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import scripting.event.EventInstanceManager;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.packets.Wedding;
+import tools.packets.WeddingPackets;
 
 /**
  *
@@ -40,14 +40,14 @@ public final class WeddingTalkHandler extends AbstractMaplePacketHandler {
             EventInstanceManager eim = c.getPlayer().getEventInstance();
             
             if(eim != null && !(c.getPlayer().getId() == eim.getIntProperty("groomId") || c.getPlayer().getId() == eim.getIntProperty("brideId"))) {
-                c.announce(Wedding.OnWeddingProgress(false, 0, 0, (byte) 2));
+                c.sendPacket(WeddingPackets.OnWeddingProgress(false, 0, 0, (byte) 2));
             } else {
-                c.announce(Wedding.OnWeddingProgress(true, 0, 0, (byte) 3));
+                c.sendPacket(WeddingPackets.OnWeddingProgress(true, 0, 0, (byte) 3));
             }
         } else {
-            c.announce(Wedding.OnWeddingProgress(true, 0, 0, (byte) 3));
+            c.sendPacket(WeddingPackets.OnWeddingProgress(true, 0, 0, (byte) 3));
         }
         
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

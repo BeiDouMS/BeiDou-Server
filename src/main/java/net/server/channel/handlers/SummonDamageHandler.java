@@ -31,16 +31,17 @@ import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.status.MonsterStatusEffect;
 import constants.skills.Outlaw;
-import java.util.ArrayList;
-import java.util.List;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleSummon;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class SummonDamageHandler extends AbstractDealDamageHandler {
     
@@ -93,7 +94,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             int damage = slea.readInt();
             allDamage.add(new SummonAttackEntry(monsterOid, damage));
         }
-        player.getMap().broadcastMessage(player, MaplePacketCreator.summonAttack(player.getId(), summon.getObjectId(), direction, allDamage), summon.getPosition());
+        player.getMap().broadcastMessage(player, PacketCreator.summonAttack(player.getId(), summon.getObjectId(), direction, allDamage), summon.getPosition());
         
         if (player.getMap().isOwnershipRestricted(player)) {
             return;

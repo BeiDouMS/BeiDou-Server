@@ -37,7 +37,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.awt.*;
@@ -200,14 +200,14 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.announce(MaplePacketCreator.spawnPlayerNPC(this));
-        client.announce(MaplePacketCreator.getPlayerNPC(this));
+        client.sendPacket(PacketCreator.spawnPlayerNPC(this));
+        client.sendPacket(PacketCreator.getPlayerNPC(this));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.announce(MaplePacketCreator.removeNPCController(this.getObjectId()));
-        client.announce(MaplePacketCreator.removePlayerNPC(this.getObjectId()));
+        client.sendPacket(PacketCreator.removeNPCController(this.getObjectId()));
+        client.sendPacket(PacketCreator.removePlayerNPC(this.getObjectId()));
     }
 
     private static void getRunningMetadata() {
@@ -540,8 +540,8 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
                 MapleMap m = channel.getMapFactory().getMap(mapid);
 
                 m.addPlayerNPCMapObject(pn);
-                m.broadcastMessage(MaplePacketCreator.spawnPlayerNPC(pn));
-                m.broadcastMessage(MaplePacketCreator.getPlayerNPC(pn));
+                m.broadcastMessage(PacketCreator.spawnPlayerNPC(pn));
+                m.broadcastMessage(PacketCreator.getPlayerNPC(pn));
             }
 
             return true;
@@ -577,8 +577,8 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
                     MapleMap m = channel.getMapFactory().getMap(mapid);
                     m.removeMapObject(pn);
 
-                    m.broadcastMessage(MaplePacketCreator.removeNPCController(pn.getObjectId()));
-                    m.broadcastMessage(MaplePacketCreator.removePlayerNPC(pn.getObjectId()));
+                    m.broadcastMessage(PacketCreator.removeNPCController(pn.getObjectId()));
+                    m.broadcastMessage(PacketCreator.removePlayerNPC(pn.getObjectId()));
                 }
             }
         }
@@ -615,8 +615,8 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
                     for (MapleMapObject pnpcObj : m.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
                         MaplePlayerNPC pn = (MaplePlayerNPC) pnpcObj;
                         m.removeMapObject(pnpcObj);
-                        m.broadcastMessage(MaplePacketCreator.removeNPCController(pn.getObjectId()));
-                        m.broadcastMessage(MaplePacketCreator.removePlayerNPC(pn.getObjectId()));
+                        m.broadcastMessage(PacketCreator.removeNPCController(pn.getObjectId()));
+                        m.broadcastMessage(PacketCreator.removePlayerNPC(pn.getObjectId()));
                     }
                 }
             }

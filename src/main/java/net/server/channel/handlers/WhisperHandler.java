@@ -28,8 +28,8 @@ import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
 import tools.FilePrinter;
 import tools.LogHelper;
-import tools.MaplePacketCreator;
-import tools.MaplePacketCreator.WhisperFlag;
+import tools.PacketCreator;
+import tools.PacketCreator.WhisperFlag;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -50,7 +50,7 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
         MapleCharacter target = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
 
         if (target == null) {
-            c.announce(MaplePacketCreator.getWhisperResult(name, false));
+            c.sendPacket(PacketCreator.getWhisperResult(name, false));
             return;
         }
 
@@ -74,15 +74,15 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
     private void handleFind(MapleCharacter user, MapleCharacter target, byte flag) {
         if (user.gmLevel() >= target.gmLevel()) {
             if (target.getCashShop().isOpened()) {
-                user.announce(MaplePacketCreator.getFindResult(target, RT_CASH_SHOP, -1, flag));
+                user.sendPacket(PacketCreator.getFindResult(target, RT_CASH_SHOP, -1, flag));
             } else if (target.getClient().getChannel() == user.getClient().getChannel()) {
-                user.announce(MaplePacketCreator.getFindResult(target, RT_SAME_CHANNEL, target.getMapId(), flag));
+                user.sendPacket(PacketCreator.getFindResult(target, RT_SAME_CHANNEL, target.getMapId(), flag));
             } else {
-                user.announce(MaplePacketCreator.getFindResult(target, RT_DIFFERENT_CHANNEL, target.getClient().getChannel() - 1, flag));
+                user.sendPacket(PacketCreator.getFindResult(target, RT_DIFFERENT_CHANNEL, target.getClient().getChannel() - 1, flag));
             }
         } else {
             // not found for whisper is the same message
-            user.announce(MaplePacketCreator.getWhisperResult(target.getName(), false));
+            user.sendPacket(PacketCreator.getWhisperResult(target.getName(), false));
         }
     }
 
@@ -103,9 +103,9 @@ public final class WhisperHandler extends AbstractMaplePacketHandler {
             LogHelper.logChat(user.getClient(), "Whisper To " + target.getName(), message);
         }
 
-        target.announce(MaplePacketCreator.getWhisperReceive(user.getName(), user.getClient().getChannel() - 1, user.isGM(), message));
+        target.sendPacket(PacketCreator.getWhisperReceive(user.getName(), user.getClient().getChannel() - 1, user.isGM(), message));
 
         boolean hidden = target.isHidden() && target.gmLevel() > user.gmLevel();
-        user.announce(MaplePacketCreator.getWhisperResult(target.getName(), !hidden));
+        user.sendPacket(PacketCreator.getWhisperResult(target.getName(), !hidden));
     }
 }

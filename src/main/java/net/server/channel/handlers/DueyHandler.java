@@ -24,9 +24,8 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.processor.npc.DueyProcessor;
 import config.YamlConfig;
-
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class DueyHandler extends AbstractMaplePacketHandler {
@@ -34,7 +33,7 @@ public final class DueyHandler extends AbstractMaplePacketHandler {
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
     	if (!YamlConfig.config.server.USE_DUEY){
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
     	}
         

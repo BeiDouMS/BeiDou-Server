@@ -30,7 +30,7 @@ import net.server.Server;
 import net.server.world.World;
 import tools.FilePrinter;
 import tools.LogHelper;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MultiChatHandler extends AbstractMaplePacketHandler {
@@ -73,7 +73,7 @@ public final class MultiChatHandler extends AbstractMaplePacketHandler {
         } else if (type == 3 && player.getGuild() != null) {
             int allianceId = player.getGuild().getAllianceId();
             if (allianceId > 0) {
-                Server.getInstance().allianceMessage(allianceId, MaplePacketCreator.multiChat(player.getName(), chattext, 3), player.getId(), -1);
+                Server.getInstance().allianceMessage(allianceId, PacketCreator.multiChat(player.getName(), chattext, 3), player.getId(), -1);
                 if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
                     LogHelper.logChat(c, "Ally", chattext);
                 }

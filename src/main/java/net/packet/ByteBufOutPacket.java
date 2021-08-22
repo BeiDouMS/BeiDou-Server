@@ -11,8 +11,8 @@ import java.awt.*;
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;
+    private byte[] bytes;
 
-    @Deprecated(forRemoval = true)
     public ByteBufOutPacket() {
         this.byteBuf = Unpooled.buffer();
     }
@@ -31,7 +31,12 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public byte[] getBytes() {
-        return ByteBufUtil.getBytes(byteBuf);
+        if (bytes == null) {
+            // Avoid creating new byte arrays when the packet is broadcast
+            bytes = ByteBufUtil.getBytes(byteBuf);
+        }
+
+        return bytes;
     }
 
     @Override
@@ -65,7 +70,7 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public void writeBoolean(boolean value) {
+    public void writeBool(boolean value) {
         byteBuf.writeByte(value ? 1 : 0);
     }
 
@@ -76,7 +81,12 @@ public class ByteBufOutPacket implements OutPacket {
     }
 
     @Override
-    public void writePoint(Point value) {
+    public void writeFixedString(String value) {
+        writeBytes(value.getBytes(STRING_CHARSET));
+    }
+
+    @Override
+    public void writePos(Point value) {
         writeShort((short) value.getX());
         writeShort((short) value.getY());
     }

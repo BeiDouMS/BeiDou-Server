@@ -35,7 +35,7 @@ import provider.MapleData;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.util.*;
@@ -292,7 +292,7 @@ public class MaplePartySearchCoordinator {
         
         if (MapleInviteCoordinator.createInvite(InviteType.PARTY, leader, partyid, chr.getId())) {
             chr.disablePartySearchInvite(leader.getId());
-            chr.announce(MaplePacketCreator.partySearchInvite(leader));
+            chr.sendPacket(PacketCreator.partySearchInvite(leader));
             return true;
         } else {
             return false;

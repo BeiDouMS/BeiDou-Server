@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class TimerAllCommand extends Command {
     {
@@ -43,13 +43,13 @@ public class TimerAllCommand extends Command {
 
         if (params[0].equalsIgnoreCase("remove")) {
             for (MapleCharacter victim : player.getWorldServer().getPlayerStorage().getAllCharacters()) {
-                victim.announce(MaplePacketCreator.removeClock());
+                victim.sendPacket(PacketCreator.removeClock());
             }
         } else {
             try {
                 int seconds = Integer.parseInt(params[0]);
                 for (MapleCharacter victim : player.getWorldServer().getPlayerStorage().getAllCharacters()) {
-                    victim.announce(MaplePacketCreator.getClock(seconds));
+                    victim.sendPacket(PacketCreator.getClock(seconds));
                 }
             } catch (NumberFormatException e) {
                 player.yellowMessage("Syntax: !timerall <seconds>|remove");

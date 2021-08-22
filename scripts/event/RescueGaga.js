@@ -101,8 +101,8 @@ function playerEntry(eim, player) {
         var map = eim.getMapInstance(entryMap);
         player.changeMap(map, map.getPortal(0));
 
-        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-        player.announce(MaplePacketCreator.showEffect("event/space/start"));
+        const PacketCreator = Java.type('tools.PacketCreator');
+        player.sendPacket(PacketCreator.showEffect("event/space/start"));
         player.startMapEffect("Please rescue Gaga within the time limit.", 5120027);
 }
 

@@ -27,7 +27,7 @@ import net.server.world.MaplePartyCharacter;
 import scripting.AbstractScriptManager;
 import server.MapleItemInformationProvider.ScriptedItem;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -151,7 +151,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                     }
                 }
             } else {
-                c.announce(MaplePacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
             }
             return true;
         } catch (final Exception ute) {

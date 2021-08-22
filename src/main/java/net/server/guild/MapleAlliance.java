@@ -23,6 +23,7 @@ package net.server.guild;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import net.packet.Packet;
 import net.server.Server;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
@@ -30,7 +31,6 @@ import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -141,8 +141,8 @@ public class MapleAlliance {
                 Server.getInstance().addAlliance(id, alliance);
 
                 int worldid = guildMasters.get(0).getWorld();
-                Server.getInstance().allianceMessage(id, MaplePacketCreator.updateAllianceInfo(alliance, worldid), -1, -1);
-                Server.getInstance().allianceMessage(id, MaplePacketCreator.getGuildAlliances(alliance, worldid), -1, -1);  // thanks Vcoc for noticing guilds from other alliances being visually stacked here due to this not being updated
+                Server.getInstance().allianceMessage(id, GuildPackets.updateAllianceInfo(alliance, worldid), -1, -1);
+                Server.getInstance().allianceMessage(id, GuildPackets.getGuildAlliances(alliance, worldid), -1, -1);  // thanks Vcoc for noticing guilds from other alliances being visually stacked here due to this not being updated
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -273,7 +273,7 @@ public class MapleAlliance {
                 ps.executeUpdate();
             }
 
-            Server.getInstance().allianceMessage(allianceId, MaplePacketCreator.disbandAlliance(allianceId), -1, -1);
+            Server.getInstance().allianceMessage(allianceId, GuildPackets.disbandAlliance(allianceId), -1, -1);
             Server.getInstance().disbandAlliance(allianceId);
         } catch (SQLException sqle) {
             sqle.printStackTrace();
@@ -298,13 +298,13 @@ public class MapleAlliance {
             return false;
         }
 
-        srv.allianceMessage(alliance.getId(), MaplePacketCreator.removeGuildFromAlliance(alliance, guildId, worldId), -1, -1);
+        srv.allianceMessage(alliance.getId(), GuildPackets.removeGuildFromAlliance(alliance, guildId, worldId), -1, -1);
         srv.removeGuildFromAlliance(alliance.getId(), guildId);
         removeGuildFromAllianceOnDb(guildId);
 
-        srv.allianceMessage(alliance.getId(), MaplePacketCreator.getGuildAlliances(alliance, worldId), -1, -1);
-        srv.allianceMessage(alliance.getId(), MaplePacketCreator.allianceNotice(alliance.getId(), alliance.getNotice()), -1, -1);
-        srv.guildMessage(guildId, MaplePacketCreator.disbandAlliance(alliance.getId()));
+        srv.allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, worldId), -1, -1);
+        srv.allianceMessage(alliance.getId(), GuildPackets.allianceNotice(alliance.getId(), alliance.getNotice()), -1, -1);
+        srv.guildMessage(guildId, GuildPackets.disbandAlliance(alliance.getId()));
 
         alliance.dropMessage("[" + srv.getGuild(guildId, worldId).getName() + "] guild has left the union.");
         return true;
@@ -312,8 +312,8 @@ public class MapleAlliance {
 
     public void updateAlliancePackets(MapleCharacter chr) {
         if (allianceId > 0) {
-            this.broadcastMessage(MaplePacketCreator.updateAllianceInfo(this, chr.getWorld()));
-            this.broadcastMessage(MaplePacketCreator.allianceNotice(this.getId(), this.getNotice()));
+            this.broadcastMessage(GuildPackets.updateAllianceInfo(this, chr.getWorld()));
+            this.broadcastMessage(GuildPackets.allianceNotice(this.getId(), this.getNotice()));
         }
     }
 
@@ -431,7 +431,7 @@ public class MapleAlliance {
         }
     }
 
-    public void broadcastMessage(byte[] packet) {
+    public void broadcastMessage(Packet packet) {
         Server.getInstance().allianceMessage(allianceId, packet, -1, -1);
     }
 
@@ -448,7 +448,7 @@ public class MapleAlliance {
                     c.getPlayer().dropMessage(5, "The master of the guild that you offered an invitation is currently not online.");
                 } else {
                     if (MapleInviteCoordinator.createInvite(InviteType.ALLIANCE, c.getPlayer(), allianceId, victim.getId())) {
-                        victim.getClient().announce(MaplePacketCreator.allianceInvite(allianceId, c.getPlayer()));
+                        victim.sendPacket(GuildPackets.allianceInvite(allianceId, c.getPlayer()));
                     } else {
                         c.getPlayer().dropMessage(5, "The master of the guild that you offered an invitation is currently managing another invite.");
                     }

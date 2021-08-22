@@ -3,7 +3,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.MapleFamily;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public class FamilyPreceptsHandler extends AbstractMaplePacketHandler {
@@ -17,7 +17,7 @@ public class FamilyPreceptsHandler extends AbstractMaplePacketHandler {
         if(newPrecepts.length() > 200) return;
         family.setMessage(newPrecepts, true);
         //family.broadcastFamilyInfoUpdate(); //probably don't need to broadcast for this?
-        c.announce(MaplePacketCreator.getFamilyInfo(c.getPlayer().getFamilyEntry()));
+        c.sendPacket(PacketCreator.getFamilyInfo(c.getPlayer().getFamilyEntry()));
     }
 
 }

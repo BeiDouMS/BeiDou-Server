@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class MesoRateCommand extends Command {
     {
@@ -43,6 +43,6 @@ public class MesoRateCommand extends Command {
 
         int mesorate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setMesoRate(mesorate);
-        c.getWorldServer().broadcastPacket(MaplePacketCreator.serverNotice(6, "[Rate] Meso Rate has been changed to " + mesorate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Meso Rate has been changed to " + mesorate + "x."));
     }
 }

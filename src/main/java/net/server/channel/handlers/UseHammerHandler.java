@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -32,6 +32,6 @@ import tools.data.input.SeekableLittleEndianAccessor;
  */
 public final class UseHammerHandler extends AbstractMaplePacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        c.announce(MaplePacketCreator.sendHammerMessage());
+        c.sendPacket(PacketCreator.sendHammerMessage());
     }
 }

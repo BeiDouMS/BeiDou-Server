@@ -26,13 +26,13 @@ import client.MapleClient;
 import client.MapleDisease;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
-import client.inventory.manipulator.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -44,7 +44,7 @@ public final class UseItemHandler extends AbstractMaplePacketHandler {
         MapleCharacter chr = c.getPlayer();
         
         if (!chr.isAlive()) {
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -108,6 +108,6 @@ public final class UseItemHandler extends AbstractMaplePacketHandler {
 
     private void remove(MapleClient c, short slot) {
         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

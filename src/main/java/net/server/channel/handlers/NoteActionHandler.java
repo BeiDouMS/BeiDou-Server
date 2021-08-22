@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
@@ -41,7 +41,7 @@ public final class NoteActionHandler extends AbstractMaplePacketHandler {
             String message = slea.readMapleAsciiString();
             try {
                 if (c.getPlayer().getCashShop().isOpened()) {
-                    c.announce(MaplePacketCreator.showCashInventory(c));
+                    c.sendPacket(PacketCreator.showCashInventory(c));
                 }
 
                 c.getPlayer().sendNote(charname, message, (byte) 1);

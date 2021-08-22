@@ -58,8 +58,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     theSeaweedTower.spawnMonsterOnGroundBelow(seruf, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    theSeaweedTower.broadcastMessage(MaplePacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    theSeaweedTower.broadcastMessage(PacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

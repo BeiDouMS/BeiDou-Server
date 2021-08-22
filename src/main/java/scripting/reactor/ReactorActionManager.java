@@ -39,7 +39,7 @@ import server.maps.MapleReactor;
 import server.maps.ReactorDropEntry;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import javax.script.Invocable;
 import java.awt.*;
@@ -294,7 +294,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
             
             if(chr != null) {
                 map.damageMonster(chr, mm, damage);
-                map.broadcastMessage(MaplePacketCreator.damageMonster(mm.getObjectId(), damage));
+                map.broadcastMessage(PacketCreator.damageMonster(mm.getObjectId(), damage));
             }
         }
     }

@@ -23,9 +23,9 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import scripting.event.EventInstanceManager;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.packets.Wedding;
+import tools.packets.WeddingPackets;
 
 /**
  *
@@ -41,7 +41,7 @@ public final class WeddingTalkMoreHandler extends AbstractMaplePacketHandler {
             c.getPlayer().dropMessage(5, "High Priest John: Your blessings have been added to their love. What a noble act for a lovely couple!");
         }
         
-        c.announce(Wedding.OnWeddingProgress(true, 0, 0, (byte) 3));
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(WeddingPackets.OnWeddingProgress(true, 0, 0, (byte) 3));
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

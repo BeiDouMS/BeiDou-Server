@@ -52,8 +52,8 @@ function start() {
     const spawnpoint = new Point(279, -496);
     thicketAroundTheBeach3.spawnMonsterOnGroundBelow(mano, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    thicketAroundTheBeach3.broadcastMessage(MaplePacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    thicketAroundTheBeach3.broadcastMessage(PacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
     em.schedule("start", 3 * 60 *60 * 1000);
 }
 

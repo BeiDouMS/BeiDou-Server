@@ -57,8 +57,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     territoryOfWanderingBear.spawnMonsterOnGroundBelow(taeRoon, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    territoryOfWanderingBear.broadcastMessage(MaplePacketCreator.serverNotice(6, "Tae Roon has appeared with a soft whistling sound."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    territoryOfWanderingBear.broadcastMessage(PacketCreator.serverNotice(6, "Tae Roon has appeared with a soft whistling sound."));
 	em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

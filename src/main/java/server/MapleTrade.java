@@ -21,26 +21,26 @@
 */
 package server;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import config.YamlConfig;
-import tools.LogHelper;
-import tools.MaplePacketCreator;
 import client.MapleCharacter;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
+import config.YamlConfig;
 import constants.game.GameConstants;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
 import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import tools.LogHelper;
+import tools.PacketCreator;
 import tools.Pair;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -104,7 +104,7 @@ public class MapleTrade {
 
     private void lockTrade() {
         locked.set(true);
-        partner.getChr().getClient().announce(MaplePacketCreator.getTradeConfirmation());
+        partner.getChr().sendPacket(PacketCreator.getTradeConfirmation());
     }
 
     private void fetchExchangedItems() {
@@ -143,7 +143,7 @@ public class MapleTrade {
             exchangeItems.clear();
         }
         
-        chr.getClient().announce(MaplePacketCreator.getTradeResult(number, result));
+        chr.sendPacket(PacketCreator.getTradeResult(number, result));
     }
 
     private void cancel(byte result) {
@@ -164,7 +164,7 @@ public class MapleTrade {
             exchangeItems.clear();
         }
         
-        chr.getClient().announce(MaplePacketCreator.getTradeResult(number, result));
+        chr.sendPacket(PacketCreator.getTradeResult(number, result));
     }
 
     private boolean isLocked() {
@@ -186,9 +186,9 @@ public class MapleTrade {
         if (chr.getMeso() >= meso) {
             chr.gainMeso(-meso, false, true, false);
             this.meso += meso;
-            chr.getClient().announce(MaplePacketCreator.getTradeMesoSet((byte) 0, this.meso));
+            chr.sendPacket(PacketCreator.getTradeMesoSet((byte) 0, this.meso));
             if (partner != null) {
-                partner.getChr().getClient().announce(MaplePacketCreator.getTradeMesoSet((byte) 1, this.meso));
+                partner.getChr().sendPacket(PacketCreator.getTradeMesoSet((byte) 1, this.meso));
             }
         } else {
         }
@@ -212,9 +212,9 @@ public class MapleTrade {
     }
 
     public void chat(String message) {
-        chr.getClient().announce(MaplePacketCreator.getTradeChat(chr, message, true));
+        chr.sendPacket(PacketCreator.getTradeChat(chr, message, true));
         if (partner != null) {
-            partner.getChr().getClient().announce(MaplePacketCreator.getTradeChat(chr, message, false));
+            partner.getChr().sendPacket(PacketCreator.getTradeChat(chr, message, false));
         }
     }
 
@@ -334,7 +334,7 @@ public class MapleTrade {
             if (local.getChr().getLevel() < 15) {
                 if (local.getChr().getMesosTraded() + local.exchangeMeso > 1000000) {
                     cancelTrade(local.getChr(), TradeResult.NO_RESPONSE);
-                    local.getChr().getClient().announce(MaplePacketCreator.serverNotice(1, "Characters under level 15 may not trade more than 1 million mesos per day."));
+                    local.getChr().sendPacket(PacketCreator.serverNotice(1, "Characters under level 15 may not trade more than 1 million mesos per day."));
                     return;
                 } else {
                     local.getChr().addMesosTraded(local.exchangeMeso);
@@ -342,7 +342,7 @@ public class MapleTrade {
             } else if (partner.getChr().getLevel() < 15) {
                 if (partner.getChr().getMesosTraded() + partner.exchangeMeso > 1000000) {
                     cancelTrade(partner.getChr(), TradeResult.NO_RESPONSE);
-                    partner.getChr().getClient().announce(MaplePacketCreator.serverNotice(1, "Characters under level 15 may not trade more than 1 million mesos per day."));
+                    partner.getChr().sendPacket(PacketCreator.serverNotice(1, "Characters under level 15 may not trade more than 1 million mesos per day."));
                     return;
                 } else {
                     partner.getChr().addMesosTraded(partner.exchangeMeso);
@@ -463,8 +463,8 @@ public class MapleTrade {
                 c2.getTrade().setPartner(c1.getTrade());
                 c1.getTrade().setPartner(c2.getTrade());
                 
-                c1.getClient().announce(MaplePacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 0));
-                c2.getClient().announce(MaplePacketCreator.tradeInvite(c1));
+                c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 0));
+                c2.sendPacket(PacketCreator.tradeInvite(c1));
             } else {
                 c1.message("The other player is already trading with someone else.");
                 cancelTrade(c1, TradeResult.NO_RESPONSE);
@@ -482,8 +482,8 @@ public class MapleTrade {
         InviteResult res = inviteRes.result;
         if (res == InviteResult.ACCEPTED) {
             if (c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
-                c2.getClient().announce(MaplePacketCreator.getTradePartnerAdd(c1));
-                c1.getClient().announce(MaplePacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
+                c2.sendPacket(PacketCreator.getTradePartnerAdd(c1));
+                c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
                 c1.getTrade().setFullTrade(true);
                 c2.getTrade().setFullTrade(true);
             } else {

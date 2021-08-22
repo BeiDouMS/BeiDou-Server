@@ -30,7 +30,7 @@ import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.net.InetAddress;
@@ -61,7 +61,7 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
             hwid = Hwid.fromHostString(hostString);
         } catch (IllegalArgumentException e) {
             log.warn("Invalid host string: {}", hostString, e);
-            c.announce(MaplePacketCreator.getAfterLoginError(17));
+            c.sendPacket(PacketCreator.getAfterLoginError(17));
             return;
         }
         
@@ -70,7 +70,7 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
 
         AntiMulticlientResult res = SessionCoordinator.getInstance().attemptGameSession(c, c.getAccID(), hwid);
         if (res != AntiMulticlientResult.SUCCESS) {
-            c.announce(MaplePacketCreator.getAfterLoginError(parseAntiMulticlientError(res)));
+            c.sendPacket(PacketCreator.getAfterLoginError(parseAntiMulticlientError(res)));
             return;
         }
         
@@ -88,13 +88,13 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
         c.setWorld(server.getCharacterWorld(charId));
         World wserv = c.getWorldServer();
         if(wserv == null || wserv.isWorldCapacityFull()) {
-            c.announce(MaplePacketCreator.getAfterLoginError(10));
+            c.sendPacket(PacketCreator.getAfterLoginError(10));
             return;
         }
         
         String[] socket = server.getInetSocket(c, c.getWorld(), c.getChannel());
         if(socket == null) {
-            c.announce(MaplePacketCreator.getAfterLoginError(10));
+            c.sendPacket(PacketCreator.getAfterLoginError(10));
             return;
         }
         
@@ -102,7 +102,7 @@ public final class CharSelectedHandler extends AbstractMaplePacketHandler {
         c.setCharacterOnSessionTransitionState(charId);
         
         try {
-            c.announce(MaplePacketCreator.getServerIP(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1]), charId));
+            c.sendPacket(PacketCreator.getServerIP(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1]), charId));
         } catch (UnknownHostException | NumberFormatException e) {
             e.printStackTrace();
         }

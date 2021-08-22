@@ -27,7 +27,7 @@ import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.maps.MapleMap;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public class FieldDamageMobHandler extends AbstractMaplePacketHandler {
@@ -52,7 +52,7 @@ public class FieldDamageMobHandler extends AbstractMaplePacketHandler {
                 return;
             }
             
-            map.broadcastMessage(chr, MaplePacketCreator.damageMonster(mobOid, dmg), true);
+            map.broadcastMessage(chr, PacketCreator.damageMonster(mobOid, dmg), true);
             map.damageMonster(chr, mob, dmg);
         }
     }

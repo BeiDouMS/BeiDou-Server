@@ -32,7 +32,7 @@ import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import server.quest.actions.*;
 import server.quest.requirements.*;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.StringUtil;
 
 import java.util.*;
@@ -315,7 +315,7 @@ public class MapleQuest {
             return false;
         }
         if (timeLimit > 0) {
-            chr.announce(MaplePacketCreator.removeQuestTimeLimit(id));
+            chr.sendPacket(PacketCreator.removeQuestTimeLimit(id));
         }
         MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.NOT_STARTED);
         newStatus.setForfeited(chr.getQuest(this).getForfeited() + 1);
@@ -361,7 +361,7 @@ public class MapleQuest {
 
     public boolean forceComplete(MapleCharacter chr, int npc) {
         if (timeLimit > 0) {
-            chr.announce(MaplePacketCreator.removeQuestTimeLimit(id));
+            chr.sendPacket(PacketCreator.removeQuestTimeLimit(id));
         }
         
         MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.COMPLETED, npc);
@@ -370,8 +370,8 @@ public class MapleQuest {
         newStatus.setCompletionTime(System.currentTimeMillis());
         chr.updateQuestStatus(newStatus);
         
-        chr.announce(MaplePacketCreator.showSpecialEffect(9)); // Quest completion
-        chr.getMap().broadcastMessage(chr, MaplePacketCreator.showForeignEffect(chr.getId(), 9), false); //use 9 instead of 12 for both
+        chr.sendPacket(PacketCreator.showSpecialEffect(9)); // Quest completion
+        chr.getMap().broadcastMessage(chr, PacketCreator.showForeignEffect(chr.getId(), 9), false); //use 9 instead of 12 for both
         return true;
     }
 

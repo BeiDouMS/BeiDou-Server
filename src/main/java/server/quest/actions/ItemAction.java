@@ -33,7 +33,7 @@ import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 
@@ -143,14 +143,14 @@ public class ItemAction extends MapleQuestAction {
                         }
 
                         MapleInventoryManipulator.removeById(chr.getClient(), type, itemid, quantity, true, false);
-                        chr.announce(MaplePacketCreator.getShowItemGain(itemid, (short) count, true));
+                        chr.sendPacket(PacketCreator.getShowItemGain(itemid, (short) count, true));
                 }
                 
                 for(ItemData iEntry: giveItem) {
                         int itemid = iEntry.getId(), count = iEntry.getCount(), period = iEntry.getPeriod();    // thanks Vcoc for noticing quest milestone item not getting removed from inventory after a while
                         
                         MapleInventoryManipulator.addById(chr.getClient(), itemid, (short) count, "", -1, period > 0 ? (System.currentTimeMillis() + period * 60 * 1000) : -1);
-                        chr.announce(MaplePacketCreator.getShowItemGain(itemid, (short) count, true));
+                        chr.sendPacket(PacketCreator.getShowItemGain(itemid, (short) count, true));
                 }
 	}
 	

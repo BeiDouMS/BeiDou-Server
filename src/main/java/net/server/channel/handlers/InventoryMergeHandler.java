@@ -21,18 +21,18 @@
  */
 package net.server.channel.handlers;
 
-import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import tools.MaplePacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
+import config.YamlConfig;
+import net.AbstractMaplePacketHandler;
 import net.server.Server;
 import server.MapleItemInformationProvider;
+import tools.PacketCreator;
+import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class InventoryMergeHandler extends AbstractMaplePacketHandler {
 
@@ -43,7 +43,7 @@ public final class InventoryMergeHandler extends AbstractMaplePacketHandler {
         chr.getAutobanManager().setTimestamp(2, Server.getInstance().getCurrentTimestamp(), 4);
         
         if(!YamlConfig.config.server.USE_ITEM_SORT) {
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
 	}
         
@@ -106,7 +106,7 @@ public final class InventoryMergeHandler extends AbstractMaplePacketHandler {
             inventory.unlockInventory();
         }
         
-        c.announce(MaplePacketCreator.finishedSort(inventoryType.getType()));
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(PacketCreator.finishedSort(inventoryType.getType()));
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

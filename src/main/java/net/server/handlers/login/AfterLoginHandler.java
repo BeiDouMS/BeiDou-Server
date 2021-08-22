@@ -24,7 +24,7 @@ package net.server.handlers.login;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.server.coordinator.session.SessionCoordinator;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class AfterLoginHandler extends AbstractMaplePacketHandler {
@@ -38,23 +38,23 @@ public final class AfterLoginHandler extends AbstractMaplePacketHandler {
         }
         if (c2 == 1 && c3 == 1) {
             if (c.getPin() == null || c.getPin().equals("")) {
-                c.announce(MaplePacketCreator.registerPin());
+                c.sendPacket(PacketCreator.registerPin());
             } else {
-                c.announce(MaplePacketCreator.requestPin());
+                c.sendPacket(PacketCreator.requestPin());
             }
         } else if (c2 == 1 && c3 == 0) {
             String pin = slea.readMapleAsciiString();
             if (c.checkPin(pin)) {
-                c.announce(MaplePacketCreator.pinAccepted());
+                c.sendPacket(PacketCreator.pinAccepted());
             } else {
-                c.announce(MaplePacketCreator.requestPinAfterFailure());
+                c.sendPacket(PacketCreator.requestPinAfterFailure());
             }
         } else if (c2 == 2 && c3 == 0) {
             String pin = slea.readMapleAsciiString();
             if (c.checkPin(pin)) {
-                c.announce(MaplePacketCreator.registerPin());
+                c.sendPacket(PacketCreator.registerPin());
             } else {
-                c.announce(MaplePacketCreator.requestPinAfterFailure());
+                c.sendPacket(PacketCreator.requestPinAfterFailure());
             }
         } else if (c2 == 0 && c3 == 5) {
             SessionCoordinator.getInstance().closeSession(c, null);

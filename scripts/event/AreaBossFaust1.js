@@ -48,13 +48,13 @@ function start() {
 	}
 
     const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
     const Point = Java.type('java.awt.Point');
 
     var faust1 = MapleLifeFactory.getMonster(5220002);
     const spawnpoint = new Point(456, 278);
     theForestOfEvil1.spawnMonsterOnGroundBelow(faust1, spawnpoint);
-    theForestOfEvil1.broadcastMessage(MaplePacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
+    theForestOfEvil1.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

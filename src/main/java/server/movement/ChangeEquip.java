@@ -21,20 +21,21 @@
 */
 package server.movement;
 
-import java.awt.Point;
-import tools.data.output.LittleEndianWriter;
+import net.packet.OutPacket;
+
+import java.awt.*;
 
 public class ChangeEquip implements LifeMovementFragment {
-    private int wui;
+    private final int wui;
 
     public ChangeEquip(int wui) {
         this.wui = wui;
     }
 
     @Override
-    public void serialize(LittleEndianWriter lew) {
-        lew.write(10);
-        lew.write(wui);
+    public void serialize(OutPacket p) {
+        p.writeByte(10);
+        p.writeByte(wui);
     }
 
     @Override

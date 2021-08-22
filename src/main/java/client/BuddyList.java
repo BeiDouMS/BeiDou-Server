@@ -21,9 +21,10 @@
 */
 package client;
 
+import net.packet.Packet;
 import net.server.PlayerStorage;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -126,12 +127,12 @@ public class BuddyList {
         }
     }
     
-    public void broadcast(byte[] packet, PlayerStorage pstorage) {
+    public void broadcast(Packet packet, PlayerStorage pstorage) {
         for(int bid : getBuddyIds()) {
             MapleCharacter chr = pstorage.getCharacterById(bid);
             
             if(chr != null && chr.isLoggedinWorld()) {
-                chr.announce(packet);
+                chr.sendPacket(packet);
             }
         }
     }
@@ -167,7 +168,7 @@ public class BuddyList {
     public void addBuddyRequest(MapleClient c, int cidFrom, String nameFrom, int channelFrom) {
         put(new BuddylistEntry(nameFrom, "Default Group", cidFrom, channelFrom, false));
         if (pendingRequests.isEmpty()) {
-            c.announce(MaplePacketCreator.requestBuddylistAdd(cidFrom, c.getPlayer().getId(), nameFrom));
+            c.sendPacket(PacketCreator.requestBuddylistAdd(cidFrom, c.getPlayer().getId(), nameFrom));
         } else {
             pendingRequests.push(new CharacterNameAndId(cidFrom, nameFrom));
         }

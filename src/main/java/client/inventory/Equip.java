@@ -26,7 +26,7 @@ import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 
@@ -532,8 +532,8 @@ public class Equip extends Item {
         showLevelupMessage(showStr, c); // thanks to Polaris dev team !
         c.getPlayer().dropMessage(6, lvupStr);
         
-        c.announce(MaplePacketCreator.showEquipmentLevelUp());
-        c.getPlayer().getMap().broadcastMessage(c.getPlayer(), MaplePacketCreator.showForeignEffect(c.getPlayer().getId(), 15));
+        c.sendPacket(PacketCreator.showEquipmentLevelUp());
+        c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PacketCreator.showForeignEffect(c.getPlayer().getId(), 15));
         c.getPlayer().forceUpdateItem(this);
     }
 

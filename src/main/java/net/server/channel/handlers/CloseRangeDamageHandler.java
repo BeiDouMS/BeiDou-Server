@@ -26,7 +26,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.skills.*;
 import server.MapleStatEffect;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -59,10 +59,10 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             return;
         if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
-            c.announce(MaplePacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+            c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
         
-        chr.getMap().broadcastMessage(chr, MaplePacketCreator.closeRangeAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, attack.speed, attack.direction, attack.display), false, true);
+        chr.getMap().broadcastMessage(chr, PacketCreator.closeRangeAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, attack.speed, attack.direction, attack.display), false, true);
         int numFinisherOrbs = 0;
         Integer comboBuff = chr.getBuffedValue(MapleBuffStat.COMBO);
         if (GameConstants.isFinisherSkill(attack.skill)) {
@@ -104,8 +104,8 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                         List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.COMBO, neworbcount));
                         chr.setBuffedValue(MapleBuffStat.COMBO, neworbcount);                 
                         duration -= (int) (currentServerTime() - chr.getBuffedStarttime(MapleBuffStat.COMBO));
-                        c.announce(MaplePacketCreator.giveBuff(oid, duration, stat));
-                        chr.getMap().broadcastMessage(chr, MaplePacketCreator.giveForeignBuff(chr.getId(), stat), false);
+                        c.sendPacket(PacketCreator.giveBuff(oid, duration, stat));
+                        chr.getMap().broadcastMessage(chr, PacketCreator.giveForeignBuff(chr.getId(), stat), false);
                     }
                 }
             } else if (chr.getSkillLevel(chr.isCygnus() ? SkillFactory.getSkill(15100004) : SkillFactory.getSkill(5110001)) > 0 && (chr.getJob().isA(MapleJob.MARAUDER) || chr.getJob().isA(MapleJob.THUNDERBREAKER2))) {
@@ -146,8 +146,8 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             }
             
             chr.setDojoEnergy(0);
-            c.announce(MaplePacketCreator.getEnergy("energy", chr.getDojoEnergy()));
-            c.announce(MaplePacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
+            c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+            c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         } else if (attack.skill > 0) {
             Skill skill = SkillFactory.getSkill(attack.skill);
             MapleStatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
@@ -155,7 +155,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 if (chr.skillIsCooling(attack.skill)) {
                     return;
                 } else {
-                    c.announce(MaplePacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
+                    c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
                     chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
                 }
             }

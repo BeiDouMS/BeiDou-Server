@@ -54,8 +54,8 @@ function start() {
 	const spawnpoint = new Point(474, 278);
     theForestOfEvil2.spawnMonsterOnGroundBelow(faust2, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    theForestOfEvil2.broadcastMessage(MaplePacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    theForestOfEvil2.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

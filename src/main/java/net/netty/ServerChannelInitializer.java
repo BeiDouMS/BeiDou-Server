@@ -18,7 +18,7 @@ import net.packet.logging.OutPacketLogger;
 import net.server.coordinator.session.IpAddresses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicLong;
@@ -54,7 +54,7 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
     }
 
     private void writeInitialUnencryptedHelloPacket(SocketChannel socketChannel, InitializationVector sendIv, InitializationVector recvIv) {
-        socketChannel.writeAndFlush(Unpooled.wrappedBuffer(MaplePacketCreator.getHello(ServerConstants.VERSION, sendIv, recvIv)));
+        socketChannel.writeAndFlush(Unpooled.wrappedBuffer(PacketCreator.getHello(ServerConstants.VERSION, sendIv, recvIv).getBytes()));
     }
 
     private void setUpHandlers(ChannelPipeline pipeline, InitializationVector sendIv, InitializationVector recvIv,

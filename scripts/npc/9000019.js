@@ -26,8 +26,8 @@ function action(mode, type, selection) {
                                 return;
                         }
 
-                        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-                        cm.getClient().announce(MaplePacketCreator.openRPSNPC());
+                        const PacketCreator = Java.type('tools.PacketCreator');
+                        cm.getClient().sendPacket(PacketCreator.openRPSNPC());
                         cm.dispose();
                 }
         }

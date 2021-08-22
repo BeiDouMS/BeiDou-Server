@@ -21,19 +21,16 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleClient;
-import client.Skill;
-import client.SkillFactory;
+import client.*;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.skills.Bishop;
 import constants.skills.Evan;
 import constants.skills.FPArchMage;
 import constants.skills.ILArchMage;
+import net.packet.Packet;
 import server.MapleStatEffect;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
@@ -59,11 +56,11 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
                 
                 if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
                         chr.setDojoEnergy(chr.getDojoEnergy() +  + YamlConfig.config.server.DOJO_ENERGY_ATK);
-                        c.announce(MaplePacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+                        c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
                 }
 
                 int charge = (attack.skill == Evan.FIRE_BREATH || attack.skill == Evan.ICE_BREATH || attack.skill == FPArchMage.BIG_BANG || attack.skill == ILArchMage.BIG_BANG || attack.skill == Bishop.BIG_BANG) ? attack.charge : -1;
-                byte[] packet = MaplePacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
+                Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
 		
 		chr.getMap().broadcastMessage(chr, packet, false, true);
 		MapleStatEffect effect = attack.getAttackEffect(chr, null);
@@ -73,7 +70,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 			if (chr.skillIsCooling(attack.skill)) {
 				return;
 			} else {
-				c.announce(MaplePacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
+				c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
 				chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
 			}
 		}

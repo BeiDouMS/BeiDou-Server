@@ -76,7 +76,7 @@ public class DebugCommand extends Command {
                 break;
 
             case "packet":
-                //player.getMap().broadcastMessage(MaplePacketCreator.customPacket(joinStringFrom(params, 1)));
+                //player.getMap().broadcastMessage(PacketCreator.customPacket(joinStringFrom(params, 1)));
                 break;
 
             case "portal":

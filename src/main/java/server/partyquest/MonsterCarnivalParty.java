@@ -1,10 +1,11 @@
 package server.partyquest;
 
 import client.MapleCharacter;
+import server.maps.MapleMap;
+import tools.PacketCreator;
+
 import java.util.LinkedList;
 import java.util.List;
-import server.maps.MapleMap;
-import tools.MaplePacketCreator;
 
 /**
  * @author Rob
@@ -111,7 +112,7 @@ public class MonsterCarnivalParty {
         final String effect = winner ? "quest/carnival/win" : "quest/carnival/lose";
 
         for (final MapleCharacter chr : members) {
-            chr.announce(MaplePacketCreator.showEffect(effect));
+            chr.sendPacket(PacketCreator.showEffect(effect));
         }
     }
 

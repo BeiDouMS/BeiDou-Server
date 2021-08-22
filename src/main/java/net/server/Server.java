@@ -36,6 +36,7 @@ import constants.inventory.ItemConstants;
 import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
 import net.netty.LoginServer;
+import net.packet.Packet;
 import net.server.audit.ThreadTracker;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
@@ -995,7 +996,7 @@ public class Server {
         }
     }
 
-    public void allianceMessage(int id, final byte[] packet, int exception, int guildex) {
+    public void allianceMessage(int id, Packet packet, int exception, int guildex) {
         MapleAlliance alliance = alliances.get(id);
         if (alliance != null) {
             for (Integer gid : alliance.getGuilds()) {
@@ -1221,11 +1222,11 @@ public class Server {
         }
     }
 
-    public void guildMessage(int gid, byte[] packet) {
+    public void guildMessage(int gid, Packet packet) {
         guildMessage(gid, packet, -1);
     }
 
-    public void guildMessage(int gid, byte[] packet, int exception) {
+    public void guildMessage(int gid, Packet packet, int exception) {
         MapleGuild g = guilds.get(gid);
         if (g != null) {
             g.broadcast(packet, exception);
@@ -1267,13 +1268,13 @@ public class Server {
         worlda.reloadGuildSummary();
     }
 
-    public void broadcastMessage(int world, final byte[] packet) {
+    public void broadcastMessage(int world, Packet packet) {
         for (Channel ch : getChannelsFromWorld(world)) {
             ch.broadcastPacket(packet);
         }
     }
 
-    public void broadcastGMMessage(int world, final byte[] packet) {
+    public void broadcastGMMessage(int world, Packet packet) {
         for (Channel ch : getChannelsFromWorld(world)) {
             ch.broadcastGMPacket(packet);
         }

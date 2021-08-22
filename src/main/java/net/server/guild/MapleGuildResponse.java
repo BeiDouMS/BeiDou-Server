@@ -21,7 +21,7 @@
 */
 package net.server.guild;
 
-import tools.MaplePacketCreator;
+import net.packet.Packet;
 
 public enum MapleGuildResponse {
     NOT_IN_CHANNEL(0x2a),
@@ -31,17 +31,17 @@ public enum MapleGuildResponse {
     MANAGING_INVITE(0x36),
     DENIED_INVITE(0x37);
     
-    private int value;
+    private final int value;
 
-    private MapleGuildResponse(int val) {
+    MapleGuildResponse(int val) {
         value = val;
     }
 
-    public final byte[] getPacket(String targetName) {
+    public final Packet getPacket(String targetName) {
         if (value >= MANAGING_INVITE.value) {
-            return MaplePacketCreator.responseGuildMessage((byte) value, targetName);
+            return GuildPackets.responseGuildMessage((byte) value, targetName);
         } else {
-            return MaplePacketCreator.genericGuildMessage((byte) value);
+            return GuildPackets.genericGuildMessage((byte) value);
         }
     }
 }

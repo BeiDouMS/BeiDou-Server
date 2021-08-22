@@ -5,9 +5,9 @@ function start(ms) {
 	var map = ms.getClient().getChannelServer().getMapFactory().getMap(mapId);
 
 	if(map.getDocked()) {
-		const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-		ms.getClient().announce(MaplePacketCreator.musicChange("Bgm04/ArabPirate"));
-		ms.getClient().announce(MaplePacketCreator.crogBoatPacket(true));
+		const PacketCreator = Java.type('tools.PacketCreator');
+		ms.getClient().sendPacket(PacketCreator.musicChange("Bgm04/ArabPirate"));
+		ms.getClient().sendPacket(PacketCreator.crogBoatPacket(true));
 	}
 
 	return true;

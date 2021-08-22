@@ -25,7 +25,7 @@ import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.*;
@@ -43,20 +43,20 @@ public final class TransferNameHandler extends AbstractMaplePacketHandler {
         slea.readInt(); //cid
         int birthday = slea.readInt();
         if (!CashOperationHandler.checkBirthday(c, birthday)) {
-            c.announce(MaplePacketCreator.showCashShopMessage((byte) 0xC4));
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC4));
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         if(!YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
-            c.announce(MaplePacketCreator.sendNameTransferRules(4));
+            c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;
         }
         MapleCharacter chr = c.getPlayer();
         if(chr.getLevel() < 10) {
-            c.announce(MaplePacketCreator.sendNameTransferRules(4));
+            c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;
         } else if(c.getTempBanCalendar() != null && c.getTempBanCalendar().getTimeInMillis() + (30*24*60*60*1000) < Calendar.getInstance().getTimeInMillis()) {
-            c.announce(MaplePacketCreator.sendNameTransferRules(2));
+            c.sendPacket(PacketCreator.sendNameTransferRules(2));
             return;
         }
         //sql queries
@@ -67,10 +67,10 @@ public final class TransferNameHandler extends AbstractMaplePacketHandler {
             while(rs.next()) {
                 Timestamp completedTimestamp = rs.getTimestamp("completionTime");
                 if(completedTimestamp == null) { //has pending name request
-                    c.announce(MaplePacketCreator.sendNameTransferRules(1));
+                    c.sendPacket(PacketCreator.sendNameTransferRules(1));
                     return;
                 } else if(completedTimestamp.getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > System.currentTimeMillis()) {
-                    c.announce(MaplePacketCreator.sendNameTransferRules(3));
+                    c.sendPacket(PacketCreator.sendNameTransferRules(3));
                     return;
                 }
             }
@@ -78,6 +78,6 @@ public final class TransferNameHandler extends AbstractMaplePacketHandler {
             e.printStackTrace();
             return;
         }
-        c.announce(MaplePacketCreator.sendNameTransferRules(0));
+        c.sendPacket(PacketCreator.sendNameTransferRules(0));
     }
 }

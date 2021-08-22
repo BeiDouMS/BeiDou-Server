@@ -28,17 +28,17 @@ function enterLeverSequence(pi) {
             }
         }
 
-        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+        const PacketCreator = Java.type('tools.PacketCreator');
         if(countMiss > 0) {
-            map.broadcastMessage(MaplePacketCreator.showEffect("quest/party/wrong_kor"));
-            map.broadcastMessage(MaplePacketCreator.playSound("Party1/Failed"));
+            map.broadcastMessage(PacketCreator.showEffect("quest/party/wrong_kor"));
+            map.broadcastMessage(PacketCreator.playSound("Party1/Failed"));
 
             pi.playerMessage(5, "The right combination of levers is needed to pass. " + countMiss + " lever(s) are misplaced.");
             return false;
         }
 
-        map.broadcastMessage(MaplePacketCreator.showEffect("quest/party/clear"));
-        map.broadcastMessage(MaplePacketCreator.playSound("Party1/Clear"));
+        map.broadcastMessage(PacketCreator.showEffect("quest/party/clear"));
+        map.broadcastMessage(PacketCreator.playSound("Party1/Clear"));
         pi.getEventInstance().setProperty("jail" + jailn, "0");
     }
 

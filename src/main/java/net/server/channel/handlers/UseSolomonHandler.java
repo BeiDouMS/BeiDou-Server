@@ -23,13 +23,13 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.MapleInventory;
 import client.inventory.Item;
+import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
-import net.AbstractMaplePacketHandler;
 import client.inventory.manipulator.MapleInventoryManipulator;
+import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -75,6 +75,6 @@ public final class UseSolomonHandler extends AbstractMaplePacketHandler {
             }
         }
         
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

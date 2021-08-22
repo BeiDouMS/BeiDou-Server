@@ -21,8 +21,9 @@
 */
 package server.movement;
 
-import java.awt.Point;
-import tools.data.output.LittleEndianWriter;
+import net.packet.OutPacket;
+
+import java.awt.*;
 
 public class JumpDownMovement extends AbstractLifeMovement {
     private Point pixelsPerSecond;
@@ -58,15 +59,13 @@ public class JumpDownMovement extends AbstractLifeMovement {
     }
 
     @Override
-    public void serialize(LittleEndianWriter lew) {
-        lew.write(getType());
-        lew.writeShort(getPosition().x);
-        lew.writeShort(getPosition().y);
-        lew.writeShort(pixelsPerSecond.x);
-        lew.writeShort(pixelsPerSecond.y);
-        lew.writeShort(fh);
-        lew.writeShort(originFh);
-        lew.write(getNewstate());
-        lew.writeShort(getDuration());
+    public void serialize(OutPacket p) {
+        p.writeByte(getType());
+        p.writePos(getPosition());
+        p.writePos(pixelsPerSecond);
+        p.writeShort(fh);
+        p.writeShort(originFh);
+        p.writeByte(getNewstate());
+        p.writeShort(getDuration());
     }
 }

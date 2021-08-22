@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class FishingRateCommand extends Command {
     {
@@ -43,6 +43,6 @@ public class FishingRateCommand extends Command {
 
         int fishrate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setFishingRate(fishrate);
-        c.getWorldServer().broadcastPacket(MaplePacketCreator.serverNotice(6, "[Rate] Fishing Rate has been changed to " + fishrate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Fishing Rate has been changed to " + fishrate + "x."));
     }
 }

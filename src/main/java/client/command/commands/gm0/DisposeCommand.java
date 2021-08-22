@@ -27,7 +27,7 @@ import client.MapleClient;
 import client.command.Command;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class DisposeCommand extends Command {
     {
@@ -38,7 +38,7 @@ public class DisposeCommand extends Command {
     public void execute(MapleClient c, String[] params) {
         NPCScriptManager.getInstance().dispose(c);
         QuestScriptManager.getInstance().dispose(c);
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
         c.removeClickedNPC();
         c.getPlayer().message("You've been disposed.");
     }

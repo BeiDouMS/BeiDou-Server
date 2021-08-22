@@ -21,16 +21,16 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import client.MapleMount;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.game.ExpTable;
 import net.AbstractMaplePacketHandler;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -80,7 +80,7 @@ public final class UseMountFoodHandler extends AbstractMaplePacketHandler {
                 }
                 
                 if (mountLevelup != null) {
-                    chr.getMap().broadcastMessage(MaplePacketCreator.updateMount(chr.getId(), mount, mountLevelup));
+                    chr.getMap().broadcastMessage(PacketCreator.updateMount(chr.getId(), mount, mountLevelup));
                 }
             } finally {
                 c.releaseClient();

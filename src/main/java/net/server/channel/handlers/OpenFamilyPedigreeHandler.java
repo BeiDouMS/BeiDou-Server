@@ -19,11 +19,11 @@
 */
 package net.server.channel.handlers;
 
-import config.YamlConfig;
 import client.MapleCharacter;
 import client.MapleClient;
+import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -36,7 +36,7 @@ public final class OpenFamilyPedigreeHandler extends AbstractMaplePacketHandler 
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(slea.readMapleAsciiString());
         if(target != null && target.getFamily() != null) {
-            c.announce(MaplePacketCreator.showPedigree(target.getFamilyEntry()));
+            c.sendPacket(PacketCreator.showPedigree(target.getFamilyEntry()));
         }
     }
 }

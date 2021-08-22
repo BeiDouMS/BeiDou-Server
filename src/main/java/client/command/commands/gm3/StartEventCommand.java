@@ -28,7 +28,7 @@ import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
 import server.events.gm.MapleEvent;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class StartEventCommand extends Command {
     {
@@ -42,14 +42,14 @@ public class StartEventCommand extends Command {
         if (params.length > 1)
             players = Integer.parseInt(params[0]);
         c.getChannelServer().setEvent(new MapleEvent(player.getMapId(), players));
-        Server.getInstance().broadcastMessage(c.getWorld(), MaplePacketCreator.earnTitleMessage(
+        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.earnTitleMessage(
                 "[Event] An event has started on "
                         + player.getMap().getMapName()
                         + " and will allow "
                         + players
                         + " players to join. Type @joinevent to participate."));
         Server.getInstance().broadcastMessage(c.getWorld(),
-                MaplePacketCreator.serverNotice(6, "[Event] An event has started on "
+                PacketCreator.serverNotice(6, "[Event] An event has started on "
                         + player.getMap().getMapName()
                         + " and will allow "
                         + players

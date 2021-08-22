@@ -26,9 +26,9 @@ package client.command.commands.gm3;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import net.server.Server;
 import net.packet.logging.MapleLogger;
-import tools.MaplePacketCreator;
+import net.server.Server;
+import tools.PacketCreator;
 
 public class IgnoreCommand extends Command {
     {
@@ -55,7 +55,7 @@ public class IgnoreCommand extends Command {
         }
         player.yellowMessage(victim.getName() + " is " + (!monitored_ ? "now being ignored." : "no longer being ignored."));
         String message_ = player.getName() + (!monitored_ ? " has started ignoring " : " has stopped ignoring ") + victim.getName() + ".";
-        Server.getInstance().broadcastGMMessage(c.getWorld(), MaplePacketCreator.serverNotice(5, message_));
+        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message_));
 
     }
 }

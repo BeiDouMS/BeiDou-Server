@@ -24,7 +24,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.util.Calendar;
 
@@ -119,8 +119,8 @@ public class Fishing {
             chr.getMap().dropMessage(6, chr.getName() + " found " + rewardStr);
         }
 
-        chr.announce(MaplePacketCreator.showInfo(fishingEffect));
-        chr.getMap().broadcastMessage(chr, MaplePacketCreator.showForeignInfo(chr.getId(), fishingEffect), false);
+        chr.sendPacket(PacketCreator.showInfo(fishingEffect));
+        chr.getMap().broadcastMessage(chr, PacketCreator.showForeignInfo(chr.getId(), fishingEffect), false);
     } 
     
     public static int getRandomItem(){ 

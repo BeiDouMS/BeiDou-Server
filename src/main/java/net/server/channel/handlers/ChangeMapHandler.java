@@ -30,7 +30,7 @@ import server.MapleTrade;
 import server.maps.MapleMap;
 import server.maps.MaplePortal;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
@@ -49,7 +49,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                 FilePrinter.printError(FilePrinter.PORTAL_STUCK + chr.getName() + ".txt", "Player " + chr.getName() + " got stuck when changing maps. Timestamp: " + Calendar.getInstance().getTime().toString() + " Last visited mapids: " + chr.getLastVisitedMapids());
             }
 
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         if (chr.getTrade() != null) {
@@ -65,7 +65,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
 
             chr.setSessionTransitionState();
             try {
-                c.announce(MaplePacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
+                c.sendPacket(PacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
             } catch (UnknownHostException ex) {
                 ex.printStackTrace();
             }
@@ -95,7 +95,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                             // thanks lucasziron (lziron) for showing revivePlayer() triggering by Wheel
 
                             MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, 5510000, 1, true, false);
-                            chr.announce(MaplePacketCreator.showWheelsLeft(chr.getItemQuantity(5510000, false)));
+                            chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(5510000, false)));
 
                             chr.updateHp(50);
                             chr.changeMap(map, map.findClosestPlayerSpawnpoint(chr.getPosition()));
@@ -121,8 +121,8 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                                 }
                             } else if (divi == 20100) {
                                 if (targetid == 104000000) {
-                                    c.announce(MaplePacketCreator.lockUI(false));
-                                    c.announce(MaplePacketCreator.disableUI(false));
+                                    c.sendPacket(PacketCreator.lockUI(false));
+                                    c.sendPacket(PacketCreator.disableUI(false));
                                     warp = true;
                                 }
                             } else if (divi == 9130401) { // Only allow warp if player is already in Intro map, or else = hack
@@ -151,8 +151,8 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                 }
 
                 if (portal != null && !portal.getPortalStatus()) {
-                    c.announce(MaplePacketCreator.blockedMessage(1));
-                    c.announce(MaplePacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.blockedMessage(1));
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
@@ -164,13 +164,13 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
 
                 if (portal != null) {
                     if (portal.getPosition().distanceSq(chr.getPosition()) > 400000) {
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return;
                     }
 
                     portal.enterPortal(c);
                 } else {
-                    c.announce(MaplePacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.enableActions());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

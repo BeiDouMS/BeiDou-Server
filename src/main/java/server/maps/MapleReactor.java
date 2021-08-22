@@ -23,6 +23,7 @@ package server.maps;
 
 import client.MapleClient;
 import config.YamlConfig;
+import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.services.task.channel.OverallService;
@@ -30,7 +31,7 @@ import net.server.services.type.ChannelServices;
 import scripting.reactor.ReactorScriptManager;
 import server.TimerManager;
 import server.partyquest.GuardianSpawnPoint;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.awt.*;
@@ -166,22 +167,22 @@ public class MapleReactor extends AbstractMapleMapObject {
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.announce(makeDestroyData());
+        client.sendPacket(makeDestroyData());
     }
 
-    public final byte[] makeDestroyData() {
-        return MaplePacketCreator.destroyReactor(this);
+    public final Packet makeDestroyData() {
+        return PacketCreator.destroyReactor(this);
     }
 
     @Override
     public void sendSpawnData(MapleClient client) {
         if (this.isAlive()) {
-            client.announce(makeSpawnData());
+            client.sendPacket(makeSpawnData());
         }
     }
 
-    public final byte[] makeSpawnData() {
-        return MaplePacketCreator.spawnReactor(this);
+    public final Packet makeSpawnData() {
+        return PacketCreator.spawnReactor(this);
     }
 
     public void resetReactorActions(int newState) {
@@ -199,7 +200,7 @@ public class MapleReactor extends AbstractMapleMapObject {
         this.lockReactor();
         try {
             this.resetReactorActions(newState);
-            map.broadcastMessage(MaplePacketCreator.triggerReactor(this, (short) 0));
+            map.broadcastMessage(PacketCreator.triggerReactor(this, (short) 0));
         } finally {
             this.unlockReactor();
         }
@@ -212,7 +213,7 @@ public class MapleReactor extends AbstractMapleMapObject {
 
         try {
             this.resetReactorActions(newState);
-            map.broadcastMessage(MaplePacketCreator.triggerReactor(this, (short) 0));
+            map.broadcastMessage(PacketCreator.triggerReactor(this, (short) 0));
         } finally {
             reactorLock.unlock();
         }
@@ -278,15 +279,15 @@ public class MapleReactor extends AbstractMapleMapObject {
                                         if (delay > 0) {
                                             map.destroyReactor(getObjectId());
                                         } else {//trigger as normal
-                                            map.broadcastMessage(MaplePacketCreator.triggerReactor(this, stance));
+                                            map.broadcastMessage(PacketCreator.triggerReactor(this, stance));
                                         }
                                     } else {//item-triggered on final step
-                                        map.broadcastMessage(MaplePacketCreator.triggerReactor(this, stance));
+                                        map.broadcastMessage(PacketCreator.triggerReactor(this, stance));
                                     }
 
                                     ReactorScriptManager.getInstance().act(c, this);
                                 } else { //reactor not broken yet
-                                    map.broadcastMessage(MaplePacketCreator.triggerReactor(this, stance));
+                                    map.broadcastMessage(PacketCreator.triggerReactor(this, stance));
                                     if (state == stats.getNextState(state, b)) {//current state = next state, looping reactor
                                         ReactorScriptManager.getInstance().act(c, this);
                                     }
@@ -302,7 +303,7 @@ public class MapleReactor extends AbstractMapleMapObject {
                         }
                     } else {
                         state++;
-                        map.broadcastMessage(MaplePacketCreator.triggerReactor(this, stance));
+                        map.broadcastMessage(PacketCreator.triggerReactor(this, stance));
                         if (this.getId() != 9980000 && this.getId() != 9980001) {
                             ReactorScriptManager.getInstance().act(c, this);
                         }
@@ -344,7 +345,7 @@ public class MapleReactor extends AbstractMapleMapObject {
             }
         }
         
-        map.broadcastMessage(MaplePacketCreator.destroyReactor(this));
+        map.broadcastMessage(PacketCreator.destroyReactor(this));
         return false;
     }
     

@@ -35,8 +35,8 @@ public final class CancelDebuffHandler extends AbstractMaplePacketHandler {//TIP
          List<MapleDisease> disease_ = new ArrayList<MapleDisease>();
          disease_.add(disease);
          diseases_.add(disease);
-         c.announce(MaplePacketCreator.cancelDebuff(disease_));
-         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), MaplePacketCreator.cancelForeignDebuff(c.getPlayer().getId(), disease_), false);
+         c.sendPacket(PacketCreator.cancelDebuff(disease_));
+         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.cancelForeignDebuff(c.getPlayer().getId(), disease_), false);
          }
          for (MapleDisease disease : diseases_) {
          c.getPlayer().removeDisease(disease);

@@ -26,7 +26,7 @@ import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
 import tools.LogHelper;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class SpouseChatHandler extends AbstractMaplePacketHandler {
@@ -39,8 +39,8 @@ public final class SpouseChatHandler extends AbstractMaplePacketHandler {
         if (partnerId > 0) { // yay marriage
             MapleCharacter spouse = c.getWorldServer().getPlayerStorage().getCharacterById(partnerId);
             if (spouse != null) {
-                spouse.announce(MaplePacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
-                c.announce(MaplePacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
+                spouse.sendPacket(PacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
+                c.sendPacket(PacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
                 if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
                     LogHelper.logChat(c, "Spouse", msg);
                 }

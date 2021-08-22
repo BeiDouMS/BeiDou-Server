@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import server.maps.MapleMapObject;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class CharInfoRequestHandler extends AbstractMaplePacketHandler {
@@ -42,7 +42,7 @@ public final class CharInfoRequestHandler extends AbstractMaplePacketHandler {
                 if(c.getPlayer().getId() != player.getId()) {
                     player.exportExcludedItems(c);
                 }
-                c.announce(MaplePacketCreator.charInfo(player));
+                c.sendPacket(PacketCreator.charInfo(player));
             }
         }
     }

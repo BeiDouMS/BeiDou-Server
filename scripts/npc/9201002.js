@@ -300,19 +300,19 @@ function action(mode, type, selection) {
                 if (state == 0) {    // give player blessings
                     eim.gridInsert(cm.getPlayer(), 1);
 
-                    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+                    const PacketCreator = Java.type('tools.PacketCreator');
                     if (YamlConfig.config.server.WEDDING_BLESSER_SHOWFX) {
                         var target = cm.getPlayer();
-                        target.announce(MaplePacketCreator.showSpecialEffect(9));
-                        target.getMap().broadcastMessage(target, MaplePacketCreator.showForeignEffect(target.getId(), 9), false);
+                        target.sendPacket(PacketCreator.showSpecialEffect(9));
+                        target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);
                     } else {
                         var target = eim.getPlayerById(eim.getIntProperty("groomId"));
-                        target.announce(MaplePacketCreator.showSpecialEffect(9));
-                        target.getMap().broadcastMessage(target, MaplePacketCreator.showForeignEffect(target.getId(), 9), false);
+                        target.sendPacket(PacketCreator.showSpecialEffect(9));
+                        target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);
 
                         target = eim.getPlayerById(eim.getIntProperty("brideId"));
-                        target.announce(MaplePacketCreator.showSpecialEffect(9));
-                        target.getMap().broadcastMessage(target, MaplePacketCreator.showForeignEffect(target.getId(), 9), false);
+                        target.sendPacket(PacketCreator.showSpecialEffect(9));
+                        target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);
                     }
 
                     cm.sendOk("Your blessings have been added to their love. What a noble act for a lovely couple!");
@@ -357,8 +357,8 @@ function action(mode, type, selection) {
                                             partner.setMarriageItemId(marriageRingId);
 
                                             //var marriageId = eim.getIntProperty("weddingId");
-                                            //player.announce(Wedding.OnMarriageResult(marriageId, player, true));
-                                            //partner.announce(Wedding.OnMarriageResult(marriageId, player, true));
+                                            //player.sendPacket(Wedding.OnMarriageResult(marriageId, player, true));
+                                            //partner.sendPacket(Wedding.OnMarriageResult(marriageId, player, true));
 
                                             giveCoupleBlessings(eim, player, partner);
 

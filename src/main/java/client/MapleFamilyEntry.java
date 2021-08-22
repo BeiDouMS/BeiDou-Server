@@ -19,18 +19,19 @@
 */
 package client;
 
+import net.packet.Packet;
+import net.server.Server;
+import tools.DatabaseConnection;
+import tools.FilePrinter;
+import tools.PacketCreator;
+import tools.Pair;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import net.server.Server;
-import tools.DatabaseConnection;
-import tools.FilePrinter;
-import tools.MaplePacketCreator;
-import tools.Pair;
 
 /**
  * @author Ubaware
@@ -264,7 +265,7 @@ public class MapleFamilyEntry {
             this.totalReputation += gain;
         }
         MapleCharacter chr = getChr();
-        if(chr != null) chr.announce(MaplePacketCreator.sendGainRep(gain, from != null ? from.getName() : ""));
+        if(chr != null) chr.sendPacket(PacketCreator.sendGainRep(gain, from != null ? from.getName() : ""));
     }
 
     public void giveReputationToSenior(int gain, boolean includeSuperSenior) {
@@ -420,15 +421,15 @@ public class MapleFamilyEntry {
         this.totalJuniors = totalJuniors;
     }
     
-    public void announceToSenior(byte[] packet, boolean includeSuperSenior) {
+    public void announceToSenior(Packet packet, boolean includeSuperSenior) {
         MapleFamilyEntry senior = getSenior();
         if(senior != null) {
             MapleCharacter seniorChr = senior.getChr();
-            if(seniorChr != null) seniorChr.announce(packet);
+            if(seniorChr != null) seniorChr.sendPacket(packet);
             senior = senior.getSenior();
             if(includeSuperSenior && senior != null) {
                 seniorChr = senior.getChr();
-                if(seniorChr != null) seniorChr.announce(packet);
+                if(seniorChr != null) seniorChr.sendPacket(packet);
             }
         }
     }
@@ -437,11 +438,11 @@ public class MapleFamilyEntry {
         MapleFamilyEntry senior = getSenior();
         if(senior != null) {
             MapleCharacter seniorChr = senior.getChr();
-            if(seniorChr != null) seniorChr.announce(MaplePacketCreator.getFamilyInfo(senior));
+            if(seniorChr != null) seniorChr.sendPacket(PacketCreator.getFamilyInfo(senior));
             senior = senior.getSenior();
             if(includeSuperSenior && senior != null) {
                 seniorChr = senior.getChr();
-                if(seniorChr != null) seniorChr.announce(MaplePacketCreator.getFamilyInfo(senior));
+                if(seniorChr != null) seniorChr.sendPacket(PacketCreator.getFamilyInfo(senior));
             }
         }
     }

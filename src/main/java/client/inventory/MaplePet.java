@@ -29,7 +29,7 @@ import server.movement.AbsoluteLifeMovement;
 import server.movement.LifeMovement;
 import server.movement.LifeMovementFragment;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.awt.*;
@@ -202,8 +202,8 @@ public class MaplePet extends Item {
                 closeness = newCloseness;
                 while(newCloseness >= ExpTable.getClosenessNeededForLevel(level)) {
                     level += 1;
-                    owner.getClient().announce(MaplePacketCreator.showOwnPetLevelUp(slot));
-                    owner.getMap().broadcastMessage(MaplePacketCreator.showPetLevelUp(owner, slot));
+                    owner.sendPacket(PacketCreator.showOwnPetLevelUp(slot));
+                    owner.getMap().broadcastMessage(PacketCreator.showPetLevelUp(owner, slot));
                 }
             }
             
@@ -220,7 +220,7 @@ public class MaplePet extends Item {
             enjoyed = false;
         }
         
-        owner.getMap().broadcastMessage(MaplePacketCreator.petFoodResponse(owner.getId(), slot, enjoyed, false));
+        owner.getMap().broadcastMessage(PacketCreator.petFoodResponse(owner.getId(), slot, enjoyed, false));
         saveToDb();
         
         Item petz = owner.getInventory(MapleInventoryType.CASH).getItem(getPosition());

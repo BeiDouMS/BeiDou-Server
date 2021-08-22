@@ -18,9 +18,10 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractMaplePacketHandler;
 import server.MapleMarriage;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
-import tools.packets.Wedding;
+import tools.packets.WeddingPackets;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -73,10 +74,10 @@ public final class WeddingHandler extends AbstractMaplePacketHandler {
                                                         MapleKarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
                                                         marriage.setIntProperty(groomWishlistProp, giftCount + 1);
 
-                                                        c.announce(Wedding.OnWeddingGiftResult((byte) 0xB, marriage.getWishlistItems(groomWishlist), Collections.singletonList(newItem)));
+                                                        c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xB, marriage.getWishlistItems(groomWishlist), Collections.singletonList(newItem)));
                                                     }
                                                 } else {
-                                                    c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), null));
+                                                    c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), null));
                                                 }
                                             }
                                         } finally {
@@ -88,17 +89,17 @@ public final class WeddingHandler extends AbstractMaplePacketHandler {
                                             marriage.saveGiftItemsToDb(c, groomWishlist, cid);
                                         }
                                     } else {
-                                        c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), null));
+                                        c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), null));
                                     }
                                 } else {
-                                    c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), null));
+                                    c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), null));
                                 }
                             } else {
-                                c.announce(Wedding.OnWeddingGiftResult((byte) 0xC, marriage.getWishlistItems(groomWishlist), null));
+                                c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xC, marriage.getWishlistItems(groomWishlist), null));
                             }
                         } catch (NumberFormatException nfe) {}
                     } else {
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                     }
                 } else if (mode == 7) { // take items
                     slea.readByte();    // invType
@@ -116,14 +117,14 @@ public final class WeddingHandler extends AbstractMaplePacketHandler {
 
                                     MapleInventoryManipulator.addFromDrop(c, item, true);
 
-                                    c.announce(Wedding.OnWeddingGiftResult((byte) 0xF, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
+                                    c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
                                 } else {
                                     c.getPlayer().dropMessage(1, "Free a slot on your inventory before collecting this item.");
-                                    c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
+                                    c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
                                 }
                             } else {
                                 c.getPlayer().dropMessage(1, "You have already collected this item.");
-                                c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
+                                c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
                             }
                         }
                     } else {
@@ -135,18 +136,18 @@ public final class WeddingHandler extends AbstractMaplePacketHandler {
                                 MapleMarriage.saveGiftItemsToDb(c, items, chr.getId());
 
                                 MapleInventoryManipulator.addFromDrop(c, item, true);
-                                c.announce(Wedding.OnWeddingGiftResult((byte) 0xF, Collections.singletonList(""), items));
+                                c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, Collections.singletonList(""), items));
                             } else {
                                 c.getPlayer().dropMessage(1, "Free a slot on your inventory before collecting this item.");
-                                c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, Collections.singletonList(""), items));
+                                c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, Collections.singletonList(""), items));
                             }
                         } catch (Exception e) {
                             c.getPlayer().dropMessage(1, "You have already collected this item.");
-                            c.announce(Wedding.OnWeddingGiftResult((byte) 0xE, Collections.singletonList(""), items));
+                            c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xE, Collections.singletonList(""), items));
                         }
                     }
                 } else if (mode == 8) { // out of Wedding Registry
-                    c.announce(MaplePacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.enableActions());
                 } else {
                     System.out.println(mode);
                 }

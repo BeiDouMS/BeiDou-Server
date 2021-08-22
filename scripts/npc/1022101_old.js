@@ -136,8 +136,8 @@ function action(mode, type, selection) {
 					cm.gainItem(itemToUse, -1);
 					
 				cm.getPlayer().getCashShop().gainCash(1, nxAmount);
-				const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-				cm.getPlayer().announce(MaplePacketCreator.earnTitleMessage("You have earned " + nxAmount + " NX"));
+				const PacketCreator = Java.type('tools.PacketCreator');
+				cm.getPlayer().sendPacket(PacketCreator.earnTitleMessage("You have earned " + nxAmount + " NX"));
 				cm.logLeaf(nxAmount + " NX");
 				cm.dispose();
 			} else if(choice == 2) {

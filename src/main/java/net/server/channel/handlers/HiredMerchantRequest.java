@@ -21,20 +21,21 @@
 */
 package net.server.channel.handlers;
 
-import client.inventory.ItemFactory;
 import client.MapleCharacter;
-import java.sql.SQLException;
-import java.util.Arrays;
 import client.MapleClient;
+import client.inventory.ItemFactory;
 import constants.game.GameConstants;
-import java.awt.Point;
 import net.AbstractMaplePacketHandler;
-import server.maps.MaplePortal;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MaplePlayerShop;
-import tools.MaplePacketCreator;
+import server.maps.MaplePortal;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.awt.*;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 /**
  *
@@ -52,11 +53,11 @@ public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
 
                     MaplePlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {
-                        chr.announce(MaplePacketCreator.getMiniRoomError(13));
+                        chr.sendPacket(PacketCreator.getMiniRoomError(13));
                         return;
                     }
                 } else {
-                    chr.announce(MaplePacketCreator.getMiniRoomError(13));
+                    chr.sendPacket(PacketCreator.getMiniRoomError(13));
                     return;
                 }
             }
@@ -64,7 +65,7 @@ public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
             Point cpos = chr.getPosition();
             MaplePortal portal = chr.getMap().findClosestTeleportPortal(cpos);
             if (portal != null && portal.getPosition().distance(cpos) < 120.0) {
-                chr.announce(MaplePacketCreator.getMiniRoomError(10));
+                chr.sendPacket(PacketCreator.getMiniRoomError(10));
                 return;
             }
         } catch (Exception e) {
@@ -75,9 +76,9 @@ public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
             if (!chr.hasMerchant()) {
                 try {
                     if (ItemFactory.MERCHANT.loadItems(chr.getId(), false).isEmpty() && chr.getMerchantMeso() == 0) {
-                        c.announce(MaplePacketCreator.hiredMerchantBox());
+                        c.sendPacket(PacketCreator.hiredMerchantBox());
                     } else {
-                        chr.announce(MaplePacketCreator.retrieveFirstMessage());
+                        chr.sendPacket(PacketCreator.retrieveFirstMessage());
                     }
                 } catch (SQLException ex) {
                     ex.printStackTrace();

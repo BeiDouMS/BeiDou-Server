@@ -45,8 +45,8 @@ function action(mode, type, selection) {
                         status--;
 
                 if(status == 0) {
-                        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-                        cm.getMap().broadcastMessage(MaplePacketCreator.playSound("orbis/" + harpSounds[cm.getNpc() - 2012027]));
+                        const PacketCreator = Java.type('tools.PacketCreator');
+                        cm.getMap().broadcastMessage(PacketCreator.playSound("orbis/" + harpSounds[cm.getNpc() - 2012027]));
                         
                         if(cm.isQuestStarted(3114)) {
                                 var idx = -1 * cm.getQuestProgressInt(3114);
@@ -57,8 +57,8 @@ function action(mode, type, selection) {
                                         if(harpNote != nextNote) {
                                                 cm.setQuestProgress(3114, 0);
 
-                                                cm.getPlayer().announce(MaplePacketCreator.showEffect("quest/party/wrong_kor"));
-                                                cm.getPlayer().announce(MaplePacketCreator.playSound("Party1/Failed"));
+                                                cm.getPlayer().sendPacket(PacketCreator.showEffect("quest/party/wrong_kor"));
+                                                cm.getPlayer().sendPacket(PacketCreator.playSound("Party1/Failed"));
 
                                                 cm.message("You've missed the note... Start over again.");
                                         } else {
@@ -71,8 +71,8 @@ function action(mode, type, selection) {
                                                                 cm.message("Twinkle, twinkle, little star, how I wonder what you are.");
                                                                 cm.setQuestProgress(3114, 42);
 
-                                                                cm.getPlayer().announce(MaplePacketCreator.showEffect("quest/party/clear"));
-                                                                cm.getPlayer().announce(MaplePacketCreator.playSound("Party1/Clear"));
+                                                                cm.getPlayer().sendPacket(PacketCreator.showEffect("quest/party/clear"));
+                                                                cm.getPlayer().sendPacket(PacketCreator.playSound("Party1/Clear"));
                                                                 
                                                                 cm.dispose();
                                                                 return;

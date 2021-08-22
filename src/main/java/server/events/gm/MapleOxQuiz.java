@@ -28,7 +28,7 @@ import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import server.TimerManager;
 import server.maps.MapleMap;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Randomizer;
 
 import java.util.ArrayList;
@@ -69,9 +69,9 @@ public final class MapleOxQuiz {
             }
         }
         final int number = gm;
-        map.broadcastMessage(MaplePacketCreator.showOXQuiz(round, question, true));
+        map.broadcastMessage(PacketCreator.showOXQuiz(round, question, true));
         TimerManager.getInstance().schedule(() -> {
-            map.broadcastMessage(MaplePacketCreator.showOXQuiz(round, question, true));
+            map.broadcastMessage(PacketCreator.showOXQuiz(round, question, true));
             List<MapleCharacter> chars = new ArrayList<>(map.getCharacters());
 
             for (MapleCharacter chr : chars) {
@@ -92,7 +92,7 @@ public final class MapleOxQuiz {
             }
             //send question
             if (map.getCharacters().size() - number <= 2) {
-                map.broadcastMessage(MaplePacketCreator.serverNotice(6, "The event has ended"));
+                map.broadcastMessage(PacketCreator.serverNotice(6, "The event has ended"));
                 map.getPortal("join00").setPortalStatus(true);
                 map.setOx(null);
                 map.setOxQuiz(false);

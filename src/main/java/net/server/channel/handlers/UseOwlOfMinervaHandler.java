@@ -22,7 +22,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import constants.game.GameConstants;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -59,6 +59,6 @@ public final class UseOwlOfMinervaHandler extends AbstractMaplePacketHandler {
             }
         }
         
-        c.announce(MaplePacketCreator.getOwlOpen(owlLeaderboards));
+        c.sendPacket(PacketCreator.getOwlOpen(owlLeaderboards));
     }
 }

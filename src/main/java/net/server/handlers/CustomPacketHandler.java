@@ -23,14 +23,14 @@ package net.server.handlers;
 
 import client.MapleClient;
 import net.MaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public class CustomPacketHandler implements MaplePacketHandler {
     @Override
     public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         if (slea.available() > 0 && c.getGMLevel() == 4) {//w/e       
-            c.announce(MaplePacketCreator.customPacket(slea.read((int) slea.available())));
+            c.sendPacket(PacketCreator.customPacket(slea.read((int) slea.available())));
         }
     }
 

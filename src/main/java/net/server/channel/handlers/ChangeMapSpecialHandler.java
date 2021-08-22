@@ -23,10 +23,10 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import server.maps.MaplePortal;
 import server.MapleTrade;
 import server.MapleTrade.TradeResult;
-import tools.MaplePacketCreator;
+import server.maps.MaplePortal;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class ChangeMapSpecialHandler extends AbstractMaplePacketHandler {
@@ -37,11 +37,11 @@ public final class ChangeMapSpecialHandler extends AbstractMaplePacketHandler {
             slea.readShort();
             MaplePortal portal = c.getPlayer().getMap().getPortal(startwp);
             if (portal == null || c.getPlayer().portalDelay() > currentServerTime() || c.getPlayer().getBlockedPortals().contains(portal.getScriptName())) {
-                    c.announce(MaplePacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
             }
             if (c.getPlayer().isChangingMaps() || c.getPlayer().isBanned()) {
-                    c.announce(MaplePacketCreator.enableActions());
+                    c.sendPacket(PacketCreator.enableActions());
                     return;
             }
             if (c.getPlayer().getTrade() != null) {

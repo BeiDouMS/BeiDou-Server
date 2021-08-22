@@ -25,7 +25,7 @@ import server.TimerManager;
 import server.expeditions.MapleExpedition;
 import server.expeditions.MapleExpeditionType;
 import server.maps.MapleMap;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +76,7 @@ public class AriantColiseum {
         }
         
         for (MapleCharacter mc : players) {
-            mc.announce(MaplePacketCreator.updateAriantPQRanking(score));
+            mc.sendPacket(PacketCreator.updateAriantPQRanking(score));
         }
         
         setAriantScoreBoard(TimerManager.getInstance().schedule(() -> showArenaResults(), pqTimerBoard));
@@ -144,7 +144,7 @@ public class AriantColiseum {
     private void broadcastAriantScoreUpdate() {
         if (scoreDirty) {
             for (MapleCharacter chr : score.keySet()) {
-                chr.announce(MaplePacketCreator.updateAriantPQRanking(score));
+                chr.sendPacket(PacketCreator.updateAriantPQRanking(score));
             }
             scoreDirty = false;
         }
@@ -193,7 +193,7 @@ public class AriantColiseum {
         eventClear = true;
         
         if (map != null) {
-            map.broadcastMessage(MaplePacketCreator.showAriantScoreBoard());
+            map.broadcastMessage(PacketCreator.showAriantScoreBoard());
             map.killAllMonsters();
             
             distributeAriantPoints();

@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
+import net.server.guild.GuildPackets;
 import tools.DatabaseConnection;
-import tools.MaplePacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
@@ -103,7 +103,7 @@ public final class BBSOperationHandler extends AbstractMaplePacketHandler {
 
             ps.setInt(1, c.getPlayer().getGuildId());
             try (ResultSet rs = ps.executeQuery()) {
-                c.announce(MaplePacketCreator.BBSThreadList(rs, start));
+                c.sendPacket(GuildPackets.BBSThreadList(rs, start));
             }
         } catch (SQLException se) {
             se.printStackTrace();
@@ -317,7 +317,7 @@ public final class BBSOperationHandler extends AbstractMaplePacketHandler {
                     ps2.setInt(1, !bIsThreadIdLocal ? threadid : threadRS.getInt("threadid"));
                     repliesRS = ps2.executeQuery();
                 }
-                client.announce(MaplePacketCreator.showThread(bIsThreadIdLocal ? threadid : threadRS.getInt("localthreadid"), threadRS, repliesRS));
+                client.sendPacket(GuildPackets.showThread(bIsThreadIdLocal ? threadid : threadRS.getInt("localthreadid"), threadRS, repliesRS));
                 repliesRS.close();
             }
             if (ps2 != null) {

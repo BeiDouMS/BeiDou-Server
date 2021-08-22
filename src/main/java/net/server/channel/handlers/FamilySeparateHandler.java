@@ -24,7 +24,7 @@ import client.MapleFamily;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public class FamilySeparateHandler extends AbstractMaplePacketHandler {
@@ -52,18 +52,18 @@ public class FamilySeparateHandler extends AbstractMaplePacketHandler {
         int cost = 2500 * levelDiff;
         cost += levelDiff * levelDiff;
         if(c.getPlayer().getMeso() < cost) {
-            c.announce(MaplePacketCreator.sendFamilyMessage(isSenior ? 81 : 80, cost));
+            c.sendPacket(PacketCreator.sendFamilyMessage(isSenior ? 81 : 80, cost));
             return;
         }
         c.getPlayer().gainMeso(-cost);
         int repCost = separateRepCost(forkOn);
         senior.gainReputation(-repCost, false);
         if(senior.getSenior() != null) senior.getSenior().gainReputation(-(repCost/2), false);
-        forkOn.announceToSenior(MaplePacketCreator.serverNotice(5, forkOn.getName() + " has left the family."), true);
+        forkOn.announceToSenior(PacketCreator.serverNotice(5, forkOn.getName() + " has left the family."), true);
         forkOn.fork();
-        c.announce(MaplePacketCreator.getFamilyInfo(forkOn)); //pedigree info will be requested from the client if the window is open
+        c.sendPacket(PacketCreator.getFamilyInfo(forkOn)); //pedigree info will be requested from the client if the window is open
         forkOn.updateSeniorFamilyInfo(true);
-        c.announce(MaplePacketCreator.sendFamilyMessage(1, 0));
+        c.sendPacket(PacketCreator.sendFamilyMessage(1, 0));
     }
     
     

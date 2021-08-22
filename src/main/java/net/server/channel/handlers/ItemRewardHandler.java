@@ -24,17 +24,18 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
+import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
-import java.util.List;
 import net.AbstractMaplePacketHandler;
 import net.server.Server;
-import client.inventory.manipulator.MapleInventoryManipulator;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.RewardItem;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
+
+import java.util.List;
 
 /**
  * @author Jay Estrella
@@ -53,7 +54,7 @@ public final class ItemRewardHandler extends AbstractMaplePacketHandler {
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
         for (RewardItem reward : rewards.getRight()) {
             if (!MapleInventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
-                c.announce(MaplePacketCreator.getShowInventoryFull());
+                c.sendPacket(PacketCreator.getShowInventoryFull());
                 break;
             }
             if (Randomizer.nextInt(rewards.getLeft()) < reward.prob) {//Is it even possible to get an item with prob 1?
@@ -71,11 +72,11 @@ public final class ItemRewardHandler extends AbstractMaplePacketHandler {
                     String msg = reward.worldmsg;
                     msg.replaceAll("/name", c.getPlayer().getName());
                     msg.replaceAll("/item", ii.getName(reward.itemid));
-                    Server.getInstance().broadcastMessage(c.getWorld(), MaplePacketCreator.serverNotice(6, msg));
+                    Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, msg));
                 }
                 break;
             }
         }
-        c.announce(MaplePacketCreator.enableActions());
+        c.sendPacket(PacketCreator.enableActions());
     }
 }

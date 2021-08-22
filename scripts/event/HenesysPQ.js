@@ -250,8 +250,8 @@ function friendlyItemDrop(eim, mob) {
                 var cakes = eim.getIntProperty("bunnyCake") + 1;
                 eim.setIntProperty("bunnyCake", cakes);
 
-                const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-                mob.getMap().broadcastMessage(MaplePacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
+                const PacketCreator = Java.type('tools.PacketCreator');
+                mob.getMap().broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
         }
 }
 
@@ -259,8 +259,8 @@ function friendlyDamaged(eim, mob) {
         if (mob.getId() == 9300061) {
                 var bunnyDamage = eim.getIntProperty("bunnyDamaged") + 1;
                 if (bunnyDamage > 5) {
-                        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-                        broadcastMessage(MaplePacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
+                        const PacketCreator = Java.type('tools.PacketCreator');
+                        broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
                         eim.setIntProperty("bunnyDamaged", 0);
                 }
         }

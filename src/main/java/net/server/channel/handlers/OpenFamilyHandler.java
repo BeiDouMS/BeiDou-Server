@@ -19,11 +19,11 @@
 */
 package net.server.channel.handlers;
 
-import config.YamlConfig;
 import client.MapleCharacter;
 import client.MapleClient;
+import config.YamlConfig;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -35,7 +35,7 @@ public final class OpenFamilyHandler extends AbstractMaplePacketHandler {
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         MapleCharacter chr = c.getPlayer();
-        c.announce(MaplePacketCreator.getFamilyInfo(chr.getFamilyEntry()));
+        c.sendPacket(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
     }
 }
 

@@ -2,9 +2,9 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import server.minigame.MapleRockPaperScissor;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import server.minigame.MapleRockPaperScissor;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -37,29 +37,29 @@ public final class RPSActionHandler extends AbstractMaplePacketHandler{
                                                 if(chr.getMeso() >= 1000){
                                                         chr.setRPS(new MapleRockPaperScissor(c, mode));
                                                 }else{
-                                                        c.announce(MaplePacketCreator.rpsMesoError(-1));
+                                                        c.sendPacket(PacketCreator.rpsMesoError(-1));
                                                 }
                                                 break;
                                         case 1: // answer
                                                 if(rps == null || !rps.answer(c, slea.readByte())){
-                                                        c.announce(MaplePacketCreator.rpsMode((byte) 0x0D));// 13
+                                                        c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));// 13
                                                 }
                                                 break;
                                         case 2: // time over
                                                 if(rps == null || !rps.timeOut(c)){
-                                                        c.announce(MaplePacketCreator.rpsMode((byte) 0x0D));
+                                                        c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));
                                                 }
                                                 break;
                                         case 3: // continue
                                                 if(rps == null || !rps.nextRound(c)){
-                                                        c.announce(MaplePacketCreator.rpsMode((byte) 0x0D));
+                                                        c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));
                                                 }
                                                 break;
                                         case 4: // leave
                                                 if(rps != null){
                                                         rps.dispose(c);
                                                 }else{
-                                                        c.announce(MaplePacketCreator.rpsMode((byte) 0x0D));
+                                                        c.sendPacket(PacketCreator.rpsMode((byte) 0x0D));
                                                 }
                                                 break;
                                 }

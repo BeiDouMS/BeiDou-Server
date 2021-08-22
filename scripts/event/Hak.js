@@ -32,8 +32,8 @@ function playerEntry(eim, player) {
         onRide = eim.getMapFactory().getMap(birdRide[myRide]);
         player.changeMap(onRide, onRide.getPortal(0));
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-        player.getClient().announce(MaplePacketCreator.getClock(rideTime / 1000));
+    const PacketCreator = Java.type('tools.PacketCreator');
+        player.sendPacket(PacketCreator.getClock(rideTime / 1000));
         eim.schedule("timeOut", rideTime);
 }
 

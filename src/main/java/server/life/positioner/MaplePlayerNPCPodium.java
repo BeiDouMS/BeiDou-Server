@@ -26,7 +26,7 @@ import server.life.MaplePlayerNPC;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -100,8 +100,8 @@ public class MaplePlayerNPCPodium {
                 
                 for(MaplePlayerNPC pn : playerNpcs) {
                     m.removeMapObject(pn);
-                    m.broadcastMessage(MaplePacketCreator.removeNPCController(pn.getObjectId()));
-                    m.broadcastMessage(MaplePacketCreator.removePlayerNPC(pn.getObjectId()));
+                    m.broadcastMessage(PacketCreator.removeNPCController(pn.getObjectId()));
+                    m.broadcastMessage(PacketCreator.removePlayerNPC(pn.getObjectId()));
                 }
             }
             
@@ -112,8 +112,8 @@ public class MaplePlayerNPCPodium {
                 
                 for(MaplePlayerNPC pn : playerNpcs) {
                     m.addPlayerNPCMapObject(pn);
-                    m.broadcastMessage(MaplePacketCreator.spawnPlayerNPC(pn));
-                    m.broadcastMessage(MaplePacketCreator.getPlayerNPC(pn));
+                    m.broadcastMessage(PacketCreator.spawnPlayerNPC(pn));
+                    m.broadcastMessage(PacketCreator.getPlayerNPC(pn));
                 }
             }
             

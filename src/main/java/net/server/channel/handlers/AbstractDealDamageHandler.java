@@ -38,7 +38,7 @@ import server.maps.MapleMap;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 import tools.data.input.LittleEndianAccessor;
@@ -96,7 +96,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                 theSkill = SkillFactory.getSkill(attack.skill); // thanks Conrad for noticing some Aran skills not consuming MP
                 attackEffect = attack.getAttackEffect(player, theSkill); //returns back the player's attack effect so we are gucci
                 if (attackEffect == null) {
-                    player.announce(MaplePacketCreator.enableActions());
+                    player.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
@@ -127,7 +127,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                             }
                         }
                     } else {
-                        player.announce(MaplePacketCreator.enableActions());
+                        player.sendPacket(PacketCreator.enableActions());
                     }
                 }
                 
@@ -168,7 +168,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                                         if (mapitem.isPickedUp()) {
                                             return;
                                         }
-                                        map.pickItemDrop(MaplePacketCreator.removeItemFromMap(mapitem.getObjectId(), 4, 0), mapitem);
+                                        map.pickItemDrop(PacketCreator.removeItemFromMap(mapitem.getObjectId(), 4, 0), mapitem);
                                     } finally {
                                         mapitem.unlockItem();
                                     }
@@ -473,7 +473,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                         }
                     } else {
                         if(attack.skill == Aran.BODY_PRESSURE) {
-                            map.broadcastMessage(MaplePacketCreator.damageMonster(monster.getObjectId(), totDamageToOneMonster));
+                            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), totDamageToOneMonster));
                         }
                         
                         map.damageMonster(player, monster, totDamageToOneMonster);
@@ -485,7 +485,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                             if (ms.left == 145) {
                                 MobSkill toUse = MobSkillFactory.getMobSkill(ms.left, ms.right);
                                 player.addHP(-toUse.getX());
-                                map.broadcastMessage(player, MaplePacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getX(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
+                                map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getX(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }
                         }
                     }                
@@ -496,7 +496,7 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
                             if (ms.left == 145) {
                                 MobSkill toUse = MobSkillFactory.getMobSkill(ms.left, ms.right);
                                 player.addHP(-toUse.getY());
-                                map.broadcastMessage(player, MaplePacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getY(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
+                                map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getY(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }
                         }
                     }
@@ -515,11 +515,11 @@ public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandl
         
         if(animationTime > 0) { // be sure to only use LIMITED ATTACKS with animation time here
             TimerManager.getInstance().schedule(() -> {
-                map.broadcastMessage(MaplePacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
+                map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
                 map.damageMonster(attacker, monster, damage);
             }, animationTime);
         } else {
-            map.broadcastMessage(MaplePacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
+            map.broadcastMessage(PacketCreator.damageMonster(monster.getObjectId(), damage), monster.getPosition());
             map.damageMonster(attacker, monster, damage);
         }
     }

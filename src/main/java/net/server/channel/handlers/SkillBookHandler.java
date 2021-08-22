@@ -31,7 +31,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractMaplePacketHandler;
 import server.MapleItemInformationProvider;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Map;
@@ -40,7 +40,7 @@ public final class SkillBookHandler extends AbstractMaplePacketHandler {
     @Override
     public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
         if (!c.getPlayer().isAlive()) {
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
             return;
         }
         
@@ -97,7 +97,7 @@ public final class SkillBookHandler extends AbstractMaplePacketHandler {
             }
             
             // thanks Vcoc for noting skill book result not showing for all in area
-            player.getMap().broadcastMessage(MaplePacketCreator.skillBookResult(player, skill, maxlevel, canuse, success));
+            player.getMap().broadcastMessage(PacketCreator.skillBookResult(player, skill, maxlevel, canuse, success));
         }
     }
 }

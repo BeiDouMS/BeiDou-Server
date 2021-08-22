@@ -23,25 +23,23 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import java.awt.Point;
-import java.util.LinkedList;
-import java.util.List;
-
 import config.YamlConfig;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
-//import server.life.MobAttackInfo;
-//import server.life.MobAttackInfoFactory;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
 import tools.exceptions.EmptyMovementException;
+
+import java.awt.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author Danny (Leifde)
@@ -152,9 +150,9 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 if (aggro == null) return;
 
                 if (nextUse != null) {
-                        c.announce(MaplePacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro, nextSkillId, nextSkillLevel));
+                        c.sendPacket(PacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro, nextSkillId, nextSkillLevel));
 		} else {
-			c.announce(MaplePacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro));
+			c.sendPacket(PacketCreator.moveMonsterResponse(objectid, moveid, mobMp, aggro));
 		}
                 
                 
@@ -168,7 +166,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                                 System.out.println((isSkill ? "SKILL " : (isAttack ? "ATTCK " : " ")) + "castPos: " + castPos + " rawAct: " + rawActivity + " opt: " + pOption + " skillID: " + useSkillId + " skillLV: " + useSkillLevel + " " + "allowSkill: " + nextMovementCouldBeSkill + " mobMp: " + mobMp);
                         }
                         
-                        map.broadcastMessage(player, MaplePacketCreator.moveMonster(objectid, nextMovementCouldBeSkill, rawActivity, useSkillId, useSkillLevel, pOption, startPos, slea, movementDataLength), serverStartPos);
+                        map.broadcastMessage(player, PacketCreator.moveMonster(objectid, nextMovementCouldBeSkill, rawActivity, useSkillId, useSkillLevel, pOption, startPos, slea, movementDataLength), serverStartPos);
                         //updatePosition(res, monster, -2); //does this need to be done after the packet is broadcast?
                         map.moveMonster(monster, monster.getPosition());
                 } catch (EmptyMovementException e) {}

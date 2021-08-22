@@ -30,7 +30,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.skills.*;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -329,11 +329,11 @@ public class AssignAPProcessor {
                 }
 
                 chr.assignStrDexIntLuk(statGain[0], statGain[1], statGain[3], statGain[2]);
-                c.announce(MaplePacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
 
                 //----------------------------------------------------------------------------------------
 
-                c.announce(MaplePacketCreator.serverNotice(1, "Better AP applications detected:\r\nSTR: +" + statGain[0] + "\r\nDEX: +" + statGain[1] + "\r\nINT: +" + statGain[3] + "\r\nLUK: +" + statGain[2]));
+                c.sendPacket(PacketCreator.serverNotice(1, "Better AP applications detected:\r\nSTR: +" + statGain[0] + "\r\nDEX: +" + statGain[1] + "\r\nINT: +" + statGain[3] + "\r\nLUK: +" + statGain[2]));
             } else {
                 if(slea.available() < 16) {
                     AutobanFactory.PACKET_EDIT.alert(chr, "Didn't send full packet for Auto Assign.");
@@ -353,7 +353,7 @@ public class AssignAPProcessor {
                 }
                 
                 chr.assignStrDexIntLuk(statGain[0], statGain[1], statGain[3], statGain[2]);
-                c.announce(MaplePacketCreator.enableActions());
+                c.sendPacket(PacketCreator.enableActions());
             }
         } finally {
             c.unlockClient();
@@ -426,48 +426,48 @@ public class AssignAPProcessor {
                 case 64: // str
                     if (player.getStr() < 5) {
                         player.message("You don't have the minimum STR required to swap.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignStr(-1)) {
                         player.message("Couldn't execute AP reset operation.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     break;
                 case 128: // dex
                     if (player.getDex() < 5) {
                         player.message("You don't have the minimum DEX required to swap.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignDex(-1)) {
                         player.message("Couldn't execute AP reset operation.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     break;
                 case 256: // int
                     if (player.getInt() < 5) {
                         player.message("You don't have the minimum INT required to swap.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignInt(-1)) {
                         player.message("Couldn't execute AP reset operation.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     break;
                 case 512: // luk
                     if (player.getLuk() < 5) {
                         player.message("You don't have the minimum LUK required to swap.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     if (!player.assignLuk(-1)) {
                         player.message("Couldn't execute AP reset operation.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     break;
@@ -475,14 +475,14 @@ public class AssignAPProcessor {
                     if(YamlConfig.config.server.USE_ENFORCE_HPMP_SWAP) {
                         if (APTo != 8192) {
                             player.message("You can only swap HP ability points to MP.");
-                            c.announce(MaplePacketCreator.enableActions());
+                            c.sendPacket(PacketCreator.enableActions());
                             return false;
                         }
                     }
                     
                     if (player.getHpMpApUsed() < 1) {
                         player.message("You don't have enough HPMP stat points to spend on AP Reset.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
 
@@ -490,7 +490,7 @@ public class AssignAPProcessor {
                     int level_ = player.getLevel();
                     if (hp < level_ * 14 + 148) {
                         player.message("You don't have the minimum HP pool required to swap.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     
@@ -506,14 +506,14 @@ public class AssignAPProcessor {
                     if(YamlConfig.config.server.USE_ENFORCE_HPMP_SWAP) {
                         if (APTo != 2048) {
                             player.message("You can only swap MP ability points to HP.");
-                            c.announce(MaplePacketCreator.enableActions());
+                            c.sendPacket(PacketCreator.enableActions());
                             return false;
                         }
                     }
                     
                     if (player.getHpMpApUsed() < 1) {
                         player.message("You don't have enough HPMP stat points to spend on AP Reset.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
 
@@ -534,7 +534,7 @@ public class AssignAPProcessor {
 
                     if (!canWash) {
                         player.message("You don't have the minimum MP pool required to swap.");
-                        c.announce(MaplePacketCreator.enableActions());
+                        c.sendPacket(PacketCreator.enableActions());
                         return false;
                     }
                     
@@ -546,7 +546,7 @@ public class AssignAPProcessor {
                     }
                     break;
                 default:
-                    c.announce(MaplePacketCreator.updatePlayerStats(MaplePacketCreator.EMPTY_STATUPDATE, true, player));
+                    c.sendPacket(PacketCreator.updatePlayerStats(PacketCreator.EMPTY_STATUPDATE, true, player));
                     return false;
             }
 
@@ -571,47 +571,47 @@ public class AssignAPProcessor {
             case 64:
                 if (!chr.assignStr(1)) {
                     chr.message("Couldn't execute AP assign operation.");
-                    chr.announce(MaplePacketCreator.enableActions());
+                    chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             case 128: // Dex
                 if (!chr.assignDex(1)) {
                     chr.message("Couldn't execute AP assign operation.");
-                    chr.announce(MaplePacketCreator.enableActions());
+                    chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             case 256: // Int
                 if (!chr.assignInt(1)) {
                     chr.message("Couldn't execute AP assign operation.");
-                    chr.announce(MaplePacketCreator.enableActions());
+                    chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             case 512: // Luk
                 if (!chr.assignLuk(1)) {
                     chr.message("Couldn't execute AP assign operation.");
-                    chr.announce(MaplePacketCreator.enableActions());
+                    chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             case 2048:
                 if (!chr.assignHP(calcHpChange(chr, usedAPReset), 1)) {
                     chr.message("Couldn't execute AP assign operation.");
-                    chr.announce(MaplePacketCreator.enableActions());
+                    chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             case 8192:
                 if (!chr.assignMP(calcMpChange(chr, usedAPReset), 1)) {
                     chr.message("Couldn't execute AP assign operation.");
-                    chr.announce(MaplePacketCreator.enableActions());
+                    chr.sendPacket(PacketCreator.enableActions());
                     return false;
                 }
                 break;
             default:
-                chr.announce(MaplePacketCreator.updatePlayerStats(MaplePacketCreator.EMPTY_STATUPDATE, true, chr));
+                chr.sendPacket(PacketCreator.updatePlayerStats(PacketCreator.EMPTY_STATUPDATE, true, chr));
                 return false;
         }
         return true;

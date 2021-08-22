@@ -23,7 +23,7 @@ package server.events.gm;
 
 import client.MapleCharacter;
 import server.TimerManager;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
 
@@ -48,12 +48,12 @@ public class MapleOla {
 
        public void startOla() { // TODO: Messages
            chr.getMap().startEvent();
-           chr.getClient().announce(MaplePacketCreator.getClock(360));
+           chr.sendPacket(PacketCreator.getClock(360));
            this.timeStarted = System.currentTimeMillis();
            this.time = 360000;
 
            chr.getMap().getPortal("join00").setPortalStatus(true);
-           chr.getClient().announce(MaplePacketCreator.serverNotice(0, "The portal has now opened. Press the up arrow key at the portal to enter."));
+           chr.sendPacket(PacketCreator.serverNotice(0, "The portal has now opened. Press the up arrow key at the portal to enter."));
        }
 
         public boolean isTimerStarted() {

@@ -24,7 +24,7 @@ package net.server.handlers.login;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.server.coordinator.session.SessionCoordinator;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /*
@@ -41,7 +41,7 @@ public final class RegisterPinHandler extends AbstractMaplePacketHandler {
             String pin = slea.readMapleAsciiString();
             if (pin != null) {
                 c.setPin(pin);
-                c.announce(MaplePacketCreator.pinRegistered());
+                c.sendPacket(PacketCreator.pinRegistered());
                 
                 SessionCoordinator.getInstance().closeSession(c, null);
                 c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);

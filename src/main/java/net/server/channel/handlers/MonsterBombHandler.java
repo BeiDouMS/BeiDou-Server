@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import server.life.MapleMonster;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 public final class MonsterBombHandler extends AbstractMaplePacketHandler {
@@ -36,7 +36,7 @@ public final class MonsterBombHandler extends AbstractMaplePacketHandler {
             return;
         }
         if (monster.getId() == 8500003 || monster.getId() == 8500004) {
-            monster.getMap().broadcastMessage(MaplePacketCreator.killMonster(monster.getObjectId(), 4));
+            monster.getMap().broadcastMessage(PacketCreator.killMonster(monster.getObjectId(), 4));
             c.getPlayer().getMap().removeMapObject(oid);
         }
     }

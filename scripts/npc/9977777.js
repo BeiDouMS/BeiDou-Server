@@ -308,21 +308,21 @@ function writeAllFeatures() {
 }
 
 function start() {
-        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-        cm.getPlayer().announce(MaplePacketCreator.musicChange(anthemSong));
+        const PacketCreator = Java.type('tools.PacketCreator');
+        cm.getPlayer().sendPacket(PacketCreator.musicChange(anthemSong));
         status = -1;
         writeAllFeatures();
         action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-        const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+        const PacketCreator = Java.type('tools.PacketCreator');
         if (mode == -1) {
-                cm.getPlayer().announce(MaplePacketCreator.musicChange(ambientSong));
+                cm.getPlayer().sendPacket(PacketCreator.musicChange(ambientSong));
                 cm.dispose();
         } else {
                 if (mode == 0 && type > 0) {
-                        cm.getPlayer().announce(MaplePacketCreator.musicChange(ambientSong));
+                        cm.getPlayer().sendPacket(PacketCreator.musicChange(ambientSong));
                         cm.dispose();
                         return;
                 }
@@ -356,7 +356,7 @@ function action(mode, type, selection) {
 
                         cm.sendPrev(sendStr);
                 } else {
-                        cm.getPlayer().announce(MaplePacketCreator.musicChange(ambientSong));
+                        cm.getPlayer().sendPacket(PacketCreator.musicChange(ambientSong));
                         cm.dispose();
                 }
         }

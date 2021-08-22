@@ -2,7 +2,7 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
@@ -23,9 +23,9 @@ public final class AcceptToSHandler extends AbstractMaplePacketHandler {
             return;
         }
         if (c.finishLogin() == 0) {
-            c.announce(MaplePacketCreator.getAuthSuccess(c));
+            c.sendPacket(PacketCreator.getAuthSuccess(c));
         } else {
-            c.announce(MaplePacketCreator.getLoginFailed(9));//shouldn't happen XD
+            c.sendPacket(PacketCreator.getLoginFailed(9));//shouldn't happen XD
         }
     }
 }

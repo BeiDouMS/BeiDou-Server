@@ -36,7 +36,7 @@ import server.MapleItemInformationProvider;
 import server.maps.MapleHiredMerchant;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.sql.*;
@@ -275,7 +275,7 @@ public class FredrickProcessor {
                     
                     byte response = canRetrieveFromFredrick(chr, items);
                     if (response != 0) {
-                        chr.announce(MaplePacketCreator.fredrickMessage(response));
+                        chr.sendPacket(PacketCreator.fredrickMessage(response));
                         return;
                     }
                     
@@ -294,7 +294,7 @@ public class FredrickProcessor {
                             FilePrinter.print(FilePrinter.FREDRICK + chr.getName() + ".txt", chr.getName() + " gained " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
                         }
 
-                        chr.announce(MaplePacketCreator.fredrickMessage((byte) 0x1E));
+                        chr.sendPacket(PacketCreator.fredrickMessage((byte) 0x1E));
                         removeFredrickLog(chr.getId());
                     } else {
                         chr.message("An unknown error has occured.");

@@ -52,11 +52,11 @@ function start() {
 
     const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
     const Point = Java.type('java.awt.Point');
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
+    const PacketCreator = Java.type('tools.PacketCreator');
 
     var snackBar = MapleLifeFactory.getMonster(8220008);
     snackBarMap.spawnMonsterOnGroundBelow(snackBar, new Point(rndPos[0], rndPos[1]));
-    snackBarMap.broadcastMessage(MaplePacketCreator.serverNotice(6, "Slowly, a suspicious food stand opens up on a strangely remote place."));
+    snackBarMap.broadcastMessage(PacketCreator.serverNotice(6, "Slowly, a suspicious food stand opens up on a strangely remote place."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

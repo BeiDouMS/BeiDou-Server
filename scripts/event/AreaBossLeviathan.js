@@ -56,8 +56,8 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     leviathansCanyon.spawnMonsterOnGroundBelow(leviathan, spawnpoint);
 
-    const MaplePacketCreator = Java.type('tools.MaplePacketCreator');
-    leviathansCanyon.broadcastMessage(MaplePacketCreator.serverNotice(6, "Leviathan emerges from the canyon and the cold icy wind blows."));
+    const PacketCreator = Java.type('tools.PacketCreator');
+    leviathansCanyon.broadcastMessage(PacketCreator.serverNotice(6, "Leviathan emerges from the canyon and the cold icy wind blows."));
 	em.schedule("start", 3 * 60 *60 * 1000);
 }
 

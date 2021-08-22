@@ -21,11 +21,12 @@
 */
 package server.maps;
 
-import java.awt.Point;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillFactory;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
+
+import java.awt.*;
 
 /**
  *
@@ -49,12 +50,12 @@ public class MapleSummon extends AbstractAnimatedMapleMapObject {
 
     @Override
     public void sendSpawnData(MapleClient client) {
-        client.announce(MaplePacketCreator.spawnSummon(this, false));
+        client.sendPacket(PacketCreator.spawnSummon(this, false));
     }
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        client.announce(MaplePacketCreator.removeSummon(this, true));
+        client.sendPacket(PacketCreator.removeSummon(this, true));
     }
 
     public MapleCharacter getOwner() {

@@ -27,7 +27,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
 import constants.game.GameConstants;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 public class MusicCommand extends Command {
     {
@@ -53,14 +53,14 @@ public class MusicCommand extends Command {
             sendMsg += "Syntax: #r!music <song>#k\r\n\r\n";
             sendMsg += getSongList();
             
-            c.announce(MaplePacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
+            c.sendPacket(PacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
             return;
         }
         
         String song = player.getLastCommandMessage();
         for (String s : GameConstants.GAME_SONGS) {
             if (s.equalsIgnoreCase(song)) {    // thanks Masterrulax for finding an issue here
-                player.getMap().broadcastMessage(MaplePacketCreator.musicChange(s));
+                player.getMap().broadcastMessage(PacketCreator.musicChange(s));
                 player.yellowMessage("Now playing song " + s + ".");
                 return;
             }
@@ -70,6 +70,6 @@ public class MusicCommand extends Command {
         sendMsg += "Song not found, please enter a song below.\r\n\r\n";
         sendMsg += getSongList();
         
-        c.announce(MaplePacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
+        c.sendPacket(PacketCreator.getNPCTalk(1052015, (byte) 0, sendMsg, "00 00", (byte) 0));
     }
 }

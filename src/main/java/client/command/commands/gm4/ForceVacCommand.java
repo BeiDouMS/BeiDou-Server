@@ -31,7 +31,7 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +70,7 @@ public class ForceVacCommand extends Command {
                     }
                 }
 
-                player.getMap().pickItemDrop(MaplePacketCreator.removeItemFromMap(mapItem.getObjectId(), 2, player.getId()), mapItem);
+                player.getMap().pickItemDrop(PacketCreator.removeItemFromMap(mapItem.getObjectId(), 2, player.getId()), mapItem);
             } finally {
                 mapItem.unlockItem();
             }

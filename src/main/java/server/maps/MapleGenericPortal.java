@@ -21,15 +21,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.maps;
 
-import client.MapleClient;
 import client.MapleCharacter;
+import client.MapleClient;
 import constants.game.GameConstants;
-import java.awt.Point;
-import scripting.portal.PortalScriptManager;
-import tools.MaplePacketCreator;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import scripting.portal.PortalScriptManager;
+import tools.PacketCreator;
+
+import java.awt.*;
 
 public class MapleGenericPortal implements MaplePortal {
 
@@ -155,7 +156,7 @@ public class MapleGenericPortal implements MaplePortal {
             }
         }
         if (!changed) {
-            c.announce(MaplePacketCreator.enableActions());
+            c.sendPacket(PacketCreator.enableActions());
         }
     }
 

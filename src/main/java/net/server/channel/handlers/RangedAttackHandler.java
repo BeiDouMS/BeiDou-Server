@@ -21,11 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleClient;
-import client.Skill;
-import client.SkillFactory;
+import client.*;
 import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
@@ -34,16 +30,11 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
-import constants.skills.Aran;
-import constants.skills.Buccaneer;
-import constants.skills.NightLord;
-import constants.skills.NightWalker;
-import constants.skills.Shadower;
-import constants.skills.ThunderBreaker;
-import constants.skills.WindArcher;
+import constants.skills.*;
+import net.packet.Packet;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
-import tools.MaplePacketCreator;
+import tools.PacketCreator;
 import tools.Randomizer;
 import tools.data.input.SeekableLittleEndianAccessor;
 
@@ -72,21 +63,21 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
         
         if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
-            c.announce(MaplePacketCreator.getEnergy("energy", chr.getDojoEnergy()));
+            c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
         
         if (attack.skill == Buccaneer.ENERGY_ORB || attack.skill == ThunderBreaker.SPARK || attack.skill == Shadower.TAUNT || attack.skill == NightLord.TAUNT) {
-            chr.getMap().broadcastMessage(chr, MaplePacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
+            chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             applyAttack(attack, chr, 1);
         } else if (attack.skill == ThunderBreaker.SHARK_WAVE && chr.getSkillLevel(ThunderBreaker.SHARK_WAVE) > 0) {
-            chr.getMap().broadcastMessage(chr, MaplePacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
+            chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             applyAttack(attack, chr, 1);
             
             for (int i = 0; i < attack.numAttacked; i++) {
                 chr.handleEnergyChargeGain();
             }
         } else if (attack.skill == Aran.COMBO_SMASH || attack.skill == Aran.COMBO_FENRIR || attack.skill == Aran.COMBO_TEMPEST) {
-            chr.getMap().broadcastMessage(chr, MaplePacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
+            chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             if (attack.skill == Aran.COMBO_SMASH && chr.getCombo() >= 30) {
             	chr.setCombo((short) 0);
             	applyAttack(attack, chr, 1);
@@ -111,7 +102,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 effect = attack.getAttackEffect(chr, null);
                 bulletCount = effect.getBulletCount();
                 if (effect.getCooldown() > 0) {
-                    c.announce(MaplePacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
+                    c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
                 }
                 
                 if(attack.skill == 4111004) {   // shadow meso
@@ -197,16 +188,16 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     visProjectile = 0;
                 }
                 
-                byte[] packet;
+                final Packet packet;
                 switch (attack.skill) {
                     case 3121004: // Hurricane
                     case 3221001: // Pierce
                     case 5221004: // Rapid Fire
                     case 13111002: // KoC Hurricane
-                        packet = MaplePacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.rangedirection, attack.numAttackedAndDamage, visProjectile, attack.allDamage, attack.speed, attack.direction, attack.display);
+                        packet = PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.rangedirection, attack.numAttackedAndDamage, visProjectile, attack.allDamage, attack.speed, attack.direction, attack.display);
                         break;
                     default:
-                        packet = MaplePacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, visProjectile, attack.allDamage, attack.speed, attack.direction, attack.display);
+                        packet = PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, visProjectile, attack.allDamage, attack.speed, attack.direction, attack.display);
                         break;
                 }
                 chr.getMap().broadcastMessage(chr, packet, false, true);
@@ -218,7 +209,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         if (chr.skillIsCooling(attack.skill)) {
                             return;
                         } else {
-                            c.announce(MaplePacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
+                            c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
                             chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
                         }
                     }
