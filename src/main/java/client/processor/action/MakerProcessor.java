@@ -35,7 +35,6 @@ import server.MapleItemInformationProvider;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

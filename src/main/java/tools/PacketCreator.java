@@ -67,7 +67,6 @@ import server.life.MobSkill;
 import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 import java.net.InetAddress;

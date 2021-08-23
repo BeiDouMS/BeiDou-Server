@@ -42,7 +42,6 @@ import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
-import tools.data.input.LittleEndianAccessor;
 
 import java.awt.*;
 import java.util.List;

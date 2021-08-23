@@ -33,7 +33,6 @@ import constants.skills.*;
 import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.ArrayList;
 import java.util.Collection;

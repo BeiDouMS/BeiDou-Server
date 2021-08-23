@@ -21,15 +21,15 @@
 */
 package net.server.channel.handlers;
 
-import java.awt.Point;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractMaplePacketHandler;
 import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
-import server.quest.MapleQuest;
 import server.life.MapleNPC;
-import tools.data.input.SeekableLittleEndianAccessor;
+import server.quest.MapleQuest;
+
+import java.awt.*;
 
 /**
  *

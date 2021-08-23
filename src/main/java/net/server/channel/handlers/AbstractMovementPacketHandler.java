@@ -21,21 +21,15 @@
  */
 package net.server.channel.handlers;
 
-import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
-
 import net.AbstractMaplePacketHandler;
 import net.packet.InPacket;
 import server.maps.AnimatedMapleMapObject;
-import server.movement.AbsoluteLifeMovement;
-import server.movement.ChangeEquip;
-import server.movement.JumpDownMovement;
-import server.movement.LifeMovementFragment;
-import server.movement.RelativeLifeMovement;
-import server.movement.TeleportMovement;
-import tools.data.input.LittleEndianAccessor;
+import server.movement.*;
 import tools.exceptions.EmptyMovementException;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketHandler {
 

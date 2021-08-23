@@ -23,7 +23,6 @@ package net;
 
 import client.MapleClient;
 import net.packet.InPacket;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 public interface MaplePacketHandler {
     void handlePacket(InPacket p, MapleClient c);
