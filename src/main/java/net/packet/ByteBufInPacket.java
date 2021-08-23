@@ -78,4 +78,23 @@ public class ByteBufInPacket implements InPacket {
     public int getPosition() {
         return byteBuf.readerIndex();
     }
+
+    @Override
+    public String toString() {
+        final int readerIndex = byteBuf.readerIndex();
+        byteBuf.markReaderIndex();
+        byteBuf.readerIndex(0);
+
+        String hexDumpWithPosition = insertReaderPosition(ByteBufUtil.hexDump(byteBuf).toUpperCase(), readerIndex);
+        String toString = String.format("ByteBufInPacket[%s]", hexDumpWithPosition);
+
+        byteBuf.resetReaderIndex();
+        return toString;
+    }
+
+    private static String insertReaderPosition(String hexDump, int index) {
+        StringBuilder sb = new StringBuilder(hexDump);
+        sb.insert(2 * index, '_');
+        return sb.toString();
+    }
 }
