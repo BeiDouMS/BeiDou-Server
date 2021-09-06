@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
@@ -31,7 +31,7 @@ import scripting.quest.QuestScriptManager;
  *
  * @author Matze
  */
-public final class NPCMoreTalkHandler extends AbstractMaplePacketHandler {
+public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         byte lastMsg = p.readByte(); // 00 (last msg type I think)

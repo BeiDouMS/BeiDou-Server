@@ -22,12 +22,12 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.MapleMonster;
 import tools.PacketCreator;
 
-public final class MonsterBombHandler extends AbstractMaplePacketHandler {
+public final class MonsterBombHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         int oid = p.readInt();

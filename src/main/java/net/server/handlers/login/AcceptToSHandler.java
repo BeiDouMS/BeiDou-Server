@@ -1,7 +1,7 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -9,7 +9,7 @@ import tools.PacketCreator;
  *
  * @author kevintjuh93
  */
-public final class AcceptToSHandler extends AbstractMaplePacketHandler {
+public final class AcceptToSHandler extends AbstractPacketHandler {
 
     @Override
     public boolean validateState(MapleClient c) {

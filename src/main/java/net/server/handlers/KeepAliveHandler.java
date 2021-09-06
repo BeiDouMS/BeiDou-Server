@@ -22,10 +22,10 @@
 package net.server.handlers;
 
 import client.MapleClient;
-import net.MaplePacketHandler;
+import net.PacketHandler;
 import net.packet.InPacket;
 
-public class KeepAliveHandler implements MaplePacketHandler {
+public class KeepAliveHandler implements PacketHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
         c.pongReceived();

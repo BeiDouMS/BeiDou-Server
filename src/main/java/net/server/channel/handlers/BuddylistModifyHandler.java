@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.*;
 import client.BuddyList.BuddyAddResult;
 import client.BuddyList.BuddyOperation;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.world.World;
 import tools.DatabaseConnection;
@@ -37,7 +37,7 @@ import java.sql.SQLException;
 
 import static client.BuddyList.BuddyOperation.ADDED;
 
-public class BuddylistModifyHandler extends AbstractMaplePacketHandler {
+public class BuddylistModifyHandler extends AbstractPacketHandler {
     private static class CharacterIdNameBuddyCapacity extends CharacterNameAndId {
         private int buddyCapacity;
 

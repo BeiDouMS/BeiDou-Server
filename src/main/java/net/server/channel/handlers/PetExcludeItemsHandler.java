@@ -25,14 +25,14 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.MaplePet;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
  * @author BubblesDev
  * @author Ronan
  */
-public final class PetExcludeItemsHandler extends AbstractMaplePacketHandler {
+public final class PetExcludeItemsHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

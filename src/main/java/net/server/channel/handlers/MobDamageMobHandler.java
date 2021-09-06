@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
@@ -41,7 +41,7 @@ import java.util.Map;
  * @author Jay Estrella
  * @author Ronan
  */
-public final class MobDamageMobHandler extends AbstractMaplePacketHandler {
+public final class MobDamageMobHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         int from = p.readInt();

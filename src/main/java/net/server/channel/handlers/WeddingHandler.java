@@ -16,7 +16,7 @@ import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleMarriage;
 import tools.PacketCreator;
@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Drago (Dragohe4rt)
  */
-public final class WeddingHandler extends AbstractMaplePacketHandler {
+public final class WeddingHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -30,7 +30,7 @@ import tools.PacketCreator;
  *
  * @author Terry Han (Acrylic)
  */
-public final class TouchingCashShopHandler extends AbstractMaplePacketHandler {
+public final class TouchingCashShopHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         c.sendPacket(PacketCreator.showCash(c.getPlayer()));

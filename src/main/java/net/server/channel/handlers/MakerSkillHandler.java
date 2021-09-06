@@ -23,14 +23,14 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.processor.action.MakerProcessor;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
  *
  * @author Jay Estrella, Ronan
  */
-public final class MakerSkillHandler extends AbstractMaplePacketHandler {
+public final class MakerSkillHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

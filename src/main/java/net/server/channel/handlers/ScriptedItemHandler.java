@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.inventory.Item;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.item.ItemScriptManager;
 import server.MapleItemInformationProvider;
@@ -34,7 +34,7 @@ import server.MapleItemInformationProvider.ScriptedItem;
  *
  * @author Jay Estrella
  */
-public final class ScriptedItemHandler extends AbstractMaplePacketHandler {
+public final class ScriptedItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         p.readInt(); // trash stamp, thanks RMZero213

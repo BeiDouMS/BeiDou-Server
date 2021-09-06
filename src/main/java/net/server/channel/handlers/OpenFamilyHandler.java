@@ -22,7 +22,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -30,7 +30,7 @@ import tools.PacketCreator;
  *
  * @author Ubaware
  */
-public final class OpenFamilyHandler extends AbstractMaplePacketHandler {
+public final class OpenFamilyHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;

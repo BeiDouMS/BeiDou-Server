@@ -27,7 +27,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.CashShop;
@@ -49,7 +49,7 @@ import java.util.Map.Entry;
  * @author Penguins (Acrylic)
  * @author Ronan (HeavenMS)
  */
-public final class CouponCodeHandler extends AbstractMaplePacketHandler {
+public final class CouponCodeHandler extends AbstractPacketHandler {
     
     private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(MapleCharacter chr, Connection con, int codeid) throws SQLException {
         Map<Integer, Integer> couponItems = new HashMap<>();

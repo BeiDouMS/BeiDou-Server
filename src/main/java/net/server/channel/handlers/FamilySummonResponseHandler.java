@@ -5,7 +5,7 @@ import client.MapleClient;
 import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
@@ -14,7 +14,7 @@ import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 
-public class FamilySummonResponseHandler extends AbstractMaplePacketHandler {
+public class FamilySummonResponseHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

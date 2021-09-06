@@ -32,7 +32,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.skills.Aran;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleStatEffect;
 import server.life.MapleLifeFactory.loseItem;
@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public final class TakeDamageHandler extends AbstractMaplePacketHandler {
+public final class TakeDamageHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

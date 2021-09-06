@@ -22,14 +22,14 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
 import tools.PacketCreator;
 
-public final class CharlistRequestHandler extends AbstractMaplePacketHandler {
+public final class CharlistRequestHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

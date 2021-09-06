@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
@@ -39,7 +39,7 @@ import tools.PacketCreator;
  * @author Moogra
  * @author Ubaware
  */
-public final class FamilyUseHandler extends AbstractMaplePacketHandler {
+public final class FamilyUseHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {

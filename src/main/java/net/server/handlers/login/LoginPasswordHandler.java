@@ -24,7 +24,7 @@ package net.server.handlers.login;
 import client.DefaultDates;
 import client.MapleClient;
 import config.YamlConfig;
-import net.MaplePacketHandler;
+import net.PacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
@@ -40,7 +40,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.Calendar;
 
-public final class LoginPasswordHandler implements MaplePacketHandler {
+public final class LoginPasswordHandler implements PacketHandler {
 
     @Override
     public boolean validateState(MapleClient c) {

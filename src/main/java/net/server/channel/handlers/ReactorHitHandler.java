@@ -22,14 +22,14 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapleReactor;
 
 /**
  * @author Lerk
  */
-public final class ReactorHitHandler extends AbstractMaplePacketHandler {
+public final class ReactorHitHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
     	//System.out.println(slea); //To see if there are any differences with packets

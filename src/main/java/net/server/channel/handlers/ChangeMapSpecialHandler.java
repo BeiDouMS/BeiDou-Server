@@ -22,14 +22,14 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleTrade;
 import server.MapleTrade.TradeResult;
 import server.maps.MaplePortal;
 import tools.PacketCreator;
 
-public final class ChangeMapSpecialHandler extends AbstractMaplePacketHandler {
+public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
             p.readByte();

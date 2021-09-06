@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.world.World;
@@ -33,7 +33,7 @@ import tools.FilePrinter;
 import tools.LogHelper;
 import tools.PacketCreator;
 
-public final class MultiChatHandler extends AbstractMaplePacketHandler {
+public final class MultiChatHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter player = c.getPlayer();

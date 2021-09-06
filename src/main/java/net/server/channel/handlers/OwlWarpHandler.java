@@ -21,7 +21,7 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import constants.game.GameConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapleHiredMerchant;
 import server.maps.MaplePlayerShop;
@@ -30,7 +30,7 @@ import tools.PacketCreator;
 /*
  * @author Ronan
  */
-public final class OwlWarpHandler extends AbstractMaplePacketHandler {
+public final class OwlWarpHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

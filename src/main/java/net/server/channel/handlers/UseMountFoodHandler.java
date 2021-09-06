@@ -29,7 +29,7 @@ import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.game.ExpTable;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -37,7 +37,7 @@ import tools.PacketCreator;
  * @author PurpleMadness
  * @author Ronan
  */
-public final class UseMountFoodHandler extends AbstractMaplePacketHandler {
+public final class UseMountFoodHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         p.skip(4);

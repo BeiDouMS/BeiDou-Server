@@ -2,14 +2,14 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.keybind.MapleQuickslotBinding;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
  *
  * @author Shavit
  */
-public class QuickslotKeyMappedModifiedHandler extends AbstractMaplePacketHandler
+public class QuickslotKeyMappedModifiedHandler extends AbstractPacketHandler
 {
     @Override
     public void handlePacket(InPacket p, MapleClient c)

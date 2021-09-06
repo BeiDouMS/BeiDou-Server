@@ -23,14 +23,14 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.processor.stat.AssignAPProcessor;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
  *
  * @author Generic, Ronan
  */
-public class AutoAssignHandler extends AbstractMaplePacketHandler {
+public class AutoAssignHandler extends AbstractPacketHandler {
     
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

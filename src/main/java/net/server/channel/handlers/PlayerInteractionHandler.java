@@ -32,7 +32,7 @@ import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleTrade;
@@ -50,7 +50,7 @@ import java.util.Arrays;
  * @author Matze
  * @author Ronan - concurrency safety and reviewed minigames
  */
-public final class PlayerInteractionHandler extends AbstractMaplePacketHandler {
+public final class PlayerInteractionHandler extends AbstractPacketHandler {
     public enum Action {
         CREATE(0),
         INVITE(2),

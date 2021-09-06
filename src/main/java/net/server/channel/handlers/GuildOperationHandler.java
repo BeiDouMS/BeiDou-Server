@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
@@ -40,7 +40,7 @@ import tools.PacketCreator;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class GuildOperationHandler extends AbstractMaplePacketHandler {
+public final class GuildOperationHandler extends AbstractPacketHandler {
     private boolean isGuildNameAcceptable(String name) {
         if (name.length() < 3 || name.length() > 12) {
             return false;

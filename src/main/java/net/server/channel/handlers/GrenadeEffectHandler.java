@@ -23,7 +23,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -33,7 +33,7 @@ import java.awt.*;
 /*
  * @author GabrielSin
  */
-public class GrenadeEffectHandler extends AbstractMaplePacketHandler {
+public class GrenadeEffectHandler extends AbstractPacketHandler {
  
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

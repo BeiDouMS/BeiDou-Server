@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.processor.npc.DueyProcessor;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 import server.life.MapleNPC;
@@ -33,7 +33,7 @@ import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
-public final class NPCTalkHandler extends AbstractMaplePacketHandler {
+public final class NPCTalkHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         if (!c.getPlayer().isAlive()) {

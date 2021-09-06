@@ -23,7 +23,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.events.gm.MapleCoconut;
 import server.events.gm.MapleCoconuts;
@@ -34,7 +34,7 @@ import tools.PacketCreator;
  *
  * @author kevintjuh93
  */
-public final class CoconutHandler extends AbstractMaplePacketHandler {
+public final class CoconutHandler extends AbstractPacketHandler {
 	public final void handlePacket(InPacket p, MapleClient c) {
 		/*CB 00 A6 00 06 01
 		 * A6 00 = coconut id

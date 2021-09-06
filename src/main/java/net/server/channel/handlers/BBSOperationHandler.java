@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.guild.GuildPackets;
 import tools.DatabaseConnection;
@@ -33,7 +33,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class BBSOperationHandler extends AbstractMaplePacketHandler {
+public final class BBSOperationHandler extends AbstractPacketHandler {
 
     private String correctLength(String in, int maxSize) {
         return in.length() > maxSize ? in.substring(0, maxSize) : in;

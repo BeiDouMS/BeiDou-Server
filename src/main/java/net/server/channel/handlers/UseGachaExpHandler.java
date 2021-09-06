@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.autoban.AutobanFactory;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -34,7 +34,7 @@ import tools.PacketCreator;
  * 
  * Modified by -- Ronan - concurrency protection
  */
-public class UseGachaExpHandler extends AbstractMaplePacketHandler {
+public class UseGachaExpHandler extends AbstractPacketHandler {
     
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

@@ -22,12 +22,12 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.session.SessionCoordinator;
 import tools.PacketCreator;
 
-public final class AfterLoginHandler extends AbstractMaplePacketHandler {
+public final class AfterLoginHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

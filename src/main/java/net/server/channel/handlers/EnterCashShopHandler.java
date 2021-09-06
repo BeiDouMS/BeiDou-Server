@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.maps.MapleMiniDungeonInfo;
@@ -33,7 +33,7 @@ import tools.PacketCreator;
  *
  * @author Flav
  */
-public class EnterCashShopHandler extends AbstractMaplePacketHandler {
+public class EnterCashShopHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
         try {

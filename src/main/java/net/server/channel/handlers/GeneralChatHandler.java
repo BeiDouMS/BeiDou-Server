@@ -26,13 +26,13 @@ import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.command.CommandsExecutor;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.LogHelper;
 import tools.PacketCreator;
 
-public final class GeneralChatHandler extends AbstractMaplePacketHandler {    
+public final class GeneralChatHandler extends AbstractPacketHandler {
 	@Override
         public final void handlePacket(InPacket p, MapleClient c) {
                 String s = p.readString();

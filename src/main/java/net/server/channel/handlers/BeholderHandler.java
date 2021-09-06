@@ -23,16 +23,17 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import constants.skills.DarkKnight;
-import java.util.Collection;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapleSummon;
+
+import java.util.Collection;
 
 /**
  *
  * @author BubblesDev
  */
-public final class BeholderHandler extends AbstractMaplePacketHandler {//Summon Skills noobs
+public final class BeholderHandler extends AbstractPacketHandler {//Summon Skills noobs
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.MapleFamily;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
@@ -45,7 +45,7 @@ import java.sql.SQLException;
  * @author Jay Estrella
  * @author Ubaware
  */
-public final class AcceptFamilyHandler extends AbstractMaplePacketHandler {
+public final class AcceptFamilyHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

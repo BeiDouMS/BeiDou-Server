@@ -26,7 +26,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.MapleItemInformationProvider;
@@ -41,7 +41,7 @@ import java.util.List;
  * @author Jay Estrella
  * @author kevintjuh93
  */
-public final class ItemRewardHandler extends AbstractMaplePacketHandler {
+public final class ItemRewardHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         byte slot = (byte) p.readShort();

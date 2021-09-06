@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.guild.GuildPackets;
@@ -36,7 +36,7 @@ import tools.PacketCreator;
  *
  * @author XoticStory, Ronan
  */
-public final class AllianceOperationHandler extends AbstractMaplePacketHandler {
+public final class AllianceOperationHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

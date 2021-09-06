@@ -25,12 +25,12 @@ import client.MapleCharacter;
 import client.MapleCharacter.FameStatus;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
-public final class GiveFameHandler extends AbstractMaplePacketHandler {
+public final class GiveFameHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

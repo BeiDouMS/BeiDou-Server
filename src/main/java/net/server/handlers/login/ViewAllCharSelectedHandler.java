@@ -22,7 +22,7 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
@@ -37,7 +37,7 @@ import tools.Randomizer;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public final class ViewAllCharSelectedHandler extends AbstractMaplePacketHandler {
+public final class ViewAllCharSelectedHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ViewAllCharSelectedHandler.class);
 
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {

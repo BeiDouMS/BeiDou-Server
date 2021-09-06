@@ -21,7 +21,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
 import tools.PacketCreator;
@@ -31,7 +31,7 @@ import tools.packets.WeddingPackets;
  *
  * @author Ronan
  */
-public final class WeddingTalkHandler extends AbstractMaplePacketHandler {
+public final class WeddingTalkHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

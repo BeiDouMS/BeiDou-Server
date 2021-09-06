@@ -24,10 +24,10 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
-public final class UseChairHandler extends AbstractMaplePacketHandler {
+public final class UseChairHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         int itemId = p.readInt();

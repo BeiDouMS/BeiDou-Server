@@ -26,7 +26,7 @@ import client.inventory.*;
 import client.keybind.MapleKeyBinding;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.PlayerBuffValueHolder;
 import net.server.Server;
@@ -57,7 +57,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-public final class PlayerLoggedinHandler extends AbstractMaplePacketHandler {
+public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
     

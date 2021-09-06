@@ -21,16 +21,16 @@
  */
 package net.server.channel.handlers;
 
-import constants.game.GameConstants;
 import client.MapleClient;
-import client.keybind.MapleKeyBinding;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.MapleInventoryType;
-import net.AbstractMaplePacketHandler;
+import client.keybind.MapleKeyBinding;
+import constants.game.GameConstants;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
-public final class KeymapChangeHandler extends AbstractMaplePacketHandler {
+public final class KeymapChangeHandler extends AbstractPacketHandler {
 	@Override
 	public final void handlePacket(InPacket p, MapleClient c) {
                 if (p.available() >= 8) {

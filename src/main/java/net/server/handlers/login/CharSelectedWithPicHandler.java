@@ -1,7 +1,7 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
@@ -15,7 +15,7 @@ import tools.PacketCreator;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class CharSelectedWithPicHandler extends AbstractMaplePacketHandler {
+public class CharSelectedWithPicHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(CharSelectedWithPicHandler.class);
 
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {

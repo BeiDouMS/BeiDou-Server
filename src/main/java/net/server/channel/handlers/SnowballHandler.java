@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.events.gm.MapleSnowball;
 import server.maps.MapleMap;
@@ -32,7 +32,7 @@ import server.maps.MapleMap;
  *
  * @author kevintjuh93
  */
-public final class SnowballHandler extends AbstractMaplePacketHandler{
+public final class SnowballHandler extends AbstractPacketHandler {
 
     public void handlePacket(InPacket p, MapleClient c) {
         //D3 00 02 00 00 A5 01

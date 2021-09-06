@@ -28,7 +28,7 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.skills.*;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.PlayerBuffValueHolder;
 import scripting.AbstractPlayerInteraction;
@@ -47,7 +47,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public abstract class AbstractDealDamageHandler extends AbstractMaplePacketHandler {
+public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
     public static class AttackInfo {
 

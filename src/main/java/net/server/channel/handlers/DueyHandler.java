@@ -24,11 +24,11 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.processor.npc.DueyProcessor;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public final class DueyHandler extends AbstractMaplePacketHandler {
+public final class DueyHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

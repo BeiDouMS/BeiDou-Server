@@ -24,12 +24,12 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.SkillFactory;
 import constants.skills.*;
-import net.AbstractMaplePacketHandler;
-import net.MaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.PacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public final class CancelBuffHandler extends AbstractMaplePacketHandler implements MaplePacketHandler {
+public final class CancelBuffHandler extends AbstractPacketHandler implements PacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

@@ -24,7 +24,7 @@ package net;
 import client.MapleClient;
 import net.server.Server;
 
-public abstract class AbstractMaplePacketHandler implements MaplePacketHandler {
+public abstract class AbstractPacketHandler implements PacketHandler {
     @Override
     public boolean validateState(MapleClient c) {
         return c.isLoggedIn();

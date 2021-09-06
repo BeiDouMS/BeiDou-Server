@@ -23,7 +23,7 @@ package net.server.handlers.login;
 
 import client.MapleClient;
 import client.MapleFamily;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import tools.DatabaseConnection;
@@ -35,7 +35,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class DeleteCharHandler extends AbstractMaplePacketHandler {
+public final class DeleteCharHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

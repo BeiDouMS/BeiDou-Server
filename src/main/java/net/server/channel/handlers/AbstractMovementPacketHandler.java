@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.AnimatedMapleMapObject;
 import server.movement.*;
@@ -31,7 +31,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractMovementPacketHandler extends AbstractMaplePacketHandler {
+public abstract class AbstractMovementPacketHandler extends AbstractPacketHandler {
 
     protected List<LifeMovementFragment> parseMovement(InPacket p) throws EmptyMovementException {
         List<LifeMovementFragment> res = new ArrayList<>();

@@ -26,12 +26,12 @@ import client.MapleClient;
 import client.inventory.MaplePet;
 import client.inventory.PetCommand;
 import client.inventory.PetDataFactory;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.Randomizer;
 
-public final class PetCommandHandler extends AbstractMaplePacketHandler {
+public final class PetCommandHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

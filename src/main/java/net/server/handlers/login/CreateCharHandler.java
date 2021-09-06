@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.creator.novice.BeginnerCreator;
 import client.creator.novice.LegendCreator;
 import client.creator.novice.NoblesseCreator;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -34,7 +34,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public final class CreateCharHandler extends AbstractMaplePacketHandler {
+public final class CreateCharHandler extends AbstractPacketHandler {
         
         private final static Set<Integer> IDs = new HashSet<>(Arrays.asList(new Integer[]{
 		1302000, 1312004, 1322005, 1442079,// weapons

@@ -26,10 +26,10 @@ import client.MapleClient;
 import client.SkillFactory;
 import constants.game.GameConstants;
 import constants.skills.Aran;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
-public class AranComboHandler extends AbstractMaplePacketHandler {
+public class AranComboHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

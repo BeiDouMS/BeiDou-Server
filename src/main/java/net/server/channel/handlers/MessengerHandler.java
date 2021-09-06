@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
@@ -34,7 +34,7 @@ import net.server.world.MapleMessengerCharacter;
 import net.server.world.World;
 import tools.PacketCreator;
 
-public final class MessengerHandler extends AbstractMaplePacketHandler {
+public final class MessengerHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         if (c.tryacquireClient()) {

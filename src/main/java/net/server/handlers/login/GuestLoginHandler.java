@@ -22,14 +22,14 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
 /*
  * @author David
  */
-public final class GuestLoginHandler extends AbstractMaplePacketHandler {
+public final class GuestLoginHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

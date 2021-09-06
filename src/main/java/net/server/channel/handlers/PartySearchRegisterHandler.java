@@ -21,15 +21,15 @@
 */
 package net.server.channel.handlers;
 
-import net.AbstractMaplePacketHandler;
-import net.packet.InPacket;
 import client.MapleClient;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 
 /**
  *
  * @author Quasar
  */
-public class PartySearchRegisterHandler extends AbstractMaplePacketHandler {
+public class PartySearchRegisterHandler extends AbstractPacketHandler {
     
     @Override
     public void handlePacket(InPacket p, MapleClient c) {}

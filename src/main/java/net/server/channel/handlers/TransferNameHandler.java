@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -36,7 +36,7 @@ import java.util.Calendar;
  * @author Ronan
  * @author Ubaware
  */
-public final class TransferNameHandler extends AbstractMaplePacketHandler {
+public final class TransferNameHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

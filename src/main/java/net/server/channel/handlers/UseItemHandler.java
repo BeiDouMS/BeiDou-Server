@@ -29,7 +29,7 @@ import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
@@ -38,7 +38,7 @@ import tools.PacketCreator;
 /**
  * @author Matze
  */
-public final class UseItemHandler extends AbstractMaplePacketHandler {
+public final class UseItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();

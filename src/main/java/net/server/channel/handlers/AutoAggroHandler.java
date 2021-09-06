@@ -21,14 +21,14 @@
  */
 package net.server.channel.handlers;
 
+import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
-import client.MapleCharacter;
 
-public final class AutoAggroHandler extends AbstractMaplePacketHandler {
+public final class AutoAggroHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

@@ -29,7 +29,7 @@ import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.processor.npc.DueyProcessor;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.channel.Channel;
 import net.server.world.World;
@@ -50,7 +50,7 @@ import java.sql.SQLException;
  * @author Ronan - major overhaul on Ring handling mechanics
  * @author Drago (Dragohe4rt) - on Wishlist
  */
-public final class RingActionHandler extends AbstractMaplePacketHandler {
+public final class RingActionHandler extends AbstractPacketHandler {
     private static int getBoxId(int useItemId) {
         return useItemId == 2240000 ? 4031357 : (useItemId == 2240001 ? 4031359 : (useItemId == 2240002 ? 4031361 : (useItemId == 2240003 ? 4031363 : (1112300 + (useItemId - 2240004)))));
     }

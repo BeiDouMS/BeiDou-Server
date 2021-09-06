@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.reactor.ReactorScriptManager;
 import server.maps.MapleReactor;
@@ -31,7 +31,7 @@ import server.maps.MapleReactor;
  *
  * @author Generic
  */
-public final class TouchReactorHandler extends AbstractMaplePacketHandler {
+public final class TouchReactorHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

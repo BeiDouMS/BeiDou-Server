@@ -23,10 +23,10 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.processor.action.SpawnPetProcessor;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
-public final class SpawnPetHandler extends AbstractMaplePacketHandler {
+public final class SpawnPetHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

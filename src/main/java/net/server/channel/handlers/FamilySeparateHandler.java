@@ -23,11 +23,11 @@ import client.MapleClient;
 import client.MapleFamily;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public class FamilySeparateHandler extends AbstractMaplePacketHandler {
+public class FamilySeparateHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

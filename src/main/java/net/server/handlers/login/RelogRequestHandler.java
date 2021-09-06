@@ -22,11 +22,11 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public final class RelogRequestHandler extends AbstractMaplePacketHandler {
+public final class RelogRequestHandler extends AbstractPacketHandler {
     @Override
     public boolean validateState(MapleClient c) {
         return !c.isLoggedIn();

@@ -21,12 +21,12 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleMonster;
 import server.life.MapleLifeFactory.BanishInfo;
-import net.AbstractMaplePacketHandler;
+import server.life.MapleMonster;
 
-public final class MobBanishPlayerHandler extends AbstractMaplePacketHandler {
+public final class MobBanishPlayerHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

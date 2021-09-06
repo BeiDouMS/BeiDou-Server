@@ -25,10 +25,10 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillMacro;
 import client.autoban.AutobanFactory;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
-public final class SkillMacroHandler extends AbstractMaplePacketHandler {
+public final class SkillMacroHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

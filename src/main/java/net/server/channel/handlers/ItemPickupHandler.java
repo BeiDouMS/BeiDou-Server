@@ -21,20 +21,21 @@
  */
 package net.server.channel.handlers;
 
-import net.AbstractMaplePacketHandler;
-import net.packet.InPacket;
-import server.maps.MapleMapObject;
 import client.MapleCharacter;
 import client.MapleClient;
-import java.awt.Point;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
+import server.maps.MapleMapObject;
 import tools.FilePrinter;
+
+import java.awt.*;
 
 /**
  *
  * @author Matze
  * @author Ronan
  */
-public final class ItemPickupHandler extends AbstractMaplePacketHandler {
+public final class ItemPickupHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(final InPacket p, final MapleClient c) {

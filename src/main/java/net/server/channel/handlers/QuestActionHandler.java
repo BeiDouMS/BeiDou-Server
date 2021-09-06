@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
 import server.life.MapleNPC;
@@ -35,7 +35,7 @@ import java.awt.*;
  *
  * @author Matze
  */
-public final class QuestActionHandler extends AbstractMaplePacketHandler {
+public final class QuestActionHandler extends AbstractPacketHandler {
     
     // isNpcNearby thanks to GabrielSin
     private static boolean isNpcNearby(InPacket p, MapleCharacter player, MapleQuest quest, int npcId) {

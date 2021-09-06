@@ -19,16 +19,16 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
 import client.MapleCharacter;
-import net.AbstractMaplePacketHandler;
+import client.MapleClient;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.guild.MapleAlliance;
 
 /**
  * @author Ronan
  */
-public final class DenyAllianceRequestHandler extends AbstractMaplePacketHandler {
+public final class DenyAllianceRequestHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

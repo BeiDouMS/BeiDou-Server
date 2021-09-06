@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
 import server.life.MapleMonster;
@@ -35,7 +35,7 @@ import tools.Randomizer;
  * @author Xotic (XoticStory) & BubblesDev
  */
 
-public final class MobDamageMobFriendlyHandler extends AbstractMaplePacketHandler {
+public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         @Override
 	public final void handlePacket(InPacket p, MapleClient c) {
 		int attacker = p.readInt();

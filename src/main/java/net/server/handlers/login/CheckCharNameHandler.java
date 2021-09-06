@@ -23,11 +23,11 @@ package net.server.handlers.login;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public final class CheckCharNameHandler extends AbstractMaplePacketHandler {
+public final class CheckCharNameHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

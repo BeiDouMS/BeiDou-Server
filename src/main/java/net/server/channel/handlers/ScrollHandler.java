@@ -29,7 +29,7 @@ import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import tools.PacketCreator;
@@ -42,7 +42,7 @@ import java.util.Map;
  * @author Matze
  * @author Frz
  */
-public final class ScrollHandler extends AbstractMaplePacketHandler {
+public final class ScrollHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

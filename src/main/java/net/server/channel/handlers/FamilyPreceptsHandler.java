@@ -2,11 +2,11 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.MapleFamily;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public class FamilyPreceptsHandler extends AbstractMaplePacketHandler {
+public class FamilyPreceptsHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

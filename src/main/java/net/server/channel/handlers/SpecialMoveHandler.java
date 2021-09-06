@@ -27,7 +27,7 @@ import client.Skill;
 import client.SkillFactory;
 import config.YamlConfig;
 import constants.skills.*;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.MapleStatEffect;
@@ -36,7 +36,7 @@ import tools.PacketCreator;
 
 import java.awt.*;
 
-public final class SpecialMoveHandler extends AbstractMaplePacketHandler {
+public final class SpecialMoveHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

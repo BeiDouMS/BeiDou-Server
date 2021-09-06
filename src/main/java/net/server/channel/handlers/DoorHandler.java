@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapleDoorObject;
 import server.maps.MapleMapObject;
@@ -33,7 +33,7 @@ import tools.PacketCreator;
  *
  * @author Matze
  */
-public final class DoorHandler extends AbstractMaplePacketHandler {
+public final class DoorHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         int ownerid = p.readInt();

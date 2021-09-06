@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.LogHelper;
@@ -35,7 +35,7 @@ import tools.PacketCreator.WhisperFlag;
 /**
  * @author Chronos
  */
-public final class WhisperHandler extends AbstractMaplePacketHandler {
+public final class WhisperHandler extends AbstractPacketHandler {
 
     // result types, not sure if there are proper names for these
     public static final byte RT_ITC = 0x00;

@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -30,7 +30,7 @@ import tools.PacketCreator;
  *
  * @author Xterminator
  */
-public final class CloseChalkboardHandler extends AbstractMaplePacketHandler {
+public final class CloseChalkboardHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

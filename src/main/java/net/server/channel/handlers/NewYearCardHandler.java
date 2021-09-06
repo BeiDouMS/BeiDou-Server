@@ -24,7 +24,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.newyear.NewYearCardRecord;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import tools.DatabaseConnection;
@@ -41,7 +41,7 @@ import java.sql.SQLException;
  * 
  * Header layout thanks to Eric 
  */
-public final class NewYearCardHandler extends AbstractMaplePacketHandler {
+public final class NewYearCardHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

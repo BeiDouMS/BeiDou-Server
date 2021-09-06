@@ -27,7 +27,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
 import io.netty.buffer.Unpooled;
-import net.MaplePacketHandler;
+import net.PacketHandler;
 import net.PacketProcessor;
 import net.packet.ByteBufInPacket;
 import net.packet.InPacket;
@@ -64,7 +64,7 @@ public class PeCommand extends Command {
         byte[] packetContent = HexTool.getByteArrayFromHexString(packet);
         InPacket inPacket = new ByteBufInPacket(Unpooled.wrappedBuffer(packetContent));
         short packetId = inPacket.readShort();
-        final MaplePacketHandler packetHandler = PacketProcessor.getProcessor(0, c.getChannel()).getHandler(packetId);
+        final PacketHandler packetHandler = PacketProcessor.getProcessor(0, c.getChannel()).getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(c)) {
             try {
                 player.yellowMessage("Receiving: " + packet);

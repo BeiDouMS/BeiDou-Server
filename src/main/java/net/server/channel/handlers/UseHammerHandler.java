@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -30,7 +30,7 @@ import tools.PacketCreator;
  *
  * @author Jay Estrella
  */
-public final class UseHammerHandler extends AbstractMaplePacketHandler {
+public final class UseHammerHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, MapleClient c) {
         c.sendPacket(PacketCreator.sendHammerMessage());
     }

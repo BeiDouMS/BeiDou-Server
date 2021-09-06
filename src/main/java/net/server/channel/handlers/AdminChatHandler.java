@@ -2,7 +2,7 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.packet.Packet;
 import tools.LogHelper;
@@ -12,7 +12,7 @@ import tools.PacketCreator;
  *
  * @author kevintjuh93
  */
-public class AdminChatHandler extends AbstractMaplePacketHandler {
+public class AdminChatHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

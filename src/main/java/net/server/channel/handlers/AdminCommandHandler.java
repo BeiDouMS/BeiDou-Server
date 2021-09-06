@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.life.MapleLifeFactory;
@@ -40,7 +40,7 @@ import tools.Randomizer;
 import java.util.Arrays;
 import java.util.List;
 
-public final class AdminCommandHandler extends AbstractMaplePacketHandler {
+public final class AdminCommandHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

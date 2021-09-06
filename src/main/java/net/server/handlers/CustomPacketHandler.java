@@ -22,11 +22,11 @@
 package net.server.handlers;
 
 import client.MapleClient;
-import net.MaplePacketHandler;
+import net.PacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
-public class CustomPacketHandler implements MaplePacketHandler {
+public class CustomPacketHandler implements PacketHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
         if (p.available() > 0 && c.getGMLevel() == 4) {//w/e

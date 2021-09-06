@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
@@ -32,7 +32,7 @@ import tools.PacketCreator;
  * @author Matze
  * @author Ronan - concurrency protection
  */
-public final class MesoDropHandler extends AbstractMaplePacketHandler {
+public final class MesoDropHandler extends AbstractPacketHandler {
         @Override
         public final void handlePacket(InPacket p, MapleClient c) {
             MapleCharacter player = c.getPlayer();

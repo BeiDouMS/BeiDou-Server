@@ -25,13 +25,13 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.autoban.AutobanManager;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 
-public final class HealOvertimeHandler extends AbstractMaplePacketHandler {
+public final class HealOvertimeHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();

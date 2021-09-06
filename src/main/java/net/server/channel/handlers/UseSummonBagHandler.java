@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.life.MapleLifeFactory;
@@ -36,7 +36,7 @@ import tools.Randomizer;
  *
  * @author AngelSL
  */
-public final class UseSummonBagHandler extends AbstractMaplePacketHandler {
+public final class UseSummonBagHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {

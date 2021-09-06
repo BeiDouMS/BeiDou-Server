@@ -24,12 +24,12 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.LogHelper;
 import tools.PacketCreator;
 
-public final class SpouseChatHandler extends AbstractMaplePacketHandler {
+public final class SpouseChatHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         p.readString();//recipient

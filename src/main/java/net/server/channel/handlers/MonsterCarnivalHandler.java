@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleDisease;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
@@ -44,7 +44,7 @@ import java.util.List;
     *@author Drago (Dragohe4rt)
 */
 
-public final class MonsterCarnivalHandler extends AbstractMaplePacketHandler {
+public final class MonsterCarnivalHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, MapleClient c) {

@@ -27,7 +27,7 @@ import constants.game.GameConstants;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
-import net.MaplePacketHandler;
+import net.PacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
 import net.packet.InPacket;
@@ -190,7 +190,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         short opcode = packet.readShort();
-        final MaplePacketHandler handler = packetProcessor.getHandler(opcode);
+        final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
             log.debug("Received packet id {}", opcode);

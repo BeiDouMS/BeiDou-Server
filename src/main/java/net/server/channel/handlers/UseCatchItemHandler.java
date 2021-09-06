@@ -27,7 +27,7 @@ import client.autoban.AutobanManager;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.MapleItemInformationProvider;
@@ -38,7 +38,7 @@ import tools.PacketCreator;
  *
  * @author kevintjuh93
  */
-public final class UseCatchItemHandler extends AbstractMaplePacketHandler {
+public final class UseCatchItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();

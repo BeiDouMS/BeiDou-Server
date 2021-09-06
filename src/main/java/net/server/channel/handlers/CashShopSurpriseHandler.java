@@ -21,7 +21,7 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.inventory.Item;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.CashShop;
 import tools.PacketCreator;
@@ -31,7 +31,7 @@ import tools.Pair;
  *
  * @author RonanLana
  */
-public class CashShopSurpriseHandler extends AbstractMaplePacketHandler {
+public class CashShopSurpriseHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         CashShop cs = c.getPlayer().getCashShop();
