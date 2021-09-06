@@ -25,23 +25,23 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import server.MapleTrade;
 import server.maps.MapleMap;
 import server.maps.MaplePortal;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 
-public final class ChangeMapHandler extends AbstractMaplePacketHandler {
+public final class ChangeMapHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
 
         if (chr.isChangingMaps() || chr.isBanned()) {
@@ -55,7 +55,7 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
         if (chr.getTrade() != null) {
             MapleTrade.cancelTrade(chr, MapleTrade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         }
-        if (slea.available() == 0) { //Cash Shop :)
+        if (p.available() == 0) { //Cash Shop :)
             if (!chr.getCashShop().isOpened()) {
                 c.disconnect(false, false);
                 return;
@@ -75,17 +75,17 @@ public final class ChangeMapHandler extends AbstractMaplePacketHandler {
                 return;
             }
             try {
-                slea.readByte(); // 1 = from dying 0 = regular portals
-                int targetid = slea.readInt();
-                String startwp = slea.readMapleAsciiString();
+                p.readByte(); // 1 = from dying 0 = regular portals
+                int targetid = p.readInt();
+                String startwp = p.readString();
                 MaplePortal portal = chr.getMap().getPortal(startwp);
-                slea.readByte();
-                boolean wheel = slea.readByte() > 0;
+                p.readByte();
+                boolean wheel = p.readByte() > 0;
 
-                boolean chasing = slea.readByte() == 1 && chr.isGM();
+                boolean chasing = p.readByte() == 1 && chr.isGM();
                 if (chasing) {
                     chr.setChasing(true);
-                    chr.setPosition(new Point(slea.readInt(), slea.readInt()));
+                    chr.setPosition(new Point(p.readInt(), p.readInt()));
                 }
 
                 if (targetid != -1) {

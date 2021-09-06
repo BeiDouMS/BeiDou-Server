@@ -24,22 +24,22 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.inventory.Item;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import scripting.item.ItemScriptManager;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.ScriptedItem;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author Jay Estrella
  */
-public final class ScriptedItemHandler extends AbstractMaplePacketHandler {
+public final class ScriptedItemHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readInt(); // trash stamp, thanks RMZero213
-        short itemSlot = slea.readShort(); // item slot, thanks RMZero213
-        int itemId = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readInt(); // trash stamp, thanks RMZero213
+        short itemSlot = p.readShort(); // item slot, thanks RMZero213
+        int itemId = p.readInt();
         
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         ScriptedItem info = ii.getScriptedItemInfo(itemId);

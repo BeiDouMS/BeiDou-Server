@@ -22,7 +22,8 @@
 package net.server.handlers.login;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.SessionCoordinator;
@@ -32,12 +33,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public final class ViewAllCharSelectedHandler extends AbstractMaplePacketHandler {
+public final class ViewAllCharSelectedHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ViewAllCharSelectedHandler.class);
 
     private static int parseAntiMulticlientError(AntiMulticlientResult res) {
@@ -51,12 +51,12 @@ public final class ViewAllCharSelectedHandler extends AbstractMaplePacketHandler
     }
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int charId = slea.readInt();
-        slea.readInt(); // please don't let the client choose which world they should login
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int charId = p.readInt();
+        p.readInt(); // please don't let the client choose which world they should login
         
-        String macs = slea.readMapleAsciiString();
-        String hostString = slea.readMapleAsciiString();
+        String macs = p.readString();
+        String hostString = p.readString();
 
         final Hwid hwid;
         try {

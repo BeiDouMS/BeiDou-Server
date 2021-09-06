@@ -27,7 +27,7 @@ import constants.game.GameConstants;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
-import net.MaplePacketHandler;
+import net.PacketHandler;
 import net.PacketProcessor;
 import net.netty.InvalidPacketHeaderException;
 import net.packet.InPacket;
@@ -63,8 +63,6 @@ import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import server.maps.MapleMiniDungeonInfo;
 import tools.*;
-import tools.data.input.ByteArrayByteStream;
-import tools.data.input.GenericSeekableLittleEndianAccessor;
 
 import javax.script.ScriptEngine;
 import java.io.IOException;
@@ -192,22 +190,18 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         short opcode = packet.readShort();
-        final MaplePacketHandler handler = packetProcessor.getHandler(opcode);
+        final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
             log.debug("Received packet id {}", opcode);
         }
 
         if (handler != null && handler.validateState(this)) {
-            // TODO: pass InPacket directly to handler once all handlers have been ported,
-            // this is just a temporary workaround
-            final byte[] content = packet.getBytes();
-            GenericSeekableLittleEndianAccessor accessor = new GenericSeekableLittleEndianAccessor(new ByteArrayByteStream(content));
             try {
-                MapleLogger.logRecv(this, opcode, content);
-                handler.handlePacket(accessor, this);
+                MapleLogger.logRecv(this, opcode, packet.getBytes());
+                handler.handlePacket(packet, this);
             } catch (final Throwable t) {
-                FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + accessor);
+                FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + packet);
                 //client.sendPacket(PacketCreator.enableActions());//bugs sometimes
             }
         }

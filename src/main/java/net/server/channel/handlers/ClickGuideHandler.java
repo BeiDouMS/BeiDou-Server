@@ -24,17 +24,17 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.MapleJob;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author kevintjuh93
  */
-public class ClickGuideHandler extends AbstractMaplePacketHandler {
+public class ClickGuideHandler extends AbstractPacketHandler {
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         if (c.getPlayer().getJob().equals(MapleJob.NOBLESSE)) {
             NPCScriptManager.getInstance().start(c, 1101008, null);
         } else {

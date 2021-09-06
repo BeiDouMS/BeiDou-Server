@@ -35,7 +35,7 @@ import java.util.Map;
 public final class PacketProcessor {
 
     private final static Map<String, PacketProcessor> instances = new LinkedHashMap<>();
-    private MaplePacketHandler[] handlers;
+    private PacketHandler[] handlers;
 
     private PacketProcessor() {
         int maxRecvOp = 0;
@@ -44,7 +44,7 @@ public final class PacketProcessor {
                 maxRecvOp = op.getValue();
             }
         }
-        handlers = new MaplePacketHandler[maxRecvOp + 1];
+        handlers = new PacketHandler[maxRecvOp + 1];
     }
 
     public static PacketProcessor getLoginServerProcessor() {
@@ -55,18 +55,18 @@ public final class PacketProcessor {
         return getProcessor(world, channel);
     }
 
-    public MaplePacketHandler getHandler(short packetId) {
+    public PacketHandler getHandler(short packetId) {
         if (packetId > handlers.length) {
             return null;
         }
-        MaplePacketHandler handler = handlers[packetId];
+        PacketHandler handler = handlers[packetId];
         if (handler != null) {
             return handler;
         }
         return null;
     }
 
-    public void registerHandler(RecvOpcode code, MaplePacketHandler handler) {
+    public void registerHandler(RecvOpcode code, PacketHandler handler) {
         try {
             handlers[code.getValue()] = handler;
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -87,7 +87,7 @@ public final class PacketProcessor {
     }
 
     public void reset(int channel) {
-        handlers = new MaplePacketHandler[handlers.length];
+        handlers = new PacketHandler[handlers.length];
 
         registerCommonHandlers();
 

@@ -19,12 +19,18 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package provider;
+package net;
 
-import java.awt.image.BufferedImage;
+import client.MapleClient;
+import net.server.Server;
 
-public interface MapleCanvas {
-    int getHeight();
-    int getWidth();
-    BufferedImage getImage();
+public abstract class AbstractPacketHandler implements PacketHandler {
+    @Override
+    public boolean validateState(MapleClient c) {
+        return c.isLoggedIn();
+    }
+    
+    protected static long currentServerTime() {
+        return Server.getInstance().getCurrentTime();
+    }
 }

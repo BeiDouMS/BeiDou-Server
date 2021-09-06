@@ -23,14 +23,14 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.processor.stat.AssignSPProcessor;
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 
-public final class DistributeSPHandler extends AbstractMaplePacketHandler {
+public final class DistributeSPHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readInt();
-        int skillid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readInt();
+        int skillid = p.readInt();
         
         AssignSPProcessor.SPAssignAction(c, skillid);
     }

@@ -19,17 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package tools.data.input;
+package net;
 
-/**
- * Represents an abstract stream of bytes.
- * 
- * @author Frz
- * @version 1.0
- * @since Revision 323
- */
-public interface ByteInputStream {
-    int readByte();
-    long getBytesRead();
-    long available();
+import client.MapleClient;
+import net.packet.InPacket;
+
+public interface PacketHandler {
+    void handlePacket(InPacket p, MapleClient c);
+    boolean validateState(MapleClient c);
 }

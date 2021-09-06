@@ -22,25 +22,25 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 import tools.Randomizer;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author Xotic (XoticStory) & BubblesDev
  */
 
-public final class MobDamageMobFriendlyHandler extends AbstractMaplePacketHandler {
+public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         @Override
-	public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-		int attacker = slea.readInt();
-		slea.readInt();
-		int damaged = slea.readInt();
+	public final void handlePacket(InPacket p, MapleClient c) {
+		int attacker = p.readInt();
+		p.readInt();
+		int damaged = p.readInt();
                 
                 MapleMap map = c.getPlayer().getMap();
 		MapleMonster monster = map.getMonsterByOid(damaged);

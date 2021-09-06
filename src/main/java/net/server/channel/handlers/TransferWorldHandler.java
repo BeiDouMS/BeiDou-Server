@@ -23,11 +23,11 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.*;
 
@@ -36,12 +36,12 @@ import java.sql.*;
  * @author Ronan
  * @author Ubaware
  */
-public final class TransferWorldHandler extends AbstractMaplePacketHandler {
+public final class TransferWorldHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readInt(); //cid
-        int birthday = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readInt(); //cid
+        int birthday = p.readInt();
         if (!CashOperationHandler.checkBirthday(c, birthday)) {
             c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC4));
             c.sendPacket(PacketCreator.enableActions());

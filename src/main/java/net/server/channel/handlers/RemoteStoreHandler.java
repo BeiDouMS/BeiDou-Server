@@ -24,18 +24,18 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleHiredMerchant;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author kevintjuh93 - :3
  */
-public class RemoteStoreHandler extends AbstractMaplePacketHandler {
+public class RemoteStoreHandler extends AbstractPacketHandler {
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         MapleHiredMerchant hm = getMerchant(c);
         if (hm != null && hm.isOwner(chr)) {

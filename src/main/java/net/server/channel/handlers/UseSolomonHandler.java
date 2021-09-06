@@ -27,10 +27,10 @@ import client.inventory.Item;
 import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -38,13 +38,13 @@ import tools.data.input.SeekableLittleEndianAccessor;
  * 
  * Modified by -- kevintjuh93, Ronan
  */
-public final class UseSolomonHandler extends AbstractMaplePacketHandler {
+public final class UseSolomonHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readInt();
-        short slot = slea.readShort();
-        int itemId = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readInt();
+        short slot = p.readShort();
+        int itemId = p.readInt();
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         
         if (c.tryacquireClient()) {

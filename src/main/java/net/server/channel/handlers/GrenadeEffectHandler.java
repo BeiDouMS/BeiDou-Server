@@ -23,24 +23,24 @@ import client.MapleCharacter;
 import client.MapleClient;
 import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 
 /*
  * @author GabrielSin
  */
-public class GrenadeEffectHandler extends AbstractMaplePacketHandler {
+public class GrenadeEffectHandler extends AbstractPacketHandler {
  
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
-        Point position = new Point(slea.readInt(), slea.readInt());
-        int keyDown = slea.readInt();
-        int skillId = slea.readInt();
+        Point position = new Point(p.readInt(), p.readInt());
+        int keyDown = p.readInt();
+        int skillId = p.readInt();
        
         switch (skillId) {
             case NightWalker.POISON_BOMB:

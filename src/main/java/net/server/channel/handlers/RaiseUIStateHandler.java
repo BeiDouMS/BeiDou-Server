@@ -1,23 +1,23 @@
 package net.server.channel.handlers;
 
-import client.MapleCharacter.DelayedQuestUpdate;
 import client.MapleCharacter;
+import client.MapleCharacter.DelayedQuestUpdate;
 import client.MapleClient;
 import client.MapleQuestStatus;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
 import server.quest.MapleQuest;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author Xari
  */
-public class RaiseUIStateHandler extends AbstractMaplePacketHandler {
+public class RaiseUIStateHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int infoNumber = slea.readShort();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int infoNumber = p.readShort();
         
         if (c.tryacquireClient()) {
             try {

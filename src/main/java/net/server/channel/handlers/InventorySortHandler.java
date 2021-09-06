@@ -25,11 +25,11 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.*;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.MapleItemInformationProvider;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -259,11 +259,11 @@ class PairedQuicksort {
     }
 }
 
-public final class InventorySortHandler extends AbstractMaplePacketHandler {
+public final class InventorySortHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
-        slea.readInt();
+        p.readInt();
         chr.getAutobanManager().setTimestamp(3, Server.getInstance().getCurrentTimestamp(), 4);
         
         if(!YamlConfig.config.server.USE_ITEM_SORT) {
@@ -271,7 +271,7 @@ public final class InventorySortHandler extends AbstractMaplePacketHandler {
             return;
         }
         
-        byte invType = slea.readByte();
+        byte invType = p.readByte();
         if (invType < 1 || invType > 5) {
             c.disconnect(false, false);
             return;

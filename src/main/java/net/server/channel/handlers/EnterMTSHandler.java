@@ -27,14 +27,14 @@ import client.inventory.Equip;
 import client.inventory.Item;
 import client.processor.action.BuybackProcessor;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import server.MTSItemInfo;
 import server.maps.FieldLimit;
 import server.maps.MapleMiniDungeonInfo;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,9 +44,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public final class EnterMTSHandler extends AbstractMaplePacketHandler {
+public final class EnterMTSHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         
         if(!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {

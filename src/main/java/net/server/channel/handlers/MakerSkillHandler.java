@@ -23,17 +23,17 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.processor.action.MakerProcessor;
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 
 /**
  *
  * @author Jay Estrella, Ronan
  */
-public final class MakerSkillHandler extends AbstractMaplePacketHandler {
+public final class MakerSkillHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        MakerProcessor.makerAction(slea, c);
+    public final void handlePacket(InPacket p, MapleClient c) {
+        MakerProcessor.makerAction(p, c);
     }
 }

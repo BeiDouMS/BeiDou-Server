@@ -22,17 +22,17 @@
 package net.server.handlers;
 
 import client.MapleClient;
-import net.MaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.PacketHandler;
+import net.packet.InPacket;
 
-public final class LoginRequiringNoOpHandler implements MaplePacketHandler {
+public final class LoginRequiringNoOpHandler implements PacketHandler {
     private static LoginRequiringNoOpHandler instance = new LoginRequiringNoOpHandler();
 
     public static LoginRequiringNoOpHandler getInstance() {
         return instance;
     }
 
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
     }
 
     public boolean validateState(MapleClient c) {

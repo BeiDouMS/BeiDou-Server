@@ -21,20 +21,20 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 import tools.packets.WeddingPackets;
 
 /**
  *
  * @author Ronan
  */
-public final class WeddingTalkMoreHandler extends AbstractMaplePacketHandler {
+public final class WeddingTalkMoreHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         EventInstanceManager eim = c.getPlayer().getEventInstance();
         if(eim != null && !(c.getPlayer().getId() == eim.getIntProperty("groomId") || c.getPlayer().getId() == eim.getIntProperty("brideId"))) {
             eim.gridInsert(c.getPlayer(), 1);

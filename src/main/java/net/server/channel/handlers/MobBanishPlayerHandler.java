@@ -21,16 +21,16 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import server.life.MapleMonster;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import server.life.MapleLifeFactory.BanishInfo;
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import server.life.MapleMonster;
 
-public final class MobBanishPlayerHandler extends AbstractMaplePacketHandler {
+public final class MobBanishPlayerHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int mobid = slea.readInt();     // mob banish handling detected thanks to MedicOP
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int mobid = p.readInt();     // mob banish handling detected thanks to MedicOP
         
         MapleCharacter chr = c.getPlayer();
         MapleMonster mob = chr.getMap().getMonsterById(mobid);

@@ -21,17 +21,17 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author RonanLana
  */
-public class UseMapleLifeHandler extends AbstractMaplePacketHandler {
+public class UseMapleLifeHandler extends AbstractPacketHandler {
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter player = c.getPlayer();
         long timeNow = currentServerTime();
         
@@ -43,7 +43,7 @@ public class UseMapleLifeHandler extends AbstractMaplePacketHandler {
         }
         player.setLastUsedCashItem(timeNow);
         
-        String name = slea.readMapleAsciiString();
+        String name = p.readString();
         if(MapleCharacter.canCreateChar(name)) {
             c.sendPacket(PacketCreator.sendMapleLifeCharacterInfo());
         } else {

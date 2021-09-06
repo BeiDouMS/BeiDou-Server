@@ -26,26 +26,26 @@ import client.MapleClient;
 import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author Moogra
  * @author Ubaware
  */
-public final class FamilyUseHandler extends AbstractMaplePacketHandler {
+public final class FamilyUseHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
-        MapleFamilyEntitlement type = MapleFamilyEntitlement.values()[slea.readInt()];
+        MapleFamilyEntitlement type = MapleFamilyEntitlement.values()[p.readInt()];
         int cost = type.getRepCost();
         MapleFamilyEntry entry = c.getPlayer().getFamilyEntry();
         if(entry.getReputation() < cost || entry.isEntitlementUsed(type)) {
@@ -54,7 +54,7 @@ public final class FamilyUseHandler extends AbstractMaplePacketHandler {
         c.sendPacket(PacketCreator.getFamilyInfo(entry));
         MapleCharacter victim;
         if(type == MapleFamilyEntitlement.FAMILY_REUINION || type == MapleFamilyEntitlement.SUMMON_FAMILY) {
-            victim = c.getChannelServer().getPlayerStorage().getCharacterByName(slea.readMapleAsciiString());
+            victim = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
             if(victim != null && victim != c.getPlayer()) {
                 if(victim.getFamily() == c.getPlayer().getFamily()) {
                     MapleMap targetMap = victim.getMap();

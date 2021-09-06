@@ -21,10 +21,10 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import constants.game.GameConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.Pair;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -34,10 +34,10 @@ import java.util.PriorityQueue;
 /**
  * @author Ronan
  */
-public final class UseOwlOfMinervaHandler extends AbstractMaplePacketHandler {
+public final class UseOwlOfMinervaHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         List<Pair<Integer, Integer>> owlSearched = c.getWorldServer().getOwlSearchedItems();
         List<Integer> owlLeaderboards;
         

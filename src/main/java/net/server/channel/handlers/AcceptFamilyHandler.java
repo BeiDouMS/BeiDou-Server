@@ -26,7 +26,8 @@ import client.MapleClient;
 import client.MapleFamily;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
@@ -34,7 +35,6 @@ import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,17 +45,17 @@ import java.sql.SQLException;
  * @author Jay Estrella
  * @author Ubaware
  */
-public final class AcceptFamilyHandler extends AbstractMaplePacketHandler {
+public final class AcceptFamilyHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
         MapleCharacter chr = c.getPlayer();
-        int inviterId = slea.readInt();
-        slea.readMapleAsciiString();
-        boolean accept = slea.readByte() != 0;
+        int inviterId = p.readInt();
+        p.readString();
+        boolean accept = p.readByte() != 0;
         // String inviterName = slea.readMapleAsciiString();
         MapleCharacter inviter = c.getWorldServer().getPlayerStorage().getCharacterById(inviterId);
         if(inviter != null) {

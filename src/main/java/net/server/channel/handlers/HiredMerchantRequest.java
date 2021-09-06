@@ -25,13 +25,13 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.ItemFactory;
 import constants.game.GameConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MaplePlayerShop;
 import server.maps.MaplePortal;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.awt.*;
 import java.sql.SQLException;
@@ -41,9 +41,9 @@ import java.util.Arrays;
  *
  * @author XoticStory
  */
-public final class HiredMerchantRequest extends AbstractMaplePacketHandler {
+public final class HiredMerchantRequest extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public final void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
         
         try {

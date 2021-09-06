@@ -24,19 +24,19 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.processor.npc.FredrickProcessor;
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 
 /**
  *
  * @author kevintjuh93
  */
-public class FredrickHandler extends AbstractMaplePacketHandler {
+public class FredrickHandler extends AbstractPacketHandler {
 
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
+    public void handlePacket(InPacket p, MapleClient c) {
         MapleCharacter chr = c.getPlayer();
-        byte operation = slea.readByte();
+        byte operation = p.readByte();
 
         switch (operation) {
             case 0x19: //Will never come...

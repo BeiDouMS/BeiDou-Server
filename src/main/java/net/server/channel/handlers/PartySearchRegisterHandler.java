@@ -21,16 +21,16 @@
 */
 package net.server.channel.handlers;
 
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
 import client.MapleClient;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 
 /**
  *
  * @author Quasar
  */
-public class PartySearchRegisterHandler extends AbstractMaplePacketHandler {
+public class PartySearchRegisterHandler extends AbstractPacketHandler {
     
     @Override
-    public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {}
+    public void handlePacket(InPacket p, MapleClient c) {}
 }

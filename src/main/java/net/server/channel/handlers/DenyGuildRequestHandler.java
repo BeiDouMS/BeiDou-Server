@@ -23,20 +23,20 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.guild.MapleGuild;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
  * @author Xterminator
  */
-public final class DenyGuildRequestHandler extends AbstractMaplePacketHandler {
+public final class DenyGuildRequestHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        slea.readByte();
-        MapleCharacter cfrom = c.getWorldServer().getPlayerStorage().getCharacterByName(slea.readMapleAsciiString());
+    public final void handlePacket(InPacket p, MapleClient c) {
+        p.readByte();
+        MapleCharacter cfrom = c.getWorldServer().getPlayerStorage().getCharacterByName(p.readString());
         if (cfrom != null) {
             MapleGuild.answerInvitation(c.getPlayer().getId(), c.getPlayer().getName(), cfrom.getGuildId(), false);
         }

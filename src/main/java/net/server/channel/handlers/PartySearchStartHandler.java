@@ -23,11 +23,11 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.world.MapleParty;
 import net.server.world.World;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /**
  *
@@ -35,11 +35,11 @@ import tools.data.input.SeekableLittleEndianAccessor;
  * @author BubblesDev
  * @author Ronan
  */
-public class PartySearchStartHandler extends AbstractMaplePacketHandler {
+public class PartySearchStartHandler extends AbstractPacketHandler {
         @Override
-	public void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-            int min = slea.readInt();
-            int max = slea.readInt();
+	public void handlePacket(InPacket p, MapleClient c) {
+            int min = p.readInt();
+            int max = p.readInt();
 
             MapleCharacter chr = c.getPlayer();
             if (min > max) {
@@ -60,8 +60,8 @@ public class PartySearchStartHandler extends AbstractMaplePacketHandler {
                 return;
             }
 
-            slea.readInt(); // members
-            int jobs = slea.readInt();
+            p.readInt(); // members
+            int jobs = p.readInt();
 
             MapleParty party = c.getPlayer().getParty();
             if (party == null || !c.getPlayer().isPartyLeader()) return;

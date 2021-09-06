@@ -24,11 +24,11 @@ import client.MapleClient;
 import client.inventory.Item;
 import client.newyear.NewYearCardRecord;
 import constants.inventory.ItemConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import net.server.Server;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,27 +41,27 @@ import java.sql.SQLException;
  * 
  * Header layout thanks to Eric 
  */
-public final class NewYearCardHandler extends AbstractMaplePacketHandler {
+public final class NewYearCardHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {        
+    public final void handlePacket(InPacket p, MapleClient c) {
         final MapleCharacter player = c.getPlayer();
-        byte reqMode = slea.readByte();                 //[00] -> NewYearReq (0 = Send) 
+        byte reqMode = p.readByte();                 //[00] -> NewYearReq (0 = Send)
         
         if(reqMode == 0) {  // card has been sent
             if(player.haveItem(2160101)) {  // new year's card
-                short slot = slea.readShort();                      //[00 2C] -> nPOS (Item Slot Pos) 
-                int itemid = slea.readInt();                        //[00 20 F5 E5] -> nItemID (item id) 
+                short slot = p.readShort();                      //[00 2C] -> nPOS (Item Slot Pos)
+                int itemid = p.readInt();                        //[00 20 F5 E5] -> nItemID (item id)
 
                 int status = getValidNewYearCardStatus(itemid, player, slot);
                 if(status == 0) {
                     if(player.canHold(4300000, 1)) {
-                        String receiver = slea.readMapleAsciiString();  //[04 00 54 65 73 74] -> sReceiverName (person to send to) 
+                        String receiver = p.readString();  //[04 00 54 65 73 74] -> sReceiverName (person to send to)
 
                         int receiverid = getReceiverId(receiver, c.getWorld());
                         if(receiverid != -1) {
                             if(receiverid != c.getPlayer().getId()) {
-                                String message = slea.readMapleAsciiString();   //[06 00 4C 65 74 74 65 72] -> sContent (message)  
+                                String message = p.readString();   //[06 00 4C 65 74 74 65 72] -> sContent (message)
 
                                 NewYearCardRecord newyear = new NewYearCardRecord(player.getId(), player.getName(), receiverid, receiver, message);
                                 NewYearCardRecord.saveNewYearCard(newyear);
@@ -89,7 +89,7 @@ public final class NewYearCardHandler extends AbstractMaplePacketHandler {
                 player.sendPacket(PacketCreator.onNewYearCardRes(player, -1, 5, 0x11));  // have no card to send
             }
         } else {    //receiver accepted the card
-            int cardid = slea.readInt();
+            int cardid = p.readInt();
             
             NewYearCardRecord newyear = NewYearCardRecord.loadNewYearCard(cardid);
             

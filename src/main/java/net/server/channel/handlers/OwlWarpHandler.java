@@ -21,21 +21,21 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import constants.game.GameConstants;
-import net.AbstractMaplePacketHandler;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 import server.maps.MapleHiredMerchant;
 import server.maps.MaplePlayerShop;
 import tools.PacketCreator;
-import tools.data.input.SeekableLittleEndianAccessor;
 
 /*
  * @author Ronan
  */
-public final class OwlWarpHandler extends AbstractMaplePacketHandler {
+public final class OwlWarpHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int ownerid = slea.readInt();
-        int mapid = slea.readInt();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int ownerid = p.readInt();
+        int mapid = p.readInt();
         
         if(ownerid == c.getPlayer().getId()) {
             c.sendPacket(PacketCreator.serverNotice(1, "You cannot visit your own shop."));

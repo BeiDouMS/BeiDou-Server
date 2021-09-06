@@ -21,16 +21,16 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
 import client.MapleCharacter;
-import net.AbstractMaplePacketHandler;
-import tools.data.input.SeekableLittleEndianAccessor;
+import client.MapleClient;
+import net.AbstractPacketHandler;
+import net.packet.InPacket;
 
-public final class CancelChairHandler extends AbstractMaplePacketHandler {
+public final class CancelChairHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(SeekableLittleEndianAccessor slea, MapleClient c) {
-        int id = slea.readShort();
+    public final void handlePacket(InPacket p, MapleClient c) {
+        int id = p.readShort();
         MapleCharacter mc = c.getPlayer();
         
         if (id >= mc.getMap().getSeats()) {
