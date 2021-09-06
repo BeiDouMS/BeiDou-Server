@@ -189,7 +189,7 @@ To launch the server, you may either:
    * If you already have Maven installed, simply run the command "mvn clean install" to create the jar file.
    * IntelliJ also comes with built-in Maven support. Open a new terminal window inside IntelliJ, type "mvn clean install" (your command should now be marked green), then Ctrl+Enter to build the jar file.
 2. Launch the jar file
-   * Double click on "launch.bat"
+   * Double click on "launch.bat" (need to have Java 16 installed)
     
 #### Launch with Docker
 1. Start Docker
