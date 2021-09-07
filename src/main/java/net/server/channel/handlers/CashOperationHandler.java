@@ -25,8 +25,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleRing;
 import client.inventory.Equip;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
@@ -280,7 +280,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleInventory mi = chr.getInventory(MapleInventoryType.getByType(invType));
+                    Inventory mi = chr.getInventory(MapleInventoryType.getByType(invType));
                     Item item = mi.findByCashId(cashId);
                     if (item == null) {
                         c.enableCSActions();

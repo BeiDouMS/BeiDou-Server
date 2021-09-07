@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanManager;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.inventory.manipulator.MapleInventoryManipulator;
@@ -71,7 +71,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                MapleInventory useInv = chr.getInventory(MapleInventoryType.USE);
+                Inventory useInv = chr.getInventory(MapleInventoryType.USE);
                 useInv.lockInventory();
                 try {
                     Item use = useInv.getItem(pos);

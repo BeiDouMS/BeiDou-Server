@@ -22,8 +22,8 @@ package client.creator;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleSkinColor;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import net.server.Server;
@@ -58,7 +58,7 @@ public abstract class CharacterFactory {
                 newchar.setJob(recipe.getJob());
                 newchar.setMapId(recipe.getMap());
                 
-                MapleInventory equipped = newchar.getInventory(MapleInventoryType.EQUIPPED);
+                Inventory equipped = newchar.getInventory(MapleInventoryType.EQUIPPED);
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 
                 int top = recipe.getTop(), bottom = recipe.getBottom(), shoes = recipe.getShoes(), weapon = recipe.getWeapon();

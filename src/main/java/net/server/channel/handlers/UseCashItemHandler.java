@@ -68,7 +68,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         int itemType = itemId / 10000;
 
-        MapleInventory cashInv = player.getInventory(MapleInventoryType.CASH);
+        Inventory cashInv = player.getInventory(MapleInventoryType.CASH);
         Item toUse = cashInv.getItem(position);
         if (toUse == null || toUse.getItemId() != itemId) {
             toUse = cashInv.findById(itemId);
@@ -601,7 +601,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
     }
 
     private static void remove(MapleClient c, short position, int itemid) {
-        MapleInventory cashInv = c.getPlayer().getInventory(MapleInventoryType.CASH);
+        Inventory cashInv = c.getPlayer().getInventory(MapleInventoryType.CASH);
         cashInv.lockInventory();
         try {
             Item it = cashInv.getItem(position);

@@ -22,8 +22,8 @@
 package server;
 
 import client.MapleCharacter;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
@@ -251,7 +251,7 @@ public class MapleTrade {
             tradeItems.add(new Pair<>(item, item.getInventoryType()));
         }
         
-        return MapleInventory.checkSpotsAndOwnership(chr, tradeItems);
+        return Inventory.checkSpotsAndOwnership(chr, tradeItems);
     }
     
     private boolean fitsUniquesInInventory() {

@@ -23,8 +23,8 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
@@ -54,7 +54,7 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         }
         
         MapleInventoryType inventoryType = MapleInventoryType.getByType(invType);	
-	MapleInventory inventory = c.getPlayer().getInventory(inventoryType);
+	Inventory inventory = c.getPlayer().getInventory(inventoryType);
         inventory.lockInventory();
         try {
             //------------------- RonanLana's SLOT MERGER -----------------

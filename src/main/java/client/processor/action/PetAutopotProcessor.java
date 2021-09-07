@@ -23,8 +23,8 @@ package client.processor.action;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
@@ -96,7 +96,7 @@ public class PetAutopotProcessor {
             curHp = chr.getHp();
             curMp = chr.getMp();
 
-            MapleInventory useInv = chr.getInventory(MapleInventoryType.USE);
+            Inventory useInv = chr.getInventory(MapleInventoryType.USE);
             useInv.lockInventory();
             try {
                 toUse = useInv.getItem(slot);

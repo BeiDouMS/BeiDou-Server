@@ -23,8 +23,8 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
@@ -50,7 +50,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {
             try {
                 MapleCharacter chr = c.getPlayer();
-                MapleInventory inv = chr.getInventory(MapleInventoryType.USE);
+                Inventory inv = chr.getInventory(MapleInventoryType.USE);
                 inv.lockInventory();
                 try {
                     Item slotItem = inv.getItem(slot);

@@ -25,8 +25,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
@@ -56,7 +56,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
         MapleCharacter player = c.getPlayer();
         if (c.tryacquireClient()) {
             try {
-                MapleInventory inv = c.getPlayer().getInventory(MapleInventoryType.USE);
+                Inventory inv = c.getPlayer().getInventory(MapleInventoryType.USE);
                 Item toUse = inv.getItem(slot);
                 if (toUse == null || toUse.getItemId() != itemId) {
                     return;

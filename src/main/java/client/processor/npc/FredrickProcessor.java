@@ -25,9 +25,9 @@ package client.processor.npc;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.server.Server;
@@ -53,7 +53,7 @@ public class FredrickProcessor {
     private static int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
     
     private static byte canRetrieveFromFredrick(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items) {
-        if (!MapleInventory.checkSpotsAndOwnership(chr, items)) {
+        if (!Inventory.checkSpotsAndOwnership(chr, items)) {
             List<Integer> itemids = new LinkedList<>();
             for (Pair<Item, MapleInventoryType> it : items) {
                 itemids.add(it.getLeft().getItemId());

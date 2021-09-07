@@ -25,13 +25,13 @@ import client.MapleCharacter;
  *
  * @author Ronan
  */
-public class MapleInventoryProof extends MapleInventory {
+public class MapleInventoryProof extends Inventory {
     
     public MapleInventoryProof(MapleCharacter mc) {
         super(mc, MapleInventoryType.CANHOLD, (byte) 0);
     }
     
-    public void cloneContents(MapleInventory inv) {
+    public void cloneContents(Inventory inv) {
         inv.lockInventory();
         lock.lock();
         try {

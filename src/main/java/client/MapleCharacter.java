@@ -155,7 +155,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private MapleClient client;
     private MapleGuildCharacter mgc = null;
     private MaplePartyCharacter mpc = null;
-    private MapleInventory[] inventory;
+    private Inventory[] inventory;
     private MapleJob job = MapleJob.BEGINNER;
     private MapleMessenger messenger = null;
     private MapleMiniGame miniGame;
@@ -303,7 +303,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         useCS = false;
         
         setStance(0);
-        inventory = new MapleInventory[MapleInventoryType.values().length];
+        inventory = new Inventory[MapleInventoryType.values().length];
         savedLocations = new SavedLocation[SavedLocationType.values().length];
         
         for (MapleInventoryType type : MapleInventoryType.values()) {
@@ -311,7 +311,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             if (type == MapleInventoryType.CASH) {
                 b = 96;
             }
-            inventory[type.ordinal()] = new MapleInventory(this, type, (byte) b);
+            inventory[type.ordinal()] = new Inventory(this, type, (byte) b);
         }
         inventory[MapleInventoryType.CANHOLD.ordinal()] = new MapleInventoryProof(this);
         
@@ -906,7 +906,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         for(MapleInventoryType invType : MapleInventoryType.values()) {
-            MapleInventory inv = this.getInventory(invType);
+            Inventory inv = this.getInventory(invType);
             
             inv.lockInventory();
             try {
@@ -2944,7 +2944,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     }
 
                     List<Item> toberemove = new ArrayList<>();
-                    for (MapleInventory inv : inventory) {
+                    for (Inventory inv : inventory) {
                         for (Item item : inv.list()) {
                             expiration = item.getExpiration();
                             
@@ -5096,7 +5096,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return initialSpawnPoint;
     }
 
-    public MapleInventory getInventory(MapleInventoryType type) {
+    public Inventory getInventory(MapleInventoryType type) {
         return inventory[type.ordinal()];
     }
 
@@ -6667,7 +6667,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public void updateCouponRates() {
-        MapleInventory cashInv = this.getInventory(MapleInventoryType.CASH);
+        Inventory cashInv = this.getInventory(MapleInventoryType.CASH);
         if (cashInv == null) return;
         
         effLock.lock();
@@ -6872,7 +6872,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             ret.jobRankMove = rs.getInt("jobRankMove");
             
             if(equipped != null) {  // players can have no equipped items at all, ofc
-                MapleInventory inv = ret.inventory[MapleInventoryType.EQUIPPED.ordinal()];
+                Inventory inv = ret.inventory[MapleInventoryType.EQUIPPED.ordinal()];
                 for (Item item : equipped) {
                     inv.addItemFromDB(item);
                 }
@@ -7831,7 +7831,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     boolean gun = weapon == MapleWeaponType.GUN;
                     if (bow || crossbow || claw || gun) {
                         // Also calc stars into this.
-                        MapleInventory inv = getInventory(MapleInventoryType.USE);
+                        Inventory inv = getInventory(MapleInventoryType.USE);
                         for (short i = 1; i <= inv.getSlotLimit(); i++) {
                             Item item = inv.getItem(i);
                             if (item != null) {
@@ -8279,7 +8279,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 }
 
                 itemsWithType = new ArrayList<>();
-                for (MapleInventory iv : inventory) {
+                for (Inventory iv : inventory) {
                     for (Item item : iv.list()) {
                         itemsWithType.add(new Pair<>(item, iv.getType()));
                     }
@@ -8557,7 +8557,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 }
 
                 List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
-                for (MapleInventory iv : inventory) {
+                for (Inventory iv : inventory) {
                     for (Item item : iv.list()) {
                         itemsWithType.add(new Pair<>(item, iv.getType()));
                     }
@@ -9139,7 +9139,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return true;
     }
     
-    public void setInventory(MapleInventoryType type, MapleInventory inv) {
+    public void setInventory(MapleInventoryType type, Inventory inv) {
         inventory[type.ordinal()] = inv;
     }
 
@@ -9329,7 +9329,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         //player decides from which inventory items should be sold.
         MapleInventoryType type = MapleInventoryType.getByType(invTypeId);
         
-        MapleInventory inv = getInventory(type);
+        Inventory inv = getInventory(type);
         inv.lockInventory();
         try {
             Item it = inv.findByName(name);
@@ -9346,7 +9346,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public int sellAllItemsFromPosition(MapleItemInformationProvider ii, MapleInventoryType type, short pos) {
         int mesoGain = 0;
         
-        MapleInventory inv = getInventory(type);
+        Inventory inv = getInventory(type);
         inv.lockInventory();
         try {
             for(short i = pos; i <= inv.getSlotLimit(); i++) {
@@ -9367,7 +9367,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             quantity = 1;
         }
         
-        MapleInventory inv = getInventory(type);
+        Inventory inv = getInventory(type);
         inv.lockInventory();
         try {
             Item item = inv.getItem((short) slot);
@@ -9443,7 +9443,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public boolean mergeAllItemsFromName(String name) {
         MapleInventoryType type = MapleInventoryType.EQUIP;
         
-        MapleInventory inv = getInventory(type);
+        Inventory inv = getInventory(type);
         inv.lockInventory();
         try {
             Item it = inv.findByName(name);
@@ -9518,7 +9518,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public void mergeAllItemsFromPosition(Map<StatUpgrade, Float> statups, short pos) {
-        MapleInventory inv = getInventory(MapleInventoryType.EQUIP);
+        Inventory inv = getInventory(MapleInventoryType.EQUIP);
         inv.lockInventory();
         try {
             for(short i = pos; i <= inv.getSlotLimit(); i++) {

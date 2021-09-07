@@ -280,7 +280,7 @@ public final class InventorySortHandler extends AbstractPacketHandler {
         ArrayList<Item> itemarray = new ArrayList<>();
         List<ModifyInventory> mods = new ArrayList<>();
         
-        MapleInventory inventory = chr.getInventory(MapleInventoryType.getByType(invType));
+        Inventory inventory = chr.getInventory(MapleInventoryType.getByType(invType));
         inventory.lockInventory();
         try {
             for (short i = 1; i <= inventory.getSlotLimit(); i++) {

@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.MapleInventory;
+import client.inventory.Inventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
@@ -62,7 +62,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 break;
             case 0x01: { // /d (inv)
                 byte type = p.readByte();
-                MapleInventory in = c.getPlayer().getInventory(MapleInventoryType.getByType(type));
+                Inventory in = c.getPlayer().getInventory(MapleInventoryType.getByType(type));
                 for (short i = 1; i <= in.getSlotLimit(); i++) { //TODO What is the point of this loop?
                     if (in.getItem(i) != null) {
                         MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.getByType(type), i, in.getItem(i).getQuantity(), false);

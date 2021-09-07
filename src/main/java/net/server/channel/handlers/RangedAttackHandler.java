@@ -22,8 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package net.server.channel.handlers;
 
 import client.*;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.inventory.manipulator.MapleInventoryManipulator;
@@ -123,7 +123,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             if (hasShadowPartner) {
                 bulletCount *= 2;
             }
-            MapleInventory inv = chr.getInventory(MapleInventoryType.USE);
+            Inventory inv = chr.getInventory(MapleInventoryType.USE);
             for (short i = 1; i <= inv.getSlotLimit(); i++) {
                 Item item = inv.getItem(i);
                 if (item != null) {
@@ -174,7 +174,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             if (projectile != 0 || soulArrow || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 4111004 || attack.skill == 13101005) {
             	int visProjectile = projectile; //visible projectile sent to players
                 if (ItemConstants.isThrowingStar(projectile)) {
-                    MapleInventory cash = chr.getInventory(MapleInventoryType.CASH);
+                    Inventory cash = chr.getInventory(MapleInventoryType.CASH);
                     for (int i = 1; i <= cash.getSlotLimit(); i++) { // impose order...
                         Item item = cash.getItem((short) i);
                         if (item != null) {

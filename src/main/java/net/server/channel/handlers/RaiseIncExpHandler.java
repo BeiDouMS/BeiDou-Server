@@ -3,7 +3,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
-import client.inventory.MapleInventory;
+import client.inventory.Inventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
@@ -47,7 +47,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                 }
                 
                 int consId;
-                MapleInventory inv = chr.getInventory(MapleInventoryType.getByType(inventorytype));
+                Inventory inv = chr.getInventory(MapleInventoryType.getByType(inventorytype));
                 inv.lockInventory();
                 try {
                     consId = inv.getItem(slot).getItemId();
