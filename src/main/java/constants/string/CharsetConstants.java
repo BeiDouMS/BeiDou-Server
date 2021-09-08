@@ -24,7 +24,7 @@ import java.util.Optional;
 
 public class CharsetConstants {
     private static final Logger log = LoggerFactory.getLogger(CharsetConstants.class);
-    public static final Charset PACKET_CHARSET = loadCharset();
+    public static final Charset CHARSET = loadCharset();
 
     private enum Language {
         LANGUAGE_US("US-ASCII"),
@@ -56,7 +56,7 @@ public class CharsetConstants {
     }
 
     private static Charset loadCharset() {
-        String configCharset = YamlConfig.config.server.PACKET_CHARSET;
+        String configCharset = YamlConfig.config.server.CHARSET;
         if (configCharset != null) {
             Language language = Language.fromCharset(configCharset);
             return Charset.forName(language.getCharset());

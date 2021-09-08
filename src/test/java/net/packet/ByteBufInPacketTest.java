@@ -83,7 +83,7 @@ class ByteBufInPacketTest {
     void readString() {
         final String writtenString = "You have gained experience (+3200)";
         byteBuf.writeShortLE(writtenString.length());
-        byte[] writtenStringBytes = writtenString.getBytes(CharsetConstants.PACKET_CHARSET);
+        byte[] writtenStringBytes = writtenString.getBytes(CharsetConstants.CHARSET);
         byteBuf.writeBytes(writtenStringBytes);
 
         String readString = inPacket.readString();

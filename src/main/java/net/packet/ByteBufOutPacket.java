@@ -78,12 +78,12 @@ public class ByteBufOutPacket implements OutPacket {
     @Override
     public void writeString(String value) {
         writeShort((short) value.length());
-        writeBytes(value.getBytes(CharsetConstants.PACKET_CHARSET));
+        writeBytes(value.getBytes(CharsetConstants.CHARSET));
     }
 
     @Override
     public void writeFixedString(String value) {
-        writeBytes(value.getBytes(CharsetConstants.PACKET_CHARSET));
+        writeBytes(value.getBytes(CharsetConstants.CHARSET));
     }
 
     @Override
