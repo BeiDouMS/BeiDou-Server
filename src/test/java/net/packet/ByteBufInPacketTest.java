@@ -1,5 +1,6 @@
 package net.packet;
 
+import constants.string.CharsetConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.opcodes.SendOpcode;
@@ -82,7 +83,7 @@ class ByteBufInPacketTest {
     void readString() {
         final String writtenString = "You have gained experience (+3200)";
         byteBuf.writeShortLE(writtenString.length());
-        byte[] writtenStringBytes = writtenString.getBytes(Packet.STRING_CHARSET);
+        byte[] writtenStringBytes = writtenString.getBytes(CharsetConstants.PACKET_CHARSET);
         byteBuf.writeBytes(writtenStringBytes);
 
         String readString = inPacket.readString();

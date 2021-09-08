@@ -1,6 +1,7 @@
 package config;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ServerConfig {
     //Thread Tracker Configuration
@@ -153,6 +154,7 @@ public class ServerConfig {
 
     //Miscellaneous Configuration
     public String TIMEZONE;
+    public String PACKET_CHARSET;
     public boolean USE_DISPLAY_NUMBERS_WITH_COMMA;
     public boolean USE_UNITPRICE_WITH_COMMA;
     public byte MAX_MONITORED_BUFFSTATS;

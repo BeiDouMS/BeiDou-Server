@@ -1,5 +1,6 @@
 package net.packet;
 
+import constants.string.CharsetConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
@@ -77,12 +78,12 @@ public class ByteBufOutPacket implements OutPacket {
     @Override
     public void writeString(String value) {
         writeShort((short) value.length());
-        writeBytes(value.getBytes(STRING_CHARSET));
+        writeBytes(value.getBytes(CharsetConstants.PACKET_CHARSET));
     }
 
     @Override
     public void writeFixedString(String value) {
-        writeBytes(value.getBytes(STRING_CHARSET));
+        writeBytes(value.getBytes(CharsetConstants.PACKET_CHARSET));
     }
 
     @Override
