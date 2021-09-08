@@ -56,7 +56,7 @@ public class CharsetConstants {
     }
 
     private static Charset loadCharset() {
-        String configCharset = YamlConfig.config.server.CHARSET;
+        String configCharset = YamlConfig.loadCharset();
         if (configCharset != null) {
             Language language = Language.fromCharset(configCharset);
             return Charset.forName(language.getCharset());
