@@ -1,5 +1,6 @@
 package net.packet;
 
+import constants.string.CharsetConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 
@@ -49,7 +50,7 @@ public class ByteBufInPacket implements InPacket {
         short length = readShort();
         byte[] stringBytes = new byte[length];
         byteBuf.readBytes(stringBytes);
-        return new String(stringBytes, STRING_CHARSET);
+        return new String(stringBytes, CharsetConstants.PACKET_CHARSET);
     }
 
     @Override

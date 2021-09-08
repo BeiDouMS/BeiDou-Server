@@ -12,37 +12,56 @@ package constants.string;
  * MapleStory Server
  * CharsetConstants
  */
- 
+
+import config.YamlConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Optional;
+
 public class CharsetConstants {
-   
-    public static MapleLanguageType MAPLE_TYPE = MapleLanguageType.LANGUAGE_US;
-   
-    public enum MapleLanguageType {
-        LANGUAGE_PT_BR(1, "ISO-8859-1"),
-        LANGUAGE_US(2, "US-ASCII");
-        final byte type;
-        final String ascii;
- 
-        private MapleLanguageType(int type, String ascii) {
-            this.type = (byte) type;
-            this.ascii = ascii;
+    private static final Logger log = LoggerFactory.getLogger(CharsetConstants.class);
+    public static final Charset PACKET_CHARSET = loadCharset();
+
+    private enum Language {
+        LANGUAGE_US("US-ASCII"),
+        LANGUAGE_PT_BR("ISO-8859-1"),
+        LANGUAGE_THAI("TIS620"),
+        LANGUAGE_KOREAN("MS949");
+
+        private final String charset;
+
+        Language(String charset) {
+            this.charset = charset;
         }
- 
-        public String getAscii() {
-            return ascii;
+
+        public String getCharset() {
+            return charset;
         }
- 
-        public byte getType() {
-            return type;
-        }
- 
-        public static MapleLanguageType getByType(byte type) {
-            for (MapleLanguageType l : MapleLanguageType.values()) {
-                if (l.getType() == type) {
-                    return l;
-                }
+
+        public static Language fromCharset(String charset) {
+            Optional<Language> language = Arrays.stream(values())
+                    .filter(l -> l.charset.equals(charset))
+                    .findAny();
+            if (language.isEmpty()) {
+                log.warn("Charset {} was not found, defaulting to US-ASCII", charset);
+                return LANGUAGE_US;
             }
-            return LANGUAGE_PT_BR;
+
+            return language.get();
         }
+    }
+
+    private static Charset loadCharset() {
+        String configCharset = YamlConfig.config.server.PACKET_CHARSET;
+        if (configCharset != null) {
+            Language language = Language.fromCharset(configCharset);
+            return Charset.forName(language.getCharset());
+        }
+
+        return StandardCharsets.US_ASCII;
     }
 }

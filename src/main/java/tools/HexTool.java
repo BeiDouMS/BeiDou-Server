@@ -43,7 +43,7 @@ public class HexTool {
         }
         return hexed.substring(0, hexed.length() - 1);
     }
-    
+
     public static String toCompressedString(byte[] bytes) {
         StringBuilder hexed = new StringBuilder();
         for (byte aByte : bytes) {
@@ -87,8 +87,8 @@ public class HexTool {
         }
         return baos.toByteArray();
     }
-    
-    public static final String toStringFromAscii(final byte[] bytes) {
+
+    public static String toStringFromAscii(final byte[] bytes) {
         byte[] ret = new byte[bytes.length];
         for (int x = 0; x < bytes.length; x++) {
             if (bytes[x] < 32 && bytes[x] >= 0) {
@@ -98,12 +98,8 @@ public class HexTool {
                 ret[x] = (byte) chr;
             }
         }
-        String encode = CharsetConstants.MAPLE_TYPE.getAscii();
-        try {
-            String str = new String(ret, encode);
-            return str;
-        } catch (Exception e) {}
-        return "";
+
+        return new String(ret, CharsetConstants.PACKET_CHARSET);
     }
 
     /**
