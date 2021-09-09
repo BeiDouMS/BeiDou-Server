@@ -26,7 +26,7 @@ import provider.DataProvider;
 import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
-import server.maps.MapleReactorStats.StateData;
+import server.maps.ReactorStats.StateData;
 import tools.Pair;
 import tools.StringUtil;
 
@@ -37,10 +37,10 @@ import java.util.Map;
 
 public class ReactorFactory {
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
-    private static final Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
+    private static final Map<Integer, ReactorStats> reactorStats = new HashMap<>();
 
-    public static final MapleReactorStats getReactorS(int rid) {
-        MapleReactorStats stats = reactorStats.get(rid);
+    public static final ReactorStats getReactorS(int rid) {
+        ReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
             Data reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
@@ -50,7 +50,7 @@ public class ReactorFactory {
                 stats = reactorStats.get(infoId);
             }
             if (stats == null) {
-                stats = new MapleReactorStats();
+                stats = new ReactorStats();
                 reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
                 if (reactorData == null) {
                     return stats;
@@ -93,8 +93,8 @@ public class ReactorFactory {
         return stats;
     }
 
-    public static MapleReactorStats getReactor(int rid) {
-        MapleReactorStats stats = reactorStats.get(rid);
+    public static ReactorStats getReactor(int rid) {
+        ReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
             Data reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
@@ -111,7 +111,7 @@ public class ReactorFactory {
             if (stats == null) {
                 reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
                 Data reactorInfoData = reactorData.getChildByPath("0");
-                stats = new MapleReactorStats();
+                stats = new ReactorStats();
                 List<StateData> statedatas = new ArrayList<>();
                 if (reactorInfoData != null) {
                     boolean areaSet = false;

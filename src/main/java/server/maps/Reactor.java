@@ -45,7 +45,7 @@ import java.util.concurrent.locks.Lock;
  */
 public class Reactor extends AbstractMapObject {
     private final int rid;
-    private final MapleReactorStats stats;
+    private final ReactorStats stats;
     private byte state;
     private byte evstate;
     private int delay;
@@ -61,7 +61,7 @@ public class Reactor extends AbstractMapObject {
     private final Lock reactorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR, true);
     private final Lock hitLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR_HIT, true);
 
-    public Reactor(MapleReactorStats stats, int rid) {
+    public Reactor(ReactorStats stats, int rid) {
         this.evstate = (byte) 0;
         this.stats = stats;
         this.rid = rid;
@@ -110,7 +110,7 @@ public class Reactor extends AbstractMapObject {
         return evstate;
     }
 
-    public MapleReactorStats getStats() {
+    public ReactorStats getStats() {
         return stats;
     }
 
