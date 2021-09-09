@@ -99,7 +99,7 @@ public class HexTool {
             }
         }
 
-        return new String(ret, CharsetConstants.PACKET_CHARSET);
+        return new String(ret, CharsetConstants.CHARSET);
     }
 
     /**

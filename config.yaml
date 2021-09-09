@@ -307,7 +307,7 @@ server:
 
     #Miscellaneous Configuration
     TIMEZONE: GMT-3
-    PACKET_CHARSET: US_ASCII                      # Defaults to US_ASCII if not set
+    CHARSET: US-ASCII                          # Is loaded first, so applies to the rest of this config. Defaults to US-ASCII if invalid or not set.
     USE_DISPLAY_NUMBERS_WITH_COMMA: true          #Enforce comma on displayed strings (use this when USE_UNITPRICE_WITH_COMMA is active and you still want to display comma-separated values).
     USE_UNITPRICE_WITH_COMMA: true                #Set this accordingly with the layout of the unitPrices on Item.wz XML's, whether it's using commas or dots to represent fractions.
     MAX_MONITORED_BUFFSTATS: 5                 #Limits accounting for "dormant" buff effects, that should take place when stronger stat buffs expires.

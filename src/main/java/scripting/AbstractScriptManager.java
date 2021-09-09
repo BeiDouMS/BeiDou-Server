@@ -23,6 +23,7 @@ package scripting;
 
 import client.MapleClient;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+import constants.string.CharsetConstants;
 import tools.FilePrinter;
 
 import javax.script.*;
@@ -55,7 +56,7 @@ public abstract class AbstractScriptManager {
 
         enableScriptHostAccess(graalScriptEngine);
 
-        try (FileReader fr = new FileReader(scriptFile)) {
+        try (FileReader fr = new FileReader(scriptFile, CharsetConstants.CHARSET)) {
             engine.eval(fr);
         } catch (final ScriptException | IOException t) {
             FilePrinter.printError(FilePrinter.INVOCABLE + path.substring(12), t, path);

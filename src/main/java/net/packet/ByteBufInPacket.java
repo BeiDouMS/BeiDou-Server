@@ -50,7 +50,7 @@ public class ByteBufInPacket implements InPacket {
         short length = readShort();
         byte[] stringBytes = new byte[length];
         byteBuf.readBytes(stringBytes);
-        return new String(stringBytes, CharsetConstants.PACKET_CHARSET);
+        return new String(stringBytes, CharsetConstants.CHARSET);
     }
 
     @Override

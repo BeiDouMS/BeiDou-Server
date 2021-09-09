@@ -1,6 +1,7 @@
 package config;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
+import constants.string.CharsetConstants;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,24 +10,22 @@ import java.util.List;
 
 
 public class YamlConfig {
-
-    public static final YamlConfig config = fromFile("config.yaml");
+    public static final String CONFIG_FILE_NAME = "config.yaml";
+    public static final YamlConfig config = loadConfig();
     
     public List<WorldConfig> worlds;
     public ServerConfig server;
 
-    public static YamlConfig fromFile(String filename) {
+    private static YamlConfig loadConfig() {
         try {
-            YamlReader reader = new YamlReader(new FileReader(filename));
+            YamlReader reader = new YamlReader(new FileReader(CONFIG_FILE_NAME, CharsetConstants.CHARSET));
             YamlConfig config = reader.read(YamlConfig.class);
             reader.close();
             return config;
         } catch (FileNotFoundException e) {
-            String message = "Could not read config file " + filename + ": " + e.getMessage();
-            throw new RuntimeException(message);
+            throw new RuntimeException("Could not read config file " + YamlConfig.CONFIG_FILE_NAME + ": " + e.getMessage());
         } catch (IOException e) {
-            String message = "Could not successfully parse config file " + filename + ": " + e.getMessage();
-            throw new RuntimeException(message);
+            throw new RuntimeException("Could not successfully parse config file " + YamlConfig.CONFIG_FILE_NAME + ": " + e.getMessage());
         }
     }
 }

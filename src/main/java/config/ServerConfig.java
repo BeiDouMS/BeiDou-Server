@@ -154,7 +154,7 @@ public class ServerConfig {
 
     //Miscellaneous Configuration
     public String TIMEZONE;
-    public String PACKET_CHARSET;
+    public String CHARSET;
     public boolean USE_DISPLAY_NUMBERS_WITH_COMMA;
     public boolean USE_UNITPRICE_WITH_COMMA;
     public byte MAX_MONITORED_BUFFSTATS;
