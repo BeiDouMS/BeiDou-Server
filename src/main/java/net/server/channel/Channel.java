@@ -45,7 +45,7 @@ import scripting.event.EventScriptManager;
 import server.TimerManager;
 import server.events.gm.Event;
 import server.expeditions.Expedition;
-import server.expeditions.MapleExpeditionType;
+import server.expeditions.ExpeditionType;
 import server.maps.*;
 import tools.PacketCreator;
 import tools.Pair;
@@ -73,9 +73,9 @@ public final class Channel {
     private Map<Integer, MapleHiredMerchant> hiredMerchants = new HashMap<>();
     private final Map<Integer, Integer> storedVars = new HashMap<>();
     private Set<Integer> playersAway = new HashSet<>();
-    private Map<MapleExpeditionType, Expedition> expeditions = new HashMap<>();
+    private Map<ExpeditionType, Expedition> expeditions = new HashMap<>();
     private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
-    private List<MapleExpeditionType> expedType = new ArrayList<>();
+    private List<ExpeditionType> expedType = new ArrayList<>();
     private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
     private Event event;
     private boolean finishedShutdown = false;
@@ -119,7 +119,7 @@ public final class Channel {
 
         try {
             this.channelServer = initServer(port, world, channel);
-            expedType.addAll(Arrays.asList(MapleExpeditionType.values()));
+            expedType.addAll(Arrays.asList(ExpeditionType.values()));
             
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
                 eventSM = new EventScriptManager(this, getEvents());
@@ -416,7 +416,7 @@ public final class Channel {
         }
     }
     
-    public Expedition getExpedition(MapleExpeditionType type) {
+    public Expedition getExpedition(ExpeditionType type) {
         return expeditions.get(type);
     }
     

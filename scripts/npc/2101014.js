@@ -11,10 +11,10 @@ var arena;
 var arenaName;
 var type;
 var map;
-const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
-var exped = MapleExpeditionType.ARIANT;
-var exped1 = MapleExpeditionType.ARIANT1;
-var exped2 = MapleExpeditionType.ARIANT2;
+const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
+var exped = ExpeditionType.ARIANT;
+var exped1 = ExpeditionType.ARIANT1;
+var exped2 = ExpeditionType.ARIANT2;
 
 function start() {
     status = -1;
@@ -103,17 +103,17 @@ function action(mode, type, selection) {
 function fetchArenaType() {
     switch (arenaType) {
         case 0 :
-            exped = MapleExpeditionType.ARIANT;
+            exped = ExpeditionType.ARIANT;
             expedicao = cm.getExpedition(exped);
             map = 980010100;
             break;
         case 1 :
-            exped = MapleExpeditionType.ARIANT1;
+            exped = ExpeditionType.ARIANT1;
             expedicao = cm.getExpedition(exped);
             map = 980010200;
             break;
         case 2 :
-            exped = MapleExpeditionType.ARIANT2;
+            exped = ExpeditionType.ARIANT2;
             expedicao = cm.getExpedition(exped);
             map = 980010300;
             break;
@@ -174,7 +174,7 @@ function enterArena(arenaPlayers) {
 }
 
 function playerAlreadyInLobby(player) {
-    return cm.getExpedition(MapleExpeditionType.ARIANT) != null && cm.getExpedition(MapleExpeditionType.ARIANT).contains(player) ||
-            cm.getExpedition(MapleExpeditionType.ARIANT1) != null && cm.getExpedition(MapleExpeditionType.ARIANT1).contains(player) ||
-            cm.getExpedition(MapleExpeditionType.ARIANT2) != null && cm.getExpedition(MapleExpeditionType.ARIANT2).contains(player);
+    return cm.getExpedition(ExpeditionType.ARIANT) != null && cm.getExpedition(ExpeditionType.ARIANT).contains(player) ||
+            cm.getExpedition(ExpeditionType.ARIANT1) != null && cm.getExpedition(ExpeditionType.ARIANT1).contains(player) ||
+            cm.getExpedition(ExpeditionType.ARIANT2) != null && cm.getExpedition(ExpeditionType.ARIANT2).contains(player);
 }

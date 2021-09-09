@@ -81,7 +81,7 @@ public class Expedition {
     };
 
     private final Character leader;
-    private final MapleExpeditionType type;
+    private final ExpeditionType type;
     private boolean registering;
     private final MapleMap startMap;
     private final List<String> bossLogs;
@@ -95,7 +95,7 @@ public class Expedition {
     private final int maxSize;
     private final MonitoredReentrantLock pL = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EIM_PARTY, true);
 
-    public Expedition(Character player, MapleExpeditionType met, boolean sil, int minPlayers, int maxPlayers) {
+    public Expedition(Character player, ExpeditionType met, boolean sil, int minPlayers, int maxPlayers) {
         leader = player;
         members.put(player.getId(), player.getName());
         startMap = player.getMap();
@@ -252,7 +252,7 @@ public class Expedition {
                 if (!silent) {
                     player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
                 }
-                if (MapleExpeditionType.ARIANT.equals(type) || MapleExpeditionType.ARIANT1.equals(type) || MapleExpeditionType.ARIANT2.equals(type)) {
+                if (ExpeditionType.ARIANT.equals(type) || ExpeditionType.ARIANT1.equals(type) || ExpeditionType.ARIANT2.equals(type)) {
                     player.changeMap(980010000);
                 }
             }
@@ -287,7 +287,7 @@ public class Expedition {
         }
     }
 
-    public MapleExpeditionType getType() {
+    public ExpeditionType getType() {
         return type;
     }
 

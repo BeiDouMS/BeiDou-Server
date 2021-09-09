@@ -23,7 +23,7 @@ import client.Character;
 import constants.game.GameConstants;
 import server.TimerManager;
 import server.expeditions.Expedition;
-import server.expeditions.MapleExpeditionType;
+import server.expeditions.ExpeditionType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 
@@ -244,14 +244,14 @@ public class AriantColiseum {
         }
     }
     
-    private MapleExpeditionType getExpeditionType() {
-        MapleExpeditionType type;
+    private ExpeditionType getExpeditionType() {
+        ExpeditionType type;
         if (map.getId() == 980010101) {
-            type = MapleExpeditionType.ARIANT;
+            type = ExpeditionType.ARIANT;
         } else if (map.getId() == 980010201) {
-            type = MapleExpeditionType.ARIANT1;
+            type = ExpeditionType.ARIANT1;
         } else {
-            type = MapleExpeditionType.ARIANT2;
+            type = ExpeditionType.ARIANT2;
         }
         
         return type;

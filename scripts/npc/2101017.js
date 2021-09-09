@@ -10,7 +10,7 @@ var arena;
 var arenaName;
 var type;
 var map;
-const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
+const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
 var exped;
 var expedicao;
 var expedMembers;
@@ -32,14 +32,14 @@ function action(mode, type, selection) {
         const GameConstants = Java.type('constants.game.GameConstants');
         if (cm.getPlayer().getMapId() == 980010100 || cm.getPlayer().getMapId() == 980010200 || cm.getPlayer().getMapId() == 980010300) {
             if (cm.getPlayer().getMapId() == 980010100) {
-                exped = MapleExpeditionType.ARIANT;
+                exped = ExpeditionType.ARIANT;
                 expedicao = cm.getExpedition(exped);
 
             } else if (cm.getPlayer().getMapId() == 980010200) {
-                exped = MapleExpeditionType.ARIANT1;
+                exped = ExpeditionType.ARIANT1;
                 expedicao = cm.getExpedition(exped);
             } else {
-                exped = MapleExpeditionType.ARIANT2;
+                exped = ExpeditionType.ARIANT2;
                 expedicao = cm.getExpedition(exped);
             }
             
@@ -116,13 +116,13 @@ function action(mode, type, selection) {
             }
         } else if (GameConstants.isAriantColiseumArena(cm.getPlayer().getMapId())) {
             if (cm.getPlayer().getMapId() == 980010101) {
-                exped = MapleExpeditionType.ARIANT;
+                exped = ExpeditionType.ARIANT;
                 expedicao = cm.getExpedition(exped);
             } else if (cm.getPlayer().getMapId() == 980010201) {
-                exped = MapleExpeditionType.ARIANT1;
+                exped = ExpeditionType.ARIANT1;
                 expedicao = cm.getExpedition(exped);
             } else {
-                exped = MapleExpeditionType.ARIANT2;
+                exped = ExpeditionType.ARIANT2;
                 expedicao = cm.getExpedition(exped);
             }
             if (status == 0) {

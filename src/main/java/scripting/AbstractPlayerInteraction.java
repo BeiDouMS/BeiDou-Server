@@ -40,7 +40,7 @@ import server.MapleItemInformationProvider;
 import server.MapleMarriage;
 import server.expeditions.Expedition;
 import server.expeditions.ExpeditionBossLog;
-import server.expeditions.MapleExpeditionType;
+import server.expeditions.ExpeditionType;
 import server.life.*;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -1067,11 +1067,11 @@ public class AbstractPlayerInteraction {
 		return (Pyramid) getPlayer().getPartyQuest();
 	}
 
-        public int createExpedition(MapleExpeditionType type) {
+        public int createExpedition(ExpeditionType type) {
                 return createExpedition(type, false, 0, 0);
         }
         
-	public int createExpedition(MapleExpeditionType type, boolean silent, int minPlayers, int maxPlayers) {
+	public int createExpedition(ExpeditionType type, boolean silent, int minPlayers, int maxPlayers) {
                 Character player = getPlayer();
                 Expedition exped = new Expedition(player, type, silent, minPlayers, maxPlayers);
                 
@@ -1092,11 +1092,11 @@ public class AbstractPlayerInteraction {
 		exped.removeChannelExpedition(getPlayer().getClient().getChannelServer());
 	}
 
-	public Expedition getExpedition(MapleExpeditionType type) {
+	public Expedition getExpedition(ExpeditionType type) {
                 return getPlayer().getClient().getChannelServer().getExpedition(type);
 	}
         
-        public String getExpeditionMemberNames(MapleExpeditionType type) {
+        public String getExpeditionMemberNames(ExpeditionType type) {
                 String members = "";
                 Expedition exped = getExpedition(type);
                 for (String memberName : exped.getMembers().values()) {
@@ -1105,7 +1105,7 @@ public class AbstractPlayerInteraction {
                 return members;
         }
 
-        public boolean isLeaderExpedition(MapleExpeditionType type) {
+        public boolean isLeaderExpedition(ExpeditionType type) {
                 Expedition exped = getExpedition(type);
                 return exped.isLeader(getPlayer());
         }

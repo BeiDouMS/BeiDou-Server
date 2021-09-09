@@ -46,7 +46,7 @@ import server.*;
 import server.MapleSkillbookInformationProvider.SkillBookEntry;
 import server.events.gm.Event;
 import server.expeditions.Expedition;
-import server.expeditions.MapleExpeditionType;
+import server.expeditions.ExpeditionType;
 import server.gachapon.MapleGachapon;
 import server.gachapon.MapleGachapon.MapleGachaponItem;
 import server.life.MapleLifeFactory;
@@ -1024,7 +1024,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             return true;
         }
         
-        public String startAriantBattle(MapleExpeditionType expedType, int mapid) {
+        public String startAriantBattle(ExpeditionType expedType, int mapid) {
             if (!GameConstants.isAriantColiseumLobby(mapid)) {
                 return "You cannot start an Ariant tournament from outside the Battle Arena Entrance.";
             }
