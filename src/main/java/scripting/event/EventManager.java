@@ -35,7 +35,7 @@ import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import net.server.world.World;
 import scripting.event.scheduler.EventScriptScheduler;
-import server.MapleMarriage;
+import server.Marriage;
 import server.ThreadManager;
 import server.expeditions.Expedition;
 import server.life.LifeFactory;
@@ -244,8 +244,8 @@ public class EventManager {
         return ret;
     }
     
-    public MapleMarriage newMarriage(String name) throws EventInstanceInProgressException {
-        MapleMarriage ret = new MapleMarriage(this, name);
+    public Marriage newMarriage(String name) throws EventInstanceInProgressException {
+        Marriage ret = new Marriage(this, name);
         
         synchronized (instances) {
             if (instances.containsKey(name)) {

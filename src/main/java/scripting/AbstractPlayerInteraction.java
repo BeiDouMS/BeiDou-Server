@@ -37,7 +37,7 @@ import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
 import scripting.npc.NPCScriptManager;
 import server.ItemInformationProvider;
-import server.MapleMarriage;
+import server.Marriage;
 import server.expeditions.Expedition;
 import server.expeditions.ExpeditionBossLog;
 import server.expeditions.ExpeditionType;
@@ -1131,7 +1131,7 @@ public class AbstractPlayerInteraction {
         }
         
         public List<Item> getUnclaimedMarriageGifts() {
-            return MapleMarriage.loadGiftItemsFromDb(this.getClient(), this.getPlayer().getId());
+            return Marriage.loadGiftItemsFromDb(this.getClient(), this.getPlayer().getId());
         }
         
         public boolean startDungeonInstance(int dungeonid) {

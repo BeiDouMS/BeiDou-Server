@@ -4759,11 +4759,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleMarriage getMarriageInstance() {
+    public Marriage getMarriageInstance() {
         EventInstanceManager eim = getEventInstance();
 
-        if (eim != null || !(eim instanceof MapleMarriage)) {
-            return (MapleMarriage) eim;
+        if (eim != null || !(eim instanceof Marriage)) {
+            return (Marriage) eim;
         } else {
             return null;
         }

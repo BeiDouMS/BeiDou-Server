@@ -18,7 +18,7 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleMarriage;
+import server.Marriage;
 import tools.PacketCreator;
 import tools.packets.WeddingPackets;
 
@@ -44,7 +44,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                     int itemid = p.readInt();
                     short quantity = p.readShort();
 
-                    MapleMarriage marriage = c.getPlayer().getMarriageInstance();
+                    Marriage marriage = c.getPlayer().getMarriageInstance();
                     if (marriage != null) {
                         try {
                             boolean groomWishlist = marriage.giftItemToSpouse(chr.getId());
@@ -105,7 +105,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                     p.readByte();    // invType
                     int itemPos = p.readByte();
 
-                    MapleMarriage marriage = chr.getMarriageInstance();
+                    Marriage marriage = chr.getMarriageInstance();
                     if (marriage != null) {
                         Boolean groomWishlist = marriage.isMarriageGroom(chr);
                         if (groomWishlist != null) {
@@ -133,7 +133,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                             Item item = items.get(itemPos);
                             if (Inventory.checkSpot(chr, item)) {
                                 items.remove(itemPos);
-                                MapleMarriage.saveGiftItemsToDb(c, items, chr.getId());
+                                Marriage.saveGiftItemsToDb(c, items, chr.getId());
 
                                 InventoryManipulator.addFromDrop(c, item, true);
                                 c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, Collections.singletonList(""), items));

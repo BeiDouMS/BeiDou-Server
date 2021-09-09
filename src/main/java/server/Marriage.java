@@ -39,15 +39,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author Ronan
  */
-public class MapleMarriage extends EventInstanceManager {
-    
-    public MapleMarriage(EventManager em, String name) {
+public class Marriage extends EventInstanceManager {
+    public Marriage(EventManager em, String name) {
         super(em, name);
     }
-    
+
     public boolean giftItemToSpouse(int cid) {
         return this.getIntProperty("wishlistSelection") == 0;
     }
@@ -101,7 +99,7 @@ public class MapleMarriage extends EventInstanceManager {
             gifts.remove(item);
         }
     }
-        
+
     public Boolean isMarriageGroom(Character chr) {
         Boolean groom = null;
         try {
@@ -111,7 +109,8 @@ public class MapleMarriage extends EventInstanceManager {
             } else if (chr.getId() == brideid) {
                 groom = false;
             }
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+        }
 
         return groom;
     }
@@ -134,10 +133,10 @@ public class MapleMarriage extends EventInstanceManager {
 
         return false;
     }
-        
+
     public static List<Item> loadGiftItemsFromDb(Client c, int cid) {
         List<Item> items = new LinkedList<>();
-        
+
         try {
             for (Pair<Item, InventoryType> it : ItemFactory.MARRIAGE_GIFTS.loadItems(cid, false)) {
                 items.add(it.getLeft());
@@ -145,14 +144,14 @@ public class MapleMarriage extends EventInstanceManager {
         } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-        
+
         return items;
     }
-        
+
     public void saveGiftItemsToDb(Client c, boolean groom, int cid) {
-        MapleMarriage.saveGiftItemsToDb(c, getGiftItems(c, groom), cid);
+        Marriage.saveGiftItemsToDb(c, getGiftItems(c, groom), cid);
     }
-    
+
     public static void saveGiftItemsToDb(Client c, List<Item> giftItems, int cid) {
         List<Pair<Item, InventoryType>> items = new LinkedList<>();
         for (Item it : giftItems) {

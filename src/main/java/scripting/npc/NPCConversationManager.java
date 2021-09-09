@@ -1066,7 +1066,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         
         public void sendMarriageWishlist(boolean groom) {
             Character player = this.getPlayer();
-            MapleMarriage marriage = player.getMarriageInstance();
+            Marriage marriage = player.getMarriageInstance();
             if(marriage != null) {
                 int cid = marriage.getIntProperty(groom ? "groomId" : "brideId");
                 Character chr = marriage.getPlayerById(cid);
@@ -1086,7 +1086,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
         public boolean createMarriageWishlist() {
-            MapleMarriage marriage = this.getPlayer().getMarriageInstance();
+            Marriage marriage = this.getPlayer().getMarriageInstance();
             if (marriage != null) {
                 Boolean groom = marriage.isMarriageGroom(this.getPlayer());
                 if (groom != null) {
