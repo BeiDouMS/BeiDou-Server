@@ -13,7 +13,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -71,7 +71,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                                         marriage.addGiftItem(groomWishlist, newItem);
                                                         InventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
                                                         
-                                                        MapleKarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
+                                                        KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
                                                         marriage.setIntProperty(groomWishlistProp, giftCount + 1);
 
                                                         c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xB, marriage.getWishlistItems(groomWishlist), Collections.singletonList(newItem)));

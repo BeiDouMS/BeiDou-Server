@@ -27,7 +27,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -260,7 +260,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
                     return false;
                 }
                 
-                MapleKarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
+                KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
                 
                 visitorLock.lock();
                 try {

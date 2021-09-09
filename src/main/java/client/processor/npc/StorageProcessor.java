@@ -28,7 +28,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
@@ -87,7 +87,7 @@ public class StorageProcessor {
                                                         if (storage.takeOut(item)) {
                                                                 chr.setUsedStorage();
                                                                 
-                                                                MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
+                                                                KarmaManipulator.toggleKarmaFlagToUntradeable(item);
                                                                 InventoryManipulator.addFromDrop(c, item, false);
 
                                                                 String itemName = ii.getName(item.getItemId());
@@ -155,7 +155,7 @@ public class StorageProcessor {
                                                 
                                                 chr.gainMeso(-storeFee, false, true, false);
                                                 
-                                                MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
+                                                KarmaManipulator.toggleKarmaFlagToUntradeable(item);
                                                 item.setQuantity(quantity);
                                                 
                                                 storage.store(item);    // inside a critical section, "!(storage.isFull())" is still in effect...

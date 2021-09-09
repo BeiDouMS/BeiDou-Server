@@ -28,7 +28,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
 import net.packet.Packet;
@@ -271,7 +271,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                 return;
             }
             
-            MapleKarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
+            KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
             
             int price = (int) Math.min((float) pItem.getPrice() * quantity, Integer.MAX_VALUE);
             if (c.getPlayer().getMeso() >= price) {

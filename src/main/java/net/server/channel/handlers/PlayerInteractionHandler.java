@@ -28,7 +28,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
@@ -511,7 +511,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 if (trade != null) {
                     if ((quantity <= item.getQuantity() && quantity >= 0) || ItemConstants.isRechargeable(item.getItemId())) {
                         if (ii.isDropRestricted(item.getItemId())) { // ensure that undroppable items do not make it to the trade window
-                            if (!MapleKarmaManipulator.hasKarmaFlag(item)) {
+                            if (!KarmaManipulator.hasKarmaFlag(item)) {
                                 c.sendPacket(PacketCreator.serverNotice(1, "That item is untradeable."));
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;

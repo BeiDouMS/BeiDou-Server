@@ -26,7 +26,7 @@ import client.creator.veteran.*;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import client.processor.npc.DueyProcessor;
 import client.processor.stat.AssignAPProcessor;
 import client.processor.stat.AssignSPProcessor;
@@ -507,12 +507,12 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             InventoryType type = InventoryType.getByType((byte) p.readInt());
             short slot = (short) p.readInt();
             Item item = player.getInventory(type).getItem(slot);
-            if (item == null || item.getQuantity() <= 0 || MapleKarmaManipulator.hasKarmaFlag(item) || !ii.isKarmaAble(item.getItemId())) {
+            if (item == null || item.getQuantity() <= 0 || KarmaManipulator.hasKarmaFlag(item) || !ii.isKarmaAble(item.getItemId())) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
 
-            MapleKarmaManipulator.setKarmaFlag(item);
+            KarmaManipulator.setKarmaFlag(item);
             player.forceUpdateItem(item);
             remove(c, position, itemId);
             c.sendPacket(PacketCreator.enableActions());

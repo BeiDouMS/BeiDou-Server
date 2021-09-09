@@ -31,7 +31,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.server.channel.Channel;
@@ -267,7 +267,7 @@ public class DueyProcessor {
                 inv.unlockInventory();
             }
 
-            MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
+            KarmaManipulator.toggleKarmaFlagToUntradeable(item);
             item.setQuantity(amount);
 
             if (!insertPackageItem(packageId, item)) {

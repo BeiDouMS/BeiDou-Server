@@ -26,7 +26,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.server.coordinator.world.MapleInviteCoordinator;
@@ -119,7 +119,7 @@ public class MapleTrade {
         meso = 0;
         
         for (Item item : exchangeItems) {
-            MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
+            KarmaManipulator.toggleKarmaFlagToUntradeable(item);
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
         
