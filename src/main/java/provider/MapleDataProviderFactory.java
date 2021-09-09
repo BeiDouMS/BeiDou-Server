@@ -27,11 +27,11 @@ import provider.wz.XMLWZFile;
 import java.io.File;
 
 public class MapleDataProviderFactory {
-    private static MapleDataProvider getWZ(File in) {
+    private static DataProvider getWZ(File in) {
         return new XMLWZFile(in);
     }
 
-    public static MapleDataProvider getDataProvider(WZFiles in) {
+    public static DataProvider getDataProvider(WZFiles in) {
         return getWZ(in.getFile());
     }
 }

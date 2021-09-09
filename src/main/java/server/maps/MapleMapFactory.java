@@ -22,7 +22,7 @@
 package server.maps;
 
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -44,7 +44,7 @@ import java.util.List;
 public class MapleMapFactory {
 
     private static Data nameData;
-    private static MapleDataProvider mapSource;
+    private static DataProvider mapSource;
     
     static {
         nameData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");

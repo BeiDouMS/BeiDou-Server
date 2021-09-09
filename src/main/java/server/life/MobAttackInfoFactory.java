@@ -22,7 +22,7 @@
 package server.life;
 
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class MobAttackInfoFactory {
     private static Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
-    private static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
+    private static DataProvider dataSource = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
 
     public static MobAttackInfo getMobAttackInfo(MapleMonster mob, int attack) {
         MobAttackInfo ret = mobAttacks.get(mob.getId() + "" + attack);

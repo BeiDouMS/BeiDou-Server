@@ -80,7 +80,7 @@ public class NoItemNameFetcher {
 
     private static void readStringWZData() {
         System.out.println("Parsing String.wz...");
-        MapleDataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+        DataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
 
         Data cashStringData = stringData.getData("Cash.img");
         readStringSubdirectoryData(cashStringData, 0);
@@ -163,7 +163,7 @@ public class NoItemNameFetcher {
         };
     }
 
-    private static void readEquipNodeData(MapleDataProvider data, DataDirectoryEntry mDir, String wzFileName, String dirName) {
+    private static void readEquipNodeData(DataProvider data, DataDirectoryEntry mDir, String wzFileName, String dirName) {
         EquipType eqType = getEquipTypeFromDirectoryName(dirName);
 
         for (DataFileEntry mFile : mDir.getFiles()) {
@@ -195,7 +195,7 @@ public class NoItemNameFetcher {
     private static void readEquipWZData() {
         String wzFileName = "Character.wz";
 
-        MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.CHARACTER);
+        DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.CHARACTER);
         DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");
@@ -212,7 +212,7 @@ public class NoItemNameFetcher {
     private static void readItemWZData() {
         String wzFileName = "Item.wz";
 
-        MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
+        DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
         DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");

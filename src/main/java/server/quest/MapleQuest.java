@@ -26,7 +26,7 @@ import client.QuestStatus;
 import client.QuestStatus.Status;
 import config.YamlConfig;
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -68,7 +68,7 @@ public class MapleQuest {
     private boolean autoPreComplete, autoComplete;
     private boolean repeatable = false;
     private String name = "", parent = "";
-    private final static MapleDataProvider questData = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
+    private final static DataProvider questData = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
     private final static Data questInfo = questData.getData("QuestInfo.img");
     private final static Data questAct = questData.getData("Act.img");
     private final static Data questReq = questData.getData("Check.img");

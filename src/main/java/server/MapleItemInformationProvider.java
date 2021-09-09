@@ -58,10 +58,10 @@ public class MapleItemInformationProvider {
         return instance;
     }
 
-    protected MapleDataProvider itemData;
-    protected MapleDataProvider equipData;
-    protected MapleDataProvider stringData;
-    protected MapleDataProvider etcData;
+    protected DataProvider itemData;
+    protected DataProvider equipData;
+    protected DataProvider stringData;
+    protected DataProvider etcData;
     protected Data cashStringData;
     protected Data consumeStringData;
     protected Data eqpStringData;

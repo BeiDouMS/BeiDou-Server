@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class SkillFactory {
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
-    private static final MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private static final DataProvider datasource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
 
     public static Skill getSkill(int id) {
         return skills.get(id);

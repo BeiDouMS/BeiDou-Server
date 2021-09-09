@@ -676,7 +676,7 @@ public class GameConstants {
     }
     
     private static int getMaxObstacleMobDamageFromWz() {
-        MapleDataProvider mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
+        DataProvider mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
         int maxMobDmg = 0;
         
         DataDirectoryEntry root = mapSource.getRoot();

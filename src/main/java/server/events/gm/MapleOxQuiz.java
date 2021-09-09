@@ -22,7 +22,7 @@
 package server.events.gm;
 
 import client.Character;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -43,7 +43,7 @@ public final class MapleOxQuiz {
     private int question = 1;
     private MapleMap map = null;
     private int expGain = 200;
-    private static MapleDataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
+    private static DataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
 
     public MapleOxQuiz(MapleMap map) {
         this.map = map;

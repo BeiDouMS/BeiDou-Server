@@ -2,7 +2,7 @@ package server.partyquest;
 
 import client.Disease;
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -22,7 +22,7 @@ public class MapleCarnivalFactory {
     private final static MapleCarnivalFactory instance = new MapleCarnivalFactory();
     private final Map<Integer, MCSkill> skills = new HashMap<>();
     private final Map<Integer, MCSkill> guardians = new HashMap<>();
-    private final MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private final DataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
     
     private final List<Integer> singleTargetedSkills = new ArrayList<>();
     private final List<Integer> multiTargetedSkills = new ArrayList<>();

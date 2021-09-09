@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.life;
 
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.DataType;
@@ -36,8 +36,8 @@ import java.util.*;
 
 public class MapleLifeFactory {
 
-    private static MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
-    private final static MapleDataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+    private static DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
+    private final static DataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
     private static Data mobStringData = stringDataWZ.getData("Mob.img");
     private static Data npcStringData = stringDataWZ.getData("Npc.img");
     private static Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
@@ -46,7 +46,7 @@ public class MapleLifeFactory {
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
         
-        MapleDataProvider uiDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.UI);
+        DataProvider uiDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.UI);
         for (Data bossData : uiDataWZ.getData("UIWindow.img").getChildByPath("MobGage/Mob").getChildren()) {
             ret.add(Integer.valueOf(bossData.getName()));
         }

@@ -23,14 +23,14 @@ package provider.wz;
 
 import provider.Data;
 import provider.DataDirectoryEntry;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class XMLWZFile implements MapleDataProvider {
+public class XMLWZFile implements DataProvider {
     private File root;
     private WZDirectoryEntry rootForNavigation;
 

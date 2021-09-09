@@ -21,7 +21,7 @@ package server.life;
 
 import net.server.Server;
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class MaplePlayerNPCFactory {
     
-    private static MapleDataProvider npcData = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
+    private static DataProvider npcData = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
     
     private static final Map<Integer, List<MaplePlayerNPC>> dnpcMaps = new HashMap<>();
     private static Integer runningDeveloperOid = 2147483000;  // 647 slots, long enough
@@ -46,14 +46,14 @@ public class MaplePlayerNPCFactory {
         return npcData.getData(scriptid + ".img") != null;
     }
     
-    private static void loadDeveloperRoomMetadata(MapleDataProvider npc) {
+    private static void loadDeveloperRoomMetadata(DataProvider npc) {
         Data thisData = npc.getData("9977777.img");
         if(thisData != null) {
-            MapleDataProvider map = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
+            DataProvider map = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
             
             thisData = map.getData("Map/Map7/777777777.img");
             if(thisData != null) {
-                MapleDataProvider sound = MapleDataProviderFactory.getDataProvider(WZFiles.SOUND);
+                DataProvider sound = MapleDataProviderFactory.getDataProvider(WZFiles.SOUND);
                 
                 thisData = sound.getData("Field.img");
                 if(thisData != null) {
@@ -67,10 +67,10 @@ public class MaplePlayerNPCFactory {
     }
     
     public synchronized static void loadFactoryMetadata() {
-        MapleDataProvider npc = npcData;
+        DataProvider npc = npcData;
         loadDeveloperRoomMetadata(npc);
 
-        MapleDataProvider etc = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
+        DataProvider etc = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
         Data dnpcData = etc.getData("DeveloperNpc.img");
         if(dnpcData != null) {
             for (Data data : dnpcData.getChildren()) {

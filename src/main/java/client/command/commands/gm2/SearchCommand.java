@@ -27,7 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -44,7 +44,7 @@ public class SearchCommand extends Command {
     {
         setDescription("Search String.wz.");
         
-        MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+        DataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
         npcStringData = dataProvider.getData("Npc.img");
         mobStringData = dataProvider.getData("Mob.img");
         skillStringData = dataProvider.getData("Skill.img");

@@ -26,7 +26,7 @@ import constants.game.GameConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -310,7 +310,7 @@ public class MapleStorage {
         if(fee == null) {
             fee = 100;
             
-            MapleDataProvider npc = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
+            DataProvider npc = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
             Data npcData = npc.getData(npcId + ".img");
             if(npcData != null) {
                 fee = MapleDataTool.getIntConvert("info/trunkPut", npcData, 100);
@@ -328,7 +328,7 @@ public class MapleStorage {
         if(fee == null) {
             fee = 0;
             
-            MapleDataProvider npc = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
+            DataProvider npc = MapleDataProviderFactory.getDataProvider(WZFiles.NPC);
             Data npcData = npc.getData(npcId + ".img");
             if(npcData != null) {
                 fee = MapleDataTool.getIntConvert("info/trunkGet", npcData, 0);

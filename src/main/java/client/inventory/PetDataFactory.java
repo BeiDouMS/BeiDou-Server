@@ -22,7 +22,7 @@
 package client.inventory;
 
 import provider.Data;
-import provider.MapleDataProvider;
+import provider.DataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Danny (Leifde)
  */
 public class PetDataFactory {
-    private static MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
+    private static DataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
     private static Map<String, PetCommand> petCommands = new HashMap<>();
     private static Map<Integer, Integer> petHunger = new HashMap<>();
 
