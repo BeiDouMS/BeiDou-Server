@@ -23,7 +23,7 @@ public class GuildPackets {
             p.writeByte(0);
             return p;
         }
-        MapleGuild g = chr.getClient().getWorldServer().getGuild(chr.getMGC());
+        Guild g = chr.getClient().getWorldServer().getGuild(chr.getMGC());
         if (g == null) { //failed to read from DB - don't show a guild
             p.writeByte(0);
             return p;
@@ -335,7 +335,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static void getGuildInfo(OutPacket p, MapleGuild guild) {
+    public static void getGuildInfo(OutPacket p, Guild guild) {
         p.writeInt(guild.getId());
         p.writeString(guild.getName());
         for (int i = 1; i <= 5; i++) {
@@ -531,7 +531,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet guildMarkChanged(int chrId, MapleGuild guild) {
+    public static Packet guildMarkChanged(int chrId, Guild guild) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_MARK_CHANGED);
         p.writeInt(chrId);
         p.writeShort(guild.getLogoBG());

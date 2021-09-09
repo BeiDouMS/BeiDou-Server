@@ -44,8 +44,8 @@ import net.server.coordinator.partysearch.PartySearchCoordinator;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.guild.MapleGuildSummary;
 import net.server.services.BaseService;
@@ -576,11 +576,11 @@ public class World {
         }
     }
 
-    public MapleGuild getGuild(MapleGuildCharacter mgc) {
+    public Guild getGuild(MapleGuildCharacter mgc) {
         if(mgc == null) return null;
         
         int gid = mgc.getGuildId();
-        MapleGuild g = Server.getInstance().getGuild(gid, mgc.getWorld(), mgc.getCharacter());
+        Guild g = Server.getInstance().getGuild(gid, mgc.getWorld(), mgc.getCharacter());
         if (gsStore.get(gid) == null) {
             gsStore.put(gid, new MapleGuildSummary(g));
         }
@@ -611,7 +611,7 @@ public class World {
         if (gsStore.containsKey(gid)) {
             return gsStore.get(gid);
         } else {
-            MapleGuild g = Server.getInstance().getGuild(gid, wid, null);
+            Guild g = Server.getInstance().getGuild(gid, wid, null);
             if (g != null) {
                 gsStore.put(gid, new MapleGuildSummary(g));
             }
@@ -624,7 +624,7 @@ public class World {
     }
 
     public void reloadGuildSummary() {
-        MapleGuild g;
+        Guild g;
         Server server = Server.getInstance();
         for (int i : gsStore.keySet()) {
             g = server.getGuild(i, getId(), null);
@@ -675,7 +675,7 @@ public class World {
         }
         if (bDifferentGuild) {
             if (mc.isLoggedinWorld()) {
-                MapleGuild guild = Server.getInstance().getGuild(guildid);
+                Guild guild = Server.getInstance().getGuild(guildid);
                 if (guild != null) {
                     mc.getMap().broadcastPacket(mc, GuildPackets.guildNameChanged(cid, guild.getName()));
                     mc.getMap().broadcastPacket(mc, GuildPackets.guildMarkChanged(cid, guild));

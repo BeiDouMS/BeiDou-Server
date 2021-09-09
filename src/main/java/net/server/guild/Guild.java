@@ -44,7 +44,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 
-public class MapleGuild {
+public class Guild {
 
     private enum BCOp {
         NONE, DISBAND, EMBLEMCHANGE
@@ -60,7 +60,7 @@ public class MapleGuild {
     private Map<Integer, List<Integer>> notifications = new LinkedHashMap<>();
     private boolean bDirty = true;
 
-    public MapleGuild(int guildid, int world) {
+    public Guild(int guildid, int world) {
         this.world = world;
         members = new ArrayList<>();
 
@@ -521,7 +521,7 @@ public class MapleGuild {
                                 ps.executeUpdate();
                             } catch (SQLException e) {
                                 e.printStackTrace();
-                                System.out.println("expelMember - MapleGuild " + e);
+                                System.out.println("expelMember - Guild " + e);
                             }
                             Server.getInstance().getWorld(mgc.getWorld()).setOfflineGuildStatus((short) 0, (byte) 5, cid);
                         }

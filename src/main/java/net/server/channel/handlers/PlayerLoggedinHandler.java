@@ -37,8 +37,8 @@ import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.world.EventRecallCoordinator;
 import net.server.guild.Alliance;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
@@ -268,7 +268,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             if (player.getGuildId() > 0) {
-                MapleGuild playerGuild = server.getGuild(player.getGuildId(), player.getWorld(), player);
+                Guild playerGuild = server.getGuild(player.getGuildId(), player.getWorld(), player);
                 if (playerGuild == null) {
                     player.deleteGuild(player.getGuildId());
                     player.getMGC().setGuildId(0);

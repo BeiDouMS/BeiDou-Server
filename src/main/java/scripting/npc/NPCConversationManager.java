@@ -34,8 +34,8 @@ import net.server.Server;
 import net.server.channel.Channel;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import net.server.guild.Alliance;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import provider.MapleData;
@@ -306,7 +306,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
 
 	public void displayGuildRanks() {
-		MapleGuild.displayGuildRanks(getClient(), npc);
+		Guild.displayGuildRanks(getClient(), npc);
 	}
         
         public boolean canSpawnPlayerNpc(int mapid) {

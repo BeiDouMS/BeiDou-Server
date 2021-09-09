@@ -46,8 +46,8 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.guild.Alliance;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.world.CharacterSaveService;
@@ -1188,7 +1188,7 @@ public class Character extends AbstractCharacterObject {
             family.broadcast(packet, id);
         }
 
-        MapleGuild guild = getGuild();
+        Guild guild = getGuild();
         if (guild != null) {
             guild.broadcast(packet, id);
         }
@@ -4999,7 +4999,7 @@ public class Character extends AbstractCharacterObject {
         return getGender() == 0;
     }
 
-    public MapleGuild getGuild() {
+    public Guild getGuild() {
         try {
             return Server.getInstance().getGuild(getGuildId(), getWorld(), this);
         } catch (Exception ex) {
@@ -6036,7 +6036,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void increaseGuildCapacity() {
-        int cost = MapleGuild.getIncreaseGuildCost(getGuild().getCapacity());
+        int cost = Guild.getIncreaseGuildCost(getGuild().getCapacity());
 
         if (getMeso() < cost) {
             dropMessage(1, "You don't have enough mesos.");
@@ -10414,7 +10414,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void broadcastMarriageMessage() {
-        MapleGuild guild = this.getGuild();
+        Guild guild = this.getGuild();
         if (guild != null) {
             guild.broadcast(PacketCreator.marriageMessage(0, name));
         }

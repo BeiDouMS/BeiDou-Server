@@ -29,7 +29,7 @@ public class MapleGuildSummary {
     private byte logoColor;
     private int allianceId;
 
-    public MapleGuildSummary(MapleGuild g) {
+    public MapleGuildSummary(Guild g) {
         this.name = g.getName();
         this.logoBG = (short) g.getLogoBG();
         this.logoBGColor = (byte) g.getLogoBGColor();

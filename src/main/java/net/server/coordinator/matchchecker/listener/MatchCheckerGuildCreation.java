@@ -26,8 +26,8 @@ import net.packet.Packet;
 import net.server.Server;
 import net.server.coordinator.matchchecker.AbstractMatchCheckerListener;
 import net.server.coordinator.matchchecker.MatchCheckerListenerRecipe;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.world.MapleParty;
 
@@ -120,7 +120,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                 leader.gainMeso(-YamlConfig.config.server.CREATE_GUILD_COST, true, false, true);
                 
                 leader.getMGC().setGuildId(gid);
-                MapleGuild guild = Server.getInstance().getGuild(leader.getGuildId(), leader.getWorld(), leader);  // initialize guild structure
+                Guild guild = Server.getInstance().getGuild(leader.getGuildId(), leader.getWorld(), leader);  // initialize guild structure
                 Server.getInstance().changeRank(gid, leader.getId(), 1);
                 
                 leader.sendPacket(GuildPackets.showGuildInfo(leader));

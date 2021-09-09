@@ -30,8 +30,8 @@ import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import net.server.guild.Alliance;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildResponse;
 import net.server.world.MapleParty;
 import net.server.world.World;
@@ -77,7 +77,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                Set<Character> eligibleMembers = new HashSet<>(MapleGuild.getEligiblePlayersForGuild(mc));
+                Set<Character> eligibleMembers = new HashSet<>(Guild.getEligiblePlayersForGuild(mc));
                 if (eligibleMembers.size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
                     if (mc.getMap().getAllPlayers().size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
                         // thanks NovaStory for noticing message in need of smoother info
@@ -108,7 +108,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 
                 String targetName = p.readString();
-                MapleGuildResponse mgr = MapleGuild.sendInvitation(c, targetName);
+                MapleGuildResponse mgr = Guild.sendInvitation(c, targetName);
                 if (mgr != null) {
                     c.sendPacket(mgr.getPacket(targetName));
                 } else {} // already sent invitation, do nothing
@@ -126,7 +126,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                if (!MapleGuild.answerInvitation(cid, mc.getName(), gid, true)) {
+                if (!Guild.answerInvitation(cid, mc.getName(), gid, true)) {
                     return;
                 }
                 

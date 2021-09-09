@@ -27,8 +27,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.guild.Alliance;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import tools.PacketCreator;
 
@@ -95,7 +95,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 
                 break;
             case 0x04: { // Accept Invite
-                MapleGuild guild = chr.getGuild();
+                Guild guild = chr.getGuild();
                 if (guild.getAllianceId() != 0 || chr.getGuildRank() != 1 || chr.getGuildId() < 1) {
                     return;
                 }
@@ -123,7 +123,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 Server.getInstance().resetAllianceGuildPlayersRank(guildid);
                 
                 chr.getMGC().setAllianceRank(2);
-                MapleGuild g = Server.getInstance().getGuild(chr.getGuildId());
+                Guild g = Server.getInstance().getGuild(chr.getGuildId());
                 if (g != null) {
                     g.getMGC(chr.getId()).setAllianceRank(2);
                 }

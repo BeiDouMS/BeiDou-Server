@@ -30,7 +30,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.server.Server;
-import net.server.guild.MapleGuild;
+import net.server.guild.Guild;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import scripting.event.EventInstanceManager;
@@ -714,7 +714,7 @@ public class AbstractPlayerInteraction {
 		}
 	}
 
-	public MapleGuild getGuild() {
+	public Guild getGuild() {
 		try {
 			return Server.getInstance().getGuild(getPlayer().getGuildId(), getPlayer().getWorld(), null);
 		} catch (Exception e) {

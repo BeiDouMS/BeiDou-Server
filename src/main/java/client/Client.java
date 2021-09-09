@@ -43,8 +43,8 @@ import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.session.SessionCoordinator.AntiMulticlientResult;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.world.*;
 import org.slf4j.Logger;
@@ -967,7 +967,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             final BuddyList bl = player.getBuddylist();
             final MapleMessengerCharacter chrm = new MapleMessengerCharacter(player, 0);
             final MapleGuildCharacter chrg = player.getMGC();
-            final MapleGuild guild = player.getGuild();
+            final Guild guild = player.getGuild();
 
             player.cancelMagicDoor();
 

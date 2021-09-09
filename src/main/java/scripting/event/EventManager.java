@@ -30,7 +30,7 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
-import net.server.guild.MapleGuild;
+import net.server.guild.Guild;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.World;
@@ -742,7 +742,7 @@ public class EventManager {
     }
     
     private void exportReadyGuild(Integer guildId) {
-        MapleGuild mg = server.getGuild(guildId);
+        Guild mg = server.getGuild(guildId);
         String callout = "[Guild Quest] Your guild has been registered to attend to the Sharenian Guild Quest at channel " + this.getChannelServer().getId() 
                        + " and HAS JUST STARTED THE STRATEGY PHASE. After 3 minutes, no more guild members will be allowed to join the effort."
                        + " Check out Shuang at the excavation site in Perion for more info.";
@@ -751,7 +751,7 @@ public class EventManager {
     }
     
     private void exportMovedQueueToGuild(Integer guildId, int place) {
-        MapleGuild mg = server.getGuild(guildId);
+        Guild mg = server.getGuild(guildId);
         String callout = "[Guild Quest] Your guild has been registered to attend to the Sharenian Guild Quest at channel " + this.getChannelServer().getId() 
                        + " and is currently on the " + GameConstants.ordinal(place) + " place on the waiting queue.";
         
