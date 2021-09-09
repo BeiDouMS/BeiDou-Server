@@ -965,7 +965,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             final int messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId();
             //final int fid = player.getFamilyId();
             final BuddyList bl = player.getBuddylist();
-            final MapleMessengerCharacter chrm = new MapleMessengerCharacter(player, 0);
+            final MessengerCharacter chrm = new MessengerCharacter(player, 0);
             final GuildCharacter chrg = player.getMGC();
             final Guild guild = player.getGuild();
 

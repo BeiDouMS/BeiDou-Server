@@ -29,8 +29,8 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
-import net.server.world.MapleMessengerCharacter;
 import net.server.world.Messenger;
+import net.server.world.MessengerCharacter;
 import net.server.world.World;
 import tools.PacketCreator;
 
@@ -51,7 +51,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             if (messengerid == 0) {
                                 InviteCoordinator.removeInvite(InviteType.MESSENGER, player.getId());
 
-                                MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, 0);
+                                MessengerCharacter messengerplayer = new MessengerCharacter(player, 0);
                                 messenger = world.createMessenger(messengerplayer);
                                 player.setMessenger(messenger);
                                 player.setMessengerPosition(0);
@@ -62,7 +62,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                                     InviteResult res = inviteRes.result;
                                     if (res == InviteResult.ACCEPTED) {
                                         int position = messenger.getLowestPosition();
-                                        MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, position);
+                                        MessengerCharacter messengerplayer = new MessengerCharacter(player, position);
                                         if (messenger.getMembers().size() < 3) {
                                             player.setMessenger(messenger);
                                             player.setMessengerPosition(position);
@@ -114,7 +114,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                         break;
                     case 0x06:
                         if (messenger != null) {
-                            MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, player.getMessengerPosition());
+                            MessengerCharacter messengerplayer = new MessengerCharacter(player, player.getMessengerPosition());
                             input = p.readString();
                             world.messengerChat(messenger, input, messengerplayer.getName());
                         }

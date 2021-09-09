@@ -29,10 +29,10 @@ import java.util.List;
 public final class Messenger {
 
     private final int id;
-    private final List<MapleMessengerCharacter> members = new ArrayList<>(3);
+    private final List<MessengerCharacter> members = new ArrayList<>(3);
     private final boolean[] pos = new boolean[3];
 
-    public Messenger(int id, MapleMessengerCharacter chrfor) {
+    public Messenger(int id, MessengerCharacter chrfor) {
         this.id = id;
         for (int i = 0; i < 3; i++) {
             pos[i] = false;
@@ -44,17 +44,17 @@ public final class Messenger {
         return id;
     }
 
-    public Collection<MapleMessengerCharacter> getMembers() {
+    public Collection<MessengerCharacter> getMembers() {
         return Collections.unmodifiableList(members);
     }
 
-    public void addMember(MapleMessengerCharacter member, int position) {
+    public void addMember(MessengerCharacter member, int position) {
         members.add(member);
         member.setPosition(position);
         pos[position] = true;
     }
 
-    public void removeMember(MapleMessengerCharacter member) {
+    public void removeMember(MessengerCharacter member) {
         int position = member.getPosition();
         pos[position] = false;
         members.remove(member);
@@ -70,7 +70,7 @@ public final class Messenger {
     }
 
     public int getPositionByName(String name) {
-        for (MapleMessengerCharacter messengerchar : members) {
+        for (MessengerCharacter messengerchar : members) {
             if (messengerchar.getName().equals(name)) {
                 return messengerchar.getPosition();
             }

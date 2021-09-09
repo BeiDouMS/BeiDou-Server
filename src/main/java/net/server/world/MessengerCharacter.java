@@ -23,13 +23,14 @@ package net.server.world;
 
 import client.Character;
 
-public class MapleMessengerCharacter {
-    private String name;
-    private int id, position;
-    private int channel;
-    private boolean online;
+public class MessengerCharacter {
+    private final String name;
+    private final int id;
+    private int position;
+    private final int channel;
+    private final boolean online;
 
-    public MapleMessengerCharacter(Character maplechar, int position) {
+    public MessengerCharacter(Character maplechar, int position) {
         this.name = maplechar.getName();
         this.channel = maplechar.getClient().getChannel();
         this.id = maplechar.getId();
@@ -80,14 +81,9 @@ public class MapleMessengerCharacter {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final MapleMessengerCharacter other = (MapleMessengerCharacter) obj;
+        final MessengerCharacter other = (MessengerCharacter) obj;
         if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
+            return other.name == null;
+        } else return name.equals(other.name);
     }
 }

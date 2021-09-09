@@ -1810,7 +1810,7 @@ public class Character extends AbstractCharacterObject {
     public void checkMessenger() {
         if (messenger != null && messengerposition < 4 && messengerposition > -1) {
             World worldz = getWorldServer();
-            worldz.silentJoinMessenger(messenger.getId(), new MapleMessengerCharacter(this, messengerposition), messengerposition);
+            worldz.silentJoinMessenger(messenger.getId(), new MessengerCharacter(this, messengerposition), messengerposition);
             worldz.updateMessenger(getMessenger().getId(), name, client.getChannel());
         }
     }
@@ -5609,7 +5609,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         World w = getWorldServer();
-        MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(this, this.getMessengerPosition());
+        MessengerCharacter messengerplayer = new MessengerCharacter(this, this.getMessengerPosition());
 
         w.leaveMessenger(m.getId(), messengerplayer);
         this.setMessenger(null);
