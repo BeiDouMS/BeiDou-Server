@@ -28,10 +28,10 @@ import client.FamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -59,7 +59,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
         // String inviterName = slea.readMapleAsciiString();
         Character inviter = c.getWorldServer().getPlayerStorage().getCharacterById(inviterId);
         if(inviter != null) {
-            MapleInviteResult inviteResult = MapleInviteCoordinator.answerInvite(InviteType.FAMILY, c.getPlayer().getId(), c.getPlayer(), accept);
+            MapleInviteResult inviteResult = InviteCoordinator.answerInvite(InviteType.FAMILY, c.getPlayer().getId(), c.getPlayer(), accept);
             if(inviteResult.result == InviteResult.NOT_FOUND) return; //was never invited. (or expired on server only somehow?)
             if(accept) {
                 if(inviter.getFamily() != null) {

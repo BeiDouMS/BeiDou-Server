@@ -25,10 +25,10 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import net.server.world.MapleMessenger;
 import net.server.world.MapleMessengerCharacter;
 import net.server.world.World;
@@ -49,7 +49,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                         int messengerid = p.readInt();
                         if (messenger == null) {
                             if (messengerid == 0) {
-                                MapleInviteCoordinator.removeInvite(InviteType.MESSENGER, player.getId());
+                                InviteCoordinator.removeInvite(InviteType.MESSENGER, player.getId());
 
                                 MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, 0);
                                 messenger = world.createMessenger(messengerplayer);
@@ -58,7 +58,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             } else {
                                 messenger = world.getMessenger(messengerid);
                                 if (messenger != null) {
-                                    MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, true);
+                                    MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, true);
                                     InviteResult res = inviteRes.result;
                                     if (res == InviteResult.ACCEPTED) {
                                         int position = messenger.getLowestPosition();
@@ -74,7 +74,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                                 }
                             }
                         } else {
-                            MapleInviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, false);
+                            InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, false);
                         }
                         break;
                     case 0x02:
@@ -88,7 +88,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
                             if (target != null) {
                                 if (target.getMessenger() == null) {
-                                    if (MapleInviteCoordinator.createInvite(InviteType.MESSENGER, c.getPlayer(), messenger.getId(), target.getId())) {
+                                    if (InviteCoordinator.createInvite(InviteType.MESSENGER, c.getPlayer(), messenger.getId(), target.getId())) {
                                         target.sendPacket(PacketCreator.messengerInvite(c.getPlayer().getName(), messenger.getId()));
                                         c.sendPacket(PacketCreator.messengerNote(input, 4, 1));
                                     } else {

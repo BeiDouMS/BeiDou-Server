@@ -25,9 +25,9 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
 import tools.PacketCreator;
 
 public final class DenyPartyRequestHandler extends AbstractPacketHandler {
@@ -41,7 +41,7 @@ public final class DenyPartyRequestHandler extends AbstractPacketHandler {
         if (cfrom != null) {
             Character chr = c.getPlayer();
             
-            if (MapleInviteCoordinator.answerInvite(InviteType.PARTY, chr.getId(), cfrom.getPartyId(), false).result == InviteResult.DENIED) {
+            if (InviteCoordinator.answerInvite(InviteType.PARTY, chr.getId(), cfrom.getPartyId(), false).result == InviteResult.DENIED) {
                 chr.updatePartySearchAvailability(chr.getParty() == null);
                 cfrom.sendPacket(PacketCreator.partyStatusMessage(23, chr.getName()));
             }

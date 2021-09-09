@@ -26,8 +26,8 @@ import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
 import tools.PacketCreator;
 
 /**
@@ -56,12 +56,12 @@ public final class FamilyAddHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.sendFamilyMessage(72, 0));
         } else if(addChr.getFamily() != null && addChr.getFamily() == chr.getFamily()) { //same family
             c.sendPacket(PacketCreator.enableActions());
-        } else if(MapleInviteCoordinator.hasInvite(InviteType.FAMILY, addChr.getId())) {
+        } else if(InviteCoordinator.hasInvite(InviteType.FAMILY, addChr.getId())) {
             c.sendPacket(PacketCreator.sendFamilyMessage(73, 0));
         } else if(chr.getFamily() != null && addChr.getFamily() != null && addChr.getFamily().getTotalGenerations() + chr.getFamily().getTotalGenerations() > YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
             c.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
         } else {
-            MapleInviteCoordinator.createInvite(InviteType.FAMILY, chr, addChr, addChr.getId());
+            InviteCoordinator.createInvite(InviteType.FAMILY, chr, addChr, addChr.getId());
             addChr.getClient().sendPacket(PacketCreator.sendFamilyInvite(chr.getId(), chr.getName()));
             chr.dropMessage("The invite has been sent.");
             c.sendPacket(PacketCreator.enableActions());

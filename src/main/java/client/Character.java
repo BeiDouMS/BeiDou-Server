@@ -44,7 +44,7 @@ import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.coordinator.world.MapleInviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator;
 import net.server.guild.GuildPackets;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
@@ -1664,7 +1664,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void removeIncomingInvites() {
-        MapleInviteCoordinator.removePlayerIncomingInvites(id);
+        InviteCoordinator.removePlayerIncomingInvites(id);
     }
 
     private void changeMapInternal(final MapleMap to, final Point pos, Packet warpPacket) {

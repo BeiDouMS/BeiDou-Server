@@ -28,8 +28,8 @@ import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.world.MapleParty;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
@@ -293,7 +293,7 @@ public class PartySearchCoordinator {
             return false;
         }
 
-        if (MapleInviteCoordinator.createInvite(InviteType.PARTY, leader, partyid, chr.getId())) {
+        if (InviteCoordinator.createInvite(InviteType.PARTY, leader, partyid, chr.getId())) {
             chr.disablePartySearchInvite(leader.getId());
             chr.sendPacket(PacketCreator.partySearchInvite(leader));
             return true;

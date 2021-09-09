@@ -29,10 +29,10 @@ import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import tools.LogHelper;
 import tools.PacketCreator;
 import tools.Pair;
@@ -367,8 +367,8 @@ public class MapleTrade {
             trade.getPartner().cancel(partnerResult);
             trade.getPartner().getChr().setTrade(null);
             
-            MapleInviteCoordinator.answerInvite(InviteType.TRADE, trade.getChr().getId(), trade.getPartner().getChr().getId(), false);
-            MapleInviteCoordinator.answerInvite(InviteType.TRADE, trade.getPartner().getChr().getId(), trade.getChr().getId(), false);
+            InviteCoordinator.answerInvite(InviteType.TRADE, trade.getChr().getId(), trade.getPartner().getChr().getId(), false);
+            InviteCoordinator.answerInvite(InviteType.TRADE, trade.getPartner().getChr().getId(), trade.getChr().getId(), false);
         }
         chr.setTrade(null);
     }
@@ -444,7 +444,7 @@ public class MapleTrade {
     }
     
     public static void inviteTrade(Character c1, Character c2) {
-        if (MapleInviteCoordinator.hasInvite(InviteType.TRADE, c1.getId())) {
+        if (InviteCoordinator.hasInvite(InviteType.TRADE, c1.getId())) {
             if (hasTradeInviteBack(c1, c2)) {
                 c1.message("You are already managing this player's trade invitation.");
             } else {
@@ -457,7 +457,7 @@ public class MapleTrade {
             return;
         }
         
-        if (MapleInviteCoordinator.createInvite(InviteType.TRADE, c1, c1.getId(), c2.getId())) {
+        if (InviteCoordinator.createInvite(InviteType.TRADE, c1, c1.getId(), c2.getId())) {
             if (c2.getTrade() == null) {
                 c2.setTrade(new MapleTrade((byte) 1, c2));
                 c2.getTrade().setPartner(c1.getTrade());
@@ -468,7 +468,7 @@ public class MapleTrade {
             } else {
                 c1.message("The other player is already trading with someone else.");
                 cancelTrade(c1, TradeResult.NO_RESPONSE);
-                MapleInviteCoordinator.answerInvite(InviteType.TRADE, c2.getId(), c1.getId(), false);
+                InviteCoordinator.answerInvite(InviteType.TRADE, c2.getId(), c1.getId(), false);
             }
         } else {
             c1.message("The other player is already managing someone else's trade invitation.");
@@ -477,7 +477,7 @@ public class MapleTrade {
     }
 
     public static void visitTrade(Character c1, Character c2) {
-        MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
+        MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
         
         InviteResult res = inviteRes.result;
         if (res == InviteResult.ACCEPTED) {
@@ -500,7 +500,7 @@ public class MapleTrade {
         if (trade != null) {
             if (trade.getPartner() != null) {
                 Character other = trade.getPartner().getChr();
-                if (MapleInviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResult.DENIED) {
+                if (InviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResult.DENIED) {
                     other.message(chr.getName() + " has declined your trade request.");
                 }
                 

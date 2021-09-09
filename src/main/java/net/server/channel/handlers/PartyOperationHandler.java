@@ -26,10 +26,10 @@ import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.PartyOperation;
@@ -64,7 +64,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             case 3: { // join
                 int partyid = p.readInt();
                 
-                MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
+                MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
                 InviteResult res = inviteRes.result;
                 if (res == InviteResult.ACCEPTED) {
                     MapleParty.joinParty(player, partyid, false);
@@ -95,7 +95,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                             party = player.getParty();
                         }
                         if (party.getMembers().size() < 6) {
-                            if (MapleInviteCoordinator.createInvite(InviteType.PARTY, player, party.getId(), invited.getId())) {
+                            if (InviteCoordinator.createInvite(InviteType.PARTY, player, party.getId(), invited.getId())) {
                                 invited.sendPacket(PacketCreator.partyInvite(player));
                             } else {
                                 c.sendPacket(PacketCreator.partyStatusMessage(22, invited.getName()));

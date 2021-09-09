@@ -41,9 +41,9 @@ import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.partysearch.PartySearchCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.guild.GuildPackets;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
@@ -1066,7 +1066,7 @@ public class World {
                 if (messenger == null) {
                     Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
                     if (from != null) {
-                        if (MapleInviteCoordinator.createInvite(InviteType.MESSENGER, from, messengerid, targetChr.getId())) {
+                        if (InviteCoordinator.createInvite(InviteType.MESSENGER, from, messengerid, targetChr.getId())) {
                             targetChr.sendPacket(PacketCreator.messengerInvite(sender, messengerid));
                             from.sendPacket(PacketCreator.messengerNote(target, 4, 1));
                         } else {
@@ -1131,7 +1131,7 @@ public class World {
         if (isConnected(sender)) {
             Character senderChr = getPlayerStorage().getCharacterByName(sender);
             if (senderChr != null && senderChr.getMessenger() != null) {
-                if (MapleInviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), senderChr.getMessenger().getId(), false).result == InviteResult.DENIED) {
+                if (InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), senderChr.getMessenger().getId(), false).result == InviteResult.DENIED) {
                     senderChr.sendPacket(PacketCreator.messengerNote(player.getName(), 5, 0));
                 }
             }

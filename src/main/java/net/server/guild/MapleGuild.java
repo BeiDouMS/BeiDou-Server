@@ -31,9 +31,9 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -717,7 +717,7 @@ public class MapleGuild {
         }
 
         Character sender = c.getPlayer();
-        if (MapleInviteCoordinator.createInvite(InviteType.GUILD, sender, sender.getGuildId(), mc.getId())) {
+        if (InviteCoordinator.createInvite(InviteType.GUILD, sender, sender.getGuildId(), mc.getId())) {
             mc.sendPacket(GuildPackets.guildInvite(sender.getGuildId(), sender.getName()));
             return null;
         } else {
@@ -726,7 +726,7 @@ public class MapleGuild {
     }
 
     public static boolean answerInvitation(int targetId, String targetName, int guildId, boolean answer) {
-        MapleInviteResult res = MapleInviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
+        MapleInviteResult res = InviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
 
         MapleGuildResponse mgr;
         Character sender = res.from;

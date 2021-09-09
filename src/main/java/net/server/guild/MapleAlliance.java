@@ -25,9 +25,9 @@ import client.Character;
 import client.Client;
 import net.packet.Packet;
 import net.server.Server;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import tools.DatabaseConnection;
@@ -447,7 +447,7 @@ public class MapleAlliance {
                 if (victim == null) {
                     c.getPlayer().dropMessage(5, "The master of the guild that you offered an invitation is currently not online.");
                 } else {
-                    if (MapleInviteCoordinator.createInvite(InviteType.ALLIANCE, c.getPlayer(), allianceId, victim.getId())) {
+                    if (InviteCoordinator.createInvite(InviteType.ALLIANCE, c.getPlayer(), allianceId, victim.getId())) {
                         victim.sendPacket(GuildPackets.allianceInvite(allianceId, c.getPlayer()));
                     } else {
                         c.getPlayer().dropMessage(5, "The master of the guild that you offered an invitation is currently managing another invite.");
@@ -458,7 +458,7 @@ public class MapleAlliance {
     }
 
     public static boolean answerInvitation(int targetId, String targetGuildName, int allianceId, boolean answer) {
-        MapleInviteResult res = MapleInviteCoordinator.answerInvite(InviteType.ALLIANCE, targetId, allianceId, answer);
+        MapleInviteResult res = InviteCoordinator.answerInvite(InviteType.ALLIANCE, targetId, allianceId, answer);
 
         String msg;
         Character sender = res.from;
