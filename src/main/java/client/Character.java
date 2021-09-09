@@ -160,7 +160,7 @@ public class Character extends AbstractCharacterObject {
     private MapleMessenger messenger = null;
     private MapleMiniGame miniGame;
     private MapleRockPaperScissor rps;
-    private MapleMount maplemount;
+    private Mount maplemount;
     private MapleParty party;
     private final Pet[] pets = new Pet[3];
     private MaplePlayerShop playerShop = null;
@@ -5372,7 +5372,7 @@ public class Character extends AbstractCharacterObject {
         return bookCover;
     }
 
-    public MapleMount getMount() {
+    public Mount getMount() {
         return maplemount;
     }
 
@@ -7424,9 +7424,9 @@ public class Character extends AbstractCharacterObject {
 
             final int mountid = ret.getJobType() * 10000000 + 1004;
             if (ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18) != null) {
-                ret.maplemount = new MapleMount(ret, ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18).getItemId(), mountid);
+                ret.maplemount = new Mount(ret, ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18).getItemId(), mountid);
             } else {
-                ret.maplemount = new MapleMount(ret, 0, mountid);
+                ret.maplemount = new Mount(ret, 0, mountid);
             }
             ret.maplemount.setExp(mountexp);
             ret.maplemount.setLevel(mountlevel);
@@ -7540,8 +7540,8 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleMount mount(int id, int skillid) {
-        MapleMount mount = maplemount;
+    public Mount mount(int id, int skillid) {
+        Mount mount = maplemount;
         mount.setItemId(id);
         mount.setSkillId(skillid);
         return mount;

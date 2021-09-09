@@ -345,7 +345,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     }
                 }
 
-                MapleMount mount = player.getMount();   // thanks Ari for noticing a scenario where Silver Mane quest couldn't be started
+                Mount mount = player.getMount();   // thanks Ari for noticing a scenario where Silver Mane quest couldn't be started
                 if (mount.getItemId() != 0) {
                     player.sendPacket(PacketCreator.updateMount(player.getId(), mount, false));
                 }

@@ -1850,7 +1850,7 @@ public class PacketCreator {
         // Monster Riding
         Integer bv = chr.getBuffedValue(BuffStat.MONSTER_RIDING);
         if (bv != null) {
-            MapleMount mount = chr.getMount();
+            Mount mount = chr.getMount();
             if (mount != null) {
                 p.writeInt(mount.getItemId());
                 p.writeInt(mount.getSkillId());
@@ -2712,7 +2712,7 @@ public class PacketCreator {
 
         Item mount;     //mounts can potentially crash the client if the player's level is not properly checked
         if (chr.getMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && MapleItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
-            MapleMount mmount = chr.getMount();
+            Mount mmount = chr.getMount();
             p.writeByte(mmount.getId()); //mount
             p.writeInt(mmount.getLevel()); //level
             p.writeInt(mmount.getExp()); //exp
@@ -2792,7 +2792,7 @@ public class PacketCreator {
      * @param mount
      * @return
      */
-    public static Packet showMonsterRiding(int cid, MapleMount mount) { //Gtfo with this, this is just giveForeignBuff
+    public static Packet showMonsterRiding(int cid, Mount mount) { //Gtfo with this, this is just giveForeignBuff
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
         p.writeLong(BuffStat.MONSTER_RIDING.getValue());
@@ -4556,7 +4556,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateMount(int charid, MapleMount mount, boolean levelup) {
+    public static Packet updateMount(int charid, Mount mount, boolean levelup) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_TAMING_MOB_INFO);
         p.writeInt(charid);
         p.writeInt(mount.getLevel());

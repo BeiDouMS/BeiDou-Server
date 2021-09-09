@@ -1223,7 +1223,7 @@ public class MapleStatEffect {
         int localDuration = getBuffLocalDuration();
         int localsourceid = sourceid;
         int seconds = localDuration / 1000;
-        MapleMount givemount = null;
+        Mount givemount = null;
         if (isMonsterRiding()) {
             int ridingMountId = 0;
             Item mount = applyfrom.getInventory(InventoryType.EQUIPPED).getItem((short) -18);
