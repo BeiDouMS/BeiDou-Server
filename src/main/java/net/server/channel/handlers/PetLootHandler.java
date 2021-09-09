@@ -26,7 +26,7 @@ import client.Client;
 import client.inventory.Pet;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapItem;
+import server.maps.MapItem;
 import server.maps.MapleMapObject;
 import tools.PacketCreator;
 
@@ -52,7 +52,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
         int oid = p.readInt();
         MapleMapObject ob = chr.getMap().getMapObject(oid);        
         try {
-            MapleMapItem mapitem = (MapleMapItem) ob;
+            MapItem mapitem = (MapItem) ob;
             if (mapitem.getMeso() > 0) {
                 if (!chr.isEquippedMesoMagnet()) {
                     c.sendPacket(PacketCreator.enableActions());

@@ -1748,7 +1748,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateMapItemObject(MapleMapItem drop, boolean giveOwnership) {
+    public static Packet updateMapItemObject(MapItem drop, boolean giveOwnership) {
         OutPacket p = OutPacket.create(SendOpcode.DROP_ITEM_FROM_MAPOBJECT);
         p.writeByte(2);
         p.writeInt(drop.getObjectId());
@@ -1766,7 +1766,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet dropItemFromMapObject(Character player, MapleMapItem drop, Point dropfrom, Point dropto, byte mod) {
+    public static Packet dropItemFromMapObject(Character player, MapItem drop, Point dropfrom, Point dropto, byte mod) {
         int dropType = drop.getDropType();
         if (drop.hasClientsideOwnership(player) && dropType < 3) {
             dropType = 2;

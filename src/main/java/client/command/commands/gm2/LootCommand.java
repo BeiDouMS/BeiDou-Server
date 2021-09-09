@@ -25,7 +25,7 @@ package client.command.commands.gm2;
 
 import client.Client;
 import client.command.Command;
-import server.maps.MapleMapItem;
+import server.maps.MapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 
@@ -42,7 +42,7 @@ public class LootCommand extends Command {
     public void execute(Client c, String[] params) {
         List<MapleMapObject> items = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.ITEM));
         for (MapleMapObject item : items) {
-            MapleMapItem mapItem = (MapleMapItem) item;
+            MapItem mapItem = (MapItem) item;
             if (mapItem.getOwnerId() == c.getPlayer().getId() || mapItem.getOwnerId() == c.getPlayer().getPartyId()) {
                 c.getPlayer().pickupItem(mapItem);
             }

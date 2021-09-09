@@ -93,7 +93,7 @@ public class MapleMap {
     private final Map<Integer, MaplePortal> portals = new HashMap<>();
     private final Map<Integer, Integer> backgroundTypes = new HashMap<>();
     private final Map<String, Integer> environment = new LinkedHashMap<>();
-    private final Map<MapleMapItem, Long> droppedItems = new LinkedHashMap<>();
+    private final Map<MapItem, Long> droppedItems = new LinkedHashMap<>();
     private final LinkedList<WeakReference<MapleMapObject>> registeredDrops = new LinkedList<>();
     private final Map<MobLootEntry, Long> mobLootEntries = new HashMap(20);
     private final List<Runnable> statUpdateRunnables = new ArrayList(50);
@@ -861,7 +861,7 @@ public class MapleMap {
         return droppedItemCount.get();
     }
 
-    private void instantiateItemDrop(MapleMapItem mdrop) {
+    private void instantiateItemDrop(MapItem mdrop) {
         if (droppedItemCount.get() >= YamlConfig.config.server.ITEM_LIMIT_ON_MAP) {
             MapleMapObject mapobj;
 
@@ -893,11 +893,11 @@ public class MapleMap {
         droppedItemCount.incrementAndGet();
     }
 
-    private void registerItemDrop(MapleMapItem mdrop) {
+    private void registerItemDrop(MapItem mdrop) {
         droppedItems.put(mdrop, !everlast ? Server.getInstance().getCurrentTime() + YamlConfig.config.server.ITEM_EXPIRE_TIME : Long.MAX_VALUE);
     }
 
-    private void unregisterItemDrop(MapleMapItem mdrop) {
+    private void unregisterItemDrop(MapItem mdrop) {
         objectWLock.lock();
         try {
             droppedItems.remove(mdrop);
@@ -907,13 +907,13 @@ public class MapleMap {
     }
 
     private void makeDisappearExpiredItemDrops() {
-        List<MapleMapItem> toDisappear = new LinkedList<>();
+        List<MapItem> toDisappear = new LinkedList<>();
 
         objectRLock.lock();
         try {
             long timeNow = Server.getInstance().getCurrentTime();
 
-            for (Entry<MapleMapItem, Long> it : droppedItems.entrySet()) {
+            for (Entry<MapItem, Long> it : droppedItems.entrySet()) {
                 if (it.getValue() < timeNow) {
                     toDisappear.add(it.getKey());
                 }
@@ -922,13 +922,13 @@ public class MapleMap {
             objectRLock.unlock();
         }
 
-        for (MapleMapItem mmi : toDisappear) {
+        for (MapItem mmi : toDisappear) {
             makeDisappearItemFromMap(mmi);
         }
 
         objectWLock.lock();
         try {
-            for (MapleMapItem mmi : toDisappear) {
+            for (MapItem mmi : toDisappear) {
                 droppedItems.remove(mmi);
             }
         } finally {
@@ -993,7 +993,7 @@ public class MapleMap {
         }
     }
 
-    private List<MapleMapItem> getDroppedItems() {
+    private List<MapItem> getDroppedItems() {
         objectRLock.lock();
         try {
             return new LinkedList<>(droppedItems.keySet());
@@ -1004,7 +1004,7 @@ public class MapleMap {
 
     public int getDroppedItemsCountById(int itemid) {
         int count = 0;
-        for (MapleMapItem mmi : getDroppedItems()) {
+        for (MapItem mmi : getDroppedItems()) {
             if (mmi.getItemId() == itemid) {
                 count++;
             }
@@ -1013,7 +1013,7 @@ public class MapleMap {
         return count;
     }
 
-    public void pickItemDrop(Packet pickupPacket, MapleMapItem mdrop) { // mdrop must be already locked and not-pickedup checked at this point
+    public void pickItemDrop(Packet pickupPacket, MapItem mdrop) { // mdrop must be already locked and not-pickedup checked at this point
         broadcastMessage(pickupPacket, mdrop.getPosition());
 
         droppedItemCount.decrementAndGet();
@@ -1022,10 +1022,10 @@ public class MapleMap {
         unregisterItemDrop(mdrop);
     }
 
-    public List<MapleMapItem> updatePlayerItemDropsToParty(int partyid, int charid, List<Character> partyMembers, Character partyLeaver) {
-        List<MapleMapItem> partyDrops = new LinkedList<>();
+    public List<MapItem> updatePlayerItemDropsToParty(int partyid, int charid, List<Character> partyMembers, Character partyLeaver) {
+        List<MapItem> partyDrops = new LinkedList<>();
 
-        for (MapleMapItem mdrop : getDroppedItems()) {
+        for (MapItem mdrop : getDroppedItems()) {
             if (mdrop.getOwnerId() == charid) {
                 mdrop.lockItem();
                 try {
@@ -1068,8 +1068,8 @@ public class MapleMap {
         return partyDrops;
     }
 
-    public void updatePartyItemDropsToNewcomer(Character newcomer, List<MapleMapItem> partyItems) {
-        for (MapleMapItem mdrop : partyItems) {
+    public void updatePartyItemDropsToNewcomer(Character newcomer, List<MapItem> partyItems) {
+        for (MapItem mdrop : partyItems) {
             mdrop.lockItem();
             try {
                 if (mdrop.isPickedUp()) {
@@ -1095,7 +1095,7 @@ public class MapleMap {
     }
 
     private void spawnDrop(final Item idrop, final Point dropPos, final MapleMapObject dropper, final Character chr, final byte droptype, final short questid) {
-        final MapleMapItem mdrop = new MapleMapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
+        final MapItem mdrop = new MapItem(idrop, dropPos, dropper, chr, chr.getClient(), droptype, false, questid);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
         spawnAndAddRangedMapObject(mdrop, c -> {
             Character chr1 = c.getPlayer();
@@ -1116,7 +1116,7 @@ public class MapleMap {
 
     public final void spawnMesoDrop(final int meso, final Point position, final MapleMapObject dropper, final Character owner, final boolean playerDrop, final byte droptype) {
         final Point droppos = calcDropPos(position, position);
-        final MapleMapItem mdrop = new MapleMapItem(meso, droppos, dropper, owner, owner.getClient(), droptype, playerDrop);
+        final MapItem mdrop = new MapItem(meso, droppos, dropper, owner, owner.getClient(), droptype, playerDrop);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
 
         spawnAndAddRangedMapObject(mdrop, c -> {
@@ -1133,7 +1133,7 @@ public class MapleMap {
 
     public final void disappearingItemDrop(final MapleMapObject dropper, final Character owner, final Item item, final Point pos) {
         final Point droppos = calcDropPos(pos, pos);
-        final MapleMapItem mdrop = new MapleMapItem(item, droppos, dropper, owner, owner.getClient(), (byte) 1, false);
+        final MapItem mdrop = new MapItem(item, droppos, dropper, owner, owner.getClient(), (byte) 1, false);
 
         mdrop.lockItem();
         try {
@@ -1145,7 +1145,7 @@ public class MapleMap {
 
     public final void disappearingMesoDrop(final int meso, final MapleMapObject dropper, final Character owner, final Point pos) {
         final Point droppos = calcDropPos(pos, pos);
-        final MapleMapItem mdrop = new MapleMapItem(meso, droppos, dropper, owner, owner.getClient(), (byte) 1, false);
+        final MapItem mdrop = new MapItem(meso, droppos, dropper, owner, owner.getClient(), (byte) 1, false);
 
         mdrop.lockItem();
         try {
@@ -2137,7 +2137,7 @@ public class MapleMap {
         }
 
         final Point droppos = calcDropPos(pos, pos);
-        final MapleMapItem mdrop = new MapleMapItem(item, droppos, dropper, owner, owner.getClient(), dropType, playerDrop);
+        final MapItem mdrop = new MapItem(item, droppos, dropper, owner, owner.getClient(), dropType, playerDrop);
         mdrop.setDropTime(Server.getInstance().getCurrentTime());
 
         spawnAndAddRangedMapObject(mdrop, c -> {
@@ -2208,7 +2208,7 @@ public class MapleMap {
         service.registerOverallAction(mapid, r, delay);
     }
 
-    private void activateItemReactors(final MapleMapItem drop, final Client c) {
+    private void activateItemReactors(final MapItem drop, final Client c) {
         final Item item = drop.getItem();
 
         for (final MapleMapObject o : getReactors()) {
@@ -2232,7 +2232,7 @@ public class MapleMap {
             int reactItem = reactProp.getLeft(), reactQty = reactProp.getRight();
             Rectangle reactArea = react.getArea();
 
-            List<MapleMapItem> list;
+            List<MapItem> list;
             objectRLock.lock();
             try {
                 list = new ArrayList<>(droppedItems.keySet());
@@ -2240,7 +2240,7 @@ public class MapleMap {
                 objectRLock.unlock();
             }
 
-            for (final MapleMapItem drop : list) {
+            for (final MapItem drop : list) {
                 drop.lockItem();
                 try {
                     if (!drop.isPickedUp()) {
@@ -2830,15 +2830,15 @@ public class MapleMap {
         }
     }
 
-    private void broadcastItemDropMessage(MapleMapItem mdrop, Point dropperPos, Point dropPos, byte mod, Point rangedFrom) {
+    private void broadcastItemDropMessage(MapItem mdrop, Point dropperPos, Point dropPos, byte mod, Point rangedFrom) {
         broadcastItemDropMessage(mdrop, dropperPos, dropPos, mod, getRangedDistance(), rangedFrom);
     }
 
-    private void broadcastItemDropMessage(MapleMapItem mdrop, Point dropperPos, Point dropPos, byte mod) {
+    private void broadcastItemDropMessage(MapItem mdrop, Point dropperPos, Point dropPos, byte mod) {
         broadcastItemDropMessage(mdrop, dropperPos, dropPos, mod, Double.POSITIVE_INFINITY, null);
     }
 
-    private void broadcastItemDropMessage(MapleMapItem mdrop, Point dropperPos, Point dropPos, byte mod, double rangeSq, Point rangedFrom) {
+    private void broadcastItemDropMessage(MapItem mdrop, Point dropperPos, Point dropPos, byte mod, double rangeSq, Point rangedFrom) {
         chrRLock.lock();
         try {
             for (Character chr : characters) {
@@ -3343,14 +3343,14 @@ public class MapleMap {
     }
 
     public boolean makeDisappearItemFromMap(MapleMapObject mapobj) {
-        if (mapobj instanceof MapleMapItem) {
-            return makeDisappearItemFromMap((MapleMapItem) mapobj);
+        if (mapobj instanceof MapItem) {
+            return makeDisappearItemFromMap((MapItem) mapobj);
         } else {
             return mapobj == null;  // no drop to make disappear...
         }
     }
 
-    public boolean makeDisappearItemFromMap(MapleMapItem mapitem) {
+    public boolean makeDisappearItemFromMap(MapItem mapitem) {
         if (mapitem != null && mapitem == getMapObject(mapitem.getObjectId())) {
             mapitem.lockItem();
             try {
@@ -3412,11 +3412,11 @@ public class MapleMap {
 
     private class ActivateItemReactor implements Runnable {
 
-        private final MapleMapItem mapitem;
+        private final MapItem mapitem;
         private final MapleReactor reactor;
         private final Client c;
 
-        public ActivateItemReactor(MapleMapItem mapitem, MapleReactor reactor, Client c) {
+        public ActivateItemReactor(MapItem mapitem, MapleReactor reactor, Client c) {
             this.mapitem = mapitem;
             this.reactor = reactor;
             this.c = c;

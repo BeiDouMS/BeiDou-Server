@@ -36,8 +36,8 @@ import scripting.AbstractPlayerInteraction;
 import server.MapleStatEffect;
 import server.TimerManager;
 import server.life.*;
+import server.maps.MapItem;
 import server.maps.MapleMap;
-import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
@@ -153,7 +153,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 for (Integer oned : attack.allDamage.keySet()) {
                     MapleMapObject mapobject = map.getMapObject(oned);
                     if (mapobject != null && mapobject.getType() == MapleMapObjectType.ITEM) {
-                        final MapleMapItem mapitem = (MapleMapItem) mapobject;
+                        final MapItem mapitem = (MapItem) mapobject;
                             if (mapitem.getMeso() == 0) { //Maybe it is possible some how?
                                 return;
                             }

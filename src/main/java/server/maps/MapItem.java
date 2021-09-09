@@ -30,7 +30,7 @@ import tools.PacketCreator;
 import java.awt.*;
 import java.util.concurrent.locks.Lock;
 
-public class MapleMapItem extends AbstractMapObject {
+public class MapItem extends AbstractMapObject {
     protected Client ownerClient;
     protected Item item;
     protected MapleMapObject dropper;
@@ -38,9 +38,9 @@ public class MapleMapItem extends AbstractMapObject {
     protected byte type;
     protected boolean pickedUp = false, playerDrop, partyDrop;
     protected long dropTime;
-    private Lock itemLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_ITEM);
+    private final Lock itemLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_ITEM);
 
-    public MapleMapItem(Item item, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
+    public MapItem(Item item, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
@@ -53,7 +53,7 @@ public class MapleMapItem extends AbstractMapObject {
         this.playerDrop = playerDrop;
     }
 
-    public MapleMapItem(Item item, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop, int questid) {
+    public MapItem(Item item, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop, int questid) {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
@@ -67,7 +67,7 @@ public class MapleMapItem extends AbstractMapObject {
         this.questid = questid;
     }
 
-    public MapleMapItem(int meso, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
+    public MapItem(int meso, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);
         this.item = null;
         this.dropper = dropper;
@@ -96,21 +96,21 @@ public class MapleMapItem extends AbstractMapObject {
     }
 
     public final MapleMapObject getDropper() {
-	return dropper;
+        return dropper;
     }
 
     public final int getOwnerId() {
-	return character_ownerid;
+        return character_ownerid;
     }
-    
+
     public final int getPartyOwnerId() {
         return party_ownerid;
     }
-    
+
     public final void setPartyOwnerId(int partyid) {
         party_ownerid = partyid;
     }
-    
+
     public final int getClientsideOwnerId() {   // thanks nozphex (RedHat) for noting an issue with collecting party items
         if (this.party_ownerid == -1) {
             return this.character_ownerid;
@@ -118,22 +118,24 @@ public class MapleMapItem extends AbstractMapObject {
             return this.party_ownerid;
         }
     }
-    
+
     public final boolean hasClientsideOwnership(Character player) {
         return this.character_ownerid == player.getId() || this.party_ownerid == player.getPartyId() || hasExpiredOwnershipTime();
     }
-    
+
     public final boolean isFFADrop() {
         return type == 2 || type == 3 || hasExpiredOwnershipTime();
     }
-    
+
     public final boolean hasExpiredOwnershipTime() {
         return System.currentTimeMillis() - dropTime >= 15 * 1000;
     }
-    
+
     public final boolean canBePickedBy(Character chr) {
-        if (character_ownerid <= 0 || isFFADrop()) return true;
-        
+        if (character_ownerid <= 0 || isFFADrop()) {
+            return true;
+        }
+
         if (party_ownerid == -1) {
             if (chr.getId() == character_ownerid) {
                 return true;
@@ -149,30 +151,30 @@ public class MapleMapItem extends AbstractMapObject {
                 return true;
             }
         }
-        
+
         return hasExpiredOwnershipTime();
     }
-    
+
     public final Client getOwnerClient() {
-	return (ownerClient.isLoggedIn() && !ownerClient.getPlayer().isAwayFromWorld()) ? ownerClient : null;
+        return (ownerClient.isLoggedIn() && !ownerClient.getPlayer().isAwayFromWorld()) ? ownerClient : null;
     }
 
     public final int getMeso() {
-	return meso;
+        return meso;
     }
 
     public final boolean isPlayerDrop() {
-	return playerDrop;
+        return playerDrop;
     }
 
     public final boolean isPickedUp() {
-	return pickedUp;
+        return pickedUp;
     }
 
     public void setPickedUp(final boolean pickedUp) {
-	this.pickedUp = pickedUp;
+        this.pickedUp = pickedUp;
     }
-	
+
     public long getDropTime() {
         return dropTime;
     }
@@ -182,34 +184,34 @@ public class MapleMapItem extends AbstractMapObject {
     }
 
     public byte getDropType() {
-	return type;
+        return type;
     }
-    
+
     public void lockItem() {
         itemLock.lock();
     }
-    
+
     public void unlockItem() {
         itemLock.unlock();
     }
 
     @Override
     public final MapleMapObjectType getType() {
-	return MapleMapObjectType.ITEM;
+        return MapleMapObjectType.ITEM;
     }
 
     @Override
     public void sendSpawnData(final Client client) {
         Character chr = client.getPlayer();
-        
-	if (chr.needQuestItem(questid, getItemId())) {
-	    this.lockItem();
+
+        if (chr.needQuestItem(questid, getItemId())) {
+            this.lockItem();
             try {
                 client.sendPacket(PacketCreator.dropItemFromMapObject(chr, this, null, getPosition(), (byte) 2));
             } finally {
                 this.unlockItem();
             }
-	}
+        }
     }
 
     @Override

@@ -1501,14 +1501,14 @@ public class Character extends AbstractCharacterObject {
         }
 
         MapleMap map = this.getMap();
-        List<MapleMapItem> partyItems = null;
+        List<MapItem> partyItems = null;
 
         int partyId = exPartyMembers != null ? -1 : this.getPartyId();
         for (WeakReference<MapleMap> mapRef : mapids) {
             MapleMap mapObj = mapRef.get();
 
             if (mapObj != null) {
-                List<MapleMapItem> partyMapItems = mapObj.updatePlayerItemDropsToParty(partyId, id, partyMembers, partyLeaver);
+                List<MapItem> partyMapItems = mapObj.updatePlayerItemDropsToParty(partyId, id, partyMembers, partyLeaver);
                 if (map.hashCode() == mapObj.hashCode()) {
                     partyItems = partyMapItems;
                 }
@@ -1911,13 +1911,13 @@ public class Character extends AbstractCharacterObject {
         pickupItem(ob, -1);
     }
 
-    public final void pickupItem(MapleMapObject ob, int petIndex) {     // yes, one picks the MapleMapObject, not the MapleMapItem
+    public final void pickupItem(MapleMapObject ob, int petIndex) {     // yes, one picks the MapleMapObject, not the MapItem
         if (ob == null) {                                               // pet index refers to the one picking up the item
             return;
         }
 
-        if (ob instanceof MapleMapItem) {
-            MapleMapItem mapitem = (MapleMapItem) ob;
+        if (ob instanceof MapItem) {
+            MapItem mapitem = (MapItem) ob;
             if (System.currentTimeMillis() - mapitem.getDropTime() < 400 || !mapitem.canBePickedBy(this)) {
                 sendPacket(PacketCreator.enableActions());
                 return;
