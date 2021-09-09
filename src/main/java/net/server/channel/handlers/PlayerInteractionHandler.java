@@ -34,7 +34,7 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleTrade;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameType;
@@ -471,7 +471,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.SET_MESO.getCode()) {
                 chr.getTrade().setMeso(p.readInt());
             } else if (mode == Action.SET_ITEMS.getCode()) {
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 InventoryType ivType = InventoryType.getByType(p.readByte());
                 short pos = p.readShort();
                 Item item = chr.getInventory(ivType).getItem(pos);
@@ -565,7 +565,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.serverNotice(1, "Could not perform shop operation with that item."));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
-                } else if (MapleItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
+                } else if (ItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
                     if (ItemConstants.isPet(ivItem.getItemId())) {
                         c.sendPacket(PacketCreator.serverNotice(1, "Pets are not allowed to be sold on the Player Store."));
                     } else {

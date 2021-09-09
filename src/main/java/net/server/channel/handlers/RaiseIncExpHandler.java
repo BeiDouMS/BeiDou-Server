@@ -8,8 +8,8 @@ import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleItemInformationProvider.QuestConsItem;
+import server.ItemInformationProvider;
+import server.ItemInformationProvider.QuestConsItem;
 import server.quest.Quest;
 import tools.PacketCreator;
 
@@ -30,7 +30,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 QuestConsItem consItem = ii.getQuestConsumablesInfo(itemid);
                 if (consItem == null) {
                     return;

@@ -30,7 +30,7 @@ import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 public class ItemCommand extends Command {
     {
@@ -47,7 +47,7 @@ public class ItemCommand extends Command {
         }
 
         int itemId = Integer.parseInt(params[0]);
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         if(ii.getName(itemId) == null) {
             player.yellowMessage("Item id '" + params[0] + "' does not exist.");

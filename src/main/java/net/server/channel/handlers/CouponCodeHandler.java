@@ -31,7 +31,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.CashShop;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -87,7 +87,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
             for (Entry<Integer, Integer> e : couponItems.entrySet()) {
                 int item = e.getKey(), qty = e.getValue();
                 
-                if (MapleItemInformationProvider.getInstance().getName(item) == null) {
+                if (ItemInformationProvider.getInstance().getName(item) == null) {
                     item = 4000000;
                     qty = 1;
                     
@@ -238,7 +238,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                                     qty = (short) quantity;
                                 }
                                 
-                                if (MapleItemInformationProvider.getInstance().isCash(item)) {
+                                if (ItemInformationProvider.getInstance().isCash(item)) {
                                     Item it = CashShop.generateCouponItem(item, qty);
 
                                     cs.addToInventory(it);

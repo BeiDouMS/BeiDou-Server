@@ -1,7 +1,7 @@
 package tools.mapletools;
 
 import provider.wz.WZFiles;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 
 import java.io.*;
@@ -227,7 +227,7 @@ public class SkillMakerFetcher {
     }
 
     private static void generateUpdatedItemFee() {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         float adjPrice = reqMeso;
 
         if (itemid < 2000000) {
@@ -329,7 +329,7 @@ public class SkillMakerFetcher {
     }
 
     public static void main(String[] args) {
-        DatabaseConnection.initializeConnectionPool(); // Using MapleItemInformationProvider which loads som unrelated things from the db
+        DatabaseConnection.initializeConnectionPool(); // Using ItemInformationProvider which loads som unrelated things from the db
         writeMakerTableData();
     }
 }

@@ -28,7 +28,7 @@ import client.Client;
 import client.Stat;
 import client.command.Command;
 import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 public class FaceCommand extends Command {
     {
@@ -46,7 +46,7 @@ public class FaceCommand extends Command {
         try {
             if (params.length == 1) {
                 int itemId = Integer.parseInt(params[0]);
-                if (!ItemConstants.isFace(itemId) || MapleItemInformationProvider.getInstance().getName(itemId) == null) {
+                if (!ItemConstants.isFace(itemId) || ItemInformationProvider.getInstance().getName(itemId) == null) {
                     player.yellowMessage("Face id '" + params[0] + "' does not exist.");
                     return;
                 }
@@ -56,7 +56,7 @@ public class FaceCommand extends Command {
                 player.equipChanged();
             } else {
                 int itemId = Integer.parseInt(params[1]);
-                if (!ItemConstants.isFace(itemId) || MapleItemInformationProvider.getInstance().getName(itemId) == null) {
+                if (!ItemConstants.isFace(itemId) || ItemInformationProvider.getInstance().getName(itemId) == null) {
                     player.yellowMessage("Face id '" + params[1] + "' does not exist.");
                 }
 

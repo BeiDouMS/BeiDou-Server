@@ -29,9 +29,9 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
+import server.ItemInformationProvider;
 import server.MakerItemFactory;
 import server.MakerItemFactory.MakerItemCreateEntry;
-import server.MapleItemInformationProvider;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
@@ -47,7 +47,7 @@ import java.util.Map;
  */
 public class MakerProcessor {
     
-    private static MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
     public static void makerAction(InPacket p, Client c) {
         if (c.tryacquireClient()) {
@@ -376,7 +376,7 @@ public class MakerProcessor {
             if(!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
                 eqp.setUpgradeSlots((byte)(eqp.getUpgradeSlots() + 1));
             }
-            item = MapleItemInformationProvider.getInstance().scrollEquipWithId(eqp, 2049100, true, 2049100, c.getPlayer().isGM());
+            item = ItemInformationProvider.getInstance().scrollEquipWithId(eqp, 2049100, true, 2049100, c.getPlayer().isGM());
         }
         
         if(!reagentids.isEmpty()) {

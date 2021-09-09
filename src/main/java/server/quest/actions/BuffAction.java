@@ -24,7 +24,7 @@ package server.quest.actions;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.quest.Quest;
 import server.quest.QuestActionType;
 
@@ -52,6 +52,6 @@ public class BuffAction extends MapleQuestAction {
 	
 	@Override
 	public void run(Character chr, Integer extSelection) {
-		MapleItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
+		ItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
 	}
 } 

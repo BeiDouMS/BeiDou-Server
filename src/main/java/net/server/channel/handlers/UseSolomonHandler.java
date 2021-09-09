@@ -29,7 +29,7 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 /**
@@ -45,7 +45,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         
         if (c.tryacquireClient()) {
             try {

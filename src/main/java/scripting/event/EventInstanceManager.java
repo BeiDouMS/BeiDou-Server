@@ -36,7 +36,7 @@ import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.scheduler.EventScriptScheduler;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleStatEffect;
 import server.ThreadManager;
 import server.TimerManager;
@@ -144,7 +144,7 @@ public class EventInstanceManager {
         
         public void applyEventPlayersItemBuff(int itemId) {
                 List<Character> players = getPlayerList();
-                MapleStatEffect mse = MapleItemInformationProvider.getInstance().getItemEffect(itemId);
+                MapleStatEffect mse = ItemInformationProvider.getInstance().getItemEffect(itemId);
                 
                 if(mse != null) {
                         for (Character player: players) {

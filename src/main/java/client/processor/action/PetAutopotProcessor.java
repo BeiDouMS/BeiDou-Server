@@ -28,7 +28,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleStatEffect;
 import tools.PacketCreator;
 
@@ -116,7 +116,7 @@ public class PetAutopotProcessor {
                         }
                     }
 
-                    stat = MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId());
+                    stat = ItemInformationProvider.getInstance().getItemEffect(toUse.getItemId());
                     hasHpGain = stat.getHp() > 0 || stat.getHpRate() > 0.0;
                     hasMpGain = stat.getMp() > 0 || stat.getMpRate() > 0.0;
                     

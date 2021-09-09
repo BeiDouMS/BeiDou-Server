@@ -58,7 +58,7 @@ import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
 import server.*;
-import server.MapleItemInformationProvider.ScriptedItem;
+import server.ItemInformationProvider.ScriptedItem;
 import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
@@ -94,7 +94,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.regex.Pattern;
 
 public class Character extends AbstractCharacterObject {
-    private static final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
     private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
     private static final String[] BLOCKED_NAMES = {"admin", "owner", "moderator", "intern", "donor", "administrator", "FREDRICK", "help", "helper", "alert", "notice", "maplestory", "fuck", "wizet", "fucking", "negro", "fuk", "fuc", "penis", "pussy", "asshole", "gay",
             "nigger", "homo", "suck", "cum", "shit", "shitty", "condom", "security", "official", "rape", "nigga", "sex", "tit", "boner", "orgy", "clit", "asshole", "fatass", "bitch", "support", "gamemaster", "cock", "gaay", "gm",
@@ -902,7 +902,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (InventoryType invType : InventoryType.values()) {
             Inventory inv = this.getInventory(invType);
 
@@ -2977,7 +2977,7 @@ public class Character extends AbstractCharacterObject {
                                 InventoryManipulator.removeFromSlot(client, inv.getType(), item.getPosition(), item.getQuantity(), true);
                             }
 
-                            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                            ItemInformationProvider ii = ItemInformationProvider.getInstance();
                             for (Item item : toberemove) {
                                 List<Integer> toadd = new ArrayList<>();
                                 Pair<Integer, String> replace = ii.getReplaceOnExpire(item.getItemId());
@@ -3593,7 +3593,7 @@ public class Character extends AbstractCharacterObject {
 
             System.out.println("IN ACTION:");
             for (Entry<BuffStat, MapleBuffStatValueHolder> bpl : effects.entrySet()) {
-                System.out.println(bpl.getKey().name() + " -> " + MapleItemInformationProvider.getInstance().getName(bpl.getValue().effect.getSourceId()));
+                System.out.println(bpl.getKey().name() + " -> " + ItemInformationProvider.getInstance().getName(bpl.getValue().effect.getSourceId()));
             }
         } finally {
             chrLock.unlock();
@@ -9348,7 +9348,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public int sellAllItemsFromPosition(MapleItemInformationProvider ii, InventoryType type, short pos) {
+    public int sellAllItemsFromPosition(ItemInformationProvider ii, InventoryType type, short pos) {
         int mesoGain = 0;
 
         Inventory inv = getInventory(type);
@@ -9367,7 +9367,7 @@ public class Character extends AbstractCharacterObject {
         return (mesoGain);
     }
 
-    private int standaloneSell(Client c, MapleItemInformationProvider ii, InventoryType type, short slot, short quantity) {
+    private int standaloneSell(Client c, ItemInformationProvider ii, InventoryType type, short slot, short quantity) {
         if (quantity == 0xFFFF || quantity == 0) {
             quantity = 1;
         }
@@ -9506,7 +9506,7 @@ public class Character extends AbstractCharacterObject {
                     Equip eqp = eqpUpg.getKey();
                     setMergeFlag(eqp);
 
-                    String showStr = " '" + MapleItemInformationProvider.getInstance().getName(eqp.getItemId()) + "': ";
+                    String showStr = " '" + ItemInformationProvider.getInstance().getName(eqp.getItemId()) + "': ";
                     String upgdStr = eqp.gainStats(eqpStatups).getLeft();
 
                     this.forceUpdateItem(eqp);

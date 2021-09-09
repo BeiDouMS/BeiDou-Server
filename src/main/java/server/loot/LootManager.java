@@ -40,7 +40,7 @@ public class LootManager {
             qCompleteAmount = quest.getCompleteItemAmountNeeded(dropEntry.itemId);
         }
 
-        //boolean restricted = MapleItemInformationProvider.getInstance().isPickupRestricted(dropEntry.itemId);
+        //boolean restricted = ItemInformationProvider.getInstance().isPickupRestricted(dropEntry.itemId);
         for (int i = 0; i < players.size(); i++) {
             LootInventory chrInv = playersInv.get(i);
 

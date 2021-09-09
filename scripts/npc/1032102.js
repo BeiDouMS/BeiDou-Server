@@ -69,7 +69,7 @@ function action(mode, type, selection) {
 				//var level = cm.getPlayer().getPet(i).getLevel();
 				//var closeness = cm.getPlayer().getPet(i).getCloseness();
 				//var fullness = cm.getPlayer().getPet(i).getFullness();
-				//MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+				//ItemInformationProvider ii = ItemInformationProvider.getInstance();
 				if (id < 5000029 || id > 5000033) {
 					cm.sendOk("Something wrong, try again.");
 					cm.dispose();
@@ -89,8 +89,8 @@ function action(mode, type, selection) {
 					cm.dispose();
 				}
 				
-                                /*if (name.equals(MapleItemInformationProvider.getInstance().getName(id))) {
-				 	name = MapleItemInformationProvider.getInstance().getName(after);
+                                /*if (name.equals(ItemInformationProvider.getInstance().getName(id))) {
+				 	name = ItemInformationProvider.getInstance().getName(after);
 				}*/
                 
 				cm.gainItem(5380000, -1);

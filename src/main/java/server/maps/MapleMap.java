@@ -53,7 +53,7 @@ import net.server.world.Party;
 import net.server.world.World;
 import scripting.event.EventInstanceManager;
 import scripting.map.MapScriptManager;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleStatEffect;
 import server.TimerManager;
 import server.events.gm.*;
@@ -610,7 +610,7 @@ public class MapleMap {
     }
 
     private static void sortDropEntries(List<MonsterDropEntry> from, List<MonsterDropEntry> item, List<MonsterDropEntry> visibleQuest, List<MonsterDropEntry> otherQuest, Character chr) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (MonsterDropEntry mde : from) {
             if (!ii.isQuestItem(mde.itemId)) {
@@ -633,7 +633,7 @@ public class MapleMap {
         Collections.shuffle(dropEntry);
 
         Item idrop;
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (final MonsterDropEntry de : dropEntry) {
             float cardRate = chr.getCardRate(de.itemId);
@@ -678,7 +678,7 @@ public class MapleMap {
         Collections.shuffle(globalEntry);
 
         Item idrop;
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (final MonsterGlobalDropEntry de : globalEntry) {
             if (Randomizer.nextInt(999999) < de.chance) {
@@ -1397,7 +1397,7 @@ public class MapleMap {
 
                     int buff = monster.getBuffToGive();
                     if (buff > -1) {
-                        MapleItemInformationProvider mii = MapleItemInformationProvider.getInstance();
+                        ItemInformationProvider mii = ItemInformationProvider.getInstance();
                         for (MapObject mmo : this.getPlayers()) {
                             Character character = (Character) mmo;
                             if (character.isAlive()) {
@@ -2177,7 +2177,7 @@ public class MapleMap {
 
         Collections.shuffle(list);
 
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Random rnd = new Random();
 
         final Point dropPos = new Point(pos);

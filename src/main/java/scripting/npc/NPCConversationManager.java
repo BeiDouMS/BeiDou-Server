@@ -365,7 +365,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
 
 	public MapleStatEffect getItemEffect(int itemId) {
-		return MapleItemInformationProvider.getInstance().getItemEffect(itemId);
+		return ItemInformationProvider.getInstance().getItemEffect(itemId);
 	}
 
 	public void resetStats() {
@@ -532,7 +532,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
         
         public boolean itemExists(int itemid) {
-                return MapleItemInformationProvider.getInstance().getName(itemid) != null;
+                return ItemInformationProvider.getInstance().getName(itemid) != null;
         }
         
         public int getCosmeticItem(int itemid) {
@@ -567,18 +567,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         
         public Object[] getAvailableMasteryBooks() {
-                return MapleItemInformationProvider.getInstance().usableMasteryBooks(this.getPlayer()).toArray();
+                return ItemInformationProvider.getInstance().usableMasteryBooks(this.getPlayer()).toArray();
         }
         
         public Object[] getAvailableSkillBooks() {
-                List<Integer> ret = MapleItemInformationProvider.getInstance().usableSkillBooks(this.getPlayer());
+                List<Integer> ret = ItemInformationProvider.getInstance().usableSkillBooks(this.getPlayer());
                 ret.addAll(MapleSkillbookInformationProvider.getTeachableSkills(this.getPlayer()));
                 
                 return ret.toArray();
         }
         
         public Object[] getNamesWhoDropsItem(Integer itemId) {
-                return MapleItemInformationProvider.getInstance().getWhoDrops(itemId).toArray();
+                return ItemInformationProvider.getInstance().getWhoDrops(itemId).toArray();
         }
         
         public String getSkillBookInfo(int itemid) {

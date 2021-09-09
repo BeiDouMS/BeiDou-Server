@@ -27,7 +27,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.ThreadManager;
 import tools.FilePrinter;
 import tools.Pair;
@@ -113,7 +113,7 @@ public class Inventory implements Iterable<Item> {
     }
 
     public Item findByName(String name) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : list()) {
             String itemName = ii.getName(item.getItemId());
             if (itemName == null) {
@@ -421,7 +421,7 @@ public class Inventory implements Iterable<Item> {
     }
 
     private static boolean checkItemRestricted(List<Pair<Item, InventoryType>> items) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         // thanks Shavit for noticing set creation that would be only effective in rare situations
         for (Pair<Item, InventoryType> p : items) {

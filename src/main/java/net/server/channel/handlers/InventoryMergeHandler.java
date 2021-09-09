@@ -31,7 +31,7 @@ import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 public final class InventoryMergeHandler extends AbstractPacketHandler {
@@ -59,7 +59,7 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         try {
             //------------------- RonanLana's SLOT MERGER -----------------
         
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             Item srcItem, dstItem;
 
             for(short dst = 1; dst <= inventory.getSlotLimit(); dst++) {

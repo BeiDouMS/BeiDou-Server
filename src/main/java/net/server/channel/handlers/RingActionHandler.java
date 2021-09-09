@@ -34,7 +34,7 @@ import net.packet.InPacket;
 import net.server.channel.Channel;
 import net.server.world.World;
 import scripting.event.EventInstanceManager;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
@@ -273,7 +273,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
     
     public static void giveMarriageRings(Character player, Character partner, int marriageRingId) {
         Pair<Integer, Integer> rings = Ring.createRing(marriageRingId, player, partner);
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         Item ringObj = ii.getEquipById(marriageRingId);
         Equip ringEqp = (Equip) ringObj;

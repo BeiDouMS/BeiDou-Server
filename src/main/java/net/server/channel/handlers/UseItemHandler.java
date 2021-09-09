@@ -31,7 +31,7 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleStatEffect;
 import tools.PacketCreator;
 
@@ -47,7 +47,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();

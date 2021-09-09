@@ -28,7 +28,7 @@ import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.life.LifeFactory;
 import server.life.Monster;
 import server.maps.MapObject;
@@ -52,7 +52,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
         Character target;
         switch (mode) {
             case 0x00: // Level1~Level8 & Package1~Package2
-                int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(p.readInt());
+                int[][] toSpawn = ItemInformationProvider.getInstance().getSummonMobs(p.readInt());
                 for (int[] toSpawnChild : toSpawn) {
                     if (Randomizer.nextInt(100) < toSpawnChild[1]) {
                         c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());

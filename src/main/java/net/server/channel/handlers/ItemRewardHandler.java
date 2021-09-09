@@ -29,8 +29,8 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleItemInformationProvider;
-import server.MapleItemInformationProvider.RewardItem;
+import server.ItemInformationProvider;
+import server.ItemInformationProvider.RewardItem;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -50,7 +50,7 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
         Item it = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);   // null check here thanks to Thora
         if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(InventoryType.USE).countById(itemId) < 1) return;
         
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
         for (RewardItem reward : rewards.getRight()) {
             if (!InventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {

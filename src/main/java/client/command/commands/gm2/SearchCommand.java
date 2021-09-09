@@ -31,7 +31,7 @@ import provider.DataProvider;
 import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.quest.Quest;
 import tools.Pair;
 
@@ -117,7 +117,7 @@ public class SearchCommand extends Command {
                 }
             }
         } else {
-            for (Pair<Integer, String> itemPair : MapleItemInformationProvider.getInstance().getAllItems()) {
+            for (Pair<Integer, String> itemPair : ItemInformationProvider.getInstance().getAllItems()) {
                 if (sb.length() < 32654) {//ohlol
                     if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
                         sb.append("#b").append(itemPair.getLeft()).append("#k - #r").append(itemPair.getRight()).append("\r\n");

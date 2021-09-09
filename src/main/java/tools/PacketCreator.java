@@ -248,7 +248,7 @@ public class PacketCreator {
 
     private static void addCharEquips(final OutPacket p, Character chr) {
         Inventory equip = chr.getInventory(InventoryType.EQUIPPED);
-        Collection<Item> ii = MapleItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
+        Collection<Item> ii = ItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
@@ -347,7 +347,7 @@ public class PacketCreator {
     }
 
     protected static void addItemInfo(final OutPacket p, Item item, boolean zeroPosition) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         boolean isCash = ii.isCash(item.getItemId());
         boolean isPet = item.getPetId() > -1;
         boolean isRing = false;
@@ -2358,7 +2358,7 @@ public class PacketCreator {
     }
 
     public static Packet getNPCShop(Client c, int sid, List<MapleShopItem> items) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         final OutPacket p = OutPacket.create(SendOpcode.OPEN_NPC_SHOP);
         p.writeInt(sid);
         p.writeShort(items.size()); // item count
@@ -2711,7 +2711,7 @@ public class PacketCreator {
         p.writeByte(0); //end of pets
 
         Item mount;     //mounts can potentially crash the client if the player's level is not properly checked
-        if (chr.getMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && MapleItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
+        if (chr.getMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && ItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
             Mount mmount = chr.getMount();
             p.writeByte(mmount.getId()); //mount
             p.writeInt(mmount.getLevel()); //level
@@ -2730,7 +2730,7 @@ public class PacketCreator {
         p.writeInt(book.getNormalCard());
         p.writeInt(book.getSpecialCard());
         p.writeInt(book.getTotalCards());
-        p.writeInt(chr.getMonsterBookCover() > 0 ? MapleItemInformationProvider.getInstance().getCardMobId(chr.getMonsterBookCover()) : 0);
+        p.writeInt(chr.getMonsterBookCover() > 0 ? ItemInformationProvider.getInstance().getCardMobId(chr.getMonsterBookCover()) : 0);
         Item medal = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -49);
         if (medal != null) {
             p.writeInt(medal.getItemId());

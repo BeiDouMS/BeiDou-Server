@@ -35,7 +35,7 @@ import java.util.Map.Entry;
  * @author Jay Estrella, Ronan
  */
 public class MakerItemFactory {
-    private static MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
     
     public static MakerItemCreateEntry getItemCreateEntry(int toCreate, int stimulantid, Map<Integer, Short> reagentids) {
         MakerItemCreateEntry makerEntry = ii.getMakerItemEntry(toCreate);

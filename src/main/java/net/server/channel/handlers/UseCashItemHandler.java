@@ -37,7 +37,7 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleShop;
 import server.MapleShopFactory;
 import server.TimerManager;
@@ -64,7 +64,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
         player.setLastUsedCashItem(timeNow);
 
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         short position = p.readShort();
         int itemId = p.readInt();
         int itemType = itemId / 10000;

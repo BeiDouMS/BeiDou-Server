@@ -31,7 +31,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                     whiteScroll = true;
                 }
 
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 Character chr = c.getPlayer();
                 Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(dst);
                 Skill LegendarySpirit = SkillFactory.getSkill(1003);

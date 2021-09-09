@@ -24,7 +24,7 @@ package server.partyquest;
 
 import client.Character;
 import net.server.world.Party;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.TimerManager;
 import tools.PacketCreator;
 
@@ -168,14 +168,14 @@ public class Pyramid extends PartyQuest {
         int total = (kill + cool);
         if (buffcount == 0 && total >= 250) {
             buffcount++;
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants())
                 ii.getItemEffect(2022585).applyTo(chr);
 
         } else if (buffcount == 1 && total >= 500) {
             buffcount++;
             skill++;
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
                 chr.sendPacket(PacketCreator.getEnergy("massacre_skill", skill));
                 ii.getItemEffect(2022586).applyTo(chr);
@@ -183,7 +183,7 @@ public class Pyramid extends PartyQuest {
         } else if (buffcount == 2 && total >= 1000) {
             buffcount++;
             skill++;
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
                 chr.sendPacket(PacketCreator.getEnergy("massacre_skill", skill));
                 ii.getItemEffect(2022587).applyTo(chr);
@@ -194,7 +194,7 @@ public class Pyramid extends PartyQuest {
         } else if (buffcount == 4 && total >= 2000) {
             buffcount++;
             skill++;
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
                 chr.sendPacket(PacketCreator.getEnergy("massacre_skill", skill));
                 ii.getItemEffect(2022588).applyTo(chr);

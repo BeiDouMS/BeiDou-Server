@@ -25,7 +25,7 @@ package client.command.commands.gm0;
 
 import client.Client;
 import client.command.Command;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.gachapon.MapleGachapon;
 
 public class GachaCommand extends Command {
@@ -56,7 +56,7 @@ public class GachaCommand extends Command {
         String talkStr = "The #b" + gachaName + "#k Gachapon contains the following items.\r\n\r\n";
         for (int i = 0; i < 2; i++){
             for (int id : gacha.getItems(i)){
-                talkStr += "-" + MapleItemInformationProvider.getInstance().getName(id) + "\r\n";
+                talkStr += "-" + ItemInformationProvider.getInstance().getName(id) + "\r\n";
             }
         }
         talkStr += "\r\nPlease keep in mind that there are items that are in all gachapons and are not listed here.";

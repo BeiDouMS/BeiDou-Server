@@ -37,8 +37,8 @@ function raiseOpen() {
         }
         
         if (diffExp > 0) {  // thanks IxianMace for noticing Mimiana egg not following progress by EXP
-            const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-            var consItem = MapleItemInformationProvider.getInstance().getQuestConsumablesInfo(4220137);
+            const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+            var consItem = ItemInformationProvider.getInstance().getQuestConsumablesInfo(4220137);
             var exp = consItem.exp;
             var grade = consItem.grade;
             

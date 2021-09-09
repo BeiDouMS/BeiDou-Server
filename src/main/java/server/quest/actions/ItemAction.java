@@ -29,7 +29,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataTool;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.quest.Quest;
 import server.quest.QuestActionType;
 import tools.FilePrinter;
@@ -241,7 +241,7 @@ public class ItemAction extends MapleQuestAction {
         
         private void announceInventoryLimit(List<Integer> itemids, Character chr) {
                 for (Integer id : itemids) {
-                        if (MapleItemInformationProvider.getInstance().isPickupRestricted(id) && chr.haveItemWithId(id, true)) {
+                        if (ItemInformationProvider.getInstance().isPickupRestricted(id) && chr.haveItemWithId(id, true)) {
                                 chr.dropMessage(1, "Please check if you already have a similar one-of-a-kind item in your inventory.");
                                 return;
                         }
@@ -293,7 +293,7 @@ public class ItemAction extends MapleQuestAction {
         }
         
         public boolean restoreLostItem(Character chr, int itemid) {
-            if (!MapleItemInformationProvider.getInstance().isQuestItem(itemid)) {
+            if (!ItemInformationProvider.getInstance().isQuestItem(itemid)) {
                 return false;
             }
             

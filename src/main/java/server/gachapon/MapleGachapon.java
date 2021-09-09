@@ -21,7 +21,7 @@
  */
 package server.gachapon;
 
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.Randomizer;
 
 /**
@@ -100,7 +100,7 @@ public class MapleGachapon {
 		}
                 
                 public static String[] getLootInfo() {
-			MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+			ItemInformationProvider ii = ItemInformationProvider.getInstance();
                         
                         String[] strList = new String[values.length + 1];
                         

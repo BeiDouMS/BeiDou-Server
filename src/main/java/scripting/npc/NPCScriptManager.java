@@ -25,7 +25,7 @@ import client.Character;
 import client.Client;
 import net.server.world.PartyCharacter;
 import scripting.AbstractScriptManager;
-import server.MapleItemInformationProvider.ScriptedItem;
+import server.ItemInformationProvider.ScriptedItem;
 import tools.FilePrinter;
 import tools.PacketCreator;
 

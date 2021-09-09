@@ -87,8 +87,8 @@ function end(mode, type, selection) {
                                 }
                         } while (after == pet.getItemId());
 			
-                        /*if (name.equals(MapleItemInformationProvider.getInstance().getName(id))) {
-				name = MapleItemInformationProvider.getInstance().getName(after);
+                        /*if (name.equals(ItemInformationProvider.getInstance().getName(id))) {
+				name = ItemInformationProvider.getInstance().getName(after);
 			} */
 
                         qm.gainMeso(-10000);

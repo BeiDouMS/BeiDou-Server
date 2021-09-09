@@ -26,7 +26,7 @@ package client.command.commands.gm1;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.life.MonsterInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
@@ -53,7 +53,7 @@ public class WhoDropsCommand extends Command {
             try {
                 String searchString = player.getLastCommandMessage();
                 String output = "";
-                Iterator<Pair<Integer, String>> listIterator = MapleItemInformationProvider.getInstance().getItemDataByName(searchString).iterator();
+                Iterator<Pair<Integer, String>> listIterator = ItemInformationProvider.getInstance().getItemDataByName(searchString).iterator();
                 if (listIterator.hasNext()) {
                     int count = 1;
                     while (listIterator.hasNext() && count <= 3) {

@@ -207,8 +207,8 @@ function getScrollSuccessTier(scrollStats) {
 
 function getAvailableScrollsPool(baseScrolls, rewardTier, successTier) {
     var scrolls = [];
-    const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-    var ii = MapleItemInformationProvider.getInstance();
+    const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+    var ii = ItemInformationProvider.getInstance();
     
     for (var i = 0; i < baseScrolls.length; i++) {
         for (var j = 0; j < 100; j++) {
@@ -245,8 +245,8 @@ function getPlayerCardTierPower() {
 
         if (ceTier >= 8) {  // is special card
             const LifeFactory = Java.type('server.life.LifeFactory');
-            const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-            var mobLevel = LifeFactory.getMonsterLevel(MapleItemInformationProvider.getInstance().getCardMobId(cardid));
+            const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+            var mobLevel = LifeFactory.getMonsterLevel(ItemInformationProvider.getInstance().getCardMobId(cardid));
             var mobTier = getLevelTier(mobLevel) - 1;
 
             countTier[mobTier] += (ce.getValue() * 1.2);

@@ -32,7 +32,7 @@ import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleStorage;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -45,7 +45,7 @@ import tools.PacketCreator;
 public class StorageProcessor {
     
         public static void storageAction(InPacket p, Client c) {
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 Character chr = c.getPlayer();
                 MapleStorage storage = chr.getStorage();
                 byte mode = p.readByte();

@@ -31,7 +31,7 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 import java.util.Map;
@@ -61,7 +61,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
                 if (toUse == null || toUse.getItemId() != itemId) {
                     return;
                 }
-                Map<String, Integer> skilldata = MapleItemInformationProvider.getInstance().getSkillStats(toUse.getItemId(), c.getPlayer().getJob().getId());
+                Map<String, Integer> skilldata = ItemInformationProvider.getInstance().getSkillStats(toUse.getItemId(), c.getPlayer().getJob().getId());
                 if (skilldata == null) {
                     return;
                 }
@@ -82,7 +82,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
                     }
 
                     canuse = true;
-                    if (MapleItemInformationProvider.rollSuccessChance(skilldata.get("success"))) {
+                    if (ItemInformationProvider.rollSuccessChance(skilldata.get("success"))) {
                         success = true;
                         player.changeSkillLevel(skill2, player.getSkillLevel(skill2), Math.max(skilldata.get("masterLevel"), player.getMasterLevel(skill2)), -1);
                     } else {

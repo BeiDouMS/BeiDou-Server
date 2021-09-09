@@ -30,7 +30,7 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.life.Monster;
 import tools.PacketCreator;
 
@@ -189,7 +189,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
             default:
                 // proper Fish catch, thanks to Dragohe4rt
                 
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 int itemGanho = ii.getCreateItem(itemId);
                 int mobItem = ii.getMobItem(itemId);
                 

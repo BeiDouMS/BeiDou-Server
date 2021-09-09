@@ -29,7 +29,7 @@ import client.inventory.Item;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import scripting.AbstractPlayerInteraction;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.TimerManager;
 import server.life.LifeFactory;
 import server.life.Monster;
@@ -72,7 +72,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
     
     private static void sortDropEntries(List<ReactorDropEntry> from, List<ReactorDropEntry> item, List<ReactorDropEntry> visibleQuest, List<ReactorDropEntry> otherQuest, Character chr) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         
         for(ReactorDropEntry mde : from) {
             if(!ii.isQuestItem(mde.itemId)) {
@@ -160,7 +160,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         final Point dropPos = new Point(posX, posY);
         
         if(!delayed) {
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             
             byte p = 1;
             for (ReactorDropEntry d : items) {
@@ -209,7 +209,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                     if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
-                        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                        ItemInformationProvider ii = ItemInformationProvider.getInstance();
                         drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
                     }
 

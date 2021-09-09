@@ -24,7 +24,7 @@ package client.inventory;
 import client.Character;
 import client.inventory.manipulator.CashIdGenerator;
 import constants.game.ExpTable;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.movement.AbsoluteLifeMovement;
 import server.movement.LifeMovement;
 import server.movement.LifeMovementFragment;
@@ -130,7 +130,7 @@ public class Pet extends Item {
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, 1, 0, 100, 0, 0)")) {
             int ret = CashIdGenerator.generateCashId();
             ps.setInt(1, ret);
-            ps.setString(2, MapleItemInformationProvider.getInstance().getName(itemid));
+            ps.setString(2, ItemInformationProvider.getInstance().getName(itemid));
             ps.executeUpdate();
             return ret;
         } catch (SQLException e) {
@@ -144,7 +144,7 @@ public class Pet extends Item {
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, ?, ?, ?, 0, 0)")) {
             int ret = CashIdGenerator.generateCashId();
             ps.setInt(1, ret);
-            ps.setString(2, MapleItemInformationProvider.getInstance().getName(itemid));
+            ps.setString(2, ItemInformationProvider.getInstance().getName(itemid));
             ps.setByte(3, level);
             ps.setInt(4, closeness);
             ps.setInt(5, fullness);
@@ -307,7 +307,7 @@ public class Pet extends Item {
     }
 
     public Pair<Integer, Boolean> canConsume(int itemId) {
-        return MapleItemInformationProvider.getInstance().canPetConsume(this.getItemId(), itemId);
+        return ItemInformationProvider.getInstance().canPetConsume(this.getItemId(), itemId);
     }
 
     public void updatePosition(List<LifeMovementFragment> movement) {

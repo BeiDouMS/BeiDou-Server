@@ -37,7 +37,7 @@ import net.server.Server;
 import server.CashShop;
 import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
@@ -484,7 +484,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
     
     private static boolean canBuy(Character chr, CashItem item, int cash) {
         if (item != null && item.isOnSale() && item.getPrice() <= cash) {
-            FilePrinter.print(FilePrinter.CASHITEM_BOUGHT, chr + " bought " + MapleItemInformationProvider.getInstance().getName(item.getItemId()) + " (SN " + item.getSN() + ") for " + item.getPrice());
+            FilePrinter.print(FilePrinter.CASHITEM_BOUGHT, chr + " bought " + ItemInformationProvider.getInstance().getName(item.getItemId()) + " (SN " + item.getSN() + ") for " + item.getPrice());
             return true;
         } else {
             return false;

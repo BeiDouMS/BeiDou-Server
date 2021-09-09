@@ -28,7 +28,7 @@ import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ class PairedQuicksort {
     private int i = 0;
     private int j = 0;
     private final ArrayList<Integer> intersect;
-    MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    ItemInformationProvider ii = ItemInformationProvider.getInstance();
     
     private void PartitionByItemId(int Esq, int Dir, ArrayList<Item> A) {
         Item x, w;

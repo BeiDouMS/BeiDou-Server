@@ -35,7 +35,7 @@ import net.packet.Packet;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleTrade;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -342,7 +342,7 @@ public class HiredMerchant extends AbstractMapObject {
 
         Character player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
         if (player != null && player.isLoggedinWorld()) {
-            player.dropMessage(6, "[Hired Merchant] Item '" + MapleItemInformationProvider.getInstance().getName(item.getItemId()) + "'" + qtyStr + " has been sold for " + mesos + " mesos. (" + inStore + " left)");
+            player.dropMessage(6, "[Hired Merchant] Item '" + ItemInformationProvider.getInstance().getName(item.getItemId()) + "'" + qtyStr + " has been sold for " + mesos + " mesos. (" + inStore + " left)");
         }
     }
 

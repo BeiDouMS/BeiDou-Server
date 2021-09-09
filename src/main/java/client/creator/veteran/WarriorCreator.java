@@ -28,7 +28,7 @@ import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import constants.skills.Warrior;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 /**
  *
@@ -42,7 +42,7 @@ public class WarriorCreator extends CharacterFactory {
         
         private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
                 CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 
                 recipe.setStr(35);
                 recipe.setRemainingAp(123);
@@ -83,7 +83,7 @@ public class WarriorCreator extends CharacterFactory {
                 return recipe;
         }
         
-        private static void giveEquipment(CharacterFactoryRecipe recipe, MapleItemInformationProvider ii, int equipid) {
+        private static void giveEquipment(CharacterFactoryRecipe recipe, ItemInformationProvider ii, int equipid) {
                 Item nEquip = ii.getEquipById(equipid);
                 recipe.addStartingEquipment(nEquip);
         }

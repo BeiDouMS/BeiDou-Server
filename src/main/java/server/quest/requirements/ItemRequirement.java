@@ -27,7 +27,7 @@ import client.inventory.Item;
 import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataTool;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
@@ -60,7 +60,7 @@ public class ItemRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public boolean check(Character chr, Integer npcid) {
-		MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+		ItemInformationProvider ii = ItemInformationProvider.getInstance();
 		for(Integer itemId : items.keySet()) {
 			int countNeeded = items.get(itemId);
 			int count = 0;

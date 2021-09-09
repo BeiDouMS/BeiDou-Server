@@ -91,7 +91,7 @@ public class CashShop {
             }
 
             if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
-                item = MapleItemInformationProvider.getInstance().getEquipById(itemId);
+                item = ItemInformationProvider.getInstance().getEquipById(itemId);
             } else {
                 item = new Item(itemId, (byte) 0, count, petid);
             }

@@ -36,7 +36,7 @@ class PairedQuicksort {
     private int i = 0;
     private int j = 0;
     private final ArrayList<Integer> intersect;
-    MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    ItemInformationProvider ii = ItemInformationProvider.getInstance();
     
     private void PartitionByItemId(int Esq, int Dir, ArrayList<Item> A) {
         Item x, w;
@@ -224,7 +224,7 @@ public class MapleStorageInventory {
             source.setPosition(dSlot);
             inventory.put(dSlot, source);
             inventory.remove(sSlot);
-        } else if (target.getItemId() == source.getItemId() && !ItemConstants.isRechargeable(source.getItemId()) && !MapleItemInformationProvider.getInstance().isPickupRestricted(source.getItemId()) && isSameOwner(source, target)) {
+        } else if (target.getItemId() == source.getItemId() && !ItemConstants.isRechargeable(source.getItemId()) && !ItemInformationProvider.getInstance().isPickupRestricted(source.getItemId()) && isSameOwner(source, target)) {
             if (isEquipOrCash(source)) {
                 swap(target, source);
             } else if (source.getQuantity() + target.getQuantity() > slotMax) {
@@ -252,7 +252,7 @@ public class MapleStorageInventory {
         if (source == null) {
             return;
         }
-        short slotMax = MapleItemInformationProvider.getInstance().getSlotMax(c, source.getItemId());
+        short slotMax = ItemInformationProvider.getInstance().getSlotMax(c, source.getItemId());
         this.move(src, dst, slotMax);
     }
 
@@ -296,7 +296,7 @@ public class MapleStorageInventory {
     }
 
     public void mergeItems() {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Item srcItem, dstItem;
 
         for(short dst = 1; dst <= this.getSlotLimit(); dst++) {

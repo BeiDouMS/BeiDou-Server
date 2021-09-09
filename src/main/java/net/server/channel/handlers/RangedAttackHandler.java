@@ -34,7 +34,7 @@ import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.InPacket;
 import net.packet.Packet;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.MapleStatEffect;
 import tools.PacketCreator;
 import tools.Randomizer;
@@ -91,7 +91,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             }
         } else {
             Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
-            WeaponType type = MapleItemInformationProvider.getInstance().getWeaponType(weapon.getItemId());
+            WeaponType type = ItemInformationProvider.getInstance().getWeaponType(weapon.getItemId());
             if (type == WeaponType.NOT_A_WEAPON) {
                 return;
             }

@@ -23,7 +23,7 @@ package client.inventory;
 
 import client.inventory.manipulator.KarmaManipulator;
 import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -152,7 +152,7 @@ public class Item implements Comparable<Item> {
     }
 
     public void setFlag(short b) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         if (ii.isAccountRestricted(id)) {
             b |= ItemConstants.ACCOUNT_SHARING; // thanks Shinigami15 for noticing ACCOUNT_SHARING flag not being applied properly to items server-side
         }
@@ -189,6 +189,6 @@ public class Item implements Comparable<Item> {
     }
     
     public boolean isUntradeable() {
-        return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (MapleItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !KarmaManipulator.hasKarmaFlag(this));
+        return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (ItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !KarmaManipulator.hasKarmaFlag(this));
     }
 }

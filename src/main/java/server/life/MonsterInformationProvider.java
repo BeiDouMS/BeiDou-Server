@@ -27,7 +27,7 @@ import provider.DataProvider;
 import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
 import tools.Randomizer;
@@ -176,7 +176,7 @@ public class MonsterInformationProvider {
             return dropsChancePool.get(monsterId);
         }
 
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         List<MonsterDropEntry> dropList = retrieveDrop(monsterId);
         List<Integer> ret = new ArrayList<>();

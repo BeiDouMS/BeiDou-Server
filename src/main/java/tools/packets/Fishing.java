@@ -23,7 +23,7 @@ import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 import java.util.Calendar;
@@ -105,12 +105,12 @@ public class Fishing {
                     break; 
                 case 2:
                     int itemid = getRandomItem();
-                    rewardStr = "a(n) " + MapleItemInformationProvider.getInstance().getName(itemid) + ".";
+                    rewardStr = "a(n) " + ItemInformationProvider.getInstance().getName(itemid) + ".";
                     
                     if (chr.canHold(itemid)) {
                         chr.getAbstractPlayerInteraction().gainItem(itemid, true);
                     } else {
-                        chr.showHint("Couldn't catch a(n) #r" + MapleItemInformationProvider.getInstance().getName(itemid) + "#k due to #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n inventory limit.");
+                        chr.showHint("Couldn't catch a(n) #r" + ItemInformationProvider.getInstance().getName(itemid) + "#k due to #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n inventory limit.");
                         rewardStr += ".. but has goofed up due to full inventory.";
                     }
                     break; 

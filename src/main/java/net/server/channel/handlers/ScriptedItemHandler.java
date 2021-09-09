@@ -27,8 +27,8 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.item.ItemScriptManager;
-import server.MapleItemInformationProvider;
-import server.MapleItemInformationProvider.ScriptedItem;
+import server.ItemInformationProvider;
+import server.ItemInformationProvider.ScriptedItem;
 
 /**
  *
@@ -41,7 +41,7 @@ public final class ScriptedItemHandler extends AbstractPacketHandler {
         short itemSlot = p.readShort(); // item slot, thanks RMZero213
         int itemId = p.readInt();
         
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         ScriptedItem info = ii.getScriptedItemInfo(itemId);
         if (info == null) return;
         

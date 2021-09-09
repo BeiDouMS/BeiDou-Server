@@ -33,8 +33,8 @@ import net.packet.InPacket;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.channel.Channel;
+import server.ItemInformationProvider;
 import server.MTSItemInfo;
-import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
@@ -809,7 +809,7 @@ public final class MTSHandler extends AbstractPacketHandler {
 
     public Packet getMTSSearch(int tab, int type, int cOi, String search, int page) {
         List<MTSItemInfo> items = new ArrayList<>();
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         String listaitems = "";
         if (cOi != 0) {
             List<String> retItems = new ArrayList<>();
