@@ -22,23 +22,22 @@ package client.inventory;
 import client.MapleCharacter;
 
 /**
- *
  * @author Ronan
  */
-public class MapleInventoryProof extends Inventory {
-    
-    public MapleInventoryProof(MapleCharacter mc) {
+public class InventoryProof extends Inventory {
+
+    public InventoryProof(MapleCharacter mc) {
         super(mc, MapleInventoryType.CANHOLD, (byte) 0);
     }
-    
+
     public void cloneContents(Inventory inv) {
         inv.lockInventory();
         lock.lock();
         try {
             inventory.clear();
             this.setSlotLimit(inv.getSlotLimit());
-            
-            for(Item it : inv.list()) {
+
+            for (Item it : inv.list()) {
                 Item item = new Item(it.getItemId(), it.getPosition(), it.getQuantity());
                 inventory.put(item.getPosition(), item);
             }
@@ -47,7 +46,7 @@ public class MapleInventoryProof extends Inventory {
             inv.unlockInventory();
         }
     }
-    
+
     public void flushContents() {
         lock.lock();
         try {
@@ -56,13 +55,13 @@ public class MapleInventoryProof extends Inventory {
             lock.unlock();
         }
     }
-    
+
     @Override
     protected short addSlot(Item item) {
-        if(item == null) {
+        if (item == null) {
             return -1;
         }
-        
+
         lock.lock();
         try {
             short slotId = getNextFreeSlot();
@@ -70,13 +69,13 @@ public class MapleInventoryProof extends Inventory {
                 return -1;
             }
             inventory.put(slotId, item);
-            
+
             return slotId;
         } finally {
             lock.unlock();
         }
     }
-    
+
     @Override
     protected void addSlotFromDB(short slot, Item item) {
         lock.lock();
@@ -86,7 +85,7 @@ public class MapleInventoryProof extends Inventory {
             lock.unlock();
         }
     }
-    
+
     @Override
     public void removeSlot(short slot) {
         lock.lock();

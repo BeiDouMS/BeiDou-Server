@@ -284,7 +284,7 @@ public class AbstractPlayerInteraction {
             List<List<Pair<Integer, Integer>>> toAddItemList = prepareInventoryItemList(toAddItemids, toAddQuantity);
             List<List<Pair<Integer, Integer>>> toRemoveItemList = prepareInventoryItemList(toRemoveItemids, toRemoveQuantity);
             
-            MapleInventoryProof prfInv = (MapleInventoryProof) this.getInventory(MapleInventoryType.CANHOLD);
+            InventoryProof prfInv = (InventoryProof) this.getInventory(MapleInventoryType.CANHOLD);
             prfInv.lockInventory();
             try {
                 for(int i = MapleInventoryType.EQUIP.getType(); i < MapleInventoryType.CASH.getType(); i++) {

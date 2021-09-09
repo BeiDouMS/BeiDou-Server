@@ -313,7 +313,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
             inventory[type.ordinal()] = new Inventory(this, type, (byte) b);
         }
-        inventory[MapleInventoryType.CANHOLD.ordinal()] = new MapleInventoryProof(this);
+        inventory[MapleInventoryType.CANHOLD.ordinal()] = new InventoryProof(this);
         
         for (int i = 0; i < SavedLocationType.values().length; i++) {
             savedLocations[i] = null;
