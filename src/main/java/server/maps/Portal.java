@@ -25,7 +25,7 @@ import client.Client;
 
 import java.awt.*;
 
-public interface MaplePortal {
+public interface Portal {
     int TELEPORT_PORTAL = 1;
     int MAP_PORTAL = 2;
     int DOOR_PORTAL = 6;

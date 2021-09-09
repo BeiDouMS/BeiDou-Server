@@ -46,8 +46,8 @@ import server.life.Monster;
 import server.life.NPC;
 import server.maps.MapManager;
 import server.maps.MapleMap;
-import server.maps.MaplePortal;
 import server.maps.MapleReactor;
+import server.maps.Portal;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -1277,7 +1277,7 @@ public class EventInstanceManager {
                 thisStage--;    //stages counts from ONE, scripts from ZERO
             
                 MapleMap nextStage = getMapInstance(thisMapId);
-                MaplePortal portal = nextStage.getPortal("next00");
+                Portal portal = nextStage.getPortal("next00");
                 if (portal != null) {
                         portal.setScriptName(eventFamily + thisStage);
                 }
@@ -1288,7 +1288,7 @@ public class EventInstanceManager {
                 thisStage--;    //stages counts from ONE, scripts from ZERO
             
                 MapleMap nextStage = getMapInstance(thisMapId);
-                MaplePortal portal = nextStage.getPortal(portalName);
+                Portal portal = nextStage.getPortal(portalName);
                 if (portal != null) {
                         portal.setScriptName(scriptName);
                 }

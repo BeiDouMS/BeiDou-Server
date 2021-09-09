@@ -908,7 +908,7 @@ public class MapleStatEffect {
         if (moveTo != -1) {
             if (moveTo != applyto.getMapId()) {
                 MapleMap target;
-                MaplePortal pt;
+                Portal pt;
 
                 if (moveTo == 999999999) {
                     if (sourceid != 2030100) {

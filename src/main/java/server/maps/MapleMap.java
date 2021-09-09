@@ -90,7 +90,7 @@ public class MapleMap {
     private final AtomicInteger droppedItemCount = new AtomicInteger(0);
     private final Collection<Character> characters = new LinkedHashSet<>();
     private final Map<Integer, Set<Integer>> mapParty = new LinkedHashMap<>();
-    private final Map<Integer, MaplePortal> portals = new HashMap<>();
+    private final Map<Integer, Portal> portals = new HashMap<>();
     private final Map<Integer, Integer> backgroundTypes = new HashMap<>();
     private final Map<String, Integer> environment = new LinkedHashMap<>();
     private final Map<MapItem, Long> droppedItems = new LinkedHashMap<>();
@@ -596,7 +596,7 @@ public class MapleMap {
     }
 
     public Pair<String, Integer> getDoorPositionStatus(Point pos) {
-        MaplePortal portal = findClosestPlayerSpawnpoint(pos);
+        Portal portal = findClosestPlayerSpawnpoint(pos);
 
         double angle = getAngle(portal.getPosition(), pos);
         double distn = pos.distanceSq(portal.getPosition());
@@ -2051,8 +2051,8 @@ public class MapleMap {
         }, chr -> chr.getMapId() == door.getFrom().getId());
     }
 
-    public MaplePortal getDoorPortal(int doorid) {
-        MaplePortal doorPortal = portals.get(0x80 + doorid);
+    public Portal getDoorPortal(int doorid) {
+        Portal doorPortal = portals.get(0x80 + doorid);
         if (doorPortal == null) {
             FilePrinter.printError(FilePrinter.EXCEPTION, "[Door] " + mapName + "(" + mapid + ") does not contain door portalid " + doorid);
             return portals.get(0x80);
@@ -2584,23 +2584,23 @@ public class MapleMap {
         Server.getInstance().registerAnnouncePlayerDiseases(c);
     }
 
-    public MaplePortal getRandomPlayerSpawnpoint() {
-        List<MaplePortal> spawnPoints = new ArrayList<>();
-        for (MaplePortal portal : portals.values()) {
+    public Portal getRandomPlayerSpawnpoint() {
+        List<Portal> spawnPoints = new ArrayList<>();
+        for (Portal portal : portals.values()) {
             if (portal.getType() >= 0 && portal.getType() <= 1 && portal.getTargetMapId() == 999999999) {
                 spawnPoints.add(portal);
             }
         }
-        MaplePortal portal = spawnPoints.get(new Random().nextInt(spawnPoints.size()));
+        Portal portal = spawnPoints.get(new Random().nextInt(spawnPoints.size()));
         return portal != null ? portal : getPortal(0);
     }
 
-    public MaplePortal findClosestTeleportPortal(Point from) {
-        MaplePortal closest = null;
+    public Portal findClosestTeleportPortal(Point from) {
+        Portal closest = null;
         double shortestDistance = Double.POSITIVE_INFINITY;
-        for (MaplePortal portal : portals.values()) {
+        for (Portal portal : portals.values()) {
             double distance = portal.getPosition().distanceSq(from);
-            if (portal.getType() == MaplePortal.TELEPORT_PORTAL && distance < shortestDistance && portal.getTargetMapId() != 999999999) {
+            if (portal.getType() == Portal.TELEPORT_PORTAL && distance < shortestDistance && portal.getTargetMapId() != 999999999) {
                 closest = portal;
                 shortestDistance = distance;
             }
@@ -2608,10 +2608,10 @@ public class MapleMap {
         return closest;
     }
 
-    public MaplePortal findClosestPlayerSpawnpoint(Point from) {
-        MaplePortal closest = null;
+    public Portal findClosestPlayerSpawnpoint(Point from) {
+        Portal closest = null;
         double shortestDistance = Double.POSITIVE_INFINITY;
-        for (MaplePortal portal : portals.values()) {
+        for (Portal portal : portals.values()) {
             double distance = portal.getPosition().distanceSq(from);
             if (portal.getType() >= 0 && portal.getType() <= 1 && distance < shortestDistance && portal.getTargetMapId() == 999999999) {
                 closest = portal;
@@ -2621,10 +2621,10 @@ public class MapleMap {
         return closest;
     }
 
-    public MaplePortal findClosestPortal(Point from) {
-        MaplePortal closest = null;
+    public Portal findClosestPortal(Point from) {
+        Portal closest = null;
         double shortestDistance = Double.POSITIVE_INFINITY;
-        for (MaplePortal portal : portals.values()) {
+        for (Portal portal : portals.values()) {
             double distance = portal.getPosition().distanceSq(from);
             if (distance < shortestDistance) {
                 closest = portal;
@@ -2634,8 +2634,8 @@ public class MapleMap {
         return closest;
     }
 
-    public MaplePortal findMarketPortal() {
-        for (MaplePortal portal : portals.values()) {
+    public Portal findMarketPortal() {
+        for (Portal portal : portals.values()) {
             String ptScript = portal.getScriptName();
             if (ptScript != null && ptScript.contains("market")) {
                 return portal;
@@ -2645,7 +2645,7 @@ public class MapleMap {
     }
 
     /*
-    public Collection<MaplePortal> getPortals() {
+    public Collection<Portal> getPortals() {
         return Collections.unmodifiableCollection(portals.values());
     }
     */
@@ -3008,12 +3008,12 @@ public class MapleMap {
         }
     }
 
-    public void addPortal(MaplePortal myPortal) {
+    public void addPortal(Portal myPortal) {
         portals.put(myPortal.getId(), myPortal);
     }
 
-    public MaplePortal getPortal(String portalname) {
-        for (MaplePortal port : portals.values()) {
+    public Portal getPortal(String portalname) {
+        for (Portal port : portals.values()) {
             if (port.getName().equals(portalname)) {
                 return port;
             }
@@ -3021,7 +3021,7 @@ public class MapleMap {
         return null;
     }
 
-    public MaplePortal getPortal(int portalid) {
+    public Portal getPortal(int portalid) {
         return portals.get(portalid);
     }
 

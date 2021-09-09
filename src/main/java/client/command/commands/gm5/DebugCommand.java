@@ -32,8 +32,8 @@ import server.life.Monster;
 import server.life.SpawnPoint;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
-import server.maps.MaplePortal;
 import server.maps.MapleReactor;
+import server.maps.Portal;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -80,7 +80,7 @@ public class DebugCommand extends Command {
                 break;
 
             case "portal":
-                MaplePortal portal = player.getMap().findClosestPortal(player.getPosition());
+                Portal portal = player.getMap().findClosestPortal(player.getPosition());
                 if (portal != null)
                     player.dropMessage(6, "Closest portal: " + portal.getId() + " '" + portal.getName() + "' Type: " + portal.getType() + " --> toMap: " + portal.getTargetMapId() + " scriptname: '" + portal.getScriptName() + "' state: " + (portal.getPortalState() ? 1 : 0) + ".");
                 else player.dropMessage(6, "There is no portal on this map.");

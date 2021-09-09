@@ -32,7 +32,7 @@ import tools.PacketCreator;
 
 import java.awt.*;
 
-public class GenericPortal implements MaplePortal {
+public class GenericPortal implements Portal {
     private String name;
     private String target;
     private Point position;
@@ -144,7 +144,7 @@ public class GenericPortal implements MaplePortal {
             Character chr = c.getPlayer();
             if (!(chr.getChalkboard() != null && GameConstants.isFreeMarketRoom(getTargetMapId()))) {
                 MapleMap to = chr.getEventInstance() == null ? c.getChannelServer().getMapFactory().getMap(getTargetMapId()) : chr.getEventInstance().getMapInstance(getTargetMapId());
-                MaplePortal pto = to.getPortal(getTarget());
+                Portal pto = to.getPortal(getTarget());
                 if (pto == null) {// fallback for missing portals - no real life case anymore - interesting for not implemented areas
                     pto = to.getPortal(0);
                 }

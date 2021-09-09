@@ -37,7 +37,7 @@ import java.util.Collection;
 public class Door {
     private int ownerId;
     private MapleMap town;
-    private MaplePortal townPortal;
+    private Portal townPortal;
     private final MapleMap target;
     private Pair<String, Integer> posStatus = null;
     private long deployTime;
@@ -81,7 +81,7 @@ public class Door {
     public void updateDoorPortal(Character owner) {
         int slot = owner.fetchDoorSlot();
 
-        MaplePortal nextTownPortal = getTownDoorPortal(slot);
+        Portal nextTownPortal = getTownDoorPortal(slot);
         if (nextTownPortal != null) {
             townPortal = nextTownPortal;
             areaDoor.update(nextTownPortal.getId(), nextTownPortal.getPosition());
@@ -141,7 +141,7 @@ public class Door {
         }
     }
 
-    private MaplePortal getTownDoorPortal(int doorid) {
+    private Portal getTownDoorPortal(int doorid) {
         return town.getDoorPortal(doorid);
     }
 
@@ -161,7 +161,7 @@ public class Door {
         return town;
     }
 
-    public MaplePortal getTownPortal() {
+    public Portal getTownPortal() {
         return townPortal;
     }
 

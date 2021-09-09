@@ -26,7 +26,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleTrade;
 import server.MapleTrade.TradeResult;
-import server.maps.MaplePortal;
+import server.maps.Portal;
 import tools.PacketCreator;
 
 public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
@@ -35,7 +35,7 @@ public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
             p.readByte();
             String startwp = p.readString();
             p.readShort();
-            MaplePortal portal = c.getPlayer().getMap().getPortal(startwp);
+            Portal portal = c.getPlayer().getMap().getPortal(startwp);
             if (portal == null || c.getPlayer().portalDelay() > currentServerTime() || c.getPlayer().getBlockedPortals().contains(portal.getScriptName())) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;

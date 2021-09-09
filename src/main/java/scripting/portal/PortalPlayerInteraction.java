@@ -24,7 +24,7 @@ package scripting.portal;
 import client.Client;
 import scripting.AbstractPlayerInteraction;
 import scripting.map.MapScriptManager;
-import server.maps.MaplePortal;
+import server.maps.Portal;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -34,14 +34,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
-    private final MaplePortal portal;
+    private final Portal portal;
 
-    public PortalPlayerInteraction(Client c, MaplePortal portal) {
+    public PortalPlayerInteraction(Client c, Portal portal) {
         super(c);
         this.portal = portal;
     }
 
-    public MaplePortal getPortal() {
+    public Portal getPortal() {
         return portal;
     }
 

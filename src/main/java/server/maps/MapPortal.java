@@ -23,6 +23,6 @@ package server.maps;
 
 public class MapPortal extends GenericPortal {
     public MapPortal() {
-        super(MaplePortal.MAP_PORTAL);
+        super(Portal.MAP_PORTAL);
     }
 }

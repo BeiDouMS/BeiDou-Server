@@ -29,8 +29,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
-import server.maps.MaplePortal;
 import server.maps.PlayerShop;
+import server.maps.Portal;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -63,7 +63,7 @@ public final class HiredMerchantRequest extends AbstractPacketHandler {
             }
 
             Point cpos = chr.getPosition();
-            MaplePortal portal = chr.getMap().findClosestTeleportPortal(cpos);
+            Portal portal = chr.getMap().findClosestTeleportPortal(cpos);
             if (portal != null && portal.getPosition().distance(cpos) < 120.0) {
                 chr.sendPacket(PacketCreator.getMiniRoomError(10));
                 return;

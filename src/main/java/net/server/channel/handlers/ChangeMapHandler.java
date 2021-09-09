@@ -29,7 +29,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleTrade;
 import server.maps.MapleMap;
-import server.maps.MaplePortal;
+import server.maps.Portal;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -78,7 +78,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                 p.readByte(); // 1 = from dying 0 = regular portals
                 int targetid = p.readInt();
                 String startwp = p.readString();
-                MaplePortal portal = chr.getMap().getPortal(startwp);
+                Portal portal = chr.getMap().getPortal(startwp);
                 p.readByte();
                 boolean wheel = p.readByte() > 0;
 

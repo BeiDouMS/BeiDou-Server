@@ -33,9 +33,9 @@ public class MaplePortalFactory {
         nextDoorPortal = 0x80;
     }
 
-    public MaplePortal makePortal(int type, Data portal) {
+    public Portal makePortal(int type, Data portal) {
         GenericPortal ret = null;
-        if (type == MaplePortal.MAP_PORTAL) {
+        if (type == Portal.MAP_PORTAL) {
             ret = new MapPortal();
         } else {
             ret = new GenericPortal(type);
@@ -56,7 +56,7 @@ public class MaplePortalFactory {
             script = null;
         }
         myPortal.setScriptName(script);
-        if (myPortal.getType() == MaplePortal.DOOR_PORTAL) {
+        if (myPortal.getType() == Portal.DOOR_PORTAL) {
             myPortal.setId(nextDoorPortal);
             nextDoorPortal++;
         } else {

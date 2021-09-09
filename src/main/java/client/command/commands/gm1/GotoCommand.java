@@ -108,7 +108,7 @@ public class GotoCommand extends Command {
             MapleMap target = c.getChannelServer().getMapFactory().getMap(gotomaps.get(params[0]));
             
             // expedition issue with this command detected thanks to Masterrulax
-            MaplePortal targetPortal = target.getRandomPlayerSpawnpoint();
+            Portal targetPortal = target.getRandomPlayerSpawnpoint();
             player.saveLocationOnWarp();
             player.changeMap(target, targetPortal);
         } else {

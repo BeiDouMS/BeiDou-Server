@@ -802,7 +802,7 @@ public class Character extends AbstractCharacterObject {
         c.setAccountName(this.client.getAccountName());//No null's for accountName
         this.setClient(c);
         this.map = c.getChannelServer().getMapFactory().getMap(getMapId());
-        MaplePortal portal = map.findClosestPlayerSpawnpoint(getPosition());
+        Portal portal = map.findClosestPlayerSpawnpoint(getPosition());
         if (portal == null) {
             portal = map.getPortal(0);
         }
@@ -1292,7 +1292,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         MapleMap map_ = getWarpMap(mapid);
-        MaplePortal portal_ = map_.getPortal(portal);
+        Portal portal_ = map_.getPortal(portal);
         changeMap(map_, portal_ != null ? portal_ : map_.getRandomPlayerSpawnpoint());
 
         setBanishPlayerData(banMap, banSp, banTime);
@@ -1337,7 +1337,7 @@ public class Character extends AbstractCharacterObject {
         changeMap(warpMap, warpMap.getPortal(portal));
     }
 
-    public void changeMap(int map, MaplePortal portal) {
+    public void changeMap(int map, Portal portal) {
         MapleMap warpMap;
         EventInstanceManager eim = getEventInstance();
 
@@ -1358,7 +1358,7 @@ public class Character extends AbstractCharacterObject {
         changeMap(to, to.getPortal(portal));
     }
 
-    public void changeMap(final MapleMap target, MaplePortal pto) {
+    public void changeMap(final MapleMap target, Portal pto) {
         canWarpCounter++;
 
         eventChangedMap(target.getId());    // player can be dropped from an event here, hence the new warping target.
@@ -1393,7 +1393,7 @@ public class Character extends AbstractCharacterObject {
         eventAfterChangedMap(this.getMapId());
     }
 
-    public void forceChangeMap(final MapleMap target, MaplePortal pto) {
+    public void forceChangeMap(final MapleMap target, Portal pto) {
         // will actually enter the map given as parameter, regardless of being an eventmap or whatnot
 
         canWarpCounter++;
@@ -7120,7 +7120,7 @@ public class Character extends AbstractCharacterObject {
                         if (ret.map == null) {
                             ret.map = mapManager.getMap(100000000);
                         }
-                        MaplePortal portal = ret.map.getPortal(ret.initialSpawnPoint);
+                        Portal portal = ret.map.getPortal(ret.initialSpawnPoint);
                         if (portal == null) {
                             portal = ret.map.getPortal(0);
                             ret.initialSpawnPoint = 0;
@@ -8145,7 +8145,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void saveLocationOnWarp() {  // suggestion to remember the map before warp command thanks to Lei
-        MaplePortal closest = map.findClosestPortal(getPosition());
+        Portal closest = map.findClosestPortal(getPosition());
         int curMapid = getMapId();
 
         for (int i = 0; i < savedLocations.length; i++) {
@@ -8156,7 +8156,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void saveLocation(String type) {
-        MaplePortal closest = map.findClosestPortal(getPosition());
+        Portal closest = map.findClosestPortal(getPosition());
         savedLocations[SavedLocationType.fromString(type).ordinal()] = new SavedLocation(getMapId(), closest != null ? closest.getId() : 0);
     }
 
@@ -8412,7 +8412,7 @@ public class Character extends AbstractCharacterObject {
                     if (map == null || map.getId() == 610020000 || map.getId() == 610020001) {  // reset to first spawnpoint on those maps
                         ps.setInt(24, 0);
                     } else {
-                        MaplePortal closest = map.findClosestPlayerSpawnpoint(getPosition());
+                        Portal closest = map.findClosestPlayerSpawnpoint(getPosition());
                         if (closest != null) {
                             ps.setInt(24, closest.getId());
                         } else {
