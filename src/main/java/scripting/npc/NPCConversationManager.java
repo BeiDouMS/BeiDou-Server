@@ -33,8 +33,8 @@ import constants.string.LanguageConstants;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
+import net.server.guild.Alliance;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
@@ -417,7 +417,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
         
         public void upgradeAlliance() {
-                MapleAlliance alliance = Server.getInstance().getAlliance(c.getPlayer().getGuild().getAllianceId());
+                Alliance alliance = Server.getInstance().getAlliance(c.getPlayer().getGuild().getAllianceId());
                 alliance.increaseCapacity(1);
                 
                 Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, c.getWorld()), -1, -1);
@@ -427,15 +427,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
 	public void disbandAlliance(Client c, int allianceId) {
-		MapleAlliance.disbandAlliance(allianceId);
+		Alliance.disbandAlliance(allianceId);
 	}
 
 	public boolean canBeUsedAllianceName(String name) {
-                return MapleAlliance.canBeUsedAllianceName(name);
+                return Alliance.canBeUsedAllianceName(name);
 	}
         
-        public MapleAlliance createAlliance(String name) {
-            return MapleAlliance.createAlliance(getParty(), name);
+        public Alliance createAlliance(String name) {
+            return Alliance.createAlliance(getParty(), name);
         }
         
         public int getAllianceCapacity() {

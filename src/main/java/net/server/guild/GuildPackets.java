@@ -365,7 +365,7 @@ public class GuildPackets {
         p.writeInt(guild.getAllianceId());
     }
 
-    public static Packet getAllianceInfo(MapleAlliance alliance) {
+    public static Packet getAllianceInfo(Alliance alliance) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0C);
         p.writeByte(1);
@@ -383,7 +383,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet updateAllianceInfo(MapleAlliance alliance, int world) {
+    public static Packet updateAllianceInfo(Alliance alliance, int world) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0F);
         p.writeInt(alliance.getId());
@@ -403,7 +403,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet getGuildAlliances(MapleAlliance alliance, int worldId) {
+    public static Packet getGuildAlliances(Alliance alliance, int worldId) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0D);
         p.writeInt(alliance.getGuilds().size());
@@ -413,7 +413,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet addGuildToAlliance(MapleAlliance alliance, int newGuild, Client c) {
+    public static Packet addGuildToAlliance(Alliance alliance, int newGuild, Client c) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x12);
         p.writeInt(alliance.getId());
@@ -471,7 +471,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet removeGuildFromAlliance(MapleAlliance alliance, int expelledGuild, int worldId) {
+    public static Packet removeGuildFromAlliance(Alliance alliance, int expelledGuild, int worldId) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x10);
         p.writeInt(alliance.getId());

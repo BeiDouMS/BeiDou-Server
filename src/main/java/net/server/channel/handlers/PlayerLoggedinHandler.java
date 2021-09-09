@@ -36,8 +36,8 @@ import net.server.channel.CharacterIdChannelPair;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.SessionCoordinator;
 import net.server.coordinator.world.EventRecallCoordinator;
+import net.server.guild.Alliance;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.PartyOperation;
@@ -280,9 +280,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     c.sendPacket(GuildPackets.showGuildInfo(player));
                     int allianceId = player.getGuild().getAllianceId();
                     if (allianceId > 0) {
-                        MapleAlliance newAlliance = server.getAlliance(allianceId);
+                        Alliance newAlliance = server.getAlliance(allianceId);
                         if (newAlliance == null) {
-                            newAlliance = MapleAlliance.loadAlliance(allianceId);
+                            newAlliance = Alliance.loadAlliance(allianceId);
                             if (newAlliance != null) {
                                 server.addAlliance(allianceId, newAlliance);
                             } else {

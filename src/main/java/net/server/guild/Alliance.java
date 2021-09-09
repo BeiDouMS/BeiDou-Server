@@ -43,7 +43,7 @@ import java.util.List;
  * @author XoticStory
  * @author Ronan
  */
-public class MapleAlliance {
+public class Alliance {
     final private List<Integer> guilds = new LinkedList<>();
 
     private int allianceId = -1;
@@ -52,7 +52,7 @@ public class MapleAlliance {
     private String notice = "";
     private String[] rankTitles = new String[5];
 
-    public MapleAlliance(String name, int id) {
+    public Alliance(String name, int id) {
         this.name = name;
         allianceId = id;
         String[] ranks = {"Master", "Jr. Master", "Member", "Member", "Member"};
@@ -109,7 +109,7 @@ public class MapleAlliance {
         return mcl;
     }
 
-    public static MapleAlliance createAlliance(MapleParty party, String name) {
+    public static Alliance createAlliance(MapleParty party, String name) {
         List<Character> guildMasters = getPartyGuildMasters(party);
         if (guildMasters.size() != 2) {
             return null;
@@ -119,7 +119,7 @@ public class MapleAlliance {
         for (Character mc : guildMasters) {
             guilds.add(mc.getGuildId());
         }
-        MapleAlliance alliance = MapleAlliance.createAllianceOnDb(guilds, name);
+        Alliance alliance = Alliance.createAllianceOnDb(guilds, name);
         if (alliance != null) {
             alliance.setCapacity(guilds.size());
             for (Integer g : guilds) {
@@ -152,7 +152,7 @@ public class MapleAlliance {
         return alliance;
     }
 
-    public static MapleAlliance createAllianceOnDb(List<Integer> guilds, String name) {
+    public static Alliance createAllianceOnDb(List<Integer> guilds, String name) {
         // will create an alliance, where the first guild listed is the leader and the alliance name MUST BE already checked for unicity.
 
         int id = -1;
@@ -178,14 +178,14 @@ public class MapleAlliance {
             return null;
         }
 
-        return new MapleAlliance(name, id);
+        return new Alliance(name, id);
     }
 
-    public static MapleAlliance loadAlliance(int id) {
+    public static Alliance loadAlliance(int id) {
         if (id <= 0) {
             return null;
         }
-        MapleAlliance alliance = new MapleAlliance(null, -1);
+        Alliance alliance = new Alliance(null, -1);
         try (Connection con = DatabaseConnection.getConnection()) {
 
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM alliance WHERE id = ?")) {
@@ -292,7 +292,7 @@ public class MapleAlliance {
 
     public static boolean removeGuildFromAlliance(int allianceId, int guildId, int worldId) {
         Server srv = Server.getInstance();
-        MapleAlliance alliance = srv.getAlliance(allianceId);
+        Alliance alliance = srv.getAlliance(allianceId);
 
         if (alliance.getLeader().getGuildId() == guildId) {
             return false;

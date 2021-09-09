@@ -26,8 +26,8 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
+import net.server.guild.Alliance;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import tools.PacketCreator;
@@ -40,7 +40,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        MapleAlliance alliance = null;
+        Alliance alliance = null;
         Character chr = c.getPlayer();
         
         if (chr.getGuild() == null) {
@@ -81,7 +81,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                MapleAlliance.removeGuildFromAlliance(chr.getGuild().getAllianceId(), chr.getGuildId(), chr.getWorld());
+                Alliance.removeGuildFromAlliance(chr.getGuild().getAllianceId(), chr.getGuildId(), chr.getWorld());
                 break;
             }
             case 0x03: // Send Invite
@@ -90,7 +90,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 if (alliance.getGuilds().size() == alliance.getCapacity()) {
                     chr.dropMessage(5, "Your alliance cannot comport any more guilds at the moment.");
                 } else {
-                    MapleAlliance.sendInvitation(c, guildName, alliance.getId());
+                    Alliance.sendInvitation(c, guildName, alliance.getId());
                 }
                 
                 break;
@@ -108,7 +108,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                if (!MapleAlliance.answerInvitation(c.getPlayer().getId(), guild.getName(), alliance.getId(), true)) {
+                if (!Alliance.answerInvitation(c.getPlayer().getId(), guild.getName(), alliance.getId(), true)) {
                     return;
                 }
                 
@@ -200,7 +200,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
         alliance.saveToDB();
     }
     
-    private void changeLeaderAllianceRank(MapleAlliance alliance, Character newLeader) {
+    private void changeLeaderAllianceRank(Alliance alliance, Character newLeader) {
         MapleGuildCharacter lmgc = alliance.getLeader();
         Character leader = newLeader.getWorldServer().getPlayerStorage().getCharacterById(lmgc.getId());
         leader.getMGC().setAllianceRank(2);
@@ -213,7 +213,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
         alliance.dropMessage("'" + newLeader.getName() + "' has been appointed as the new head of this Alliance.");
     }
     
-    private void changePlayerAllianceRank(MapleAlliance alliance, Character chr, boolean raise) {
+    private void changePlayerAllianceRank(Alliance alliance, Character chr, boolean raise) {
         int newRank = chr.getAllianceRank() + (raise ? -1 : 1);
         if(newRank < 3 || newRank > 5) return;
         

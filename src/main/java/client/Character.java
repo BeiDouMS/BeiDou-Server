@@ -45,8 +45,8 @@ import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.world.InviteCoordinator;
+import net.server.guild.Alliance;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.services.task.channel.FaceExpressionService;
@@ -5008,7 +5008,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleAlliance getAlliance() {
+    public Alliance getAlliance() {
         if (mgc != null) {
             try {
                 return Server.getInstance().getAlliance(getGuild().getAllianceId());

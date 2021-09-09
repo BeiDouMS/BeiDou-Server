@@ -29,8 +29,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
+import net.server.guild.Alliance;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildResponse;
 import net.server.world.MapleParty;
@@ -224,7 +224,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 Server.getInstance().setGuildEmblem(mc.getGuildId(), bg, bgcolor, logo, logocolor);
                 
                 if (mc.getGuild() != null && mc.getGuild().getAllianceId() > 0) {
-                    MapleAlliance alliance = mc.getAlliance();
+                    Alliance alliance = mc.getAlliance();
                     Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, c.getWorld()), -1, -1);
                 }
                 

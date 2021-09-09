@@ -23,7 +23,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.guild.MapleAlliance;
+import net.server.guild.Alliance;
 
 /**
  * @author Ronan
@@ -38,9 +38,9 @@ public final class DenyAllianceRequestHandler extends AbstractPacketHandler {
         
         Character chr = c.getWorldServer().getPlayerStorage().getCharacterByName(inviterName);
         if (chr != null) {
-            MapleAlliance alliance = chr.getAlliance();
+            Alliance alliance = chr.getAlliance();
             if (alliance != null) {
-                MapleAlliance.answerInvitation(c.getPlayer().getId(), guildName, alliance.getId(), false);
+                Alliance.answerInvitation(c.getPlayer().getId(), guildName, alliance.getId(), false);
             }
         }
     }

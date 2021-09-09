@@ -49,7 +49,7 @@ import net.server.channel.Channel;
 import net.server.channel.handlers.PlayerInteractionHandler;
 import net.server.channel.handlers.SummonDamageHandler.SummonAttackEntry;
 import net.server.channel.handlers.WhisperHandler;
-import net.server.guild.MapleAlliance;
+import net.server.guild.Alliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildSummary;
 import net.server.world.MapleParty;
@@ -2685,7 +2685,7 @@ public class PacketCreator {
             MapleGuild mg = Server.getInstance().getGuild(chr.getGuildId());
             guildName = mg.getName();
 
-            MapleAlliance alliance = Server.getInstance().getAlliance(chr.getGuild().getAllianceId());
+            Alliance alliance = Server.getInstance().getAlliance(chr.getGuild().getAllianceId());
             if (alliance != null) {
                 allianceName = alliance.getName();
             }

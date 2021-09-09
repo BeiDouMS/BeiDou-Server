@@ -48,7 +48,7 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
-import net.server.guild.MapleAlliance;
+import net.server.guild.Alliance;
 import net.server.guild.MapleGuild;
 import net.server.guild.MapleGuildCharacter;
 import net.server.task.*;
@@ -108,7 +108,7 @@ public class Server {
     private final Map<Client, Long> inLoginState = new HashMap<>(100);
 
     private final PlayerBuffStorage buffStorage = new PlayerBuffStorage();
-    private final Map<Integer, MapleAlliance> alliances = new HashMap<>(100);
+    private final Map<Integer, Alliance> alliances = new HashMap<>(100);
     private final Map<Integer, NewYearCardRecord> newyears = new HashMap<>();
     private final List<Client> processDiseaseAnnouncePlayers = new LinkedList<>();
     private final List<Client> registeredDiseaseAnnouncePlayers = new LinkedList<>();
@@ -963,7 +963,7 @@ public class Server {
         return subnetInfo;
     }
 
-    public MapleAlliance getAlliance(int id) {
+    public Alliance getAlliance(int id) {
         synchronized (alliances) {
             if (alliances.containsKey(id)) {
                 return alliances.get(id);
@@ -972,7 +972,7 @@ public class Server {
         }
     }
 
-    public void addAlliance(int id, MapleAlliance alliance) {
+    public void addAlliance(int id, Alliance alliance) {
         synchronized (alliances) {
             if (!alliances.containsKey(id)) {
                 alliances.put(id, alliance);
@@ -982,7 +982,7 @@ public class Server {
 
     public void disbandAlliance(int id) {
         synchronized (alliances) {
-            MapleAlliance alliance = alliances.get(id);
+            Alliance alliance = alliances.get(id);
             if (alliance != null) {
                 for (Integer gid : alliance.getGuilds()) {
                     guilds.get(gid).setAllianceId(0);
@@ -993,7 +993,7 @@ public class Server {
     }
 
     public void allianceMessage(int id, Packet packet, int exception, int guildex) {
-        MapleAlliance alliance = alliances.get(id);
+        Alliance alliance = alliances.get(id);
         if (alliance != null) {
             for (Integer gid : alliance.getGuilds()) {
                 if (guildex == gid) {
@@ -1008,7 +1008,7 @@ public class Server {
     }
 
     public boolean addGuildtoAlliance(int aId, int guildId) {
-        MapleAlliance alliance = alliances.get(aId);
+        Alliance alliance = alliances.get(aId);
         if (alliance != null) {
             alliance.addGuild(guildId);
             guilds.get(guildId).setAllianceId(aId);
@@ -1018,7 +1018,7 @@ public class Server {
     }
 
     public boolean removeGuildFromAlliance(int aId, int guildId) {
-        MapleAlliance alliance = alliances.get(aId);
+        Alliance alliance = alliances.get(aId);
         if (alliance != null) {
             alliance.removeGuild(guildId);
             guilds.get(guildId).setAllianceId(0);
@@ -1028,7 +1028,7 @@ public class Server {
     }
 
     public boolean setAllianceRanks(int aId, String[] ranks) {
-        MapleAlliance alliance = alliances.get(aId);
+        Alliance alliance = alliances.get(aId);
         if (alliance != null) {
             alliance.setRankTitle(ranks);
             return true;
@@ -1037,7 +1037,7 @@ public class Server {
     }
 
     public boolean setAllianceNotice(int aId, String notice) {
-        MapleAlliance alliance = alliances.get(aId);
+        Alliance alliance = alliances.get(aId);
         if (alliance != null) {
             alliance.setNotice(notice);
             return true;
@@ -1046,7 +1046,7 @@ public class Server {
     }
 
     public boolean increaseAllianceCapacity(int aId, int inc) {
-        MapleAlliance alliance = alliances.get(aId);
+        Alliance alliance = alliances.get(aId);
         if (alliance != null) {
             alliance.increaseCapacity(inc);
             return true;

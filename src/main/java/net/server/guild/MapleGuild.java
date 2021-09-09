@@ -634,8 +634,8 @@ public class MapleGuild {
 
     public void disbandGuild() {
         if (allianceId > 0) {
-            if (!MapleAlliance.removeGuildFromAlliance(allianceId, id, world)) {
-                MapleAlliance.disbandAlliance(allianceId);
+            if (!Alliance.removeGuildFromAlliance(allianceId, id, world)) {
+                Alliance.disbandAlliance(allianceId);
             }
         }
 
