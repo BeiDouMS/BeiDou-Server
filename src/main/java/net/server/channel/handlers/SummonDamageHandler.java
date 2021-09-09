@@ -28,7 +28,7 @@ import client.SkillFactory;
 import client.autoban.AutobanFactory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleWeaponType;
+import client.inventory.WeaponType;
 import client.status.MonsterStatusEffect;
 import constants.skills.Outlaw;
 import net.packet.InPacket;
@@ -141,7 +141,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             if (weapon_item != null) {
                 maxBaseDmg = player.calculateMaxBaseDamage(watk, MapleItemInformationProvider.getInstance().getWeaponType(weapon_item.getItemId()));
             } else {
-                maxBaseDmg = player.calculateMaxBaseDamage(watk, MapleWeaponType.SWORD1H);
+                maxBaseDmg = player.calculateMaxBaseDamage(watk, WeaponType.SWORD1H);
             }
             
             float summonDmgMod = (maxBaseDmg >= 438) ? 0.054f : 0.077f;

@@ -21,7 +21,7 @@
 */
 package client.inventory;
 
-public enum MapleWeaponType {
+public enum WeaponType {
     NOT_A_WEAPON(0),
     GENERAL1H_SWING(4.4),
     GENERAL1H_STAB(3.2),
@@ -42,9 +42,10 @@ public enum MapleWeaponType {
     SWORD1H(4.0),
     SWORD2H(4.6),
     WAND(3.6);
-    private double damageMultiplier;
 
-    private MapleWeaponType(double maxDamageMultiplier) {
+    private final double damageMultiplier;
+
+    WeaponType(double maxDamageMultiplier) {
         this.damageMultiplier = maxDamageMultiplier;
     }
 

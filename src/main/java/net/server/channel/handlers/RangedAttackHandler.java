@@ -25,7 +25,7 @@ import client.*;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleWeaponType;
+import client.inventory.WeaponType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -90,8 +90,8 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             }
         } else {
             Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
-            MapleWeaponType type = MapleItemInformationProvider.getInstance().getWeaponType(weapon.getItemId());
-            if (type == MapleWeaponType.NOT_A_WEAPON) {
+            WeaponType type = MapleItemInformationProvider.getInstance().getWeaponType(weapon.getItemId());
+            if (type == WeaponType.NOT_A_WEAPON) {
                 return;
             }
             short slot = -1;
@@ -133,13 +133,13 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     boolean bow = ItemConstants.isArrowForBow(id);
                     boolean cbow = ItemConstants.isArrowForCrossBow(id);
                     if (item.getQuantity() >= bulletCount) { //Fixes the bug where you can't use your last arrow.
-                        if (type == MapleWeaponType.CLAW && ItemConstants.isThrowingStar(id) && weapon.getItemId() != 1472063) {
+                        if (type == WeaponType.CLAW && ItemConstants.isThrowingStar(id) && weapon.getItemId() != 1472063) {
                             if (((id == 2070007 || id == 2070018) && chr.getLevel() < 70) || (id == 2070016 && chr.getLevel() < 50)) {
                             } else {	
                                 projectile = id;
                                 break;
                             }
-                        } else if ((type == MapleWeaponType.GUN && ItemConstants.isBullet(id))) {
+                        } else if ((type == WeaponType.GUN && ItemConstants.isBullet(id))) {
                             if (id == 2331000 && id == 2332000) {
                                 if (chr.getLevel() > 69) {
                                     projectile = id;
@@ -149,7 +149,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                                 projectile = id;
                                 break;
                             }
-                        } else if ((type == MapleWeaponType.BOW && bow) || (type == MapleWeaponType.CROSSBOW && cbow) || (weapon.getItemId() == 1472063 && (bow || cbow))) {
+                        } else if ((type == WeaponType.BOW && bow) || (type == WeaponType.CROSSBOW && cbow) || (weapon.getItemId() == 1472063 && (bow || cbow))) {
                             projectile = id;
                             break;
                         }

@@ -693,16 +693,16 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return false;
     }
     
-    public int calculateMaxBaseDamage(int watk, MapleWeaponType weapon) {
+    public int calculateMaxBaseDamage(int watk, WeaponType weapon) {
         int mainstat, secondarystat;
-        if (getJob().isA(MapleJob.THIEF) && weapon == MapleWeaponType.DAGGER_OTHER) {
-            weapon = MapleWeaponType.DAGGER_THIEVES;
+        if (getJob().isA(MapleJob.THIEF) && weapon == WeaponType.DAGGER_OTHER) {
+            weapon = WeaponType.DAGGER_THIEVES;
         }
 
-        if (weapon == MapleWeaponType.BOW || weapon == MapleWeaponType.CROSSBOW || weapon == MapleWeaponType.GUN) {
+        if (weapon == WeaponType.BOW || weapon == WeaponType.CROSSBOW || weapon == WeaponType.GUN) {
             mainstat = localdex;
             secondarystat = localstr;
-        } else if (weapon == MapleWeaponType.CLAW || weapon == MapleWeaponType.DAGGER_THIEVES) {
+        } else if (weapon == WeaponType.CLAW || weapon == WeaponType.DAGGER_THIEVES) {
             mainstat = localluk;
             secondarystat = localdex + localstr;
         } else {
@@ -7824,11 +7824,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             if (job.isA(MapleJob.THIEF) || job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.PIRATE) || job.isA(MapleJob.NIGHTWALKER1) || job.isA(MapleJob.WINDARCHER1)) {
                 Item weapon_item = getInventory(InventoryType.EQUIPPED).getItem((short) -11);
                 if (weapon_item != null) {
-                    MapleWeaponType weapon = ii.getWeaponType(weapon_item.getItemId());
-                    boolean bow = weapon == MapleWeaponType.BOW;
-                    boolean crossbow = weapon == MapleWeaponType.CROSSBOW;
-                    boolean claw = weapon == MapleWeaponType.CLAW;
-                    boolean gun = weapon == MapleWeaponType.GUN;
+                    WeaponType weapon = ii.getWeaponType(weapon_item.getItemId());
+                    boolean bow = weapon == WeaponType.BOW;
+                    boolean crossbow = weapon == WeaponType.CROSSBOW;
+                    boolean claw = weapon == WeaponType.CLAW;
+                    boolean gun = weapon == WeaponType.GUN;
                     if (bow || crossbow || claw || gun) {
                         // Also calc stars into this.
                         Inventory inv = getInventory(InventoryType.USE);
