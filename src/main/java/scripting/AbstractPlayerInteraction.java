@@ -79,7 +79,7 @@ public class AbstractPlayerInteraction {
 		return getPlayer().getJob().getId();
 	}
         
-	public MapleJob getJob(){
+	public Job getJob(){
 		return getPlayer().getJob();
 	}
         

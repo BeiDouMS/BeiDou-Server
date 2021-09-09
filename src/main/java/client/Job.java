@@ -21,7 +21,7 @@
 */
 package client;
 
-public enum MapleJob {
+public enum Job {
     BEGINNER(0),
 
     WARRIOR(100),
@@ -58,17 +58,17 @@ public enum MapleJob {
 
     LEGEND(2000), EVAN(2001),
     ARAN1(2100), ARAN2(2110), ARAN3(2111), ARAN4(2112),
-	
+
     EVAN1(2200), EVAN2(2210), EVAN3(2211), EVAN4(2212), EVAN5(2213), EVAN6(2214),
     EVAN7(2215), EVAN8(2216), EVAN9(2217), EVAN10(2218);
 
     final int jobid;
     final static int maxId = 22;    // maxId = (EVAN / 100);
-    
-    private MapleJob(int id) {
+
+    Job(int id) {
         jobid = id;
     }
-    
+
     public static int getMax() {
         return maxId;
     }
@@ -77,8 +77,8 @@ public enum MapleJob {
         return jobid;
     }
 
-    public static MapleJob getById(int id) {
-        for (MapleJob l : MapleJob.values()) {
+    public static Job getById(int id) {
+        for (Job l : Job.values()) {
             if (l.getId() == id) {
                 return l;
             }
@@ -86,7 +86,7 @@ public enum MapleJob {
         return null;
     }
 
-    public static MapleJob getBy5ByteEncoding(int encoded) {
+    public static Job getBy5ByteEncoding(int encoded) {
         switch (encoded) {
             case 2:
                 return WARRIOR;
@@ -114,12 +114,12 @@ public enum MapleJob {
                 return BEGINNER;
         }
     }
-    
-    public boolean isA(MapleJob basejob) {  // thanks Steve (kaito1410) for pointing out an improvement here
+
+    public boolean isA(Job basejob) {  // thanks Steve (kaito1410) for pointing out an improvement here
         int basebranch = basejob.getId() / 10;
         return (getId() / 10 == basebranch && getId() >= basejob.getId()) || (basebranch % 10 == 0 && getId() / 100 == basejob.getId() / 100);
     }
-    
+
     public int getJobNiche() {
         return (jobid / 100) % 10;
         

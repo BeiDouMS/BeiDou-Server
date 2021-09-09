@@ -1395,10 +1395,10 @@ public class MapleStatEffect {
         if (primary) {
             if (mpCon != 0) {
                 double mod = 1.0;
-                boolean isAFpMage = applyfrom.getJob().isA(MapleJob.FP_MAGE);
-                boolean isCygnus = applyfrom.getJob().isA(MapleJob.BLAZEWIZARD2);
-                boolean isEvan = applyfrom.getJob().isA(MapleJob.EVAN7);
-                if (isAFpMage || isCygnus || isEvan || applyfrom.getJob().isA(MapleJob.IL_MAGE)) {
+                boolean isAFpMage = applyfrom.getJob().isA(Job.FP_MAGE);
+                boolean isCygnus = applyfrom.getJob().isA(Job.BLAZEWIZARD2);
+                boolean isEvan = applyfrom.getJob().isA(Job.EVAN7);
+                if (isAFpMage || isCygnus || isEvan || applyfrom.getJob().isA(Job.IL_MAGE)) {
                     Skill amp = isAFpMage ? SkillFactory.getSkill(FPMage.ELEMENT_AMPLIFICATION) : (isCygnus ? SkillFactory.getSkill(BlazeWizard.ELEMENT_AMPLIFICATION) : (isEvan ? SkillFactory.getSkill(Evan.MAGIC_AMPLIFICATION) : SkillFactory.getSkill(ILMage.ELEMENT_AMPLIFICATION)));
                     int ampLevel = applyfrom.getSkillLevel(amp);
                     if (ampLevel > 0) {
@@ -1421,7 +1421,7 @@ public class MapleStatEffect {
     }
 
     private int alchemistModifyVal(Character chr, int val, boolean withX) {
-        if (!skill && (chr.getJob().isA(MapleJob.HERMIT) || chr.getJob().isA(MapleJob.NIGHTWALKER3))) {
+        if (!skill && (chr.getJob().isA(Job.HERMIT) || chr.getJob().isA(Job.NIGHTWALKER3))) {
             MapleStatEffect alchemistEffect = getAlchemistEffect(chr);
             if (alchemistEffect != null) {
                 return (int) (val * ((withX ? alchemistEffect.getX() : alchemistEffect.getY()) / 100.0));

@@ -20,7 +20,7 @@
 package client.creator.veteran;
 
 import client.Client;
-import client.MapleJob;
+import client.Job;
 import client.Skill;
 import client.SkillFactory;
 import client.creator.CharacterFactory;
@@ -40,7 +40,7 @@ public class WarriorCreator extends CharacterFactory {
         private static int[] startingHpMp = {905, 208};
         private static int[] hpGain = {0, 72, 144, 212, 280, 348, 412, 476, 540, 600, 660};
         
-        private static CharacterFactoryRecipe createRecipe(MapleJob job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
+        private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
                 CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 
@@ -93,6 +93,6 @@ public class WarriorCreator extends CharacterFactory {
         }
     
         public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
-                return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(MapleJob.WARRIOR, 30, 102000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
+                return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.WARRIOR, 30, 102000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
         }
 }

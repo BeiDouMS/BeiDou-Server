@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import client.MapleJob;
+import client.Job;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -58,7 +58,7 @@ public class JobRequirement extends MapleQuestRequirement {
 	@Override
 	public boolean check(Character chr, Integer npcid) {
 		for(Integer job : jobs) {
-			if (chr.getJob().equals(MapleJob.getById(job)) || chr.isGM()) {
+			if (chr.getJob().equals(Job.getById(job)) || chr.isGM()) {
 				return true;
 			}
 		}

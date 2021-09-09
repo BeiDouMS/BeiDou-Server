@@ -1,7 +1,7 @@
 package constants.game;
 
 import client.Disease;
-import client.MapleJob;
+import client.Job;
 import config.YamlConfig;
 import constants.skills.Aran;
 import provider.*;
@@ -307,7 +307,7 @@ public class GameConstants {
         String name = jobNames.get(jobid);
         
         if(name == null) {
-            MapleJob job = MapleJob.getById(jobid);
+            Job job = Job.getById(jobid);
             
             if(job != null) {
                 name = job.name().toLowerCase();
@@ -364,40 +364,40 @@ public class GameConstants {
         }
     }
     
-    public static byte getHallOfFameBranch(MapleJob job, int mapid) {
+    public static byte getHallOfFameBranch(Job job, int mapid) {
         if(!isHallOfFameMap(mapid)) {
             return (byte) (26 + 4 * (mapid / 100000000));   // custom, 400 pnpcs available per continent
         }
         
-        if(job.isA(MapleJob.WARRIOR)) {
+        if(job.isA(Job.WARRIOR)) {
             return 10;
-        } else if(job.isA(MapleJob.MAGICIAN)) {
+        } else if(job.isA(Job.MAGICIAN)) {
             return 11;
-        } else if(job.isA(MapleJob.BOWMAN)) {
+        } else if(job.isA(Job.BOWMAN)) {
             return 12;
-        } else if(job.isA(MapleJob.THIEF)) {
+        } else if(job.isA(Job.THIEF)) {
             return 13;
-        } else if(job.isA(MapleJob.PIRATE)) {
+        } else if(job.isA(Job.PIRATE)) {
             return 14;
-        } else if(job.isA(MapleJob.DAWNWARRIOR1)) {
+        } else if(job.isA(Job.DAWNWARRIOR1)) {
             return 15;
-        } else if(job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if(job.isA(Job.BLAZEWIZARD1)) {
             return 16;
-        } else if(job.isA(MapleJob.WINDARCHER1)) {
+        } else if(job.isA(Job.WINDARCHER1)) {
             return 17;
-        } else if(job.isA(MapleJob.NIGHTWALKER1)) {
+        } else if(job.isA(Job.NIGHTWALKER1)) {
             return 18;
-        } else if(job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if(job.isA(Job.THUNDERBREAKER1)) {
             return 19;
-        } else if(job.isA(MapleJob.ARAN1)) {
+        } else if(job.isA(Job.ARAN1)) {
             return 20;
-        } else if(job.isA(MapleJob.EVAN1)) {
+        } else if(job.isA(Job.EVAN1)) {
             return 21;
-        } else if(job.isA(MapleJob.BEGINNER)) {
+        } else if(job.isA(Job.BEGINNER)) {
             return 22;
-        } else if(job.isA(MapleJob.NOBLESSE)) {
+        } else if(job.isA(Job.NOBLESSE)) {
             return 23;
-        } else if(job.isA(MapleJob.LEGEND)) {
+        } else if(job.isA(Job.LEGEND)) {
             return 24;
         } else {
             return 25;
@@ -425,7 +425,7 @@ public class GameConstants {
         }
     }
     
-    public static int getHallOfFameMapid(MapleJob job) {
+    public static int getHallOfFameMapid(Job job) {
         int jobid = job.getId();
         
         if(isCygnus(jobid)) {
@@ -433,15 +433,15 @@ public class GameConstants {
         } else if(isAran(jobid)) {
             return 140010110;
         } else {
-            if(job.isA(MapleJob.WARRIOR)) {
+            if(job.isA(Job.WARRIOR)) {
                 return 102000004;
-            } else if(job.isA(MapleJob.MAGICIAN)) {
+            } else if(job.isA(Job.MAGICIAN)) {
                 return 101000004;
-            } else if(job.isA(MapleJob.BOWMAN)) {
+            } else if(job.isA(Job.BOWMAN)) {
                 return 100000204;
-            } else if(job.isA(MapleJob.THIEF)) {
+            } else if(job.isA(Job.THIEF)) {
                 return 103000008;
-            } else if(job.isA(MapleJob.PIRATE)) {
+            } else if(job.isA(Job.PIRATE)) {
                 return 120000105;
             } else {
                 return 130000110;   // beginner explorers are allotted with the Cygnus, available map lul
@@ -449,7 +449,7 @@ public class GameConstants {
         }
     }
     
-    public static int getJobBranch(MapleJob job) {
+    public static int getJobBranch(Job job) {
         int jobid = job.getId();
         
         if(jobid % 1000 == 0) {
@@ -461,7 +461,7 @@ public class GameConstants {
         }
     }
     
-    public static int getJobMaxLevel(MapleJob job) {
+    public static int getJobMaxLevel(Job job) {
         int jobBranch = getJobBranch(job);
         
         switch(jobBranch) {
@@ -619,7 +619,7 @@ public class GameConstants {
         return MapleQuest.getInstance(questid).getMedalRequirement() != -1;
     }
     
-    public static boolean hasSPTable(MapleJob job) {
+    public static boolean hasSPTable(Job job) {
         switch (job) {
             case EVAN:
             case EVAN1:

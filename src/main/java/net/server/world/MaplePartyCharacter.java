@@ -22,7 +22,7 @@
 package net.server.world;
 
 import client.Character;
-import client.MapleJob;
+import client.Job;
 
 public class MaplePartyCharacter {
     private String name;
@@ -32,7 +32,7 @@ public class MaplePartyCharacter {
     private int jobid;
     private int mapid;
     private boolean online;
-    private MapleJob job;
+    private Job job;
     private Character character;
     
     public MaplePartyCharacter(Character maplechar) {
@@ -56,7 +56,7 @@ public class MaplePartyCharacter {
     	return character;
     }
 
-    public MapleJob getJob() {
+    public Job getJob() {
         return job;
     }
 

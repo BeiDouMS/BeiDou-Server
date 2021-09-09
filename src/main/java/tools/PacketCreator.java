@@ -1915,7 +1915,7 @@ public class PacketCreator {
         p.writeShort(chr.getJob().getId());
 
                 /* replace "p.writeShort(chr.getJob().getId())" with this snippet for 3rd person FJ animation on all classes
-                if (chr.getJob().isA(MapleJob.HERMIT) || chr.getJob().isA(MapleJob.DAWNWARRIOR2) || chr.getJob().isA(MapleJob.NIGHTWALKER2)) {
+                if (chr.getJob().isA(Job.HERMIT) || chr.getJob().isA(Job.DAWNWARRIOR2) || chr.getJob().isA(Job.NIGHTWALKER2)) {
 			p.writeShort(chr.getJob().getId());
                 } else {
 			p.writeShort(412);

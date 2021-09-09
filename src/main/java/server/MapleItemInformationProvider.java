@@ -324,7 +324,7 @@ public class MapleItemInformationProvider {
 
         // thanks GMChuck for detecting player sensitive data being cached into getSlotMax
         if (ItemConstants.isThrowingStar(itemId)) {
-            if(c.getPlayer().getJob().isA(MapleJob.NIGHTWALKER1)) {
+            if(c.getPlayer().getJob().isA(Job.NIGHTWALKER1)) {
                 ret += c.getPlayer().getSkillLevel(SkillFactory.getSkill(NightWalker.CLAW_MASTERY)) * 10;
             } else {
                 ret += c.getPlayer().getSkillLevel(SkillFactory.getSkill(Assassin.CLAW_MASTERY)) * 10;
@@ -1587,7 +1587,7 @@ public class MapleItemInformationProvider {
             return items;
         }
         Collection<Item> itemz = new LinkedList<>();
-        if (chr.getJob() == MapleJob.SUPERGM || chr.getJob() == MapleJob.GM) {
+        if (chr.getJob() == Job.SUPERGM || chr.getJob() == Job.GM) {
             for (Item item : items) {
                 Equip equip = (Equip) item;
                 equip.wear(true);
@@ -1609,7 +1609,7 @@ public class MapleItemInformationProvider {
             ex.printStackTrace();
          }*/
         int tdex = chr.getDex(), tstr = chr.getStr(), tint = chr.getInt(), tluk = chr.getLuk(), fame = chr.getFame();
-        if (chr.getJob() != MapleJob.SUPERGM || chr.getJob() != MapleJob.GM) {
+        if (chr.getJob() != Job.SUPERGM || chr.getJob() != Job.GM) {
             for (Item item : inv.list()) {
                 Equip equip = (Equip) item;
                 tdex += equip.getDex();
@@ -1675,7 +1675,7 @@ public class MapleItemInformationProvider {
             return false;
         }
 
-        if (chr.getJob() == MapleJob.SUPERGM || chr.getJob() == MapleJob.GM) {
+        if (chr.getJob() == Job.SUPERGM || chr.getJob() == Job.GM) {
             equip.wear(true);
             return true;
         }

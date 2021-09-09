@@ -19,7 +19,7 @@
 */
 package client.creator;
 
-import client.MapleJob;
+import client.Job;
 import client.Skill;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author RonanLana
  */
 public class CharacterFactoryRecipe {
-    private MapleJob job;
+    private Job job;
     private int level, map, top, bottom, shoes, weapon;
     private int str = 4, dex = 4, int_ = 4, luk = 4;
     private int maxHp = 50, maxMp = 5;
@@ -48,7 +48,7 @@ public class CharacterFactoryRecipe {
     private List<Pair<Item, InventoryType>> itemsWithType = new LinkedList<>();
     private Map<InventoryType, AtomicInteger> runningTypePosition = new LinkedHashMap<>();
     
-    public CharacterFactoryRecipe(MapleJob job, int level, int map, int top, int bottom, int shoes, int weapon) {
+    public CharacterFactoryRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
         this.job = job;
         this.level = level;
         this.map = map;
@@ -121,7 +121,7 @@ public class CharacterFactoryRecipe {
         itemsWithType.add(new Pair<>(new Item(itemid, (short) p.getAndIncrement(), (short) quantity), itemType));
     }
     
-    public MapleJob getJob() {
+    public Job getJob() {
         return job;
     }
     

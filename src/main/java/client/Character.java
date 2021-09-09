@@ -156,7 +156,7 @@ public class Character extends AbstractCharacterObject {
     private MapleGuildCharacter mgc = null;
     private MaplePartyCharacter mpc = null;
     private Inventory[] inventory;
-    private MapleJob job = MapleJob.BEGINNER;
+    private Job job = Job.BEGINNER;
     private MapleMessenger messenger = null;
     private MapleMiniGame miniGame;
     private MapleRockPaperScissor rps;
@@ -322,37 +322,37 @@ public class Character extends AbstractCharacterObject {
         setPosition(new Point(0, 0));
     }
 
-    private static MapleJob getJobStyleInternal(int jobid, byte opt) {
+    private static Job getJobStyleInternal(int jobid, byte opt) {
         int jobtype = jobid / 100;
 
-        if (jobtype == MapleJob.WARRIOR.getId() / 100 || jobtype == MapleJob.DAWNWARRIOR1.getId() / 100 || jobtype == MapleJob.ARAN1.getId() / 100) {
-            return (MapleJob.WARRIOR);
-        } else if (jobtype == MapleJob.MAGICIAN.getId() / 100 || jobtype == MapleJob.BLAZEWIZARD1.getId() / 100 || jobtype == MapleJob.EVAN1.getId() / 100) {
-            return (MapleJob.MAGICIAN);
-        } else if (jobtype == MapleJob.BOWMAN.getId() / 100 || jobtype == MapleJob.WINDARCHER1.getId() / 100) {
-            if (jobid / 10 == MapleJob.CROSSBOWMAN.getId() / 10) {
-                return (MapleJob.CROSSBOWMAN);
+        if (jobtype == Job.WARRIOR.getId() / 100 || jobtype == Job.DAWNWARRIOR1.getId() / 100 || jobtype == Job.ARAN1.getId() / 100) {
+            return (Job.WARRIOR);
+        } else if (jobtype == Job.MAGICIAN.getId() / 100 || jobtype == Job.BLAZEWIZARD1.getId() / 100 || jobtype == Job.EVAN1.getId() / 100) {
+            return (Job.MAGICIAN);
+        } else if (jobtype == Job.BOWMAN.getId() / 100 || jobtype == Job.WINDARCHER1.getId() / 100) {
+            if (jobid / 10 == Job.CROSSBOWMAN.getId() / 10) {
+                return (Job.CROSSBOWMAN);
             } else {
-                return (MapleJob.BOWMAN);
+                return (Job.BOWMAN);
             }
-        } else if (jobtype == MapleJob.THIEF.getId() / 100 || jobtype == MapleJob.NIGHTWALKER1.getId() / 100) {
-            return (MapleJob.THIEF);
-        } else if (jobtype == MapleJob.PIRATE.getId() / 100 || jobtype == MapleJob.THUNDERBREAKER1.getId() / 100) {
+        } else if (jobtype == Job.THIEF.getId() / 100 || jobtype == Job.NIGHTWALKER1.getId() / 100) {
+            return (Job.THIEF);
+        } else if (jobtype == Job.PIRATE.getId() / 100 || jobtype == Job.THUNDERBREAKER1.getId() / 100) {
             if (opt == (byte) 0x80) {
-                return (MapleJob.BRAWLER);
+                return (Job.BRAWLER);
             } else {
-                return (MapleJob.GUNSLINGER);
+                return (Job.GUNSLINGER);
             }
         }
 
-        return (MapleJob.BEGINNER);
+        return (Job.BEGINNER);
     }
 
-    public MapleJob getJobStyle(byte opt) {
+    public Job getJobStyle(byte opt) {
         return getJobStyleInternal(this.getJob().getId(), opt);
     }
 
-    public MapleJob getJobStyle() {
+    public Job getJobStyle() {
         return getJobStyle((byte) ((this.getStr() > this.getDex()) ? 0x80 : 0x40));
     }
 
@@ -369,7 +369,7 @@ public class Character extends AbstractCharacterObject {
         ret.int_ = 4;
         ret.luk = 4;
         ret.map = null;
-        ret.job = MapleJob.BEGINNER;
+        ret.job = Job.BEGINNER;
         ret.level = 1;
         ret.accountid = c.getAccID();
         ret.buddylist = new BuddyList(20);
@@ -693,7 +693,7 @@ public class Character extends AbstractCharacterObject {
 
     public int calculateMaxBaseDamage(int watk, WeaponType weapon) {
         int mainstat, secondarystat;
-        if (getJob().isA(MapleJob.THIEF) && weapon == WeaponType.DAGGER_OTHER) {
+        if (getJob().isA(Job.THIEF) && weapon == WeaponType.DAGGER_OTHER) {
             weapon = WeaponType.DAGGER_THIEVES;
         }
 
@@ -716,7 +716,7 @@ public class Character extends AbstractCharacterObject {
         if (weapon_item != null) {
             maxbasedamage = calculateMaxBaseDamage(watk, ii.getWeaponType(weapon_item.getItemId()));
         } else {
-            if (job.isA(MapleJob.PIRATE) || job.isA(MapleJob.THUNDERBREAKER1)) {
+            if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
                 double weapMulti = 3;
                 if (job.getId() % 100 != 0) {
                     weapMulti = 4.2;
@@ -1040,7 +1040,7 @@ public class Character extends AbstractCharacterObject {
         }, 777);
     }
 
-    public synchronized void changeJob(MapleJob newJob) {
+    public synchronized void changeJob(Job newJob) {
         if (newJob == null) {
             return;//the fuck you doing idiot!
         }
@@ -1783,7 +1783,7 @@ public class Character extends AbstractCharacterObject {
             berserkSchedule.cancel(false);
         }
         final Character chr = this;
-        if (job.equals(MapleJob.DARKKNIGHT)) {
+        if (job.equals(Job.DARKKNIGHT)) {
             Skill BerserkX = SkillFactory.getSkill(DarkKnight.BERSERK);
             final int skilllevel = getSkillLevel(BerserkX);
             if (skilllevel > 0) {
@@ -4227,7 +4227,7 @@ public class Character extends AbstractCharacterObject {
             recalcMseList.add(re.getValue().getLeft());
         }
 
-        boolean mageJob = this.getJobStyle() == MapleJob.MAGICIAN;
+        boolean mageJob = this.getJobStyle() == Job.MAGICIAN;
         do {
             List<MapleStatEffect> mseList = recalcMseList;
             recalcMseList = new LinkedList<>();
@@ -4564,7 +4564,7 @@ public class Character extends AbstractCharacterObject {
         updateLocalStats();
     }
 
-    private static int getJobMapChair(MapleJob job) {
+    private static int getJobMapChair(Job job) {
         switch (job.getId() / 1000) {
             case 0:
                 return Beginner.MAP_CHAIR;
@@ -5143,7 +5143,7 @@ public class Character extends AbstractCharacterObject {
         return count;
     }
 
-    public MapleJob getJob() {
+    public Job getJob() {
         return job;
     }
 
@@ -6220,7 +6220,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private int getChangedJobSp(MapleJob newJob) {
+    private int getChangedJobSp(Job newJob) {
         int curSp = getUsedSp(newJob) + getJobRemainingSp(newJob);
         int spGain = 0;
         int expectedSp = getJobLevelSp(level - 10, newJob, GameConstants.getJobBranch(newJob));
@@ -6231,7 +6231,7 @@ public class Character extends AbstractCharacterObject {
         return getSpGain(spGain, curSp, newJob);
     }
 
-    private int getUsedSp(MapleJob job) {
+    private int getUsedSp(Job job) {
         int jobId = job.getId();
         int spUsed = 0;
 
@@ -6245,21 +6245,21 @@ public class Character extends AbstractCharacterObject {
         return spUsed;
     }
 
-    private int getJobLevelSp(int level, MapleJob job, int jobBranch) {
-        if (getJobStyleInternal(job.getId(), (byte) 0x40) == MapleJob.MAGICIAN) {
+    private int getJobLevelSp(int level, Job job, int jobBranch) {
+        if (getJobStyleInternal(job.getId(), (byte) 0x40) == Job.MAGICIAN) {
             level += 2;  // starts earlier, level 8
         }
 
         return 3 * level + GameConstants.getChangeJobSpUpgrade(jobBranch);
     }
 
-    private int getJobMaxSp(MapleJob job) {
+    private int getJobMaxSp(Job job) {
         int jobBranch = GameConstants.getJobBranch(job);
         int jobRange = GameConstants.getJobUpgradeLevelRange(jobBranch);
         return getJobLevelSp(jobRange, job, jobBranch);
     }
 
-    private int getJobRemainingSp(MapleJob job) {
+    private int getJobRemainingSp(Job job) {
         int skillBook = GameConstants.getSkillBook(job.getId());
 
         int ret = 0;
@@ -6270,12 +6270,12 @@ public class Character extends AbstractCharacterObject {
         return ret;
     }
 
-    private int getSpGain(int spGain, MapleJob job) {
+    private int getSpGain(int spGain, Job job) {
         int curSp = getUsedSp(job) + getJobRemainingSp(job);
         return getSpGain(spGain, curSp, job);
     }
 
-    private int getSpGain(int spGain, int curSp, MapleJob job) {
+    private int getSpGain(int spGain, int curSp, Job job) {
         int maxSp = getJobMaxSp(job);
 
         spGain = Math.min(spGain, maxSp - curSp);
@@ -6344,46 +6344,46 @@ public class Character extends AbstractCharacterObject {
         if (isBeginner) {
             addhp += Randomizer.rand(12, 16);
             addmp += Randomizer.rand(10, 12);
-        } else if (job.isA(MapleJob.WARRIOR) || job.isA(MapleJob.DAWNWARRIOR1)) {
+        } else if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
             improvingMaxHP = isCygnus() ? SkillFactory.getSkill(DawnWarrior.MAX_HP_INCREASE) : SkillFactory.getSkill(Warrior.IMPROVED_MAXHP);
-            if (job.isA(MapleJob.CRUSADER)) {
+            if (job.isA(Job.CRUSADER)) {
                 improvingMaxMP = SkillFactory.getSkill(1210000);
-            } else if (job.isA(MapleJob.DAWNWARRIOR2)) {
+            } else if (job.isA(Job.DAWNWARRIOR2)) {
                 improvingMaxMP = SkillFactory.getSkill(11110000);
             }
             improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
             addhp += Randomizer.rand(24, 28);
             addmp += Randomizer.rand(4, 6);
-        } else if (job.isA(MapleJob.MAGICIAN) || job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             improvingMaxMP = isCygnus() ? SkillFactory.getSkill(BlazeWizard.INCREASING_MAX_MP) : SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
             improvingMaxMPLevel = getSkillLevel(improvingMaxMP);
             addhp += Randomizer.rand(10, 14);
             addmp += Randomizer.rand(22, 24);
-        } else if (job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.THIEF) || (job.getId() > 1299 && job.getId() < 1500)) {
+        } else if (job.isA(Job.BOWMAN) || job.isA(Job.THIEF) || (job.getId() > 1299 && job.getId() < 1500)) {
             addhp += Randomizer.rand(20, 24);
             addmp += Randomizer.rand(14, 16);
-        } else if (job.isA(MapleJob.GM)) {
+        } else if (job.isA(Job.GM)) {
             addhp += 30000;
             addmp += 30000;
-        } else if (job.isA(MapleJob.PIRATE) || job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             improvingMaxHP = isCygnus() ? SkillFactory.getSkill(ThunderBreaker.IMPROVE_MAX_HP) : SkillFactory.getSkill(Brawler.IMPROVE_MAX_HP);
             improvingMaxHPLevel = getSkillLevel(improvingMaxHP);
             addhp += Randomizer.rand(22, 28);
             addmp += Randomizer.rand(18, 23);
-        } else if (job.isA(MapleJob.ARAN1)) {
+        } else if (job.isA(Job.ARAN1)) {
             addhp += Randomizer.rand(44, 48);
             int aids = Randomizer.rand(4, 8);
             addmp += aids + Math.floor(aids * 0.1);
         }
-        if (improvingMaxHPLevel > 0 && (job.isA(MapleJob.WARRIOR) || job.isA(MapleJob.PIRATE) || job.isA(MapleJob.DAWNWARRIOR1) || job.isA(MapleJob.THUNDERBREAKER1))) {
+        if (improvingMaxHPLevel > 0 && (job.isA(Job.WARRIOR) || job.isA(Job.PIRATE) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.THUNDERBREAKER1))) {
             addhp += improvingMaxHP.getEffect(improvingMaxHPLevel).getX();
         }
-        if (improvingMaxMPLevel > 0 && (job.isA(MapleJob.MAGICIAN) || job.isA(MapleJob.CRUSADER) || job.isA(MapleJob.BLAZEWIZARD1))) {
+        if (improvingMaxMPLevel > 0 && (job.isA(Job.MAGICIAN) || job.isA(Job.CRUSADER) || job.isA(Job.BLAZEWIZARD1))) {
             addmp += improvingMaxMP.getEffect(improvingMaxMPLevel).getX();
         }
 
         if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
-            if (getJobStyle() == MapleJob.MAGICIAN) {
+            if (getJobStyle() == Job.MAGICIAN) {
                 addmp += localint_ / 20;
             } else {
                 addmp += localint_ / 10;
@@ -6855,7 +6855,7 @@ public class Character extends AbstractCharacterObject {
             // skipping pets, probably unneeded here
 
             ret.level = rs.getInt("level");
-            ret.job = MapleJob.getById(rs.getInt("job"));
+            ret.job = Job.getById(rs.getInt("job"));
             ret.str = rs.getInt("str");
             ret.dex = rs.getInt("dex");
             ret.int_ = rs.getInt("int");
@@ -6994,7 +6994,7 @@ public class Character extends AbstractCharacterObject {
                     ret.setGMLevel(rs.getInt("gm"));
                     ret.skinColor = MapleSkinColor.getById(rs.getInt("skincolor"));
                     ret.gender = rs.getInt("gender");
-                    ret.job = MapleJob.getById(rs.getInt("job"));
+                    ret.job = Job.getById(rs.getInt("job"));
                     ret.finishedDojoTutorial = rs.getInt("finishedDojoTutorial") == 1;
                     ret.vanquisherKills = rs.getInt("vanquisherKills");
                     ret.omokwins = rs.getInt("omokwins");
@@ -7580,7 +7580,7 @@ public class Character extends AbstractCharacterObject {
             message("You have used a safety charm, so your EXP points have not been decreased.");
             InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
             usedSafetyCharm = true;
-        } else if (getJob() != MapleJob.BEGINNER) { //Hmm...
+        } else if (getJob() != Job.BEGINNER) { //Hmm...
             if (!FieldLimit.NO_EXP_DECREASE.check(getMap().getFieldLimit())) {  // thanks Conrad for noticing missing FieldLimit check
                 int XPdummy = ExpTable.getExpNeededForLevel(getLevel());
 
@@ -7787,11 +7787,11 @@ public class Character extends AbstractCharacterObject {
                 localint_ += getInt() * mwarr / 100;
                 localluk += getLuk() * mwarr / 100;
             }
-            if (job.isA(MapleJob.BOWMAN)) {
+            if (job.isA(Job.BOWMAN)) {
                 Skill expert = null;
-                if (job.isA(MapleJob.MARKSMAN)) {
+                if (job.isA(Job.MARKSMAN)) {
                     expert = SkillFactory.getSkill(3220004);
-                } else if (job.isA(MapleJob.BOWMASTER)) {
+                } else if (job.isA(Job.BOWMASTER)) {
                     expert = SkillFactory.getSkill(3120005);
                 }
                 if (expert != null) {
@@ -7828,7 +7828,7 @@ public class Character extends AbstractCharacterObject {
                 localmagic += blessing * 2;
             }
 
-            if (job.isA(MapleJob.THIEF) || job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.PIRATE) || job.isA(MapleJob.NIGHTWALKER1) || job.isA(MapleJob.WINDARCHER1)) {
+            if (job.isA(Job.THIEF) || job.isA(Job.BOWMAN) || job.isA(Job.PIRATE) || job.isA(Job.NIGHTWALKER1) || job.isA(Job.WINDARCHER1)) {
                 Item weapon_item = getInventory(InventoryType.EQUIPPED).getItem((short) -11);
                 if (weapon_item != null) {
                     WeaponType weapon = ii.getWeaponType(weapon_item.getItemId());
@@ -9152,7 +9152,7 @@ public class Character extends AbstractCharacterObject {
         this.itemEffect = itemEffect;
     }
 
-    public void setJob(MapleJob job) {
+    public void setJob(Job job) {
         this.job = job;
     }
 
@@ -11178,7 +11178,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
         addReborns();
-        changeJob(MapleJob.BEGINNER);
+        changeJob(Job.BEGINNER);
         setLevel(0);
         levelUp(true);
     }

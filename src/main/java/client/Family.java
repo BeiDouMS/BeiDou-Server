@@ -233,7 +233,7 @@ public class Family {
                     family = new Family(familyid, world);
                     Server.getInstance().getWorld(world).addFamily(familyid, family);
                 }
-                FamilyEntry familyEntry = new FamilyEntry(family, cid, name, level, MapleJob.getById(jobID));
+                FamilyEntry familyEntry = new FamilyEntry(family, cid, name, level, Job.getById(jobID));
                 family.addEntry(familyEntry);
                 if (seniorid <= 0) {
                     family.setLeader(familyEntry);

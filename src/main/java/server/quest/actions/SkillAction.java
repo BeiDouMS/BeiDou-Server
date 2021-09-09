@@ -22,7 +22,7 @@
 package server.quest.actions;
 
 import client.Character;
-import client.MapleJob;
+import client.Job;
 import client.Skill;
 import client.SkillFactory;
 import provider.MapleData;
@@ -114,7 +114,7 @@ public class SkillAction extends MapleQuestAction {
 			return masterLevel;
 		}
 		
-		public boolean jobsContains(MapleJob job) {
+		public boolean jobsContains(Job job) {
 			return jobs.contains(job.getId());
 		}
 		

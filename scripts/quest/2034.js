@@ -23,12 +23,12 @@ function end(mode, type, selection) {
 
 	    var stance = qm.getPlayer().getJobStyle();
 
-	    const MapleJob = Java.type('client.MapleJob');
-        if(stance == MapleJob.WARRIOR) item = 1072003;
-        else if(stance == MapleJob.MAGICIAN) item = 1072077;
-        else if(stance == MapleJob.BOWMAN || stance == MapleJob.CROSSBOWMAN) item = 1072081;
-        else if(stance == MapleJob.THIEF) item = 1072035;
-        else if(stance == MapleJob.BRAWLER || stance == MapleJob.GUNSLINGER) item = 1072294;
+	    const Job = Java.type('client.Job');
+        if(stance == Job.WARRIOR) item = 1072003;
+        else if(stance == Job.MAGICIAN) item = 1072077;
+        else if(stance == Job.BOWMAN || stance == Job.CROSSBOWMAN) item = 1072081;
+        else if(stance == Job.THIEF) item = 1072035;
+        else if(stance == Job.BRAWLER || stance == Job.GUNSLINGER) item = 1072294;
         else item = 1072018;
 
         qm.gainItem(item, 1);

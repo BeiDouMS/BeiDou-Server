@@ -48,7 +48,7 @@ public class MaxSkillCommand extends Command {
             } catch (NullPointerException npe) { }
         }
 
-        if (player.getJob().isA(MapleJob.ARAN1) || player.getJob().isA(MapleJob.LEGEND)) {
+        if (player.getJob().isA(Job.ARAN1) || player.getJob().isA(Job.LEGEND)) {
             Skill skill = SkillFactory.getSkill(5001005);
             player.changeSkillLevel(skill, (byte) -1, -1, -1);
         } else {

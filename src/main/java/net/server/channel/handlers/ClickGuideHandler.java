@@ -23,7 +23,7 @@
 package net.server.channel.handlers;
 
 import client.Client;
-import client.MapleJob;
+import client.Job;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
@@ -35,7 +35,7 @@ import scripting.npc.NPCScriptManager;
 public class ClickGuideHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (c.getPlayer().getJob().equals(MapleJob.NOBLESSE)) {
+        if (c.getPlayer().getJob().equals(Job.NOBLESSE)) {
             NPCScriptManager.getInstance().start(c, 1101008, null);
         } else {
             NPCScriptManager.getInstance().start(c, 1202000, null);

@@ -25,7 +25,7 @@ package client.command.commands.gm2;
 
 import client.Character;
 import client.Client;
-import client.MapleJob;
+import client.Job;
 import client.command.Command;
 
 public class JobCommand extends Command {
@@ -43,7 +43,7 @@ public class JobCommand extends Command {
                 return;
             }
 
-            player.changeJob(MapleJob.getById(jobid));
+            player.changeJob(Job.getById(jobid));
             player.equipChanged();
         } else if (params.length == 2) {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
@@ -55,7 +55,7 @@ public class JobCommand extends Command {
                     return;
                 }
 
-                victim.changeJob(MapleJob.getById(jobid));
+                victim.changeJob(Job.getById(jobid));
                 player.equipChanged();
             } else {
                 player.message("Player '" + params[0] + "' could not be found.");

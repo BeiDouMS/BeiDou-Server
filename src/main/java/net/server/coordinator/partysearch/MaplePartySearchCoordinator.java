@@ -20,7 +20,7 @@
 package net.server.coordinator.partysearch;
 
 import client.Character;
-import client.MapleJob;
+import client.Job;
 import config.YamlConfig;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
@@ -47,8 +47,8 @@ import java.util.Map.Entry;
  */
 public class MaplePartySearchCoordinator {
     
-    private Map<MapleJob, PartySearchStorage> storage = new HashMap<>();
-    private Map<MapleJob, PartySearchEchelon> upcomers = new HashMap<>();
+    private Map<Job, PartySearchStorage> storage = new HashMap<>();
+    private Map<Job, PartySearchEchelon> upcomers = new HashMap<>();
     
     private List<Character> leaderQueue = new LinkedList<>();
     private final MonitoredReentrantReadWriteLock leaderQueueLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_PARTY_SEARCH_QUEUE, true);
@@ -63,7 +63,7 @@ public class MaplePartySearchCoordinator {
     private int updateCount = 0;
     
     private static Map<Integer, Set<Integer>> mapNeighbors = fetchNeighbouringMaps();
-    private static Map<Integer, MapleJob> jobTable = instantiateJobTable();
+    private static Map<Integer, Job> jobTable = instantiateJobTable();
     
     private static Map<Integer, Set<Integer>> fetchNeighbouringMaps() {
         Map<Integer, Set<Integer>> mapLinks = new HashMap<>();
@@ -104,33 +104,33 @@ public class MaplePartySearchCoordinator {
         }
     }
     
-    private static Map<Integer, MapleJob> instantiateJobTable() {
-        Map<Integer, MapleJob> table = new HashMap<>();
+    private static Map<Integer, Job> instantiateJobTable() {
+        Map<Integer, Job> table = new HashMap<>();
         
         List<Pair<Integer, Integer>> jobSearchTypes = new LinkedList<Pair<Integer, Integer>>() {{
-            add(new Pair<>(MapleJob.MAPLELEAF_BRIGADIER.getId(), 0));
+            add(new Pair<>(Job.MAPLELEAF_BRIGADIER.getId(), 0));
             add(new Pair<>(0, 0));
-            add(new Pair<>(MapleJob.ARAN1.getId(), 0));
+            add(new Pair<>(Job.ARAN1.getId(), 0));
             add(new Pair<>(100, 3));
-            add(new Pair<>(MapleJob.DAWNWARRIOR1.getId(), 0));
+            add(new Pair<>(Job.DAWNWARRIOR1.getId(), 0));
             add(new Pair<>(200, 3));
-            add(new Pair<>(MapleJob.BLAZEWIZARD1.getId(), 0));
+            add(new Pair<>(Job.BLAZEWIZARD1.getId(), 0));
             add(new Pair<>(500, 2));
-            add(new Pair<>(MapleJob.THUNDERBREAKER1.getId(), 0));
+            add(new Pair<>(Job.THUNDERBREAKER1.getId(), 0));
             add(new Pair<>(400, 2));
-            add(new Pair<>(MapleJob.NIGHTWALKER1.getId(), 0));
+            add(new Pair<>(Job.NIGHTWALKER1.getId(), 0));
             add(new Pair<>(300, 2));
-            add(new Pair<>(MapleJob.WINDARCHER1.getId(), 0));
-            add(new Pair<>(MapleJob.EVAN1.getId(), 0));
+            add(new Pair<>(Job.WINDARCHER1.getId(), 0));
+            add(new Pair<>(Job.EVAN1.getId(), 0));
         }};
         
         int i = 0;
         for (Pair<Integer, Integer> p : jobSearchTypes) {
-            table.put(i, MapleJob.getById(p.getLeft()));
+            table.put(i, Job.getById(p.getLeft()));
             i++;
             
             for (int j = 1; j <= p.getRight(); j++) {
-                table.put(i, MapleJob.getById(p.getLeft() + 10 * j));
+                table.put(i, Job.getById(p.getLeft() + 10 * j));
                 i++;
             }
         }
@@ -141,18 +141,18 @@ public class MaplePartySearchCoordinator {
     private class LeaderSearchMetadata {
         private int minLevel;
         private int maxLevel;
-        private List<MapleJob> searchedJobs;
+        private List<Job> searchedJobs;
         
         private int reentryCount;
         
-        private List<MapleJob> decodeSearchedJobs(int jobsSelected) {
-            List<MapleJob> searchedJobs = new LinkedList<>();
+        private List<Job> decodeSearchedJobs(int jobsSelected) {
+            List<Job> searchedJobs = new LinkedList<>();
             
             int topByte = (int)((Math.log(jobsSelected) / Math.log(2)) + 1e-5);
             
             for (int i = 0; i <= topByte; i++) {
                 if (jobsSelected % 2 == 1) {
-                    MapleJob job = jobTable.get(i);
+                    Job job = jobTable.get(i);
                     if (job != null) {
                         searchedJobs.add(job);
                     }
@@ -177,7 +177,7 @@ public class MaplePartySearchCoordinator {
     }
     
     public MaplePartySearchCoordinator() {
-        for (MapleJob job : jobTable.values()) {
+        for (Job job : jobTable.values()) {
             storage.put(job, new PartySearchStorage());
             upcomers.put(job, new PartySearchEchelon());
         }
@@ -188,7 +188,7 @@ public class MaplePartySearchCoordinator {
     }
     
     public void detachPlayer(Character chr) {
-        MapleJob psJob = getPartySearchJob(chr.getJob());
+        Job psJob = getPartySearchJob(chr.getJob());
         
         if (!upcomers.get(psJob).detachPlayer(chr)) {
             storage.get(psJob).detachPlayer(chr);
@@ -196,24 +196,24 @@ public class MaplePartySearchCoordinator {
     }
     
     public void updatePartySearchStorage() {
-        for (Entry<MapleJob, PartySearchEchelon> psUpdate : upcomers.entrySet()) {
+        for (Entry<Job, PartySearchEchelon> psUpdate : upcomers.entrySet()) {
             storage.get(psUpdate.getKey()).updateStorage(psUpdate.getValue().exportEchelon());
         }
     }
     
-    private static MapleJob getPartySearchJob(MapleJob job) {
+    private static Job getPartySearchJob(Job job) {
         if (job.getJobNiche() == 0) {
-            return MapleJob.BEGINNER;
+            return Job.BEGINNER;
         } else if (job.getId() < 600) { // explorers
-            return MapleJob.getById((job.getId() / 10) * 10);
+            return Job.getById((job.getId() / 10) * 10);
         } else if (job.getId() >= 1000) {
-            return MapleJob.getById((job.getId() / 100) * 100);
+            return Job.getById((job.getId() / 100) * 100);
         } else {
-            return MapleJob.MAPLELEAF_BRIGADIER;
+            return Job.MAPLELEAF_BRIGADIER;
         }
     }
     
-    private Character fetchPlayer(int callerCid, int callerMapid, MapleJob job, int minLevel, int maxLevel) {
+    private Character fetchPlayer(int callerCid, int callerMapid, Job job, int minLevel, int maxLevel) {
         return storage.get(getPartySearchJob(job)).callPlayer(callerCid, callerMapid, minLevel, maxLevel);
     }
     
@@ -269,7 +269,7 @@ public class MaplePartySearchCoordinator {
             
             int leaderCid = leader.getId();
             int leaderMapid = leader.getMapId();
-            for (MapleJob searchJob : settings.searchedJobs) {
+            for (Job searchJob : settings.searchedJobs) {
                 Character chr = fetchPlayer(leaderCid, leaderMapid, searchJob, minLevel, maxLevel);
                 if (chr != null) {
                     return chr;

@@ -37,8 +37,8 @@ function end(mode, type, selection) {
 
                 qm.gainItem(1302077, 1);
                 qm.gainItem(1142066, 1);
-                const MapleJob = Java.type('client.MapleJob');
-                qm.changeJob(MapleJob.DAWNWARRIOR1);
+                const Job = Java.type('client.Job');
+                qm.changeJob(Job.DAWNWARRIOR1);
                 qm.getPlayer().resetStats();
             }
             qm.forceCompleteQuest();

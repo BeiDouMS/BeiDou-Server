@@ -353,10 +353,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
 
 	public void changeJobById(int a) {
-		getPlayer().changeJob(MapleJob.getById(a));
+		getPlayer().changeJob(Job.getById(a));
 	}
 
-	public void changeJob(MapleJob job) {
+	public void changeJob(Job job) {
 		getPlayer().changeJob(job);
 	}
 
