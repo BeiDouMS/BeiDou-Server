@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class MapleLootManager {
     
-    private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<MapleLootInventory> playersInv) {
+    private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<LootInventory> playersInv) {
         int qStartAmount = 0, qCompleteAmount = 0;
         MapleQuest quest = MapleQuest.getInstance(dropEntry.questid);
         if (quest != null) {
@@ -43,7 +43,7 @@ public class MapleLootManager {
         
         //boolean restricted = MapleItemInformationProvider.getInstance().isPickupRestricted(dropEntry.itemId);
         for (int i = 0; i < players.size(); i++) {
-            MapleLootInventory chrInv = playersInv.get(i);
+            LootInventory chrInv = playersInv.get(i);
             
             if (dropEntry.questid > 0) {
                 int qItemAmount, chrQuestStatus = players.get(i).getQuestStatus(dropEntry.questid);
@@ -77,9 +77,9 @@ public class MapleLootManager {
         List<MonsterDropEntry> loots = MonsterInformationProvider.getInstance().retrieveEffectiveDrop(monsterId);
         if(loots.isEmpty()) return loots;
         
-        List<MapleLootInventory> playersInv = new LinkedList<>();
+        List<LootInventory> playersInv = new LinkedList<>();
         for(Character chr : players) {
-            MapleLootInventory lootInv = new MapleLootInventory(chr);
+            LootInventory lootInv = new LootInventory(chr);
             playersInv.add(lootInv);
         }
         
