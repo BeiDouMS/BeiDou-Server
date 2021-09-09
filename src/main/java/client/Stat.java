@@ -21,8 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package client;
 
-public enum MapleStat {
-
+public enum Stat {
     SKIN(0x1),
     FACE(0x2),
     HAIR(0x4),
@@ -45,7 +44,7 @@ public enum MapleStat {
     GACHAEXP(0x200000);
     private final int i;
 
-    private MapleStat(int i) {
+    Stat(int i) {
         this.i = i;
     }
 
@@ -53,8 +52,8 @@ public enum MapleStat {
         return i;
     }
 
-    public static MapleStat getByValue(int value) {
-        for (MapleStat stat : MapleStat.values()) {
+    public static Stat getByValue(int value) {
+        for (Stat stat : Stat.values()) {
             if (stat.getValue() == value) {
                 return stat;
             }
@@ -62,7 +61,7 @@ public enum MapleStat {
         return null;
     }
 
-    public static MapleStat getBy5ByteEncoding(int encoded) {
+    public static Stat getBy5ByteEncoding(int encoded) {
         switch (encoded) {
             case 64:
                 return STR;
@@ -76,7 +75,7 @@ public enum MapleStat {
         return null;
     }
 
-    public static MapleStat getByString(String type) {
+    public static Stat getByString(String type) {
         if (type.equals("SKIN")) {
             return SKIN;
         } else if (type.equals("FACE")) {

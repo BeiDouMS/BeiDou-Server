@@ -48,7 +48,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapleMapOb
     protected float transienthp = Float.NEGATIVE_INFINITY, transientmp = Float.NEGATIVE_INFINITY;
 
     private AbstractCharacterListener listener = null;
-    protected Map<MapleStat, Integer> statUpdates = new HashMap<>();
+    protected Map<Stat, Integer> statUpdates = new HashMap<>();
 
     protected Lock effLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHARACTER_EFF, true);
     protected MonitoredReadLock statRlock;
@@ -332,13 +332,13 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapleMapOb
 
                     poolUpdate = true;
                     setMaxHp(newMaxHp);
-                    statUpdates.put(MapleStat.MAXHP, clientmaxhp);
-                    statUpdates.put(MapleStat.HP, hp);
+                    statUpdates.put(Stat.MAXHP, clientmaxhp);
+                    statUpdates.put(Stat.HP, hp);
                 }
 
                 if (newHp != Short.MIN_VALUE) {
                     setHp(newHp);
-                    statUpdates.put(MapleStat.HP, hp);
+                    statUpdates.put(Stat.HP, hp);
                 }
 
                 if (newMaxMp != Short.MIN_VALUE) {
@@ -348,13 +348,13 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapleMapOb
 
                     poolUpdate = true;
                     setMaxMp(newMaxMp);
-                    statUpdates.put(MapleStat.MAXMP, clientmaxmp);
-                    statUpdates.put(MapleStat.MP, mp);
+                    statUpdates.put(Stat.MAXMP, clientmaxmp);
+                    statUpdates.put(Stat.MP, mp);
                 }
 
                 if (newMp != Short.MIN_VALUE) {
                     setMp(newMp);
-                    statUpdates.put(MapleStat.MP, mp);
+                    statUpdates.put(Stat.MP, mp);
                 }
             }
 
@@ -366,27 +366,27 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapleMapOb
 
                 if (newStr >= 4) {
                     setStr(newStr);
-                    statUpdates.put(MapleStat.STR, str);
+                    statUpdates.put(Stat.STR, str);
                 }
 
                 if (newDex >= 4) {
                     setDex(newDex);
-                    statUpdates.put(MapleStat.DEX, dex);
+                    statUpdates.put(Stat.DEX, dex);
                 }
 
                 if (newInt >= 4) {
                     setInt(newInt);
-                    statUpdates.put(MapleStat.INT, int_);
+                    statUpdates.put(Stat.INT, int_);
                 }
 
                 if (newLuk >= 4) {
                     setLuk(newLuk);
-                    statUpdates.put(MapleStat.LUK, luk);
+                    statUpdates.put(Stat.LUK, luk);
                 }
 
                 if (newAp >= 0) {
                     setRemainingAp(newAp);
-                    statUpdates.put(MapleStat.AVAILABLEAP, remainingAp);
+                    statUpdates.put(Stat.AVAILABLEAP, remainingAp);
                 }
 
                 statUpdate = true;
@@ -397,7 +397,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapleMapOb
                 short skillbook = newSp.shortValue();
 
                 setRemainingSp(sp, skillbook);
-                statUpdates.put(MapleStat.AVAILABLESP, remainingSp[skillbook]);
+                statUpdates.put(Stat.AVAILABLESP, remainingSp[skillbook]);
             }
 
             if (!statUpdates.isEmpty()) {

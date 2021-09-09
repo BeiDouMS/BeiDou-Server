@@ -110,7 +110,7 @@ public class AssignAPProcessor {
                 int prStat = 0, scStat = 0, trStat = 0, temp, tempAp = remainingAp, CAP;
                 if (tempAp < 1) return;
 
-                MapleStat primary, secondary, tertiary = MapleStat.LUK;
+                Stat primary, secondary, tertiary = Stat.LUK;
                 switch(stance) {
                     case MAGICIAN:
                         CAP = 165;
@@ -132,9 +132,9 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.INT;
-                        secondary = MapleStat.LUK;
-                        tertiary = MapleStat.DEX;
+                        primary = Stat.INT;
+                        secondary = Stat.LUK;
+                        tertiary = Stat.DEX;
 
                         break;
 
@@ -158,8 +158,8 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.DEX;
-                        secondary = MapleStat.STR;
+                        primary = Stat.DEX;
+                        secondary = Stat.STR;
 
                         break;
 
@@ -184,8 +184,8 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.DEX;
-                        secondary = MapleStat.STR;
+                        primary = Stat.DEX;
+                        secondary = Stat.STR;
 
                         break;
 
@@ -243,9 +243,9 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.LUK;
-                        secondary = MapleStat.DEX;
-                        tertiary = MapleStat.STR;
+                        primary = Stat.LUK;
+                        secondary = Stat.DEX;
+                        tertiary = Stat.STR;
 
                         break;
 
@@ -310,8 +310,8 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.STR;
-                        secondary = MapleStat.DEX;
+                        primary = Stat.STR;
+                        secondary = Stat.DEX;
                 }
 
                 //-------------------------------------------------------------------------------------
@@ -350,7 +350,7 @@ public class AssignAPProcessor {
                         return;
                     }
                     
-                    gainStatByType(MapleStat.getBy5ByteEncoding(type), statGain, tempVal, statUpdate);
+                    gainStatByType(Stat.getBy5ByteEncoding(type), statGain, tempVal, statUpdate);
                 }
                 
                 chr.assignStrDexIntLuk(statGain[0], statGain[1], statGain[3], statGain[2]);
@@ -365,11 +365,11 @@ public class AssignAPProcessor {
         return(statList.size() <= rank ? 0 : statList.get(rank));
     }
     
-    private static int gainStatByType(MapleStat type, int[] statGain, int gain, int[] statUpdate) {
+    private static int gainStatByType(Stat type, int[] statGain, int gain, int[] statUpdate) {
         if(gain <= 0) return 0;
         
         int newVal = 0;
-        if (type.equals(MapleStat.STR)) {
+        if (type.equals(Stat.STR)) {
             newVal = statUpdate[0] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[0] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -378,7 +378,7 @@ public class AssignAPProcessor {
                 statGain[0] += gain;
                 statUpdate[0] = newVal;
             }
-        } else if (type.equals(MapleStat.INT)) {
+        } else if (type.equals(Stat.INT)) {
             newVal = statUpdate[3] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[3] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -387,7 +387,7 @@ public class AssignAPProcessor {
                 statGain[3] += gain;
                 statUpdate[3] = newVal;
             }
-        } else if (type.equals(MapleStat.LUK)) {
+        } else if (type.equals(Stat.LUK)) {
             newVal = statUpdate[2] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[2] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -396,7 +396,7 @@ public class AssignAPProcessor {
                 statGain[2] += gain;
                 statUpdate[2] = newVal;
             }
-        } else if (type.equals(MapleStat.DEX)) {
+        } else if (type.equals(Stat.DEX)) {
             newVal = statUpdate[1] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[1] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -413,9 +413,9 @@ public class AssignAPProcessor {
         return 0;
     }
     
-    private static MapleStat getQuaternaryStat(Job stance) {
-        if(stance != Job.MAGICIAN) return MapleStat.INT;
-        return MapleStat.STR;
+    private static Stat getQuaternaryStat(Job stance) {
+        if(stance != Job.MAGICIAN) return Stat.INT;
+        return Stat.STR;
     }
     
     public static boolean APResetAction(Client c, int APFrom, int APTo) {

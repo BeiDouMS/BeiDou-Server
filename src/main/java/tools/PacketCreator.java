@@ -83,7 +83,7 @@ import java.util.stream.Collectors;
  */
 public class PacketCreator {
 
-    public static final List<Pair<MapleStat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
+    public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
     private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
@@ -951,14 +951,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<MapleStat, Integer>> stats, boolean enableActions, Character chr) {
+    public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<MapleStat, Integer> statupdate : stats) {
+        for (Pair<Stat, Integer> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<MapleStat, Integer>> mystats = stats;
+        List<Pair<Stat, Integer>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -967,7 +967,7 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<MapleStat, Integer> statupdate : mystats) {
+        for (Pair<Stat, Integer> statupdate : mystats) {
             if (statupdate.getLeft().getValue() >= 1) {
                 if (statupdate.getLeft().getValue() == 0x1) {
                     p.writeByte(statupdate.getRight().byteValue());
@@ -4473,7 +4473,7 @@ public class PacketCreator {
 
         final OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         int mask = 0;
-        mask |= MapleStat.PET.getValue();
+        mask |= Stat.PET.getValue();
         p.writeByte(0);
         p.writeInt(mask);
         Pet[] pets = chr.getPets();

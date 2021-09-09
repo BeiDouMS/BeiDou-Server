@@ -25,7 +25,7 @@ package client.command.commands.gm3;
 
 import client.Character;
 import client.Client;
-import client.MapleStat;
+import client.Stat;
 import client.command.Command;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
@@ -52,7 +52,7 @@ public class HairCommand extends Command {
                 }
 
                 player.setHair(itemId);
-                player.updateSingleStat(MapleStat.HAIR, itemId);
+                player.updateSingleStat(Stat.HAIR, itemId);
                 player.equipChanged();
             } else {
                 int itemId = Integer.parseInt(params[1]);
@@ -64,7 +64,7 @@ public class HairCommand extends Command {
                 Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
                 if (victim != null) {
                     victim.setHair(itemId);
-                    victim.updateSingleStat(MapleStat.HAIR, itemId);
+                    victim.updateSingleStat(Stat.HAIR, itemId);
                     victim.equipChanged();
                 } else {
                     player.yellowMessage("Player '" + params[0] + "' has not been found on this channel.");
