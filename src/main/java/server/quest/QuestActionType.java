@@ -22,18 +22,36 @@
 package server.quest;
 
 /**
- *
  * @author Matze
  */
-public enum MapleQuestActionType {
-    UNDEFINED(-1), EXP(0), ITEM(1), NEXTQUEST(2), MESO(3), QUEST(4), SKILL(5), FAME(6), BUFF(7), PETSKILL(8), YES(9), NO(10), NPC(11), MIN_LEVEL(12), NORMAL_AUTO_START(13), PETTAMENESS(14), PETSPEED(15), INFO(16), ZERO(16);
+public enum QuestActionType {
+    UNDEFINED(-1),
+    EXP(0),
+    ITEM(1),
+    NEXTQUEST(2),
+    MESO(3),
+    QUEST(4),
+    SKILL(5),
+    FAME(6),
+    BUFF(7),
+    PETSKILL(8),
+    YES(9),
+    NO(10),
+    NPC(11),
+    MIN_LEVEL(12),
+    NORMAL_AUTO_START(13),
+    PETTAMENESS(14),
+    PETSPEED(15),
+    INFO(16),
+    ZERO(16);
+
     final byte type;
 
-    private MapleQuestActionType(int type) {
+    QuestActionType(int type) {
         this.type = (byte) type;
     }
 
-    public static MapleQuestActionType getByWZName(String name) {
+    public static QuestActionType getByWZName(String name) {
         if (name.equals("exp")) {
             return EXP;
         } else if (name.equals("money")) {

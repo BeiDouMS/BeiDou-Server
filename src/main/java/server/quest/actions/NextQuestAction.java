@@ -25,8 +25,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 import tools.PacketCreator;
 
 /**
@@ -37,7 +37,7 @@ public class NextQuestAction extends MapleQuestAction {
 	int nextQuest;
 	
 	public NextQuestAction(Quest quest, Data data) {
-		super(MapleQuestActionType.NEXTQUEST, quest);
+		super(QuestActionType.NEXTQUEST, quest);
 		processData(data);
 	}
 	

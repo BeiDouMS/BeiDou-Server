@@ -22,8 +22,8 @@ package server.quest.actions;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
@@ -35,7 +35,7 @@ public class InfoAction extends MapleQuestAction {
         private int questID;
 
         public InfoAction(Quest quest, Data data) {
-                super(MapleQuestActionType.INFO, quest);
+                super(QuestActionType.INFO, quest);
                 questID = quest.getId();
                 processData(data);
         }

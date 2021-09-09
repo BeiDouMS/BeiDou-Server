@@ -30,8 +30,8 @@ import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataTool;
 import server.MapleItemInformationProvider;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
@@ -51,7 +51,7 @@ public class ItemAction extends MapleQuestAction {
 	List<ItemData> items = new ArrayList<>();
 	
 	public ItemAction(Quest quest, Data data) {
-		super(MapleQuestActionType.ITEM, quest);
+		super(QuestActionType.ITEM, quest);
 		processData(data);
 	}
 	

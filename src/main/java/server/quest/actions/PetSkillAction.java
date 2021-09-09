@@ -26,8 +26,8 @@ import client.QuestStatus;
 import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
@@ -37,7 +37,7 @@ public class PetSkillAction extends MapleQuestAction {
 	int flag;
 	
 	public PetSkillAction(Quest quest, Data data) {
-		super(MapleQuestActionType.PETSKILL, quest);
+		super(QuestActionType.PETSKILL, quest);
 		questID = quest.getId();
 		processData(data);
 	}

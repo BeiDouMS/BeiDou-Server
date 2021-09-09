@@ -27,8 +27,8 @@ import client.Skill;
 import client.SkillFactory;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class SkillAction extends MapleQuestAction {
 	Map<Integer, SkillData> skillData = new HashMap<>();
 	
 	public SkillAction(Quest quest, Data data) {
-		super(MapleQuestActionType.SKILL, quest);
+		super(QuestActionType.SKILL, quest);
 		processData(data);
 	}
 	

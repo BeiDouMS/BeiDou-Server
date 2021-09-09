@@ -60,8 +60,8 @@ public class Quest {
     protected int timeLimit, timeLimit2;
     protected Map<MapleQuestRequirementType, MapleQuestRequirement> startReqs = new EnumMap<>(MapleQuestRequirementType.class);
     protected Map<MapleQuestRequirementType, MapleQuestRequirement> completeReqs = new EnumMap<>(MapleQuestRequirementType.class);
-    protected Map<MapleQuestActionType, MapleQuestAction> startActs = new EnumMap<>(MapleQuestActionType.class);
-    protected Map<MapleQuestActionType, MapleQuestAction> completeActs = new EnumMap<>(MapleQuestActionType.class);
+    protected Map<QuestActionType, MapleQuestAction> startActs = new EnumMap<>(QuestActionType.class);
+    protected Map<QuestActionType, MapleQuestAction> completeActs = new EnumMap<>(QuestActionType.class);
     protected List<Integer> relevantMobs = new LinkedList<>();
     private boolean autoStart;
     private boolean autoPreComplete, autoComplete;
@@ -147,7 +147,7 @@ public class Quest {
         final Data startActData = actData.getChildByPath("0");
         if (startActData != null) {
             for (Data startAct : startActData.getChildren()) {
-                MapleQuestActionType questActionType = MapleQuestActionType.getByWZName(startAct.getName());
+                QuestActionType questActionType = QuestActionType.getByWZName(startAct.getName());
                 MapleQuestAction act = this.getAction(questActionType, startAct);
 
                 if (act == null) {
@@ -160,7 +160,7 @@ public class Quest {
         Data completeActData = actData.getChildByPath("1");
         if (completeActData != null) {
             for (Data completeAct : completeActData.getChildren()) {
-                MapleQuestActionType questActionType = MapleQuestActionType.getByWZName(completeAct.getName());
+                QuestActionType questActionType = QuestActionType.getByWZName(completeAct.getName());
                 MapleQuestAction act = this.getAction(questActionType, completeAct);
 
                 if (act == null) {
@@ -534,7 +534,7 @@ public class Quest {
         return ret;
     }
 
-    private MapleQuestAction getAction(MapleQuestActionType type, Data data) {
+    private MapleQuestAction getAction(QuestActionType type, Data data) {
         MapleQuestAction ret = null;
         switch (type) {
             case BUFF:
@@ -582,7 +582,7 @@ public class Quest {
 
     public boolean restoreLostItem(Character chr, int itemid) {
         if (chr.getQuest(this).getStatus().equals(QuestStatus.Status.STARTED)) {
-            ItemAction itemAct = (ItemAction) startActs.get(MapleQuestActionType.ITEM);
+            ItemAction itemAct = (ItemAction) startActs.get(QuestActionType.ITEM);
             if (itemAct != null) {
                 return itemAct.restoreLostItem(chr, itemid);
             }
@@ -618,8 +618,8 @@ public class Quest {
     }
 
     public boolean hasNextQuestAction() {
-        Map<MapleQuestActionType, MapleQuestAction> acts = completeActs;
-        MapleQuestAction mqa = acts.get(MapleQuestActionType.NEXTQUEST);
+        Map<QuestActionType, MapleQuestAction> acts = completeActs;
+        MapleQuestAction mqa = acts.get(QuestActionType.NEXTQUEST);
 
         return mqa != null;
     }

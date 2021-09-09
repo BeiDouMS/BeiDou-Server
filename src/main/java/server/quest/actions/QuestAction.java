@@ -25,8 +25,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class QuestAction extends MapleQuestAction {
 	Map<Integer, Integer> quests = new HashMap<>();
 	
 	public QuestAction(Quest quest, Data data) {
-		super(MapleQuestActionType.QUEST, quest);
+		super(QuestActionType.QUEST, quest);
 		questID = quest.getId();
 		processData(data);
 	}

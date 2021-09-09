@@ -24,8 +24,8 @@ import client.Client;
 import client.inventory.Pet;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
@@ -35,7 +35,7 @@ public class PetTamenessAction extends MapleQuestAction {
 	int tameness;
 	
 	public PetTamenessAction(Quest quest, Data data) {
-		super(MapleQuestActionType.PETTAMENESS, quest);
+		super(QuestActionType.PETTAMENESS, quest);
 		questID = quest.getId();
 		processData(data);
 	}

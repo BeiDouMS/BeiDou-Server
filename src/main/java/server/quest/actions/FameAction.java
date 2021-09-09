@@ -24,8 +24,8 @@ package server.quest.actions;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestActionType;
 import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
@@ -35,7 +35,7 @@ public class FameAction extends MapleQuestAction {
 	int fame;
 	
 	public FameAction(Quest quest, Data data) {
-		super(MapleQuestActionType.FAME, quest);
+		super(QuestActionType.FAME, quest);
 		questID = quest.getId();
 		processData(data);
 	}
