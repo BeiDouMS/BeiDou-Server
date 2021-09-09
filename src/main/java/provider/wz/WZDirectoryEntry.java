@@ -23,7 +23,7 @@ package provider.wz;
 
 import provider.DataDirectoryEntry;
 import provider.DataEntity;
-import provider.MapleDataEntry;
+import provider.DataEntry;
 import provider.MapleDataFileEntry;
 
 import java.util.*;
@@ -31,7 +31,7 @@ import java.util.*;
 public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
     private List<DataDirectoryEntry> subdirs = new ArrayList<>();
     private List<MapleDataFileEntry> files = new ArrayList<>();
-    private Map<String, MapleDataEntry> entries = new HashMap<>();
+    private Map<String, DataEntry> entries = new HashMap<>();
 
     public WZDirectoryEntry(String name, int size, int checksum, DataEntity parent) {
         super(name, size, checksum, parent);
@@ -59,7 +59,7 @@ public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
         return Collections.unmodifiableList(files);
     }
 
-    public MapleDataEntry getEntry(String name) {
+    public DataEntry getEntry(String name) {
         return entries.get(name);
     }
 }

@@ -22,10 +22,9 @@
 package provider;
 
 /**
- *
  * @author Matze
  */
-public interface MapleDataEntry extends DataEntity {
+public interface DataEntry extends DataEntity {
     String getName();
     int getSize();
     int getChecksum();

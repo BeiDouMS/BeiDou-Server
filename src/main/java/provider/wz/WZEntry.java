@@ -22,9 +22,9 @@
 package provider.wz;
 
 import provider.DataEntity;
-import provider.MapleDataEntry;
+import provider.DataEntry;
 
-public class WZEntry implements MapleDataEntry {
+public class WZEntry implements DataEntry {
     private String name;
     private int size;
     private int checksum;
