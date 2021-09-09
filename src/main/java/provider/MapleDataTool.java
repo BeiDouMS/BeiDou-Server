@@ -21,7 +21,7 @@
 */
 package provider;
 
-import provider.wz.MapleDataType;
+import provider.wz.DataType;
 
 import java.awt.*;
 
@@ -66,7 +66,7 @@ public class MapleDataTool {
     }
 
     public static int getIntConvert(MapleData data) {
-        if (data.getType() == MapleDataType.STRING) {
+        if (data.getType() == DataType.STRING) {
             return Integer.parseInt(getString(data));
         } else {
             return getInt(data);
@@ -77,7 +77,7 @@ public class MapleDataTool {
         if (data == null) {
             return def;
         }
-        if (data.getType() == MapleDataType.STRING) {
+        if (data.getType() == DataType.STRING) {
 	    String dd = getString(data);
 	    if (dd.endsWith("%")) {
 		dd = dd.substring(0, dd.length() - 1);
@@ -94,7 +94,7 @@ public class MapleDataTool {
 
     public static int getIntConvert(String path, MapleData data) {
         MapleData d = data.getChildByPath(path);
-        if (d.getType() == MapleDataType.STRING) {
+        if (d.getType() == DataType.STRING) {
             return Integer.parseInt(getString(d));
         } else {
             return getInt(d);
@@ -104,7 +104,7 @@ public class MapleDataTool {
     public static int getInt(MapleData data, int def) {
         if (data == null || data.getData() == null) {
             return  def;
-        } else if (data.getType() == MapleDataType.STRING) {
+        } else if (data.getType() == DataType.STRING) {
             return Integer.parseInt(getString(data));
         } else {
             Object numData = data.getData();
@@ -125,7 +125,7 @@ public class MapleDataTool {
         if (d == null) {
             return def;
         }
-        if (d.getType() == MapleDataType.STRING) {
+        if (d.getType() == DataType.STRING) {
             try {
                 return Integer.parseInt(getString(d));
             } catch (NumberFormatException nfe) {

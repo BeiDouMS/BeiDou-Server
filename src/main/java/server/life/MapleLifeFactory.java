@@ -25,7 +25,7 @@ import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
-import provider.wz.MapleDataType;
+import provider.wz.DataType;
 import provider.wz.WZFiles;
 import tools.Pair;
 import tools.StringUtil;
@@ -149,7 +149,7 @@ public class MapleLifeFactory {
         MapleData firstAttackData = monsterInfoData.getChildByPath("firstAttack");
         int firstAttack = 0;
         if (firstAttackData != null) {
-            if (firstAttackData.getType() == MapleDataType.FLOAT) {
+            if (firstAttackData.getType() == DataType.FLOAT) {
                 firstAttack = Math.round(MapleDataTool.getFloat(firstAttackData));
             } else {
                 firstAttack = MapleDataTool.getInt(firstAttackData);

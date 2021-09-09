@@ -115,7 +115,7 @@ public class XMLDomMapleData implements MapleData {
 	@Override
 	public synchronized Object getData() {
                 NamedNodeMap attributes = node.getAttributes();
-                MapleDataType type = getType();
+                DataType type = getType();
                 switch (type) {
                         case DOUBLE:
                         case FLOAT:
@@ -153,34 +153,34 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized MapleDataType getType() {
+	public synchronized DataType getType() {
                 String nodeName = node.getNodeName();
                 
                 switch (nodeName) {
                     case "imgdir":
-                        return MapleDataType.PROPERTY;
+                        return DataType.PROPERTY;
                     case "canvas":
-                        return MapleDataType.CANVAS;
+                        return DataType.CANVAS;
                     case "convex":
-                        return MapleDataType.CONVEX;
+                        return DataType.CONVEX;
                     case "sound":
-                        return MapleDataType.SOUND;
+                        return DataType.SOUND;
                     case "uol":
-                        return MapleDataType.UOL;
+                        return DataType.UOL;
                     case "double":
-                        return MapleDataType.DOUBLE;
+                        return DataType.DOUBLE;
                     case "float":
-                        return MapleDataType.FLOAT;
+                        return DataType.FLOAT;
                     case "int":
-                        return MapleDataType.INT;
+                        return DataType.INT;
                     case "short":
-                        return MapleDataType.SHORT;
+                        return DataType.SHORT;
                     case "string":
-                        return MapleDataType.STRING;
+                        return DataType.STRING;
                     case "vector":
-                        return MapleDataType.VECTOR;
+                        return DataType.VECTOR;
                     case "null":
-                        return MapleDataType.IMG_0x00;
+                        return DataType.IMG_0x00;
                 }
 		return null;
 	}

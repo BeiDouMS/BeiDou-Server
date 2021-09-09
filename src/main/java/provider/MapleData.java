@@ -21,14 +21,14 @@
 */
 package provider;
 
-import provider.wz.MapleDataType;
+import provider.wz.DataType;
 
 import java.util.List;
 
 public interface MapleData extends MapleDataEntity, Iterable<MapleData> {
     @Override
     String getName();
-    MapleDataType getType();
+    DataType getType();
     List<MapleData> getChildren();
     MapleData getChildByPath(String path);
     Object getData();
