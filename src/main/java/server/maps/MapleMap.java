@@ -144,8 +144,8 @@ public class MapleMap {
     
     // events
     private boolean eventstarted = false, isMuted = false;
-    private MapleSnowball snowball0 = null;
-    private MapleSnowball snowball1 = null;
+    private Snowball snowball0 = null;
+    private Snowball snowball1 = null;
     private Coconut coconut;
     
     //CPQ
@@ -3842,7 +3842,7 @@ public class MapleMap {
     }
 
     // BEGIN EVENTS
-    public void setSnowball(int team, MapleSnowball ball) {
+    public void setSnowball(int team, Snowball ball) {
         switch (team) {
             case 0:
                 this.snowball0 = ball;
@@ -3855,7 +3855,7 @@ public class MapleMap {
         }
     }
 
-    public MapleSnowball getSnowball(int team) {
+    public Snowball getSnowball(int team) {
         switch (team) {
             case 0:
                 return snowball0;
@@ -3904,8 +3904,8 @@ public class MapleMap {
             getOx().sendQuestion();
             setOxQuiz(true);
         } else if (this.mapid == 109060000 && getSnowball(chr.getTeam()) == null) {
-            setSnowball(0, new MapleSnowball(0, this));
-            setSnowball(1, new MapleSnowball(1, this));
+            setSnowball(0, new Snowball(0, this));
+            setSnowball(1, new Snowball(1, this));
             getSnowball(chr.getTeam()).startEvent();
         }
     }

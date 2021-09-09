@@ -60,7 +60,7 @@ import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
 import server.*;
-import server.events.gm.MapleSnowball;
+import server.events.gm.Snowball;
 import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
@@ -6792,7 +6792,7 @@ public class PacketCreator {
         return OutPacket.create(SendOpcode.LEFT_KNOCK_BACK);
     }
 
-    public static Packet rollSnowBall(boolean entermap, int state, MapleSnowball ball0, MapleSnowball ball1) {
+    public static Packet rollSnowBall(boolean entermap, int state, Snowball ball0, Snowball ball1) {
         OutPacket p = OutPacket.create(SendOpcode.SNOWBALL_STATE);
         if (entermap) {
             p.skip(21);
