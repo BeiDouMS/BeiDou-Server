@@ -59,7 +59,7 @@ import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
 import server.*;
 import server.MapleItemInformationProvider.ScriptedItem;
-import server.events.MapleEvents;
+import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
 import server.events.gm.Ola;
@@ -230,7 +230,7 @@ public class Character extends AbstractCharacterObject {
     private byte pendantExp = 0, lastmobcount = 0, doorSlot = -1;
     private final List<Integer> trockmaps = new ArrayList<>();
     private final List<Integer> viptrockmaps = new ArrayList<>();
-    private Map<String, MapleEvents> events = new LinkedHashMap<>();
+    private Map<String, Events> events = new LinkedHashMap<>();
     private PartyQuest partyQuest = null;
     private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
     private MapleDragon dragon = null;
@@ -8658,7 +8658,7 @@ public class Character extends AbstractCharacterObject {
                 try (PreparedStatement psEvent = con.prepareStatement("INSERT INTO eventstats (characterid, name, info) VALUES (?, ?, ?)")) {
                     psEvent.setInt(1, id);
 
-                    for (Map.Entry<String, MapleEvents> entry : events.entrySet()) {
+                    for (Map.Entry<String, Events> entry : events.entrySet()) {
                         psEvent.setString(2, entry.getKey());
                         psEvent.setInt(3, entry.getValue().getInfo());
                         psEvent.addBatch();
@@ -10425,7 +10425,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public Map<String, MapleEvents> getEvents() {
+    public Map<String, Events> getEvents() {
         return events;
     }
 

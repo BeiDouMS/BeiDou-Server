@@ -12,7 +12,7 @@ import client.SkillFactory;
  *
  * @author kevintjuh93
  */
-public class RescueGaga extends MapleEvents {
+public class RescueGaga extends Events {
     
     private int completed;
     
