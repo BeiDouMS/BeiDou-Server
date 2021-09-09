@@ -23,8 +23,8 @@ import client.MapleClient;
 import client.MapleJob;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import server.MapleItemInformationProvider;
 
 /**
@@ -55,11 +55,11 @@ public class PirateCreator extends CharacterFactory {
                         giveEquipment(recipe, ii, weapons[i]);
                 }
                 
-                giveItem(recipe, 2330000, 800, MapleInventoryType.USE);
+                giveItem(recipe, 2330000, 800, InventoryType.USE);
 
-                giveItem(recipe, 2000002, 100, MapleInventoryType.USE);
-                giveItem(recipe, 2000003, 100, MapleInventoryType.USE);
-                giveItem(recipe, 3010000, 1, MapleInventoryType.SETUP);
+                giveItem(recipe, 2000002, 100, InventoryType.USE);
+                giveItem(recipe, 2000003, 100, InventoryType.USE);
+                giveItem(recipe, 3010000, 1, InventoryType.SETUP);
                 
                 return recipe;
         }
@@ -69,7 +69,7 @@ public class PirateCreator extends CharacterFactory {
                 recipe.addStartingEquipment(nEquip);
         }
         
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, MapleInventoryType itemType) {
+        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
                 recipe.addStartingItem(itemid, quantity, itemType);
         }
     

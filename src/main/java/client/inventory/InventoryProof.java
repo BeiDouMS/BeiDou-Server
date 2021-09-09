@@ -27,7 +27,7 @@ import client.MapleCharacter;
 public class InventoryProof extends Inventory {
 
     public InventoryProof(MapleCharacter mc) {
-        super(mc, MapleInventoryType.CANHOLD, (byte) 0);
+        super(mc, InventoryType.CANHOLD, (byte) 0);
     }
 
     public void cloneContents(Inventory inv) {

@@ -24,8 +24,8 @@ package scripting.reactor;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import scripting.AbstractPlayerInteraction;
@@ -175,7 +175,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 } else {
                     Item drop;
                     
-                    if (ItemConstants.getInventoryType(d.itemId) != MapleInventoryType.EQUIP) {
+                    if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
                         drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
@@ -206,7 +206,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 } else {
                     Item drop;
 
-                    if (ItemConstants.getInventoryType(d.itemId) != MapleInventoryType.EQUIP) {
+                    if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
                         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();

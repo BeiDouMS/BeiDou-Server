@@ -26,8 +26,8 @@ package client.command.commands.gm2;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
@@ -94,7 +94,7 @@ public class ItemDropCommand extends Command {
         }
         
         Item toDrop;
-        if (ItemConstants.getInventoryType(itemId) == MapleInventoryType.EQUIP) {
+        if (ItemConstants.getInventoryType(itemId) == InventoryType.EQUIP) {
             toDrop = ii.getEquipById(itemId);
         } else {
             toDrop = new Item(itemId, (short) 0, quantity);

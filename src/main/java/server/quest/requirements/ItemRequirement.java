@@ -21,18 +21,18 @@
  */
 package server.quest.requirements;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import client.MapleCharacter;
+import client.inventory.InventoryType;
+import client.inventory.Item;
+import constants.inventory.ItemConstants;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
-import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import constants.inventory.ItemConstants;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -65,23 +65,23 @@ public class ItemRequirement extends MapleQuestRequirement {
 			int countNeeded = items.get(itemId);
 			int count = 0;
 			
-			MapleInventoryType iType = ItemConstants.getInventoryType(itemId);
+			InventoryType iType = ItemConstants.getInventoryType(itemId);
 			
-			if (iType.equals(MapleInventoryType.UNDEFINED)) {
+			if (iType.equals(InventoryType.UNDEFINED)) {
 				return false;
 			}
 			for (Item item : chr.getInventory(iType).listById(itemId)) {
 				count += item.getQuantity();
 			}
 			//Weird stuff, nexon made some quests only available when wearing gm clothes. This enables us to accept it ><
-			if (iType.equals(MapleInventoryType.EQUIP) && !ItemConstants.isMedal(itemId)) {
+			if (iType.equals(InventoryType.EQUIP) && !ItemConstants.isMedal(itemId)) {
                                 if(chr.isGM()) {
-                                        for (Item item : chr.getInventory(MapleInventoryType.EQUIPPED).listById(itemId)) {
+                                        for (Item item : chr.getInventory(InventoryType.EQUIPPED).listById(itemId)) {
                                                 count += item.getQuantity();
                                         }
                                 } else {
                                         if(count < countNeeded) {
-                                                if(chr.getInventory(MapleInventoryType.EQUIPPED).countById(itemId) + count >= countNeeded) {
+                                                if(chr.getInventory(InventoryType.EQUIPPED).countById(itemId) + count >= countNeeded) {
                                                         chr.dropMessage(5, "Unequip the required " + ii.getName(itemId) + " before trying this quest operation.");
                                                         return false;
                                                 }

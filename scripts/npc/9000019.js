@@ -19,8 +19,8 @@ function action(mode, type, selection) {
                         status--;
 
                 if(status == 0) {
-                        const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-                        if(cm.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() < 1) {
+                        const InventoryType = Java.type('client.inventory.InventoryType');
+                        if(cm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
                                 cm.sendNext("Check for a available slot on your ETC inventory.");
                                 cm.dispose();
                                 return;

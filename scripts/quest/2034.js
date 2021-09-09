@@ -14,8 +14,8 @@ function end(mode, type, selection) {
 	}
 
 	else if(status == 1) {
-	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-	    if(qm.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 1) {
+	    const InventoryType = Java.type('client.inventory.InventoryType');
+	    if(qm.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 1) {
 		    qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
 		    qm.dispose();
 		    return;

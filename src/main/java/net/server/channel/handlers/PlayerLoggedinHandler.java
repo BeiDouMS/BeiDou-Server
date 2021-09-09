@@ -314,7 +314,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.updatePartyMemberHP();
             }
 
-            Inventory eqpInv = player.getInventory(MapleInventoryType.EQUIPPED);
+            Inventory eqpInv = player.getInventory(InventoryType.EQUIPPED);
             eqpInv.lockInventory();
             try {
                 for (Item it : eqpInv.list()) {

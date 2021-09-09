@@ -13,8 +13,8 @@ function end(mode, type, selection) {
 	if(status == 0) {
 		qm.sendNext("What the? Are you telling me you've already taken out 150 #o4230120#s? And these ... yes, these really are 120 #t4000122#s. I was wondering how you were going to complete this mission all by yourself, but you took care of it just fine. Alright, here ... this is a very important item for me, but please take it.");
 	} else if(status == 1) {
-	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-	    if(qm.getPlayer().getInventory(MapleInventoryType.EQUIP).getNumFreeSlot() < 1) {
+	    const InventoryType = Java.type('client.inventory.InventoryType');
+	    if(qm.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 1) {
 		qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
 		qm.dispose();
 		return;

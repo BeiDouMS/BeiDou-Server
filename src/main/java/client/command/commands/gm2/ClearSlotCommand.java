@@ -26,8 +26,8 @@ package client.command.commands.gm2;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 
 public class ClearSlotCommand extends Command {
@@ -46,79 +46,79 @@ public class ClearSlotCommand extends Command {
         switch (type) {
             case "all":
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("All Slots Cleared.");
                 break;
             case "equip":
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Equipment Slot Cleared.");
                 break;
             case "use":
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.USE).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Use Slot Cleared.");
                 break;
             case "setup":
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.SETUP).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Set-Up Slot Cleared.");
                 break;
             case "etc":
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.ETC).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("ETC Slot Cleared.");
                 break;
             case "cash":
                 for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(MapleInventoryType.CASH).getItem((byte) i);
+                    Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Cash Slot Cleared.");
                 break;

@@ -28,7 +28,7 @@ import client.MapleClient;
 import client.command.Command;
 import client.inventory.Equip;
 import client.inventory.Inventory;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import constants.inventory.ItemConstants;
 
 public class SetEqStatCommand extends Command {
@@ -46,7 +46,7 @@ public class SetEqStatCommand extends Command {
 
         short newStat = (short) Math.max(0, Integer.parseInt(params[0]));
         short newSpdJmp = params.length >= 2 ? (short) Integer.parseInt(params[1]) : 0;
-        Inventory equip = player.getInventory(MapleInventoryType.EQUIP);
+        Inventory equip = player.getInventory(InventoryType.EQUIP);
         
         for (byte i = 1; i <= equip.getSlotLimit(); i++) {
             try {

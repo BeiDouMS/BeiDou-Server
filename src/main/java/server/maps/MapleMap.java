@@ -26,8 +26,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -659,7 +659,7 @@ public class MapleMap {
                         spawnMesoDrop(mesos, calcDropPos(pos, mob.getPosition()), mob, chr, false, droptype);
                     }
                 } else {
-                    if (ItemConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
+                    if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                         idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
                         idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
@@ -687,7 +687,7 @@ public class MapleMap {
                     pos.x = mobpos + ((d % 2 == 0) ? (25 * (d + 1) / 2) : -(25 * (d / 2)));
                 }
                 if (de.itemId != 0) {
-                    if (ItemConstants.getInventoryType(de.itemId) == MapleInventoryType.EQUIP) {
+                    if (ItemConstants.getInventoryType(de.itemId) == InventoryType.EQUIP) {
                         idrop = ii.randomizeStats((Equip) ii.getEquipById(de.itemId));
                     } else {
                         idrop = new Item(de.itemId, (short) 0, (short) (de.Maximum != 1 ? Randomizer.nextInt(de.Maximum - de.Minimum) + de.Minimum : 1));
@@ -2189,7 +2189,7 @@ public class MapleMap {
                 final Item drop;
                 int randomedId = integer;
 
-                if (ItemConstants.getInventoryType(randomedId) != MapleInventoryType.EQUIP) {
+                if (ItemConstants.getInventoryType(randomedId) != InventoryType.EQUIP) {
                     drop = new Item(randomedId, (short) 0, (short) (rnd.nextInt(copies) + minCopies));
                 } else {
                     drop = ii.randomizeStats((Equip) ii.getEquipById(randomedId));

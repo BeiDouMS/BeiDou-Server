@@ -25,8 +25,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleMount;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.game.ExpTable;
 import net.AbstractPacketHandler;
@@ -46,7 +46,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
         
         MapleCharacter chr = c.getPlayer();
         MapleMount mount = chr.getMount();
-        Inventory useInv = chr.getInventory(MapleInventoryType.USE);
+        Inventory useInv = chr.getInventory(InventoryType.USE);
         
         if (c.tryacquireClient()) {
             try {
@@ -73,7 +73,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
                             mountLevelup = levelup;
                         }
 
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, itemid, 1, true, false);
+                        MapleInventoryManipulator.removeById(c, InventoryType.USE, itemid, 1, true, false);
                     }
                 } finally {
                     useInv.unlockInventory();

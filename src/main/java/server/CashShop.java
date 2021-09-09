@@ -90,7 +90,7 @@ public class CashShop {
                 petid = MaplePet.createPet(itemId);
             }
 
-            if (ItemConstants.getInventoryType(itemId).equals(MapleInventoryType.EQUIP)) {
+            if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
                 item = MapleItemInformationProvider.getInstance().getEquipById(itemId);
             } else {
                 item = new Item(itemId, (byte) 0, count, petid);
@@ -277,7 +277,7 @@ public class CashShop {
                 }
             }
 
-            for (Pair<Item, MapleInventoryType> item : factory.loadItems(accountId, false)) {
+            for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
                 inventory.add(item.getLeft());
             }
 
@@ -348,7 +348,7 @@ public class CashShop {
         boolean isRing;
         Equip equip = null;
         for (Item item : getInventory()) {
-            if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+            if (item.getInventoryType().equals(InventoryType.EQUIP)) {
                 equip = (Equip) item;
                 isRing = equip.getRingId() > -1;
             } else {
@@ -426,7 +426,7 @@ public class CashShop {
                         Item item = cItem.toItem();
                         Equip equip = null;
                         item.setGiftFrom(rs.getString("from"));
-                        if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+                        if (item.getInventoryType().equals(InventoryType.EQUIP)) {
                             equip = (Equip) item;
                             equip.setRingId(rs.getInt("ringid"));
                             gifts.add(new Pair<>(equip, rs.getString("message")));
@@ -474,7 +474,7 @@ public class CashShop {
             ps.executeUpdate();
         }
 
-        List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
+        List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
 
         List<Item> inv = getInventory();
         for (Item item : inv) {

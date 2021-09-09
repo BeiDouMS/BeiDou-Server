@@ -27,9 +27,9 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
@@ -146,7 +146,7 @@ public class DueyProcessor {
         try {
             int packageId = rs.getInt("PackageId");
 
-            List<Pair<Item, MapleInventoryType>> dueyItems = ItemFactory.DUEY.loadItems(packageId, false);
+            List<Pair<Item, InventoryType>> dueyItems = ItemFactory.DUEY.loadItems(packageId, false);
             DueyPackage dueypack;
 
             if (!dueyItems.isEmpty()) {     // in a duey package there's only one item
@@ -226,7 +226,7 @@ public class DueyProcessor {
     }
 
     private static boolean insertPackageItem(int packageId, Item item) {
-        Pair<Item, MapleInventoryType> dueyItem = new Pair<>(item, MapleInventoryType.getByType(item.getItemType()));
+        Pair<Item, InventoryType> dueyItem = new Pair<>(item, InventoryType.getByType(item.getItemType()));
         try (Connection con = DatabaseConnection.getConnection()) {
             ItemFactory.DUEY.saveItems(Collections.singletonList(dueyItem), packageId, con);
             return true;
@@ -241,7 +241,7 @@ public class DueyProcessor {
         if (invTypeId > 0) {
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
-            MapleInventoryType invType = MapleInventoryType.getByType(invTypeId);
+            InventoryType invType = InventoryType.getByType(invTypeId);
             Inventory inv = c.getPlayer().getInventory(invType);
 
             Item item;
@@ -324,7 +324,7 @@ public class DueyProcessor {
                 }
 
                 if (quick) {
-                    MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, 5330000, (short) 1, false, false);
+                    MapleInventoryManipulator.removeById(c, InventoryType.CASH, 5330000, (short) 1, false, false);
                 }
 
                 int packageId = createPackage(sendMesos, sendMessage, c.getPlayer().getName(), recipientCid, quick);

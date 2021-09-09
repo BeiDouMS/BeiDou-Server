@@ -23,8 +23,8 @@ package server.quest.actions;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import provider.MapleData;
@@ -130,14 +130,14 @@ public class ItemAction extends MapleQuestAction {
                 for(ItemData iEntry: takeItem) {
                         int itemid = iEntry.getId(), count = iEntry.getCount();
                     
-                        MapleInventoryType type = ItemConstants.getInventoryType(itemid);
+                        InventoryType type = ItemConstants.getInventoryType(itemid);
                         int quantity = count * -1; // Invert
-                        if(type.equals(MapleInventoryType.EQUIP)) {
+                        if(type.equals(InventoryType.EQUIP)) {
                                 if(chr.getInventory(type).countById(itemid) < quantity) {
                                         // Not enough in the equip inventoty, so check Equipped...
-                                        if(chr.getInventory(MapleInventoryType.EQUIPPED).countById(itemid) > quantity) {
+                                        if(chr.getInventory(InventoryType.EQUIPPED).countById(itemid) > quantity) {
                                                 // Found it equipped, so change the type to equipped.
-                                                type = MapleInventoryType.EQUIPPED;
+                                                type = InventoryType.EQUIPPED;
                                         }
                                 }
                         }
@@ -156,9 +156,9 @@ public class ItemAction extends MapleQuestAction {
 	
 	@Override
 	public boolean check(MapleCharacter chr, Integer extSelection) {
-		List<Pair<Item, MapleInventoryType>> gainList = new LinkedList<>();
-                List<Pair<Item, MapleInventoryType>> selectList = new LinkedList<>();
-                List<Pair<Item, MapleInventoryType>> randomList = new LinkedList<>();
+		List<Pair<Item, InventoryType>> gainList = new LinkedList<>();
+                List<Pair<Item, InventoryType>> selectList = new LinkedList<>();
+                List<Pair<Item, InventoryType>> randomList = new LinkedList<>();
                 
                 List<Integer> allSlotUsed = new ArrayList(5);
                 for(byte i = 0; i < 5; i++) allSlotUsed.add(0);
@@ -168,7 +168,7 @@ public class ItemAction extends MapleQuestAction {
 				continue;
 			}
                         
-			MapleInventoryType type = ItemConstants.getInventoryType(item.getId());
+			InventoryType type = ItemConstants.getInventoryType(item.getId());
 			if(item.getProp() != null) {
                                 Item toItem = new Item(item.getId(), (short) 0, (short) item.getCount());
                             
@@ -189,7 +189,7 @@ public class ItemAction extends MapleQuestAction {
                                         
                                         int freeSlotCount = chr.getInventory(type).freeSlotCountById(item.getId(), quantity);
                                         if(freeSlotCount == -1) {
-                                                if(type.equals(MapleInventoryType.EQUIP) && chr.getInventory(MapleInventoryType.EQUIPPED).countById(item.getId()) > quantity)
+                                                if(type.equals(InventoryType.EQUIP) && chr.getInventory(InventoryType.EQUIPPED).countById(item.getId()) > quantity)
                                                         continue;
                                                 
                                                 announceInventoryLimit(Collections.singletonList(item.getId()), chr);
@@ -209,7 +209,7 @@ public class ItemAction extends MapleQuestAction {
                         List<Integer> rndUsed = new ArrayList(5);
                         for(byte i = 0; i < 5; i++) rndUsed.add(allSlotUsed.get(i));
                     
-                        for(Pair<Item, MapleInventoryType> it: randomList) {
+                        for(Pair<Item, InventoryType> it: randomList) {
                                 int idx = it.getRight().getType() - 1;
                             
                                 result = MapleInventoryManipulator.checkSpaceProgressively(c, it.getLeft().getItemId(), it.getLeft().getQuantity(), "", rndUsed.get(idx), false);
@@ -223,13 +223,13 @@ public class ItemAction extends MapleQuestAction {
                 }
                 
                 if(!selectList.isEmpty()) {
-                        Pair<Item, MapleInventoryType> selected = selectList.get(extSelection);
+                        Pair<Item, InventoryType> selected = selectList.get(extSelection);
                         gainList.add(selected);
                 }
                 
                 if (!canHold(chr, gainList)) {
                         List<Integer> gainItemids = new LinkedList<>();
-                        for (Pair<Item, MapleInventoryType> it : gainList) {
+                        for (Pair<Item, InventoryType> it : gainList) {
                                 gainItemids.add(it.getLeft().getItemId());
                         }
                     
@@ -250,13 +250,13 @@ public class ItemAction extends MapleQuestAction {
                 chr.dropMessage(1, "Please check if you have enough space in your inventory.");
         }
         
-        private boolean canHold(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> gainList) {
+        private boolean canHold(MapleCharacter chr, List<Pair<Item, InventoryType>> gainList) {
                 List<Integer> toAddItemids = new LinkedList<>();
                 List<Integer> toAddQuantity = new LinkedList<>();
                 List<Integer> toRemoveItemids = new LinkedList<>();
                 List<Integer> toRemoveQuantity = new LinkedList<>();
                 
-                for (Pair<Item, MapleInventoryType> item : gainList) {
+                for (Pair<Item, InventoryType> item : gainList) {
                         Item it = item.getLeft();
 
                         if (it.getQuantity() > 0) {

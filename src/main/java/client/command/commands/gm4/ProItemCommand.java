@@ -27,8 +27,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
@@ -57,8 +57,8 @@ public class ProItemCommand extends Command {
         short stat = (short) Math.max(0, Short.parseShort(params[1]));
         short spdjmp = params.length >= 3 ? (short) Math.max(0, Short.parseShort(params[2])) : 0;
         
-        MapleInventoryType type = ItemConstants.getInventoryType(itemid);
-        if (type.equals(MapleInventoryType.EQUIP)) {
+        InventoryType type = ItemConstants.getInventoryType(itemid);
+        if (type.equals(InventoryType.EQUIP)) {
             Item it = ii.getEquipById(itemid);
             it.setOwner(player.getName());
 

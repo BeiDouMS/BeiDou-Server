@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -33,7 +33,7 @@ public final class UseChairHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         
         // thanks Darter (YungMoozi) for reporting unchecked chair item
-        if (!ItemConstants.isChair(itemId) || c.getPlayer().getInventory(MapleInventoryType.SETUP).findById(itemId) == null) {
+        if (!ItemConstants.isChair(itemId) || c.getPlayer().getInventory(InventoryType.SETUP).findById(itemId) == null) {
             return;
         }
         

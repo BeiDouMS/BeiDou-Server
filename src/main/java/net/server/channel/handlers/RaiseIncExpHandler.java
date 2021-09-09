@@ -4,7 +4,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.inventory.Inventory;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -47,7 +47,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                 }
                 
                 int consId;
-                Inventory inv = chr.getInventory(MapleInventoryType.getByType(inventorytype));
+                Inventory inv = chr.getInventory(InventoryType.getByType(inventorytype));
                 inv.lockInventory();
                 try {
                     consId = inv.getItem(slot).getItemId();
@@ -55,7 +55,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.getByType(inventorytype), slot, (short) 1, false, true);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.getByType(inventorytype), slot, (short) 1, false, true);
                 } finally {
                     inv.unlockInventory();
                 }

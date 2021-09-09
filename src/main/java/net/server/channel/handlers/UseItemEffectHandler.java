@@ -22,8 +22,8 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -34,9 +34,9 @@ public final class UseItemEffectHandler extends AbstractPacketHandler {
         Item toUse;
         int itemId = p.readInt();
         if (itemId == 4290001 || itemId == 4290000) {
-            toUse = c.getPlayer().getInventory(MapleInventoryType.ETC).findById(itemId);
+            toUse = c.getPlayer().getInventory(InventoryType.ETC).findById(itemId);
         } else {
-            toUse = c.getPlayer().getInventory(MapleInventoryType.CASH).findById(itemId);
+            toUse = c.getPlayer().getInventory(InventoryType.CASH).findById(itemId);
         }
         if (toUse == null || toUse.getQuantity() < 1) {
             if (itemId != 0) return;

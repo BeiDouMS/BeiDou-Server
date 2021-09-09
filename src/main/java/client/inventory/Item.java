@@ -21,13 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package client.inventory;
 
+import client.inventory.manipulator.MapleKarmaManipulator;
 import constants.inventory.ItemConstants;
+import server.MapleItemInformationProvider;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import client.inventory.manipulator.MapleKarmaManipulator;
-import server.MapleItemInformationProvider;
 
 public class Item implements Comparable<Item> {
 
@@ -104,7 +105,7 @@ public class Item implements Comparable<Item> {
         return quantity;
     }
 
-    public MapleInventoryType getInventoryType() {
+    public InventoryType getInventoryType() {
         return ItemConstants.getInventoryType(id);
     }
     

@@ -116,7 +116,7 @@ function action(mode, type, selection) {
 			if(!cm.hasItem(itemToUse) && vp > 0)
 				useVP = true;
 
-			const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
+			const InventoryType = Java.type('client.inventory.InventoryType');
 			if(choice == 0) {
 				// VP Exchange
 				if(!cm.canHold(itemToUse)) {
@@ -141,7 +141,7 @@ function action(mode, type, selection) {
 				cm.logLeaf(nxAmount + " NX");
 				cm.dispose();
 			} else if(choice == 2) {
-				if(!cm.getPlayer().getInventory(MapleInventoryType.SETUP).isFull(chairAmount)) {
+				if(!cm.getPlayer().getInventory(InventoryType.SETUP).isFull(chairAmount)) {
 					
 					var chairStr = "";
 					for(var i = 0; i < chairAmount; i++) {
@@ -161,7 +161,7 @@ function action(mode, type, selection) {
 					cm.sendOk("Please make sure you have enough space to hold the items!");
 				}
 			} else if(choice == 3) {
-				if(!cm.getPlayer().getInventory(MapleInventoryType.EQUIP).isFull(weaponAmount)) {
+				if(!cm.getPlayer().getInventory(InventoryType.EQUIP).isFull(weaponAmount)) {
 					
 					var weaponStr = "";
 					for(var i = 0; i < weaponAmount; i++) {
@@ -181,7 +181,7 @@ function action(mode, type, selection) {
 					cm.sendOk("Please make sure you have enough space to hold the items!");
 				}
 			} else if(choice == 4) {
-				if(!cm.getPlayer().getInventory(MapleInventoryType.USE).isFull(2)) {
+				if(!cm.getPlayer().getInventory(InventoryType.USE).isFull(2)) {
 					cm.gainItem(buff1ID, buffAmount, true);
 					cm.gainItem(buff2ID, buffAmount, true);
 					cm.gainItem(itemToUse, -1);
@@ -192,7 +192,7 @@ function action(mode, type, selection) {
 				}
 			} else if(choice == 5) {
 				if(!cm.haveItem(5030000, 1)) {
-					if(!cm.getPlayer().getInventory(MapleInventoryType.CASH).isFull(1)){
+					if(!cm.getPlayer().getInventory(InventoryType.CASH).isFull(1)){
 						cm.gainItem(5030000, 1, false, true, 1000 * 60 * 60 * 24 * hiredMerchantLength);
 						
 						if(useVP)

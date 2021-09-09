@@ -23,7 +23,7 @@ import client.MapleClient;
 import client.MapleJob;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 
 /**
  *
@@ -33,11 +33,11 @@ public class BeginnerCreator extends CharacterFactory {
         
         private static CharacterFactoryRecipe createRecipe(MapleJob job, int level, int map, int top, int bottom, int shoes, int weapon) {
                 CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
-                giveItem(recipe, 4161001, 1, MapleInventoryType.ETC);
+                giveItem(recipe, 4161001, 1, InventoryType.ETC);
                 return recipe;
         }
         
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, MapleInventoryType itemType) {
+        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
                 recipe.addStartingItem(itemid, quantity, itemType);
         }
         

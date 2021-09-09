@@ -25,8 +25,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
@@ -239,7 +239,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     String desc = p.readString();
                     p.skip(3);
                     int itemId = p.readInt();
-                    if (chr.getInventory(MapleInventoryType.CASH).countById(itemId) < 1) {
+                    if (chr.getInventory(InventoryType.CASH).countById(itemId) < 1) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(6));
                         return;
                     }
@@ -363,7 +363,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 if (shop != null && shop.isOwner(chr)) {
                     if(YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
                         try {
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, shop.getItemId(), 1, true, false);
+                            MapleInventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
                         } catch(RuntimeException re) {} // fella does not have a player shop permit...
                     }
 
@@ -472,7 +472,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 chr.getTrade().setMeso(p.readInt());
             } else if (mode == Action.SET_ITEMS.getCode()) {
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-                MapleInventoryType ivType = MapleInventoryType.getByType(p.readByte());
+                InventoryType ivType = InventoryType.getByType(p.readByte());
                 short pos = p.readShort();
                 Item item = chr.getInventory(ivType).getItem(pos);
                 short quantity = p.readShort();
@@ -556,7 +556,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.ADD_ITEM.getCode() || mode == Action.PUT_ITEM.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleInventoryType ivType = MapleInventoryType.getByType(p.readByte());
+                InventoryType ivType = InventoryType.getByType(p.readByte());
                 short slot = p.readShort();
                 short bundles = p.readShort();
                 Item ivItem = chr.getInventory(ivType).getItem(slot);
@@ -616,7 +616,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     
                     c.sendPacket(PacketCreator.getPlayerShopItemUpdate(shop));
                 } else if (merchant != null && merchant.isOwner(chr)) {
-                    if (ivType.equals(MapleInventoryType.CASH) && merchant.isPublished()) {
+                    if (ivType.equals(InventoryType.CASH) && merchant.isPublished()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "Cash items are only allowed to be sold when first opening the store."));
                         return;
                     }

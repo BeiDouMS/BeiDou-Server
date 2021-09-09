@@ -170,10 +170,10 @@ public class AbstractPlayerInteraction {
 	}
         
         public Inventory getInventory(int type) {
-                return getPlayer().getInventory(MapleInventoryType.getByType((byte) type));
+                return getPlayer().getInventory(InventoryType.getByType((byte) type));
         }
         
-        public Inventory getInventory(MapleInventoryType type) {
+        public Inventory getInventory(InventoryType type) {
                 return getPlayer().getInventory(type);
         }
         
@@ -245,7 +245,7 @@ public class AbstractPlayerInteraction {
         private boolean canHoldAll(List<Integer> itemids, List<Integer> quantity, boolean isInteger) {
             int size = Math.min(itemids.size(), quantity.size());
             
-            List<Pair<Item, MapleInventoryType>> addedItems = new LinkedList<>();
+            List<Pair<Item, InventoryType>> addedItems = new LinkedList<>();
             for(int i = 0; i < size; i++) {
                 Item it = new Item(itemids.get(i), (short) 0, quantity.get(i).shortValue());
                 addedItems.add(new Pair<>(it, ItemConstants.getInventoryType(itemids.get(i))));
@@ -254,11 +254,11 @@ public class AbstractPlayerInteraction {
             return Inventory.checkSpots(c.getPlayer(), addedItems);
         }
         
-        private List<Pair<Item, MapleInventoryType>> prepareProofInventoryItems(List<Pair<Integer, Integer>> items) {
-            List<Pair<Item, MapleInventoryType>> addedItems = new LinkedList<>();
+        private List<Pair<Item, InventoryType>> prepareProofInventoryItems(List<Pair<Integer, Integer>> items) {
+            List<Pair<Item, InventoryType>> addedItems = new LinkedList<>();
             for(Pair<Integer, Integer> p : items) {
                 Item it = new Item(p.getLeft(), (short) 0, p.getRight().shortValue());
-                addedItems.add(new Pair<>(it, MapleInventoryType.CANHOLD));
+                addedItems.add(new Pair<>(it, InventoryType.CANHOLD));
             }
             
             return addedItems;
@@ -268,7 +268,7 @@ public class AbstractPlayerInteraction {
             int size = Math.min(itemids.size(), quantity.size());
             
             List<List<Pair<Integer, Integer>>> invList = new ArrayList<>(6);
-            for(int i = MapleInventoryType.UNDEFINED.getType(); i < MapleInventoryType.CASH.getType(); i++) {
+            for(int i = InventoryType.UNDEFINED.getType(); i < InventoryType.CASH.getType(); i++) {
                 invList.add(new LinkedList<>());
             }
             
@@ -284,10 +284,10 @@ public class AbstractPlayerInteraction {
             List<List<Pair<Integer, Integer>>> toAddItemList = prepareInventoryItemList(toAddItemids, toAddQuantity);
             List<List<Pair<Integer, Integer>>> toRemoveItemList = prepareInventoryItemList(toRemoveItemids, toRemoveQuantity);
             
-            InventoryProof prfInv = (InventoryProof) this.getInventory(MapleInventoryType.CANHOLD);
+            InventoryProof prfInv = (InventoryProof) this.getInventory(InventoryType.CANHOLD);
             prfInv.lockInventory();
             try {
-                for(int i = MapleInventoryType.EQUIP.getType(); i < MapleInventoryType.CASH.getType(); i++) {
+                for(int i = InventoryType.EQUIP.getType(); i < InventoryType.CASH.getType(); i++) {
                     List<Pair<Integer, Integer>> toAdd = toAddItemList.get(i);
                     
                     if(!toAdd.isEmpty()) {
@@ -297,10 +297,10 @@ public class AbstractPlayerInteraction {
                         prfInv.cloneContents(inv);
                         
                         for(Pair<Integer, Integer> p : toRemove) {
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.CANHOLD, p.getLeft(), p.getRight(), false, false);
+                            MapleInventoryManipulator.removeById(c, InventoryType.CANHOLD, p.getLeft(), p.getRight(), false, false);
                         }
                         
-                        List<Pair<Item, MapleInventoryType>> addItems = prepareProofInventoryItems(toAdd);
+                        List<Pair<Item, InventoryType>> addItems = prepareProofInventoryItems(toAdd);
                         
                         boolean canHold = Inventory.checkSpots(c.getPlayer(), addItems, true);
                         if(!canHold) {
@@ -532,7 +532,7 @@ public class AbstractPlayerInteraction {
             chr.getClient().getWorldServer().registerPetHunger(chr, chr.getPetIndex(evolved));
             */
             
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.CASH, target.getPosition(), (short) 1, false);
+            MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, target.getPosition(), (short) 1, false);
             
             return evolved;
         }
@@ -593,7 +593,7 @@ public class AbstractPlayerInteraction {
                     
 			MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
-			if (ItemConstants.getInventoryType(id).equals(MapleInventoryType.EQUIP)) {
+			if (ItemConstants.getInventoryType(id).equals(InventoryType.EQUIP)) {
 				item = ii.getEquipById(id);
                                 
                                 if(item != null) {
@@ -622,7 +622,7 @@ public class AbstractPlayerInteraction {
 				c.getPlayer().dropMessage(1, "Your inventory is full. Please remove an item from your " + ItemConstants.getInventoryType(id).name() + " inventory.");
 				return null;
 			}
-			if (ItemConstants.getInventoryType(id) == MapleInventoryType.EQUIP) {
+			if (ItemConstants.getInventoryType(id) == InventoryType.EQUIP) {
 				if (randomStats) {
 					MapleInventoryManipulator.addFromDrop(c, ii.randomizeStats((Equip) item), false, petId);
 				} else {
@@ -842,7 +842,7 @@ public class AbstractPlayerInteraction {
 
 	public void removeFromParty(int id, List<MapleCharacter> party) {
 		for (MapleCharacter chr : party) {
-			MapleInventoryType type = ItemConstants.getInventoryType(id);
+			InventoryType type = ItemConstants.getInventoryType(id);
 			Inventory iv = chr.getInventory(type);
 			int possesed = iv.countById(id);
 			if (possesed > 0) {
@@ -857,16 +857,16 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void removeAll(int id, MapleClient cl) {
-		MapleInventoryType invType = ItemConstants.getInventoryType(id);
+		InventoryType invType = ItemConstants.getInventoryType(id);
 		int possessed = cl.getPlayer().getInventory(invType).countById(id);
 		if (possessed > 0) {
 			MapleInventoryManipulator.removeById(cl, ItemConstants.getInventoryType(id), id, possessed, true, false);
 			cl.sendPacket(PacketCreator.getShowItemGain(id, (short) -possessed, true));
 		}
 		
-		if(invType == MapleInventoryType.EQUIP) {
-			if(cl.getPlayer().getInventory(MapleInventoryType.EQUIPPED).countById(id) > 0) {
-				MapleInventoryManipulator.removeById(cl, MapleInventoryType.EQUIPPED, id, 1, true, false);
+		if(invType == InventoryType.EQUIP) {
+			if(cl.getPlayer().getInventory(InventoryType.EQUIPPED).countById(id) > 0) {
+				MapleInventoryManipulator.removeById(cl, InventoryType.EQUIPPED, id, 1, true, false);
 				cl.sendPacket(PacketCreator.getShowItemGain(id, (short) -1, true));
 			}
 		}
@@ -931,18 +931,18 @@ public class AbstractPlayerInteraction {
 	}
 
 	public void removeEquipFromSlot(short slot) {
-		Item tempItem = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(slot);
-		MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIPPED, slot, tempItem.getQuantity(), false, false);
+		Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
+		MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIPPED, slot, tempItem.getQuantity(), false, false);
 	}
 
 	public void gainAndEquip(int itemid, short slot) {
-		final Item old = c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).getItem(slot);
+		final Item old = c.getPlayer().getInventory(InventoryType.EQUIPPED).getItem(slot);
 		if (old != null) {
-			MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIPPED, slot, old.getQuantity(), false, false);
+			MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIPPED, slot, old.getQuantity(), false, false);
 		}
 		final Item newItem = MapleItemInformationProvider.getInstance().getEquipById(itemid);
 		newItem.setPosition(slot);
-		c.getPlayer().getInventory(MapleInventoryType.EQUIPPED).addItemFromDB(newItem);
+		c.getPlayer().getInventory(InventoryType.EQUIPPED).addItemFromDB(newItem);
 		c.sendPacket(PacketCreator.modifyInventory(false, Collections.singletonList(new ModifyInventory(0, newItem))));
 	}
         
@@ -1117,7 +1117,7 @@ public class AbstractPlayerInteraction {
                 List<MaplePet> list = new LinkedList<>();
             
                 long curTime = System.currentTimeMillis();
-                for(Item it : getPlayer().getInventory(MapleInventoryType.CASH).list()) {
+                for(Item it : getPlayer().getInventory(InventoryType.CASH).list()) {
                         if(ItemConstants.isPet(it.getItemId()) && it.getExpiration() < curTime) {
                                 MaplePet pet = it.getPet();
                                 if (pet != null) {

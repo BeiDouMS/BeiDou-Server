@@ -421,8 +421,8 @@ function performExchange(sgItemid, sgCount) {
 }
 
 function generateRandomScroll() {
-    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-    if (cm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+    const InventoryType = Java.type('client.inventory.InventoryType');
+    if (cm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
         var itemid = getRandomScroll(calculateScrollTiers());
         if (itemid != -1) {
             if (performExchange(itemid, 1)) {

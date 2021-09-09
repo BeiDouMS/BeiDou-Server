@@ -345,7 +345,7 @@ public class MapleItemInformationProvider {
         if (item != null) {
             MapleData smEntry = item.getChildByPath("info/slotMax");
             if (smEntry == null) {
-                if (ItemConstants.getInventoryType(itemId).getType() == MapleInventoryType.EQUIP.getType()) {
+                if (ItemConstants.getInventoryType(itemId).getType() == InventoryType.EQUIP.getType()) {
                     ret = 1;
                 } else {
                     ret = 100;
@@ -1581,7 +1581,7 @@ public class MapleItemInformationProvider {
     }
 
     public Collection<Item> canWearEquipment(MapleCharacter chr, Collection<Item> items) {
-        Inventory inv = chr.getInventory(MapleInventoryType.EQUIPPED);
+        Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
         if (inv.checked()) {
             return items;
         }
@@ -1597,8 +1597,8 @@ public class MapleItemInformationProvider {
         boolean highfivestamp = false;
         /* Removed because players shouldn't even get this, and gm's should just be gm job.
          try {
-         for (Pair<Item, MapleInventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
-         if (ii.getRight() == MapleInventoryType.CASH) {
+         for (Pair<Item, InventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
+         if (ii.getRight() == InventoryType.CASH) {
          if (ii.getLeft().getItemId() == 5590000) {
          highfivestamp = true;
          }
@@ -1683,8 +1683,8 @@ public class MapleItemInformationProvider {
         boolean highfivestamp = false;
         /* Removed check above for message ><
          try {
-         for (Pair<Item, MapleInventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
-         if (ii.getRight() == MapleInventoryType.CASH) {
+         for (Pair<Item, InventoryType> ii : ItemFactory.INVENTORY.loadItems(chr.getId(), false)) {
+         if (ii.getRight() == InventoryType.CASH) {
          if (ii.getLeft().getItemId() == 5590000) {
          highfivestamp = true;
          }

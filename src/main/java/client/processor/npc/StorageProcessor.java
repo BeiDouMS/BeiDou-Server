@@ -25,8 +25,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
@@ -67,7 +67,7 @@ public class StorageProcessor {
                                                 c.disconnect(true, false);
                                                 return;
                                         }
-                                        slot = storage.getSlot(MapleInventoryType.getByType(type), slot);
+                                        slot = storage.getSlot(InventoryType.getByType(type), slot);
                                         Item item = storage.getItem(slot);
                                         if (item != null) {
                                                 if (ii.isPickupRestricted(item.getItemId()) && chr.haveItemWithId(item.getItemId(), true)) {
@@ -106,7 +106,7 @@ public class StorageProcessor {
                                         short slot = p.readShort();
                                         int itemId = p.readInt();
                                         short quantity = p.readShort();
-                                        MapleInventoryType invType = ItemConstants.getInventoryType(itemId);
+                                        InventoryType invType = ItemConstants.getInventoryType(itemId);
                                         Inventory inv = chr.getInventory(invType);
                                         if (slot < 1 || slot > inv.getSlotLimit()) { //player inv starts at one
                                                 AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with storage.");

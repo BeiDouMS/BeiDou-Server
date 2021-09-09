@@ -24,8 +24,8 @@ package server.maps;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import net.packet.Packet;
@@ -255,7 +255,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
                 if (quantity < 1 || !pItem.isExist() || pItem.getBundles() < quantity) {
                     c.sendPacket(PacketCreator.enableActions());
                     return false;
-                } else if (newItem.getInventoryType().equals(MapleInventoryType.EQUIP) && newItem.getQuantity() > 1) {
+                } else if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
                     c.sendPacket(PacketCreator.enableActions());
                     return false;
                 }

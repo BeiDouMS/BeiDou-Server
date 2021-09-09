@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -102,7 +102,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                 if (quantity < 0 || price < 110 || c.getPlayer().getItemQuantity(itemid, false) < quantity) {
                     return;
                 }
-                MapleInventoryType invType = ItemConstants.getInventoryType(itemid);
+                InventoryType invType = ItemConstants.getInventoryType(itemid);
                 Item i = c.getPlayer().getInventory(invType).getItem(slot).copy();
                 if (i != null && c.getPlayer().getMeso() >= 5000) {
                     Connection con = null;
@@ -159,7 +159,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         } else {
                             date += day + "";
                         }
-                        if (!i.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+                        if (!i.getInventoryType().equals(InventoryType.EQUIP)) {
                             Item item = i;
                             ps = con.prepareStatement("INSERT INTO mts_items (tab, type, itemid, quantity, expiration, giftFrom, seller, price, owner, sellername, sell_ends) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             ps.setInt(1, 1);

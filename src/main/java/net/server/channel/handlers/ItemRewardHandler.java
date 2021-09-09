@@ -22,8 +22,8 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -47,8 +47,8 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
         byte slot = (byte) p.readShort();
         int itemId = p.readInt(); // will load from xml I don't care.
         
-        Item it = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);   // null check here thanks to Thora
-        if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(MapleInventoryType.USE).countById(itemId) < 1) return;
+        Item it = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);   // null check here thanks to Thora
+        if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(InventoryType.USE).countById(itemId) < 1) return;
         
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
@@ -58,7 +58,7 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
                 break;
             }
             if (Randomizer.nextInt(rewards.getLeft()) < reward.prob) {//Is it even possible to get an item with prob 1?
-            	if (ItemConstants.getInventoryType(reward.itemid) == MapleInventoryType.EQUIP) {
+            	if (ItemConstants.getInventoryType(reward.itemid) == InventoryType.EQUIP) {
                     final Item item = ii.getEquipById(reward.itemid);
                     if (reward.period != -1) {
                     	item.setExpiration(currentServerTime() + (reward.period * 60 * 60 * 10));
@@ -67,7 +67,7 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
                 } else {
                     MapleInventoryManipulator.addById(c, reward.itemid, reward.quantity, "", -1);
                 }
-                MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, itemId, 1, false, false);
+                MapleInventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, false, false);
                 if (reward.worldmsg != null) {
                     String msg = reward.worldmsg;
                     msg.replaceAll("/name", c.getPlayer().getName());

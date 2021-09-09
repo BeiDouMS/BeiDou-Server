@@ -21,13 +21,13 @@
 */
 package constants.inventory;
 
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import config.YamlConfig;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Ronan
  */
 public final class ItemConstants {
-    protected static Map<Integer, MapleInventoryType> inventoryTypeCache = new HashMap<>();
+    protected static Map<Integer, InventoryType> inventoryTypeCache = new HashMap<>();
     
     public final static short LOCK = 0x01;
     public final static short SPIKES = 0x02;
@@ -184,16 +184,16 @@ public final class ItemConstants {
         return itemId / 10000 == 514;
     }
     
-    public static MapleInventoryType getInventoryType(final int itemId) {
+    public static InventoryType getInventoryType(final int itemId) {
         if (inventoryTypeCache.containsKey(itemId)) {
             return inventoryTypeCache.get(itemId);
         }
         
-        MapleInventoryType ret = MapleInventoryType.UNDEFINED;
+        InventoryType ret = InventoryType.UNDEFINED;
         
 	final byte type = (byte) (itemId / 1000000);
 	if (type >= 1 && type <= 5) {
-	    ret = MapleInventoryType.getByType(type);
+	    ret = InventoryType.getByType(type);
 	}
         
         inventoryTypeCache.put(itemId, ret);

@@ -15,8 +15,8 @@ function end(mode, type, selection) {
 	}
 
 	else if(status == 1) {
-	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-	    if(qm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() < 1) {
+	    const InventoryType = Java.type('client.inventory.InventoryType');
+	    if(qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 1) {
 		qm.getPlayer().dropMessage(1, "USE inventory full.");
 		qm.dispose();
 		return;

@@ -24,8 +24,8 @@ package client.processor.action;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import server.MapleItemInformationProvider;
@@ -55,7 +55,7 @@ public class PetAutopotProcessor {
         
         private boolean cursorOnNextAvailablePot(MapleCharacter chr) {
             if(toUseList == null) {
-                toUseList = chr.getInventory(MapleInventoryType.USE).linkedListById(itemId);
+                toUseList = chr.getInventory(InventoryType.USE).linkedListById(itemId);
             }
 
             toUse = null;
@@ -96,7 +96,7 @@ public class PetAutopotProcessor {
             curHp = chr.getHp();
             curMp = chr.getMp();
 
-            Inventory useInv = chr.getInventory(MapleInventoryType.USE);
+            Inventory useInv = chr.getInventory(InventoryType.USE);
             useInv.lockInventory();
             try {
                 toUse = useInv.getItem(slot);
@@ -150,7 +150,7 @@ public class PetAutopotProcessor {
 
                     while (true) {
                         short qtyToUse = (short) Math.min(qtyCount, toUse.getQuantity());
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, qtyToUse, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, qtyToUse, false);
 
                         curHp += (incHp * qtyToUse);
                         curMp += (incMp * qtyToUse);

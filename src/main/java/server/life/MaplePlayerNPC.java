@@ -23,8 +23,8 @@ package server.life;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.server.Server;
@@ -451,7 +451,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO playernpcs_equip (npcid, equipid, equippos) VALUES (?, ?, ?)")) {
                     ps.setInt(1, npcId);
 
-                    for (Item equip : chr.getInventory(MapleInventoryType.EQUIPPED)) {
+                    for (Item equip : chr.getInventory(InventoryType.EQUIPPED)) {
                         int position = Math.abs(equip.getPosition());
                         if ((position < 12 && position > 0) || (position > 100 && position < 112)) {
                             ps.setInt(2, equip.getItemId());

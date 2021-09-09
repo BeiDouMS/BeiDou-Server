@@ -10,8 +10,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
@@ -56,7 +56,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                 if (chr.getId() != cid) {   // cannot gift yourself
                                     MapleCharacter spouse = marriage.getPlayerById(cid);
                                     if (spouse != null) {
-                                        MapleInventoryType type = ItemConstants.getInventoryType(itemid);
+                                        InventoryType type = ItemConstants.getInventoryType(itemid);
                                         Inventory chrInv = chr.getInventory(type);
 
                                         Item newItem = null;

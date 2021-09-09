@@ -238,7 +238,7 @@ class PairedQuicksort {
         if(A.size() > 0) {
             MapleQuicksort(0, A.size() - 1, A, primarySort);
             
-            if (A.get(0).getInventoryType().equals(MapleInventoryType.USE)) {   // thanks KDA & Vcoc for suggesting stronger projectiles coming before weaker ones
+            if (A.get(0).getInventoryType().equals(InventoryType.USE)) {   // thanks KDA & Vcoc for suggesting stronger projectiles coming before weaker ones
                 reverseSortSublist(A, BinarySearchElement(A, 206));  // arrows
                 reverseSortSublist(A, BinarySearchElement(A, 207));  // stars
                 reverseSortSublist(A, BinarySearchElement(A, 233));  // bullets
@@ -280,7 +280,7 @@ public final class InventorySortHandler extends AbstractPacketHandler {
         ArrayList<Item> itemarray = new ArrayList<>();
         List<ModifyInventory> mods = new ArrayList<>();
         
-        Inventory inventory = chr.getInventory(MapleInventoryType.getByType(invType));
+        Inventory inventory = chr.getInventory(InventoryType.getByType(invType));
         inventory.lockInventory();
         try {
             for (short i = 1; i <= inventory.getSlotLimit(); i++) {
@@ -295,7 +295,7 @@ public final class InventorySortHandler extends AbstractPacketHandler {
                 mods.add(new ModifyInventory(3, item));
             }
 
-            int invTypeCriteria = (MapleInventoryType.getByType(invType) == MapleInventoryType.EQUIP) ? 3 : 1;
+            int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
             int sortCriteria = (YamlConfig.config.server.USE_ITEM_SORT_BY_NAME == true) ? 2 : 0;
             PairedQuicksort pq = new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
 

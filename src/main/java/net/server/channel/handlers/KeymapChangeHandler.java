@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import client.keybind.MapleKeyBinding;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
@@ -65,14 +65,14 @@ public final class KeymapChangeHandler extends AbstractPacketHandler {
 				}
 			} else if(mode == 1) { // Auto HP Potion
 				int itemID = p.readInt();
-				if(itemID != 0 && c.getPlayer().getInventory(MapleInventoryType.USE).findById(itemID) == null) {
+				if(itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
 					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
 					return;
 				}
 				c.getPlayer().changeKeybinding(91, new MapleKeyBinding(7, itemID));
 			} else if(mode == 2) { // Auto MP Potion
 				int itemID = p.readInt();
-				if(itemID != 0 && c.getPlayer().getInventory(MapleInventoryType.USE).findById(itemID) == null) {
+				if(itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
 					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
 					return;
 				}

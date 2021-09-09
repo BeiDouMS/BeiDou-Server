@@ -22,7 +22,7 @@ package client.processor.action;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillFactory;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import client.inventory.MaplePet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import provider.MapleDataProvider;
@@ -44,7 +44,7 @@ public class SpawnPetProcessor {
         if (c.tryacquireClient()) {
             try {
                 MapleCharacter chr = c.getPlayer();
-                MaplePet pet = chr.getInventory(MapleInventoryType.CASH).getItem(slot).getPet();
+                MaplePet pet = chr.getInventory(InventoryType.CASH).getItem(slot).getPet();
                 if (pet == null) return;
 
                 int petid = pet.getItemId();
@@ -60,8 +60,8 @@ public class SpawnPetProcessor {
                         if (petId == -1) {
                             return;
                         }
-                        long expiration = chr.getInventory(MapleInventoryType.CASH).getItem(slot).getExpiration();
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, petid, (short) 1, false, false);
+                        long expiration = chr.getInventory(InventoryType.CASH).getItem(slot).getExpiration();
+                        MapleInventoryManipulator.removeById(c, InventoryType.CASH, petid, (short) 1, false, false);
                         MapleInventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
                         
                         c.sendPacket(PacketCreator.enableActions());

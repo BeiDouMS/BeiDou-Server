@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.MapleClient;
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -41,7 +41,7 @@ public final class ItemMoveHandler extends AbstractPacketHandler {
             return;
         }
         
-        MapleInventoryType type = MapleInventoryType.getByType(p.readByte());
+        InventoryType type = InventoryType.getByType(p.readByte());
         short src = p.readShort();     //is there any reason to use byte instead of short in src and action?
         short action = p.readShort();
         short quantity = p.readShort();

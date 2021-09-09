@@ -22,9 +22,9 @@ package server;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
@@ -139,7 +139,7 @@ public class MapleMarriage extends EventInstanceManager {
         List<Item> items = new LinkedList<>();
         
         try {
-            for (Pair<Item, MapleInventoryType> it : ItemFactory.MARRIAGE_GIFTS.loadItems(cid, false)) {
+            for (Pair<Item, InventoryType> it : ItemFactory.MARRIAGE_GIFTS.loadItems(cid, false)) {
                 items.add(it.getLeft());
             }
         } catch (SQLException sqle) {
@@ -154,7 +154,7 @@ public class MapleMarriage extends EventInstanceManager {
     }
     
     public static void saveGiftItemsToDb(MapleClient c, List<Item> giftItems, int cid) {
-        List<Pair<Item, MapleInventoryType>> items = new LinkedList<>();
+        List<Pair<Item, InventoryType>> items = new LinkedList<>();
         for (Item it : giftItems) {
             items.add(new Pair<>(it, it.getInventoryType()));
         }

@@ -19,9 +19,9 @@
 package server;
 
 import client.MapleClient;
+import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventoryType;
 import constants.game.GameConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -54,7 +54,7 @@ public class MapleStorage {
     private int currentNpcid;
     private int meso;
     private byte slots;
-    private Map<MapleInventoryType, List<Item>> typeItems = new HashMap<>();
+    private Map<InventoryType, List<Item>> typeItems = new HashMap<>();
     private List<Item> items = new LinkedList<>();
     private Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.STORAGE, true);
 
@@ -85,7 +85,7 @@ public class MapleStorage {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     ret = new MapleStorage(rs.getInt("storageid"), (byte) rs.getInt("slots"), rs.getInt("meso"));
-                    for (Pair<Item, MapleInventoryType> item : ItemFactory.STORAGE.loadItems(ret.id, false)) {
+                    for (Pair<Item, InventoryType> item : ItemFactory.STORAGE.loadItems(ret.id, false)) {
                         ret.items.add(item.getLeft());
                     }
                 } else {
@@ -132,7 +132,7 @@ public class MapleStorage {
                 ps.setInt(3, id);
                 ps.executeUpdate();
             }
-            List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
+            List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
 
             List<Item> list = getItems();
             for (Item item : list) {
@@ -159,7 +159,7 @@ public class MapleStorage {
         try {
             boolean ret = items.remove(item);
             
-            MapleInventoryType type = item.getInventoryType();
+            InventoryType type = item.getInventoryType();
             typeItems.put(type, new ArrayList<>(filterItems(type)));
             
             return ret;
@@ -177,7 +177,7 @@ public class MapleStorage {
             
             items.add(item);
             
-            MapleInventoryType type = item.getInventoryType();
+            InventoryType type = item.getInventoryType();
             typeItems.put(type, new ArrayList<>(filterItems(type)));
             
             return true;
@@ -195,7 +195,7 @@ public class MapleStorage {
         }
     }
     
-    private List<Item> filterItems(MapleInventoryType type) {
+    private List<Item> filterItems(InventoryType type) {
         List<Item> storageItems = getItems();
         List<Item> ret = new LinkedList<>();
         
@@ -207,7 +207,7 @@ public class MapleStorage {
         return ret;
     }
     
-    public byte getSlot(MapleInventoryType type, byte slot) {
+    public byte getSlot(InventoryType type, byte slot) {
         lock.lock();
         try {
             byte ret = 0;
@@ -243,7 +243,7 @@ public class MapleStorage {
             });
             
             List<Item> storageItems = getItems();
-            for (MapleInventoryType type : MapleInventoryType.values()) {
+            for (InventoryType type : InventoryType.values()) {
                 typeItems.put(type, new ArrayList<>(storageItems));
             }
             
@@ -254,7 +254,7 @@ public class MapleStorage {
         }
     }
 
-    public void sendStored(MapleClient c, MapleInventoryType type) {
+    public void sendStored(MapleClient c, InventoryType type) {
         lock.lock();
         try {
             c.sendPacket(PacketCreator.storeStorage(slots, type, typeItems.get(type)));
@@ -263,7 +263,7 @@ public class MapleStorage {
         }
     }
 
-    public void sendTakenOut(MapleClient c, MapleInventoryType type) {
+    public void sendTakenOut(MapleClient c, InventoryType type) {
         lock.lock();
         try {
             c.sendPacket(PacketCreator.takeOutStorage(slots, type, typeItems.get(type)));
@@ -279,7 +279,7 @@ public class MapleStorage {
             msi.mergeItems();
             items = msi.sortItems();
             
-            for (MapleInventoryType type : MapleInventoryType.values()) {
+            for (InventoryType type : InventoryType.values()) {
                 typeItems.put(type, new ArrayList<>(items));
             }
             

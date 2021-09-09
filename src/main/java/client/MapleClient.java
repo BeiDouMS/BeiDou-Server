@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package client;
 
-import client.inventory.MapleInventoryType;
+import client.inventory.InventoryType;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import io.netty.channel.ChannelHandlerContext;
@@ -1491,7 +1491,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         //Cancelling magicdoor? Nope
         //Cancelling mounts? Noty
 
-        player.getInventory(MapleInventoryType.EQUIPPED).checked(false); //test
+        player.getInventory(InventoryType.EQUIPPED).checked(false); //test
         player.getMap().removePlayer(player);
         player.clearBanishPlayerData();
         player.getClient().getChannelServer().removePlayer(player);

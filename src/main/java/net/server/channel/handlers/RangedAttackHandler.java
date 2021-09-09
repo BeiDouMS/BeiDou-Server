@@ -23,8 +23,8 @@ package net.server.channel.handlers;
 
 import client.*;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.MapleWeaponType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
@@ -89,7 +89,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 applyAttack(attack, chr, 4);
             }
         } else {
-            Item weapon = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
+            Item weapon = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
             MapleWeaponType type = MapleItemInformationProvider.getInstance().getWeaponType(weapon.getItemId());
             if (type == MapleWeaponType.NOT_A_WEAPON) {
                 return;
@@ -123,7 +123,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             if (hasShadowPartner) {
                 bulletCount *= 2;
             }
-            Inventory inv = chr.getInventory(MapleInventoryType.USE);
+            Inventory inv = chr.getInventory(InventoryType.USE);
             for (short i = 1; i <= inv.getSlotLimit(); i++) {
                 Item item = inv.getItem(i);
                 if (item != null) {
@@ -167,14 +167,14 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     }
 
                     if(slot < 0) System.out.println("<ERROR> Projectile to use was unable to be found.");
-                    else MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, bulletConsume, false, true);
+                    else MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
                 }
             }
             
             if (projectile != 0 || soulArrow || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 4111004 || attack.skill == 13101005) {
             	int visProjectile = projectile; //visible projectile sent to players
                 if (ItemConstants.isThrowingStar(projectile)) {
-                    Inventory cash = chr.getInventory(MapleInventoryType.CASH);
+                    Inventory cash = chr.getInventory(InventoryType.CASH);
                     for (int i = 1; i <= cash.getSlotLimit(); i++) { // impose order...
                         Item item = cash.getItem((short) i);
                         if (item != null) {

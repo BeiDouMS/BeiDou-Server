@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -50,7 +50,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {
             try {
                 MapleCharacter chr = c.getPlayer();
-                Inventory inv = chr.getInventory(MapleInventoryType.USE);
+                Inventory inv = chr.getInventory(InventoryType.USE);
                 inv.lockInventory();
                 try {
                     Item slotItem = inv.getItem(slot);
@@ -66,7 +66,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
                         return;
                     }
                     chr.addGachaExp((int) gachaexp);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                 } finally {
                     inv.unlockInventory();
                 }

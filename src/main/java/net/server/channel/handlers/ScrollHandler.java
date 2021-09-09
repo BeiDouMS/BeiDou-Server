@@ -60,15 +60,15 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 MapleCharacter chr = c.getPlayer();
-                Equip toScroll = (Equip) chr.getInventory(MapleInventoryType.EQUIPPED).getItem(dst);
+                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(dst);
                 Skill LegendarySpirit = SkillFactory.getSkill(1003);
                 if (chr.getSkillLevel(LegendarySpirit) > 0 && dst >= 0) {
                     legendarySpirit = true;
-                    toScroll = (Equip) chr.getInventory(MapleInventoryType.EQUIP).getItem(dst);
+                    toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(dst);
                 }
                 byte oldLevel = toScroll.getLevel();
                 byte oldSlots = toScroll.getUpgradeSlots();
-                Inventory useInventory = chr.getInventory(MapleInventoryType.USE);
+                Inventory useInventory = chr.getInventory(InventoryType.USE);
                 Item scroll = useInventory.getItem(slot);
                 Item wscroll = null;
 
@@ -128,10 +128,10 @@ public final class ScrollHandler extends AbstractPacketHandler {
                             return;
                         }
                         
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
+                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
                     }
                     
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, scroll.getPosition(), (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
                 } finally {
                     useInventory.unlockInventory();
                 }
@@ -141,7 +141,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                     if(!ItemConstants.isWeddingRing(toScroll.getItemId())) {
                         mods.add(new ModifyInventory(3, toScroll));
                         if (dst < 0) {
-                            Inventory inv = chr.getInventory(MapleInventoryType.EQUIPPED);
+                            Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
 
                             inv.lockInventory();
                             try {
@@ -151,7 +151,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                                 inv.unlockInventory();
                             }
                         } else {
-                            Inventory inv = chr.getInventory(MapleInventoryType.EQUIP);
+                            Inventory inv = chr.getInventory(InventoryType.EQUIP);
                             
                             inv.lockInventory();
                             try {

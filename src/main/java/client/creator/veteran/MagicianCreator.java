@@ -25,8 +25,8 @@ import client.Skill;
 import client.SkillFactory;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import constants.skills.Magician;
 import server.MapleItemInformationProvider;
 
@@ -61,9 +61,9 @@ public class MagicianCreator extends CharacterFactory {
                         giveEquipment(recipe, ii, weapons[i]);
                 }
 
-                giveItem(recipe, 2000001, 100, MapleInventoryType.USE);
-                giveItem(recipe, 2000006, 100, MapleInventoryType.USE);
-                giveItem(recipe, 3010000, 1, MapleInventoryType.SETUP);
+                giveItem(recipe, 2000001, 100, InventoryType.USE);
+                giveItem(recipe, 2000006, 100, InventoryType.USE);
+                giveItem(recipe, 3010000, 1, InventoryType.SETUP);
                 
                 if(improveSp > 0) {
                         improveSp += 5;
@@ -88,7 +88,7 @@ public class MagicianCreator extends CharacterFactory {
                 recipe.addStartingEquipment(nEquip);
         }
         
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, MapleInventoryType itemType) {
+        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
                 recipe.addStartingItem(itemid, quantity, itemType);
         }
     

@@ -24,9 +24,9 @@ package server.maps;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import client.processor.npc.FredrickProcessor;
@@ -266,7 +266,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
             if (quantity < 1 || !pItem.isExist() || pItem.getBundles() < quantity) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
-            } else if (newItem.getInventoryType().equals(MapleInventoryType.EQUIP) && newItem.getQuantity() > 1) {
+            } else if (newItem.getInventoryType().equals(InventoryType.EQUIP) && newItem.getQuantity() > 1) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
@@ -410,7 +410,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
             if (check(c.getPlayer(), copyItems) && !timeout) {
                 for (MaplePlayerShopItem mpsi : copyItems) {
                     if (mpsi.isExist()) {
-                        if (mpsi.getItem().getInventoryType().equals(MapleInventoryType.EQUIP)) {
+                        if (mpsi.getItem().getInventoryType().equals(InventoryType.EQUIP)) {
                             MapleInventoryManipulator.addFromDrop(c, mpsi.getItem(), false);
                         } else {
                             MapleInventoryManipulator.addById(c, mpsi.getItem().getItemId(), (short) (mpsi.getBundles() * mpsi.getItem().getQuantity()), mpsi.getItem().getOwner(), -1, mpsi.getItem().getFlag(), mpsi.getItem().getExpiration());
@@ -622,7 +622,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     }
 
     public void saveItems(boolean shutdown) throws SQLException {
-        List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
+        List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
         List<Short> bundles = new ArrayList<>();
 
         for (MaplePlayerShopItem pItems : getItems()) {
@@ -648,7 +648,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     }
 
     private static boolean check(MapleCharacter chr, List<MaplePlayerShopItem> items) {
-        List<Pair<Item, MapleInventoryType>> li = new ArrayList<>();
+        List<Pair<Item, InventoryType>> li = new ArrayList<>();
         for (MaplePlayerShopItem item : items) {
             Item it = item.getItem().copy();
             it.setQuantity((short)(it.getQuantity() * item.getBundles()));

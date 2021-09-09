@@ -23,8 +23,8 @@ package server;
 
 import client.*;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -940,7 +940,7 @@ public class MapleStatEffect {
         if (isShadowClaw()) {
             short projectileConsume = this.getBulletConsume();  // noticed by shavit
             
-            Inventory use = applyto.getInventory(MapleInventoryType.USE);
+            Inventory use = applyto.getInventory(InventoryType.USE);
             use.lockInventory();
             try {
                 Item projectile = null;
@@ -956,7 +956,7 @@ public class MapleStatEffect {
                 if (projectile == null) {
                     return false;
                 } else {
-                    MapleInventoryManipulator.removeFromSlot(applyto.getClient(), MapleInventoryType.USE, projectile.getPosition(), projectileConsume, false, true);
+                    MapleInventoryManipulator.removeFromSlot(applyto.getClient(), InventoryType.USE, projectile.getPosition(), projectileConsume, false, true);
                 }
             } finally {
                 use.unlockInventory();
@@ -1225,7 +1225,7 @@ public class MapleStatEffect {
         MapleMount givemount = null;
         if (isMonsterRiding()) {
             int ridingMountId = 0;
-            Item mount = applyfrom.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -18);
+            Item mount = applyfrom.getInventory(InventoryType.EQUIPPED).getItem((short) -18);
             if (mount != null) {
                 ridingMountId = mount.getItemId();
             }

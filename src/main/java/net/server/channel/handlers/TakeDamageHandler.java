@@ -23,8 +23,8 @@ package net.server.channel.handlers;
 
 import client.*;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -88,7 +88,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         loseItems = attacker.getStats().loseItem();
                         if (loseItems != null) {
                             if (chr.getBuffEffect(MapleBuffStat.AURA) == null) {
-                                MapleInventoryType type;
+                                InventoryType type;
                                 final int playerpos = chr.getPosition().x;
                                 byte d = 1;
                                 Point pos = new Point(0, chr.getPosition().y);

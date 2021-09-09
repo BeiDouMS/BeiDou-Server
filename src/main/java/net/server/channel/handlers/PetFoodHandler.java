@@ -25,8 +25,8 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanManager;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.MaplePet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
@@ -71,7 +71,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                Inventory useInv = chr.getInventory(MapleInventoryType.USE);
+                Inventory useInv = chr.getInventory(InventoryType.USE);
                 useInv.lockInventory();
                 try {
                     Item use = useInv.getItem(pos);
@@ -80,7 +80,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
                     }
 
                     pet.gainClosenessFullness(chr, (pet.getFullness() <= 75) ? 1 : 0, 30, 1);   // 25+ "emptyness" to get +1 closeness
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pos, (short) 1, false);
+                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, pos, (short) 1, false);
                 } finally {
                     useInv.unlockInventory();
                 }

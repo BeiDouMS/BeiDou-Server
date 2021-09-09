@@ -223,7 +223,7 @@ public class MaplePet extends Item {
         owner.getMap().broadcastMessage(PacketCreator.petFoodResponse(owner.getId(), slot, enjoyed, false));
         saveToDb();
         
-        Item petz = owner.getInventory(MapleInventoryType.CASH).getItem(getPosition());
+        Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
         if (petz != null)
             owner.forceUpdateItem(petz);
     }
@@ -284,7 +284,7 @@ public class MaplePet extends Item {
         this.petFlag |= flag.getValue();
         saveToDb();
         
-        Item petz = owner.getInventory(MapleInventoryType.CASH).getItem(getPosition());
+        Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
         if (petz != null)
             owner.forceUpdateItem(petz);
     }
@@ -293,7 +293,7 @@ public class MaplePet extends Item {
         this.petFlag &= 0xFFFFFFFF ^ flag.getValue();
         saveToDb();
         
-        Item petz = owner.getInventory(MapleInventoryType.CASH).getItem(getPosition());
+        Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
         if (petz != null)
             owner.forceUpdateItem(petz);
     }

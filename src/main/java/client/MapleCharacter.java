@@ -303,17 +303,17 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         useCS = false;
         
         setStance(0);
-        inventory = new Inventory[MapleInventoryType.values().length];
+        inventory = new Inventory[InventoryType.values().length];
         savedLocations = new SavedLocation[SavedLocationType.values().length];
         
-        for (MapleInventoryType type : MapleInventoryType.values()) {
+        for (InventoryType type : InventoryType.values()) {
             byte b = 24;
-            if (type == MapleInventoryType.CASH) {
+            if (type == InventoryType.CASH) {
                 b = 96;
             }
             inventory[type.ordinal()] = new Inventory(this, type, (byte) b);
         }
-        inventory[MapleInventoryType.CANHOLD.ordinal()] = new InventoryProof(this);
+        inventory[InventoryType.CANHOLD.ordinal()] = new InventoryProof(this);
         
         for (int i = 0; i < SavedLocationType.values().length; i++) {
             savedLocations[i] = null;
@@ -374,10 +374,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         ret.accountid = c.getAccID();
         ret.buddylist = new BuddyList(20);
         ret.maplemount = null;
-        ret.getInventory(MapleInventoryType.EQUIP).setSlotLimit(24);
-        ret.getInventory(MapleInventoryType.USE).setSlotLimit(24);
-        ret.getInventory(MapleInventoryType.SETUP).setSlotLimit(24);
-        ret.getInventory(MapleInventoryType.ETC).setSlotLimit(24);
+        ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);
+        ret.getInventory(InventoryType.USE).setSlotLimit(24);
+        ret.getInventory(InventoryType.SETUP).setSlotLimit(24);
+        ret.getInventory(InventoryType.ETC).setSlotLimit(24);
         
         // Select a keybinding method
         int[] selectedKey;
@@ -714,7 +714,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
     public int calculateMaxBaseDamage(int watk) {
         int maxbasedamage;
-        Item weapon_item = getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
+        Item weapon_item = getInventory(InventoryType.EQUIPPED).getItem((short) -11);
         if (weapon_item != null) {
             maxbasedamage = calculateMaxBaseDamage(watk, ii.getWeaponType(weapon_item.getItemId()));
         } else {
@@ -814,7 +814,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
     public String getMedalText() {
         String medal = "";
-        final Item medalItem = getInventory(MapleInventoryType.EQUIPPED).getItem((short) -49);
+        final Item medalItem = getInventory(InventoryType.EQUIPPED).getItem((short) -49);
         if (medalItem != null) {
             medal = "<" + ii.getName(medalItem.getItemId()) + "> ";
         }
@@ -905,7 +905,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
         
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        for(MapleInventoryType invType : MapleInventoryType.values()) {
+        for(InventoryType invType : InventoryType.values()) {
             Inventory inv = this.getInventory(invType);
             
             inv.lockInventory();
@@ -1278,7 +1278,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     
     public void changeMapBanish(int mapid, String portal, String msg) {
         if(YamlConfig.config.server.USE_SPIKES_AVOID_BANISH) {
-            for(Item it: this.getInventory(MapleInventoryType.EQUIPPED).list()) {
+            for(Item it: this.getInventory(InventoryType.EQUIPPED).list()) {
                 if((it.getFlag() & ItemConstants.SPIKES) == ItemConstants.SPIKES) {
                     return;
                 }
@@ -1455,7 +1455,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             effLock.unlock();
         }
         
-        for(Item it: this.getInventory(MapleInventoryType.EQUIPPED).list()) {
+        for(Item it: this.getInventory(InventoryType.EQUIPPED).list()) {
             if((it.getFlag() & ItemConstants.COLD) == ItemConstants.COLD && ((returnMapid == 211000000 && thisMapid != 200082300) || returnMapid == 193000000)) {
                 return true;        //protection from cold
             }
@@ -2762,7 +2762,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
 
     private void doHurtHp() {
-        if (!(this.getInventory(MapleInventoryType.EQUIPPED).findById(getMap().getHPDecProtect()) != null || buffMapProtection())) {
+        if (!(this.getInventory(InventoryType.EQUIPPED).findById(getMap().getHPDecProtect()) != null || buffMapProtection())) {
             addHP(-getMap().getHPDec());
             lastHpDec = Server.getInstance().getCurrentTime();
         }
@@ -5096,7 +5096,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return initialSpawnPoint;
     }
 
-    public Inventory getInventory(MapleInventoryType type) {
+    public Inventory getInventory(InventoryType type) {
         return inventory[type.ordinal()];
     }
 
@@ -5106,11 +5106,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
     public boolean haveItemWithId(int itemid, boolean checkEquipped) {
         return (inventory[ItemConstants.getInventoryType(itemid).ordinal()].findById(itemid) != null)
-                || (checkEquipped && inventory[MapleInventoryType.EQUIPPED.ordinal()].findById(itemid) != null);
+                || (checkEquipped && inventory[InventoryType.EQUIPPED.ordinal()].findById(itemid) != null);
     }
     
     public boolean haveItemEquipped(int itemid) {
-        return (inventory[MapleInventoryType.EQUIPPED.ordinal()].findById(itemid) != null);
+        return (inventory[InventoryType.EQUIPPED.ordinal()].findById(itemid) != null);
     }
     
     public boolean haveWeddingRing() {
@@ -5128,7 +5128,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public int getItemQuantity(int itemid, boolean checkEquipped) {
         int count = inventory[ItemConstants.getInventoryType(itemid).ordinal()].countById(itemid);
         if (checkEquipped) {
-            count += inventory[MapleInventoryType.EQUIPPED.ordinal()].countById(itemid);
+            count += inventory[InventoryType.EQUIPPED.ordinal()].countById(itemid);
         }
         return count;
     }
@@ -5136,7 +5136,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public int getCleanItemQuantity(int itemid, boolean checkEquipped) {
         int count = inventory[ItemConstants.getInventoryType(itemid).ordinal()].countNotOwnedById(itemid);
         if (checkEquipped) {
-            count += inventory[MapleInventoryType.EQUIPPED.ordinal()].countNotOwnedById(itemid);
+            count += inventory[InventoryType.EQUIPPED.ordinal()].countNotOwnedById(itemid);
         }
         return count;
     }
@@ -6030,7 +6030,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public boolean hasEmptySlot(byte invType) {
-        return getInventory(MapleInventoryType.getByType(invType)).getNextFreeSlot() > -1;
+        return getInventory(InventoryType.getByType(invType)).getNextFreeSlot() > -1;
     }
 
     public void increaseGuildCapacity() {
@@ -6648,7 +6648,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private void setCouponRates() {
         List<Integer> couponEffects;
         
-        Collection<Item> cashItems = this.getInventory(MapleInventoryType.CASH).list();
+        Collection<Item> cashItems = this.getInventory(InventoryType.CASH).list();
         chrLock.lock();
         try {
             setActiveCoupons(cashItems);
@@ -6667,7 +6667,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public void updateCouponRates() {
-        Inventory cashInv = this.getInventory(MapleInventoryType.CASH);
+        Inventory cashInv = this.getInventory(InventoryType.CASH);
         if (cashInv == null) return;
         
         effLock.lock();
@@ -6872,7 +6872,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             ret.jobRankMove = rs.getInt("jobRankMove");
             
             if(equipped != null) {  // players can have no equipped items at all, ofc
-                Inventory inv = ret.inventory[MapleInventoryType.EQUIPPED.ordinal()];
+                Inventory inv = ret.inventory[InventoryType.EQUIPPED.ordinal()];
                 for (Item item : equipped) {
                     inv.addItemFromDB(item);
                 }
@@ -6915,7 +6915,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         ret.mapid = this.getMapId();
         ret.initialSpawnPoint = this.getInitialSpawnpoint();
         
-        ret.inventory[MapleInventoryType.EQUIPPED.ordinal()] = this.getInventory(MapleInventoryType.EQUIPPED);
+        ret.inventory[InventoryType.EQUIPPED.ordinal()] = this.getInventory(InventoryType.EQUIPPED);
         
         ret.setGMLevel(this.gmLevel());
         ret.world = this.getWorld();
@@ -7030,13 +7030,13 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
                     wserv = Server.getInstance().getWorld(ret.world);
 
-                    ret.getInventory(MapleInventoryType.EQUIP).setSlotLimit(rs.getByte("equipslots"));
-                    ret.getInventory(MapleInventoryType.USE).setSlotLimit(rs.getByte("useslots"));
-                    ret.getInventory(MapleInventoryType.SETUP).setSlotLimit(rs.getByte("setupslots"));
-                    ret.getInventory(MapleInventoryType.ETC).setSlotLimit(rs.getByte("etcslots"));
+                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getByte("equipslots"));
+                    ret.getInventory(InventoryType.USE).setSlotLimit(rs.getByte("useslots"));
+                    ret.getInventory(InventoryType.SETUP).setSlotLimit(rs.getByte("setupslots"));
+                    ret.getInventory(InventoryType.ETC).setSlotLimit(rs.getByte("etcslots"));
 
                     short sandboxCheck = 0x0;
-                    for (Pair<Item, MapleInventoryType> item : ItemFactory.INVENTORY.loadItems(ret.id, !channelserver)) {
+                    for (Pair<Item, InventoryType> item : ItemFactory.INVENTORY.loadItems(ret.id, !channelserver)) {
                         sandboxCheck |= item.getLeft().getFlag();
 
                         ret.getInventory(item.getRight()).addItemFromDB(item.getLeft());
@@ -7049,12 +7049,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                             continue;
                         }
 
-                        MapleInventoryType mit = item.getRight();
-                        if (mit.equals(MapleInventoryType.EQUIP) || mit.equals(MapleInventoryType.EQUIPPED)) {
+                        InventoryType mit = item.getRight();
+                        if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
                             Equip equip = (Equip) item.getLeft();
                             if (equip.getRingId() > -1) {
                                 MapleRing ring = MapleRing.loadFromDb(equip.getRingId());
-                                if (item.getRight().equals(MapleInventoryType.EQUIPPED)) {
+                                if (item.getRight().equals(InventoryType.EQUIPPED)) {
                                     ring.equip();
                                 }
 
@@ -7416,8 +7416,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
 
             final int mountid = ret.getJobType() * 10000000 + 1004;
-            if (ret.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -18) != null) {
-                ret.maplemount = new MapleMount(ret, ret.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -18).getItemId(), mountid);
+            if (ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18) != null) {
+                ret.maplemount = new MapleMount(ret, ret.getInventory(InventoryType.EQUIPPED).getItem((short) -18).getItemId(), mountid);
             } else {
                 ret.maplemount = new MapleMount(ret, 0, mountid);
             }
@@ -7704,7 +7704,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             //equipspeed = 0;
             //equipjump = 0;
             
-            for (Item item : getInventory(MapleInventoryType.EQUIPPED)) {
+            for (Item item : getInventory(InventoryType.EQUIPPED)) {
                 Equip equip = (Equip) item;
                 equipmaxhp += equip.getHp();
                 equipmaxmp += equip.getMp();
@@ -7822,7 +7822,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
 
             if (job.isA(MapleJob.THIEF) || job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.PIRATE) || job.isA(MapleJob.NIGHTWALKER1) || job.isA(MapleJob.WINDARCHER1)) {
-                Item weapon_item = getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
+                Item weapon_item = getInventory(InventoryType.EQUIPPED).getItem((short) -11);
                 if (weapon_item != null) {
                     MapleWeaponType weapon = ii.getWeaponType(weapon_item.getItemId());
                     boolean bow = weapon == MapleWeaponType.BOW;
@@ -7831,7 +7831,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     boolean gun = weapon == MapleWeaponType.GUN;
                     if (bow || crossbow || claw || gun) {
                         // Also calc stars into this.
-                        Inventory inv = getInventory(MapleInventoryType.USE);
+                        Inventory inv = getInventory(InventoryType.USE);
                         for (short i = 1; i <= inv.getSlotLimit(); i++) {
                             Item item = inv.getItem(i);
                             if (item != null) {
@@ -8176,8 +8176,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             this.changeSkillLevel(skill, skEntry.getRight().byteValue(), skill.getMaxLevel(), -1);
         }
 
-        List<Pair<Item, MapleInventoryType>> itemsWithType = recipe.getStartingItems();
-        for (Pair<Item, MapleInventoryType> itEntry : itemsWithType) {
+        List<Pair<Item, InventoryType>> itemsWithType = recipe.getStartingItems();
+        for (Pair<Item, InventoryType> itEntry : itemsWithType) {
             this.getInventory(itEntry.getRight()).addItem(itEntry.getLeft());
         }
 
@@ -8556,7 +8556,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     psMacro.executeBatch();
                 }
 
-                List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
+                List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
                 for (Inventory iv : inventory) {
                     for (Item item : iv.list()) {
                         itemsWithType.add(new Pair<>(item, iv.getType()));
@@ -9112,7 +9112,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 int autohpItemid = autohpPot.getAction();
                 float autohpAlert = this.getAutopotHpAlert();
                 if (((float) this.getHp()) / this.getCurrentMaxHp() <= autohpAlert) { // try within user settings... thanks Lame, Optimist, Stealth2800
-                    Item autohpItem = this.getInventory(MapleInventoryType.USE).findById(autohpItemid);
+                    Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
                     if (autohpItem != null) {
                         this.setAutopotHpAlert(0.9f * autohpAlert);
                         PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
@@ -9127,7 +9127,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 int autompItemid = autompPot.getAction();
                 float autompAlert = this.getAutopotMpAlert();
                 if (((float) this.getMp()) / this.getCurrentMaxMp() <= autompAlert) {
-                    Item autompItem = this.getInventory(MapleInventoryType.USE).findById(autompItemid);
+                    Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
                     if (autompItem != null) {
                         this.setAutopotMpAlert(0.9f * autompAlert); // autoMP would stick to using pots at every depletion in some cases... thanks Rohenn
                         PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
@@ -9139,7 +9139,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return true;
     }
     
-    public void setInventory(MapleInventoryType type, Inventory inv) {
+    public void setInventory(InventoryType type, Inventory inv) {
         inventory[type.ordinal()] = inv;
     }
 
@@ -9285,7 +9285,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
 
     public byte getSlots(int type) {
-        return type == MapleInventoryType.CASH.getType() ? 96 : inventory[type].getSlotLimit();
+        return type == InventoryType.CASH.getType() ? 96 : inventory[type].getSlotLimit();
     }
     
     public boolean canGainSlots(int type, int slots) {
@@ -9327,7 +9327,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     
     public int sellAllItemsFromName(byte invTypeId, String name) {
         //player decides from which inventory items should be sold.
-        MapleInventoryType type = MapleInventoryType.getByType(invTypeId);
+        InventoryType type = InventoryType.getByType(invTypeId);
         
         Inventory inv = getInventory(type);
         inv.lockInventory();
@@ -9343,7 +9343,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    public int sellAllItemsFromPosition(MapleItemInformationProvider ii, MapleInventoryType type, short pos) {
+    public int sellAllItemsFromPosition(MapleItemInformationProvider ii, InventoryType type, short pos) {
         int mesoGain = 0;
         
         Inventory inv = getInventory(type);
@@ -9362,7 +9362,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return(mesoGain);
     }
 
-    private int standaloneSell(MapleClient c, MapleItemInformationProvider ii, MapleInventoryType type, short slot, short quantity) {
+    private int standaloneSell(MapleClient c, MapleItemInformationProvider ii, InventoryType type, short slot, short quantity) {
         if (quantity == 0xFFFF || quantity == 0) {
             quantity = 1;
         }
@@ -9419,7 +9419,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private List<Equip> getUpgradeableEquipped() {
         List<Equip> list = new LinkedList<>();
         
-        for (Item item : getInventory(MapleInventoryType.EQUIPPED)) {
+        for (Item item : getInventory(InventoryType.EQUIPPED)) {
             if (ii.isUpgradeable(item.getItemId())) {
                 list.add((Equip) item);
             }
@@ -9441,7 +9441,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public boolean mergeAllItemsFromName(String name) {
-        MapleInventoryType type = MapleInventoryType.EQUIP;
+        InventoryType type = InventoryType.EQUIP;
         
         Inventory inv = getInventory(type);
         inv.lockInventory();
@@ -9518,18 +9518,18 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public void mergeAllItemsFromPosition(Map<StatUpgrade, Float> statups, short pos) {
-        Inventory inv = getInventory(MapleInventoryType.EQUIP);
+        Inventory inv = getInventory(InventoryType.EQUIP);
         inv.lockInventory();
         try {
             for(short i = pos; i <= inv.getSlotLimit(); i++) {
-                standaloneMerge(statups, getClient(), MapleInventoryType.EQUIP, i, inv.getItem(i));
+                standaloneMerge(statups, getClient(), InventoryType.EQUIP, i, inv.getItem(i));
             }
         } finally {
             inv.unlockInventory();
         }
     }
 
-    private void standaloneMerge(Map<StatUpgrade, Float> statups, MapleClient c, MapleInventoryType type, short slot, Item item) {
+    private void standaloneMerge(Map<StatUpgrade, Float> statups, MapleClient c, InventoryType type, short slot, Item item) {
         short quantity;
         if (item == null || (quantity = item.getQuantity()) < 1 || ii.isCash(item.getItemId()) || !ii.isUpgradeable(item.getItemId()) || hasMergeFlag(item)){
             return;
@@ -9623,7 +9623,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             nextWarningTime = curTime + (60 * 1000);   // show underlevel info again after 1 minute
             
             String medal = "";
-            Item medalItem = mapOwner.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -49);
+            Item medalItem = mapOwner.getInventory(InventoryType.EQUIPPED).getItem((short) -49);
             if (medalItem != null) {
                 medal = "<" + ii.getName(medalItem.getItemId()) + "> ";
             }
@@ -9722,7 +9722,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         } else {
             pet.setFullness(newFullness);
             pet.saveToDb();
-            Item petz = getInventory(MapleInventoryType.CASH).getItem(pet.getPosition());
+            Item petz = getInventory(InventoryType.CASH).getItem(pet.getPosition());
             if (petz != null) {
                 forceUpdateItem(petz);
             }
@@ -10365,7 +10365,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     private Collection<Item> getUpgradeableEquipList() {
-        Collection<Item> fullList = getInventory(MapleInventoryType.EQUIPPED).list();
+        Collection<Item> fullList = getInventory(InventoryType.EQUIPPED).list();
         if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_CASH) {
             return fullList;
         }
@@ -10401,7 +10401,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public void showAllEquipFeatures() {
         String showMsg = "";
         
-        for (Item item : getInventory(MapleInventoryType.EQUIPPED).list()) {
+        for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
             Equip nEquip = (Equip) item;
             String itemName = ii.getName(nEquip.getItemId());
             if (itemName == null) {

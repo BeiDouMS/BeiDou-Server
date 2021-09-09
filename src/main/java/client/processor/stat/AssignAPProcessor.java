@@ -26,8 +26,8 @@ package client.processor.stat;
 import client.*;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.skills.*;
 import net.packet.InPacket;
@@ -49,7 +49,7 @@ public class AssignAPProcessor {
         MapleCharacter chr = c.getPlayer();
         if (chr.getRemainingAp() < 1) return;
         
-        Collection<Item> equippedC = chr.getInventory(MapleInventoryType.EQUIPPED).list();
+        Collection<Item> equippedC = chr.getInventory(InventoryType.EQUIPPED).list();
         
         c.lockClient();
         try {

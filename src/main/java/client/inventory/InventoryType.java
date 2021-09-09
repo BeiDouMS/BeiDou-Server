@@ -24,7 +24,7 @@ package client.inventory;
 /**
  * @author Matze
  */
-public enum MapleInventoryType {
+public enum InventoryType {
     UNDEFINED(0),
     EQUIP(1),
     USE(2),
@@ -33,9 +33,10 @@ public enum MapleInventoryType {
     CASH(5),
     CANHOLD(6),   //Proof-guard for inserting after removal checks
     EQUIPPED(-1); //Seems nexon screwed something when removing an item T_T
+
     final byte type;
 
-    private MapleInventoryType(int type) {
+    InventoryType(int type) {
         this.type = (byte) type;
     }
 
@@ -47,8 +48,8 @@ public enum MapleInventoryType {
         return (short) (2 << type);
     }
 
-    public static MapleInventoryType getByType(byte type) {
-        for (MapleInventoryType l : MapleInventoryType.values()) {
+    public static InventoryType getByType(byte type) {
+        for (InventoryType l : InventoryType.values()) {
             if (l.getType() == type) {
                 return l;
             }
@@ -56,18 +57,14 @@ public enum MapleInventoryType {
         return null;
     }
 
-    public static MapleInventoryType getByWZName(String name) {
-        if (name.equals("Install")) {
-            return SETUP;
-        } else if (name.equals("Consume")) {
-            return USE;
-        } else if (name.equals("Etc")) {
-            return ETC;
-        } else if (name.equals("Cash")) {
-            return CASH;
-        } else if (name.equals("Pet")) {
-            return CASH;
-        }
-        return UNDEFINED;
+    public static InventoryType getByWZName(String name) {
+        return switch (name) {
+            case "Install" -> SETUP;
+            case "Consume" -> USE;
+            case "Etc" -> ETC;
+            case "Cash" -> CASH;
+            case "Pet" -> CASH;
+            default -> UNDEFINED;
+        };
     }
 }

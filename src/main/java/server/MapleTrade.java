@@ -23,8 +23,8 @@ package server;
 
 import client.MapleCharacter;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
@@ -246,7 +246,7 @@ public class MapleTrade {
     }
     
     private boolean fitsInInventory() {
-        List<Pair<Item, MapleInventoryType>> tradeItems = new LinkedList<>();
+        List<Pair<Item, InventoryType>> tradeItems = new LinkedList<>();
         for (Item item : exchangeItems) {
             tradeItems.add(new Pair<>(item, item.getInventoryType()));
         }

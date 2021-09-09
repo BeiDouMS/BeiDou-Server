@@ -102,8 +102,8 @@ function action(mode, type, selection) {
 		} else if (status == 2) {
 			if (selection == 0) {
 				const MapleInventoryManipulator = Java.type('client.inventory.manipulator.MapleInventoryManipulator');
-				const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-				MapleInventoryManipulator.removeFromSlot(cm.getClient(), MapleInventoryType.CASH, 1, 1, true);
+				const InventoryType = Java.type('client.inventory.InventoryType');
+				MapleInventoryManipulator.removeFromSlot(cm.getClient(), InventoryType.CASH, 1, 1, true);
 				cm.sendOk("Your cash first slot is removed.");
 			} else if (selection == 1) {
 				if (cm.haveItem(5000029, 2)) {
