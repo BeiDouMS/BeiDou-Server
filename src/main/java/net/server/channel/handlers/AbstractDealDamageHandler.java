@@ -38,8 +38,8 @@ import server.TimerManager;
 import server.life.*;
 import server.maps.MapItem;
 import server.maps.MapObject;
+import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -152,7 +152,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 int delay = 0;
                 for (Integer oned : attack.allDamage.keySet()) {
                     MapObject mapobject = map.getMapObject(oned);
-                    if (mapobject != null && mapobject.getType() == MapleMapObjectType.ITEM) {
+                    if (mapobject != null && mapobject.getType() == MapObjectType.ITEM) {
                         final MapItem mapitem = (MapItem) mapobject;
                             if (mapitem.getMeso() == 0) { //Maybe it is possible some how?
                                 return;
@@ -178,7 +178,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             } finally {
                                 mapitem.unlockItem();
                             }
-                    } else if (mapobject != null && mapobject.getType() != MapleMapObjectType.MONSTER) {
+                    } else if (mapobject != null && mapobject.getType() != MapObjectType.MONSTER) {
                         return;
                     }
                 }

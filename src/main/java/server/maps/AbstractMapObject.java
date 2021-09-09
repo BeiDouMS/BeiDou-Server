@@ -28,7 +28,7 @@ public abstract class AbstractMapObject implements MapObject {
     private int objectId;
 
     @Override
-    public abstract MapleMapObjectType getType();
+    public abstract MapObjectType getType();
 
     @Override
     public Point getPosition() {

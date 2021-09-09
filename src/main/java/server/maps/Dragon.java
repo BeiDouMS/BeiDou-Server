@@ -38,8 +38,8 @@ public class Dragon extends AbstractAnimatedMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.DRAGON;
+    public MapObjectType getType() {
+        return MapObjectType.DRAGON;
     }
 
     @Override

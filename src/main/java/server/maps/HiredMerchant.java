@@ -713,8 +713,8 @@ public class HiredMerchant extends AbstractMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.HIRED_MERCHANT;
+    public MapObjectType getType() {
+        return MapObjectType.HIRED_MERCHANT;
     }
 
     @Override

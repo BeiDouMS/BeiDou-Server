@@ -571,8 +571,8 @@ public class MaplePlayerShop extends AbstractMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.SHOP;
+    public MapObjectType getType() {
+        return MapObjectType.SHOP;
     }
     
     public class SoldItem {

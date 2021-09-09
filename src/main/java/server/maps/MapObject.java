@@ -28,7 +28,7 @@ import java.awt.*;
 public interface MapObject {
     int getObjectId();
     void setObjectId(int id);
-    MapleMapObjectType getType();
+    MapObjectType getType();
     Point getPosition();
     void setPosition(Point position);
     void sendSpawnData(Client client);

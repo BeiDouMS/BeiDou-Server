@@ -47,8 +47,8 @@ import server.TimerManager;
 import server.life.LifeFactory.BanishInfo;
 import server.loot.LootManager;
 import server.maps.AbstractAnimatedMapObject;
+import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleMapObjectType;
 import server.maps.MapleSummon;
 import tools.IntervalBuilder;
 import tools.PacketCreator;
@@ -1042,8 +1042,8 @@ public class Monster extends AbstractLoadedLife {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.MONSTER;
+    public MapObjectType getType() {
+        return MapObjectType.MONSTER;
     }
 
     public boolean isMobile() {

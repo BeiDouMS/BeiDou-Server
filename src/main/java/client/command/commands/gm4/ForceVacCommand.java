@@ -30,7 +30,7 @@ import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
 import server.maps.MapItem;
 import server.maps.MapObject;
-import server.maps.MapleMapObjectType;
+import server.maps.MapObjectType;
 import tools.PacketCreator;
 
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class ForceVacCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        List<MapObject> items = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.ITEM));
+        List<MapObject> items = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.ITEM));
         for (MapObject item : items) {
             MapItem mapItem = (MapItem) item;
 

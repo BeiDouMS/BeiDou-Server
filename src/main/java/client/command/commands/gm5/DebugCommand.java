@@ -31,7 +31,7 @@ import server.TimerManager;
 import server.life.Monster;
 import server.life.SpawnPoint;
 import server.maps.MapObject;
-import server.maps.MapleMapObjectType;
+import server.maps.MapObjectType;
 import server.maps.MaplePortal;
 import server.maps.MapleReactor;
 
@@ -67,7 +67,7 @@ public class DebugCommand extends Command {
                 break;
             
             case "monster":
-                List<MapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
+                List<MapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.MONSTER));
                 for (MapObject monstermo : monsters) {
                     Monster monster = (Monster) monstermo;
                     Character controller = monster.getController();

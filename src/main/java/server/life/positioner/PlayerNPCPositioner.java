@@ -24,8 +24,8 @@ import net.server.Server;
 import net.server.channel.Channel;
 import server.life.PlayerNPC;
 import server.maps.MapObject;
+import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -176,7 +176,7 @@ public class PlayerNPCPositioner {
     }
 
     private static Point getNextPlayerNpcPosition(MapleMap map, int initStep) {   // automated playernpc position thanks to Ronan
-        List<MapObject> mmoList = map.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC));
+        List<MapObject> mmoList = map.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC));
         List<Point> otherPlayerNpcs = new LinkedList<>();
         for (MapObject mmo : mmoList) {
             otherPlayerNpcs.add(mmo.getPosition());

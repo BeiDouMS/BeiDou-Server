@@ -819,7 +819,7 @@ public class MapleStatEffect {
                 case FPWizard.MP_EATER:
                 case ILWizard.MP_EATER:
                 case Cleric.MP_EATER:
-                    if (obj == null || obj.getType() != MapleMapObjectType.MONSTER) {
+                    if (obj == null || obj.getType() != MapObjectType.MONSTER) {
                         return;
                     }
                     Monster mob = (Monster) obj; // x is absorb percentage
@@ -1090,7 +1090,7 @@ public class MapleStatEffect {
         
         if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff())) {
             Rectangle bounds = (!useMaxRange) ? calculateBoundingBox(applyfrom.getPosition(), applyfrom.isFacingLeft()) : new Rectangle(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
-            List<MapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.PLAYER));
+            List<MapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapObjectType.PLAYER));
             List<Character> affectedp = new ArrayList<>(affecteds.size());
             for (MapObject affectedmo : affecteds) {
                 Character affected = (Character) affectedmo;
@@ -1120,7 +1120,7 @@ public class MapleStatEffect {
 
     private void applyMonsterBuff(Character applyfrom) {
         Rectangle bounds = calculateBoundingBox(applyfrom.getPosition(), applyfrom.isFacingLeft());
-        List<MapObject> affected = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.MONSTER));
+        List<MapObject> affected = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapObjectType.MONSTER));
         Skill skill_ = SkillFactory.getSkill(sourceid);
         int i = 0;
         for (MapObject mo : affected) {

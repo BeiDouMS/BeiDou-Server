@@ -87,8 +87,8 @@ public class MapleSummon extends AbstractAnimatedMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.SUMMON;
+    public MapObjectType getType() {
+        return MapObjectType.SUMMON;
     }
 
     public final boolean isPuppet() {

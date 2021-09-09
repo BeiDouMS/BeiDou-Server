@@ -196,8 +196,8 @@ public class MapItem extends AbstractMapObject {
     }
 
     @Override
-    public final MapleMapObjectType getType() {
-        return MapleMapObjectType.ITEM;
+    public final MapObjectType getType() {
+        return MapObjectType.ITEM;
     }
 
     @Override

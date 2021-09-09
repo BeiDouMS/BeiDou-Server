@@ -83,8 +83,8 @@ public class MapleMist extends AbstractMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.MIST;
+    public MapObjectType getType() {
+        return MapObjectType.MIST;
     }
 
     @Override

@@ -129,8 +129,8 @@ public class MapleReactor extends AbstractMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.REACTOR;
+    public MapObjectType getType() {
+        return MapObjectType.REACTOR;
     }
 
     public int getReactorType() {

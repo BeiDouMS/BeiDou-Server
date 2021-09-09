@@ -182,7 +182,7 @@ public class DoorObject extends AbstractMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.DOOR;
+    public MapObjectType getType() {
+        return MapObjectType.DOOR;
     }
 }

@@ -795,7 +795,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
     
     private static boolean canPlaceStore(Character chr) {
         try {
-            for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
+            for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
                 if (mmo instanceof Character) {
                     Character mc = (Character) mmo;
                     if (mc.getId() == chr.getId()) {

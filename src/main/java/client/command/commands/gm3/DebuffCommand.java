@@ -30,7 +30,7 @@ import client.command.Command;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.maps.MapObject;
-import server.maps.MapleMapObjectType;
+import server.maps.MapObjectType;
 
 import java.util.Arrays;
 
@@ -107,7 +107,7 @@ public class DebuffCommand extends Command {
             return;
         }
 
-        for (MapObject mmo : player.getMap().getMapObjectsInRange(player.getPosition(), 777777.7, Arrays.asList(MapleMapObjectType.PLAYER))) {
+        for (MapObject mmo : player.getMap().getMapObjectsInRange(player.getPosition(), 777777.7, Arrays.asList(MapObjectType.PLAYER))) {
             Character chr = (Character) mmo;
 
             if (chr.getId() != player.getId()) {

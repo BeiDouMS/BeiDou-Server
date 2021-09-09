@@ -23,7 +23,7 @@ package server.life;
 
 import client.Client;
 import server.MapleShopFactory;
-import server.maps.MapleMapObjectType;
+import server.maps.MapObjectType;
 import tools.PacketCreator;
 
 public class NPC extends AbstractLoadedLife {
@@ -55,8 +55,8 @@ public class NPC extends AbstractLoadedLife {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.NPC;
+    public MapObjectType getType() {
+        return MapObjectType.NPC;
     }
 
     public String getName() {

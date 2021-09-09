@@ -10065,8 +10065,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.PLAYER;
+    public MapObjectType getType() {
+        return MapObjectType.PLAYER;
     }
 
     @Override

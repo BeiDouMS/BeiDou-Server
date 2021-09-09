@@ -23,8 +23,8 @@ public class Kite extends AbstractMapObject {
     }
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.KITE;
+    public MapObjectType getType() {
+        return MapObjectType.KITE;
     }
 
     @Override

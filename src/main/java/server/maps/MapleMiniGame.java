@@ -516,7 +516,7 @@ public class MapleMiniGame extends AbstractMapObject {
     public void sendSpawnData(Client client) {}
 
     @Override
-    public MapleMapObjectType getType() {
-        return MapleMapObjectType.MINI_GAME;
+    public MapObjectType getType() {
+        return MapObjectType.MINI_GAME;
     }
 }
