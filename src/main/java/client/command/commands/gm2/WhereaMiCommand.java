@@ -26,9 +26,9 @@ package client.command.commands.gm2;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
+import server.life.Monster;
 import server.maps.MapleMapObject;
 
 import java.util.HashSet;
@@ -45,7 +45,7 @@ public class WhereaMiCommand extends Command {
         HashSet<Character> chars = new HashSet<>();
         HashSet<MapleNPC> npcs = new HashSet<>();
         HashSet<MaplePlayerNPC> playernpcs = new HashSet<>();
-        HashSet<MapleMonster> mobs = new HashSet<>();
+        HashSet<Monster> mobs = new HashSet<>();
         
         for (MapleMapObject mmo : player.getMap().getMapObjects()) {
             if (mmo instanceof MapleNPC) {
@@ -54,8 +54,8 @@ public class WhereaMiCommand extends Command {
             } else if (mmo instanceof Character) {
                 Character mc = (Character) mmo;
                 chars.add(mc);
-            } else if (mmo instanceof MapleMonster) {
-                MapleMonster mob = (MapleMonster) mmo;
+            } else if (mmo instanceof Monster) {
+                Monster mob = (Monster) mmo;
                 if (mob.isAlive()) {
                     mobs.add(mob);
                 }
@@ -88,7 +88,7 @@ public class WhereaMiCommand extends Command {
         
         if (!mobs.isEmpty()) {
             player.yellowMessage("Monsters on this map:");
-            for (MapleMonster mob : mobs) {
+            for (Monster mob : mobs) {
                 if (mob.isAlive()) {
                     player.dropMessage(5, ">> " + mob.getName() + " - " + mob.getId() + " - Oid: " + mob.getObjectId());
                 }

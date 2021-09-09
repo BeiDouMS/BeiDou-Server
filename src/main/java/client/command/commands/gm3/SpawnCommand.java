@@ -27,7 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import server.life.LifeFactory;
-import server.life.MapleMonster;
+import server.life.Monster;
 
 public class SpawnCommand extends Command {
     {
@@ -42,7 +42,7 @@ public class SpawnCommand extends Command {
             return;
         }
 
-        MapleMonster monster = LifeFactory.getMonster(Integer.parseInt(params[0]));
+        Monster monster = LifeFactory.getMonster(Integer.parseInt(params[0]));
         if (monster == null) {
             return;
         }

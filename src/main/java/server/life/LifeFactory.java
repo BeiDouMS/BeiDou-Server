@@ -237,7 +237,7 @@ public class LifeFactory {
         return new Pair<>(stats, attackInfos);
     }
 
-    public static MapleMonster getMonster(int mid) {
+    public static Monster getMonster(int mid) {
         try {
             MapleMonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
@@ -247,7 +247,7 @@ public class LifeFactory {
 
                 monsterStats.put(mid, stats);
             }
-            MapleMonster ret = new MapleMonster(mid, stats);
+            Monster ret = new Monster(mid, stats);
             return ret;
         } catch (NullPointerException npe) {
             System.out.println("[SEVERE] MOB " + mid + " failed to load. Issue: " + npe.getMessage() + "\n\n");

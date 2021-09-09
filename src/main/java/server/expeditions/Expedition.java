@@ -31,7 +31,7 @@ import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import server.TimerManager;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMap;
 import tools.LogHelper;
 import tools.PacketCreator;
@@ -259,7 +259,7 @@ public class Expedition {
         }
     }
 
-    public void monsterKilled(Character chr, MapleMonster mob) {
+    public void monsterKilled(Character chr, Monster mob) {
         for (int expeditionBoss : EXPEDITION_BOSSES) {
             if (mob.getId() == expeditionBoss) { //If the monster killed was a boss
                 String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());

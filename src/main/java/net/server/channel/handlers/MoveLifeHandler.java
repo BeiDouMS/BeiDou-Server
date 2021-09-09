@@ -25,10 +25,10 @@ import client.Character;
 import client.Client;
 import config.YamlConfig;
 import net.packet.InPacket;
-import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.Monster;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -64,7 +64,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 			return;
 		}
                 
-		MapleMonster monster = (MapleMonster) mmo;
+		Monster monster = (Monster) mmo;
                 List<Character> banishPlayers = null;
                 
                 byte pNibbles = p.readByte();

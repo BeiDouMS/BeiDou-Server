@@ -28,7 +28,7 @@ import client.Client;
 import client.command.Command;
 import net.server.Server;
 import server.TimerManager;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.life.SpawnPoint;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -69,7 +69,7 @@ public class DebugCommand extends Command {
             case "monster":
                 List<MapleMapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (MapleMapObject monstermo : monsters) {
-                    MapleMonster monster = (MapleMonster) monstermo;
+                    Monster monster = (Monster) monstermo;
                     Character controller = monster.getController();
                     player.message("Monster ID: " + monster.getId() + " Aggro target: " + ((controller != null) ? controller.getName() + " Has aggro: " + monster.isControllerHasAggro() + " Knowns aggro: " + monster.isControllerKnowsAboutAggro() : "<none>"));
                 }

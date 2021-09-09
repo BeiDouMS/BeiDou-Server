@@ -25,7 +25,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMap;
 
 public final class AutoAggroHandler extends AbstractPacketHandler {
@@ -38,7 +38,7 @@ public final class AutoAggroHandler extends AbstractPacketHandler {
         MapleMap map = player.getMap();
         int oid = p.readInt();
         
-        MapleMonster monster = map.getMonsterByOid(oid);
+        Monster monster = map.getMonsterByOid(oid);
         if (monster != null) {
             monster.aggroAutoAggroUpdate(player);
         }

@@ -104,7 +104,7 @@ function friendlyKilled(mob, eim) {
 }
 
 function allMonstersDead(eim) {
-    // When invoking unregisterMonster(MapleMonster mob) OR killed
+    // When invoking unregisterMonster(Monster mob) OR killed
     // Happens only when size = 0
 }
 

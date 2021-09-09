@@ -58,7 +58,7 @@ import scripting.quest.QuestActionManager;
 import scripting.quest.QuestScriptManager;
 import server.ThreadManager;
 import server.TimerManager;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import server.maps.MapleMiniDungeonInfo;
@@ -1416,7 +1416,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         sendPacket(PacketCreator.serverMessage(this.getChannelServer().getServerMessage()));
     }
 
-    public synchronized void announceBossHpBar(MapleMonster mm, final int mobHash, Packet packet) {
+    public synchronized void announceBossHpBar(Monster mm, final int mobHash, Packet packet) {
         long timeNow = System.currentTimeMillis();
         int targetHash = player.getTargetHpBarHash();
 

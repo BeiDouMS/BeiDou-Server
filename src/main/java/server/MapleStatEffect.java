@@ -38,9 +38,9 @@ import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import provider.Data;
 import provider.DataTool;
-import server.life.MapleMonster;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.Monster;
 import server.maps.*;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
@@ -822,7 +822,7 @@ public class MapleStatEffect {
                     if (obj == null || obj.getType() != MapleMapObjectType.MONSTER) {
                         return;
                     }
-                    MapleMonster mob = (MapleMonster) obj; // x is absorb percentage
+                    Monster mob = (Monster) obj; // x is absorb percentage
                     if (!mob.isBoss()) {
                         int absorbMp = Math.min((int) (mob.getMaxMp() * (getX() / 100.0)), mob.getMp());
                         if (absorbMp > 0) {
@@ -1124,7 +1124,7 @@ public class MapleStatEffect {
         Skill skill_ = SkillFactory.getSkill(sourceid);
         int i = 0;
         for (MapleMapObject mo : affected) {
-            MapleMonster monster = (MapleMonster) mo;
+            Monster monster = (Monster) mo;
             if (isDispel()) {
                 monster.debuffMob(skill_.getId());
             } else if (isSeal() && monster.isBoss()) {  // thanks IxianMace for noticing seal working on bosses

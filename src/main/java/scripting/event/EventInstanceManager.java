@@ -42,8 +42,8 @@ import server.ThreadManager;
 import server.TimerManager;
 import server.expeditions.Expedition;
 import server.life.LifeFactory;
-import server.life.MapleMonster;
 import server.life.MapleNPC;
+import server.life.Monster;
 import server.maps.MapleMap;
 import server.maps.MapleMapManager;
 import server.maps.MaplePortal;
@@ -67,7 +67,7 @@ import java.util.logging.Logger;
 public class EventInstanceManager {
 	private Map<Integer, Character> chars = new HashMap<>();
         private int leaderId = -1;
-	private List<MapleMonster> mobs = new LinkedList<>();
+	private List<Monster> mobs = new LinkedList<>();
 	private Map<Character, Integer> killCount = new HashMap<>();
 	private EventManager em;
         private EventScriptScheduler ess;
@@ -431,7 +431,7 @@ public class EventInstanceManager {
                 }
         }
         
-	public void registerMonster(MapleMonster mob) {
+	public void registerMonster(Monster mob) {
 		if (!mob.getStats().isFriendly()) { //We cannot register moon bunny
 			mobs.add(mob);
 		}
@@ -467,7 +467,7 @@ public class EventInstanceManager {
                 leaderId = ldr.getId();
 	}
 	
-	public void monsterKilled(final MapleMonster mob, final boolean hasKiller) {
+	public void monsterKilled(final Monster mob, final boolean hasKiller) {
                 int scriptResult = 0;
                 
 		sL.lock();
@@ -502,19 +502,19 @@ public class EventInstanceManager {
                 }
         }
         
-        public void friendlyKilled(final MapleMonster mob, final boolean hasKiller) {
+        public void friendlyKilled(final Monster mob, final boolean hasKiller) {
                 try {
                         invokeScriptFunction("friendlyKilled", mob, EventInstanceManager.this, hasKiller);
                 } catch (ScriptException | NoSuchMethodException ex) {} //optional
 	}
         
-        public void friendlyDamaged(final MapleMonster mob) {
+        public void friendlyDamaged(final Monster mob) {
                 try {
                         invokeScriptFunction("friendlyDamaged", EventInstanceManager.this, mob);
                 } catch (ScriptException | NoSuchMethodException ex) {} // optional
 	}
         
-        public void friendlyItemDrop(final MapleMonster mob) {
+        public void friendlyItemDrop(final Monster mob) {
                 try {
                         invokeScriptFunction("friendlyItemDrop", EventInstanceManager.this, mob);
                 } catch (ScriptException | NoSuchMethodException ex) {} // optional
@@ -528,7 +528,7 @@ public class EventInstanceManager {
                 });
 	}
 
-        public void reviveMonster(final MapleMonster mob) {
+        public void reviveMonster(final Monster mob) {
                 try {
                         invokeScriptFunction("monsterRevive", EventInstanceManager.this, mob);
                 } catch (ScriptException | NoSuchMethodException ex) {} // optional
@@ -555,7 +555,7 @@ public class EventInstanceManager {
                 EventRecallCoordinator.getInstance().storeEventInstance(chr.getId(), this);
 	}
         
-	public void monsterKilled(Character chr, final MapleMonster mob) {
+	public void monsterKilled(Character chr, final Monster mob) {
             try {
                     final int inc = (int) invokeScriptFunction("monsterValue", EventInstanceManager.this, mob.getId());
 
@@ -876,7 +876,7 @@ public class EventInstanceManager {
             }
         }
         
-        public MapleMonster getMonster(int mid) {
+        public Monster getMonster(int mid) {
                 return(LifeFactory.getMonster(mid));
         }
 

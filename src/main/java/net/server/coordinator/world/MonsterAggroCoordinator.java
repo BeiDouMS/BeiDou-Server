@@ -27,7 +27,7 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMap;
 import tools.Pair;
 
@@ -46,8 +46,8 @@ public class MonsterAggroCoordinator {
 
     private ScheduledFuture<?> aggroMonitor = null;
 
-    private final Map<MapleMonster, Map<Integer, PlayerAggroEntry>> mobAggroEntries = new HashMap<>();
-    private final Map<MapleMonster, List<PlayerAggroEntry>> mobSortedAggros = new HashMap<>();
+    private final Map<Monster, Map<Integer, PlayerAggroEntry>> mobAggroEntries = new HashMap<>();
+    private final Map<Monster, List<PlayerAggroEntry>> mobSortedAggros = new HashMap<>();
 
     private final Set<Integer> mapPuppetEntries = new HashSet<>();
 
@@ -144,7 +144,7 @@ public class MonsterAggroCoordinator {
         }
     }
 
-    public void addAggroDamage(MapleMonster mob, int cid, int damage) { // assumption: should not trigger after dispose()
+    public void addAggroDamage(Monster mob, int cid, int damage) { // assumption: should not trigger after dispose()
         if (!mob.isAlive()) {
             return;
         }
@@ -196,17 +196,17 @@ public class MonsterAggroCoordinator {
     }
 
     private void runAggroUpdate(int deltaTime) {
-        List<Pair<MapleMonster, Map<Integer, PlayerAggroEntry>>> aggroMobs = new LinkedList<>();
+        List<Pair<Monster, Map<Integer, PlayerAggroEntry>>> aggroMobs = new LinkedList<>();
         lock.lock();
         try {
-            for (Entry<MapleMonster, Map<Integer, PlayerAggroEntry>> e : mobAggroEntries.entrySet()) {
+            for (Entry<Monster, Map<Integer, PlayerAggroEntry>> e : mobAggroEntries.entrySet()) {
                 aggroMobs.add(new Pair<>(e.getKey(), e.getValue()));
             }
         } finally {
             lock.unlock();
         }
 
-        for (Pair<MapleMonster, Map<Integer, PlayerAggroEntry>> am : aggroMobs) {
+        for (Pair<Monster, Map<Integer, PlayerAggroEntry>> am : aggroMobs) {
             Map<Integer, PlayerAggroEntry> mobAggro = am.getRight();
             List<PlayerAggroEntry> sortedAggro = mobSortedAggros.get(am.getLeft());
 
@@ -289,7 +289,7 @@ public class MonsterAggroCoordinator {
         }
     }
 
-    public boolean isLeadingCharacterAggro(MapleMonster mob, Character player) {
+    public boolean isLeadingCharacterAggro(Monster mob, Character player) {
         if (mob.isLeadingPuppetInVicinity()) {
             return false;
         } else if (mob.isCharacterPuppetInVicinity(player)) {
@@ -337,7 +337,7 @@ public class MonsterAggroCoordinator {
         }
     }
 
-    public void removeAggroEntries(MapleMonster mob) {
+    public void removeAggroEntries(Monster mob) {
         lock.lock();
         try {
             mobAggroEntries.remove(mob);

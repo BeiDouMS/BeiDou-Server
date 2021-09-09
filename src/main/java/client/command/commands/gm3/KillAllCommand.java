@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -46,7 +46,7 @@ public class KillAllCommand extends Command {
         List<MapleMapObject> monsters = map.getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
         int count = 0;
         for (MapleMapObject monstermo : monsters) {
-            MapleMonster monster = (MapleMonster) monstermo;
+            Monster monster = (Monster) monstermo;
             if (!monster.getStats().isFriendly() && !(monster.getId() >= 8810010 && monster.getId() <= 8810018)) {
                 map.damageMonster(player, monster, Integer.MAX_VALUE);
                 count++;

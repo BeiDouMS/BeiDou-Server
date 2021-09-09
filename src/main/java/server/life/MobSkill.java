@@ -106,7 +106,7 @@ public class MobSkill {
         this.limit = limit;
     }
 
-    public void applyDelayedEffect(final Character player, final MapleMonster monster, final boolean skill, int animationTime) {
+    public void applyDelayedEffect(final Character player, final Monster monster, final boolean skill, int animationTime) {
         Runnable toRun = () -> {
             if (monster.isAlive()) {
                 applyEffect(player, monster, skill, null);
@@ -117,7 +117,7 @@ public class MobSkill {
         service.registerOverallAction(monster.getMap().getId(), toRun, animationTime);
     }
 
-    public void applyEffect(Character player, MapleMonster monster, boolean skill, List<Character> banishPlayers) {
+    public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayers) {
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new ArrayMap<>();
         List<Integer> reflection = new LinkedList<>();
@@ -147,7 +147,7 @@ public class MobSkill {
                     List<MapleMapObject> objects = getObjectsInRange(monster, MapleMapObjectType.MONSTER);
                     final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
                     for (MapleMapObject mons : objects) {
-                        ((MapleMonster) mons).heal(hps, getY());
+                        ((Monster) mons).heal(hps, getY());
                     }
                 } else {
                     monster.heal(getX(), getY());
@@ -254,7 +254,7 @@ public class MobSkill {
                         
                         Collections.shuffle(summons);
                         for (Integer mobId : summons.subList(0, summonLimit)) {
-                            MapleMonster toSpawn = LifeFactory.getMonster(mobId);
+                            Monster toSpawn = LifeFactory.getMonster(mobId);
                             if (toSpawn != null) {
                                 if (bossRushMap) {
                                     toSpawn.disableDrops();  // no littering on BRPQ pls
@@ -318,7 +318,7 @@ public class MobSkill {
         if (stats.size() > 0) {
             if (lt != null && rb != null && skill) {
                 for (MapleMapObject mons : getObjectsInRange(monster, MapleMapObjectType.MONSTER)) {
-                    ((MapleMonster) mons).applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
+                    ((Monster) mons).applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
                 }
             } else {
                 monster.applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
@@ -345,7 +345,7 @@ public class MobSkill {
         }
     }
 
-    private List<Character> getPlayersInRange(MapleMonster monster) {
+    private List<Character> getPlayersInRange(Monster monster) {
         return monster.getMap().getPlayersInRange(calculateBoundingBox(monster.getPosition()));
     }
 
@@ -412,7 +412,7 @@ public class MobSkill {
         return bounds;
     }
 
-    private List<MapleMapObject> getObjectsInRange(MapleMonster monster, MapleMapObjectType objectType) {
+    private List<MapleMapObject> getObjectsInRange(Monster monster, MapleMapObjectType objectType) {
         return monster.getMap().getMapObjectsInBox(calculateBoundingBox(monster.getPosition()), Collections.singletonList(objectType));
     }
 }

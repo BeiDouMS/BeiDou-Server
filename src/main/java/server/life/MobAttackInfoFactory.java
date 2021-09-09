@@ -39,7 +39,7 @@ public class MobAttackInfoFactory {
     private static Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
     private static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.MOB);
 
-    public static MobAttackInfo getMobAttackInfo(MapleMonster mob, int attack) {
+    public static MobAttackInfo getMobAttackInfo(Monster mob, int attack) {
         MobAttackInfo ret = mobAttacks.get(mob.getId() + "" + attack);
         if (ret != null) {
             return ret;

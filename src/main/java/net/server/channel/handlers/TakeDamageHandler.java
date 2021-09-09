@@ -64,7 +64,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         int pos_x = 0, pos_y = 0, fake = 0;
         boolean is_pgmr = false, is_pg = true, is_deadly = false;
         int mpattack = 0;
-        MapleMonster attacker = null;
+        Monster attacker = null;
         final MapleMap map = chr.getMap();
         if (damagefrom != -3 && damagefrom != -4) {
             monsteridfrom = p.readInt();
@@ -72,8 +72,8 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             
             try {
                 MapleMapObject mmo = map.getMapObject(oid);
-                if(mmo instanceof MapleMonster) {
-                    attacker = (MapleMonster) mmo;
+                if(mmo instanceof Monster) {
+                    attacker = (Monster) mmo;
                     if(attacker.getId() != monsteridfrom) {
                         attacker = null;
                     }

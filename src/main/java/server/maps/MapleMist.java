@@ -28,8 +28,8 @@ import client.SkillFactory;
 import constants.skills.*;
 import net.packet.Packet;
 import server.MapleStatEffect;
-import server.life.MapleMonster;
 import server.life.MobSkill;
+import server.life.Monster;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -41,13 +41,13 @@ import java.awt.*;
 public class MapleMist extends AbstractMapleMapObject {
     private Rectangle mistPosition;
     private Character owner = null;
-    private MapleMonster mob = null;
+    private Monster mob = null;
     private MapleStatEffect source;
     private MobSkill skill;
     private boolean isMobMist, isPoisonMist, isRecoveryMist;
     private int skillDelay;
 
-    public MapleMist(Rectangle mistPosition, MapleMonster mob, MobSkill skill) {
+    public MapleMist(Rectangle mistPosition, Monster mob, MobSkill skill) {
         this.mistPosition = mistPosition;
         this.mob = mob;
         this.skill = skill;
@@ -112,7 +112,7 @@ public class MapleMist extends AbstractMapleMapObject {
         return skillDelay;
     }
 
-    public MapleMonster getMobOwner() {
+    public Monster getMobOwner() {
         return mob;
     }
 

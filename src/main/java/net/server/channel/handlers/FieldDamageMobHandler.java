@@ -24,8 +24,8 @@ import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
+import server.life.Monster;
 import server.maps.MapleMap;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -45,7 +45,7 @@ public class FieldDamageMobHandler extends AbstractPacketHandler {
             return;
         }
         
-        MapleMonster mob = map.getMonsterByOid(mobOid);
+        Monster mob = map.getMonsterByOid(mobOid);
         if (mob != null) {
             if (dmg < 0 || dmg > GameConstants.MAX_FIELD_MOB_DAMAGE) {
                 FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack " + MapleMonsterInformationProvider.getInstance().getMobNameFromId(mob.getId()) + " with damage " + dmg);

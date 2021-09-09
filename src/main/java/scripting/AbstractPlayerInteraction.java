@@ -961,12 +961,12 @@ public class AbstractPlayerInteraction {
         }
         
 	public void spawnMonster(int id, int x, int y) {
-		MapleMonster monster = LifeFactory.getMonster(id);
+		Monster monster = LifeFactory.getMonster(id);
 		monster.setPosition(new Point(x, y));
 		getPlayer().getMap().spawnMonster(monster);
 	}
         
-	public MapleMonster getMonsterLifeFactory(int mid) {
+	public Monster getMonsterLifeFactory(int mid) {
 		return LifeFactory.getMonster(mid);
 	}
         

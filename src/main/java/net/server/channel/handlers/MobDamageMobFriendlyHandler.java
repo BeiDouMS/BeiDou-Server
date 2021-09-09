@@ -25,7 +25,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 import tools.Randomizer;
@@ -43,7 +43,7 @@ public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
 		int damaged = p.readInt();
                 
                 MapleMap map = c.getPlayer().getMap();
-		MapleMonster monster = map.getMonsterByOid(damaged);
+		Monster monster = map.getMonsterByOid(damaged);
 
 		if (monster == null || map.getMonsterByOid(attacker) == null) {
 			return;

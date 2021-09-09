@@ -34,8 +34,8 @@ import constants.skills.Outlaw;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
-import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
+import server.life.Monster;
 import server.maps.MapleSummon;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -104,7 +104,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         int maxDmg = calcMaxDamage(summonEffect, player, magic);    // thanks Darter (YungMoozi) for reporting unchecked max dmg
         for (SummonAttackEntry attackEntry : allDamage) {
             int damage = attackEntry.getDamage();
-            MapleMonster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
+            Monster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
             if (target != null) {
                 if (damage > maxDmg) {
                     AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");

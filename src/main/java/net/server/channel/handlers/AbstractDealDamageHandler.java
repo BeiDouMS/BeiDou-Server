@@ -184,7 +184,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
             }
             for (Integer oned : attack.allDamage.keySet()) {
-                final MapleMonster monster = map.getMonsterByOid(oned);
+                final Monster monster = map.getMonsterByOid(oned);
                 if (monster != null) { 
                     double distance = player.getPosition().distanceSq(monster.getPosition());
                     double distanceToDetect = 200000.0;
@@ -508,7 +508,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
     }
 
-    private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final MapleMonster monster, final int damage, int skillid, int fixedTime) {
+    private static void damageMonsterWithSkill(final Character attacker, final MapleMap map, final Monster monster, final int damage, int skillid, int fixedTime) {
         int animationTime;
         
         if(fixedTime == 0) animationTime = SkillFactory.getSkill(skillid).getAnimationTime();
@@ -743,7 +743,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             int oid = p.readInt();
             p.skip(14);
             List<Integer> allDamageNumbers = new ArrayList<>();
-            MapleMonster monster = chr.getMap().getMonsterByOid(oid);
+            Monster monster = chr.getMap().getMonsterByOid(oid);
             
             if(chr.getBuffEffect(BuffStat.WK_CHARGE) != null) {
                 // Charge, so now we need to check elemental effectiveness

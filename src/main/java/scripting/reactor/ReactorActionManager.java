@@ -32,7 +32,7 @@ import scripting.AbstractPlayerInteraction;
 import server.MapleItemInformationProvider;
 import server.TimerManager;
 import server.life.LifeFactory;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapMonitor;
 import server.maps.MapleMap;
 import server.maps.MapleReactor;
@@ -287,7 +287,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
         
         MapleMap map = reactor.getMap();
-        MapleMonster mm = map.getMonsterById(id);
+        Monster mm = map.getMonsterById(id);
         if(mm != null) {
             int damage = (int)Math.ceil(mm.getMaxHp() / hitsToKill);
             Character chr = this.getPlayer();
@@ -326,7 +326,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void dispelAllMonsters(int num, int team) { //dispels all mobs, cpq
         final MCSkill skil = MapleCarnivalFactory.getInstance().getGuardian(num);
         if (skil != null) {
-            for (MapleMonster mons : getMap().getAllMonsters()) {
+            for (Monster mons : getMap().getAllMonsters()) {
                 if(mons.getTeam() == team) {
                     mons.dispelSkill(skil.getSkill());
                 }

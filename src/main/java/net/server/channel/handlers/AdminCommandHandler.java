@@ -30,7 +30,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.life.LifeFactory;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.quest.MapleQuest;
@@ -128,7 +128,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 int amount = p.readInt();
                 List<MapleMapObject> monsterx = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (int x = 0; x < amount; x++) {
-                    MapleMonster monster = (MapleMonster) monsterx.get(x);
+                    Monster monster = (Monster) monsterx.get(x);
                     if (monster.getId() == mobToKill) {
                         c.getPlayer().getMap().killMonster(monster, c.getPlayer(), true);
                     }
@@ -149,7 +149,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 c.getPlayer().dropMessage("Monsters HP");
                 List<MapleMapObject> monsters = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (MapleMapObject mobs : monsters) {
-                    MapleMonster monster = (MapleMonster) mobs;
+                    Monster monster = (Monster) mobs;
                     if (monster.getId() == mobHp) {
                         c.getPlayer().dropMessage(monster.getName() + ": " + monster.getHp());
                     }

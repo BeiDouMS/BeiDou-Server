@@ -31,7 +31,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.MapleStatEffect;
-import server.life.MapleMonster;
+import server.life.Monster;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -89,7 +89,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                 int mobOid = p.readInt();
                 byte success = p.readByte();
                 chr.getMap().broadcastMessage(chr, PacketCreator.catchMonster(mobOid, success), false);
-                MapleMonster monster = chr.getMap().getMonsterByOid(mobOid);
+                Monster monster = chr.getMap().getMonsterByOid(mobOid);
                 if (monster != null) {
                     if (!monster.isBoss()) {
                         monster.aggroClearDamages();

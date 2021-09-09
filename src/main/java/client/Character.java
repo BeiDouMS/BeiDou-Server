@@ -63,10 +63,10 @@ import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
 import server.events.gm.Ola;
-import server.life.MapleMonster;
 import server.life.MaplePlayerNPC;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.Monster;
 import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
 import server.minigame.MapleRockPaperScissor;
@@ -177,7 +177,7 @@ public class Character extends AbstractCharacterObject {
     private final List<WeakReference<MapleMap>> lastVisitedMaps = new LinkedList<>();
     private WeakReference<MapleMap> ownedMap = new WeakReference<>(null);
     private final Map<Short, QuestStatus> quests;
-    private final Set<MapleMonster> controlled = new LinkedHashSet<>();
+    private final Set<Monster> controlled = new LinkedHashSet<>();
     private final Map<Integer, String> entered = new LinkedHashMap<>();
     private final Set<MapleMapObject> visibleMapObjects = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final Map<Skill, SkillEntry> skills = new LinkedHashMap<>();
@@ -833,7 +833,7 @@ public class Character extends AbstractCharacterObject {
                 }
 
                 for (MapleMapObject mo : this.getMap().getMonsters()) {
-                    MapleMonster m = (MapleMonster) mo;
+                    Monster m = (Monster) mo;
                     m.aggroUpdateController();
                 }
             } else {
@@ -1815,7 +1815,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void controlMonster(MapleMonster monster) {
+    public void controlMonster(Monster monster) {
         if (cpnLock.tryLock()) {
             try {
                 controlled.add(monster);
@@ -1825,7 +1825,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void stopControllingMonster(MapleMonster monster) {
+    public void stopControllingMonster(Monster monster) {
         if (cpnLock.tryLock()) {
             try {
                 controlled.remove(monster);
@@ -1844,7 +1844,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public Collection<MapleMonster> getControlledMonsters() {
+    public Collection<Monster> getControlledMonsters() {
         cpnLock.lock();
         try {
             return new ArrayList<>(controlled);
@@ -1854,7 +1854,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void releaseControlledMonsters() {
-        Collection<MapleMonster> controlledMonsters;
+        Collection<Monster> controlledMonsters;
 
         cpnLock.lock();
         try {
@@ -1864,7 +1864,7 @@ public class Character extends AbstractCharacterObject {
             cpnLock.unlock();
         }
 
-        for (MapleMonster monster : controlledMonsters) {
+        for (Monster monster : controlledMonsters) {
             monster.aggroRedirectController();
         }
     }
@@ -9613,7 +9613,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void showUnderleveledInfo(MapleMonster mob) {
+    public void showUnderleveledInfo(Monster mob) {
         long curTime = Server.getInstance().getCurrentTime();
         if (nextWarningTime < curTime) {
             nextWarningTime = curTime + (60 * 1000);   // show underlevel info again after 1 minute

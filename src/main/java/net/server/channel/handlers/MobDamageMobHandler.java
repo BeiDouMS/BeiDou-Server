@@ -28,8 +28,8 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleMonster;
 import server.life.MapleMonsterInformationProvider;
+import server.life.Monster;
 import server.maps.MapleMap;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -52,8 +52,8 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         Character chr = c.getPlayer();
         
         MapleMap map = chr.getMap();
-        MapleMonster attacker = map.getMonsterByOid(from);
-        MapleMonster damaged = map.getMonsterByOid(to);
+        Monster attacker = map.getMonsterByOid(from);
+        Monster damaged = map.getMonsterByOid(to);
         
         if (attacker != null && damaged != null) {
             int maxDmg = calcMaxDamage(attacker, damaged, magic);     // thanks Darter (YungMoozi) for reporting unchecked dmg
@@ -70,7 +70,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         }
     }
     
-    private static int calcMaxDamage(MapleMonster attacker, MapleMonster damaged, boolean magic) {
+    private static int calcMaxDamage(Monster attacker, Monster damaged, boolean magic) {
         int attackerAtk, damagedDef, attackerLevel = attacker.getLevel();
         double maxDamage;
         if (magic) {
@@ -94,7 +94,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         return (int) maxDamage;
     }
     
-    private static int calcModifier(MapleMonster monster, MonsterStatus buff, MonsterStatus nerf) {
+    private static int calcModifier(Monster monster, MonsterStatus buff, MonsterStatus nerf) {
         int atkModifier;
         final Map<MonsterStatus, MonsterStatusEffect> monsterStati = monster.getStati();
         

@@ -39,7 +39,7 @@ import server.MapleMarriage;
 import server.ThreadManager;
 import server.expeditions.Expedition;
 import server.life.LifeFactory;
-import server.life.MapleMonster;
+import server.life.Monster;
 import server.maps.MapleMap;
 import server.quest.MapleQuest;
 import tools.exceptions.EventInstanceInProgressException;
@@ -737,7 +737,7 @@ public class EventManager {
         }
     }
     
-    public MapleMonster getMonster(int mid) {
+    public Monster getMonster(int mid) {
         return(LifeFactory.getMonster(mid));
     }
     

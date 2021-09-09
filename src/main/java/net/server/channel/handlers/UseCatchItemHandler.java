@@ -31,7 +31,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.MapleItemInformationProvider;
-import server.life.MapleMonster;
+import server.life.Monster;
 import tools.PacketCreator;
 
 /**
@@ -49,7 +49,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         int monsterid = p.readInt();
         
-        MapleMonster mob = chr.getMap().getMonsterByOid(monsterid);
+        Monster mob = chr.getMap().getMonsterByOid(monsterid);
         if (chr.getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId) <= 0) {
            return;
         }

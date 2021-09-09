@@ -61,10 +61,10 @@ import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
 import server.*;
 import server.events.gm.Snowball;
-import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
 import server.life.MobSkill;
+import server.life.Monster;
 import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
@@ -1327,7 +1327,7 @@ public class PacketCreator {
      * @param newSpawn Is it a new spawn?
      * @return The spawn monster packet.
      */
-    public static Packet spawnMonster(MapleMonster life, boolean newSpawn) {
+    public static Packet spawnMonster(Monster life, boolean newSpawn) {
         return spawnMonsterInternal(life, false, newSpawn, false, 0, false);
     }
 
@@ -1339,7 +1339,7 @@ public class PacketCreator {
      * @param effect   The spawn effect.
      * @return The spawn monster packet.
      */
-    public static Packet spawnMonster(MapleMonster life, boolean newSpawn, int effect) {
+    public static Packet spawnMonster(Monster life, boolean newSpawn, int effect) {
         return spawnMonsterInternal(life, false, newSpawn, false, effect, false);
     }
 
@@ -1351,7 +1351,7 @@ public class PacketCreator {
      * @param aggro    Aggressive monster?
      * @return The monster control packet.
      */
-    public static Packet controlMonster(MapleMonster life, boolean newSpawn, boolean aggro) {
+    public static Packet controlMonster(Monster life, boolean newSpawn, boolean aggro) {
         return spawnMonsterInternal(life, true, newSpawn, aggro, 0, false);
     }
 
@@ -1361,7 +1361,7 @@ public class PacketCreator {
      * @param life
      * @return
      */
-    public static Packet removeMonsterInvisibility(MapleMonster life) {
+    public static Packet removeMonsterInvisibility(Monster life) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
         p.writeByte(1);
         p.writeInt(life.getObjectId());
@@ -1374,7 +1374,7 @@ public class PacketCreator {
      * @param life
      * @return
      */
-    public static Packet makeMonsterInvisible(MapleMonster life) {
+    public static Packet makeMonsterInvisible(Monster life) {
         return spawnMonsterInternal(life, true, false, false, 0, true);
     }
 
@@ -1444,7 +1444,7 @@ public class PacketCreator {
      * @param effect            The spawn effect to use.
      * @return The spawn/control packet.
      */
-    private static Packet spawnMonsterInternal(MapleMonster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
+    private static Packet spawnMonsterInternal(Monster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
         if (makeInvis) {
             OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
             p.writeByte(0);
@@ -1485,7 +1485,7 @@ public class PacketCreator {
          */
 
         if (life.getParentMobOid() != 0) {
-            MapleMonster parentMob = life.getMap().getMonsterByOid(life.getParentMobOid());
+            Monster parentMob = life.getMap().getMonsterByOid(life.getParentMobOid());
             if (parentMob != null && parentMob.isAlive()) {
                 p.writeByte(effect != 0 ? effect : -3);
                 p.writeInt(life.getParentMobOid());
@@ -1508,7 +1508,7 @@ public class PacketCreator {
      * @param effect The effect to show when spawning.
      * @return The packet to spawn the mob as non-targettable.
      */
-    public static Packet spawnFakeMonster(MapleMonster life, int effect) {
+    public static Packet spawnFakeMonster(Monster life, int effect) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
         p.writeByte(1);
         p.writeInt(life.getObjectId());
@@ -1536,7 +1536,7 @@ public class PacketCreator {
      * @param life The mob to make targettable.
      * @return The packet to make the mob targettable.
      */
-    public static Packet makeMonsterReal(MapleMonster life) {
+    public static Packet makeMonsterReal(Monster life) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER);
         p.writeInt(life.getObjectId());
         p.writeByte(5);
@@ -6692,7 +6692,7 @@ public class PacketCreator {
         return builder.toString();
     }
 
-    public static Packet MobDamageMobFriendly(MapleMonster mob, int damage, int remainingHp) {
+    public static Packet MobDamageMobFriendly(Monster mob, int damage, int remainingHp) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(mob.getObjectId());
         p.writeByte(1); // direction ?

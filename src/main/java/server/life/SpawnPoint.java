@@ -35,7 +35,7 @@ public class SpawnPoint {
     private AtomicInteger spawnedMonsters = new AtomicInteger(0);
     private boolean immobile, denySpawn = false;
 
-    public SpawnPoint(final MapleMonster monster, Point pos, boolean immobile, int mobTime, int mobInterval, int team) {
+    public SpawnPoint(final Monster monster, Point pos, boolean immobile, int mobTime, int mobInterval, int team) {
         this.monster = monster.getId();
         this.pos = new Point(pos);
         this.mobTime = mobTime;
@@ -74,8 +74,8 @@ public class SpawnPoint {
         return true;
     }
     
-    public MapleMonster getMonster() {
-        MapleMonster mob = new MapleMonster(LifeFactory.getMonster(monster));
+    public Monster getMonster() {
+        Monster mob = new Monster(LifeFactory.getMonster(monster));
         mob.setPosition(new Point(pos));
         mob.setTeam(team);
         mob.setFh(fh);
