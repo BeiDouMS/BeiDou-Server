@@ -61,7 +61,7 @@ import server.*;
 import server.MapleItemInformationProvider.ScriptedItem;
 import server.events.MapleEvents;
 import server.events.RescueGaga;
-import server.events.gm.MapleFitness;
+import server.events.gm.Fitness;
 import server.events.gm.MapleOla;
 import server.life.MapleMonster;
 import server.life.MaplePlayerNPC;
@@ -11185,7 +11185,7 @@ public class Character extends AbstractCharacterObject {
 
     //EVENTS
     private byte team = 0;
-    private MapleFitness fitness;
+    private Fitness fitness;
     private MapleOla ola;
     private long snowballattack;
 
@@ -11205,11 +11205,11 @@ public class Character extends AbstractCharacterObject {
         this.ola = ola;
     }
 
-    public MapleFitness getFitness() {
+    public Fitness getFitness() {
         return fitness;
     }
 
-    public void setFitness(MapleFitness fit) {
+    public void setFitness(Fitness fit) {
         this.fitness = fit;
     }
 

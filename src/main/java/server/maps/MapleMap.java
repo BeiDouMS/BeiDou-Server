@@ -3894,7 +3894,7 @@ public class MapleMap {
             setCoconut(new Coconut(this));
             coconut.startEvent();
         } else if (this.mapid == 109040000) {
-            chr.setFitness(new MapleFitness(chr));
+            chr.setFitness(new Fitness(chr));
             chr.getFitness().startFitness();
         } else if (this.mapid == 109030101 || this.mapid == 109030201 || this.mapid == 109030301 || this.mapid == 109030401) {
             chr.setOla(new MapleOla(chr));
