@@ -22,8 +22,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class QuestRequirement extends MapleQuestRequirement {
 	Map<Integer, Integer> quests = new HashMap<>();
 	
 	public QuestRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.QUEST);
+		super(QuestRequirementType.QUEST);
 		processData(data);
 	}
 	

@@ -58,8 +58,8 @@ public class Quest {
 
     protected short id;
     protected int timeLimit, timeLimit2;
-    protected Map<MapleQuestRequirementType, MapleQuestRequirement> startReqs = new EnumMap<>(MapleQuestRequirementType.class);
-    protected Map<MapleQuestRequirementType, MapleQuestRequirement> completeReqs = new EnumMap<>(MapleQuestRequirementType.class);
+    protected Map<QuestRequirementType, MapleQuestRequirement> startReqs = new EnumMap<>(QuestRequirementType.class);
+    protected Map<QuestRequirementType, MapleQuestRequirement> completeReqs = new EnumMap<>(QuestRequirementType.class);
     protected Map<QuestActionType, MapleQuestAction> startActs = new EnumMap<>(QuestActionType.class);
     protected Map<QuestActionType, MapleQuestAction> completeActs = new EnumMap<>(QuestActionType.class);
     protected List<Integer> relevantMobs = new LinkedList<>();
@@ -104,10 +104,10 @@ public class Quest {
         Data startReqData = reqData.getChildByPath("0");
         if (startReqData != null) {
             for (Data startReq : startReqData.getChildren()) {
-                MapleQuestRequirementType type = MapleQuestRequirementType.getByWZName(startReq.getName());
-                if (type.equals(MapleQuestRequirementType.INTERVAL)) {
+                QuestRequirementType type = QuestRequirementType.getByWZName(startReq.getName());
+                if (type.equals(QuestRequirementType.INTERVAL)) {
                     repeatable = true;
-                } else if (type.equals(MapleQuestRequirementType.MOB)) {
+                } else if (type.equals(QuestRequirementType.MOB)) {
                     for (Data mob : startReq.getChildren()) {
                         relevantMobs.add(DataTool.getInt(mob.getChildByPath("id")));
                     }
@@ -125,14 +125,14 @@ public class Quest {
         Data completeReqData = reqData.getChildByPath("1");
         if (completeReqData != null) {
             for (Data completeReq : completeReqData.getChildren()) {
-                MapleQuestRequirementType type = MapleQuestRequirementType.getByWZName(completeReq.getName());
+                QuestRequirementType type = QuestRequirementType.getByWZName(completeReq.getName());
 
                 MapleQuestRequirement req = this.getRequirement(type, completeReq);
                 if (req == null) {
                     continue;
                 }
 
-                if (type.equals(MapleQuestRequirementType.MOB)) {
+                if (type.equals(QuestRequirementType.MOB)) {
                     for (Data mob : completeReq.getChildren()) {
                         relevantMobs.add(DataTool.getInt(mob.getChildByPath("id")));
                     }
@@ -203,7 +203,7 @@ public class Quest {
             return false;
         }
 
-        IntervalRequirement ir = (IntervalRequirement) startReqs.get(MapleQuestRequirementType.INTERVAL);
+        IntervalRequirement ir = (IntervalRequirement) startReqs.get(QuestRequirementType.INTERVAL);
         return ir.getInterval() < YamlConfig.config.server.QUEST_POINT_REPEATABLE_INTERVAL * 60 * 60 * 1000;
     }
 
@@ -381,7 +381,7 @@ public class Quest {
     }
 
     public int getStartItemAmountNeeded(int itemid) {
-        MapleQuestRequirement req = startReqs.get(MapleQuestRequirementType.ITEM);
+        MapleQuestRequirement req = startReqs.get(QuestRequirementType.ITEM);
         if (req == null) {
             return Integer.MIN_VALUE;
         }
@@ -391,7 +391,7 @@ public class Quest {
     }
 
     public int getCompleteItemAmountNeeded(int itemid) {
-        MapleQuestRequirement req = completeReqs.get(MapleQuestRequirementType.ITEM);
+        MapleQuestRequirement req = completeReqs.get(QuestRequirementType.ITEM);
         if (req == null) {
             return Integer.MAX_VALUE;
         }
@@ -401,7 +401,7 @@ public class Quest {
     }
 
     public int getMobAmountNeeded(int mid) {
-        MapleQuestRequirement req = completeReqs.get(MapleQuestRequirementType.MOB);
+        MapleQuestRequirement req = completeReqs.get(QuestRequirementType.MOB);
         if (req == null) {
             return 0;
         }
@@ -413,9 +413,9 @@ public class Quest {
 
     public short getInfoNumber(Status qs) {
         boolean checkEnd = qs.equals(Status.STARTED);
-        Map<MapleQuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
 
-        MapleQuestRequirement req = reqs.get(MapleQuestRequirementType.INFO_NUMBER);
+        MapleQuestRequirement req = reqs.get(QuestRequirementType.INFO_NUMBER);
         if (req != null) {
             InfoNumberRequirement inReq = (InfoNumberRequirement) req;
             return inReq.getInfoNumber();
@@ -426,9 +426,9 @@ public class Quest {
 
     public String getInfoEx(Status qs, int index) {
         boolean checkEnd = qs.equals(Status.STARTED);
-        Map<MapleQuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
         try {
-            MapleQuestRequirement req = reqs.get(MapleQuestRequirementType.INFO_EX);
+            MapleQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
             InfoExRequirement ixReq = (InfoExRequirement) req;
             return ixReq.getInfo().get(index);
         } catch (Exception e) {
@@ -438,9 +438,9 @@ public class Quest {
 
     public List<String> getInfoEx(Status qs) {
         boolean checkEnd = qs.equals(Status.STARTED);
-        Map<MapleQuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
         try {
-            MapleQuestRequirement req = reqs.get(MapleQuestRequirementType.INFO_EX);
+            MapleQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
             InfoExRequirement ixReq = (InfoExRequirement) req;
             return ixReq.getInfo();
         } catch (Exception e) {
@@ -460,7 +460,7 @@ public class Quest {
         quests.clear();
     }
 
-    private MapleQuestRequirement getRequirement(MapleQuestRequirementType type, Data data) {
+    private MapleQuestRequirement getRequirement(QuestRequirementType type, Data data) {
         MapleQuestRequirement ret = null;
         switch (type) {
             case END_DATE:
@@ -597,8 +597,8 @@ public class Quest {
     }
 
     public int getNpcRequirement(boolean checkEnd) {
-        Map<MapleQuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
-        MapleQuestRequirement mqr = reqs.get(MapleQuestRequirementType.NPC);
+        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        MapleQuestRequirement mqr = reqs.get(QuestRequirementType.NPC);
         if (mqr != null) {
             return ((NpcRequirement) mqr).get();
         } else {
@@ -607,8 +607,8 @@ public class Quest {
     }
 
     public boolean hasScriptRequirement(boolean checkEnd) {
-        Map<MapleQuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
-        MapleQuestRequirement mqr = reqs.get(MapleQuestRequirementType.SCRIPT);
+        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        MapleQuestRequirement mqr = reqs.get(QuestRequirementType.SCRIPT);
 
         if (mqr != null) {
             return ((ScriptRequirement) mqr).get();

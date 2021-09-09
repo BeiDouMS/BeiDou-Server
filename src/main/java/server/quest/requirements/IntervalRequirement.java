@@ -25,8 +25,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
@@ -37,7 +37,7 @@ public class IntervalRequirement extends MapleQuestRequirement {
 	private int questID;
 	
 	public IntervalRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.INTERVAL);
+		super(QuestRequirementType.INTERVAL);
 		questID = quest.getId();
                 processData(data);
 	}

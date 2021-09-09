@@ -22,14 +22,38 @@
 package server.quest;
 
 /**
- *
  * @author Matze
  */
-public enum MapleQuestRequirementType {
-    UNDEFINED(-1), JOB(0), ITEM(1), QUEST(2), MIN_LEVEL(3), MAX_LEVEL(4), END_DATE(5), MOB(6), NPC(7), FIELD_ENTER(8), INTERVAL(9), SCRIPT(10), PET(11), MIN_PET_TAMENESS(12), MONSTER_BOOK(13), NORMAL_AUTO_START(14), INFO_NUMBER(15), INFO_EX(16), COMPLETED_QUEST(17), START(18), END(19), DAY_BY_DAY(20), MESO(21), BUFF(22), EXCEPT_BUFF(23);
+public enum QuestRequirementType {
+    UNDEFINED(-1),
+    JOB(0),
+    ITEM(1),
+    QUEST(2),
+    MIN_LEVEL(3),
+    MAX_LEVEL(4),
+    END_DATE(5),
+    MOB(6),
+    NPC(7),
+    FIELD_ENTER(8),
+    INTERVAL(9),
+    SCRIPT(10),
+    PET(11),
+    MIN_PET_TAMENESS(12),
+    MONSTER_BOOK(13),
+    NORMAL_AUTO_START(14),
+    INFO_NUMBER(15),
+    INFO_EX(16),
+    COMPLETED_QUEST(17),
+    START(18),
+    END(19),
+    DAY_BY_DAY(20),
+    MESO(21),
+    BUFF(22),
+    EXCEPT_BUFF(23);
+
     final byte type;
 
-    private MapleQuestRequirementType(int type) {
+    QuestRequirementType(int type) {
         this.type = (byte) type;
     }
 
@@ -37,7 +61,7 @@ public enum MapleQuestRequirementType {
         return type;
     }
 
-    public static MapleQuestRequirementType getByWZName(String name) {
+    public static QuestRequirementType getByWZName(String name) {
         if (name.equals("job")) {
             return JOB;
         } else if (name.equals("quest")) {
@@ -76,11 +100,11 @@ public enum MapleQuestRequirementType {
             return INFO_EX;
         } else if (name.equals("questComplete")) {
             return COMPLETED_QUEST;
-	} else if(name.equals("start")) {
+        } else if (name.equals("start")) {
             return START;
 	/*} else if(name.equals("end")) {   already coded
             return END;*/
-	} else if(name.equals("daybyday")) {
+        } else if (name.equals("daybyday")) {
             return DAY_BY_DAY;
         } else if (name.equals("money")) {
             return MESO;

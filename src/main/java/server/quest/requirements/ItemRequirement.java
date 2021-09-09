@@ -28,8 +28,8 @@ import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataTool;
 import server.MapleItemInformationProvider;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class ItemRequirement extends MapleQuestRequirement {
 	
 	
 	public ItemRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.ITEM);
+		super(QuestRequirementType.ITEM);
 		processData(data);
 	}
 	

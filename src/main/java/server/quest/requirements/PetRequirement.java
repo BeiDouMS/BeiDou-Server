@@ -25,8 +25,8 @@ import client.Character;
 import client.inventory.Pet;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public class PetRequirement extends MapleQuestRequirement {
 	
 	
 	public PetRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.PET);
+		super(QuestRequirementType.PET);
 		processData(data);
 	}
 	

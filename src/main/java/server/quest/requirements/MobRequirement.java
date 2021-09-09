@@ -25,8 +25,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 import tools.FilePrinter;
 
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public class MobRequirement extends MapleQuestRequirement {
 	private int questID;
 	
 	public MobRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.MOB);
+		super(QuestRequirementType.MOB);
 		questID = quest.getId();
                 processData(data);
 	}

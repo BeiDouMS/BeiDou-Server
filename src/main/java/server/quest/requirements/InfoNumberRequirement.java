@@ -22,8 +22,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
@@ -35,7 +35,7 @@ public class InfoNumberRequirement extends MapleQuestRequirement {
         private int questID;
 
         public InfoNumberRequirement(Quest quest, Data data) {
-                super(MapleQuestRequirementType.INFO_NUMBER);
+                super(QuestRequirementType.INFO_NUMBER);
                 questID = quest.getId();
                 processData(data);
         }

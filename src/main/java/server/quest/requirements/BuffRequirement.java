@@ -22,8 +22,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
@@ -33,7 +33,7 @@ public class BuffRequirement extends MapleQuestRequirement {
         private int buffId = 1;
         
 	public BuffRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.BUFF);
+		super(QuestRequirementType.BUFF);
 		processData(data);
 	}
 	

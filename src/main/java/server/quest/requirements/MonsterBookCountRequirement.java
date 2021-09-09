@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuestRequirementType;
 import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
@@ -36,7 +36,7 @@ public class MonsterBookCountRequirement extends MapleQuestRequirement {
 	
 	
 	public MonsterBookCountRequirement(Quest quest, Data data) {
-		super(MapleQuestRequirementType.MONSTER_BOOK);
+		super(QuestRequirementType.MONSTER_BOOK);
 		processData(data);
 	}
 	
