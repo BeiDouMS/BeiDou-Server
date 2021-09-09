@@ -1,6 +1,6 @@
 package constants.game;
 
-import client.MapleDisease;
+import client.Disease;
 import client.MapleJob;
 import config.YamlConfig;
 import constants.skills.Aran;
@@ -35,8 +35,8 @@ public class GameConstants {
     private final static NumberFormat nfFormatter = new DecimalFormat("#,###,###,###");
     private final static NumberFormat nfParser = NumberFormat.getInstance(YamlConfig.config.server.USE_UNITPRICE_WITH_COMMA ? Locale.FRANCE : Locale.UK);
     
-    public static final MapleDisease[] CPQ_DISEASES = {MapleDisease.SLOW, MapleDisease.SEDUCE, MapleDisease.STUN, MapleDisease.POISON,
-                                                       MapleDisease.SEAL, MapleDisease.DARKNESS, MapleDisease.WEAKEN, MapleDisease.CURSE};
+    public static final Disease[] CPQ_DISEASES = {Disease.SLOW, Disease.SEDUCE, Disease.STUN, Disease.POISON,
+                                                       Disease.SEAL, Disease.DARKNESS, Disease.WEAKEN, Disease.CURSE};
     
     public static final int MAX_FIELD_MOB_DAMAGE = getMaxObstacleMobDamageFromWz() * 2;
     

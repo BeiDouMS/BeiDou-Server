@@ -20,15 +20,15 @@
 */
 package net.server;
 
-import client.MapleDisease;
+import client.Disease;
 
 public class PlayerDiseaseValueHolder {//Thanks Celino
 
     public long startTime;
     public long length;
-    public MapleDisease disease;
+    public Disease disease;
 
-    public PlayerDiseaseValueHolder(final MapleDisease disease, final long startTime, final long length) {
+    public PlayerDiseaseValueHolder(final Disease disease, final long startTime, final long length) {
 	this.disease = disease;
 	this.startTime = startTime;
 	this.length = length;

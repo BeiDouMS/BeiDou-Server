@@ -185,13 +185,13 @@ public class Character extends AbstractCharacterObject {
     private final Map<Integer, Integer> activeCouponRates = new LinkedHashMap<>();
     private final EnumMap<BuffStat, MapleBuffStatValueHolder> effects = new EnumMap<>(BuffStat.class);
     private final Map<BuffStat, Byte> buffEffectsCount = new LinkedHashMap<>();
-    private final Map<MapleDisease, Long> diseaseExpires = new LinkedHashMap<>();
+    private final Map<Disease, Long> diseaseExpires = new LinkedHashMap<>();
     private final Map<Integer, Map<BuffStat, MapleBuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private final Map<Integer, Long> buffExpires = new LinkedHashMap<>();
     private final Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
     private final Map<Integer, MapleSummon> summons = new LinkedHashMap<>();
     private final Map<Integer, MapleCoolDownValueHolder> coolDowns = new LinkedHashMap<>();
-    private final EnumMap<MapleDisease, Pair<MapleDiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(MapleDisease.class);
+    private final EnumMap<Disease, Pair<MapleDiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(Disease.class);
     private byte[] m_aQuickslotLoaded;
     private QuickslotBinding m_pQuickslotKeyMapped;
     private MapleDoor pdoor = null;
@@ -2536,7 +2536,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public final boolean hasDisease(final MapleDisease dis) {
+    public final boolean hasDisease(final Disease dis) {
         chrLock.lock();
         try {
             return diseases.containsKey(dis);
@@ -2554,13 +2554,13 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public Map<MapleDisease, Pair<Long, MobSkill>> getAllDiseases() {
+    public Map<Disease, Pair<Long, MobSkill>> getAllDiseases() {
         chrLock.lock();
         try {
             long curtime = Server.getInstance().getCurrentTime();
-            Map<MapleDisease, Pair<Long, MobSkill>> ret = new LinkedHashMap<>();
+            Map<Disease, Pair<Long, MobSkill>> ret = new LinkedHashMap<>();
 
-            for (Entry<MapleDisease, Long> de : diseaseExpires.entrySet()) {
+            for (Entry<Disease, Long> de : diseaseExpires.entrySet()) {
                 Pair<MapleDiseaseValueHolder, MobSkill> dee = diseases.get(de.getKey());
                 MapleDiseaseValueHolder mdvh = dee.getLeft();
 
@@ -2573,12 +2573,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void silentApplyDiseases(Map<MapleDisease, Pair<Long, MobSkill>> diseaseMap) {
+    public void silentApplyDiseases(Map<Disease, Pair<Long, MobSkill>> diseaseMap) {
         chrLock.lock();
         try {
             long curTime = Server.getInstance().getCurrentTime();
 
-            for (Entry<MapleDisease, Pair<Long, MobSkill>> di : diseaseMap.entrySet()) {
+            for (Entry<Disease, Pair<Long, MobSkill>> di : diseaseMap.entrySet()) {
                 long expTime = curTime + di.getValue().getLeft();
 
                 diseaseExpires.put(di.getKey(), expTime);
@@ -2590,7 +2590,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void announceDiseases() {
-        Set<Entry<MapleDisease, Pair<MapleDiseaseValueHolder, MobSkill>>> chrDiseases;
+        Set<Entry<Disease, Pair<MapleDiseaseValueHolder, MobSkill>>> chrDiseases;
 
         chrLock.lock();
         try {
@@ -2604,12 +2604,12 @@ public class Character extends AbstractCharacterObject {
             chrLock.unlock();
         }
 
-        for (Entry<MapleDisease, Pair<MapleDiseaseValueHolder, MobSkill>> di : chrDiseases) {
-            MapleDisease disease = di.getKey();
+        for (Entry<Disease, Pair<MapleDiseaseValueHolder, MobSkill>> di : chrDiseases) {
+            Disease disease = di.getKey();
             MobSkill skill = di.getValue().getRight();
-            final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
+            final List<Pair<Disease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
 
-            if (disease != MapleDisease.SLOW) {
+            if (disease != Disease.SLOW) {
                 map.broadcastMessage(PacketCreator.giveForeignDebuff(id, debuff, skill));
             } else {
                 map.broadcastMessage(PacketCreator.giveForeignSlowDebuff(id, debuff, skill));
@@ -2621,12 +2621,12 @@ public class Character extends AbstractCharacterObject {
         for (Character chr : map.getAllPlayers()) {
             int cid = chr.getId();
 
-            for (Entry<MapleDisease, Pair<Long, MobSkill>> di : chr.getAllDiseases().entrySet()) {
-                MapleDisease disease = di.getKey();
+            for (Entry<Disease, Pair<Long, MobSkill>> di : chr.getAllDiseases().entrySet()) {
+                Disease disease = di.getKey();
                 MobSkill skill = di.getValue().getRight();
-                final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
+                final List<Pair<Disease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
 
-                if (disease != MapleDisease.SLOW) {
+                if (disease != Disease.SLOW) {
                     this.sendPacket(PacketCreator.giveForeignDebuff(cid, debuff, skill));
                 } else {
                     this.sendPacket(PacketCreator.giveForeignSlowDebuff(cid, debuff, skill));
@@ -2635,9 +2635,9 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void giveDebuff(final MapleDisease disease, MobSkill skill) {
+    public void giveDebuff(final Disease disease, MobSkill skill) {
         if (!hasDisease(disease) && getDiseasesSize() < 2) {
-            if (!(disease == MapleDisease.SEDUCE || disease == MapleDisease.STUN)) {
+            if (!(disease == Disease.SEDUCE || disease == Disease.STUN)) {
                 if (hasActiveBuff(Bishop.HOLY_SHIELD)) {
                     return;
                 }
@@ -2652,14 +2652,14 @@ public class Character extends AbstractCharacterObject {
                 chrLock.unlock();
             }
 
-            if (disease == MapleDisease.SEDUCE && chair.get() < 0) {
+            if (disease == Disease.SEDUCE && chair.get() < 0) {
                 sitChair(-1);
             }
 
-            final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
+            final List<Pair<Disease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
             sendPacket(PacketCreator.giveDebuff(debuff, skill));
 
-            if (disease != MapleDisease.SLOW) {
+            if (disease != Disease.SLOW) {
                 map.broadcastMessage(this, PacketCreator.giveForeignDebuff(id, debuff, skill), false);
             } else {
                 map.broadcastMessage(this, PacketCreator.giveForeignSlowDebuff(id, debuff, skill), false);
@@ -2667,12 +2667,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void dispelDebuff(MapleDisease debuff) {
+    public void dispelDebuff(Disease debuff) {
         if (hasDisease(debuff)) {
             long mask = debuff.getValue();
             sendPacket(PacketCreator.cancelDebuff(mask));
 
-            if (debuff != MapleDisease.SLOW) {
+            if (debuff != Disease.SLOW) {
                 map.broadcastMessage(this, PacketCreator.cancelForeignDebuff(id, mask), false);
             } else {
                 map.broadcastMessage(this, PacketCreator.cancelForeignSlowDebuff(id), false);
@@ -2689,18 +2689,18 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void dispelDebuffs() {
-        dispelDebuff(MapleDisease.CURSE);
-        dispelDebuff(MapleDisease.DARKNESS);
-        dispelDebuff(MapleDisease.POISON);
-        dispelDebuff(MapleDisease.SEAL);
-        dispelDebuff(MapleDisease.WEAKEN);
-        dispelDebuff(MapleDisease.SLOW);    // thanks Conrad for noticing ZOMBIFY isn't dispellable
+        dispelDebuff(Disease.CURSE);
+        dispelDebuff(Disease.DARKNESS);
+        dispelDebuff(Disease.POISON);
+        dispelDebuff(Disease.SEAL);
+        dispelDebuff(Disease.WEAKEN);
+        dispelDebuff(Disease.SLOW);    // thanks Conrad for noticing ZOMBIFY isn't dispellable
     }
 
     public void purgeDebuffs() {
-        dispelDebuff(MapleDisease.SEDUCE);
-        dispelDebuff(MapleDisease.ZOMBIFY);
-        dispelDebuff(MapleDisease.CONFUSE);
+        dispelDebuff(Disease.SEDUCE);
+        dispelDebuff(Disease.ZOMBIFY);
+        dispelDebuff(Disease.CONFUSE);
         dispelDebuffs();
     }
 
@@ -2815,13 +2815,13 @@ public class Character extends AbstractCharacterObject {
             diseaseExpireTask = TimerManager.getInstance().register(new Runnable() {
                 @Override
                 public void run() {
-                    Set<MapleDisease> toExpire = new LinkedHashSet<>();
+                    Set<Disease> toExpire = new LinkedHashSet<>();
 
                     chrLock.lock();
                     try {
                         long curTime = Server.getInstance().getCurrentTime();
 
-                        for (Entry<MapleDisease, Long> de : diseaseExpires.entrySet()) {
+                        for (Entry<Disease, Long> de : diseaseExpires.entrySet()) {
                             if (de.getValue() < curTime) {
                                 toExpire.add(de.getKey());
                             }
@@ -2830,7 +2830,7 @@ public class Character extends AbstractCharacterObject {
                         chrLock.unlock();
                     }
 
-                    for (MapleDisease d : toExpire) {
+                    for (Disease d : toExpire) {
                         dispelDebuff(d);
                     }
                 }
@@ -3052,7 +3052,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void gainExp(int gain, int party, boolean show, boolean inChat, boolean white) {
-        if (hasDisease(MapleDisease.CURSE)) {
+        if (hasDisease(Disease.CURSE)) {
             gain *= 0.5;
             party *= 0.5;
         }
@@ -7328,14 +7328,14 @@ public class Character extends AbstractCharacterObject {
                 }
 
                 // Debuffs (load)
-                Map<MapleDisease, Pair<Long, MobSkill>> loadedDiseases = new LinkedHashMap<>();
+                Map<Disease, Pair<Long, MobSkill>> loadedDiseases = new LinkedHashMap<>();
                 try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playerdiseases WHERE charid = ?")) {
                     ps.setInt(1, ret.getId());
 
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
-                            final MapleDisease disease = MapleDisease.ordinal(rs.getInt("disease"));
-                            if (disease == MapleDisease.NULL) {
+                            final Disease disease = Disease.ordinal(rs.getInt("disease"));
+                            if (disease == Disease.NULL) {
                                 continue;
                             }
 
@@ -8106,14 +8106,14 @@ public class Character extends AbstractCharacterObject {
             }
         }
 
-        Map<MapleDisease, Pair<Long, MobSkill>> listds = getAllDiseases();
+        Map<Disease, Pair<Long, MobSkill>> listds = getAllDiseases();
         if (!listds.isEmpty()) {
             try (Connection con = DatabaseConnection.getConnection()) {
                 deleteWhereCharacterId(con, "DELETE FROM playerdiseases WHERE charid = ?");
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO playerdiseases (charid, disease, mobskillid, mobskilllv, length) VALUES (?, ?, ?, ?, ?)")) {
                     ps.setInt(1, getId());
 
-                    for (Entry<MapleDisease, Pair<Long, MobSkill>> e : listds.entrySet()) {
+                    for (Entry<Disease, Pair<Long, MobSkill>> e : listds.entrySet()) {
                         ps.setInt(2, e.getKey().ordinal());
 
                         MobSkill ms = e.getValue().getRight();
@@ -9085,7 +9085,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean applyHpMpChange(int hpCon, int hpchange, int mpchange) {
-        boolean zombify = hasDisease(MapleDisease.ZOMBIFY);
+        boolean zombify = hasDisease(Disease.ZOMBIFY);
 
         effLock.lock();
         statWlock.lock();

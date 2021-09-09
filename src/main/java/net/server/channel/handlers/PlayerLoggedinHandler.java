@@ -210,7 +210,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentGiveBuffs(timedBuffs);
             }
 
-            Map<MapleDisease, Pair<Long, MobSkill>> diseases = server.getPlayerBuffStorage().getDiseasesFromStorage(cid);
+            Map<Disease, Pair<Long, MobSkill>> diseases = server.getPlayerBuffStorage().getDiseasesFromStorage(cid);
             if (diseases != null) {
                 player.silentApplyDiseases(diseases);
             }
@@ -362,8 +362,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
 
                 if (diseases != null) {
-                    for (Entry<MapleDisease, Pair<Long, MobSkill>> e : diseases.entrySet()) {
-                        final List<Pair<MapleDisease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), e.getValue().getRight().getX()));
+                    for (Entry<Disease, Pair<Long, MobSkill>> e : diseases.entrySet()) {
+                        final List<Pair<Disease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), e.getValue().getRight().getX()));
                         c.sendPacket(PacketCreator.giveDebuff(debuff, e.getValue().getRight()));
                     }
                 }

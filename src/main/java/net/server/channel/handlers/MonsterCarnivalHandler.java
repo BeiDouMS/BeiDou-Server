@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleDisease;
+import client.Disease;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.world.MapleParty;
@@ -99,7 +99,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
-                        final MapleDisease dis = skill.getDisease();
+                        final Disease dis = skill.getDisease();
                         MapleParty enemies = c.getPlayer().getParty().getEnemy();
                         if (skill.targetsAll) {
                             int hitChance = 0;

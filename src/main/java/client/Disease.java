@@ -23,7 +23,7 @@ package client;
 
 import constants.game.GameConstants;
 
-public enum MapleDisease {
+public enum Disease {
     NULL(0x0),
     SLOW(0x1, 126),
     SEDUCE(0x80, 128),
@@ -36,25 +36,25 @@ public enum MapleDisease {
     DARKNESS(0x10000000000000L, 121),
     WEAKEN(0x4000000000000000L, 122),
     CURSE(0x8000000000000000L, 124);
-    
-    private long i;
-    private boolean first;
-    private int mobskill;
-    
-    private MapleDisease(long i) {
+
+    private final long i;
+    private final boolean first;
+    private final int mobskill;
+
+    Disease(long i) {
         this(i, false, 0);
     }
 
-    private MapleDisease(long i, int skill) {
+    Disease(long i, int skill) {
         this(i, false, skill);
     }
-    
-    private MapleDisease(long i, boolean first, int skill) {
+
+    Disease(long i, boolean first, int skill) {
         this.i = i;
         this.first = first;
         this.mobskill = skill;
     }
-    
+
     public long getValue() {
         return i;
     }
@@ -62,31 +62,31 @@ public enum MapleDisease {
     public boolean isFirst() {
         return first;
     }
-    
+
     public int getDisease() {
         return mobskill;
     }
-    
-    public static MapleDisease ordinal(int ord) {
+
+    public static Disease ordinal(int ord) {
         try {
-            return MapleDisease.values()[ord];
+            return Disease.values()[ord];
         } catch (IndexOutOfBoundsException io) {
             return NULL;
         }
     }
-    
-    public static final MapleDisease getRandom() {
-        MapleDisease[] diseases = GameConstants.CPQ_DISEASES;
+
+    public static final Disease getRandom() {
+        Disease[] diseases = GameConstants.CPQ_DISEASES;
         return diseases[(int) (Math.random() * diseases.length)];
     }
-    
-    public static final MapleDisease getBySkill(final int skill) {
-        for (MapleDisease d : MapleDisease.values()) {
+
+    public static final Disease getBySkill(final int skill) {
+        for (Disease d : Disease.values()) {
             if (d.getDisease() == skill && d.getDisease() != 0) {
                 return d;
             }
         }
         return null;
     }
-    
+
 }

@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleDisease;
+import client.Disease;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
@@ -58,17 +58,17 @@ public final class UseItemHandler extends AbstractPacketHandler {
                 remove(c, slot);
                 return;
             } else if (itemId == 2050001) {
-		chr.dispelDebuff(MapleDisease.DARKNESS);
+		chr.dispelDebuff(Disease.DARKNESS);
                 remove(c, slot);
                 return;
 	    } else if (itemId == 2050002) {
-		chr.dispelDebuff(MapleDisease.WEAKEN);
-                chr.dispelDebuff(MapleDisease.SLOW);
+		chr.dispelDebuff(Disease.WEAKEN);
+                chr.dispelDebuff(Disease.SLOW);
                 remove(c, slot);
                 return;
             } else if (itemId == 2050003) {
-                chr.dispelDebuff(MapleDisease.SEAL);
-		chr.dispelDebuff(MapleDisease.CURSE);
+                chr.dispelDebuff(Disease.SEAL);
+		chr.dispelDebuff(Disease.CURSE);
                 remove(c, slot);
                 return;
             } else if (ItemConstants.isTownScroll(itemId)) {

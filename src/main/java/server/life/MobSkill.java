@@ -22,7 +22,7 @@
 package server.life;
 
 import client.Character;
-import client.MapleDisease;
+import client.Disease;
 import client.status.MonsterStatus;
 import constants.game.GameConstants;
 import net.server.services.task.channel.OverallService;
@@ -118,7 +118,7 @@ public class MobSkill {
     }
 
     public void applyEffect(Character player, MapleMonster monster, boolean skill, List<Character> banishPlayers) {
-        MapleDisease disease = null;
+        Disease disease = null;
         Map<MonsterStatus, Integer> stats = new ArrayMap<>();
         List<Integer> reflection = new LinkedList<>();
         switch (skillId) {
@@ -154,25 +154,25 @@ public class MobSkill {
                 }
                 break;
             case 120:
-                disease = MapleDisease.SEAL;
+                disease = Disease.SEAL;
                 break;
             case 121:
-                disease = MapleDisease.DARKNESS;
+                disease = Disease.DARKNESS;
                 break;
             case 122:
-                disease = MapleDisease.WEAKEN;
+                disease = Disease.WEAKEN;
                 break;
             case 123:
-                disease = MapleDisease.STUN;
+                disease = Disease.STUN;
                 break;
             case 124:
-                disease = MapleDisease.CURSE;
+                disease = Disease.CURSE;
                 break;
             case 125:
-                disease = MapleDisease.POISON;
+                disease = Disease.POISON;
                 break;
             case 126: // Slow
-                disease = MapleDisease.SLOW;
+                disease = Disease.SLOW;
                 break;
             case 127:
                 if (lt != null && rb != null && skill) {
@@ -184,7 +184,7 @@ public class MobSkill {
                 }
                 break;
             case 128: // Seduce
-                disease = MapleDisease.SEDUCE;
+                disease = Disease.SEDUCE;
                 break;
             case 129: // Banish
                 if (lt != null && rb != null && skill) {
@@ -197,10 +197,10 @@ public class MobSkill {
                 monster.getMap().spawnMist(new MapleMist(calculateBoundingBox(monster.getPosition()), monster, this), x * 100, false, false, false);
                 break;
             case 132:
-                disease = MapleDisease.CONFUSE;
+                disease = Disease.CONFUSE;
                 break;
             case 133: // zombify
-                disease = MapleDisease.ZOMBIFY;
+                disease = Disease.ZOMBIFY;
                 break;
             case 140:
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
@@ -329,9 +329,9 @@ public class MobSkill {
                 int i = 0;
                 for (Character character : getPlayersInRange(monster)) {
                     if (!character.hasActiveBuff(2321005)) {  // holy shield
-                        if (disease.equals(MapleDisease.SEDUCE)) {
+                        if (disease.equals(Disease.SEDUCE)) {
                             if (i < count) {
-                                character.giveDebuff(MapleDisease.SEDUCE, this);
+                                character.giveDebuff(Disease.SEDUCE, this);
                                 i++;
                             }
                         } else {

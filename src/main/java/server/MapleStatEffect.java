@@ -70,7 +70,7 @@ public class MapleStatEffect {
     private int sourceid;
     private int moveTo;
     private int cp, nuffSkill;
-    private List<MapleDisease> cureDebuffs;
+    private List<Disease> cureDebuffs;
     private boolean skill;
     private List<Pair<BuffStat, Integer>> statups;
     private Map<MonsterStatus, Integer> monsterStatus;
@@ -183,22 +183,22 @@ public class MapleStatEffect {
         ret.prop = iprop / 100.0;
 
         ret.cp = MapleDataTool.getInt("cp", source, 0);
-        List<MapleDisease> cure = new ArrayList<>(5);
+        List<Disease> cure = new ArrayList<>(5);
         if (MapleDataTool.getInt("poison", source, 0) > 0) {
-            cure.add(MapleDisease.POISON);
+            cure.add(Disease.POISON);
         }
         if (MapleDataTool.getInt("seal", source, 0) > 0) {
-            cure.add(MapleDisease.SEAL);
+            cure.add(Disease.SEAL);
         }
         if (MapleDataTool.getInt("darkness", source, 0) > 0) {
-            cure.add(MapleDisease.DARKNESS);
+            cure.add(Disease.DARKNESS);
         }
         if (MapleDataTool.getInt("weakness", source, 0) > 0) {
-            cure.add(MapleDisease.WEAKEN);
-            cure.add(MapleDisease.SLOW);
+            cure.add(Disease.WEAKEN);
+            cure.add(Disease.SLOW);
         }
         if (MapleDataTool.getInt("curse", source, 0) > 0) {
-            cure.add(MapleDisease.CURSE);
+            cure.add(Disease.CURSE);
         }
         ret.cureDebuffs = cure;
         ret.nuffSkill = MapleDataTool.getInt("nuffSkill", source, 0);
@@ -1038,7 +1038,7 @@ public class MapleStatEffect {
         } else if (nuffSkill != 0 && applyto.getParty() != null && applyto.getMap().isCPQMap()) { // added by Drago (Dragohe4rt)
             final MCSkill skill = MapleCarnivalFactory.getInstance().getSkill(nuffSkill);
             if (skill != null) {
-                final MapleDisease dis = skill.getDisease();
+                final Disease dis = skill.getDisease();
                 MapleParty opposition = applyfrom.getParty().getEnemy();
                 if (skill.targetsAll) {
                     for (MaplePartyCharacter enemyChrs : opposition.getPartyMembers()) {
@@ -1065,12 +1065,12 @@ public class MapleStatEffect {
                 }
             }
         } else if (cureDebuffs.size() > 0) { // added by Drago (Dragohe4rt)
-            for (final MapleDisease debuff : cureDebuffs) {
+            for (final Disease debuff : cureDebuffs) {
                 applyfrom.dispelDebuff(debuff);
             }
         } else if (mobSkill > 0 && mobSkillLevel > 0) {
             MobSkill ms = MobSkillFactory.getMobSkill(mobSkill, mobSkillLevel);
-            MapleDisease dis = MapleDisease.getBySkill(mobSkill);
+            Disease dis = Disease.getBySkill(mobSkill);
             
             if (target > 0) {
                 for (Character chr : applyto.getMap().getAllPlayers()) {
@@ -1347,20 +1347,20 @@ public class MapleStatEffect {
                 } else {
                     hpchange += hp;
                 }
-                if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
+                if (applyfrom.hasDisease(Disease.ZOMBIFY)) {
                     hpchange /= 2;
                 }
             } else { // assumption: this is heal
                 float hpHeal = (applyfrom.getCurrentMaxHp() * (float) hp / (100.0f * affectedPlayers));
                 hpchange += hpHeal;
-                if (applyfrom.hasDisease(MapleDisease.ZOMBIFY)) {
+                if (applyfrom.hasDisease(Disease.ZOMBIFY)) {
                     hpchange = -hpchange;
                     hpCon = 0;
                 }
             }
         }
         if (hpR != 0) {
-            hpchange += (int) (applyfrom.getCurrentMaxHp() * hpR) / (applyfrom.hasDisease(MapleDisease.ZOMBIFY) ? 2 : 1);
+            hpchange += (int) (applyfrom.getCurrentMaxHp() * hpR) / (applyfrom.hasDisease(Disease.ZOMBIFY) ? 2 : 1);
         }
         if (primary) {
             if (hpCon != 0) {

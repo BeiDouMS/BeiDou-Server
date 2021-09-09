@@ -1,6 +1,6 @@
 package server.partyquest;
 
-import client.MapleDisease;
+import client.Disease;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -97,8 +97,8 @@ public class MapleCarnivalFactory {
             return MobSkillFactory.getMobSkill(skillid, level);
         }
 
-        public MapleDisease getDisease() {
-            return MapleDisease.getBySkill(skillid);
+        public Disease getDisease() {
+            return Disease.getBySkill(skillid);
         }
     }
 }

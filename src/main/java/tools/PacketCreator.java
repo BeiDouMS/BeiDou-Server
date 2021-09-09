@@ -2895,10 +2895,10 @@ public class PacketCreator {
         return p;
     }
 
-    private static void writeLongMaskD(final OutPacket p, List<Pair<MapleDisease, Integer>> statups) {
+    private static void writeLongMaskD(final OutPacket p, List<Pair<Disease, Integer>> statups) {
         long firstmask = 0;
         long secondmask = 0;
-        for (Pair<MapleDisease, Integer> statup : statups) {
+        for (Pair<Disease, Integer> statup : statups) {
             if (statup.getLeft().isFirst()) {
                 firstmask |= statup.getLeft().getValue();
             } else {
@@ -2909,10 +2909,10 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
-    public static Packet giveDebuff(List<Pair<MapleDisease, Integer>> statups, MobSkill skill) {
+    public static Packet giveDebuff(List<Pair<Disease, Integer>> statups, MobSkill skill) {
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         writeLongMaskD(p, statups);
-        for (Pair<MapleDisease, Integer> statup : statups) {
+        for (Pair<Disease, Integer> statup : statups) {
             p.writeShort(statup.getRight().shortValue());
             p.writeShort(skill.getSkillId());
             p.writeShort(skill.getSkillLevel());
@@ -2924,13 +2924,13 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet giveForeignDebuff(int chrId, List<Pair<MapleDisease, Integer>> statups, MobSkill skill) {
+    public static Packet giveForeignDebuff(int chrId, List<Pair<Disease, Integer>> statups, MobSkill skill) {
         // Poison damage visibility and missing diseases status visibility, extended through map transitions thanks to Ronan
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMaskD(p, statups);
-        for (Pair<MapleDisease, Integer> statup : statups) {
-            if (statup.getLeft() == MapleDisease.POISON) {
+        for (Pair<Disease, Integer> statup : statups) {
+            if (statup.getLeft() == Disease.POISON) {
                 p.writeShort(statup.getRight().shortValue());
             }
             p.writeShort(skill.getSkillId());
@@ -3040,12 +3040,12 @@ public class PacketCreator {
         p.writeLong(0);
     }
 
-    public static Packet giveForeignSlowDebuff(int chrId, List<Pair<MapleDisease, Integer>> statups, MobSkill skill) {
+    public static Packet giveForeignSlowDebuff(int chrId, List<Pair<Disease, Integer>> statups, MobSkill skill) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMaskSlowD(p);
-        for (Pair<MapleDisease, Integer> statup : statups) {
-            if (statup.getLeft() == MapleDisease.POISON) {
+        for (Pair<Disease, Integer> statup : statups) {
+            if (statup.getLeft() == Disease.POISON) {
                 p.writeShort(statup.getRight().shortValue());
             }
             p.writeShort(skill.getSkillId());
