@@ -36,11 +36,11 @@ public class MapleShopFactory {
         return instance;
     }
     
-    private Map<Integer, MapleShop> shops = new HashMap<>();
-    private Map<Integer, MapleShop> npcShops = new HashMap<>();
+    private Map<Integer, Shop> shops = new HashMap<>();
+    private Map<Integer, Shop> npcShops = new HashMap<>();
 
-    private MapleShop loadShop(int id, boolean isShopId) {
-        MapleShop ret = MapleShop.createFromDB(id, isShopId);
+    private Shop loadShop(int id, boolean isShopId) {
+        Shop ret = Shop.createFromDB(id, isShopId);
         if (ret != null) {
             shops.put(ret.getId(), ret);
             npcShops.put(ret.getNpcId(), ret);
@@ -52,14 +52,14 @@ public class MapleShopFactory {
         return ret;
     }
 
-    public MapleShop getShop(int shopId) {
+    public Shop getShop(int shopId) {
         if (shops.containsKey(shopId)) {
             return shops.get(shopId);
         }
         return loadShop(shopId, true);
     }
 
-    public MapleShop getShopForNPC(int npcId) {
+    public Shop getShopForNPC(int npcId) {
         if (npcShops.containsKey(npcId)) {
             return npcShops.get(npcId);
         }

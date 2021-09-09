@@ -164,7 +164,7 @@ public class Character extends AbstractCharacterObject {
     private Party party;
     private final Pet[] pets = new Pet[3];
     private PlayerShop playerShop = null;
-    private MapleShop shop = null;
+    private Shop shop = null;
     private SkinColor skinColor = SkinColor.NORMAL;
     private MapleStorage storage = null;
     private MapleTrade trade = null;
@@ -5792,7 +5792,7 @@ public class Character extends AbstractCharacterObject {
         return search;
     }
 
-    public MapleShop getShop() {
+    public Shop getShop() {
         return shop;
     }
 
@@ -9566,7 +9566,7 @@ public class Character extends AbstractCharacterObject {
         InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
     }
 
-    public void setShop(MapleShop shop) {
+    public void setShop(Shop shop) {
         this.shop = shop;
     }
 

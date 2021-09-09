@@ -38,8 +38,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.ItemInformationProvider;
-import server.MapleShop;
 import server.MapleShopFactory;
+import server.Shop;
 import server.TimerManager;
 import server.maps.*;
 import tools.PacketCreator;
@@ -494,7 +494,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
         } else if (itemType == 545) { // MiuMiu's travel store
             if (player.getShop() == null) {
-                MapleShop shop = MapleShopFactory.getInstance().getShop(1338);
+                Shop shop = MapleShopFactory.getInstance().getShop(1338);
                 if (shop != null) {
                     shop.sendShop(c);
                     remove(c, position, itemId);

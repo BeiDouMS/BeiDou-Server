@@ -373,7 +373,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
         
         public void openShopNPC(int id) {
-            MapleShop shop = MapleShopFactory.getInstance().getShop(id);
+            Shop shop = MapleShopFactory.getInstance().getShop(id);
             
             if (shop != null) {
                 shop.sendShop(c);
