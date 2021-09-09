@@ -28,8 +28,8 @@ import net.packet.InPacket;
 import net.server.Server;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
+import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuildCharacter;
 import tools.PacketCreator;
 
 /**
@@ -201,7 +201,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
     }
     
     private void changeLeaderAllianceRank(Alliance alliance, Character newLeader) {
-        MapleGuildCharacter lmgc = alliance.getLeader();
+        GuildCharacter lmgc = alliance.getLeader();
         Character leader = newLeader.getWorldServer().getPlayerStorage().getCharacterById(lmgc.getId());
         leader.getMGC().setAllianceRank(2);
         leader.saveGuildStatus();

@@ -403,11 +403,11 @@ public class Alliance {
         return name;
     }
 
-    public MapleGuildCharacter getLeader() {
+    public GuildCharacter getLeader() {
         synchronized (guilds) {
             for (Integer gId : guilds) {
                 Guild guild = Server.getInstance().getGuild(gId);
-                MapleGuildCharacter mgc = guild.getMGC(guild.getLeaderId());
+                GuildCharacter mgc = guild.getMGC(guild.getLeaderId());
 
                 if (mgc.getAllianceRank() == 1) {
                     return mgc;

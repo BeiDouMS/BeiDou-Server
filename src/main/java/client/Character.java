@@ -47,8 +47,8 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
+import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuildCharacter;
 import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.world.CharacterSaveService;
 import net.server.services.type.ChannelServices;
@@ -153,7 +153,7 @@ public class Character extends AbstractCharacterObject {
     private EventInstanceManager eventInstance = null;
     private MapleHiredMerchant hiredMerchant = null;
     private Client client;
-    private MapleGuildCharacter mgc = null;
+    private GuildCharacter mgc = null;
     private MaplePartyCharacter mpc = null;
     private Inventory[] inventory;
     private Job job = Job.BEGINNER;
@@ -2198,7 +2198,7 @@ public class Character extends AbstractCharacterObject {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next() && rs.getInt("guildid") > 0) {
-                        Server.getInstance().deleteGuildCharacter(new MapleGuildCharacter(player, cid, 0, rs.getString("name"), (byte) -1, (byte) -1, 0, rs.getInt("guildrank"), rs.getInt("guildid"), false, rs.getInt("allianceRank")));
+                        Server.getInstance().deleteGuildCharacter(new GuildCharacter(player, cid, 0, rs.getString("name"), (byte) -1, (byte) -1, 0, rs.getInt("guildrank"), rs.getInt("guildid"), false, rs.getInt("allianceRank")));
                     }
                 }
             }
@@ -5289,11 +5289,11 @@ public class Character extends AbstractCharacterObject {
         return messengerposition;
     }
 
-    public MapleGuildCharacter getMGC() {
+    public GuildCharacter getMGC() {
         return mgc;
     }
 
-    public void setMGC(MapleGuildCharacter mgc) {
+    public void setMGC(GuildCharacter mgc) {
         this.mgc = mgc;
     }
 
@@ -7029,7 +7029,7 @@ public class Character extends AbstractCharacterObject {
                     ret.dojoPoints = rs.getInt("dojoPoints");
                     ret.dojoStage = rs.getInt("lastDojoStage");
                     ret.dataString = rs.getString("dataString");
-                    ret.mgc = new MapleGuildCharacter(ret);
+                    ret.mgc = new GuildCharacter(ret);
                     int buddyCapacity = rs.getInt("buddyCapacity");
                     ret.buddylist = new BuddyList(buddyCapacity);
                     ret.lastExpGainTime = rs.getTimestamp("lastExpGainTime").getTime();

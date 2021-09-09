@@ -50,7 +50,7 @@ import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
-import net.server.guild.MapleGuildCharacter;
+import net.server.guild.GuildCharacter;
 import net.server.task.*;
 import net.server.world.World;
 import org.slf4j.Logger;
@@ -1097,7 +1097,7 @@ public class Server {
             }
 
             if (mc != null) {
-                MapleGuildCharacter mgc = g.getMGC(mc.getId());
+                GuildCharacter mgc = g.getMGC(mc.getId());
                 if (mgc != null) {
                     mc.setMGC(mgc);
                     mgc.setCharacter(mc);
@@ -1118,7 +1118,7 @@ public class Server {
         g.setOnline(mc.getId(), bOnline, channel);
     }
 
-    public int addGuildMember(MapleGuildCharacter mgc, Character chr) {
+    public int addGuildMember(GuildCharacter mgc, Character chr) {
         Guild g = guilds.get(mgc.getGuildId());
         if (g != null) {
             return g.addGuildMember(mgc, chr);
@@ -1139,7 +1139,7 @@ public class Server {
         guilds.get(gId).resetAllianceGuildPlayersRank();
     }
 
-    public void leaveGuild(MapleGuildCharacter mgc) {
+    public void leaveGuild(GuildCharacter mgc) {
         Guild g = guilds.get(mgc.getGuildId());
         if (g != null) {
             g.leaveGuild(mgc);
@@ -1160,7 +1160,7 @@ public class Server {
         }
     }
 
-    public void expelMember(MapleGuildCharacter initiator, String name, int cid) {
+    public void expelMember(GuildCharacter initiator, String name, int cid) {
         Guild g = guilds.get(initiator.getGuildId());
         if (g != null) {
             g.expelMember(initiator, name, cid);
@@ -1174,7 +1174,7 @@ public class Server {
         }
     }
 
-    public void memberLevelJobUpdate(MapleGuildCharacter mgc) {
+    public void memberLevelJobUpdate(GuildCharacter mgc) {
         Guild g = guilds.get(mgc.getGuildId());
         if (g != null) {
             g.memberLevelJobUpdate(mgc);
@@ -1242,7 +1242,7 @@ public class Server {
         }
     }
 
-    public void deleteGuildCharacter(MapleGuildCharacter mgc) {
+    public void deleteGuildCharacter(GuildCharacter mgc) {
         if (mgc.getCharacter() != null) {
             setGuildMemberOnline(mgc.getCharacter(), false, (byte) -1);
         }

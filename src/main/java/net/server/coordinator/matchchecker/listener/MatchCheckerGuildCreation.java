@@ -27,8 +27,8 @@ import net.server.Server;
 import net.server.coordinator.matchchecker.AbstractMatchCheckerListener;
 import net.server.coordinator.matchchecker.MatchCheckerListenerRecipe;
 import net.server.guild.Guild;
+import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuildCharacter;
 import net.server.world.MapleParty;
 
 import java.util.Set;
@@ -129,7 +129,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                 for (Character chr : matchPlayers) {
                     boolean cofounder = chr.getPartyId() == partyid;
                     
-                    MapleGuildCharacter mgc = chr.getMGC();
+                    GuildCharacter mgc = chr.getMGC();
                     mgc.setGuildId(gid);
                     mgc.setGuildRank(cofounder ? 2 : 5);
                     mgc.setAllianceRank(5);

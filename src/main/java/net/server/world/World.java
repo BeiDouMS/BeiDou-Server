@@ -45,8 +45,8 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.guild.Guild;
+import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuildCharacter;
 import net.server.guild.MapleGuildSummary;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
@@ -576,7 +576,7 @@ public class World {
         }
     }
 
-    public Guild getGuild(MapleGuildCharacter mgc) {
+    public Guild getGuild(GuildCharacter mgc) {
         if(mgc == null) return null;
         
         int gid = mgc.getGuildId();

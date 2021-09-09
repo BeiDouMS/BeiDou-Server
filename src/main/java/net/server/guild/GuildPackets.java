@@ -34,12 +34,12 @@ public class GuildPackets {
         for (int i = 1; i <= 5; i++) {
             p.writeString(g.getRankTitle(i));
         }
-        Collection<MapleGuildCharacter> members = g.getMembers();
+        Collection<GuildCharacter> members = g.getMembers();
         p.writeByte(members.size()); //then it is the size of all the members
-        for (MapleGuildCharacter mgc : members) {//and each of their character ids o_O
+        for (GuildCharacter mgc : members) {//and each of their character ids o_O
             p.writeInt(mgc.getId());
         }
-        for (MapleGuildCharacter mgc : members) {
+        for (GuildCharacter mgc : members) {
             p.writeFixedString(StringUtil.getRightPaddedStr(mgc.getName(), '\0', 13));
             p.writeInt(mgc.getJobId());
             p.writeInt(mgc.getLevel());
@@ -121,7 +121,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet newGuildMember(MapleGuildCharacter mgc) {
+    public static Packet newGuildMember(GuildCharacter mgc) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x27);
         p.writeInt(mgc.getGuildId());
@@ -137,7 +137,7 @@ public class GuildPackets {
     }
 
     //someone leaving, mode == 0x2c for leaving, 0x2f for expelled
-    public static Packet memberLeft(MapleGuildCharacter mgc, boolean bExpelled) {
+    public static Packet memberLeft(GuildCharacter mgc, boolean bExpelled) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(bExpelled ? 0x2f : 0x2c);
         p.writeInt(mgc.getGuildId());
@@ -147,7 +147,7 @@ public class GuildPackets {
     }
 
     //rank change
-    public static Packet changeRank(MapleGuildCharacter mgc) {
+    public static Packet changeRank(GuildCharacter mgc) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x40);
         p.writeInt(mgc.getGuildId());
@@ -164,7 +164,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet guildMemberLevelJobUpdate(MapleGuildCharacter mgc) {
+    public static Packet guildMemberLevelJobUpdate(GuildCharacter mgc) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x3C);
         p.writeInt(mgc.getGuildId());
@@ -341,12 +341,12 @@ public class GuildPackets {
         for (int i = 1; i <= 5; i++) {
             p.writeString(guild.getRankTitle(i));
         }
-        Collection<MapleGuildCharacter> members = guild.getMembers();
+        Collection<GuildCharacter> members = guild.getMembers();
         p.writeByte(members.size());
-        for (MapleGuildCharacter mgc : members) {
+        for (GuildCharacter mgc : members) {
             p.writeInt(mgc.getId());
         }
-        for (MapleGuildCharacter mgc : members) {
+        for (GuildCharacter mgc : members) {
             p.writeFixedString(StringUtil.getRightPaddedStr(mgc.getName(), '\0', 13));
             p.writeInt(mgc.getJobId());
             p.writeInt(mgc.getLevel());

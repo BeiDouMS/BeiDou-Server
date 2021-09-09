@@ -23,19 +23,19 @@ package net.server.guild;
 
 import client.Character;
 
-public class MapleGuildCharacter {
+public class GuildCharacter {
     private Character character;
     private int level;
-    private int id;
+    private final int id;
     private int world, channel;
     private int jobid;
     private int guildrank;
     private int guildid;
     private int allianceRank;
     private boolean online;
-    private String name;
+    private final String name;
 
-    public MapleGuildCharacter(Character chr) {
+    public GuildCharacter(Character chr) {
         this.character = chr;
         this.name = chr.getName();
         this.level = chr.getLevel();
@@ -49,7 +49,7 @@ public class MapleGuildCharacter {
         this.allianceRank = chr.getAllianceRank();
     }
 
-    public MapleGuildCharacter(Character chr, int _id, int _lv, String _name, int _channel, int _world, int _job, int _rank, int _gid, boolean _on, int _allianceRank) {
+    public GuildCharacter(Character chr, int _id, int _lv, String _name, int _channel, int _world, int _job, int _rank, int _gid, boolean _on, int _allianceRank) {
         this.character = chr;
         this.level = _lv;
         this.id = _id;
@@ -64,11 +64,11 @@ public class MapleGuildCharacter {
         this.guildid = _gid;
         this.allianceRank = _allianceRank;
     }
-    
+
     public void setCharacter(Character ch) {
         this.character = ch;
     }
-    
+
     public Character getCharacter() {
         return character;
     }
@@ -113,7 +113,7 @@ public class MapleGuildCharacter {
         guildid = gid;
         character.setGuildId(gid);
     }
-    
+
     public int getGuildRank() {
         return guildrank;
     }
@@ -121,16 +121,16 @@ public class MapleGuildCharacter {
     public void setOfflineGuildRank(int rank) {
         guildrank = rank;
     }
-    
+
     public void setGuildRank(int rank) {
         guildrank = rank;
         character.setGuildRank(rank);
     }
-    
+
     public int getAllianceRank() {
         return allianceRank;
     }
-    
+
     public void setAllianceRank(int rank) {
         allianceRank = rank;
         character.setAllianceRank(rank);
@@ -150,10 +150,10 @@ public class MapleGuildCharacter {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof MapleGuildCharacter)) {
+        if (!(other instanceof GuildCharacter)) {
             return false;
         }
-        MapleGuildCharacter o = (MapleGuildCharacter) other;
+        GuildCharacter o = (GuildCharacter) other;
         return (o.getId() == id && o.getName().equals(name));
     }
 

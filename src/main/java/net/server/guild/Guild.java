@@ -50,7 +50,7 @@ public class Guild {
         NONE, DISBAND, EMBLEMCHANGE
     }
 
-    private final List<MapleGuildCharacter> members;
+    private final List<GuildCharacter> members;
     private final Lock membersLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.GUILD, true);
 
     private String[] rankTitles = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
@@ -97,7 +97,7 @@ public class Guild {
                     }
 
                     do {
-                        members.add(new MapleGuildCharacter(null, rs.getInt("id"), rs.getInt("level"), rs.getString("name"), (byte) -1, world, rs.getInt("job"), rs.getInt("guildrank"), guildid, false, rs.getInt("allianceRank")));
+                        members.add(new GuildCharacter(null, rs.getInt("id"), rs.getInt("level"), rs.getString("name"), (byte) -1, world, rs.getInt("job"), rs.getInt("guildrank"), guildid, false, rs.getInt("allianceRank")));
                     } while (rs.next());
                 }
             }
@@ -127,7 +127,7 @@ public class Guild {
 
         membersLock.lock();
         try {
-            for (MapleGuildCharacter mgc : members) {
+            for (GuildCharacter mgc : members) {
                 if (!mgc.isOnline()) {
                     continue;
                 }
@@ -254,7 +254,7 @@ public class Guild {
         return name;
     }
 
-    public List<MapleGuildCharacter> getMembers() {
+    public List<GuildCharacter> getMembers() {
         membersLock.lock();
         try {
             return new ArrayList<>(members);
@@ -274,7 +274,7 @@ public class Guild {
     public void broadcastNameChanged() {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
-        for (MapleGuildCharacter mgc : getMembers()) {
+        for (GuildCharacter mgc : getMembers()) {
             Character chr = ps.getCharacterById(mgc.getId());
             if (chr == null || !chr.isLoggedinWorld()) {
                 continue;
@@ -288,7 +288,7 @@ public class Guild {
     public void broadcastEmblemChanged() {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
-        for (MapleGuildCharacter mgc : getMembers()) {
+        for (GuildCharacter mgc : getMembers()) {
             Character chr = ps.getCharacterById(mgc.getId());
             if (chr == null || !chr.isLoggedinWorld()) {
                 continue;
@@ -302,7 +302,7 @@ public class Guild {
     public void broadcastInfoChanged() {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
-        for (MapleGuildCharacter mgc : getMembers()) {
+        for (GuildCharacter mgc : getMembers()) {
             Character chr = ps.getCharacterById(mgc.getId());
             if (chr == null || !chr.isLoggedinWorld()) {
                 continue;
@@ -352,7 +352,7 @@ public class Guild {
     public void guildMessage(Packet serverNotice) {
         membersLock.lock();
         try {
-            for (MapleGuildCharacter mgc : members) {
+            for (GuildCharacter mgc : members) {
                 for (Channel cs : Server.getInstance().getChannelsFromWorld(world)) {
                     if (cs.getPlayerStorage().getCharacterById(mgc.getId()) != null) {
                         cs.getPlayerStorage().getCharacterById(mgc.getId()).sendPacket(serverNotice);
@@ -372,7 +372,7 @@ public class Guild {
     public void dropMessage(int type, String message) {
         membersLock.lock();
         try {
-            for (MapleGuildCharacter mgc : members) {
+            for (GuildCharacter mgc : members) {
                 if (mgc.getCharacter() != null) {
                     mgc.getCharacter().dropMessage(type, message);
                 }
@@ -390,7 +390,7 @@ public class Guild {
         membersLock.lock();
         try {
             boolean bBroadcast = true;
-            for (MapleGuildCharacter mgc : members) {
+            for (GuildCharacter mgc : members) {
                 if (mgc.getId() == cid) {
                     if (mgc.isOnline() && online) {
                         bBroadcast = false;
@@ -464,7 +464,7 @@ public class Guild {
         }
     }
 
-    public int addGuildMember(MapleGuildCharacter mgc, Character chr) {
+    public int addGuildMember(GuildCharacter mgc, Character chr) {
         membersLock.lock();
         try {
             if (members.size() >= capacity) {
@@ -486,7 +486,7 @@ public class Guild {
         }
     }
 
-    public void leaveGuild(MapleGuildCharacter mgc) {
+    public void leaveGuild(GuildCharacter mgc) {
         membersLock.lock();
         try {
             this.broadcast(GuildPackets.memberLeft(mgc, false));
@@ -497,11 +497,11 @@ public class Guild {
         }
     }
 
-    public void expelMember(MapleGuildCharacter initiator, String name, int cid) {
+    public void expelMember(GuildCharacter initiator, String name, int cid) {
         membersLock.lock();
         try {
-            java.util.Iterator<MapleGuildCharacter> itr = members.iterator();
-            MapleGuildCharacter mgc;
+            java.util.Iterator<GuildCharacter> itr = members.iterator();
+            GuildCharacter mgc;
             while (itr.hasNext()) {
                 mgc = itr.next();
                 if (mgc.getId() == cid && initiator.getGuildRank() < mgc.getGuildRank()) {
@@ -541,7 +541,7 @@ public class Guild {
     public void changeRank(int cid, int newRank) {
         membersLock.lock();
         try {
-            for (MapleGuildCharacter mgc : members) {
+            for (GuildCharacter mgc : members) {
                 if (cid == mgc.getId()) {
                     changeRank(mgc, newRank);
                     return;
@@ -552,7 +552,7 @@ public class Guild {
         }
     }
 
-    public void changeRank(MapleGuildCharacter mgc, int newRank) {
+    public void changeRank(GuildCharacter mgc, int newRank) {
         try {
             if (mgc.isOnline()) {
                 Server.getInstance().getWorld(mgc.getWorld()).setGuildAndRank(mgc.getId(), this.id, newRank);
@@ -586,10 +586,10 @@ public class Guild {
         }
     }
 
-    public void memberLevelJobUpdate(MapleGuildCharacter mgc) {
+    public void memberLevelJobUpdate(GuildCharacter mgc) {
         membersLock.lock();
         try {
-            for (MapleGuildCharacter member : members) {
+            for (GuildCharacter member : members) {
                 if (mgc.equals(member)) {
                     member.setJobId(mgc.getJobId());
                     member.setLevel(mgc.getLevel());
@@ -604,10 +604,10 @@ public class Guild {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof MapleGuildCharacter)) {
+        if (!(other instanceof GuildCharacter)) {
             return false;
         }
-        MapleGuildCharacter o = (MapleGuildCharacter) other;
+        GuildCharacter o = (GuildCharacter) other;
         return (o.getId() == id && o.getName().equals(name));
     }
 
@@ -663,10 +663,10 @@ public class Guild {
         }
     }
 
-    public MapleGuildCharacter getMGC(int cid) {
+    public GuildCharacter getMGC(int cid) {
         membersLock.lock();
         try {
-            for (MapleGuildCharacter mgc : members) {
+            for (GuildCharacter mgc : members) {
                 if (mgc.getId() == cid) {
                     return mgc;
                 }
@@ -793,7 +793,7 @@ public class Guild {
         try {
             membersLock.lock();
             try {
-                for (MapleGuildCharacter mgc : members) {
+                for (GuildCharacter mgc : members) {
                     if (mgc.isOnline()) {
                         mgc.setAllianceRank(5);
                     }
