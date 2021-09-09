@@ -49,8 +49,8 @@ public class Family {
     private static final AtomicInteger familyIDCounter = new AtomicInteger();
 
     private final int id, world;
-    private final Map<Integer, MapleFamilyEntry> members = new ConcurrentHashMap<>();
-    private MapleFamilyEntry leader;
+    private final Map<Integer, FamilyEntry> members = new ConcurrentHashMap<>();
+    private FamilyEntry leader;
     private String name;
     private String preceptsMessage = "";
     private int totalGenerations;
@@ -83,12 +83,12 @@ public class Family {
         return world;
     }
 
-    public void setLeader(MapleFamilyEntry leader) {
+    public void setLeader(FamilyEntry leader) {
         this.leader = leader;
         setName(leader.getName());
     }
 
-    public MapleFamilyEntry getLeader() {
+    public FamilyEntry getLeader() {
         return leader;
     }
 
@@ -131,29 +131,29 @@ public class Family {
         return preceptsMessage;
     }
 
-    public void addEntry(MapleFamilyEntry entry) {
+    public void addEntry(FamilyEntry entry) {
         members.put(entry.getChrId(), entry);
     }
 
-    public void removeEntryBranch(MapleFamilyEntry root) {
+    public void removeEntryBranch(FamilyEntry root) {
         members.remove(root.getChrId());
-        for (MapleFamilyEntry junior : root.getJuniors()) {
+        for (FamilyEntry junior : root.getJuniors()) {
             if (junior != null) {
                 removeEntryBranch(junior);
             }
         }
     }
 
-    public void addEntryTree(MapleFamilyEntry root) {
+    public void addEntryTree(FamilyEntry root) {
         members.put(root.getChrId(), root);
-        for (MapleFamilyEntry junior : root.getJuniors()) {
+        for (FamilyEntry junior : root.getJuniors()) {
             if (junior != null) {
                 addEntryTree(junior);
             }
         }
     }
 
-    public MapleFamilyEntry getEntryByID(int cid) {
+    public FamilyEntry getEntryByID(int cid) {
         return members.get(cid);
     }
 
@@ -162,7 +162,7 @@ public class Family {
     }
 
     public void broadcast(Packet packet, int ignoreID) {
-        for (MapleFamilyEntry entry : members.values()) {
+        for (FamilyEntry entry : members.values()) {
             Character chr = entry.getChr();
             if (chr != null) {
                 if (chr.getId() == ignoreID) {
@@ -174,7 +174,7 @@ public class Family {
     }
 
     public void broadcastFamilyInfoUpdate() {
-        for (MapleFamilyEntry entry : members.values()) {
+        for (FamilyEntry entry : members.values()) {
             Character chr = entry.getChr();
             if (chr != null) {
                 chr.sendPacket(PacketCreator.getFamilyInfo(entry));
@@ -183,7 +183,7 @@ public class Family {
     }
 
     public void resetDailyReps() {
-        for (MapleFamilyEntry entry : members.values()) {
+        for (FamilyEntry entry : members.values()) {
             entry.setTodaysRep(0);
             entry.setRepsToSenior(0);
             entry.resetEntitlementUsages();
@@ -191,7 +191,7 @@ public class Family {
     }
 
     public static void loadAllFamilies(Connection con) {
-        List<Pair<Pair<Integer, Integer>, MapleFamilyEntry>> unmatchedJuniors = new ArrayList<>(200); // <<world, seniorid> familyEntry>
+        List<Pair<Pair<Integer, Integer>, FamilyEntry>> unmatchedJuniors = new ArrayList<>(200); // <<world, seniorid> familyEntry>
         try (PreparedStatement psEntries = con.prepareStatement("SELECT * FROM family_character")) {
             ResultSet rsEntries = psEntries.executeQuery();
             while (rsEntries.next()) { // can be optimized
@@ -233,13 +233,13 @@ public class Family {
                     family = new Family(familyid, world);
                     Server.getInstance().getWorld(world).addFamily(familyid, family);
                 }
-                MapleFamilyEntry familyEntry = new MapleFamilyEntry(family, cid, name, level, MapleJob.getById(jobID));
+                FamilyEntry familyEntry = new FamilyEntry(family, cid, name, level, MapleJob.getById(jobID));
                 family.addEntry(familyEntry);
                 if (seniorid <= 0) {
                     family.setLeader(familyEntry);
                     family.setMessage(precepts, false);
                 }
-                MapleFamilyEntry senior = family.getEntryByID(seniorid);
+                FamilyEntry senior = family.getEntryByID(seniorid);
                 if (senior != null) {
                     familyEntry.setSenior(family.getEntryByID(seniorid), false);
                 } else {
@@ -265,11 +265,11 @@ public class Family {
             e.printStackTrace();
         }
         // link missing ones (out of order)
-        for (Pair<Pair<Integer, Integer>, MapleFamilyEntry> unmatchedJunior : unmatchedJuniors) {
+        for (Pair<Pair<Integer, Integer>, FamilyEntry> unmatchedJunior : unmatchedJuniors) {
             int world = unmatchedJunior.getLeft().getLeft();
             int seniorid = unmatchedJunior.getLeft().getRight();
-            MapleFamilyEntry junior = unmatchedJunior.getRight();
-            MapleFamilyEntry senior = Server.getInstance().getWorld(world).getFamily(junior.getFamily().getID()).getEntryByID(seniorid);
+            FamilyEntry junior = unmatchedJunior.getRight();
+            FamilyEntry senior = Server.getInstance().getWorld(world).getFamily(junior.getFamily().getID()).getEntryByID(seniorid);
             if (senior != null) {
                 junior.setSenior(senior, false);
             } else {
@@ -288,7 +288,7 @@ public class Family {
         try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
             boolean success = true;
-            for (MapleFamilyEntry entry : members.values()) {
+            for (FamilyEntry entry : members.values()) {
                 success = entry.saveReputation(con);
                 if (!success) {
                     break;
@@ -300,7 +300,7 @@ public class Family {
             }
             con.setAutoCommit(true);
             //reset repChanged after successful save
-            for (MapleFamilyEntry entry : members.values()) {
+            for (FamilyEntry entry : members.values()) {
                 entry.savedSuccessfully();
             }
         } catch (SQLException e) {

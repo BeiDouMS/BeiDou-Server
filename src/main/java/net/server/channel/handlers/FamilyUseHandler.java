@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import client.FamilyEntitlement;
-import client.MapleFamilyEntry;
+import client.FamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -47,7 +47,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
         }
         FamilyEntitlement type = FamilyEntitlement.values()[p.readInt()];
         int cost = type.getRepCost();
-        MapleFamilyEntry entry = c.getPlayer().getFamilyEntry();
+        FamilyEntry entry = c.getPlayer().getFamilyEntry();
         if(entry.getReputation() < cost || entry.isEntitlementUsed(type)) {
             return; // shouldn't even be able to request it
         }
@@ -130,7 +130,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
         }
     }
     
-    private boolean useEntitlement(MapleFamilyEntry entry, FamilyEntitlement entitlement) {
+    private boolean useEntitlement(FamilyEntry entry, FamilyEntitlement entitlement) {
         if(entry.useEntitlement(entitlement)) {
             entry.gainReputation(-entitlement.getRepCost(), false);
             entry.getChr().sendPacket(PacketCreator.getFamilyInfo(entry));

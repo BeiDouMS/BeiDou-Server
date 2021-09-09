@@ -115,7 +115,7 @@ public class Character extends AbstractCharacterObject {
     private int energybar;
     private int gmLevel;
     private int ci = 0;
-    private MapleFamilyEntry familyEntry;
+    private FamilyEntry familyEntry;
     private int familyId;
     private int bookCover;
     private int battleshipHp = 0;
@@ -4963,11 +4963,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleFamilyEntry getFamilyEntry() {
+    public FamilyEntry getFamilyEntry() {
         return familyEntry;
     }
 
-    public void setFamilyEntry(MapleFamilyEntry entry) {
+    public void setFamilyEntry(FamilyEntry entry) {
         if (entry != null) {
             setFamilyId(entry.getFamily().getID());
         }
@@ -6495,10 +6495,10 @@ public class Character extends AbstractCharacterObject {
         levelUpMessages();
         guildUpdate();
 
-        MapleFamilyEntry familyEntry = getFamilyEntry();
+        FamilyEntry familyEntry = getFamilyEntry();
         if (familyEntry != null) {
             familyEntry.giveReputationToSenior(YamlConfig.config.server.FAMILY_REP_PER_LEVELUP, true);
-            MapleFamilyEntry senior = familyEntry.getSenior();
+            FamilyEntry senior = familyEntry.getSenior();
             if (senior != null) { //only send the message to direct senior
                 Character seniorChr = senior.getChr();
                 if (seniorChr != null) {
@@ -8706,12 +8706,12 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
 
-                MapleFamilyEntry familyEntry = getFamilyEntry(); //save family rep
+                FamilyEntry familyEntry = getFamilyEntry(); //save family rep
                 if (familyEntry != null) {
                     if (familyEntry.saveReputation(con)) {
                         familyEntry.savedSuccessfully();
                     }
-                    MapleFamilyEntry senior = familyEntry.getSenior();
+                    FamilyEntry senior = familyEntry.getSenior();
                     if (senior != null && senior.getChr() == null) { //only save for offline family members
                         if (senior.saveReputation(con)) {
                             senior.savedSuccessfully();
@@ -10529,7 +10529,7 @@ public class Character extends AbstractCharacterObject {
             mpc = null;
             mgc = null;
             party = null;
-            MapleFamilyEntry familyEntry = getFamilyEntry();
+            FamilyEntry familyEntry = getFamilyEntry();
             if (familyEntry != null) {
                 familyEntry.setCharacter(null);
                 setFamilyEntry(null);

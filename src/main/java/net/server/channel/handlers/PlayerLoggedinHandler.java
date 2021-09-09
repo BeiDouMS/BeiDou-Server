@@ -249,7 +249,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (player.getFamilyId() > 0) {
                 Family f = wserv.getFamily(player.getFamilyId());
                 if (f != null) {
-                    MapleFamilyEntry familyEntry = f.getEntryByID(player.getId());
+                    FamilyEntry familyEntry = f.getEntryByID(player.getId());
                     if (familyEntry != null) {
                         familyEntry.setCharacter(player);
                         player.setFamilyEntry(familyEntry);

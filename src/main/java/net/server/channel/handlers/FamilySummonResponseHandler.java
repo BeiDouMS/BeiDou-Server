@@ -3,7 +3,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import client.FamilyEntitlement;
-import client.MapleFamilyEntry;
+import client.FamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -24,7 +24,7 @@ public class FamilySummonResponseHandler extends AbstractPacketHandler {
         MapleInviteResult inviteResult = MapleInviteCoordinator.answerInvite(InviteType.FAMILY_SUMMON, c.getPlayer().getId(), c.getPlayer(), accept);
         if(inviteResult.result == InviteResult.NOT_FOUND) return;
         Character inviter = inviteResult.from;
-        MapleFamilyEntry inviterEntry = inviter.getFamilyEntry();
+        FamilyEntry inviterEntry = inviter.getFamilyEntry();
         if(inviterEntry == null) return;
         MapleMap map = (MapleMap) inviteResult.params[0];
         if(accept && inviter.getMap() == map) { //cancel if inviter has changed maps

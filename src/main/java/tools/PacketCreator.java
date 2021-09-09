@@ -5801,7 +5801,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getFamilyInfo(MapleFamilyEntry f) {
+    public static Packet getFamilyInfo(FamilyEntry f) {
         if (f == null) {
             return getEmptyFamilyInfo();
         }
@@ -5839,10 +5839,10 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showPedigree(MapleFamilyEntry entry) {
+    public static Packet showPedigree(FamilyEntry entry) {
         final OutPacket p = OutPacket.create(SendOpcode.FAMILY_CHART_RESULT);
         p.writeInt(entry.getChrId()); //ID of viewed player's pedigree, can't be leader?
-        List<MapleFamilyEntry> superJuniors = new ArrayList<>(4);
+        List<FamilyEntry> superJuniors = new ArrayList<>(4);
         boolean hasOtherJunior = false;
         int entryCount = 2; //2 guaranteed, leader and self
         entryCount += Math.min(2, entry.getTotalSeniors());
@@ -5853,12 +5853,12 @@ public class PacketCreator {
                 hasOtherJunior = true;
             }
         }
-        for (MapleFamilyEntry junior : entry.getJuniors()) {
+        for (FamilyEntry junior : entry.getJuniors()) {
                 if (junior == null) {
                         continue;
                 }
             entryCount++;
-            for (MapleFamilyEntry superJunior : junior.getJuniors()) {
+            for (FamilyEntry superJunior : junior.getJuniors()) {
                     if (superJunior == null) {
                             continue;
                     }
@@ -5881,7 +5881,7 @@ public class PacketCreator {
         }
         addPedigreeEntry(p, entry);
         if (hasOtherJunior) { //must be sent after own entry
-            MapleFamilyEntry otherJunior = entry.getSenior().getOtherJunior(entry);
+            FamilyEntry otherJunior = entry.getSenior().getOtherJunior(entry);
             if (otherJunior != null) {
                 addPedigreeEntry(p, otherJunior);
             }
@@ -5889,12 +5889,12 @@ public class PacketCreator {
         if (missingEntries) {
             addPedigreeEntry(p, entry);
         }
-        for (MapleFamilyEntry junior : entry.getJuniors()) {
+        for (FamilyEntry junior : entry.getJuniors()) {
             if (junior == null) {
                 continue;
             }
             addPedigreeEntry(p, junior);
-            for (MapleFamilyEntry superJunior : junior.getJuniors()) {
+            for (FamilyEntry superJunior : junior.getJuniors()) {
                 if (superJunior != null) {
                     addPedigreeEntry(p, superJunior);
                 }
@@ -5906,7 +5906,7 @@ public class PacketCreator {
         p.writeInt(entry.getFamily().getTotalMembers());
         p.writeInt(0);
         p.writeInt(entry.getTotalSeniors()); //client subtracts provided seniors
-        for (MapleFamilyEntry superJunior : superJuniors) {
+        for (FamilyEntry superJunior : superJuniors) {
             p.writeInt(superJunior.getChrId());
             p.writeInt(superJunior.getTotalJuniors());
         }
@@ -5917,7 +5917,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addPedigreeEntry(OutPacket p, MapleFamilyEntry entry) {
+    private static void addPedigreeEntry(OutPacket p, FamilyEntry entry) {
         Character chr = entry.getChr();
         boolean isOnline = chr != null;
         p.writeInt(entry.getChrId()); //ID

@@ -21,7 +21,7 @@ package net.server.channel.handlers;
 
 import client.Client;
 import client.Family;
-import client.MapleFamilyEntry;
+import client.FamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -34,7 +34,7 @@ public class FamilySeparateHandler extends AbstractPacketHandler {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         Family oldFamily = c.getPlayer().getFamily();
         if(oldFamily == null) return;
-        MapleFamilyEntry forkOn = null;
+        FamilyEntry forkOn = null;
         boolean isSenior;
         if(p.available() > 0) { //packet 0x95 doesn't send id, since there is only one senior
             forkOn = c.getPlayer().getFamily().getEntryByID(p.readInt());
@@ -46,7 +46,7 @@ public class FamilySeparateHandler extends AbstractPacketHandler {
         }
         if(forkOn == null) return;
         
-        MapleFamilyEntry senior = forkOn.getSenior();
+        FamilyEntry senior = forkOn.getSenior();
         if(senior == null) return;
         int levelDiff = Math.abs(c.getPlayer().getLevel() - senior.getLevel());
         int cost = 2500 * levelDiff;
@@ -67,7 +67,7 @@ public class FamilySeparateHandler extends AbstractPacketHandler {
     }
     
     
-    private static int separateRepCost(MapleFamilyEntry junior) {
+    private static int separateRepCost(FamilyEntry junior) {
         int level = junior.getLevel();
         int ret = level / 20;
         ret += 10;

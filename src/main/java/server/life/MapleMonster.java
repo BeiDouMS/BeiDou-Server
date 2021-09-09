@@ -943,7 +943,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
     
-    private void giveFamilyRep(MapleFamilyEntry entry) {
+    private void giveFamilyRep(FamilyEntry entry) {
         if(entry != null) {
             int repGain = isBoss() ? YamlConfig.config.server.FAMILY_REP_PER_BOSS_KILL : YamlConfig.config.server.FAMILY_REP_PER_KILL;
             if(getMaxHp() <= 1) repGain = 0; //don't count trash mobs

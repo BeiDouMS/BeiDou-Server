@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import client.Family;
-import client.MapleFamilyEntry;
+import client.FamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -64,7 +64,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
             if(accept) {
                 if(inviter.getFamily() != null) {
                     if(chr.getFamily() == null) {
-                        MapleFamilyEntry newEntry = new MapleFamilyEntry(inviter.getFamily(), chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
+                        FamilyEntry newEntry = new FamilyEntry(inviter.getFamily(), chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
                         newEntry.setCharacter(chr);
                         if(!newEntry.setSenior(inviter.getFamilyEntry(), true)) {
                             inviter.sendPacket(PacketCreator.sendFamilyMessage(1, 0));
@@ -75,7 +75,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                             insertNewFamilyRecord(chr.getId(), inviter.getFamily().getID(), inviter.getId(), false);
                         }
                     } else { //absorb target family
-                        MapleFamilyEntry targetEntry = chr.getFamilyEntry();
+                        FamilyEntry targetEntry = chr.getFamilyEntry();
                         Family targetFamily = targetEntry.getFamily();
                         if(targetFamily.getLeader() != targetEntry) return;
                         if(inviter.getFamily().getTotalGenerations() + targetFamily.getTotalGenerations() <= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
@@ -94,12 +94,12 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                     }
                     Family newFamily = new Family(-1, c.getWorld());
                     c.getWorldServer().addFamily(newFamily.getID(), newFamily);
-                    MapleFamilyEntry inviterEntry = new MapleFamilyEntry(newFamily, inviter.getId(), inviter.getName(), inviter.getLevel(), inviter.getJob());
+                    FamilyEntry inviterEntry = new FamilyEntry(newFamily, inviter.getId(), inviter.getName(), inviter.getLevel(), inviter.getJob());
                     inviterEntry.setCharacter(inviter);
                     newFamily.setLeader(inviter.getFamilyEntry());                    
                     newFamily.addEntry(inviterEntry);
                     if(chr.getFamily() == null) { //completely new family
-                        MapleFamilyEntry newEntry = new MapleFamilyEntry(newFamily, chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
+                        FamilyEntry newEntry = new FamilyEntry(newFamily, chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
                         newEntry.setCharacter(chr);
                         newEntry.setSenior(inviterEntry, true);
                         // save new family
