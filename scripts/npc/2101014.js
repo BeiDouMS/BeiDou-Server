@@ -40,12 +40,12 @@ function action(mode, type, selection) {
                 cm.dispose();
                 return;
             }
-            
+
             if (status == 0) {
                 var expedicao = cm.getExpedition(exped);
                 var expedicao1 = cm.getExpedition(exped1);
                 var expedicao2 = cm.getExpedition(exped2);
-                
+
                 var channelMaps = cm.getClient().getChannelServer().getMapFactory();
                 var startSnd = "What would you like to do? \r\n\r\n\t#e#r(Choose a Battle Arena)#n#k\r\n#b";
                 var toSnd = startSnd;
@@ -78,7 +78,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                     return;
                 }
-                
+
                 if (expedicao != null) {
                     enterArena(-1);
                 } else {
@@ -94,7 +94,7 @@ function action(mode, type, selection) {
                     status = 0;
                 } else {
                     enterArena(players);
-                } 
+                }
             }
         }
     }
@@ -122,7 +122,7 @@ function fetchArenaType() {
             map = 0;
             expedicao = "";
     }
-    
+
     return expedicao;
 }
 
@@ -130,7 +130,7 @@ function enterArena(arenaPlayers) {
     expedicao = fetchArenaType();
     if (expedicao == "") {
         cm.dispose();
-        return;
+
     } else if (expedicao == null) {
         if (arenaPlayers != -1) {
             var res = cm.createExpedition(exped, true, 0, arenaPlayers);
@@ -145,7 +145,7 @@ function enterArena(arenaPlayers) {
         } else {
             cm.sendOk("An unexpected error has occurred when locating the expedition, please try again later.");
         }
-        
+
         cm.dispose();
     } else {
         if (playerAlreadyInLobby(cm.getPlayer())) {
@@ -175,6 +175,6 @@ function enterArena(arenaPlayers) {
 
 function playerAlreadyInLobby(player) {
     return cm.getExpedition(ExpeditionType.ARIANT) != null && cm.getExpedition(ExpeditionType.ARIANT).contains(player) ||
-            cm.getExpedition(ExpeditionType.ARIANT1) != null && cm.getExpedition(ExpeditionType.ARIANT1).contains(player) ||
-            cm.getExpedition(ExpeditionType.ARIANT2) != null && cm.getExpedition(ExpeditionType.ARIANT2).contains(player);
+        cm.getExpedition(ExpeditionType.ARIANT1) != null && cm.getExpedition(ExpeditionType.ARIANT1).contains(player) ||
+        cm.getExpedition(ExpeditionType.ARIANT2) != null && cm.getExpedition(ExpeditionType.ARIANT2).contains(player);
 }

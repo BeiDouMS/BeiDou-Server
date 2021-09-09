@@ -20,7 +20,7 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    
+
     if (mode == -1) {
         cm.dispose();
     } else {
@@ -42,12 +42,12 @@ function action(mode, type, selection) {
                 exped = ExpeditionType.ARIANT2;
                 expedicao = cm.getExpedition(exped);
             }
-            
+
             if (expedicao == null) {
                 cm.dispose();
                 return;
             }
-            
+
             expedMembers = expedicao.getMemberList();
             if (status == 0) {
                 if (cm.isLeaderExpedition(exped)) {
@@ -89,12 +89,12 @@ function action(mode, type, selection) {
                             cm.dispose();
                             return;
                         }
-                        
+
                         var errorMsg = cm.startAriantBattle(exped, cm.getPlayer().getMapId());
                         if (errorMsg != "") {
                             cm.sendOk(errorMsg);
                         }
-                        
+
                         cm.dispose();
                     }
                 } else if (selection == 4) {
@@ -144,6 +144,6 @@ function action(mode, type, selection) {
         } else {
             cm.sendOk("Hi there, have you heard of the Ariant Coliseum Battle Arena, it's a competitive event available to players between level 20 to 30!");
             cm.dispose();
-        } 
+        }
     }
 }

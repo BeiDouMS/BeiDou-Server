@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 	Control Device
  */
 
 function start() {
-    cm.sendNext ("This control device seems to be monitoring something...");
+    cm.sendNext("This control device seems to be monitoring something...");
     cm.dispose();
 }

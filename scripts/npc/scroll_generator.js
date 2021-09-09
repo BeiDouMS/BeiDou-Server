@@ -60,37 +60,45 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
-        if(status == 0) {
+        if (status == 0) {
             cm.sendNext("This is the MapleTV Scroll Generator broadcast. Place your supplies or mesos earned throughout your adventure to redeem a prize! You can place #bany amount of supplies#k, however take note that placing #rdifferent supplies#k with #rbigger shots of any of them#k will improve the reward possibilities!");
-        } else if(status == 1) {
+        } else if (status == 1) {
             var sendStr;
 
             //print("Book: " + sgBookBuckets + " Item: " + sgItemBuckets);
-            
-            if(sgItemBuckets > 0.0) sendStr = "With the items you have currently placed, you have #r" + sgBuckets + "#k buckets (#r" + (sgItemBuckets < 1.0 ? sgItemBuckets.toFixed(2) : Math.floor(sgItemBuckets)) + "#k supply buckets) for claiming a prize. Place supplies:";
-            else sendStr = "You have placed no supplies yet. Place supplies:";
+
+            if (sgItemBuckets > 0.0) {
+                sendStr = "With the items you have currently placed, you have #r" + sgBuckets + "#k buckets (#r" + (sgItemBuckets < 1.0 ? sgItemBuckets.toFixed(2) : Math.floor(sgItemBuckets)) + "#k supply buckets) for claiming a prize. Place supplies:";
+            } else {
+                sendStr = "You have placed no supplies yet. Place supplies:";
+            }
 
             var listStr = "";
             var i;
-            for(i = 0; i < sgItems.length; i++) {
+            for (i = 0; i < sgItems.length; i++) {
                 listStr += "#b#L" + i + "##t" + sgItems[i] + "##k";
-                if(sgAppliedItems[i] > 0) listStr += " - " + sgAppliedItems[i];
+                if (sgAppliedItems[i] > 0) {
+                    listStr += " - " + sgAppliedItems[i];
+                }
                 listStr += "#l\r\n";
             }
 
             listStr += "#b#L" + i + "#Mesos#k";
-            if(sgAppliedMeso > 0) listStr += " - " + sgAppliedMeso;
+            if (sgAppliedMeso > 0) {
+                listStr += " - " + sgAppliedMeso;
+            }
             listStr += "#l\r\n";
 
             cm.sendSimple(sendStr + "\r\n\r\n" + listStr + "#r#L" + (sgItems.length + 2) + "#Retrieve a prize!#l#k\r\n");
-        } else if(status == 2) {
-            if(selection == (sgItems.length + 2)) {
-                if(sgItemBuckets < 1.0) {
+        } else if (status == 2) {
+            if (selection == (sgItems.length + 2)) {
+                if (sgItemBuckets < 1.0) {
                     cm.sendPrev("You have set not enough supplies. Insert at least one bucket of #bsupplies#k to claim a prize.");
                 } else {
                     generateRandomScroll();
@@ -98,37 +106,42 @@ function action(mode, type, selection) {
                 }
             } else {
                 var tickSel;
-                if(selection < sgItems.length) {
+                if (selection < sgItems.length) {
                     tickSel = "of #b#t" + sgItems[selection] + "##k";
                     curItemQty = cm.getItemQuantity(sgItems[selection]);
                 } else {
                     tickSel = "#bmesos#k";
                     curItemQty = cm.getMeso();
                 }
-                
+
                 curItemSel = selection;
-                if(curItemQty > 0) {
+                if (curItemQty > 0) {
                     cm.sendGetText("How many " + tickSel + " do you want to provide? (#r" + curItemQty + "#k available)#k");
                 } else {
                     cm.sendPrev("You have got #rnone#k " + tickSel + " to provide for Scroll Generation. Click '#rBack#k' to return to the main interface.");
                 }
             }
-        } else if(status == 3) {
+        } else if (status == 3) {
             var text = cm.getText();
 
             try {
                 var placedQty = parseInt(text);
-                if(isNaN(placedQty) || placedQty < 0) throw true;
+                if (isNaN(placedQty) || placedQty < 0) {
+                    throw true;
+                }
 
-                if(placedQty > curItemQty) {
+                if (placedQty > curItemQty) {
                     cm.sendPrev("You cannot insert the given amount of #r" + (curItemSel < sgItems.length ? "#t" + sgItems[curItemSel] + "#" : "mesos") + "#k (#r" + curItemQty + "#k available). Click '#rBack#k' to return to the main interface.");
                 } else {
-                    if(curItemSel < sgItems.length) sgApplyItem(curItemSel, placedQty);
-                    else sgApplyMeso(placedQty);
+                    if (curItemSel < sgItems.length) {
+                        sgApplyItem(curItemSel, placedQty);
+                    } else {
+                        sgApplyMeso(placedQty);
+                    }
 
                     cm.sendPrev("Operation succeeded. Click '#rBack#k' to return to the main interface.");
                 }
-            } catch(err) {
+            } catch (err) {
                 cm.sendPrev("You must enter a positive number of supplies to insert. Click '#rBack#k' to return to the main interface.");
             }
 
@@ -154,7 +167,7 @@ function getJobTierScrolls() {
             Array.prototype.push.apply(scrolls, jobScrolls[i]);
         }
     }
-    
+
     return scrolls;
 }
 
@@ -167,7 +180,7 @@ function getScrollTypePool(rewardTier) {
             } else {
                 Array.prototype.push.apply(scrolls, getJobTierScrolls());
             }
-            
+
             Array.prototype.push.apply(scrolls, tier1Scrolls);
             break;
         case 2:
@@ -176,7 +189,7 @@ function getScrollTypePool(rewardTier) {
         default:
             Array.prototype.push.apply(scrolls, tier3Scrolls);
     }
-    
+
     return scrolls;
 }
 
@@ -188,7 +201,7 @@ function getScrollTier(scrollStats) {
             }
         }
     }
-    
+
     return 4;
 }
 
@@ -209,7 +222,7 @@ function getAvailableScrollsPool(baseScrolls, rewardTier, successTier) {
     var scrolls = [];
     const ItemInformationProvider = Java.type('server.ItemInformationProvider');
     var ii = ItemInformationProvider.getInstance();
-    
+
     for (var i = 0; i < baseScrolls.length; i++) {
         for (var j = 0; j < 100; j++) {
             var scrollid = baseScrolls[i] + j;
@@ -252,7 +265,7 @@ function getPlayerCardTierPower() {
             countTier[mobTier] += (ce.getValue() * 1.2);
         }
     }
-    
+
     return countTier;
 }
 
@@ -266,14 +279,14 @@ function calculateMobBookTierBuckets(tierSize, playerCards, tier) {
     if (tierHitRate > 0.5) {
         tierHitRate = 0.5;
     }
-    
+
     return tierHitRate * 4;
 }
 
 function calculateMobBookBuckets() {
     var book = cm.getPlayer().getMonsterBook();
     var bookLevelMult = 0.9 + (0.1 * book.getBookLevel());
-    
+
     var playerLevelTier = getLevelTier(cm.getPlayer().getLevel());
     if (playerLevelTier > 8) {
         playerLevelTier = 8;
@@ -282,17 +295,17 @@ function calculateMobBookBuckets() {
     const MonsterBook = Java.type('client.MonsterBook');
     var tierSize = MonsterBook.getCardTierSize();
     var playerCards = getPlayerCardTierPower();
-    
+
     var prevBuckets = calculateMobBookTierBuckets(tierSize, playerCards, playerLevelTier - 1);
     var currBuckets = calculateMobBookTierBuckets(tierSize, playerCards, playerLevelTier);
-    
+
     return (prevBuckets + currBuckets) * bookLevelMult;
 }
 
 function recalcBuckets() {
     sgBookBuckets = calculateMobBookBuckets();
     sgItemBuckets = calculateSuppliesBuckets();
-    
+
     var buckets = sgBookBuckets + sgItemBuckets;
     if (buckets > 6.0) {
         sgBuckets = 6;
@@ -338,9 +351,9 @@ function calculateScrollTiers() {
                 pool.push(i);
             }
         }
-        
+
         var rnd = pool[Math.floor(Math.random() * pool.length)];
-        
+
         tiers[rnd]++;
         buckets--;
     }
@@ -357,7 +370,7 @@ function getRandomScrollFromTiers(tiers) {
     var typeTier = tiers[0], subtypeTier = tiers[1], successTier = tiers[2];
     var scrollTypePool = getScrollTypePool(typeTier);
     var scrollPool = getAvailableScrollsPool(scrollTypePool, subtypeTier, successTier);
-    
+
     if (scrollPool.length > 0) {
         return scrollPool[Math.floor(Math.random() * scrollPool.length)];
     } else {
@@ -391,7 +404,7 @@ function getRandomScroll(tiers) {
         // worst case shift-right permutations...
         itemid = getRandomScrollFromRightPermutations(tiers);
     }
-    
+
     return itemid;
 }
 
@@ -399,7 +412,7 @@ function performExchange(sgItemid, sgCount) {
     if (cm.getMeso() < sgAppliedMeso) {
         return false;
     }
-    
+
     for (var i = 0; i < sgItems.length; i++) {
         var itemid = sgItems[i];
         var count = sgAppliedItems[i];
@@ -409,7 +422,7 @@ function performExchange(sgItemid, sgCount) {
     }
 
     cm.gainMeso(-sgAppliedMeso);
-    
+
     for (var i = 0; i < sgItems.length; i++) {
         var itemid = sgItems[i];
         var count = sgAppliedItems[i];

@@ -19,11 +19,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*
 	Incomplete Magic Square
  */
 
 function start() {
-    cm.sendNext ("This chalkboard has some hard-founded studies annotated on it...");
+    cm.sendNext("This chalkboard has some hard-founded studies annotated on it...");
     cm.dispose();
 }

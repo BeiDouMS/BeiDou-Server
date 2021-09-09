@@ -2,7 +2,7 @@
  *9201101 - T-1337
  *@author Ronan
  */
- 
+
 function start() {
     const YamlConfig = Java.type('config.YamlConfig');
     if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
