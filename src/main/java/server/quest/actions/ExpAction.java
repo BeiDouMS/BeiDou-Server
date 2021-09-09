@@ -29,33 +29,32 @@ import server.quest.Quest;
 import server.quest.QuestActionType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class ExpAction extends AbstractQuestAction {
-	int exp;
-	
-	public ExpAction(Quest quest, Data data) {
-		super(QuestActionType.EXP, quest);
-		processData(data);
-	}
-	
-	
-	@Override
-	public void processData(Data data) {
-		exp = DataTool.getInt(data);
-	}
-	
-	@Override
-	public void run(Character chr, Integer extSelection) {
-		runAction(chr, exp);
-	}
-        
-        public static void runAction(Character chr, int gain) {
-                if (!YamlConfig.config.server.USE_QUEST_RATE) {
-                        chr.gainExp(gain * chr.getExpRate(), true, true);
-                } else {
-                        chr.gainExp(gain * chr.getQuestExpRate(), true, true);
-                }
+    int exp;
+
+    public ExpAction(Quest quest, Data data) {
+        super(QuestActionType.EXP, quest);
+        processData(data);
+    }
+
+
+    @Override
+    public void processData(Data data) {
+        exp = DataTool.getInt(data);
+    }
+
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        runAction(chr, exp);
+    }
+
+    public static void runAction(Character chr, int gain) {
+        if (!YamlConfig.config.server.USE_QUEST_RATE) {
+            chr.gainExp(gain * chr.getExpRate(), true, true);
+        } else {
+            chr.gainExp(gain * chr.getQuestExpRate(), true, true);
         }
+    }
 } 

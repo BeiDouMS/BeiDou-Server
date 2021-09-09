@@ -30,35 +30,35 @@ import server.quest.Quest;
 import server.quest.QuestActionType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class PetSkillAction extends AbstractQuestAction {
-	int flag;
-	
-	public PetSkillAction(Quest quest, Data data) {
-		super(QuestActionType.PETSKILL, quest);
-		questID = quest.getId();
-		processData(data);
-	}
-	
-	
-	@Override
-	public void processData(Data data) {
-		flag = DataTool.getInt("petskill", data);
-	}
-	
-	@Override
-	public boolean check(Character chr, Integer extSelection) {
-		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
-		if(!(status.getStatus() == QuestStatus.Status.NOT_STARTED && status.getForfeited() > 0))
-			return false;
-		
-		return chr.getPet(0) != null; 
-	}
-	
-	@Override
-	public void run(Character chr, Integer extSelection) {
-		chr.getPet(0).setFlag((byte) ItemConstants.getFlagByInt(flag));
-	}
+    int flag;
+
+    public PetSkillAction(Quest quest, Data data) {
+        super(QuestActionType.PETSKILL, quest);
+        questID = quest.getId();
+        processData(data);
+    }
+
+
+    @Override
+    public void processData(Data data) {
+        flag = DataTool.getInt("petskill", data);
+    }
+
+    @Override
+    public boolean check(Character chr, Integer extSelection) {
+        QuestStatus status = chr.getQuest(Quest.getInstance(questID));
+        if (!(status.getStatus() == QuestStatus.Status.NOT_STARTED && status.getForfeited() > 0)) {
+            return false;
+        }
+
+        return chr.getPet(0) != null;
+    }
+
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        chr.getPet(0).setFlag((byte) ItemConstants.getFlagByInt(flag));
+    }
 } 

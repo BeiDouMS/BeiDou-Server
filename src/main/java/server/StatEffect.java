@@ -1648,7 +1648,9 @@ public class StatEffect {
     private boolean isCureAllAbnormalStatus() {
         if (skill) {
             return isHerosWill(sourceid);
-        } else return sourceid == 2022544;
+        } else {
+            return sourceid == 2022544;
+        }
     }
 
     public static boolean isHerosWill(int skillid) {

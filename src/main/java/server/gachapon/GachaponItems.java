@@ -23,35 +23,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.gachapon;
 
 /**
-*
-* @author Alan (SharpAceX)
-*/
+ * @author Alan (SharpAceX)
+ */
 
 public abstract class GachaponItems {
 
-	public abstract int [] getCommonItems();
-	public abstract int [] getUncommonItems();
-	public abstract int [] getRareItems();
-	
-	private final int [] commonItems;
-	private final int [] uncommonItems;
-	private final int [] rareItems;
-	
-	public GachaponItems() {
-		this.commonItems = getCommonItems();
-		this.uncommonItems = getUncommonItems();
-		this.rareItems = getRareItems();
-	}
+    public abstract int[] getCommonItems();
+    public abstract int[] getUncommonItems();
+    public abstract int[] getRareItems();
 
-	public final int[] getItems(int tier) {
-		if (tier == 0) {
-			return commonItems;
-		} else if (tier == 1) {
-			return uncommonItems;
-		} else if (tier == 2) {
-			return rareItems;
-		}
-		return null;
-	}
+    private final int[] commonItems;
+    private final int[] uncommonItems;
+    private final int[] rareItems;
+
+    public GachaponItems() {
+        this.commonItems = getCommonItems();
+        this.uncommonItems = getUncommonItems();
+        this.rareItems = getRareItems();
+    }
+
+    public final int[] getItems(int tier) {
+        if (tier == 0) {
+            return commonItems;
+        } else if (tier == 1) {
+            return uncommonItems;
+        } else if (tier == 2) {
+            return rareItems;
+        }
+        return null;
+    }
 }
 

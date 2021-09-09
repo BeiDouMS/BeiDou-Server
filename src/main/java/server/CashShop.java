@@ -48,10 +48,12 @@ import java.util.concurrent.locks.Lock;
 public class CashShop {
     public static class CashItem {
 
-        private int sn, itemId, price;
-        private long period;
-        private short count;
-        private boolean onSale;
+        private final int sn;
+        private final int itemId;
+        private final int price;
+        private final long period;
+        private final short count;
+        private final boolean onSale;
 
         private CashItem(int sn, int itemId, int price, long period, short count, boolean onSale) {
             this.sn = sn;
@@ -120,8 +122,9 @@ public class CashShop {
     }
 
     public static class SpecialCashItem {
-        private int sn, modifier;
-        private byte info; //?
+        private final int sn;
+        private final int modifier;
+        private final byte info; //?
 
         public SpecialCashItem(int sn, int modifier, byte info) {
             this.sn = sn;
@@ -240,13 +243,17 @@ public class CashShop {
         }
     }
 
-    private int accountId, characterId, nxCredit, maplePoint, nxPrepaid;
+    private final int accountId;
+    private final int characterId;
+    private int nxCredit;
+    private int maplePoint;
+    private int nxPrepaid;
     private boolean opened;
     private ItemFactory factory;
-    private List<Item> inventory = new ArrayList<>();
-    private List<Integer> wishList = new ArrayList<>();
+    private final List<Item> inventory = new ArrayList<>();
+    private final List<Integer> wishList = new ArrayList<>();
     private int notes = 0;
-    private Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CASHSHOP);
+    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CASHSHOP);
 
     public CashShop(int accountId, int characterId, int jobType) throws SQLException {
         this.accountId = accountId;

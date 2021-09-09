@@ -29,39 +29,40 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class MinTamenessRequirement extends AbstractQuestRequirement {
-	private int minTameness;
-	
-	
-	public MinTamenessRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.MIN_PET_TAMENESS);
-		processData(data);
-	}
-	
-	/**
-	 * 
-	 * @param data 
-	 */
-	@Override
-	public void processData(Data data) {
-		minTameness = DataTool.getInt(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		int curCloseness = 0;
-                
-		for(Pet pet : chr.getPets()) {
-                    if(pet == null) continue;
-                    
-                    if(pet.getCloseness() > curCloseness)
-                        curCloseness = pet.getCloseness();
-		}
-		
-		return curCloseness >= minTameness;
-	}
+    private int minTameness;
+
+
+    public MinTamenessRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.MIN_PET_TAMENESS);
+        processData(data);
+    }
+
+    /**
+     * @param data
+     */
+    @Override
+    public void processData(Data data) {
+        minTameness = DataTool.getInt(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        int curCloseness = 0;
+
+        for (Pet pet : chr.getPets()) {
+            if (pet == null) {
+                continue;
+            }
+
+            if (pet.getCloseness() > curCloseness) {
+                curCloseness = pet.getCloseness();
+            }
+        }
+
+        return curCloseness >= minTameness;
+    }
 }

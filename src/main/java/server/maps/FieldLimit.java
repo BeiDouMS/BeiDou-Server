@@ -21,7 +21,6 @@
 package server.maps;
 
 /**
- *
  * @author AngelSL
  */
 public enum FieldLimit {
@@ -44,7 +43,7 @@ public enum FieldLimit {
     //ANTI_MACRO_LIMIT(0x10000), // No notes
     CANNOTJUMPDOWN(0x20000),
     //SUMMON_NPC_LIMIT(0x40000); // Seems to .. disable Rush if 0x2 is set
-    
+
     //......... EVEN MORE LIMITS ............
     //SUMMON_NPC_LIMIT(0x40000),
     NO_EXP_DECREASE(0x80000),
@@ -52,10 +51,10 @@ public enum FieldLimit {
     //PARCEL_OPEN_LIMIT(0x200000),
     DROP_LIMIT(0x400000);
     //ROCKETBOOSTER_LIMIT(0x800000)     //lol we don't even have mechanics <3
-    
-    private long i;
 
-    private FieldLimit(long i) {
+    private final long i;
+
+    FieldLimit(long i) {
         this.i = i;
     }
 

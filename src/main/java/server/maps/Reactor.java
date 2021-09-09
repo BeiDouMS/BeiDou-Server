@@ -334,7 +334,9 @@ public class Reactor extends AbstractMapObject {
                     if (this.getDelay() > 0) {
                         this.delayedRespawn();
                     }
-                } else return !this.inDelayedRespawn();
+                } else {
+                    return !this.inDelayedRespawn();
+                }
             } finally {
                 reactorLock.unlock();
             }

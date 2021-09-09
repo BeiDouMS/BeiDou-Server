@@ -28,26 +28,25 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class MonsterBookCountRequirement extends AbstractQuestRequirement {
-	private int reqCards;
-	
-	
-	public MonsterBookCountRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.MONSTER_BOOK);
-		processData(data);
-	}
-	
-	@Override
-	public void processData(Data data) {
-		reqCards = DataTool.getInt(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return chr.getMonsterBook().getTotalCards() >= reqCards;
-	}
+    private int reqCards;
+
+
+    public MonsterBookCountRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.MONSTER_BOOK);
+        processData(data);
+    }
+
+    @Override
+    public void processData(Data data) {
+        reqCards = DataTool.getInt(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return chr.getMonsterBook().getTotalCards() >= reqCards;
+    }
 }

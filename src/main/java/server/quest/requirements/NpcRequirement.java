@@ -28,29 +28,28 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class NpcRequirement extends AbstractQuestRequirement {
-	private int reqNPC;
-	
-	public NpcRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.NPC);
-		processData(data);
-	}
-	
-	@Override
-	public void processData(Data data) {
-		reqNPC = DataTool.getInt(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return npcid != null && npcid == reqNPC;
-	}
-        
-        public int get() {
-                return reqNPC;
-        }
+    private int reqNPC;
+
+    public NpcRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.NPC);
+        processData(data);
+    }
+
+    @Override
+    public void processData(Data data) {
+        reqNPC = DataTool.getInt(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return npcid != null && npcid == reqNPC;
+    }
+
+    public int get() {
+        return reqNPC;
+    }
 }

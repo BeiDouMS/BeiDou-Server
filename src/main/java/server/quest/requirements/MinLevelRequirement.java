@@ -28,27 +28,26 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class MinLevelRequirement extends AbstractQuestRequirement {
-	private int minLevel;
-	
-	
-	public MinLevelRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.MIN_LEVEL);
-		processData(data);
-	}
-	
-	
-	@Override
-	public void processData(Data data) {
-		minLevel = DataTool.getInt(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return chr.getLevel() >= minLevel;
-	}
+    private int minLevel;
+
+
+    public MinLevelRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.MIN_LEVEL);
+        processData(data);
+    }
+
+
+    @Override
+    public void processData(Data data) {
+        minLevel = DataTool.getInt(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return chr.getLevel() >= minLevel;
+    }
 }

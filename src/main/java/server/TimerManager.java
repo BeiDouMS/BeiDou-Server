@@ -34,12 +34,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TimerManager implements TimerManagerMBean {
-    private static TimerManager instance = new TimerManager();
-    
+    private static final TimerManager instance = new TimerManager();
+
     public static TimerManager getInstance() {
         return instance;
     }
-    
+
     private ScheduledThreadPoolExecutor ses;
 
     private TimerManager() {
@@ -68,24 +68,24 @@ public class TimerManager implements TimerManagerMBean {
         //this is a no-no, it actually does nothing..then why the fuck are you doing it?
         stpe.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
         stpe.setRemoveOnCancelPolicy(true);
-		
+
         stpe.setKeepAliveTime(5, TimeUnit.MINUTES);
         stpe.allowCoreThreadTimeOut(true);
-		
+
         ses = stpe;
     }
 
     public void stop() {
         ses.shutdownNow();
     }
-	
+
     public Runnable purge() {//Yay?
         return () -> {
             Server.getInstance().forceUpdateCurrentTime();
             ses.purge();
         };
     }
-    
+
     public ScheduledFuture<?> register(Runnable r, long repeatTime, long delay) {
         return ses.scheduleAtFixedRate(new LoggingSaveRunnable(r), delay, repeatTime, TimeUnit.MILLISECONDS);
     }
@@ -97,7 +97,7 @@ public class TimerManager implements TimerManagerMBean {
     public ScheduledFuture<?> schedule(Runnable r, long delay) {
         return ses.schedule(new LoggingSaveRunnable(r), delay, TimeUnit.MILLISECONDS);
     }
-        
+
     public ScheduledFuture<?> scheduleAtTimestamp(Runnable r, long timestamp) {
         return schedule(r, timestamp - System.currentTimeMillis());
     }
@@ -118,7 +118,7 @@ public class TimerManager implements TimerManagerMBean {
     }
 
     @Override
-    public long getTaskCount() {        
+    public long getTaskCount() {
         return ses.getTaskCount();
     }
 
@@ -132,7 +132,7 @@ public class TimerManager implements TimerManagerMBean {
         return ses.isTerminated();
     }
 
-    
+
     private static class LoggingSaveRunnable implements Runnable {
         Runnable r;
 

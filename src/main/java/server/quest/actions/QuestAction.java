@@ -32,34 +32,33 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class QuestAction extends AbstractQuestAction {
-	int mesos;
-	Map<Integer, Integer> quests = new HashMap<>();
-	
-	public QuestAction(Quest quest, Data data) {
-		super(QuestActionType.QUEST, quest);
-		questID = quest.getId();
-		processData(data);
-	}
-	
-	
-	@Override
-	public void processData(Data data) {
-		for (Data qEntry : data) {
-			int questid = DataTool.getInt(qEntry.getChildByPath("id"));
-			int stat = DataTool.getInt(qEntry.getChildByPath("state"));
-			quests.put(questid, stat);
-		}
-	}
-	
-	@Override
-	public void run(Character chr, Integer extSelection) {
-		for(Integer questID : quests.keySet()) {
-			int stat = quests.get(questID);
-			chr.updateQuestStatus(new QuestStatus(Quest.getInstance(questID), QuestStatus.Status.getById(stat)));
-		}
-	}
+    int mesos;
+    Map<Integer, Integer> quests = new HashMap<>();
+
+    public QuestAction(Quest quest, Data data) {
+        super(QuestActionType.QUEST, quest);
+        questID = quest.getId();
+        processData(data);
+    }
+
+
+    @Override
+    public void processData(Data data) {
+        for (Data qEntry : data) {
+            int questid = DataTool.getInt(qEntry.getChildByPath("id"));
+            int stat = DataTool.getInt(qEntry.getChildByPath("state"));
+            quests.put(questid, stat);
+        }
+    }
+
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        for (Integer questID : quests.keySet()) {
+            int stat = quests.get(questID);
+            chr.updateQuestStatus(new QuestStatus(Quest.getInstance(questID), QuestStatus.Status.getById(stat)));
+        }
+    }
 } 

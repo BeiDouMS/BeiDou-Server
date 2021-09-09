@@ -39,13 +39,14 @@ import java.util.List;
 import java.util.*;
 
 /**
- *
  * @author Danny (Leifde)
  */
 public class MobSkill {
 
-    private int skillId, skillLevel, mpCon;
-    private List<Integer> toSummon = new ArrayList<>();
+    private final int skillId;
+    private final int skillLevel;
+    private int mpCon;
+    private final List<Integer> toSummon = new ArrayList<>();
     private int spawnEffect, hp, x, y, count;
     private long duration, cooltime;
     private float prop;
@@ -251,7 +252,7 @@ public class MobSkill {
                     int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
                     if (summonLimit >= 1) {
                         boolean bossRushMap = GameConstants.isBossRush(map.getId());
-                        
+
                         Collections.shuffle(summons);
                         for (Integer mobId : summons.subList(0, summonLimit)) {
                             Monster toSpawn = LifeFactory.getMonster(mobId);

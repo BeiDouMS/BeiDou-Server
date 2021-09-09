@@ -34,34 +34,34 @@ import java.util.List;
  * @author Ronan - made MapleTV mechanics synchronous
  */
 public class MapleTVEffect {
-	
-	private final static boolean[] ACTIVE = new boolean[Server.getInstance().getWorldsSize()];
-	
-	public static synchronized boolean broadcastMapleTVIfNotActive(Character player, Character victim, List<String> messages, int tvType){
-                int w = player.getWorld();
-                if(!ACTIVE[w]) {
-                        broadcastTV(true, w, messages, player, tvType, victim);
-                        return true;
-                }
-            
-		return false;
-	}
 
-	private static synchronized void broadcastTV(boolean activity, final int userWorld, List<String> message, Character user, int type, Character partner) {
-		Server server = Server.getInstance();
-		ACTIVE[userWorld] = activity;
-		if (activity) {
-			server.broadcastMessage(userWorld, PacketCreator.enableTV());
-			server.broadcastMessage(userWorld, PacketCreator.sendTV(user, message, type <= 2 ? type : type - 3, partner));
-			int delay = 15000;
-			if (type == 4) {
-				delay = 30000;
-			} else if (type == 5) {
-				delay = 60000;
-			}
-			TimerManager.getInstance().schedule(() -> broadcastTV(false, userWorld, null, null, -1, null), delay);
-		} else {
-			server.broadcastMessage(userWorld, PacketCreator.removeTV());
-		}
-	}
+    private final static boolean[] ACTIVE = new boolean[Server.getInstance().getWorldsSize()];
+
+    public static synchronized boolean broadcastMapleTVIfNotActive(Character player, Character victim, List<String> messages, int tvType) {
+        int w = player.getWorld();
+        if (!ACTIVE[w]) {
+            broadcastTV(true, w, messages, player, tvType, victim);
+            return true;
+        }
+
+        return false;
+    }
+
+    private static synchronized void broadcastTV(boolean activity, final int userWorld, List<String> message, Character user, int type, Character partner) {
+        Server server = Server.getInstance();
+        ACTIVE[userWorld] = activity;
+        if (activity) {
+            server.broadcastMessage(userWorld, PacketCreator.enableTV());
+            server.broadcastMessage(userWorld, PacketCreator.sendTV(user, message, type <= 2 ? type : type - 3, partner));
+            int delay = 15000;
+            if (type == 4) {
+                delay = 30000;
+            } else if (type == 5) {
+                delay = 60000;
+            }
+            TimerManager.getInstance().schedule(() -> broadcastTV(false, userWorld, null, null, -1, null), delay);
+        } else {
+            server.broadcastMessage(userWorld, PacketCreator.removeTV());
+        }
+    }
 }

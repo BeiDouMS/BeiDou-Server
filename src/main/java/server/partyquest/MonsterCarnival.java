@@ -93,13 +93,13 @@ public class MonsterCarnival {
                 }
                 return;
             }
-            
+
             // thanks Atoot, Vcoc for noting double CPQ functional being sent to players in CPQ start
-            
+
             timer = TimerManager.getInstance().schedule(() -> timeUp(), map.getTimeDefault() * 1000); // thanks Atoot for noticing an irregular "event extended" issue here
             effectTimer = TimerManager.getInstance().schedule(() -> complete(), map.getTimeDefault() * 1000 - 10 * 1000);
             respawnTask = TimerManager.getInstance().register(() -> respawn(), YamlConfig.config.server.RESPAWN_INTERVAL);
-            
+
             cs.initMonsterCarnival(cpq1, room);
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class MonsterCarnival {
     private void respawn() {
         map.respawn();
     }
-    
+
     public void playerDisconnected(int charid) {
         int team = -1;
         for (PartyCharacter mpc : leader1.getParty().getMembers()) {
@@ -155,7 +155,7 @@ public class MonsterCarnival {
     public boolean canSummonR() {
         return summonsR < map.getMaxMobs();
     }
-    
+
     public void summonR() {
         summonsR++;
     }
@@ -163,11 +163,11 @@ public class MonsterCarnival {
     public boolean canSummonB() {
         return summonsB < map.getMaxMobs();
     }
-    
+
     public void summonB() {
         summonsB++;
     }
-    
+
     public boolean canGuardianR() {
         int teamReactors = 0;
         for (Reactor react : map.getAllReactors()) {
@@ -175,10 +175,10 @@ public class MonsterCarnival {
                 teamReactors += 1;
             }
         }
-        
+
         return teamReactors < map.getMaxReactors();
     }
-    
+
     public boolean canGuardianB() {
         int teamReactors = 0;
         for (Reactor react : map.getAllReactors()) {
@@ -186,7 +186,7 @@ public class MonsterCarnival {
                 teamReactors += 1;
             }
         }
-        
+
         return teamReactors < map.getMaxReactors();
     }
 
@@ -238,7 +238,7 @@ public class MonsterCarnival {
         leader2.getParty().setEnemy(null);
         map.dispose();
         map = null;
-        
+
         cs.finishMonsterCarnival(cpq1, room);
     }
 
@@ -345,9 +345,9 @@ public class MonsterCarnival {
             chrMap.dropMessage(5, LanguageConstants.getMessage(chrMap, LanguageConstants.CPQExtendTime));
         }
         startTime = System.currentTimeMillis() + 3 * 60 * 1000;
-        
+
         map.broadcastMessage(PacketCreator.getClock(3 * 60));
-        
+
         timer = TimerManager.getInstance().schedule(() -> timeUp(), map.getTimeExpand() * 1000);
         effectTimer = TimerManager.getInstance().schedule(() -> complete(), map.getTimeExpand() * 1000 - 10 * 1000); // thanks Vcoc for noticing a time set issue here
     }
@@ -355,10 +355,10 @@ public class MonsterCarnival {
     public void complete() {
         int cp1 = this.redTotalCP;
         int cp2 = this.blueTotalCP;
-        
+
         this.redTimeupCP = cp1;
         this.blueTimeupCP = cp2;
-        
+
         if (cp1 == cp2) {
             return;
         }
@@ -368,7 +368,7 @@ public class MonsterCarnival {
         if (chnl != chnl1) {
             throw new RuntimeException("Os lideres estao em canais diferentes.");
         }
-        
+
         map.killAllMonsters();
         for (PartyCharacter mpc : leader1.getParty().getMembers()) {
             Character mc = mpc.getPlayer();
@@ -509,11 +509,11 @@ public class MonsterCarnival {
             this.blueCP = CP;
         }
     }
-    
+
     public int getRoom() {
         return this.room;
     }
-    
+
     public MapleMap getEventMap() {
         return this.map;
     }

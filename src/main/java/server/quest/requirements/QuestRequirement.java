@@ -29,45 +29,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class QuestRequirement extends AbstractQuestRequirement {
-	Map<Integer, Integer> quests = new HashMap<>();
-	
-	public QuestRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.QUEST);
-		processData(data);
-	}
-	
-	/**
-	 * 
-	 * @param data 
-	 */
-	@Override
-	public void processData(Data data) {
-		for (Data questEntry : data.getChildren()) {
-			int questID = DataTool.getInt(questEntry.getChildByPath("id"));
-			int stateReq = DataTool.getInt(questEntry.getChildByPath("state"));
-			quests.put(questID, stateReq);
-		}
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		for(Integer questID : quests.keySet()) {
-			int stateReq = quests.get(questID);
-			QuestStatus qs = chr.getQuest(Quest.getInstance(questID));
-			
-			if(qs == null && QuestStatus.Status.getById(stateReq).equals(QuestStatus.Status.NOT_STARTED))
-				continue;
-			
-			if(qs == null || !qs.getStatus().equals(QuestStatus.Status.getById(stateReq))) {
-				return false;
-			}
-			
-		}
-		return true;
-	}
+    Map<Integer, Integer> quests = new HashMap<>();
+
+    public QuestRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.QUEST);
+        processData(data);
+    }
+
+    /**
+     * @param data
+     */
+    @Override
+    public void processData(Data data) {
+        for (Data questEntry : data.getChildren()) {
+            int questID = DataTool.getInt(questEntry.getChildByPath("id"));
+            int stateReq = DataTool.getInt(questEntry.getChildByPath("state"));
+            quests.put(questID, stateReq);
+        }
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        for (Integer questID : quests.keySet()) {
+            int stateReq = quests.get(questID);
+            QuestStatus qs = chr.getQuest(Quest.getInstance(questID));
+
+            if (qs == null && QuestStatus.Status.getById(stateReq).equals(QuestStatus.Status.NOT_STARTED)) {
+                continue;
+            }
+
+            if (qs == null || !qs.getStatus().equals(QuestStatus.Status.getById(stateReq))) {
+                return false;
+            }
+
+        }
+        return true;
+    }
 }

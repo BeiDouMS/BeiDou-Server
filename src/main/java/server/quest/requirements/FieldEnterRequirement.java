@@ -28,29 +28,28 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class FieldEnterRequirement extends AbstractQuestRequirement {
-	private int mapId = -1;
-	
-	
-	public FieldEnterRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.FIELD_ENTER);
-		processData(data);
-	}
-	
-	@Override
-	public void processData(Data data) {
-		Data zeroField = data.getChildByPath("0");
-		if (zeroField != null) {
-			 mapId = DataTool.getInt(zeroField);
-		}
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return mapId == chr.getMapId();
-	}
+    private int mapId = -1;
+
+
+    public FieldEnterRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.FIELD_ENTER);
+        processData(data);
+    }
+
+    @Override
+    public void processData(Data data) {
+        Data zeroField = data.getChildByPath("0");
+        if (zeroField != null) {
+            mapId = DataTool.getInt(zeroField);
+        }
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return mapId == chr.getMapId();
+    }
 }
