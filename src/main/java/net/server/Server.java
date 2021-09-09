@@ -59,7 +59,7 @@ import server.CashShop.CashItemFactory;
 import server.MapleSkillbookInformationProvider;
 import server.ThreadManager;
 import server.TimerManager;
-import server.expeditions.MapleExpeditionBossLog;
+import server.expeditions.ExpeditionBossLog;
 import server.life.MaplePlayerNPCFactory;
 import server.quest.MapleQuest;
 import tools.DatabaseConnection;
@@ -951,7 +951,7 @@ public class Server {
         tMan.register(new RespawnTask(), YamlConfig.config.server.RESPAWN_INTERVAL, YamlConfig.config.server.RESPAWN_INTERVAL);
 
         timeLeft = getTimeLeftForNextDay();
-        MapleExpeditionBossLog.resetBossLogTable();
+        ExpeditionBossLog.resetBossLogTable();
         tMan.register(new BossLogTask(), 24 * 60 * 60 * 1000, timeLeft);
     }
 

@@ -29,96 +29,96 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author Conrad
  * @author Ronan
  */
-public class MapleExpeditionBossLog {
-    
+public class ExpeditionBossLog {
+
     public enum BossLogEntry {
         ZAKUM(2, 1, false),
         HORNTAIL(2, 1, false),
         PINKBEAN(1, 1, false),
         SCARGA(1, 1, false),
         PAPULATUS(2, 1, false);
-        
-        private int entries;
-        private int timeLength;
-        private int minChannel, maxChannel;
-        private boolean week;
-        
-        private BossLogEntry(int entries, int timeLength, boolean week) {
+
+        private final int entries;
+        private final int timeLength;
+        private final int minChannel;
+        private final int maxChannel;
+        private final boolean week;
+
+        BossLogEntry(int entries, int timeLength, boolean week) {
             this(entries, 0, Integer.MAX_VALUE, timeLength, week);
         }
-        
-        private BossLogEntry(int entries, int minChannel, int maxChannel, int timeLength, boolean week) {
+
+        BossLogEntry(int entries, int minChannel, int maxChannel, int timeLength, boolean week) {
             this.entries = entries;
             this.minChannel = minChannel;
             this.maxChannel = maxChannel;
             this.timeLength = timeLength;
             this.week = week;
         }
-        
+
         private static List<Pair<Timestamp, BossLogEntry>> getBossLogResetTimestamps(Calendar timeNow, boolean week) {
             List<Pair<Timestamp, BossLogEntry>> resetTimestamps = new LinkedList<>();
-            
+
             Timestamp ts = new Timestamp(timeNow.getTime().getTime());  // reset all table entries actually, thanks Conrad
             for (BossLogEntry b : BossLogEntry.values()) {
                 if (b.week == week) {
                     resetTimestamps.add(new Pair<>(ts, b));
                 }
             }
-            
+
             return resetTimestamps;
         }
-        
+
         private static BossLogEntry getBossEntryByName(String name) {
             for (BossLogEntry b : BossLogEntry.values()) {
                 if (name.contentEquals(b.name())) {
                     return b;
                 }
             }
-            
+
             return null;
         }
-        
+
     }
-    
+
     public static void resetBossLogTable() {
         /*
         Boss logs resets 12am, weekly thursday 12AM - thanks Smitty Werbenjagermanjensen (superadlez) - https://www.reddit.com/r/Maplestory/comments/61tiup/about_reset_time/
         */
-        
+
         Calendar thursday = Calendar.getInstance();
         thursday.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
         thursday.set(Calendar.HOUR, 0);
         thursday.set(Calendar.MINUTE, 0);
         thursday.set(Calendar.SECOND, 0);
-        
+
         Calendar now = Calendar.getInstance();
-        
+
         long weekLength = 7 * 24 * 60 * 60 * 1000;
         long halfDayLength = 12 * 60 * 60 * 1000;
-        
+
         long deltaTime = now.getTime().getTime() - thursday.getTime().getTime();    // 2x time: get Date into millis
         deltaTime += halfDayLength;
         deltaTime %= weekLength;
         deltaTime -= halfDayLength;
-        
+
         if (deltaTime < halfDayLength) {
-            MapleExpeditionBossLog.resetBossLogTable(true, thursday);
+            ExpeditionBossLog.resetBossLogTable(true, thursday);
         }
-        
+
         now.set(Calendar.HOUR, 0);
         now.set(Calendar.MINUTE, 0);
         now.set(Calendar.SECOND, 0);
-        
-        MapleExpeditionBossLog.resetBossLogTable(false, now);
+
+        ExpeditionBossLog.resetBossLogTable(false, now);
     }
-    
+
     private static void resetBossLogTable(boolean week, Calendar c) {
         List<Pair<Timestamp, BossLogEntry>> resetTimestamps = BossLogEntry.getBossLogResetTimestamps(c, week);
-        
+
         try (Connection con = DatabaseConnection.getConnection()) {
             for (Pair<Timestamp, BossLogEntry> p : resetTimestamps) {
                 try (PreparedStatement ps = con.prepareStatement("DELETE FROM " + getBossLogTable(week) + " WHERE attempttime <= ? AND bosstype LIKE ?")) {
@@ -131,7 +131,7 @@ public class MapleExpeditionBossLog {
             e.printStackTrace();
         }
     }
-    
+
     private static String getBossLogTable(boolean week) {
         return week ? "bosslog_weekly" : "bosslog_daily";
     }
@@ -167,25 +167,25 @@ public class MapleExpeditionBossLog {
             e.printStackTrace();
         }
     }
-    
+
     public static boolean attemptBoss(int cid, int channel, Expedition exped, boolean log) {
         if (!YamlConfig.config.server.USE_ENABLE_DAILY_EXPEDITIONS) {
             return true;
         }
-        
+
         BossLogEntry boss = BossLogEntry.getBossEntryByName(exped.getType().name());
         if (boss == null) {
             return true;
         }
-        
+
         if (channel < boss.minChannel || channel > boss.maxChannel) {
             return false;
         }
-        
+
         if (countPlayerEntries(cid, boss) >= boss.entries) {
             return false;
         }
-        
+
         if (log) {
             insertPlayerEntry(cid, boss);
         }

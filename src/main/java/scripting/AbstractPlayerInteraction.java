@@ -39,7 +39,7 @@ import scripting.npc.NPCScriptManager;
 import server.MapleItemInformationProvider;
 import server.MapleMarriage;
 import server.expeditions.Expedition;
-import server.expeditions.MapleExpeditionBossLog;
+import server.expeditions.ExpeditionBossLog;
 import server.expeditions.MapleExpeditionType;
 import server.life.*;
 import server.maps.MapleMap;
@@ -1076,7 +1076,7 @@ public class AbstractPlayerInteraction {
                 Expedition exped = new Expedition(player, type, silent, minPlayers, maxPlayers);
                 
                 int channel = player.getMap().getChannelServer().getId();
-                if (!MapleExpeditionBossLog.attemptBoss(player.getId(), channel, exped, false)) {    // thanks Conrad for noticing missing expeditions entry limit
+                if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, exped, false)) {    // thanks Conrad for noticing missing expeditions entry limit
                         return 1;
                 }
                 

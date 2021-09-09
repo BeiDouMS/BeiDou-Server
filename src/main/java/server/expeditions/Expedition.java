@@ -178,7 +178,7 @@ public class Expedition {
         }
 
         int channel = this.getRecruitingMap().getChannelServer().getId();
-        if (!MapleExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {    // thanks Conrad, Cato for noticing some expeditions have entry limit
+        if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {    // thanks Conrad, Cato for noticing some expeditions have entry limit
             return "Sorry, you've already reached the quota of attempts for this expedition! Try again another day...";
         }
 
@@ -213,7 +213,7 @@ public class Expedition {
         int channel = this.getRecruitingMap().getChannelServer().getId();
 
         for (Character chr : getActiveMembers()) {
-            MapleExpeditionBossLog.attemptBoss(chr.getId(), channel, this, true);
+            ExpeditionBossLog.attemptBoss(chr.getId(), channel, this, true);
         }
     }
 
