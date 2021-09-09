@@ -34,7 +34,7 @@ import java.util.concurrent.Semaphore;
  */
 public class MatchCheckerCoordinator {
 
-    private final Map<Integer, MapleMatchCheckingElement> matchEntries = new HashMap<>();
+    private final Map<Integer, MatchCheckingElement> matchEntries = new HashMap<>();
 
     private final Set<Integer> pooledCids = new HashSet<>();
     private final Semaphore semaphorePool = new Semaphore(7);
@@ -62,7 +62,7 @@ public class MatchCheckerCoordinator {
         }
     }
 
-    private class MapleMatchCheckingElement {
+    private class MatchCheckingElement {
         private final int leaderCid;
         private final int world;
 
@@ -75,7 +75,7 @@ public class MatchCheckerCoordinator {
 
         private final String message;
 
-        private MapleMatchCheckingElement(MatchCheckerType matchType, int leaderCid, int world, AbstractMatchCheckerListener leaderListener, Set<Integer> matchPlayers, String message) {
+        private MatchCheckingElement(MatchCheckerType matchType, int leaderCid, int world, AbstractMatchCheckerListener leaderListener, Set<Integer> matchPlayers, String message) {
             this.leaderCid = leaderCid;
             this.world = world;
             this.listener = leaderListener;
@@ -213,7 +213,7 @@ public class MatchCheckerCoordinator {
 
     private void reenablePlayerMatching(Set<Integer> matchPlayers) {
         for (Integer cid : matchPlayers) {
-            MapleMatchCheckingElement mmce = matchEntries.get(cid);
+            MatchCheckingElement mmce = matchEntries.get(cid);
 
             if (mmce != null) {
                 synchronized (mmce) {
@@ -226,7 +226,7 @@ public class MatchCheckerCoordinator {
     }
 
     public int getMatchConfirmationLeaderid(int cid) {
-        MapleMatchCheckingElement mmce = matchEntries.get(cid);
+        MatchCheckingElement mmce = matchEntries.get(cid);
         if (mmce != null) {
             return mmce.leaderCid;
         } else {
@@ -235,7 +235,7 @@ public class MatchCheckerCoordinator {
     }
 
     public MatchCheckerType getMatchConfirmationType(int cid) {
-        MapleMatchCheckingElement mmce = matchEntries.get(cid);
+        MatchCheckingElement mmce = matchEntries.get(cid);
         if (mmce != null) {
             return mmce.matchType;
         } else {
@@ -244,7 +244,7 @@ public class MatchCheckerCoordinator {
     }
 
     public boolean isMatchConfirmationActive(int cid) {
-        MapleMatchCheckingElement mmce = matchEntries.get(cid);
+        MatchCheckingElement mmce = matchEntries.get(cid);
         if (mmce != null) {
             return mmce.active;
         } else {
@@ -252,8 +252,8 @@ public class MatchCheckerCoordinator {
         }
     }
 
-    private MapleMatchCheckingElement createMatchConfirmationInternal(MatchCheckerType matchType, int world, int leaderCid, AbstractMatchCheckerListener leaderListener, Set<Integer> players, String message) {
-        MapleMatchCheckingElement mmce = new MapleMatchCheckingElement(matchType, leaderCid, world, leaderListener, players, message);
+    private MatchCheckingElement createMatchConfirmationInternal(MatchCheckerType matchType, int world, int leaderCid, AbstractMatchCheckerListener leaderListener, Set<Integer> players, String message) {
+        MatchCheckingElement mmce = new MatchCheckingElement(matchType, leaderCid, world, leaderListener, players, message);
 
         for (Integer cid : players) {
             matchEntries.put(cid, mmce);
@@ -264,7 +264,7 @@ public class MatchCheckerCoordinator {
     }
 
     public boolean createMatchConfirmation(MatchCheckerType matchType, int world, int leaderCid, Set<Integer> players, String message) {
-        MapleMatchCheckingElement mmce = null;
+        MatchCheckingElement mmce = null;
         try {
             semaphorePool.acquire();
             try {
@@ -295,7 +295,7 @@ public class MatchCheckerCoordinator {
         }
     }
 
-    private void disposeMatchElement(MapleMatchCheckingElement mmce) {
+    private void disposeMatchElement(MatchCheckingElement mmce) {
         Set<Integer> matchPlayers = mmce.getMatchPlayers();     // thanks Ai for noticing players getting match-stuck on certain cases
         while (!poolMatchPlayers(matchPlayers)) {
             try {
@@ -313,7 +313,7 @@ public class MatchCheckerCoordinator {
         }
     }
 
-    private boolean acceptMatchElement(MapleMatchCheckingElement mmce, int cid) {
+    private boolean acceptMatchElement(MatchCheckingElement mmce, int cid) {
         if (mmce.acceptEntry(cid)) {
             unpoolMatchPlayer(cid);
             disposeMatchElement(mmce);
@@ -324,12 +324,12 @@ public class MatchCheckerCoordinator {
         }
     }
 
-    private void denyMatchElement(MapleMatchCheckingElement mmce, int cid) {
+    private void denyMatchElement(MatchCheckingElement mmce, int cid) {
         unpoolMatchPlayer(cid);
         disposeMatchElement(mmce);
     }
 
-    private void dismissMatchElement(MapleMatchCheckingElement mmce, int cid) {
+    private void dismissMatchElement(MatchCheckingElement mmce, int cid) {
         mmce.setMatchActive(false);
 
         unpoolMatchPlayer(cid);
@@ -337,7 +337,7 @@ public class MatchCheckerCoordinator {
     }
 
     public boolean answerMatchConfirmation(int cid, boolean accept) {
-        MapleMatchCheckingElement mmce = null;
+        MatchCheckingElement mmce = null;
         try {
             semaphorePool.acquire();
             try {
@@ -385,7 +385,7 @@ public class MatchCheckerCoordinator {
     }
 
     public boolean dismissMatchConfirmation(int cid) {
-        MapleMatchCheckingElement mmce = null;
+        MatchCheckingElement mmce = null;
         try {
             semaphorePool.acquire();
             try {
