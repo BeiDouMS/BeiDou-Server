@@ -12,7 +12,7 @@ import java.util.List;
 public class YamlConfig {
     public static final String CONFIG_FILE_NAME = "config.yaml";
     public static final YamlConfig config = loadConfig();
-    
+
     public List<WorldConfig> worlds;
     public ServerConfig server;
 
