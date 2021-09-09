@@ -339,7 +339,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
             remove(c, position, itemId);
         } else if (itemType == 508) {   // thanks tmskdl12 for graduation banner; thanks ratency for first pointing lack of Kite handling
-            MapleKite kite = new MapleKite(player, p.readString(), itemId);
+            Kite kite = new Kite(player, p.readString(), itemId);
 
             if (!GameConstants.isFreeMarketRoom(player.getMapId())) {
                 player.getMap().spawnKite(kite);

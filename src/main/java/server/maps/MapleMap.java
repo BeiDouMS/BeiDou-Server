@@ -2113,7 +2113,7 @@ public class MapleMap {
         service.registerMobMistCancelAction(mapid, mistSchedule, duration);
     }
     
-    public void spawnKite(final MapleKite kite) {
+    public void spawnKite(final Kite kite) {
         addMapObject(kite);
         broadcastMessage(kite.makeSpawnData());
         

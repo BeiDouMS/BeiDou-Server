@@ -7,14 +7,14 @@ import tools.PacketCreator;
 
 import java.awt.*;
 
-public class MapleKite extends AbstractMapObject {
+public class Kite extends AbstractMapObject {
     private final Point pos;
     private final Character owner;
     private final String text;
     private final int ft;
     private final int itemid;
 
-    public MapleKite(Character owner, String text, int itemId) {
+    public Kite(Character owner, String text, int itemId) {
         this.owner = owner;
         this.pos = owner.getPosition();
         this.ft = owner.getFh();
