@@ -26,7 +26,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.DoorObject;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.PacketCreator;
 
 /**
@@ -45,7 +45,7 @@ public final class DoorHandler extends AbstractPacketHandler {
             return;
         }
         
-        for (MapleMapObject obj : chr.getMap().getMapObjects()) {
+        for (MapObject obj : chr.getMap().getMapObjects()) {
             if (obj instanceof DoorObject) {
                 DoorObject door = (DoorObject) obj;
                 if (door.getOwnerId() == ownerid) {

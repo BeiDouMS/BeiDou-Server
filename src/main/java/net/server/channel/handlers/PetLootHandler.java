@@ -27,7 +27,7 @@ import client.inventory.Pet;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapItem;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.PacketCreator;
 
 import java.util.Set;
@@ -50,7 +50,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
         
         p.skip(13);
         int oid = p.readInt();
-        MapleMapObject ob = chr.getMap().getMapObject(oid);        
+        MapObject ob = chr.getMap().getMapObject(oid);
         try {
             MapItem mapitem = (MapItem) ob;
             if (mapitem.getMeso() > 0) {

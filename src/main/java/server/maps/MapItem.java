@@ -33,14 +33,14 @@ import java.util.concurrent.locks.Lock;
 public class MapItem extends AbstractMapObject {
     protected Client ownerClient;
     protected Item item;
-    protected MapleMapObject dropper;
+    protected MapObject dropper;
     protected int character_ownerid, party_ownerid, meso, questid = -1;
     protected byte type;
     protected boolean pickedUp = false, playerDrop, partyDrop;
     protected long dropTime;
     private final Lock itemLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_ITEM);
 
-    public MapItem(Item item, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
+    public MapItem(Item item, Point position, MapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
@@ -53,7 +53,7 @@ public class MapItem extends AbstractMapObject {
         this.playerDrop = playerDrop;
     }
 
-    public MapItem(Item item, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop, int questid) {
+    public MapItem(Item item, Point position, MapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop, int questid) {
         setPosition(position);
         this.item = item;
         this.dropper = dropper;
@@ -67,7 +67,7 @@ public class MapItem extends AbstractMapObject {
         this.questid = questid;
     }
 
-    public MapItem(int meso, Point position, MapleMapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
+    public MapItem(int meso, Point position, MapObject dropper, Character owner, Client ownerClient, byte type, boolean playerDrop) {
         setPosition(position);
         this.item = null;
         this.dropper = dropper;
@@ -95,7 +95,7 @@ public class MapItem extends AbstractMapObject {
         return item.getItemId();
     }
 
-    public final MapleMapObject getDropper() {
+    public final MapObject getDropper() {
         return dropper;
     }
 

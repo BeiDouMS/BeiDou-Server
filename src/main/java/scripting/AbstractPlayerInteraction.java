@@ -42,8 +42,8 @@ import server.expeditions.Expedition;
 import server.expeditions.ExpeditionBossLog;
 import server.expeditions.ExpeditionType;
 import server.life.*;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.partyquest.PartyQuest;
 import server.partyquest.Pyramid;
@@ -897,7 +897,7 @@ public class AbstractPlayerInteraction {
 	public void resetMap(int mapid) {
 		getMap(mapid).resetReactors();
 		getMap(mapid).killAllMonsters();
-		for (MapleMapObject i : getMap(mapid).getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.ITEM))) {
+		for (MapObject i : getMap(mapid).getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.ITEM))) {
 			getMap(mapid).removeMapObject(i);
 			getMap(mapid).broadcastMessage(PacketCreator.removeItemFromMap(i.getObjectId(), 0, c.getPlayer().getId()));
 		}

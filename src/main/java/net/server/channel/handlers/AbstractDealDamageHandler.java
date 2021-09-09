@@ -37,8 +37,8 @@ import server.MapleStatEffect;
 import server.TimerManager;
 import server.life.*;
 import server.maps.MapItem;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
@@ -151,7 +151,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             if (attack.skill == ChiefBandit.MESO_EXPLOSION) {
                 int delay = 0;
                 for (Integer oned : attack.allDamage.keySet()) {
-                    MapleMapObject mapobject = map.getMapObject(oned);
+                    MapObject mapobject = map.getMapObject(oned);
                     if (mapobject != null && mapobject.getType() == MapleMapObjectType.ITEM) {
                         final MapItem mapitem = (MapItem) mapobject;
                             if (mapitem.getMeso() == 0) { //Maybe it is possible some how?

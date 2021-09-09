@@ -25,7 +25,7 @@ import client.Client;
 
 import java.awt.*;
 
-public interface MapleMapObject {
+public interface MapObject {
     int getObjectId();
     void setObjectId(int id);
     MapleMapObjectType getType();

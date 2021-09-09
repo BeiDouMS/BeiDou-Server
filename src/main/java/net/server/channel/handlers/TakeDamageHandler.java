@@ -38,8 +38,8 @@ import net.packet.InPacket;
 import server.MapleStatEffect;
 import server.life.LifeFactory.loseItem;
 import server.life.*;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Randomizer;
@@ -71,7 +71,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
 	    oid = p.readInt();
             
             try {
-                MapleMapObject mmo = map.getMapObject(oid);
+                MapObject mmo = map.getMapObject(oid);
                 if(mmo instanceof Monster) {
                     attacker = (Monster) mmo;
                     if(attacker.getId() != monsteridfrom) {

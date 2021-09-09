@@ -26,7 +26,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import server.maps.MapleSummon;
 import tools.PacketCreator;
 
@@ -39,7 +39,7 @@ public final class DamageSummonHandler extends AbstractPacketHandler {
         int monsterIdFrom = p.readInt();
         
         Character player = c.getPlayer();
-        MapleMapObject mmo = player.getMap().getMapObject(oid);
+        MapObject mmo = player.getMap().getMapObject(oid);
         
         if(mmo != null && mmo instanceof MapleSummon) {
             MapleSummon summon = (MapleSummon) mmo;

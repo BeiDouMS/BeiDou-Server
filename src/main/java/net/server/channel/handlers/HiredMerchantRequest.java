@@ -27,7 +27,7 @@ import client.inventory.ItemFactory;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MaplePlayerShop;
 import server.maps.MaplePortal;
@@ -47,7 +47,7 @@ public final class HiredMerchantRequest extends AbstractPacketHandler {
         Character chr = c.getPlayer();
         
         try {
-            for (MapleMapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
+            for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
                 if (mmo instanceof Character) {
                     Character mc = (Character) mmo;
 

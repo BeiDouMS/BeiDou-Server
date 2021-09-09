@@ -29,7 +29,7 @@ import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 import server.life.NPC;
 import server.life.PlayerNPC;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -47,7 +47,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         }
         
         int oid = p.readInt();
-        MapleMapObject obj = c.getPlayer().getMap().getMapObject(oid);
+        MapObject obj = c.getPlayer().getMap().getMapObject(oid);
         if (obj instanceof NPC) {
             NPC npc = (NPC) obj;
             if(YamlConfig.config.server.USE_DEBUG == true) c.getPlayer().dropMessage(5, "Talking to NPC " + npc.getId());

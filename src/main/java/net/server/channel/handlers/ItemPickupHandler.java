@@ -25,7 +25,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.FilePrinter;
 
 import java.awt.*;
@@ -44,7 +44,7 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
         p.readPos(); //cpos
         int oid = p.readInt();
         Character chr = c.getPlayer();
-        MapleMapObject ob = chr.getMap().getMapObject(oid);
+        MapObject ob = chr.getMap().getMapObject(oid);
         if(ob == null) return;
         
         Point charPos = chr.getPosition();

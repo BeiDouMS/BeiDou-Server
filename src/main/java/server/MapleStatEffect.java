@@ -813,7 +813,7 @@ public class MapleStatEffect {
      * @param obj
      * @param attack damage done by the skill
      */
-    public void applyPassive(Character applyto, MapleMapObject obj, int attack) {
+    public void applyPassive(Character applyto, MapObject obj, int attack) {
         if (makeChanceResult()) {
             switch (sourceid) { // MP eater
                 case FPWizard.MP_EATER:
@@ -1090,9 +1090,9 @@ public class MapleStatEffect {
         
         if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff())) {
             Rectangle bounds = (!useMaxRange) ? calculateBoundingBox(applyfrom.getPosition(), applyfrom.isFacingLeft()) : new Rectangle(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
-            List<MapleMapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.PLAYER));
+            List<MapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.PLAYER));
             List<Character> affectedp = new ArrayList<>(affecteds.size());
-            for (MapleMapObject affectedmo : affecteds) {
+            for (MapObject affectedmo : affecteds) {
                 Character affected = (Character) affectedmo;
                 if (affected != applyfrom && (isGmBuff() || applyfrom.getParty().equals(affected.getParty()))) {
                     if (!isResurrection()) {
@@ -1120,10 +1120,10 @@ public class MapleStatEffect {
 
     private void applyMonsterBuff(Character applyfrom) {
         Rectangle bounds = calculateBoundingBox(applyfrom.getPosition(), applyfrom.isFacingLeft());
-        List<MapleMapObject> affected = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.MONSTER));
+        List<MapObject> affected = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.MONSTER));
         Skill skill_ = SkillFactory.getSkill(sourceid);
         int i = 0;
-        for (MapleMapObject mo : affected) {
+        for (MapObject mo : affected) {
             Monster monster = (Monster) mo;
             if (isDispel()) {
                 monster.debuffMob(skill_.getId());

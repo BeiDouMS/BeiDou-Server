@@ -23,8 +23,8 @@ import config.YamlConfig;
 import net.server.Server;
 import net.server.channel.Channel;
 import server.life.PlayerNPC;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 
@@ -73,14 +73,14 @@ public class PlayerNPCPodium {
         return calcNextPos(i, newStep);
     }
 
-    private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapleMapObject> mmoList) {
+    private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
             if (YamlConfig.config.server.USE_DEBUG) {
                 System.out.println("Reorganizing pnpc map, step " + newStep);
             }
 
             List<PlayerNPC> playerNpcs = new ArrayList<>(mmoList.size());
-            for (MapleMapObject mmo : mmoList) {
+            for (MapObject mmo : mmoList) {
                 playerNpcs.add((PlayerNPC) mmo);
             }
 
@@ -128,7 +128,7 @@ public class PlayerNPCPodium {
                 return null;
             }
 
-            List<MapleMapObject> mmoList = map.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC));
+            List<MapObject> mmoList = map.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC));
             map.getWorldServer().setPlayerNpcMapPodiumData(map.getId(), encodePodiumData(podiumStep + 1, podiumCount + 1));
             return reorganizePlayerNpcs(map, podiumStep + 1, mmoList);
         } else {

@@ -179,7 +179,7 @@ public class Character extends AbstractCharacterObject {
     private final Map<Short, QuestStatus> quests;
     private final Set<Monster> controlled = new LinkedHashSet<>();
     private final Map<Integer, String> entered = new LinkedHashMap<>();
-    private final Set<MapleMapObject> visibleMapObjects = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<MapObject> visibleMapObjects = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final Map<Skill, SkillEntry> skills = new LinkedHashMap<>();
     private final Map<Integer, Integer> activeCoupons = new LinkedHashMap<>();
     private final Map<Integer, Integer> activeCouponRates = new LinkedHashMap<>();
@@ -636,7 +636,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void addVisibleMapObject(MapleMapObject mo) {
+    public void addVisibleMapObject(MapObject mo) {
         visibleMapObjects.add(mo);
     }
 
@@ -832,7 +832,7 @@ public class Character extends AbstractCharacterObject {
                     getMap().broadcastNONGMMessage(this, PacketCreator.spawnSummon(ms, false), false);
                 }
 
-                for (MapleMapObject mo : this.getMap().getMonsters()) {
+                for (MapObject mo : this.getMap().getMonsters()) {
                     Monster m = (Monster) mo;
                     m.aggroUpdateController();
                 }
@@ -1907,11 +1907,11 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public final void pickupItem(MapleMapObject ob) {
+    public final void pickupItem(MapObject ob) {
         pickupItem(ob, -1);
     }
 
-    public final void pickupItem(MapleMapObject ob, int petIndex) {     // yes, one picks the MapleMapObject, not the MapItem
+    public final void pickupItem(MapObject ob, int petIndex) {     // yes, one picks the MapObject, not the MapItem
         if (ob == null) {                                               // pet index refers to the one picking up the item
             return;
         }
@@ -5899,8 +5899,8 @@ public class Character extends AbstractCharacterObject {
         return vanquisherStage;
     }
 
-    public MapleMapObject[] getVisibleMapObjects() {
-        return visibleMapObjects.toArray(new MapleMapObject[visibleMapObjects.size()]);
+    public MapObject[] getVisibleMapObjects() {
+        return visibleMapObjects.toArray(new MapObject[visibleMapObjects.size()]);
     }
 
     public int getWorld() {
@@ -6184,7 +6184,7 @@ public class Character extends AbstractCharacterObject {
         return hidden;
     }
 
-    public boolean isMapObjectVisible(MapleMapObject mo) {
+    public boolean isMapObjectVisible(MapObject mo) {
         return visibleMapObjects.contains(mo);
     }
 
@@ -8007,7 +8007,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void removeVisibleMapObject(MapleMapObject mo) {
+    public void removeVisibleMapObject(MapObject mo) {
         visibleMapObjects.remove(mo);
     }
 

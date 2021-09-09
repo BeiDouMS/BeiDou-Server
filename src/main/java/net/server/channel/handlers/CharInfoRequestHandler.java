@@ -25,7 +25,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.PacketCreator;
 
 public final class CharInfoRequestHandler extends AbstractPacketHandler {
@@ -34,7 +34,7 @@ public final class CharInfoRequestHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
         int cid = p.readInt();
-        MapleMapObject target = c.getPlayer().getMap().getMapObject(cid);
+        MapObject target = c.getPlayer().getMap().getMapObject(cid);
         if (target != null) {
             if (target instanceof Character) {
                 Character player = (Character) target;

@@ -29,7 +29,7 @@ import client.command.Command;
 import server.life.Monster;
 import server.life.NPC;
 import server.life.PlayerNPC;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 
 import java.util.HashSet;
 
@@ -47,7 +47,7 @@ public class WhereaMiCommand extends Command {
         HashSet<PlayerNPC> playernpcs = new HashSet<>();
         HashSet<Monster> mobs = new HashSet<>();
         
-        for (MapleMapObject mmo : player.getMap().getMapObjects()) {
+        for (MapObject mmo : player.getMap().getMapObjects()) {
             if (mmo instanceof NPC) {
                 NPC npc = (NPC) mmo;
                 npcs.add(npc);

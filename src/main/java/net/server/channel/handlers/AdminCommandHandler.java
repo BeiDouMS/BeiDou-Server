@@ -31,7 +31,7 @@ import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.life.LifeFactory;
 import server.life.Monster;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import server.maps.MapleMapObjectType;
 import server.quest.MapleQuest;
 import tools.PacketCreator;
@@ -126,7 +126,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
             case 0x15: // Kill
                 int mobToKill = p.readInt();
                 int amount = p.readInt();
-                List<MapleMapObject> monsterx = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
+                List<MapObject> monsterx = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
                 for (int x = 0; x < amount; x++) {
                     Monster monster = (Monster) monsterx.get(x);
                     if (monster.getId() == mobToKill) {
@@ -147,8 +147,8 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
             case 0x18: // Maple & Mobhp
                 int mobHp = p.readInt();
                 c.getPlayer().dropMessage("Monsters HP");
-                List<MapleMapObject> monsters = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
-                for (MapleMapObject mobs : monsters) {
+                List<MapObject> monsters = c.getPlayer().getMap().getMapObjectsInRange(c.getPlayer().getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
+                for (MapObject mobs : monsters) {
                     Monster monster = (Monster) mobs;
                     if (monster.getId() == mobHp) {
                         c.getPlayer().dropMessage(monster.getName() + ": " + monster.getHp());

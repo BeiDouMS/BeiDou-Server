@@ -29,8 +29,8 @@ import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.life.Monster;
 import server.life.MonsterInformationProvider;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
@@ -59,7 +59,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 
 		int objectid = p.readInt();
 		short moveid = p.readShort();
-		MapleMapObject mmo = map.getMapObject(objectid);
+		MapObject mmo = map.getMapObject(objectid);
 		if (mmo == null || mmo.getType() != MapleMapObjectType.MONSTER) {
 			return;
 		}

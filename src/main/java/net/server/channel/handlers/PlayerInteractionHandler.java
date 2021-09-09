@@ -281,7 +281,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     if (isTradeOpen(chr)) return;
 
                     int oid = p.readInt();
-                    MapleMapObject ob = chr.getMap().getMapObject(oid);
+                    MapObject ob = chr.getMap().getMapObject(oid);
                     if (ob instanceof MaplePlayerShop) {
                         MaplePlayerShop shop = (MaplePlayerShop) ob;
                         shop.visitShop(chr);
@@ -795,7 +795,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
     
     private static boolean canPlaceStore(Character chr) {
         try {
-            for (MapleMapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
+            for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
                 if (mmo instanceof Character) {
                     Character mc = (Character) mmo;
                     if (mc.getId() == chr.getId()) {

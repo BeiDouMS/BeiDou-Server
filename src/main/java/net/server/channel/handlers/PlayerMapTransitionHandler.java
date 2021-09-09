@@ -26,7 +26,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.Monster;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -53,7 +53,7 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
         }
         
         if (!chr.isHidden()) {  // thanks Lame (Conrad) for noticing hidden characters controlling mobs
-            for (MapleMapObject mo : chr.getMap().getMonsters()) {    // thanks BHB, IxianMace, Jefe for noticing several issues regarding mob statuses (such as freeze)
+            for (MapObject mo : chr.getMap().getMonsters()) {    // thanks BHB, IxianMace, Jefe for noticing several issues regarding mob statuses (such as freeze)
                 Monster m = (Monster) mo;
                 if (m.getSpawnEffect() == 0 || m.getHp() < m.getMaxHp()) {     // avoid effect-spawning mobs
                     if (m.getController() == chr) {

@@ -30,7 +30,7 @@ import net.server.Server;
 import server.TimerManager;
 import server.life.Monster;
 import server.life.SpawnPoint;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MaplePortal;
 import server.maps.MapleReactor;
@@ -67,8 +67,8 @@ public class DebugCommand extends Command {
                 break;
             
             case "monster":
-                List<MapleMapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
-                for (MapleMapObject monstermo : monsters) {
+                List<MapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
+                for (MapObject monstermo : monsters) {
                     Monster monster = (Monster) monstermo;
                     Character controller = monster.getController();
                     player.message("Monster ID: " + monster.getId() + " Aggro target: " + ((controller != null) ? controller.getName() + " Has aggro: " + monster.isControllerHasAggro() + " Knowns aggro: " + monster.isControllerKnowsAboutAggro() : "<none>"));
@@ -123,7 +123,7 @@ public class DebugCommand extends Command {
             case "reactors":
                 player.dropMessage(6, "Current reactor states on map " + player.getMapId() + ":");
 
-                for (MapleMapObject mmo : player.getMap().getReactors()) {
+                for (MapObject mmo : player.getMap().getReactors()) {
                     MapleReactor mr = (MapleReactor) mmo;
                     player.dropMessage(6, "Id: " + mr.getId() + " Oid: " + mr.getObjectId() + " name: '" + mr.getName() + "' -> Type: " + mr.getReactorType() + " State: " + mr.getState() + " Event State: " + mr.getEventState() + " Position: x " + mr.getPosition().getX() + " y " + mr.getPosition().getY() + ".");
                 }

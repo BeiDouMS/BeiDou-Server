@@ -27,8 +27,8 @@ import client.status.MonsterStatus;
 import constants.game.GameConstants;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleMist;
 import tools.ArrayMap;
@@ -144,9 +144,9 @@ public class MobSkill {
                 break;
             case 114:
                 if (lt != null && rb != null && skill) {
-                    List<MapleMapObject> objects = getObjectsInRange(monster, MapleMapObjectType.MONSTER);
+                    List<MapObject> objects = getObjectsInRange(monster, MapleMapObjectType.MONSTER);
                     final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
-                    for (MapleMapObject mons : objects) {
+                    for (MapObject mons : objects) {
                         ((Monster) mons).heal(hps, getY());
                     }
                 } else {
@@ -317,7 +317,7 @@ public class MobSkill {
         }
         if (stats.size() > 0) {
             if (lt != null && rb != null && skill) {
-                for (MapleMapObject mons : getObjectsInRange(monster, MapleMapObjectType.MONSTER)) {
+                for (MapObject mons : getObjectsInRange(monster, MapleMapObjectType.MONSTER)) {
                     ((Monster) mons).applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
                 }
             } else {
@@ -412,7 +412,7 @@ public class MobSkill {
         return bounds;
     }
 
-    private List<MapleMapObject> getObjectsInRange(Monster monster, MapleMapObjectType objectType) {
+    private List<MapObject> getObjectsInRange(Monster monster, MapleMapObjectType objectType) {
         return monster.getMap().getMapObjectsInBox(calculateBoundingBox(monster.getPosition()), Collections.singletonList(objectType));
     }
 }

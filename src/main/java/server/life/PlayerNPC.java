@@ -33,8 +33,8 @@ import net.server.world.World;
 import server.life.positioner.PlayerNPCPodium;
 import server.life.positioner.PlayerNPCPositioner;
 import server.maps.AbstractMapObject;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -553,7 +553,7 @@ public class PlayerNPC extends AbstractMapObject {
 
     private static PlayerNPC getPlayerNPCFromWorldMap(String name, int world, int map) {
         World wserv = Server.getInstance().getWorld(world);
-        for (MapleMapObject pnpcObj : wserv.getChannel(1).getMapFactory().getMap(map).getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
+        for (MapObject pnpcObj : wserv.getChannel(1).getMapFactory().getMap(map).getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
             PlayerNPC pn = (PlayerNPC) pnpcObj;
 
             if (name.contentEquals(pn.getName()) && pn.getScriptId() < 9977777) {
@@ -617,7 +617,7 @@ public class PlayerNPC extends AbstractMapObject {
                 for (Channel channel : Server.getInstance().getChannelsFromWorld(world)) {
                     MapleMap m = channel.getMapFactory().getMap(map);
 
-                    for (MapleMapObject pnpcObj : m.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
+                    for (MapObject pnpcObj : m.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
                         PlayerNPC pn = (PlayerNPC) pnpcObj;
                         m.removeMapObject(pnpcObj);
                         m.broadcastMessage(PacketCreator.removeNPCController(pn.getObjectId()));

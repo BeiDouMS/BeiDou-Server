@@ -52,8 +52,8 @@ import server.gachapon.MapleGachapon.MapleGachaponItem;
 import server.life.LifeFactory;
 import server.life.PlayerNPC;
 import server.maps.MapManager;
+import server.maps.MapObject;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
@@ -315,7 +315,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         
         public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
-                for(MapleMapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
+                for(MapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
                         PlayerNPC pn = (PlayerNPC) pnpcObj;
 
                         if(pn.getScriptId() == scriptId) {
@@ -608,7 +608,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         public int cpqCalcAvgLvl(int map) {
             int num = 0;
             int avg = 0;
-            for (MapleMapObject mmo : c.getChannelServer().getMapFactory().getMap(map).getAllPlayer()) {
+            for (MapObject mmo : c.getChannelServer().getMapFactory().getMap(map).getAllPlayer()) {
                 avg += ((Character) mmo).getLevel();
                 num++;
             }
@@ -959,7 +959,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         public void challengeParty2(int field) {
             Character leader = null;
             MapleMap map = c.getChannelServer().getMapFactory().getMap(980031000 + 1000 * field);
-            for (MapleMapObject mmo : map.getAllPlayer()) {
+            for (MapObject mmo : map.getAllPlayer()) {
                 Character mc = (Character) mmo;
                 if (mc.getParty() == null) {
                     sendOk(LanguageConstants.getMessage(mc, LanguageConstants.CPQFindError));
@@ -990,7 +990,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 sendOk("An unexpected error regarding the other party has occurred.");
                 return;
             }
-            for (MapleMapObject mmo : map.getAllPlayer()) {
+            for (MapObject mmo : map.getAllPlayer()) {
                 Character mc = (Character) mmo;
                 if (mc.getParty() == null) {
                     sendOk(LanguageConstants.getMessage(mc, LanguageConstants.CPQFindError));

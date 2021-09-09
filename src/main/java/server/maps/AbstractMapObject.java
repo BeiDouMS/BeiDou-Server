@@ -23,7 +23,7 @@ package server.maps;
 
 import java.awt.*;
 
-public abstract class AbstractMapObject implements MapleMapObject {
+public abstract class AbstractMapObject implements MapObject {
     private Point position = new Point();
     private int objectId;
 
