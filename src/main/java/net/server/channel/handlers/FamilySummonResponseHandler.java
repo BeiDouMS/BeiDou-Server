@@ -2,7 +2,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleFamilyEntitlement;
+import client.FamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -30,8 +30,8 @@ public class FamilySummonResponseHandler extends AbstractPacketHandler {
         if(accept && inviter.getMap() == map) { //cancel if inviter has changed maps
             c.getPlayer().changeMap(map, map.getPortal(0));
         } else {
-            inviterEntry.refundEntitlement(MapleFamilyEntitlement.SUMMON_FAMILY);
-            inviterEntry.gainReputation(MapleFamilyEntitlement.SUMMON_FAMILY.getRepCost(), false); //refund rep cost if declined
+            inviterEntry.refundEntitlement(FamilyEntitlement.SUMMON_FAMILY);
+            inviterEntry.gainReputation(FamilyEntitlement.SUMMON_FAMILY.getRepCost(), false); //refund rep cost if declined
             inviter.sendPacket(PacketCreator.getFamilyInfo(inviterEntry));
             inviter.dropMessage(5, c.getPlayer().getName() + " has denied the summon request.");
         }

@@ -471,7 +471,7 @@ public class MapleFamilyEntry {
         return new Pair<>(highestGeneration, juniorCount); //creating new objects to return is a bit inefficient, but cleaner than packing into a long
     }
 
-    public boolean useEntitlement(MapleFamilyEntitlement entitlement) {
+    public boolean useEntitlement(FamilyEntitlement entitlement) {
         int id = entitlement.ordinal();
         if(entitlements[id] >= 1) return false;
         try(Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement("INSERT INTO family_entitlement (entitlementid, charid, timestamp) VALUES (?, ?, ?)")) {
@@ -487,7 +487,7 @@ public class MapleFamilyEntry {
         return true;
     }
     
-    public boolean refundEntitlement(MapleFamilyEntitlement entitlement) {
+    public boolean refundEntitlement(FamilyEntitlement entitlement) {
         int id = entitlement.ordinal();
         try(Connection con = DatabaseConnection.getConnection(); PreparedStatement ps = con.prepareStatement("DELETE FROM family_entitlement WHERE entitlementid = ? AND charid = ?")) {
             ps.setInt(1, id);
@@ -501,11 +501,11 @@ public class MapleFamilyEntry {
         return true;
     }
 
-    public boolean isEntitlementUsed(MapleFamilyEntitlement entitlement) {
+    public boolean isEntitlementUsed(FamilyEntitlement entitlement) {
         return entitlements[entitlement.ordinal()] >= 1;
     }
     
-    public int getEntitlementUsageCount(MapleFamilyEntitlement entitlement) {
+    public int getEntitlementUsageCount(FamilyEntitlement entitlement) {
         return entitlements[entitlement.ordinal()];
     }
     
@@ -514,7 +514,7 @@ public class MapleFamilyEntry {
     }
     
     public void resetEntitlementUsages() {
-        for(MapleFamilyEntitlement entitlement : MapleFamilyEntitlement.values()) {
+        for(FamilyEntitlement entitlement : FamilyEntitlement.values()) {
             entitlements[entitlement.ordinal()] = 0;
         }
     }

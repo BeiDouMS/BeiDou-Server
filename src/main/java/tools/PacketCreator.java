@@ -5747,9 +5747,9 @@ public class PacketCreator {
 
     public static Packet loadFamily(Character player) {
         final OutPacket p = OutPacket.create(SendOpcode.FAMILY_PRIVILEGE_LIST);
-        p.writeInt(MapleFamilyEntitlement.values().length);
-        for (int i = 0; i < MapleFamilyEntitlement.values().length; i++) {
-            MapleFamilyEntitlement entitlement = MapleFamilyEntitlement.values()[i];
+        p.writeInt(FamilyEntitlement.values().length);
+        for (int i = 0; i < FamilyEntitlement.values().length; i++) {
+            FamilyEntitlement entitlement = FamilyEntitlement.values()[i];
             p.writeByte(i <= 1 ? 1 : 2); //type
             p.writeInt(entitlement.getRepCost());
             p.writeInt(entitlement.getUsageLimit());
@@ -5816,8 +5816,8 @@ public class PacketCreator {
         p.writeInt(f.getFamily().getLeader().getChrId()); // Leader ID (Allows setting message)
         p.writeString(f.getFamily().getName());
         p.writeString(f.getFamily().getMessage()); //family message
-        p.writeInt(MapleFamilyEntitlement.values().length); //Entitlement info count
-        for (MapleFamilyEntitlement entitlement : MapleFamilyEntitlement.values()) {
+        p.writeInt(FamilyEntitlement.values().length); //Entitlement info count
+        for (FamilyEntitlement entitlement : FamilyEntitlement.values()) {
             p.writeInt(entitlement.ordinal()); //ID
             p.writeInt(f.isEntitlementUsed(entitlement) ? 1 : 0); //Used count
         }

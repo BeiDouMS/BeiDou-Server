@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleFamilyEntitlement;
+import client.FamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -45,7 +45,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
-        MapleFamilyEntitlement type = MapleFamilyEntitlement.values()[p.readInt()];
+        FamilyEntitlement type = FamilyEntitlement.values()[p.readInt()];
         int cost = type.getRepCost();
         MapleFamilyEntry entry = c.getPlayer().getFamilyEntry();
         if(entry.getReputation() < cost || entry.isEntitlementUsed(type)) {
@@ -53,14 +53,14 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
         }
         c.sendPacket(PacketCreator.getFamilyInfo(entry));
         Character victim;
-        if(type == MapleFamilyEntitlement.FAMILY_REUINION || type == MapleFamilyEntitlement.SUMMON_FAMILY) {
+        if(type == FamilyEntitlement.FAMILY_REUINION || type == FamilyEntitlement.SUMMON_FAMILY) {
             victim = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
             if(victim != null && victim != c.getPlayer()) {
                 if(victim.getFamily() == c.getPlayer().getFamily()) {
                     MapleMap targetMap = victim.getMap();
                     MapleMap ownMap = c.getPlayer().getMap();
                     if(targetMap != null) {
-                        if(type == MapleFamilyEntitlement.FAMILY_REUINION) {
+                        if(type == FamilyEntitlement.FAMILY_REUINION) {
                             if(!FieldLimit.CANNOTMIGRATE.check(ownMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit())
                                     && (targetMap.getForcedReturnId() == 999999999 || targetMap.getId() < 100000000) && targetMap.getEventInstance() == null) {
                                 
@@ -91,7 +91,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.sendFamilyMessage(67, 0));
                 }
             }
-        } else if(type == MapleFamilyEntitlement.FAMILY_BONDING) {
+        } else if(type == FamilyEntitlement.FAMILY_BONDING) {
             //not implemented
         } else {
             boolean party = false;
@@ -103,11 +103,11 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                 case PARTY_EXP_2_30MIN:
                     party = true;
                     isExp = true;
-                    type = MapleFamilyEntitlement.SELF_EXP_2_30MIN;
+                    type = FamilyEntitlement.SELF_EXP_2_30MIN;
                     continue;
                 case PARTY_DROP_2_30MIN:
                     party = true;
-                    type = MapleFamilyEntitlement.SELF_DROP_2_30MIN;
+                    type = FamilyEntitlement.SELF_DROP_2_30MIN;
                     continue;
                 case SELF_DROP_2_30MIN:
                     duration = 30;
@@ -130,7 +130,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
         }
     }
     
-    private boolean useEntitlement(MapleFamilyEntry entry, MapleFamilyEntitlement entitlement) {
+    private boolean useEntitlement(MapleFamilyEntry entry, FamilyEntitlement entitlement) {
         if(entry.useEntitlement(entitlement)) {
             entry.gainReputation(-entitlement.getRepCost(), false);
             entry.getChr().sendPacket(PacketCreator.getFamilyInfo(entry));
