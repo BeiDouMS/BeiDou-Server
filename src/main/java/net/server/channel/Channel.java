@@ -36,8 +36,8 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.ChannelServices;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -319,7 +319,7 @@ public final class Channel {
 
     public List<Character> getPartyMembers(Party party) {
         List<Character> partym = new ArrayList<>(8);
-        for (MaplePartyCharacter partychar : party.getMembers()) {
+        for (PartyCharacter partychar : party.getMembers()) {
             if (partychar.getChannel() == getId()) {
                 Character chr = getPlayerStorage().getCharacterByName(partychar.getName());
                 if (chr != null) {

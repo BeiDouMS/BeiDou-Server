@@ -31,8 +31,8 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.guild.Guild;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
 import scripting.npc.NPCScriptManager;
@@ -771,7 +771,7 @@ public class AbstractPlayerInteraction {
 			removeAll(id);
 			return;
 		}
-		for (MaplePartyCharacter mpc : getParty().getMembers()) {
+		for (PartyCharacter mpc : getParty().getMembers()) {
                         if (mpc == null || !mpc.isOnline()) {
                                 continue;
                         }
@@ -808,7 +808,7 @@ public class AbstractPlayerInteraction {
 		int size = party.getMembers().size();
 
 		if(instance) {
-			for(MaplePartyCharacter member: party.getMembers()) {
+			for(PartyCharacter member: party.getMembers()) {
 				if(member == null || !member.isOnline()){
 					size--;
 				} else {
@@ -821,7 +821,7 @@ public class AbstractPlayerInteraction {
 		}
 
 		int bonus = size < 4 ? 100 : 70 + (size * 10);
-		for (MaplePartyCharacter member : party.getMembers()) {
+		for (PartyCharacter member : party.getMembers()) {
 			if(member == null || !member.isOnline()){
 				continue;
 			}

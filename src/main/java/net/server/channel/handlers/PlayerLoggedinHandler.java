@@ -39,7 +39,7 @@ import net.server.coordinator.world.EventRecallCoordinator;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.world.MaplePartyCharacter;
+import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import scripting.event.EventInstanceManager;
@@ -303,7 +303,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             player.showNote();
             if (player.getParty() != null) {
-                MaplePartyCharacter pchar = player.getMPC();
+                PartyCharacter pchar = player.getMPC();
 
                 //Use this in case of enabling party HPbar HUD when logging in, however "you created a party" will appear on chat.
                 //c.sendPacket(PacketCreator.partyCreated(pchar));

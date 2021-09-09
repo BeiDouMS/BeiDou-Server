@@ -44,8 +44,8 @@ public class Party {
     private int id;
     private Party enemy = null;
     private int leaderId;
-    private final List<MaplePartyCharacter> members = new LinkedList<>();
-    private List<MaplePartyCharacter> pqMembers = null;
+    private final List<PartyCharacter> members = new LinkedList<>();
+    private List<PartyCharacter> pqMembers = null;
 
     private final Map<Integer, Integer> histMembers = new HashMap<>();
     private int nextEntry = 0;
@@ -54,12 +54,12 @@ public class Party {
 
     private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.PARTY, true);
 
-    public Party(int id, MaplePartyCharacter chrfor) {
+    public Party(int id, PartyCharacter chrfor) {
         this.leaderId = chrfor.getId();
         this.id = id;
     }
 
-    public boolean containsMembers(MaplePartyCharacter member) {
+    public boolean containsMembers(PartyCharacter member) {
         lock.lock();
         try {
             return members.contains(member);
@@ -68,7 +68,7 @@ public class Party {
         }
     }
 
-    public void addMember(MaplePartyCharacter member) {
+    public void addMember(PartyCharacter member) {
         lock.lock();
         try {
             histMembers.put(member.getId(), nextEntry);
@@ -80,7 +80,7 @@ public class Party {
         }
     }
 
-    public void removeMember(MaplePartyCharacter member) {
+    public void removeMember(PartyCharacter member) {
         lock.lock();
         try {
             histMembers.remove(member.getId());
@@ -91,11 +91,11 @@ public class Party {
         }
     }
 
-    public void setLeader(MaplePartyCharacter victim) {
+    public void setLeader(PartyCharacter victim) {
         this.leaderId = victim.getId();
     }
 
-    public void updateMember(MaplePartyCharacter member) {
+    public void updateMember(PartyCharacter member) {
         lock.lock();
         try {
             for (int i = 0; i < members.size(); i++) {
@@ -108,10 +108,10 @@ public class Party {
         }
     }
 
-    public MaplePartyCharacter getMemberById(int id) {
+    public PartyCharacter getMemberById(int id) {
         lock.lock();
         try {
-            for (MaplePartyCharacter chr : members) {
+            for (PartyCharacter chr : members) {
                 if (chr.getId() == id) {
                     return chr;
                 }
@@ -122,7 +122,7 @@ public class Party {
         }
     }
 
-    public Collection<MaplePartyCharacter> getMembers() {
+    public Collection<PartyCharacter> getMembers() {
         lock.lock();
         try {
             return new LinkedList<>(members);
@@ -131,7 +131,7 @@ public class Party {
         }
     }
 
-    public List<MaplePartyCharacter> getPartyMembers() {
+    public List<PartyCharacter> getPartyMembers() {
         lock.lock();
         try {
             return new LinkedList<>(members);
@@ -140,12 +140,12 @@ public class Party {
         }
     }
 
-    public List<MaplePartyCharacter> getPartyMembersOnline() {
+    public List<PartyCharacter> getPartyMembersOnline() {
         lock.lock();
         try {
-            List<MaplePartyCharacter> ret = new LinkedList<>();
+            List<PartyCharacter> ret = new LinkedList<>();
 
-            for (MaplePartyCharacter mpc : members) {
+            for (PartyCharacter mpc : members) {
                 if (mpc.isOnline()) {
                     ret.add(mpc);
                 }
@@ -158,11 +158,11 @@ public class Party {
     }
 
     // used whenever entering PQs: will draw every party member that can attempt a target PQ while ingnoring those unfit.
-    public Collection<MaplePartyCharacter> getEligibleMembers() {
+    public Collection<PartyCharacter> getEligibleMembers() {
         return Collections.unmodifiableList(pqMembers);
     }
 
-    public void setEligibleMembers(List<MaplePartyCharacter> eliParty) {
+    public void setEligibleMembers(List<PartyCharacter> eliParty) {
         pqMembers = eliParty;
     }
 
@@ -178,10 +178,10 @@ public class Party {
         return leaderId;
     }
 
-    public MaplePartyCharacter getLeader() {
+    public PartyCharacter getLeader() {
         lock.lock();
         try {
-            for (MaplePartyCharacter mpc : members) {
+            for (PartyCharacter mpc : members) {
                 if (mpc.getId() == leaderId) {
                     return mpc;
                 }
@@ -263,11 +263,11 @@ public class Party {
 
     public void assignNewLeader(Client c) {
         World world = c.getWorldServer();
-        MaplePartyCharacter newLeadr = null;
+        PartyCharacter newLeadr = null;
 
         lock.lock();
         try {
-            for (MaplePartyCharacter mpc : members) {
+            for (PartyCharacter mpc : members) {
                 if (mpc.getId() != leaderId && (newLeadr == null || newLeadr.getLevel() < mpc.getLevel())) {
                     newLeadr = mpc;
                 }
@@ -297,9 +297,9 @@ public class Party {
         return result;
     }
 
-    public MaplePartyCharacter getMemberByPos(int pos) {
+    public PartyCharacter getMemberByPos(int pos) {
         int i = 0;
-        for (MaplePartyCharacter chr : members) {
+        for (PartyCharacter chr : members) {
             if (pos == i) {
                 return chr;
             }
@@ -334,7 +334,7 @@ public class Party {
                 return false;
             }
 
-            MaplePartyCharacter partyplayer = new MaplePartyCharacter(player);
+            PartyCharacter partyplayer = new PartyCharacter(player);
             party = player.getWorldServer().createParty(partyplayer);
             player.setParty(party);
             player.setMPC(partyplayer);
@@ -364,7 +364,7 @@ public class Party {
             party = world.getParty(partyid);
             if (party != null) {
                 if (party.getMembers().size() < 6) {
-                    MaplePartyCharacter partyplayer = new MaplePartyCharacter(player);
+                    PartyCharacter partyplayer = new PartyCharacter(player);
                     player.getMap().addPartyMember(player, party.getId());
 
                     world.updateParty(party.getId(), PartyOperation.JOIN, partyplayer);
@@ -395,7 +395,7 @@ public class Party {
     public static void leaveParty(Party party, Client c) {
         World world = c.getWorldServer();
         Character player = c.getPlayer();
-        MaplePartyCharacter partyplayer = player.getMPC();
+        PartyCharacter partyplayer = player.getMPC();
 
         if (party != null && partyplayer != null) {
             if (partyplayer.getId() == party.getLeaderId()) {
@@ -443,11 +443,11 @@ public class Party {
     public static void expelFromParty(Party party, Client c, int expelCid) {
         World world = c.getWorldServer();
         Character player = c.getPlayer();
-        MaplePartyCharacter partyplayer = player.getMPC();
+        PartyCharacter partyplayer = player.getMPC();
 
         if (party != null && partyplayer != null) {
             if (partyplayer.equals(party.getLeader())) {
-                MaplePartyCharacter expelled = party.getMemberById(expelCid);
+                PartyCharacter expelled = party.getMemberById(expelCid);
                 if (expelled != null) {
                     Character emc = expelled.getPlayer();
                     if (emc != null) {

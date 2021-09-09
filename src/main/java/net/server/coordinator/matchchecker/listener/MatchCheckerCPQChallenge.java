@@ -23,7 +23,7 @@ import client.Character;
 import constants.string.LanguageConstants;
 import net.server.coordinator.matchchecker.AbstractMatchCheckerListener;
 import net.server.coordinator.matchchecker.MatchCheckerListenerRecipe;
-import net.server.world.MaplePartyCharacter;
+import net.server.world.PartyCharacter;
 import scripting.npc.NPCConversationManager;
 import scripting.npc.NPCScriptManager;
 
@@ -70,8 +70,8 @@ public class MatchCheckerCPQChallenge implements MatchCheckerListenerRecipe {
                 
                 Character chr = leader;
                 
-                List<MaplePartyCharacter> chrMembers = new LinkedList<>();
-                for (MaplePartyCharacter mpc : chr.getParty().getMembers()) {
+                List<PartyCharacter> chrMembers = new LinkedList<>();
+                for (PartyCharacter mpc : chr.getParty().getMembers()) {
                     if (mpc.isOnline()) {
                         chrMembers.add(mpc);
                     }

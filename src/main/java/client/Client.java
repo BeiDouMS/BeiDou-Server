@@ -882,12 +882,12 @@ public class Client extends ChannelInboundHandlerAdapter {
         final int idz = player.getId();
 
         if (party != null) {
-            final MaplePartyCharacter chrp = new MaplePartyCharacter(player);
+            final PartyCharacter chrp = new PartyCharacter(player);
             chrp.setOnline(false);
             wserv.updateParty(party.getId(), PartyOperation.LOG_ONOFF, chrp);
             if (party.getLeader().getId() == idz && map != null) {
-                MaplePartyCharacter lchr = null;
-                for (MaplePartyCharacter pchr : party.getMembers()) {
+                PartyCharacter lchr = null;
+                for (PartyCharacter pchr : party.getMembers()) {
                     if (pchr != null && pchr.getId() != idz && (lchr == null || lchr.getLevel() <= pchr.getLevel()) && map.getCharacterById(pchr.getId()) != null) {
                         lchr = pchr;
                     }

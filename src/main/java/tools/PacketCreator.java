@@ -52,8 +52,8 @@ import net.server.channel.handlers.WhisperHandler;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildSummary;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import server.CashShop.CashItem;
@@ -3765,23 +3765,23 @@ public class PacketCreator {
     }
 
     private static void addPartyStatus(int forchannel, Party party, OutPacket p, boolean leaving) {
-        List<MaplePartyCharacter> partymembers = new ArrayList<>(party.getMembers());
+        List<PartyCharacter> partymembers = new ArrayList<>(party.getMembers());
         while (partymembers.size() < 6) {
-            partymembers.add(new MaplePartyCharacter());
+            partymembers.add(new PartyCharacter());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getId());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeFixedString(getRightPaddedStr(partychar.getName(), '\0', 13));
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getJobId());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getLevel());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             if (partychar.isOnline()) {
                 p.writeInt(partychar.getChannel() - 1);
             } else {
@@ -3789,7 +3789,7 @@ public class PacketCreator {
             }
         }
         p.writeInt(party.getLeader().getId());
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             if (partychar.getChannel() == forchannel) {
                 p.writeInt(partychar.getMapId());
             } else {
@@ -3798,7 +3798,7 @@ public class PacketCreator {
         }
 
         Map<Integer, MapleDoor> partyDoors = party.getDoors();
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             if (partychar.getChannel() == forchannel && !leaving) {
                 if (partyDoors.size() > 0) {
                     MapleDoor door = partyDoors.get(partychar.getId());
@@ -3829,7 +3829,7 @@ public class PacketCreator {
         }
     }
 
-    public static Packet updateParty(int forChannel, Party party, PartyOperation op, MaplePartyCharacter target) {
+    public static Packet updateParty(int forChannel, Party party, PartyOperation op, PartyCharacter target) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         switch (op) {
             case DISBAND:

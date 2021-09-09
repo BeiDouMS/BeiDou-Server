@@ -24,8 +24,8 @@ package server.partyquest;
 
 import client.Character;
 import net.server.Server;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import tools.FilePrinter;
 
 import java.util.ArrayList;
@@ -42,11 +42,11 @@ public class PartyQuest {
 
     public PartyQuest(Party party) {
         this.party = party;
-        MaplePartyCharacter leader = party.getLeader();
+        PartyCharacter leader = party.getLeader();
         channel = leader.getChannel();
         world = leader.getWorld();
         int mapid = leader.getMapId();
-        for (MaplePartyCharacter pchr : party.getMembers()) {
+        for (PartyCharacter pchr : party.getMembers()) {
             if (pchr.getChannel() == channel && pchr.getMapId() == mapid) {
                 Character chr = Server.getInstance().getWorld(world).getChannel(channel).getPlayerStorage().getCharacterById(pchr.getId());
                 if (chr != null)

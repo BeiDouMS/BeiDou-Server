@@ -26,8 +26,8 @@ import client.Client;
 import client.Disease;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.partyquest.MapleCarnivalFactory;
@@ -107,7 +107,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                                 hitChance = (int) (Math.random() * 100);
                             }
                             if (hitChance <= 80) {
-                                for (MaplePartyCharacter mpc : enemies.getPartyMembers()) {
+                                for (PartyCharacter mpc : enemies.getPartyMembers()) {
                                     Character mc = mpc.getPlayer();
                                     if (mc != null) {
                                         if (dis == null) {

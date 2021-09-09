@@ -28,8 +28,8 @@ import net.server.Server;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import tools.DatabaseConnection;
 
 import java.sql.Connection;
@@ -86,7 +86,7 @@ public class Alliance {
     private static List<Character> getPartyGuildMasters(Party party) {
         List<Character> mcl = new LinkedList<>();
 
-        for (MaplePartyCharacter mpc : party.getMembers()) {
+        for (PartyCharacter mpc : party.getMembers()) {
             Character chr = mpc.getPlayer();
             if (chr != null) {
                 Character lchr = party.getLeader().getPlayer();

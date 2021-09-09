@@ -838,7 +838,7 @@ public class World {
         }
     }
     
-    public Party createParty(MaplePartyCharacter chrfor) {
+    public Party createParty(PartyCharacter chrfor) {
         int partyid = runningPartyId.getAndIncrement();
         Party party = new Party(partyid, chrfor);
         
@@ -872,7 +872,7 @@ public class World {
         }
     }
     
-    private void updateCharacterParty(Party party, PartyOperation operation, MaplePartyCharacter target, Collection<MaplePartyCharacter> partyMembers) {
+    private void updateCharacterParty(Party party, PartyOperation operation, PartyCharacter target, Collection<PartyCharacter> partyMembers) {
         switch (operation) {
             case JOIN:
                 registerCharacterParty(target.getId(), party.getId());
@@ -886,7 +886,7 @@ public class World {
             case DISBAND:
                 partyLock.lock();
                 try {
-                    for (MaplePartyCharacter partychar : partyMembers) {
+                    for (PartyCharacter partychar : partyMembers) {
                         unregisterCharacterPartyInternal(partychar.getId());
                     }
                 } finally {
@@ -899,11 +899,11 @@ public class World {
         }
     }
     
-    private void updateParty(Party party, PartyOperation operation, MaplePartyCharacter target) {
-        Collection<MaplePartyCharacter> partyMembers = party.getMembers();
+    private void updateParty(Party party, PartyOperation operation, PartyCharacter target) {
+        Collection<PartyCharacter> partyMembers = party.getMembers();
         updateCharacterParty(party, operation, target, partyMembers);
         
-        for (MaplePartyCharacter partychar : partyMembers) {
+        for (PartyCharacter partychar : partyMembers) {
             Character chr = getPlayerStorage().getCharacterById(partychar.getId());
             if (chr != null) {
                 if (operation == PartyOperation.DISBAND) {
@@ -930,7 +930,7 @@ public class World {
         }
     }
 
-    public void updateParty(int partyid, PartyOperation operation, MaplePartyCharacter target) {
+    public void updateParty(int partyid, PartyOperation operation, PartyCharacter target) {
         Party party = getParty(partyid);
         if (party == null) {
             throw new IllegalArgumentException("no party with the specified partyid exists");
@@ -982,7 +982,7 @@ public class World {
         Party party = getParty(partyid);
         if(party == null) return;
         
-        for(MaplePartyCharacter mpc : party.getMembers()) {
+        for(PartyCharacter mpc : party.getMembers()) {
             Character mc = mpc.getPlayer();
             if(mc != null) {
                 MapleMap map = mc.getMap();
@@ -1012,7 +1012,7 @@ public class World {
     }
 
     public void partyChat(Party party, String chattext, String namefrom) {
-        for (MaplePartyCharacter partychar : party.getMembers()) {
+        for (PartyCharacter partychar : party.getMembers()) {
             if (!(partychar.getName().equals(namefrom))) {
                 Character chr = getPlayerStorage().getCharacterByName(partychar.getName());
                 if (chr != null) {

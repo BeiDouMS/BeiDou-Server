@@ -154,7 +154,7 @@ public class Character extends AbstractCharacterObject {
     private MapleHiredMerchant hiredMerchant = null;
     private Client client;
     private GuildCharacter mgc = null;
-    private MaplePartyCharacter mpc = null;
+    private PartyCharacter mpc = null;
     private Inventory[] inventory;
     private Job job = Job.BEGINNER;
     private Messenger messenger = null;
@@ -1143,7 +1143,7 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        setMPC(new MaplePartyCharacter(this));
+        setMPC(new PartyCharacter(this));
         silentPartyUpdate();
 
         if (dragon != null) {
@@ -5297,14 +5297,14 @@ public class Character extends AbstractCharacterObject {
         this.mgc = mgc;
     }
 
-    public MaplePartyCharacter getMPC() {
+    public PartyCharacter getMPC() {
         if (mpc == null) {
-            mpc = new MaplePartyCharacter(this);
+            mpc = new PartyCharacter(this);
         }
         return mpc;
     }
 
-    public void setMPC(MaplePartyCharacter mpc) {
+    public void setMPC(PartyCharacter mpc) {
         this.mpc = mpc;
     }
 
@@ -5437,7 +5437,7 @@ public class Character extends AbstractCharacterObject {
         prtLock.lock();
         try {
             if (party != null) {
-                for (MaplePartyCharacter mpc : party.getMembers()) {
+                for (PartyCharacter mpc : party.getMembers()) {
                     Character mc = mpc.getPlayer();
                     if (mc != null) {
                         list.add(mc);
@@ -5458,7 +5458,7 @@ public class Character extends AbstractCharacterObject {
         prtLock.lock();
         try {
             if (party != null) {
-                for (MaplePartyCharacter mpc : party.getMembers()) {
+                for (PartyCharacter mpc : party.getMembers()) {
                     Character chr = mpc.getPlayer();
                     if (chr != null) {
                         MapleMap chrMap = chr.getMap();
@@ -6450,7 +6450,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         getMap().broadcastMessage(this, PacketCreator.showForeignEffect(getId(), 0), false);
-        setMPC(new MaplePartyCharacter(this));
+        setMPC(new PartyCharacter(this));
         silentPartyUpdate();
 
         if (this.guildid > 0) {
@@ -7131,7 +7131,7 @@ public class Character extends AbstractCharacterObject {
                         if (party != null) {
                             ret.mpc = party.getMemberById(ret.id);
                             if (ret.mpc != null) {
-                                ret.mpc = new MaplePartyCharacter(ret);
+                                ret.mpc = new PartyCharacter(ret);
                                 ret.party = party;
                             }
                         }

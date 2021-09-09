@@ -107,7 +107,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers && mask == 3)) eligible = [];
         if(onlyMarriedPlayers && hasNotMarried) eligible = [];
-        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
+        return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {

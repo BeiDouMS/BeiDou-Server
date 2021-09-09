@@ -23,7 +23,7 @@ package scripting.npc;
 
 import client.Character;
 import client.Client;
-import net.server.world.MaplePartyCharacter;
+import net.server.world.PartyCharacter;
 import scripting.AbstractScriptManager;
 import server.MapleItemInformationProvider.ScriptedItem;
 import tools.FilePrinter;
@@ -79,7 +79,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         return start(c, scriptItem.getNpc(), -1, scriptItem.getScript(), chr, true, "im");
     }
 
-    public void start(String filename, Client c, int npc, List<MaplePartyCharacter> chrs) {
+    public void start(String filename, Client c, int npc, List<PartyCharacter> chrs) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, chrs, true);
             cm.dispose();

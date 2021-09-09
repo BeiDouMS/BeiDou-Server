@@ -31,8 +31,8 @@ import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.guild.Guild;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.World;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleMarriage;
@@ -702,15 +702,15 @@ public class EventManager {
         return false;
     }
     
-    public List<MaplePartyCharacter> getEligibleParty(Party party) {
+    public List<PartyCharacter> getEligibleParty(Party party) {
         if (party == null) {
             return new ArrayList<>();
         }
         try {
             Object o = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
             
-            if (o instanceof MaplePartyCharacter[] partyChrs) {
-                final List<MaplePartyCharacter> eligibleParty = new ArrayList<>(Arrays.asList(partyChrs));
+            if (o instanceof PartyCharacter[] partyChrs) {
+                final List<PartyCharacter> eligibleParty = new ArrayList<>(Arrays.asList(partyChrs));
                 party.setEligibleMembers(eligibleParty);
                 return eligibleParty;
             }

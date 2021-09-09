@@ -30,8 +30,8 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import tools.PacketCreator;
@@ -118,7 +118,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             }
             case 6: { // change leader
                 int newLeader = p.readInt();
-                MaplePartyCharacter newLeadr = party.getMemberById(newLeader);
+                PartyCharacter newLeadr = party.getMemberById(newLeader);
                 world.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeadr);
                 break;
             }

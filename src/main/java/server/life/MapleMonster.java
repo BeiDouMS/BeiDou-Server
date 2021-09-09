@@ -39,8 +39,8 @@ import net.server.services.task.channel.MobClearSkillService;
 import net.server.services.task.channel.MobStatusService;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import scripting.event.EventInstanceManager;
 import server.MapleStatEffect;
 import server.TimerManager;
@@ -370,7 +370,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             int remainingHP = (int) Math.max(1, hp.get() * 100f / getMaxHp());
             Packet packet = PacketCreator.showMonsterHP(getObjectId(), remainingHP);
             if (from.getParty() != null) {
-                for (MaplePartyCharacter mpc : from.getParty().getMembers()) {
+                for (PartyCharacter mpc : from.getParty().getMembers()) {
                     Character member = from.getMap().getCharacterById(mpc.getId()); // god bless
                     if (member != null) {
                         member.sendPacket(packet);

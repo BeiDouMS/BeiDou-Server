@@ -32,8 +32,8 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.EventRecallCoordinator;
-import net.server.world.MaplePartyCharacter;
 import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleItemInformationProvider;
@@ -351,7 +351,7 @@ public class EventInstanceManager {
         }
         
 	public void registerParty(Party party, MapleMap map) {
-		for (MaplePartyCharacter mpc : party.getEligibleMembers()) {
+		for (PartyCharacter mpc : party.getEligibleMembers()) {
                         if (mpc.isOnline()) {   // thanks resinate
                                 Character chr = map.getCharacterById(mpc.getId());
                                 if (chr != null) {
@@ -457,7 +457,7 @@ public class EventInstanceManager {
                 } catch (ScriptException | NoSuchMethodException ex) {} // optional
 	}
         
-        public synchronized void changedLeader(final MaplePartyCharacter ldr) {
+        public synchronized void changedLeader(final PartyCharacter ldr) {
                 try {
                         invokeScriptFunction("changedLeader", EventInstanceManager.this, ldr);
                 } catch (ScriptException | NoSuchMethodException ex) {
