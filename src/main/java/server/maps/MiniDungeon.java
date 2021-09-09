@@ -31,70 +31,73 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 
 /**
- *
  * @author Ronan
  */
-public class MapleMiniDungeon {
+public class MiniDungeon {
     List<Character> players = new ArrayList<>();
     ScheduledFuture<?> timeoutTask = null;
     Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MINIDUNGEON, true);
-    
+
     int baseMap;
     long expireTime;
-    
-    public MapleMiniDungeon(int base, long timeLimit) {
+
+    public MiniDungeon(int base, long timeLimit) {
         baseMap = base;
         expireTime = timeLimit * 1000;
-        
+
         timeoutTask = TimerManager.getInstance().schedule(() -> close(), expireTime);
-        
+
         expireTime += System.currentTimeMillis();
     }
-    
+
     public boolean registerPlayer(Character chr) {
-        int time = (int)((expireTime - System.currentTimeMillis()) / 1000);
-        if(time > 0) chr.sendPacket(PacketCreator.getClock(time));
-        
+        int time = (int) ((expireTime - System.currentTimeMillis()) / 1000);
+        if (time > 0) {
+            chr.sendPacket(PacketCreator.getClock(time));
+        }
+
         lock.lock();
         try {
-            if(timeoutTask == null) return false;
-            
+            if (timeoutTask == null) {
+                return false;
+            }
+
             players.add(chr);
         } finally {
             lock.unlock();
         }
-        
+
         return true;
     }
-    
+
     public boolean unregisterPlayer(Character chr) {
         chr.sendPacket(PacketCreator.removeClock());
-        
+
         lock.lock();
         try {
             players.remove(chr);
-            
-            if(players.isEmpty()) {
+
+            if (players.isEmpty()) {
                 dispose();
                 return false;
             }
         } finally {
             lock.unlock();
         }
-        
+
         if (chr.isPartyLeader()) {  // thanks Conrad for noticing party is not sent out of the MD as soon as leader leaves it
             close();
         }
-        
+
         return true;
     }
-    
+
     public void close() {
         lock.lock();
         try {
             List<Character> lchr = new ArrayList<>(players);
 
-            for(Character chr : lchr) {
+            for (Character chr : lchr) {
                 chr.changeMap(baseMap);
             }
 
@@ -104,13 +107,13 @@ public class MapleMiniDungeon {
             lock.unlock();
         }
     }
-    
+
     public void dispose() {
         lock.lock();
         try {
             players.clear();
-            
-            if(timeoutTask != null) {
+
+            if (timeoutTask != null) {
                 timeoutTask.cancel(false);
                 timeoutTask = null;
             }

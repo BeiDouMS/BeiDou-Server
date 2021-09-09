@@ -2444,7 +2444,7 @@ public class MapleMap {
                 }
             }, travelTime);
         } else if (MapleMiniDungeonInfo.isDungeonMap(mapid)) {
-            MapleMiniDungeon mmd = chr.getClient().getChannelServer().getMiniDungeon(mapid);
+            MiniDungeon mmd = chr.getClient().getChannelServer().getMiniDungeon(mapid);
             if (mmd != null) {
                 mmd.registerPlayer(chr);
             }
@@ -2682,7 +2682,7 @@ public class MapleMap {
         }
 
         if (MapleMiniDungeonInfo.isDungeonMap(mapid)) {
-            MapleMiniDungeon mmd = cserv.getMiniDungeon(mapid);
+            MiniDungeon mmd = cserv.getMiniDungeon(mapid);
             if (mmd != null) {
                 if (!mmd.unregisterPlayer(chr)) {
                     cserv.removeMiniDungeon(mapid);

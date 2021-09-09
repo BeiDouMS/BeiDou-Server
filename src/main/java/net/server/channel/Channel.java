@@ -74,7 +74,7 @@ public final class Channel {
     private final Map<Integer, Integer> storedVars = new HashMap<>();
     private Set<Integer> playersAway = new HashSet<>();
     private Map<ExpeditionType, Expedition> expeditions = new HashMap<>();
-    private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
+    private Map<Integer, MiniDungeon> dungeons = new HashMap<>();
     private List<ExpeditionType> expedType = new ArrayList<>();
     private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
     private Event event;
@@ -659,7 +659,7 @@ public final class Channel {
             if(dungeons.containsKey(dungeonid)) return false;
             
             MapleMiniDungeonInfo mmdi = MapleMiniDungeonInfo.getDungeon(dungeonid);
-            MapleMiniDungeon mmd = new MapleMiniDungeon(mmdi.getBase(), this.getMapFactory().getMap(mmdi.getDungeonId()).getTimeLimit());   // thanks Conrad for noticing hardcoded time limit for minidungeons
+            MiniDungeon mmd = new MiniDungeon(mmdi.getBase(), this.getMapFactory().getMap(mmdi.getDungeonId()).getTimeLimit());   // thanks Conrad for noticing hardcoded time limit for minidungeons
             
             dungeons.put(dungeonid, mmd);
             return true;
@@ -668,7 +668,7 @@ public final class Channel {
         }
     }
     
-    public MapleMiniDungeon getMiniDungeon(int dungeonid) {
+    public MiniDungeon getMiniDungeon(int dungeonid) {
         lock.lock();
         try {
             return dungeons.get(dungeonid);
