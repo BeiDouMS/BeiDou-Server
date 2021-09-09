@@ -26,7 +26,7 @@ import client.inventory.InventoryType;
 import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import tools.PacketCreator;
@@ -38,7 +38,7 @@ import java.awt.*;
  * @author RonanLana - just added locking on OdinMS' SpawnPetHandler method body
  */
 public class SpawnPetProcessor {
-    private static final DataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
+    private static final DataProvider dataRoot = DataProviderFactory.getDataProvider(WZFiles.ITEM);
     
     public static void processSpawnPet(Client c, byte slot, boolean lead) {
         if (c.tryacquireClient()) {

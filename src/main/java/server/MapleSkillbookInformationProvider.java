@@ -22,7 +22,7 @@ package server;
 import client.Character;
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
@@ -116,7 +116,7 @@ public class MapleSkillbookInformationProvider {
     }
     
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromQuests() {
-        DataProvider questDataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
+        DataProvider questDataProvider = DataProviderFactory.getDataProvider(WZFiles.QUEST);
         Data actData = questDataProvider.getData("Act.img");
         Data checkData = questDataProvider.getData("Check.img");
 

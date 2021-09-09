@@ -23,7 +23,7 @@ package server.maps;
 
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import scripting.event.EventInstanceManager;
@@ -47,8 +47,8 @@ public class MapleMapFactory {
     private static DataProvider mapSource;
     
     static {
-        nameData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
-        mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
+        nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+        mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
     }
     
     private static void loadLifeFromWz(MapleMap map, Data mapData) {

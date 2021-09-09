@@ -29,7 +29,7 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 
@@ -46,7 +46,7 @@ import java.util.Map;
 public class MobSkillFactory {
 
     private static Map<String, MobSkill> mobSkills = new HashMap<>();
-    private final static DataProvider dataSource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private final static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
     private static Data skillRoot = dataSource.getData("MobSkill.img");
     private final static MonitoredReentrantReadWriteLock dataLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MOBSKILL_FACTORY);
     private final static MonitoredReadLock rL = MonitoredReadLockFactory.createLock(dataLock);

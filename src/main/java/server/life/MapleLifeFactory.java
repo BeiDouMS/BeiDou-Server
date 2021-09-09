@@ -23,7 +23,7 @@ package server.life;
 
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.DataType;
 import provider.wz.WZFiles;
@@ -36,8 +36,8 @@ import java.util.*;
 
 public class MapleLifeFactory {
 
-    private static DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
-    private final static DataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+    private static DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
+    private final static DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
     private static Data mobStringData = stringDataWZ.getData("Mob.img");
     private static Data npcStringData = stringDataWZ.getData("Npc.img");
     private static Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
@@ -46,7 +46,7 @@ public class MapleLifeFactory {
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
         
-        DataProvider uiDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.UI);
+        DataProvider uiDataWZ = DataProviderFactory.getDataProvider(WZFiles.UI);
         for (Data bossData : uiDataWZ.getData("UIWindow.img").getChildByPath("MobGage/Mob").getChildren()) {
             ret.add(Integer.valueOf(bossData.getName()));
         }

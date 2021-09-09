@@ -14,8 +14,8 @@ import tools.Pair;
 import java.util.*;
 
 public class MonsterStatFetcher {
-    private static final DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
-    private static final DataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+    private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
+    private static final DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
     private static final Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
 

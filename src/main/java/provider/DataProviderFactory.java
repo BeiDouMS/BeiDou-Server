@@ -26,7 +26,7 @@ import provider.wz.XMLWZFile;
 
 import java.io.File;
 
-public class MapleDataProviderFactory {
+public class DataProviderFactory {
     private static DataProvider getWZ(File in) {
         return new XMLWZFile(in);
     }

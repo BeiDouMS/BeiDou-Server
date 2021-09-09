@@ -23,7 +23,7 @@ package server.maps;
 
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import server.maps.MapleReactorStats.StateData;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MapleReactorFactory {
-    private static DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.REACTOR);
+    private static DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
     private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
 
     

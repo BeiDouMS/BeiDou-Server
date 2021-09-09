@@ -32,7 +32,7 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.world.Party;
 import provider.Data;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import tools.PacketCreator;
@@ -67,7 +67,7 @@ public class PartySearchCoordinator {
     private static Map<Integer, Set<Integer>> fetchNeighbouringMaps() {
         Map<Integer, Set<Integer>> mapLinks = new HashMap<>();
 
-        Data data = MapleDataProviderFactory.getDataProvider(WZFiles.ETC).getData("MapNeighbors.img");
+        Data data = DataProviderFactory.getDataProvider(WZFiles.ETC).getData("MapNeighbors.img");
         if (data != null) {
             for (Data mapdata : data.getChildren()) {
                 int mapid = Integer.parseInt(mapdata.getName());

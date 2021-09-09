@@ -29,7 +29,7 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
@@ -149,7 +149,7 @@ public class CashShop {
         private static volatile List<SpecialCashItem> specialcashitems = new ArrayList<>();
 
         public static void loadAllCashItems() {
-            DataProvider etc = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
+            DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, CashItem> loadedItems = new HashMap<>();
             List<Integer> onSaleItems = new ArrayList<>();

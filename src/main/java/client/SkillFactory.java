@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class SkillFactory {
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
-    private static final DataProvider datasource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private static final DataProvider datasource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
 
     public static Skill getSkill(int id) {
         return skills.get(id);
@@ -330,7 +330,7 @@ public class SkillFactory {
     }
 
     public static String getSkillName(int skillid) {
-        Data data = MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img");
+        Data data = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img");
         StringBuilder skill = new StringBuilder();
         skill.append(skillid);
         if (skill.length() == 4) {

@@ -24,7 +24,7 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataProvider;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
 import server.MapleItemInformationProvider;
@@ -227,7 +227,7 @@ public class MapleMonsterInformationProvider {
     }
 
     public static ArrayList<Pair<Integer, String>> getMobsIDsFromName(String search) {
-        DataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+        DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.STRING);
         ArrayList<Pair<Integer, String>> retMobs = new ArrayList<>();
         Data data = dataProvider.getData("Mob.img");
         List<Pair<Integer, String>> mobPairList = new LinkedList<>();
@@ -267,7 +267,7 @@ public class MapleMonsterInformationProvider {
     public String getMobNameFromId(int id) {
         String mobName = mobNameCache.get(id);
         if (mobName == null) {
-            DataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+            DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.STRING);
             Data mobData = dataProvider.getData("Mob.img");
             
             mobName = MapleDataTool.getString(mobData.getChildByPath(id + "/name"), "");

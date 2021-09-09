@@ -80,7 +80,7 @@ public class NoItemNameFetcher {
 
     private static void readStringWZData() {
         System.out.println("Parsing String.wz...");
-        DataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+        DataProvider stringData = DataProviderFactory.getDataProvider(WZFiles.STRING);
 
         Data cashStringData = stringData.getData("Cash.img");
         readStringSubdirectoryData(cashStringData, 0);
@@ -195,7 +195,7 @@ public class NoItemNameFetcher {
     private static void readEquipWZData() {
         String wzFileName = "Character.wz";
 
-        DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.CHARACTER);
+        DataProvider data = DataProviderFactory.getDataProvider(WZFiles.CHARACTER);
         DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");
@@ -212,7 +212,7 @@ public class NoItemNameFetcher {
     private static void readItemWZData() {
         String wzFileName = "Item.wz";
 
-        DataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
+        DataProvider data = DataProviderFactory.getDataProvider(WZFiles.ITEM);
         DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");

@@ -39,7 +39,7 @@ import net.server.guild.GuildPackets;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import provider.Data;
-import provider.MapleDataProviderFactory;
+import provider.DataProviderFactory;
 import provider.wz.WZFiles;
 import scripting.AbstractPlayerInteraction;
 import server.*;
@@ -384,7 +384,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
 	public void maxMastery() {
-		for (Data skill_ : MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
+		for (Data skill_ : DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
 			try {
 				Skill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
 				getPlayer().changeSkillLevel(skill, (byte) 0, skill.getMaxLevel(), -1);
