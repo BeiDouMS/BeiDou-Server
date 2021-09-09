@@ -31,8 +31,8 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import tools.LogHelper;
 import tools.PacketCreator;
 import tools.Pair;
@@ -478,10 +478,10 @@ public class Trade {
     }
 
     public static void visitTrade(Character c1, Character c2) {
-        MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
+        InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
 
-        InviteResult res = inviteRes.result;
-        if (res == InviteResult.ACCEPTED) {
+        InviteResultType res = inviteRes.result;
+        if (res == InviteResultType.ACCEPTED) {
             if (c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
                 c2.sendPacket(PacketCreator.getTradePartnerAdd(c1));
                 c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 1));
@@ -501,7 +501,7 @@ public class Trade {
         if (trade != null) {
             if (trade.getPartner() != null) {
                 Character other = trade.getPartner().getChr();
-                if (InviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResult.DENIED) {
+                if (InviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResultType.DENIED) {
                     other.message(chr.getName() + " has declined your trade request.");
                 }
 

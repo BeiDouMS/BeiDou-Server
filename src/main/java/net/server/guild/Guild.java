@@ -32,8 +32,8 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -726,7 +726,7 @@ public class Guild {
     }
 
     public static boolean answerInvitation(int targetId, String targetName, int guildId, boolean answer) {
-        MapleInviteResult res = InviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
+        InviteResult res = InviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
 
         GuildResponse mgr;
         Character sender = res.from;

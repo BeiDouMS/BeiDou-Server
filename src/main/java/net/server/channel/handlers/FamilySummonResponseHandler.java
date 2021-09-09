@@ -9,8 +9,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 
@@ -21,8 +21,8 @@ public class FamilySummonResponseHandler extends AbstractPacketHandler {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         p.readString(); //family name
         boolean accept = p.readByte() != 0;
-        MapleInviteResult inviteResult = InviteCoordinator.answerInvite(InviteType.FAMILY_SUMMON, c.getPlayer().getId(), c.getPlayer(), accept);
-        if(inviteResult.result == InviteResult.NOT_FOUND) return;
+        InviteResult inviteResult = InviteCoordinator.answerInvite(InviteType.FAMILY_SUMMON, c.getPlayer().getId(), c.getPlayer(), accept);
+        if(inviteResult.result == InviteResultType.NOT_FOUND) return;
         Character inviter = inviteResult.from;
         FamilyEntry inviterEntry = inviter.getFamilyEntry();
         if(inviterEntry == null) return;

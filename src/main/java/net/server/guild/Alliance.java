@@ -26,8 +26,8 @@ import client.Client;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import tools.DatabaseConnection;
@@ -458,7 +458,7 @@ public class Alliance {
     }
 
     public static boolean answerInvitation(int targetId, String targetGuildName, int allianceId, boolean answer) {
-        MapleInviteResult res = InviteCoordinator.answerInvite(InviteType.ALLIANCE, targetId, allianceId, answer);
+        InviteResult res = InviteCoordinator.answerInvite(InviteType.ALLIANCE, targetId, allianceId, answer);
 
         String msg;
         Character sender = res.from;

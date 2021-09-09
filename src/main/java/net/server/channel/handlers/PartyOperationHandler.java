@@ -28,8 +28,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
@@ -64,9 +64,9 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             case 3: { // join
                 int partyid = p.readInt();
                 
-                MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
-                InviteResult res = inviteRes.result;
-                if (res == InviteResult.ACCEPTED) {
+                InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
+                InviteResultType res = inviteRes.result;
+                if (res == InviteResultType.ACCEPTED) {
                     Party.joinParty(player, partyid, false);
                 } else {
                     c.sendPacket(PacketCreator.serverNotice(5, "You couldn't join the party due to an expired invitation request."));

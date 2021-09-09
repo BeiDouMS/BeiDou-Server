@@ -27,8 +27,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
 import net.server.world.Messenger;
 import net.server.world.MessengerCharacter;
 import net.server.world.World;
@@ -58,9 +58,9 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             } else {
                                 messenger = world.getMessenger(messengerid);
                                 if (messenger != null) {
-                                    MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, true);
-                                    InviteResult res = inviteRes.result;
-                                    if (res == InviteResult.ACCEPTED) {
+                                    InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, true);
+                                    InviteResultType res = inviteRes.result;
+                                    if (res == InviteResultType.ACCEPTED) {
                                         int position = messenger.getLowestPosition();
                                         MessengerCharacter messengerplayer = new MessengerCharacter(player, position);
                                         if (messenger.getMembers().size() < 3) {

@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class InviteCoordinator {
 
-    public enum InviteResult {
+    public enum InviteResultType {
         ACCEPTED,
         DENIED,
         NOT_FOUND
@@ -103,11 +103,11 @@ public class InviteCoordinator {
         return type.hasRequest(targetCid);
     }
 
-    public static MapleInviteResult answerInvite(InviteType type, int targetCid, Object referenceFrom, boolean answer) {
+    public static InviteResult answerInvite(InviteType type, int targetCid, Object referenceFrom, boolean answer) {
         Map<Integer, Object> table = type.getRequestsTable();
 
         Character from = null;
-        InviteResult result = InviteResult.NOT_FOUND;
+        InviteResultType result = InviteResultType.NOT_FOUND;
         Pair<Character, Object[]> inviteInfo = null;
 
         Object reference = table.get(targetCid);
@@ -118,10 +118,10 @@ public class InviteCoordinator {
                 from = null;
             }
 
-            result = answer ? InviteResult.ACCEPTED : InviteResult.DENIED;
+            result = answer ? InviteResultType.ACCEPTED : InviteResultType.DENIED;
         }
 
-        return new MapleInviteResult(result, from, inviteInfo != null ? inviteInfo.getRight() : new Object[0]);
+        return new InviteResult(result, from, inviteInfo != null ? inviteInfo.getRight() : new Object[0]);
     }
 
     public static void removeInvite(InviteType type, int targetCid) {
@@ -153,13 +153,13 @@ public class InviteCoordinator {
         }
     }
 
-    public static class MapleInviteResult {
+    public static class InviteResult {
 
-        public final InviteResult result;
+        public final InviteResultType result;
         public final Character from;
         public final Object[] params;
 
-        private MapleInviteResult(InviteResult result, Character from, Object[] params) {
+        private InviteResult(InviteResultType result, Character from, Object[] params) {
             this.result = result;
             this.from = from;
             this.params = params;
