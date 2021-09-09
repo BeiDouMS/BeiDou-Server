@@ -25,19 +25,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Matze
  */
-public class MapleShopFactory {
-    
-    private static MapleShopFactory instance = new MapleShopFactory();
-    
-    public static MapleShopFactory getInstance() {
+public class ShopFactory {
+    private static final ShopFactory instance = new ShopFactory();
+
+    public static ShopFactory getInstance() {
         return instance;
     }
-    
-    private Map<Integer, Shop> shops = new HashMap<>();
-    private Map<Integer, Shop> npcShops = new HashMap<>();
+
+    private final Map<Integer, Shop> shops = new HashMap<>();
+    private final Map<Integer, Shop> npcShops = new HashMap<>();
 
     private Shop loadShop(int id, boolean isShopId) {
         Shop ret = Shop.createFromDB(id, isShopId);
@@ -65,7 +63,7 @@ public class MapleShopFactory {
         }
         return loadShop(npcId, false);
     }
-    
+
     public void reloadShops() {
         shops.clear();
         npcShops.clear();

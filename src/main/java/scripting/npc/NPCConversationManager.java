@@ -373,13 +373,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
         
         public void openShopNPC(int id) {
-            Shop shop = MapleShopFactory.getInstance().getShop(id);
+            Shop shop = ShopFactory.getInstance().getShop(id);
             
             if (shop != null) {
                 shop.sendShop(c);
             } else {    // check for missing shopids thanks to resinate
                 FilePrinter.printError(FilePrinter.NPC_UNCODED, "Shop ID: " + id + " is missing from database.");
-                MapleShopFactory.getInstance().getShop(11000).sendShop(c);
+                ShopFactory.getInstance().getShop(11000).sendShop(c);
             }
         }
 
