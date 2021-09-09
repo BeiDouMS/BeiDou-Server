@@ -64,7 +64,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class MapleMonster extends AbstractLoadedMapleLife {
+public class MapleMonster extends AbstractLoadedLife {
     
     private ChangeableStats ostats = null;  //unused, v83 WZs offers no support for changeable stats.
     private MapleMonsterStats stats;

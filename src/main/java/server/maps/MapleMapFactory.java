@@ -109,7 +109,7 @@ public class MapleMapFactory {
     }
 
     private static void loadLifeRaw(MapleMap map, int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide, int mobTime, int team) {
-        AbstractLoadedMapleLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
+        AbstractLoadedLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
         if (myLife instanceof MapleMonster) {
             MapleMonster monster = (MapleMonster) myLife;
 
@@ -338,8 +338,8 @@ public class MapleMapFactory {
         return map;
     }
     
-    private static AbstractLoadedMapleLife loadLife(int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide) {
-        AbstractLoadedMapleLife myLife = MapleLifeFactory.getLife(id, type);
+    private static AbstractLoadedLife loadLife(int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide) {
+        AbstractLoadedLife myLife = MapleLifeFactory.getLife(id, type);
         myLife.setCy(cy);
         myLife.setF(f);
         myLife.setFh(fh);

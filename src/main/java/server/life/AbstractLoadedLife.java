@@ -23,7 +23,7 @@ package server.life;
 
 import server.maps.AbstractAnimatedMapleMapObject;
 
-public abstract class AbstractLoadedMapleLife extends AbstractAnimatedMapleMapObject {
+public abstract class AbstractLoadedLife extends AbstractAnimatedMapleMapObject {
     private final int id;
     private int f;
     private boolean hide;
@@ -33,11 +33,11 @@ public abstract class AbstractLoadedMapleLife extends AbstractAnimatedMapleMapOb
     private int rx0;
     private int rx1;
 
-    public AbstractLoadedMapleLife(int id) {
+    public AbstractLoadedLife(int id) {
         this.id = id;
     }
 
-    public AbstractLoadedMapleLife(AbstractLoadedMapleLife life) {
+    public AbstractLoadedLife(AbstractLoadedLife life) {
         this(life.getId());
         this.f = life.f;
         this.hide = life.hide;

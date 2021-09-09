@@ -54,7 +54,7 @@ public class MapleLifeFactory {
         return ret;
     }
     
-    public static AbstractLoadedMapleLife getLife(int id, String type) {
+    public static AbstractLoadedLife getLife(int id, String type) {
         if (type.equalsIgnoreCase("n")) {
             return getNPC(id);
         } else if (type.equalsIgnoreCase("m")) {
