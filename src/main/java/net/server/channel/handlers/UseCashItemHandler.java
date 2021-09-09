@@ -396,7 +396,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 c.getWorldServer().addOwlItemSearch(itemid);
             }
             player.setOwlSearch(itemid);
-            List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> hmsAvailable = c.getWorldServer().getAvailableItemBundles(itemid);
+            List<Pair<MaplePlayerShopItem, AbstractMapObject>> hmsAvailable = c.getWorldServer().getAvailableItemBundles(itemid);
             if (!hmsAvailable.isEmpty()) {
                 remove(c, position, itemId);
             }

@@ -5004,7 +5004,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> hmsAvailable) {
+    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<MaplePlayerShopItem, AbstractMapObject>> hmsAvailable) {
         byte itemType = ItemConstants.getInventoryType(itemId).getType();
 
         OutPacket p = OutPacket.create(SendOpcode.SHOP_SCANNER_RESULT);
@@ -5012,9 +5012,9 @@ public class PacketCreator {
         p.writeInt(0);
         p.writeInt(itemId);
         p.writeInt(hmsAvailable.size());
-        for (Pair<MaplePlayerShopItem, AbstractMapleMapObject> hme : hmsAvailable) {
+        for (Pair<MaplePlayerShopItem, AbstractMapObject> hme : hmsAvailable) {
             MaplePlayerShopItem item = hme.getLeft();
-            AbstractMapleMapObject mo = hme.getRight();
+            AbstractMapObject mo = hme.getRight();
 
             if (mo instanceof MaplePlayerShop ps) {
                 Character owner = ps.getOwner();

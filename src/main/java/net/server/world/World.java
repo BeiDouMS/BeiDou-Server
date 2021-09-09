@@ -1813,8 +1813,8 @@ public class World {
         }
     }
 
-    public List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> getAvailableItemBundles(int itemid) {
-        List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> hmsAvailable = new ArrayList<>();
+    public List<Pair<MaplePlayerShopItem, AbstractMapObject>> getAvailableItemBundles(int itemid) {
+        List<Pair<MaplePlayerShopItem, AbstractMapObject>> hmsAvailable = new ArrayList<>();
 
         for (MapleHiredMerchant hm : getActiveMerchants()) {
             List<MaplePlayerShopItem> itemBundles = hm.sendAvailableBundles(itemid);

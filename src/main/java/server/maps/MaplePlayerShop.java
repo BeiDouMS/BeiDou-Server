@@ -44,7 +44,7 @@ import java.util.concurrent.locks.Lock;
  * @author Matze
  * @author Ronan - concurrency protection
  */
-public class MaplePlayerShop extends AbstractMapleMapObject {
+public class MaplePlayerShop extends AbstractMapObject {
     private AtomicBoolean open = new AtomicBoolean(false);
     private Character owner;
     private int itemid;

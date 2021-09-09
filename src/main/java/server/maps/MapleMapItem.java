@@ -30,7 +30,7 @@ import tools.PacketCreator;
 import java.awt.*;
 import java.util.concurrent.locks.Lock;
 
-public class MapleMapItem extends AbstractMapleMapObject {
+public class MapleMapItem extends AbstractMapObject {
     protected Client ownerClient;
     protected Item item;
     protected MapleMapObject dropper;

@@ -38,7 +38,7 @@ import java.awt.*;
  *
  * @author LaiLaiNoob
  */
-public class MapleMist extends AbstractMapleMapObject {
+public class MapleMist extends AbstractMapObject {
     private Rectangle mistPosition;
     private Character owner = null;
     private Monster mob = null;

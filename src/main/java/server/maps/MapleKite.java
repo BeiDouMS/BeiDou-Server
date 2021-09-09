@@ -7,7 +7,7 @@ import tools.PacketCreator;
 
 import java.awt.*;
 
-public class MapleKite extends AbstractMapleMapObject {
+public class MapleKite extends AbstractMapObject {
     private final Point pos;
     private final Character owner;
     private final String text;

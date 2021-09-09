@@ -36,7 +36,7 @@ import java.util.List;
  * @author Matze
  * @author Ronan (HeavenMS)
  */
-public class MapleMiniGame extends AbstractMapleMapObject {
+public class MapleMiniGame extends AbstractMapObject {
     private Character owner;
     private Character visitor;
     private String password;

@@ -57,7 +57,7 @@ import java.util.concurrent.locks.Lock;
  * @author XoticStory
  * @author Ronan - concurrency protection
  */
-public class MapleHiredMerchant extends AbstractMapleMapObject {
+public class MapleHiredMerchant extends AbstractMapObject {
     private int ownerId, itemId, mesos = 0;
     private int channel, world;
     private long start;

@@ -36,7 +36,7 @@ import java.awt.*;
  *
  * @author Ronan
  */
-public class MapleDoorObject extends AbstractMapleMapObject {
+public class MapleDoorObject extends AbstractMapObject {
     private final int ownerId;
     private int pairOid;
     

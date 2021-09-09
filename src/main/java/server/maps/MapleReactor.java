@@ -44,7 +44,7 @@ import java.util.concurrent.locks.Lock;
  * @author Lerk
  * @author Ronan
  */
-public class MapleReactor extends AbstractMapleMapObject {
+public class MapleReactor extends AbstractMapObject {
 
     private int rid;
     private MapleReactorStats stats;

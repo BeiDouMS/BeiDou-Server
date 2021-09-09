@@ -32,7 +32,7 @@ import net.server.channel.Channel;
 import net.server.world.World;
 import server.life.positioner.PlayerNPCPodium;
 import server.life.positioner.PlayerNPCPositioner;
-import server.maps.AbstractMapleMapObject;
+import server.maps.AbstractMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author XoticStory
  * @author Ronan
  */
-public class PlayerNPC extends AbstractMapleMapObject {
+public class PlayerNPC extends AbstractMapObject {
     private static final Map<Byte, List<Integer>> availablePlayerNpcScriptIds = new HashMap<>();
     private static final AtomicInteger runningOverallRank = new AtomicInteger();
     private static final List<AtomicInteger> runningWorldRank = new ArrayList<>();
