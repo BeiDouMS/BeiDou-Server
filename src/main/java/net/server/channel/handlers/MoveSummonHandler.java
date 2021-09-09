@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import net.packet.InPacket;
-import server.maps.MapleSummon;
+import server.maps.Summon;
 import tools.PacketCreator;
 import tools.exceptions.EmptyMovementException;
 
@@ -37,9 +37,9 @@ public final class MoveSummonHandler extends AbstractMovementPacketHandler {
         int oid = p.readInt();
         Point startPos = new Point(p.readShort(), p.readShort());
         Character player = c.getPlayer();
-        Collection<MapleSummon> summons = player.getSummonsValues();
-        MapleSummon summon = null;
-        for (MapleSummon sum : summons) {
+        Collection<Summon> summons = player.getSummonsValues();
+        Summon summon = null;
+        for (Summon sum : summons) {
             if (sum.getObjectId() == oid) {
                 summon = sum;
                 break;

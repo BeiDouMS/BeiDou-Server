@@ -27,7 +27,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapObject;
-import server.maps.MapleSummon;
+import server.maps.Summon;
 import tools.PacketCreator;
 
 public final class DamageSummonHandler extends AbstractPacketHandler {
@@ -41,8 +41,8 @@ public final class DamageSummonHandler extends AbstractPacketHandler {
         Character player = c.getPlayer();
         MapObject mmo = player.getMap().getMapObject(oid);
         
-        if(mmo != null && mmo instanceof MapleSummon) {
-            MapleSummon summon = (MapleSummon) mmo;
+        if(mmo != null && mmo instanceof Summon) {
+            Summon summon = (Summon) mmo;
         
             summon.addHP(-damage);
             if (summon.getHP() <= 0) {

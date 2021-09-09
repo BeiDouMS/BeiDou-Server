@@ -29,21 +29,23 @@ import tools.PacketCreator;
 import java.awt.*;
 
 /**
- *
  * @author Jan
  */
-public class MapleSummon extends AbstractAnimatedMapObject {
-    private Character owner;
-    private byte skillLevel;
-    private int skill, hp;
-    private SummonMovementType movementType;
+public class Summon extends AbstractAnimatedMapObject {
+    private final Character owner;
+    private final byte skillLevel;
+    private final int skill;
+    private int hp;
+    private final SummonMovementType movementType;
 
-    public MapleSummon(Character owner, int skill, Point pos, SummonMovementType movementType) {
+    public Summon(Character owner, int skill, Point pos, SummonMovementType movementType) {
         this.owner = owner;
         this.skill = skill;
         this.skillLevel = owner.getSkillLevel(SkillFactory.getSkill(skill));
-        if (skillLevel == 0) throw new RuntimeException();
-        
+        if (skillLevel == 0) {
+            throw new RuntimeException();
+        }
+
         this.movementType = movementType;
         setPosition(pos);
     }
@@ -92,12 +94,12 @@ public class MapleSummon extends AbstractAnimatedMapObject {
     }
 
     public final boolean isPuppet() {
-	switch (skill) {
-	    case 3111002:
-	    case 3211002:
-	    case 13111004:
-		return true;
-	}
-	return false;
+        switch (skill) {
+            case 3111002:
+            case 3211002:
+            case 13111004:
+                return true;
+        }
+        return false;
     }
 }

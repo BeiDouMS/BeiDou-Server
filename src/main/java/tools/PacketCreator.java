@@ -1095,7 +1095,7 @@ public class PacketCreator {
      * @param animated   Animated spawn?
      * @return The spawn packet for the map object.
      */
-    public static Packet spawnSummon(MapleSummon summon, boolean animated) {
+    public static Packet spawnSummon(Summon summon, boolean animated) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_SPECIAL_MAPOBJECT);
         p.writeInt(summon.getOwner().getId());
         p.writeInt(summon.getObjectId());
@@ -1118,7 +1118,7 @@ public class PacketCreator {
      * @param animated Animated removal?
      * @return The packet removing the object.
      */
-    public static Packet removeSummon(MapleSummon summon, boolean animated) {
+    public static Packet removeSummon(Summon summon, boolean animated) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_SPECIAL_MAPOBJECT);
         p.writeInt(summon.getOwner().getId());
         p.writeInt(summon.getObjectId());

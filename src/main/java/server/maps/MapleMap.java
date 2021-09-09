@@ -2061,7 +2061,7 @@ public class MapleMap {
         return doorPortal;
     }
 
-    public void spawnSummon(final MapleSummon summon) {
+    public void spawnSummon(final Summon summon) {
         spawnAndAddRangedMapObject(summon, c -> {
             if (summon != null) {
                 c.sendPacket(PacketCreator.spawnSummon(summon, true));
@@ -2537,7 +2537,7 @@ public class MapleMap {
 
         MapleStatEffect summonStat = chr.getStatForBuff(BuffStat.SUMMON);
         if (summonStat != null) {
-            MapleSummon summon = chr.getSummonByKey(summonStat.getSourceId());
+            Summon summon = chr.getSummonByKey(summonStat.getSourceId());
             summon.setPosition(chr.getPosition());
             chr.getMap().spawnSummon(summon);
             updateMapObjectVisibility(chr, summon);
@@ -2699,7 +2699,7 @@ public class MapleMap {
 
         chr.leaveMap();
 
-        for (MapleSummon summon : new ArrayList<>(chr.getSummonsValues())) {
+        for (Summon summon : new ArrayList<>(chr.getSummonsValues())) {
             if (summon.isStationary()) {
                 chr.cancelEffectFromBuffStat(BuffStat.PUPPET);
             } else {
@@ -2939,7 +2939,7 @@ public class MapleMap {
             if (isNonRangedType(o.getType())) {
                 o.sendSpawnData(c);
             } else if (o.getType() == MapObjectType.SUMMON) {
-                MapleSummon summon = (MapleSummon) o;
+                Summon summon = (Summon) o;
                 if (summon.getOwner() == chr) {
                     if (chr.isSummonsEmpty() || !chr.containsSummon(summon)) {
                         objectWLock.lock();

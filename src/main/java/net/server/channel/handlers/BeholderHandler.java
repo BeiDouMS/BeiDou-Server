@@ -25,7 +25,7 @@ import client.Client;
 import constants.skills.DarkKnight;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleSummon;
+import server.maps.Summon;
 
 import java.util.Collection;
 
@@ -38,10 +38,10 @@ public final class BeholderHandler extends AbstractPacketHandler {//Summon Skill
     @Override
     public final void handlePacket(InPacket p, Client c) {
         //System.out.println(slea.toString());
-        Collection<MapleSummon> summons = c.getPlayer().getSummonsValues();
+        Collection<Summon> summons = c.getPlayer().getSummonsValues();
         int oid = p.readInt();
-        MapleSummon summon = null;
-        for (MapleSummon sum : summons) {
+        Summon summon = null;
+        for (Summon sum : summons) {
             if (sum.getObjectId() == oid) {
                 summon = sum;
             }

@@ -36,7 +36,7 @@ import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.life.Monster;
 import server.life.MonsterInformationProvider;
-import server.maps.MapleSummon;
+import server.maps.Summon;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -72,8 +72,8 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         if (!player.isAlive()) {
             return;
         }
-        MapleSummon summon = null;
-        for (MapleSummon sum : player.getSummonsValues()) {
+        Summon summon = null;
+        for (Summon sum : player.getSummonsValues()) {
             if (sum.getObjectId() == oid) {
                 summon = sum;
             }

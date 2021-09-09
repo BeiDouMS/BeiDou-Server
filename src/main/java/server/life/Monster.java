@@ -49,7 +49,7 @@ import server.loot.LootManager;
 import server.maps.AbstractAnimatedMapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleSummon;
+import server.maps.Summon;
 import tools.IntervalBuilder;
 import tools.PacketCreator;
 import tools.Pair;
@@ -1796,14 +1796,14 @@ public class Monster extends AbstractLoadedLife {
 
     // ---------------------------------------------------------------------------------
 
-    private boolean isPuppetInVicinity(MapleSummon summon) {
+    private boolean isPuppetInVicinity(Summon summon) {
         return summon.getPosition().distanceSq(this.getPosition()) < 177777;
     }
 
     public boolean isCharacterPuppetInVicinity(Character chr) {
         MapleStatEffect mse = chr.getBuffEffect(BuffStat.PUPPET);
         if (mse != null) {
-            MapleSummon summon = chr.getSummonByKey(mse.getSourceId());
+            Summon summon = chr.getSummonByKey(mse.getSourceId());
 
             // check whether mob is currently under a puppet's field of action or not
             if (summon != null) {
@@ -2098,7 +2098,7 @@ public class Monster extends AbstractLoadedLife {
         c.sendPacket(PacketCreator.controlMonster(mob, false, immediateAggro));
     }
 
-    private void aggroRefreshPuppetVisibility(Character chrController, MapleSummon puppet) {
+    private void aggroRefreshPuppetVisibility(Character chrController, Summon puppet) {
         // lame patch for client to redirect all aggro to the puppet
 
         List<Monster> puppetControlled = new LinkedList<>();
@@ -2135,7 +2135,7 @@ public class Monster extends AbstractLoadedLife {
 
                 MapleStatEffect puppetEffect = chrController.getBuffEffect(BuffStat.PUPPET);
                 if (puppetEffect != null) {
-                    MapleSummon puppet = chrController.getSummonByKey(puppetEffect.getSourceId());
+                    Summon puppet = chrController.getSummonByKey(puppetEffect.getSourceId());
 
                     if (puppet != null && isPuppetInVicinity(puppet)) {
                         controllerHasPuppet = true;

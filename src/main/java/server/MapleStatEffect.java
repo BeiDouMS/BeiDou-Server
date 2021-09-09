@@ -993,7 +993,7 @@ public class MapleStatEffect {
         }
 
         if (summonMovementType != null && pos != null) {
-            final MapleSummon tosummon = new MapleSummon(applyfrom, sourceid, pos, summonMovementType);
+            final Summon tosummon = new Summon(applyfrom, sourceid, pos, summonMovementType);
             applyfrom.getMap().spawnSummon(tosummon);
             applyfrom.addSummon(sourceid, tosummon);
             tosummon.addHP(x);
@@ -1171,7 +1171,7 @@ public class MapleStatEffect {
         chr.registerEffect(this, localStartTime, localStartTime + localDuration, true);
         SummonMovementType summonMovementType = getSummonMovementType();
         if (summonMovementType != null) {
-            final MapleSummon tosummon = new MapleSummon(chr, sourceid, chr.getPosition(), summonMovementType);
+            final Summon tosummon = new Summon(chr, sourceid, chr.getPosition(), summonMovementType);
             if (!tosummon.isStationary()) {
                 chr.addSummon(sourceid, tosummon);
                 tosummon.addHP(x);

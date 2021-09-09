@@ -189,7 +189,7 @@ public class Character extends AbstractCharacterObject {
     private final Map<Integer, Map<BuffStat, MapleBuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private final Map<Integer, Long> buffExpires = new LinkedHashMap<>();
     private final Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
-    private final Map<Integer, MapleSummon> summons = new LinkedHashMap<>();
+    private final Map<Integer, Summon> summons = new LinkedHashMap<>();
     private final Map<Integer, MapleCoolDownValueHolder> coolDowns = new LinkedHashMap<>();
     private final EnumMap<Disease, Pair<DiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(Disease.class);
     private byte[] m_aQuickslotLoaded;
@@ -628,7 +628,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void addSummon(int id, MapleSummon summon) {
+    public void addSummon(int id, Summon summon) {
         summons.put(id, summon);
 
         if (summon.isPuppet()) {
@@ -828,7 +828,7 @@ public class Character extends AbstractCharacterObject {
                 getMap().broadcastGMMessage(this, PacketCreator.cancelForeignBuff(id, dsstat), false);
                 getMap().broadcastSpawnPlayerMapObjectMessage(this, this, false);
 
-                for (MapleSummon ms : this.getSummonsValues()) {
+                for (Summon ms : this.getSummonsValues()) {
                     getMap().broadcastNONGMMessage(this, PacketCreator.spawnSummon(ms, false), false);
                 }
 
@@ -3706,7 +3706,7 @@ public class Character extends AbstractCharacterObject {
                     } else if (mbs == BuffStat.SUMMON || mbs == BuffStat.PUPPET) {
                         int summonId = mbsvh.effect.getSourceId();
 
-                        MapleSummon summon = summons.get(summonId);
+                        Summon summon = summons.get(summonId);
                         if (summon != null) {
                             getMap().broadcastMessage(PacketCreator.removeSummon(summon, true), summon.getPosition());
                             getMap().removeMapObject(summon);
@@ -5867,7 +5867,7 @@ public class Character extends AbstractCharacterObject {
         return storage;
     }
 
-    public Collection<MapleSummon> getSummonsValues() {
+    public Collection<Summon> getSummonsValues() {
         return summons.values();
     }
 
@@ -5875,7 +5875,7 @@ public class Character extends AbstractCharacterObject {
         summons.clear();
     }
 
-    public MapleSummon getSummonByKey(int id) {
+    public Summon getSummonByKey(int id) {
         return summons.get(id);
     }
 
@@ -5883,7 +5883,7 @@ public class Character extends AbstractCharacterObject {
         return summons.isEmpty();
     }
 
-    public boolean containsSummon(MapleSummon summon) {
+    public boolean containsSummon(Summon summon) {
         return summons.containsValue(summon);
     }
 
