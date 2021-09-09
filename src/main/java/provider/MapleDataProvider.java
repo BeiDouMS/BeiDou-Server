@@ -23,5 +23,5 @@ package provider;
 
 public interface MapleDataProvider {
     Data getData(String path);
-    MapleDataDirectoryEntry getRoot();
+    DataDirectoryEntry getRoot();
 }

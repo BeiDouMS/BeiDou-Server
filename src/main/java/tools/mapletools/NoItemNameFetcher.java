@@ -163,7 +163,7 @@ public class NoItemNameFetcher {
         };
     }
 
-    private static void readEquipNodeData(MapleDataProvider data, MapleDataDirectoryEntry mDir, String wzFileName, String dirName) {
+    private static void readEquipNodeData(MapleDataProvider data, DataDirectoryEntry mDir, String wzFileName, String dirName) {
         EquipType eqType = getEquipTypeFromDirectoryName(dirName);
 
         for (MapleDataFileEntry mFile : mDir.getFiles()) {
@@ -196,10 +196,10 @@ public class NoItemNameFetcher {
         String wzFileName = "Character.wz";
 
         MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.CHARACTER);
-        MapleDataDirectoryEntry root = data.getRoot();
+        DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");
-        for (MapleDataDirectoryEntry mDir : root.getSubdirectories()) {
+        for (DataDirectoryEntry mDir : root.getSubdirectories()) {
             String dirName = mDir.getName();
             if (dirName.contentEquals("Dragon")) {
                 continue;
@@ -213,10 +213,10 @@ public class NoItemNameFetcher {
         String wzFileName = "Item.wz";
 
         MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
-        MapleDataDirectoryEntry root = data.getRoot();
+        DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");
-        for (MapleDataDirectoryEntry mDir : root.getSubdirectories()) {
+        for (DataDirectoryEntry mDir : root.getSubdirectories()) {
             String dirName = mDir.getName();
             if (dirName.contentEquals("Special")) {
                 continue;

@@ -22,7 +22,7 @@
 package provider.wz;
 
 import provider.Data;
-import provider.MapleDataDirectoryEntry;
+import provider.DataDirectoryEntry;
 import provider.MapleDataProvider;
 
 import java.io.File;
@@ -80,7 +80,7 @@ public class XMLWZFile implements MapleDataProvider {
     }
 
     @Override
-    public MapleDataDirectoryEntry getRoot() {
+    public DataDirectoryEntry getRoot() {
         return rootForNavigation;
     }
 }

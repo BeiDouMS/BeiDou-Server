@@ -271,8 +271,8 @@ public class MapleItemInformationProvider {
     private Data getItemData(int itemId) {
         Data ret = null;
         String idStr = "0" + String.valueOf(itemId);
-        MapleDataDirectoryEntry root = itemData.getRoot();
-        for (MapleDataDirectoryEntry topDir : root.getSubdirectories()) {
+        DataDirectoryEntry root = itemData.getRoot();
+        for (DataDirectoryEntry topDir : root.getSubdirectories()) {
             for (MapleDataFileEntry iFile : topDir.getFiles()) {
                 if (iFile.getName().equals(idStr.substring(0, 4) + ".img")) {
                     ret = itemData.getData(topDir.getName() + "/" + iFile.getName());
@@ -287,7 +287,7 @@ public class MapleItemInformationProvider {
             }
         }
         root = equipData.getRoot();
-        for (MapleDataDirectoryEntry topDir : root.getSubdirectories()) {
+        for (DataDirectoryEntry topDir : root.getSubdirectories()) {
             for (MapleDataFileEntry iFile : topDir.getFiles()) {
                 if (iFile.getName().equals(idStr + ".img")) {
                     return equipData.getData(topDir.getName() + "/" + iFile.getName());

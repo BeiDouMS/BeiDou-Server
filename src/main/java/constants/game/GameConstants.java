@@ -679,8 +679,8 @@ public class GameConstants {
         MapleDataProvider mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
         int maxMobDmg = 0;
         
-        MapleDataDirectoryEntry root = mapSource.getRoot();
-        for (MapleDataDirectoryEntry objData : root.getSubdirectories()) {
+        DataDirectoryEntry root = mapSource.getRoot();
+        for (DataDirectoryEntry objData : root.getSubdirectories()) {
             if (!objData.getName().contentEquals("Obj")) {
                 continue;
             }

@@ -20,7 +20,7 @@ public class MonsterStatFetcher {
     private static final Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
 
     static Map<Integer, MapleMonsterStats> getAllMonsterStats() {
-        MapleDataDirectoryEntry root = data.getRoot();
+        DataDirectoryEntry root = data.getRoot();
 
         System.out.print("Parsing mob stats... ");
         for (MapleDataFileEntry mFile : root.getFiles()) {
