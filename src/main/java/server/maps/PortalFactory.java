@@ -26,10 +26,10 @@ import provider.DataTool;
 
 import java.awt.*;
 
-public class MaplePortalFactory {
+public class PortalFactory {
     private int nextDoorPortal;
 
-    public MaplePortalFactory() {
+    public PortalFactory() {
         nextDoorPortal = 0x80;
     }
 

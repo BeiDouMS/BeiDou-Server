@@ -153,7 +153,7 @@ public class MapFactory {
 
         map.setFieldLimit(DataTool.getInt(infoData.getChildByPath("fieldLimit"), 0));
         map.setMobInterval((short) DataTool.getInt(infoData.getChildByPath("createMobInterval"), 5000));
-        MaplePortalFactory portalFactory = new MaplePortalFactory();
+        PortalFactory portalFactory = new PortalFactory();
         for (Data portal : mapData.getChildByPath("portal")) {
             map.addPortal(portalFactory.makePortal(DataTool.getInt(portal.getChildByPath("pt")), portal));
         }
