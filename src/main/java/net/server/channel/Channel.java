@@ -658,7 +658,7 @@ public final class Channel {
         try {
             if(dungeons.containsKey(dungeonid)) return false;
             
-            MapleMiniDungeonInfo mmdi = MapleMiniDungeonInfo.getDungeon(dungeonid);
+            MiniDungeonInfo mmdi = MiniDungeonInfo.getDungeon(dungeonid);
             MiniDungeon mmd = new MiniDungeon(mmdi.getBase(), this.getMapFactory().getMap(mmdi.getDungeonId()).getTimeLimit());   // thanks Conrad for noticing hardcoded time limit for minidungeons
             
             dungeons.put(dungeonid, mmd);

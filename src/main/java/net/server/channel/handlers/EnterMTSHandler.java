@@ -32,7 +32,7 @@ import net.packet.InPacket;
 import net.server.Server;
 import server.MTSItemInfo;
 import server.maps.FieldLimit;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.MiniDungeonInfo;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -64,7 +64,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                 return;
             }
             
-            if(MapleMiniDungeonInfo.isDungeonMap(chr.getMapId())) {
+            if(MiniDungeonInfo.isDungeonMap(chr.getMapId())) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;

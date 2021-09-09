@@ -960,7 +960,7 @@ public class World {
                     } else {
                         int oldLeaderMapid = mc.getMapId();
 
-                        if (MapleMiniDungeonInfo.isDungeonMap(oldLeaderMapid)) {
+                        if (MiniDungeonInfo.isDungeonMap(oldLeaderMapid)) {
                             if (oldLeaderMapid != target.getMapId()) {
                                 MiniDungeon mmd = mc.getClient().getChannelServer().getMiniDungeon(oldLeaderMapid);
                                 if(mmd != null) {

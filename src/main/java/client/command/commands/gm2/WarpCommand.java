@@ -28,7 +28,7 @@ import client.Client;
 import client.command.Command;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.MiniDungeonInfo;
 
 public class WarpCommand extends Command {
     {
@@ -56,7 +56,7 @@ public class WarpCommand extends Command {
             }
             
             if (!player.isGM()) {
-                if (player.getEventInstance() != null || MapleMiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
+                if (player.getEventInstance() != null || MiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
                     player.dropMessage(1, "This command cannot be used in this map.");
                     return;
                 }

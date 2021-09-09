@@ -61,7 +61,7 @@ import server.TimerManager;
 import server.life.Monster;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.MiniDungeonInfo;
 import tools.*;
 
 import javax.script.ScriptEngine;
@@ -1460,7 +1460,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (!player.isAlive() || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
             sendPacket(PacketCreator.enableActions());
             return;
-        } else if (MapleMiniDungeonInfo.isDungeonMap(player.getMapId())) {
+        } else if (MiniDungeonInfo.isDungeonMap(player.getMapId())) {
             sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
             sendPacket(PacketCreator.enableActions());
             return;

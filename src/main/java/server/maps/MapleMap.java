@@ -2443,7 +2443,7 @@ public class MapleMap {
                     chr.changeMap(130000210, 0);
                 }
             }, travelTime);
-        } else if (MapleMiniDungeonInfo.isDungeonMap(mapid)) {
+        } else if (MiniDungeonInfo.isDungeonMap(mapid)) {
             MiniDungeon mmd = chr.getClient().getChannelServer().getMiniDungeon(mapid);
             if (mmd != null) {
                 mmd.registerPlayer(chr);
@@ -2681,7 +2681,7 @@ public class MapleMap {
             chrWLock.unlock();
         }
 
-        if (MapleMiniDungeonInfo.isDungeonMap(mapid)) {
+        if (MiniDungeonInfo.isDungeonMap(mapid)) {
             MiniDungeon mmd = cserv.getMiniDungeon(mapid);
             if (mmd != null) {
                 if (!mmd.unregisterPlayer(chr)) {

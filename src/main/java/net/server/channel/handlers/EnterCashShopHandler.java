@@ -26,7 +26,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.MiniDungeonInfo;
 import tools.PacketCreator;
 
 /**
@@ -50,7 +50,7 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
                 return;
             }
             
-            if(MapleMiniDungeonInfo.isDungeonMap(mc.getMapId())) {
+            if(MiniDungeonInfo.isDungeonMap(mc.getMapId())) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;
