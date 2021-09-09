@@ -23,17 +23,17 @@ package net.server.guild;
 
 import net.packet.Packet;
 
-public enum MapleGuildResponse {
+public enum GuildResponse {
     NOT_IN_CHANNEL(0x2a),
     ALREADY_IN_GUILD(0x28),
     NOT_IN_GUILD(0x2d),
     NOT_FOUND_INVITE(0x2e),
     MANAGING_INVITE(0x36),
     DENIED_INVITE(0x37);
-    
+
     private final int value;
 
-    MapleGuildResponse(int val) {
+    GuildResponse(int val) {
         value = val;
     }
 

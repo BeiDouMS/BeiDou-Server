@@ -707,13 +707,13 @@ public class Guild {
         this.guildMessage(GuildPackets.updateGP(this.id, this.gp));
     }
 
-    public static MapleGuildResponse sendInvitation(Client c, String targetName) {
+    public static GuildResponse sendInvitation(Client c, String targetName) {
         Character mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
-            return MapleGuildResponse.NOT_IN_CHANNEL;
+            return GuildResponse.NOT_IN_CHANNEL;
         }
         if (mc.getGuildId() > 0) {
-            return MapleGuildResponse.ALREADY_IN_GUILD;
+            return GuildResponse.ALREADY_IN_GUILD;
         }
 
         Character sender = c.getPlayer();
@@ -721,25 +721,25 @@ public class Guild {
             mc.sendPacket(GuildPackets.guildInvite(sender.getGuildId(), sender.getName()));
             return null;
         } else {
-            return MapleGuildResponse.MANAGING_INVITE;
+            return GuildResponse.MANAGING_INVITE;
         }
     }
 
     public static boolean answerInvitation(int targetId, String targetName, int guildId, boolean answer) {
         MapleInviteResult res = InviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
 
-        MapleGuildResponse mgr;
+        GuildResponse mgr;
         Character sender = res.from;
         switch (res.result) {
             case ACCEPTED:
                 return true;
 
             case DENIED:
-                mgr = MapleGuildResponse.DENIED_INVITE;
+                mgr = GuildResponse.DENIED_INVITE;
                 break;
 
             default:
-                mgr = MapleGuildResponse.NOT_FOUND_INVITE;
+                mgr = GuildResponse.NOT_FOUND_INVITE;
         }
 
         if (mgr != null && sender != null) {

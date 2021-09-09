@@ -32,7 +32,7 @@ import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchChec
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuildResponse;
+import net.server.guild.GuildResponse;
 import net.server.world.MapleParty;
 import net.server.world.World;
 import tools.PacketCreator;
@@ -108,7 +108,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 
                 String targetName = p.readString();
-                MapleGuildResponse mgr = Guild.sendInvitation(c, targetName);
+                GuildResponse mgr = Guild.sendInvitation(c, targetName);
                 if (mgr != null) {
                     c.sendPacket(mgr.getPacket(targetName));
                 } else {} // already sent invitation, do nothing
