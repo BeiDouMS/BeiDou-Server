@@ -28,7 +28,7 @@ import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import server.maps.AbstractAnimatedMapleMapObject;
+import server.maps.AbstractAnimatedMapObject;
 import server.maps.MapleMap;
 
 import java.util.Arrays;
@@ -39,7 +39,7 @@ import java.util.concurrent.locks.Lock;
 /**
  * @author RonanLana
  */
-public abstract class AbstractCharacterObject extends AbstractAnimatedMapleMapObject {
+public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject {
     protected MapleMap map;
     protected int str, dex, luk, int_, hp, maxhp, mp, maxmp;
     protected int hpMpApUsed, remainingAp;

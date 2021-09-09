@@ -27,7 +27,7 @@ import tools.PacketCreator;
 
 
 
-public class MapleDragon extends AbstractAnimatedMapleMapObject {
+public class MapleDragon extends AbstractAnimatedMapObject {
 
     private Character owner;
 

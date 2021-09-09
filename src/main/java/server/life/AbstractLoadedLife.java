@@ -21,9 +21,9 @@
 */
 package server.life;
 
-import server.maps.AbstractAnimatedMapleMapObject;
+import server.maps.AbstractAnimatedMapObject;
 
-public abstract class AbstractLoadedLife extends AbstractAnimatedMapleMapObject {
+public abstract class AbstractLoadedLife extends AbstractAnimatedMapObject {
     private final int id;
     private int f;
     private boolean hide;

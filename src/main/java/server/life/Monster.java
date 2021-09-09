@@ -46,7 +46,7 @@ import server.MapleStatEffect;
 import server.TimerManager;
 import server.life.LifeFactory.BanishInfo;
 import server.loot.LootManager;
-import server.maps.AbstractAnimatedMapleMapObject;
+import server.maps.AbstractAnimatedMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
 import server.maps.MapleSummon;
@@ -1329,7 +1329,7 @@ public class Monster extends AbstractLoadedLife {
         aggroRemoveController();
 
         setPosition(newPoint);
-        map.broadcastMessage(PacketCreator.moveMonster(this.getObjectId(), false, -1, 0, 0, 0, this.getPosition(), this.getIdleMovement(), AbstractAnimatedMapleMapObject.IDLE_MOVEMENT_PACKET_LENGTH));
+        map.broadcastMessage(PacketCreator.moveMonster(this.getObjectId(), false, -1, 0, 0, 0, this.getPosition(), this.getIdleMovement(), AbstractAnimatedMapObject.IDLE_MOVEMENT_PACKET_LENGTH));
         map.moveMonster(this, this.getPosition());
 
         aggroUpdateController();

@@ -32,7 +32,7 @@ import java.awt.*;
  *
  * @author Jan
  */
-public class MapleSummon extends AbstractAnimatedMapleMapObject {
+public class MapleSummon extends AbstractAnimatedMapObject {
     private Character owner;
     private byte skillLevel;
     private int skill, hp;
