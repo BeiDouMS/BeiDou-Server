@@ -30,8 +30,8 @@ import constants.game.GameConstants;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
-import server.life.positioner.MaplePlayerNPCPodium;
 import server.life.positioner.MaplePlayerNPCPositioner;
+import server.life.positioner.PlayerNPCPodium;
 import server.maps.AbstractMapleMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
@@ -389,7 +389,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
 
         if (pos == null) {
             if (GameConstants.isPodiumHallOfFameMap(map.getId())) {
-                pos = MaplePlayerNPCPodium.getNextPlayerNpcPosition(map);
+                pos = PlayerNPCPodium.getNextPlayerNpcPosition(map);
             } else {
                 pos = MaplePlayerNPCPositioner.getNextPlayerNpcPosition(map);
             }
