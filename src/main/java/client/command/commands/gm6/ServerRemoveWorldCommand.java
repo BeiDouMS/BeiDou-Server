@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
 import server.ThreadManager;
@@ -35,8 +35,8 @@ public class ServerRemoveWorldCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        final MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        final Character player = c.getPlayer();
         
         final int rwid = Server.getInstance().getWorldsSize() - 1;
         if(rwid <= 0) {

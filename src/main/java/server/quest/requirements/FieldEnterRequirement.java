@@ -21,36 +21,36 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class FieldEnterRequirement extends MapleQuestRequirement {
+public class FieldEnterRequirement extends AbstractQuestRequirement {
 	private int mapId = -1;
 	
 	
-	public FieldEnterRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.FIELD_ENTER);
+	public FieldEnterRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.FIELD_ENTER);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		MapleData zeroField = data.getChildByPath("0");
+	public void processData(Data data) {
+		Data zeroField = data.getChildByPath("0");
 		if (zeroField != null) {
-			 mapId = MapleDataTool.getInt(zeroField);
+			 mapId = DataTool.getInt(zeroField);
 		}
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		return mapId == chr.getMapId();
 	}
 }

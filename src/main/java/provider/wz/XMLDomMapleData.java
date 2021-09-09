@@ -27,8 +27,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import provider.MapleData;
-import provider.MapleDataEntity;
+import provider.Data;
+import provider.DataEntity;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class XMLDomMapleData implements MapleData {
+public class XMLDomMapleData implements Data {
 	private Node node;
 	private File imageDataDir;
 
@@ -66,10 +66,10 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized MapleData getChildByPath(String path) {  // the whole XML reading system seems susceptible to give nulls on strenuous read scenarios
+	public synchronized Data getChildByPath(String path) {  // the whole XML reading system seems susceptible to give nulls on strenuous read scenarios
 		String[] segments = path.split("/");
 		if (segments[0].equals("..")) {
-			return ((MapleData) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
+			return ((Data) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
 		}
 
                 Node myNode;
@@ -96,8 +96,8 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized List<MapleData> getChildren() {
-		List<MapleData> ret = new ArrayList<>();
+	public synchronized List<Data> getChildren() {
+		List<Data> ret = new ArrayList<>();
                 
                 NodeList childNodes = node.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {
@@ -115,7 +115,7 @@ public class XMLDomMapleData implements MapleData {
 	@Override
 	public synchronized Object getData() {
                 NamedNodeMap attributes = node.getAttributes();
-                MapleDataType type = getType();
+                DataType type = getType();
                 switch (type) {
                         case DOUBLE:
                         case FLOAT:
@@ -153,40 +153,40 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized MapleDataType getType() {
+	public synchronized DataType getType() {
                 String nodeName = node.getNodeName();
                 
                 switch (nodeName) {
                     case "imgdir":
-                        return MapleDataType.PROPERTY;
+                        return DataType.PROPERTY;
                     case "canvas":
-                        return MapleDataType.CANVAS;
+                        return DataType.CANVAS;
                     case "convex":
-                        return MapleDataType.CONVEX;
+                        return DataType.CONVEX;
                     case "sound":
-                        return MapleDataType.SOUND;
+                        return DataType.SOUND;
                     case "uol":
-                        return MapleDataType.UOL;
+                        return DataType.UOL;
                     case "double":
-                        return MapleDataType.DOUBLE;
+                        return DataType.DOUBLE;
                     case "float":
-                        return MapleDataType.FLOAT;
+                        return DataType.FLOAT;
                     case "int":
-                        return MapleDataType.INT;
+                        return DataType.INT;
                     case "short":
-                        return MapleDataType.SHORT;
+                        return DataType.SHORT;
                     case "string":
-                        return MapleDataType.STRING;
+                        return DataType.STRING;
                     case "vector":
-                        return MapleDataType.VECTOR;
+                        return DataType.VECTOR;
                     case "null":
-                        return MapleDataType.IMG_0x00;
+                        return DataType.IMG_0x00;
                 }
 		return null;
 	}
 
 	@Override
-	public synchronized MapleDataEntity getParent() {
+	public synchronized DataEntity getParent() {
                 Node parentNode;
                 parentNode = node.getParentNode();
                 if (parentNode.getNodeType() == Node.DOCUMENT_NODE) {
@@ -203,7 +203,7 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized Iterator<MapleData> iterator() {
+	public synchronized Iterator<Data> iterator() {
 		return getChildren().iterator();
 	}
 }

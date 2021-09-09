@@ -19,15 +19,15 @@
 */
 package client.processor.action;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.SkillFactory;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
+import client.inventory.InventoryType;
+import client.inventory.Pet;
+import client.inventory.manipulator.InventoryManipulator;
+import provider.DataProvider;
+import provider.DataProviderFactory;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.PacketCreator;
 
@@ -38,13 +38,13 @@ import java.awt.*;
  * @author RonanLana - just added locking on OdinMS' SpawnPetHandler method body
  */
 public class SpawnPetProcessor {
-    private static final MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
+    private static final DataProvider dataRoot = DataProviderFactory.getDataProvider(WZFiles.ITEM);
     
-    public static void processSpawnPet(MapleClient c, byte slot, boolean lead) {
+    public static void processSpawnPet(Client c, byte slot, boolean lead) {
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
-                MaplePet pet = chr.getInventory(MapleInventoryType.CASH).getItem(slot).getPet();
+                Character chr = c.getPlayer();
+                Pet pet = chr.getInventory(InventoryType.CASH).getItem(slot).getPet();
                 if (pet == null) return;
 
                 int petid = pet.getItemId();
@@ -55,14 +55,14 @@ public class SpawnPetProcessor {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     } else {
-                        int evolveid = MapleDataTool.getInt("info/evol1", dataRoot.getData("Pet/" + petid + ".img"));
-                        int petId = MaplePet.createPet(evolveid);
+                        int evolveid = DataTool.getInt("info/evol1", dataRoot.getData("Pet/" + petid + ".img"));
+                        int petId = Pet.createPet(evolveid);
                         if (petId == -1) {
                             return;
                         }
-                        long expiration = chr.getInventory(MapleInventoryType.CASH).getItem(slot).getExpiration();
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, petid, (short) 1, false, false);
-                        MapleInventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
+                        long expiration = chr.getInventory(InventoryType.CASH).getItem(slot).getExpiration();
+                        InventoryManipulator.removeById(c, InventoryType.CASH, petid, (short) 1, false, false);
+                        InventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
                         
                         c.sendPacket(PacketCreator.enableActions());
                         return;

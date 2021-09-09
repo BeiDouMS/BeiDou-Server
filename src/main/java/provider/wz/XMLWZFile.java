@@ -21,15 +21,16 @@
 */
 package provider.wz;
 
+import provider.Data;
+import provider.DataDirectoryEntry;
+import provider.DataProvider;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import provider.MapleData;
-import provider.MapleDataDirectoryEntry;
-import provider.MapleDataProvider;
 
-public class XMLWZFile implements MapleDataProvider {
+public class XMLWZFile implements DataProvider {
     private File root;
     private WZDirectoryEntry rootForNavigation;
 
@@ -53,7 +54,7 @@ public class XMLWZFile implements MapleDataProvider {
     }
 
     @Override
-    public synchronized MapleData getData(String path) {
+    public synchronized Data getData(String path) {
         File dataFile = new File(root, path + ".xml");
         File imageDataDir = new File(root, path);
         if (!dataFile.exists()) {
@@ -79,7 +80,7 @@ public class XMLWZFile implements MapleDataProvider {
     }
 
     @Override
-    public MapleDataDirectoryEntry getRoot() {
+    public DataDirectoryEntry getRoot() {
         return rootForNavigation;
     }
 }

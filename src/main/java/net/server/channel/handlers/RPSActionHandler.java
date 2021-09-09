@@ -1,10 +1,10 @@
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.minigame.MapleRockPaperScissor;
+import server.minigame.RockPaperScissor;
 import tools.PacketCreator;
 
 /**
@@ -15,9 +15,9 @@ import tools.PacketCreator;
 public final class RPSActionHandler extends AbstractPacketHandler {
 
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c){
-                MapleCharacter chr = c.getPlayer();
-                MapleRockPaperScissor rps = chr.getRPS();
+	public final void handlePacket(InPacket p, Client c){
+                Character chr = c.getPlayer();
+                RockPaperScissor rps = chr.getRPS();
                 
                 if (c.tryacquireClient()) {
                         try {
@@ -35,7 +35,7 @@ public final class RPSActionHandler extends AbstractPacketHandler {
                                                         rps.reward(c);
                                                 }
                                                 if(chr.getMeso() >= 1000){
-                                                        chr.setRPS(new MapleRockPaperScissor(c, mode));
+                                                        chr.setRPS(new RockPaperScissor(c, mode));
                                                 }else{
                                                         c.sendPacket(PacketCreator.rpsMesoError(-1));
                                                 }

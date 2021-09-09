@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 
 public class SetGmLevelCommand extends Command {
@@ -33,15 +33,15 @@ public class SetGmLevelCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 2) {
             player.yellowMessage("Syntax: !setgmlevel <playername> <newlevel>");
             return;
         }
 
         int newLevel = Integer.parseInt(params[1]);
-        MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
         if (target != null) {
             target.setGMLevel(newLevel);
             target.getClient().setGMLevel(newLevel);

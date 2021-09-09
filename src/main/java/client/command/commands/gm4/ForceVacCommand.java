@@ -23,14 +23,14 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import client.inventory.MaplePet;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import server.maps.MapleMapItem;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
+import client.inventory.Pet;
+import client.inventory.manipulator.InventoryManipulator;
+import server.maps.MapItem;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
 import tools.PacketCreator;
 
 import java.util.Arrays;
@@ -42,11 +42,11 @@ public class ForceVacCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        List<MapleMapObject> items = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.ITEM));
-        for (MapleMapObject item : items) {
-            MapleMapItem mapItem = (MapleMapItem) item;
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        List<MapObject> items = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.ITEM));
+        for (MapObject item : items) {
+            MapItem mapItem = (MapItem) item;
 
             mapItem.lockItem();
             try {
@@ -59,12 +59,12 @@ public class ForceVacCommand extends Command {
                     // Add NX to account, show effect and make item disappear
                     player.getCashShop().gainCash(1, mapItem.getItemId() == 4031865 ? 100 : 250);
                 } else if (mapItem.getItem().getItemId() >= 5000000 && mapItem.getItem().getItemId() <= 5000100) {
-                    int petId = MaplePet.createPet(mapItem.getItem().getItemId());
+                    int petId = Pet.createPet(mapItem.getItem().getItemId());
                     if (petId == -1) {
                         continue;
                     }
-                    MapleInventoryManipulator.addById(c, mapItem.getItem().getItemId(), mapItem.getItem().getQuantity(), null, petId);
-                } else if (MapleInventoryManipulator.addFromDrop(c, mapItem.getItem(), true)) {
+                    InventoryManipulator.addById(c, mapItem.getItem().getItemId(), mapItem.getItem().getQuantity(), null, petId);
+                } else if (InventoryManipulator.addFromDrop(c, mapItem.getItem(), true)) {
                     if (mapItem.getItemId() == 4031868) {
                         player.updateAriantScore();
                     }

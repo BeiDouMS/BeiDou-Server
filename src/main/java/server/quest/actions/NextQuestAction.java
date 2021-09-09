@@ -21,35 +21,35 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import client.MapleQuestStatus;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import client.Character;
+import client.QuestStatus;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 import tools.PacketCreator;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class NextQuestAction extends MapleQuestAction {
+public class NextQuestAction extends AbstractQuestAction {
 	int nextQuest;
 	
-	public NextQuestAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.NEXTQUEST, quest);
+	public NextQuestAction(Quest quest, Data data) {
+		super(QuestActionType.NEXTQUEST, quest);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		nextQuest = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		nextQuest = DataTool.getInt(data);
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
-		MapleQuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+	public void run(Character chr, Integer extSelection) {
+		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
 		chr.sendPacket(PacketCreator.updateQuestFinish((short) questID, status.getNpc(), (short) nextQuest));
 	}
 } 

@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.AnimatedMapleMapObject;
+import server.maps.AnimatedMapObject;
 import server.movement.*;
 import tools.exceptions.EmptyMovementException;
 
@@ -145,7 +145,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
         return res;
     }
     
-    protected void updatePosition(InPacket p, AnimatedMapleMapObject target, int yOffset) throws EmptyMovementException {
+    protected void updatePosition(InPacket p, AnimatedMapObject target, int yOffset) throws EmptyMovementException {
     	
         byte numCommands = p.readByte();
         if (numCommands < 1) throw new EmptyMovementException(p);

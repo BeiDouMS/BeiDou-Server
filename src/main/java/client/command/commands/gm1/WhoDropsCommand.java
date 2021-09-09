@@ -23,11 +23,11 @@
 */
 package client.command.commands.gm1;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.MapleItemInformationProvider;
-import server.life.MapleMonsterInformationProvider;
+import server.ItemInformationProvider;
+import server.life.MonsterInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
 
@@ -42,8 +42,8 @@ public class WhoDropsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.dropMessage(5, "Please do @whodrops <item name>");
             return;
@@ -53,7 +53,7 @@ public class WhoDropsCommand extends Command {
             try {
                 String searchString = player.getLastCommandMessage();
                 String output = "";
-                Iterator<Pair<Integer, String>> listIterator = MapleItemInformationProvider.getInstance().getItemDataByName(searchString).iterator();
+                Iterator<Pair<Integer, String>> listIterator = ItemInformationProvider.getInstance().getItemDataByName(searchString).iterator();
                 if (listIterator.hasNext()) {
                     int count = 1;
                     while (listIterator.hasNext() && count <= 3) {
@@ -65,7 +65,7 @@ public class WhoDropsCommand extends Command {
 
                             try (ResultSet rs = ps.executeQuery()) {
                                 while (rs.next()) {
-                                    String resultName = MapleMonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
+                                    String resultName = MonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
                                     if (resultName != null) {
                                         output += resultName + ", ";
                                     }

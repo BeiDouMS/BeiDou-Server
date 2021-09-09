@@ -21,11 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting.portal;
 
-import client.MapleClient;
+import client.Client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
-import server.maps.MaplePortal;
+import server.maps.Portal;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -64,7 +64,7 @@ public class PortalScriptManager extends AbstractScriptManager {
         return script;
     }
 
-    public boolean executePortalScript(MaplePortal portal, MapleClient c) {
+    public boolean executePortalScript(Portal portal, Client c) {
         try {
             PortalScript script = getPortalScript(portal.getScriptName());
             if (script != null) {

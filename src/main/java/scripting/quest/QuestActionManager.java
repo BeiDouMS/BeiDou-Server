@@ -21,10 +21,10 @@
 */
 package scripting.quest;
 
-import client.MapleClient;
+import client.Client;
 import scripting.npc.NPCConversationManager;
-import server.MapleItemInformationProvider;
-import server.quest.MapleQuest;
+import server.ItemInformationProvider;
+import server.quest.Quest;
 import server.quest.actions.ExpAction;
 import server.quest.actions.MesoAction;
 
@@ -36,7 +36,7 @@ public class QuestActionManager extends NPCConversationManager {
     private boolean start; // this is if the script in question is start or end
     private int quest;
 
-    public QuestActionManager(MapleClient c, int quest, int npc, boolean start) {
+    public QuestActionManager(Client c, int quest, int npc, boolean start) {
         super(c, npc, null);
         this.quest = quest;
         this.start = start;
@@ -84,7 +84,7 @@ public class QuestActionManager extends NPCConversationManager {
     }
     
     public String getMedalName() {  // usable only for medal quests (id 299XX)
-        MapleQuest q = MapleQuest.getInstance(quest);
-        return MapleItemInformationProvider.getInstance().getName(q.getMedalRequirement());
+        Quest q = Quest.getInstance(quest);
+        return ItemInformationProvider.getInstance().getName(q.getMedalRequirement());
     }
 }

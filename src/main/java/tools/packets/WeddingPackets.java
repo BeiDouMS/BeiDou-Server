@@ -6,7 +6,7 @@
 
 package tools.packets;
 
-import client.MapleCharacter;
+import client.Character;
 import client.inventory.Item;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
@@ -67,7 +67,7 @@ public class WeddingPackets extends PacketCreator {
     }
     
     public class WeddingWishList {
-        public MapleCharacter pUser;
+        public Character pUser;
         public int dwMarriageNo;
         public int nGender;
         public int nWLType;
@@ -224,17 +224,17 @@ public class WeddingPackets extends PacketCreator {
      *    @param ReservedBrideName The bride IGN of the wedding
      *    @param m_dwField The current field id (the id of the cake map, ex. 680000300)
      *    @param m_uCount The current user count (equal to m_dwUsers.size)
-     *    @param m_dwUsers The List of all MapleCharacter guests within the current cake map to be encoded
+     *    @param m_dwUsers The List of all Character guests within the current cake map to be encoded
      *    @return mplew (MaplePacket) Byte array to be converted and read for byte[]->ImageIO
      */
-    public static Packet onTakePhoto(String ReservedGroomName, String ReservedBrideName, int m_dwField, List<MapleCharacter> m_dwUsers) { // OnIFailedAtWeddingPhotos
+    public static Packet onTakePhoto(String ReservedGroomName, String ReservedBrideName, int m_dwField, List<Character> m_dwUsers) { // OnIFailedAtWeddingPhotos
         OutPacket p = OutPacket.create(SendOpcode.WEDDING_PHOTO);// v53 header, convert -> v83
         p.writeString(ReservedGroomName);
         p.writeString(ReservedBrideName);
         p.writeInt(m_dwField); // field id?
         p.writeInt(m_dwUsers.size());
         
-        for (MapleCharacter guest : m_dwUsers) {
+        for (Character guest : m_dwUsers) {
             // Begin Avatar Encoding
             addCharLook(p, guest, false); // CUser::EncodeAvatar
             p.writeInt(30000); // v20 = *(_DWORD *)(v13 + 2192) -- new groom marriage ID??
@@ -268,7 +268,7 @@ public class WeddingPackets extends PacketCreator {
      *    @param wedding
      *    @return mplew
      */
-    public static Packet OnMarriageResult(int marriageId, MapleCharacter chr, boolean wedding) {
+    public static Packet OnMarriageResult(int marriageId, Character chr, boolean wedding) {
         OutPacket p = OutPacket.create(SendOpcode.MARRIAGE_RESULT);
         p.writeByte(11);
         p.writeInt(marriageId);
@@ -282,8 +282,8 @@ public class WeddingPackets extends PacketCreator {
             p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
             p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
         }
-        p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : MapleCharacter.getNameById(chr.getPartnerId()), '\0', 13));
-        p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? MapleCharacter.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
+        p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
+        p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
         
         return p;
     }

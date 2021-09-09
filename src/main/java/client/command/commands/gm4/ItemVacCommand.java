@@ -23,11 +23,11 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,10 +38,10 @@ public class ItemVacCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        List<MapleMapObject> list = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.ITEM));
-        for (MapleMapObject item : list) {
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        List<MapObject> list = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.ITEM));
+        for (MapObject item : list) {
             player.pickupItem(item);
         }
     }

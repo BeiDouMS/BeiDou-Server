@@ -21,18 +21,18 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleDisease;
+import client.Character;
+import client.Client;
+import client.Disease;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.ItemInformationProvider;
+import server.StatEffect;
 import tools.PacketCreator;
 
 /**
@@ -40,35 +40,35 @@ import tools.PacketCreator;
  */
 public final class UseItemHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         
         if (!chr.isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
-        Item toUse = chr.getInventory(MapleInventoryType.USE).getItem(slot);
+        Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
             if (itemId == 2050004) {
                 chr.dispelDebuffs();
                 remove(c, slot);
                 return;
             } else if (itemId == 2050001) {
-		chr.dispelDebuff(MapleDisease.DARKNESS);
+		chr.dispelDebuff(Disease.DARKNESS);
                 remove(c, slot);
                 return;
 	    } else if (itemId == 2050002) {
-		chr.dispelDebuff(MapleDisease.WEAKEN);
-                chr.dispelDebuff(MapleDisease.SLOW);
+		chr.dispelDebuff(Disease.WEAKEN);
+                chr.dispelDebuff(Disease.SLOW);
                 remove(c, slot);
                 return;
             } else if (itemId == 2050003) {
-                chr.dispelDebuff(MapleDisease.SEAL);
-		chr.dispelDebuff(MapleDisease.CURSE);
+                chr.dispelDebuff(Disease.SEAL);
+		chr.dispelDebuff(Disease.CURSE);
                 remove(c, slot);
                 return;
             } else if (ItemConstants.isTownScroll(itemId)) {
@@ -98,16 +98,16 @@ public final class UseItemHandler extends AbstractPacketHandler {
             if(toUse.getItemId() != 2022153) {
                 ii.getItemEffect(toUse.getItemId()).applyTo(chr);
             } else {
-                MapleStatEffect mse = ii.getItemEffect(toUse.getItemId());
-                for(MapleCharacter player : chr.getMap().getCharacters()) {
+                StatEffect mse = ii.getItemEffect(toUse.getItemId());
+                for(Character player : chr.getMap().getCharacters()) {
                     mse.applyTo(player);
                 }
             }
         }
     }
 
-    private void remove(MapleClient c, short slot) {
-        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+    private void remove(Client c, short slot) {
+        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         c.sendPacket(PacketCreator.enableActions());
     }
 }

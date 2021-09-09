@@ -21,27 +21,27 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
 import tools.PacketCreator;
 
 public final class DenyPartyRequestHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readByte();
         String[] cname = p.readString().split("PS: ");
         
-        MapleCharacter cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(cname[cname.length - 1]);
+        Character cfrom = c.getChannelServer().getPlayerStorage().getCharacterByName(cname[cname.length - 1]);
         if (cfrom != null) {
-            MapleCharacter chr = c.getPlayer();
+            Character chr = c.getPlayer();
             
-            if (MapleInviteCoordinator.answerInvite(InviteType.PARTY, chr.getId(), cfrom.getPartyId(), false).result == InviteResult.DENIED) {
+            if (InviteCoordinator.answerInvite(InviteType.PARTY, chr.getId(), cfrom.getPartyId(), false).result == InviteResultType.DENIED) {
                 chr.updatePartySearchAvailability(chr.getParty() == null);
                 cfrom.sendPacket(PacketCreator.partyStatusMessage(23, chr.getName()));
             }

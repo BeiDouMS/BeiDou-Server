@@ -27,10 +27,10 @@ import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import provider.MapleData;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
+import provider.Data;
+import provider.DataProvider;
+import provider.DataProviderFactory;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 import tools.Pair;
@@ -87,11 +87,11 @@ public class CashShop {
 
             int petid = -1;
             if (ItemConstants.isPet(itemId)) {
-                petid = MaplePet.createPet(itemId);
+                petid = Pet.createPet(itemId);
             }
 
-            if (ItemConstants.getInventoryType(itemId).equals(MapleInventoryType.EQUIP)) {
-                item = MapleItemInformationProvider.getInstance().getEquipById(itemId);
+            if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
+                item = ItemInformationProvider.getInstance().getEquipById(itemId);
             } else {
                 item = new Item(itemId, (byte) 0, count, petid);
             }
@@ -149,17 +149,17 @@ public class CashShop {
         private static volatile List<SpecialCashItem> specialcashitems = new ArrayList<>();
 
         public static void loadAllCashItems() {
-            MapleDataProvider etc = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
+            DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
             Map<Integer, CashItem> loadedItems = new HashMap<>();
             List<Integer> onSaleItems = new ArrayList<>();
-            for (MapleData item : etc.getData("Commodity.img").getChildren()) {
-                int sn = MapleDataTool.getIntConvert("SN", item);
-                int itemId = MapleDataTool.getIntConvert("ItemId", item);
-                int price = MapleDataTool.getIntConvert("Price", item, 0);
-                long period = MapleDataTool.getIntConvert("Period", item, 1);
-                short count = (short) MapleDataTool.getIntConvert("Count", item, 1);
-                boolean onSale = MapleDataTool.getIntConvert("OnSale", item, 0) == 1;
+            for (Data item : etc.getData("Commodity.img").getChildren()) {
+                int sn = DataTool.getIntConvert("SN", item);
+                int itemId = DataTool.getIntConvert("ItemId", item);
+                int price = DataTool.getIntConvert("Price", item, 0);
+                long period = DataTool.getIntConvert("Period", item, 1);
+                short count = (short) DataTool.getIntConvert("Count", item, 1);
+                boolean onSale = DataTool.getIntConvert("OnSale", item, 0) == 1;
                 loadedItems.put(sn, new CashItem(sn, itemId, price, period, count, onSale));
 
                 if (onSale) {
@@ -170,10 +170,10 @@ public class CashShop {
             CashItemFactory.randomitemsns = onSaleItems;
 
             Map<Integer, List<Integer>> loadedPackages = new HashMap<>();
-            for (MapleData cashPackage : etc.getData("CashPackage.img").getChildren()) {
+            for (Data cashPackage : etc.getData("CashPackage.img").getChildren()) {
                 List<Integer> cPackage = new ArrayList<>();
 
-                for (MapleData item : cashPackage.getChildByPath("SN").getChildren()) {
+                for (Data item : cashPackage.getChildByPath("SN").getChildren()) {
                     cPackage.add(Integer.parseInt(item.getData().toString()));
                 }
 
@@ -277,7 +277,7 @@ public class CashShop {
                 }
             }
 
-            for (Pair<Item, MapleInventoryType> item : factory.loadItems(accountId, false)) {
+            for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
                 inventory.add(item.getLeft());
             }
 
@@ -348,7 +348,7 @@ public class CashShop {
         boolean isRing;
         Equip equip = null;
         for (Item item : getInventory()) {
-            if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+            if (item.getInventoryType().equals(InventoryType.EQUIP)) {
                 equip = (Equip) item;
                 isRing = equip.getRingId() > -1;
             } else {
@@ -426,7 +426,7 @@ public class CashShop {
                         Item item = cItem.toItem();
                         Equip equip = null;
                         item.setGiftFrom(rs.getString("from"));
-                        if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+                        if (item.getInventoryType().equals(InventoryType.EQUIP)) {
                             equip = (Equip) item;
                             equip.setRingId(rs.getInt("ringid"));
                             gifts.add(new Pair<>(equip, rs.getString("message")));
@@ -474,7 +474,7 @@ public class CashShop {
             ps.executeUpdate();
         }
 
-        List<Pair<Item, MapleInventoryType>> itemsWithType = new ArrayList<>();
+        List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
 
         List<Item> inv = getInventory();
         for (Item item : inv) {

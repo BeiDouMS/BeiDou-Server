@@ -21,14 +21,15 @@
 */
 package client;
 
+import server.StatEffect;
+import server.life.Element;
+
 import java.util.ArrayList;
 import java.util.List;
-import server.MapleStatEffect;
-import server.life.Element;
 
 public class Skill {
     private int id;
-    private List<MapleStatEffect> effects = new ArrayList<>();
+    private List<StatEffect> effects = new ArrayList<>();
     private Element element;
     private int animationTime;
     private int job;
@@ -43,7 +44,7 @@ public class Skill {
         return id;
     }
 
-    public MapleStatEffect getEffect(int level) {
+    public StatEffect getEffect(int level) {
         return effects.get(level - 1);
     }
 
@@ -93,7 +94,7 @@ public class Skill {
         return action;
     }
     
-    public void addLevelEffect(MapleStatEffect effect) {
+    public void addLevelEffect(StatEffect effect) {
         effects.add(effect);
     }
 }

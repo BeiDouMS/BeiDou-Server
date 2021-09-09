@@ -21,37 +21,37 @@
  */
 package server.quest.requirements;
 
+import client.Character;
+import client.inventory.InventoryType;
+import client.inventory.Item;
+import constants.inventory.ItemConstants;
+import provider.Data;
+import provider.DataTool;
+import server.ItemInformationProvider;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.MapleItemInformationProvider;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
-import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import constants.inventory.ItemConstants;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class ItemRequirement extends MapleQuestRequirement {
+public class ItemRequirement extends AbstractQuestRequirement {
 	Map<Integer, Integer> items = new HashMap<>();
 	
 	
-	public ItemRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.ITEM);
+	public ItemRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.ITEM);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData itemEntry : data.getChildren()) {
-			int itemId = MapleDataTool.getInt(itemEntry.getChildByPath("id"));
-			int count = MapleDataTool.getInt(itemEntry.getChildByPath("count"), 0);
+	public void processData(Data data) {
+		for (Data itemEntry : data.getChildren()) {
+			int itemId = DataTool.getInt(itemEntry.getChildByPath("id"));
+			int count = DataTool.getInt(itemEntry.getChildByPath("count"), 0);
 			
 			items.put(itemId, count);
 		}
@@ -59,29 +59,29 @@ public class ItemRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
-		MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+	public boolean check(Character chr, Integer npcid) {
+		ItemInformationProvider ii = ItemInformationProvider.getInstance();
 		for(Integer itemId : items.keySet()) {
 			int countNeeded = items.get(itemId);
 			int count = 0;
 			
-			MapleInventoryType iType = ItemConstants.getInventoryType(itemId);
+			InventoryType iType = ItemConstants.getInventoryType(itemId);
 			
-			if (iType.equals(MapleInventoryType.UNDEFINED)) {
+			if (iType.equals(InventoryType.UNDEFINED)) {
 				return false;
 			}
 			for (Item item : chr.getInventory(iType).listById(itemId)) {
 				count += item.getQuantity();
 			}
 			//Weird stuff, nexon made some quests only available when wearing gm clothes. This enables us to accept it ><
-			if (iType.equals(MapleInventoryType.EQUIP) && !ItemConstants.isMedal(itemId)) {
+			if (iType.equals(InventoryType.EQUIP) && !ItemConstants.isMedal(itemId)) {
                                 if(chr.isGM()) {
-                                        for (Item item : chr.getInventory(MapleInventoryType.EQUIPPED).listById(itemId)) {
+                                        for (Item item : chr.getInventory(InventoryType.EQUIPPED).listById(itemId)) {
                                                 count += item.getQuantity();
                                         }
                                 } else {
                                         if(count < countNeeded) {
-                                                if(chr.getInventory(MapleInventoryType.EQUIPPED).countById(itemId) + count >= countNeeded) {
+                                                if(chr.getInventory(InventoryType.EQUIPPED).countById(itemId) + count >= countNeeded) {
                                                         chr.dropMessage(5, "Unequip the required " + ii.getName(itemId) + " before trying this quest operation.");
                                                         return false;
                                                 }

@@ -37,7 +37,7 @@ function spawnMobs(maxSpawn) {
     var spawnPosY;
 
     var mapObj = cm.getMap();
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     if (stage == 2) {
         spawnPosX = [619, 299, 47, -140, -471];
@@ -45,9 +45,9 @@ function spawnMobs(maxSpawn) {
 
         for(var i = 0; i < 5; i++) {
             for(var j = 0; j < 2; j++) {
-                var mobObj1 = MapleLifeFactory.getMonster(9400515);
-                var mobObj2 = MapleLifeFactory.getMonster(9400516);
-                var mobObj3 = MapleLifeFactory.getMonster(9400517);
+                var mobObj1 = LifeFactory.getMonster(9400515);
+                var mobObj2 = LifeFactory.getMonster(9400516);
+                var mobObj3 = LifeFactory.getMonster(9400517);
 
                 mapObj.spawnMonsterOnGroundBelow(mobObj1, new Point(spawnPosX[i], spawnPosY[i]));
                 mapObj.spawnMonsterOnGroundBelow(mobObj2, new Point(spawnPosX[i], spawnPosY[i]));
@@ -62,7 +62,7 @@ function spawnMobs(maxSpawn) {
             var rndMob = 9400519 + Math.floor(Math.random() * 4);
             var rndPos = Math.floor(Math.random() * 5);
 
-            var mobObj = MapleLifeFactory.getMonster(rndMob);
+            var mobObj = LifeFactory.getMonster(rndMob);
             mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(spawnPosX[rndPos], spawnPosY[rndPos]));
         }
     }

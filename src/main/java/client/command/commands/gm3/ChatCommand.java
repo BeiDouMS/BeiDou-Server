@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 
 public class ChatCommand extends Command {
@@ -33,8 +33,8 @@ public class ChatCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         player.toggleWhiteChat();
         player.message("Your chat is now " + (player.getWhiteChat() ? " white" : "normal") + ".");
     }

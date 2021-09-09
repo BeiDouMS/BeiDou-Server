@@ -21,8 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -44,10 +44,10 @@ public final class WhisperHandler extends AbstractPacketHandler {
     public static final byte RT_DIFFERENT_CHANNEL = 0x03;
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         byte request = p.readByte();
         String name = p.readString();
-        MapleCharacter target = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
+        Character target = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
 
         if (target == null) {
             c.sendPacket(PacketCreator.getWhisperResult(name, false));
@@ -71,7 +71,7 @@ public final class WhisperHandler extends AbstractPacketHandler {
         }
     }
 
-    private void handleFind(MapleCharacter user, MapleCharacter target, byte flag) {
+    private void handleFind(Character user, Character target, byte flag) {
         if (user.gmLevel() >= target.gmLevel()) {
             if (target.getCashShop().isOpened()) {
                 user.sendPacket(PacketCreator.getFindResult(target, RT_CASH_SHOP, -1, flag));
@@ -86,7 +86,7 @@ public final class WhisperHandler extends AbstractPacketHandler {
         }
     }
 
-    private void handleWhisper(String message, MapleCharacter user, MapleCharacter target) {
+    private void handleWhisper(String message, Character user, Character target) {
         if (user.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
             return;
         }

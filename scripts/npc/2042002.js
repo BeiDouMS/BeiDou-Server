@@ -500,8 +500,8 @@ function refineItems(refineType) {
     var refineFees = [[300,300,300,500,500,500,800,270],[500,500,500,500,500,500,500,1000,3000],[5000,5000,5000,5000,1000000]];
     var itemCount = {};
 
-    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-    var iter = cm.getPlayer().getInventory(MapleInventoryType.ETC).iterator();
+    const InventoryType = Java.type('client.inventory.InventoryType');
+    var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();
@@ -554,8 +554,8 @@ function refineRockItems() {
     var rockItems = [4011007, 4021009];
     var rockFees = [10000, 15000];
 
-    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-    var iter = cm.getPlayer().getInventory(MapleInventoryType.ETC).iterator();
+    const InventoryType = Java.type('client.inventory.InventoryType');
+    var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
         var itemid = it.getItemId();

@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import config.YamlConfig;
 import server.maps.MapleMap;
@@ -35,10 +35,10 @@ public class MapOwnerClaimCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 
                 if (YamlConfig.config.server.USE_MAP_OWNERSHIP_SYSTEM) {
                     if (chr.getEventInstance() == null) {

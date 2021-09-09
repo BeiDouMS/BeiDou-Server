@@ -3,7 +3,7 @@ package net.server.task;
 import net.server.PlayerStorage;
 import net.server.Server;
 import net.server.channel.Channel;
-import server.maps.MapleMapManager;
+import server.maps.MapManager;
 
 /**
  * @author Resinate
@@ -16,7 +16,7 @@ public class RespawnTask implements Runnable {
             PlayerStorage ps = ch.getPlayerStorage();
             if (ps != null) {
                 if (!ps.getAllCharacters().isEmpty()) {
-                    MapleMapManager mapManager = ch.getMapFactory();
+                    MapManager mapManager = ch.getMapFactory();
                     if (mapManager != null) {
                         mapManager.updateMaps();
                     }

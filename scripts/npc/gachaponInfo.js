@@ -27,9 +27,9 @@ var status;
 var gachaMessages;
  
 function start() {
-        const MapleGachapon = Java.type('server.gachapon.MapleGachapon');
-        gachaMessages = MapleGachapon.Gachapon.getLootInfo();
-        gachas = MapleGachapon.Gachapon.values();
+        const Gachapon = Java.type('server.gachapon.Gachapon');
+        gachaMessages = Gachapon.GachaponType.getLootInfo();
+        gachas = Gachapon.GachaponType.values();
     
         status = -1;
         action(1, 0, 0);

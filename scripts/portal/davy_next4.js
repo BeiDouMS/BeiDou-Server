@@ -7,10 +7,10 @@ function enter(pi) {
             var chests = parseInt(eim.getProperty("openedChests"));
             var boss;                                               
 
-            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-            if(chests == 0) boss = MapleLifeFactory.getMonster(9300119);        //lord pirate
-            else if(chests == 1) boss = MapleLifeFactory.getMonster(9300105);   //angry lord pirate
-            else boss = MapleLifeFactory.getMonster(9300106);                   //enraged lord pirate
+            const LifeFactory = Java.type('server.life.LifeFactory');
+            if(chests == 0) boss = LifeFactory.getMonster(9300119);        //lord pirate
+            else if(chests == 1) boss = LifeFactory.getMonster(9300105);   //angry lord pirate
+            else boss = LifeFactory.getMonster(9300106);                   //enraged lord pirate
 
             boss.changeDifficulty(level, true);
 

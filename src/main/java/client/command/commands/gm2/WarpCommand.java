@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.MiniDungeonInfo;
 
 public class WarpCommand extends Command {
     {
@@ -36,8 +36,8 @@ public class WarpCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !warp <mapid>");
             return;
@@ -56,7 +56,7 @@ public class WarpCommand extends Command {
             }
             
             if (!player.isGM()) {
-                if (player.getEventInstance() != null || MapleMiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
+                if (player.getEventInstance() != null || MiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
                     player.dropMessage(1, "This command cannot be used in this map.");
                     return;
                 }

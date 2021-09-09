@@ -47,11 +47,11 @@ function start() {
 		return;
 	}
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     const PacketCreator = Java.type('tools.PacketCreator');
 
-    var zeno = MapleLifeFactory.getMonster(6220001);
+    var zeno = LifeFactory.getMonster(6220001);
     graysPrairie.spawnMonsterOnGroundBelow(zeno, new Point(-4224, 776));
     graysPrairie.broadcastMessage(PacketCreator.serverNotice(6, "Zeno has appeared with a heavy sound of machinery."));
 	em.schedule("start", 3 * 60 * 60 * 1000);

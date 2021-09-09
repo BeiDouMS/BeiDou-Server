@@ -21,15 +21,15 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleMonster;
-import server.life.MapleMonsterInformationProvider;
+import server.life.Monster;
+import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -43,17 +43,17 @@ import java.util.Map;
  */
 public final class MobDamageMobHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int from = p.readInt();
         p.readInt();
         int to = p.readInt();
         boolean magic = p.readByte() == 0;
         int dmg = p.readInt();
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         
         MapleMap map = chr.getMap();
-        MapleMonster attacker = map.getMonsterByOid(from);
-        MapleMonster damaged = map.getMonsterByOid(to);
+        Monster attacker = map.getMonsterByOid(from);
+        Monster damaged = map.getMonsterByOid(to);
         
         if (attacker != null && damaged != null) {
             int maxDmg = calcMaxDamage(attacker, damaged, magic);     // thanks Darter (YungMoozi) for reporting unchecked dmg
@@ -61,7 +61,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
             if (dmg > maxDmg) {
                 AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing hypnotize damage exploit.");   // thanks Rien dev team
                 
-                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " had hypnotized " + MapleMonsterInformationProvider.getInstance().getMobNameFromId(attacker.getId()) + " to attack " + MapleMonsterInformationProvider.getInstance().getMobNameFromId(damaged.getId()) + " with damage " + dmg + " (max: " + maxDmg + ")");
+                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " had hypnotized " + MonsterInformationProvider.getInstance().getMobNameFromId(attacker.getId()) + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(damaged.getId()) + " with damage " + dmg + " (max: " + maxDmg + ")");
                 dmg = maxDmg;
             }
             
@@ -70,7 +70,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         }
     }
     
-    private static int calcMaxDamage(MapleMonster attacker, MapleMonster damaged, boolean magic) {
+    private static int calcMaxDamage(Monster attacker, Monster damaged, boolean magic) {
         int attackerAtk, damagedDef, attackerLevel = attacker.getLevel();
         double maxDamage;
         if (magic) {
@@ -94,7 +94,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         return (int) maxDamage;
     }
     
-    private static int calcModifier(MapleMonster monster, MonsterStatus buff, MonsterStatus nerf) {
+    private static int calcModifier(Monster monster, MonsterStatus buff, MonsterStatus nerf) {
         int atkModifier;
         final Map<MonsterStatus, MonsterStatusEffect> monsterStati = monster.getStati();
         

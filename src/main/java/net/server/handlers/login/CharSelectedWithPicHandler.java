@@ -1,6 +1,6 @@
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -29,7 +29,7 @@ public class CharSelectedWithPicHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         String pic = p.readString();
         int charId = p.readInt();
         

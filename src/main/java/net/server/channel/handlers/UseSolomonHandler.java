@@ -21,15 +21,15 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 /**
@@ -41,16 +41,16 @@ import tools.PacketCreator;
 public final class UseSolomonHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
-                Inventory inv = chr.getInventory(MapleInventoryType.USE);
+                Character chr = c.getPlayer();
+                Inventory inv = chr.getInventory(InventoryType.USE);
                 inv.lockInventory();
                 try {
                     Item slotItem = inv.getItem(slot);
@@ -66,7 +66,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
                         return;
                     }
                     chr.addGachaExp((int) gachaexp);
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                 } finally {
                     inv.unlockInventory();
                 }

@@ -21,13 +21,13 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.inventory.MaplePet;
+import client.Character;
+import client.Client;
+import client.inventory.Pet;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapItem;
-import server.maps.MapleMapObject;
+import server.maps.MapItem;
+import server.maps.MapObject;
 import tools.PacketCreator;
 
 import java.util.Set;
@@ -38,11 +38,11 @@ import java.util.Set;
  */
 public final class PetLootHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         
         int petIndex = chr.getPetIndex(p.readInt());
-        MaplePet pet = chr.getPet(petIndex);
+        Pet pet = chr.getPet(petIndex);
         if (pet == null || !pet.isSummoned()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -50,9 +50,9 @@ public final class PetLootHandler extends AbstractPacketHandler {
         
         p.skip(13);
         int oid = p.readInt();
-        MapleMapObject ob = chr.getMap().getMapObject(oid);        
+        MapObject ob = chr.getMap().getMapObject(oid);
         try {
-            MapleMapItem mapitem = (MapleMapItem) ob;
+            MapItem mapitem = (MapItem) ob;
             if (mapitem.getMeso() > 0) {
                 if (!chr.isEquippedMesoMagnet()) {
                     c.sendPacket(PacketCreator.enableActions());

@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.DatabaseConnection;
@@ -34,7 +34,7 @@ import java.sql.SQLException;
 
 public final class NoteActionHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int action = p.readByte();
         if (action == 0 && c.getPlayer().getCashShop().getAvailableNotes() > 0) {
             String charname = p.readString();

@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import tools.PacketCreator;
 
@@ -34,14 +34,14 @@ public class TimerCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 2) {
             player.yellowMessage("Syntax: !timer <playername> <seconds>|remove");
             return;
         }
 
-        MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             if (params[1].equalsIgnoreCase("remove")) {
                 victim.sendPacket(PacketCreator.removeClock());

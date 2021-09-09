@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm1;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.MapleItemInformationProvider;
-import server.life.MapleMonsterInformationProvider;
+import server.ItemInformationProvider;
 import server.life.MonsterDropEntry;
+import server.life.MonsterInformationProvider;
 import tools.Pair;
 
 import java.util.Iterator;
@@ -39,8 +39,8 @@ public class WhatDropsFromCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.dropMessage(5, "Please do @whatdropsfrom <monster name>");
             return;
@@ -48,20 +48,20 @@ public class WhatDropsFromCommand extends Command {
         String monsterName = player.getLastCommandMessage();
         String output = "";
         int limit = 3;
-        Iterator<Pair<Integer, String>> listIterator = MapleMonsterInformationProvider.getMobsIDsFromName(monsterName).iterator();
+        Iterator<Pair<Integer, String>> listIterator = MonsterInformationProvider.getMobsIDsFromName(monsterName).iterator();
         for (int i = 0; i < limit; i++) {
             if(listIterator.hasNext()) {
                 Pair<Integer, String> data = listIterator.next();
                 int mobId = data.getLeft();
                 String mobName = data.getRight();
                 output += mobName + " drops the following items:\r\n\r\n";
-                for (MonsterDropEntry drop : MapleMonsterInformationProvider.getInstance().retrieveDrop(mobId)){
+                for (MonsterDropEntry drop : MonsterInformationProvider.getInstance().retrieveDrop(mobId)){
                     try {
-                        String name = MapleItemInformationProvider.getInstance().getName(drop.itemId);
+                        String name = ItemInformationProvider.getInstance().getName(drop.itemId);
                         if (name == null || name.equals("null") || drop.chance == 0){
                             continue;
                         }
-                        float chance = Math.max(1000000 / drop.chance / (!MapleMonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
+                        float chance = Math.max(1000000 / drop.chance / (!MonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
                         output += "- " + name + " (1/" + (int) chance + ")\r\n";
                     } catch (Exception ex){
                         ex.printStackTrace();

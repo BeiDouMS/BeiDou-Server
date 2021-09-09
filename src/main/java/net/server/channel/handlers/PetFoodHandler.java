@@ -21,14 +21,14 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanManager;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.MaplePet;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.Pet;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -37,8 +37,8 @@ import tools.PacketCreator;
 public final class PetFoodHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
         if (abm.getLastSpam(2) + 500 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
@@ -53,7 +53,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
         }
         int previousFullness = 100;
         byte slot = 0;
-        MaplePet[] pets = chr.getPets();
+        Pet[] pets = chr.getPets();
         for (byte i = 0; i < 3; i++) {
             if (pets[i] != null) {
                 if (pets[i].getFullness() < previousFullness) {
@@ -63,7 +63,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
             }
         }
         
-        MaplePet pet = chr.getPet(slot);
+        Pet pet = chr.getPet(slot);
         if(pet == null) return;
         
         short pos = p.readShort();
@@ -71,7 +71,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                Inventory useInv = chr.getInventory(MapleInventoryType.USE);
+                Inventory useInv = chr.getInventory(InventoryType.USE);
                 useInv.lockInventory();
                 try {
                     Item use = useInv.getItem(pos);
@@ -80,7 +80,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
                     }
 
                     pet.gainClosenessFullness(chr, (pet.getFullness() <= 75) ? 1 : 0, 30, 1);   // 25+ "emptyness" to get +1 closeness
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, pos, (short) 1, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, pos, (short) 1, false);
                 } finally {
                     useInv.unlockInventory();
                 }

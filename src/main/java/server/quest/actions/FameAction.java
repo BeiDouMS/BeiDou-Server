@@ -21,33 +21,33 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class FameAction extends MapleQuestAction {
+public class FameAction extends AbstractQuestAction {
 	int fame;
 	
-	public FameAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.FAME, quest);
+	public FameAction(Quest quest, Data data) {
+		super(QuestActionType.FAME, quest);
 		questID = quest.getId();
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		fame = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		fame = DataTool.getInt(data);
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		chr.gainFame(fame);
 	}
 } 

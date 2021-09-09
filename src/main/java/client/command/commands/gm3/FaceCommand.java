@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleStat;
+import client.Character;
+import client.Client;
+import client.Stat;
 import client.command.Command;
 import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 public class FaceCommand extends Command {
     {
@@ -36,8 +36,8 @@ public class FaceCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !face [<playername>] <faceid>");
             return;
@@ -46,24 +46,24 @@ public class FaceCommand extends Command {
         try {
             if (params.length == 1) {
                 int itemId = Integer.parseInt(params[0]);
-                if (!ItemConstants.isFace(itemId) || MapleItemInformationProvider.getInstance().getName(itemId) == null) {
+                if (!ItemConstants.isFace(itemId) || ItemInformationProvider.getInstance().getName(itemId) == null) {
                     player.yellowMessage("Face id '" + params[0] + "' does not exist.");
                     return;
                 }
 
                 player.setFace(itemId);
-                player.updateSingleStat(MapleStat.FACE, itemId);
+                player.updateSingleStat(Stat.FACE, itemId);
                 player.equipChanged();
             } else {
                 int itemId = Integer.parseInt(params[1]);
-                if (!ItemConstants.isFace(itemId) || MapleItemInformationProvider.getInstance().getName(itemId) == null) {
+                if (!ItemConstants.isFace(itemId) || ItemInformationProvider.getInstance().getName(itemId) == null) {
                     player.yellowMessage("Face id '" + params[1] + "' does not exist.");
                 }
 
-                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
+                Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
                 if (victim == null) {
                     victim.setFace(itemId);
-                    victim.updateSingleStat(MapleStat.FACE, itemId);
+                    victim.updateSingleStat(Stat.FACE, itemId);
                     victim.equipChanged();
                 } else {
                     player.yellowMessage("Player '" + params[0] + "' has not been found on this channel.");

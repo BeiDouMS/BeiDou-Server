@@ -3,7 +3,7 @@ function start(ms) {
         map.resetPQ(1);
         
         if(map.countMonster(9100013) == 0) {
-                map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9100013), new java.awt.Point(82, 200));
+                map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9100013), new java.awt.Point(82, 200));
         }
         
 	return(true);	

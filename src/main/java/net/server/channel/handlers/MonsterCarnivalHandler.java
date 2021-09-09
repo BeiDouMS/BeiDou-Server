@@ -21,17 +21,17 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleDisease;
+import client.Character;
+import client.Client;
+import client.Disease;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.world.MapleParty;
-import net.server.world.MaplePartyCharacter;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
-import server.partyquest.MapleCarnivalFactory;
-import server.partyquest.MapleCarnivalFactory.MCSkill;
+import net.server.world.Party;
+import net.server.world.PartyCharacter;
+import server.life.LifeFactory;
+import server.life.Monster;
+import server.partyquest.CarnivalFactory;
+import server.partyquest.CarnivalFactory.MCSkill;
 import server.partyquest.MonsterCarnival;
 import tools.PacketCreator;
 import tools.Pair;
@@ -47,7 +47,7 @@ import java.util.List;
 public final class MonsterCarnivalHandler extends AbstractPacketHandler {
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
                 try {
@@ -62,7 +62,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             return;
                         }
 
-                        final MapleMonster mob = MapleLifeFactory.getMonster(mobs.get(num).left);
+                        final Monster mob = LifeFactory.getMonster(mobs.get(num).left);
                         MonsterCarnival mcpq = c.getPlayer().getMonsterCarnival();
                         if (mcpq != null) {
                             if (!mcpq.canSummonR() && c.getPlayer().getTeam() == 0 || !mcpq.canSummonB() && c.getPlayer().getTeam() == 1) {
@@ -93,22 +93,22 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
-                        final MCSkill skill = MapleCarnivalFactory.getInstance().getSkill(skillid.get(num)); //ugh wtf
+                        final MCSkill skill = CarnivalFactory.getInstance().getSkill(skillid.get(num)); //ugh wtf
                         if (skill == null || c.getPlayer().getCP() < skill.cpLoss) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
-                        final MapleDisease dis = skill.getDisease();
-                        MapleParty enemies = c.getPlayer().getParty().getEnemy();
+                        final Disease dis = skill.getDisease();
+                        Party enemies = c.getPlayer().getParty().getEnemy();
                         if (skill.targetsAll) {
                             int hitChance = 0;
                             if (dis.getDisease() == 121 || dis.getDisease() == 122 || dis.getDisease() == 125 || dis.getDisease() == 126) {
                                 hitChance = (int) (Math.random() * 100);
                             }
                             if (hitChance <= 80) {
-                                for (MaplePartyCharacter mpc : enemies.getPartyMembers()) {
-                                    MapleCharacter mc = mpc.getPlayer();
+                                for (PartyCharacter mpc : enemies.getPartyMembers()) {
+                                    Character mc = mpc.getPlayer();
                                     if (mc != null) {
                                         if (dis == null) {
                                             mc.dispel();
@@ -121,7 +121,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         } else {
                             int amount = enemies.getMembers().size() - 1;
                             int randd = (int) Math.floor(Math.random() * amount);
-                            MapleCharacter chrApp = c.getPlayer().getMap().getCharacterById(enemies.getMemberByPos(randd).getId());
+                            Character chrApp = c.getPlayer().getMap().getCharacterById(enemies.getMemberByPos(randd).getId());
                             if (chrApp != null && chrApp.getMap().isCPQMap()) {
                                 if (dis == null) {
                                     chrApp.dispel();
@@ -133,7 +133,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         neededCP = skill.cpLoss;
                         c.sendPacket(PacketCreator.enableActions());
                     } else if (tab == 2) { //protectors
-                        final MCSkill skill = MapleCarnivalFactory.getInstance().getGuardian(num);
+                        final MCSkill skill = CarnivalFactory.getInstance().getGuardian(num);
                         if (skill == null || c.getPlayer().getCP() < skill.cpLoss) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());

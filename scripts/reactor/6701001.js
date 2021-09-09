@@ -30,9 +30,9 @@ function act(){
 	var startId = 9400523;
         var mobObj, mapObj = rm.getMap();
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         for(var i = 0; i < 7; i++) {
-                mobObj = MapleLifeFactory.getMonster(startId + Math.floor(Math.random() * 3));
+                mobObj = LifeFactory.getMonster(startId + Math.floor(Math.random() * 3));
                 mapObj.spawnMonsterOnGroundBelow(mobObj, rm.getReactor().getPosition());
         }
 }

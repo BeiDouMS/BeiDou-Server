@@ -40,20 +40,20 @@ public class NoItemNameFetcher {
         UNDEF, ACCESSORY, CAP, CAPE, COAT, FACE, GLOVE, HAIR, LONGCOAT, PANTS, PETEQUIP, RING, SHIELD, SHOES, TAMING, WEAPON
     }
 
-    private static void processStringSubdirectoryData(MapleData subdirData, String subdirPath) {
-        for (MapleData md : subdirData.getChildren()) {
+    private static void processStringSubdirectoryData(Data subdirData, String subdirPath) {
+        for (Data md : subdirData.getChildren()) {
             try {
-                MapleData nameData = md.getChildByPath("name");
-                MapleData descData = md.getChildByPath("desc");
+                Data nameData = md.getChildByPath("name");
+                Data descData = md.getChildByPath("desc");
 
                 int itemId = Integer.parseInt(md.getName());
                 if (nameData != null && descData != null) {
                     itemsWithNoNameProperty.remove(itemId);
                 } else {
                     if (nameData != null) {
-                        nameContentCache.put(itemId, MapleDataTool.getString("name", md));
+                        nameContentCache.put(itemId, DataTool.getString("name", md));
                     } else if (descData != null) {
-                        descContentCache.put(itemId, MapleDataTool.getString("desc", md));
+                        descContentCache.put(itemId, DataTool.getString("desc", md));
                     }
 
                     System.out.println("Found itemid on String.wz with no full property: " + subdirPath + subdirData.getName() + "/" + md.getName());
@@ -64,9 +64,9 @@ public class NoItemNameFetcher {
         }
     }
 
-    private static void readStringSubdirectoryData(MapleData subdirData, int depth, String subdirPath) {
+    private static void readStringSubdirectoryData(Data subdirData, int depth, String subdirPath) {
         if (depth > 0) {
-            for (MapleData mDir : subdirData.getChildren()) {
+            for (Data mDir : subdirData.getChildren()) {
                 readStringSubdirectoryData(mDir, depth - 1, subdirPath + mDir.getName() + "/");
             }
         } else {
@@ -74,30 +74,30 @@ public class NoItemNameFetcher {
         }
     }
 
-    private static void readStringSubdirectoryData(MapleData subdirData, int depth) {
+    private static void readStringSubdirectoryData(Data subdirData, int depth) {
         readStringSubdirectoryData(subdirData, depth, "");
     }
 
     private static void readStringWZData() {
         System.out.println("Parsing String.wz...");
-        MapleDataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
+        DataProvider stringData = DataProviderFactory.getDataProvider(WZFiles.STRING);
 
-        MapleData cashStringData = stringData.getData("Cash.img");
+        Data cashStringData = stringData.getData("Cash.img");
         readStringSubdirectoryData(cashStringData, 0);
 
-        MapleData consumeStringData = stringData.getData("Consume.img");
+        Data consumeStringData = stringData.getData("Consume.img");
         readStringSubdirectoryData(consumeStringData, 0);
 
-        MapleData eqpStringData = stringData.getData("Eqp.img");
+        Data eqpStringData = stringData.getData("Eqp.img");
         readStringSubdirectoryData(eqpStringData, 2);
 
-        MapleData etcStringData = stringData.getData("Etc.img");
+        Data etcStringData = stringData.getData("Etc.img");
         readStringSubdirectoryData(etcStringData, 1);
 
-        MapleData insStringData = stringData.getData("Ins.img");
+        Data insStringData = stringData.getData("Ins.img");
         readStringSubdirectoryData(insStringData, 0);
 
-        MapleData petStringData = stringData.getData("Pet.img");
+        Data petStringData = stringData.getData("Pet.img");
         readStringSubdirectoryData(petStringData, 0);
     }
 
@@ -163,10 +163,10 @@ public class NoItemNameFetcher {
         };
     }
 
-    private static void readEquipNodeData(MapleDataProvider data, MapleDataDirectoryEntry mDir, String wzFileName, String dirName) {
+    private static void readEquipNodeData(DataProvider data, DataDirectoryEntry mDir, String wzFileName, String dirName) {
         EquipType eqType = getEquipTypeFromDirectoryName(dirName);
 
-        for (MapleDataFileEntry mFile : mDir.getFiles()) {
+        for (DataFileEntry mFile : mDir.getFiles()) {
             String fileName = mFile.getName();
 
             try {
@@ -178,8 +178,8 @@ public class NoItemNameFetcher {
 
                 if (!isAccessory(itemId) && !isTamingMob(itemId)) {
                     try {
-                        MapleData fileData = data.getData(dirName + "/" + fileName);
-                        MapleData mdinfo = fileData.getChildByPath("info");
+                        Data fileData = data.getData(dirName + "/" + fileName);
+                        Data mdinfo = fileData.getChildByPath("info");
                         if (mdinfo.getChildByPath("cash") == null) {
                             equipsWithNoCashProperty.add(itemId);
                         }
@@ -195,11 +195,11 @@ public class NoItemNameFetcher {
     private static void readEquipWZData() {
         String wzFileName = "Character.wz";
 
-        MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.CHARACTER);
-        MapleDataDirectoryEntry root = data.getRoot();
+        DataProvider data = DataProviderFactory.getDataProvider(WZFiles.CHARACTER);
+        DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");
-        for (MapleDataDirectoryEntry mDir : root.getSubdirectories()) {
+        for (DataDirectoryEntry mDir : root.getSubdirectories()) {
             String dirName = mDir.getName();
             if (dirName.contentEquals("Dragon")) {
                 continue;
@@ -212,11 +212,11 @@ public class NoItemNameFetcher {
     private static void readItemWZData() {
         String wzFileName = "Item.wz";
 
-        MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
-        MapleDataDirectoryEntry root = data.getRoot();
+        DataProvider data = DataProviderFactory.getDataProvider(WZFiles.ITEM);
+        DataDirectoryEntry root = data.getRoot();
 
         System.out.println("Parsing " + wzFileName + "...");
-        for (MapleDataDirectoryEntry mDir : root.getSubdirectories()) {
+        for (DataDirectoryEntry mDir : root.getSubdirectories()) {
             String dirName = mDir.getName();
             if (dirName.contentEquals("Special")) {
                 continue;
@@ -224,11 +224,11 @@ public class NoItemNameFetcher {
 
             curType = getItemTypeFromDirectoryName(dirName);
             if (!dirName.contentEquals("Pet")) {
-                for (MapleDataFileEntry mFile : mDir.getFiles()) {
+                for (DataFileEntry mFile : mDir.getFiles()) {
                     String fileName = mFile.getName();
 
-                    MapleData fileData = data.getData(dirName + "/" + fileName);
-                    for (MapleData mData : fileData.getChildren()) {
+                    Data fileData = data.getData(dirName + "/" + fileName);
+                    for (Data mData : fileData.getChildren()) {
                         try {
                             int itemId = Integer.parseInt(mData.getName());
                             itemsWithNoNameProperty.put(itemId, curType);

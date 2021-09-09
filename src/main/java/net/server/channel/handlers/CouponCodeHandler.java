@@ -23,15 +23,15 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import server.CashShop;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -51,7 +51,7 @@ import java.util.Map.Entry;
  */
 public final class CouponCodeHandler extends AbstractPacketHandler {
     
-    private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(MapleCharacter chr, Connection con, int codeid) throws SQLException {
+    private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(Character chr, Connection con, int codeid) throws SQLException {
         Map<Integer, Integer> couponItems = new HashMap<>();
         Map<Integer, Integer> couponPoints = new HashMap<>(5);
         
@@ -87,7 +87,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
             for (Entry<Integer, Integer> e : couponItems.entrySet()) {
                 int item = e.getKey(), qty = e.getValue();
                 
-                if (MapleItemInformationProvider.getInstance().getName(item) == null) {
+                if (ItemInformationProvider.getInstance().getName(item) == null) {
                     item = 4000000;
                     qty = 1;
                     
@@ -111,8 +111,8 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
         return ret;
     }
     
-    private static Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> getNXCodeResult(MapleCharacter chr, String code) {
-        MapleClient c = chr.getClient();
+    private static Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> getNXCodeResult(Character chr, String code) {
+        Client c = chr.getClient();
         List<Pair<Integer, Pair<Integer, Integer>>> ret = new LinkedList<>();
         try {
             if (!c.attemptCsCoupon()) {
@@ -179,7 +179,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(2);
         String code = p.readString();
         
@@ -238,13 +238,13 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                                     qty = (short) quantity;
                                 }
                                 
-                                if (MapleItemInformationProvider.getInstance().isCash(item)) {
+                                if (ItemInformationProvider.getInstance().isCash(item)) {
                                     Item it = CashShop.generateCouponItem(item, qty);
 
                                     cs.addToInventory(it);
                                     cashItems.add(it);
                                 } else {
-                                    MapleInventoryManipulator.addById(c, item, qty, "", -1);
+                                    InventoryManipulator.addById(c, item, qty, "", -1);
                                     items.add(new Pair<>((int) qty, item));
                                 }
                                 break;

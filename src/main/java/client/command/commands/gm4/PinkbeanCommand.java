@@ -23,10 +23,10 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 
 public class PinkbeanCommand extends Command {
     {
@@ -34,9 +34,9 @@ public class PinkbeanCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        player.getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8820001), player.getPosition());
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8820001), player.getPosition());
 
     }
 }

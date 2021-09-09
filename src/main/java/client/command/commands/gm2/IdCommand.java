@@ -1,7 +1,7 @@
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import server.ThreadManager;
 import tools.exceptions.IdTypeNotSupportedException;
@@ -30,8 +30,8 @@ public class IdCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient client, final String[] params) {
-        final MapleCharacter player = client.getPlayer();
+    public void execute(Client client, final String[] params) {
+        final Character player = client.getPlayer();
         if (params.length < 2) {
             player.yellowMessage("Syntax: !id <type> <query>");
             return;

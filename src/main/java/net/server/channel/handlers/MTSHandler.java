@@ -21,20 +21,20 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.channel.Channel;
+import server.ItemInformationProvider;
 import server.MTSItemInfo;
-import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
@@ -50,7 +50,7 @@ import java.util.List;
 public final class MTSHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         // TODO add karma-to-untradeable flag on sold items here
         
         if (!c.getPlayer().getCashShop().isOpened()) {
@@ -102,7 +102,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                 if (quantity < 0 || price < 110 || c.getPlayer().getItemQuantity(itemid, false) < quantity) {
                     return;
                 }
-                MapleInventoryType invType = ItemConstants.getInventoryType(itemid);
+                InventoryType invType = ItemConstants.getInventoryType(itemid);
                 Item i = c.getPlayer().getInventory(invType).getItem(slot).copy();
                 if (i != null && c.getPlayer().getMeso() >= 5000) {
                     Connection con = null;
@@ -159,7 +159,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         } else {
                             date += day + "";
                         }
-                        if (!i.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+                        if (!i.getInventoryType().equals(InventoryType.EQUIP)) {
                             Item item = i;
                             ps = con.prepareStatement("INSERT INTO mts_items (tab, type, itemid, quantity, expiration, giftFrom, seller, price, owner, sellername, sell_ends) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                             ps.setInt(1, 1);
@@ -213,7 +213,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         }
                         ps.executeUpdate();
                         ps.close();
-                        MapleInventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
+                        InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
                         
                         con.close();
                     } catch (SQLException e) {
@@ -343,7 +343,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                             pse.setInt(2, c.getPlayer().getId());
                             pse.executeUpdate();
                         }
-                        MapleInventoryManipulator.addFromDrop(c, i, false);
+                        InventoryManipulator.addFromDrop(c, i, false);
                         c.enableCSActions();
                         c.sendPacket(getCart(c.getPlayer().getId()));
                         c.sendPacket(getMTS(c.getPlayer().getCurrentTab(), c.getPlayer().getCurrentType(), c.getPlayer().getCurrentPage()));
@@ -427,7 +427,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         if (c.getPlayer().getCashShop().getCash(4) >= price) { //FIX
                             boolean alwaysnull = true;
                             for (Channel cserv : Server.getInstance().getAllChannels()) {
-                                MapleCharacter victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
+                                Character victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
                                 if (victim != null) {
                                     victim.getCashShop().gainCash(4, rs.getInt("price"));
                                     alwaysnull = false;
@@ -490,7 +490,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         int price = rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1);
                         if (c.getPlayer().getCashShop().getCash(4) >= price) {
                             for (Channel cserv : Server.getInstance().getAllChannels()) {
-                                MapleCharacter victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
+                                Character victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
                                 if (victim != null) {
                                     victim.getCashShop().gainCash(4, rs.getInt("price"));
                                 } else {
@@ -809,7 +809,7 @@ public final class MTSHandler extends AbstractPacketHandler {
 
     public Packet getMTSSearch(int tab, int type, int cOi, String search, int page) {
         List<MTSItemInfo> items = new ArrayList<>();
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         String listaitems = "";
         if (cOi != 0) {
             List<String> retItems = new ArrayList<>();

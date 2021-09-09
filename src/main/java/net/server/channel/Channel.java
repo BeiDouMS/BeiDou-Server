@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.netty.ChannelServer;
@@ -36,16 +36,16 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.ChannelServices;
-import net.server.world.MapleParty;
-import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventScriptManager;
 import server.TimerManager;
-import server.events.gm.MapleEvent;
-import server.expeditions.MapleExpedition;
-import server.expeditions.MapleExpeditionType;
+import server.events.gm.Event;
+import server.expeditions.Expedition;
+import server.expeditions.ExpeditionType;
 import server.maps.*;
 import tools.PacketCreator;
 import tools.Pair;
@@ -67,17 +67,17 @@ public final class Channel {
     private PlayerStorage players = new PlayerStorage();
     private ChannelServer channelServer;
     private String serverMessage;
-    private MapleMapManager mapManager;
+    private MapManager mapManager;
     private EventScriptManager eventSM;
     private ServicesManager services;
-    private Map<Integer, MapleHiredMerchant> hiredMerchants = new HashMap<>();
+    private Map<Integer, HiredMerchant> hiredMerchants = new HashMap<>();
     private final Map<Integer, Integer> storedVars = new HashMap<>();
     private Set<Integer> playersAway = new HashSet<>();
-    private Map<MapleExpeditionType, MapleExpedition> expeditions = new HashMap<>();
-    private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
-    private List<MapleExpeditionType> expedType = new ArrayList<>();
+    private Map<ExpeditionType, Expedition> expeditions = new HashMap<>();
+    private Map<Integer, MiniDungeon> dungeons = new HashMap<>();
+    private List<ExpeditionType> expedType = new ArrayList<>();
     private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
-    private MapleEvent event;
+    private Event event;
     private boolean finishedShutdown = false;
     private Set<Integer> usedMC = new HashSet<>();
     
@@ -113,13 +113,13 @@ public final class Channel {
         this.channel = channel;
         
         this.ongoingStartTime = startTime + 10000;  // rude approach to a world's last channel boot time, placeholder for the 1st wedding reservation ever
-        this.mapManager = new MapleMapManager(null, world, channel);
+        this.mapManager = new MapManager(null, world, channel);
         this.port = BASE_PORT + (this.channel - 1) + (world * 100);
         this.ip = YamlConfig.config.server.HOST + ":" + port;
 
         try {
             this.channelServer = initServer(port, world, channel);
-            expedType.addAll(Arrays.asList(MapleExpeditionType.values()));
+            expedType.addAll(Arrays.asList(ExpeditionType.values()));
             
             if (Server.getInstance().isOnline()) {  // postpone event loading to improve boot time... thanks Riizade, daronhudson for noticing slow startup times
                 eventSM = new EventScriptManager(this, getEvents());
@@ -228,7 +228,7 @@ public final class Channel {
     
     private void closeAllMerchants() {
         try {
-            List<MapleHiredMerchant> merchs;
+            List<HiredMerchant> merchs;
             
             merchWlock.lock();
             try {
@@ -238,7 +238,7 @@ public final class Channel {
                 merchWlock.unlock();
             }
 
-            for (MapleHiredMerchant merch : merchs) {
+            for (HiredMerchant merch : merchs) {
                 merch.forceClose();
             }
         } catch (Exception e) {
@@ -246,7 +246,7 @@ public final class Channel {
         }
     }
     
-    public MapleMapManager getMapFactory() {
+    public MapManager getMapFactory() {
         return mapManager;
     }
     
@@ -262,7 +262,7 @@ public final class Channel {
         return Server.getInstance().getWorld(world);
     }
     
-    public void addPlayer(MapleCharacter chr) {
+    public void addPlayer(Character chr) {
         players.addPlayer(chr);
         chr.sendPacket(PacketCreator.serverMessage(serverMessage));
     }
@@ -275,7 +275,7 @@ public final class Channel {
         return players;
     }
 
-    public boolean removePlayer(MapleCharacter chr) {
+    public boolean removePlayer(Character chr) {
         return players.removePlayer(chr.getId()) != null;
     }
     
@@ -284,7 +284,7 @@ public final class Channel {
     }
 
     public void broadcastPacket(Packet packet) {
-        for (MapleCharacter chr : players.getAllCharacters()) {
+        for (Character chr : players.getAllCharacters()) {
             chr.sendPacket(packet);
         }
     }
@@ -297,11 +297,11 @@ public final class Channel {
         return ip;
     }
 
-    public MapleEvent getEvent() {
+    public Event getEvent() {
         return event;
     }
 
-    public void setEvent(MapleEvent event) {
+    public void setEvent(Event event) {
         this.event = event;
     }
 
@@ -310,18 +310,18 @@ public final class Channel {
     }
 
     public void broadcastGMPacket(Packet packet) {
-        for (MapleCharacter chr : players.getAllCharacters()) {
+        for (Character chr : players.getAllCharacters()) {
             if (chr.isGM()) {
                 chr.sendPacket(packet);
             }
         }
     }
 
-    public List<MapleCharacter> getPartyMembers(MapleParty party) {
-        List<MapleCharacter> partym = new ArrayList<>(8);
-        for (MaplePartyCharacter partychar : party.getMembers()) {
+    public List<Character> getPartyMembers(Party party) {
+        List<Character> partym = new ArrayList<>(8);
+        for (PartyCharacter partychar : party.getMembers()) {
             if (partychar.getChannel() == getId()) {
-                MapleCharacter chr = getPlayerStorage().getCharacterByName(partychar.getName());
+                Character chr = getPlayerStorage().getCharacterByName(partychar.getName());
                 if (chr != null) {
                     partym.add(chr);
                 }
@@ -345,14 +345,14 @@ public final class Channel {
     private void disconnectAwayPlayers() {
         World wserv = getWorldServer();
         for (Integer cid : playersAway) {
-            MapleCharacter chr = wserv.getPlayerStorage().getCharacterById(cid);
+            Character chr = wserv.getPlayerStorage().getCharacterById(cid);
             if (chr != null && chr.isLoggedin()) {
                 chr.getClient().forceDisconnect();
             }
         }
     }
         
-    public Map<Integer, MapleHiredMerchant> getHiredMerchants() {
+    public Map<Integer, HiredMerchant> getHiredMerchants() {
         merchRlock.lock();
         try {
             return Collections.unmodifiableMap(hiredMerchants);
@@ -361,7 +361,7 @@ public final class Channel {
         }
     }
 
-    public void addHiredMerchant(int chrid, MapleHiredMerchant hm) {
+    public void addHiredMerchant(int chrid, HiredMerchant hm) {
         merchWlock.lock();
         try {
             hiredMerchants.put(chrid, hm);
@@ -383,7 +383,7 @@ public final class Channel {
         List<Integer> ret = new ArrayList<>(characterIds.length);
         PlayerStorage playerStorage = getPlayerStorage();
         for (int characterId : characterIds) {
-            MapleCharacter chr = playerStorage.getCharacterById(characterId);
+            Character chr = playerStorage.getCharacterById(characterId);
             if (chr != null) {
                 if (chr.getBuddylist().containsVisible(charIdFrom)) {
                     ret.add(characterId);
@@ -398,7 +398,7 @@ public final class Channel {
         return retArr;
     }
     
-    public boolean addExpedition(MapleExpedition exped) {
+    public boolean addExpedition(Expedition exped) {
         synchronized (expeditions) {
             if (expeditions.containsKey(exped.getType())) {
                 return false;
@@ -410,17 +410,17 @@ public final class Channel {
         }
     }
     
-    public void removeExpedition(MapleExpedition exped) {
+    public void removeExpedition(Expedition exped) {
         synchronized (expeditions) {
             expeditions.remove(exped.getType());
         }
     }
     
-    public MapleExpedition getExpedition(MapleExpeditionType type) {
+    public Expedition getExpedition(ExpeditionType type) {
         return expeditions.get(type);
     }
     
-    public List<MapleExpedition> getExpeditions() {
+    public List<Expedition> getExpeditions() {
         synchronized (expeditions) {
             return new ArrayList<>(expeditions.values());
         }
@@ -465,7 +465,7 @@ public final class Channel {
         this.storedVars.put(key, val);
     }
     
-    public int lookupPartyDojo(MapleParty party) {
+    public int lookupPartyDojo(Party party) {
         if(party == null) return -1;
         
         Integer i = dojoParty.get(party.hashCode());
@@ -476,7 +476,7 @@ public final class Channel {
         return ingressDojo(isPartyDojo, null, fromStage);
     }
     
-    public int ingressDojo(boolean isPartyDojo, MapleParty party, int fromStage) {
+    public int ingressDojo(boolean isPartyDojo, Party party, int fromStage) {
         lock.lock();
         try {
             int dojoList = this.usedDojo;
@@ -516,7 +516,7 @@ public final class Channel {
         }
     }
     
-    private void freeDojoSlot(int slot, MapleParty party) {
+    private void freeDojoSlot(int slot, Party party) {
         int mask = 0b11111111111111111111;
         mask ^= (1 << slot);
         
@@ -594,7 +594,7 @@ public final class Channel {
             this.dojoTask[slot] = TimerManager.getInstance().schedule(() -> {
                 final int delta = (dojoMapId) % 100;
                 final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
-                MapleParty party = null;
+                Party party = null;
 
                 for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
                     if (stage + i > 38) {
@@ -602,7 +602,7 @@ public final class Channel {
                     }
 
                     MapleMap dojoExit = getMapFactory().getMap(925020002);
-                    for(MapleCharacter chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
+                    for(Character chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
                         if(GameConstants.isDojo(chr.getMap().getId())) {
                             chr.changeMap(dojoExit);
                         }
@@ -619,7 +619,7 @@ public final class Channel {
         dojoFinishTime[slot] = Server.getInstance().getCurrentTime() + clockTime;
     }
     
-    public void dismissDojoSchedule(int dojoMapId, MapleParty party) {
+    public void dismissDojoSchedule(int dojoMapId, Party party) {
         int slot = getDojoSlot(dojoMapId);
         int stage = (dojoMapId / 100) % 100;
         if(stage <= dojoStage[slot]) return;
@@ -658,8 +658,8 @@ public final class Channel {
         try {
             if(dungeons.containsKey(dungeonid)) return false;
             
-            MapleMiniDungeonInfo mmdi = MapleMiniDungeonInfo.getDungeon(dungeonid);
-            MapleMiniDungeon mmd = new MapleMiniDungeon(mmdi.getBase(), this.getMapFactory().getMap(mmdi.getDungeonId()).getTimeLimit());   // thanks Conrad for noticing hardcoded time limit for minidungeons
+            MiniDungeonInfo mmdi = MiniDungeonInfo.getDungeon(dungeonid);
+            MiniDungeon mmd = new MiniDungeon(mmdi.getBase(), this.getMapFactory().getMap(mmdi.getDungeonId()).getTimeLimit());   // thanks Conrad for noticing hardcoded time limit for minidungeons
             
             dungeons.put(dungeonid, mmd);
             return true;
@@ -668,7 +668,7 @@ public final class Channel {
         }
     }
     
-    public MapleMiniDungeon getMiniDungeon(int dungeonid) {
+    public MiniDungeon getMiniDungeon(int dungeonid) {
         lock.lock();
         try {
             return dungeons.get(dungeonid);
@@ -705,7 +705,7 @@ public final class Channel {
         Pair<Integer, Integer> coupleId = wserv.getMarriageQueuedCouple(ret);
         Pair<Boolean, Set<Integer>> typeGuests = wserv.removeMarriageQueued(ret);
         
-        Pair<String, String> couple = new Pair<>(MapleCharacter.getNameById(coupleId.getLeft()), MapleCharacter.getNameById(coupleId.getRight()));
+        Pair<String, String> couple = new Pair<>(Character.getNameById(coupleId.getLeft()), Character.getNameById(coupleId.getRight()));
         wserv.dropMessage(6, couple.getLeft() + " and " + couple.getRight() + "'s wedding is going to be started at " + (cathedral ? "Cathedral" : "Chapel") + " on Channel " + channel + ".");
         
         return new Pair<>(typeGuests.getLeft(), new Pair<>(ret, typeGuests.getRight()));
@@ -945,7 +945,7 @@ public final class Channel {
     }
     
     public void dropMessage(int type, String message) {
-        for (MapleCharacter player : getPlayerStorage().getAllCharacters()) {
+        for (Character player : getPlayerStorage().getAllCharacters()) {
             player.dropMessage(type, message);
         }
     }

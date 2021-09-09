@@ -21,11 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.events.gm.MapleSnowball;
+import server.events.gm.Snowball;
 import server.maps.MapleMap;
 
 /**
@@ -34,12 +34,12 @@ import server.maps.MapleMap;
  */
 public final class SnowballHandler extends AbstractPacketHandler {
 
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         //D3 00 02 00 00 A5 01
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMap map = chr.getMap();
-        final MapleSnowball snowball = map.getSnowball(chr.getTeam());
-        final MapleSnowball othersnowball = map.getSnowball(chr.getTeam() == 0 ? (byte) 1 : 0);
+        final Snowball snowball = map.getSnowball(chr.getTeam());
+        final Snowball othersnowball = map.getSnowball(chr.getTeam() == 0 ? (byte) 1 : 0);
         int what = p.readByte();
         //slea.skip(4);
 

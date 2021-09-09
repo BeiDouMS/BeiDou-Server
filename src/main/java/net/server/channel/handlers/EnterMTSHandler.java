@@ -21,8 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.processor.action.BuybackProcessor;
@@ -32,7 +32,7 @@ import net.packet.InPacket;
 import net.server.Server;
 import server.MTSItemInfo;
 import server.maps.FieldLimit;
-import server.maps.MapleMiniDungeonInfo;
+import server.maps.MiniDungeonInfo;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -46,8 +46,8 @@ import java.util.List;
 
 public final class EnterMTSHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         
         if(!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {
             BuybackProcessor.processBuyback(c);
@@ -64,7 +64,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                 return;
             }
             
-            if(MapleMiniDungeonInfo.isDungeonMap(chr.getMapId())) {
+            if(MiniDungeonInfo.isDungeonMap(chr.getMapId())) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;

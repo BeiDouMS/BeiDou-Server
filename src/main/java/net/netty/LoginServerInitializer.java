@@ -1,6 +1,6 @@
 package net.netty;
 
-import client.MapleClient;
+import client.Client;
 import io.netty.channel.socket.SocketChannel;
 import net.PacketProcessor;
 import net.server.coordinator.session.SessionCoordinator;
@@ -18,7 +18,7 @@ public class LoginServerInitializer extends ServerChannelInitializer {
         PacketProcessor packetProcessor = PacketProcessor.getLoginServerProcessor();
         final long clientSessionId = sessionId.getAndIncrement();
         final String remoteAddress = getRemoteAddress(socketChannel);
-        final MapleClient client = MapleClient.createLoginClient(clientSessionId, remoteAddress, packetProcessor, LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
+        final Client client = Client.createLoginClient(clientSessionId, remoteAddress, packetProcessor, LoginServer.WORLD_ID, LoginServer.CHANNEL_ID);
 
         if (!SessionCoordinator.getInstance().canStartLoginSession(client)) {
             socketChannel.close();

@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.opcodes.SendOpcode;
 import net.packet.InPacket;
@@ -29,7 +29,7 @@ import net.packet.OutPacket;
 
 public final class NPCAnimationHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (c.getPlayer().isChangingMaps()) {   // possible cause of error 38 in some map transition scenarios, thanks Arnah
             return;
         }

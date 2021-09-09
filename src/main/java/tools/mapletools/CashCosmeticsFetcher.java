@@ -1,6 +1,6 @@
 package tools.mapletools;
 
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 
 import java.io.BufferedReader;
@@ -85,7 +85,7 @@ public class CashCosmeticsFetcher {
     }
 
     private static void reportCosmeticCouponResults() {
-        final MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        final ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (int itemid = 5150000; itemid <= 5154000; itemid++) {
             String itemName = ii.getName(itemid);
 
@@ -102,7 +102,7 @@ public class CashCosmeticsFetcher {
     }
 
     public static void main(String[] args) {
-        DatabaseConnection.initializeConnectionPool(); // MapleItemInformationProvider loads unrelated stuff from the db
+        DatabaseConnection.initializeConnectionPool(); // ItemInformationProvider loads unrelated stuff from the db
         try {
             loadScripts();
             System.out.println("Loaded scripts");

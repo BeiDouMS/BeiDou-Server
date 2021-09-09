@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
 import net.server.channel.Channel;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -39,17 +39,17 @@ public class ExpedsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         for (Channel ch : Server.getInstance().getChannelsFromWorld(c.getWorld())) {
-            List<MapleExpedition> expeds = ch.getExpeditions();
+            List<Expedition> expeds = ch.getExpeditions();
             if (expeds.isEmpty()) {
                 player.yellowMessage("No Expeditions in Channel " + ch.getId());
                 continue;
             }
             player.yellowMessage("Expeditions in Channel " + ch.getId());
             int id = 0;
-            for (MapleExpedition exped : expeds) {
+            for (Expedition exped : expeds) {
                 id++;
                 player.yellowMessage("> Expedition " + id);
                 player.yellowMessage(">> Type: " + exped.getType().toString());

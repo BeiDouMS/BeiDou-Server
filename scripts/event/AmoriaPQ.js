@@ -107,7 +107,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers && mask == 3)) eligible = [];
         if(onlyMarriedPlayers && hasNotMarried) eligible = [];
-        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
+        return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -148,9 +148,9 @@ function setup(level, lobbyid) {
         
         var mapObj = eim.getInstanceMap(670010700);
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
-        var mobObj = MapleLifeFactory.getMonster(9400536);
+        var mobObj = LifeFactory.getMonster(9400536);
         mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(942, 478));
         
         respawnStages(eim);

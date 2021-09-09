@@ -21,24 +21,24 @@
 */
 package scripting.reactor;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import scripting.AbstractPlayerInteraction;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.TimerManager;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.LifeFactory;
+import server.life.Monster;
 import server.maps.MapMonitor;
 import server.maps.MapleMap;
-import server.maps.MapleReactor;
+import server.maps.Reactor;
 import server.maps.ReactorDropEntry;
-import server.partyquest.MapleCarnivalFactory;
-import server.partyquest.MapleCarnivalFactory.MCSkill;
+import server.partyquest.CarnivalFactory;
+import server.partyquest.CarnivalFactory.MCSkill;
 import tools.PacketCreator;
 
 import javax.script.Invocable;
@@ -53,11 +53,11 @@ import java.util.concurrent.ScheduledFuture;
  * @author Ronan
  */
 public class ReactorActionManager extends AbstractPlayerInteraction {
-    private final MapleReactor reactor;
+    private final Reactor reactor;
     private final Invocable iv;
     private ScheduledFuture<?> sprayTask = null;
 
-    public ReactorActionManager(MapleClient c, MapleReactor reactor, Invocable iv) {
+    public ReactorActionManager(Client c, Reactor reactor, Invocable iv) {
         super(c);
         this.reactor = reactor;
         this.iv = iv;
@@ -71,8 +71,8 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         reactor.getMap().destroyNPC(npcId);
     }
     
-    private static void sortDropEntries(List<ReactorDropEntry> from, List<ReactorDropEntry> item, List<ReactorDropEntry> visibleQuest, List<ReactorDropEntry> otherQuest, MapleCharacter chr) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    private static void sortDropEntries(List<ReactorDropEntry> from, List<ReactorDropEntry> item, List<ReactorDropEntry> visibleQuest, List<ReactorDropEntry> otherQuest, Character chr) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         
         for(ReactorDropEntry mde : from) {
             if(!ii.isQuestItem(mde.itemId)) {
@@ -87,7 +87,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
     
-    private static List<ReactorDropEntry> assembleReactorDropEntries(MapleCharacter chr, List<ReactorDropEntry> items) {
+    private static List<ReactorDropEntry> assembleReactorDropEntries(Character chr, List<ReactorDropEntry> items) {
         final List<ReactorDropEntry> dropEntry = new ArrayList<>();
         final List<ReactorDropEntry> visibleQuestEntry = new ArrayList<>();
         final List<ReactorDropEntry> otherQuestEntry = new ArrayList<>();
@@ -152,7 +152,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
     
     public void dropItems(boolean delayed, int posX, int posY, boolean meso, int mesoChance, final int minMeso, final int maxMeso, int minItems) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if(chr == null) return;
         
         List<ReactorDropEntry> items = assembleReactorDropEntries(chr, generateDropList(getDropChances(), chr.getDropRate(), meso, mesoChance, minItems));
@@ -160,7 +160,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         final Point dropPos = new Point(posX, posY);
         
         if(!delayed) {
-            MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             
             byte p = 1;
             for (ReactorDropEntry d : items) {
@@ -175,7 +175,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 } else {
                     Item drop;
                     
-                    if (ItemConstants.getInventoryType(d.itemId) != MapleInventoryType.EQUIP) {
+                    if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
                         drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
@@ -185,7 +185,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 }
             }
         } else {
-            final MapleReactor r = reactor;
+            final Reactor r = reactor;
             final List<ReactorDropEntry> dropItems = items;
             final int worldMesoRate = c.getWorldServer().getMesoRate();
             
@@ -206,10 +206,10 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 } else {
                     Item drop;
 
-                    if (ItemConstants.getInventoryType(d.itemId) != MapleInventoryType.EQUIP) {
+                    if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
-                        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                        ItemInformationProvider ii = ItemInformationProvider.getInstance();
                         drop = ii.randomizeStats((Equip) ii.getEquipById(d.itemId));
                     }
 
@@ -262,7 +262,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
     public void spawnMonster(int id, int qty, Point pos) {
         for (int i = 0; i < qty; i++) {
-            reactor.getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
+            reactor.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(id), pos);
         }
     }
 
@@ -287,10 +287,10 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
         
         MapleMap map = reactor.getMap();
-        MapleMonster mm = map.getMonsterById(id);
+        Monster mm = map.getMonsterById(id);
         if(mm != null) {
             int damage = (int)Math.ceil(mm.getMaxHp() / hitsToKill);
-            MapleCharacter chr = this.getPlayer();
+            Character chr = this.getPlayer();
             
             if(chr != null) {
                 map.damageMonster(chr, mm, damage);
@@ -299,12 +299,12 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
 
-    public MapleReactor getReactor() {
+    public Reactor getReactor() {
         return reactor;
     }
 
     public void spawnFakeMonster(int id) {
-        reactor.getMap().spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), getPosition());
+        reactor.getMap().spawnFakeMonsterOnGroundBelow(LifeFactory.getMonster(id), getPosition());
     }
 
     /**
@@ -324,9 +324,9 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
     
     public void dispelAllMonsters(int num, int team) { //dispels all mobs, cpq
-        final MCSkill skil = MapleCarnivalFactory.getInstance().getGuardian(num);
+        final MCSkill skil = CarnivalFactory.getInstance().getGuardian(num);
         if (skil != null) {
-            for (MapleMonster mons : getMap().getAllMonsters()) {
+            for (Monster mons : getMap().getAllMonsters()) {
                 if(mons.getTeam() == team) {
                     mons.dispelSkill(skil.getSkill());
                 }

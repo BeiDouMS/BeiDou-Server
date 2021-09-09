@@ -10,8 +10,8 @@ function end(mode, type, selection) {
             qm.sendNext("Take these #bMana Elixir Pills#k as a token of my gratitude.");
         }
 	else if (status == 1) {
-	    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-		if(qm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+	    const InventoryType = Java.type('client.inventory.InventoryType');
+		if(qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
 			qm.gainItem(4000099, -1);
 			qm.gainItem(2000011, 50);
 			qm.gainExp(8000);

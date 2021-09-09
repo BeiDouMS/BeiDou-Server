@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 
 public class KillMapCommand extends Command {
@@ -33,9 +33,9 @@ public class KillMapCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        for (MapleCharacter mch : player.getMap().getCharacters()) {
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        for (Character mch : player.getMap().getCharacters()) {
             mch.updateHp(0);
         }
     }

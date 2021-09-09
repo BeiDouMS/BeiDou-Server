@@ -23,6 +23,7 @@ package net.server.channel.handlers;
 
 import client.*;
 import client.BuddyList.BuddyAddResult;
+import client.Character;
 import client.BuddyList.BuddyOperation;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -51,7 +52,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
         }
     }
 
-    private void nextPendingRequest(MapleClient c) {
+    private void nextPendingRequest(Client c) {
         CharacterNameAndId pendingBuddyRequest = c.getPlayer().getBuddylist().pollPendingRequest();
         if (pendingBuddyRequest != null) {
             c.sendPacket(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), c.getPlayer().getId(), pendingBuddyRequest.getName()));
@@ -76,9 +77,9 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         int mode = p.readByte();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         BuddyList buddylist = player.getBuddylist();
         if (mode == 1) { // add
             String addName = p.readString();
@@ -96,7 +97,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                     World world = c.getWorldServer();
                     CharacterIdNameBuddyCapacity charWithId;
                     int channel;
-                    MapleCharacter otherChar = c.getChannelServer().getPlayerStorage().getCharacterByName(addName);
+                    Character otherChar = c.getChannelServer().getPlayerStorage().getCharacterByName(addName);
                     if (otherChar != null) {
                         channel = c.getChannel();
                         charWithId = new CharacterIdNameBuddyCapacity(otherChar.getId(), otherChar.getName(), otherChar.getBuddylist().getCapacity());
@@ -170,7 +171,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                 try {
                     int channel = c.getWorldServer().find(otherCid);//worldInterface.find(otherCid);
                     String otherName = null;
-                    MapleCharacter otherChar = c.getChannelServer().getPlayerStorage().getCharacterById(otherCid);
+                    Character otherChar = c.getChannelServer().getPlayerStorage().getCharacterById(otherCid);
                     if (otherChar == null) {
                         try (Connection con = DatabaseConnection.getConnection();
                              PreparedStatement ps = con.prepareStatement("SELECT name FROM characters WHERE id = ?")) {
@@ -201,8 +202,8 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
         }
     }
 
-    private void notifyRemoteChannel(MapleClient c, int remoteChannel, int otherCid, BuddyOperation operation) {
-        MapleCharacter player = c.getPlayer();
+    private void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyOperation operation) {
+        Character player = c.getPlayer();
         if (remoteChannel != -1) {
             c.getWorldServer().buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation);
         }

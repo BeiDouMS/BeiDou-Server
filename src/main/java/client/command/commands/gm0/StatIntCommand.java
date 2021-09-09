@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import config.YamlConfig;
 
@@ -34,8 +34,8 @@ public class StatIntCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         int remainingAp = player.getRemainingAp();
 
         int amount;

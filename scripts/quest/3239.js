@@ -17,8 +17,8 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (qm.haveItem(4031092, 10)) {
-                const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-                if (qm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+                const InventoryType = Java.type('client.inventory.InventoryType');
+                if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
                     qm.sendOk("Well done! You brought back all the #t4031092# that were missing. Here, take this scroll as a token of my gratitude...");
                 } else {
                     qm.sendOk("Free a space on your USE inventory before receiving your prize.");

@@ -19,7 +19,7 @@
 */
 package client.newyear;
 
-import client.MapleCharacter;
+import client.Character;
 import net.server.Server;
 import server.TimerManager;
 import tools.DatabaseConnection;
@@ -199,7 +199,7 @@ public class NewYearCardRecord {
         return null;
     }
     
-    public static void loadPlayerNewYearCards(MapleCharacter chr) {
+    public static void loadPlayerNewYearCards(Character chr) {
         try (Connection con = DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM newyear WHERE senderid = ? OR receiverid = ?")) {
                 ps.setInt(1, chr.getId());
@@ -218,7 +218,7 @@ public class NewYearCardRecord {
         }
     }
     
-    public static void printNewYearRecords(MapleCharacter chr) {
+    public static void printNewYearRecords(Character chr) {
         chr.dropMessage(5, "New Years: " + chr.getNewYearRecords().size());
         
         for(NewYearCardRecord nyc : chr.getNewYearRecords()) {
@@ -255,7 +255,7 @@ public class NewYearCardRecord {
                 return;
             }
 
-            MapleCharacter target = server.getWorld(world).getPlayerStorage().getCharacterById(receiverId);
+            Character target = server.getWorld(world).getPlayerStorage().getCharacterById(receiverId);
             if(target != null && target.isLoggedinWorld()) {
                 target.sendPacket(PacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
             }
@@ -282,7 +282,7 @@ public class NewYearCardRecord {
         }
     }
     
-    public static void removeAllNewYearCard(boolean send, MapleCharacter chr) {
+    public static void removeAllNewYearCard(boolean send, Character chr) {
         int cid = chr.getId();
         
         /* not truly needed since it's going to be hard removed from the DB
@@ -310,7 +310,7 @@ public class NewYearCardRecord {
                     
                     chr.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(chr, nyc, 0xE, 0));
 
-                    MapleCharacter other = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(nyc.getReceiverId());
+                    Character other = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(nyc.getReceiverId());
                     if(other != null && other.isLoggedinWorld()) {
                         other.removeNewYearRecord(nyc);
                         other.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(other, nyc, 0xE, 0));
@@ -328,7 +328,7 @@ public class NewYearCardRecord {
                     
                     chr.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(chr, nyc, 0xE, 0));
 
-                    MapleCharacter other = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(nyc.getSenderId());
+                    Character other = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(nyc.getSenderId());
                     if(other != null && other.isLoggedinWorld()) {
                         other.removeNewYearRecord(nyc);
                         other.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(other, nyc, 0xE, 0));

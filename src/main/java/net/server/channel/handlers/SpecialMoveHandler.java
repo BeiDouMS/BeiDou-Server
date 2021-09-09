@@ -21,8 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import config.YamlConfig;
@@ -30,8 +30,8 @@ import constants.skills.*;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleStatEffect;
-import server.life.MapleMonster;
+import server.StatEffect;
+import server.life.Monster;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -39,8 +39,8 @@ import java.awt.*;
 public final class SpecialMoveHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-    	MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+    	Character chr = c.getPlayer();
         p.readInt();
         chr.getAutobanManager().setTimestamp(4, Server.getInstance().getCurrentTimestamp(), 28);
         int skillid = p.readInt();
@@ -69,13 +69,13 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         }
         if (skillLevel == 0 || skillLevel != __skillLevel) return;
         
-        MapleStatEffect effect = skill.getEffect(skillLevel);
+        StatEffect effect = skill.getEffect(skillLevel);
         if (effect.getCooldown() > 0) {
             if (chr.skillIsCooling(skillid)) {
                 return;
             } else if (skillid != Corsair.BATTLE_SHIP) {
                 int cooldownTime = effect.getCooldown();
-                if(MapleStatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
+                if(StatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
                     cooldownTime /= 60;
                 }
                 
@@ -89,7 +89,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                 int mobOid = p.readInt();
                 byte success = p.readByte();
                 chr.getMap().broadcastMessage(chr, PacketCreator.catchMonster(mobOid, success), false);
-                MapleMonster monster = chr.getMap().getMonsterByOid(mobOid);
+                Monster monster = chr.getMap().getMonsterByOid(mobOid);
                 if (monster != null) {
                     if (!monster.isBoss()) {
                         monster.aggroClearDamages();
@@ -107,7 +107,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             return;
         } else if (skillid == Brawler.MP_RECOVERY) {// MP Recovery
             Skill s = SkillFactory.getSkill(skillid);
-            MapleStatEffect ef = s.getEffect(chr.getSkillLevel(s));
+            StatEffect ef = s.getEffect(chr.getSkillLevel(s));
             
             int lose = chr.safeAddHP(-1 * (chr.getCurrentMaxHp() / ef.getX()));
             int gain = -lose * (ef.getY() / 100);

@@ -29,8 +29,8 @@ var expedition;
 var expedMembers;
 var player;
 var em;
-const MapleExpeditionType = Java.type('server.expeditions.MapleExpeditionType');
-const exped = MapleExpeditionType.HORNTAIL;
+const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
+const exped = ExpeditionType.HORNTAIL;
 var expedName = "Horntail";
 var expedBoss = "mighty Horntail";
 

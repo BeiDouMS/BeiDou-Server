@@ -21,40 +21,41 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import client.inventory.MaplePet;
+import client.Character;
+import client.inventory.Pet;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
+
 import java.util.ArrayList;
 import java.util.List;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class PetRequirement extends MapleQuestRequirement {
+public class PetRequirement extends AbstractQuestRequirement {
 	List<Integer> petIDs = new ArrayList<>();
 	
 	
-	public PetRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.PET);
+	public PetRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.PET);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for(MapleData petData : data.getChildren()) {
-			petIDs.add(MapleDataTool.getInt(petData.getChildByPath("id")));
+	public void processData(Data data) {
+		for(Data petData : data.getChildren()) {
+			petIDs.add(DataTool.getInt(petData.getChildByPath("id")));
 		}
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
-		for(MaplePet pet : chr.getPets()) {
+	public boolean check(Character chr, Integer npcid) {
+		for(Pet pet : chr.getPets()) {
                         if(pet == null) continue;   // thanks Arufonsu for showing a NPE occurring here
                         
 			if(petIDs.contains(pet.getItemId()))

@@ -19,32 +19,32 @@
 */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Ronan
  */
-public class BuffRequirement extends MapleQuestRequirement {
+public class BuffRequirement extends AbstractQuestRequirement {
         private int buffId = 1;
         
-	public BuffRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.BUFF);
+	public BuffRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.BUFF);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
                 // item buffs are negative
-		buffId = -1 * Integer.parseInt(MapleDataTool.getString(data));
+		buffId = -1 * Integer.parseInt(DataTool.getString(data));
 	}
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
                 return chr.hasBuffFromSourceid(buffId);
 	}
 }

@@ -23,10 +23,10 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.life.MaplePlayerNPC;
+import server.life.PlayerNPC;
 
 public class SpawnAllPNpcsCommand extends Command {
     {
@@ -34,8 +34,8 @@ public class SpawnAllPNpcsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        MaplePlayerNPC.multicastSpawnPlayerNPC(player.getMapId(), player.getWorld());
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        PlayerNPC.multicastSpawnPlayerNPC(player.getMapId(), player.getWorld());
     }
 }

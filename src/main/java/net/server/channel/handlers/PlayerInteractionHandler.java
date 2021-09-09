@@ -21,23 +21,23 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.InventoryManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleTrade;
+import server.ItemInformationProvider;
+import server.Trade;
 import server.maps.*;
-import server.maps.MapleMiniGame.MiniGameType;
+import server.maps.MiniGame.MiniGameType;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -109,7 +109,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         }
     }
 
-    private static int establishMiniroomStatus(MapleCharacter chr, boolean isMinigame) {
+    private static int establishMiniroomStatus(Character chr, boolean isMinigame) {
         if (isMinigame && FieldLimit.CANNOTMINIGAME.check(chr.getMap().getFieldLimit())) {
             return 11;
         }
@@ -126,7 +126,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (!c.tryacquireClient()) {    // thanks GabrielSin for pointing dupes within player interactions
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -134,7 +134,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         
         try {
             byte mode = p.readByte();
-            final MapleCharacter chr = c.getPlayer();
+            final Character chr = c.getPlayer();
             
             if (mode == Action.CREATE.getCode()) {
                 if(!chr.isAlive()) {    // thanks GabrielSin for pointing this
@@ -144,7 +144,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                 byte createType = p.readByte();
                 if (createType == 3) {  // trade
-                    MapleTrade.startTrade(chr);
+                    Trade.startTrade(chr);
                 } else if (createType == 1) { // omok mini game
                     int status = establishMiniroomStatus(chr, true);
                     if (status > 0) {
@@ -172,7 +172,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleMiniGame game = new MapleMiniGame(chr, desc, pw);
+                    MiniGame game = new MiniGame(chr, desc, pw);
                     chr.setMiniGame(game);
                     game.setPieceType(type);
                     game.setGameType(MiniGameType.OMOK);
@@ -206,7 +206,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleMiniGame game = new MapleMiniGame(chr, desc, pw);
+                    MiniGame game = new MiniGame(chr, desc, pw);
                     game.setPieceType(type);
                     if (type == 0) {
                         game.setMatchesToWin(6);
@@ -239,20 +239,20 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     String desc = p.readString();
                     p.skip(3);
                     int itemId = p.readInt();
-                    if (chr.getInventory(MapleInventoryType.CASH).countById(itemId) < 1) {
+                    if (chr.getInventory(InventoryType.CASH).countById(itemId) < 1) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(6));
                         return;
                     }
 
                     if (ItemConstants.isPlayerShop(itemId)) {
-                        MaplePlayerShop shop = new MaplePlayerShop(chr, desc, itemId);
+                        PlayerShop shop = new PlayerShop(chr, desc, itemId);
                         chr.setPlayerShop(shop);
                         chr.getMap().addMapObject(shop);
                         shop.sendShop(c);
                         c.getWorldServer().registerPlayerShop(shop);
                         //c.sendPacket(PacketCreator.getPlayerShopRemoveVisitor(1));
                     } else if (ItemConstants.isHiredMerchant(itemId)) {
-                        MapleHiredMerchant merchant = new MapleHiredMerchant(chr, desc, itemId);
+                        HiredMerchant merchant = new HiredMerchant(chr, desc, itemId);
                         chr.setHiredMerchant(merchant);
                         c.getWorldServer().registerHiredMerchant(merchant);
                         chr.getClient().getChannelServer().addHiredMerchant(chr.getId(), merchant);
@@ -261,18 +261,18 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
             } else if (mode == Action.INVITE.getCode()) {
                 int otherCid = p.readInt();
-                MapleCharacter other = chr.getMap().getCharacterById(otherCid);
+                Character other = chr.getMap().getCharacterById(otherCid);
                 if (other == null || chr.getId() == other.getId()) {
                     return;
                 }
                 
-                MapleTrade.inviteTrade(chr, other);
+                Trade.inviteTrade(chr, other);
             } else if (mode == Action.DECLINE.getCode()) {
-                MapleTrade.declineTrade(chr);
+                Trade.declineTrade(chr);
             } else if (mode == Action.VISIT.getCode()) {
                 if (chr.getTrade() != null && chr.getTrade().getPartner() != null) {
                     if (!chr.getTrade().isFullTrade() && !chr.getTrade().getPartner().isFullTrade()) {
-                        MapleTrade.visitTrade(chr, chr.getTrade().getPartner().getChr());
+                        Trade.visitTrade(chr, chr.getTrade().getPartner().getChr());
                     } else {
                         chr.sendPacket(PacketCreator.getMiniRoomError(2));
                         return;
@@ -281,15 +281,15 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     if (isTradeOpen(chr)) return;
 
                     int oid = p.readInt();
-                    MapleMapObject ob = chr.getMap().getMapObject(oid);
-                    if (ob instanceof MaplePlayerShop) {
-                        MaplePlayerShop shop = (MaplePlayerShop) ob;
+                    MapObject ob = chr.getMap().getMapObject(oid);
+                    if (ob instanceof PlayerShop) {
+                        PlayerShop shop = (PlayerShop) ob;
                         shop.visitShop(chr);
-                    } else if (ob instanceof MapleMiniGame) {
+                    } else if (ob instanceof MiniGame) {
                         p.skip(1);
                         String pw = p.available() > 1 ? p.readString() : "";
 
-                        MapleMiniGame game = (MapleMiniGame) ob;
+                        MiniGame game = (MiniGame) ob;
                         if(game.checkPassword(pw)) {
                             if (game.hasFreeSlot() && !game.isVisitor(chr)) {
                                 game.addVisitor(chr);
@@ -308,22 +308,22 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         } else {
                             chr.sendPacket(PacketCreator.getMiniRoomError(22));
                         }
-                    } else if (ob instanceof MapleHiredMerchant && chr.getHiredMerchant() == null) {
-                        MapleHiredMerchant merchant = (MapleHiredMerchant) ob;
+                    } else if (ob instanceof HiredMerchant && chr.getHiredMerchant() == null) {
+                        HiredMerchant merchant = (HiredMerchant) ob;
                         merchant.visitShop(chr);
                     }
                 }
             } else if (mode == Action.CHAT.getCode()) { // chat lol
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (chr.getTrade() != null) {
                     chr.getTrade().chat(p.readString());
                 } else if (chr.getPlayerShop() != null) { //mini game
-                    MaplePlayerShop shop = chr.getPlayerShop();
+                    PlayerShop shop = chr.getPlayerShop();
                     if (shop != null) {
                         shop.chat(c, p.readString());
                     }
                 } else if (chr.getMiniGame() != null) {
-                    MapleMiniGame game = chr.getMiniGame();
+                    MiniGame game = chr.getMiniGame();
                     if (game != null) {
                         game.chat(c, p.readString());
                     }
@@ -332,7 +332,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
             } else if (mode == Action.EXIT.getCode()) {
                 if (chr.getTrade() != null) {
-                    MapleTrade.cancelTrade(chr, MapleTrade.TradeResult.PARTNER_CANCEL);
+                    Trade.cancelTrade(chr, Trade.TradeResult.PARTNER_CANCEL);
                 } else {
                     chr.closePlayerShop();
                     chr.closeMiniGame(false);
@@ -358,12 +358,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                MaplePlayerShop shop = chr.getPlayerShop();
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                PlayerShop shop = chr.getPlayerShop();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
                     if(YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
                         try {
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, shop.getItemId(), 1, true, false);
+                            InventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
                         } catch(RuntimeException re) {} // fella does not have a player shop permit...
                     }
 
@@ -377,13 +377,13 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().broadcastMessage(PacketCreator.spawnHiredMerchantBox(merchant));
                 }
             } else if (mode == Action.READY.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 game.broadcast(PacketCreator.getMiniGameReady(game));
             } else if (mode == Action.UN_READY.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 game.broadcast(PacketCreator.getMiniGameUnReady(game));
             } else if (mode == Action.START.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (game.getGameType().equals(MiniGameType.OMOK)) {
                     game.minigameMatchStarted();
                     game.broadcast(PacketCreator.getMiniGameStart(game, game.getLoser()));
@@ -395,7 +395,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().broadcastMessage(PacketCreator.addMatchCardBox(game.getOwner(), 2, 1));
                 }
             } else if (mode == Action.GIVE_UP.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (game.getGameType().equals(MiniGameType.OMOK)) {
                     if (game.isOwner(chr)) {
                         game.minigameMatchVisitorWins(true);
@@ -410,7 +410,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.REQUEST_TIE.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (!game.isTieDenied(chr)) {
                     if (game.isOwner(chr)) {
                         game.broadcastToVisitor(PacketCreator.getMiniGameRequestTie(game));
@@ -419,7 +419,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.ANSWER_TIE.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (p.readByte() != 0) {
                     game.minigameMatchDraw();
                 } else {
@@ -432,7 +432,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.SKIP.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (game.isOwner(chr)) {
                     game.broadcast(PacketCreator.getMiniGameSkipOwner(game));
                 } else {
@@ -446,7 +446,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.SELECT_CARD.getCode()) {
                 int turn = p.readByte(); // 1st turn = 1; 2nd turn = 0
                 int slot = p.readByte(); // slot
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 int firstslot = game.getFirstSlot();
                 if (turn == 1) {
                     game.setFirstSlot(slot);
@@ -471,8 +471,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.SET_MESO.getCode()) {
                 chr.getTrade().setMeso(p.readInt());
             } else if (mode == Action.SET_ITEMS.getCode()) {
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-                MapleInventoryType ivType = MapleInventoryType.getByType(p.readByte());
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
+                InventoryType ivType = InventoryType.getByType(p.readByte());
                 short pos = p.readShort();
                 Item item = chr.getInventory(ivType).getItem(pos);
                 short quantity = p.readShort();
@@ -507,11 +507,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                MapleTrade trade = chr.getTrade();
+                Trade trade = chr.getTrade();
                 if (trade != null) {
                     if ((quantity <= item.getQuantity() && quantity >= 0) || ItemConstants.isRechargeable(item.getItemId())) {
                         if (ii.isDropRestricted(item.getItemId())) { // ensure that undroppable items do not make it to the trade window
-                            if (!MapleKarmaManipulator.hasKarmaFlag(item)) {
+                            if (!KarmaManipulator.hasKarmaFlag(item)) {
                                 c.sendPacket(PacketCreator.serverNotice(1, "That item is untradeable."));
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
@@ -537,7 +537,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                             tradeItem.setPosition(targetSlot);
                             
                             if (trade.addItem(tradeItem)) {
-                                MapleInventoryManipulator.removeFromSlot(c, ivType, item.getPosition(), quantity, true);
+                                InventoryManipulator.removeFromSlot(c, ivType, item.getPosition(), quantity, true);
                                 
                                 trade.getChr().sendPacket(PacketCreator.getTradeItemAdd((byte) 0, tradeItem));
                                 if (trade.getPartner() != null) {
@@ -552,11 +552,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.CONFIRM.getCode()) {
-                MapleTrade.completeTrade(chr);
+                Trade.completeTrade(chr);
             } else if (mode == Action.ADD_ITEM.getCode() || mode == Action.PUT_ITEM.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleInventoryType ivType = MapleInventoryType.getByType(p.readByte());
+                InventoryType ivType = InventoryType.getByType(p.readByte());
                 short slot = p.readShort();
                 short bundles = p.readShort();
                 Item ivItem = chr.getInventory(ivType).getItem(slot);
@@ -565,7 +565,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.serverNotice(1, "Could not perform shop operation with that item."));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
-                } else if (MapleItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
+                } else if (ItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
                     if (ItemConstants.isPet(ivItem.getItemId())) {
                         c.sendPacket(PacketCreator.serverNotice(1, "Pets are not allowed to be sold on the Player Store."));
                     } else {
@@ -599,9 +599,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     sellItem.setQuantity(perBundle);
                 }
 
-                MaplePlayerShopItem shopItem = new MaplePlayerShopItem(sellItem, bundles, price);
-                MaplePlayerShop shop = chr.getPlayerShop();
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                PlayerShopItem shopItem = new PlayerShopItem(sellItem, bundles, price);
+                PlayerShop shop = chr.getPlayerShop();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
                     if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't sell it anymore."));
@@ -609,14 +609,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                     
                     if (ItemConstants.isRechargeable(ivItem.getItemId())) {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
                     } else {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
                     }
                     
                     c.sendPacket(PacketCreator.getPlayerShopItemUpdate(shop));
                 } else if (merchant != null && merchant.isOwner(chr)) {
-                    if (ivType.equals(MapleInventoryType.CASH) && merchant.isPublished()) {
+                    if (ivType.equals(InventoryType.CASH) && merchant.isPublished()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "Cash items are only allowed to be sold when first opening the store."));
                         return;
                     }
@@ -627,9 +627,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                     
                     if (ItemConstants.isRechargeable(ivItem.getItemId())) {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
                     } else {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
                     }
                     
                     c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));
@@ -649,7 +649,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.REMOVE_ITEM.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 if (shop != null && shop.isOwner(chr)) {
                     if (shop.isOpen()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't take it with the store open."));
@@ -667,12 +667,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     shop.takeItemBack(slot, chr);
                 }
             } else if (mode == Action.MERCHANT_MESO.getCode()) {
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null) return;
 
                 merchant.withdrawMesos(chr);
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null || !merchant.isOwner(chr)) return;
 
                 merchant.withdrawMesos(chr);
@@ -695,8 +695,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.disconnect(true, false);
                     return;
                 }
-                MaplePlayerShop shop = chr.getPlayerShop();
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                PlayerShop shop = chr.getPlayerShop();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isVisitor(chr)) {
                     if (shop.buy(c, itemid, quantity)) {
                         shop.broadcast(PacketCreator.getPlayerShopItemUpdate(shop));
@@ -708,7 +708,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.TAKE_ITEM_BACK.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null && merchant.isOwner(chr)) {
                     if (merchant.isOpen()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't take it with the store open."));
@@ -728,14 +728,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.CLOSE_MERCHANT.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null) {
                     merchant.closeOwnerMerchant(chr);
                 }
             } else if (mode == Action.MAINTENANCE_OFF.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if(merchant != null) {
                     if (merchant.isOwner(chr)) {
                         if (merchant.getItems().isEmpty()) {
@@ -753,14 +753,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.BAN_PLAYER.getCode()) {
                 p.skip(1);
 
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 if (shop != null && shop.isOwner(chr)) {
                     shop.banPlayer(p.readString());
                 }
             } else if (mode == Action.EXPEL.getCode()) {
-                MapleMiniGame miniGame = chr.getMiniGame();
+                MiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null && miniGame.isOwner(chr)) {
-                    MapleCharacter visitor = miniGame.getVisitor();
+                    Character visitor = miniGame.getVisitor();
 
                     if(visitor != null) {
                         visitor.closeMiniGame(false);
@@ -768,12 +768,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.EXIT_AFTER_GAME.getCode()) {
-                MapleMiniGame miniGame = chr.getMiniGame();
+                MiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null) {
                     miniGame.setQuitAfterGame(chr, true);
                 }
             } else if (mode == Action.CANCEL_EXIT_AFTER_GAME.getCode()) {
-                MapleMiniGame miniGame = chr.getMiniGame();
+                MiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null) {
                     miniGame.setQuitAfterGame(chr, false);
                 }
@@ -783,7 +783,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         }
     }
     
-    private static boolean isTradeOpen(MapleCharacter chr) {
+    private static boolean isTradeOpen(Character chr) {
         if (chr.getTrade() != null) {   // thanks to Rien dev team
             //Apparently there is a dupe exploit that causes racing conditions when saving/retrieving from the db with stuff like trade open.
             chr.sendPacket(PacketCreator.enableActions());
@@ -793,16 +793,16 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         return false;
     }
     
-    private static boolean canPlaceStore(MapleCharacter chr) {
+    private static boolean canPlaceStore(Character chr) {
         try {
-            for (MapleMapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
-                if (mmo instanceof MapleCharacter) {
-                    MapleCharacter mc = (MapleCharacter) mmo;
+            for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
+                if (mmo instanceof Character) {
+                    Character mc = (Character) mmo;
                     if (mc.getId() == chr.getId()) {
                         continue;
                     }
 
-                    MaplePlayerShop shop = mc.getPlayerShop();
+                    PlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(13));
                         return false;
@@ -814,7 +814,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             }
 
             Point cpos = chr.getPosition();
-            MaplePortal portal = chr.getMap().findClosestTeleportPortal(cpos);
+            Portal portal = chr.getMap().findClosestTeleportPortal(cpos);
             if (portal != null && portal.getPosition().distance(cpos) < 120.0) {
                 chr.sendPacket(PacketCreator.getMiniRoomError(10));
                 return false;

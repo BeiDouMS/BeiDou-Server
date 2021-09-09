@@ -19,7 +19,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 
 /**
@@ -32,7 +32,7 @@ public class GachaListCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         c.getAbstractPlayerInteraction().openNpc(10000, "gachaponInfo");
     }
 }

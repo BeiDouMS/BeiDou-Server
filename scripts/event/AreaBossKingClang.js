@@ -49,8 +49,8 @@ function start() {
 		return;
 	}
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var kingClang = MapleLifeFactory.getMonster(5220001);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var kingClang = LifeFactory.getMonster(5220001);
     var posX;
     var posY = 140;
     posX =  Math.floor((Math.random() * 2400) - 1600);

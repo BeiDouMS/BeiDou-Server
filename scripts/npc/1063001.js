@@ -34,8 +34,8 @@ function start() {
         
         cm.gainItem(4031026,20);
     } else {
-        const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-        if(cm.getPlayer().getInventory(MapleInventoryType.ETC).getNumFreeSlot() < 1) {
+        const InventoryType = Java.type('client.inventory.InventoryType');
+        if(cm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
             cm.sendNext("Check for a available slot on your ETC inventory.");
             cm.dispose();
             return;

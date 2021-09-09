@@ -21,12 +21,12 @@
 */
 package net;
 
-import client.MapleClient;
+import client.Client;
 import net.server.Server;
 
 public abstract class AbstractPacketHandler implements PacketHandler {
     @Override
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return c.isLoggedIn();
     }
     

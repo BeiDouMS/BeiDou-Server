@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting.reactor;
 
-import client.MapleClient;
+import client.Client;
 import scripting.AbstractScriptManager;
-import server.maps.MapleReactor;
+import server.maps.Reactor;
 import server.maps.ReactorDropEntry;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
@@ -51,7 +51,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
         return instance;
     }
     
-    public void onHit(MapleClient c, MapleReactor reactor) {
+    public void onHit(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
             if (iv == null) {
@@ -66,7 +66,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void act(MapleClient c, MapleReactor reactor) {
+    public void act(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
             if (iv == null) {
@@ -104,15 +104,15 @@ public class ReactorScriptManager extends AbstractScriptManager {
         drops.clear();
     }
 
-    public void touch(MapleClient c, MapleReactor reactor) {
+    public void touch(Client c, Reactor reactor) {
         touching(c, reactor, true);
     }
 
-    public void untouch(MapleClient c, MapleReactor reactor) {
+    public void untouch(Client c, Reactor reactor) {
         touching(c, reactor, false);
     }
 
-    private void touching(MapleClient c, MapleReactor reactor, boolean touching) {
+    private void touching(Client c, Reactor reactor, boolean touching) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
             if (iv == null) {
@@ -129,7 +129,7 @@ public class ReactorScriptManager extends AbstractScriptManager {
         }
     }
 
-    private Invocable initializeInvocable(MapleClient c, MapleReactor reactor) {
+    private Invocable initializeInvocable(Client c, Reactor reactor) {
         ScriptEngine engine = getInvocableScriptEngine("reactor/" + reactor.getId() + ".js", c);
         if (engine == null) {
             return null;

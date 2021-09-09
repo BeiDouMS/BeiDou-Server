@@ -23,17 +23,17 @@
 */
 package client.processor.npc;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.server.Server;
 import net.server.world.World;
-import server.MapleItemInformationProvider;
-import server.maps.MapleHiredMerchant;
+import server.ItemInformationProvider;
+import server.maps.HiredMerchant;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -52,10 +52,10 @@ public class FredrickProcessor {
     
     private static int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
     
-    private static byte canRetrieveFromFredrick(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items) {
+    private static byte canRetrieveFromFredrick(Character chr, List<Pair<Item, InventoryType>> items) {
         if (!Inventory.checkSpotsAndOwnership(chr, items)) {
             List<Integer> itemids = new LinkedList<>();
-            for (Pair<Item, MapleInventoryType> it : items) {
+            for (Pair<Item, InventoryType> it : items) {
                 itemids.add(it.getLeft().getItemId());
             }
             
@@ -132,7 +132,7 @@ public class FredrickProcessor {
     private static void removeFredrickReminders(List<Pair<Integer, Integer>> expiredCids) {
         List<String> expiredCnames = new LinkedList<>();
         for (Pair<Integer, Integer> id : expiredCids) {
-            String name = MapleCharacter.getNameById(id.getLeft());
+            String name = Character.getNameById(id.getLeft());
             if (name != null) {
                 expiredCnames.add(name);
             }
@@ -209,7 +209,7 @@ public class FredrickProcessor {
 
                         World wserv = Server.getInstance().getWorld(cid.getRight());
                         if (wserv != null) {
-                            MapleCharacter chr = wserv.getPlayerStorage().getCharacterById(cid.getLeft());
+                            Character chr = wserv.getPlayerStorage().getCharacterById(cid.getLeft());
                             if (chr != null) {
                                 chr.setMerchantMeso(0);
                             }
@@ -239,7 +239,7 @@ public class FredrickProcessor {
                         ps.addBatch();
 
                         String msg = fredrickReminderMessage(cid.getRight() - 1);
-                        MapleCharacter.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
+                        Character.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
                     }
 
                     ps.executeBatch();
@@ -264,12 +264,12 @@ public class FredrickProcessor {
         }
     }
     
-    public static void fredrickRetrieveItems(MapleClient c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
+    public static void fredrickRetrieveItems(Client c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
 
-                List<Pair<Item, MapleInventoryType>> items;
+                List<Pair<Item, InventoryType>> items;
                 try {
                     items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
                     
@@ -282,15 +282,15 @@ public class FredrickProcessor {
                     chr.withdrawMerchantMesos();
                     
                     if (deleteFredrickItems(chr.getId())) {
-                        MapleHiredMerchant merchant = chr.getHiredMerchant();
+                        HiredMerchant merchant = chr.getHiredMerchant();
 
                         if(merchant != null)
                             merchant.clearItems();
 
-                        for (Pair<Item, MapleInventoryType> it : items) {
+                        for (Pair<Item, InventoryType> it : items) {
                             Item item = it.getLeft();
-                            MapleInventoryManipulator.addFromDrop(chr.getClient(), item, false);
-                            String itemName = MapleItemInformationProvider.getInstance().getName(item.getItemId());
+                            InventoryManipulator.addFromDrop(chr.getClient(), item, false);
+                            String itemName = ItemInformationProvider.getInstance().getName(item.getItemId());
                             FilePrinter.print(FilePrinter.FREDRICK + chr.getName() + ".txt", chr.getName() + " gained " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
                         }
 

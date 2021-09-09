@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import constants.skills.*;
 import net.AbstractPacketHandler;
@@ -32,7 +32,7 @@ import tools.PacketCreator;
 public final class CancelBuffHandler extends AbstractPacketHandler implements PacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int sourceid = p.readInt();
         
         switch (sourceid) {

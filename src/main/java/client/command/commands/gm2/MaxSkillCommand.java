@@ -23,10 +23,11 @@
 */
 package client.command.commands.gm2;
 
+import client.Character;
 import client.*;
 import client.command.Command;
-import provider.MapleData;
-import provider.MapleDataProviderFactory;
+import provider.Data;
+import provider.DataProviderFactory;
 import provider.wz.WZFiles;
 
 public class MaxSkillCommand extends Command {
@@ -35,9 +36,9 @@ public class MaxSkillCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        for (Data skill_ : DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {
                 Skill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));
                 player.changeSkillLevel(skill, (byte) skill.getMaxLevel(), skill.getMaxLevel(), -1);
@@ -47,7 +48,7 @@ public class MaxSkillCommand extends Command {
             } catch (NullPointerException npe) { }
         }
 
-        if (player.getJob().isA(MapleJob.ARAN1) || player.getJob().isA(MapleJob.LEGEND)) {
+        if (player.getJob().isA(Job.ARAN1) || player.getJob().isA(Job.LEGEND)) {
             Skill skill = SkillFactory.getSkill(5001005);
             player.changeSkillLevel(skill, (byte) -1, -1, -1);
         } else {

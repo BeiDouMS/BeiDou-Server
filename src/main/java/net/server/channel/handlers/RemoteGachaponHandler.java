@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -34,7 +34,7 @@ import scripting.npc.NPCScriptManager;
  */
 public final class RemoteGachaponHandler extends AbstractPacketHandler {
         @Override
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
 		int ticket = p.readInt();
 		int gacha = p.readInt();
 		if (ticket != 5451000){

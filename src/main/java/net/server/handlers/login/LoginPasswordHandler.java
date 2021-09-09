@@ -21,8 +21,8 @@
  */
 package net.server.handlers.login;
 
+import client.Client;
 import client.DefaultDates;
-import client.MapleClient;
 import config.YamlConfig;
 import net.PacketHandler;
 import net.packet.InPacket;
@@ -43,7 +43,7 @@ import java.util.Calendar;
 public final class LoginPasswordHandler implements PacketHandler {
 
     @Override
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return !c.isLoggedIn();
     }
 
@@ -54,7 +54,7 @@ public final class LoginPasswordHandler implements PacketHandler {
     }
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         String remoteHost = c.getRemoteAddress();
         if (remoteHost.contentEquals("null")) {
             c.sendPacket(PacketCreator.getLoginFailed(14));          // thanks Alchemist for noting remoteHost could be null
@@ -131,7 +131,7 @@ public final class LoginPasswordHandler implements PacketHandler {
         }
     }
 
-    private static void login(MapleClient c) {
+    private static void login(Client c) {
         c.sendPacket(PacketCreator.getAuthSuccess(c));//why the fk did I do c.getAccountName()?
         Server.getInstance().registerLoginState(c);
     }

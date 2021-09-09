@@ -24,7 +24,7 @@ package client;
 import constants.skills.*;
 import provider.*;
 import provider.wz.WZFiles;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Element;
 
 import java.util.HashMap;
@@ -32,7 +32,7 @@ import java.util.Map;
 
 public class SkillFactory {
     private static volatile Map<Integer, Skill> skills = new HashMap<>();
-    private static final MapleDataProvider datasource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private static final DataProvider datasource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
 
     public static Skill getSkill(int id) {
         return skills.get(id);
@@ -40,12 +40,12 @@ public class SkillFactory {
 
     public static void loadAllSkills() {
         final Map<Integer, Skill> loadedSkills = new HashMap<>();
-        final MapleDataDirectoryEntry root = datasource.getRoot();
-        for (MapleDataFileEntry topDir : root.getFiles()) { // Loop thru jobs
+        final DataDirectoryEntry root = datasource.getRoot();
+        for (DataFileEntry topDir : root.getFiles()) { // Loop thru jobs
             if (topDir.getName().length() <= 8) {
-                for (MapleData data : datasource.getData(topDir.getName())) { // Loop thru each jobs
+                for (Data data : datasource.getData(topDir.getName())) { // Loop thru each jobs
                     if (data.getName().equals("skill")) {
-                        for (MapleData data2 : data) { // Loop thru each jobs
+                        for (Data data2 : data) { // Loop thru each jobs
                             if (data2 != null) {
                                 int skillId = Integer.parseInt(data2.getName());
                                 loadedSkills.put(skillId, loadFromData(skillId, data2));
@@ -59,23 +59,23 @@ public class SkillFactory {
         skills = loadedSkills;
     }
     
-    private static Skill loadFromData(int id, MapleData data) {
+    private static Skill loadFromData(int id, Data data) {
         Skill ret = new Skill(id);
         boolean isBuff = false;
-        int skillType = MapleDataTool.getInt("skillType", data, -1);
-        String elem = MapleDataTool.getString("elemAttr", data, null);
+        int skillType = DataTool.getInt("skillType", data, -1);
+        String elem = DataTool.getString("elemAttr", data, null);
         if (elem != null) {
             ret.setElement(Element.getFromChar(elem.charAt(0)));
         } else {
             ret.setElement(Element.NEUTRAL);
         }
-        MapleData effect = data.getChildByPath("effect");
+        Data effect = data.getChildByPath("effect");
         if (skillType != -1) {
             if (skillType == 2) {
                 isBuff = true;
             }
         } else {
-            MapleData action_ = data.getChildByPath("action");
+            Data action_ = data.getChildByPath("action");
             boolean action = false;
 	    if (action_ == null) {
                 if (data.getChildByPath("prepare/action") != null) {
@@ -92,10 +92,10 @@ public class SkillFactory {
 	    	action = true;
 	    }
 	    ret.setAction(action);
-            MapleData hit = data.getChildByPath("hit");
-            MapleData ball = data.getChildByPath("ball");
+            Data hit = data.getChildByPath("hit");
+            Data ball = data.getChildByPath("ball");
             isBuff = effect != null && hit == null && ball == null;
-            isBuff |= action_ != null && MapleDataTool.getString("0", action_, "").equals("alert2");
+            isBuff |= action_ != null && DataTool.getString("0", action_, "").equals("alert2");
             switch (id) {
                 case Hero.RUSH:
                 case Paladin.RUSH:
@@ -317,20 +317,20 @@ public class SkillFactory {
             }
         }
 
-        for (MapleData level : data.getChildByPath("level")) {
-            ret.addLevelEffect(MapleStatEffect.loadSkillEffectFromData(level, id, isBuff));
+        for (Data level : data.getChildByPath("level")) {
+            ret.addLevelEffect(StatEffect.loadSkillEffectFromData(level, id, isBuff));
         }
         ret.setAnimationTime(0);
         if (effect != null) {
-            for (MapleData effectEntry : effect) {
-                ret.incAnimationTime(MapleDataTool.getIntConvert("delay", effectEntry, 0));
+            for (Data effectEntry : effect) {
+                ret.incAnimationTime(DataTool.getIntConvert("delay", effectEntry, 0));
             }
         }
         return ret;
     }
 
     public static String getSkillName(int skillid) {
-        MapleData data = MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img");
+        Data data = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img");
         StringBuilder skill = new StringBuilder();
         skill.append(skillid);
         if (skill.length() == 4) {
@@ -338,9 +338,9 @@ public class SkillFactory {
             skill.append("000").append(skillid);
         }
         if (data.getChildByPath(skill.toString()) != null) {
-            for (MapleData skilldata : data.getChildByPath(skill.toString()).getChildren()) {
+            for (Data skilldata : data.getChildByPath(skill.toString()).getChildren()) {
                 if (skilldata.getName().equals("name"))
-                    return MapleDataTool.getString(skilldata, null);
+                    return DataTool.getString(skilldata, null);
             }
         }
 

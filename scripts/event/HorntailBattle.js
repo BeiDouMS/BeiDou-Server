@@ -96,15 +96,15 @@ function setup(channel) {
     eim.getInstanceMap(240060100).resetPQ(level);
     eim.getInstanceMap(240060200).resetPQ(level);
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     var map, mob;
     map = eim.getInstanceMap(240060000);
-    mob = MapleLifeFactory.getMonster(8810000);
+    mob = LifeFactory.getMonster(8810000);
     map.spawnMonsterOnGroundBelow(mob, new Point(960, 120));
     
     map = eim.getInstanceMap(240060100);
-    mob = MapleLifeFactory.getMonster(8810001);
+    mob = LifeFactory.getMonster(8810001);
     map.spawnMonsterOnGroundBelow(mob, new Point(-420, 120));
     
     eim.startEventTimer(eventTime * 60000);

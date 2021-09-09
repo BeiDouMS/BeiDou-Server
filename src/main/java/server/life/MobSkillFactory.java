@@ -27,10 +27,10 @@ import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import provider.MapleData;
-import provider.MapleDataProvider;
-import provider.MapleDataProviderFactory;
-import provider.MapleDataTool;
+import provider.Data;
+import provider.DataProvider;
+import provider.DataProviderFactory;
+import provider.DataTool;
 import provider.wz.WZFiles;
 
 import java.awt.*;
@@ -46,8 +46,8 @@ import java.util.Map;
 public class MobSkillFactory {
 
     private static Map<String, MobSkill> mobSkills = new HashMap<>();
-    private final static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
-    private static MapleData skillRoot = dataSource.getData("MobSkill.img");
+    private final static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private static Data skillRoot = dataSource.getData("MobSkill.img");
     private final static MonitoredReentrantReadWriteLock dataLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MOBSKILL_FACTORY);
     private final static MonitoredReadLock rL = MonitoredReadLockFactory.createLock(dataLock);
     private final static MonitoredWriteLock wL = MonitoredWriteLockFactory.createLock(dataLock);
@@ -68,27 +68,27 @@ public class MobSkillFactory {
             MobSkill ret;
             ret = mobSkills.get(key);
             if (ret == null) {
-                MapleData skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
+                Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
                 if (skillData != null) {
-                    int mpCon = MapleDataTool.getInt(skillData.getChildByPath("mpCon"), 0);
+                    int mpCon = DataTool.getInt(skillData.getChildByPath("mpCon"), 0);
                     List<Integer> toSummon = new ArrayList<>();
                     for (int i = 0; i > -1; i++) {
                         if (skillData.getChildByPath(String.valueOf(i)) == null) {
                             break;
                         }
-                        toSummon.add(MapleDataTool.getInt(skillData.getChildByPath(String.valueOf(i)), 0));
+                        toSummon.add(DataTool.getInt(skillData.getChildByPath(String.valueOf(i)), 0));
                     }
-                    int effect = MapleDataTool.getInt("summonEffect", skillData, 0);
-                    int hp = MapleDataTool.getInt("hp", skillData, 100);
-                    int x = MapleDataTool.getInt("x", skillData, 1);
-                    int y = MapleDataTool.getInt("y", skillData, 1);
-                    int count = MapleDataTool.getInt("count", skillData, 1);
-                    long duration = MapleDataTool.getInt("time", skillData, 0) * 1000;
-                    long cooltime = MapleDataTool.getInt("interval", skillData, 0) * 1000;
-                    int iprop = MapleDataTool.getInt("prop", skillData, 100);
+                    int effect = DataTool.getInt("summonEffect", skillData, 0);
+                    int hp = DataTool.getInt("hp", skillData, 100);
+                    int x = DataTool.getInt("x", skillData, 1);
+                    int y = DataTool.getInt("y", skillData, 1);
+                    int count = DataTool.getInt("count", skillData, 1);
+                    long duration = DataTool.getInt("time", skillData, 0) * 1000;
+                    long cooltime = DataTool.getInt("interval", skillData, 0) * 1000;
+                    int iprop = DataTool.getInt("prop", skillData, 100);
                     float prop = iprop / 100;
-                    int limit = MapleDataTool.getInt("limit", skillData, 0);
-                    MapleData ltd = skillData.getChildByPath("lt");
+                    int limit = DataTool.getInt("limit", skillData, 0);
+                    Data ltd = skillData.getChildByPath("lt");
                     Point lt = null;
                     Point rb = null;
                     if (ltd != null) {

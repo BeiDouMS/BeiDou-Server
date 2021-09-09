@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -33,7 +33,7 @@ import tools.FilePrinter;
  * @author Matze
  */
 public final class NPCShopHandler extends AbstractPacketHandler {
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte bmode = p.readByte();
         if (bmode == 0) { // mode 0 = buy :)
             short slot = p.readShort();// slot

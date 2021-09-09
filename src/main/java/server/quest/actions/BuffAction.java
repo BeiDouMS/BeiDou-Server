@@ -21,37 +21,37 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.MapleItemInformationProvider;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.ItemInformationProvider;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class BuffAction extends MapleQuestAction {
+public class BuffAction extends AbstractQuestAction {
 	int itemEffect;
 	
-	public BuffAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.BUFF, quest);
+	public BuffAction(Quest quest, Data data) {
+		super(QuestActionType.BUFF, quest);
 		processData(data);
 	}
         
         @Override
-	public boolean check(MapleCharacter chr, Integer extSelection) {
+	public boolean check(Character chr, Integer extSelection) {
 		return true;
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		itemEffect = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		itemEffect = DataTool.getInt(data);
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
-		MapleItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
+	public void run(Character chr, Integer extSelection) {
+		ItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
 	}
 } 

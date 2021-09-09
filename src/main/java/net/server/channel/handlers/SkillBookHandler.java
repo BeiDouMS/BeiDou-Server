@@ -21,24 +21,24 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 import java.util.Map;
 
 public final class SkillBookHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -53,15 +53,15 @@ public final class SkillBookHandler extends AbstractPacketHandler {
         int skill = 0;
         int maxlevel = 0;
         
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (c.tryacquireClient()) {
             try {
-                Inventory inv = c.getPlayer().getInventory(MapleInventoryType.USE);
+                Inventory inv = c.getPlayer().getInventory(InventoryType.USE);
                 Item toUse = inv.getItem(slot);
                 if (toUse == null || toUse.getItemId() != itemId) {
                     return;
                 }
-                Map<String, Integer> skilldata = MapleItemInformationProvider.getInstance().getSkillStats(toUse.getItemId(), c.getPlayer().getJob().getId());
+                Map<String, Integer> skilldata = ItemInformationProvider.getInstance().getSkillStats(toUse.getItemId(), c.getPlayer().getJob().getId());
                 if (skilldata == null) {
                     return;
                 }
@@ -76,13 +76,13 @@ public final class SkillBookHandler extends AbstractPacketHandler {
                             return;
                         }
 
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                     } finally {
                         inv.unlockInventory();
                     }
 
                     canuse = true;
-                    if (MapleItemInformationProvider.rollSuccessChance(skilldata.get("success"))) {
+                    if (ItemInformationProvider.rollSuccessChance(skilldata.get("success"))) {
                         success = true;
                         player.changeSkillLevel(skill2, player.getSkillLevel(skill2), Math.max(skilldata.get("masterLevel"), player.getMasterLevel(skill2)), -1);
                     } else {

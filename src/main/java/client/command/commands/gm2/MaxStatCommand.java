@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleStat;
+import client.Character;
+import client.Client;
+import client.Stat;
 import client.command.Command;
 import config.YamlConfig;
 
@@ -35,8 +35,8 @@ public class MaxStatCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         player.loseExp(player.getExp(), false, false);
         player.setLevel(255);
         player.resetPlayerRates();
@@ -45,8 +45,8 @@ public class MaxStatCommand extends Command {
         player.updateStrDexIntLuk(Short.MAX_VALUE);
         player.setFame(13337);
         player.updateMaxHpMaxMp(30000, 30000);
-        player.updateSingleStat(MapleStat.LEVEL, 255);
-        player.updateSingleStat(MapleStat.FAME, 13337);
+        player.updateSingleStat(Stat.LEVEL, 255);
+        player.updateSingleStat(Stat.FAME, 13337);
         player.yellowMessage("Stats maxed out.");
     }
 }

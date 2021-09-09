@@ -21,33 +21,33 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class CompletedQuestRequirement extends MapleQuestRequirement {
+public class CompletedQuestRequirement extends AbstractQuestRequirement {
 	private int reqQuest;
 	
 	
-	public CompletedQuestRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.COMPLETED_QUEST);
+	public CompletedQuestRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.COMPLETED_QUEST);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		reqQuest = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		reqQuest = DataTool.getInt(data);
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		return chr.getCompletedQuests().size() >= reqQuest;
 	}
 }

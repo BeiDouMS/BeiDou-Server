@@ -21,37 +21,37 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class ExpAction extends MapleQuestAction {
+public class ExpAction extends AbstractQuestAction {
 	int exp;
 	
-	public ExpAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.EXP, quest);
+	public ExpAction(Quest quest, Data data) {
+		super(QuestActionType.EXP, quest);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		exp = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		exp = DataTool.getInt(data);
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		runAction(chr, exp);
 	}
         
-        public static void runAction(MapleCharacter chr, int gain) {
+        public static void runAction(Character chr, int gain) {
                 if (!YamlConfig.config.server.USE_QUEST_RATE) {
                         chr.gainExp(gain * chr.getExpRate(), true, true);
                 } else {

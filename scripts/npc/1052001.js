@@ -96,9 +96,9 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                const MaplePlayerNPC = Java.type('server.life.MaplePlayerNPC');
+                const PlayerNPC = Java.type('server.life.PlayerNPC');
                 const GameConstants = Java.type('constants.game.GameConstants');
-                if(MaplePlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(cm.getJob()), cm.getPlayer())) {
+                if(PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(cm.getJob()), cm.getPlayer())) {
                     cm.sendOk("There you go! Hope you will like it.");
                     cm.gainMeso(-spawnPnpcFee);
                 } else {

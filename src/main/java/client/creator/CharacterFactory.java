@@ -19,15 +19,15 @@
 */
 package client.creator;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleSkinColor;
+import client.Character;
+import client.Client;
+import client.SkinColor;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import net.server.Server;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -37,18 +37,18 @@ import tools.PacketCreator;
  */
 public abstract class CharacterFactory {
         
-        protected synchronized static int createNewCharacter(MapleClient c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
+        protected synchronized static int createNewCharacter(Client c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
                 if (YamlConfig.config.server.COLLECTIVE_CHARSLOT ? c.getAvailableCharacterSlots() <= 0 : c.getAvailableCharacterWorldSlots() <= 0) {
                         return -3;
                 }
             
-                if (!MapleCharacter.canCreateChar(name)) {
+                if (!Character.canCreateChar(name)) {
                         return -1;
                 }
                 
-                MapleCharacter newchar = MapleCharacter.getDefault(c);
+                Character newchar = Character.getDefault(c);
                 newchar.setWorld(c.getWorld());
-                newchar.setSkinColor(MapleSkinColor.getById(skin));
+                newchar.setSkinColor(SkinColor.getById(skin));
                 newchar.setGender(gender);
                 newchar.setName(name);
                 newchar.setHair(hair);
@@ -58,8 +58,8 @@ public abstract class CharacterFactory {
                 newchar.setJob(recipe.getJob());
                 newchar.setMapId(recipe.getMap());
                 
-                Inventory equipped = newchar.getInventory(MapleInventoryType.EQUIPPED);
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                Inventory equipped = newchar.getInventory(InventoryType.EQUIPPED);
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 
                 int top = recipe.getTop(), bottom = recipe.getBottom(), shoes = recipe.getShoes(), weapon = recipe.getWeapon();
                 

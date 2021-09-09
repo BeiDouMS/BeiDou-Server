@@ -21,25 +21,25 @@
  */
 package server.quest.requirements;
 
+import client.Character;
+import client.Job;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
-import client.MapleJob;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class JobRequirement extends MapleQuestRequirement {
+public class JobRequirement extends AbstractQuestRequirement {
 	List<Integer> jobs = new ArrayList<>();
 	
-	public JobRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.JOB);
+	public JobRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.JOB);
 		processData(data);
 	}
 	
@@ -48,17 +48,17 @@ public class JobRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData jobEntry : data.getChildren()) {
-			jobs.add(MapleDataTool.getInt(jobEntry));
+	public void processData(Data data) {
+		for (Data jobEntry : data.getChildren()) {
+			jobs.add(DataTool.getInt(jobEntry));
 		}
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		for(Integer job : jobs) {
-			if (chr.getJob().equals(MapleJob.getById(job)) || chr.isGM()) {
+			if (chr.getJob().equals(Job.getById(job)) || chr.isGM()) {
 				return true;
 			}
 		}

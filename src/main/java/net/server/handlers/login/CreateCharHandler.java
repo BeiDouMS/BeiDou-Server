@@ -21,7 +21,7 @@
  */
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import client.creator.novice.BeginnerCreator;
 import client.creator.novice.LegendCreator;
 import client.creator.novice.NoblesseCreator;
@@ -52,7 +52,7 @@ public final class CreateCharHandler extends AbstractPacketHandler {
 
 
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
                 String name = p.readString();
                 int job = p.readInt();
 		int face = p.readInt();

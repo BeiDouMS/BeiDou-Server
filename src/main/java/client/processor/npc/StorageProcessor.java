@@ -21,19 +21,19 @@
  */
 package client.processor.npc;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.InventoryManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleStorage;
+import server.ItemInformationProvider;
+import server.Storage;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -44,10 +44,10 @@ import tools.PacketCreator;
  */
 public class StorageProcessor {
     
-        public static void storageAction(InPacket p, MapleClient c) {
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-                MapleCharacter chr = c.getPlayer();
-                MapleStorage storage = chr.getStorage();
+        public static void storageAction(InPacket p, Client c) {
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
+                Character chr = c.getPlayer();
+                Storage storage = chr.getStorage();
                 byte mode = p.readByte();
 
                 if (chr.getLevel() < 15){
@@ -67,7 +67,7 @@ public class StorageProcessor {
                                                 c.disconnect(true, false);
                                                 return;
                                         }
-                                        slot = storage.getSlot(MapleInventoryType.getByType(type), slot);
+                                        slot = storage.getSlot(InventoryType.getByType(type), slot);
                                         Item item = storage.getItem(slot);
                                         if (item != null) {
                                                 if (ii.isPickupRestricted(item.getItemId()) && chr.haveItemWithId(item.getItemId(), true)) {
@@ -83,12 +83,12 @@ public class StorageProcessor {
                                                         chr.gainMeso(-takeoutFee, false);
                                                 }
 
-                                                if (MapleInventoryManipulator.checkSpace(c, item.getItemId(), item.getQuantity(), item.getOwner())) {                
+                                                if (InventoryManipulator.checkSpace(c, item.getItemId(), item.getQuantity(), item.getOwner())) {
                                                         if (storage.takeOut(item)) {
                                                                 chr.setUsedStorage();
                                                                 
-                                                                MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
-                                                                MapleInventoryManipulator.addFromDrop(c, item, false);
+                                                                KarmaManipulator.toggleKarmaFlagToUntradeable(item);
+                                                                InventoryManipulator.addFromDrop(c, item, false);
 
                                                                 String itemName = ii.getName(item.getItemId());
                                                                 FilePrinter.print(FilePrinter.STORAGE + c.getAccountName() + ".txt", c.getPlayer().getName() + " took out " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
@@ -106,7 +106,7 @@ public class StorageProcessor {
                                         short slot = p.readShort();
                                         int itemId = p.readInt();
                                         short quantity = p.readShort();
-                                        MapleInventoryType invType = ItemConstants.getInventoryType(itemId);
+                                        InventoryType invType = ItemConstants.getInventoryType(itemId);
                                         Inventory inv = chr.getInventory(invType);
                                         if (slot < 1 || slot > inv.getSlotLimit()) { //player inv starts at one
                                                 AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with storage.");
@@ -142,7 +142,7 @@ public class StorageProcessor {
                                                                         quantity = item.getQuantity();
                                                                 }
                                                                 
-                                                                MapleInventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
+                                                                InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
                                                         } else {
                                                                 c.sendPacket(PacketCreator.enableActions());
                                                                 return;
@@ -155,7 +155,7 @@ public class StorageProcessor {
                                                 
                                                 chr.gainMeso(-storeFee, false, true, false);
                                                 
-                                                MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
+                                                KarmaManipulator.toggleKarmaFlagToUntradeable(item);
                                                 item.setQuantity(quantity);
                                                 
                                                 storage.store(item);    // inside a critical section, "!(storage.isFull())" is still in effect...

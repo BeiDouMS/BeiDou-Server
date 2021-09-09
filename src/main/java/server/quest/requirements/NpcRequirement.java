@@ -21,32 +21,32 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class NpcRequirement extends MapleQuestRequirement {
+public class NpcRequirement extends AbstractQuestRequirement {
 	private int reqNPC;
 	
-	public NpcRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.NPC);
+	public NpcRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.NPC);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		reqNPC = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		reqNPC = DataTool.getInt(data);
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		return npcid != null && npcid == reqNPC;
 	}
         

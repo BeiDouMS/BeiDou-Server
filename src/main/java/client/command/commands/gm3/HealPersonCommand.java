@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 
 public class HealPersonCommand extends Command {
@@ -33,9 +33,9 @@ public class HealPersonCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             victim.healHpMp();
         } else {

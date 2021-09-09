@@ -69,7 +69,7 @@ function action(mode, type, selection) {
 				//var level = cm.getPlayer().getPet(i).getLevel();
 				//var closeness = cm.getPlayer().getPet(i).getCloseness();
 				//var fullness = cm.getPlayer().getPet(i).getFullness();
-				//MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+				//ItemInformationProvider ii = ItemInformationProvider.getInstance();
 				if (id < 5000029 || id > 5000033) {
 					cm.sendOk("Something wrong, try again.");
 					cm.dispose();
@@ -89,8 +89,8 @@ function action(mode, type, selection) {
 					cm.dispose();
 				}
 				
-                                /*if (name.equals(MapleItemInformationProvider.getInstance().getName(id))) {
-				 	name = MapleItemInformationProvider.getInstance().getName(after);
+                                /*if (name.equals(ItemInformationProvider.getInstance().getName(id))) {
+				 	name = ItemInformationProvider.getInstance().getName(after);
 				}*/
                 
 				cm.gainItem(5380000, -1);
@@ -101,9 +101,9 @@ function action(mode, type, selection) {
 			}
 		} else if (status == 2) {
 			if (selection == 0) {
-				const MapleInventoryManipulator = Java.type('client.inventory.manipulator.MapleInventoryManipulator');
-				const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-				MapleInventoryManipulator.removeFromSlot(cm.getClient(), MapleInventoryType.CASH, 1, 1, true);
+				const InventoryManipulator = Java.type('client.inventory.manipulator.InventoryManipulator');
+				const InventoryType = Java.type('client.inventory.InventoryType');
+				InventoryManipulator.removeFromSlot(cm.getClient(), InventoryType.CASH, 1, 1, true);
 				cm.sendOk("Your cash first slot is removed.");
 			} else if (selection == 1) {
 				if (cm.haveItem(5000029, 2)) {

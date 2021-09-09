@@ -155,7 +155,7 @@ function action(mode, type, selection) {
 						}
 						else {
 							var count = 0;
-							var iter = cm.getChar().getInventory(MapleInventoryType.ETC).listById(mats[i]).iterator();
+							var iter = cm.getChar().getInventory(InventoryType.ETC).listById(mats[i]).iterator();
 							while (iter.hasNext()) {
 								count += iter.next().getQuantity();
 							}
@@ -166,7 +166,7 @@ function action(mode, type, selection) {
 				}
 				else {
 					var count = 0;
-					var iter = cm.getChar().getInventory(MapleInventoryType.ETC).listById(mats).iterator();
+					var iter = cm.getChar().getInventory(InventoryType.ETC).listById(mats).iterator();
 					while (iter.hasNext()) {
 						count += iter.next().getQuantity();
 					}

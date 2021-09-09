@@ -21,8 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.command.CommandsExecutor;
 import config.YamlConfig;
@@ -34,9 +34,9 @@ import tools.PacketCreator;
 
 public final class GeneralChatHandler extends AbstractPacketHandler {
 	@Override
-        public final void handlePacket(InPacket p, MapleClient c) {
+        public final void handlePacket(InPacket p, Client c) {
                 String s = p.readString();
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 if(chr.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;

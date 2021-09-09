@@ -7,9 +7,9 @@ function enter(pi) {
             mapobj1.resetPQ(1);
             mapobj2.resetPQ(1);
 
-            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+            const LifeFactory = Java.type('server.life.LifeFactory');
             const Point = Java.type('java.awt.Point');
-            mapobj2.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300348), new Point(591, -34));
+            mapobj2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300348), new Point(591, -34));
             
             pi.playPortalSound(); pi.warp(920030000,2);
             return true;

@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
@@ -32,5 +32,5 @@ import net.packet.InPacket;
 public class PartySearchRegisterHandler extends AbstractPacketHandler {
     
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {}
+    public void handlePacket(InPacket p, Client c) {}
 }

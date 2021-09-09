@@ -21,21 +21,21 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.processor.npc.DueyProcessor;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
-import server.life.MapleNPC;
-import server.life.MaplePlayerNPC;
-import server.maps.MapleMapObject;
+import server.life.NPC;
+import server.life.PlayerNPC;
+import server.maps.MapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
 public final class NPCTalkHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -47,9 +47,9 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         }
         
         int oid = p.readInt();
-        MapleMapObject obj = c.getPlayer().getMap().getMapObject(oid);
-        if (obj instanceof MapleNPC) {
-            MapleNPC npc = (MapleNPC) obj;
+        MapObject obj = c.getPlayer().getMap().getMapObject(oid);
+        if (obj instanceof NPC) {
+            NPC npc = (NPC) obj;
             if(YamlConfig.config.server.USE_DEBUG == true) c.getPlayer().dropMessage(5, "Talking to NPC " + npc.getId());
             
             if (npc.getId() == 9010009) {   //is duey
@@ -82,8 +82,8 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     }
                 }
             }
-        } else if (obj instanceof MaplePlayerNPC) {
-            MaplePlayerNPC pnpc = (MaplePlayerNPC) obj;
+        } else if (obj instanceof PlayerNPC) {
+            PlayerNPC pnpc = (PlayerNPC) obj;
             NPCScriptManager nsm = NPCScriptManager.getInstance();
             
             if (pnpc.getScriptId() < 9977777 && !nsm.isNpcScriptAvailable(c, "" + pnpc.getScriptId())) {

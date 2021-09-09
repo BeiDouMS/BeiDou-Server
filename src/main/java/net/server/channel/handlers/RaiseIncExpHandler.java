@@ -1,16 +1,16 @@
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleQuestStatus;
+import client.Character;
+import client.Client;
+import client.QuestStatus;
 import client.inventory.Inventory;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.InventoryType;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleItemInformationProvider.QuestConsItem;
-import server.quest.MapleQuest;
+import server.ItemInformationProvider;
+import server.ItemInformationProvider.QuestConsItem;
+import server.quest.Quest;
 import tools.PacketCreator;
 
 import java.util.Map;
@@ -23,14 +23,14 @@ import java.util.Map;
 public class RaiseIncExpHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte inventorytype = p.readByte();//nItemIT
         short slot = p.readShort();//nSlotPosition
         int itemid = p.readInt();//nItemID
         
         if (c.tryacquireClient()) {
             try {
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 QuestConsItem consItem = ii.getQuestConsumablesInfo(itemid);
                 if (consItem == null) {
                     return;
@@ -39,15 +39,15 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                 int infoNumber = consItem.questid;
                 Map<Integer, Integer> consumables = consItem.items;
                 
-                MapleCharacter chr = c.getPlayer();
-                MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
-                if (!chr.getQuest(quest).getStatus().equals(MapleQuestStatus.Status.STARTED)) {
+                Character chr = c.getPlayer();
+                Quest quest = Quest.getInstanceFromInfoNumber(infoNumber);
+                if (!chr.getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
                 
                 int consId;
-                Inventory inv = chr.getInventory(MapleInventoryType.getByType(inventorytype));
+                Inventory inv = chr.getInventory(InventoryType.getByType(inventorytype));
                 inv.lockInventory();
                 try {
                     consId = inv.getItem(slot).getItemId();
@@ -55,7 +55,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.getByType(inventorytype), slot, (short) 1, false, true);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.getByType(inventorytype), slot, (short) 1, false, true);
                 } finally {
                     inv.unlockInventory();
                 }

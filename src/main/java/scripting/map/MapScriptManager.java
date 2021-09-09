@@ -21,8 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting.map;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import scripting.AbstractScriptManager;
 import tools.FilePrinter;
 
@@ -44,9 +44,9 @@ public class MapScriptManager extends AbstractScriptManager {
         scripts.clear();
     }
 
-    public boolean runMapScript(MapleClient c, String mapScriptPath, boolean firstUser) {
+    public boolean runMapScript(Client c, String mapScriptPath, boolean firstUser) {
         if (firstUser) {
-            MapleCharacter chr = c.getPlayer();
+            Character chr = c.getPlayer();
             int mapid = chr.getMapId();
             if (chr.hasEntered(mapScriptPath, mapid)) {
                 return false;

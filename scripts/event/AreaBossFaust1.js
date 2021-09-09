@@ -47,11 +47,11 @@ function start() {
 		return;
 	}
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const PacketCreator = Java.type('tools.PacketCreator');
     const Point = Java.type('java.awt.Point');
 
-    var faust1 = MapleLifeFactory.getMonster(5220002);
+    var faust1 = LifeFactory.getMonster(5220002);
     const spawnpoint = new Point(456, 278);
     theForestOfEvil1.spawnMonsterOnGroundBelow(faust1, spawnpoint);
     theForestOfEvil1.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));

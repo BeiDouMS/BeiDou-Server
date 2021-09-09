@@ -21,17 +21,17 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import config.YamlConfig;
 import net.packet.InPacket;
-import server.life.MapleMonster;
-import server.life.MapleMonsterInformationProvider;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.Monster;
+import server.life.MonsterInformationProvider;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -49,8 +49,8 @@ import java.util.List;
 public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c) {
-                MapleCharacter player = c.getPlayer();
+	public final void handlePacket(InPacket p, Client c) {
+                Character player = c.getPlayer();
                 MapleMap map = player.getMap();
                 
                 if (player.isChangingMaps()) {  // thanks Lame for noticing mob movement shuffle (mob OID on different maps) happening on map transitions
@@ -59,13 +59,13 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 
 		int objectid = p.readInt();
 		short moveid = p.readShort();
-		MapleMapObject mmo = map.getMapObject(objectid);
-		if (mmo == null || mmo.getType() != MapleMapObjectType.MONSTER) {
+		MapObject mmo = map.getMapObject(objectid);
+		if (mmo == null || mmo.getType() != MapObjectType.MONSTER) {
 			return;
 		}
                 
-		MapleMonster monster = (MapleMonster) mmo;
-                List<MapleCharacter> banishPlayers = null;
+		Monster monster = (Monster) mmo;
+                List<Character> banishPlayers = null;
                 
                 byte pNibbles = p.readByte();
 		byte rawActivity = p.readByte();
@@ -99,7 +99,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                                 toUse = MobSkillFactory.getMobSkill(useSkillId, useSkillLevel);
                                 
                                 if (monster.canUseSkill(toUse, true)) {
-                                        int animationTime = MapleMonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
+                                        int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
                                         if(animationTime > 0 && toUse.getSkillId() != 129) {
                                                 toUse.applyDelayedEffect(player, monster, true, animationTime);
                                         } else {
@@ -172,7 +172,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 } catch (EmptyMovementException e) {}
                 
                 if (banishPlayers != null) {
-                        for (MapleCharacter chr : banishPlayers) {
+                        for (Character chr : banishPlayers) {
                                chr.changeMapBanish(monster.getBanish().getMap(), monster.getBanish().getPortal(), monster.getBanish().getMsg());
                         }
                 }

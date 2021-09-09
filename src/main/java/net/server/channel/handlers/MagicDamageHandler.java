@@ -21,6 +21,7 @@
  */
 package net.server.channel.handlers;
 
+import client.Character;
 import client.*;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -30,13 +31,13 @@ import constants.skills.FPArchMage;
 import constants.skills.ILArchMage;
 import net.packet.InPacket;
 import net.packet.Packet;
-import server.MapleStatEffect;
+import server.StatEffect;
 import tools.PacketCreator;
 
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c) {
-		MapleCharacter chr = c.getPlayer();
+	public final void handlePacket(InPacket p, Client c) {
+		Character chr = c.getPlayer();
 
 		/*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
 		if(timeElapsed < 300) {
@@ -46,8 +47,8 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 
 		AttackInfo attack = parseDamage(p, chr, false, true);
                 
-		if (chr.getBuffEffect(MapleBuffStat.MORPH) != null) {
-			if(chr.getBuffEffect(MapleBuffStat.MORPH).isMorphWithoutAttack()) {
+		if (chr.getBuffEffect(BuffStat.MORPH) != null) {
+			if(chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
 				// How are they attacking when the client won't let them?
 				chr.getClient().disconnect(false, false);
 				return; 
@@ -63,9 +64,9 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
                 Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
 		
 		chr.getMap().broadcastMessage(chr, packet, false, true);
-		MapleStatEffect effect = attack.getAttackEffect(chr, null);
+		StatEffect effect = attack.getAttackEffect(chr, null);
 		Skill skill = SkillFactory.getSkill(attack.skill);
-		MapleStatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+		StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
 		if (effect_.getCooldown() > 0) {
 			if (chr.skillIsCooling(attack.skill)) {
 				return;

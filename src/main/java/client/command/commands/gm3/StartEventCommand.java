@@ -23,11 +23,11 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
-import server.events.gm.MapleEvent;
+import server.events.gm.Event;
 import tools.PacketCreator;
 
 public class StartEventCommand extends Command {
@@ -36,12 +36,12 @@ public class StartEventCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         int players = 50;
         if (params.length > 1)
             players = Integer.parseInt(params[0]);
-        c.getChannelServer().setEvent(new MapleEvent(player.getMapId(), players));
+        c.getChannelServer().setEvent(new Event(player.getMapId(), players));
         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.earnTitleMessage(
                 "[Event] An event has started on "
                         + player.getMap().getMapName()

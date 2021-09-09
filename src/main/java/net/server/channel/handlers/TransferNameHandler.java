@@ -20,8 +20,8 @@
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -39,7 +39,7 @@ import java.util.Calendar;
 public final class TransferNameHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readInt(); //cid
         int birthday = p.readInt();
         if (!CashOperationHandler.checkBirthday(c, birthday)) {
@@ -51,7 +51,7 @@ public final class TransferNameHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if(chr.getLevel() < 10) {
             c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;

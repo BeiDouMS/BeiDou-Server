@@ -19,36 +19,35 @@
 */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import client.MapleQuestStatus;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
  * @author Ronan
  */
-public class InfoAction extends MapleQuestAction {
+public class InfoAction extends AbstractQuestAction {
         
         private String info;
         private int questID;
 
-        public InfoAction(MapleQuest quest, MapleData data) {
-                super(MapleQuestActionType.INFO, quest);
+        public InfoAction(Quest quest, Data data) {
+                super(QuestActionType.INFO, quest);
                 questID = quest.getId();
                 processData(data);
         }
 
         @Override
-        public void processData(MapleData data) {
-                info = MapleDataTool.getString(data, "");
+        public void processData(Data data) {
+                info = DataTool.getString(data, "");
         }
 
 
         @Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
                 chr.getAbstractPlayerInteraction().setQuestProgress(questID, info);
         }
         

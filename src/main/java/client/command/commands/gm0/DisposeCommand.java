@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
@@ -35,7 +35,7 @@ public class DisposeCommand extends Command {
     }
     
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         NPCScriptManager.getInstance().dispose(c);
         QuestScriptManager.getInstance().dispose(c);
         c.sendPacket(PacketCreator.enableActions());

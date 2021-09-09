@@ -21,15 +21,15 @@
 */
 package client.processor.action;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
-import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.ItemInformationProvider;
+import server.StatEffect;
 import tools.PacketCreator;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class PetAutopotProcessor {
     
     private static class AutopotAction {
         
-        private MapleClient c;
+        private Client c;
         private short slot;
         private int itemId;
         
@@ -53,9 +53,9 @@ public class PetAutopotProcessor {
         private int maxHp, maxMp, curHp, curMp;
         private double incHp, incMp;
         
-        private boolean cursorOnNextAvailablePot(MapleCharacter chr) {
+        private boolean cursorOnNextAvailablePot(Character chr) {
             if(toUseList == null) {
-                toUseList = chr.getInventory(MapleInventoryType.USE).linkedListById(itemId);
+                toUseList = chr.getInventory(InventoryType.USE).linkedListById(itemId);
             }
 
             toUse = null;
@@ -73,22 +73,22 @@ public class PetAutopotProcessor {
             return false;
         }
         
-        public AutopotAction(MapleClient c, short slot, int itemId) {
+        public AutopotAction(Client c, short slot, int itemId) {
             this.c = c;
             this.slot = slot;
             this.itemId = itemId;
         }
         
         public void run() {
-            MapleClient c = this.c;
-            MapleCharacter chr = c.getPlayer();
+            Client c = this.c;
+            Character chr = c.getPlayer();
             if (!chr.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
             
             int useCount = 0, qtyCount = 0;
-            MapleStatEffect stat = null;
+            StatEffect stat = null;
             
             maxHp = chr.getCurrentMaxHp();
             maxMp = chr.getCurrentMaxMp();
@@ -96,7 +96,7 @@ public class PetAutopotProcessor {
             curHp = chr.getHp();
             curMp = chr.getMp();
 
-            Inventory useInv = chr.getInventory(MapleInventoryType.USE);
+            Inventory useInv = chr.getInventory(InventoryType.USE);
             useInv.lockInventory();
             try {
                 toUse = useInv.getItem(slot);
@@ -116,7 +116,7 @@ public class PetAutopotProcessor {
                         }
                     }
 
-                    stat = MapleItemInformationProvider.getInstance().getItemEffect(toUse.getItemId());
+                    stat = ItemInformationProvider.getInstance().getItemEffect(toUse.getItemId());
                     hasHpGain = stat.getHp() > 0 || stat.getHpRate() > 0.0;
                     hasMpGain = stat.getMp() > 0 || stat.getMpRate() > 0.0;
                     
@@ -150,7 +150,7 @@ public class PetAutopotProcessor {
 
                     while (true) {
                         short qtyToUse = (short) Math.min(qtyCount, toUse.getQuantity());
-                        MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, qtyToUse, false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, qtyToUse, false);
 
                         curHp += (incHp * qtyToUse);
                         curMp += (incMp * qtyToUse);
@@ -183,7 +183,7 @@ public class PetAutopotProcessor {
         }
     }
     
-    public static void runAutopotAction(MapleClient c, short slot, int itemid) {
+    public static void runAutopotAction(Client c, short slot, int itemid) {
         AutopotAction action = new AutopotAction(c, slot, itemid);
         action.run();
     }

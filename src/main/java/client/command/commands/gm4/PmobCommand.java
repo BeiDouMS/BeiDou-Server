@@ -23,12 +23,12 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import net.server.channel.Channel;
-import server.life.MapleLifeFactory;
-import server.life.MapleMonster;
+import server.life.LifeFactory;
+import server.life.Monster;
 import server.maps.MapleMap;
 import tools.DatabaseConnection;
 
@@ -43,8 +43,8 @@ public class PmobCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !pmob <mobid> [<mobtime>]");
             return;
@@ -60,7 +60,7 @@ public class PmobCommand extends Command {
         int ypos = checkpos.y;
         int fh = player.getMap().getFootholds().findBelow(checkpos).getId();
 
-        MapleMonster mob = MapleLifeFactory.getMonster(mobId);
+        Monster mob = LifeFactory.getMonster(mobId);
         if (mob != null && !mob.getName().equals("MISSINGNO")) {
             mob.setPosition(checkpos);
             mob.setCy(ypos);

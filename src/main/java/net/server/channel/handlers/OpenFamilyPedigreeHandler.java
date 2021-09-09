@@ -19,8 +19,8 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -32,9 +32,9 @@ import tools.PacketCreator;
  */
 public final class OpenFamilyPedigreeHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
-        MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
+        Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
         if(target != null && target.getFamily() != null) {
             c.sendPacket(PacketCreator.showPedigree(target.getFamilyEntry()));
         }

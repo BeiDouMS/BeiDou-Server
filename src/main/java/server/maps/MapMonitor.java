@@ -28,7 +28,7 @@ import java.util.concurrent.ScheduledFuture;
 public class MapMonitor {
     private ScheduledFuture<?> monitorSchedule;
     private MapleMap map;
-    private MaplePortal portal;
+    private Portal portal;
 
     public MapMonitor(final MapleMap map, String portal) {
         this.map = map;
@@ -49,7 +49,7 @@ public class MapMonitor {
         map.killAllMonsters();
         map.clearDrops();
         if (portal != null) {
-            portal.setPortalStatus(MaplePortal.OPEN);
+            portal.setPortalStatus(Portal.OPEN);
         }
         map.resetReactors();
         

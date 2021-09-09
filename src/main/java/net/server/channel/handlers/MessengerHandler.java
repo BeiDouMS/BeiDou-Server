@@ -21,48 +21,48 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
-import net.server.world.MapleMessenger;
-import net.server.world.MapleMessengerCharacter;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.world.Messenger;
+import net.server.world.MessengerCharacter;
 import net.server.world.World;
 import tools.PacketCreator;
 
 public final class MessengerHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
                 String input;
                 byte mode = p.readByte();
-                MapleCharacter player = c.getPlayer();
+                Character player = c.getPlayer();
                 World world = c.getWorldServer();
-                MapleMessenger messenger = player.getMessenger();
+                Messenger messenger = player.getMessenger();
                 switch (mode) {
                     case 0x00:
                         int messengerid = p.readInt();
                         if (messenger == null) {
                             if (messengerid == 0) {
-                                MapleInviteCoordinator.removeInvite(InviteType.MESSENGER, player.getId());
+                                InviteCoordinator.removeInvite(InviteType.MESSENGER, player.getId());
 
-                                MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, 0);
+                                MessengerCharacter messengerplayer = new MessengerCharacter(player, 0);
                                 messenger = world.createMessenger(messengerplayer);
                                 player.setMessenger(messenger);
                                 player.setMessengerPosition(0);
                             } else {
                                 messenger = world.getMessenger(messengerid);
                                 if (messenger != null) {
-                                    MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, true);
-                                    InviteResult res = inviteRes.result;
-                                    if (res == InviteResult.ACCEPTED) {
+                                    InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, true);
+                                    InviteResultType res = inviteRes.result;
+                                    if (res == InviteResultType.ACCEPTED) {
                                         int position = messenger.getLowestPosition();
-                                        MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, position);
+                                        MessengerCharacter messengerplayer = new MessengerCharacter(player, position);
                                         if (messenger.getMembers().size() < 3) {
                                             player.setMessenger(messenger);
                                             player.setMessengerPosition(position);
@@ -74,7 +74,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                                 }
                             }
                         } else {
-                            MapleInviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, false);
+                            InviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), messengerid, false);
                         }
                         break;
                     case 0x02:
@@ -85,10 +85,10 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.messengerChat(player.getName() + " : This Maple Messenger is currently unavailable. Please quit this chat."));
                         } else if (messenger.getMembers().size() < 3) {
                             input = p.readString();
-                            MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
+                            Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
                             if (target != null) {
                                 if (target.getMessenger() == null) {
-                                    if (MapleInviteCoordinator.createInvite(InviteType.MESSENGER, c.getPlayer(), messenger.getId(), target.getId())) {
+                                    if (InviteCoordinator.createInvite(InviteType.MESSENGER, c.getPlayer(), messenger.getId(), target.getId())) {
                                         target.sendPacket(PacketCreator.messengerInvite(c.getPlayer().getName(), messenger.getId()));
                                         c.sendPacket(PacketCreator.messengerNote(input, 4, 1));
                                     } else {
@@ -114,7 +114,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                         break;
                     case 0x06:
                         if (messenger != null) {
-                            MapleMessengerCharacter messengerplayer = new MapleMessengerCharacter(player, player.getMessengerPosition());
+                            MessengerCharacter messengerplayer = new MessengerCharacter(player, player.getMessengerPosition());
                             input = p.readString();
                             world.messengerChat(messenger, input, messengerplayer.getName());
                         }

@@ -110,7 +110,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
+        return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -304,9 +304,9 @@ function snowmanEvolve(eim, curLevel) {
         eim.setIntProperty("snowmanLevel", curLevel + 2);   // increment by 2 to decrement by 1 on friendlyKilled
         mapobj.killMonster(snowman, null, false, 2);
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
-        var snowman = MapleLifeFactory.getMonster(9400317 + (5 * difficulty) + curLevel);
+        var snowman = LifeFactory.getMonster(9400317 + (5 * difficulty) + curLevel);
         mapobj.spawnMonsterOnGroundBelow(snowman, new Point(-180, 15));
         
         if(curLevel >= 4) {

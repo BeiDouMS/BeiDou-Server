@@ -31,7 +31,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
+        return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function setup(difficulty, lobbyId){
@@ -63,9 +63,9 @@ function respawn(eim){
 
                 var weddinghall = eim.getMapInstance(entryMap);
                 weddinghall.getPortal(1).setPortalState(false);
-                const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                const LifeFactory = Java.type('server.life.LifeFactory');
                 const Point = Java.type('java.awt.Point');
-                weddinghall.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(292, 143));
+                weddinghall.spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(292, 143));
         } else {
                 eim.schedule("respawn", 10000);
         }

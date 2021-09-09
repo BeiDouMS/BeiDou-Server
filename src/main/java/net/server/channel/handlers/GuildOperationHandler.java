@@ -21,19 +21,19 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
+import net.server.guild.Alliance;
+import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleAlliance;
-import net.server.guild.MapleGuild;
-import net.server.guild.MapleGuildResponse;
-import net.server.world.MapleParty;
+import net.server.guild.GuildResponse;
+import net.server.world.Party;
 import net.server.world.World;
 import tools.PacketCreator;
 
@@ -46,7 +46,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
             return false;
         }
         for (int i = 0; i < name.length(); i++) {
-            if (!Character.isLowerCase(name.charAt(i)) && !Character.isUpperCase(name.charAt(i))) {
+            if (!java.lang.Character.isLowerCase(name.charAt(i)) && !java.lang.Character.isUpperCase(name.charAt(i))) {
                 return false;
             }
         }
@@ -54,8 +54,8 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter mc = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character mc = c.getPlayer();
         byte type = p.readByte();
         int allianceId = -1;
         switch (type) {
@@ -77,7 +77,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                Set<MapleCharacter> eligibleMembers = new HashSet<>(MapleGuild.getEligiblePlayersForGuild(mc));
+                Set<Character> eligibleMembers = new HashSet<>(Guild.getEligiblePlayersForGuild(mc));
                 if (eligibleMembers.size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
                     if (mc.getMap().getAllPlayers().size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
                         // thanks NovaStory for noticing message in need of smoother info
@@ -90,13 +90,13 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                if (!MapleParty.createParty(mc, true)) {
+                if (!Party.createParty(mc, true)) {
                     mc.dropMessage(1, "You cannot create a new Guild while in a party.");
                     return;
                 }
                 
                 Set<Integer> eligibleCids = new HashSet<>();
-                for (MapleCharacter chr : eligibleMembers) {
+                for (Character chr : eligibleMembers) {
                     eligibleCids.add(chr.getId());
                 }
                 
@@ -108,7 +108,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 
                 String targetName = p.readString();
-                MapleGuildResponse mgr = MapleGuild.sendInvitation(c, targetName);
+                GuildResponse mgr = Guild.sendInvitation(c, targetName);
                 if (mgr != null) {
                     c.sendPacket(mgr.getPacket(targetName));
                 } else {} // already sent invitation, do nothing
@@ -126,7 +126,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                if (!MapleGuild.answerInvitation(cid, mc.getName(), gid, true)) {
+                if (!Guild.answerInvitation(cid, mc.getName(), gid, true)) {
                     return;
                 }
                 
@@ -224,7 +224,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 Server.getInstance().setGuildEmblem(mc.getGuildId(), bg, bgcolor, logo, logocolor);
                 
                 if (mc.getGuild() != null && mc.getGuild().getAllianceId() > 0) {
-                    MapleAlliance alliance = mc.getAlliance();
+                    Alliance alliance = mc.getAlliance();
                     Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, c.getWorld()), -1, -1);
                 }
                 
@@ -256,11 +256,11 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 if (leaderid != -1) {
                     boolean result = p.readByte() != 0;
                     if (result && wserv.getMatchCheckerCoordinator().isMatchConfirmationActive(mc.getId())) {
-                        MapleCharacter leader = wserv.getPlayerStorage().getCharacterById(leaderid);
+                        Character leader = wserv.getPlayerStorage().getCharacterById(leaderid);
                         if (leader != null) {
                             int partyid = leader.getPartyId();
                             if (partyid != -1) {
-                                MapleParty.joinParty(mc, partyid, true);    // GMS gimmick "party to form guild" recalled thanks to Vcoc
+                                Party.joinParty(mc, partyid, true);    // GMS gimmick "party to form guild" recalled thanks to Vcoc
                             }
                         }
                     }

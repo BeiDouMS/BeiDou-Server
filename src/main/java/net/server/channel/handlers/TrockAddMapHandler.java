@@ -21,8 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.FieldLimit;
@@ -35,8 +35,8 @@ import tools.PacketCreator;
 public final class TrockAddMapHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         byte type = p.readByte();
         boolean vip = p.readByte() == 1;
         if (type == 0x00) {

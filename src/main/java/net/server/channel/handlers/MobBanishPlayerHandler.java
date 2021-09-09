@@ -19,21 +19,21 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleLifeFactory.BanishInfo;
-import server.life.MapleMonster;
+import server.life.LifeFactory.BanishInfo;
+import server.life.Monster;
 
 public final class MobBanishPlayerHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int mobid = p.readInt();     // mob banish handling detected thanks to MedicOP
         
-        MapleCharacter chr = c.getPlayer();
-        MapleMonster mob = chr.getMap().getMonsterById(mobid);
+        Character chr = c.getPlayer();
+        Monster mob = chr.getMap().getMonsterById(mobid);
         
         if (mob != null) {
             BanishInfo banishInfo = mob.getBanish();

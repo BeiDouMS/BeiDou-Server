@@ -19,10 +19,10 @@
 */
 package net.server.task;
 
+import client.Character;
 import config.YamlConfig;
-import net.server.world.World;
-import client.MapleCharacter;
 import net.server.PlayerStorage;
+import net.server.world.World;
 
 /**
  * @author Ronan
@@ -34,7 +34,7 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
         if(!YamlConfig.config.server.USE_AUTOSAVE) return;
         
         PlayerStorage ps = wserv.getPlayerStorage();
-        for(MapleCharacter chr: ps.getAllCharacters()) {
+        for(Character chr: ps.getAllCharacters()) {
             if(chr != null && chr.isLoggedin()) {
                 chr.saveCharToDB(false);
             }

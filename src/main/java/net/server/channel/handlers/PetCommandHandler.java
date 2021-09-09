@@ -21,9 +21,9 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.inventory.MaplePet;
+import client.Character;
+import client.Client;
+import client.inventory.Pet;
 import client.inventory.PetCommand;
 import client.inventory.PetDataFactory;
 import net.AbstractPacketHandler;
@@ -34,11 +34,11 @@ import tools.Randomizer;
 public final class PetCommandHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         int petId = p.readInt();
         byte petIndex = chr.getPetIndex(petId);
-        MaplePet pet;
+        Pet pet;
         if (petIndex == -1) {
             return;
         } else {

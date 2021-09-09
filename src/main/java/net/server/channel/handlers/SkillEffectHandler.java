@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import constants.skills.*;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -29,7 +29,7 @@ import tools.PacketCreator;
 
 public final class SkillEffectHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int skillId = p.readInt();
         int level = p.readByte();
         byte flags = p.readByte();

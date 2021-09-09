@@ -21,16 +21,16 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.ItemFactory;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
-import server.maps.MaplePlayerShop;
-import server.maps.MaplePortal;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
+import server.maps.PlayerShop;
+import server.maps.Portal;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -43,15 +43,15 @@ import java.util.Arrays;
  */
 public final class HiredMerchantRequest extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         
         try {
-            for (MapleMapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
-                if (mmo instanceof MapleCharacter) {
-                    MapleCharacter mc = (MapleCharacter) mmo;
+            for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
+                if (mmo instanceof Character) {
+                    Character mc = (Character) mmo;
 
-                    MaplePlayerShop shop = mc.getPlayerShop();
+                    PlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(13));
                         return;
@@ -63,7 +63,7 @@ public final class HiredMerchantRequest extends AbstractPacketHandler {
             }
 
             Point cpos = chr.getPosition();
-            MaplePortal portal = chr.getMap().findClosestTeleportPortal(cpos);
+            Portal portal = chr.getMap().findClosestTeleportPortal(cpos);
             if (portal != null && portal.getPosition().distance(cpos) < 120.0) {
                 chr.sendPacket(PacketCreator.getMiniRoomError(10));
                 return;

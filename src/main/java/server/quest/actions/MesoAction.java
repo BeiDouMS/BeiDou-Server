@@ -21,38 +21,38 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class MesoAction extends MapleQuestAction {
+public class MesoAction extends AbstractQuestAction {
 	int mesos;
 	
-	public MesoAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.MESO, quest);
+	public MesoAction(Quest quest, Data data) {
+		super(QuestActionType.MESO, quest);
 		questID = quest.getId();
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		mesos = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		mesos = DataTool.getInt(data);
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
                 runAction(chr, mesos);
 	}
         
-        public static void runAction(MapleCharacter chr, int gain) {
+        public static void runAction(Character chr, int gain) {
                 if (gain < 0) {
                         chr.gainMeso(gain, true, false, true);
                 } else {

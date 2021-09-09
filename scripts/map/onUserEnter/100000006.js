@@ -9,8 +9,8 @@ function start(ms){
 			return;   	       
 		}
 
-		const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+		const LifeFactory = Java.type('server.life.LifeFactory');
 		const Point = Java.type('java.awt.Point');
-		map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), new Point(-1027, 216));
+		map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(-1027, 216));
 	}
 }

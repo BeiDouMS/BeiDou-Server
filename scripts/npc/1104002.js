@@ -34,9 +34,9 @@ function action(mode, type, selection) {
                 if (mode == 0 && type > 0) {
                         cm.getPlayer().dropMessage(5, "Eleanor: Oh, lost the Empress and still challenging us? Now you've done it! Prepare yourself!!!");
 
-                        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                        const LifeFactory = Java.type('server.life.LifeFactory');
                         const Point = Java.type('java.awt.Point');
-                        mapobj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9001010), new Point(850, 0));
+                        mapobj.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9001010), new Point(850, 0));
                         mapobj.destroyNPC(1104002);
                         
                         cm.dispose();

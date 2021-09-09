@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import constants.inventory.ItemConstants;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 public class RechargeCommand extends Command {
     {
@@ -37,10 +37,10 @@ public class RechargeCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-        for (Item torecharge : c.getPlayer().getInventory(MapleInventoryType.USE).list()) {
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        for (Item torecharge : c.getPlayer().getInventory(InventoryType.USE).list()) {
             if (ItemConstants.isThrowingStar(torecharge.getItemId())){
                 torecharge.setQuantity(ii.getSlotMax(c, torecharge.getItemId()));
                 c.getPlayer().forceUpdateItem(torecharge);

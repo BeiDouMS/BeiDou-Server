@@ -21,8 +21,8 @@
 var status = -1;
 
 function isPillUsed(ch) {
-    const MapleBuffStat = Java.type('client.MapleBuffStat');
-    return ch.getBuffSource(MapleBuffStat.HPREC) == 2022198;
+    const BuffStat = Java.type('client.BuffStat');
+    return ch.getBuffSource(BuffStat.HPREC) == 2022198;
 }
 
 function end(mode, type, selection) {

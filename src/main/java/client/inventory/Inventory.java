@@ -21,13 +21,13 @@
 */
 package client.inventory;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.Character;
+import client.Client;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import server.ThreadManager;
 import tools.FilePrinter;
 import tools.Pair;
@@ -41,14 +41,14 @@ import java.util.concurrent.locks.Lock;
  */
 public class Inventory implements Iterable<Item> {
     protected final Map<Short, Item> inventory;
-    protected final MapleInventoryType type;
+    protected final InventoryType type;
     protected final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.INVENTORY, true);
 
-    protected MapleCharacter owner;
+    protected Character owner;
     protected byte slotLimit;
     protected boolean checked = false;
 
-    public Inventory(MapleCharacter mc, MapleInventoryType type, byte slotLimit) {
+    public Inventory(Character mc, InventoryType type, byte slotLimit) {
         this.owner = mc;
         this.inventory = new LinkedHashMap<>();
         this.type = type;
@@ -56,11 +56,11 @@ public class Inventory implements Iterable<Item> {
     }
 
     public boolean isExtendableInventory() { // not sure about cash, basing this on the previous one.
-        return !(type.equals(MapleInventoryType.UNDEFINED) || type.equals(MapleInventoryType.EQUIPPED) || type.equals(MapleInventoryType.CASH));
+        return !(type.equals(InventoryType.UNDEFINED) || type.equals(InventoryType.EQUIPPED) || type.equals(InventoryType.CASH));
     }
 
     public boolean isEquipInventory() {
-        return type.equals(MapleInventoryType.EQUIP) || type.equals(MapleInventoryType.EQUIPPED);
+        return type.equals(InventoryType.EQUIP) || type.equals(InventoryType.EQUIPPED);
     }
 
     public byte getSlotLimit() {
@@ -113,7 +113,7 @@ public class Inventory implements Iterable<Item> {
     }
 
     public Item findByName(String name) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : list()) {
             String itemName = ii.getName(item.getItemId());
             if (itemName == null) {
@@ -223,7 +223,7 @@ public class Inventory implements Iterable<Item> {
     }
 
     public void addItemFromDB(Item item) {
-        if (item.getPosition() < 0 && !type.equals(MapleInventoryType.EQUIPPED)) {
+        if (item.getPosition() < 0 && !type.equals(InventoryType.EQUIPPED)) {
             return;
         }
         addSlotFromDB(item.getPosition(), item);
@@ -246,7 +246,7 @@ public class Inventory implements Iterable<Item> {
                 inventory.put(dSlot, source);
                 inventory.remove(sSlot);
             } else if (target.getItemId() == source.getItemId() && !ItemConstants.isRechargeable(source.getItemId()) && isSameOwner(source, target)) {
-                if (type.getType() == MapleInventoryType.EQUIP.getType() || type.getType() == MapleInventoryType.CASH.getType()) {
+                if (type.getType() == InventoryType.EQUIP.getType() || type.getType() == InventoryType.CASH.getType()) {
                     swap(target, source);
                 } else if (source.getQuantity() + target.getQuantity() > slotMax) {
                     short rest = (short) ((source.getQuantity() + target.getQuantity()) - slotMax);
@@ -420,11 +420,11 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
-    private static boolean checkItemRestricted(List<Pair<Item, MapleInventoryType>> items) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    private static boolean checkItemRestricted(List<Pair<Item, InventoryType>> items) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         // thanks Shavit for noticing set creation that would be only effective in rare situations
-        for (Pair<Item, MapleInventoryType> p : items) {
+        for (Pair<Item, InventoryType> p : items) {
             int itemid = p.getLeft().getItemId();
             if (ii.isPickupRestricted(itemid) && p.getLeft().getQuantity() > 1) {
                 return false;
@@ -434,12 +434,12 @@ public class Inventory implements Iterable<Item> {
         return true;
     }
 
-    public static boolean checkSpot(MapleCharacter chr, Item item) {    // thanks Vcoc for noticing pshops not checking item stacks when taking item back
+    public static boolean checkSpot(Character chr, Item item) {    // thanks Vcoc for noticing pshops not checking item stacks when taking item back
         return checkSpot(chr, Collections.singletonList(item));
     }
 
-    public static boolean checkSpot(MapleCharacter chr, List<Item> items) {
-        List<Pair<Item, MapleInventoryType>> listItems = new LinkedList<>();
+    public static boolean checkSpot(Character chr, List<Item> items) {
+        List<Pair<Item, InventoryType>> listItems = new LinkedList<>();
         for (Item item : items) {
             listItems.add(new Pair<>(item, item.getInventoryType()));
         }
@@ -447,12 +447,12 @@ public class Inventory implements Iterable<Item> {
         return checkSpotsAndOwnership(chr, listItems);
     }
 
-    public static boolean checkSpots(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items) {
+    public static boolean checkSpots(Character chr, List<Pair<Item, InventoryType>> items) {
         return checkSpots(chr, items, false);
     }
 
-    public static boolean checkSpots(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items, boolean useProofInv) {
-        int invTypesSize = MapleInventoryType.values().length;
+    public static boolean checkSpots(Character chr, List<Pair<Item, InventoryType>> items, boolean useProofInv) {
+        int invTypesSize = InventoryType.values().length;
         List<Integer> zeroedList = new ArrayList<>(invTypesSize);
         for (byte i = 0; i < invTypesSize; i++) {
             zeroedList.add(0);
@@ -461,7 +461,7 @@ public class Inventory implements Iterable<Item> {
         return checkSpots(chr, items, zeroedList, useProofInv);
     }
 
-    public static boolean checkSpots(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
+    public static boolean checkSpots(Character chr, List<Pair<Item, InventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
         // assumption: no "UNDEFINED" or "EQUIPPED" items shall be tested here, all counts are >= 0.
 
         if (!checkItemRestricted(items)) {
@@ -471,7 +471,7 @@ public class Inventory implements Iterable<Item> {
         Map<Integer, List<Integer>> rcvItems = new LinkedHashMap<>();
         Map<Integer, Byte> rcvTypes = new LinkedHashMap<>();
 
-        for (Pair<Item, MapleInventoryType> item : items) {
+        for (Pair<Item, InventoryType> item : items) {
             Integer itemId = item.left.getItemId();
             List<Integer> qty = rcvItems.get(itemId);
 
@@ -490,14 +490,14 @@ public class Inventory implements Iterable<Item> {
             }
         }
 
-        MapleClient c = chr.getClient();
+        Client c = chr.getClient();
         for (Entry<Integer, List<Integer>> it : rcvItems.entrySet()) {
             int itemType = rcvTypes.get(it.getKey()) - 1;
 
             for (Integer itValue : it.getValue()) {
                 int usedSlots = typesSlotsUsed.get(itemType);
 
-                int result = MapleInventoryManipulator.checkSpaceProgressively(c, it.getKey(), itValue, "", usedSlots, useProofInv);
+                int result = InventoryManipulator.checkSpaceProgressively(c, it.getKey(), itValue, "", usedSlots, useProofInv);
                 boolean hasSpace = ((result % 2) != 0);
 
                 if (!hasSpace) {
@@ -528,11 +528,11 @@ public class Inventory implements Iterable<Item> {
         return (itemId.longValue() << 32L) + fnvHash32(owner);
     }
 
-    public static boolean checkSpotsAndOwnership(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items) {
+    public static boolean checkSpotsAndOwnership(Character chr, List<Pair<Item, InventoryType>> items) {
         return checkSpotsAndOwnership(chr, items, false);
     }
 
-    public static boolean checkSpotsAndOwnership(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items, boolean useProofInv) {
+    public static boolean checkSpotsAndOwnership(Character chr, List<Pair<Item, InventoryType>> items, boolean useProofInv) {
         List<Integer> zeroedList = new ArrayList<>(5);
         for (byte i = 0; i < 5; i++) {
             zeroedList.add(0);
@@ -541,7 +541,7 @@ public class Inventory implements Iterable<Item> {
         return checkSpotsAndOwnership(chr, items, zeroedList, useProofInv);
     }
 
-    public static boolean checkSpotsAndOwnership(MapleCharacter chr, List<Pair<Item, MapleInventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
+    public static boolean checkSpotsAndOwnership(Character chr, List<Pair<Item, InventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
         //assumption: no "UNDEFINED" or "EQUIPPED" items shall be tested here, all counts are >= 0 and item list to be checked is a legal one.
 
         if (!checkItemRestricted(items)) {
@@ -552,7 +552,7 @@ public class Inventory implements Iterable<Item> {
         Map<Long, Byte> rcvTypes = new LinkedHashMap<>();
         Map<Long, String> rcvOwners = new LinkedHashMap<>();
 
-        for (Pair<Item, MapleInventoryType> item : items) {
+        for (Pair<Item, InventoryType> item : items) {
             Long itemHash = hashKey(item.left.getItemId(), item.left.getOwner());
             List<Integer> qty = rcvItems.get(itemHash);
 
@@ -573,7 +573,7 @@ public class Inventory implements Iterable<Item> {
             }
         }
 
-        MapleClient c = chr.getClient();
+        Client c = chr.getClient();
         for (Entry<Long, List<Integer>> it : rcvItems.entrySet()) {
             int itemType = rcvTypes.get(it.getKey()) - 1;
             int itemId = (int) (it.getKey() >> 32L);
@@ -583,7 +583,7 @@ public class Inventory implements Iterable<Item> {
 
                 //System.out.print("inserting " + itemId.intValue() + " with type " + itemType + " qty " + it.getValue() + " owner '" + rcvOwners.get(it.getKey()) + "' current usedSlots:");
                 //for(Integer i : typesSlotsUsed) System.out.print(" " + i);
-                int result = MapleInventoryManipulator.checkSpaceProgressively(c, itemId, itValue, rcvOwners.get(it.getKey()), usedSlots, useProofInv);
+                int result = InventoryManipulator.checkSpaceProgressively(c, itemId, itValue, rcvOwners.get(it.getKey()), usedSlots, useProofInv);
                 boolean hasSpace = ((result % 2) != 0);
                 //System.out.print(" -> hasSpace: " + hasSpace + " RESULT : " + result + "\n");
 
@@ -597,7 +597,7 @@ public class Inventory implements Iterable<Item> {
         return true;
     }
 
-    public MapleInventoryType getType() {
+    public InventoryType getType() {
         return type;
     }
 
@@ -610,7 +610,7 @@ public class Inventory implements Iterable<Item> {
         boolean isRing = false;
         Equip equip = null;
         for (Item item : list()) {
-            if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+            if (item.getInventoryType().equals(InventoryType.EQUIP)) {
                 equip = (Equip) item;
                 isRing = equip.getRingId() > -1;
             }

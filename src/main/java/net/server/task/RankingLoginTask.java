@@ -21,7 +21,7 @@
 */
 package net.server.task;
 
-import client.MapleJob;
+import client.Job;
 import config.YamlConfig;
 import net.server.Server;
 import tools.DatabaseConnection;
@@ -96,7 +96,7 @@ public class RankingLoginTask implements Runnable {
 
                 for (int j = 0; j < Server.getInstance().getWorldsSize(); j++) {
                     updateRanking(-1, j);    //overall ranking
-                    for (int i = 0; i <= MapleJob.getMax(); i++) {
+                    for (int i = 0; i <= Job.getMax(); i++) {
                         updateRanking(i, j);
                     }
                     con.commit();

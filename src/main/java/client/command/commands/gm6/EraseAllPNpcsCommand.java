@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
-import server.life.MaplePlayerNPC;
+import server.life.PlayerNPC;
 
 public class EraseAllPNpcsCommand extends Command {
     {
@@ -33,7 +33,7 @@ public class EraseAllPNpcsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MaplePlayerNPC.removeAllPlayerNPC();
+    public void execute(Client c, String[] params) {
+        PlayerNPC.removeAllPlayerNPC();
     }
 }

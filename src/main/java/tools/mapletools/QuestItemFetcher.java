@@ -2,7 +2,7 @@ package tools.mapletools;
 
 import org.apache.commons.io.FileUtils;
 import provider.wz.WZFiles;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
 
@@ -38,7 +38,7 @@ public class QuestItemFetcher {
     private static final Map<Integer, int[]> mixedQuestidItems = new HashMap<>();
     private static final Set<Integer> limitedQuestids = new HashSet<>();
 
-    private static MapleItemInformationProvider ii;
+    private static ItemInformationProvider ii;
     private static PrintWriter printWriter = null;
     private static BufferedReader bufferedReader = null;
     private static byte status = 0;
@@ -520,8 +520,8 @@ public class QuestItemFetcher {
     }
 
     public static void main(String[] args) {
-        DatabaseConnection.initializeConnectionPool(); // MapleItemInformationProvider loads some unrelated db data
-        ii = MapleItemInformationProvider.getInstance();
+        DatabaseConnection.initializeConnectionPool(); // ItemInformationProvider loads some unrelated db data
+        ii = ItemInformationProvider.getInstance();
 
         reportQuestItemData();
     }

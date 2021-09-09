@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import config.YamlConfig;
 
@@ -34,8 +34,8 @@ public class SpCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !sp [<playername>] <newsp>");
             return;
@@ -48,7 +48,7 @@ public class SpCommand extends Command {
 
             player.updateRemainingSp(newSp);
         } else {
-            MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim != null) {
                 int newSp = Integer.parseInt(params[1]);
                 if (newSp < 0) newSp = 0;

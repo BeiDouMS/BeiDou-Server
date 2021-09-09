@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import config.YamlConfig;
 
@@ -34,8 +34,8 @@ public class ShowRatesCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         String showMsg = "#eEXP RATE#n" + "\r\n";
         showMsg += "World EXP Rate: #k" + c.getWorldServer().getExpRate() + "x#k" + "\r\n";
         showMsg += "Player EXP Rate: #k" + player.getRawExpRate() + "x#k" + "\r\n";

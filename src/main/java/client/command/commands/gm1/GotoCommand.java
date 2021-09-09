@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm1;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import constants.game.GameConstants;
 import server.maps.*;
@@ -47,13 +47,13 @@ public class GotoCommand extends Command {
             // thanks shavit for noticing goto areas getting loaded from wz needlessly only for the name retrieval
             
             for (Map.Entry<String, Integer> e : towns) {
-                GOTO_TOWNS_INFO += ("'" + e.getKey() + "' - #b" + (MapleMapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
+                GOTO_TOWNS_INFO += ("'" + e.getKey() + "' - #b" + (MapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
             }
 
             List<Entry<String, Integer>> areas = new ArrayList<>(GameConstants.GOTO_AREAS.entrySet());
             sortGotoEntries(areas);
             for (Map.Entry<String, Integer> e : areas) {
-                GOTO_AREAS_INFO += ("'" + e.getKey() + "' - #b" + (MapleMapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
+                GOTO_AREAS_INFO += ("'" + e.getKey() + "' - #b" + (MapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,8 +72,8 @@ public class GotoCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1){
             String sendStr = "Syntax: #b@goto <map name>#k. Available areas:\r\n\r\n#rTowns:#k\r\n" + GOTO_TOWNS_INFO;
             if (player.isGM()) {
@@ -90,7 +90,7 @@ public class GotoCommand extends Command {
         }
 
         if (!player.isGM()) {
-            if (player.getEventInstance() != null || MapleMiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
+            if (player.getEventInstance() != null || MiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
                 player.dropMessage(1, "This command can not be used in this map.");
                 return;
             }
@@ -108,7 +108,7 @@ public class GotoCommand extends Command {
             MapleMap target = c.getChannelServer().getMapFactory().getMap(gotomaps.get(params[0]));
             
             // expedition issue with this command detected thanks to Masterrulax
-            MaplePortal targetPortal = target.getRandomPlayerSpawnpoint();
+            Portal targetPortal = target.getRandomPlayerSpawnpoint();
             player.saveLocationOnWarp();
             player.changeMap(target, targetPortal);
         } else {

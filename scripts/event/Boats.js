@@ -95,17 +95,17 @@ function approach() {
 }
 
 function invasion() {
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
 
     var map1 = Boat_to_Ellinia;
     var pos1 = new java.awt.Point(-538, 143);
-    map1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos1);
-    map1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos1);
+    map1.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos1);
+    map1.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos1);
 
     var map2 = Boat_to_Orbis;
     var pos2 = new java.awt.Point(339, 148);
-    map2.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos2);
-    map2.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8150000), pos2);
+    map2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos2);
+    map2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8150000), pos2);
 }
 
 function cancelSchedule() {}

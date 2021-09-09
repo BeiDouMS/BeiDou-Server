@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
 import net.server.world.World;
@@ -36,8 +36,8 @@ public class ShutdownCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 1){
             player.yellowMessage("Syntax: !shutdown [<time>|NOW]");
             return;
@@ -63,7 +63,7 @@ public class ShutdownCommand extends Command {
             strTime += seconds + " seconds";
 
             for (World w : Server.getInstance().getWorlds()) {
-                for (MapleCharacter chr : w.getPlayerStorage().getAllCharacters()) {
+                for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                     chr.dropMessage("Server is undergoing maintenance process, and will be shutdown in " + strTime + ". Prepare yourself to quit safely in the mean time.");
                 }
             }

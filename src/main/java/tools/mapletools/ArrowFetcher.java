@@ -19,7 +19,7 @@
 */
 package tools.mapletools;
 
-import server.life.MapleMonsterStats;
+import server.life.MonsterStats;
 import tools.Pair;
 
 import java.io.PrintWriter;
@@ -52,7 +52,7 @@ public class ArrowFetcher {
 
     private static final Map<Integer, Pair<Integer, Integer>> mobRange = new HashMap<>();
     private static PrintWriter printWriter;
-    private static Map<Integer, MapleMonsterStats> mobStats;
+    private static Map<Integer, MonsterStats> mobStats;
 
     private static Pair<Integer, Integer> calcArrowRange(int level, boolean boss) {
         int minRange, maxRange;
@@ -69,8 +69,8 @@ public class ArrowFetcher {
     private static void calcAllMobsArrowRange() {
         System.out.print("Calculating range... ");
 
-        for (Entry<Integer, MapleMonsterStats> mobStat : mobStats.entrySet()) {
-            MapleMonsterStats mms = mobStat.getValue();
+        for (Entry<Integer, MonsterStats> mobStat : mobStats.entrySet()) {
+            MonsterStats mms = mobStat.getValue();
             Pair<Integer, Integer> arrowRange;
 
             arrowRange = calcArrowRange(mms.getLevel(), mms.isBoss());

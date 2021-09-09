@@ -19,35 +19,35 @@
 */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Ronan
  */
-public class InfoNumberRequirement extends MapleQuestRequirement {
+public class InfoNumberRequirement extends AbstractQuestRequirement {
         
         private short infoNumber;
         private int questID;
 
-        public InfoNumberRequirement(MapleQuest quest, MapleData data) {
-                super(MapleQuestRequirementType.INFO_NUMBER);
+        public InfoNumberRequirement(Quest quest, Data data) {
+                super(QuestRequirementType.INFO_NUMBER);
                 questID = quest.getId();
                 processData(data);
         }
 
         @Override
-        public void processData(MapleData data) {
-                infoNumber = (short) MapleDataTool.getIntConvert(data, 0);
+        public void processData(Data data) {
+                infoNumber = (short) DataTool.getIntConvert(data, 0);
         }
 
 
         @Override
-        public boolean check(MapleCharacter chr, Integer npcid) {
+        public boolean check(Character chr, Integer npcid) {
                 return true;
         }
 

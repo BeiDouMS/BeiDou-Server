@@ -21,16 +21,16 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleItemInformationProvider;
-import server.MapleItemInformationProvider.RewardItem;
+import server.ItemInformationProvider;
+import server.ItemInformationProvider.RewardItem;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -43,31 +43,31 @@ import java.util.List;
  */
 public final class ItemRewardHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte slot = (byte) p.readShort();
         int itemId = p.readInt(); // will load from xml I don't care.
         
-        Item it = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);   // null check here thanks to Thora
-        if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(MapleInventoryType.USE).countById(itemId) < 1) return;
+        Item it = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);   // null check here thanks to Thora
+        if (it == null || it.getItemId() != itemId || c.getPlayer().getInventory(InventoryType.USE).countById(itemId) < 1) return;
         
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Pair<Integer, List<RewardItem>> rewards = ii.getItemReward(itemId);
         for (RewardItem reward : rewards.getRight()) {
-            if (!MapleInventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
+            if (!InventoryManipulator.checkSpace(c, reward.itemid, reward.quantity, "")) {
                 c.sendPacket(PacketCreator.getShowInventoryFull());
                 break;
             }
             if (Randomizer.nextInt(rewards.getLeft()) < reward.prob) {//Is it even possible to get an item with prob 1?
-            	if (ItemConstants.getInventoryType(reward.itemid) == MapleInventoryType.EQUIP) {
+            	if (ItemConstants.getInventoryType(reward.itemid) == InventoryType.EQUIP) {
                     final Item item = ii.getEquipById(reward.itemid);
                     if (reward.period != -1) {
                     	item.setExpiration(currentServerTime() + (reward.period * 60 * 60 * 10));
                     }
-                    MapleInventoryManipulator.addFromDrop(c, item, false);
+                    InventoryManipulator.addFromDrop(c, item, false);
                 } else {
-                    MapleInventoryManipulator.addById(c, reward.itemid, reward.quantity, "", -1);
+                    InventoryManipulator.addById(c, reward.itemid, reward.quantity, "", -1);
                 }
-                MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, itemId, 1, false, false);
+                InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, false, false);
                 if (reward.worldmsg != null) {
                     String msg = reward.worldmsg;
                     msg.replaceAll("/name", c.getPlayer().getName());

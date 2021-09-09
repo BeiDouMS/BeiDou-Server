@@ -21,7 +21,7 @@
 */
 package net.server.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.PacketHandler;
 import net.packet.InPacket;
 
@@ -32,10 +32,10 @@ public final class LoginRequiringNoOpHandler implements PacketHandler {
         return instance;
     }
 
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
     }
 
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return c.isLoggedIn();
     }
 }

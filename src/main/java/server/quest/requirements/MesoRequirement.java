@@ -19,32 +19,32 @@
 */
 package server.quest.requirements;
 
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Ronan
  */
-public class MesoRequirement extends MapleQuestRequirement {
+public class MesoRequirement extends AbstractQuestRequirement {
         private int meso = 0;
     
-	public MesoRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.MESO);
+	public MesoRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.MESO);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		meso = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		meso = DataTool.getInt(data);
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
                 if (chr.getMeso() >= meso) {
                         return true;
                 } else {

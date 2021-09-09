@@ -58,8 +58,8 @@ function action(mode, type, selection) {
                     cm.sendOk("You can only increase your Guild's capacity if you are the leader.");
                     cm.dispose();
                 } else {
-                    var MapleGuild = Java.type("net.server.guild.MapleGuild");  // thanks Conrad for noticing an issue due to call on a static method here
-                    cm.sendYesNo("Increasing your Guild capacity by #b5#k costs #b " + MapleGuild.getIncreaseGuildCost(cm.getPlayer().getGuild().getCapacity()) +" mesos#k, are you sure you want to continue?");
+                    var Guild = Java.type("net.server.guild.Guild");  // thanks Conrad for noticing an issue due to call on a static method here
+                    cm.sendYesNo("Increasing your Guild capacity by #b5#k costs #b " + Guild.getIncreaseGuildCost(cm.getPlayer().getGuild().getCapacity()) +" mesos#k, are you sure you want to continue?");
                 }
             }
         } else if (status == 2) {

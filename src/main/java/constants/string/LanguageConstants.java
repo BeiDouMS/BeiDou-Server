@@ -1,6 +1,6 @@
 package constants.string;
 
-import client.MapleCharacter;
+import client.Character;
 
 /**
  *
@@ -90,7 +90,7 @@ public class LanguageConstants {
         
     }
 
-    public static String getMessage(MapleCharacter chr, String[] message) {
+    public static String getMessage(Character chr, String[] message) {
         return message[chr.getLanguage()];
     }
 }

@@ -23,10 +23,10 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 public class QuestResetCommand extends Command {
     {
@@ -34,8 +34,8 @@ public class QuestResetCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         
         if (params.length < 1){
             player.yellowMessage("Syntax: !resetquest <questid>");
@@ -45,7 +45,7 @@ public class QuestResetCommand extends Command {
         int questid_ = Integer.parseInt(params[0]);
 
         if (player.getQuestStatus(questid_) != 0) {
-            MapleQuest quest = MapleQuest.getInstance(questid_);
+            Quest quest = Quest.getInstance(questid_);
             if (quest != null) {
                 quest.reset(player);
                 player.dropMessage(5, "QUEST " + questid_ + " reseted.");

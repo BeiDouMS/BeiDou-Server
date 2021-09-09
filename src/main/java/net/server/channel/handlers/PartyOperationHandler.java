@@ -21,17 +21,17 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
-import net.server.world.MapleParty;
-import net.server.world.MaplePartyCharacter;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
+import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import tools.PacketCreator;
@@ -41,21 +41,21 @@ import java.util.List;
 public final class PartyOperationHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int operation = p.readByte();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         World world = c.getWorldServer();
-        MapleParty party = player.getParty();
+        Party party = player.getParty();
         switch (operation) {
             case 1: { // create
-               	MapleParty.createParty(player, false);
+               	Party.createParty(player, false);
                 break;
             }
             case 2: { // leave/disband
                 if (party != null) {
-                    List<MapleCharacter> partymembers = player.getPartyMembersOnline();
+                    List<Character> partymembers = player.getPartyMembersOnline();
 
-                    MapleParty.leaveParty(party, c);
+                    Party.leaveParty(party, c);
                     player.updatePartySearchAvailability(true);
                     player.partyOperationUpdate(party, partymembers);
                 }
@@ -64,10 +64,10 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             case 3: { // join
                 int partyid = p.readInt();
                 
-                MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
-                InviteResult res = inviteRes.result;
-                if (res == InviteResult.ACCEPTED) {
-                    MapleParty.joinParty(player, partyid, false);
+                InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
+                InviteResultType res = inviteRes.result;
+                if (res == InviteResultType.ACCEPTED) {
+                    Party.joinParty(player, partyid, false);
                 } else {
                     c.sendPacket(PacketCreator.serverNotice(5, "You couldn't join the party due to an expired invitation request."));
                 }
@@ -75,7 +75,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             }
             case 4: { // invite
                 String name = p.readString();
-                MapleCharacter invited = world.getPlayerStorage().getCharacterByName(name);
+                Character invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
                     if(invited.getLevel() < 10 && (!YamlConfig.config.server.USE_PARTY_FOR_STARTERS || player.getLevel() >= 10)) { //min requirement is level 10
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));
@@ -88,14 +88,14 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                     
                     if (invited.getParty() == null) {
                         if (party == null) {
-                            if (!MapleParty.createParty(player, false)) {
+                            if (!Party.createParty(player, false)) {
                                 return;
                             }
                             
                             party = player.getParty();
                         }
                         if (party.getMembers().size() < 6) {
-                            if (MapleInviteCoordinator.createInvite(InviteType.PARTY, player, party.getId(), invited.getId())) {
+                            if (InviteCoordinator.createInvite(InviteType.PARTY, player, party.getId(), invited.getId())) {
                                 invited.sendPacket(PacketCreator.partyInvite(player));
                             } else {
                                 c.sendPacket(PacketCreator.partyStatusMessage(22, invited.getName()));
@@ -113,12 +113,12 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             }
             case 5: { // expel
                 int cid = p.readInt();
-                MapleParty.expelFromParty(party, c, cid);
+                Party.expelFromParty(party, c, cid);
                 break;
             }
             case 6: { // change leader
                 int newLeader = p.readInt();
-                MaplePartyCharacter newLeadr = party.getMemberById(newLeader);
+                PartyCharacter newLeadr = party.getMemberById(newLeader);
                 world.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeadr);
                 break;
             }

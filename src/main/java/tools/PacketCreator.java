@@ -20,12 +20,13 @@
  */
 package tools;
 
+import client.Character;
 import client.*;
-import client.MapleCharacter.SkillEntry;
+import client.Character.SkillEntry;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
-import client.keybind.MapleKeyBinding;
-import client.keybind.MapleQuickslotBinding;
+import client.keybind.KeyBinding;
+import client.keybind.QuickslotBinding;
 import client.newyear.NewYearCardRecord;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -48,24 +49,24 @@ import net.server.channel.Channel;
 import net.server.channel.handlers.PlayerInteractionHandler;
 import net.server.channel.handlers.SummonDamageHandler.SummonAttackEntry;
 import net.server.channel.handlers.WhisperHandler;
-import net.server.guild.MapleAlliance;
-import net.server.guild.MapleGuild;
-import net.server.guild.MapleGuildSummary;
-import net.server.world.MapleParty;
-import net.server.world.MaplePartyCharacter;
+import net.server.guild.Alliance;
+import net.server.guild.Guild;
+import net.server.guild.GuildSummary;
+import net.server.world.Party;
+import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
 import server.*;
-import server.events.gm.MapleSnowball;
-import server.life.MapleMonster;
-import server.life.MapleNPC;
-import server.life.MaplePlayerNPC;
+import server.events.gm.Snowball;
 import server.life.MobSkill;
+import server.life.Monster;
+import server.life.NPC;
+import server.life.PlayerNPC;
 import server.maps.*;
-import server.maps.MapleMiniGame.MiniGameResult;
+import server.maps.MiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
 
 import java.awt.*;
@@ -82,7 +83,7 @@ import java.util.stream.Collectors;
  */
 public class PacketCreator {
 
-    public static final List<Pair<MapleStat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
+    public static final List<Pair<Stat, Integer>> EMPTY_STATUPDATE = Collections.emptyList();
     private final static long FT_UT_OFFSET = 116444736010800000L + (10000L * TimeZone.getDefault().getOffset(System.currentTimeMillis())); // normalize with timezone offset suggested by Ari
     private final static long DEFAULT_TIME = 150842304000000000L;//00 80 05 BB 46 E6 17 02
     public final static long ZERO_TIME = 94354848000000000L;//00 40 E0 FD 3B 37 4F 01
@@ -110,7 +111,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addRemainingSkillInfo(final OutPacket p, MapleCharacter chr) {
+    private static void addRemainingSkillInfo(final OutPacket p, Character chr) {
         int[] remainingSp = chr.getRemainingSps();
         int effectiveLength = 0;
         for (int j : remainingSp) {
@@ -128,7 +129,7 @@ public class PacketCreator {
         }
     }
 
-    private static void addCharStats(OutPacket p, MapleCharacter chr) {
+    private static void addCharStats(OutPacket p, Character chr) {
         p.writeInt(chr.getId()); // character id
         p.writeFixedString(StringUtil.getRightPaddedStr(chr.getName(), '\0', 13));
         p.writeByte(chr.getGender()); // gender (0 = male, 1 = female)
@@ -137,7 +138,7 @@ public class PacketCreator {
         p.writeInt(chr.getHair()); // hair
 
         for (int i = 0; i < 3; i++) {
-            MaplePet pet = chr.getPet(i);
+            Pet pet = chr.getPet(i);
             if (pet != null) //Checked GMS.. and your pets stay when going into the cash shop.
             {
                 p.writeLong(pet.getUniqueId());
@@ -170,7 +171,7 @@ public class PacketCreator {
         p.writeInt(0);
     }
 
-    protected static void addCharLook(final OutPacket p, MapleCharacter chr, boolean mega) {
+    protected static void addCharLook(final OutPacket p, Character chr, boolean mega) {
         p.writeByte(chr.getGender());
         p.writeByte(chr.getSkinColor().getId()); // skin color
         p.writeInt(chr.getFace()); // face
@@ -179,7 +180,7 @@ public class PacketCreator {
         addCharEquips(p, chr);
     }
 
-    private static void addCharacterInfo(OutPacket p, MapleCharacter chr) {
+    private static void addCharacterInfo(OutPacket p, Character chr) {
         p.writeLong(-1);
         p.writeByte(0);
         addCharStats(p, chr);
@@ -205,7 +206,7 @@ public class PacketCreator {
         p.writeShort(0);
     }
 
-    private static void addNewYearInfo(OutPacket p, MapleCharacter chr) {
+    private static void addNewYearInfo(OutPacket p, Character chr) {
         Set<NewYearCardRecord> received = chr.getReceivedNewYearRecords();
 
         p.writeShort(received.size());
@@ -214,7 +215,7 @@ public class PacketCreator {
         }
     }
 
-    private static void addTeleportInfo(OutPacket p, MapleCharacter chr) {
+    private static void addTeleportInfo(OutPacket p, Character chr) {
         final List<Integer> tele = chr.getTrockMaps();
         final List<Integer> viptele = chr.getVipTrockMaps();
         for (int i = 0; i < 5; i++) {
@@ -225,7 +226,7 @@ public class PacketCreator {
         }
     }
 
-    private static void addMiniGameInfo(OutPacket p, MapleCharacter chr) {
+    private static void addMiniGameInfo(OutPacket p, Character chr) {
         p.writeShort(0);
                 /*for (int m = size; m > 0; m--) {//nexon does this :P
                  p.writeInt(0);
@@ -236,7 +237,7 @@ public class PacketCreator {
                  }*/
     }
 
-    private static void addAreaInfo(OutPacket p, MapleCharacter chr) {
+    private static void addAreaInfo(OutPacket p, Character chr) {
         Map<Short, String> areaInfos = chr.getAreaInfos();
         p.writeShort(areaInfos.size());
         for (Short area : areaInfos.keySet()) {
@@ -245,9 +246,9 @@ public class PacketCreator {
         }
     }
 
-    private static void addCharEquips(final OutPacket p, MapleCharacter chr) {
-        Inventory equip = chr.getInventory(MapleInventoryType.EQUIPPED);
-        Collection<Item> ii = MapleItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
+    private static void addCharEquips(final OutPacket p, Character chr) {
+        Inventory equip = chr.getInventory(InventoryType.EQUIPPED);
+        Collection<Item> ii = ItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
@@ -291,7 +292,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addCharEntry(OutPacket p, MapleCharacter chr, boolean viewall) {
+    private static void addCharEntry(OutPacket p, Character chr, boolean viewall) {
         addCharStats(p, chr);
         addCharLook(p, chr, false);
         if (!viewall) {
@@ -308,30 +309,30 @@ public class PacketCreator {
         p.writeInt(chr.getJobRankMove()); // move (negative is downwards)
     }
 
-    private static void addQuestInfo(OutPacket p, MapleCharacter chr) {
-        List<MapleQuestStatus> started = chr.getStartedQuests();
+    private static void addQuestInfo(OutPacket p, Character chr) {
+        List<QuestStatus> started = chr.getStartedQuests();
         int startedSize = 0;
-        for (MapleQuestStatus qs : started) {
+        for (QuestStatus qs : started) {
             if (qs.getInfoNumber() > 0) {
                 startedSize++;
             }
             startedSize++;
         }
         p.writeShort(startedSize);
-        for (MapleQuestStatus qs : started) {
+        for (QuestStatus qs : started) {
             p.writeShort(qs.getQuest().getId());
             p.writeString(qs.getProgressData());
 
             short infoNumber = qs.getInfoNumber();
             if (infoNumber > 0) {
-                MapleQuestStatus iqs = chr.getQuest(infoNumber);
+                QuestStatus iqs = chr.getQuest(infoNumber);
                 p.writeShort(infoNumber);
                 p.writeString(iqs.getProgressData());
             }
         }
-        List<MapleQuestStatus> completed = chr.getCompletedQuests();
+        List<QuestStatus> completed = chr.getCompletedQuests();
         p.writeShort(completed.size());
-        for (MapleQuestStatus qs : completed) {
+        for (QuestStatus qs : completed) {
             p.writeShort(qs.getQuest().getId());
             p.writeLong(getTime(qs.getCompletionTime()));
         }
@@ -346,7 +347,7 @@ public class PacketCreator {
     }
 
     protected static void addItemInfo(final OutPacket p, Item item, boolean zeroPosition) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         boolean isCash = ii.isCash(item.getItemId());
         boolean isPet = item.getPetId() > -1;
         boolean isRing = false;
@@ -375,7 +376,7 @@ public class PacketCreator {
         }
         addExpirationTime(p, item.getExpiration());
         if (isPet) {
-            MaplePet pet = item.getPet();
+            Pet pet = item.getPet();
             p.writeFixedString(StringUtil.getRightPaddedStr(pet.getName(), '\0', 13));
             p.writeByte(pet.getLevel());
             p.writeShort(pet.getCloseness());
@@ -439,12 +440,12 @@ public class PacketCreator {
 
     }
 
-    private static void addInventoryInfo(OutPacket p, MapleCharacter chr) {
+    private static void addInventoryInfo(OutPacket p, Character chr) {
         for (byte i = 1; i <= 5; i++) {
-            p.writeByte(chr.getInventory(MapleInventoryType.getByType(i)).getSlotLimit());
+            p.writeByte(chr.getInventory(InventoryType.getByType(i)).getSlotLimit());
         }
         p.writeLong(getTime(-2));
-        Inventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
+        Inventory iv = chr.getInventory(InventoryType.EQUIPPED);
         Collection<Item> equippedC = iv.list();
         List<Item> equipped = new ArrayList<>(equippedC.size());
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
@@ -463,30 +464,30 @@ public class PacketCreator {
             addItemInfo(p, item);
         }
         p.writeShort(0); // start of equip inventory
-        for (Item item : chr.getInventory(MapleInventoryType.EQUIP).list()) {
+        for (Item item : chr.getInventory(InventoryType.EQUIP).list()) {
             addItemInfo(p, item);
         }
         p.writeInt(0);
-        for (Item item : chr.getInventory(MapleInventoryType.USE).list()) {
+        for (Item item : chr.getInventory(InventoryType.USE).list()) {
             addItemInfo(p, item);
         }
         p.writeByte(0);
-        for (Item item : chr.getInventory(MapleInventoryType.SETUP).list()) {
+        for (Item item : chr.getInventory(InventoryType.SETUP).list()) {
             addItemInfo(p, item);
         }
         p.writeByte(0);
-        for (Item item : chr.getInventory(MapleInventoryType.ETC).list()) {
+        for (Item item : chr.getInventory(InventoryType.ETC).list()) {
             addItemInfo(p, item);
         }
         p.writeByte(0);
-        for (Item item : chr.getInventory(MapleInventoryType.CASH).list()) {
+        for (Item item : chr.getInventory(InventoryType.CASH).list()) {
             addItemInfo(p, item);
         }
     }
 
-    private static void addSkillInfo(OutPacket p, MapleCharacter chr) {
+    private static void addSkillInfo(OutPacket p, Character chr) {
         p.writeByte(0); // start of skills
-        Map<Skill, MapleCharacter.SkillEntry> skills = chr.getSkills();
+        Map<Skill, Character.SkillEntry> skills = chr.getSkills();
         int skillsSize = skills.size();
         // We don't want to include any hidden skill in this, so subtract them from the size list and ignore them.
         for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
@@ -514,7 +515,7 @@ public class PacketCreator {
         }
     }
 
-    private static void addMonsterBookInfo(OutPacket p, MapleCharacter chr) {
+    private static void addMonsterBookInfo(OutPacket p, Character chr) {
         p.writeInt(chr.getMonsterBookCover()); // cover
         p.writeByte(0);
         Map<Integer, Integer> cards = chr.getMonsterBook().getCards();
@@ -656,7 +657,7 @@ public class PacketCreator {
      * @param c
      * @return the successful authentication packet
      */
-    public static Packet getAuthSuccess(MapleClient c) {
+    public static Packet getAuthSuccess(Client c) {
         Server.getInstance().loadAccountCharacters(c);    // locks the login session until data is recovered from the cache or the DB.
         Server.getInstance().loadAccountStorages(c);
 
@@ -829,7 +830,7 @@ public class PacketCreator {
     /**
      * Gets a packet with a list of characters.
      *
-     * @param c        The MapleClient to load characters of.
+     * @param c        The Client to load characters of.
      * @param serverId The ID of the server requested.
      * @param status   The charlist request result.
      * @return The character list packet.
@@ -849,12 +850,12 @@ public class PacketCreator {
      * <br> 17: Wrong gateway or personal info<br>
      * <br> 21: Verify account via email<br>
      */
-    public static Packet getCharList(MapleClient c, int serverId, int status) {
+    public static Packet getCharList(Client c, int serverId, int status) {
         final OutPacket p = OutPacket.create(SendOpcode.CHARLIST);
         p.writeByte(status);
-        List<MapleCharacter> chars = c.loadCharacters(serverId);
+        List<Character> chars = c.loadCharacters(serverId);
         p.writeByte((byte) chars.size());
-        for (MapleCharacter chr : chars) {
+        for (Character chr : chars) {
             addCharEntry(p, chr, false);
         }
 
@@ -888,7 +889,7 @@ public class PacketCreator {
      * @param partner  The partner shown with chr
      * @return the SEND_TV packet
      */
-    public static Packet sendTV(MapleCharacter chr, List<String> messages, int type, MapleCharacter partner) {
+    public static Packet sendTV(Character chr, List<String> messages, int type, Character partner) {
         final OutPacket p = OutPacket.create(SendOpcode.SEND_TV);
         p.writeByte(partner != null ? 3 : 1);
         p.writeByte(type); //Heart = 2  Star = 1  Normal = 0
@@ -919,7 +920,7 @@ public class PacketCreator {
      * @param chr The character to get info about.
      * @return The character info packet.
      */
-    public static Packet getCharInfo(MapleCharacter chr) {
+    public static Packet getCharInfo(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
         p.writeByte(1);
@@ -950,14 +951,14 @@ public class PacketCreator {
      * @param chr           The update target.
      * @return The stat update packet.
      */
-    public static Packet updatePlayerStats(List<Pair<MapleStat, Integer>> stats, boolean enableActions, MapleCharacter chr) {
+    public static Packet updatePlayerStats(List<Pair<Stat, Integer>> stats, boolean enableActions, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         p.writeBool(enableActions);
         int updateMask = 0;
-        for (Pair<MapleStat, Integer> statupdate : stats) {
+        for (Pair<Stat, Integer> statupdate : stats) {
             updateMask |= statupdate.getLeft().getValue();
         }
-        List<Pair<MapleStat, Integer>> mystats = stats;
+        List<Pair<Stat, Integer>> mystats = stats;
         if (mystats.size() > 1) {
             mystats.sort((o1, o2) -> {
                 int val1 = o1.getLeft().getValue();
@@ -966,7 +967,7 @@ public class PacketCreator {
             });
         }
         p.writeInt(updateMask);
-        for (Pair<MapleStat, Integer> statupdate : mystats) {
+        for (Pair<Stat, Integer> statupdate : mystats) {
             if (statupdate.getLeft().getValue() >= 1) {
                 if (statupdate.getLeft().getValue() == 0x1) {
                     p.writeByte(statupdate.getRight().byteValue());
@@ -1000,7 +1001,7 @@ public class PacketCreator {
      * @param chr        The character warping to <code>to</code>
      * @return The map change packet.
      */
-    public static Packet getWarpToMap(MapleMap to, int spawnPoint, MapleCharacter chr) {
+    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
         p.writeInt(0);//updated
@@ -1018,7 +1019,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Point spawnPosition, MapleCharacter chr) {
+    public static Packet getWarpToMap(MapleMap to, int spawnPoint, Point spawnPosition, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_FIELD);
         p.writeInt(chr.getClient().getChannel() - 1);
         p.writeInt(0);//updated
@@ -1094,7 +1095,7 @@ public class PacketCreator {
      * @param animated   Animated spawn?
      * @return The spawn packet for the map object.
      */
-    public static Packet spawnSummon(MapleSummon summon, boolean animated) {
+    public static Packet spawnSummon(Summon summon, boolean animated) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_SPECIAL_MAPOBJECT);
         p.writeInt(summon.getOwner().getId());
         p.writeInt(summon.getObjectId());
@@ -1117,7 +1118,7 @@ public class PacketCreator {
      * @param animated Animated removal?
      * @return The packet removing the object.
      */
-    public static Packet removeSummon(MapleSummon summon, boolean animated) {
+    public static Packet removeSummon(Summon summon, boolean animated) {
         OutPacket p = OutPacket.create(SendOpcode.REMOVE_SPECIAL_MAPOBJECT);
         p.writeInt(summon.getOwner().getId());
         p.writeInt(summon.getObjectId());
@@ -1249,7 +1250,7 @@ public class PacketCreator {
      * @param ear     Whether or not the ear is shown for whisper.
      * @return
      */
-    public static Packet getAvatarMega(MapleCharacter chr, String medal, int channel, int itemId, List<String> message, boolean ear) {
+    public static Packet getAvatarMega(Character chr, String medal, int channel, int itemId, List<String> message, boolean ear) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_AVATAR_MEGAPHONE);
         p.writeInt(itemId);
         p.writeString(medal + chr.getName());
@@ -1280,7 +1281,7 @@ public class PacketCreator {
      * @param player
      * @return
      */
-    public static Packet gachaponMessage(Item item, String town, MapleCharacter player) {
+    public static Packet gachaponMessage(Item item, String town, Character player) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
         p.writeByte(0x0B);
         p.writeString(player.getName() + " : got a(n)");
@@ -1290,7 +1291,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnNPC(MapleNPC life) {
+    public static Packet spawnNPC(NPC life) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC);
         p.writeInt(life.getObjectId());
         p.writeInt(life.getId());
@@ -1304,7 +1305,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnNPCRequestController(MapleNPC life, boolean miniMap) {
+    public static Packet spawnNPCRequestController(NPC life, boolean miniMap) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC_REQUEST_CONTROLLER);
         p.writeByte(1);
         p.writeInt(life.getObjectId());
@@ -1326,7 +1327,7 @@ public class PacketCreator {
      * @param newSpawn Is it a new spawn?
      * @return The spawn monster packet.
      */
-    public static Packet spawnMonster(MapleMonster life, boolean newSpawn) {
+    public static Packet spawnMonster(Monster life, boolean newSpawn) {
         return spawnMonsterInternal(life, false, newSpawn, false, 0, false);
     }
 
@@ -1338,7 +1339,7 @@ public class PacketCreator {
      * @param effect   The spawn effect.
      * @return The spawn monster packet.
      */
-    public static Packet spawnMonster(MapleMonster life, boolean newSpawn, int effect) {
+    public static Packet spawnMonster(Monster life, boolean newSpawn, int effect) {
         return spawnMonsterInternal(life, false, newSpawn, false, effect, false);
     }
 
@@ -1350,7 +1351,7 @@ public class PacketCreator {
      * @param aggro    Aggressive monster?
      * @return The monster control packet.
      */
-    public static Packet controlMonster(MapleMonster life, boolean newSpawn, boolean aggro) {
+    public static Packet controlMonster(Monster life, boolean newSpawn, boolean aggro) {
         return spawnMonsterInternal(life, true, newSpawn, aggro, 0, false);
     }
 
@@ -1360,7 +1361,7 @@ public class PacketCreator {
      * @param life
      * @return
      */
-    public static Packet removeMonsterInvisibility(MapleMonster life) {
+    public static Packet removeMonsterInvisibility(Monster life) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
         p.writeByte(1);
         p.writeInt(life.getObjectId());
@@ -1373,7 +1374,7 @@ public class PacketCreator {
      * @param life
      * @return
      */
-    public static Packet makeMonsterInvisible(MapleMonster life) {
+    public static Packet makeMonsterInvisible(Monster life) {
         return spawnMonsterInternal(life, true, false, false, 0, true);
     }
 
@@ -1443,7 +1444,7 @@ public class PacketCreator {
      * @param effect            The spawn effect to use.
      * @return The spawn/control packet.
      */
-    private static Packet spawnMonsterInternal(MapleMonster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
+    private static Packet spawnMonsterInternal(Monster life, boolean requestController, boolean newSpawn, boolean aggro, int effect, boolean makeInvis) {
         if (makeInvis) {
             OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
             p.writeByte(0);
@@ -1484,7 +1485,7 @@ public class PacketCreator {
          */
 
         if (life.getParentMobOid() != 0) {
-            MapleMonster parentMob = life.getMap().getMonsterByOid(life.getParentMobOid());
+            Monster parentMob = life.getMap().getMonsterByOid(life.getParentMobOid());
             if (parentMob != null && parentMob.isAlive()) {
                 p.writeByte(effect != 0 ? effect : -3);
                 p.writeInt(life.getParentMobOid());
@@ -1507,7 +1508,7 @@ public class PacketCreator {
      * @param effect The effect to show when spawning.
      * @return The packet to spawn the mob as non-targettable.
      */
-    public static Packet spawnFakeMonster(MapleMonster life, int effect) {
+    public static Packet spawnFakeMonster(Monster life, int effect) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER_CONTROL);
         p.writeByte(1);
         p.writeInt(life.getObjectId());
@@ -1535,7 +1536,7 @@ public class PacketCreator {
      * @param life The mob to make targettable.
      * @return The packet to make the mob targettable.
      */
-    public static Packet makeMonsterReal(MapleMonster life) {
+    public static Packet makeMonsterReal(Monster life) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MONSTER);
         p.writeInt(life.getObjectId());
         p.writeByte(5);
@@ -1747,7 +1748,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateMapItemObject(MapleMapItem drop, boolean giveOwnership) {
+    public static Packet updateMapItemObject(MapItem drop, boolean giveOwnership) {
         OutPacket p = OutPacket.create(SendOpcode.DROP_ITEM_FROM_MAPOBJECT);
         p.writeByte(2);
         p.writeInt(drop.getObjectId());
@@ -1765,7 +1766,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet dropItemFromMapObject(MapleCharacter player, MapleMapItem drop, Point dropfrom, Point dropto, byte mod) {
+    public static Packet dropItemFromMapObject(Character player, MapItem drop, Point dropfrom, Point dropto, byte mod) {
         int dropType = drop.getDropType();
         if (drop.hasClientsideOwnership(player) && dropType < 3) {
             dropType = 2;
@@ -1792,37 +1793,37 @@ public class PacketCreator {
         return p;
     }
 
-    private static void writeForeignBuffs(OutPacket p, MapleCharacter chr) {
+    private static void writeForeignBuffs(OutPacket p, Character chr) {
         p.writeInt(0);
         p.writeShort(0); //v83
         p.writeByte(0xFC);
         p.writeByte(1);
-        if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) {
+        if (chr.getBuffedValue(BuffStat.MORPH) != null) {
             p.writeInt(2);
         } else {
             p.writeInt(0);
         }
         long buffmask = 0;
         Integer buffvalue = null;
-        if ((chr.getBuffedValue(MapleBuffStat.DARKSIGHT) != null || chr.getBuffedValue(MapleBuffStat.WIND_WALK) != null) && !chr.isHidden()) {
-            buffmask |= MapleBuffStat.DARKSIGHT.getValue();
+        if ((chr.getBuffedValue(BuffStat.DARKSIGHT) != null || chr.getBuffedValue(BuffStat.WIND_WALK) != null) && !chr.isHidden()) {
+            buffmask |= BuffStat.DARKSIGHT.getValue();
         }
-        if (chr.getBuffedValue(MapleBuffStat.COMBO) != null) {
-            buffmask |= MapleBuffStat.COMBO.getValue();
-            buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.COMBO));
+        if (chr.getBuffedValue(BuffStat.COMBO) != null) {
+            buffmask |= BuffStat.COMBO.getValue();
+            buffvalue = Integer.valueOf(chr.getBuffedValue(BuffStat.COMBO));
         }
-        if (chr.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null) {
-            buffmask |= MapleBuffStat.SHADOWPARTNER.getValue();
+        if (chr.getBuffedValue(BuffStat.SHADOWPARTNER) != null) {
+            buffmask |= BuffStat.SHADOWPARTNER.getValue();
         }
-        if (chr.getBuffedValue(MapleBuffStat.SOULARROW) != null) {
-            buffmask |= MapleBuffStat.SOULARROW.getValue();
+        if (chr.getBuffedValue(BuffStat.SOULARROW) != null) {
+            buffmask |= BuffStat.SOULARROW.getValue();
         }
-        if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) {
-            buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.MORPH));
+        if (chr.getBuffedValue(BuffStat.MORPH) != null) {
+            buffvalue = Integer.valueOf(chr.getBuffedValue(BuffStat.MORPH));
         }
         p.writeInt((int) ((buffmask >> 32) & 0xffffffffL));
         if (buffvalue != null) {
-            if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) { //TEST
+            if (chr.getBuffedValue(BuffStat.MORPH) != null) { //TEST
                 p.writeShort(buffvalue);
             } else {
                 p.writeByte(buffvalue.byteValue());
@@ -1835,7 +1836,7 @@ public class PacketCreator {
         p.writeShort(0);
         p.skip(4);
 
-        boolean dashBuff = chr.getBuffedValue(MapleBuffStat.DASH) != null;
+        boolean dashBuff = chr.getBuffedValue(BuffStat.DASH) != null;
         // Dash Speed
         p.writeInt(dashBuff ? 1 << 24 : 0);
         p.skip(11);
@@ -1847,9 +1848,9 @@ public class PacketCreator {
         p.writeByte(0);
 
         // Monster Riding
-        Integer bv = chr.getBuffedValue(MapleBuffStat.MONSTER_RIDING);
+        Integer bv = chr.getBuffedValue(BuffStat.MONSTER_RIDING);
         if (bv != null) {
-            MapleMount mount = chr.getMount();
+            Mount mount = chr.getMount();
             if (mount != null) {
                 p.writeInt(mount.getItemId());
                 p.writeInt(mount.getSkillId());
@@ -1887,7 +1888,7 @@ public class PacketCreator {
      * @param enteringField Whether the character to spawn is not yet present in the map or already is.
      * @return The spawn player packet.
      */
-    public static Packet spawnPlayerMapObject(MapleClient target, MapleCharacter chr, boolean enteringField) {
+    public static Packet spawnPlayerMapObject(Client target, Character chr, boolean enteringField) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PLAYER);
         p.writeInt(chr.getId());
         p.writeByte(chr.getLevel()); //v83
@@ -1896,7 +1897,7 @@ public class PacketCreator {
             p.writeString("");
             p.writeBytes(new byte[6]);
         } else {
-            MapleGuildSummary gs = chr.getClient().getWorldServer().getGuildSummary(chr.getGuildId(), chr.getWorld());
+            GuildSummary gs = chr.getClient().getWorldServer().getGuildSummary(chr.getGuildId(), chr.getWorld());
             if (gs != null) {
                 p.writeString(gs.getName());
                 p.writeShort(gs.getLogoBG());
@@ -1914,16 +1915,16 @@ public class PacketCreator {
         p.writeShort(chr.getJob().getId());
 
                 /* replace "p.writeShort(chr.getJob().getId())" with this snippet for 3rd person FJ animation on all classes
-                if (chr.getJob().isA(MapleJob.HERMIT) || chr.getJob().isA(MapleJob.DAWNWARRIOR2) || chr.getJob().isA(MapleJob.NIGHTWALKER2)) {
+                if (chr.getJob().isA(Job.HERMIT) || chr.getJob().isA(Job.DAWNWARRIOR2) || chr.getJob().isA(Job.NIGHTWALKER2)) {
 			p.writeShort(chr.getJob().getId());
                 } else {
 			p.writeShort(412);
                 }*/
 
         addCharLook(p, chr, false);
-        p.writeInt(chr.getInventory(MapleInventoryType.CASH).countById(5110000));
+        p.writeInt(chr.getInventory(InventoryType.CASH).countById(5110000));
         p.writeInt(chr.getItemEffect());
-        p.writeInt(ItemConstants.getInventoryType(chr.getChair()) == MapleInventoryType.SETUP ? chr.getChair() : 0);
+        p.writeInt(ItemConstants.getInventoryType(chr.getChair()) == InventoryType.SETUP ? chr.getChair() : 0);
 
         if (enteringField) {
             Point spawnPos = new Point(chr.getPosition());
@@ -1937,7 +1938,7 @@ public class PacketCreator {
 
         p.writeShort(0);//chr.getFh()
         p.writeByte(0);
-        MaplePet[] pet = chr.getPets();
+        Pet[] pet = chr.getPets();
         for (int i = 0; i < 3; i++) {
             if (pet[i] != null) {
                 addPetInfo(p, pet[i], false);
@@ -1953,7 +1954,7 @@ public class PacketCreator {
             p.writeInt(chr.getMount().getTiredness());
         }
 
-        MaplePlayerShop mps = chr.getPlayerShop();
+        PlayerShop mps = chr.getPlayerShop();
         if (mps != null && mps.isOwner(chr)) {
             if (mps.hasFreeSlot()) {
                 addAnnounceBox(p, mps, mps.getVisitors().length);
@@ -1961,7 +1962,7 @@ public class PacketCreator {
                 addAnnounceBox(p, mps, 1);
             }
         } else {
-            MapleMiniGame miniGame = chr.getMiniGame();
+            MiniGame miniGame = chr.getMiniGame();
             if (miniGame != null && miniGame.isOwner(chr)) {
                 if (miniGame.hasFreeSlot()) {
                     addAnnounceBox(p, miniGame, 1, 0);
@@ -1989,7 +1990,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void encodeNewYearCardInfo(OutPacket p, MapleCharacter chr) {
+    private static void encodeNewYearCardInfo(OutPacket p, Character chr) {
         Set<NewYearCardRecord> newyears = chr.getReceivedNewYearRecords();
         if (!newyears.isEmpty()) {
             p.writeByte(1);
@@ -2003,12 +2004,12 @@ public class PacketCreator {
         }
     }
 
-    public static Packet onNewYearCardRes(MapleCharacter user, int cardId, int mode, int msg) {
+    public static Packet onNewYearCardRes(Character user, int cardId, int mode, int msg) {
         NewYearCardRecord newyear = user.getNewYearRecord(cardId);
         return onNewYearCardRes(user, newyear, mode, msg);
     }
 
-    public static Packet onNewYearCardRes(MapleCharacter user, NewYearCardRecord newyear, int mode, int msg) {
+    public static Packet onNewYearCardRes(Character user, NewYearCardRecord newyear, int mode, int msg) {
         OutPacket p = OutPacket.create(SendOpcode.NEW_YEAR_CARD_RES);
         p.writeByte(mode);
         switch (mode) {
@@ -2079,15 +2080,15 @@ public class PacketCreator {
         p.writeString(newyear.getMessage());
     }
 
-    private static void addRingLook(final OutPacket p, MapleCharacter chr, boolean crush) {
-        List<MapleRing> rings;
+    private static void addRingLook(final OutPacket p, Character chr, boolean crush) {
+        List<Ring> rings;
         if (crush) {
             rings = chr.getCrushRings();
         } else {
             rings = chr.getFriendshipRings();
         }
         boolean yes = false;
-        for (MapleRing ring : rings) {
+        for (Ring ring : rings) {
             if (ring.equipped()) {
                 if (yes == false) {
                     yes = true;
@@ -2105,15 +2106,15 @@ public class PacketCreator {
         }
     }
 
-    private static void addMarriageRingLook(MapleClient target, final OutPacket p, MapleCharacter chr) {
-        MapleRing ring = chr.getMarriageRing();
+    private static void addMarriageRingLook(Client target, final OutPacket p, Character chr) {
+        Ring ring = chr.getMarriageRing();
 
         if (ring == null || !ring.equipped()) {
             p.writeByte(0);
         } else {
             p.writeByte(1);
 
-            MapleCharacter targetChr = target.getPlayer();
+            Character targetChr = target.getPlayer();
             if (targetChr != null && targetChr.getPartnerId() == chr.getId()) {
                 p.writeInt(0);
                 p.writeInt(0);
@@ -2133,7 +2134,7 @@ public class PacketCreator {
      *              to.
      * @param shop  The shop to announce.
      */
-    private static void addAnnounceBox(final OutPacket p, MaplePlayerShop shop, int availability) {
+    private static void addAnnounceBox(final OutPacket p, PlayerShop shop, int availability) {
         p.writeByte(4);
         p.writeInt(shop.getObjectId());
         p.writeString(shop.getDescription());
@@ -2144,7 +2145,7 @@ public class PacketCreator {
         p.writeByte(0);
     }
 
-    private static void addAnnounceBox(final OutPacket p, MapleMiniGame game, int ammount, int joinable) {
+    private static void addAnnounceBox(final OutPacket p, MiniGame game, int ammount, int joinable) {
         p.writeByte(game.getGameType().getValue());
         p.writeInt(game.getObjectId()); // gameid/shopid
         p.writeString(game.getDescription()); // desc
@@ -2155,7 +2156,7 @@ public class PacketCreator {
         p.writeByte(joinable);
     }
 
-    private static void updateHiredMerchantBoxInfo(OutPacket p, MapleHiredMerchant hm) {
+    private static void updateHiredMerchantBoxInfo(OutPacket p, HiredMerchant hm) {
         byte[] roomInfo = hm.getShopRoomInfo();
 
         p.writeByte(5);
@@ -2165,14 +2166,14 @@ public class PacketCreator {
         p.writeBytes(roomInfo);    // visitor capacity here, thanks GabrielSin
     }
 
-    public static Packet updateHiredMerchantBox(MapleHiredMerchant hm) {
+    public static Packet updateHiredMerchantBox(HiredMerchant hm) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_HIRED_MERCHANT);
         p.writeInt(hm.getOwnerId());
         updateHiredMerchantBoxInfo(p, hm);
         return p;
     }
 
-    private static void updatePlayerShopBoxInfo(OutPacket p, MaplePlayerShop shop) {
+    private static void updatePlayerShopBoxInfo(OutPacket p, PlayerShop shop) {
         byte[] roomInfo = shop.getShopRoomInfo();
 
         p.writeByte(4);
@@ -2185,21 +2186,21 @@ public class PacketCreator {
         p.writeByte(0);
     }
 
-    public static Packet updatePlayerShopBox(MaplePlayerShop shop) {
+    public static Packet updatePlayerShopBox(PlayerShop shop) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(shop.getOwner().getId());
         updatePlayerShopBoxInfo(p, shop);
         return p;
     }
 
-    public static Packet removePlayerShopBox(MaplePlayerShop shop) {
+    public static Packet removePlayerShopBox(PlayerShop shop) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(shop.getOwner().getId());
         p.writeByte(0);
         return p;
     }
 
-    public static Packet facialExpression(MapleCharacter from, int expression) {
+    public static Packet facialExpression(Character from, int expression) {
         OutPacket p = OutPacket.create(SendOpcode.FACIAL_EXPRESSION);
         p.writeInt(from.getId());
         p.writeInt(expression);
@@ -2289,20 +2290,20 @@ public class PacketCreator {
         }
         */
 
-    public static Packet closeRangeAttack(MapleCharacter chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.CLOSE_RANGE_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         return p;
     }
 
-    public static Packet rangedAttack(MapleCharacter chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.RANGED_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction, display);
         p.writeInt(0);
         return p;
     }
 
-    public static Packet magicAttack(MapleCharacter chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
+    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.MAGIC_ATTACK);
         addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
         if (charge != -1) {
@@ -2311,7 +2312,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addAttackBody(OutPacket p, MapleCharacter chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
         p.writeInt(chr.getId());
         p.writeByte(numAttackedAndDamage);
         p.writeByte(0x5B);//?
@@ -2356,12 +2357,12 @@ public class PacketCreator {
         return (int) (Double.doubleToLongBits(d) >> 48);
     }
 
-    public static Packet getNPCShop(MapleClient c, int sid, List<MapleShopItem> items) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    public static Packet getNPCShop(Client c, int sid, List<ShopItem> items) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         final OutPacket p = OutPacket.create(SendOpcode.OPEN_NPC_SHOP);
         p.writeInt(sid);
         p.writeShort(items.size()); // item count
-        for (MapleShopItem item : items) {
+        for (ShopItem item : items) {
             p.writeInt(item.getItemId());
             p.writeInt(item.getPrice());
             p.writeInt(item.getPrice() == 0 ? item.getPitch() : 0); //Perfect Pitch
@@ -2481,16 +2482,16 @@ public class PacketCreator {
         return OutPacket.create(SendOpcode.ARIANT_ARENA_SHOW_RESULT);
     }
 
-    public static Packet updateAriantPQRanking(final MapleCharacter chr, final int score) {
-        return updateAriantPQRanking(new LinkedHashMap<MapleCharacter, Integer>() {{
+    public static Packet updateAriantPQRanking(final Character chr, final int score) {
+        return updateAriantPQRanking(new LinkedHashMap<Character, Integer>() {{
             put(chr, score);
         }});
     }
 
-    public static Packet updateAriantPQRanking(Map<MapleCharacter, Integer> playerScore) {
+    public static Packet updateAriantPQRanking(Map<Character, Integer> playerScore) {
         OutPacket p = OutPacket.create(SendOpcode.ARIANT_ARENA_USER_SCORE);
         p.writeByte(playerScore.size());
-        for (Entry<MapleCharacter, Integer> e : playerScore.entrySet()) {
+        for (Entry<Character, Integer> e : playerScore.entrySet()) {
             p.writeString(e.getKey().getName());
             p.writeInt(e.getValue());
         }
@@ -2545,7 +2546,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateCharLook(MapleClient target, MapleCharacter chr) {
+    public static Packet updateCharLook(Client target, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_LOOK);
         p.writeInt(chr.getId());
         p.writeByte(1);
@@ -2618,7 +2619,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet addNewCharEntry(MapleCharacter chr) {
+    public static Packet addNewCharEntry(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.ADD_NEW_CHAR_ENTRY);
         p.writeByte(0);
         addCharEntry(p, chr, false);
@@ -2670,7 +2671,7 @@ public class PacketCreator {
      * @param isSelf
      * @return
      */
-    public static Packet charInfo(MapleCharacter chr) {
+    public static Packet charInfo(Character chr) {
         //3D 00 0A 43 01 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
         final OutPacket p = OutPacket.create(SendOpcode.CHAR_INFO);
         p.writeInt(chr.getId());
@@ -2681,10 +2682,10 @@ public class PacketCreator {
         String guildName = "";
         String allianceName = "";
         if (chr.getGuildId() > 0) {
-            MapleGuild mg = Server.getInstance().getGuild(chr.getGuildId());
+            Guild mg = Server.getInstance().getGuild(chr.getGuildId());
             guildName = mg.getName();
 
-            MapleAlliance alliance = Server.getInstance().getAlliance(chr.getGuild().getAllianceId());
+            Alliance alliance = Server.getInstance().getAlliance(chr.getGuild().getAllianceId());
             if (alliance != null) {
                 allianceName = alliance.getName();
             }
@@ -2693,8 +2694,8 @@ public class PacketCreator {
         p.writeString(allianceName);  // does not seem to work
         p.writeByte(0); // pMedalInfo, thanks to Arnah (Vertisy)
 
-        MaplePet[] pets = chr.getPets();
-        Item inv = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -114);
+        Pet[] pets = chr.getPets();
+        Item inv = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -114);
         for (int i = 0; i < 3; i++) {
             if (pets[i] != null) {
                 p.writeByte(pets[i].getUniqueId());
@@ -2710,8 +2711,8 @@ public class PacketCreator {
         p.writeByte(0); //end of pets
 
         Item mount;     //mounts can potentially crash the client if the player's level is not properly checked
-        if (chr.getMount() != null && (mount = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -18)) != null && MapleItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
-            MapleMount mmount = chr.getMount();
+        if (chr.getMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && ItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
+            Mount mmount = chr.getMount();
             p.writeByte(mmount.getId()); //mount
             p.writeInt(mmount.getLevel()); //level
             p.writeInt(mmount.getExp()); //exp
@@ -2729,16 +2730,16 @@ public class PacketCreator {
         p.writeInt(book.getNormalCard());
         p.writeInt(book.getSpecialCard());
         p.writeInt(book.getTotalCards());
-        p.writeInt(chr.getMonsterBookCover() > 0 ? MapleItemInformationProvider.getInstance().getCardMobId(chr.getMonsterBookCover()) : 0);
-        Item medal = chr.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -49);
+        p.writeInt(chr.getMonsterBookCover() > 0 ? ItemInformationProvider.getInstance().getCardMobId(chr.getMonsterBookCover()) : 0);
+        Item medal = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -49);
         if (medal != null) {
             p.writeInt(medal.getItemId());
         } else {
             p.writeInt(0);
         }
         ArrayList<Short> medalQuests = new ArrayList<>();
-        List<MapleQuestStatus> completed = chr.getCompletedQuests();
-        for (MapleQuestStatus qs : completed) {
+        List<QuestStatus> completed = chr.getCompletedQuests();
+        for (QuestStatus qs : completed) {
             if (qs.getQuest().getId() >= 29000) { // && q.getQuest().getId() <= 29923
                 medalQuests.add(qs.getQuest().getId());
             }
@@ -2754,7 +2755,7 @@ public class PacketCreator {
 
     /**
      * It is important that statups is in the correct order (see declaration
-     * order in MapleBuffStat) since this method doesn't do automagical
+     * order in BuffStat) since this method doesn't do automagical
      * reordering.
      *
      * @param buffid
@@ -2763,12 +2764,12 @@ public class PacketCreator {
      * @return
      */
     //1F 00 00 00 00 00 03 00 00 40 00 00 00 E0 00 00 00 00 00 00 00 00 E0 01 8E AA 4F 00 00 C2 EB 0B E0 01 8E AA 4F 00 00 C2 EB 0B 0C 00 8E AA 4F 00 00 C2 EB 0B 44 02 8E AA 4F 00 00 C2 EB 0B 44 02 8E AA 4F 00 00 C2 EB 0B 00 00 E0 7A 1D 00 8E AA 4F 00 00 00 00 00 00 00 00 03
-    public static Packet giveBuff(int buffid, int bufflength, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveBuff(int buffid, int bufflength, List<Pair<BuffStat, Integer>> statups) {
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         boolean special = false;
         writeLongMask(p, statups);
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
-            if (statup.getLeft().equals(MapleBuffStat.MONSTER_RIDING) || statup.getLeft().equals(MapleBuffStat.HOMING_BEACON)) {
+        for (Pair<BuffStat, Integer> statup : statups) {
+            if (statup.getLeft().equals(BuffStat.MONSTER_RIDING) || statup.getLeft().equals(BuffStat.HOMING_BEACON)) {
                 special = true;
             }
             p.writeShort(statup.getRight().shortValue());
@@ -2791,10 +2792,10 @@ public class PacketCreator {
      * @param mount
      * @return
      */
-    public static Packet showMonsterRiding(int cid, MapleMount mount) { //Gtfo with this, this is just giveForeignBuff
+    public static Packet showMonsterRiding(int cid, Mount mount) { //Gtfo with this, this is just giveForeignBuff
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
-        p.writeLong(MapleBuffStat.MONSTER_RIDING.getValue());
+        p.writeLong(BuffStat.MONSTER_RIDING.getValue());
         p.writeLong(0);
         p.writeShort(0);
         p.writeInt(mount.getItemId());
@@ -2806,7 +2807,7 @@ public class PacketCreator {
     }
         /*        p.writeInt(cid);
              writeLongMask(mplew, statups);
-             for (Pair<MapleBuffStat, Integer> statup : statups) {
+             for (Pair<BuffStat, Integer> statup : statups) {
              if (morph) {
              p.writeInt(statup.getRight().intValue());
              } else {
@@ -2877,11 +2878,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateQuest(MapleCharacter chr, MapleQuestStatus qs, boolean infoUpdate) {
+    public static Packet updateQuest(Character chr, QuestStatus qs, boolean infoUpdate) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(1);
         if (infoUpdate) {
-            MapleQuestStatus iqs = chr.getQuest(qs.getInfoNumber());
+            QuestStatus iqs = chr.getQuest(qs.getInfoNumber());
             p.writeShort(iqs.getQuestID());
             p.writeByte(1);
             p.writeString(iqs.getProgressData());
@@ -2894,10 +2895,10 @@ public class PacketCreator {
         return p;
     }
 
-    private static void writeLongMaskD(final OutPacket p, List<Pair<MapleDisease, Integer>> statups) {
+    private static void writeLongMaskD(final OutPacket p, List<Pair<Disease, Integer>> statups) {
         long firstmask = 0;
         long secondmask = 0;
-        for (Pair<MapleDisease, Integer> statup : statups) {
+        for (Pair<Disease, Integer> statup : statups) {
             if (statup.getLeft().isFirst()) {
                 firstmask |= statup.getLeft().getValue();
             } else {
@@ -2908,10 +2909,10 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
-    public static Packet giveDebuff(List<Pair<MapleDisease, Integer>> statups, MobSkill skill) {
+    public static Packet giveDebuff(List<Pair<Disease, Integer>> statups, MobSkill skill) {
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         writeLongMaskD(p, statups);
-        for (Pair<MapleDisease, Integer> statup : statups) {
+        for (Pair<Disease, Integer> statup : statups) {
             p.writeShort(statup.getRight().shortValue());
             p.writeShort(skill.getSkillId());
             p.writeShort(skill.getSkillLevel());
@@ -2923,13 +2924,13 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet giveForeignDebuff(int chrId, List<Pair<MapleDisease, Integer>> statups, MobSkill skill) {
+    public static Packet giveForeignDebuff(int chrId, List<Pair<Disease, Integer>> statups, MobSkill skill) {
         // Poison damage visibility and missing diseases status visibility, extended through map transitions thanks to Ronan
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMaskD(p, statups);
-        for (Pair<MapleDisease, Integer> statup : statups) {
-            if (statup.getLeft() == MapleDisease.POISON) {
+        for (Pair<Disease, Integer> statup : statups) {
+            if (statup.getLeft() == Disease.POISON) {
                 p.writeShort(statup.getRight().shortValue());
             }
             p.writeShort(skill.getSkillId());
@@ -2956,11 +2957,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet giveForeignBuff(int chrId, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveForeignBuff(int chrId, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMask(p, statups);
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
+        for (Pair<BuffStat, Integer> statup : statups) {
             p.writeShort(statup.getRight().shortValue());
         }
         p.writeInt(0);
@@ -2968,24 +2969,24 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet cancelForeignBuff(int chrId, List<MapleBuffStat> statups) {
+    public static Packet cancelForeignBuff(int chrId, List<BuffStat> statups) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMaskFromList(p, statups);
         return p;
     }
 
-    public static Packet cancelBuff(List<MapleBuffStat> statups) {
+    public static Packet cancelBuff(List<BuffStat> statups) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_BUFF);
         writeLongMaskFromList(p, statups);
         p.writeByte(1);//?
         return p;
     }
 
-    private static void writeLongMask(final OutPacket p, List<Pair<MapleBuffStat, Integer>> statups) {
+    private static void writeLongMask(final OutPacket p, List<Pair<BuffStat, Integer>> statups) {
         long firstmask = 0;
         long secondmask = 0;
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
+        for (Pair<BuffStat, Integer> statup : statups) {
             if (statup.getLeft().isFirst()) {
                 firstmask |= statup.getLeft().getValue();
             } else {
@@ -2996,10 +2997,10 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
-    private static void writeLongMaskFromList(OutPacket p, List<MapleBuffStat> statups) {
+    private static void writeLongMaskFromList(OutPacket p, List<BuffStat> statups) {
         long firstmask = 0;
         long secondmask = 0;
-        for (MapleBuffStat statup : statups) {
+        for (BuffStat statup : statups) {
             if (statup.isFirst()) {
                 firstmask |= statup.getValue();
             } else {
@@ -3039,12 +3040,12 @@ public class PacketCreator {
         p.writeLong(0);
     }
 
-    public static Packet giveForeignSlowDebuff(int chrId, List<Pair<MapleDisease, Integer>> statups, MobSkill skill) {
+    public static Packet giveForeignSlowDebuff(int chrId, List<Pair<Disease, Integer>> statups, MobSkill skill) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMaskSlowD(p);
-        for (Pair<MapleDisease, Integer> statup : statups) {
-            if (statup.getLeft() == MapleDisease.POISON) {
+        for (Pair<Disease, Integer> statup : statups) {
+            if (statup.getLeft() == Disease.POISON) {
                 p.writeShort(statup.getRight().shortValue());
             }
             p.writeShort(skill.getSkillId());
@@ -3087,7 +3088,7 @@ public class PacketCreator {
     }
 
     // packet found thanks to Ronan
-    public static Packet giveForeignWKChargeEffect(int cid, int buffid, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveForeignWKChargeEffect(int cid, int buffid, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
         writeLongMask(p, statups);
@@ -3105,7 +3106,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerShopChat(MapleCharacter chr, String chat, boolean owner) {
+    public static Packet getPlayerShopChat(Character chr, String chat, boolean owner) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.CHAT.getCode());
         p.writeByte(PlayerInteractionHandler.Action.CHAT_THING.getCode());
@@ -3114,7 +3115,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerShopNewVisitor(MapleCharacter chr, int slot) {
+    public static Packet getPlayerShopNewVisitor(Character chr, int slot) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(slot);
@@ -3132,7 +3133,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradePartnerAdd(MapleCharacter chr) {
+    public static Packet getTradePartnerAdd(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(1);
@@ -3141,7 +3142,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet tradeInvite(MapleCharacter chr) {
+    public static Packet tradeInvite(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.INVITE.getCode());
         p.writeByte(3);
@@ -3167,11 +3168,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerShopItemUpdate(MaplePlayerShop shop) {
+    public static Packet getPlayerShopItemUpdate(PlayerShop shop) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
         p.writeByte(shop.getItems().size());
-        for (MaplePlayerShopItem item : shop.getItems()) {
+        for (PlayerShopItem item : shop.getItems()) {
             p.writeShort(item.getBundles());
             p.writeShort(item.getItem().getQuantity());
             p.writeInt(item.getPrice());
@@ -3180,7 +3181,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerShopOwnerUpdate(MaplePlayerShop.SoldItem item, int position) {
+    public static Packet getPlayerShopOwnerUpdate(PlayerShop.SoldItem item, int position) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_PLAYERSHOP.getCode());
         p.writeByte(position);
@@ -3196,7 +3197,7 @@ public class PacketCreator {
      * @param owner
      * @return
      */
-    public static Packet getPlayerShop(MaplePlayerShop shop, boolean owner) {
+    public static Packet getPlayerShop(PlayerShop shop, boolean owner) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(4);
@@ -3204,9 +3205,9 @@ public class PacketCreator {
         p.writeByte(owner ? 0 : 1);
 
         if (owner) {
-            List<MaplePlayerShop.SoldItem> sold = shop.getSold();
+            List<PlayerShop.SoldItem> sold = shop.getSold();
             p.writeByte(sold.size());
-            for (MaplePlayerShop.SoldItem s : sold) {
+            for (PlayerShop.SoldItem s : sold) {
                 p.writeInt(s.getItemId());
                 p.writeShort(s.getQuantity());
                 p.writeInt(s.getMesos());
@@ -3219,7 +3220,7 @@ public class PacketCreator {
         addCharLook(p, shop.getOwner(), false);
         p.writeString(shop.getOwner().getName());
 
-        MapleCharacter[] visitors = shop.getVisitors();
+        Character[] visitors = shop.getVisitors();
         for (int i = 0; i < 3; i++) {
             if (visitors[i] != null) {
                 p.writeByte(i + 1);
@@ -3230,10 +3231,10 @@ public class PacketCreator {
 
         p.writeByte(0xFF);
         p.writeString(shop.getDescription());
-        List<MaplePlayerShopItem> items = shop.getItems();
+        List<PlayerShopItem> items = shop.getItems();
         p.writeByte(0x10);  //TODO SLOTS, which is 16 for most stores...slotMax
         p.writeByte(items.size());
-        for (MaplePlayerShopItem item : items) {
+        for (PlayerShopItem item : items) {
             p.writeShort(item.getBundles());
             p.writeShort(item.getItem().getQuantity());
             p.writeInt(item.getPrice());
@@ -3242,7 +3243,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeStart(MapleClient c, MapleTrade trade, byte number) {
+    public static Packet getTradeStart(Client c, Trade trade, byte number) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(3);
@@ -3468,11 +3469,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getKeymap(Map<Integer, MapleKeyBinding> keybindings) {
+    public static Packet getKeymap(Map<Integer, KeyBinding> keybindings) {
         final OutPacket p = OutPacket.create(SendOpcode.KEYMAP);
         p.writeByte(0);
         for (int x = 0; x < 90; x++) {
-            MapleKeyBinding binding = keybindings.get(x);
+            KeyBinding binding = keybindings.get(x);
             if (binding != null) {
                 p.writeByte(binding.getType());
                 p.writeInt(binding.getAction());
@@ -3484,7 +3485,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet QuickslotMappedInit(MapleQuickslotBinding pQuickslot) {
+    public static Packet QuickslotMappedInit(QuickslotBinding pQuickslot) {
         OutPacket p = OutPacket.create(SendOpcode.QUICKSLOT_INIT);
         pQuickslot.encode(p);
         return p;
@@ -3552,7 +3553,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet storeStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
+    public static Packet storeStorage(byte slots, InventoryType type, Collection<Item> items) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0xD);
         p.writeByte(slots);
@@ -3566,7 +3567,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet takeOutStorage(byte slots, MapleInventoryType type, Collection<Item> items) {
+    public static Packet takeOutStorage(byte slots, InventoryType type, Collection<Item> items) {
         final OutPacket p = OutPacket.create(SendOpcode.STORAGE);
         p.writeByte(0x9);
         p.writeByte(slots);
@@ -3681,17 +3682,17 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet partyCreated(MapleParty party, int partycharid) {
+    public static Packet partyCreated(Party party, int partycharid) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         p.writeByte(8);
         p.writeInt(party.getId());
 
-        Map<Integer, MapleDoor> partyDoors = party.getDoors();
+        Map<Integer, Door> partyDoors = party.getDoors();
         if (partyDoors.size() > 0) {
-            MapleDoor door = partyDoors.get(partycharid);
+            Door door = partyDoors.get(partycharid);
 
             if (door != null) {
-                MapleDoorObject mdo = door.getAreaDoor();
+                DoorObject mdo = door.getAreaDoor();
                 p.writeInt(mdo.getTo().getId());
                 p.writeInt(mdo.getFrom().getId());
                 p.writeInt(mdo.getPosition().x);
@@ -3711,7 +3712,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet partyInvite(MapleCharacter from) {
+    public static Packet partyInvite(Character from) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         p.writeByte(4);
         p.writeInt(from.getParty().getId());
@@ -3720,7 +3721,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet partySearchInvite(MapleCharacter from) {
+    public static Packet partySearchInvite(Character from) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         p.writeByte(4);
         p.writeInt(from.getParty().getId());
@@ -3763,24 +3764,24 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addPartyStatus(int forchannel, MapleParty party, OutPacket p, boolean leaving) {
-        List<MaplePartyCharacter> partymembers = new ArrayList<>(party.getMembers());
+    private static void addPartyStatus(int forchannel, Party party, OutPacket p, boolean leaving) {
+        List<PartyCharacter> partymembers = new ArrayList<>(party.getMembers());
         while (partymembers.size() < 6) {
-            partymembers.add(new MaplePartyCharacter());
+            partymembers.add(new PartyCharacter());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getId());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeFixedString(getRightPaddedStr(partychar.getName(), '\0', 13));
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getJobId());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             p.writeInt(partychar.getLevel());
         }
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             if (partychar.isOnline()) {
                 p.writeInt(partychar.getChannel() - 1);
             } else {
@@ -3788,7 +3789,7 @@ public class PacketCreator {
             }
         }
         p.writeInt(party.getLeader().getId());
-        for (MaplePartyCharacter partychar : partymembers) {
+        for (PartyCharacter partychar : partymembers) {
             if (partychar.getChannel() == forchannel) {
                 p.writeInt(partychar.getMapId());
             } else {
@@ -3796,13 +3797,13 @@ public class PacketCreator {
             }
         }
 
-        Map<Integer, MapleDoor> partyDoors = party.getDoors();
-        for (MaplePartyCharacter partychar : partymembers) {
+        Map<Integer, Door> partyDoors = party.getDoors();
+        for (PartyCharacter partychar : partymembers) {
             if (partychar.getChannel() == forchannel && !leaving) {
                 if (partyDoors.size() > 0) {
-                    MapleDoor door = partyDoors.get(partychar.getId());
+                    Door door = partyDoors.get(partychar.getId());
                     if (door != null) {
-                        MapleDoorObject mdo = door.getTownDoor();
+                        DoorObject mdo = door.getTownDoor();
                         p.writeInt(mdo.getTown().getId());
                         p.writeInt(mdo.getArea().getId());
                         p.writeInt(mdo.getPosition().x);
@@ -3828,7 +3829,7 @@ public class PacketCreator {
         }
     }
 
-    public static Packet updateParty(int forChannel, MapleParty party, PartyOperation op, MaplePartyCharacter target) {
+    public static Packet updateParty(int forChannel, Party party, PartyOperation op, PartyCharacter target) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         switch (op) {
             case DISBAND:
@@ -3980,7 +3981,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnMist(int objId, int ownerChrId, int skill, int level, MapleMist mist) {
+    public static Packet spawnMist(int objId, int ownerChrId, int skill, int level, Mist mist) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MIST);
         p.writeInt(objId);
         p.writeInt(mist.isMobMist() ? 0 : mist.isPoisonMist() ? 1 : mist.isRecoveryMist() ? 4 : 2); // mob mist = 0, player poison = 1, smokescreen = 2, unknown = 3, recovery = 4
@@ -4116,7 +4117,7 @@ public class PacketCreator {
     }
 
     // is there a way to spawn reactors non-animated?
-    public static Packet spawnReactor(MapleReactor reactor) {
+    public static Packet spawnReactor(Reactor reactor) {
         OutPacket p = OutPacket.create(SendOpcode.REACTOR_SPAWN);
         p.writeInt(reactor.getObjectId());
         p.writeInt(reactor.getId());
@@ -4128,7 +4129,7 @@ public class PacketCreator {
     }
 
     // is there a way to trigger reactors without performing the hit animation?
-    public static Packet triggerReactor(MapleReactor reactor, int stance) {
+    public static Packet triggerReactor(Reactor reactor, int stance) {
         OutPacket p = OutPacket.create(SendOpcode.REACTOR_HIT);
         p.writeInt(reactor.getObjectId());
         p.writeByte(reactor.getState());
@@ -4139,7 +4140,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet destroyReactor(MapleReactor reactor) {
+    public static Packet destroyReactor(Reactor reactor) {
         OutPacket p = OutPacket.create(SendOpcode.REACTOR_DESTROY);
         p.writeInt(reactor.getObjectId());
         p.writeByte(reactor.getState());
@@ -4220,7 +4221,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet skillEffect(MapleCharacter from, int skillId, int level, byte flags, int speed, byte direction) {
+    public static Packet skillEffect(Character from, int skillId, int level, byte flags, int speed, byte direction) {
         final OutPacket p = OutPacket.create(SendOpcode.SKILL_EFFECT);
         p.writeInt(from.getId());
         p.writeInt(skillId);
@@ -4231,7 +4232,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet skillCancel(MapleCharacter from, int skillId) {
+    public static Packet skillCancel(Character from, int skillId) {
         final OutPacket p = OutPacket.create(SendOpcode.CANCEL_SKILL_EFFECT);
         p.writeInt(from.getId());
         p.writeInt(skillId);
@@ -4290,7 +4291,7 @@ public class PacketCreator {
     }
 
         /*
-        public static Packet sendSpouseChat(MapleCharacter partner, String msg) {
+        public static Packet sendSpouseChat(Character partner, String msg) {
                 OutPacket p = OutPacket.create(SendOpcode);
                 SPOUSE_CHAT);
                 p.writeString(partner.getName());
@@ -4310,7 +4311,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet addMessengerPlayer(String from, MapleCharacter chr, int position, int channel) {
+    public static Packet addMessengerPlayer(String from, Character chr, int position, int channel) {
         final OutPacket p = OutPacket.create(SendOpcode.MESSENGER);
         p.writeByte(0x00);
         p.writeByte(position);
@@ -4328,7 +4329,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateMessengerPlayer(String from, MapleCharacter chr, int position, int channel) {
+    public static Packet updateMessengerPlayer(String from, Character chr, int position, int channel) {
         final OutPacket p = OutPacket.create(SendOpcode.MESSENGER);
         p.writeByte(0x07);
         p.writeByte(position);
@@ -4361,7 +4362,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addPetInfo(final OutPacket p, MaplePet pet, boolean showpet) {
+    private static void addPetInfo(final OutPacket p, Pet pet, boolean showpet) {
         p.writeByte(1);
         if (showpet) {
             p.writeByte(0);
@@ -4375,7 +4376,7 @@ public class PacketCreator {
         p.writeInt(pet.getFh());
     }
 
-    public static Packet showPet(MapleCharacter chr, MaplePet pet, boolean remove, boolean hunger) {
+    public static Packet showPet(Character chr, Pet pet, boolean remove, boolean hunger) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PET);
         p.writeInt(chr.getId());
         p.writeByte(chr.getPetIndex(pet));
@@ -4437,7 +4438,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showPetLevelUp(MapleCharacter chr, byte index) {
+    public static Packet showPetLevelUp(Character chr, byte index) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_FOREIGN_EFFECT);
         p.writeInt(chr.getId());
         p.writeByte(4);
@@ -4446,7 +4447,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet changePetName(MapleCharacter chr, String newname, int slot) {
+    public static Packet changePetName(Character chr, String newname, int slot) {
         OutPacket p = OutPacket.create(SendOpcode.PET_NAMECHANGE);
         p.writeInt(chr.getId());
         p.writeByte(0);
@@ -4467,15 +4468,15 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet petStatUpdate(MapleCharacter chr) {
+    public static Packet petStatUpdate(Character chr) {
         // this actually does nothing... packet structure and stats needs to be uncovered
 
         final OutPacket p = OutPacket.create(SendOpcode.STAT_CHANGED);
         int mask = 0;
-        mask |= MapleStat.PET.getValue();
+        mask |= Stat.PET.getValue();
         p.writeByte(0);
         p.writeInt(mask);
-        MaplePet[] pets = chr.getPets();
+        Pet[] pets = chr.getPets();
         for (int i = 0; i < 3; i++) {
             if (pets[i] != null) {
                 p.writeLong(pets[i].getUniqueId());
@@ -4510,7 +4511,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet skillBookResult(MapleCharacter chr, int skillid, int maxlevel, boolean canuse, boolean success) {
+    public static Packet skillBookResult(Character chr, int skillid, int maxlevel, boolean canuse, boolean success) {
         final OutPacket p = OutPacket.create(SendOpcode.SKILL_LEARN_ITEM_RESULT);
         p.writeInt(chr.getId());
         p.writeByte(1);
@@ -4543,19 +4544,19 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showAllCharacterInfo(int worldid, List<MapleCharacter> chars, boolean usePic) {
+    public static Packet showAllCharacterInfo(int worldid, List<Character> chars, boolean usePic) {
         final OutPacket p = OutPacket.create(SendOpcode.VIEW_ALL_CHAR);
         p.writeByte(0);
         p.writeByte(worldid);
         p.writeByte(chars.size());
-        for (MapleCharacter chr : chars) {
+        for (Character chr : chars) {
             addCharEntry(p, chr, true);
         }
         p.writeByte(usePic ? 1 : 2);
         return p;
     }
 
-    public static Packet updateMount(int charid, MapleMount mount, boolean levelup) {
+    public static Packet updateMount(int charid, Mount mount, boolean levelup) {
         final OutPacket p = OutPacket.create(SendOpcode.SET_TAMING_MOB_INFO);
         p.writeInt(charid);
         p.writeInt(mount.getLevel());
@@ -4579,7 +4580,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGame(MapleClient c, MapleMiniGame minigame, boolean owner, int piece) {
+    public static Packet getMiniGame(Client c, MiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(1);
@@ -4589,7 +4590,7 @@ public class PacketCreator {
         addCharLook(p, minigame.getOwner(), false);
         p.writeString(minigame.getOwner().getName());
         if (minigame.getVisitor() != null) {
-            MapleCharacter visitor = minigame.getVisitor();
+            Character visitor = minigame.getVisitor();
             p.writeByte(1);
             addCharLook(p, visitor, false);
             p.writeString(visitor.getName());
@@ -4602,7 +4603,7 @@ public class PacketCreator {
         p.writeInt(minigame.getOwner().getMiniGamePoints(MiniGameResult.LOSS, true));
         p.writeInt(minigame.getOwnerScore());
         if (minigame.getVisitor() != null) {
-            MapleCharacter visitor = minigame.getVisitor();
+            Character visitor = minigame.getVisitor();
             p.writeByte(1);
             p.writeInt(1);
             p.writeInt(visitor.getMiniGamePoints(MiniGameResult.WIN, true));
@@ -4617,39 +4618,39 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameReady(MapleMiniGame game) {
+    public static Packet getMiniGameReady(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.READY.getCode());
         return p;
     }
 
-    public static Packet getMiniGameUnReady(MapleMiniGame game) {
+    public static Packet getMiniGameUnReady(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UN_READY.getCode());
         return p;
     }
 
-    public static Packet getMiniGameStart(MapleMiniGame game, int loser) {
+    public static Packet getMiniGameStart(MiniGame game, int loser) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.START.getCode());
         p.writeByte(loser);
         return p;
     }
 
-    public static Packet getMiniGameSkipOwner(MapleMiniGame game) {
+    public static Packet getMiniGameSkipOwner(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SKIP.getCode());
         p.writeByte(0x01);
         return p;
     }
 
-    public static Packet getMiniGameRequestTie(MapleMiniGame game) {
+    public static Packet getMiniGameRequestTie(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.REQUEST_TIE.getCode());
         return p;
     }
 
-    public static Packet getMiniGameDenyTie(MapleMiniGame game) {
+    public static Packet getMiniGameDenyTie(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ANSWER_TIE.getCode());
         return p;
@@ -4675,13 +4676,13 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameSkipVisitor(MapleMiniGame game) {
+    public static Packet getMiniGameSkipVisitor(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeShort(PlayerInteractionHandler.Action.SKIP.getCode());
         return p;
     }
 
-    public static Packet getMiniGameMoveOmok(MapleMiniGame game, int move1, int move2, int move3) {
+    public static Packet getMiniGameMoveOmok(MiniGame game, int move1, int move2, int move3) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.MOVE_OMOK.getCode());
         p.writeInt(move1);
@@ -4690,7 +4691,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameNewVisitor(MapleMiniGame minigame, MapleCharacter chr, int slot) {
+    public static Packet getMiniGameNewVisitor(MiniGame minigame, Character chr, int slot) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(slot);
@@ -4711,7 +4712,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static Packet getMiniGameResult(MapleMiniGame game, int tie, int result, int forfeit) {
+    private static Packet getMiniGameResult(MiniGame game, int tie, int result, int forfeit) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.GET_RESULT.getCode());
 
@@ -4758,15 +4759,15 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameOwnerWin(MapleMiniGame game, boolean forfeit) {
+    public static Packet getMiniGameOwnerWin(MiniGame game, boolean forfeit) {
         return getMiniGameResult(game, 0, 1, forfeit ? 1 : 0);
     }
 
-    public static Packet getMiniGameVisitorWin(MapleMiniGame game, boolean forfeit) {
+    public static Packet getMiniGameVisitorWin(MiniGame game, boolean forfeit) {
         return getMiniGameResult(game, 0, 2, forfeit ? 1 : 0);
     }
 
-    public static Packet getMiniGameTie(MapleMiniGame game) {
+    public static Packet getMiniGameTie(MiniGame game) {
         return getMiniGameResult(game, 1, 3, 0);
     }
 
@@ -4778,7 +4779,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCard(MapleClient c, MapleMiniGame minigame, boolean owner, int piece) {
+    public static Packet getMatchCard(Client c, MiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(2);
@@ -4788,7 +4789,7 @@ public class PacketCreator {
         addCharLook(p, minigame.getOwner(), false);
         p.writeString(minigame.getOwner().getName());
         if (minigame.getVisitor() != null) {
-            MapleCharacter visitor = minigame.getVisitor();
+            Character visitor = minigame.getVisitor();
             p.writeByte(1);
             addCharLook(p, visitor, false);
             p.writeString(visitor.getName());
@@ -4803,7 +4804,7 @@ public class PacketCreator {
         //set vs
         p.writeInt(minigame.getOwnerScore());
         if (minigame.getVisitor() != null) {
-            MapleCharacter visitor = minigame.getVisitor();
+            Character visitor = minigame.getVisitor();
             p.writeByte(1);
             p.writeInt(2);
             p.writeInt(visitor.getMiniGamePoints(MiniGameResult.WIN, false));
@@ -4818,7 +4819,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCardStart(MapleMiniGame game, int loser) {
+    public static Packet getMatchCardStart(MiniGame game, int loser) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.START.getCode());
         p.writeByte(loser);
@@ -4839,7 +4840,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCardNewVisitor(MapleMiniGame minigame, MapleCharacter chr, int slot) {
+    public static Packet getMatchCardNewVisitor(MiniGame minigame, Character chr, int slot) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(slot);
@@ -4853,7 +4854,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCardSelect(MapleMiniGame game, int turn, int slot, int firstslot, int type) {
+    public static Packet getMatchCardSelect(MiniGame game, int turn, int slot, int firstslot, int type) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SELECT_CARD.getCode());
         p.writeByte(turn);
@@ -4920,7 +4921,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getFredrick(MapleCharacter chr) {
+    public static Packet getFredrick(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.FREDRICK);
         p.writeByte(0x23);
         p.writeInt(9030000); // Fredrick
@@ -4929,10 +4930,10 @@ public class PacketCreator {
         p.writeInt(chr.getMerchantNetMeso());
         p.writeByte(0);
         try {
-            List<Pair<Item, MapleInventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
+            List<Pair<Item, InventoryType>> items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
             p.writeByte(items.size());
 
-            for (Pair<Item, MapleInventoryType> item : items) {
+            for (Pair<Item, InventoryType> item : items) {
                 addItemInfo(p, item.getLeft(), true);
             }
         } catch (SQLException e) {
@@ -4942,28 +4943,28 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet addOmokBox(MapleCharacter chr, int amount, int type) {
+    public static Packet addOmokBox(Character chr, int amount, int type) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(chr.getId());
         addAnnounceBox(p, chr.getMiniGame(), amount, type);
         return p;
     }
 
-    public static Packet addMatchCardBox(MapleCharacter chr, int amount, int type) {
+    public static Packet addMatchCardBox(Character chr, int amount, int type) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(chr.getId());
         addAnnounceBox(p, chr.getMiniGame(), amount, type);
         return p;
     }
 
-    public static Packet removeMinigameBox(MapleCharacter chr) {
+    public static Packet removeMinigameBox(Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(chr.getId());
         p.writeByte(0);
         return p;
     }
 
-    public static Packet getPlayerShopChat(MapleCharacter chr, String chat, byte slot) {
+    public static Packet getPlayerShopChat(Character chr, String chat, byte slot) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.CHAT.getCode());
         p.writeByte(PlayerInteractionHandler.Action.CHAT_THING.getCode());
@@ -4972,7 +4973,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeChat(MapleCharacter chr, String chat, boolean owner) {
+    public static Packet getTradeChat(Character chr, String chat, boolean owner) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.CHAT.getCode());
         p.writeByte(PlayerInteractionHandler.Action.CHAT_THING.getCode());
@@ -5003,7 +5004,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet owlOfMinerva(MapleClient c, int itemId, List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> hmsAvailable) {
+    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<PlayerShopItem, AbstractMapObject>> hmsAvailable) {
         byte itemType = ItemConstants.getInventoryType(itemId).getType();
 
         OutPacket p = OutPacket.create(SendOpcode.SHOP_SCANNER_RESULT);
@@ -5011,12 +5012,12 @@ public class PacketCreator {
         p.writeInt(0);
         p.writeInt(itemId);
         p.writeInt(hmsAvailable.size());
-        for (Pair<MaplePlayerShopItem, AbstractMapleMapObject> hme : hmsAvailable) {
-            MaplePlayerShopItem item = hme.getLeft();
-            AbstractMapleMapObject mo = hme.getRight();
+        for (Pair<PlayerShopItem, AbstractMapObject> hme : hmsAvailable) {
+            PlayerShopItem item = hme.getLeft();
+            AbstractMapObject mo = hme.getRight();
 
-            if (mo instanceof MaplePlayerShop ps) {
-                MapleCharacter owner = ps.getOwner();
+            if (mo instanceof PlayerShop ps) {
+                Character owner = ps.getOwner();
 
                 p.writeString(owner.getName());
                 p.writeInt(owner.getMapId());
@@ -5027,7 +5028,7 @@ public class PacketCreator {
                 p.writeInt(owner.getId());
                 p.writeByte(owner.getClient().getChannel() - 1);
             } else {
-                MapleHiredMerchant hm = (MapleHiredMerchant) mo;
+                HiredMerchant hm = (HiredMerchant) mo;
 
                 p.writeString(hm.getOwner());
                 p.writeInt(hm.getMapId());
@@ -5040,7 +5041,7 @@ public class PacketCreator {
             }
 
             p.writeByte(itemType);
-            if (itemType == MapleInventoryType.EQUIP.getType()) {
+            if (itemType == InventoryType.EQUIP.getType()) {
                 addItemInfo(p, item.getItem(), true);
             }
         }
@@ -5079,7 +5080,7 @@ public class PacketCreator {
      * 0x12 = FKING POPUP LOL
      */
 
-    public static Packet getHiredMerchant(MapleCharacter chr, MapleHiredMerchant hm, boolean firstTime) {//Thanks Dustin
+    public static Packet getHiredMerchant(Character chr, HiredMerchant hm, boolean firstTime) {//Thanks Dustin
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(0x05);
@@ -5088,7 +5089,7 @@ public class PacketCreator {
         p.writeInt(hm.getItemId());
         p.writeString("Hired Merchant");
 
-        MapleCharacter[] visitors = hm.getVisitors();
+        Character[] visitors = hm.getVisitors();
         for (int i = 0; i < 3; i++) {
             if (visitors[i] != null) {
                 p.writeByte(i + 1);
@@ -5113,9 +5114,9 @@ public class PacketCreator {
             p.writeShort(0);
             p.writeShort(hm.getTimeOpen());
             p.writeByte(firstTime ? 1 : 0);
-            List<MapleHiredMerchant.SoldItem> sold = hm.getSold();
+            List<HiredMerchant.SoldItem> sold = hm.getSold();
             p.writeByte(sold.size());
-            for (MapleHiredMerchant.SoldItem s : sold) {
+            for (HiredMerchant.SoldItem s : sold) {
                 p.writeInt(s.getItemId());
                 p.writeShort(s.getQuantity());
                 p.writeInt(s.getMesos());
@@ -5130,7 +5131,7 @@ public class PacketCreator {
         if (hm.getItems().isEmpty()) {
             p.writeByte(0);//Hmm??
         } else {
-            for (MaplePlayerShopItem item : hm.getItems()) {
+            for (PlayerShopItem item : hm.getItems()) {
                 p.writeShort(item.getBundles());
                 p.writeShort(item.getItem().getQuantity());
                 p.writeInt(item.getPrice());
@@ -5140,12 +5141,12 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateHiredMerchant(MapleHiredMerchant hm, MapleCharacter chr) {
+    public static Packet updateHiredMerchant(HiredMerchant hm, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
         p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
-        for (MaplePlayerShopItem item : hm.getItems()) {
+        for (PlayerShopItem item : hm.getItems()) {
             p.writeShort(item.getBundles());
             p.writeShort(item.getItem().getQuantity());
             p.writeInt(item.getPrice());
@@ -5202,7 +5203,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet hiredMerchantVisitorAdd(MapleCharacter chr, int slot) {
+    public static Packet hiredMerchantVisitorAdd(Character chr, int slot) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(slot);
@@ -5211,7 +5212,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnHiredMerchantBox(MapleHiredMerchant hm) {
+    public static Packet spawnHiredMerchantBox(HiredMerchant hm) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_HIRED_MERCHANT);
         p.writeInt(hm.getOwnerId());
         p.writeInt(hm.getItemId());
@@ -5233,7 +5234,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnPlayerNPC(MaplePlayerNPC npc) {
+    public static Packet spawnPlayerNPC(PlayerNPC npc) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC_REQUEST_CONTROLLER);
         p.writeByte(1);
         p.writeInt(npc.getObjectId());
@@ -5248,7 +5249,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerNPC(MaplePlayerNPC npc) {     // thanks to Arnah
+    public static Packet getPlayerNPC(PlayerNPC npc) {     // thanks to Arnah
         final OutPacket p = OutPacket.create(SendOpcode.IMITATED_NPC_DATA);
         p.writeByte(0x01);
         p.writeInt(npc.getScriptId());
@@ -5312,12 +5313,12 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet givePirateBuff(List<Pair<MapleBuffStat, Integer>> statups, int buffid, int duration) {
+    public static Packet givePirateBuff(List<Pair<BuffStat, Integer>> statups, int buffid, int duration) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION || buffid == Corsair.SPEED_INFUSION;
         writeLongMask(p, statups);
         p.writeShort(0);
-        for (Pair<MapleBuffStat, Integer> stat : statups) {
+        for (Pair<BuffStat, Integer> stat : statups) {
             p.writeInt(stat.getRight().shortValue());
             p.writeInt(buffid);
             p.skip(infusion ? 10 : 5);
@@ -5327,13 +5328,13 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet giveForeignPirateBuff(int cid, int buffid, int time, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveForeignPirateBuff(int cid, int buffid, int time, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION || buffid == Corsair.SPEED_INFUSION;
         p.writeInt(cid);
         writeLongMask(p, statups);
         p.writeShort(0);
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
+        for (Pair<BuffStat, Integer> statup : statups) {
             p.writeInt(statup.getRight().shortValue());
             p.writeInt(buffid);
             p.skip(infusion ? 10 : 5);
@@ -5404,7 +5405,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet useChalkboard(MapleCharacter chr, boolean close) {
+    public static Packet useChalkboard(Character chr, boolean close) {
         OutPacket p = OutPacket.create(SendOpcode.CHALKBOARD);
         p.writeInt(chr.getId());
         if (close) {
@@ -5416,7 +5417,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet trockRefreshMapList(MapleCharacter chr, boolean delete, boolean vip) {
+    public static Packet trockRefreshMapList(Character chr, boolean delete, boolean vip) {
         final OutPacket p = OutPacket.create(SendOpcode.MAP_TRANSFER_RESULT);
         p.writeByte(delete ? 2 : 3);
         if (vip) {
@@ -5445,7 +5446,7 @@ public class PacketCreator {
             8: must quit family,
             9: unknown error
         */
-    public static Packet sendWorldTransferRules(int error, MapleClient c) {
+    public static Packet sendWorldTransferRules(int error, Client c) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CHECK_TRANSFER_WORLD_POSSIBLE_RESULT);
         p.writeInt(0); //ignored
         p.writeByte(error);
@@ -5523,7 +5524,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showMTSCash(MapleCharacter chr) {
+    public static Packet showMTSCash(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.MTS_OPERATION2);
         p.writeInt(chr.getCashShop().getCash(4));
         p.writeInt(chr.getCashShop().getCash(2));
@@ -5632,7 +5633,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showCash(MapleCharacter mc) {
+    public static Packet showCash(Character mc) {
         final OutPacket p = OutPacket.create(SendOpcode.QUERY_CASH_RESULT);
         p.writeInt(mc.getCashShop().getCash(1));
         p.writeInt(mc.getCashShop().getCash(2));
@@ -5640,7 +5641,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet enableCSUse(MapleCharacter mc) {
+    public static Packet enableCSUse(Character mc) {
         return showCash(mc);
     }
 
@@ -5664,7 +5665,7 @@ public class PacketCreator {
      * @param flag           LOCATION or LOCATION_FRIEND
      * @return packet structure
      */
-    public static Packet getFindResult(MapleCharacter target, byte type, int fieldOrChannel, byte flag) {
+    public static Packet getFindResult(Character target, byte type, int fieldOrChannel, byte flag) {
         OutPacket p = OutPacket.create(SendOpcode.WHISPER);
 
         p.writeByte(flag | WhisperFlag.RESULT);
@@ -5718,7 +5719,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateGender(MapleCharacter chr) {
+    public static Packet updateGender(Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.SET_GENDER);
         p.writeByte(chr.getGender());
         return p;
@@ -5744,11 +5745,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet loadFamily(MapleCharacter player) {
+    public static Packet loadFamily(Character player) {
         final OutPacket p = OutPacket.create(SendOpcode.FAMILY_PRIVILEGE_LIST);
-        p.writeInt(MapleFamilyEntitlement.values().length);
-        for (int i = 0; i < MapleFamilyEntitlement.values().length; i++) {
-            MapleFamilyEntitlement entitlement = MapleFamilyEntitlement.values()[i];
+        p.writeInt(FamilyEntitlement.values().length);
+        for (int i = 0; i < FamilyEntitlement.values().length; i++) {
+            FamilyEntitlement entitlement = FamilyEntitlement.values()[i];
             p.writeByte(i <= 1 ? 1 : 2); //type
             p.writeInt(entitlement.getRepCost());
             p.writeInt(entitlement.getUsageLimit());
@@ -5800,7 +5801,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getFamilyInfo(MapleFamilyEntry f) {
+    public static Packet getFamilyInfo(FamilyEntry f) {
         if (f == null) {
             return getEmptyFamilyInfo();
         }
@@ -5815,8 +5816,8 @@ public class PacketCreator {
         p.writeInt(f.getFamily().getLeader().getChrId()); // Leader ID (Allows setting message)
         p.writeString(f.getFamily().getName());
         p.writeString(f.getFamily().getMessage()); //family message
-        p.writeInt(MapleFamilyEntitlement.values().length); //Entitlement info count
-        for (MapleFamilyEntitlement entitlement : MapleFamilyEntitlement.values()) {
+        p.writeInt(FamilyEntitlement.values().length); //Entitlement info count
+        for (FamilyEntitlement entitlement : FamilyEntitlement.values()) {
             p.writeInt(entitlement.ordinal()); //ID
             p.writeInt(f.isEntitlementUsed(entitlement) ? 1 : 0); //Used count
         }
@@ -5838,10 +5839,10 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showPedigree(MapleFamilyEntry entry) {
+    public static Packet showPedigree(FamilyEntry entry) {
         final OutPacket p = OutPacket.create(SendOpcode.FAMILY_CHART_RESULT);
         p.writeInt(entry.getChrId()); //ID of viewed player's pedigree, can't be leader?
-        List<MapleFamilyEntry> superJuniors = new ArrayList<>(4);
+        List<FamilyEntry> superJuniors = new ArrayList<>(4);
         boolean hasOtherJunior = false;
         int entryCount = 2; //2 guaranteed, leader and self
         entryCount += Math.min(2, entry.getTotalSeniors());
@@ -5852,12 +5853,12 @@ public class PacketCreator {
                 hasOtherJunior = true;
             }
         }
-        for (MapleFamilyEntry junior : entry.getJuniors()) {
+        for (FamilyEntry junior : entry.getJuniors()) {
                 if (junior == null) {
                         continue;
                 }
             entryCount++;
-            for (MapleFamilyEntry superJunior : junior.getJuniors()) {
+            for (FamilyEntry superJunior : junior.getJuniors()) {
                     if (superJunior == null) {
                             continue;
                     }
@@ -5880,7 +5881,7 @@ public class PacketCreator {
         }
         addPedigreeEntry(p, entry);
         if (hasOtherJunior) { //must be sent after own entry
-            MapleFamilyEntry otherJunior = entry.getSenior().getOtherJunior(entry);
+            FamilyEntry otherJunior = entry.getSenior().getOtherJunior(entry);
             if (otherJunior != null) {
                 addPedigreeEntry(p, otherJunior);
             }
@@ -5888,12 +5889,12 @@ public class PacketCreator {
         if (missingEntries) {
             addPedigreeEntry(p, entry);
         }
-        for (MapleFamilyEntry junior : entry.getJuniors()) {
+        for (FamilyEntry junior : entry.getJuniors()) {
             if (junior == null) {
                 continue;
             }
             addPedigreeEntry(p, junior);
-            for (MapleFamilyEntry superJunior : junior.getJuniors()) {
+            for (FamilyEntry superJunior : junior.getJuniors()) {
                 if (superJunior != null) {
                     addPedigreeEntry(p, superJunior);
                 }
@@ -5905,7 +5906,7 @@ public class PacketCreator {
         p.writeInt(entry.getFamily().getTotalMembers());
         p.writeInt(0);
         p.writeInt(entry.getTotalSeniors()); //client subtracts provided seniors
-        for (MapleFamilyEntry superJunior : superJuniors) {
+        for (FamilyEntry superJunior : superJuniors) {
             p.writeInt(superJunior.getChrId());
             p.writeInt(superJunior.getTotalJuniors());
         }
@@ -5916,8 +5917,8 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addPedigreeEntry(OutPacket p, MapleFamilyEntry entry) {
-        MapleCharacter chr = entry.getChr();
+    private static void addPedigreeEntry(OutPacket p, FamilyEntry entry) {
+        Character chr = entry.getChr();
         boolean isOnline = chr != null;
         p.writeInt(entry.getChrId()); //ID
         p.writeInt(entry.getSenior() != null ? entry.getSenior().getChrId() : 0); //parent ID
@@ -6587,7 +6588,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateDojoStats(MapleCharacter chr, int belt) {
+    public static Packet updateDojoStats(Character chr, int belt) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(10);
         p.writeBytes(new byte[]{(byte) 0xB7, 4}); //?
@@ -6691,7 +6692,7 @@ public class PacketCreator {
         return builder.toString();
     }
 
-    public static Packet MobDamageMobFriendly(MapleMonster mob, int damage, int remainingHp) {
+    public static Packet MobDamageMobFriendly(Monster mob, int damage, int remainingHp) {
         final OutPacket p = OutPacket.create(SendOpcode.DAMAGE_MONSTER);
         p.writeInt(mob.getObjectId());
         p.writeByte(1); // direction ?
@@ -6709,9 +6710,9 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addRingInfo(OutPacket p, MapleCharacter chr) {
+    private static void addRingInfo(OutPacket p, Character chr) {
         p.writeShort(chr.getCrushRings().size());
-        for (MapleRing ring : chr.getCrushRings()) {
+        for (Ring ring : chr.getCrushRings()) {
             p.writeInt(ring.getPartnerChrId());
             p.writeFixedString(getRightPaddedStr(ring.getPartnerName(), '\0', 13));
             p.writeInt(ring.getRingId());
@@ -6720,7 +6721,7 @@ public class PacketCreator {
             p.writeInt(0);
         }
         p.writeShort(chr.getFriendshipRings().size());
-        for (MapleRing ring : chr.getFriendshipRings()) {
+        for (Ring ring : chr.getFriendshipRings()) {
             p.writeInt(ring.getPartnerChrId());
             p.writeFixedString(getRightPaddedStr(ring.getPartnerName(), '\0', 13));
             p.writeInt(ring.getRingId());
@@ -6731,7 +6732,7 @@ public class PacketCreator {
         }
 
         if (chr.getPartnerId() > 0) {
-            MapleRing marriageRing = chr.getMarriageRing();
+            Ring marriageRing = chr.getMarriageRing();
 
             p.writeShort(1);
             p.writeInt(chr.getRelationshipId());
@@ -6745,8 +6746,8 @@ public class PacketCreator {
                 p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
                 p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
             }
-            p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : MapleCharacter.getNameById(chr.getPartnerId()), '\0', 13));
-            p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? MapleCharacter.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
+            p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
         } else {
             p.writeShort(0);
         }
@@ -6791,7 +6792,7 @@ public class PacketCreator {
         return OutPacket.create(SendOpcode.LEFT_KNOCK_BACK);
     }
 
-    public static Packet rollSnowBall(boolean entermap, int state, MapleSnowball ball0, MapleSnowball ball1) {
+    public static Packet rollSnowBall(boolean entermap, int state, Snowball ball0, Snowball ball1) {
         OutPacket p = OutPacket.create(SendOpcode.SNOWBALL_STATE);
         if (entermap) {
             p.skip(21);
@@ -6895,7 +6896,7 @@ public class PacketCreator {
         boolean isGift = giftMessage != null;
         boolean isRing = false;
         Equip equip = null;
-        if (item.getInventoryType().equals(MapleInventoryType.EQUIP)) {
+        if (item.getInventoryType().equals(InventoryType.EQUIP)) {
             equip = (Equip) item;
             isRing = equip.getRingId() > -1;
         }
@@ -6918,7 +6919,7 @@ public class PacketCreator {
         p.writeLong(0);
     }
 
-    public static Packet showWishList(MapleCharacter mc, boolean update) {
+    public static Packet showWishList(Character mc, boolean update) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
         if (update) {
@@ -7016,7 +7017,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showCashInventory(MapleClient c) {
+    public static Packet showCashInventory(Client c) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
         p.writeByte(0x4B);
@@ -7119,7 +7120,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet openCashShop(MapleClient c, boolean mts) throws Exception {
+    public static Packet openCashShop(Client c, boolean mts) throws Exception {
         final OutPacket p = OutPacket.create(mts ? SendOpcode.SET_ITC : SendOpcode.SET_CASH_SHOP);
 
         addCharacterInfo(p, c.getPlayer());
@@ -7226,7 +7227,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet startMonsterCarnival(MapleCharacter chr, int team, int opposition) {
+    public static Packet startMonsterCarnival(Character chr, int team, int opposition) {
         OutPacket p = OutPacket.create(SendOpcode.MONSTER_CARNIVAL_START);
         p.writeByte(team); // team
         p.writeShort(chr.getCP()); // Obtained CP - Used CP
@@ -7275,7 +7276,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnDragon(MapleDragon dragon) {
+    public static Packet spawnDragon(Dragon dragon) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_DRAGON);
         p.writeInt(dragon.getOwner().getId());//objectid = owner id
         p.writeShort(dragon.getPosition().x);
@@ -7288,7 +7289,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet moveDragon(MapleDragon dragon, Point startPos, InPacket movementPacket, long movementDataLength) {
+    public static Packet moveDragon(Dragon dragon, Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_DRAGON);
         p.writeInt(dragon.getOwner().getId());
         p.writePos(startPos);

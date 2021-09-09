@@ -1,14 +1,14 @@
 package constants.game;
 
-import client.MapleDisease;
-import client.MapleJob;
+import client.Disease;
+import client.Job;
 import config.YamlConfig;
 import constants.skills.Aran;
 import provider.*;
 import provider.wz.WZFiles;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -35,8 +35,8 @@ public class GameConstants {
     private final static NumberFormat nfFormatter = new DecimalFormat("#,###,###,###");
     private final static NumberFormat nfParser = NumberFormat.getInstance(YamlConfig.config.server.USE_UNITPRICE_WITH_COMMA ? Locale.FRANCE : Locale.UK);
     
-    public static final MapleDisease[] CPQ_DISEASES = {MapleDisease.SLOW, MapleDisease.SEDUCE, MapleDisease.STUN, MapleDisease.POISON,
-                                                       MapleDisease.SEAL, MapleDisease.DARKNESS, MapleDisease.WEAKEN, MapleDisease.CURSE};
+    public static final Disease[] CPQ_DISEASES = {Disease.SLOW, Disease.SEDUCE, Disease.STUN, Disease.POISON,
+                                                       Disease.SEAL, Disease.DARKNESS, Disease.WEAKEN, Disease.CURSE};
     
     public static final int MAX_FIELD_MOB_DAMAGE = getMaxObstacleMobDamageFromWz() * 2;
     
@@ -307,7 +307,7 @@ public class GameConstants {
         String name = jobNames.get(jobid);
         
         if(name == null) {
-            MapleJob job = MapleJob.getById(jobid);
+            Job job = Job.getById(jobid);
             
             if(job != null) {
                 name = job.name().toLowerCase();
@@ -364,40 +364,40 @@ public class GameConstants {
         }
     }
     
-    public static byte getHallOfFameBranch(MapleJob job, int mapid) {
+    public static byte getHallOfFameBranch(Job job, int mapid) {
         if(!isHallOfFameMap(mapid)) {
             return (byte) (26 + 4 * (mapid / 100000000));   // custom, 400 pnpcs available per continent
         }
         
-        if(job.isA(MapleJob.WARRIOR)) {
+        if(job.isA(Job.WARRIOR)) {
             return 10;
-        } else if(job.isA(MapleJob.MAGICIAN)) {
+        } else if(job.isA(Job.MAGICIAN)) {
             return 11;
-        } else if(job.isA(MapleJob.BOWMAN)) {
+        } else if(job.isA(Job.BOWMAN)) {
             return 12;
-        } else if(job.isA(MapleJob.THIEF)) {
+        } else if(job.isA(Job.THIEF)) {
             return 13;
-        } else if(job.isA(MapleJob.PIRATE)) {
+        } else if(job.isA(Job.PIRATE)) {
             return 14;
-        } else if(job.isA(MapleJob.DAWNWARRIOR1)) {
+        } else if(job.isA(Job.DAWNWARRIOR1)) {
             return 15;
-        } else if(job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if(job.isA(Job.BLAZEWIZARD1)) {
             return 16;
-        } else if(job.isA(MapleJob.WINDARCHER1)) {
+        } else if(job.isA(Job.WINDARCHER1)) {
             return 17;
-        } else if(job.isA(MapleJob.NIGHTWALKER1)) {
+        } else if(job.isA(Job.NIGHTWALKER1)) {
             return 18;
-        } else if(job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if(job.isA(Job.THUNDERBREAKER1)) {
             return 19;
-        } else if(job.isA(MapleJob.ARAN1)) {
+        } else if(job.isA(Job.ARAN1)) {
             return 20;
-        } else if(job.isA(MapleJob.EVAN1)) {
+        } else if(job.isA(Job.EVAN1)) {
             return 21;
-        } else if(job.isA(MapleJob.BEGINNER)) {
+        } else if(job.isA(Job.BEGINNER)) {
             return 22;
-        } else if(job.isA(MapleJob.NOBLESSE)) {
+        } else if(job.isA(Job.NOBLESSE)) {
             return 23;
-        } else if(job.isA(MapleJob.LEGEND)) {
+        } else if(job.isA(Job.LEGEND)) {
             return 24;
         } else {
             return 25;
@@ -425,7 +425,7 @@ public class GameConstants {
         }
     }
     
-    public static int getHallOfFameMapid(MapleJob job) {
+    public static int getHallOfFameMapid(Job job) {
         int jobid = job.getId();
         
         if(isCygnus(jobid)) {
@@ -433,15 +433,15 @@ public class GameConstants {
         } else if(isAran(jobid)) {
             return 140010110;
         } else {
-            if(job.isA(MapleJob.WARRIOR)) {
+            if(job.isA(Job.WARRIOR)) {
                 return 102000004;
-            } else if(job.isA(MapleJob.MAGICIAN)) {
+            } else if(job.isA(Job.MAGICIAN)) {
                 return 101000004;
-            } else if(job.isA(MapleJob.BOWMAN)) {
+            } else if(job.isA(Job.BOWMAN)) {
                 return 100000204;
-            } else if(job.isA(MapleJob.THIEF)) {
+            } else if(job.isA(Job.THIEF)) {
                 return 103000008;
-            } else if(job.isA(MapleJob.PIRATE)) {
+            } else if(job.isA(Job.PIRATE)) {
                 return 120000105;
             } else {
                 return 130000110;   // beginner explorers are allotted with the Cygnus, available map lul
@@ -449,7 +449,7 @@ public class GameConstants {
         }
     }
     
-    public static int getJobBranch(MapleJob job) {
+    public static int getJobBranch(Job job) {
         int jobid = job.getId();
         
         if(jobid % 1000 == 0) {
@@ -461,7 +461,7 @@ public class GameConstants {
         }
     }
     
-    public static int getJobMaxLevel(MapleJob job) {
+    public static int getJobMaxLevel(Job job) {
         int jobBranch = getJobBranch(job);
         
         switch(jobBranch) {
@@ -616,10 +616,10 @@ public class GameConstants {
     }
     
     public static boolean isMedalQuest(short questid) {
-        return MapleQuest.getInstance(questid).getMedalRequirement() != -1;
+        return Quest.getInstance(questid).getMedalRequirement() != -1;
     }
     
-    public static boolean hasSPTable(MapleJob job) {
+    public static boolean hasSPTable(Job job) {
         switch (job) {
             case EVAN:
             case EVAN1:
@@ -676,20 +676,20 @@ public class GameConstants {
     }
     
     private static int getMaxObstacleMobDamageFromWz() {
-        MapleDataProvider mapSource = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
+        DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
         int maxMobDmg = 0;
         
-        MapleDataDirectoryEntry root = mapSource.getRoot();
-        for (MapleDataDirectoryEntry objData : root.getSubdirectories()) {
+        DataDirectoryEntry root = mapSource.getRoot();
+        for (DataDirectoryEntry objData : root.getSubdirectories()) {
             if (!objData.getName().contentEquals("Obj")) {
                 continue;
             }
             
-            for (MapleDataFileEntry obj : objData.getFiles()) {
-                for (MapleData l0 : mapSource.getData(objData.getName() + "/" + obj.getName()).getChildren()) {
-                    for (MapleData l1 : l0.getChildren()) {
-                        for (MapleData l2 : l1.getChildren()) {
-                            int objDmg = MapleDataTool.getIntConvert("s1/mobdamage", l2, 0);
+            for (DataFileEntry obj : objData.getFiles()) {
+                for (Data l0 : mapSource.getData(objData.getName() + "/" + obj.getName()).getChildren()) {
+                    for (Data l1 : l0.getChildren()) {
+                        for (Data l2 : l1.getChildren()) {
+                            int objDmg = DataTool.getIntConvert("s1/mobdamage", l2, 0);
                             if (maxMobDmg < objDmg) {
                                 maxMobDmg = objDmg;
                             }

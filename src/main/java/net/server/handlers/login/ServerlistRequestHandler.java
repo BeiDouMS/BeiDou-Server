@@ -21,7 +21,7 @@
 */
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -34,7 +34,7 @@ import java.util.List;
 public final class ServerlistRequestHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
     	Server server = Server.getInstance();
         List<World> worlds = server.getWorlds();
         c.requestedServerlist(worlds.size());

@@ -21,13 +21,13 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleMount;
+import client.Character;
+import client.Client;
+import client.Mount;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.game.ExpTable;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -39,14 +39,14 @@ import tools.PacketCreator;
  */
 public final class UseMountFoodHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
         short pos = p.readShort();
         int itemid = p.readInt();
         
-        MapleCharacter chr = c.getPlayer();
-        MapleMount mount = chr.getMount();
-        Inventory useInv = chr.getInventory(MapleInventoryType.USE);
+        Character chr = c.getPlayer();
+        Mount mount = chr.getMount();
+        Inventory useInv = chr.getInventory(InventoryType.USE);
         
         if (c.tryacquireClient()) {
             try {
@@ -73,7 +73,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
                             mountLevelup = levelup;
                         }
 
-                        MapleInventoryManipulator.removeById(c, MapleInventoryType.USE, itemid, 1, true, false);
+                        InventoryManipulator.removeById(c, InventoryType.USE, itemid, 1, true, false);
                     }
                 } finally {
                     useInv.unlockInventory();

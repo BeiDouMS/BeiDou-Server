@@ -21,17 +21,17 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.MapleFamily;
-import client.MapleFamilyEntry;
+import client.Character;
+import client.Client;
+import client.Family;
+import client.FamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.coordinator.world.MapleInviteCoordinator;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
-import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
-import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
+import net.server.coordinator.world.InviteCoordinator;
+import net.server.coordinator.world.InviteCoordinator.InviteResult;
+import net.server.coordinator.world.InviteCoordinator.InviteResultType;
+import net.server.coordinator.world.InviteCoordinator.InviteType;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -48,23 +48,23 @@ import java.sql.SQLException;
 public final class AcceptFamilyHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         int inviterId = p.readInt();
         p.readString();
         boolean accept = p.readByte() != 0;
         // String inviterName = slea.readMapleAsciiString();
-        MapleCharacter inviter = c.getWorldServer().getPlayerStorage().getCharacterById(inviterId);
+        Character inviter = c.getWorldServer().getPlayerStorage().getCharacterById(inviterId);
         if(inviter != null) {
-            MapleInviteResult inviteResult = MapleInviteCoordinator.answerInvite(InviteType.FAMILY, c.getPlayer().getId(), c.getPlayer(), accept);
-            if(inviteResult.result == InviteResult.NOT_FOUND) return; //was never invited. (or expired on server only somehow?)
+            InviteResult inviteResult = InviteCoordinator.answerInvite(InviteType.FAMILY, c.getPlayer().getId(), c.getPlayer(), accept);
+            if(inviteResult.result == InviteResultType.NOT_FOUND) return; //was never invited. (or expired on server only somehow?)
             if(accept) {
                 if(inviter.getFamily() != null) {
                     if(chr.getFamily() == null) {
-                        MapleFamilyEntry newEntry = new MapleFamilyEntry(inviter.getFamily(), chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
+                        FamilyEntry newEntry = new FamilyEntry(inviter.getFamily(), chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
                         newEntry.setCharacter(chr);
                         if(!newEntry.setSenior(inviter.getFamilyEntry(), true)) {
                             inviter.sendPacket(PacketCreator.sendFamilyMessage(1, 0));
@@ -75,8 +75,8 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                             insertNewFamilyRecord(chr.getId(), inviter.getFamily().getID(), inviter.getId(), false);
                         }
                     } else { //absorb target family
-                        MapleFamilyEntry targetEntry = chr.getFamilyEntry();
-                        MapleFamily targetFamily = targetEntry.getFamily();
+                        FamilyEntry targetEntry = chr.getFamilyEntry();
+                        Family targetFamily = targetEntry.getFamily();
                         if(targetFamily.getLeader() != targetEntry) return;
                         if(inviter.getFamily().getTotalGenerations() + targetFamily.getTotalGenerations() <= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
                             targetEntry.join(inviter.getFamilyEntry());
@@ -92,14 +92,14 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                         chr.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
                         return;
                     }
-                    MapleFamily newFamily = new MapleFamily(-1, c.getWorld());
+                    Family newFamily = new Family(-1, c.getWorld());
                     c.getWorldServer().addFamily(newFamily.getID(), newFamily);
-                    MapleFamilyEntry inviterEntry = new MapleFamilyEntry(newFamily, inviter.getId(), inviter.getName(), inviter.getLevel(), inviter.getJob());
+                    FamilyEntry inviterEntry = new FamilyEntry(newFamily, inviter.getId(), inviter.getName(), inviter.getLevel(), inviter.getJob());
                     inviterEntry.setCharacter(inviter);
                     newFamily.setLeader(inviter.getFamilyEntry());                    
                     newFamily.addEntry(inviterEntry);
                     if(chr.getFamily() == null) { //completely new family
-                        MapleFamilyEntry newEntry = new MapleFamilyEntry(newFamily, chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
+                        FamilyEntry newEntry = new FamilyEntry(newFamily, chr.getId(), chr.getName(), chr.getLevel(), chr.getJob());
                         newEntry.setCharacter(chr);
                         newEntry.setSenior(inviterEntry, true);
                         // save new family

@@ -21,44 +21,45 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import client.MapleQuestStatus;
+import client.Character;
+import client.QuestStatus;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
+
 import java.util.HashMap;
 import java.util.Map;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class QuestAction extends MapleQuestAction {
+public class QuestAction extends AbstractQuestAction {
 	int mesos;
 	Map<Integer, Integer> quests = new HashMap<>();
 	
-	public QuestAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.QUEST, quest);
+	public QuestAction(Quest quest, Data data) {
+		super(QuestActionType.QUEST, quest);
 		questID = quest.getId();
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData qEntry : data) {
-			int questid = MapleDataTool.getInt(qEntry.getChildByPath("id"));
-			int stat = MapleDataTool.getInt(qEntry.getChildByPath("state"));
+	public void processData(Data data) {
+		for (Data qEntry : data) {
+			int questid = DataTool.getInt(qEntry.getChildByPath("id"));
+			int stat = DataTool.getInt(qEntry.getChildByPath("state"));
 			quests.put(questid, stat);
 		}
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		for(Integer questID : quests.keySet()) {
 			int stat = quests.get(questID);
-			chr.updateQuestStatus(new MapleQuestStatus(MapleQuest.getInstance(questID), MapleQuestStatus.Status.getById(stat)));
+			chr.updateQuestStatus(new QuestStatus(Quest.getInstance(questID), QuestStatus.Status.getById(stat)));
 		}
 	}
 } 

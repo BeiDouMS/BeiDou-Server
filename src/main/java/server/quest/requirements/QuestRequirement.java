@@ -18,25 +18,25 @@
 */
 package server.quest.requirements;
 
+import client.Character;
+import client.QuestStatus;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
-import client.MapleQuestStatus;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class QuestRequirement extends MapleQuestRequirement {
+public class QuestRequirement extends AbstractQuestRequirement {
 	Map<Integer, Integer> quests = new HashMap<>();
 	
-	public QuestRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.QUEST);
+	public QuestRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.QUEST);
 		processData(data);
 	}
 	
@@ -45,25 +45,25 @@ public class QuestRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData questEntry : data.getChildren()) {
-			int questID = MapleDataTool.getInt(questEntry.getChildByPath("id"));
-			int stateReq = MapleDataTool.getInt(questEntry.getChildByPath("state"));
+	public void processData(Data data) {
+		for (Data questEntry : data.getChildren()) {
+			int questID = DataTool.getInt(questEntry.getChildByPath("id"));
+			int stateReq = DataTool.getInt(questEntry.getChildByPath("state"));
 			quests.put(questID, stateReq);
 		}
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		for(Integer questID : quests.keySet()) {
 			int stateReq = quests.get(questID);
-			MapleQuestStatus qs = chr.getQuest(MapleQuest.getInstance(questID));
+			QuestStatus qs = chr.getQuest(Quest.getInstance(questID));
 			
-			if(qs == null && MapleQuestStatus.Status.getById(stateReq).equals(MapleQuestStatus.Status.NOT_STARTED))
+			if(qs == null && QuestStatus.Status.getById(stateReq).equals(QuestStatus.Status.NOT_STARTED))
 				continue;
 			
-			if(qs == null || !qs.getStatus().equals(MapleQuestStatus.Status.getById(stateReq))) {
+			if(qs == null || !qs.getStatus().equals(QuestStatus.Status.getById(stateReq))) {
 				return false;
 			}
 			

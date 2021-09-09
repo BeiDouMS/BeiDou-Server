@@ -23,8 +23,8 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
 
 public class GiveVpCommand extends Command {
@@ -33,14 +33,14 @@ public class GiveVpCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         if (params.length < 2) {
             player.yellowMessage("Syntax: !givevp <playername> <gainvotepoint>");
             return;
         }
 
-        MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             victim.getClient().addVotePoints(Integer.parseInt(params[1]));
             player.message("VP given.");

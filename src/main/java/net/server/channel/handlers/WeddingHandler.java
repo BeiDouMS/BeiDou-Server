@@ -7,18 +7,18 @@
 package net.server.channel.handlers;
 
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Inventory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
-import client.inventory.manipulator.MapleKarmaManipulator;
+import client.inventory.manipulator.InventoryManipulator;
+import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleMarriage;
+import server.Marriage;
 import tools.PacketCreator;
 import tools.packets.WeddingPackets;
 
@@ -32,11 +32,11 @@ import java.util.List;
 public final class WeddingHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 final byte mode = p.readByte();
 
                 if (mode == 6) { //additem
@@ -44,7 +44,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                     int itemid = p.readInt();
                     short quantity = p.readShort();
 
-                    MapleMarriage marriage = c.getPlayer().getMarriageInstance();
+                    Marriage marriage = c.getPlayer().getMarriageInstance();
                     if (marriage != null) {
                         try {
                             boolean groomWishlist = marriage.giftItemToSpouse(chr.getId());
@@ -54,9 +54,9 @@ public final class WeddingHandler extends AbstractPacketHandler {
                             if (giftCount < YamlConfig.config.server.WEDDING_GIFT_LIMIT) {
                                 int cid = marriage.getIntProperty(groomWishlist ? "groomId" : "brideId");
                                 if (chr.getId() != cid) {   // cannot gift yourself
-                                    MapleCharacter spouse = marriage.getPlayerById(cid);
+                                    Character spouse = marriage.getPlayerById(cid);
                                     if (spouse != null) {
-                                        MapleInventoryType type = ItemConstants.getInventoryType(itemid);
+                                        InventoryType type = ItemConstants.getInventoryType(itemid);
                                         Inventory chrInv = chr.getInventory(type);
 
                                         Item newItem = null;
@@ -69,9 +69,9 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                                         newItem = item.copy();
 
                                                         marriage.addGiftItem(groomWishlist, newItem);
-                                                        MapleInventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
+                                                        InventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
                                                         
-                                                        MapleKarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
+                                                        KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
                                                         marriage.setIntProperty(groomWishlistProp, giftCount + 1);
 
                                                         c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xB, marriage.getWishlistItems(groomWishlist), Collections.singletonList(newItem)));
@@ -105,7 +105,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                     p.readByte();    // invType
                     int itemPos = p.readByte();
 
-                    MapleMarriage marriage = chr.getMarriageInstance();
+                    Marriage marriage = chr.getMarriageInstance();
                     if (marriage != null) {
                         Boolean groomWishlist = marriage.isMarriageGroom(chr);
                         if (groomWishlist != null) {
@@ -115,7 +115,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                     marriage.removeGiftItem(groomWishlist, item);
                                     marriage.saveGiftItemsToDb(c, groomWishlist, chr.getId());
 
-                                    MapleInventoryManipulator.addFromDrop(c, item, true);
+                                    InventoryManipulator.addFromDrop(c, item, true);
 
                                     c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
                                 } else {
@@ -133,9 +133,9 @@ public final class WeddingHandler extends AbstractPacketHandler {
                             Item item = items.get(itemPos);
                             if (Inventory.checkSpot(chr, item)) {
                                 items.remove(itemPos);
-                                MapleMarriage.saveGiftItemsToDb(c, items, chr.getId());
+                                Marriage.saveGiftItemsToDb(c, items, chr.getId());
 
-                                MapleInventoryManipulator.addFromDrop(c, item, true);
+                                InventoryManipulator.addFromDrop(c, item, true);
                                 c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, Collections.singletonList(""), items));
                             } else {
                                 c.getPlayer().dropMessage(1, "Free a slot on your inventory before collecting this item.");

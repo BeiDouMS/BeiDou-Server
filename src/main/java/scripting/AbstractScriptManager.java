@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting;
 
-import client.MapleClient;
+import client.Client;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import constants.string.CharsetConstants;
 import tools.FilePrinter;
@@ -66,7 +66,7 @@ public abstract class AbstractScriptManager {
         return graalScriptEngine;
     }
 
-    protected ScriptEngine getInvocableScriptEngine(String path, MapleClient c) {
+    protected ScriptEngine getInvocableScriptEngine(String path, Client c) {
         ScriptEngine engine = c.getScriptEngine("scripts/" + path);
         if (engine == null) {
             engine = getInvocableScriptEngine(path);
@@ -85,7 +85,7 @@ public abstract class AbstractScriptManager {
         bindings.put("polyglot.js.allowHostClassLookup", true);
     }
 
-    protected void resetContext(String path, MapleClient c) {
+    protected void resetContext(String path, Client c) {
         c.removeScriptEngine("scripts/" + path);
     }
 }

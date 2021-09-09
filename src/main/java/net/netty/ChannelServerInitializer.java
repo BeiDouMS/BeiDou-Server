@@ -1,6 +1,6 @@
 package net.netty;
 
-import client.MapleClient;
+import client.Client;
 import io.netty.channel.socket.SocketChannel;
 import net.PacketProcessor;
 import net.server.Server;
@@ -27,7 +27,7 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
         PacketProcessor packetProcessor = PacketProcessor.getChannelServerProcessor(world, channel);
         final long clientSessionId = sessionId.getAndIncrement();
         final String remoteAddress = getRemoteAddress(socketChannel);
-        final MapleClient client = MapleClient.createChannelClient(clientSessionId, remoteAddress, packetProcessor, world, channel);
+        final Client client = Client.createChannelClient(clientSessionId, remoteAddress, packetProcessor, world, channel);
 
         if (Server.getInstance().getChannel(world, channel) == null) {
             SessionCoordinator.getInstance().closeSession(client, true);

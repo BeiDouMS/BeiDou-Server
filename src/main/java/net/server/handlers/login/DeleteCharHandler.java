@@ -21,8 +21,8 @@
  */
 package net.server.handlers.login;
 
-import client.MapleClient;
-import client.MapleFamily;
+import client.Client;
+import client.Family;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -38,7 +38,7 @@ import java.sql.SQLException;
 public final class DeleteCharHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
 		String pic = p.readString();
 		int cid = p.readInt();
 		if (c.checkPic(pic)) {
@@ -60,7 +60,7 @@ public final class DeleteCharHandler extends AbstractPacketHandler {
 						c.sendPacket(PacketCreator.deleteCharResponse(cid, 0x16));
 						return;
 					} else if (familyId != -1) {
-						MapleFamily family = Server.getInstance().getWorld(world).getFamily(familyId);
+						Family family = Server.getInstance().getWorld(world).getFamily(familyId);
 						if (family != null && family.getTotalMembers() > 1) {
 							c.sendPacket(PacketCreator.deleteCharResponse(cid, 0x1D));
 							return;

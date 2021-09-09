@@ -1,14 +1,14 @@
 package net.server.task;
 
+import client.Family;
+import net.server.world.World;
+import tools.DatabaseConnection;
+import tools.FilePrinter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Calendar;
-
-import client.MapleFamily;
-import net.server.world.World;
-import tools.DatabaseConnection;
-import tools.FilePrinter;
 
 public class FamilyDailyResetTask implements Runnable {
 
@@ -21,7 +21,7 @@ public class FamilyDailyResetTask implements Runnable {
     @Override
     public void run() {
         resetEntitlementUsage(world);
-        for(MapleFamily family : world.getFamilies()) {
+        for(Family family : world.getFamilies()) {
             family.resetDailyReps();
         }
     }

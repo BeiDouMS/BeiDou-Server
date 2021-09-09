@@ -42,8 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var lostTime1 = em.getChannelServer().getMapFactory().getMap(220050000);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var timer2 = MapleLifeFactory.getMonster(5220003);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var timer2 = LifeFactory.getMonster(5220003);
 	
 	if(lostTime1.getMonsterById(5220003) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);

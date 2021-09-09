@@ -19,13 +19,13 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleMonster;
-import server.life.MapleMonsterInformationProvider;
+import server.life.Monster;
+import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -33,11 +33,11 @@ import tools.PacketCreator;
 public class FieldDamageMobHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int mobOid = p.readInt();    // packet structure found thanks to Darter (Rajan)
         int dmg = p.readInt();
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMap map = chr.getMap();
         
         if (map.getEnvironment().isEmpty()) {   // no environment objects activated to actually hit the mob
@@ -45,10 +45,10 @@ public class FieldDamageMobHandler extends AbstractPacketHandler {
             return;
         }
         
-        MapleMonster mob = map.getMonsterByOid(mobOid);
+        Monster mob = map.getMonsterByOid(mobOid);
         if (mob != null) {
             if (dmg < 0 || dmg > GameConstants.MAX_FIELD_MOB_DAMAGE) {
-                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack " + MapleMonsterInformationProvider.getInstance().getMobNameFromId(mob.getId()) + " with damage " + dmg);
+                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(mob.getId()) + " with damage " + dmg);
                 return;
             }
             

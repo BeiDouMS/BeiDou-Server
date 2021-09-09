@@ -19,16 +19,16 @@
 */
 package client.creator.veteran;
 
-import client.MapleClient;
-import client.MapleJob;
+import client.Client;
+import client.Job;
 import client.Skill;
 import client.SkillFactory;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import constants.skills.Warrior;
-import server.MapleItemInformationProvider;
+import server.ItemInformationProvider;
 
 /**
  *
@@ -40,9 +40,9 @@ public class WarriorCreator extends CharacterFactory {
         private static int[] startingHpMp = {905, 208};
         private static int[] hpGain = {0, 72, 144, 212, 280, 348, 412, 476, 540, 600, 660};
         
-        private static CharacterFactoryRecipe createRecipe(MapleJob job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
+        private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
                 CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
-                MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 
                 recipe.setStr(35);
                 recipe.setRemainingAp(123);
@@ -76,23 +76,23 @@ public class WarriorCreator extends CharacterFactory {
                         }
                 }
 
-                giveItem(recipe, 2000002, 100, MapleInventoryType.USE);
-                giveItem(recipe, 2000003, 100, MapleInventoryType.USE);
-                giveItem(recipe, 3010000, 1, MapleInventoryType.SETUP);
+                giveItem(recipe, 2000002, 100, InventoryType.USE);
+                giveItem(recipe, 2000003, 100, InventoryType.USE);
+                giveItem(recipe, 3010000, 1, InventoryType.SETUP);
                 
                 return recipe;
         }
         
-        private static void giveEquipment(CharacterFactoryRecipe recipe, MapleItemInformationProvider ii, int equipid) {
+        private static void giveEquipment(CharacterFactoryRecipe recipe, ItemInformationProvider ii, int equipid) {
                 Item nEquip = ii.getEquipById(equipid);
                 recipe.addStartingEquipment(nEquip);
         }
         
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, MapleInventoryType itemType) {
+        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
                 recipe.addStartingItem(itemid, quantity, itemType);
         }
     
-        public static int createCharacter(MapleClient c, String name, int face, int hair, int skin, int gender, int improveSp) {
-                return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(MapleJob.WARRIOR, 30, 102000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
+        public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
+                return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.WARRIOR, 30, 102000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
         }
 }

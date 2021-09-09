@@ -21,18 +21,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting.map;
 
-import client.MapleCharacter.DelayedQuestUpdate;
-import client.MapleClient;
-import client.MapleQuestStatus;
+import client.Character.DelayedQuestUpdate;
+import client.Client;
+import client.QuestStatus;
 import scripting.AbstractPlayerInteraction;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.PacketCreator;
 
 public class MapScriptMethods extends AbstractPlayerInteraction {
    
 	private String rewardstring = " title has been rewarded. Please see NPC Dalair to receive your Medal.";
     
-	public MapScriptMethods(MapleClient c) {
+	public MapScriptMethods(Client c) {
         super(c);
     }
     
@@ -116,13 +116,13 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
     }
 
     public void explorerQuest(short questid, String questName) {
-        MapleQuest quest = MapleQuest.getInstance(questid);
+        Quest quest = Quest.getInstance(questid);
         if (!isQuestStarted(questid)) {
             if (!quest.forceStart(getPlayer(), 9000066)) {
                 return;
             }
         }
-        MapleQuestStatus qs = getPlayer().getQuest(quest);
+        QuestStatus qs = getPlayer().getQuest(quest);
         if (!qs.addMedalMap(getPlayer().getMapId())) {
             return;
         }
@@ -145,13 +145,13 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
     }
 
     public void touchTheSky() { //29004
-        MapleQuest quest = MapleQuest.getInstance(29004);
+        Quest quest = Quest.getInstance(29004);
         if (!isQuestStarted(29004)) {
             if (!quest.forceStart(getPlayer(), 9000066)) {
                 return;
             }
         }
-        MapleQuestStatus qs = getPlayer().getQuest(quest);
+        QuestStatus qs = getPlayer().getQuest(quest);
         if (!qs.addMedalMap(getPlayer().getMapId())) {
             return;
         }

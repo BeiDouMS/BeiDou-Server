@@ -21,23 +21,24 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
+import client.Character;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
+
 import java.util.Calendar;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class EndDateRequirement extends MapleQuestRequirement {
+public class EndDateRequirement extends AbstractQuestRequirement {
 	private String timeStr;
 	
 	
-	public EndDateRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.END_DATE);
+	public EndDateRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.END_DATE);
 		processData(data);
 	}
 	
@@ -46,13 +47,13 @@ public class EndDateRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		timeStr = MapleDataTool.getString(data);
+	public void processData(Data data) {
+		timeStr = DataTool.getString(data);
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Integer.parseInt(timeStr.substring(0, 4)), Integer.parseInt(timeStr.substring(4, 6)), Integer.parseInt(timeStr.substring(6, 8)), Integer.parseInt(timeStr.substring(8, 10)), 0);
 		return cal.getTimeInMillis() >= System.currentTimeMillis();

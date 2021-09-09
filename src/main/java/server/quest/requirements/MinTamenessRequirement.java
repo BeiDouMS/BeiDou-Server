@@ -21,23 +21,23 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import client.inventory.MaplePet;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
+import client.Character;
+import client.inventory.Pet;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class MinTamenessRequirement extends MapleQuestRequirement {
+public class MinTamenessRequirement extends AbstractQuestRequirement {
 	private int minTameness;
 	
 	
-	public MinTamenessRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.MIN_PET_TAMENESS);
+	public MinTamenessRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.MIN_PET_TAMENESS);
 		processData(data);
 	}
 	
@@ -46,16 +46,16 @@ public class MinTamenessRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		minTameness = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		minTameness = DataTool.getInt(data);
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		int curCloseness = 0;
                 
-		for(MaplePet pet : chr.getPets()) {
+		for(Pet pet : chr.getPets()) {
                     if(pet == null) continue;
                     
                     if(pet.getCloseness() > curCloseness)

@@ -21,8 +21,8 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -35,8 +35,8 @@ import tools.PacketCreator;
 
 public final class MultiChatHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter player = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character player = c.getPlayer();
         if(player.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
                 return;
         }

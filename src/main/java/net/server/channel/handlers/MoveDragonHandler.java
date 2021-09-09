@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.packet.InPacket;
-import server.maps.MapleDragon;
+import server.maps.Dragon;
 import tools.PacketCreator;
 import tools.exceptions.EmptyMovementException;
 
@@ -33,10 +33,10 @@ import java.awt.*;
 
 public class MoveDragonHandler extends AbstractMovementPacketHandler {
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
-        final MapleCharacter chr = c.getPlayer();
+    public void handlePacket(InPacket p, Client c) {
+        final Character chr = c.getPlayer();
         final Point startPos = new Point(p.readShort(), p.readShort());
-        final MapleDragon dragon = chr.getDragon();
+        final Dragon dragon = chr.getDragon();
         if (dragon != null) {
             try {
                 int movementDataStart = p.getPosition();

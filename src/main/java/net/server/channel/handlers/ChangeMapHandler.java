@@ -21,15 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.Character;
+import client.Client;
+import client.inventory.InventoryType;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleTrade;
+import server.Trade;
 import server.maps.MapleMap;
-import server.maps.MaplePortal;
+import server.maps.Portal;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -41,8 +41,8 @@ import java.util.Calendar;
 public final class ChangeMapHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
 
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {
@@ -53,7 +53,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
             return;
         }
         if (chr.getTrade() != null) {
-            MapleTrade.cancelTrade(chr, MapleTrade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
+            Trade.cancelTrade(chr, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         }
         if (p.available() == 0) { //Cash Shop :)
             if (!chr.getCashShop().isOpened()) {
@@ -78,7 +78,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                 p.readByte(); // 1 = from dying 0 = regular portals
                 int targetid = p.readInt();
                 String startwp = p.readString();
-                MaplePortal portal = chr.getMap().getPortal(startwp);
+                Portal portal = chr.getMap().getPortal(startwp);
                 p.readByte();
                 boolean wheel = p.readByte() > 0;
 
@@ -94,7 +94,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                         if (wheel && chr.haveItemWithId(5510000, false)) {
                             // thanks lucasziron (lziron) for showing revivePlayer() triggering by Wheel
 
-                            MapleInventoryManipulator.removeById(c, MapleInventoryType.CASH, 5510000, 1, true, false);
+                            InventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
                             chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(5510000, false)));
 
                             chr.updateHp(50);

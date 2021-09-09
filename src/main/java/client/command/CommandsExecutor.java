@@ -23,7 +23,7 @@
 */
 package client.command;
 
-import client.MapleClient;
+import client.Client;
 import client.command.commands.gm0.*;
 import client.command.commands.gm1.*;
 import client.command.commands.gm2.*;
@@ -48,7 +48,7 @@ public class CommandsExecutor {
     private static final char USER_HEADING = '@';
     private static final char GM_HEADING = '!';
     
-    public static boolean isCommand(MapleClient client, String content){
+    public static boolean isCommand(Client client, String content){
         char heading = content.charAt(0);
         if (client.getPlayer().isGM()){
             return heading == USER_HEADING || heading == GM_HEADING;
@@ -74,7 +74,7 @@ public class CommandsExecutor {
         return commandsNameDesc;
     }
     
-    public void handle(MapleClient client, String message){
+    public void handle(Client client, String message){
         if (client.tryacquireClient()) {
             try {
                 handleInternal(client, message);
@@ -86,7 +86,7 @@ public class CommandsExecutor {
         }
     }
     
-    private void handleInternal(MapleClient client, String message){
+    private void handleInternal(Client client, String message){
         if (client.getPlayer().getMapId() == 300000012) {
             client.getPlayer().yellowMessage("You do not have permission to use commands while in jail.");
             return;
@@ -121,7 +121,7 @@ public class CommandsExecutor {
         writeLog(client, message);
     }
 
-    private void writeLog(MapleClient client, String command){
+    private void writeLog(Client client, String command){
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         FilePrinter.print(FilePrinter.USED_COMMANDS, client.getPlayer().getName() + " used: " + command + " on "
                 + sdf.format(Calendar.getInstance().getTime()));

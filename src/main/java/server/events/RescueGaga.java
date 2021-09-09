@@ -5,14 +5,14 @@
 
 package server.events;
 
-import client.MapleCharacter;
+import client.Character;
 import client.SkillFactory;
 
 /**
  *
  * @author kevintjuh93
  */
-public class RescueGaga extends MapleEvents {
+public class RescueGaga extends Events {
     
     private int completed;
     
@@ -34,7 +34,7 @@ public class RescueGaga extends MapleEvents {
         return getCompleted();
     }
     
-    public void giveSkill(MapleCharacter chr) {
+    public void giveSkill(Character chr) {
         int skillid = 0;
         switch (chr.getJobType()) {
             case 0:

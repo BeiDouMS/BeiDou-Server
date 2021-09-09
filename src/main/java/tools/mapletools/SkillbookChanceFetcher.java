@@ -1,6 +1,6 @@
 package tools.mapletools;
 
-import server.life.MapleMonsterStats;
+import server.life.MonsterStats;
 import tools.Pair;
 
 import java.io.File;
@@ -31,7 +31,7 @@ public class SkillbookChanceFetcher {
     private static final Map<Pair<Integer, Integer>, Integer> skillbookChances = new HashMap<>();
 
     private static PrintWriter printWriter;
-    private static Map<Integer, MapleMonsterStats> mobStats;
+    private static Map<Integer, MonsterStats> mobStats;
 
     private static List<Map.Entry<Pair<Integer, Integer>, Integer>> sortedSkillbookChances() {
         List<Map.Entry<Pair<Integer, Integer>, Integer>> skillbookChancesList = new ArrayList<>(skillbookChances.entrySet());

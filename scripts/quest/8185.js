@@ -86,8 +86,8 @@ function end(mode, type, selection) {
                                 return;
 			}
                         
-                        /* if (name.equals(MapleItemInformationProvider.getInstance().getName(id))) {
-					name = MapleItemInformationProvider.getInstance().getName(after);
+                        /* if (name.equals(ItemInformationProvider.getInstance().getName(id))) {
+					name = ItemInformationProvider.getInstance().getName(after);
 			} */
 			
                         //qm.unequipPet(qm.getClient());

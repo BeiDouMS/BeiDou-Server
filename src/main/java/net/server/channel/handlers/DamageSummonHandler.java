@@ -21,32 +21,32 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleBuffStat;
-import client.MapleCharacter;
-import client.MapleClient;
+import client.BuffStat;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
-import server.maps.MapleSummon;
+import server.maps.MapObject;
+import server.maps.Summon;
 import tools.PacketCreator;
 
 public final class DamageSummonHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
         p.skip(1);   // -1
         int damage = p.readInt();
         int monsterIdFrom = p.readInt();
         
-        MapleCharacter player = c.getPlayer();
-        MapleMapObject mmo = player.getMap().getMapObject(oid);
+        Character player = c.getPlayer();
+        MapObject mmo = player.getMap().getMapObject(oid);
         
-        if(mmo != null && mmo instanceof MapleSummon) {
-            MapleSummon summon = (MapleSummon) mmo;
+        if(mmo != null && mmo instanceof Summon) {
+            Summon summon = (Summon) mmo;
         
             summon.addHP(-damage);
             if (summon.getHP() <= 0) {
-                player.cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
+                player.cancelEffectFromBuffStat(BuffStat.PUPPET);
             }
             player.getMap().broadcastMessage(player, PacketCreator.damageSummon(player.getId(), oid, damage, monsterIdFrom), summon.getPosition());
         }

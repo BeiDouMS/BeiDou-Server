@@ -103,7 +103,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
         }
         
         if(!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) eligible = [];
-        return Java.to(eligible, Java.type('net.server.world.MaplePartyCharacter[]'));
+        return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -135,16 +135,16 @@ function releaseLeftClaw(eim) {
 function spawnBalrog(eim) {
         var mapObj = eim.getInstanceMap(entryMap);
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
-        mapObj.spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830000), new Point(412, 258));
-        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830002), new Point(412, 258));
-        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830006), new Point(412, 258));
+        mapObj.spawnFakeMonsterOnGroundBelow(LifeFactory.getMonster(8830000), new Point(412, 258));
+        mapObj.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8830002), new Point(412, 258));
+        mapObj.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8830006), new Point(412, 258));
 }
 
 function spawnSealedBalrog(eim) {
         const Point = Java.type('java.awt.Point');
-        eim.getInstanceMap(entryMap).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(bossMobId), new Point(412, 258));
+        eim.getInstanceMap(entryMap).spawnMonsterOnGroundBelow(LifeFactory.getMonster(bossMobId), new Point(412, 258));
 }
 
 function playerEntry(eim, player) {

@@ -23,8 +23,8 @@
 */
 package client.processor.stat;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.autoban.AutobanFactory;
@@ -39,13 +39,13 @@ import tools.PacketCreator;
  */
 public class AssignSPProcessor {
     
-    public static boolean canSPAssign(MapleClient c, int skillid) {
+    public static boolean canSPAssign(Client c, int skillid) {
         if (skillid == Aran.HIDDEN_FULL_DOUBLE || skillid == Aran.HIDDEN_FULL_TRIPLE || skillid == Aran.HIDDEN_OVER_DOUBLE || skillid == Aran.HIDDEN_OVER_TRIPLE) {
             c.sendPacket(PacketCreator.enableActions());
             return false;
         }
 
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if ((!GameConstants.isPqSkillMap(player.getMapId()) && GameConstants.isPqSkill(skillid)) || (!player.isGM() && GameConstants.isGMSkills(skillid)) || (!GameConstants.isInJobTree(skillid, player.getJob().getId()) && !player.isGM())) {
             AutobanFactory.PACKET_EDIT.alert(player, "tried to packet edit in distributing sp.");
             FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use skill " + skillid + " without it being in their job.");
@@ -57,14 +57,14 @@ public class AssignSPProcessor {
         return true;
     }
     
-    public static void SPAssignAction(MapleClient c, int skillid) {
+    public static void SPAssignAction(Client c, int skillid) {
         c.lockClient();
         try {
             if (!canSPAssign(c, skillid)) {
                 return;
             }
             
-            MapleCharacter player = c.getPlayer();
+            Character player = c.getPlayer();
             int remainingSp = player.getRemainingSps()[GameConstants.getSkillBook(skillid/10000)];
             boolean isBeginnerSkill = false;
             

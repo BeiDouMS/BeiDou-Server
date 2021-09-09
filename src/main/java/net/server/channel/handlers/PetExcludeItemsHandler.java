@@ -21,10 +21,10 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
@@ -35,15 +35,15 @@ import net.packet.InPacket;
 public final class PetExcludeItemsHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         final int petId = p.readInt();
         p.skip(4); // timestamp
 
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         byte petIndex = chr.getPetIndex(petId);
         if (petIndex < 0) return;
 
-        final MaplePet pet = chr.getPet(petIndex);
+        final Pet pet = chr.getPet(petIndex);
         if (pet == null) {
             return;
         }

@@ -22,15 +22,14 @@
 
 package server.partyquest;
 
-import client.MapleCharacter;
+import client.Character;
+import net.server.Server;
+import net.server.world.Party;
+import net.server.world.PartyCharacter;
+import tools.FilePrinter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import tools.FilePrinter;
-import net.server.Server;
-import net.server.world.MapleParty;
-import net.server.world.MaplePartyCharacter;
 
 /**
  *
@@ -38,33 +37,33 @@ import net.server.world.MaplePartyCharacter;
  */
 public class PartyQuest {
     int channel, world;
-    MapleParty party;
-    List<MapleCharacter> participants = new ArrayList<>();
+    Party party;
+    List<Character> participants = new ArrayList<>();
 
-    public PartyQuest(MapleParty party) {
+    public PartyQuest(Party party) {
         this.party = party;
-        MaplePartyCharacter leader = party.getLeader();
+        PartyCharacter leader = party.getLeader();
         channel = leader.getChannel();
         world = leader.getWorld();
         int mapid = leader.getMapId();
-        for (MaplePartyCharacter pchr : party.getMembers()) {
+        for (PartyCharacter pchr : party.getMembers()) {
             if (pchr.getChannel() == channel && pchr.getMapId() == mapid) {
-                MapleCharacter chr = Server.getInstance().getWorld(world).getChannel(channel).getPlayerStorage().getCharacterById(pchr.getId());
+                Character chr = Server.getInstance().getWorld(world).getChannel(channel).getPlayerStorage().getCharacterById(pchr.getId());
                 if (chr != null)
                     this.participants.add(chr);
             }
         }
     }
 
-    public MapleParty getParty() {
+    public Party getParty() {
         return party;
     }
 
-    public List<MapleCharacter> getParticipants() {
+    public List<Character> getParticipants() {
         return participants;
     }
 
-    public void removeParticipant(MapleCharacter chr) throws Throwable {
+    public void removeParticipant(Character chr) throws Throwable {
         synchronized (participants) {
             participants.remove(chr);
             chr.setPartyQuest(null);

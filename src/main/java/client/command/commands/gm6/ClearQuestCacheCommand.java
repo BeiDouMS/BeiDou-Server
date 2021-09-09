@@ -23,10 +23,10 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 public class ClearQuestCacheCommand extends Command {
     {
@@ -34,9 +34,9 @@ public class ClearQuestCacheCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        MapleQuest.clearCache();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
+        Quest.clearCache();
         player.dropMessage(5, "Quest Cache Cleared.");
     }
 }

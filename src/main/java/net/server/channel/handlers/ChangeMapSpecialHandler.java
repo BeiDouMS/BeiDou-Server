@@ -21,21 +21,21 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleTrade;
-import server.MapleTrade.TradeResult;
-import server.maps.MaplePortal;
+import server.Trade;
+import server.Trade.TradeResult;
+import server.maps.Portal;
 import tools.PacketCreator;
 
 public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
             p.readByte();
             String startwp = p.readString();
             p.readShort();
-            MaplePortal portal = c.getPlayer().getMap().getPortal(startwp);
+            Portal portal = c.getPlayer().getMap().getPortal(startwp);
             if (portal == null || c.getPlayer().portalDelay() > currentServerTime() || c.getPlayer().getBlockedPortals().contains(portal.getScriptName())) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
@@ -45,7 +45,7 @@ public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
                     return;
             }
             if (c.getPlayer().getTrade() != null) {
-                    MapleTrade.cancelTrade(c.getPlayer(), TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
+                    Trade.cancelTrade(c.getPlayer(), TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
             }
             portal.enterPortal(c);   
     }

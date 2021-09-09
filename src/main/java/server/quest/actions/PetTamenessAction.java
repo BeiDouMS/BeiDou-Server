@@ -19,38 +19,38 @@
 */
 package server.quest.actions;
 
-import client.MapleClient;
-import client.MapleCharacter;
-import client.inventory.MaplePet;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
+import client.Character;
+import client.Client;
+import client.inventory.Pet;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
 
 /**
  *
  * @author Ronan
  */
-public class PetTamenessAction extends MapleQuestAction {
+public class PetTamenessAction extends AbstractQuestAction {
 	int tameness;
 	
-	public PetTamenessAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.PETTAMENESS, quest);
+	public PetTamenessAction(Quest quest, Data data) {
+		super(QuestActionType.PETTAMENESS, quest);
 		questID = quest.getId();
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		tameness = MapleDataTool.getInt(data);
+	public void processData(Data data) {
+		tameness = DataTool.getInt(data);
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
-                MapleClient c = chr.getClient();
+	public void run(Character chr, Integer extSelection) {
+                Client c = chr.getClient();
                 
-                MaplePet pet = chr.getPet(0);   // assuming here only the pet leader will gain tameness
+                Pet pet = chr.getPet(0);   // assuming here only the pet leader will gain tameness
                 if(pet == null) return;
             
                 c.lockClient();

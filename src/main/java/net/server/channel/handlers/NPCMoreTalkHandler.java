@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
@@ -33,7 +33,7 @@ import scripting.quest.QuestScriptManager;
  */
 public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte lastMsg = p.readByte(); // 00 (last msg type I think)
         byte action = p.readByte(); // 00 = end chat, 01 == follow
         if (lastMsg == 2) {

@@ -19,19 +19,19 @@
 */
 package client.processor.action;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
+import server.ItemInformationProvider;
 import server.MakerItemFactory;
 import server.MakerItemFactory.MakerItemCreateEntry;
-import server.MapleItemInformationProvider;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
@@ -47,9 +47,9 @@ import java.util.Map;
  */
 public class MakerProcessor {
     
-    private static MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+    private static ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-    public static void makerAction(InPacket p, MapleClient c) {
+    public static void makerAction(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
                 int type = p.readInt();
@@ -75,7 +75,7 @@ public class MakerProcessor {
                     p.readInt(); // 1... probably inventory type
                     pos = p.readInt();
 
-                    Item it = c.getPlayer().getInventory(MapleInventoryType.EQUIP).getItem((short) pos);
+                    Item it = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((short) pos);
                     if(it != null && it.getItemId() == toCreate) {
                         toDisassemble = toCreate;
                         
@@ -182,7 +182,7 @@ public class MakerProcessor {
 
                     default:
                         if(toDisassemble != -1) {
-                            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.EQUIP, (short) pos, (short) 1, false);
+                            InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (short) pos, (short) 1, false);
                         } else {
                             for (Pair<Integer, Integer> pair : recipe.getReqItems()) {
                                 c.getAbstractPlayerInteraction().gainItem(pair.getLeft(), (short) -pair.getRight(), false);
@@ -304,11 +304,11 @@ public class MakerProcessor {
         return null;
     }
     
-    public static int getMakerSkillLevel(MapleCharacter chr) {
+    public static int getMakerSkillLevel(Character chr) {
         return chr.getSkillLevel((chr.getJob().getId() / 1000) * 10000000 + 1007);
     }
     
-    private static short getCreateStatus(MapleClient c, MakerItemCreateEntry recipe) {
+    private static short getCreateStatus(Client c, MakerItemCreateEntry recipe) {
         if(recipe.isInvalid()) {
             return -1;
         }
@@ -351,7 +351,7 @@ public class MakerProcessor {
         return 0;
     }
 
-    private static boolean hasItems(MapleClient c, MakerItemCreateEntry recipe) {
+    private static boolean hasItems(Client c, MakerItemCreateEntry recipe) {
         for (Pair<Integer, Integer> p : recipe.getReqItems()) {
             int itemId = p.getLeft();
             if (c.getPlayer().getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId) < p.getRight()) {
@@ -361,7 +361,7 @@ public class MakerProcessor {
         return true;
     }
     
-    private static boolean addBoostedMakerItem(MapleClient c, int itemid, int stimulantid, Map<Integer, Short> reagentids) {
+    private static boolean addBoostedMakerItem(Client c, int itemid, int stimulantid, Map<Integer, Short> reagentids) {
         if(stimulantid != -1 && !ii.rollSuccessChance(90.0)) {
             return false;
         }
@@ -376,7 +376,7 @@ public class MakerProcessor {
             if(!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
                 eqp.setUpgradeSlots((byte)(eqp.getUpgradeSlots() + 1));
             }
-            item = MapleItemInformationProvider.getInstance().scrollEquipWithId(eqp, 2049100, true, 2049100, c.getPlayer().isGM());
+            item = ItemInformationProvider.getInstance().scrollEquipWithId(eqp, 2049100, true, 2049100, c.getPlayer().isGM());
         }
         
         if(!reagentids.isEmpty()) {
@@ -436,7 +436,7 @@ public class MakerProcessor {
             eqp = ii.randomizeUpgradeStats(eqp);
         }
         
-        MapleInventoryManipulator.addFromDrop(c, item, false, -1);
+        InventoryManipulator.addFromDrop(c, item, false, -1);
         return true;
     }
 }

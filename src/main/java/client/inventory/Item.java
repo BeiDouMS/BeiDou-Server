@@ -21,13 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package client.inventory;
 
+import client.inventory.manipulator.KarmaManipulator;
 import constants.inventory.ItemConstants;
+import server.ItemInformationProvider;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import client.inventory.manipulator.MapleKarmaManipulator;
-import server.MapleItemInformationProvider;
 
 public class Item implements Comparable<Item> {
 
@@ -37,7 +38,7 @@ public class Item implements Comparable<Item> {
     private short position;
     private short quantity;
     private int petid = -1;
-    private MaplePet pet = null;
+    private Pet pet = null;
     private String owner = "";
     protected List<String> log;
     private short flag;
@@ -57,7 +58,7 @@ public class Item implements Comparable<Item> {
         this.position = position;
         this.quantity = quantity;
         if (petid > -1) {   // issue with null "pet" having petid > -1 found thanks to MedicOP
-            this.pet = MaplePet.loadFromDb(id, position, petid);
+            this.pet = Pet.loadFromDb(id, position, petid);
             if (this.pet == null) {
                 petid = -1;
             }
@@ -104,7 +105,7 @@ public class Item implements Comparable<Item> {
         return quantity;
     }
 
-    public MapleInventoryType getInventoryType() {
+    public InventoryType getInventoryType() {
         return ItemConstants.getInventoryType(id);
     }
     
@@ -151,7 +152,7 @@ public class Item implements Comparable<Item> {
     }
 
     public void setFlag(short b) {
-        MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         if (ii.isAccountRestricted(id)) {
             b |= ItemConstants.ACCOUNT_SHARING; // thanks Shinigami15 for noticing ACCOUNT_SHARING flag not being applied properly to items server-side
         }
@@ -183,11 +184,11 @@ public class Item implements Comparable<Item> {
         this.giftFrom = giftFrom;
     }
 
-    public MaplePet getPet() {
+    public Pet getPet() {
         return pet;
     }
     
     public boolean isUntradeable() {
-        return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (MapleItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !MapleKarmaManipulator.hasKarmaFlag(this));
+        return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (ItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !KarmaManipulator.hasKarmaFlag(this));
     }
 }

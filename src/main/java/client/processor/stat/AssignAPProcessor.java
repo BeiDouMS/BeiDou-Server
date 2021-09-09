@@ -23,11 +23,12 @@
 */
 package client.processor.stat;
 
+import client.Character;
 import client.*;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
 import constants.skills.*;
 import net.packet.InPacket;
@@ -45,11 +46,11 @@ import java.util.List;
  */
 public class AssignAPProcessor {
     
-    public static void APAutoAssignAction(InPacket inPacket, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public static void APAutoAssignAction(InPacket inPacket, Client c) {
+        Character chr = c.getPlayer();
         if (chr.getRemainingAp() < 1) return;
         
-        Collection<Item> equippedC = chr.getInventory(MapleInventoryType.EQUIPPED).list();
+        Collection<Item> equippedC = chr.getInventory(InventoryType.EQUIPPED).list();
         
         c.lockClient();
         try {
@@ -105,11 +106,11 @@ public class AssignAPProcessor {
                 //c.getPlayer().message("SDL: s" + eqpStr + " d" + eqpDex + " l" + eqpLuk + " BASE STATS --> STR: " + chr.getStr() + " DEX: " + chr.getDex() + " INT: " + chr.getInt() + " LUK: " + chr.getLuk());
                 //c.getPlayer().message("SUM EQUIP STATS -> STR: " + str + " DEX: " + dex + " LUK: " + luk + " INT: " + int_);
 
-                MapleJob stance = c.getPlayer().getJobStyle(opt);
+                Job stance = c.getPlayer().getJobStyle(opt);
                 int prStat = 0, scStat = 0, trStat = 0, temp, tempAp = remainingAp, CAP;
                 if (tempAp < 1) return;
 
-                MapleStat primary, secondary, tertiary = MapleStat.LUK;
+                Stat primary, secondary, tertiary = Stat.LUK;
                 switch(stance) {
                     case MAGICIAN:
                         CAP = 165;
@@ -131,9 +132,9 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.INT;
-                        secondary = MapleStat.LUK;
-                        tertiary = MapleStat.DEX;
+                        primary = Stat.INT;
+                        secondary = Stat.LUK;
+                        tertiary = Stat.DEX;
 
                         break;
 
@@ -157,8 +158,8 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.DEX;
-                        secondary = MapleStat.STR;
+                        primary = Stat.DEX;
+                        secondary = Stat.STR;
 
                         break;
 
@@ -183,8 +184,8 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.DEX;
-                        secondary = MapleStat.STR;
+                        primary = Stat.DEX;
+                        secondary = Stat.STR;
 
                         break;
 
@@ -242,9 +243,9 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.LUK;
-                        secondary = MapleStat.DEX;
-                        tertiary = MapleStat.STR;
+                        primary = Stat.LUK;
+                        secondary = Stat.DEX;
+                        tertiary = Stat.STR;
 
                         break;
 
@@ -309,8 +310,8 @@ public class AssignAPProcessor {
                             prStat += temp;
                         }
 
-                        primary = MapleStat.STR;
-                        secondary = MapleStat.DEX;
+                        primary = Stat.STR;
+                        secondary = Stat.DEX;
                 }
 
                 //-------------------------------------------------------------------------------------
@@ -349,7 +350,7 @@ public class AssignAPProcessor {
                         return;
                     }
                     
-                    gainStatByType(MapleStat.getBy5ByteEncoding(type), statGain, tempVal, statUpdate);
+                    gainStatByType(Stat.getBy5ByteEncoding(type), statGain, tempVal, statUpdate);
                 }
                 
                 chr.assignStrDexIntLuk(statGain[0], statGain[1], statGain[3], statGain[2]);
@@ -364,11 +365,11 @@ public class AssignAPProcessor {
         return(statList.size() <= rank ? 0 : statList.get(rank));
     }
     
-    private static int gainStatByType(MapleStat type, int[] statGain, int gain, int[] statUpdate) {
+    private static int gainStatByType(Stat type, int[] statGain, int gain, int[] statUpdate) {
         if(gain <= 0) return 0;
         
         int newVal = 0;
-        if (type.equals(MapleStat.STR)) {
+        if (type.equals(Stat.STR)) {
             newVal = statUpdate[0] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[0] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -377,7 +378,7 @@ public class AssignAPProcessor {
                 statGain[0] += gain;
                 statUpdate[0] = newVal;
             }
-        } else if (type.equals(MapleStat.INT)) {
+        } else if (type.equals(Stat.INT)) {
             newVal = statUpdate[3] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[3] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -386,7 +387,7 @@ public class AssignAPProcessor {
                 statGain[3] += gain;
                 statUpdate[3] = newVal;
             }
-        } else if (type.equals(MapleStat.LUK)) {
+        } else if (type.equals(Stat.LUK)) {
             newVal = statUpdate[2] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[2] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -395,7 +396,7 @@ public class AssignAPProcessor {
                 statGain[2] += gain;
                 statUpdate[2] = newVal;
             }
-        } else if (type.equals(MapleStat.DEX)) {
+        } else if (type.equals(Stat.DEX)) {
             newVal = statUpdate[1] + gain;
             if (newVal > YamlConfig.config.server.MAX_AP) {
                 statGain[1] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
@@ -412,15 +413,15 @@ public class AssignAPProcessor {
         return 0;
     }
     
-    private static MapleStat getQuaternaryStat(MapleJob stance) {
-        if(stance != MapleJob.MAGICIAN) return MapleStat.INT;
-        return MapleStat.STR;
+    private static Stat getQuaternaryStat(Job stance) {
+        if(stance != Job.MAGICIAN) return Stat.INT;
+        return Stat.STR;
     }
     
-    public static boolean APResetAction(MapleClient c, int APFrom, int APTo) {
+    public static boolean APResetAction(Client c, int APFrom, int APTo) {
         c.lockClient();
         try {
-            MapleCharacter player = c.getPlayer();
+            Character player = c.getPlayer();
 
             switch (APFrom) {
                 case 64: // str
@@ -519,14 +520,14 @@ public class AssignAPProcessor {
 
                     int mp = player.getMaxMp();
                     int level = player.getLevel();
-                    MapleJob job = player.getJob();
+                    Job job = player.getJob();
 
                     boolean canWash = true;
-                    if (job.isA(MapleJob.SPEARMAN) && mp < 4 * level + 156) {
+                    if (job.isA(Job.SPEARMAN) && mp < 4 * level + 156) {
                         canWash = false;
-                    } else if ((job.isA(MapleJob.FIGHTER) || job.isA(MapleJob.ARAN1)) && mp < 4 * level + 56) {
+                    } else if ((job.isA(Job.FIGHTER) || job.isA(Job.ARAN1)) && mp < 4 * level + 56) {
                         canWash = false;
-                    } else if (job.isA(MapleJob.THIEF) && job.getId() % 100 > 0 && mp < level * 14 - 4) {
+                    } else if (job.isA(Job.THIEF) && job.getId() % 100 > 0 && mp < level * 14 - 4) {
                         canWash = false;
                     } else if (mp < level * 14 + 148) {
                         canWash = false;
@@ -557,7 +558,7 @@ public class AssignAPProcessor {
         }
     }
     
-    public static void APAssignAction(MapleClient c, int num) {
+    public static void APAssignAction(Client c, int num) {
         c.lockClient();
         try {
             addStat(c.getPlayer(), num, false);
@@ -566,7 +567,7 @@ public class AssignAPProcessor {
         }
     }
     
-    private static boolean addStat(MapleCharacter chr, int apTo, boolean usedAPReset) {
+    private static boolean addStat(Character chr, int apTo, boolean usedAPReset) {
         switch (apTo) {
             case 64:
                 if (!chr.assignStr(1)) {
@@ -617,13 +618,13 @@ public class AssignAPProcessor {
         return true;
     }
 
-    private static int calcHpChange(MapleCharacter player, boolean usedAPReset) {
-        MapleJob job = player.getJob();
+    private static int calcHpChange(Character player, boolean usedAPReset) {
+        Job job = player.getJob();
         int MaxHP = 0;
         
-        if (job.isA(MapleJob.WARRIOR) || job.isA(MapleJob.DAWNWARRIOR1)) {
+        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1)) {
             if(!usedAPReset) {
-                Skill increaseHP = SkillFactory.getSkill(job.isA(MapleJob.DAWNWARRIOR1) ? DawnWarrior.MAX_HP_INCREASE : Warrior.IMPROVED_MAXHP);
+                Skill increaseHP = SkillFactory.getSkill(job.isA(Job.DAWNWARRIOR1) ? DawnWarrior.MAX_HP_INCREASE : Warrior.IMPROVED_MAXHP);
                 int sLvl = player.getSkillLevel(increaseHP);
 
                 if(sLvl > 0)
@@ -639,7 +640,7 @@ public class AssignAPProcessor {
             } else {
                 MaxHP += 20;
             }
-        } else if(job.isA(MapleJob.ARAN1)) {
+        } else if(job.isA(Job.ARAN1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if (usedAPReset) {
                     MaxHP += 20;
@@ -649,7 +650,7 @@ public class AssignAPProcessor {
             } else {
                 MaxHP += 28;
             }
-        } else if (job.isA(MapleJob.MAGICIAN) || job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if (usedAPReset) {
                     MaxHP += 6;
@@ -659,7 +660,7 @@ public class AssignAPProcessor {
             } else {
                 MaxHP += 6;
             }
-        } else if (job.isA(MapleJob.THIEF) || job.isA(MapleJob.NIGHTWALKER1)) {
+        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if (usedAPReset) {
                     MaxHP += 16;
@@ -669,7 +670,7 @@ public class AssignAPProcessor {
             } else {
                 MaxHP += 16;
             }
-        } else if(job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.WINDARCHER1)) {
+        } else if(job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if (usedAPReset) {
                     MaxHP += 16;
@@ -679,9 +680,9 @@ public class AssignAPProcessor {
             } else {
                 MaxHP += 16;
             }
-        } else if (job.isA(MapleJob.PIRATE) || job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             if(!usedAPReset) {
-                Skill increaseHP = SkillFactory.getSkill(job.isA(MapleJob.PIRATE) ? Brawler.IMPROVE_MAX_HP : ThunderBreaker.IMPROVE_MAX_HP);
+                Skill increaseHP = SkillFactory.getSkill(job.isA(Job.PIRATE) ? Brawler.IMPROVE_MAX_HP : ThunderBreaker.IMPROVE_MAX_HP);
                 int sLvl = player.getSkillLevel(increaseHP);
 
                 if(sLvl > 0)
@@ -710,11 +711,11 @@ public class AssignAPProcessor {
         return MaxHP;
     }
 
-    private static int calcMpChange(MapleCharacter player, boolean usedAPReset) {
-        MapleJob job = player.getJob();
+    private static int calcMpChange(Character player, boolean usedAPReset) {
+        Job job = player.getJob();
         int MaxMP = 0;
         
-        if (job.isA(MapleJob.WARRIOR) || job.isA(MapleJob.DAWNWARRIOR1) || job.isA(MapleJob.ARAN1)) {
+        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if(!usedAPReset) {
                     MaxMP += (Randomizer.rand(2, 4) + (player.getInt() / 10));
@@ -724,9 +725,9 @@ public class AssignAPProcessor {
             } else {
                 MaxMP += 3;
             }
-        } else if (job.isA(MapleJob.MAGICIAN) || job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             if(!usedAPReset) {
-                Skill increaseMP = SkillFactory.getSkill(job.isA(MapleJob.BLAZEWIZARD1) ? BlazeWizard.INCREASING_MAX_MP : Magician.IMPROVED_MAX_MP_INCREASE);
+                Skill increaseMP = SkillFactory.getSkill(job.isA(Job.BLAZEWIZARD1) ? BlazeWizard.INCREASING_MAX_MP : Magician.IMPROVED_MAX_MP_INCREASE);
                 int sLvl = player.getSkillLevel(increaseMP);
 
                 if(sLvl > 0)
@@ -742,7 +743,7 @@ public class AssignAPProcessor {
             } else {
                 MaxMP += 18;
             }
-        } else if (job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.WINDARCHER1)) {
+        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if(!usedAPReset) {
                     MaxMP += (Randomizer.rand(6, 8) + (player.getInt() / 10));
@@ -752,7 +753,7 @@ public class AssignAPProcessor {
             } else {
                 MaxMP += 10;
             }
-        } else if(job.isA(MapleJob.THIEF) || job.isA(MapleJob.NIGHTWALKER1)) {
+        } else if(job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if(!usedAPReset) {
                     MaxMP += (Randomizer.rand(6, 8) + (player.getInt() / 10));
@@ -762,7 +763,7 @@ public class AssignAPProcessor {
             } else {
                 MaxMP += 10;
             }
-        } else if (job.isA(MapleJob.PIRATE) || job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             if(YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
                 if(!usedAPReset) {
                     MaxMP += (Randomizer.rand(7, 9) + (player.getInt() / 10));
@@ -787,18 +788,18 @@ public class AssignAPProcessor {
         return MaxMP;
     }
     
-    private static int takeHp(MapleJob job) {
+    private static int takeHp(Job job) {
         int MaxHP = 0;
         
-        if (job.isA(MapleJob.WARRIOR) || job.isA(MapleJob.DAWNWARRIOR1) || job.isA(MapleJob.ARAN1)) {
+        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
             MaxHP += 54;
-        } else if (job.isA(MapleJob.MAGICIAN) || job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             MaxHP += 10;
-        } else if (job.isA(MapleJob.THIEF) || job.isA(MapleJob.NIGHTWALKER1)) {
+        } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
             MaxHP += 20;
-        } else if(job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.WINDARCHER1)) {
+        } else if(job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             MaxHP += 20;
-        } else if (job.isA(MapleJob.PIRATE) || job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             MaxHP += 42;
         } else {
             MaxHP += 12;
@@ -807,18 +808,18 @@ public class AssignAPProcessor {
         return MaxHP;
     }
     
-    private static int takeMp(MapleJob job) {
+    private static int takeMp(Job job) {
         int MaxMP = 0;
         
-        if (job.isA(MapleJob.WARRIOR) || job.isA(MapleJob.DAWNWARRIOR1) || job.isA(MapleJob.ARAN1)) {
+        if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
             MaxMP += 4;
-        } else if (job.isA(MapleJob.MAGICIAN) || job.isA(MapleJob.BLAZEWIZARD1)) {
+        } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
             MaxMP += 31;
-        } else if (job.isA(MapleJob.BOWMAN) || job.isA(MapleJob.WINDARCHER1)) {
+        } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
             MaxMP += 12;
-        } else if(job.isA(MapleJob.THIEF) || job.isA(MapleJob.NIGHTWALKER1)) {
+        } else if(job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
             MaxMP += 12;
-        } else if (job.isA(MapleJob.PIRATE) || job.isA(MapleJob.THUNDERBREAKER1)) {
+        } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
             MaxMP += 16;
         } else {
             MaxMP += 8;

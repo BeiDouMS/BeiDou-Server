@@ -23,9 +23,9 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
-import server.MapleShopFactory;
+import server.ShopFactory;
 
 
 public class ReloadShopsCommand extends Command {
@@ -34,7 +34,7 @@ public class ReloadShopsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleShopFactory.getInstance().reloadShops();
+    public void execute(Client c, String[] params) {
+        ShopFactory.getInstance().reloadShops();
     }
 }

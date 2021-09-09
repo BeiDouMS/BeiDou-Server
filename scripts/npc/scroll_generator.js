@@ -207,8 +207,8 @@ function getScrollSuccessTier(scrollStats) {
 
 function getAvailableScrollsPool(baseScrolls, rewardTier, successTier) {
     var scrolls = [];
-    const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-    var ii = MapleItemInformationProvider.getInstance();
+    const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+    var ii = ItemInformationProvider.getInstance();
     
     for (var i = 0; i < baseScrolls.length; i++) {
         for (var j = 0; j < 100; j++) {
@@ -244,9 +244,9 @@ function getPlayerCardTierPower() {
         countTier[ceTier] += ce.getValue();
 
         if (ceTier >= 8) {  // is special card
-            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-            const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-            var mobLevel = MapleLifeFactory.getMonsterLevel(MapleItemInformationProvider.getInstance().getCardMobId(cardid));
+            const LifeFactory = Java.type('server.life.LifeFactory');
+            const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+            var mobLevel = LifeFactory.getMonsterLevel(ItemInformationProvider.getInstance().getCardMobId(cardid));
             var mobTier = getLevelTier(mobLevel) - 1;
 
             countTier[mobTier] += (ce.getValue() * 1.2);
@@ -421,8 +421,8 @@ function performExchange(sgItemid, sgCount) {
 }
 
 function generateRandomScroll() {
-    const MapleInventoryType = Java.type('client.inventory.MapleInventoryType');
-    if (cm.getPlayer().getInventory(MapleInventoryType.USE).getNumFreeSlot() >= 1) {
+    const InventoryType = Java.type('client.inventory.InventoryType');
+    if (cm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
         var itemid = getRandomScroll(calculateScrollTiers());
         if (itemid != -1) {
             if (performExchange(itemid, 1)) {

@@ -21,27 +21,27 @@
  */
 package server.quest.requirements;
 
+import client.Character;
+import client.QuestStatus;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestRequirementType;
+import tools.FilePrinter;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestRequirementType;
-import tools.FilePrinter;
-import client.MapleCharacter;
-import client.MapleQuestStatus;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class MobRequirement extends MapleQuestRequirement {
+public class MobRequirement extends AbstractQuestRequirement {
 	Map<Integer, Integer> mobs = new HashMap<>();
 	private int questID;
 	
-	public MobRequirement(MapleQuest quest, MapleData data) {
-		super(MapleQuestRequirementType.MOB);
+	public MobRequirement(Quest quest, Data data) {
+		super(QuestRequirementType.MOB);
 		questID = quest.getId();
                 processData(data);
 	}
@@ -51,18 +51,18 @@ public class MobRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData questEntry : data.getChildren()) {
-			int mobID = MapleDataTool.getInt(questEntry.getChildByPath("id"));
-			int countReq = MapleDataTool.getInt(questEntry.getChildByPath("count"));
+	public void processData(Data data) {
+		for (Data questEntry : data.getChildren()) {
+			int mobID = DataTool.getInt(questEntry.getChildByPath("id"));
+			int countReq = DataTool.getInt(questEntry.getChildByPath("count"));
 			mobs.put(mobID, countReq);
 		}
 	}
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
-		MapleQuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+	public boolean check(Character chr, Integer npcid) {
+		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
 		for(Integer mobID : mobs.keySet()) {
 			int countReq = mobs.get(mobID);
 			int progress;

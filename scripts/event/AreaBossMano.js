@@ -41,8 +41,8 @@ function cancelSchedule() {
 
 function start() {
     var thicketAroundTheBeach3 = em.getChannelServer().getMapFactory().getMap(104000400);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var mano = MapleLifeFactory.getMonster(2220000);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var mano = LifeFactory.getMonster(2220000);
     if(thicketAroundTheBeach3.getMonsterById(2220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;

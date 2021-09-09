@@ -21,26 +21,26 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.processor.action.PetAutopotProcessor;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
+import server.ItemInformationProvider;
+import server.StatEffect;
 
 public final class PetAutoPotHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readByte();
         p.readLong();
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
         
-        MapleCharacter chr = c.getPlayer();
-        MapleStatEffect stat = MapleItemInformationProvider.getInstance().getItemEffect(itemId);
+        Character chr = c.getPlayer();
+        StatEffect stat = ItemInformationProvider.getInstance().getItemEffect(itemId);
         if (stat.getHp() > 0 || stat.getHpRate() > 0.0) {
             float estimatedHp = ((float) chr.getHp()) / chr.getMaxHp();
             chr.setAutopotHpAlert(estimatedHp + 0.05f);

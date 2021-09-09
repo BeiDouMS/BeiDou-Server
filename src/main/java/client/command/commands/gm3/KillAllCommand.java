@@ -23,13 +23,13 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.command.Command;
-import server.life.MapleMonster;
+import server.life.Monster;
+import server.maps.MapObject;
+import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleMapObject;
-import server.maps.MapleMapObjectType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,13 +40,13 @@ public class KillAllCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+    public void execute(Client c, String[] params) {
+        Character player = c.getPlayer();
         MapleMap map = player.getMap();
-        List<MapleMapObject> monsters = map.getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.MONSTER));
+        List<MapObject> monsters = map.getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.MONSTER));
         int count = 0;
-        for (MapleMapObject monstermo : monsters) {
-            MapleMonster monster = (MapleMonster) monstermo;
+        for (MapObject monstermo : monsters) {
+            Monster monster = (Monster) monstermo;
             if (!monster.getStats().isFriendly() && !(monster.getId() >= 8810010 && monster.getId() <= 8810018)) {
                 map.damageMonster(player, monster, Integer.MAX_VALUE);
                 count++;

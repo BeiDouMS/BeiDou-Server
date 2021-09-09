@@ -21,11 +21,11 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleMapObject;
+import server.maps.MapObject;
 import tools.FilePrinter;
 
 import java.awt.*;
@@ -38,13 +38,13 @@ import java.awt.*;
 public final class ItemPickupHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(final InPacket p, final MapleClient c) {
+    public final void handlePacket(final InPacket p, final Client c) {
         p.readInt(); //Timestamp
         p.readByte();
         p.readPos(); //cpos
         int oid = p.readInt();
-        MapleCharacter chr = c.getPlayer();
-        MapleMapObject ob = chr.getMap().getMapObject(oid);
+        Character chr = c.getPlayer();
+        MapObject ob = chr.getMap().getMapObject(oid);
         if(ob == null) return;
         
         Point charPos = chr.getPosition();

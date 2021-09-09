@@ -21,22 +21,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.autoban.AutobanFactory;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.MapleWeaponType;
+import client.inventory.WeaponType;
 import client.status.MonsterStatusEffect;
 import constants.skills.Outlaw;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.MapleStatEffect;
-import server.life.MapleMonster;
-import server.life.MapleMonsterInformationProvider;
-import server.maps.MapleSummon;
+import server.ItemInformationProvider;
+import server.StatEffect;
+import server.life.Monster;
+import server.life.MonsterInformationProvider;
+import server.maps.Summon;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -66,14 +66,14 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
     }
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (!player.isAlive()) {
             return;
         }
-        MapleSummon summon = null;
-        for (MapleSummon sum : player.getSummonsValues()) {
+        Summon summon = null;
+        for (Summon sum : player.getSummonsValues()) {
             if (sum.getObjectId() == oid) {
                 summon = sum;
             }
@@ -82,7 +82,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             return;
         }
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
-        MapleStatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
+        StatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
         p.skip(4);
         List<SummonAttackEntry> allDamage = new ArrayList<>();
         byte direction = p.readByte();
@@ -104,12 +104,12 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         int maxDmg = calcMaxDamage(summonEffect, player, magic);    // thanks Darter (YungMoozi) for reporting unchecked max dmg
         for (SummonAttackEntry attackEntry : allDamage) {
             int damage = attackEntry.getDamage();
-            MapleMonster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
+            Monster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
             if (target != null) {
                 if (damage > maxDmg) {
                     AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
 
-                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " used a summon of skillid " + summon.getSkill() + " to attack " + MapleMonsterInformationProvider.getInstance().getMobNameFromId(target.getId()) + " with damage " + damage + " (max: " + maxDmg + ")");
+                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " used a summon of skillid " + summon.getSkill() + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(target.getId()) + " with damage " + damage + " (max: " + maxDmg + ")");
                     damage = maxDmg;
                 }
                 
@@ -127,7 +127,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         }
     }
     
-    private static int calcMaxDamage(MapleStatEffect summonEffect, MapleCharacter player, boolean magic) {
+    private static int calcMaxDamage(StatEffect summonEffect, Character player, boolean magic) {
         double maxDamage;
         
         if (magic) {
@@ -135,13 +135,13 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             maxDamage = player.calculateMaxBaseMagicDamage(matk) * (0.05 * summonEffect.getMatk());
         } else {
             int watk = Math.max(player.getTotalWatk(), 14);
-            Item weapon_item = player.getInventory(MapleInventoryType.EQUIPPED).getItem((short) -11);
+            Item weapon_item = player.getInventory(InventoryType.EQUIPPED).getItem((short) -11);
             
             int maxBaseDmg;  // thanks Conrad, Atoot for detecting some summons legitimately hitting over the calculated limit
             if (weapon_item != null) {
-                maxBaseDmg = player.calculateMaxBaseDamage(watk, MapleItemInformationProvider.getInstance().getWeaponType(weapon_item.getItemId()));
+                maxBaseDmg = player.calculateMaxBaseDamage(watk, ItemInformationProvider.getInstance().getWeaponType(weapon_item.getItemId()));
             } else {
-                maxBaseDmg = player.calculateMaxBaseDamage(watk, MapleWeaponType.SWORD1H);
+                maxBaseDmg = player.calculateMaxBaseDamage(watk, WeaponType.SWORD1H);
             }
             
             float summonDmgMod = (maxBaseDmg >= 438) ? 0.054f : 0.077f;

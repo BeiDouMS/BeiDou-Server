@@ -40,9 +40,9 @@ function cancelSchedule() {
 }
 
 function start() {
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     var mapObj = em.getChannelServer().getMapFactory().getMap(800020120);   // original mapid was 251010101
-    var mobObj = MapleLifeFactory.getMonster(6090002);
+    var mobObj = LifeFactory.getMonster(6090002);
 	
 	if(mapObj.getMonsterById(6090002) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);

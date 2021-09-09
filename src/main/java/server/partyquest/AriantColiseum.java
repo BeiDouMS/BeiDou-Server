@@ -19,11 +19,11 @@
 */
 package server.partyquest;
 
-import client.MapleCharacter;
+import client.Character;
 import constants.game.GameConstants;
 import server.TimerManager;
-import server.expeditions.MapleExpedition;
-import server.expeditions.MapleExpeditionType;
+import server.expeditions.Expedition;
+import server.expeditions.ExpeditionType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 
@@ -40,11 +40,11 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class AriantColiseum {
     
-    private MapleExpedition exped;
+    private Expedition exped;
     private MapleMap map;
     
-    private Map<MapleCharacter, Integer> score;
-    private Map<MapleCharacter, Integer> rewardTier;
+    private Map<Character, Integer> score;
+    private Map<Character, Integer> rewardTier;
     private boolean scoreDirty = false;
     
     private ScheduledFuture<?> ariantUpdate;
@@ -55,7 +55,7 @@ public class AriantColiseum {
     
     private boolean eventClear = false;
     
-    public AriantColiseum(MapleMap eventMap, MapleExpedition expedition) {
+    public AriantColiseum(MapleMap eventMap, Expedition expedition) {
         exped = expedition;
         exped.finishRegistration();
         
@@ -65,17 +65,17 @@ public class AriantColiseum {
         int pqTimer = 10 * 60 * 1000;
         int pqTimerBoard = (9 * 60 * 1000) + 50 * 1000;
         
-        List<MapleCharacter> players = exped.getActiveMembers();
+        List<Character> players = exped.getActiveMembers();
         score = new HashMap<>();
         rewardTier = new HashMap<>();
-        for (MapleCharacter mc : players) {
+        for (Character mc : players) {
             mc.changeMap(map, 0);
             mc.setAriantColiseum(this);
             mc.updateAriantScore();
             rewardTier.put(mc, 0);
         }
         
-        for (MapleCharacter mc : players) {
+        for (Character mc : players) {
             mc.sendPacket(PacketCreator.updateAriantPQRanking(score));
         }
         
@@ -125,16 +125,16 @@ public class AriantColiseum {
         cancelAriantScoreBoard();
     }
     
-    public int getAriantScore(MapleCharacter chr) {
+    public int getAriantScore(Character chr) {
         Integer chrScore = score.get(chr);
         return chrScore != null ? chrScore : 0;
     }
     
-    public void clearAriantScore(MapleCharacter chr) {
+    public void clearAriantScore(Character chr) {
         score.remove(chr);
     }
     
-    public void updateAriantScore(MapleCharacter chr, int points) {
+    public void updateAriantScore(Character chr, int points) {
         if (map != null) {
             score.put(chr, points);
             scoreDirty = true;
@@ -143,19 +143,19 @@ public class AriantColiseum {
     
     private void broadcastAriantScoreUpdate() {
         if (scoreDirty) {
-            for (MapleCharacter chr : score.keySet()) {
+            for (Character chr : score.keySet()) {
                 chr.sendPacket(PacketCreator.updateAriantPQRanking(score));
             }
             scoreDirty = false;
         }
     }
     
-    public int getAriantRewardTier(MapleCharacter chr) {
+    public int getAriantRewardTier(Character chr) {
         Integer reward = rewardTier.get(chr);
         return reward != null ? reward : 0;
     }
     
-    public void clearAriantRewardTier(MapleCharacter chr) {
+    public void clearAriantRewardTier(Character chr) {
         rewardTier.remove(chr);
     }
     
@@ -163,13 +163,13 @@ public class AriantColiseum {
         lostShards += quantity;
     }
     
-    public void leaveArena(MapleCharacter chr) {
+    public void leaveArena(Character chr) {
         if (!(eventClear && GameConstants.isAriantColiseumArena(chr.getMapId()))) {
             leaveArenaInternal(chr);
         }
     }
     
-    private synchronized void leaveArenaInternal(MapleCharacter chr) {
+    private synchronized void leaveArenaInternal(Character chr) {
         if (exped != null) {
             if (exped.removeMember(chr)) {
                 int minSize = eventClear ? 1 : 2;
@@ -185,7 +185,7 @@ public class AriantColiseum {
         }
     }
     
-    public void playerDisconnected(MapleCharacter chr) {
+    public void playerDisconnected(Character chr) {
         leaveArenaInternal(chr);
     }
     
@@ -221,10 +221,10 @@ public class AriantColiseum {
     
     public void distributeAriantPoints() {
         int firstTop = -1, secondTop = -1;
-        MapleCharacter winner = null;
+        Character winner = null;
         List<Integer> runnerups = new ArrayList<>();
         
-        for (Entry<MapleCharacter, Integer> e : score.entrySet()) {
+        for (Entry<Character, Integer> e : score.entrySet()) {
             Integer s = e.getValue();
             if (s > firstTop) {
                 secondTop = firstTop;
@@ -244,14 +244,14 @@ public class AriantColiseum {
         }
     }
     
-    private MapleExpeditionType getExpeditionType() {
-        MapleExpeditionType type;
+    private ExpeditionType getExpeditionType() {
+        ExpeditionType type;
         if (map.getId() == 980010101) {
-            type = MapleExpeditionType.ARIANT;
+            type = ExpeditionType.ARIANT;
         } else if (map.getId() == 980010201) {
-            type = MapleExpeditionType.ARIANT1;
+            type = ExpeditionType.ARIANT1;
         } else {
-            type = MapleExpeditionType.ARIANT2;
+            type = ExpeditionType.ARIANT2;
         }
         
         return type;
@@ -261,7 +261,7 @@ public class AriantColiseum {
         exped.removeChannelExpedition(map.getChannelServer());
         cancelAriantSchedules();
         
-        for (MapleCharacter chr : map.getAllPlayers()) {
+        for (Character chr : map.getAllPlayers()) {
             chr.changeMap(980010010, 0);
         }
     }
@@ -270,7 +270,7 @@ public class AriantColiseum {
         if (exped != null) {
             exped.dispose(false);
             
-            for (MapleCharacter chr : exped.getActiveMembers()) {
+            for (Character chr : exped.getActiveMembers()) {
                 chr.setAriantColiseum(null);
                 chr.changeMap(980010000, 0);
             }

@@ -22,8 +22,8 @@
 
 
 function isTigunMorphed(ch) {
-    const MapleBuffStat = Java.type('client.MapleBuffStat');
-    return ch.getBuffSource(MapleBuffStat.MORPH) == 2210005;
+    const BuffStat = Java.type('client.BuffStat');
+    return ch.getBuffSource(BuffStat.MORPH) == 2210005;
 }
 
 function start() {

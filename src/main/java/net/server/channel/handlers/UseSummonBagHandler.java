@@ -21,14 +21,14 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleItemInformationProvider;
-import server.life.MapleLifeFactory;
+import server.ItemInformationProvider;
+import server.life.LifeFactory;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -39,7 +39,7 @@ import tools.Randomizer;
 public final class UseSummonBagHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         //[4A 00][6C 4C F2 02][02 00][63 0B 20 00]
         if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
@@ -48,13 +48,13 @@ public final class UseSummonBagHandler extends AbstractPacketHandler {
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
-        Item toUse = c.getPlayer().getInventory(MapleInventoryType.USE).getItem(slot);
+        Item toUse = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
-            MapleInventoryManipulator.removeFromSlot(c, MapleInventoryType.USE, slot, (short) 1, false);
-            int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(itemId);
+            InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
+            int[][] toSpawn = ItemInformationProvider.getInstance().getSummonMobs(itemId);
             for (int[] toSpawnChild : toSpawn) {
                 if (Randomizer.nextInt(100) < toSpawnChild[1]) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                 }
             }
         }

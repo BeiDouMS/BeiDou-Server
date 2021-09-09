@@ -21,48 +21,49 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import client.MapleJob;
+import client.Character;
+import client.Job;
 import client.Skill;
 import client.SkillFactory;
+import provider.Data;
+import provider.DataTool;
+import server.quest.Quest;
+import server.quest.QuestActionType;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import provider.MapleData;
-import provider.MapleDataTool;
-import server.quest.MapleQuest;
-import server.quest.MapleQuestActionType;
 
 /**
  *
  * @author Tyler (Twdtwd)
  */
-public class SkillAction extends MapleQuestAction {
+public class SkillAction extends AbstractQuestAction {
 	int itemEffect;
 	Map<Integer, SkillData> skillData = new HashMap<>();
 	
-	public SkillAction(MapleQuest quest, MapleData data) {
-		super(MapleQuestActionType.SKILL, quest);
+	public SkillAction(Quest quest, Data data) {
+		super(QuestActionType.SKILL, quest);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData sEntry : data) {
+	public void processData(Data data) {
+		for (Data sEntry : data) {
 			byte skillLevel = 0;
-			int skillid = MapleDataTool.getInt(sEntry.getChildByPath("id"));
-			MapleData skillLevelData = sEntry.getChildByPath("skillLevel");
+			int skillid = DataTool.getInt(sEntry.getChildByPath("id"));
+			Data skillLevelData = sEntry.getChildByPath("skillLevel");
 			if(skillLevelData != null)
-				skillLevel = (byte) MapleDataTool.getInt(skillLevelData);
-			int masterLevel = MapleDataTool.getInt(sEntry.getChildByPath("masterLevel"));
+				skillLevel = (byte) DataTool.getInt(skillLevelData);
+			int masterLevel = DataTool.getInt(sEntry.getChildByPath("masterLevel"));
 			List<Integer> jobs = new ArrayList<>();
 			
-			MapleData applicableJobs = sEntry.getChildByPath("job");
+			Data applicableJobs = sEntry.getChildByPath("job");
 			if(applicableJobs != null) {
-				for (MapleData applicableJob : applicableJobs.getChildren()) {
-					jobs.add(MapleDataTool.getInt(applicableJob));
+				for (Data applicableJob : applicableJobs.getChildren()) {
+					jobs.add(DataTool.getInt(applicableJob));
 				}
 			}
 			
@@ -71,7 +72,7 @@ public class SkillAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		for(SkillData skill : skillData.values()) {
 			Skill skillObject = SkillFactory.getSkill(skill.getId());
                         if(skillObject == null) continue;
@@ -113,7 +114,7 @@ public class SkillAction extends MapleQuestAction {
 			return masterLevel;
 		}
 		
-		public boolean jobsContains(MapleJob job) {
+		public boolean jobsContains(Job job) {
 			return jobs.contains(job.getId());
 		}
 		

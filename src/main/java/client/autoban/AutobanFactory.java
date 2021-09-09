@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package client.autoban;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import net.packet.logging.MapleLogger;
 import net.server.Server;
@@ -83,19 +83,19 @@ public enum AutobanFactory {
 		ban.addPoint(this, reason);
 	}
 	
-	public void alert(MapleCharacter chr, String reason) {
+	public void alert(Character chr, String reason) {
             if(YamlConfig.config.server.USE_AUTOBAN == true) {
 		if (chr != null && MapleLogger.ignored.contains(chr.getId())){
 			return;
 		}
-		Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? MapleCharacter.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
+		Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
             }
         if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
-			FilePrinter.print(FilePrinter.AUTOBAN_WARNING, (chr != null ? MapleCharacter.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason);
+			FilePrinter.print(FilePrinter.AUTOBAN_WARNING, (chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason);
 		}
 	}
 	
-	public void autoban(MapleCharacter chr, String value) {
+	public void autoban(Character chr, String value) {
             if(YamlConfig.config.server.USE_AUTOBAN == true) {
 		chr.autoban("Autobanned for (" + this.name() + ": " + value + ")");
 		//chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");

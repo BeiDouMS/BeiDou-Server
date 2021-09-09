@@ -43,8 +43,8 @@ function cancelSchedule() {
 }
 
 function start() {
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var eliza = MapleLifeFactory.getMonster(8220000);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var eliza = LifeFactory.getMonster(8220000);
     var stairwayToTheSky2 = em.getChannelServer().getMapFactory().getMap(200010300);
 
 	if(stairwayToTheSky2.getMonsterById(8220000) != null) {

@@ -21,8 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleClient;
+import client.Character;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.autoban.AutobanManager;
 import net.AbstractPacketHandler;
@@ -33,8 +33,8 @@ import tools.PacketCreator;
 
 public final class HealOvertimeHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+    public final void handlePacket(InPacket p, Client c) {
+        Character chr = c.getPlayer();
         if(!chr.isLoggedinWorld()) return;
         
         AutobanManager abm = chr.getAutobanManager();

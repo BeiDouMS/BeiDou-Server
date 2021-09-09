@@ -19,24 +19,25 @@
 */
 package client.creator;
 
-import client.MapleJob;
+import client.Job;
 import client.Skill;
+import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MapleInventoryType;
 import config.YamlConfig;
-import java.util.concurrent.atomic.AtomicInteger;
+import tools.Pair;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import tools.Pair;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *
  * @author RonanLana
  */
 public class CharacterFactoryRecipe {
-    private MapleJob job;
+    private Job job;
     private int level, map, top, bottom, shoes, weapon;
     private int str = 4, dex = 4, int_ = 4, luk = 4;
     private int maxHp = 50, maxMp = 5;
@@ -44,10 +45,10 @@ public class CharacterFactoryRecipe {
     private int meso = 0;
     private List<Pair<Skill, Integer>> skills = new LinkedList<>();
     
-    private List<Pair<Item, MapleInventoryType>> itemsWithType = new LinkedList<>();
-    private Map<MapleInventoryType, AtomicInteger> runningTypePosition = new LinkedHashMap<>();
+    private List<Pair<Item, InventoryType>> itemsWithType = new LinkedList<>();
+    private Map<InventoryType, AtomicInteger> runningTypePosition = new LinkedHashMap<>();
     
-    public CharacterFactoryRecipe(MapleJob job, int level, int map, int top, int bottom, int shoes, int weapon) {
+    public CharacterFactoryRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
         this.job = job;
         this.level = level;
         this.map = map;
@@ -107,10 +108,10 @@ public class CharacterFactoryRecipe {
     }
     
     public void addStartingEquipment(Item eqpItem) {
-        itemsWithType.add(new Pair<>(eqpItem, MapleInventoryType.EQUIP));
+        itemsWithType.add(new Pair<>(eqpItem, InventoryType.EQUIP));
     }
     
-    public void addStartingItem(int itemid, int quantity, MapleInventoryType itemType) {
+    public void addStartingItem(int itemid, int quantity, InventoryType itemType) {
         AtomicInteger p = runningTypePosition.get(itemType);
         if(p == null) {
             p = new AtomicInteger(0);
@@ -120,7 +121,7 @@ public class CharacterFactoryRecipe {
         itemsWithType.add(new Pair<>(new Item(itemid, (short) p.getAndIncrement(), (short) quantity), itemType));
     }
     
-    public MapleJob getJob() {
+    public Job getJob() {
         return job;
     }
     
@@ -188,7 +189,7 @@ public class CharacterFactoryRecipe {
         return skills;
     }
     
-    public List<Pair<Item, MapleInventoryType>> getStartingItems() {
+    public List<Pair<Item, InventoryType>> getStartingItems() {
         return itemsWithType;
     }
 }
