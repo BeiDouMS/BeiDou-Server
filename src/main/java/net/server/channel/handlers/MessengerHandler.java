@@ -29,8 +29,8 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.coordinator.world.InviteCoordinator.MapleInviteResult;
-import net.server.world.MapleMessenger;
 import net.server.world.MapleMessengerCharacter;
+import net.server.world.Messenger;
 import net.server.world.World;
 import tools.PacketCreator;
 
@@ -43,7 +43,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                 byte mode = p.readByte();
                 Character player = c.getPlayer();
                 World world = c.getWorldServer();
-                MapleMessenger messenger = player.getMessenger();
+                Messenger messenger = player.getMessenger();
                 switch (mode) {
                     case 0x00:
                         int messengerid = p.readInt();

@@ -157,7 +157,7 @@ public class Character extends AbstractCharacterObject {
     private MaplePartyCharacter mpc = null;
     private Inventory[] inventory;
     private Job job = Job.BEGINNER;
-    private MapleMessenger messenger = null;
+    private Messenger messenger = null;
     private MapleMiniGame miniGame;
     private MapleRockPaperScissor rps;
     private Mount maplemount;
@@ -5376,7 +5376,7 @@ public class Character extends AbstractCharacterObject {
         return maplemount;
     }
 
-    public MapleMessenger getMessenger() {
+    public Messenger getMessenger() {
         return messenger;
     }
 
@@ -5603,7 +5603,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void closePlayerMessenger() {
-        MapleMessenger m = this.getMessenger();
+        Messenger m = this.getMessenger();
         if (m == null) {
             return;
         }
@@ -7138,7 +7138,7 @@ public class Character extends AbstractCharacterObject {
                         int messengerid = rs.getInt("messengerid");
                         int position = rs.getInt("messengerposition");
                         if (messengerid > 0 && position < 4 && position > -1) {
-                            MapleMessenger messenger = wserv.getMessenger(messengerid);
+                            Messenger messenger = wserv.getMessenger(messengerid);
                             if (messenger != null) {
                                 ret.messenger = messenger;
                                 ret.messengerposition = position;
@@ -9172,7 +9172,7 @@ public class Character extends AbstractCharacterObject {
         this.mapid = PmapId;
     }
 
-    public void setMessenger(MapleMessenger messenger) {
+    public void setMessenger(Messenger messenger) {
         this.messenger = messenger;
     }
 

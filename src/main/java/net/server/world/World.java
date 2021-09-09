@@ -80,7 +80,7 @@ public class World {
     private List<Channel> channels = new ArrayList<>();
     private Map<Integer, Byte> pnpcStep = new HashMap<>();
     private Map<Integer, Short> pnpcPodium = new HashMap<>();
-    private Map<Integer, MapleMessenger> messengers = new HashMap<>();
+    private Map<Integer, Messenger> messengers = new HashMap<>();
     private AtomicInteger runningMessengerId = new AtomicInteger();
     private Map<Integer, Family> families = new LinkedHashMap<>();
     private Map<Integer, Integer> relationships = new HashMap<>();
@@ -1044,12 +1044,12 @@ public class World {
         return foundsChars.toArray(new CharacterIdChannelPair[foundsChars.size()]);
     }
 
-    public MapleMessenger getMessenger(int messengerid) {
+    public Messenger getMessenger(int messengerid) {
         return messengers.get(messengerid);
     }
 
     public void leaveMessenger(int messengerid, MapleMessengerCharacter target) {
-        MapleMessenger messenger = getMessenger(messengerid);
+        Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
             throw new IllegalArgumentException("No messenger with the specified messengerid exists");
         }
@@ -1062,7 +1062,7 @@ public class World {
         if (isConnected(target)) {
             Character targetChr = getPlayerStorage().getCharacterByName(target);
             if (targetChr != null) {
-                MapleMessenger messenger = targetChr.getMessenger();
+                Messenger messenger = targetChr.getMessenger();
                 if (messenger == null) {
                     Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
                     if (from != null) {
@@ -1081,7 +1081,7 @@ public class World {
         }
     }
 
-    public void addMessengerPlayer(MapleMessenger messenger, String namefrom, int fromchannel, int position) {
+    public void addMessengerPlayer(Messenger messenger, String namefrom, int fromchannel, int position) {
     	for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
     		Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
     		if(chr == null){
@@ -1097,7 +1097,7 @@ public class World {
     	}
     }
 
-    public void removeMessengerPlayer(MapleMessenger messenger, int position) {
+    public void removeMessengerPlayer(Messenger messenger, int position) {
         for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
             Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
             if (chr != null) {
@@ -1106,7 +1106,7 @@ public class World {
         }
     }
 
-    public void messengerChat(MapleMessenger messenger, String chattext, String namefrom) {
+    public void messengerChat(Messenger messenger, String chattext, String namefrom) {
     	String from = "";
     	String to1 = "";
     	String to2 = "";
@@ -1139,12 +1139,12 @@ public class World {
     }
 
     public void updateMessenger(int messengerid, String namefrom, int fromchannel) {
-        MapleMessenger messenger = getMessenger(messengerid);
+        Messenger messenger = getMessenger(messengerid);
         int position = messenger.getPositionByName(namefrom);
         updateMessenger(messenger, namefrom, position, fromchannel);
     }
 
-    public void updateMessenger(MapleMessenger messenger, String namefrom, int position, int fromchannel) {
+    public void updateMessenger(Messenger messenger, String namefrom, int position, int fromchannel) {
         for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
             Channel ch = getChannel(fromchannel);
             if (!(messengerchar.getName().equals(namefrom))) {
@@ -1157,7 +1157,7 @@ public class World {
     }
 
     public void silentLeaveMessenger(int messengerid, MapleMessengerCharacter target) {
-        MapleMessenger messenger = getMessenger(messengerid);
+        Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
             throw new IllegalArgumentException("No messenger with the specified messengerid exists");
         }
@@ -1165,7 +1165,7 @@ public class World {
     }
 
     public void joinMessenger(int messengerid, MapleMessengerCharacter target, String from, int fromchannel) {
-        MapleMessenger messenger = getMessenger(messengerid);
+        Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
             throw new IllegalArgumentException("No messenger with the specified messengerid exists");
         }
@@ -1174,16 +1174,16 @@ public class World {
     }
 
     public void silentJoinMessenger(int messengerid, MapleMessengerCharacter target, int position) {
-        MapleMessenger messenger = getMessenger(messengerid);
+        Messenger messenger = getMessenger(messengerid);
         if (messenger == null) {
             throw new IllegalArgumentException("No messenger with the specified messengerid exists");
         }
         messenger.addMember(target, position);
     }
 
-    public MapleMessenger createMessenger(MapleMessengerCharacter chrfor) {
+    public Messenger createMessenger(MapleMessengerCharacter chrfor) {
         int messengerid = runningMessengerId.getAndIncrement();
-        MapleMessenger messenger = new MapleMessenger(messengerid, chrfor);
+        Messenger messenger = new Messenger(messengerid, chrfor);
         messengers.put(messenger.getId(), messenger);
         return messenger;
     }
