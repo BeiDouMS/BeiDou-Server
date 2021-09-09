@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import net.packet.InPacket;
-import server.maps.MapleDragon;
+import server.maps.Dragon;
 import tools.PacketCreator;
 import tools.exceptions.EmptyMovementException;
 
@@ -36,7 +36,7 @@ public class MoveDragonHandler extends AbstractMovementPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         final Character chr = c.getPlayer();
         final Point startPos = new Point(p.readShort(), p.readShort());
-        final MapleDragon dragon = chr.getDragon();
+        final Dragon dragon = chr.getDragon();
         if (dragon != null) {
             try {
                 int movementDataStart = p.getPosition();

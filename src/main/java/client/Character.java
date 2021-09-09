@@ -233,7 +233,7 @@ public class Character extends AbstractCharacterObject {
     private Map<String, Events> events = new LinkedHashMap<>();
     private PartyQuest partyQuest = null;
     private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
-    private MapleDragon dragon = null;
+    private Dragon dragon = null;
     private Ring marriageRing;
     private int marriageItemid = -1;
     private int partnerId = -1;
@@ -10615,14 +10615,14 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void createDragon() {
-        dragon = new MapleDragon(this);
+        dragon = new Dragon(this);
     }
 
-    public MapleDragon getDragon() {
+    public Dragon getDragon() {
         return dragon;
     }
 
-    public void setDragon(MapleDragon dragon) {
+    public void setDragon(Dragon dragon) {
         this.dragon = dragon;
     }
 

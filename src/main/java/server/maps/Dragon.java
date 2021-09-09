@@ -26,12 +26,10 @@ import client.Client;
 import tools.PacketCreator;
 
 
+public class Dragon extends AbstractAnimatedMapObject {
+    private final Character owner;
 
-public class MapleDragon extends AbstractAnimatedMapObject {
-
-    private Character owner;
-
-    public MapleDragon(Character chr) {
+    public Dragon(Character chr) {
         super();
         this.owner = chr;
         this.setPosition(chr.getPosition());
@@ -58,8 +56,8 @@ public class MapleDragon extends AbstractAnimatedMapObject {
     public void sendDestroyData(Client c) {
         c.sendPacket(PacketCreator.removeDragon(owner.getId()));
     }
-    
+
     public Character getOwner() {
-    	return owner;
+        return owner;
     }
 }

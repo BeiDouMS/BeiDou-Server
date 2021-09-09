@@ -2523,7 +2523,7 @@ public class MapleMap {
             addMapObject(chr.getPlayerShop());
         }
         
-        final MapleDragon dragon = chr.getDragon();
+        final Dragon dragon = chr.getDragon();
         if (dragon != null) {
             dragon.setPosition(chr.getPosition());
             this.addMapObject(dragon);

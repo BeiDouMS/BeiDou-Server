@@ -7276,7 +7276,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnDragon(MapleDragon dragon) {
+    public static Packet spawnDragon(Dragon dragon) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_DRAGON);
         p.writeInt(dragon.getOwner().getId());//objectid = owner id
         p.writeShort(dragon.getPosition().x);
@@ -7289,7 +7289,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet moveDragon(MapleDragon dragon, Point startPos, InPacket movementPacket, long movementDataLength) {
+    public static Packet moveDragon(Dragon dragon, Point startPos, InPacket movementPacket, long movementDataLength) {
         final OutPacket p = OutPacket.create(SendOpcode.MOVE_DRAGON);
         p.writeInt(dragon.getOwner().getId());
         p.writePos(startPos);
