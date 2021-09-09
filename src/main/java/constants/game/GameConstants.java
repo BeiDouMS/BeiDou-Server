@@ -689,7 +689,7 @@ public class GameConstants {
                 for (Data l0 : mapSource.getData(objData.getName() + "/" + obj.getName()).getChildren()) {
                     for (Data l1 : l0.getChildren()) {
                         for (Data l2 : l1.getChildren()) {
-                            int objDmg = MapleDataTool.getIntConvert("s1/mobdamage", l2, 0);
+                            int objDmg = DataTool.getIntConvert("s1/mobdamage", l2, 0);
                             if (maxMobDmg < objDmg) {
                                 maxMobDmg = objDmg;
                             }

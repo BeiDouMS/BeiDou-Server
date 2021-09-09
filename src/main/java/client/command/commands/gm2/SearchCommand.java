@@ -29,7 +29,7 @@ import client.command.Command;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
@@ -86,7 +86,7 @@ public class SearchCommand extends Command {
                 
                 if (searchType == 0) {
                     for (Data searchData : data.getChildren()) {
-                        name = MapleDataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
+                        name = DataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
                         if (name.toLowerCase().contains(search.toLowerCase())) {
                             sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(name).append("\r\n");
                         }
@@ -96,8 +96,8 @@ public class SearchCommand extends Command {
                     
                     for (Data searchDataDir : data.getChildren()) {
                         for (Data searchData : searchDataDir.getChildren()) {
-                            mapName = MapleDataTool.getString(searchData.getChildByPath("mapName"), "NO-NAME");
-                            streetName = MapleDataTool.getString(searchData.getChildByPath("streetName"), "NO-NAME");
+                            mapName = DataTool.getString(searchData.getChildByPath("mapName"), "NO-NAME");
+                            streetName = DataTool.getString(searchData.getChildByPath("streetName"), "NO-NAME");
                             
                             if (mapName.toLowerCase().contains(search.toLowerCase()) || streetName.toLowerCase().contains(search.toLowerCase())) {
                                 sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(streetName).append(" - ").append(mapName).append("\r\n");

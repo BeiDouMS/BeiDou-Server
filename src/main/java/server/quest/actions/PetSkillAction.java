@@ -25,7 +25,7 @@ import client.Character;
 import client.QuestStatus;
 import constants.inventory.ItemConstants;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -45,7 +45,7 @@ public class PetSkillAction extends MapleQuestAction {
 	
 	@Override
 	public void processData(Data data) {
-		flag = MapleDataTool.getInt("petskill", data);
+		flag = DataTool.getInt("petskill", data);
 	}
 	
 	@Override

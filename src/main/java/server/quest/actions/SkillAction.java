@@ -26,7 +26,7 @@ import client.Job;
 import client.Skill;
 import client.SkillFactory;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -53,17 +53,17 @@ public class SkillAction extends MapleQuestAction {
 	public void processData(Data data) {
 		for (Data sEntry : data) {
 			byte skillLevel = 0;
-			int skillid = MapleDataTool.getInt(sEntry.getChildByPath("id"));
+			int skillid = DataTool.getInt(sEntry.getChildByPath("id"));
 			Data skillLevelData = sEntry.getChildByPath("skillLevel");
 			if(skillLevelData != null)
-				skillLevel = (byte) MapleDataTool.getInt(skillLevelData);
-			int masterLevel = MapleDataTool.getInt(sEntry.getChildByPath("masterLevel"));
+				skillLevel = (byte) DataTool.getInt(skillLevelData);
+			int masterLevel = DataTool.getInt(sEntry.getChildByPath("masterLevel"));
 			List<Integer> jobs = new ArrayList<>();
 			
 			Data applicableJobs = sEntry.getChildByPath("job");
 			if(applicableJobs != null) {
 				for (Data applicableJob : applicableJobs.getChildren()) {
-					jobs.add(MapleDataTool.getInt(applicableJob));
+					jobs.add(DataTool.getInt(applicableJob));
 				}
 			}
 			

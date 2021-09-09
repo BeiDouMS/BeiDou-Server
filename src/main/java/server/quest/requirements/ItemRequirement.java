@@ -26,7 +26,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import constants.inventory.ItemConstants;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -50,8 +50,8 @@ public class ItemRequirement extends MapleQuestRequirement {
 	@Override
 	public void processData(Data data) {
 		for (Data itemEntry : data.getChildren()) {
-			int itemId = MapleDataTool.getInt(itemEntry.getChildByPath("id"));
-			int count = MapleDataTool.getInt(itemEntry.getChildByPath("count"), 0);
+			int itemId = DataTool.getInt(itemEntry.getChildByPath("id"));
+			int count = DataTool.getInt(itemEntry.getChildByPath("count"), 0);
 			
 			items.put(itemId, count);
 		}

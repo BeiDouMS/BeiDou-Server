@@ -25,7 +25,7 @@ import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import server.MapleItemInformationProvider;
 import tools.DatabaseConnection;
@@ -233,7 +233,7 @@ public class MapleMonsterInformationProvider {
         List<Pair<Integer, String>> mobPairList = new LinkedList<>();
         for (Data mobIdData : data.getChildren()) {
             int mobIdFromData = Integer.parseInt(mobIdData.getName());
-            String mobNameFromData = MapleDataTool.getString(mobIdData.getChildByPath("name"), "NO-NAME");
+            String mobNameFromData = DataTool.getString(mobIdData.getChildByPath("name"), "NO-NAME");
             mobPairList.add(new Pair<>(mobIdFromData, mobNameFromData));
         }
         for (Pair<Integer, String> mobPair : mobPairList) {
@@ -270,7 +270,7 @@ public class MapleMonsterInformationProvider {
             DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.STRING);
             Data mobData = dataProvider.getData("Mob.img");
             
-            mobName = MapleDataTool.getString(mobData.getChildByPath(id + "/name"), "");
+            mobName = DataTool.getString(mobData.getChildByPath(id + "/name"), "");
             mobNameCache.put(id, mobName);
         }
 

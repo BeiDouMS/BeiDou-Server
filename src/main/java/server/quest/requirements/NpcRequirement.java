@@ -23,7 +23,7 @@ package server.quest.requirements;
 
 import client.Character;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -41,7 +41,7 @@ public class NpcRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public void processData(Data data) {
-		reqNPC = MapleDataTool.getInt(data);
+		reqNPC = DataTool.getInt(data);
 	}
 	
 	

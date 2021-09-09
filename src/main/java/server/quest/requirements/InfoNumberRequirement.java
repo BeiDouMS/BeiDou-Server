@@ -21,7 +21,7 @@ package server.quest.requirements;
 
 import client.Character;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -42,7 +42,7 @@ public class InfoNumberRequirement extends MapleQuestRequirement {
 
         @Override
         public void processData(Data data) {
-                infoNumber = (short) MapleDataTool.getIntConvert(data, 0);
+                infoNumber = (short) DataTool.getIntConvert(data, 0);
         }
 
 

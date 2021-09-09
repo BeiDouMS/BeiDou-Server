@@ -24,7 +24,7 @@ package server.quest.actions;
 import client.Character;
 import client.QuestStatus;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 import tools.PacketCreator;
@@ -44,7 +44,7 @@ public class NextQuestAction extends MapleQuestAction {
 	
 	@Override
 	public void processData(Data data) {
-		nextQuest = MapleDataTool.getInt(data);
+		nextQuest = DataTool.getInt(data);
 	}
 	
 	@Override

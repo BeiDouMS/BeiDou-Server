@@ -24,7 +24,7 @@ package server.quest.actions;
 import client.Character;
 import config.YamlConfig;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -43,7 +43,7 @@ public class ExpAction extends MapleQuestAction {
 	
 	@Override
 	public void processData(Data data) {
-		exp = MapleDataTool.getInt(data);
+		exp = DataTool.getInt(data);
 	}
 	
 	@Override

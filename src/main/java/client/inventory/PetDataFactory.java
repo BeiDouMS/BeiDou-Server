@@ -24,7 +24,7 @@ package client.inventory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 
 import java.util.HashMap;
@@ -51,8 +51,8 @@ public class PetDataFactory {
                 int prob = 0;
                 int inc = 0;
                 if (skillData != null) {
-                    prob = MapleDataTool.getInt("interact/" + skillId + "/prob", skillData, 0);
-                    inc = MapleDataTool.getInt("interact/" + skillId + "/inc", skillData, 0);
+                    prob = DataTool.getInt("interact/" + skillId + "/prob", skillData, 0);
+                    inc = DataTool.getInt("interact/" + skillId + "/inc", skillData, 0);
                 }
                 ret = new PetCommand(petId, skillId, prob, inc);
                 petCommands.put(petId + "" + skillId, ret);
@@ -69,7 +69,7 @@ public class PetDataFactory {
         synchronized (petHunger) {
             ret = petHunger.get(petId);
             if (ret == null) {
-                ret = MapleDataTool.getInt(dataRoot.getData("Pet/" + petId + ".img").getChildByPath("info/hungry"), 1);
+                ret = DataTool.getInt(dataRoot.getData("Pet/" + petId + ".img").getChildByPath("info/hungry"), 1);
             }
             return ret;
         }

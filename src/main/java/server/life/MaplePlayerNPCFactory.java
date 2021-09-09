@@ -23,7 +23,7 @@ import net.server.Server;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 
 import java.util.HashMap;
@@ -76,23 +76,23 @@ public class MaplePlayerNPCFactory {
             for (Data data : dnpcData.getChildren()) {
                 int scriptId = Integer.parseInt(data.getName());
 
-                String name = MapleDataTool.getString("name", data, "");
-                int face = MapleDataTool.getIntConvert("face", data, 20000);
-                int hair = MapleDataTool.getIntConvert("hair", data, 30000);
-                int gender = MapleDataTool.getIntConvert("gender", data, 0);
-                byte skin = (byte) MapleDataTool.getIntConvert("skin", data, 0);
-                int dir = MapleDataTool.getIntConvert("dir", data, 0);
-                int mapid = MapleDataTool.getIntConvert("map", data, 0);
-                int FH = MapleDataTool.getIntConvert("fh", data, 0);
-                int RX0 = MapleDataTool.getIntConvert("rx0", data, 0);
-                int RX1 = MapleDataTool.getIntConvert("rx1", data, 0);
-                int CX = MapleDataTool.getIntConvert("cx", data, 0);
-                int CY = MapleDataTool.getIntConvert("cy", data, 0);
+                String name = DataTool.getString("name", data, "");
+                int face = DataTool.getIntConvert("face", data, 20000);
+                int hair = DataTool.getIntConvert("hair", data, 30000);
+                int gender = DataTool.getIntConvert("gender", data, 0);
+                byte skin = (byte) DataTool.getIntConvert("skin", data, 0);
+                int dir = DataTool.getIntConvert("dir", data, 0);
+                int mapid = DataTool.getIntConvert("map", data, 0);
+                int FH = DataTool.getIntConvert("fh", data, 0);
+                int RX0 = DataTool.getIntConvert("rx0", data, 0);
+                int RX1 = DataTool.getIntConvert("rx1", data, 0);
+                int CX = DataTool.getIntConvert("cx", data, 0);
+                int CY = DataTool.getIntConvert("cy", data, 0);
 
                 Map<Short, Integer> equips = new HashMap<>();
                 for (Data edata : data.getChildByPath("equips").getChildren()) {
-                    short equippos = (short) MapleDataTool.getIntConvert("pos", edata);
-                    int equipid = MapleDataTool.getIntConvert("itemid", edata);
+                    short equippos = (short) DataTool.getIntConvert("pos", edata);
+                    int equipid = DataTool.getIntConvert("itemid", edata);
 
                     equips.put(equippos, equipid);
                 }

@@ -33,7 +33,7 @@ import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.world.Party;
 import provider.Data;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.PacketCreator;
 import tools.Pair;
@@ -76,7 +76,7 @@ public class PartySearchCoordinator {
                 mapLinks.put(mapid, neighborMaps);
 
                 for (Data neighbordata : mapdata.getChildren()) {
-                    int neighborid = MapleDataTool.getInt(neighbordata, 999999999);
+                    int neighborid = DataTool.getInt(neighbordata, 999999999);
 
                     if (neighborid != 999999999) {
                         neighborMaps.add(neighborid);

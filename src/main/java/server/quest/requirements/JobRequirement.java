@@ -24,7 +24,7 @@ package server.quest.requirements;
 import client.Character;
 import client.Job;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -50,7 +50,7 @@ public class JobRequirement extends MapleQuestRequirement {
 	@Override
 	public void processData(Data data) {
 		for (Data jobEntry : data.getChildren()) {
-			jobs.add(MapleDataTool.getInt(jobEntry));
+			jobs.add(DataTool.getInt(jobEntry));
 		}
 	}
 	

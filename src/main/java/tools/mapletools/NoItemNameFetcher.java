@@ -51,9 +51,9 @@ public class NoItemNameFetcher {
                     itemsWithNoNameProperty.remove(itemId);
                 } else {
                     if (nameData != null) {
-                        nameContentCache.put(itemId, MapleDataTool.getString("name", md));
+                        nameContentCache.put(itemId, DataTool.getString("name", md));
                     } else if (descData != null) {
-                        descContentCache.put(itemId, MapleDataTool.getString("desc", md));
+                        descContentCache.put(itemId, DataTool.getString("desc", md));
                     }
 
                     System.out.println("Found itemid on String.wz with no full property: " + subdirPath + subdirData.getName() + "/" + md.getName());

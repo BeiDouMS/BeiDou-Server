@@ -24,7 +24,7 @@ package server.maps;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import scripting.event.EventInstanceManager;
 import server.life.*;
@@ -54,9 +54,9 @@ public class MapleMapFactory {
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
         for (Data life : mapData.getChildByPath("life")) {
             life.getName();
-            String id = MapleDataTool.getString(life.getChildByPath("id"));
-            String type = MapleDataTool.getString(life.getChildByPath("type"));
-            int team = MapleDataTool.getInt("team", life, -1);
+            String id = DataTool.getString(life.getChildByPath("id"));
+            String type = DataTool.getString(life.getChildByPath("type"));
+            int team = DataTool.getInt("team", life, -1);
             if (map.isCPQMap2() && type.equals("m")) {
                 if ((Integer.parseInt(life.getName()) % 2) == 0) {
                     team = 0;
@@ -64,16 +64,16 @@ public class MapleMapFactory {
                     team = 1;
                 }
             }
-            int cy = MapleDataTool.getInt(life.getChildByPath("cy"));
+            int cy = DataTool.getInt(life.getChildByPath("cy"));
             Data dF = life.getChildByPath("f");
-            int f = (dF != null) ? MapleDataTool.getInt(dF) : 0;
-            int fh = MapleDataTool.getInt(life.getChildByPath("fh"));
-            int rx0 = MapleDataTool.getInt(life.getChildByPath("rx0"));
-            int rx1 = MapleDataTool.getInt(life.getChildByPath("rx1"));
-            int x = MapleDataTool.getInt(life.getChildByPath("x"));
-            int y = MapleDataTool.getInt(life.getChildByPath("y"));
-            int hide = MapleDataTool.getInt("hide", life, 0);
-            int mobTime = MapleDataTool.getInt("mobTime", life, 0);
+            int f = (dF != null) ? DataTool.getInt(dF) : 0;
+            int fh = DataTool.getInt(life.getChildByPath("fh"));
+            int rx0 = DataTool.getInt(life.getChildByPath("rx0"));
+            int rx1 = DataTool.getInt(life.getChildByPath("rx1"));
+            int x = DataTool.getInt(life.getChildByPath("x"));
+            int y = DataTool.getInt(life.getChildByPath("y"));
+            int hide = DataTool.getInt("hide", life, 0);
+            int mobTime = DataTool.getInt("mobTime", life, 0);
             
             loadLifeRaw(map, Integer.parseInt(id), type, cy, f, fh, rx0, rx1, x, y, hide, mobTime, team);
         }
@@ -133,7 +133,7 @@ public class MapleMapFactory {
         Data mapData = mapSource.getData(mapName);    // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
         Data infoData = mapData.getChildByPath("info");
 
-        String link = MapleDataTool.getString(infoData.getChildByPath("link"), "");
+        String link = DataTool.getString(infoData.getChildByPath("link"), "");
         if (!link.equals("")) { //nexon made hundreds of dojo maps so to reduce the size they added links.
             mapName = getMapName(Integer.parseInt(link));
             mapData = mapSource.getData(mapName);
@@ -143,37 +143,37 @@ public class MapleMapFactory {
         if (mobRate != null) {
             monsterRate = (Float) mobRate.getData();
         }
-        map = new MapleMap(mapid, world, channel, MapleDataTool.getInt("returnMap", infoData), monsterRate);
+        map = new MapleMap(mapid, world, channel, DataTool.getInt("returnMap", infoData), monsterRate);
         map.setEventInstance(event);
 
-        String onFirstEnter = MapleDataTool.getString(infoData.getChildByPath("onFirstUserEnter"), String.valueOf(mapid));
+        String onFirstEnter = DataTool.getString(infoData.getChildByPath("onFirstUserEnter"), String.valueOf(mapid));
         map.setOnFirstUserEnter(onFirstEnter.equals("") ? String.valueOf(mapid) : onFirstEnter);
 
-        String onEnter = MapleDataTool.getString(infoData.getChildByPath("onUserEnter"), String.valueOf(mapid));
+        String onEnter = DataTool.getString(infoData.getChildByPath("onUserEnter"), String.valueOf(mapid));
         map.setOnUserEnter(onEnter.equals("") ? String.valueOf(mapid) : onEnter);
 
-        map.setFieldLimit(MapleDataTool.getInt(infoData.getChildByPath("fieldLimit"), 0));
-        map.setMobInterval((short) MapleDataTool.getInt(infoData.getChildByPath("createMobInterval"), 5000));
+        map.setFieldLimit(DataTool.getInt(infoData.getChildByPath("fieldLimit"), 0));
+        map.setMobInterval((short) DataTool.getInt(infoData.getChildByPath("createMobInterval"), 5000));
         MaplePortalFactory portalFactory = new MaplePortalFactory();
         for (Data portal : mapData.getChildByPath("portal")) {
-            map.addPortal(portalFactory.makePortal(MapleDataTool.getInt(portal.getChildByPath("pt")), portal));
+            map.addPortal(portalFactory.makePortal(DataTool.getInt(portal.getChildByPath("pt")), portal));
         }
         Data timeMob = infoData.getChildByPath("timeMob");
         if (timeMob != null) {
-            map.setTimeMob(MapleDataTool.getInt(timeMob.getChildByPath("id")), MapleDataTool.getString(timeMob.getChildByPath("message")));
+            map.setTimeMob(DataTool.getInt(timeMob.getChildByPath("id")), DataTool.getString(timeMob.getChildByPath("message")));
         }
 
         int[] bounds = new int[4];
-        bounds[0] = MapleDataTool.getInt(infoData.getChildByPath("VRTop"));
-        bounds[1] = MapleDataTool.getInt(infoData.getChildByPath("VRBottom"));
+        bounds[0] = DataTool.getInt(infoData.getChildByPath("VRTop"));
+        bounds[1] = DataTool.getInt(infoData.getChildByPath("VRBottom"));
 
         if (bounds[0] == bounds[1]) {    // old-style baked map
             Data minimapData = mapData.getChildByPath("miniMap");
             if (minimapData != null) {
-                bounds[0] = MapleDataTool.getInt(minimapData.getChildByPath("centerX")) * -1;
-                bounds[1] = MapleDataTool.getInt(minimapData.getChildByPath("centerY")) * -1;
-                bounds[2] = MapleDataTool.getInt(minimapData.getChildByPath("height"));
-                bounds[3] = MapleDataTool.getInt(minimapData.getChildByPath("width"));
+                bounds[0] = DataTool.getInt(minimapData.getChildByPath("centerX")) * -1;
+                bounds[1] = DataTool.getInt(minimapData.getChildByPath("centerY")) * -1;
+                bounds[2] = DataTool.getInt(minimapData.getChildByPath("height"));
+                bounds[3] = DataTool.getInt(minimapData.getChildByPath("width"));
 
                 map.setMapPointBoundings(bounds[0], bounds[1], bounds[2], bounds[3]);
             } else {
@@ -181,8 +181,8 @@ public class MapleMapFactory {
                 map.setMapPointBoundings(-dist / 2, -dist / 2, dist, dist);
             }
         } else {
-            bounds[2] = MapleDataTool.getInt(infoData.getChildByPath("VRLeft"));
-            bounds[3] = MapleDataTool.getInt(infoData.getChildByPath("VRRight"));
+            bounds[2] = DataTool.getInt(infoData.getChildByPath("VRLeft"));
+            bounds[3] = DataTool.getInt(infoData.getChildByPath("VRRight"));
 
             map.setMapLineBoundings(bounds[0], bounds[1], bounds[2], bounds[3]);
         }
@@ -193,13 +193,13 @@ public class MapleMapFactory {
         for (Data footRoot : mapData.getChildByPath("foothold")) {
             for (Data footCat : footRoot) {
                 for (Data footHold : footCat) {
-                    int x1 = MapleDataTool.getInt(footHold.getChildByPath("x1"));
-                    int y1 = MapleDataTool.getInt(footHold.getChildByPath("y1"));
-                    int x2 = MapleDataTool.getInt(footHold.getChildByPath("x2"));
-                    int y2 = MapleDataTool.getInt(footHold.getChildByPath("y2"));
+                    int x1 = DataTool.getInt(footHold.getChildByPath("x1"));
+                    int y1 = DataTool.getInt(footHold.getChildByPath("y1"));
+                    int x2 = DataTool.getInt(footHold.getChildByPath("x2"));
+                    int y2 = DataTool.getInt(footHold.getChildByPath("y2"));
                     MapleFoothold fh = new MapleFoothold(new Point(x1, y1), new Point(x2, y2), Integer.parseInt(footHold.getName()));
-                    fh.setPrev(MapleDataTool.getInt(footHold.getChildByPath("prev")));
-                    fh.setNext(MapleDataTool.getInt(footHold.getChildByPath("next")));
+                    fh.setPrev(DataTool.getInt(footHold.getChildByPath("prev")));
+                    fh.setNext(DataTool.getInt(footHold.getChildByPath("next")));
                     if (fh.getX1() < lBound.x) {
                         lBound.x = fh.getX1();
                     }
@@ -223,10 +223,10 @@ public class MapleMapFactory {
         map.setFootholds(fTree);
         if (mapData.getChildByPath("area") != null) {
             for (Data area : mapData.getChildByPath("area")) {
-                int x1 = MapleDataTool.getInt(area.getChildByPath("x1"));
-                int y1 = MapleDataTool.getInt(area.getChildByPath("y1"));
-                int x2 = MapleDataTool.getInt(area.getChildByPath("x2"));
-                int y2 = MapleDataTool.getInt(area.getChildByPath("y2"));
+                int x1 = DataTool.getInt(area.getChildByPath("x1"));
+                int y1 = DataTool.getInt(area.getChildByPath("y1"));
+                int x2 = DataTool.getInt(area.getChildByPath("x2"));
+                int y2 = DataTool.getInt(area.getChildByPath("y2"));
                 map.addMapleArea(new Rectangle(x1, y1, (x2 - x1), (y2 - y1)));
             }
         }
@@ -263,27 +263,27 @@ public class MapleMapFactory {
         if (map.isCPQMap()) {
             Data mcData = mapData.getChildByPath("monsterCarnival");
             if (mcData != null) {
-                map.setDeathCP(MapleDataTool.getIntConvert("deathCP", mcData, 0));
-                map.setMaxMobs(MapleDataTool.getIntConvert("mobGenMax", mcData, 20));    // thanks Atoot for noticing CPQ1 bf. 3 and 4 not accepting spawns due to undefined limits, Lame for noticing a need to cap mob spawns even on such undefined limits
-                map.setTimeDefault(MapleDataTool.getIntConvert("timeDefault", mcData, 0));
-                map.setTimeExpand(MapleDataTool.getIntConvert("timeExpand", mcData, 0));
-                map.setMaxReactors(MapleDataTool.getIntConvert("guardianGenMax", mcData, 16));
+                map.setDeathCP(DataTool.getIntConvert("deathCP", mcData, 0));
+                map.setMaxMobs(DataTool.getIntConvert("mobGenMax", mcData, 20));    // thanks Atoot for noticing CPQ1 bf. 3 and 4 not accepting spawns due to undefined limits, Lame for noticing a need to cap mob spawns even on such undefined limits
+                map.setTimeDefault(DataTool.getIntConvert("timeDefault", mcData, 0));
+                map.setTimeExpand(DataTool.getIntConvert("timeExpand", mcData, 0));
+                map.setMaxReactors(DataTool.getIntConvert("guardianGenMax", mcData, 16));
                 Data guardianGenData = mcData.getChildByPath("guardianGenPos");
                 for (Data node : guardianGenData.getChildren()) {
-                    GuardianSpawnPoint pt = new GuardianSpawnPoint(new Point(MapleDataTool.getIntConvert("x", node), MapleDataTool.getIntConvert("y", node)));
-                    pt.setTeam(MapleDataTool.getIntConvert("team", node, -1));
+                    GuardianSpawnPoint pt = new GuardianSpawnPoint(new Point(DataTool.getIntConvert("x", node), DataTool.getIntConvert("y", node)));
+                    pt.setTeam(DataTool.getIntConvert("team", node, -1));
                     pt.setTaken(false);
                     map.addGuardianSpawnPoint(pt);
                 }
                 if (mcData.getChildByPath("skill") != null) {
                     for (Data area : mcData.getChildByPath("skill")) {
-                        map.addSkillId(MapleDataTool.getInt(area));
+                        map.addSkillId(DataTool.getInt(area));
                     }
                 }
 
                 if (mcData.getChildByPath("mob") != null) {
                     for (Data area : mcData.getChildByPath("mob")) {
-                        map.addMobSpawn(MapleDataTool.getInt(area.getChildByPath("id")), MapleDataTool.getInt(area.getChildByPath("spendCP")));
+                        map.addMobSpawn(DataTool.getInt(area.getChildByPath("id")), DataTool.getInt(area.getChildByPath("spendCP")));
                     }
                 }
             }
@@ -292,9 +292,9 @@ public class MapleMapFactory {
 
         if (mapData.getChildByPath("reactor") != null) {
             for (Data reactor : mapData.getChildByPath("reactor")) {
-                String id = MapleDataTool.getString(reactor.getChildByPath("id"));
+                String id = DataTool.getString(reactor.getChildByPath("id"));
                 if (id != null) {
-                    MapleReactor newReactor = loadReactor(reactor, id, (byte) MapleDataTool.getInt(reactor.getChildByPath("f"), 0));
+                    MapleReactor newReactor = loadReactor(reactor, id, (byte) DataTool.getInt(reactor.getChildByPath("f"), 0));
                     map.spawnReactor(newReactor);
                 }
             }
@@ -304,26 +304,26 @@ public class MapleMapFactory {
         map.setStreetName(loadStreetName(mapid));
         
         map.setClock(mapData.getChildByPath("clock") != null);
-        map.setEverlast(MapleDataTool.getIntConvert("everlast", infoData, 0) != 0); // thanks davidlafriniere for noticing value 0 accounting as true
-        map.setTown(MapleDataTool.getIntConvert("town", infoData, 0) != 0);
-        map.setHPDec(MapleDataTool.getIntConvert("decHP", infoData, 0));
-        map.setHPDecProtect(MapleDataTool.getIntConvert("protectItem", infoData, 0));
-        map.setForcedReturnMap(MapleDataTool.getInt(infoData.getChildByPath("forcedReturn"), 999999999));
+        map.setEverlast(DataTool.getIntConvert("everlast", infoData, 0) != 0); // thanks davidlafriniere for noticing value 0 accounting as true
+        map.setTown(DataTool.getIntConvert("town", infoData, 0) != 0);
+        map.setHPDec(DataTool.getIntConvert("decHP", infoData, 0));
+        map.setHPDecProtect(DataTool.getIntConvert("protectItem", infoData, 0));
+        map.setForcedReturnMap(DataTool.getInt(infoData.getChildByPath("forcedReturn"), 999999999));
         map.setBoat(mapData.getChildByPath("shipObj") != null);
-        map.setTimeLimit(MapleDataTool.getIntConvert("timeLimit", infoData, -1));
-        map.setFieldType(MapleDataTool.getIntConvert("fieldType", infoData, 0));
-        map.setMobCapacity(MapleDataTool.getIntConvert("fixedMobCapacity", infoData, 500));//Is there a map that contains more than 500 mobs?
+        map.setTimeLimit(DataTool.getIntConvert("timeLimit", infoData, -1));
+        map.setFieldType(DataTool.getIntConvert("fieldType", infoData, 0));
+        map.setMobCapacity(DataTool.getIntConvert("fixedMobCapacity", infoData, 500));//Is there a map that contains more than 500 mobs?
         
         Data recData = infoData.getChildByPath("recovery");
         if (recData != null) {
-            map.setRecovery(MapleDataTool.getFloat(recData));
+            map.setRecovery(DataTool.getFloat(recData));
         }
 
         HashMap<Integer, Integer> backTypes = new HashMap<>();
         try {
             for (Data layer : mapData.getChildByPath("back")) { // yolo
                 int layerNum = Integer.parseInt(layer.getName());
-                int btype = MapleDataTool.getInt(layer.getChildByPath("type"), 0);
+                int btype = DataTool.getInt(layer.getChildByPath("type"), 0);
 
                 backTypes.put(layerNum, btype);
             }
@@ -354,12 +354,12 @@ public class MapleMapFactory {
 
     private static MapleReactor loadReactor(Data reactor, String id, final byte FacingDirection) {
         MapleReactor myReactor = new MapleReactor(MapleReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
-        int x = MapleDataTool.getInt(reactor.getChildByPath("x"));
-        int y = MapleDataTool.getInt(reactor.getChildByPath("y"));
+        int x = DataTool.getInt(reactor.getChildByPath("x"));
+        int y = DataTool.getInt(reactor.getChildByPath("y"));
         myReactor.setFacingDirection(FacingDirection);
         myReactor.setPosition(new Point(x, y));
-        myReactor.setDelay(MapleDataTool.getInt(reactor.getChildByPath("reactorTime")) * 1000);
-        myReactor.setName(MapleDataTool.getString(reactor.getChildByPath("name"), ""));
+        myReactor.setDelay(DataTool.getInt(reactor.getChildByPath("reactorTime")) * 1000);
+        myReactor.setName(DataTool.getString(reactor.getChildByPath("name"), ""));
         myReactor.resetReactorActions(0);
         return myReactor;
     }
@@ -417,7 +417,7 @@ public class MapleMapFactory {
     
     public static String loadPlaceName(int mapid) {
         try {
-            return MapleDataTool.getString("mapName", nameData.getChildByPath(getMapStringName(mapid)), "");
+            return DataTool.getString("mapName", nameData.getChildByPath(getMapStringName(mapid)), "");
         } catch (Exception e) {
             return "";
         }
@@ -425,7 +425,7 @@ public class MapleMapFactory {
     
     public static String loadStreetName(int mapid) {
         try {
-            return MapleDataTool.getString("streetName", nameData.getChildByPath(getMapStringName(mapid)), "");
+            return DataTool.getString("streetName", nameData.getChildByPath(getMapStringName(mapid)), "");
         } catch (Exception e) {
             return "";
         }

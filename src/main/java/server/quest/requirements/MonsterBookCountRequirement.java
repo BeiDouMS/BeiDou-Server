@@ -23,7 +23,7 @@ package server.quest.requirements;
 
 import client.Character;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -42,7 +42,7 @@ public class MonsterBookCountRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public void processData(Data data) {
-		reqCards = MapleDataTool.getInt(data);
+		reqCards = DataTool.getInt(data);
 	}
 	
 	

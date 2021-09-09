@@ -37,7 +37,7 @@ import net.server.Server;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.life.MapleMonster;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
@@ -172,49 +172,49 @@ public class MapleStatEffect {
 
     private static MapleStatEffect loadFromData(Data source, int sourceid, boolean skill, boolean overTime) {
         MapleStatEffect ret = new MapleStatEffect();
-        ret.duration = MapleDataTool.getIntConvert("time", source, -1);
-        ret.hp = (short) MapleDataTool.getInt("hp", source, 0);
-        ret.hpR = MapleDataTool.getInt("hpR", source, 0) / 100.0;
-        ret.mp = (short) MapleDataTool.getInt("mp", source, 0);
-        ret.mpR = MapleDataTool.getInt("mpR", source, 0) / 100.0;
-        ret.mpCon = (short) MapleDataTool.getInt("mpCon", source, 0);
-        ret.hpCon = (short) MapleDataTool.getInt("hpCon", source, 0);
-        int iprop = MapleDataTool.getInt("prop", source, 100);
+        ret.duration = DataTool.getIntConvert("time", source, -1);
+        ret.hp = (short) DataTool.getInt("hp", source, 0);
+        ret.hpR = DataTool.getInt("hpR", source, 0) / 100.0;
+        ret.mp = (short) DataTool.getInt("mp", source, 0);
+        ret.mpR = DataTool.getInt("mpR", source, 0) / 100.0;
+        ret.mpCon = (short) DataTool.getInt("mpCon", source, 0);
+        ret.hpCon = (short) DataTool.getInt("hpCon", source, 0);
+        int iprop = DataTool.getInt("prop", source, 100);
         ret.prop = iprop / 100.0;
 
-        ret.cp = MapleDataTool.getInt("cp", source, 0);
+        ret.cp = DataTool.getInt("cp", source, 0);
         List<Disease> cure = new ArrayList<>(5);
-        if (MapleDataTool.getInt("poison", source, 0) > 0) {
+        if (DataTool.getInt("poison", source, 0) > 0) {
             cure.add(Disease.POISON);
         }
-        if (MapleDataTool.getInt("seal", source, 0) > 0) {
+        if (DataTool.getInt("seal", source, 0) > 0) {
             cure.add(Disease.SEAL);
         }
-        if (MapleDataTool.getInt("darkness", source, 0) > 0) {
+        if (DataTool.getInt("darkness", source, 0) > 0) {
             cure.add(Disease.DARKNESS);
         }
-        if (MapleDataTool.getInt("weakness", source, 0) > 0) {
+        if (DataTool.getInt("weakness", source, 0) > 0) {
             cure.add(Disease.WEAKEN);
             cure.add(Disease.SLOW);
         }
-        if (MapleDataTool.getInt("curse", source, 0) > 0) {
+        if (DataTool.getInt("curse", source, 0) > 0) {
             cure.add(Disease.CURSE);
         }
         ret.cureDebuffs = cure;
-        ret.nuffSkill = MapleDataTool.getInt("nuffSkill", source, 0);
+        ret.nuffSkill = DataTool.getInt("nuffSkill", source, 0);
 
-        ret.mobCount = MapleDataTool.getInt("mobCount", source, 1);
-        ret.cooldown = MapleDataTool.getInt("cooltime", source, 0);
-        ret.morphId = MapleDataTool.getInt("morph", source, 0);
-        ret.ghost = MapleDataTool.getInt("ghost", source, 0);
-        ret.fatigue = MapleDataTool.getInt("incFatigue", source, 0);
-        ret.repeatEffect = MapleDataTool.getInt("repeatEffect", source, 0) > 0;
+        ret.mobCount = DataTool.getInt("mobCount", source, 1);
+        ret.cooldown = DataTool.getInt("cooltime", source, 0);
+        ret.morphId = DataTool.getInt("morph", source, 0);
+        ret.ghost = DataTool.getInt("ghost", source, 0);
+        ret.fatigue = DataTool.getInt("incFatigue", source, 0);
+        ret.repeatEffect = DataTool.getInt("repeatEffect", source, 0) > 0;
 
         Data mdd = source.getChildByPath("0");
         if (mdd != null && mdd.getChildren().size() > 0) {
-            ret.mobSkill = (short) MapleDataTool.getInt("mobSkill", mdd, 0);
-            ret.mobSkillLevel = (short) MapleDataTool.getInt("level", mdd, 0);
-            ret.target = MapleDataTool.getInt("target", mdd, 0);
+            ret.mobSkill = (short) DataTool.getInt("mobSkill", mdd, 0);
+            ret.mobSkillLevel = (short) DataTool.getInt("level", mdd, 0);
+            ret.target = DataTool.getInt("target", mdd, 0);
         } else {
             ret.mobSkill = 0;
             ret.mobSkillLevel = 0;
@@ -224,7 +224,7 @@ public class MapleStatEffect {
         Data mdds = source.getChildByPath("mob");
         if (mdds != null) {
             if (mdds.getChildren()!= null && mdds.getChildren().size() > 0) {
-                ret.mob = MapleDataTool.getInt("mob", mdds, 0);
+                ret.mob = DataTool.getInt("mob", mdds, 0);
             }
         }
         ret.sourceid = sourceid;
@@ -237,17 +237,17 @@ public class MapleStatEffect {
         }
 
         ArrayList<Pair<BuffStat, Integer>> statups = new ArrayList<>();
-        ret.watk = (short) MapleDataTool.getInt("pad", source, 0);
-        ret.wdef = (short) MapleDataTool.getInt("pdd", source, 0);
-        ret.matk = (short) MapleDataTool.getInt("mad", source, 0);
-        ret.mdef = (short) MapleDataTool.getInt("mdd", source, 0);
-        ret.acc = (short) MapleDataTool.getIntConvert("acc", source, 0);
-        ret.avoid = (short) MapleDataTool.getInt("eva", source, 0);
+        ret.watk = (short) DataTool.getInt("pad", source, 0);
+        ret.wdef = (short) DataTool.getInt("pdd", source, 0);
+        ret.matk = (short) DataTool.getInt("mad", source, 0);
+        ret.mdef = (short) DataTool.getInt("mdd", source, 0);
+        ret.acc = (short) DataTool.getIntConvert("acc", source, 0);
+        ret.avoid = (short) DataTool.getInt("eva", source, 0);
 
-        ret.speed = (short) MapleDataTool.getInt("speed", source, 0);
-        ret.jump = (short) MapleDataTool.getInt("jump", source, 0);
+        ret.speed = (short) DataTool.getInt("speed", source, 0);
+        ret.jump = (short) DataTool.getInt("jump", source, 0);
 
-        ret.barrier = MapleDataTool.getInt("barrier", source, 0);
+        ret.barrier = DataTool.getInt("barrier", source, 0);
         addBuffStatPairToListIfNotZero(statups, BuffStat.AURA, ret.barrier);
         
         ret.mapProtection = mapProtection(sourceid);
@@ -256,23 +256,23 @@ public class MapleStatEffect {
         if (ret.overTime && ret.getSummonMovementType() == null) {
             if (!skill) {
                 if (isPyramidBuff(sourceid)) {
-                    ret.berserk = MapleDataTool.getInt("berserk", source, 0);
-                    ret.booster = MapleDataTool.getInt("booster", source, 0);
+                    ret.berserk = DataTool.getInt("berserk", source, 0);
+                    ret.booster = DataTool.getInt("booster", source, 0);
 
                     addBuffStatPairToListIfNotZero(statups, BuffStat.BERSERK, ret.berserk);
                     addBuffStatPairToListIfNotZero(statups, BuffStat.BOOSTER, ret.booster);
 
                 } else if (isDojoBuff(sourceid) || isHpMpRecovery(sourceid)) {
-                    ret.mhpR = (byte) MapleDataTool.getInt("mhpR", source, 0);
-                    ret.mhpRRate = (short) (MapleDataTool.getInt("mhpRRate", source, 0) * 100);
-                    ret.mmpR = (byte) MapleDataTool.getInt("mmpR", source, 0);
-                    ret.mmpRRate = (short) (MapleDataTool.getInt("mmpRRate", source, 0) * 100);
+                    ret.mhpR = (byte) DataTool.getInt("mhpR", source, 0);
+                    ret.mhpRRate = (short) (DataTool.getInt("mhpRRate", source, 0) * 100);
+                    ret.mmpR = (byte) DataTool.getInt("mmpR", source, 0);
+                    ret.mmpRRate = (short) (DataTool.getInt("mmpRRate", source, 0) * 100);
 
                     addBuffStatPairToListIfNotZero(statups, BuffStat.HPREC, (int) ret.mhpR);
                     addBuffStatPairToListIfNotZero(statups, BuffStat.MPREC, (int) ret.mmpR);
 
                 } else if (isRateCoupon(sourceid)) {
-                    switch (MapleDataTool.getInt("expR", source, 0)) {
+                    switch (DataTool.getInt("expR", source, 0)) {
                         case 1:
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP1, 1);
                             break;
@@ -290,7 +290,7 @@ public class MapleStatEffect {
                             break;
                     }
 
-                    switch (MapleDataTool.getInt("drpR", source, 0)) {
+                    switch (DataTool.getInt("drpR", source, 0)) {
                         case 1:
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_DRP1, 1);
                             break;
@@ -313,11 +313,11 @@ public class MapleStatEffect {
                         areas = new ArrayList<>(3);
 
                         for (Data conData : con.getChildren()) {
-                            int type = MapleDataTool.getInt("type", conData, -1);
+                            int type = DataTool.getInt("type", conData, -1);
                             
                             if (type == 0) {
-                                int startMap = MapleDataTool.getInt("sMap", conData, 0);
-                                int endMap = MapleDataTool.getInt("eMap", conData, 0);
+                                int startMap = DataTool.getInt("sMap", conData, 0);
+                                int endMap = DataTool.getInt("eMap", conData, 0);
 
                                 areas.add(new Pair<>(startMap, endMap));
                             } else if (type == 2) {
@@ -330,51 +330,51 @@ public class MapleStatEffect {
                         }
                     }
                     
-                    if (MapleDataTool.getInt("mesoupbyitem", source, 0) != 0) {
+                    if (DataTool.getInt("mesoupbyitem", source, 0) != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.MESO_UP_BY_ITEM, 4);
-                        prob = MapleDataTool.getInt("prob", source, 1);
+                        prob = DataTool.getInt("prob", source, 1);
                     }
                     
-                    int itemupType = MapleDataTool.getInt("itemupbyitem", source, 0);
+                    int itemupType = DataTool.getInt("itemupbyitem", source, 0);
                     if (itemupType != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.ITEM_UP_BY_ITEM, 4);
-                        prob = MapleDataTool.getInt("prob", source, 1);
+                        prob = DataTool.getInt("prob", source, 1);
                         
                         switch (itemupType) {
                             case 2:
-                                itemupCode = MapleDataTool.getInt("itemCode", source, 1);
+                                itemupCode = DataTool.getInt("itemCode", source, 1);
                                 break;
                                 
                             case 3:
-                                itemupCode = MapleDataTool.getInt("itemRange", source, 1);    // 3 digits
+                                itemupCode = DataTool.getInt("itemRange", source, 1);    // 3 digits
                                 break;
                         }
                     }
                     
-                    if (MapleDataTool.getInt("respectPimmune", source, 0) != 0) {
+                    if (DataTool.getInt("respectPimmune", source, 0) != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.RESPECT_PIMMUNE, 4);
                     }
                     
-                    if (MapleDataTool.getInt("respectMimmune", source, 0) != 0) {
+                    if (DataTool.getInt("respectMimmune", source, 0) != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.RESPECT_MIMMUNE, 4);
                     }
                     
-                    if (MapleDataTool.getString("defenseAtt", source, null) != null) {
+                    if (DataTool.getString("defenseAtt", source, null) != null) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.DEFENSE_ATT, 4);
                     }
                     
-                    if (MapleDataTool.getString("defenseState", source, null) != null) {
+                    if (DataTool.getString("defenseState", source, null) != null) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.DEFENSE_STATE, 4);
                     }
                     
-                    int thaw = MapleDataTool.getInt("thaw", source, 0);
+                    int thaw = DataTool.getInt("thaw", source, 0);
                     if (thaw != 0) {
                         addBuffStatPairToListIfNotZero(statups, BuffStat.MAP_PROTECTION, thaw > 0 ? 1 : 2);
                     }
                     
                     ret.cardStats = new CardItemupStats(itemupCode, prob, areas, inParty);
                 } else if (isExpIncrease(sourceid)) {
-                    addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_INCREASE, MapleDataTool.getInt("expinc", source, 0));
+                    addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_INCREASE, DataTool.getInt("expinc", source, 0));
                 }
             } else {
                 if (isMapChair(sourceid)) {
@@ -406,23 +406,23 @@ public class MapleStatEffect {
             }
         }
 
-        int x = MapleDataTool.getInt("x", source, 0);
+        int x = DataTool.getInt("x", source, 0);
 
         if ((sourceid == Beginner.RECOVERY || sourceid == Noblesse.RECOVERY || sourceid == Evan.RECOVERY || sourceid == Legend.RECOVERY) && YamlConfig.config.server.USE_ULTRA_RECOVERY == true) {
             x *= 10;
         }
         ret.x = x;
-        ret.y = MapleDataTool.getInt("y", source, 0);
+        ret.y = DataTool.getInt("y", source, 0);
 
-        ret.damage = MapleDataTool.getIntConvert("damage", source, 100);
-        ret.fixdamage = MapleDataTool.getIntConvert("fixdamage", source, -1);
-        ret.attackCount = MapleDataTool.getIntConvert("attackCount", source, 1);
-        ret.bulletCount = (short) MapleDataTool.getIntConvert("bulletCount", source, 1);
-        ret.bulletConsume = (short) MapleDataTool.getIntConvert("bulletConsume", source, 0);
-        ret.moneyCon = MapleDataTool.getIntConvert("moneyCon", source, 0);
-        ret.itemCon = MapleDataTool.getInt("itemCon", source, 0);
-        ret.itemConNo = MapleDataTool.getInt("itemConNo", source, 0);
-        ret.moveTo = MapleDataTool.getInt("moveTo", source, -1);
+        ret.damage = DataTool.getIntConvert("damage", source, 100);
+        ret.fixdamage = DataTool.getIntConvert("fixdamage", source, -1);
+        ret.attackCount = DataTool.getIntConvert("attackCount", source, 1);
+        ret.bulletCount = (short) DataTool.getIntConvert("bulletCount", source, 1);
+        ret.bulletConsume = (short) DataTool.getIntConvert("bulletConsume", source, 0);
+        ret.moneyCon = DataTool.getIntConvert("moneyCon", source, 0);
+        ret.itemCon = DataTool.getInt("itemCon", source, 0);
+        ret.itemConNo = DataTool.getInt("itemConNo", source, 0);
+        ret.moveTo = DataTool.getInt("moveTo", source, -1);
         Map<MonsterStatus, Integer> monsterStatus = new ArrayMap<>();
         if (skill) {
             switch (sourceid) {

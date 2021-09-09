@@ -27,7 +27,7 @@ import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.PacketCreator;
 
@@ -55,7 +55,7 @@ public class SpawnPetProcessor {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     } else {
-                        int evolveid = MapleDataTool.getInt("info/evol1", dataRoot.getData("Pet/" + petid + ".img"));
+                        int evolveid = DataTool.getInt("info/evol1", dataRoot.getData("Pet/" + petid + ".img"));
                         int petId = Pet.createPet(evolveid);
                         if (petId == -1) {
                             return;

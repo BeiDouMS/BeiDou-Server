@@ -62,8 +62,8 @@ public class SkillFactory {
     private static Skill loadFromData(int id, Data data) {
         Skill ret = new Skill(id);
         boolean isBuff = false;
-        int skillType = MapleDataTool.getInt("skillType", data, -1);
-        String elem = MapleDataTool.getString("elemAttr", data, null);
+        int skillType = DataTool.getInt("skillType", data, -1);
+        String elem = DataTool.getString("elemAttr", data, null);
         if (elem != null) {
             ret.setElement(Element.getFromChar(elem.charAt(0)));
         } else {
@@ -95,7 +95,7 @@ public class SkillFactory {
             Data hit = data.getChildByPath("hit");
             Data ball = data.getChildByPath("ball");
             isBuff = effect != null && hit == null && ball == null;
-            isBuff |= action_ != null && MapleDataTool.getString("0", action_, "").equals("alert2");
+            isBuff |= action_ != null && DataTool.getString("0", action_, "").equals("alert2");
             switch (id) {
                 case Hero.RUSH:
                 case Paladin.RUSH:
@@ -323,7 +323,7 @@ public class SkillFactory {
         ret.setAnimationTime(0);
         if (effect != null) {
             for (Data effectEntry : effect) {
-                ret.incAnimationTime(MapleDataTool.getIntConvert("delay", effectEntry, 0));
+                ret.incAnimationTime(DataTool.getIntConvert("delay", effectEntry, 0));
             }
         }
         return ret;
@@ -340,7 +340,7 @@ public class SkillFactory {
         if (data.getChildByPath(skill.toString()) != null) {
             for (Data skilldata : data.getChildByPath(skill.toString()).getChildren()) {
                 if (skilldata.getName().equals("name"))
-                    return MapleDataTool.getString(skilldata, null);
+                    return DataTool.getString(skilldata, null);
             }
         }
 

@@ -28,7 +28,7 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -59,22 +59,22 @@ public class ItemAction extends MapleQuestAction {
 	@Override
 	public void processData(Data data) {
 		for (Data iEntry : data.getChildren()) {
-			int id = MapleDataTool.getInt(iEntry.getChildByPath("id"));
-			int count = MapleDataTool.getInt(iEntry.getChildByPath("count"), 1);
-                        int period = MapleDataTool.getInt(iEntry.getChildByPath("period"), 0);
+			int id = DataTool.getInt(iEntry.getChildByPath("id"));
+			int count = DataTool.getInt(iEntry.getChildByPath("count"), 1);
+                        int period = DataTool.getInt(iEntry.getChildByPath("period"), 0);
 			
 			Integer prop = null;
 			Data propData = iEntry.getChildByPath("prop");
 			if(propData != null)
-				prop = MapleDataTool.getInt(propData);
+				prop = DataTool.getInt(propData);
 			
 			int gender = 2;
 			if (iEntry.getChildByPath("gender") != null)
-				gender = MapleDataTool.getInt(iEntry.getChildByPath("gender"));
+				gender = DataTool.getInt(iEntry.getChildByPath("gender"));
 			
 			int job = -1;
 			if (iEntry.getChildByPath("job") != null)
-				job = MapleDataTool.getInt(iEntry.getChildByPath("job"));
+				job = DataTool.getInt(iEntry.getChildByPath("job"));
 			
 			items.add(new ItemData(Integer.parseInt(iEntry.getName()), id, count, prop, job, gender, period));
 		}

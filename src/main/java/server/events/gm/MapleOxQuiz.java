@@ -24,7 +24,7 @@ package server.events.gm;
 import client.Character;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import server.TimerManager;
 import server.maps.MapleMap;
@@ -104,6 +104,6 @@ public final class MapleOxQuiz {
     }
 
     private static int getOXAnswer(int imgdir, int id) {
-        return MapleDataTool.getInt(stringData.getData("OXQuiz.img").getChildByPath("" + imgdir + "").getChildByPath("" + id + "").getChildByPath("a"));
+        return DataTool.getInt(stringData.getData("OXQuiz.img").getChildByPath("" + imgdir + "").getChildByPath("" + id + "").getChildByPath("a"));
     }
 }

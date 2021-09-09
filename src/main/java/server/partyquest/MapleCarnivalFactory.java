@@ -4,7 +4,7 @@ import client.Disease;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
@@ -42,7 +42,7 @@ public class MapleCarnivalFactory {
         }
         for (Data z : dataRoot.getData("MCSkill.img")) {
             Integer id = Integer.parseInt(z.getName());
-            MCSkill ms = new MCSkill(MapleDataTool.getInt("spendCP", z, 0), MapleDataTool.getInt("mobSkillID", z, 0), MapleDataTool.getInt("level", z, 0), MapleDataTool.getInt("target", z, 1) > 1);
+            MCSkill ms = new MCSkill(DataTool.getInt("spendCP", z, 0), DataTool.getInt("mobSkillID", z, 0), DataTool.getInt("level", z, 0), DataTool.getInt("target", z, 1) > 1);
             
             skills.put(id, ms);
             if (ms.targetsAll) {
@@ -52,7 +52,7 @@ public class MapleCarnivalFactory {
             }
         }
         for (Data z : dataRoot.getData("MCGuardian.img")) {
-            guardians.put(Integer.parseInt(z.getName()), new MCSkill(MapleDataTool.getInt("spendCP", z, 0), MapleDataTool.getInt("mobSkillID", z, 0), MapleDataTool.getInt("level", z, 0), true));
+            guardians.put(Integer.parseInt(z.getName()), new MCSkill(DataTool.getInt("spendCP", z, 0), DataTool.getInt("mobSkillID", z, 0), DataTool.getInt("level", z, 0), true));
         }
     }
 

@@ -23,7 +23,7 @@ package server.quest.requirements;
 
 import client.Character;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -50,7 +50,7 @@ public class InfoExRequirement extends MapleQuestRequirement {
 		// Because we have to...
                 for(Data infoEx : data.getChildren()) {
 			Data value = infoEx.getChildByPath("value");
-			infoExpected.add(MapleDataTool.getString(value, ""));
+			infoExpected.add(DataTool.getString(value, ""));
 		}
 	}
 	

@@ -21,7 +21,7 @@ package server.quest.actions;
 
 import client.Character;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -42,7 +42,7 @@ public class InfoAction extends MapleQuestAction {
 
         @Override
         public void processData(Data data) {
-                info = MapleDataTool.getString(data, "");
+                info = DataTool.getString(data, "");
         }
 
 

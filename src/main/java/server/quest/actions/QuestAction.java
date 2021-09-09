@@ -24,7 +24,7 @@ package server.quest.actions;
 import client.Character;
 import client.QuestStatus;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -49,8 +49,8 @@ public class QuestAction extends MapleQuestAction {
 	@Override
 	public void processData(Data data) {
 		for (Data qEntry : data) {
-			int questid = MapleDataTool.getInt(qEntry.getChildByPath("id"));
-			int stat = MapleDataTool.getInt(qEntry.getChildByPath("state"));
+			int questid = DataTool.getInt(qEntry.getChildByPath("id"));
+			int stat = DataTool.getInt(qEntry.getChildByPath("state"));
 			quests.put(questid, stat);
 		}
 	}

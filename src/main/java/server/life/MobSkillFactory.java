@@ -30,7 +30,7 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 
 import java.awt.*;
@@ -70,24 +70,24 @@ public class MobSkillFactory {
             if (ret == null) {
                 Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
                 if (skillData != null) {
-                    int mpCon = MapleDataTool.getInt(skillData.getChildByPath("mpCon"), 0);
+                    int mpCon = DataTool.getInt(skillData.getChildByPath("mpCon"), 0);
                     List<Integer> toSummon = new ArrayList<>();
                     for (int i = 0; i > -1; i++) {
                         if (skillData.getChildByPath(String.valueOf(i)) == null) {
                             break;
                         }
-                        toSummon.add(MapleDataTool.getInt(skillData.getChildByPath(String.valueOf(i)), 0));
+                        toSummon.add(DataTool.getInt(skillData.getChildByPath(String.valueOf(i)), 0));
                     }
-                    int effect = MapleDataTool.getInt("summonEffect", skillData, 0);
-                    int hp = MapleDataTool.getInt("hp", skillData, 100);
-                    int x = MapleDataTool.getInt("x", skillData, 1);
-                    int y = MapleDataTool.getInt("y", skillData, 1);
-                    int count = MapleDataTool.getInt("count", skillData, 1);
-                    long duration = MapleDataTool.getInt("time", skillData, 0) * 1000;
-                    long cooltime = MapleDataTool.getInt("interval", skillData, 0) * 1000;
-                    int iprop = MapleDataTool.getInt("prop", skillData, 100);
+                    int effect = DataTool.getInt("summonEffect", skillData, 0);
+                    int hp = DataTool.getInt("hp", skillData, 100);
+                    int x = DataTool.getInt("x", skillData, 1);
+                    int y = DataTool.getInt("y", skillData, 1);
+                    int count = DataTool.getInt("count", skillData, 1);
+                    long duration = DataTool.getInt("time", skillData, 0) * 1000;
+                    long cooltime = DataTool.getInt("interval", skillData, 0) * 1000;
+                    int iprop = DataTool.getInt("prop", skillData, 100);
                     float prop = iprop / 100;
-                    int limit = MapleDataTool.getInt("limit", skillData, 0);
+                    int limit = DataTool.getInt("limit", skillData, 0);
                     Data ltd = skillData.getChildByPath("lt");
                     Point lt = null;
                     Point rb = null;

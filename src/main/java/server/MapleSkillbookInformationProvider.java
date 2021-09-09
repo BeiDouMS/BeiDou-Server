@@ -23,7 +23,7 @@ import client.Character;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 
@@ -86,7 +86,7 @@ public class MapleSkillbookInformationProvider {
         Data startReqItemData = questStartData.getChildByPath("item");
         if (startReqItemData != null) {
             for (Data itemData : startReqItemData.getChildren()) {
-                int itemId = MapleDataTool.getInt("id", itemData, 0);
+                int itemId = DataTool.getInt("id", itemData, 0);
                 if (isQuestBook(itemId)) {
                     return itemId;
                 }
@@ -98,7 +98,7 @@ public class MapleSkillbookInformationProvider {
             Set<Integer> reqQuests = new HashSet<>();
             
             for (Data questStatusData : startReqQuestData.getChildren()) {
-                int reqQuest = MapleDataTool.getInt("id", questStatusData, 0);
+                int reqQuest = DataTool.getInt("id", questStatusData, 0);
                 if (reqQuest > 0) {
                     reqQuests.add(reqQuest);
                 }
@@ -127,8 +127,8 @@ public class MapleSkillbookInformationProvider {
                     String actNodeName = questNodeData.getName();
                     if (actNodeName.contentEquals("item")) {
                         for (Data questItemData : questNodeData.getChildren()) {
-                            int itemId = MapleDataTool.getInt("id", questItemData, 0);
-                            int itemCount = MapleDataTool.getInt("count", questItemData, 0);
+                            int itemId = DataTool.getInt("id", questItemData, 0);
+                            int itemCount = DataTool.getInt("count", questItemData, 0);
                             
                             if (isSkillBook(itemId) && itemCount > 0) {
                                 int questbook = fetchQuestbook(checkData, questData.getName());
@@ -141,7 +141,7 @@ public class MapleSkillbookInformationProvider {
                         }
                     } else if (actNodeName.contentEquals("skill")) {
                         for (Data questSkillData : questNodeData.getChildren()) {
-                            int skillId = MapleDataTool.getInt("id", questSkillData, 0);
+                            int skillId = DataTool.getInt("id", questSkillData, 0);
                             if (is4thJobSkill(skillId)) {
                                 // negative itemids are skill rewards
                                 

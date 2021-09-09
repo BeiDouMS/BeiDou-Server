@@ -24,7 +24,7 @@ package server.quest.requirements;
 import client.Character;
 import client.QuestStatus;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -48,7 +48,7 @@ public class IntervalRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public void processData(Data data) {
-		interval = MapleDataTool.getInt(data) * 60 * 1000;
+		interval = DataTool.getInt(data) * 60 * 1000;
 	}
 	
         private static String getIntervalTimeLeft(Character chr, IntervalRequirement r) {

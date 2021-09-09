@@ -24,7 +24,7 @@ package server.life;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.StringUtil;
 
@@ -50,7 +50,7 @@ public class MobAttackInfoFactory {
                 Data mobData = dataSource.getData(StringUtil.getLeftPaddedStr(mob.getId() + ".img", '0', 11));
                 if (mobData != null) {
 //					MapleData infoData = mobData.getChildByPath("info");
-                    String linkedmob = MapleDataTool.getString("link", mobData, "");
+                    String linkedmob = DataTool.getString("link", mobData, "");
                     if (!linkedmob.equals("")) {
                         mobData = dataSource.getData(StringUtil.getLeftPaddedStr(linkedmob + ".img", '0', 11));
                     }
@@ -61,10 +61,10 @@ public class MobAttackInfoFactory {
                     }
                     
                     Data deadlyAttack = attackData.getChildByPath("deadlyAttack");
-                    int mpBurn = MapleDataTool.getInt("mpBurn", attackData, 0);
-                    int disease = MapleDataTool.getInt("disease", attackData, 0);
-                    int level = MapleDataTool.getInt("level", attackData, 0);
-                    int mpCon = MapleDataTool.getInt("conMP", attackData, 0);
+                    int mpBurn = DataTool.getInt("mpBurn", attackData, 0);
+                    int disease = DataTool.getInt("disease", attackData, 0);
+                    int level = DataTool.getInt("level", attackData, 0);
+                    int mpCon = DataTool.getInt("conMP", attackData, 0);
                     ret = new MobAttackInfo(mob.getId(), attack);
                     ret.setDeadlyAttack(deadlyAttack != null);
                     ret.setMpBurn(mpBurn);

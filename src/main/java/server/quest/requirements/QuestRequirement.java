@@ -21,7 +21,7 @@ package server.quest.requirements;
 import client.Character;
 import client.QuestStatus;
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
 
@@ -47,8 +47,8 @@ public class QuestRequirement extends MapleQuestRequirement {
 	@Override
 	public void processData(Data data) {
 		for (Data questEntry : data.getChildren()) {
-			int questID = MapleDataTool.getInt(questEntry.getChildByPath("id"));
-			int stateReq = MapleDataTool.getInt(questEntry.getChildByPath("state"));
+			int questID = DataTool.getInt(questEntry.getChildByPath("id"));
+			int stateReq = DataTool.getInt(questEntry.getChildByPath("state"));
 			quests.put(questID, stateReq);
 		}
 	}

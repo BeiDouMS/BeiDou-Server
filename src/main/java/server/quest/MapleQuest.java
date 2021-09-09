@@ -28,7 +28,7 @@ import config.YamlConfig;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import server.quest.actions.*;
 import server.quest.requirements.*;
@@ -84,16 +84,16 @@ public class MapleQuest {
         if(questInfo != null) {
             Data reqInfo = questInfo.getChildByPath(String.valueOf(id));
             if(reqInfo != null) {
-                name = MapleDataTool.getString("name", reqInfo, "");
-                parent = MapleDataTool.getString("parent", reqInfo, "");
+                name = DataTool.getString("name", reqInfo, "");
+                parent = DataTool.getString("parent", reqInfo, "");
                 
-                timeLimit = MapleDataTool.getInt("timeLimit", reqInfo, 0);
-                timeLimit2 = MapleDataTool.getInt("timeLimit2", reqInfo, 0);
-                autoStart = MapleDataTool.getInt("autoStart", reqInfo, 0) == 1;
-                autoPreComplete = MapleDataTool.getInt("autoPreComplete", reqInfo, 0) == 1;
-                autoComplete = MapleDataTool.getInt("autoComplete", reqInfo, 0) == 1;
+                timeLimit = DataTool.getInt("timeLimit", reqInfo, 0);
+                timeLimit2 = DataTool.getInt("timeLimit2", reqInfo, 0);
+                autoStart = DataTool.getInt("autoStart", reqInfo, 0) == 1;
+                autoPreComplete = DataTool.getInt("autoPreComplete", reqInfo, 0) == 1;
+                autoComplete = DataTool.getInt("autoComplete", reqInfo, 0) == 1;
                 
-                int medalid = MapleDataTool.getInt("viewMedalItem", reqInfo, 0);
+                int medalid = DataTool.getInt("viewMedalItem", reqInfo, 0);
                 if(medalid != 0) medals.put(this.id, medalid);
             } else {
                 System.out.println("no data " + id);
@@ -108,7 +108,7 @@ public class MapleQuest {
                     repeatable = true;
                 } else if (type.equals(MapleQuestRequirementType.MOB)) {
                     for (Data mob : startReq.getChildren()) {
-                        relevantMobs.add(MapleDataTool.getInt(mob.getChildByPath("id")));
+                        relevantMobs.add(DataTool.getInt(mob.getChildByPath("id")));
                     }
                 }
 		
@@ -133,7 +133,7 @@ public class MapleQuest {
 				
                 if (type.equals(MapleQuestRequirementType.MOB)) {
                     for (Data mob : completeReq.getChildren()) {
-                        relevantMobs.add(MapleDataTool.getInt(mob.getChildByPath("id")));
+                        relevantMobs.add(DataTool.getInt(mob.getChildByPath("id")));
                     }
                 }
                 completeReqs.put(type, req);

@@ -25,7 +25,7 @@ import provider.wz.DataType;
 
 import java.awt.*;
 
-public class MapleDataTool {
+public class DataTool {
     public static String getString(Data data) {
         return ((String) data.getData());
     }
@@ -72,16 +72,16 @@ public class MapleDataTool {
             return getInt(data);
         }
     }
-    
+
     public static int getIntConvert(Data data, int def) {
         if (data == null) {
             return def;
         }
         if (data.getType() == DataType.STRING) {
-	    String dd = getString(data);
-	    if (dd.endsWith("%")) {
-		dd = dd.substring(0, dd.length() - 1);
-	    }
+            String dd = getString(data);
+            if (dd.endsWith("%")) {
+                dd = dd.substring(0, dd.length() - 1);
+            }
             try {
                 return Integer.parseInt(dd);
             } catch (NumberFormatException nfe) {
@@ -103,7 +103,7 @@ public class MapleDataTool {
 
     public static int getInt(Data data, int def) {
         if (data == null || data.getData() == null) {
-            return  def;
+            return def;
         } else if (data.getType() == DataType.STRING) {
             return Integer.parseInt(getString(data));
         } else {

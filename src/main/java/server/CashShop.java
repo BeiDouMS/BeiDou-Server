@@ -30,7 +30,7 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
-import provider.MapleDataTool;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 import tools.Pair;
@@ -154,12 +154,12 @@ public class CashShop {
             Map<Integer, CashItem> loadedItems = new HashMap<>();
             List<Integer> onSaleItems = new ArrayList<>();
             for (Data item : etc.getData("Commodity.img").getChildren()) {
-                int sn = MapleDataTool.getIntConvert("SN", item);
-                int itemId = MapleDataTool.getIntConvert("ItemId", item);
-                int price = MapleDataTool.getIntConvert("Price", item, 0);
-                long period = MapleDataTool.getIntConvert("Period", item, 1);
-                short count = (short) MapleDataTool.getIntConvert("Count", item, 1);
-                boolean onSale = MapleDataTool.getIntConvert("OnSale", item, 0) == 1;
+                int sn = DataTool.getIntConvert("SN", item);
+                int itemId = DataTool.getIntConvert("ItemId", item);
+                int price = DataTool.getIntConvert("Price", item, 0);
+                long period = DataTool.getIntConvert("Period", item, 1);
+                short count = (short) DataTool.getIntConvert("Count", item, 1);
+                boolean onSale = DataTool.getIntConvert("OnSale", item, 0) == 1;
                 loadedItems.put(sn, new CashItem(sn, itemId, price, period, count, onSale));
 
                 if (onSale) {

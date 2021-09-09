@@ -22,7 +22,7 @@
 package server.maps;
 
 import provider.Data;
-import provider.MapleDataTool;
+import provider.DataTool;
 
 import java.awt.*;
 
@@ -45,13 +45,13 @@ public class MaplePortalFactory {
     }
 
     private void loadPortal(MapleGenericPortal myPortal, Data portal) {
-        myPortal.setName(MapleDataTool.getString(portal.getChildByPath("pn")));
-        myPortal.setTarget(MapleDataTool.getString(portal.getChildByPath("tn")));
-        myPortal.setTargetMapId(MapleDataTool.getInt(portal.getChildByPath("tm")));
-        int x = MapleDataTool.getInt(portal.getChildByPath("x"));
-        int y = MapleDataTool.getInt(portal.getChildByPath("y"));
+        myPortal.setName(DataTool.getString(portal.getChildByPath("pn")));
+        myPortal.setTarget(DataTool.getString(portal.getChildByPath("tn")));
+        myPortal.setTargetMapId(DataTool.getInt(portal.getChildByPath("tm")));
+        int x = DataTool.getInt(portal.getChildByPath("x"));
+        int y = DataTool.getInt(portal.getChildByPath("y"));
         myPortal.setPosition(new Point(x, y));
-        String script = MapleDataTool.getString("script", portal, null);
+        String script = DataTool.getString("script", portal, null);
         if (script != null && script.equals("")) {
             script = null;
         }
