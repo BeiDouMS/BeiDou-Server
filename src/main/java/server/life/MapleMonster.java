@@ -33,7 +33,7 @@ import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
-import net.server.coordinator.world.MapleMonsterAggroCoordinator;
+import net.server.coordinator.world.MonsterAggroCoordinator;
 import net.server.services.task.channel.MobAnimationService;
 import net.server.services.task.channel.MobClearSkillService;
 import net.server.services.task.channel.MobStatusService;
@@ -1417,7 +1417,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return map;
     }
     
-    public MapleMonsterAggroCoordinator getMapAggroCoordinator() {
+    public MonsterAggroCoordinator getMapAggroCoordinator() {
         return map.getAggroCoordinator();
     }
     
@@ -1927,7 +1927,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
     
     public void aggroAddPuppet(Character player) {
-        MapleMonsterAggroCoordinator mmac = map.getAggroCoordinator();
+        MonsterAggroCoordinator mmac = map.getAggroCoordinator();
         mmac.addPuppetAggro(player);
         
         aggroUpdatePuppetController(player);
@@ -1938,7 +1938,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
     
     public void aggroRemovePuppet(Character player) {
-        MapleMonsterAggroCoordinator mmac = map.getAggroCoordinator();
+        MonsterAggroCoordinator mmac = map.getAggroCoordinator();
         mmac.removePuppetAggro(player.getId());
         
         aggroUpdatePuppetController(null);
@@ -1985,7 +1985,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
         
         if (newController == null || !isCharacterPuppetInVicinity(newController)) {
-            MapleMonsterAggroCoordinator mmac = map.getAggroCoordinator();
+            MonsterAggroCoordinator mmac = map.getAggroCoordinator();
             
             List<Integer> puppetOwners = mmac.getPuppetAggroList();
             List<Integer> toRemovePuppets = new LinkedList<>();
@@ -2074,7 +2074,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * 
      */
     public void aggroMonsterDamage(Character attacker, int damage) {
-        MapleMonsterAggroCoordinator mmac = this.getMapAggroCoordinator();
+        MonsterAggroCoordinator mmac = this.getMapAggroCoordinator();
         mmac.addAggroDamage(this, attacker.getId(), damage);
         
         Character chrController = this.getController();    // aggro based on DPS rather than first-come-first-served, now live after suggestions thanks to MedicOP, Thora, Vcoc

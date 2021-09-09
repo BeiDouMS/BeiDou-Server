@@ -44,7 +44,7 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
-import net.server.coordinator.world.MapleMonsterAggroCoordinator;
+import net.server.coordinator.world.MonsterAggroCoordinator;
 import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.channel.MobMistService;
 import net.server.services.task.channel.OverallService;
@@ -130,7 +130,7 @@ public class MapleMap {
     private int fieldType;
     private int fieldLimit = 0;
     private int mobCapacity = -1;
-    private MapleMonsterAggroCoordinator aggroMonitor = null;   // aggroMonitor activity in sync with itemMonitor
+    private MonsterAggroCoordinator aggroMonitor = null;   // aggroMonitor activity in sync with itemMonitor
     private ScheduledFuture<?> itemMonitor = null;
     private ScheduledFuture<?> expireItemsTask = null;
     private ScheduledFuture<?> mobSpawnLootTask = null;
@@ -183,7 +183,7 @@ public class MapleMap {
         objectRLock = MonitoredReadLockFactory.createLock(objectLock);
         objectWLock = MonitoredWriteLockFactory.createLock(objectLock);
         
-        aggroMonitor = new MapleMonsterAggroCoordinator();
+        aggroMonitor = new MonsterAggroCoordinator();
     }
     
     public void setEventInstance(EventInstanceManager eim) {
@@ -3052,7 +3052,7 @@ public class MapleMap {
         mapArea.setBounds(vrLeft, vrTop, vrRight - vrLeft, vrBottom - vrTop);
     }
     
-    public MapleMonsterAggroCoordinator getAggroCoordinator() {
+    public MonsterAggroCoordinator getAggroCoordinator() {
         return aggroMonitor;
     }
     
