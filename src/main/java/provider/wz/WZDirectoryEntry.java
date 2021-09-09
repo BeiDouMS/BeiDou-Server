@@ -22,7 +22,7 @@
 package provider.wz;
 
 import provider.DataDirectoryEntry;
-import provider.MapleDataEntity;
+import provider.DataEntity;
 import provider.MapleDataEntry;
 import provider.MapleDataFileEntry;
 
@@ -33,7 +33,7 @@ public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
     private List<MapleDataFileEntry> files = new ArrayList<>();
     private Map<String, MapleDataEntry> entries = new HashMap<>();
 
-    public WZDirectoryEntry(String name, int size, int checksum, MapleDataEntity parent) {
+    public WZDirectoryEntry(String name, int size, int checksum, DataEntity parent) {
         super(name, size, checksum, parent);
     }
 

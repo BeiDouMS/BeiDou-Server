@@ -155,7 +155,7 @@ public class MapleDataTool {
 
     public static String getFullDataPath(Data data) {
         String path = "";
-        MapleDataEntity myData = data;
+        DataEntity myData = data;
         while (myData != null) {
             path = myData.getName() + "/" + path;
             myData = myData.getParent();

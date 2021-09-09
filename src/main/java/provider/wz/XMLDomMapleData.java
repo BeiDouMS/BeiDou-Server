@@ -28,7 +28,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import provider.Data;
-import provider.MapleDataEntity;
+import provider.DataEntity;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -186,7 +186,7 @@ public class XMLDomMapleData implements Data {
 	}
 
 	@Override
-	public synchronized MapleDataEntity getParent() {
+	public synchronized DataEntity getParent() {
                 Node parentNode;
                 parentNode = node.getParentNode();
                 if (parentNode.getNodeType() == Node.DOCUMENT_NODE) {

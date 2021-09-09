@@ -25,7 +25,7 @@ import provider.wz.DataType;
 
 import java.util.List;
 
-public interface Data extends MapleDataEntity, Iterable<Data> {
+public interface Data extends DataEntity, Iterable<Data> {
     @Override
     String getName();
     DataType getType();

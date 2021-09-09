@@ -21,13 +21,13 @@
 */
 package provider.wz;
 
-import provider.MapleDataEntity;
+import provider.DataEntity;
 import provider.MapleDataFileEntry;
 
 public class WZFileEntry extends WZEntry implements MapleDataFileEntry {
     private int offset;
 
-    public WZFileEntry(String name, int size, int checksum, MapleDataEntity parent) {
+    public WZFileEntry(String name, int size, int checksum, DataEntity parent) {
         super(name, size, checksum, parent);
     }
 
