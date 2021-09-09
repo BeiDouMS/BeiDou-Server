@@ -46,7 +46,7 @@ public class Shop {
     private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
     private final int id;
     private final int npcId;
-    private final List<MapleShopItem> items;
+    private final List<ShopItem> items;
     private final int tokenvalue = 1000000000;
     private final int token = 4000313;
 
@@ -69,7 +69,7 @@ public class Shop {
         items = new ArrayList<>();
     }
 
-    private void addItem(MapleShopItem item) {
+    private void addItem(ShopItem item) {
         items.add(item);
     }
 
@@ -79,7 +79,7 @@ public class Shop {
     }
 
     public void buy(Client c, short slot, int itemId, short quantity) {
-        MapleShopItem item = findBySlot(slot);
+        ShopItem item = findBySlot(slot);
         if (item != null) {
             if (item.getItemId() != itemId) {
                 System.out.println("Wrong slot number in shop " + id);
@@ -232,7 +232,7 @@ public class Shop {
         }
     }
 
-    private MapleShopItem findBySlot(short slot) {
+    private ShopItem findBySlot(short slot) {
         return items.get(slot);
     }
 
@@ -267,17 +267,17 @@ public class Shop {
                     List<Integer> recharges = new ArrayList<>(rechargeableItems);
                     while (rs.next()) {
                         if (ItemConstants.isRechargeable(rs.getInt("itemid"))) {
-                            MapleShopItem starItem = new MapleShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
+                            ShopItem starItem = new ShopItem((short) 1, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch"));
                             ret.addItem(starItem);
                             if (rechargeableItems.contains(starItem.getItemId())) {
                                 recharges.remove(Integer.valueOf(starItem.getItemId()));
                             }
                         } else {
-                            ret.addItem(new MapleShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
+                            ret.addItem(new ShopItem((short) 1000, rs.getInt("itemid"), rs.getInt("price"), rs.getInt("pitch")));
                         }
                     }
                     for (Integer recharge : recharges) {
-                        ret.addItem(new MapleShopItem((short) 1000, recharge, 0, 0));
+                        ret.addItem(new ShopItem((short) 1000, recharge, 0, 0));
                     }
                 }
             }

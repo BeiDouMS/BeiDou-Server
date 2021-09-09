@@ -2357,12 +2357,12 @@ public class PacketCreator {
         return (int) (Double.doubleToLongBits(d) >> 48);
     }
 
-    public static Packet getNPCShop(Client c, int sid, List<MapleShopItem> items) {
+    public static Packet getNPCShop(Client c, int sid, List<ShopItem> items) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         final OutPacket p = OutPacket.create(SendOpcode.OPEN_NPC_SHOP);
         p.writeInt(sid);
         p.writeShort(items.size()); // item count
-        for (MapleShopItem item : items) {
+        for (ShopItem item : items) {
             p.writeInt(item.getItemId());
             p.writeInt(item.getPrice());
             p.writeInt(item.getPrice() == 0 ? item.getPitch() : 0); //Perfect Pitch
