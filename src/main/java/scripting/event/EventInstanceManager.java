@@ -31,7 +31,7 @@ import net.server.audit.locks.*;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import net.server.coordinator.world.MapleEventRecallCoordinator;
+import net.server.coordinator.world.EventRecallCoordinator;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import scripting.AbstractPlayerInteraction;
@@ -552,7 +552,7 @@ public class EventInstanceManager {
                         ex.printStackTrace();
                 }
                 
-                MapleEventRecallCoordinator.getInstance().storeEventInstance(chr.getId(), this);
+                EventRecallCoordinator.getInstance().storeEventInstance(chr.getId(), this);
 	}
         
 	public void monsterKilled(Character chr, final MapleMonster mob) {

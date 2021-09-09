@@ -35,7 +35,7 @@ import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.SessionCoordinator;
-import net.server.coordinator.world.MapleEventRecallCoordinator;
+import net.server.coordinator.world.EventRecallCoordinator;
 import net.server.guild.GuildPackets;
 import net.server.guild.MapleAlliance;
 import net.server.guild.MapleGuild;
@@ -408,7 +408,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             if (newcomer) {
-                EventInstanceManager eim = MapleEventRecallCoordinator.getInstance().recallEventInstance(cid);
+                EventInstanceManager eim = EventRecallCoordinator.getInstance().recallEventInstance(cid);
                 if (eim != null) {
                     eim.registerPlayer(player);
                 }
