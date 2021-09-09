@@ -25,12 +25,12 @@ import client.Client;
 import net.packet.Packet;
 import tools.PacketCreator;
 
-public class MapleMapEffect {
+public class MapEffect {
     private final String msg;
     private final int itemId;
     private final boolean active = true;
 
-    public MapleMapEffect(String msg, int itemId) {
+    public MapEffect(String msg, int itemId) {
         this.msg = msg;
         this.itemId = itemId;
     }

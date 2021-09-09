@@ -113,7 +113,7 @@ public class MapleMap {
     private EventInstanceManager event = null;
     private String mapName;
     private String streetName;
-    private MapleMapEffect mapEffect = null;
+    private MapEffect mapEffect = null;
     private boolean everlast = false;
     private int forcedReturnMap = 999999999;
     private int timeLimit;
@@ -2273,7 +2273,7 @@ public class MapleMap {
         if (mapEffect != null) {
             return;
         }
-        mapEffect = new MapleMapEffect(msg, itemId);
+        mapEffect = new MapEffect(msg, itemId);
         broadcastMessage(mapEffect.makeStartData());
         
         Runnable r = () -> {

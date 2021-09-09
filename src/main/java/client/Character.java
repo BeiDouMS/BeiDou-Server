@@ -9755,7 +9755,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void startMapEffect(String msg, int itemId, int duration) {
-        final MapleMapEffect mapEffect = new MapleMapEffect(msg, itemId);
+        final MapEffect mapEffect = new MapEffect(msg, itemId);
         sendPacket(mapEffect.makeStartData());
         TimerManager.getInstance().schedule(new Runnable() {
             @Override
