@@ -1,6 +1,6 @@
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -29,7 +29,7 @@ public final class RegisterPicHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readByte();
         int charId = p.readInt();
         

@@ -80,12 +80,12 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public final boolean validateState(MapleClient c) {
+    public final boolean validateState(Client c) {
         return !c.isLoggedIn();
     }
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
         
@@ -152,7 +152,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             boolean allowLogin = true;
 
                 /*  is this check really necessary?
-                if (state == MapleClient.LOGIN_SERVER_TRANSITION || state == MapleClient.LOGIN_NOTLOGGEDIN) {
+                if (state == Client.LOGIN_SERVER_TRANSITION || state == Client.LOGIN_NOTLOGGEDIN) {
                     List<String> charNames = c.loadCharacterNames(c.getWorld());
                     if(!newcomer) {
                         charNames.remove(player.getName());
@@ -171,11 +171,11 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (tryAcquireAccount(accId)) { // Sync this to prevent wrong login state for double loggedin handling
                 try {
                     int state = c.getLoginState();
-                    if (state != MapleClient.LOGIN_SERVER_TRANSITION || !allowLogin) {
+                    if (state != Client.LOGIN_SERVER_TRANSITION || !allowLogin) {
                         c.setPlayer(null);
                         c.setAccID(0);
 
-                        if (state == MapleClient.LOGIN_LOGGEDIN) {
+                        if (state == Client.LOGIN_LOGGEDIN) {
                             c.disconnect(true, false);
                         } else {
                             c.sendPacket(PacketCreator.getAfterLoginError(7));
@@ -183,7 +183,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
                         return;
                     }
-                    c.updateLoginState(MapleClient.LOGIN_LOGGEDIN);
+                    c.updateLoginState(Client.LOGIN_LOGGEDIN);
                 } finally {
                     releaseAccount(accId);
                 }
@@ -440,7 +440,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
         }
     }
     
-    private static void showDueyNotification(MapleClient c, Character player) {
+    private static void showDueyNotification(Client c, Character player) {
         try (Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
             ps.setInt(1, player.getId());

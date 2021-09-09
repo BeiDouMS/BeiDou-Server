@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.autoban.AutobanFactory;
@@ -66,7 +66,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
     }
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
         Character player = c.getPlayer();
         if (!player.isAlive()) {

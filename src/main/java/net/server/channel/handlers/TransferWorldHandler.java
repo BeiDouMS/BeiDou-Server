@@ -21,7 +21,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -39,7 +39,7 @@ import java.sql.*;
 public final class TransferWorldHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readInt(); //cid
         int birthday = p.readInt();
         if (!CashOperationHandler.checkBirthday(c, birthday)) {

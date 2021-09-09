@@ -24,7 +24,7 @@
 package client.processor.npc;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -264,7 +264,7 @@ public class FredrickProcessor {
         }
     }
     
-    public static void fredrickRetrieveItems(MapleClient c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
+    public static void fredrickRetrieveItems(Client c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();

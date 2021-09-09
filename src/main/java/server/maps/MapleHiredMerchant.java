@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -239,7 +239,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    private static boolean canBuy(MapleClient c, Item newItem) {    // thanks xiaokelvin (Conrad) for noticing a leaked test code here
+    private static boolean canBuy(Client c, Item newItem) {    // thanks xiaokelvin (Conrad) for noticing a leaked test code here
         return InventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && InventoryManipulator.addFromDrop(c, newItem, false);
     }
     
@@ -257,7 +257,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    public void buy(MapleClient c, int item, short quantity) {
+    public void buy(Client c, int item, short quantity) {
         synchronized (items) {
             MaplePlayerShopItem pItem = items.get(item);
             Item newItem = pItem.getItem().copy();
@@ -397,7 +397,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    private void closeShop(MapleClient c, boolean timeout) {
+    private void closeShop(Client c, boolean timeout) {
         map.removeMapObject(this);
         map.broadcastMessage(PacketCreator.removeHiredMerchantBox(ownerId));
         c.getChannelServer().removeHiredMerchant(ownerId);
@@ -710,10 +710,10 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     }
     
     @Override
-    public void sendDestroyData(MapleClient client) {}
+    public void sendDestroyData(Client client) {}
     
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(PacketCreator.spawnHiredMerchantBox(this));
     }
 

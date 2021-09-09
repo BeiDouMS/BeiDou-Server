@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Character.FameStatus;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -33,7 +33,7 @@ import tools.PacketCreator;
 public final class GiveFameHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character target = (Character) c.getPlayer().getMap().getMapObject(p.readInt());
         int mode = p.readByte();
         int famechange = 2 * mode - 1;

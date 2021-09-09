@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.processor.npc.StorageProcessor;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -32,7 +32,7 @@ import net.packet.InPacket;
  */
 public final class StorageHandler extends AbstractPacketHandler {
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
 		StorageProcessor.storageAction(p, c);
 	}
 }

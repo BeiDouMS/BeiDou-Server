@@ -21,7 +21,7 @@
 */
 package scripting.quest;
 
-import client.MapleClient;
+import client.Client;
 import scripting.npc.NPCConversationManager;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
@@ -36,7 +36,7 @@ public class QuestActionManager extends NPCConversationManager {
     private boolean start; // this is if the script in question is start or end
     private int quest;
 
-    public QuestActionManager(MapleClient c, int quest, int npc, boolean start) {
+    public QuestActionManager(Client c, int quest, int npc, boolean start) {
         super(c, npc, null);
         this.quest = quest;
         this.start = start;

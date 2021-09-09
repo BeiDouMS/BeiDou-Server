@@ -24,7 +24,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
@@ -112,7 +112,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
     }
     
     private static Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> getNXCodeResult(Character chr, String code) {
-        MapleClient c = chr.getClient();
+        Client c = chr.getClient();
         List<Pair<Integer, Pair<Integer, Integer>>> ret = new LinkedList<>();
         try {
             if (!c.attemptCsCoupon()) {
@@ -179,7 +179,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(2);
         String code = p.readString();
         

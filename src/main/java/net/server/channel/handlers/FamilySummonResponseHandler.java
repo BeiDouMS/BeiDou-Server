@@ -1,7 +1,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
@@ -17,7 +17,7 @@ import tools.PacketCreator;
 public class FamilySummonResponseHandler extends AbstractPacketHandler {
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
         p.readString(); //family name
         boolean accept = p.readByte() != 0;

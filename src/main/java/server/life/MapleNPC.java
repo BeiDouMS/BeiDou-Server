@@ -21,7 +21,7 @@
 */
 package server.life;
 
-import client.MapleClient;
+import client.Client;
 import server.MapleShopFactory;
 import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
@@ -38,18 +38,18 @@ public class MapleNPC extends AbstractLoadedMapleLife {
         return MapleShopFactory.getInstance().getShopForNPC(getId()) != null;
     }
 
-    public void sendShop(MapleClient c) {
+    public void sendShop(Client c) {
         MapleShopFactory.getInstance().getShopForNPC(getId()).sendShop(c);
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(PacketCreator.spawnNPC(this));
         client.sendPacket(PacketCreator.spawnNPCRequestController(this, true));
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.removeNPCController(getObjectId()));
         client.sendPacket(PacketCreator.removeNPC(getObjectId()));
     }

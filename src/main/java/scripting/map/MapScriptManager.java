@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting.map;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import scripting.AbstractScriptManager;
 import tools.FilePrinter;
 
@@ -44,7 +44,7 @@ public class MapScriptManager extends AbstractScriptManager {
         scripts.clear();
     }
 
-    public boolean runMapScript(MapleClient c, String mapScriptPath, boolean firstUser) {
+    public boolean runMapScript(Client c, String mapScriptPath, boolean firstUser) {
         if (firstUser) {
             Character chr = c.getPlayer();
             int mapid = chr.getMapId();

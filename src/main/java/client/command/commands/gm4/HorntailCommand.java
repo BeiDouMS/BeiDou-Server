@@ -24,7 +24,7 @@
 package client.command.commands.gm4;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.maps.MapleMap;
 
@@ -36,7 +36,7 @@ public class HorntailCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         final Point targetPoint = player.getPosition();
         final MapleMap targetMap = player.getMap();

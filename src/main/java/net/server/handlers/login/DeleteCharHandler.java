@@ -21,7 +21,7 @@
  */
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleFamily;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -38,7 +38,7 @@ import java.sql.SQLException;
 public final class DeleteCharHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
 		String pic = p.readString();
 		int cid = p.readInt();
 		if (c.checkPic(pic)) {

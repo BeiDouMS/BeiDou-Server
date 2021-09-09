@@ -21,14 +21,14 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.packet.InPacket;
 import tools.PacketCreator;
 import tools.exceptions.EmptyMovementException;
 
 public final class MovePlayerHandler extends AbstractMovementPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(9);
         try {   // thanks Sa for noticing empty movement sequences crashing players
             int movementDataStart = p.getPosition();

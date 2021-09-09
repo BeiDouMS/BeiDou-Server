@@ -24,7 +24,7 @@
 package client.command.commands.gm0;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import config.YamlConfig;
 import server.maps.MapleMap;
@@ -35,7 +35,7 @@ public class MapOwnerClaimCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();

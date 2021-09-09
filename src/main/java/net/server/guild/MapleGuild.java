@@ -22,7 +22,7 @@
 package net.server.guild;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.packet.Packet;
 import net.server.PlayerStorage;
@@ -707,7 +707,7 @@ public class MapleGuild {
         this.guildMessage(GuildPackets.updateGP(this.id, this.gp));
     }
 
-    public static MapleGuildResponse sendInvitation(MapleClient c, String targetName) {
+    public static MapleGuildResponse sendInvitation(Client c, String targetName) {
         Character mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
             return MapleGuildResponse.NOT_IN_CHANNEL;
@@ -762,7 +762,7 @@ public class MapleGuild {
         return guildMembers;
     }
 
-    public static void displayGuildRanks(MapleClient c, int npcid) {
+    public static void displayGuildRanks(Client c, int npcid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT `name`, `GP`, `logoBG`, `logoBGColor`, `logo`, `logoColor` FROM guilds ORDER BY `GP` DESC LIMIT 50", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
              ResultSet rs = ps.executeQuery()) {

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm5;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import config.YamlConfig;
 
@@ -33,7 +33,7 @@ public class ShowMoveLifeCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE = !YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE;
     }
 }

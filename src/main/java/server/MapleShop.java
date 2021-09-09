@@ -21,7 +21,7 @@
 */
 package server;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.Pet;
@@ -74,12 +74,12 @@ public class MapleShop {
         items.add(item);
     }
 
-    public void sendShop(MapleClient c) {
+    public void sendShop(Client c) {
         c.getPlayer().setShop(this);
         c.sendPacket(PacketCreator.getNPCShop(c, getNpcId(), items));
     }
 
-    public void buy(MapleClient c, short slot, int itemId, short quantity) {
+    public void buy(Client c, short slot, int itemId, short quantity) {
         MapleShopItem item = findBySlot(slot);
         if (item != null) {
             if (item.getItemId() != itemId) {
@@ -186,7 +186,7 @@ public class MapleShop {
         return quantity;
     }
 
-    public void sell(MapleClient c, InventoryType type, short slot, short quantity) {
+    public void sell(Client c, InventoryType type, short slot, short quantity) {
         if (quantity == 0xFFFF || quantity == 0) {
             quantity = 1;
         } else if (quantity < 0) {
@@ -209,7 +209,7 @@ public class MapleShop {
         }
     }
 
-    public void recharge(MapleClient c, short slot) {
+    public void recharge(Client c, short slot) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         Item item = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
         if (item == null || !ItemConstants.isRechargeable(item.getItemId())) {

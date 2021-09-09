@@ -22,7 +22,7 @@
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -212,7 +212,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         items.remove(slot);
     }
 
-    private static boolean canBuy(MapleClient c, Item newItem) {
+    private static boolean canBuy(Client c, Item newItem) {
         return InventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && InventoryManipulator.addFromDrop(c, newItem, false);
     }
     
@@ -245,7 +245,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
      * @param item
      * @param quantity
      */
-    public boolean buy(MapleClient c, int item, short quantity) {
+    public boolean buy(Client c, int item, short quantity) {
         synchronized (items) {
             if (isVisitor(c.getPlayer())) {
                 MaplePlayerShopItem pItem = items.get(item);
@@ -376,7 +376,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
     }
 
     public void broadcast(Packet packet) {
-        MapleClient client = owner.getClient();
+        Client client = owner.getClient();
         if (client != null) {
             client.sendPacket(packet);
         }
@@ -399,7 +399,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         return s;
     }
     
-    public void chat(MapleClient c, String chat) {
+    public void chat(Client c, String chat) {
         byte s = getVisitorSlot(c.getPlayer());
         
         synchronized(chatLog) {
@@ -434,7 +434,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         owner.getMap().broadcastMessage(PacketCreator.removePlayerShopBox(this));
     }
 
-    public void sendShop(MapleClient c) {
+    public void sendShop(Client c) {
         visitorLock.lock();
         try {
             c.sendPacket(PacketCreator.getPlayerShop(this, isOwner(c.getPlayer())));
@@ -561,12 +561,12 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.removePlayerShopBox(this));
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(PacketCreator.updatePlayerShopBox(this));
     }
 

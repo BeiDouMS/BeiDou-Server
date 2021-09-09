@@ -1,6 +1,6 @@
 package net.netty;
 
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import constants.net.ServerConstants;
 import io.netty.buffer.Unpooled;
@@ -46,7 +46,7 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
         return remoteAddress;
     }
 
-    void initPipeline(SocketChannel socketChannel, MapleClient client) {
+    void initPipeline(SocketChannel socketChannel, Client client) {
         final InitializationVector sendIv = InitializationVector.generateSend();
         final InitializationVector recvIv = InitializationVector.generateReceive();
         writeInitialUnencryptedHelloPacket(socketChannel, sendIv, recvIv);
@@ -58,14 +58,14 @@ public abstract class ServerChannelInitializer extends ChannelInitializer<Socket
     }
 
     private void setUpHandlers(ChannelPipeline pipeline, InitializationVector sendIv, InitializationVector recvIv,
-                               MapleClient client) {
+                               Client client) {
         pipeline.addLast("IdleStateHandler", new IdleStateHandler(0, 0, IDLE_TIME_SECONDS));
         pipeline.addLast("PacketCodec", new PacketCodec(ClientCyphers.of(sendIv, recvIv)));
-        pipeline.addLast("MapleClient", client);
+        pipeline.addLast("Client", client);
 
         if (LOG_PACKETS) {
-            pipeline.addBefore("MapleClient", "SendPacketLogger", sendPacketLogger);
-            pipeline.addBefore("MapleClient", "ReceivePacketLogger", receivePacketLogger);
+            pipeline.addBefore("Client", "SendPacketLogger", sendPacketLogger);
+            pipeline.addBefore("Client", "ReceivePacketLogger", receivePacketLogger);
         }
     }
 }

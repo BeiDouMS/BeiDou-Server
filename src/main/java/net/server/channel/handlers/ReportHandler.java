@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -40,7 +40,7 @@ import java.util.Calendar;
  * @author BubblesDev
  */
 public final class ReportHandler extends AbstractPacketHandler {
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
 		int type = p.readByte(); //01 = Conversation claim 00 = illegal program
 		String victim = p.readString();
 		int reason = p.readByte();

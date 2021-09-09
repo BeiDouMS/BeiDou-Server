@@ -22,7 +22,7 @@
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.packet.Packet;
 import net.server.Server;
 import tools.PacketCreator;
@@ -156,7 +156,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
     }
 
     public void broadcastToOwner(Packet packet) {
-        MapleClient c = owner.getClient();
+        Client c = owner.getClient();
         if (c != null) {
             c.sendPacket(packet);
         }
@@ -390,15 +390,15 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         broadcastToVisitor(packet);
     }
 
-    public void chat(MapleClient c, String chat) {
+    public void chat(Client c, String chat) {
         broadcast(PacketCreator.getPlayerShopChat(c.getPlayer(), chat, isOwner(c.getPlayer())));
     }
 
-    public void sendOmok(MapleClient c, int type) {
+    public void sendOmok(Client c, int type) {
         c.sendPacket(PacketCreator.getMiniGame(c, this, isOwner(c.getPlayer()), type));
     }
 
-    public void sendMatchCard(MapleClient c, int type) {
+    public void sendMatchCard(Client c, int type) {
         c.sendPacket(PacketCreator.getMatchCard(c, this, isOwner(c.getPlayer()), type));
     }
 
@@ -510,10 +510,10 @@ public class MapleMiniGame extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {}
+    public void sendDestroyData(Client client) {}
 
     @Override
-    public void sendSpawnData(MapleClient client) {}
+    public void sendSpawnData(Client client) {}
 
     @Override
     public MapleMapObjectType getType() {

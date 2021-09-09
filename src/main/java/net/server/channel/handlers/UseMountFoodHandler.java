@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleMount;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -39,7 +39,7 @@ import tools.PacketCreator;
  */
 public final class UseMountFoodHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
         short pos = p.readShort();
         int itemid = p.readInt();

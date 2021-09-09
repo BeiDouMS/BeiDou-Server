@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleRing;
 import client.inventory.Equip;
 import client.inventory.Inventory;
@@ -50,7 +50,7 @@ import java.util.Map;
 public final class CashOperationHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         CashShop cs = chr.getCashShop();
         
@@ -472,7 +472,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         }
     }
 
-    public static boolean checkBirthday(MapleClient c, int idate) {
+    public static boolean checkBirthday(Client c, int idate) {
         int year = idate / 10000;
         int month = (idate - year * 10000) / 100;
         int day = idate - year * 10000 - month * 100;

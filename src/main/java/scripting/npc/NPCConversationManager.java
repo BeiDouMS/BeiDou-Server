@@ -94,18 +94,18 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             return talk;
         }
         
-        public NPCConversationManager(MapleClient c, int npc, String scriptName) {
+        public NPCConversationManager(Client c, int npc, String scriptName) {
                this(c, npc, -1, scriptName, false);
         }
         
-        public NPCConversationManager(MapleClient c, int npc, List<MaplePartyCharacter> otherParty, boolean test) {
+        public NPCConversationManager(Client c, int npc, List<MaplePartyCharacter> otherParty, boolean test) {
                 super(c);
                 this.c = c;
                 this.npc = npc;
                 this.otherParty = otherParty;
         }
         
-	public NPCConversationManager(MapleClient c, int npc, int oid, String scriptName, boolean itemScript) {
+	public NPCConversationManager(Client c, int npc, int oid, String scriptName, boolean itemScript) {
 		super(c);
 		this.npc = npc;
                 this.npcOid = oid;
@@ -426,7 +426,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 c.sendPacket(GuildPackets.updateAllianceInfo(alliance, c.getWorld()));  // thanks Vcoc for finding an alliance update to leader issue
         }
 
-	public void disbandAlliance(MapleClient c, int allianceId) {
+	public void disbandAlliance(Client c, int allianceId) {
 		MapleAlliance.disbandAlliance(allianceId);
 	}
 

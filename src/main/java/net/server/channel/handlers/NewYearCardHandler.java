@@ -20,7 +20,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import client.newyear.NewYearCardRecord;
 import constants.inventory.ItemConstants;
@@ -44,7 +44,7 @@ import java.sql.SQLException;
 public final class NewYearCardHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         final Character player = c.getPlayer();
         byte reqMode = p.readByte();                 //[00] -> NewYearReq (0 = Send)
         

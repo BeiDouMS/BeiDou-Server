@@ -22,7 +22,7 @@
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import constants.skills.*;
@@ -148,12 +148,12 @@ public class MapleMist extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(makeSpawnData());
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(makeDestroyData());
     }
 

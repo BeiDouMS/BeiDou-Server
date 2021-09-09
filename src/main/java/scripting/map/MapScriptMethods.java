@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package scripting.map;
 
 import client.Character.DelayedQuestUpdate;
-import client.MapleClient;
+import client.Client;
 import client.MapleQuestStatus;
 import scripting.AbstractPlayerInteraction;
 import server.quest.MapleQuest;
@@ -32,7 +32,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
    
 	private String rewardstring = " title has been rewarded. Please see NPC Dalair to receive your Medal.";
     
-	public MapScriptMethods(MapleClient c) {
+	public MapScriptMethods(Client c) {
         super(c);
     }
     

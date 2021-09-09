@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
@@ -29,7 +29,7 @@ import server.MapleItemInformationProvider;
 public final class CancelItemEffectHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int itemId = -p.readInt();
         if (MapleItemInformationProvider.getInstance().noCancelMouse(itemId)) {
             return;

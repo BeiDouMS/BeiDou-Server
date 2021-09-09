@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public final class MobDamageMobHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int from = p.readInt();
         p.readInt();
         int to = p.readInt();

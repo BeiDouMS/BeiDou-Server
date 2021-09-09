@@ -22,7 +22,7 @@
 package net.server.guild;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.coordinator.world.MapleInviteCoordinator;
@@ -435,7 +435,7 @@ public class MapleAlliance {
         Server.getInstance().allianceMessage(allianceId, packet, -1, -1);
     }
 
-    public static void sendInvitation(MapleClient c, String targetGuildName, int allianceId) {
+    public static void sendInvitation(Client c, String targetGuildName, int allianceId) {
         MapleGuild mg = Server.getInstance().getGuildByName(targetGuildName);
         if (mg == null) {
             c.getPlayer().dropMessage(5, "The entered guild does not exist.");

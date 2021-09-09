@@ -19,7 +19,7 @@
 */
 package server;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import config.YamlConfig;
@@ -173,11 +173,11 @@ class PairedQuicksort {
 }
 
 public class MapleStorageInventory {
-    private MapleClient c;
+    private Client c;
     private Map<Short, Item> inventory = new LinkedHashMap<>();
     private byte slotLimit;
     
-    public MapleStorageInventory(MapleClient c, List<Item> toSort) {
+    public MapleStorageInventory(Client c, List<Item> toSort) {
         this.inventory = new LinkedHashMap<>();
         this.slotLimit = (byte)toSort.size();
         this.c = c;

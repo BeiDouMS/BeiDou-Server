@@ -57,13 +57,13 @@ import java.util.*;
 
 public class AbstractPlayerInteraction {
 
-	public MapleClient c;
+	public Client c;
 
-	public AbstractPlayerInteraction(MapleClient c) {
+	public AbstractPlayerInteraction(Client c) {
 		this.c = c;
 	}
 
-	public MapleClient getClient() {
+	public Client getClient() {
 		return c;
 	}
 
@@ -749,7 +749,7 @@ public class AbstractPlayerInteraction {
         
         public void givePartyItems(int id, short quantity, List<Character> party) {
 		for (Character chr : party) {
-			MapleClient cl = chr.getClient();
+			Client cl = chr.getClient();
 			if (quantity >= 0) {
 				InventoryManipulator.addById(cl, id, quantity);
 			} else {
@@ -857,7 +857,7 @@ public class AbstractPlayerInteraction {
 		removeAll(id, c);
 	}
 
-	public void removeAll(int id, MapleClient cl) {
+	public void removeAll(int id, Client cl) {
 		InventoryType invType = ItemConstants.getInventoryType(id);
 		int possessed = cl.getPlayer().getInventory(invType).countById(id);
 		if (possessed > 0) {

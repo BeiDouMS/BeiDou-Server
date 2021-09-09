@@ -22,7 +22,7 @@ package net.server.channel.handlers;
 
 import client.BuffStat;
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.MapleMonster;
@@ -40,7 +40,7 @@ import java.util.List;
 public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         chr.setMapTransitionComplete();
         

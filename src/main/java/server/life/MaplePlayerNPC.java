@@ -22,7 +22,7 @@
 package server.life;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import config.YamlConfig;
@@ -199,13 +199,13 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(PacketCreator.spawnPlayerNPC(this));
         client.sendPacket(PacketCreator.getPlayerNPC(this));
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.removeNPCController(this.getObjectId()));
         client.sendPacket(PacketCreator.removePlayerNPC(this.getObjectId()));
     }
@@ -588,7 +588,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         World wserv = Server.getInstance().getWorld(world);
         if (wserv == null) return;
 
-        MapleClient c = MapleClient.createMock();
+        Client c = Client.createMock();
         c.setWorld(world);
         c.setChannel(1);
 

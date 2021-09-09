@@ -24,7 +24,7 @@
 package client.command.commands.gm2;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
@@ -38,7 +38,7 @@ public class ItemCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         
         if (params.length < 1) {

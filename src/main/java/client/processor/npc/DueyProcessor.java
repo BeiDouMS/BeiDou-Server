@@ -24,7 +24,7 @@
 package client.processor.npc;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -106,7 +106,7 @@ public class DueyProcessor {
         return ids;
     }
 
-    private static void showDueyNotification(MapleClient c, Character player) {
+    private static void showDueyNotification(Client c, Character player) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT SenderName, Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
 
@@ -237,7 +237,7 @@ public class DueyProcessor {
         return false;
     }
 
-    private static int addPackageItemFromInventory(int packageId, MapleClient c, byte invTypeId, short itemPos, short amount) {
+    private static int addPackageItemFromInventory(int packageId, Client c, byte invTypeId, short itemPos, short amount) {
         if (invTypeId > 0) {
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
@@ -278,7 +278,7 @@ public class DueyProcessor {
         return 0;
     }
 
-    public static void dueySendItem(MapleClient c, byte invTypeId, short itemPos, short amount, int sendMesos, String sendMessage, String recipient, boolean quick) {
+    public static void dueySendItem(Client c, byte invTypeId, short itemPos, short amount, int sendMesos, String sendMessage, String recipient, boolean quick) {
         if (c.tryacquireClient()) {
             try {
                 int fee = MapleTrade.getFee(sendMesos);
@@ -343,7 +343,7 @@ public class DueyProcessor {
                     c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_INCORRECT_REQUEST.getCode()));
                 }
 
-                MapleClient rClient = null;
+                Client rClient = null;
                 int channel = c.getWorldServer().find(recipient);
                 if (channel > -1) {
                     Channel rcserv = c.getWorldServer().getChannel(channel);
@@ -364,7 +364,7 @@ public class DueyProcessor {
         }
     }
 
-    public static void dueyRemovePackage(MapleClient c, int packageid, boolean playerRemove) {
+    public static void dueyRemovePackage(Client c, int packageid, boolean playerRemove) {
         if (c.tryacquireClient()) {
             try {
                 removePackageFromDB(packageid);
@@ -375,7 +375,7 @@ public class DueyProcessor {
         }
     }
 
-    public static void dueyClaimPackage(MapleClient c, int packageId) {
+    public static void dueyClaimPackage(Client c, int packageId) {
         if (c.tryacquireClient()) {
             try {
                 try {
@@ -435,7 +435,7 @@ public class DueyProcessor {
         }
     }
 
-    public static void dueySendTalk(MapleClient c, boolean quickDelivery) {
+    public static void dueySendTalk(Client c, boolean quickDelivery) {
         if (c.tryacquireClient()) {
             try {
                 long timeNow = System.currentTimeMillis();

@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.*;
@@ -45,7 +45,7 @@ import java.util.Map;
 public final class ScrollHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
                 p.readInt(); // whatever...
@@ -182,7 +182,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
         }
     }
     
-    private static void announceCannotScroll(MapleClient c, boolean legendarySpirit) {
+    private static void announceCannotScroll(Client c, boolean legendarySpirit) {
         if (legendarySpirit) {
             c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, false, false));
         } else {

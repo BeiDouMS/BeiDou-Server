@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.packet.InPacket;
 import server.maps.MapleDragon;
 import tools.PacketCreator;
@@ -33,7 +33,7 @@ import java.awt.*;
 
 public class MoveDragonHandler extends AbstractMovementPacketHandler {
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         final Character chr = c.getPlayer();
         final Point startPos = new Point(p.readShort(), p.readShort());
         final MapleDragon dragon = chr.getDragon();

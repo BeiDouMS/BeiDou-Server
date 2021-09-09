@@ -20,7 +20,7 @@
 package client.processor.action;    // thanks Alex for pointing out some package structures containing broad modules
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import server.maps.MapleMap;
 import tools.PacketCreator;
 
@@ -30,7 +30,7 @@ import tools.PacketCreator;
  */
 public class BuybackProcessor {
     
-    public static void processBuyback(MapleClient c) {
+    public static void processBuyback(Client c) {
         Character chr = c.getPlayer();
         boolean buyback;
         

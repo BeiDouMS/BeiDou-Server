@@ -78,8 +78,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
-public class MapleClient extends ChannelInboundHandlerAdapter {
-    private static final Logger log = LoggerFactory.getLogger(MapleClient.class);
+public class Client extends ChannelInboundHandlerAdapter {
+    private static final Logger log = LoggerFactory.getLogger(Client.class);
 
     public static final int LOGIN_NOTLOGGEDIN = 0;
     public static final int LOGIN_SERVER_TRANSITION = 1;
@@ -133,7 +133,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         CHANNEL
     }
 
-    public MapleClient(Type type, long sessionId, String remoteAddress, PacketProcessor packetProcessor, int world, int channel) {
+    public Client(Type type, long sessionId, String remoteAddress, PacketProcessor packetProcessor, int world, int channel) {
         this.type = type;
         this.sessionId = sessionId;
         this.remoteAddress = remoteAddress;
@@ -142,18 +142,18 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         this.channel = channel;
     }
 
-    public static MapleClient createLoginClient(long sessionId, String remoteAddress, PacketProcessor packetProcessor,
-                                                int world, int channel) {
-        return new MapleClient(Type.LOGIN, sessionId, remoteAddress, packetProcessor, world, channel);
+    public static Client createLoginClient(long sessionId, String remoteAddress, PacketProcessor packetProcessor,
+                                           int world, int channel) {
+        return new Client(Type.LOGIN, sessionId, remoteAddress, packetProcessor, world, channel);
     }
 
-    public static MapleClient createChannelClient(long sessionId, String remoteAddress, PacketProcessor packetProcessor,
-                                                  int world, int channel) {
-        return new MapleClient(Type.CHANNEL, sessionId, remoteAddress, packetProcessor, world, channel);
+    public static Client createChannelClient(long sessionId, String remoteAddress, PacketProcessor packetProcessor,
+                                             int world, int channel) {
+        return new Client(Type.CHANNEL, sessionId, remoteAddress, packetProcessor, world, channel);
     }
 
-    public static MapleClient createMock() {
-        return new MapleClient(null, -1,null, null, -123, -123);
+    public static Client createMock() {
+        return new Client(null, -1,null, null, -123, -123);
     }
 
     @Override
@@ -543,7 +543,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 loggedIn = false;
                 return 7;
             }
-            updateLoginState(MapleClient.LOGIN_LOGGEDIN);
+            updateLoginState(Client.LOGIN_LOGGEDIN);
         } finally {
             encoderLock.unlock();
         }
@@ -834,7 +834,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (!rs.next()) {
-                        throw new RuntimeException("getLoginState - MapleClient AccID: " + getAccID());
+                        throw new RuntimeException("getLoginState - Client AccID: " + getAccID());
                     }
 
                     birthday = Calendar.getInstance();
@@ -848,7 +848,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                         if (rs.getTimestamp("lastlogin").getTime() + 30000 < Server.getInstance().getCurrentTime()) {
                             int accountId = accId;
                             state = LOGIN_NOTLOGGEDIN;
-                            updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);   // ACCID = 0, issue found thanks to Tochi & K u ssss o & Thora & Omo Oppa
+                            updateLoginState(Client.LOGIN_NOTLOGGEDIN);   // ACCID = 0, issue found thanks to Tochi & K u ssss o & Thora & Omo Oppa
                             this.setAccID(accountId);
                         }
                     }
@@ -960,7 +960,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return true;
     }
 
-    private void disconnectInternal(boolean shutdown, boolean cashshop) {//once per MapleClient instance
+    private void disconnectInternal(boolean shutdown, boolean cashshop) {//once per Client instance
         if (player != null && player.isLoggedin() && player.getClient() != null) {
             final int messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId();
             //final int fid = player.getFamilyId();
@@ -1039,12 +1039,12 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         SessionCoordinator.getInstance().closeSession(this, false);
 
         if (!serverTransition && isLoggedIn()) {
-            updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+            updateLoginState(Client.LOGIN_NOTLOGGEDIN);
 
             clear();
         } else {
             if (!Server.getInstance().hasCharacteridInTransition(this)) {
-                updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+                updateLoginState(Client.LOGIN_NOTLOGGEDIN);
             }
 
             engines = null; // thanks Tochi for pointing out a NPE here
@@ -1068,7 +1068,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     }
 
     public void setCharacterOnSessionTransitionState(int cid) {
-        this.updateLoginState(MapleClient.LOGIN_SERVER_TRANSITION);
+        this.updateLoginState(Client.LOGIN_SERVER_TRANSITION);
         this.inTransition = true;
         Server.getInstance().setCharacteridInTransition(this, cid);
     }
@@ -1144,7 +1144,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 if (lastPong < pingedAt) {
                     if (ioChannel.isActive()) {
                         log.info("Disconnected {} due to idling. Reason: {}", remoteAddress, event.state());
-                        updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+                        updateLoginState(Client.LOGIN_NOTLOGGEDIN);
                         disconnectSession();
                     }
                 }

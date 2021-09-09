@@ -22,7 +22,7 @@
 package net.server;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleFamily;
 import client.SkillFactory;
 import client.command.CommandsExecutor;
@@ -105,13 +105,13 @@ public class Server {
     private final Map<String, Integer> transitioningChars = new HashMap<>();
     private List<Pair<Integer, String>> worldRecommendedList = new LinkedList<>();
     private final Map<Integer, MapleGuild> guilds = new HashMap<>(100);
-    private final Map<MapleClient, Long> inLoginState = new HashMap<>(100);
+    private final Map<Client, Long> inLoginState = new HashMap<>(100);
 
     private final PlayerBuffStorage buffStorage = new PlayerBuffStorage();
     private final Map<Integer, MapleAlliance> alliances = new HashMap<>(100);
     private final Map<Integer, NewYearCardRecord> newyears = new HashMap<>();
-    private final List<MapleClient> processDiseaseAnnouncePlayers = new LinkedList<>();
-    private final List<MapleClient> registeredDiseaseAnnouncePlayers = new LinkedList<>();
+    private final List<Client> processDiseaseAnnouncePlayers = new LinkedList<>();
+    private final List<Client> registeredDiseaseAnnouncePlayers = new LinkedList<>();
 
     private final List<List<Pair<String, Integer>>> playerRanking = new LinkedList<>();
 
@@ -281,7 +281,7 @@ public class Server {
         }
     }
 
-    public String[] getInetSocket(MapleClient client, int world, int channel) {
+    public String[] getInetSocket(Client client, int world, int channel) {
         String remoteIp = client.getRemoteAddress();
 
         String[] hostAddress = getIP(world, channel).split(":");
@@ -645,7 +645,7 @@ public class Server {
     }
 
     public void runAnnouncePlayerDiseasesSchedule() {
-        List<MapleClient> processDiseaseAnnounceClients;
+        List<Client> processDiseaseAnnounceClients;
         disLock.lock();
         try {
             processDiseaseAnnounceClients = new LinkedList<>(processDiseaseAnnouncePlayers);
@@ -655,7 +655,7 @@ public class Server {
         }
 
         while (!processDiseaseAnnounceClients.isEmpty()) {
-            MapleClient c = processDiseaseAnnounceClients.remove(0);
+            Client c = processDiseaseAnnounceClients.remove(0);
             Character player = c.getPlayer();
             if (player != null && player.isLoggedinWorld()) {
                 player.announceDiseases();
@@ -667,7 +667,7 @@ public class Server {
         try {
             // this is to force the system to wait for at least one complete tick before releasing disease info for the registered clients
             while (!registeredDiseaseAnnouncePlayers.isEmpty()) {
-                MapleClient c = registeredDiseaseAnnouncePlayers.remove(0);
+                Client c = registeredDiseaseAnnouncePlayers.remove(0);
                 processDiseaseAnnouncePlayers.add(c);
             }
         } finally {
@@ -675,7 +675,7 @@ public class Server {
         }
     }
 
-    public void registerAnnouncePlayerDiseases(MapleClient c) {
+    public void registerAnnouncePlayerDiseases(Client c) {
         disLock.lock();
         try {
             registeredDiseaseAnnouncePlayers.add(c);
@@ -1661,7 +1661,7 @@ public class Server {
         }
     }
 
-    public void loadAccountCharacters(MapleClient c) {
+    public void loadAccountCharacters(Client c) {
         Integer accId = c.getAccID();
         if (!isFirstAccountLogin(accId)) {
             Set<Integer> accWorlds = new HashSet<>();
@@ -1734,7 +1734,7 @@ public class Server {
         return gmLevel;
     }
 
-    public void loadAccountStorages(MapleClient c) {
+    public void loadAccountStorages(Client c) {
         int accountId = c.getAccID();
         Set<Integer> accWorlds = new HashSet<>();
         lgnWLock.lock();
@@ -1760,11 +1760,11 @@ public class Server {
         }
     }
 
-    private static String getRemoteHost(MapleClient client) {
+    private static String getRemoteHost(Client client) {
         return SessionCoordinator.getSessionRemoteHost(client);
     }
 
-    public void setCharacteridInTransition(MapleClient client, int charId) {
+    public void setCharacteridInTransition(Client client, int charId) {
         String remoteIp = getRemoteHost(client);
 
         lgnWLock.lock();
@@ -1775,7 +1775,7 @@ public class Server {
         }
     }
 
-    public boolean validateCharacteridInTransition(MapleClient client, int charId) {
+    public boolean validateCharacteridInTransition(Client client, int charId) {
         if (!YamlConfig.config.server.USE_IP_VALIDATION) {
             return true;
         }
@@ -1791,7 +1791,7 @@ public class Server {
         }
     }
 
-    public Integer freeCharacteridInTransition(MapleClient client) {
+    public Integer freeCharacteridInTransition(Client client) {
         if (!YamlConfig.config.server.USE_IP_VALIDATION) {
             return null;
         }
@@ -1806,7 +1806,7 @@ public class Server {
         }
     }
 
-    public boolean hasCharacteridInTransition(MapleClient client) {
+    public boolean hasCharacteridInTransition(Client client) {
         if (!YamlConfig.config.server.USE_IP_VALIDATION) {
             return true;
         }
@@ -1821,7 +1821,7 @@ public class Server {
         }
     }
 
-    public void registerLoginState(MapleClient c) {
+    public void registerLoginState(Client c) {
         srvLock.lock();
         try {
             inLoginState.put(c, System.currentTimeMillis() + 600000);
@@ -1830,7 +1830,7 @@ public class Server {
         }
     }
 
-    public void unregisterLoginState(MapleClient c) {
+    public void unregisterLoginState(Client c) {
         srvLock.lock();
         try {
             inLoginState.remove(c);
@@ -1840,26 +1840,26 @@ public class Server {
     }
 
     private void disconnectIdlesOnLoginState() {
-        List<MapleClient> toDisconnect = new LinkedList<>();
+        List<Client> toDisconnect = new LinkedList<>();
 
         srvLock.lock();
         try {
             long timeNow = System.currentTimeMillis();
 
-            for (Entry<MapleClient, Long> mc : inLoginState.entrySet()) {
+            for (Entry<Client, Long> mc : inLoginState.entrySet()) {
                 if (timeNow > mc.getValue()) {
                     toDisconnect.add(mc.getKey());
                 }
             }
 
-            for (MapleClient c : toDisconnect) {
+            for (Client c : toDisconnect) {
                 inLoginState.remove(c);
             }
         } finally {
             srvLock.unlock();
         }
 
-        for (MapleClient c : toDisconnect) {    // thanks Lei for pointing a deadlock issue with srvLock
+        for (Client c : toDisconnect) {    // thanks Lei for pointing a deadlock issue with srvLock
             if (c.isLoggedIn()) {
                 c.disconnect(false, false);
             } else {

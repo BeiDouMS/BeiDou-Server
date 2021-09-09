@@ -24,7 +24,7 @@
 package client.command.commands.gm3;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 
 public class HpMpCommand extends Command {
@@ -33,7 +33,7 @@ public class HpMpCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         Character victim = player;
         int statUpdate = 1;

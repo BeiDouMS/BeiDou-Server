@@ -657,7 +657,7 @@ public class PacketCreator {
      * @param c
      * @return the successful authentication packet
      */
-    public static Packet getAuthSuccess(MapleClient c) {
+    public static Packet getAuthSuccess(Client c) {
         Server.getInstance().loadAccountCharacters(c);    // locks the login session until data is recovered from the cache or the DB.
         Server.getInstance().loadAccountStorages(c);
 
@@ -830,7 +830,7 @@ public class PacketCreator {
     /**
      * Gets a packet with a list of characters.
      *
-     * @param c        The MapleClient to load characters of.
+     * @param c        The Client to load characters of.
      * @param serverId The ID of the server requested.
      * @param status   The charlist request result.
      * @return The character list packet.
@@ -850,7 +850,7 @@ public class PacketCreator {
      * <br> 17: Wrong gateway or personal info<br>
      * <br> 21: Verify account via email<br>
      */
-    public static Packet getCharList(MapleClient c, int serverId, int status) {
+    public static Packet getCharList(Client c, int serverId, int status) {
         final OutPacket p = OutPacket.create(SendOpcode.CHARLIST);
         p.writeByte(status);
         List<Character> chars = c.loadCharacters(serverId);
@@ -1888,7 +1888,7 @@ public class PacketCreator {
      * @param enteringField Whether the character to spawn is not yet present in the map or already is.
      * @return The spawn player packet.
      */
-    public static Packet spawnPlayerMapObject(MapleClient target, Character chr, boolean enteringField) {
+    public static Packet spawnPlayerMapObject(Client target, Character chr, boolean enteringField) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PLAYER);
         p.writeInt(chr.getId());
         p.writeByte(chr.getLevel()); //v83
@@ -2106,7 +2106,7 @@ public class PacketCreator {
         }
     }
 
-    private static void addMarriageRingLook(MapleClient target, final OutPacket p, Character chr) {
+    private static void addMarriageRingLook(Client target, final OutPacket p, Character chr) {
         MapleRing ring = chr.getMarriageRing();
 
         if (ring == null || !ring.equipped()) {
@@ -2357,7 +2357,7 @@ public class PacketCreator {
         return (int) (Double.doubleToLongBits(d) >> 48);
     }
 
-    public static Packet getNPCShop(MapleClient c, int sid, List<MapleShopItem> items) {
+    public static Packet getNPCShop(Client c, int sid, List<MapleShopItem> items) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         final OutPacket p = OutPacket.create(SendOpcode.OPEN_NPC_SHOP);
         p.writeInt(sid);
@@ -2546,7 +2546,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateCharLook(MapleClient target, Character chr) {
+    public static Packet updateCharLook(Client target, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_LOOK);
         p.writeInt(chr.getId());
         p.writeByte(1);
@@ -3243,7 +3243,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeStart(MapleClient c, MapleTrade trade, byte number) {
+    public static Packet getTradeStart(Client c, MapleTrade trade, byte number) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(3);
@@ -4580,7 +4580,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGame(MapleClient c, MapleMiniGame minigame, boolean owner, int piece) {
+    public static Packet getMiniGame(Client c, MapleMiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(1);
@@ -4779,7 +4779,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCard(MapleClient c, MapleMiniGame minigame, boolean owner, int piece) {
+    public static Packet getMatchCard(Client c, MapleMiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(2);
@@ -5004,7 +5004,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet owlOfMinerva(MapleClient c, int itemId, List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> hmsAvailable) {
+    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<MaplePlayerShopItem, AbstractMapleMapObject>> hmsAvailable) {
         byte itemType = ItemConstants.getInventoryType(itemId).getType();
 
         OutPacket p = OutPacket.create(SendOpcode.SHOP_SCANNER_RESULT);
@@ -5446,7 +5446,7 @@ public class PacketCreator {
             8: must quit family,
             9: unknown error
         */
-    public static Packet sendWorldTransferRules(int error, MapleClient c) {
+    public static Packet sendWorldTransferRules(int error, Client c) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CHECK_TRANSFER_WORLD_POSSIBLE_RESULT);
         p.writeInt(0); //ignored
         p.writeByte(error);
@@ -7017,7 +7017,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showCashInventory(MapleClient c) {
+    public static Packet showCashInventory(Client c) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
         p.writeByte(0x4B);
@@ -7120,7 +7120,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet openCashShop(MapleClient c, boolean mts) throws Exception {
+    public static Packet openCashShop(Client c, boolean mts) throws Exception {
         final OutPacket p = OutPacket.create(mts ? SendOpcode.SET_ITC : SendOpcode.SET_CASH_SHOP);
 
         addCharacterInfo(p, c.getPlayer());

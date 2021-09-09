@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.processor.stat.AssignAPProcessor;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -33,7 +33,7 @@ import net.packet.InPacket;
 public class AutoAssignHandler extends AbstractPacketHandler {
     
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         AssignAPProcessor.APAutoAssignAction(p, c);
     }
 }

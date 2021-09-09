@@ -22,7 +22,7 @@
 package client.inventory;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.server.audit.locks.MonitoredLockType;
@@ -490,7 +490,7 @@ public class Inventory implements Iterable<Item> {
             }
         }
 
-        MapleClient c = chr.getClient();
+        Client c = chr.getClient();
         for (Entry<Integer, List<Integer>> it : rcvItems.entrySet()) {
             int itemType = rcvTypes.get(it.getKey()) - 1;
 
@@ -573,7 +573,7 @@ public class Inventory implements Iterable<Item> {
             }
         }
 
-        MapleClient c = chr.getClient();
+        Client c = chr.getClient();
         for (Entry<Long, List<Integer>> it : rcvItems.entrySet()) {
             int itemType = rcvTypes.get(it.getKey()) - 1;
             int itemId = (int) (it.getKey() >> 32L);

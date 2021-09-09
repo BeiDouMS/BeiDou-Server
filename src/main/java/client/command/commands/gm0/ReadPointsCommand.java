@@ -1,7 +1,7 @@
 package client.command.commands.gm0;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 
 public class ReadPointsCommand extends Command {
@@ -10,7 +10,7 @@ public class ReadPointsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient client, String[] params) {
+    public void execute(Client client, String[] params) {
 
         Character player = client.getPlayer();
         if (params.length > 2) {

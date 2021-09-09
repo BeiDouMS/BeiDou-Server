@@ -53,7 +53,7 @@ import java.util.List;
 public final class UseCashItemHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         final Character player = c.getPlayer();
 
         long timeNow = currentServerTime();
@@ -574,7 +574,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             InventoryManipulator.removeFromSlot(c, InventoryType.USE, uSlot, (short) 1, false);
             remove(c, position, itemId);
 
-            final MapleClient client = c;
+            final Client client = c;
             TimerManager.getInstance().schedule(() -> {
                 if (!player.isLoggedin()) {
                     return;
@@ -601,7 +601,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
     }
 
-    private static void remove(MapleClient c, short position, int itemid) {
+    private static void remove(Client c, short position, int itemid) {
         Inventory cashInv = c.getPlayer().getInventory(InventoryType.CASH);
         cashInv.lockInventory();
         try {
@@ -619,7 +619,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
     }
 
-    private static boolean getIncubatedItem(MapleClient c, int id) {
+    private static boolean getIncubatedItem(Client c, int id) {
         final int[] ids = {1012070, 1302049, 1302063, 1322027, 2000004, 2000005, 2020013, 2020015, 2040307, 2040509, 2040519, 2040521, 2040533, 2040715, 2040717, 2040810, 2040811, 2070005, 2070006, 4020009,};
         final int[] quantitys = {1, 1, 1, 1, 240, 200, 200, 200, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3};
         int amount = 0;

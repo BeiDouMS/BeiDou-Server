@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.MapleItemInformationProvider;
 import server.gachapon.MapleGachapon;
@@ -34,7 +34,7 @@ public class GachaCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         MapleGachapon.Gachapon gacha = null;
         String search = c.getPlayer().getLastCommandMessage();
         String gachaName = "";

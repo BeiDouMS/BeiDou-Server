@@ -20,7 +20,7 @@
 package client.processor.action;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import client.inventory.InventoryType;
 import client.inventory.Pet;
@@ -40,7 +40,7 @@ import java.awt.*;
 public class SpawnPetProcessor {
     private static final MapleDataProvider dataRoot = MapleDataProviderFactory.getDataProvider(WZFiles.ITEM);
     
-    public static void processSpawnPet(MapleClient c, byte slot, boolean lead) {
+    public static void processSpawnPet(Client c, byte slot, boolean lead) {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();

@@ -20,7 +20,7 @@
 package server;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -69,7 +69,7 @@ public class MapleMarriage extends EventInstanceManager {
         this.setObjectProperty("brideGiftlist", brideGifts);
     }
 
-    public List<Item> getGiftItems(MapleClient c, boolean groom) {
+    public List<Item> getGiftItems(Client c, boolean groom) {
         List<Item> gifts = getGiftItemsList(groom);
         synchronized (gifts) {
             return new LinkedList<>(gifts);
@@ -80,7 +80,7 @@ public class MapleMarriage extends EventInstanceManager {
         return (List<Item>) this.getObjectProperty(groom ? "groomGiftlist" : "brideGiftlist");
     }
 
-    public Item getGiftItem(MapleClient c, boolean groom, int idx) {
+    public Item getGiftItem(Client c, boolean groom, int idx) {
         try {
             return getGiftItems(c, groom).get(idx);
         } catch (IndexOutOfBoundsException e) {
@@ -116,7 +116,7 @@ public class MapleMarriage extends EventInstanceManager {
         return groom;
     }
 
-    public static boolean claimGiftItems(MapleClient c, Character chr) {
+    public static boolean claimGiftItems(Client c, Character chr) {
         List<Item> gifts = loadGiftItemsFromDb(c, chr.getId());
         if (Inventory.checkSpot(chr, gifts)) {
             try (Connection con = DatabaseConnection.getConnection()) {
@@ -135,7 +135,7 @@ public class MapleMarriage extends EventInstanceManager {
         return false;
     }
         
-    public static List<Item> loadGiftItemsFromDb(MapleClient c, int cid) {
+    public static List<Item> loadGiftItemsFromDb(Client c, int cid) {
         List<Item> items = new LinkedList<>();
         
         try {
@@ -149,11 +149,11 @@ public class MapleMarriage extends EventInstanceManager {
         return items;
     }
         
-    public void saveGiftItemsToDb(MapleClient c, boolean groom, int cid) {
+    public void saveGiftItemsToDb(Client c, boolean groom, int cid) {
         MapleMarriage.saveGiftItemsToDb(c, getGiftItems(c, groom), cid);
     }
     
-    public static void saveGiftItemsToDb(MapleClient c, List<Item> giftItems, int cid) {
+    public static void saveGiftItemsToDb(Client c, List<Item> giftItems, int cid) {
         List<Pair<Item, InventoryType>> items = new LinkedList<>();
         for (Item it : giftItems) {
             items.add(new Pair<>(it, it.getInventoryType()));

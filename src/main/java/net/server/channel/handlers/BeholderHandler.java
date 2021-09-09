@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import constants.skills.DarkKnight;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -36,7 +36,7 @@ import java.util.Collection;
 public final class BeholderHandler extends AbstractPacketHandler {//Summon Skills noobs
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         //System.out.println(slea.toString());
         Collection<MapleSummon> summons = c.getPlayer().getSummonsValues();
         int oid = p.readInt();

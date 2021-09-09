@@ -24,7 +24,7 @@
 package client.command.commands.gm3;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleDisease;
 import client.command.Command;
 import server.life.MobSkill;
@@ -40,7 +40,7 @@ public class DebuffCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !debuff SLOW|SEDUCE|ZOMBIFY|CONFUSE|STUN|POISON|SEAL|DARKNESS|WEAKEN|CURSE");

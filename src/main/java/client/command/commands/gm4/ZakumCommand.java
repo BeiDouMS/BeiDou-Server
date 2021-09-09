@@ -24,7 +24,7 @@
 package client.command.commands.gm4;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.life.MapleLifeFactory;
 
@@ -34,7 +34,7 @@ public class ZakumCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         player.getMap().spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(8800000), player.getPosition());
         for (int x = 8800003; x < 8800011; x++) {

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.MapleShopFactory;
 
@@ -33,7 +33,7 @@ public class GmShopCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         MapleShopFactory.getInstance().getShop(1337).sendShop(c);
     }
 }

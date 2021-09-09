@@ -24,7 +24,7 @@
 package client.command.commands.gm1;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import constants.game.GameConstants;
 import server.maps.*;
@@ -72,7 +72,7 @@ public class GotoCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1){
             String sendStr = "Syntax: #b@goto <map name>#k. Available areas:\r\n\r\n#rTowns:#k\r\n" + GOTO_TOWNS_INFO;

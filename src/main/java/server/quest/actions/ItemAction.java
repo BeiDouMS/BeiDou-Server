@@ -22,7 +22,7 @@
 package server.quest.actions;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
@@ -204,7 +204,7 @@ public class ItemAction extends MapleQuestAction {
                 
                 if(!randomList.isEmpty()) {
                         int result;
-                        MapleClient c = chr.getClient();
+                        Client c = chr.getClient();
                         
                         List<Integer> rndUsed = new ArrayList(5);
                         for(byte i = 0; i < 5; i++) rndUsed.add(allSlotUsed.get(i));

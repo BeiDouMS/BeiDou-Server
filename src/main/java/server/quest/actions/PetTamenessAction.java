@@ -20,7 +20,7 @@
 package server.quest.actions;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Pet;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -48,7 +48,7 @@ public class PetTamenessAction extends MapleQuestAction {
 	
 	@Override
 	public void run(Character chr, Integer extSelection) {
-                MapleClient c = chr.getClient();
+                Client c = chr.getClient();
                 
                 Pet pet = chr.getPet(0);   // assuming here only the pet leader will gain tameness
                 if(pet == null) return;

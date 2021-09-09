@@ -1,7 +1,7 @@
 package net.server.guild;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
 import net.packet.Packet;
@@ -413,7 +413,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet addGuildToAlliance(MapleAlliance alliance, int newGuild, MapleClient c) {
+    public static Packet addGuildToAlliance(MapleAlliance alliance, int newGuild, Client c) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x12);
         p.writeInt(alliance.getId());

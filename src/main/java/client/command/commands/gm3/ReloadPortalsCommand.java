@@ -24,7 +24,7 @@
 package client.command.commands.gm3;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import scripting.portal.PortalScriptManager;
 
@@ -34,7 +34,7 @@ public class ReloadPortalsCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         PortalScriptManager.getInstance().reloadPortalScripts();
         player.dropMessage(5, "Reloaded Portals");

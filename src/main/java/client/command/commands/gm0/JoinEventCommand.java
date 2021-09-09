@@ -24,7 +24,7 @@
 package client.command.commands.gm0;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.events.gm.MapleEvent;
 import server.maps.FieldLimit;
@@ -35,7 +35,7 @@ public class JoinEventCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if(!FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
             MapleEvent event = c.getChannelServer().getEvent();

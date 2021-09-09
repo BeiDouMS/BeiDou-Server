@@ -23,7 +23,7 @@ package server.maps;
 
 import client.BuffStat;
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
@@ -2207,7 +2207,7 @@ public class MapleMap {
         service.registerOverallAction(mapid, r, delay);
     }
     
-    private void activateItemReactors(final MapleMapItem drop, final MapleClient c) {
+    private void activateItemReactors(final MapleMapItem drop, final Client c) {
         final Item item = drop.getItem();
 
         for (final MapleMapObject o : getReactors()) {
@@ -2247,7 +2247,7 @@ public class MapleMap {
                         
                         if (item != null && reactItem == item.getItemId() && reactQty == item.getQuantity()) {
                             if (reactArea.contains(drop.getPosition())) {
-                                MapleClient owner = drop.getOwnerClient();
+                                Client owner = drop.getOwnerClient();
                                 if(owner != null) {
                                     registerMapSchedule(new ActivateItemReactor(drop, react, owner), 5000);
                                 }
@@ -2579,7 +2579,7 @@ public class MapleMap {
         announcePlayerDiseases(chr.getClient());
     }
     
-    private static void announcePlayerDiseases(final MapleClient c) {
+    private static void announcePlayerDiseases(final Client c) {
         Server.getInstance().registerAnnouncePlayerDiseases(c);
     }
 
@@ -2923,7 +2923,7 @@ public class MapleMap {
         }
     }
 
-    private void sendObjectPlacement(MapleClient c) {
+    private void sendObjectPlacement(Client c) {
         Character chr = c.getPlayer();
         Collection<MapleMapObject> objects;
         
@@ -3413,9 +3413,9 @@ public class MapleMap {
 
         private MapleMapItem mapitem;
         private MapleReactor reactor;
-        private MapleClient c;
+        private Client c;
 
-        public ActivateItemReactor(MapleMapItem mapitem, MapleReactor reactor, MapleClient c) {
+        public ActivateItemReactor(MapleMapItem mapitem, MapleReactor reactor, Client c) {
             this.mapitem = mapitem;
             this.reactor = reactor;
             this.c = c;
@@ -3661,7 +3661,7 @@ public class MapleMap {
 
     private interface DelayedPacketCreation {
 
-        void sendPackets(MapleClient c);
+        void sendPackets(Client c);
     }
 
     private interface SpawnCondition {

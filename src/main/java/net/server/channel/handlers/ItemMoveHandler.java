@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
@@ -34,7 +34,7 @@ import tools.PacketCreator;
  */
 public final class ItemMoveHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
         if(c.getPlayer().getAutobanManager().getLastSpam(6) + 300 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());

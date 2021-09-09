@@ -21,18 +21,18 @@
 */
 package net.server.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.PacketHandler;
 import net.packet.InPacket;
 
 public class KeepAliveHandler implements PacketHandler {
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         c.pongReceived();
     }
 
     @Override
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return true;
     }
 }

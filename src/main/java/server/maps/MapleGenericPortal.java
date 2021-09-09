@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import constants.game.GameConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
@@ -128,7 +128,7 @@ public class MapleGenericPortal implements MaplePortal {
     }
 
     @Override
-    public void enterPortal(MapleClient c) {
+    public void enterPortal(Client c) {
         boolean changed = false;
         if (getScriptName() != null) {
             try {

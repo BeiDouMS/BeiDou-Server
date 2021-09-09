@@ -19,7 +19,7 @@
 */
 package client.creator.veteran;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleJob;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
@@ -73,7 +73,7 @@ public class PirateCreator extends CharacterFactory {
                 recipe.addStartingItem(itemid, quantity, itemType);
         }
     
-        public static int createCharacter(MapleClient c, String name, int face, int hair, int skin, int gender, int improveSp) {
+        public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
                 return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(MapleJob.PIRATE, 30, 120000000, equips[gender], equips[2 + gender], equips[4], weapons[0]));
         }
 }

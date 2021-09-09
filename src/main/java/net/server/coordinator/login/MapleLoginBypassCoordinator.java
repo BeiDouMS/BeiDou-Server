@@ -20,7 +20,7 @@
 package net.server.coordinator.login;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.server.Server;
 import net.server.coordinator.session.Hwid;
@@ -86,7 +86,7 @@ public class MapleLoginBypassCoordinator {
 
             for (World w : Server.getInstance().getWorlds()) {
                 for (Character chr : w.getPlayerStorage().getAllCharacters()) {
-                    MapleClient c = chr.getClient();
+                    Client c = chr.getClient();
                     if (c != null) {
                         onlineAccounts.add(c.getAccID());
                     }

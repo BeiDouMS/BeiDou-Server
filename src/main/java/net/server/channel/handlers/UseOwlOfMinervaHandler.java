@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -37,7 +37,7 @@ import java.util.PriorityQueue;
 public final class UseOwlOfMinervaHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         List<Pair<Integer, Integer>> owlSearched = c.getWorldServer().getOwlSearchedItems();
         List<Integer> owlLeaderboards;
         

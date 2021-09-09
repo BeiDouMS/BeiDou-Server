@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.InventoryType;
@@ -32,7 +32,7 @@ import net.packet.InPacket;
 
 public final class KeymapChangeHandler extends AbstractPacketHandler {
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
                 if (p.available() >= 8) {
 			int mode = p.readInt();
 			if(mode == 0) {

@@ -20,7 +20,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
@@ -34,7 +34,7 @@ import tools.packets.WeddingPackets;
 public final class WeddingTalkMoreHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         EventInstanceManager eim = c.getPlayer().getEventInstance();
         if(eim != null && !(c.getPlayer().getId() == eim.getIntProperty("groomId") || c.getPlayer().getId() == eim.getIntProperty("brideId"))) {
             eim.gridInsert(c.getPlayer(), 1);

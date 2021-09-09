@@ -21,7 +21,7 @@
  */
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.session.SessionCoordinator;
@@ -30,7 +30,7 @@ import tools.PacketCreator;
 public final class AfterLoginHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte c2 = p.readByte();
         byte c3 = 5;
         if (p.available() > 0) {
@@ -58,7 +58,7 @@ public final class AfterLoginHandler extends AbstractPacketHandler {
             }
         } else if (c2 == 0 && c3 == 5) {
             SessionCoordinator.getInstance().closeSession(c, null);
-            c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+            c.updateLoginState(Client.LOGIN_NOTLOGGEDIN);
         }
     }
 }

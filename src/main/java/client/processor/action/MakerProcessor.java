@@ -20,7 +20,7 @@
 package client.processor.action;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -49,7 +49,7 @@ public class MakerProcessor {
     
     private static MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
-    public static void makerAction(InPacket p, MapleClient c) {
+    public static void makerAction(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
                 int type = p.readInt();
@@ -308,7 +308,7 @@ public class MakerProcessor {
         return chr.getSkillLevel((chr.getJob().getId() / 1000) * 10000000 + 1007);
     }
     
-    private static short getCreateStatus(MapleClient c, MakerItemCreateEntry recipe) {
+    private static short getCreateStatus(Client c, MakerItemCreateEntry recipe) {
         if(recipe.isInvalid()) {
             return -1;
         }
@@ -351,7 +351,7 @@ public class MakerProcessor {
         return 0;
     }
 
-    private static boolean hasItems(MapleClient c, MakerItemCreateEntry recipe) {
+    private static boolean hasItems(Client c, MakerItemCreateEntry recipe) {
         for (Pair<Integer, Integer> p : recipe.getReqItems()) {
             int itemId = p.getLeft();
             if (c.getPlayer().getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId) < p.getRight()) {
@@ -361,7 +361,7 @@ public class MakerProcessor {
         return true;
     }
     
-    private static boolean addBoostedMakerItem(MapleClient c, int itemid, int stimulantid, Map<Integer, Short> reagentids) {
+    private static boolean addBoostedMakerItem(Client c, int itemid, int stimulantid, Map<Integer, Short> reagentids) {
         if(stimulantid != -1 && !ii.rollSuccessChance(90.0)) {
             return false;
         }

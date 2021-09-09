@@ -1,6 +1,6 @@
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -12,12 +12,12 @@ import tools.PacketCreator;
 public final class AcceptToSHandler extends AbstractPacketHandler {
 
     @Override
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return !c.isLoggedIn();
     }
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         if (p.available() == 0 || p.readByte() != 1 || c.acceptToS()) {
             c.disconnect(false, false);//Client dc's but just because I am cool I do this (:
             return;

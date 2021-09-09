@@ -21,21 +21,21 @@
 */
 package net.server.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.PacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
 
 public class CustomPacketHandler implements PacketHandler {
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         if (p.available() > 0 && c.getGMLevel() == 4) {//w/e
             c.sendPacket(PacketCreator.customPacket(p.readBytes((int) p.available())));
         }
     }
 
     @Override
-    public boolean validateState(MapleClient c) {
+    public boolean validateState(Client c) {
         return true;
     }
 }

@@ -22,7 +22,7 @@
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.SkillFactory;
 import tools.PacketCreator;
 
@@ -49,12 +49,12 @@ public class MapleSummon extends AbstractAnimatedMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(PacketCreator.spawnSummon(this, false));
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.removeSummon(this, true));
     }
 

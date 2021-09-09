@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleDisease;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -47,7 +47,7 @@ import java.util.List;
 public final class MonsterCarnivalHandler extends AbstractPacketHandler {
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
                 try {

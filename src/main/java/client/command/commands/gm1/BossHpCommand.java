@@ -24,7 +24,7 @@
 package client.command.commands.gm1;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.life.MapleMonster;
 
@@ -34,7 +34,7 @@ public class BossHpCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         for(MapleMonster monster : player.getMap().getAllMonsters()) {
             if(monster != null && monster.isBoss() && monster.getHp() > 0) {

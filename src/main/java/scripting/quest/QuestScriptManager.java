@@ -21,7 +21,7 @@
  */
 package scripting.quest;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleQuestStatus;
 import constants.game.GameConstants;
 import scripting.AbstractScriptManager;
@@ -41,14 +41,14 @@ import java.util.Map;
 public class QuestScriptManager extends AbstractScriptManager {
     private static final QuestScriptManager instance = new QuestScriptManager();
     
-	private final Map<MapleClient, QuestActionManager> qms = new HashMap<>();
-	private final Map<MapleClient, Invocable> scripts = new HashMap<>();
+	private final Map<Client, QuestActionManager> qms = new HashMap<>();
+	private final Map<Client, Invocable> scripts = new HashMap<>();
 
     public static QuestScriptManager getInstance() {
         return instance;
     }
 
-    private ScriptEngine getQuestScriptEngine(MapleClient c, short questid) {
+    private ScriptEngine getQuestScriptEngine(Client c, short questid) {
         ScriptEngine engine = getInvocableScriptEngine("quest/" + questid + ".js", c);
         if (engine == null && GameConstants.isMedalQuest(questid)) {
             engine = getInvocableScriptEngine("quest/medalQuest.js", c);   // start generic medal quest
@@ -57,7 +57,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         return engine;
     }
         
-	public void start(MapleClient c, short questid, int npc) {
+	public void start(Client c, short questid, int npc) {
         MapleQuest quest = MapleQuest.getInstance(questid);
         try {
             QuestActionManager qm = new QuestActionManager(c, questid, npc, true);
@@ -95,7 +95,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
-	public void start(MapleClient c, byte mode, byte type, int selection) {
+	public void start(Client c, byte mode, byte type, int selection) {
 		Invocable iv = scripts.get(c);
 		if (iv != null) {
 			try {
@@ -108,7 +108,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
 	}
         
-	public void end(MapleClient c, short questid, int npc) {
+	public void end(Client c, short questid, int npc) {
         MapleQuest quest = MapleQuest.getInstance(questid);
         if (!c.getPlayer().getQuest(quest).getStatus().equals(MapleQuestStatus.Status.STARTED) || !c.getPlayer().getMap().containsNPC(npc)) {
             dispose(c);
@@ -150,7 +150,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
     }
 
-	public void end(MapleClient c, byte mode, byte type, int selection) {
+	public void end(Client c, byte mode, byte type, int selection) {
 		Invocable iv = scripts.get(c);
 		if (iv != null) {
 			try {
@@ -163,7 +163,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         }
 	}
 
-        public void raiseOpen(MapleClient c, short questid, int npc) {
+        public void raiseOpen(Client c, short questid, int npc) {
             try {
                 QuestActionManager qm = new QuestActionManager(c, questid, npc, true);
                 if (qms.containsKey(c)) {
@@ -195,7 +195,7 @@ public class QuestScriptManager extends AbstractScriptManager {
             }
         }
 
-    public void dispose(QuestActionManager qm, MapleClient c) {
+    public void dispose(QuestActionManager qm, Client c) {
         qms.remove(c);
         scripts.remove(c);
         c.getPlayer().setNpcCooldown(System.currentTimeMillis());
@@ -203,14 +203,14 @@ public class QuestScriptManager extends AbstractScriptManager {
         c.getPlayer().flushDelayedUpdateQuests();
     }
 
-	public void dispose(MapleClient c) {
+	public void dispose(Client c) {
 		QuestActionManager qm = qms.get(c);
 		if (qm != null) {
 			dispose(qm, c);
 		}
 	}
 
-    public QuestActionManager getQM(MapleClient c) {
+    public QuestActionManager getQM(Client c) {
         return qms.get(c);
     }
 

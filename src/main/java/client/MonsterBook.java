@@ -53,7 +53,7 @@ public final class MonsterBook {
         }
     }
     
-    public void addCard(final MapleClient c, final int cardid) {
+    public void addCard(final Client c, final int cardid) {
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignCardEffect(c.getPlayer().getId()), false);
         
         Integer qty;

@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting.item;
 
-import client.MapleClient;
+import client.Client;
 import scripting.npc.NPCScriptManager;
 import server.MapleItemInformationProvider.ScriptedItem;
 
@@ -33,7 +33,7 @@ public class ItemScriptManager {
         return instance;
     }
     
-    public void runItemScript(MapleClient c, ScriptedItem scriptItem) {
+    public void runItemScript(Client c, ScriptedItem scriptItem) {
         NPCScriptManager.getInstance().start(c, scriptItem, null);
     }
 }

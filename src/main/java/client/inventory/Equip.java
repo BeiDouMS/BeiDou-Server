@@ -21,7 +21,7 @@
  */
 package client.inventory;
 
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.inventory.ItemConstants;
@@ -472,7 +472,7 @@ public class Equip extends Item {
         return new Pair<>(lvupStr, new Pair<>(gotSlot, gotVicious));
     }
     
-    private void gainLevel(MapleClient c) {
+    private void gainLevel(Client c) {
         List<Pair<StatUpgrade, Integer>> stats = new LinkedList<>();
         
         if(isElemental) {
@@ -558,7 +558,7 @@ public class Equip extends Item {
         }
     }
     
-    public synchronized void gainItemExp(MapleClient c, int gain) {  // Ronan's Equip Exp gain method
+    public synchronized void gainItemExp(Client c, int gain) {  // Ronan's Equip Exp gain method
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if(!ii.isUpgradeable(this.getItemId())) {
             return;
@@ -609,7 +609,7 @@ public class Equip extends Item {
         return itemLevel >= YamlConfig.config.server.USE_EQUIPMNT_LVLUP;
     }
     
-    public String showEquipFeatures(MapleClient c) {
+    public String showEquipFeatures(Client c) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if(!ii.isUpgradeable(this.getItemId())) return "";
         
@@ -619,7 +619,7 @@ public class Equip extends Item {
         return "'" + eqpName + "' -> LV: #e#b" + itemLevel + "#k#n    " + eqpInfo + "\r\n";
     }
 
-    private static void showLevelupMessage(String msg, MapleClient c) {
+    private static void showLevelupMessage(String msg, Client c) {
         c.getPlayer().showHint(msg, 300);
     }
     

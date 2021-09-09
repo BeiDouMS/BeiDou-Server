@@ -20,7 +20,7 @@
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -105,11 +105,11 @@ public class MapleDoorObject extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         sendSpawnData(client, true);
     }
     
-    public void sendSpawnData(MapleClient client, boolean launched) {
+    public void sendSpawnData(Client client, boolean launched) {
         Character chr = client.getPlayer();
         if (this.getFrom().getId() == chr.getMapId()) {
             if (chr.getParty() != null && (this.getOwnerId() == chr.getId() || chr.getParty().getMemberById(this.getOwnerId()) != null)) {
@@ -124,7 +124,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         Character chr = client.getPlayer();
         if (from.getId() == chr.getMapId()) {
             MapleParty party = chr.getParty();
@@ -135,7 +135,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
         }
     }
     
-    public void sendDestroyData(MapleClient client, boolean partyUpdate) {
+    public void sendDestroyData(Client client, boolean partyUpdate) {
         if (client != null && from.getId() == client.getPlayer().getMapId()) {
             client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
             client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));

@@ -22,7 +22,7 @@
 package client.processor.action;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -42,7 +42,7 @@ public class PetAutopotProcessor {
     
     private static class AutopotAction {
         
-        private MapleClient c;
+        private Client c;
         private short slot;
         private int itemId;
         
@@ -73,14 +73,14 @@ public class PetAutopotProcessor {
             return false;
         }
         
-        public AutopotAction(MapleClient c, short slot, int itemId) {
+        public AutopotAction(Client c, short slot, int itemId) {
             this.c = c;
             this.slot = slot;
             this.itemId = itemId;
         }
         
         public void run() {
-            MapleClient c = this.c;
+            Client c = this.c;
             Character chr = c.getPlayer();
             if (!chr.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
@@ -183,7 +183,7 @@ public class PetAutopotProcessor {
         }
     }
     
-    public static void runAutopotAction(MapleClient c, short slot, int itemid) {
+    public static void runAutopotAction(Client c, short slot, int itemid) {
         AutopotAction action = new AutopotAction(c, slot, itemid);
         action.run();
     }

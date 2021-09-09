@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -33,7 +33,7 @@ import tools.PacketCreator;
 public final class OwlWarpHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int ownerid = p.readInt();
         int mapid = p.readInt();
         

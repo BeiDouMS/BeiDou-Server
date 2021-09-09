@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapleMapObject;
@@ -31,7 +31,7 @@ import tools.PacketCreator;
 public final class CharInfoRequestHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
         int cid = p.readInt();
         MapleMapObject target = c.getPlayer().getMap().getMapObject(cid);

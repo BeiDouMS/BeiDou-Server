@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import config.YamlConfig;
@@ -39,7 +39,7 @@ import java.awt.*;
 public final class SpecialMoveHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
     	Character chr = c.getPlayer();
         p.readInt();
         chr.getAutobanManager().setTimestamp(4, Server.getInstance().getCurrentTimestamp(), 28);

@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.MapleMonster;
@@ -29,7 +29,7 @@ import tools.PacketCreator;
 
 public final class MonsterBombHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
         MapleMonster monster = c.getPlayer().getMap().getMonsterByOid(oid);
         if (!c.getPlayer().isAlive() || monster == null) {

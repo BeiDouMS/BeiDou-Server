@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.*;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -261,7 +261,7 @@ class PairedQuicksort {
 
 public final class InventorySortHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         p.readInt();
         chr.getAutobanManager().setTimestamp(3, Server.getInstance().getCurrentTimestamp(), 4);

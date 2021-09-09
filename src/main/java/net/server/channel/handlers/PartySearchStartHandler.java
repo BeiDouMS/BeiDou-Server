@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.world.MapleParty;
@@ -37,7 +37,7 @@ import tools.PacketCreator;
  */
 public class PartySearchStartHandler extends AbstractPacketHandler {
         @Override
-	public void handlePacket(InPacket p, MapleClient c) {
+	public void handlePacket(InPacket p, Client c) {
             int min = p.readInt();
             int max = p.readInt();
 

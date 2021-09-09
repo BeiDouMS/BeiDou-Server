@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import client.MapleClient;
+import client.Client;
 import net.packet.Packet;
 import tools.PacketCreator;
 
@@ -43,7 +43,7 @@ public class MapleMapEffect {
         return PacketCreator.startMapEffect(msg, itemId, active);
     }
 
-    public void sendStartData(MapleClient client) {
+    public void sendStartData(Client client) {
         client.sendPacket(makeStartData());
     }
 }

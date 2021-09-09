@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.packet.InPacket;
 import server.life.MapleMonster;
@@ -49,7 +49,7 @@ import java.util.List;
 public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
                 Character player = c.getPlayer();
                 MapleMap map = player.getMap();
                 

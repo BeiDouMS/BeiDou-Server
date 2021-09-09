@@ -43,7 +43,7 @@ import tools.Randomizer;
 public final class RangedAttackHandler extends AbstractDealDamageHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         
         /*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);

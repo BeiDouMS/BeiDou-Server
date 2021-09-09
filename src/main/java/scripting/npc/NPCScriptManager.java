@@ -22,7 +22,7 @@
 package scripting.npc;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.server.world.MaplePartyCharacter;
 import scripting.AbstractScriptManager;
 import server.MapleItemInformationProvider.ScriptedItem;
@@ -43,14 +43,14 @@ import java.util.Map;
 public class NPCScriptManager extends AbstractScriptManager {
     private static final NPCScriptManager instance = new NPCScriptManager();
 
-    private final Map<MapleClient, NPCConversationManager> cms = new HashMap<>();
-    private final Map<MapleClient, Invocable> scripts = new HashMap<>();
+    private final Map<Client, NPCConversationManager> cms = new HashMap<>();
+    private final Map<Client, Invocable> scripts = new HashMap<>();
 
     public static NPCScriptManager getInstance() {
         return instance;
     }
 
-    public boolean isNpcScriptAvailable(MapleClient c, String fileName) {
+    public boolean isNpcScriptAvailable(Client c, String fileName) {
         ScriptEngine engine = null;
         if (fileName != null) {
             engine = getInvocableScriptEngine("npc/" + fileName + ".js", c);
@@ -59,27 +59,27 @@ public class NPCScriptManager extends AbstractScriptManager {
         return engine != null;
     }
 
-    public boolean start(MapleClient c, int npc, Character chr) {
+    public boolean start(Client c, int npc, Character chr) {
         return start(c, npc, -1, chr);
     }
 
-    public boolean start(MapleClient c, int npc, int oid, Character chr) {
+    public boolean start(Client c, int npc, int oid, Character chr) {
         return start(c, npc, oid, null, chr);
     }
 
-    public boolean start(MapleClient c, int npc, String fileName, Character chr) {
+    public boolean start(Client c, int npc, String fileName, Character chr) {
         return start(c, npc, -1, fileName, chr);
     }
 
-    public boolean start(MapleClient c, int npc, int oid, String fileName, Character chr) {
+    public boolean start(Client c, int npc, int oid, String fileName, Character chr) {
         return start(c, npc, oid, fileName, chr, false, "cm");
     }
 
-    public boolean start(MapleClient c, ScriptedItem scriptItem, Character chr) {
+    public boolean start(Client c, ScriptedItem scriptItem, Character chr) {
         return start(c, scriptItem.getNpc(), -1, scriptItem.getScript(), chr, true, "im");
     }
 
-    public void start(String filename, MapleClient c, int npc, List<MaplePartyCharacter> chrs) {
+    public void start(String filename, Client c, int npc, List<MaplePartyCharacter> chrs) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, chrs, true);
             cm.dispose();
@@ -110,7 +110,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    private boolean start(MapleClient c, int npc, int oid, String fileName, Character chr, boolean itemScript, String engineName) {
+    private boolean start(Client c, int npc, int oid, String fileName, Character chr, boolean itemScript, String engineName) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, oid, fileName, itemScript);
             if (cms.containsKey(c)) {
@@ -162,7 +162,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    public void action(MapleClient c, byte mode, byte type, int selection) {
+    public void action(Client c, byte mode, byte type, int selection) {
         Invocable iv = scripts.get(c);
         if (iv != null) {
             try {
@@ -178,7 +178,7 @@ public class NPCScriptManager extends AbstractScriptManager {
     }
 
     public void dispose(NPCConversationManager cm) {
-        MapleClient c = cm.getClient();
+        Client c = cm.getClient();
         c.getPlayer().setCS(false);
         c.getPlayer().setNpcCooldown(System.currentTimeMillis());
         cms.remove(c);
@@ -194,14 +194,14 @@ public class NPCScriptManager extends AbstractScriptManager {
         c.getPlayer().flushDelayedUpdateQuests();
     }
 
-    public void dispose(MapleClient c) {
+    public void dispose(Client c) {
         NPCConversationManager cm = cms.get(c);
         if (cm != null) {
             dispose(cm);
         }
     }
 
-    public NPCConversationManager getCM(MapleClient c) {
+    public NPCConversationManager getCM(Client c) {
         return cms.get(c);
     }
 

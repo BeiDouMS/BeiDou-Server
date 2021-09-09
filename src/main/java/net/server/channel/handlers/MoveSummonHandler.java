@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.packet.InPacket;
 import server.maps.MapleSummon;
 import tools.PacketCreator;
@@ -33,7 +33,7 @@ import java.util.Collection;
 
 public final class MoveSummonHandler extends AbstractMovementPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
         Point startPos = new Point(p.readShort(), p.readShort());
         Character player = c.getPlayer();

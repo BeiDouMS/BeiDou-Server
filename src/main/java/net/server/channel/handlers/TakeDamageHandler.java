@@ -52,7 +52,7 @@ import java.util.List;
 public final class TakeDamageHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         List<Character> banishPlayers = new ArrayList<>();
         
         Character chr = c.getPlayer();

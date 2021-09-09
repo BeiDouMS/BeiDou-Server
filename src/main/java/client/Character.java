@@ -152,7 +152,7 @@ public class Character extends AbstractCharacterObject {
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
     private MapleHiredMerchant hiredMerchant = null;
-    private MapleClient client;
+    private Client client;
     private MapleGuildCharacter mgc = null;
     private MaplePartyCharacter mpc = null;
     private Inventory[] inventory;
@@ -356,7 +356,7 @@ public class Character extends AbstractCharacterObject {
         return getJobStyle((byte) ((this.getStr() > this.getDex()) ? 0x80 : 0x40));
     }
 
-    public static Character getDefault(MapleClient c) {
+    public static Character getDefault(Client c) {
         Character ret = new Character();
         ret.client = c;
         ret.setGMLevel(0);
@@ -793,11 +793,11 @@ public class Character extends AbstractCharacterObject {
         allowExpGain = !allowExpGain;
     }
 
-    public void setClient(MapleClient c) {
+    public void setClient(Client c) {
         this.client = c;
     }
 
-    public void newClient(MapleClient c) {
+    public void newClient(Client c) {
         this.loggedIn = true;
         c.setAccountName(this.client.getAccountName());//No null's for accountName
         this.setClient(c);
@@ -1019,7 +1019,7 @@ public class Character extends AbstractCharacterObject {
 
     private void broadcastChangeJob() {
         for (Character chr : map.getAllPlayers()) {
-            MapleClient chrC = chr.getClient();
+            Client chrC = chr.getClient();
 
             if (chrC != null) {     // propagate new job 3rd-person effects (FJ, Aran 1st strike, etc)
                 this.sendDestroyData(chrC);
@@ -2108,14 +2108,14 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void nextPendingRequest(MapleClient c) {
+    private void nextPendingRequest(Client c) {
         CharacterNameAndId pendingBuddyRequest = c.getPlayer().getBuddylist().pollPendingRequest();
         if (pendingBuddyRequest != null) {
             c.sendPacket(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), c.getPlayer().getId(), pendingBuddyRequest.getName()));
         }
     }
 
-    private void notifyRemoteChannel(MapleClient c, int remoteChannel, int otherCid, BuddyList.BuddyOperation operation) {
+    private void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyList.BuddyOperation operation) {
         Character player = c.getPlayer();
         if (remoteChannel != -1) {
             c.getWorldServer().buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation);
@@ -4614,7 +4614,7 @@ public class Character extends AbstractCharacterObject {
         return this.chalktext;
     }
 
-    public MapleClient getClient() {
+    public Client getClient() {
         return client;
     }
 
@@ -4825,7 +4825,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void exportExcludedItems(MapleClient c) {
+    public void exportExcludedItems(Client c) {
         Map<Integer, Set<Integer>> petExcluded = this.getExcluded();
         for (Map.Entry<Integer, Set<Integer>> pe : petExcluded.entrySet()) {
             byte petIndex = this.getPetIndex(pe.getKey());
@@ -6951,7 +6951,7 @@ public class Character extends AbstractCharacterObject {
         updateRemainingSp(remainingSp, GameConstants.getSkillBook(job.getId()));
     }
 
-    public static Character loadCharFromDB(final int charid, MapleClient client, boolean channelserver) throws SQLException {
+    public static Character loadCharFromDB(final int charid, Client client, boolean channelserver) throws SQLException {
         Character ret = new Character();
         ret.client = client;
         ret.id = charid;
@@ -7182,7 +7182,7 @@ public class Character extends AbstractCharacterObject {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        MapleClient retClient = ret.getClient();
+                        Client retClient = ret.getClient();
 
                         retClient.setAccountName(rs.getString("name"));
                         retClient.setCharacterSlots(rs.getByte("characterslots"));
@@ -9367,7 +9367,7 @@ public class Character extends AbstractCharacterObject {
         return (mesoGain);
     }
 
-    private int standaloneSell(MapleClient c, MapleItemInformationProvider ii, InventoryType type, short slot, short quantity) {
+    private int standaloneSell(Client c, MapleItemInformationProvider ii, InventoryType type, short slot, short quantity) {
         if (quantity == 0xFFFF || quantity == 0) {
             quantity = 1;
         }
@@ -9534,7 +9534,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void standaloneMerge(Map<StatUpgrade, Float> statups, MapleClient c, InventoryType type, short slot, Item item) {
+    private void standaloneMerge(Map<StatUpgrade, Float> statups, Client c, InventoryType type, short slot, Item item) {
         short quantity;
         if (item == null || (quantity = item.getQuantity()) < 1 || ii.isCash(item.getItemId()) || !ii.isUpgradeable(item.getItemId()) || hasMergeFlag(item)) {
             return;
@@ -9885,7 +9885,7 @@ public class Character extends AbstractCharacterObject {
 
     public void announceUpdateQuest(DelayedQuestUpdate questUpdateType, Object... params) {
         Pair<DelayedQuestUpdate, Object[]> p = new Pair<>(questUpdateType, params);
-        MapleClient c = this.getClient();
+        Client c = this.getClient();
         if (c.getQM() != null || c.getCM() != null) {
             synchronized (npcUpdateQuests) {
                 npcUpdateQuests.add(p);
@@ -10070,12 +10070,12 @@ public class Character extends AbstractCharacterObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.removePlayerFromMap(this.getObjectId()));
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         if (!this.isHidden() || client.getPlayer().gmLevel() > 1) {
             client.sendPacket(PacketCreator.spawnPlayerMapObject(client, this, false));
 

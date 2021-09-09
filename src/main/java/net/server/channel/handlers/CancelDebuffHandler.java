@@ -21,14 +21,14 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 public final class CancelDebuffHandler extends AbstractPacketHandler {//TIP: BAD STUFF LOL!
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         /*List<MapleDisease> diseases = c.getPlayer().getDiseases();
          List<MapleDisease> diseases_ = new ArrayList<MapleDisease>();
          for (MapleDisease disease : diseases) {

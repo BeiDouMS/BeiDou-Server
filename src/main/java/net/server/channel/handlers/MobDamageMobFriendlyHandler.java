@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
@@ -37,7 +37,7 @@ import tools.Randomizer;
 
 public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         @Override
-	public final void handlePacket(InPacket p, MapleClient c) {
+	public final void handlePacket(InPacket p, Client c) {
 		int attacker = p.readInt();
 		p.readInt();
 		int damaged = p.readInt();

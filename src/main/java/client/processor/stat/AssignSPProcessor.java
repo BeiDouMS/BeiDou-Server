@@ -24,7 +24,7 @@
 package client.processor.stat;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.Skill;
 import client.SkillFactory;
 import client.autoban.AutobanFactory;
@@ -39,7 +39,7 @@ import tools.PacketCreator;
  */
 public class AssignSPProcessor {
     
-    public static boolean canSPAssign(MapleClient c, int skillid) {
+    public static boolean canSPAssign(Client c, int skillid) {
         if (skillid == Aran.HIDDEN_FULL_DOUBLE || skillid == Aran.HIDDEN_FULL_TRIPLE || skillid == Aran.HIDDEN_OVER_DOUBLE || skillid == Aran.HIDDEN_OVER_TRIPLE) {
             c.sendPacket(PacketCreator.enableActions());
             return false;
@@ -57,7 +57,7 @@ public class AssignSPProcessor {
         return true;
     }
     
-    public static void SPAssignAction(MapleClient c, int skillid) {
+    public static void SPAssignAction(Client c, int skillid) {
         c.lockClient();
         try {
             if (!canSPAssign(c, skillid)) {

@@ -22,7 +22,7 @@
 package net.server;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -98,7 +98,7 @@ public class PlayerStorage {
 	}
         
         for(Character mc : chrList) {
-            MapleClient client = mc.getClient();
+            Client client = mc.getClient();
             if(client != null) {
                 client.forceDisconnect();
             }

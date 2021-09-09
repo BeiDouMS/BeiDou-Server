@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.packet.InPacket;
 import server.movement.LifeMovementFragment;
 import tools.PacketCreator;
@@ -32,7 +32,7 @@ import java.util.List;
 
 public final class MovePetHandler extends AbstractMovementPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int petId = p.readInt();
         p.readLong();
 //        Point startPos = StreamUtil.readShortPoint(slea);

@@ -1,7 +1,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.minigame.MapleRockPaperScissor;
@@ -15,7 +15,7 @@ import tools.PacketCreator;
 public final class RPSActionHandler extends AbstractPacketHandler {
 
 	@Override
-	public final void handlePacket(InPacket p, MapleClient c){
+	public final void handlePacket(InPacket p, Client c){
                 Character chr = c.getPlayer();
                 MapleRockPaperScissor rps = chr.getRPS();
                 

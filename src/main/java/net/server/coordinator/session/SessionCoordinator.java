@@ -20,7 +20,7 @@
 package net.server.coordinator.session;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.server.Server;
 import net.server.coordinator.login.LoginStorage;
@@ -60,9 +60,9 @@ public class SessionCoordinator {
 
     private final SessionInitialization sessionInit = new SessionInitialization();
     private final LoginStorage loginStorage = new LoginStorage();
-    private final Map<Integer, MapleClient> onlineClients = new HashMap<>(); // Key: account id
+    private final Map<Integer, Client> onlineClients = new HashMap<>(); // Key: account id
     private final Set<Hwid> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
-    private final Map<String, MapleClient> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
+    private final Map<String, Client> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
     private final HostHwidCache hostHwidCache = new HostHwidCache();
     
     private SessionCoordinator() {
@@ -93,7 +93,7 @@ public class SessionCoordinator {
         return false;
     }
     
-    public static String getSessionRemoteHost(MapleClient client) {
+    public static String getSessionRemoteHost(Client client) {
         Hwid hwid = client.getHwid();
         
         if (hwid != null) {
@@ -106,7 +106,7 @@ public class SessionCoordinator {
     /**
      * Overwrites any existing online client for the account id, making sure to disconnect it as well.
      */
-    public void updateOnlineClient(MapleClient client) {
+    public void updateOnlineClient(Client client) {
         if (client != null) {
             int accountId = client.getAccID();
             disconnectClientIfOnline(accountId);
@@ -115,13 +115,13 @@ public class SessionCoordinator {
     }
 
     private void disconnectClientIfOnline(int accountId) {
-        MapleClient ingameClient = onlineClients.get(accountId);
+        Client ingameClient = onlineClients.get(accountId);
         if (ingameClient != null) {     // thanks MedicOP for finding out a loss of loggedin account uniqueness when using the CMS "Unstuck" feature
             ingameClient.forceDisconnect();
         }
     }
 
-    public boolean canStartLoginSession(MapleClient client) {
+    public boolean canStartLoginSession(Client client) {
         if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
             return true;
         }
@@ -152,7 +152,7 @@ public class SessionCoordinator {
         }
     }
 
-    public void closeLoginSession(MapleClient client) {
+    public void closeLoginSession(Client client) {
         clearLoginRemoteHost(client);
 
         Hwid nibbleHwid = client.getHwid();
@@ -161,7 +161,7 @@ public class SessionCoordinator {
             onlineRemoteHwids.remove(nibbleHwid);
 
             if (client != null) {
-                MapleClient loggedClient = onlineClients.get(client.getAccID());
+                Client loggedClient = onlineClients.get(client.getAccID());
 
                 // do not remove an online game session here, only login session
                 if (loggedClient != null && loggedClient.getSessionId() == client.getSessionId()) {
@@ -171,13 +171,13 @@ public class SessionCoordinator {
         }
     }
 
-    private void clearLoginRemoteHost(MapleClient client) {
+    private void clearLoginRemoteHost(Client client) {
         String remoteHost = getSessionRemoteHost(client);
         loginRemoteHosts.remove(client.getRemoteAddress());
         loginRemoteHosts.remove(remoteHost);
     }
 
-    public AntiMulticlientResult attemptLoginSession(MapleClient client, Hwid hwid, int accountId, boolean routineCheck) {
+    public AntiMulticlientResult attemptLoginSession(Client client, Hwid hwid, int accountId, boolean routineCheck) {
         if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
             client.setHwid(hwid);
             return AntiMulticlientResult.SUCCESS;
@@ -209,7 +209,7 @@ public class SessionCoordinator {
         }
     }
 
-    public AntiMulticlientResult attemptGameSession(MapleClient client, int accountId, Hwid hwid) {
+    public AntiMulticlientResult attemptGameSession(Client client, int accountId, Hwid hwid) {
         final String remoteHost = getSessionRemoteHost(client);
         if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
             hostHwidCache.addEntry(remoteHost, hwid);
@@ -268,13 +268,13 @@ public class SessionCoordinator {
         }
     }
     
-    private static MapleClient fetchInTransitionSessionClient(MapleClient client) {
+    private static Client fetchInTransitionSessionClient(Client client) {
         Hwid hwid = SessionCoordinator.getInstance().getGameSessionHwid(client);
         if (hwid == null) {   // maybe this session was currently in-transition?
             return null;
         }
 
-        MapleClient fakeClient = MapleClient.createMock();
+        Client fakeClient = Client.createMock();
         fakeClient.setHwid(hwid);
         Integer chrId = Server.getInstance().freeCharacteridInTransition(client);
         if (chrId != null) {
@@ -288,7 +288,7 @@ public class SessionCoordinator {
         return fakeClient;
     }
     
-    public void closeSession(MapleClient client, Boolean immediately) {
+    public void closeSession(Client client, Boolean immediately) {
         if (client == null) {
             client = fetchInTransitionSessionClient(client);
         }
@@ -303,7 +303,7 @@ public class SessionCoordinator {
         if (isGameSession) {
             onlineClients.remove(client.getAccID());
         } else {
-            MapleClient loggedClient = onlineClients.get(client.getAccID());
+            Client loggedClient = onlineClients.get(client.getAccID());
 
             // do not remove an online game session here, only login session
             if (loggedClient != null && loggedClient.getSessionId() == client.getSessionId()) {
@@ -316,13 +316,13 @@ public class SessionCoordinator {
         }
     }
 
-    public Hwid pickLoginSessionHwid(MapleClient client) {
+    public Hwid pickLoginSessionHwid(Client client) {
         String remoteHost = client.getRemoteAddress();
         // thanks BHB, resinate for noticing players from same network not being able to login
         return hostHwidCache.removeEntryAndGetItsHwid(remoteHost);
     }
     
-    public Hwid getGameSessionHwid(MapleClient client) {
+    public Hwid getGameSessionHwid(Client client) {
         String remoteHost = getSessionRemoteHost(client);
         return hostHwidCache.getEntryHwid(remoteHost);
     }
@@ -337,7 +337,7 @@ public class SessionCoordinator {
     
     public void printSessionTrace() {
         if (!onlineClients.isEmpty()) {
-            List<Entry<Integer, MapleClient>> elist = new ArrayList<>(onlineClients.entrySet());
+            List<Entry<Integer, Client>> elist = new ArrayList<>(onlineClients.entrySet());
             String commaSeparatedClients = elist.stream()
                     .map(Entry::getKey)
                     .sorted(Integer::compareTo)
@@ -358,25 +358,25 @@ public class SessionCoordinator {
         }
         
         if (!loginRemoteHosts.isEmpty()) {
-            List<Entry<String, MapleClient>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
+            List<Entry<String, Client>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             elist.sort(Entry.comparingByKey());
             
             System.out.println("Current login sessions: ");
-            for (Entry<String, MapleClient> e : elist) {
+            for (Entry<String, Client> e : elist) {
                 System.out.println("  " + e.getKey() + ", client: " + e.getValue());
             }
         }
     }
     
-    public void printSessionTrace(MapleClient c) {
+    public void printSessionTrace(Client c) {
         String str = "Opened server sessions:\r\n\r\n";
         
         if (!onlineClients.isEmpty()) {
-            List<Entry<Integer, MapleClient>> elist = new ArrayList<>(onlineClients.entrySet());
+            List<Entry<Integer, Client>> elist = new ArrayList<>(onlineClients.entrySet());
             elist.sort(Entry.comparingByKey());
             
             str += ("Current online clients:\r\n");
-            for (Entry<Integer, MapleClient> e : elist) {
+            for (Entry<Integer, Client> e : elist) {
                 str += ("  " + e.getKey() + "\r\n");
             }
         }
@@ -392,12 +392,12 @@ public class SessionCoordinator {
         }
         
         if (!loginRemoteHosts.isEmpty()) {
-            List<Entry<String, MapleClient>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
+            List<Entry<String, Client>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             
             elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
             
             str += ("Current login sessions:\r\n");
-            for (Entry<String, MapleClient> e : elist) {
+            for (Entry<String, Client> e : elist) {
                 str += ("  " + e.getKey() + ", IP: " + e.getValue().getRemoteAddress() + "\r\n");
             }
         }

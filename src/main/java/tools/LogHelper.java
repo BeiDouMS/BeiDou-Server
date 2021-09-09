@@ -1,7 +1,7 @@
 package tools;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Item;
 import net.server.Server;
 import server.MapleItemInformationProvider;
@@ -71,7 +71,7 @@ public class LogHelper {
 		FilePrinter.print(FilePrinter.LOG_GACHAPON, log);
 	}
 
-	public static void logChat(MapleClient player, String chatType, String text){
+	public static void logChat(Client player, String chatType, String text){
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 		FilePrinter.print(FilePrinter.LOG_CHAT, "[" + sdf.format(Calendar.getInstance().getTime()) + "] (" + chatType + ") " +player.getPlayer().getName() + ": " + text);
 	}

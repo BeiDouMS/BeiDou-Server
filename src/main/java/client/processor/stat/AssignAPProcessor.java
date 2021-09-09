@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class AssignAPProcessor {
     
-    public static void APAutoAssignAction(InPacket inPacket, MapleClient c) {
+    public static void APAutoAssignAction(InPacket inPacket, Client c) {
         Character chr = c.getPlayer();
         if (chr.getRemainingAp() < 1) return;
         
@@ -418,7 +418,7 @@ public class AssignAPProcessor {
         return MapleStat.STR;
     }
     
-    public static boolean APResetAction(MapleClient c, int APFrom, int APTo) {
+    public static boolean APResetAction(Client c, int APFrom, int APTo) {
         c.lockClient();
         try {
             Character player = c.getPlayer();
@@ -558,7 +558,7 @@ public class AssignAPProcessor {
         }
     }
     
-    public static void APAssignAction(MapleClient c, int num) {
+    public static void APAssignAction(Client c, int num) {
         c.lockClient();
         try {
             addStat(c.getPlayer(), num, false);

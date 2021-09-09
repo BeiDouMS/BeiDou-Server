@@ -24,7 +24,7 @@
 package client.command.commands.gm3;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
 
@@ -34,7 +34,7 @@ public class FlyCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) { // fly option will become available for any character of that account
+    public void execute(Client c, String[] params) { // fly option will become available for any character of that account
         Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !fly <on/off>");

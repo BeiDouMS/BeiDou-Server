@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
@@ -54,7 +54,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character mc = c.getPlayer();
         byte type = p.readByte();
         int allianceId = -1;

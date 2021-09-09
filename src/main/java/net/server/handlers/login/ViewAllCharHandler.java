@@ -22,7 +22,7 @@
 package net.server.handlers.login;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public final class ViewAllCharHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         try {
             if(!c.canRequestCharlist()) {   // client breaks if the charlist request pops too soon
                 c.sendPacket(PacketCreator.showAllCharacter(0, 0));

@@ -19,7 +19,7 @@
 */
 package client.creator.novice;
 
-import client.MapleClient;
+import client.Client;
 import client.MapleJob;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
@@ -41,7 +41,7 @@ public class NoblesseCreator extends CharacterFactory {
                 recipe.addStartingItem(itemid, quantity, itemType);
         }
         
-        public static int createCharacter(MapleClient c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
+        public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
                 int status = createNewCharacter(c, name, face, hair, skin, gender, createRecipe(MapleJob.NOBLESSE, 1, 130030000, top, bottom, shoes, weapon));
                 return status;
         }

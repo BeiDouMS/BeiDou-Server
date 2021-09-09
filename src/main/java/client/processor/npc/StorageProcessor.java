@@ -22,7 +22,7 @@
 package client.processor.npc;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -44,7 +44,7 @@ import tools.PacketCreator;
  */
 public class StorageProcessor {
     
-        public static void storageAction(InPacket p, MapleClient c) {
+        public static void storageAction(InPacket p, Client c) {
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
                 Character chr = c.getPlayer();
                 MapleStorage storage = chr.getStorage();

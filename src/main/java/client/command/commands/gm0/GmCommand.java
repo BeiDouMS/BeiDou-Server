@@ -24,7 +24,7 @@
 package client.command.commands.gm0;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
 import tools.FilePrinter;
@@ -37,7 +37,7 @@ public class GmCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         String[] tips = {
                 "Please only use @gm in emergencies or to report somebody.",
                 "To report a bug or make a suggestion, use the forum.",

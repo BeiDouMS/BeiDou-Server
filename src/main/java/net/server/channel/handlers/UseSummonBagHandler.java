@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
@@ -39,7 +39,7 @@ import tools.Randomizer;
 public final class UseSummonBagHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         //[4A 00][6C 4C F2 02][02 00][63 0B 20 00]
         if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());

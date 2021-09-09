@@ -18,7 +18,7 @@
  */
 package server;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
@@ -224,7 +224,7 @@ public class MapleStorage {
         }
     }
     
-    public void sendStorage(MapleClient c, int npcId) {
+    public void sendStorage(Client c, int npcId) {
         if (c.getPlayer().getLevel() < 15){
             c.getPlayer().dropMessage(1, "You may only use the storage once you have reached level 15.");
             c.sendPacket(PacketCreator.enableActions());
@@ -254,7 +254,7 @@ public class MapleStorage {
         }
     }
 
-    public void sendStored(MapleClient c, InventoryType type) {
+    public void sendStored(Client c, InventoryType type) {
         lock.lock();
         try {
             c.sendPacket(PacketCreator.storeStorage(slots, type, typeItems.get(type)));
@@ -263,7 +263,7 @@ public class MapleStorage {
         }
     }
 
-    public void sendTakenOut(MapleClient c, InventoryType type) {
+    public void sendTakenOut(Client c, InventoryType type) {
         lock.lock();
         try {
             c.sendPacket(PacketCreator.takeOutStorage(slots, type, typeItems.get(type)));
@@ -272,7 +272,7 @@ public class MapleStorage {
         }
     }
     
-    public void arrangeItems(MapleClient c) {
+    public void arrangeItems(Client c) {
         lock.lock();
         try {
             MapleStorageInventory msi = new MapleStorageInventory(c, items);
@@ -300,7 +300,7 @@ public class MapleStorage {
         this.meso = meso;
     }
 
-    public void sendMeso(MapleClient c) {
+    public void sendMeso(Client c) {
         c.sendPacket(PacketCreator.mesoStorage(slots, meso));
     }
     

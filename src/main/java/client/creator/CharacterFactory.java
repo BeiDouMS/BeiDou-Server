@@ -20,7 +20,7 @@
 package client.creator;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleSkinColor;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -37,7 +37,7 @@ import tools.PacketCreator;
  */
 public abstract class CharacterFactory {
         
-        protected synchronized static int createNewCharacter(MapleClient c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
+        protected synchronized static int createNewCharacter(Client c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
                 if (YamlConfig.config.server.COLLECTIVE_CHARSLOT ? c.getAvailableCharacterSlots() <= 0 : c.getAvailableCharacterWorldSlots() <= 0) {
                         return -3;
                 }

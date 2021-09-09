@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import client.processor.action.BuybackProcessor;
@@ -46,7 +46,7 @@ import java.util.List;
 
 public final class EnterMTSHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         
         if(!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {

@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import client.MapleClient;
+import client.Client;
 
 import java.awt.*;
 
@@ -41,7 +41,7 @@ public interface MaplePortal {
     void setPortalStatus(boolean newStatus);
     boolean getPortalStatus();
     int getTargetMapId();
-    void enterPortal(MapleClient c);
+    void enterPortal(Client c);
     void setPortalState(boolean state);
     boolean getPortalState();
 }

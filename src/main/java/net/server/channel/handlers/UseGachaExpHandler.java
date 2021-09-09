@@ -22,7 +22,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -37,7 +37,7 @@ import tools.PacketCreator;
 public class UseGachaExpHandler extends AbstractPacketHandler {
     
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         
         if (c.tryacquireClient()) {
             try {

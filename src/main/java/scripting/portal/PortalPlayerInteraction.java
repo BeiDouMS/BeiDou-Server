@@ -21,7 +21,7 @@
  */
 package scripting.portal;
 
-import client.MapleClient;
+import client.Client;
 import scripting.AbstractPlayerInteraction;
 import scripting.map.MapScriptManager;
 import server.maps.MaplePortal;
@@ -36,7 +36,7 @@ import java.sql.SQLException;
 public class PortalPlayerInteraction extends AbstractPlayerInteraction {
     private final MaplePortal portal;
 
-    public PortalPlayerInteraction(MapleClient c, MaplePortal portal) {
+    public PortalPlayerInteraction(Client c, MaplePortal portal) {
         super(c);
         this.portal = portal;
     }

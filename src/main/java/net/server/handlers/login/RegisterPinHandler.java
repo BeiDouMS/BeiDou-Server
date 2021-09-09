@@ -21,7 +21,7 @@
 */
 package net.server.handlers.login;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.session.SessionCoordinator;
@@ -32,11 +32,11 @@ import tools.PacketCreator;
  */
 public final class RegisterPinHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte c2 = p.readByte();
         if (c2 == 0) {
             SessionCoordinator.getInstance().closeSession(c, null);
-            c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+            c.updateLoginState(Client.LOGIN_NOTLOGGEDIN);
         } else {
             String pin = p.readString();
             if (pin != null) {
@@ -44,7 +44,7 @@ public final class RegisterPinHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.pinRegistered());
                 
                 SessionCoordinator.getInstance().closeSession(c, null);
-                c.updateLoginState(MapleClient.LOGIN_NOTLOGGEDIN);
+                c.updateLoginState(Client.LOGIN_NOTLOGGEDIN);
             }
         }
     }

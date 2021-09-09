@@ -24,7 +24,7 @@
 package client.command.commands.gm6;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import net.server.Server;
 import net.server.world.World;
@@ -35,7 +35,7 @@ public class DCAllCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         for (World world : Server.getInstance().getWorlds()) {
             for (Character chr : world.getPlayerStorage().getAllCharacters()) {

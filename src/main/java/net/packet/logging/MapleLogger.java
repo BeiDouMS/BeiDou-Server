@@ -21,7 +21,7 @@
 package net.packet.logging;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.opcodes.RecvOpcode;
 import tools.FilePrinter;
 import tools.HexTool;
@@ -40,7 +40,7 @@ public class MapleLogger {
     public static final Set<Integer> monitored = new HashSet<>();
     public static final Set<Integer> ignored = new HashSet<>();
 
-    public static void logRecv(MapleClient c, short packetId, byte[] packetContent) {
+    public static void logRecv(Client c, short packetId, byte[] packetContent) {
         Character chr = c.getPlayer();
         if (chr == null) {
             return;

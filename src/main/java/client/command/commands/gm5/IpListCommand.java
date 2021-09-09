@@ -20,7 +20,7 @@
 package client.command.commands.gm5;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import constants.game.GameConstants;
 import net.server.Server;
@@ -40,7 +40,7 @@ public class IpListCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         String str = "Player-IP relation:";
         
         for (World w : Server.getInstance().getWorlds()) {

@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.processor.action.PetAutopotProcessor;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -32,7 +32,7 @@ import server.MapleStatEffect;
 public final class PetAutoPotHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         p.readByte();
         p.readLong();
         p.readInt();

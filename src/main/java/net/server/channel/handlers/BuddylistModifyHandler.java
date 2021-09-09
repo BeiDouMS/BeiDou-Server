@@ -52,7 +52,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
         }
     }
 
-    private void nextPendingRequest(MapleClient c) {
+    private void nextPendingRequest(Client c) {
         CharacterNameAndId pendingBuddyRequest = c.getPlayer().getBuddylist().pollPendingRequest();
         if (pendingBuddyRequest != null) {
             c.sendPacket(PacketCreator.requestBuddylistAdd(pendingBuddyRequest.getId(), c.getPlayer().getId(), pendingBuddyRequest.getName()));
@@ -77,7 +77,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         int mode = p.readByte();
         Character player = c.getPlayer();
         BuddyList buddylist = player.getBuddylist();
@@ -202,7 +202,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
         }
     }
 
-    private void notifyRemoteChannel(MapleClient c, int remoteChannel, int otherCid, BuddyOperation operation) {
+    private void notifyRemoteChannel(Client c, int remoteChannel, int otherCid, BuddyOperation operation) {
         Character player = c.getPlayer();
         if (remoteChannel != -1) {
             c.getWorldServer().buddyChanged(otherCid, player.getId(), player.getName(), c.getChannel(), operation);

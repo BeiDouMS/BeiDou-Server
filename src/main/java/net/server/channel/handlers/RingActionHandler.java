@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleRing;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
@@ -55,7 +55,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         return useItemId == 2240000 ? 4031357 : (useItemId == 2240001 ? 4031359 : (useItemId == 2240002 ? 4031361 : (useItemId == 2240003 ? 4031363 : (1112300 + (useItemId - 2240004)))));
     }
     
-    public static void sendEngageProposal(final MapleClient c, final String name, final int itemid) {
+    public static void sendEngageProposal(final Client c, final String name, final int itemid) {
         final int newBoxId = getBoxId(itemid);
         final Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
         final Character source = c.getPlayer();
@@ -291,7 +291,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
     }
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte mode = p.readByte();
         String name;
         byte slot;

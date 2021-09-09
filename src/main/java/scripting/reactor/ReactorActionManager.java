@@ -22,7 +22,7 @@
 package scripting.reactor;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -57,7 +57,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     private final Invocable iv;
     private ScheduledFuture<?> sprayTask = null;
 
-    public ReactorActionManager(MapleClient c, MapleReactor reactor, Invocable iv) {
+    public ReactorActionManager(Client c, MapleReactor reactor, Invocable iv) {
         super(c);
         this.reactor = reactor;
         this.iv = iv;

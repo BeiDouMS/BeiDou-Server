@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanFactory;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -44,7 +44,7 @@ public final class WhisperHandler extends AbstractPacketHandler {
     public static final byte RT_DIFFERENT_CHANNEL = 0x03;
 
     @Override
-    public void handlePacket(InPacket p, MapleClient c) {
+    public void handlePacket(InPacket p, Client c) {
         byte request = p.readByte();
         String name = p.readString();
         Character target = c.getWorldServer().getPlayerStorage().getCharacterByName(name);

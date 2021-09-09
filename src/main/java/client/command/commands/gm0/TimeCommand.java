@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 
 import java.text.DateFormat;
@@ -37,7 +37,7 @@ public class TimeCommand extends Command {
     }
     
     @Override
-    public void execute(MapleClient client, String[] params) {
+    public void execute(Client client, String[] params) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getDefault());
         client.getPlayer().yellowMessage("Cosmic Server Time: " + dateFormat.format(new Date()));

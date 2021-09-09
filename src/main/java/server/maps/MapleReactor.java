@@ -21,7 +21,7 @@
  */
 package server.maps;
 
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
@@ -166,7 +166,7 @@ public class MapleReactor extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(makeDestroyData());
     }
 
@@ -175,7 +175,7 @@ public class MapleReactor extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         if (this.isAlive()) {
             client.sendPacket(makeSpawnData());
         }
@@ -238,15 +238,15 @@ public class MapleReactor extends AbstractMapleMapObject {
         }
     }
 
-    public void delayedHitReactor(final MapleClient c, long delay) {
+    public void delayedHitReactor(final Client c, long delay) {
         TimerManager.getInstance().schedule(() -> hitReactor(c), delay);
     }
 
-    public void hitReactor(MapleClient c) {
+    public void hitReactor(Client c) {
         hitReactor(false, 0, (short) 0, 0, c);
     }
 
-    public void hitReactor(boolean wHit, int charPos, short stance, int skillid, MapleClient c) {
+    public void hitReactor(boolean wHit, int charPos, short stance, int skillid, Client c) {
         try {
             if (!this.isActive()) {
                 return;

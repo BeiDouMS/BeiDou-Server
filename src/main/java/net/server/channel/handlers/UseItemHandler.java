@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleDisease;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -40,7 +40,7 @@ import tools.PacketCreator;
  */
 public final class UseItemHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         
         if (!chr.isAlive()) {
@@ -106,7 +106,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
         }
     }
 
-    private void remove(MapleClient c, short slot) {
+    private void remove(Client c, short slot) {
         InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         c.sendPacket(PacketCreator.enableActions());
     }

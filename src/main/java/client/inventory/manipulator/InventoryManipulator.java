@@ -23,7 +23,7 @@ package client.inventory.manipulator;
 
 import client.BuffStat;
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.inventory.*;
 import client.newyear.NewYearCardRecord;
 import config.YamlConfig;
@@ -45,23 +45,23 @@ import java.util.List;
  */
 public class InventoryManipulator {
 
-    public static boolean addById(MapleClient c, int itemId, short quantity) {
+    public static boolean addById(Client c, int itemId, short quantity) {
         return addById(c, itemId, quantity, null, -1, -1);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, long expiration) {
+    public static boolean addById(Client c, int itemId, short quantity, long expiration) {
         return addById(c, itemId, quantity, null, -1, (byte) 0, expiration);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, int petid) {
+    public static boolean addById(Client c, int itemId, short quantity, String owner, int petid) {
         return addById(c, itemId, quantity, owner, petid, -1);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, int petid, long expiration) {
+    public static boolean addById(Client c, int itemId, short quantity, String owner, int petid, long expiration) {
         return addById(c, itemId, quantity, owner, petid, (byte) 0, expiration);
     }
 
-    public static boolean addById(MapleClient c, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
+    public static boolean addById(Client c, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
         Character chr = c.getPlayer();
         InventoryType type = ItemConstants.getInventoryType(itemId);
 
@@ -74,7 +74,7 @@ public class InventoryManipulator {
         }
     }
 
-    private static boolean addByIdInternal(MapleClient c, Character chr, InventoryType type, Inventory inv, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
+    private static boolean addByIdInternal(Client c, Character chr, InventoryType type, Inventory inv, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (!type.equals(InventoryType.EQUIP)) {
             short slotMax = ii.getSlotMax(c, itemId);
@@ -162,15 +162,15 @@ public class InventoryManipulator {
         return true;
     }
 
-    public static boolean addFromDrop(MapleClient c, Item item) {
+    public static boolean addFromDrop(Client c, Item item) {
         return addFromDrop(c, item, true);
     }
 
-    public static boolean addFromDrop(MapleClient c, Item item, boolean show) {
+    public static boolean addFromDrop(Client c, Item item, boolean show) {
         return addFromDrop(c, item, show, item.getPetId());
     }
 
-    public static boolean addFromDrop(MapleClient c, Item item, boolean show, int petId) {
+    public static boolean addFromDrop(Client c, Item item, boolean show, int petId) {
         Character chr = c.getPlayer();
         InventoryType type = item.getInventoryType();
 
@@ -183,7 +183,7 @@ public class InventoryManipulator {
         }
     }
 
-    private static boolean addFromDropInternal(MapleClient c, Character chr, InventoryType type, Inventory inv, Item item, boolean show, int petId) {
+    private static boolean addFromDropInternal(Client c, Character chr, InventoryType type, Inventory inv, Item item, boolean show, int petId) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         int itemid = item.getItemId();
         if (ii.isPickupRestricted(itemid) && chr.haveItemWithId(itemid, true)) {
@@ -283,7 +283,7 @@ public class InventoryManipulator {
         return inv.findById(itemid) != null;
     }
 
-    public static boolean checkSpace(MapleClient c, int itemid, int quantity, String owner) {
+    public static boolean checkSpace(Client c, int itemid, int quantity, String owner) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         InventoryType type = ItemConstants.getInventoryType(itemid);
         Character chr = c.getPlayer();
@@ -332,7 +332,7 @@ public class InventoryManipulator {
         }
     }
 
-    public static int checkSpaceProgressively(MapleClient c, int itemid, int quantity, String owner, int usedSlots, boolean useProofInv) {
+    public static int checkSpaceProgressively(Client c, int itemid, int quantity, String owner, int usedSlots, boolean useProofInv) {
         // return value --> bit0: if has space for this one;
         //                  value after: new slots filled;
         // assumption: equipments always have slotMax == 1.
@@ -394,11 +394,11 @@ public class InventoryManipulator {
         return returnValue;
     }
 
-    public static void removeFromSlot(MapleClient c, InventoryType type, short slot, short quantity, boolean fromDrop) {
+    public static void removeFromSlot(Client c, InventoryType type, short slot, short quantity, boolean fromDrop) {
         removeFromSlot(c, type, slot, quantity, fromDrop, false);
     }
 
-    public static void removeFromSlot(MapleClient c, InventoryType type, short slot, short quantity, boolean fromDrop, boolean consume) {
+    public static void removeFromSlot(Client c, InventoryType type, short slot, short quantity, boolean fromDrop, boolean consume) {
         Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
         Item item = inv.getItem(slot);
@@ -438,7 +438,7 @@ public class InventoryManipulator {
         }
     }
 
-    private static void announceModifyInventory(MapleClient c, Item item, boolean fromDrop, boolean allowZero) {
+    private static void announceModifyInventory(Client c, Item item, boolean fromDrop, boolean allowZero) {
         if (item.getQuantity() == 0 && !allowZero) {
             c.sendPacket(PacketCreator.modifyInventory(fromDrop, Collections.singletonList(new ModifyInventory(3, item))));
         } else {
@@ -446,7 +446,7 @@ public class InventoryManipulator {
         }
     }
 
-    public static void removeById(MapleClient c, InventoryType type, int itemId, int quantity, boolean fromDrop, boolean consume) {
+    public static void removeById(Client c, InventoryType type, int itemId, int quantity, boolean fromDrop, boolean consume) {
         int removeQuantity = quantity;
         Inventory inv = c.getPlayer().getInventory(type);
         int slotLimit = type == InventoryType.EQUIPPED ? 128 : inv.getSlotLimit();
@@ -475,7 +475,7 @@ public class InventoryManipulator {
         return source.getOwner().equals(target.getOwner());
     }
 
-    public static void move(MapleClient c, InventoryType type, short src, short dst) {
+    public static void move(Client c, InventoryType type, short src, short dst) {
         Inventory inv = c.getPlayer().getInventory(type);
 
         if (src < 0 || dst < 0) {
@@ -512,7 +512,7 @@ public class InventoryManipulator {
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
     }
 
-    public static void equip(MapleClient c, short src, short dst) {
+    public static void equip(Client c, short src, short dst) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
         Character chr = c.getPlayer();
@@ -629,7 +629,7 @@ public class InventoryManipulator {
         chr.equipChanged();
     }
 
-    public static void unequip(MapleClient c, short src, short dst) {
+    public static void unequip(Client c, short src, short dst) {
         Character chr = c.getPlayer();
         Inventory eqpInv = chr.getInventory(InventoryType.EQUIP);
         Inventory eqpdInv = chr.getInventory(InventoryType.EQUIPPED);
@@ -684,7 +684,7 @@ public class InventoryManipulator {
         } else return ItemConstants.isWeddingRing(it.getItemId());
     }
 
-    public static void drop(MapleClient c, InventoryType type, short src, short quantity) {
+    public static void drop(Client c, InventoryType type, short src, short quantity) {
         if (src < 0) {
             type = InventoryType.EQUIPPED;
         }

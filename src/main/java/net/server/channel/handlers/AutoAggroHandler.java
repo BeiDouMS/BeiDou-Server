@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.life.MapleMonster;
@@ -31,7 +31,7 @@ import server.maps.MapleMap;
 public final class AutoAggroHandler extends AbstractPacketHandler {
 
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character player = c.getPlayer();
         if (player.isHidden()) return; // Don't auto aggro GM's in hide...
         

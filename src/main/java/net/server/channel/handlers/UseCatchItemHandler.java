@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.autoban.AutobanManager;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
@@ -40,7 +40,7 @@ import tools.PacketCreator;
  */
 public final class UseCatchItemHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
         p.readInt();

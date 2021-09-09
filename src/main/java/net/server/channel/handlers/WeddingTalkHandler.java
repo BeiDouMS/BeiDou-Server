@@ -20,7 +20,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
@@ -34,7 +34,7 @@ import tools.packets.WeddingPackets;
 public final class WeddingTalkHandler extends AbstractPacketHandler {
     
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         byte action = p.readByte();
         if(action == 1) {
             EventInstanceManager eim = c.getPlayer().getEventInstance();

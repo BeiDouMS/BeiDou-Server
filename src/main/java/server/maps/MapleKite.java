@@ -1,7 +1,7 @@
 package server.maps;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import net.packet.Packet;
 import tools.PacketCreator;
 
@@ -42,12 +42,12 @@ public class MapleKite extends AbstractMapleMapObject {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(makeDestroyData());
     }
 
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         client.sendPacket(makeSpawnData());
     }
 

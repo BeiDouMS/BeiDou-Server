@@ -24,7 +24,7 @@
 package client.command.commands.gm2;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.command.Command;
 import server.maps.MapleMap;
 
@@ -34,7 +34,7 @@ public class ReachCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !reach <playername>");

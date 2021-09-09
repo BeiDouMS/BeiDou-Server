@@ -24,7 +24,7 @@
 package client.command.commands.gm2;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import client.MapleStat;
 import client.command.Command;
 import config.YamlConfig;
@@ -35,7 +35,7 @@ public class MaxStatCommand extends Command {
     }
 
     @Override
-    public void execute(MapleClient c, String[] params) {
+    public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         player.loseExp(player.getExp(), false, false);
         player.setLevel(255);

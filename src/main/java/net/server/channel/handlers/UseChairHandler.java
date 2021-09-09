@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleClient;
+import client.Client;
 import client.inventory.InventoryType;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -29,7 +29,7 @@ import net.packet.InPacket;
 
 public final class UseChairHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, MapleClient c) {
+    public final void handlePacket(InPacket p, Client c) {
         int itemId = p.readInt();
         
         // thanks Darter (YungMoozi) for reporting unchecked chair item

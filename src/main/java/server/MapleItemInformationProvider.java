@@ -319,7 +319,7 @@ public class MapleItemInformationProvider {
         return list;
     }
 
-    private static short getExtraSlotMaxFromPlayer(MapleClient c, int itemId) {
+    private static short getExtraSlotMaxFromPlayer(Client c, int itemId) {
         short ret = 0;
 
         // thanks GMChuck for detecting player sensitive data being cached into getSlotMax
@@ -336,7 +336,7 @@ public class MapleItemInformationProvider {
         return ret;
     }
 
-    public short getSlotMax(MapleClient c, int itemId) {
+    public short getSlotMax(Client c, int itemId) {
         Short slotMax = slotMaxCache.get(itemId);
         if (slotMax != null) {
             return (short)(slotMax + getExtraSlotMaxFromPlayer(c, itemId));

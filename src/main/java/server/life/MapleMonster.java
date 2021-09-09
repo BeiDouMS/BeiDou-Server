@@ -1017,7 +1017,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
     
     @Override
-    public void sendSpawnData(MapleClient client) {
+    public void sendSpawnData(Client client) {
         if (hp.get() <= 0) { // mustn't monsterLock this function
             return;
         }
@@ -1033,7 +1033,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
 
     @Override
-    public void sendDestroyData(MapleClient client) {
+    public void sendDestroyData(Client client) {
         client.sendPacket(PacketCreator.killMonster(getObjectId(), false));
         client.sendPacket(PacketCreator.killMonster(getObjectId(), true));
     }
@@ -2101,7 +2101,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
     
-    private static void aggroMonsterControl(MapleClient c, MapleMonster mob, boolean immediateAggro) {
+    private static void aggroMonsterControl(Client c, MapleMonster mob, boolean immediateAggro) {
         c.sendPacket(PacketCreator.controlMonster(mob, false, immediateAggro));
     }
     
@@ -2120,7 +2120,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
         chrController.sendPacket(PacketCreator.removeSummon(puppet, false));
         
-        MapleClient c = chrController.getClient();
+        Client c = chrController.getClient();
         for (MapleMonster mob : puppetControlled) { // thanks BHB for noticing puppets disrupting mobstatuses for bowmans
             aggroMonsterControl(c, mob, mob.isControllerKnowsAboutAggro());
         }

@@ -22,7 +22,7 @@
 package net.server.world;
 
 import client.Character;
-import client.MapleClient;
+import client.Client;
 import config.YamlConfig;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
@@ -261,7 +261,7 @@ public class MapleParty {
         }
     }
 
-    public void assignNewLeader(MapleClient c) {
+    public void assignNewLeader(Client c) {
         World world = c.getWorldServer();
         MaplePartyCharacter newLeadr = null;
 
@@ -395,7 +395,7 @@ public class MapleParty {
         return false;
     }
     
-    public static void leaveParty(MapleParty party, MapleClient c) {
+    public static void leaveParty(MapleParty party, Client c) {
         World world = c.getWorldServer();
         Character player = c.getPlayer();
         MaplePartyCharacter partyplayer = player.getMPC();
@@ -443,7 +443,7 @@ public class MapleParty {
         }
     }
     
-    public static void expelFromParty(MapleParty party, MapleClient c, int expelCid) {
+    public static void expelFromParty(MapleParty party, Client c, int expelCid) {
         World world = c.getWorldServer();
         Character player = c.getPlayer();
         MaplePartyCharacter partyplayer = player.getMPC();
