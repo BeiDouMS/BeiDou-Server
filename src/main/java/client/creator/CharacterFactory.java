@@ -21,7 +21,7 @@ package client.creator;
 
 import client.Character;
 import client.Client;
-import client.MapleSkinColor;
+import client.SkinColor;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -48,7 +48,7 @@ public abstract class CharacterFactory {
                 
                 Character newchar = Character.getDefault(c);
                 newchar.setWorld(c.getWorld());
-                newchar.setSkinColor(MapleSkinColor.getById(skin));
+                newchar.setSkinColor(SkinColor.getById(skin));
                 newchar.setGender(gender);
                 newchar.setName(name);
                 newchar.setHair(hair);

@@ -165,7 +165,7 @@ public class Character extends AbstractCharacterObject {
     private final Pet[] pets = new Pet[3];
     private MaplePlayerShop playerShop = null;
     private MapleShop shop = null;
-    private MapleSkinColor skinColor = MapleSkinColor.NORMAL;
+    private SkinColor skinColor = SkinColor.NORMAL;
     private MapleStorage storage = null;
     private MapleTrade trade = null;
     private MonsterBook monsterbook;
@@ -5830,7 +5830,7 @@ public class Character extends AbstractCharacterObject {
         return skills.get(skill).expiration;
     }
 
-    public MapleSkinColor getSkinColor() {
+    public SkinColor getSkinColor() {
         return skinColor;
     }
 
@@ -6848,7 +6848,7 @@ public class Character extends AbstractCharacterObject {
             ret.id = rs.getInt("id");
             ret.name = rs.getString("name");
             ret.gender = rs.getInt("gender");
-            ret.skinColor = MapleSkinColor.getById(rs.getInt("skincolor"));
+            ret.skinColor = SkinColor.getById(rs.getInt("skincolor"));
             ret.face = rs.getInt("face");
             ret.hair = rs.getInt("hair");
 
@@ -6992,7 +6992,7 @@ public class Character extends AbstractCharacterObject {
                     ret.meso.set(rs.getInt("meso"));
                     ret.merchantmeso = rs.getInt("MerchantMesos");
                     ret.setGMLevel(rs.getInt("gm"));
-                    ret.skinColor = MapleSkinColor.getById(rs.getInt("skincolor"));
+                    ret.skinColor = SkinColor.getById(rs.getInt("skincolor"));
                     ret.gender = rs.getInt("gender");
                     ret.job = Job.getById(rs.getInt("job"));
                     ret.finishedDojoTutorial = rs.getInt("finishedDojoTutorial") == 1;
@@ -9285,7 +9285,7 @@ public class Character extends AbstractCharacterObject {
         search = find;
     }
 
-    public void setSkinColor(MapleSkinColor skinColor) {
+    public void setSkinColor(SkinColor skinColor) {
         this.skinColor = skinColor;
     }
 

@@ -296,7 +296,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
 
 	public void setSkin(int color) {
-		getPlayer().setSkinColor(MapleSkinColor.getById(color));
+		getPlayer().setSkinColor(SkinColor.getById(color));
 		getPlayer().updateSingleStat(MapleStat.SKIN, color);
 		getPlayer().equipChanged();
 	}
