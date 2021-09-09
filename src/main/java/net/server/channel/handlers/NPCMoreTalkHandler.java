@@ -28,7 +28,6 @@ import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestScriptManager;
 
 /**
- *
  * @author Matze
  */
 public final class NPCMoreTalkHandler extends AbstractPacketHandler {

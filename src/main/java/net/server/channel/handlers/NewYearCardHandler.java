@@ -36,10 +36,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
  * @author Ronan
- * 
- * Header layout thanks to Eric 
+ * <p>
+ * Header layout thanks to Eric
  */
 public final class NewYearCardHandler extends AbstractPacketHandler {
 
@@ -47,27 +46,27 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         final Character player = c.getPlayer();
         byte reqMode = p.readByte();                 //[00] -> NewYearReq (0 = Send)
-        
-        if(reqMode == 0) {  // card has been sent
-            if(player.haveItem(2160101)) {  // new year's card
+
+        if (reqMode == 0) {  // card has been sent
+            if (player.haveItem(2160101)) {  // new year's card
                 short slot = p.readShort();                      //[00 2C] -> nPOS (Item Slot Pos)
                 int itemid = p.readInt();                        //[00 20 F5 E5] -> nItemID (item id)
 
                 int status = getValidNewYearCardStatus(itemid, player, slot);
-                if(status == 0) {
-                    if(player.canHold(4300000, 1)) {
+                if (status == 0) {
+                    if (player.canHold(4300000, 1)) {
                         String receiver = p.readString();  //[04 00 54 65 73 74] -> sReceiverName (person to send to)
 
                         int receiverid = getReceiverId(receiver, c.getWorld());
-                        if(receiverid != -1) {
-                            if(receiverid != c.getPlayer().getId()) {
+                        if (receiverid != -1) {
+                            if (receiverid != c.getPlayer().getId()) {
                                 String message = p.readString();   //[06 00 4C 65 74 74 65 72] -> sContent (message)
 
                                 NewYearCardRecord newyear = new NewYearCardRecord(player.getId(), player.getName(), receiverid, receiver, message);
                                 NewYearCardRecord.saveNewYearCard(newyear);
                                 player.addNewYearRecord(newyear);
 
-                                player.getAbstractPlayerInteraction().gainItem(2160101, (short)-1);
+                                player.getAbstractPlayerInteraction().gainItem(2160101, (short) -1);
                                 player.getAbstractPlayerInteraction().gainItem(4300000, (short) 1);
 
                                 Server.getInstance().setNewYearCard(newyear);
@@ -90,17 +89,19 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
             }
         } else {    //receiver accepted the card
             int cardid = p.readInt();
-            
+
             NewYearCardRecord newyear = NewYearCardRecord.loadNewYearCard(cardid);
-            
-            if(newyear != null && newyear.getReceiverId() == player.getId() && !newyear.isReceiverCardReceived()) {
-                if(!newyear.isSenderCardDiscarded()) {
-                    if(player.canHold(4301000, 1)) {
+
+            if (newyear != null && newyear.getReceiverId() == player.getId() && !newyear.isReceiverCardReceived()) {
+                if (!newyear.isSenderCardDiscarded()) {
+                    if (player.canHold(4301000, 1)) {
                         newyear.stopNewYearCardTask();
                         NewYearCardRecord.updateNewYearCard(newyear);
 
-                        player.getAbstractPlayerInteraction().gainItem(4301000, (short)1);
-                        if(!newyear.getMessage().isEmpty()) player.dropMessage(6, "[New Year] " + newyear.getSenderName() + ": " + newyear.getMessage());
+                        player.getAbstractPlayerInteraction().gainItem(4301000, (short) 1);
+                        if (!newyear.getMessage().isEmpty()) {
+                            player.dropMessage(6, "[New Year] " + newyear.getSenderName() + ": " + newyear.getMessage());
+                        }
 
                         player.addNewYearRecord(newyear);
                         player.sendPacket(PacketCreator.onNewYearCardRes(player, newyear, 6, 0));    // successfully rcvd
@@ -108,7 +109,7 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
                         player.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(player, newyear, 0xD, 0));
 
                         Character sender = c.getWorldServer().getPlayerStorage().getCharacterById(newyear.getSenderId());
-                        if(sender != null && sender.isLoggedinWorld()) {
+                        if (sender != null && sender.isLoggedinWorld()) {
                             sender.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(sender, newyear, 0xD, 0));
                             sender.dropMessage(6, "[New Year] Your addressee successfully received the New Year card.");
                         }
@@ -119,36 +120,38 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
                     player.dropMessage(6, "[New Year] The sender of the New Year card already dropped it. Nothing to receive.");
                 }
             } else {
-                if(newyear == null) {
+                if (newyear == null) {
                     player.dropMessage(6, "[New Year] The sender of the New Year card already dropped it. Nothing to receive.");
                 }
             }
         }
     }
-    
+
     private static int getReceiverId(String receiver, int world) {
         try (Connection con = DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement("SELECT id, world FROM characters WHERE name LIKE ?")) {
                 ps.setString(1, receiver);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        if(rs.getInt("world") == world) {
+                        if (rs.getInt("world") == world) {
                             return rs.getInt("id");
                         }
                     }
                 }
             }
-        } catch(SQLException sqle) {
+        } catch (SQLException sqle) {
             sqle.printStackTrace();
         }
-        
+
         return -1;
     }
-    
+
     private static int getValidNewYearCardStatus(int itemid, Character player, short slot) {
-        if(!ItemConstants.isNewYearCardUse(itemid)) return 0x14;
-        
-        Item it = player.getInventory(ItemConstants.getInventoryType(itemid)).getItem(slot);        
+        if (!ItemConstants.isNewYearCardUse(itemid)) {
+            return 0x14;
+        }
+
+        Item it = player.getInventory(ItemConstants.getInventoryType(itemid)).getItem(slot);
         return (it != null && it.getItemId() == itemid) ? 0 : 0x12;
-    } 
+    }
 }

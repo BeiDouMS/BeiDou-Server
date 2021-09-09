@@ -35,7 +35,7 @@ public final class DenyAllianceRequestHandler extends AbstractPacketHandler {
         p.readByte();
         String inviterName = p.readString();
         String guildName = p.readString();
-        
+
         Character chr = c.getWorldServer().getPlayerStorage().getCharacterByName(inviterName);
         if (chr != null) {
             Alliance alliance = chr.getAlliance();

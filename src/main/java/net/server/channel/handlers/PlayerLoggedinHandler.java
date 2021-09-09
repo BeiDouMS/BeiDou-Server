@@ -61,24 +61,24 @@ import java.util.stream.Collectors;
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
-    
+
     private boolean tryAcquireAccount(int accId) {
         synchronized (attemptingLoginAccounts) {
             if (attemptingLoginAccounts.contains(accId)) {
                 return false;
             }
-            
+
             attemptingLoginAccounts.add(accId);
             return true;
         }
     }
-    
+
     private void releaseAccount(int accId) {
         synchronized (attemptingLoginAccounts) {
             attemptingLoginAccounts.remove(accId);
         }
     }
-    
+
     @Override
     public final boolean validateState(Client c) {
         return !c.isLoggedIn();
@@ -88,7 +88,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
-        
+
         if (!c.tryacquireClient()) {
             // thanks MedicOP for assisting on concurrency protection here
             c.sendPacket(PacketCreator.getAfterLoginError(10));
@@ -385,7 +385,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.commitExcludedItems();
             showDueyNotification(c, player);
 
-            if (player.getMap().getHPDec() > 0) player.resetHpDecreaseTask();
+            if (player.getMap().getHPDec() > 0) {
+                player.resetHpDecreaseTask();
+            }
 
             player.resetPlayerRates();
             if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
@@ -432,22 +434,24 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.setNPCScriptable(npcsIds));
             }
 
-            if (newcomer) player.setLoginTime(System.currentTimeMillis());
+            if (newcomer) {
+                player.setLoginTime(System.currentTimeMillis());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             c.releaseClient();
         }
     }
-    
+
     private static void showDueyNotification(Client c, Character player) {
         try (Connection con = DatabaseConnection.getConnection();
-            PreparedStatement ps = con.prepareStatement("SELECT Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
+             PreparedStatement ps = con.prepareStatement("SELECT Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
             ps.setInt(1, player.getId());
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    try (PreparedStatement ps2 = con.prepareStatement("UPDATE dueypackages SET Checked = 0 WHERE ReceiverId = ?")){
+                    try (PreparedStatement ps2 = con.prepareStatement("UPDATE dueypackages SET Checked = 0 WHERE ReceiverId = ?")) {
                         ps2.setInt(1, player.getId());
                         ps2.executeUpdate();
 
@@ -459,17 +463,17 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             e.printStackTrace();
         }
     }
-    
+
     private static List<Pair<Long, PlayerBuffValueHolder>> getLocalStartTimes(List<PlayerBuffValueHolder> lpbvl) {
         List<Pair<Long, PlayerBuffValueHolder>> timedBuffs = new ArrayList<>();
         long curtime = currentServerTime();
-        
-        for(PlayerBuffValueHolder pb : lpbvl) {
+
+        for (PlayerBuffValueHolder pb : lpbvl) {
             timedBuffs.add(new Pair<>(curtime - pb.usedTime, pb));
         }
-        
+
         timedBuffs.sort((p1, p2) -> p1.getLeft().compareTo(p2.getLeft()));
-        
+
         return timedBuffs;
     }
 }

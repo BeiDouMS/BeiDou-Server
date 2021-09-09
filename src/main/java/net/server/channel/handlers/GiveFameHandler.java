@@ -31,7 +31,7 @@ import tools.FilePrinter;
 import tools.PacketCreator;
 
 public final class GiveFameHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character target = (Character) c.getPlayer().getMap().getMapObject(p.readInt());
@@ -46,7 +46,7 @@ public final class GiveFameHandler extends AbstractPacketHandler {
             c.disconnect(true, false);
             return;
         }
-        
+
         FameStatus status = player.canGiveFame(target);
         if (status == FameStatus.OK) {
             if (target.gainFame(famechange, player, mode)) {

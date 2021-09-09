@@ -35,24 +35,28 @@ public final class HealOvertimeHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        if(!chr.isLoggedinWorld()) return;
-        
+        if (!chr.isLoggedinWorld()) {
+            return;
+        }
+
         AutobanManager abm = chr.getAutobanManager();
         int timestamp = Server.getInstance().getCurrentTimestamp();
         p.skip(8);
-        
+
         short healHP = p.readShort();
         if (healHP != 0) {
             abm.setTimestamp(8, timestamp, 28);  // thanks Vcoc & Thora for pointing out d/c happening here
-            if ((abm.getLastSpam(0) + 1500) > timestamp) AutobanFactory.FAST_HP_HEALING.addPoint(abm, "Fast hp healing");
-            
+            if ((abm.getLastSpam(0) + 1500) > timestamp) {
+                AutobanFactory.FAST_HP_HEALING.addPoint(abm, "Fast hp healing");
+            }
+
             MapleMap map = chr.getMap();
-            int abHeal = (int)(77 * map.getRecovery() * 1.5); // thanks Ari for noticing players not getting healed in sauna in certain cases
+            int abHeal = (int) (77 * map.getRecovery() * 1.5); // thanks Ari for noticing players not getting healed in sauna in certain cases
             if (healHP > abHeal) {
                 AutobanFactory.HIGH_HP_HEALING.autoban(chr, "Healing: " + healHP + "; Max is " + abHeal + ".");
                 return;
             }
-            
+
             chr.addHP(healHP);
             chr.getMap().broadcastMessage(chr, PacketCreator.showHpHealed(chr.getId(), healHP), false);
             abm.spam(0, timestamp);

@@ -30,7 +30,6 @@ import server.maps.HiredMerchant;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93 - :3
  */
 public class RemoteStoreHandler extends AbstractPacketHandler {
@@ -46,7 +45,7 @@ public class RemoteStoreHandler extends AbstractPacketHandler {
             }
             return;
         } else {
-           chr.dropMessage(1, "You don't have a Merchant open.");
+            chr.dropMessage(1, "You don't have a Merchant open.");
         }
         c.sendPacket(PacketCreator.enableActions());
     }

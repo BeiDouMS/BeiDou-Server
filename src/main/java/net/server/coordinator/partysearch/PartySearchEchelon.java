@@ -34,36 +34,35 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Ronan
  */
 public class PartySearchEchelon {
-    
+
     private final MonitoredReentrantReadWriteLock psLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_PARTY_SEARCH_ECHELON, true);
     private final MonitoredReadLock psRLock = MonitoredReadLockFactory.createLock(psLock);
     private final MonitoredWriteLock psWLock = MonitoredWriteLockFactory.createLock(psLock);
-    
-    private Map<Integer, WeakReference<Character>> echelon = new HashMap<>(20);
-    
+
+    private final Map<Integer, WeakReference<Character>> echelon = new HashMap<>(20);
+
     public List<Character> exportEchelon() {
         psWLock.lock();     // reversing read/write actually could provide a lax yet sure performance/precision trade-off here
         try {
             List<Character> players = new ArrayList<>(echelon.size());
-            
+
             for (WeakReference<Character> chrRef : echelon.values()) {
                 Character chr = chrRef.get();
                 if (chr != null) {
                     players.add(chr);
                 }
             }
-            
+
             echelon.clear();
             return players;
         } finally {
             psWLock.unlock();
         }
     }
-    
+
     public void attachPlayer(Character chr) {
         psRLock.lock();
         try {
@@ -72,7 +71,7 @@ public class PartySearchEchelon {
             psRLock.unlock();
         }
     }
-    
+
     public boolean detachPlayer(Character chr) {
         psRLock.lock();
         try {
@@ -81,5 +80,5 @@ public class PartySearchEchelon {
             psRLock.unlock();
         }
     }
-    
+
 }

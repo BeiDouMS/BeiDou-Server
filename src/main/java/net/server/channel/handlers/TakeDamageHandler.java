@@ -54,7 +54,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         List<Character> banishPlayers = new ArrayList<>();
-        
+
         Character chr = c.getPlayer();
         p.readInt();
         byte damagefrom = p.readByte();
@@ -68,22 +68,22 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         final MapleMap map = chr.getMap();
         if (damagefrom != -3 && damagefrom != -4) {
             monsteridfrom = p.readInt();
-	    oid = p.readInt();
-            
+            oid = p.readInt();
+
             try {
                 MapObject mmo = map.getMapObject(oid);
-                if(mmo instanceof Monster) {
+                if (mmo instanceof Monster) {
                     attacker = (Monster) mmo;
-                    if(attacker.getId() != monsteridfrom) {
+                    if (attacker.getId() != monsteridfrom) {
                         attacker = null;
                     }
                 }
-                
+
                 if (attacker != null) {
                     if (attacker.isBuffed(MonsterStatus.NEUTRALISE)) {
                         return;
                     }
-                    
+
                     List<loseItem> loseItems;
                     if (damage > 0) {
                         loseItems = attacker.getStats().loseItem();
@@ -95,17 +95,17 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                                 Point pos = new Point(0, chr.getPosition().y);
                                 for (loseItem loseItem : loseItems) {
                                     type = ItemConstants.getInventoryType(loseItem.getId());
-                                    
+
                                     int dropCount = 0;
                                     for (byte b = 0; b < loseItem.getX(); b++) {
                                         if (Randomizer.nextInt(100) < loseItem.getChance()) {
                                             dropCount += 1;
                                         }
                                     }
-                                    
+
                                     if (dropCount > 0) {
                                         int qty;
-                                    
+
                                         Inventory inv = chr.getInventory(type);
                                         inv.lockInventory();
                                         try {
@@ -114,7 +114,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                                         } finally {
                                             inv.unlockInventory();
                                         }
-                                        
+
                                         if (loseItem.getId() == 4031868) {
                                             chr.updateAriantScore();
                                         }
@@ -133,67 +133,67 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 } else if (damagefrom != 0 || !map.removeSelfDestructive(oid)) {    // thanks inhyuk for noticing self-destruct damage not being handled properly
                     return;
                 }
-            } catch(ClassCastException e) {
+            } catch (ClassCastException e) {
                 //this happens due to mob on last map damaging player just before changing maps
-                
+
                 e.printStackTrace();
                 FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, "Attacker is not a mob-type, rather is a " + map.getMapObject(oid).getClass().getName() + " entity.");
-                
+
                 return;
             }
-            
+
             direction = p.readByte();
         }
         if (damagefrom != -1 && damagefrom != -2 && attacker != null) {
             MobAttackInfo attackInfo = MobAttackInfoFactory.getMobAttackInfo(attacker, damagefrom);
             if (attackInfo != null) {
-	            if (attackInfo.isDeadlyAttack()) {
-	                mpattack = chr.getMp() - 1;
-                        is_deadly = true;
-	            }
-	            mpattack += attackInfo.getMpBurn();
-	            MobSkill mobSkill = MobSkillFactory.getMobSkill(attackInfo.getDiseaseSkill(), attackInfo.getDiseaseLevel());
-	            if (mobSkill != null && damage > 0) {
-	                mobSkill.applyEffect(chr, attacker, false, banishPlayers);
-	            }
-	            
-                    attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
-                    if (chr.getBuffedValue(BuffStat.MANA_REFLECTION) != null && damage > 0 && !attacker.isBoss()) {
-                        int jobid = chr.getJob().getId();
-                        if (jobid == 212 || jobid == 222 || jobid == 232) {
-                            int id = jobid * 10000 + 1002;
-                            Skill manaReflectSkill = SkillFactory.getSkill(id);
-                            if (chr.isBuffFrom(BuffStat.MANA_REFLECTION, manaReflectSkill) && chr.getSkillLevel(manaReflectSkill) > 0 && manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).makeChanceResult()) {
-                                int bouncedamage = (damage * manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).getX() / 100);
-                                if (bouncedamage > attacker.getMaxHp() / 5) {
-                                    bouncedamage = attacker.getMaxHp() / 5;
-                                }
-                                map.damageMonster(chr, attacker, bouncedamage);
-                                map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), true);
-                                chr.sendPacket(PacketCreator.showOwnBuffEffect(id, 5));
-                                map.broadcastMessage(chr, PacketCreator.showBuffEffect(chr.getId(), id, 5), false);
+                if (attackInfo.isDeadlyAttack()) {
+                    mpattack = chr.getMp() - 1;
+                    is_deadly = true;
+                }
+                mpattack += attackInfo.getMpBurn();
+                MobSkill mobSkill = MobSkillFactory.getMobSkill(attackInfo.getDiseaseSkill(), attackInfo.getDiseaseLevel());
+                if (mobSkill != null && damage > 0) {
+                    mobSkill.applyEffect(chr, attacker, false, banishPlayers);
+                }
+
+                attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
+                if (chr.getBuffedValue(BuffStat.MANA_REFLECTION) != null && damage > 0 && !attacker.isBoss()) {
+                    int jobid = chr.getJob().getId();
+                    if (jobid == 212 || jobid == 222 || jobid == 232) {
+                        int id = jobid * 10000 + 1002;
+                        Skill manaReflectSkill = SkillFactory.getSkill(id);
+                        if (chr.isBuffFrom(BuffStat.MANA_REFLECTION, manaReflectSkill) && chr.getSkillLevel(manaReflectSkill) > 0 && manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).makeChanceResult()) {
+                            int bouncedamage = (damage * manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).getX() / 100);
+                            if (bouncedamage > attacker.getMaxHp() / 5) {
+                                bouncedamage = attacker.getMaxHp() / 5;
                             }
+                            map.damageMonster(chr, attacker, bouncedamage);
+                            map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), true);
+                            chr.sendPacket(PacketCreator.showOwnBuffEffect(id, 5));
+                            map.broadcastMessage(chr, PacketCreator.showBuffEffect(chr.getId(), id, 5), false);
                         }
                     }
-	        }
+                }
+            }
         }
-        
+
         if (damage == -1) {
             fake = 4020002 + (chr.getJob().getId() / 10 - 40) * 100000;
         }
-        
+
         if (damage > 0) {
             chr.getAutobanManager().resetMisses();
         } else {
             chr.getAutobanManager().addMiss();
         }
-        
+
         //in dojo player cannot use pot, so deadly attacks should be turned off as well
-        if(is_deadly && GameConstants.isDojo(chr.getMap().getId()) && !YamlConfig.config.server.USE_DEADLY_DOJO) {
+        if (is_deadly && GameConstants.isDojo(chr.getMap().getId()) && !YamlConfig.config.server.USE_DEADLY_DOJO) {
             damage = 0;
             mpattack = 0;
         }
-        
+
         if (damage > 0 && !chr.isHidden()) {
             if (attacker != null) {
                 if (damagefrom == -1) {
@@ -215,7 +215,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         }
                     }
                 }
-                
+
                 StatEffect cBarrier = chr.getBuffEffect(BuffStat.COMBO_BARRIER);  // thanks BHB for noticing Combo Barrier buff not working
                 if (cBarrier != null) {
                     damage *= (cBarrier.getX() / 1000.0);
@@ -232,7 +232,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 if (achilles != 0 && achilles1 != null) {
                     damage *= (achilles1.getEffect(achilles).getX() / 1000.0);
                 }
-                
+
                 Skill highDef = SkillFactory.getSkill(Aran.HIGH_DEFENSE);
                 int hdLevel = chr.getSkillLevel(highDef);
                 if (highDef != null && hdLevel > 0) {
@@ -243,13 +243,13 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
                 int mploss = (int) (damage * (chr.getBuffedValue(BuffStat.MAGIC_GUARD).doubleValue() / 100.0));
                 int hploss = damage - mploss;
-                
+
                 int curmp = chr.getMp();
                 if (mploss > curmp) {
                     hploss += mploss - curmp;
                     mploss = curmp;
                 }
-                
+
                 chr.addMPHP(-hploss, -mploss);
             } else if (mesoguard != null) {
                 damage = Math.round(damage / 2);
@@ -277,7 +277,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_DMG);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
-        
+
         for (Character player : banishPlayers) {  // chill, if this list ever gets non-empty an attacker does exist, trust me :)
             player.changeMapBanish(attacker.getBanish().getMap(), attacker.getBanish().getPortal(), attacker.getBanish().getMsg());
         }

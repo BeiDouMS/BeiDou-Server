@@ -37,10 +37,10 @@ import tools.PacketCreator;
 import java.awt.*;
 
 public final class SpecialMoveHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
-    	Character chr = c.getPlayer();
+        Character chr = c.getPlayer();
         p.readInt();
         chr.getAutobanManager().setTimestamp(4, Server.getInstance().getCurrentTimestamp(), 28);
         int skillid = p.readInt();
@@ -53,7 +53,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             return;
         }
         */
-        
+
         Point pos = null;
         int __skillLevel = p.readByte();
         Skill skill = SkillFactory.getSkill(skillid);
@@ -67,18 +67,20 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         }
-        if (skillLevel == 0 || skillLevel != __skillLevel) return;
-        
+        if (skillLevel == 0 || skillLevel != __skillLevel) {
+            return;
+        }
+
         StatEffect effect = skill.getEffect(skillLevel);
         if (effect.getCooldown() > 0) {
             if (chr.skillIsCooling(skillid)) {
                 return;
             } else if (skillid != Corsair.BATTLE_SHIP) {
                 int cooldownTime = effect.getCooldown();
-                if(StatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
+                if (StatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
                     cooldownTime /= 60;
                 }
-                
+
                 c.sendPacket(PacketCreator.skillCooldown(skillid, cooldownTime));
                 chr.addCooldown(skillid, currentServerTime(), cooldownTime * 1000);
             }
@@ -94,7 +96,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                     if (!monster.isBoss()) {
                         monster.aggroClearDamages();
                         monster.aggroMonsterDamage(chr, 1);
-                        
+
                         // thanks onechord for pointing out Magnet crashing the caster (issue would actually happen upon failing to catch mob)
                         // thanks Conrad for noticing Magnet crashing when trying to pull bosses and fixed mobs
                         monster.aggroSwitchController(chr, true);
@@ -108,7 +110,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         } else if (skillid == Brawler.MP_RECOVERY) {// MP Recovery
             Skill s = SkillFactory.getSkill(skillid);
             StatEffect ef = s.getEffect(chr.getSkillLevel(s));
-            
+
             int lose = chr.safeAddHP(-1 * (chr.getCurrentMaxHp() / ef.getX()));
             int gain = -lose * (ef.getY() / 100);
             chr.addMP(gain);
@@ -118,7 +120,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         } else if (skillid % 10000000 == 1004) {
             p.readShort();
         }
-        
+
         if (p.available() == 5) {
             pos = new Point(p.readShort(), p.readShort());
         }
@@ -142,7 +144,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                         c.releaseClient();
                     }
                 }
-                
+
                 c.sendPacket(PacketCreator.enableActions());
             }
         } else {

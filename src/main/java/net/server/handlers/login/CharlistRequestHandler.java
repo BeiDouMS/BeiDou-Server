@@ -35,20 +35,20 @@ public final class CharlistRequestHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();
         int world = p.readByte();
-        
+
         World wserv = Server.getInstance().getWorld(world);
-        if(wserv == null || wserv.isWorldCapacityFull()) {
+        if (wserv == null || wserv.isWorldCapacityFull()) {
             c.sendPacket(PacketCreator.getServerStatus(2));
             return;
         }
-        
+
         int channel = p.readByte() + 1;
         Channel ch = wserv.getChannel(channel);
-        if(ch == null) {
+        if (ch == null) {
             c.sendPacket(PacketCreator.getServerStatus(2));
             return;
         }
-        
+
         c.setWorld(world);
         c.setChannel(channel);
         c.sendCharList(world);

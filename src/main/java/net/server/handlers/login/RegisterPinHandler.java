@@ -42,7 +42,7 @@ public final class RegisterPinHandler extends AbstractPacketHandler {
             if (pin != null) {
                 c.setPin(pin);
                 c.sendPacket(PacketCreator.pinRegistered());
-                
+
                 SessionCoordinator.getInstance().closeSession(c, null);
                 c.updateLoginState(Client.LOGIN_NOTLOGGEDIN);
             }

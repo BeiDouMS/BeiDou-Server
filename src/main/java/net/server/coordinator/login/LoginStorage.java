@@ -31,12 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Ronan
  */
 public class LoginStorage {
     private final ConcurrentHashMap<Integer, List<Instant>> loginHistory = new ConcurrentHashMap<>(); // Key: accountId
-    
+
     public boolean registerLogin(int accountId) {
         List<Instant> attempts = loginHistory.computeIfAbsent(accountId, k -> new ArrayList<>());
 
@@ -47,12 +46,12 @@ public class LoginStorage {
                 Collections.fill(attempts, attemptExpiry);
                 return false;
             }
-            
+
             attempts.add(attemptExpiry);
             return true;
         }
     }
-    
+
     public void clearExpiredAttempts() {
         final Instant now = Instant.ofEpochMilli(Server.getInstance().getCurrentTime());
         List<Integer> accountIdsToClear = new ArrayList<>();

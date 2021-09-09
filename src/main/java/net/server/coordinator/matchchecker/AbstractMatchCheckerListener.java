@@ -24,7 +24,6 @@ import client.Character;
 import java.util.Set;
 
 /**
- *
  * @author Ronan
  */
 public interface AbstractMatchCheckerListener {

@@ -20,28 +20,27 @@
 package net.server.audit;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- *
  * @author Ronan
  */
 public class LockCollector {
-    
+
     private static final LockCollector instance = new LockCollector();
-    
+
     public static LockCollector getInstance() {
         return instance;
     }
-    
-    private Map<Runnable, Integer> disposableLocks = new HashMap<>(200);
+
+    private final Map<Runnable, Integer> disposableLocks = new HashMap<>(200);
     private final Lock lock = new ReentrantLock(true);
-    
+
     public void registerDisposeAction(Runnable r) {
         lock.lock();
         try {
@@ -50,15 +49,15 @@ public class LockCollector {
             lock.unlock();
         }
     }
-    
+
     public void runLockCollector() {
         List<Runnable> toDispose = new ArrayList<>();
-        
+
         lock.lock();
         try {
-            for(Entry<Runnable, Integer> e : disposableLocks.entrySet()) {
+            for (Entry<Runnable, Integer> e : disposableLocks.entrySet()) {
                 Integer eVal = e.getValue();
-                if(eVal > 5) {  // updates each 2min
+                if (eVal > 5) {  // updates each 2min
                     toDispose.add(e.getKey());
                 } else {
                     disposableLocks.put(e.getKey(), ++eVal);
@@ -67,8 +66,8 @@ public class LockCollector {
         } finally {
             lock.unlock();
         }
-        
-        for(Runnable r : toDispose) {
+
+        for (Runnable r : toDispose) {
             r.run();
         }
     }

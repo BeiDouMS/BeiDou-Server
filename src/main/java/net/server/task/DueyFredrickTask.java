@@ -26,7 +26,7 @@ import client.processor.npc.FredrickProcessor;
  * @author Ronan
  */
 public class DueyFredrickTask implements Runnable {
-    
+
     @Override
     public void run() {
         FredrickProcessor.runFredrickSchedule();

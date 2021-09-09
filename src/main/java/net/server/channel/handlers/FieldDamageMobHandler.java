@@ -31,27 +31,27 @@ import tools.FilePrinter;
 import tools.PacketCreator;
 
 public class FieldDamageMobHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int mobOid = p.readInt();    // packet structure found thanks to Darter (Rajan)
         int dmg = p.readInt();
-        
+
         Character chr = c.getPlayer();
         MapleMap map = chr.getMap();
-        
+
         if (map.getEnvironment().isEmpty()) {   // no environment objects activated to actually hit the mob
             FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack.");
             return;
         }
-        
+
         Monster mob = map.getMonsterByOid(mobOid);
         if (mob != null) {
             if (dmg < 0 || dmg > GameConstants.MAX_FIELD_MOB_DAMAGE) {
                 FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(mob.getId()) + " with damage " + dmg);
                 return;
             }
-            
+
             map.broadcastMessage(chr, PacketCreator.damageMonster(mobOid, dmg), true);
             map.damageMonster(chr, mob, dmg);
         }

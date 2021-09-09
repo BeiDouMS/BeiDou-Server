@@ -23,7 +23,7 @@ package net.opcodes;
 
 public enum RecvOpcode {
     CUSTOM_PACKET(0x3713),//13 37 lol
-    
+
     LOGIN_PASSWORD(0x01),
     GUEST_LOGIN(0x02),
     SERVERLIST_REREQUEST(0x04),
@@ -203,10 +203,10 @@ public enum RecvOpcode {
     MTS_OPERATION(0xFD),
     USE_MAPLELIFE(0x100),
     USE_HAMMER(0x104);
-    
+
     private int code = -2;
 
-    private RecvOpcode(int code) {
+    RecvOpcode(int code) {
         this.code = code;
     }
 

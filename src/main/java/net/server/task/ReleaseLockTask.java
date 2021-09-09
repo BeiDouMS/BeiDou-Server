@@ -23,7 +23,7 @@ import net.server.audit.LockCollector;
 
 /**
  * @author Ronan
- * @info   Thread responsible for expiring locks signalized for dispose.
+ * @info Thread responsible for expiring locks signalized for dispose.
  */
 public class ReleaseLockTask implements Runnable {
     @Override

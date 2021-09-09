@@ -27,7 +27,6 @@ import net.packet.InPacket;
 import tools.PacketCreator;
 
 /**
- *
  * @author Terry Han (Acrylic)
  */
 public final class TouchingCashShopHandler extends AbstractPacketHandler {

@@ -31,10 +31,10 @@ public enum SendOpcode {
     CONFIRM_EULA_RESULT(0x05),
     CHECK_PINCODE(0x06),
     UPDATE_PINCODE(0x07),
-    
+
     VIEW_ALL_CHAR(0x08),
     SELECT_CHARACTER_BY_VAC(0x09),
-    
+
     SERVERLIST(0x0A),
     CHARLIST(0x0B),
     SERVER_IP(0x0C),
@@ -51,7 +51,7 @@ public enum SendOpcode {
     LAST_CONNECTED_WORLD(0x1A),
     RECOMMENDED_WORLD_MESSAGE(0x1B),
     CHECK_SPW_RESULT(0x1C),
-    
+
     /*CWvsContext::OnPacket*/
     INVENTORY_OPERATION(0x1D),
     INVENTORY_GROW(0x1E),
@@ -91,16 +91,16 @@ public enum SendOpcode {
     INCUBATOR_RESULT(0x45),
     SHOP_SCANNER_RESULT(0x46),
     SHOP_LINK_RESULT(0x47),
-    
+
     MARRIAGE_REQUEST(0x48),
     MARRIAGE_RESULT(0x49),
     WEDDING_GIFT_RESULT(0x4A),
     NOTIFY_MARRIED_PARTNER_MAP_TRANSFER(0x4B),
-    
+
     CASH_PET_FOOD_RESULT(0x4C),
     SET_WEEK_EVENT_MESSAGE(0x4D),
     SET_POTION_DISCOUNT_RATE(0x4E),
-    
+
     BRIDLE_MOB_CATCH_FAIL(0x4F),
     IMITATED_NPC_RESULT(0x50),
     IMITATED_NPC_DATA(0x51),
@@ -116,7 +116,7 @@ public enum SendOpcode {
     PARTY_VALUE(0x5B),
     FIELD_SET_VARIABLE(0x5C),
     BONUS_EXP_CHANGED(0x5D),//pendant of spirit etc (guess, not sure about the opcode in v83)
-    
+
     FAMILY_CHART_RESULT(0x5E),
     FAMILY_INFO_RESULT(0x5F),
     FAMILY_RESULT(0x60),
@@ -128,7 +128,7 @@ public enum SendOpcode {
     FAMILY_NOTIFY_LOGIN_OR_LOGOUT(0x66), //? is logged in. LOLWUT
     FAMILY_SET_PRIVILEGE(0x67),
     FAMILY_SUMMON_REQUEST(0x68),
-    
+
     NOTIFY_LEVELUP(0x69),
     NOTIFY_MARRIAGE(0x6A),
     NOTIFY_JOB_CHANGE(0x6B),
@@ -149,12 +149,12 @@ public enum SendOpcode {
     SCRIPT_PROGRESS_MESSAGE(0x7A),
     DATA_CRC_CHECK_FAILED(0x7B),
     MACRO_SYS_DATA_INIT(0x7C),
-    
+
     /*CStage::OnPacket*/
     SET_FIELD(0x7D),
     SET_ITC(0x7E),
     SET_CASH_SHOP(0x7F),
-    
+
     /*CField::OnPacket*/
     SET_BACK_EFFECT(0x80),
     SET_MAP_OBJECT_VISIBLE(0x81),//CMapLoadable::OnSetMapObjectVisible O_O
@@ -166,7 +166,7 @@ public enum SendOpcode {
     WHISPER(0x87),
     SPOUSE_CHAT(0x88),
     SUMMON_ITEM_INAVAILABLE(0x89), //You can't use it in this map
-    
+
     FIELD_EFFECT(0x8A),
     FIELD_OBSTACLE_ONOFF(0x8B),
     FIELD_OBSTACLE_ONOFF_LIST(0x8C),
@@ -197,7 +197,7 @@ public enum SendOpcode {
     UPDATE_CHAR_BOX(0xA5),
     SHOW_CONSUME_EFFECT(0xA6),
     SHOW_SCROLL_EFFECT(0xA7),
-    
+
     SPAWN_PET(0xA8),
     MOVE_PET(0xAA),
     PET_CHAT(0xAB),
@@ -299,7 +299,7 @@ public enum SendOpcode {
     MONSTER_CARNIVAL_MESSAGE(0x125),
     MONSTER_CARNIVAL_DIED(0x126),
     MONSTER_CARNIVAL_LEAVE(0x127),
-    
+
     ARIANT_ARENA_USER_SCORE(0x129),
     SHEEP_RANCH_INFO(0x12B),
     SHEEP_RANCH_CLOTHES(0x12C),
@@ -317,18 +317,18 @@ public enum SendOpcode {
     RPS_GAME(0x138),
     MESSENGER(0x139),
     PLAYER_INTERACTION(0x13A),
-    
+
     TOURNAMENT(0x13B),
     TOURNAMENT_MATCH_TABLE(0x13C),
     TOURNAMENT_SET_PRIZE(0x13D),
     TOURNAMENT_UEW(0x13E),
     TOURNAMENT_CHARACTERS(0x13F),//they never coded this :|
-    
+
     WEDDING_PROGRESS(0x140),//byte step, int groomid, int brideid
     WEDDING_CEREMONY_END(0x141),
-    
+
     PARCEL(0x142),
-    
+
     CHARGE_PARAM_RESULT(0x143),
     QUERY_CASH_RESULT(0x144),
     CASHSHOP_OPERATION(0x145),
@@ -341,7 +341,7 @@ public enum SendOpcode {
     CASHSHOP_GACHAPON_STAMP_RESULT(0x14C),
     CASHSHOP_CASH_ITEM_GACHAPON_RESULT(0x14D),
     CASHSHOP_CASH_GACHAPON_OPEN_RESULT(0x14E),
-    
+
     KEYMAP(0x14F),
     AUTO_HP_POT(0x150),
     AUTO_MP_POT(0x151),
@@ -356,7 +356,7 @@ public enum SendOpcode {
     VEGA_SCROLL(0x166);
     private int code = -2;
 
-    private SendOpcode(int code) {
+    SendOpcode(int code) {
         this.code = code;
     }
 

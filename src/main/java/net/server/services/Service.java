@@ -20,14 +20,13 @@
 package net.server.services;
 
 /**
- *
  * @author Ronan
  */
-public class Service <T extends BaseService> {
-    
+public class Service<T extends BaseService> {
+
     private Class<T> cls;
     private BaseService service;
-    
+
     public Service(Class<T> s) {
         try {
             cls = s;
@@ -36,15 +35,15 @@ public class Service <T extends BaseService> {
             e.printStackTrace();
         }
     }
-    
+
     public T getService() {
         return cls.cast(service);
     }
-    
+
     public void dispose() {
         service.dispose();
         service = null;
     }
-    
+
 }
 

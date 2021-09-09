@@ -22,7 +22,6 @@
 package net.server.channel;
 
 /**
- *
  * @author Frz
  */
 public class CharacterIdChannelPair {

@@ -26,7 +26,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 public final class PartySearchUpdateHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         c.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(c.getPlayer());

@@ -60,10 +60,7 @@ public final class PacketProcessor {
             return null;
         }
         PacketHandler handler = handlers[packetId];
-        if (handler != null) {
-            return handler;
-        }
-        return null;
+        return handler;
     }
 
     public void registerHandler(RecvOpcode code, PacketHandler handler) {

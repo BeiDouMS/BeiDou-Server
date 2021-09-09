@@ -38,14 +38,13 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
- *
  * @author XoticStory
  */
 public final class HiredMerchantRequest extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        
+
         try {
             for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
                 if (mmo instanceof Character) {
@@ -71,7 +70,7 @@ public final class HiredMerchantRequest extends AbstractPacketHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         if (GameConstants.isFreeMarketRoom(chr.getMapId())) {
             if (!chr.hasMerchant()) {
                 try {

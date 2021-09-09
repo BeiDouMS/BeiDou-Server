@@ -30,7 +30,6 @@ import server.maps.MiniDungeonInfo;
 import tools.PacketCreator;
 
 /**
- *
  * @author Flav
  */
 public class EnterCashShopHandler extends AbstractPacketHandler {
@@ -43,19 +42,19 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
-            
-            if(mc.getEventInstance() != null) {
+
+            if (mc.getEventInstance() != null) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Entering Cash Shop or MTS are disabled when registered on an event."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
-            
-            if(MiniDungeonInfo.isDungeonMap(mc.getMapId())) {
+
+            if (MiniDungeonInfo.isDungeonMap(mc.getMapId())) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
-            
+
             if (mc.getCashShop().isOpened()) {
                 return;
             }
@@ -75,10 +74,10 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
             mc.cancelDiseaseExpireTask();
             mc.cancelSkillCooldownTask();
             mc.cancelExpirationTask();
-            
+
             mc.forfeitExpirableQuests();
             mc.cancelQuestExpirationTask();
-            
+
             c.sendPacket(PacketCreator.openCashShop(c, false));
             c.sendPacket(PacketCreator.showCashInventory(c));
             c.sendPacket(PacketCreator.showGifts(mc.getCashShop().loadGifts()));

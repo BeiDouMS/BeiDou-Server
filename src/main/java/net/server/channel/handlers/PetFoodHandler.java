@@ -62,13 +62,15 @@ public final class PetFoodHandler extends AbstractPacketHandler {
                 }
             }
         }
-        
+
         Pet pet = chr.getPet(slot);
-        if(pet == null) return;
-        
+        if (pet == null) {
+            return;
+        }
+
         short pos = p.readShort();
         int itemId = p.readInt();
-        
+
         if (c.tryacquireClient()) {
             try {
                 Inventory useInv = chr.getInventory(InventoryType.USE);

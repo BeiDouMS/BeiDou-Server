@@ -34,7 +34,7 @@ public final class ServerStatusRequestHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         byte world = (byte) p.readShort();
         World wserv = Server.getInstance().getWorld(world);
-        if(wserv != null) {
+        if (wserv != null) {
             int status = wserv.getWorldCapacityStatus();
             c.sendPacket(PacketCreator.getServerStatus(status));
         } else {

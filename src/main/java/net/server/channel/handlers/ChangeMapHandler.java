@@ -46,7 +46,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
 
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {
-                FilePrinter.printError(FilePrinter.PORTAL_STUCK + chr.getName() + ".txt", "Player " + chr.getName() + " got stuck when changing maps. Timestamp: " + Calendar.getInstance().getTime().toString() + " Last visited mapids: " + chr.getLastVisitedMapids());
+                FilePrinter.printError(FilePrinter.PORTAL_STUCK + chr.getName() + ".txt", "Player " + chr.getName() + " got stuck when changing maps. Timestamp: " + Calendar.getInstance().getTime() + " Last visited mapids: " + chr.getLastVisitedMapids());
             }
 
             c.sendPacket(PacketCreator.enableActions());

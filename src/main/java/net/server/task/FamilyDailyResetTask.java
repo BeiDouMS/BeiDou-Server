@@ -21,7 +21,7 @@ public class FamilyDailyResetTask implements Runnable {
     @Override
     public void run() {
         resetEntitlementUsage(world);
-        for(Family family : world.getFamilies()) {
+        for (Family family : world.getFamilies()) {
             family.resetDailyReps();
         }
     }
@@ -33,22 +33,22 @@ public class FamilyDailyResetTask implements Runnable {
         resetTime.set(Calendar.MINUTE, 0);
         resetTime.set(Calendar.SECOND, 0);
         resetTime.set(Calendar.MILLISECOND, 0);
-        try(Connection con = DatabaseConnection.getConnection()) {
-            try(PreparedStatement ps = con.prepareStatement("UPDATE family_character SET todaysrep = 0, reptosenior = 0 WHERE lastresettime <= ?")) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("UPDATE family_character SET todaysrep = 0, reptosenior = 0 WHERE lastresettime <= ?")) {
                 ps.setLong(1, resetTime.getTimeInMillis());
                 ps.executeUpdate();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not reset daily rep for families. On " + Calendar.getInstance().getTime());
                 e.printStackTrace();
             }
-            try(PreparedStatement ps = con.prepareStatement("DELETE FROM family_entitlement WHERE timestamp <= ?")) {
+            try (PreparedStatement ps = con.prepareStatement("DELETE FROM family_entitlement WHERE timestamp <= ?")) {
                 ps.setLong(1, resetTime.getTimeInMillis());
                 ps.executeUpdate();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not do daily reset for family entitlements. On " + Calendar.getInstance().getTime());
                 e.printStackTrace();
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
             e.printStackTrace();
         }

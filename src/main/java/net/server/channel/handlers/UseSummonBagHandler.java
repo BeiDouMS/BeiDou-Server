@@ -33,7 +33,6 @@ import tools.PacketCreator;
 import tools.Randomizer;
 
 /**
- *
  * @author AngelSL
  */
 public final class UseSummonBagHandler extends AbstractPacketHandler {

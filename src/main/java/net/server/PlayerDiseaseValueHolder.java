@@ -29,8 +29,8 @@ public class PlayerDiseaseValueHolder {//Thanks Celino
     public Disease disease;
 
     public PlayerDiseaseValueHolder(final Disease disease, final long startTime, final long length) {
-	this.disease = disease;
-	this.startTime = startTime;
-	this.length = length;
+        this.disease = disease;
+        this.startTime = startTime;
+        this.length = length;
     }
 }

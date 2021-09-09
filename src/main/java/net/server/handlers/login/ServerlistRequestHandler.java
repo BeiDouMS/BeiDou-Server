@@ -35,10 +35,10 @@ public final class ServerlistRequestHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-    	Server server = Server.getInstance();
+        Server server = Server.getInstance();
         List<World> worlds = server.getWorlds();
         c.requestedServerlist(worlds.size());
-        
+
         for (World world : worlds) {
             c.sendPacket(PacketCreator.getServerList(world.getId(), GameConstants.WORLD_NAMES[world.getId()], world.getFlag(), world.getEventMessage(), world.getChannels()));
         }

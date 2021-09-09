@@ -27,16 +27,16 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 public final class CancelChairHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int id = p.readShort();
         Character mc = c.getPlayer();
-        
+
         if (id >= mc.getMap().getSeats()) {
             return;
         }
-        
+
         if (c.tryacquireClient()) {
             try {
                 mc.sitChair(id);

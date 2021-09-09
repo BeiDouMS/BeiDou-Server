@@ -96,14 +96,14 @@ public class Server {
     private static final List<Integer> activeCoupons = new LinkedList<>();
 
     private LoginServer loginServer;
-    private List<Map<Integer, String>> channels = new LinkedList<>();
-    private List<World> worlds = new ArrayList<>();
+    private final List<Map<Integer, String>> channels = new LinkedList<>();
+    private final List<World> worlds = new ArrayList<>();
     private final Properties subnetInfo = new Properties();
     private final Map<Integer, Set<Integer>> accountChars = new HashMap<>();
     private final Map<Integer, Short> accountCharacterCount = new HashMap<>();
     private final Map<Integer, Integer> worldChars = new HashMap<>();
     private final Map<String, Integer> transitioningChars = new HashMap<>();
-    private List<Pair<Integer, String>> worldRecommendedList = new LinkedList<>();
+    private final List<Pair<Integer, String>> worldRecommendedList = new LinkedList<>();
     private final Map<Integer, Guild> guilds = new HashMap<>(100);
     private final Map<Client, Long> inLoginState = new HashMap<>(100);
 
@@ -1613,7 +1613,7 @@ public class Server {
                 String reason = Character.checkWorldTransferEligibility(con, characterId, oldWorld, newWorld); //check if character is still eligible
                 if (reason != null) {
                     removedTransfers.add(nameChangeId);
-                    FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer cancelled : Character ID " + characterId + " at " + Calendar.getInstance().getTime().toString() + ", Reason : " + reason);
+                    FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer cancelled : Character ID " + characterId + " at " + Calendar.getInstance().getTime() + ", Reason : " + reason);
                     try (PreparedStatement delPs = con.prepareStatement("DELETE FROM worldtransfers WHERE id = ?")) {
                         delPs.setInt(1, nameChangeId);
                         delPs.executeUpdate();

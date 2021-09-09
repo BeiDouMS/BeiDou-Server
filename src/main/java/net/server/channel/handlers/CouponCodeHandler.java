@@ -45,16 +45,15 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- *
  * @author Penguins (Acrylic)
  * @author Ronan (HeavenMS)
  */
 public final class CouponCodeHandler extends AbstractPacketHandler {
-    
+
     private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(Character chr, Connection con, int codeid) throws SQLException {
         Map<Integer, Integer> couponItems = new HashMap<>();
         Map<Integer, Integer> couponPoints = new HashMap<>(5);
-        
+
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode_items WHERE codeid = ?")) {
             ps.setInt(1, codeid);
 
@@ -81,36 +80,36 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                 }
             }
         }
-        
+
         List<Pair<Integer, Pair<Integer, Integer>>> ret = new LinkedList<>();
         if (!couponItems.isEmpty()) {
             for (Entry<Integer, Integer> e : couponItems.entrySet()) {
                 int item = e.getKey(), qty = e.getValue();
-                
+
                 if (ItemInformationProvider.getInstance().getName(item) == null) {
                     item = 4000000;
                     qty = 1;
-                    
+
                     FilePrinter.printError(FilePrinter.UNHANDLED_EVENT, "Error trying to redeem itemid " + item + " from codeid " + codeid + ".");
                 }
-                
+
                 if (!chr.canHold(item, qty)) {
                     return null;
                 }
-                
+
                 ret.add(new Pair<>(5, new Pair<>(item, qty)));
             }
         }
-        
+
         if (!couponPoints.isEmpty()) {
             for (Entry<Integer, Integer> e : couponPoints.entrySet()) {
                 ret.add(new Pair<>(e.getKey(), new Pair<>(777, e.getValue())));
             }
         }
-        
+
         return ret;
     }
-    
+
     private static Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> getNXCodeResult(Character chr, String code) {
         Client c = chr.getClient();
         List<Pair<Integer, Pair<Integer, Integer>>> ret = new LinkedList<>();
@@ -158,31 +157,31 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
         c.resetCsCoupon();
         return new Pair<>(0, ret);
     }
-    
+
     private static int parseCouponResult(int res) {
         switch (res) {
             case -1:
                 return 0xB0;
-                
+
             case -2:
                 return 0xB3;
-            
+
             case -3:
                 return 0xB2;
-            
+
             case -4:
                 return 0xBB;
-                
+
             default:
                 return 0xB1;
         }
     }
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.skip(2);
         String code = p.readString();
-        
+
         if (c.tryacquireClient()) {
             try {
                 Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> codeRes = getNXCodeResult(c.getPlayer(), code.toUpperCase());
@@ -196,7 +195,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                     int maplePoints = 0;
                     int nxPrepaid = 0;
                     int mesos = 0;
-                    
+
                     for (Pair<Integer, Pair<Integer, Integer>> pair : codeRes.getRight()) {
                         type = pair.getLeft();
                         int quantity = pair.getRight().getRight();
@@ -228,7 +227,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
 
                             default:
                                 int item = pair.getRight().getLeft();
-                                
+
                                 short qty;
                                 if (quantity > Short.MAX_VALUE) {
                                     qty = Short.MAX_VALUE;
@@ -237,7 +236,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                                 } else {
                                     qty = (short) quantity;
                                 }
-                                
+
                                 if (ItemInformationProvider.getInstance().isCash(item)) {
                                     Item it = CashShop.generateCouponItem(item, qty);
 
@@ -250,11 +249,11 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                                 break;
                         }
                     }
-                    if(cashItems.size() > 255) {
+                    if (cashItems.size() > 255) {
                         List<Item> oldList = cashItems;
                         cashItems = Arrays.asList(new Item[255]);
                         int index = 0;
-                        for(Item item : oldList) {
+                        for (Item item : oldList) {
                             cashItems.set(index, item);
                             index++;
                         }

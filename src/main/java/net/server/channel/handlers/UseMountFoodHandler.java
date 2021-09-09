@@ -43,15 +43,15 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
         p.skip(4);
         short pos = p.readShort();
         int itemid = p.readInt();
-        
+
         Character chr = c.getPlayer();
         Mount mount = chr.getMount();
         Inventory useInv = chr.getInventory(InventoryType.USE);
-        
+
         if (c.tryacquireClient()) {
             try {
                 Boolean mountLevelup = null;
-                
+
                 useInv.lockInventory();
                 try {
                     Item item = useInv.getItem(pos);
@@ -69,7 +69,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
                             if (levelup) {
                                 mount.setLevel(level + 1);
                             }
-                            
+
                             mountLevelup = levelup;
                         }
 
@@ -78,7 +78,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
                 } finally {
                     useInv.unlockInventory();
                 }
-                
+
                 if (mountLevelup != null) {
                     chr.getMap().broadcastMessage(PacketCreator.updateMount(chr.getId(), mount, mountLevelup));
                 }

@@ -28,11 +28,10 @@ import net.packet.InPacket;
 import net.server.guild.Guild;
 
 /**
- *
  * @author Xterminator
  */
 public final class DenyGuildRequestHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();

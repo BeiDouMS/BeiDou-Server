@@ -26,7 +26,6 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
- *
  * @author BubblesDev
  */
 public final class InnerPortalHandler extends AbstractPacketHandler {

@@ -39,7 +39,7 @@ import tools.PacketCreator;
 import java.util.List;
 
 public final class PartyOperationHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int operation = p.readByte();
@@ -48,7 +48,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
         Party party = player.getParty();
         switch (operation) {
             case 1: { // create
-               	Party.createParty(player, false);
+                Party.createParty(player, false);
                 break;
             }
             case 2: { // leave/disband
@@ -63,7 +63,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             }
             case 3: { // join
                 int partyid = p.readInt();
-                
+
                 InviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.PARTY, player.getId(), partyid, true);
                 InviteResultType res = inviteRes.result;
                 if (res == InviteResultType.ACCEPTED) {
@@ -77,21 +77,21 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 String name = p.readString();
                 Character invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
-                    if(invited.getLevel() < 10 && (!YamlConfig.config.server.USE_PARTY_FOR_STARTERS || player.getLevel() >= 10)) { //min requirement is level 10
+                    if (invited.getLevel() < 10 && (!YamlConfig.config.server.USE_PARTY_FOR_STARTERS || player.getLevel() >= 10)) { //min requirement is level 10
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));
                         return;
                     }
-                    if(YamlConfig.config.server.USE_PARTY_FOR_STARTERS && invited.getLevel() >= 10 && player.getLevel() < 10) {    //trying to invite high level
+                    if (YamlConfig.config.server.USE_PARTY_FOR_STARTERS && invited.getLevel() >= 10 && player.getLevel() < 10) {    //trying to invite high level
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));
                         return;
                     }
-                    
+
                     if (invited.getParty() == null) {
                         if (party == null) {
                             if (!Party.createParty(player, false)) {
                                 return;
                             }
-                            
+
                             party = player.getParty();
                         }
                         if (party.getMembers().size() < 6) {
@@ -122,6 +122,6 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 world.updateParty(party.getId(), PartyOperation.CHANGE_LEADER, newLeadr);
                 break;
             }
-        }    
+        }
     }
 }

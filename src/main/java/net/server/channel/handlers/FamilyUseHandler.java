@@ -35,35 +35,34 @@ import server.maps.MapleMap;
 import tools.PacketCreator;
 
 /**
- *
  * @author Moogra
  * @author Ubaware
  */
 public final class FamilyUseHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
         FamilyEntitlement type = FamilyEntitlement.values()[p.readInt()];
         int cost = type.getRepCost();
         FamilyEntry entry = c.getPlayer().getFamilyEntry();
-        if(entry.getReputation() < cost || entry.isEntitlementUsed(type)) {
+        if (entry.getReputation() < cost || entry.isEntitlementUsed(type)) {
             return; // shouldn't even be able to request it
         }
         c.sendPacket(PacketCreator.getFamilyInfo(entry));
         Character victim;
-        if(type == FamilyEntitlement.FAMILY_REUINION || type == FamilyEntitlement.SUMMON_FAMILY) {
+        if (type == FamilyEntitlement.FAMILY_REUINION || type == FamilyEntitlement.SUMMON_FAMILY) {
             victim = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
-            if(victim != null && victim != c.getPlayer()) {
-                if(victim.getFamily() == c.getPlayer().getFamily()) {
+            if (victim != null && victim != c.getPlayer()) {
+                if (victim.getFamily() == c.getPlayer().getFamily()) {
                     MapleMap targetMap = victim.getMap();
                     MapleMap ownMap = c.getPlayer().getMap();
-                    if(targetMap != null) {
-                        if(type == FamilyEntitlement.FAMILY_REUINION) {
-                            if(!FieldLimit.CANNOTMIGRATE.check(ownMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit())
+                    if (targetMap != null) {
+                        if (type == FamilyEntitlement.FAMILY_REUINION) {
+                            if (!FieldLimit.CANNOTMIGRATE.check(ownMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit())
                                     && (targetMap.getForcedReturnId() == 999999999 || targetMap.getId() < 100000000) && targetMap.getEventInstance() == null) {
-                                
+
                                 c.getPlayer().changeMap(victim.getMap(), victim.getMap().getPortal(0));
                                 useEntitlement(entry, type);
                             } else {
@@ -71,10 +70,10 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                                 return;
                             }
                         } else {
-                            if(!FieldLimit.CANNOTMIGRATE.check(targetMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(ownMap.getFieldLimit()) 
+                            if (!FieldLimit.CANNOTMIGRATE.check(targetMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(ownMap.getFieldLimit())
                                     && (ownMap.getForcedReturnId() == 999999999 || ownMap.getId() < 100000000) && ownMap.getEventInstance() == null) {
-                                
-                                if(InviteCoordinator.hasInvite(InviteType.FAMILY_SUMMON, victim.getId())) {
+
+                                if (InviteCoordinator.hasInvite(InviteType.FAMILY_SUMMON, victim.getId())) {
                                     c.sendPacket(PacketCreator.sendFamilyMessage(74, 0));
                                     return;
                                 }
@@ -91,7 +90,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.sendFamilyMessage(67, 0));
                 }
             }
-        } else if(type == FamilyEntitlement.FAMILY_BONDING) {
+        } else if (type == FamilyEntitlement.FAMILY_BONDING) {
             //not implemented
         } else {
             boolean party = false;
@@ -99,39 +98,39 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
             float rate = 1.5f;
             int duration = 15;
             do {
-                switch(type) {
-                case PARTY_EXP_2_30MIN:
-                    party = true;
-                    isExp = true;
-                    type = FamilyEntitlement.SELF_EXP_2_30MIN;
-                    continue;
-                case PARTY_DROP_2_30MIN:
-                    party = true;
-                    type = FamilyEntitlement.SELF_DROP_2_30MIN;
-                    continue;
-                case SELF_DROP_2_30MIN:
-                    duration = 30;
-                case SELF_DROP_2:
-                    rate = 2.0f;
-                case SELF_DROP_1_5:
-                    break;
-                case SELF_EXP_2_30MIN:
-                    duration = 30;
-                case SELF_EXP_2:
-                    rate = 2.0f;
-                case SELF_EXP_1_5:
-                    isExp = true;
-                default:
-                    break;
+                switch (type) {
+                    case PARTY_EXP_2_30MIN:
+                        party = true;
+                        isExp = true;
+                        type = FamilyEntitlement.SELF_EXP_2_30MIN;
+                        continue;
+                    case PARTY_DROP_2_30MIN:
+                        party = true;
+                        type = FamilyEntitlement.SELF_DROP_2_30MIN;
+                        continue;
+                    case SELF_DROP_2_30MIN:
+                        duration = 30;
+                    case SELF_DROP_2:
+                        rate = 2.0f;
+                    case SELF_DROP_1_5:
+                        break;
+                    case SELF_EXP_2_30MIN:
+                        duration = 30;
+                    case SELF_EXP_2:
+                        rate = 2.0f;
+                    case SELF_EXP_1_5:
+                        isExp = true;
+                    default:
+                        break;
                 }
                 break;
-            } while(true);
+            } while (true);
             //not implemented
         }
     }
-    
+
     private boolean useEntitlement(FamilyEntry entry, FamilyEntitlement entitlement) {
-        if(entry.useEntitlement(entitlement)) {
+        if (entry.useEntitlement(entitlement)) {
             entry.gainReputation(-entitlement.getRepCost(), false);
             entry.getChr().sendPacket(PacketCreator.getFamilyInfo(entry));
             return true;

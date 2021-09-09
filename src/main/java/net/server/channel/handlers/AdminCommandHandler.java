@@ -75,10 +75,10 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 c.getPlayer().setExp(p.readInt());
                 break;
             case 0x03: // /ban <name>
-            	c.getPlayer().yellowMessage("Please use !ban <IGN> <Reason>");
-            	break;
+                c.getPlayer().yellowMessage("Please use !ban <IGN> <Reason>");
+                break;
             case 0x04: // /block <name> <duration (in days)> <HACK/BOT/AD/HARASS/CURSE/SCAM/MISCONDUCT/SELL/ICASH/TEMP/GM/IPROGRAM/MEGAPHONE>
-            	victim = p.readString();
+                victim = p.readString();
                 int type = p.readByte(); //reason
                 int duration = p.readInt();
                 String description = p.readString();
@@ -176,7 +176,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 }
                 break;
             default:
-                System.out.println("New GM packet encountered (MODE : " + mode + ": " + p.toString());
+                System.out.println("New GM packet encountered (MODE : " + mode + ": " + p);
                 break;
         }
     }

@@ -41,8 +41,8 @@ import java.util.List;
 
 
 /**
-    *@author Drago (Dragohe4rt)
-*/
+ * @author Drago (Dragohe4rt)
+ */
 
 public final class MonsterCarnivalHandler extends AbstractPacketHandler {
 
@@ -54,7 +54,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                     int tab = p.readByte();
                     int num = p.readByte();
                     int neededCP = 0;
-                    if (tab == 0) { 
+                    if (tab == 0) {
                         final List<Pair<Integer, Integer>> mobs = c.getPlayer().getMap().getMobsToSpawn();
                         if (num >= mobs.size() || c.getPlayer().getCP() < mobs.get(num).right) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
@@ -70,7 +70,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             }
-                            
+
                             if (c.getPlayer().getTeam() == 0) {
                                 mcpq.summonR();
                             } else {
@@ -139,7 +139,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
-                        
+
                         MonsterCarnival mcpq = c.getPlayer().getMonsterCarnival();
                         if (mcpq != null) {
                             if (!mcpq.canGuardianR() && c.getPlayer().getTeam() == 0 || !mcpq.canGuardianB() && c.getPlayer().getTeam() == 1) {
@@ -171,7 +171,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                     }
                     c.getPlayer().gainCP(-neededCP);
                     c.getPlayer().getMap().broadcastMessage(PacketCreator.playerSummoned(c.getPlayer().getName(), tab, num));
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             } finally {

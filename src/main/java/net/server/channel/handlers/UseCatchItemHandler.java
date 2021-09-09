@@ -35,7 +35,6 @@ import server.life.Monster;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93
  */
 public final class UseCatchItemHandler extends AbstractPacketHandler {
@@ -48,13 +47,13 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
         p.readShort();
         int itemId = p.readInt();
         int monsterid = p.readInt();
-        
+
         Monster mob = chr.getMap().getMonsterByOid(monsterid);
         if (chr.getInventory(ItemConstants.getInventoryType(itemId)).countById(itemId) <= 0) {
-           return;
+            return;
         }
         if (mob == null) {
-           return;
+            return;
         }
         switch (itemId) {
             case 2270000:
@@ -63,7 +62,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     mob.getMap().killMonster(mob, null, false);
                     InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
                     InventoryManipulator.addById(c, 1902000, (short) 1, "", -1);
-                 }
+                }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case 2270001:
@@ -98,7 +97,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                             } else {
                                 chr.dropMessage(5, "Make a ETC slot available before using this item.");
                             }
-                            
+
                             abm.spam(10);
                         } else {
                             c.sendPacket(PacketCreator.catchMessage(0));
@@ -162,12 +161,12 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
             case 2270004:
                 if (mob.getId() == 9300175) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
-                    chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
-                    mob.getMap().killMonster(mob, null, false);
-                    InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                    InventoryManipulator.addById(c, 4001169, (short) 1, "", -1);
+                        chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
+                        mob.getMap().killMonster(mob, null, false);
+                        InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
+                        InventoryManipulator.addById(c, 4001169, (short) 1, "", -1);
                     } else {
-                    c.sendPacket(PacketCreator.catchMessage(0));
+                        c.sendPacket(PacketCreator.catchMessage(0));
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
@@ -188,15 +187,15 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 break;
             default:
                 // proper Fish catch, thanks to Dragohe4rt
-                
+
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 int itemGanho = ii.getCreateItem(itemId);
                 int mobItem = ii.getMobItem(itemId);
-                
+
                 if (itemGanho != 0 && mobItem == mob.getId()) {
                     int timeCatch = ii.getUseDelay(itemId);
                     int mobHp = ii.getMobHP(itemId);
-                    
+
                     if (timeCatch != 0 && (abm.getLastSpam(10) + timeCatch) < currentServerTime()) {
                         if (mobHp != 0 && mob.getHp() < ((mob.getMaxHp() / 100) * mobHp)) {
                             chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
@@ -214,7 +213,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
-                
+
                 // System.out.println("UseCatchItemHandler: \r\n" + slea.toString());
         }
     }

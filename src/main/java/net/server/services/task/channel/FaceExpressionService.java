@@ -33,69 +33,68 @@ import tools.PacketCreator;
 import java.util.Collections;
 
 /**
- *
  * @author Ronan
  */
 public class FaceExpressionService extends BaseService {
-    
-    private FaceExpressionScheduler[] faceExpressionSchedulers = new FaceExpressionScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
-    private MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
-    
+
+    private final FaceExpressionScheduler[] faceExpressionSchedulers = new FaceExpressionScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private final MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
+
     public FaceExpressionService() {
-        for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
             faceLock[i] = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL_FACEEXPRS, true);
             faceExpressionSchedulers[i] = new FaceExpressionScheduler(faceLock[i]);
         }
     }
-    
+
     private void emptyLocks() {
-        for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
             faceLock[i] = faceLock[i].dispose();
         }
     }
-    
+
     private void disposeLocks() {
         LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
     }
-    
+
     @Override
     public void dispose() {
-        for(int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
-            if(faceExpressionSchedulers[i] != null) {
+        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+            if (faceExpressionSchedulers[i] != null) {
                 faceExpressionSchedulers[i].dispose();
                 faceExpressionSchedulers[i] = null;
             }
         }
-        
+
         disposeLocks();
     }
-    
+
     public void registerFaceExpression(final MapleMap map, final Character chr, int emote) {
         int lockid = getChannelSchedulerIndex(map.getId());
-        
+
         Runnable cancelAction = () -> {
-            if(chr.isLoggedinWorld()) {
+            if (chr.isLoggedinWorld()) {
                 map.broadcastMessage(chr, PacketCreator.facialExpression(chr, 0), false);
             }
         };
-        
+
         faceLock[lockid].lock();
         try {
-            if(!chr.isLoggedinWorld()) {
+            if (!chr.isLoggedinWorld()) {
                 return;
             }
-            
+
             faceExpressionSchedulers[lockid].registerFaceExpression(chr.getId(), cancelAction);
         } finally {
             faceLock[lockid].unlock();
         }
-        
+
         map.broadcastMessage(chr, PacketCreator.facialExpression(chr, emote), false);
     }
-    
+
     public void unregisterFaceExpression(int mapid, Character chr) {
         int lockid = getChannelSchedulerIndex(mapid);
-        
+
         faceLock[lockid].lock();
         try {
             faceExpressionSchedulers[lockid].unregisterFaceExpression(chr.getId());
@@ -103,9 +102,9 @@ public class FaceExpressionService extends BaseService {
             faceLock[lockid].unlock();
         }
     }
-    
+
     private class FaceExpressionScheduler extends BaseScheduler {
-        
+
         public FaceExpressionScheduler(final MonitoredReentrantLock channelFaceLock) {
             super(MonitoredLockType.CHANNEL_FACESCHDL, Collections.singletonList(channelFaceLock));
         }
@@ -117,7 +116,7 @@ public class FaceExpressionService extends BaseService {
         public void unregisterFaceExpression(Integer characterId) {
             interruptEntry(characterId);
         }
-    
+
     }
-    
+
 }

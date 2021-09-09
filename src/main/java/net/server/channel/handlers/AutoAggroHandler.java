@@ -33,11 +33,13 @@ public final class AutoAggroHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character player = c.getPlayer();
-        if (player.isHidden()) return; // Don't auto aggro GM's in hide...
-        
+        if (player.isHidden()) {
+            return; // Don't auto aggro GM's in hide...
+        }
+
         MapleMap map = player.getMap();
         int oid = p.readInt();
-        
+
         Monster monster = map.getMonsterByOid(oid);
         if (monster != null) {
             monster.aggroAutoAggroUpdate(player);

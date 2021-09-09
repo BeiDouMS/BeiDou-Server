@@ -84,6 +84,8 @@ public class MessengerCharacter {
         final MessengerCharacter other = (MessengerCharacter) obj;
         if (name == null) {
             return other.name == null;
-        } else return name.equals(other.name);
+        } else {
+            return name.equals(other.name);
+        }
     }
 }

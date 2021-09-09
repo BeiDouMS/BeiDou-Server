@@ -29,7 +29,6 @@ import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
 
 /**
- *
  * @author kevintjuh93
  */
 public class ClickGuideHandler extends AbstractPacketHandler {

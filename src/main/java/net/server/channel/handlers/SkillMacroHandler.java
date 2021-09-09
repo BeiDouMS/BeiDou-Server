@@ -34,7 +34,9 @@ public final class SkillMacroHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         int num = p.readByte();
-        if (num > 5) return;
+        if (num > 5) {
+            return;
+        }
 
         for (int i = 0; i < num; i++) {
             String name = p.readString();

@@ -27,11 +27,10 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
- *
  * @author Generic, Ronan
  */
 public class AutoAssignHandler extends AbstractPacketHandler {
-    
+
     @Override
     public void handlePacket(InPacket p, Client c) {
         AssignAPProcessor.APAutoAssignAction(p, c);

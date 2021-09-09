@@ -30,7 +30,6 @@ import server.maps.Summon;
 import java.util.Collection;
 
 /**
- *
  * @author BubblesDev
  */
 public final class BeholderHandler extends AbstractPacketHandler {//Summon Skills noobs

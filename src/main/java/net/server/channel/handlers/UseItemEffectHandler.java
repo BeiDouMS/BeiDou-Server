@@ -39,7 +39,9 @@ public final class UseItemEffectHandler extends AbstractPacketHandler {
             toUse = c.getPlayer().getInventory(InventoryType.CASH).findById(itemId);
         }
         if (toUse == null || toUse.getQuantity() < 1) {
-            if (itemId != 0) return;
+            if (itemId != 0) {
+                return;
+            }
         }
         c.getPlayer().setItemEffect(itemId);
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.itemEffect(c.getPlayer().getId(), itemId), false);

@@ -18,16 +18,22 @@ public class FamilySummonResponseHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
+        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+            return;
+        }
         p.readString(); //family name
         boolean accept = p.readByte() != 0;
         InviteResult inviteResult = InviteCoordinator.answerInvite(InviteType.FAMILY_SUMMON, c.getPlayer().getId(), c.getPlayer(), accept);
-        if(inviteResult.result == InviteResultType.NOT_FOUND) return;
+        if (inviteResult.result == InviteResultType.NOT_FOUND) {
+            return;
+        }
         Character inviter = inviteResult.from;
         FamilyEntry inviterEntry = inviter.getFamilyEntry();
-        if(inviterEntry == null) return;
+        if (inviterEntry == null) {
+            return;
+        }
         MapleMap map = (MapleMap) inviteResult.params[0];
-        if(accept && inviter.getMap() == map) { //cancel if inviter has changed maps
+        if (accept && inviter.getMap() == map) { //cancel if inviter has changed maps
             c.getPlayer().changeMap(map, map.getPortal(0));
         } else {
             inviterEntry.refundEntitlement(FamilyEntitlement.SUMMON_FAMILY);

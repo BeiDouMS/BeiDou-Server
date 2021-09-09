@@ -36,8 +36,8 @@ public class PlayerStorage {
     private final MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.PLAYER_STORAGE, true);
     private final Map<Integer, Character> storage = new LinkedHashMap<>();
     private final Map<String, Character> nameStorage = new LinkedHashMap<>();
-    private MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
-    private MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
+    private final MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
+    private final MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
 
     public void addPlayer(Character chr) {
         wlock.lock();
@@ -45,16 +45,18 @@ public class PlayerStorage {
             storage.put(chr.getId(), chr);
             nameStorage.put(chr.getName().toLowerCase(), chr);
         } finally {
-	    wlock.unlock();
-	}
+            wlock.unlock();
+        }
     }
 
     public Character removePlayer(int chr) {
         wlock.lock();
         try {
             Character mc = storage.remove(chr);
-            if(mc != null) nameStorage.remove(mc.getName().toLowerCase());
-            
+            if (mc != null) {
+                nameStorage.remove(mc.getName().toLowerCase());
+            }
+
             return mc;
         } finally {
             wlock.unlock();
@@ -62,7 +64,7 @@ public class PlayerStorage {
     }
 
     public Character getCharacterByName(String name) {
-        rlock.lock();    
+        rlock.lock();
         try {
             return nameStorage.get(name.toLowerCase());
         } finally {
@@ -71,7 +73,7 @@ public class PlayerStorage {
     }
 
     public Character getCharacterById(int id) {
-        rlock.lock();    
+        rlock.lock();
         try {
             return storage.get(id);
         } finally {
@@ -90,28 +92,28 @@ public class PlayerStorage {
 
     public final void disconnectAll() {
         List<Character> chrList;
-	rlock.lock();
-	try {
+        rlock.lock();
+        try {
             chrList = new ArrayList<>(storage.values());
-	} finally {
-	    rlock.unlock();
-	}
-        
-        for(Character mc : chrList) {
+        } finally {
+            rlock.unlock();
+        }
+
+        for (Character mc : chrList) {
             Client client = mc.getClient();
-            if(client != null) {
+            if (client != null) {
                 client.forceDisconnect();
             }
         }
-        
+
         wlock.lock();
-	try {
+        try {
             storage.clear();
-	} finally {
-	    wlock.unlock();
-	}
+        } finally {
+            wlock.unlock();
+        }
     }
-    
+
     public int getSize() {
         rlock.lock();
         try {

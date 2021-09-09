@@ -26,7 +26,7 @@ import net.PacketHandler;
 import net.packet.InPacket;
 
 public final class LoginRequiringNoOpHandler implements PacketHandler {
-    private static LoginRequiringNoOpHandler instance = new LoginRequiringNoOpHandler();
+    private static final LoginRequiringNoOpHandler instance = new LoginRequiringNoOpHandler();
 
     public static LoginRequiringNoOpHandler getInstance() {
         return instance;

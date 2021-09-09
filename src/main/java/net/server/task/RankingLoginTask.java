@@ -38,7 +38,7 @@ import java.sql.SQLException;
  */
 public class RankingLoginTask implements Runnable {
     private long lastUpdate = System.currentTimeMillis();
-    
+
     private void resetMoveRank(boolean job) throws SQLException {
         String query = "UPDATE characters SET " + (job ? "jobRankMove = 0" : "rankMove = 0");
         try (Connection con = DatabaseConnection.getConnection()) {
@@ -82,7 +82,7 @@ public class RankingLoginTask implements Runnable {
             }
         }
     }
-    
+
     @Override
     public void run() {
         try (Connection con = DatabaseConnection.getConnection()) {

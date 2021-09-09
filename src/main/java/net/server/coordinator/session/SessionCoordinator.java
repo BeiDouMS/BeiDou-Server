@@ -37,17 +37,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- *
  * @author Ronan
  */
 public class SessionCoordinator {
     private static final Logger log = LoggerFactory.getLogger(SessionCoordinator.class);
     private static final SessionCoordinator instance = new SessionCoordinator();
-    
+
     public static SessionCoordinator getInstance() {
         return instance;
     }
-    
+
     public enum AntiMulticlientResult {
         SUCCESS,
         REMOTE_LOGGEDIN,
@@ -64,7 +63,7 @@ public class SessionCoordinator {
     private final Set<Hwid> onlineRemoteHwids = new HashSet<>(); // Hwid/nibblehwid
     private final Map<String, Client> loginRemoteHosts = new ConcurrentHashMap<>(); // Key: Ip (+ nibblehwid)
     private final HostHwidCache hostHwidCache = new HostHwidCache();
-    
+
     private SessionCoordinator() {
     }
 
@@ -92,10 +91,10 @@ public class SessionCoordinator {
 
         return false;
     }
-    
+
     public static String getSessionRemoteHost(Client client) {
         Hwid hwid = client.getHwid();
-        
+
         if (hwid != null) {
             return client.getRemoteAddress() + "-" + hwid.hwid();
         } else {
@@ -141,7 +140,7 @@ public class SessionCoordinator {
             final HostHwid knownHwid = hostHwidCache.getEntry(remoteHost);
             if (knownHwid != null && onlineRemoteHwids.contains(knownHwid.hwid())) {
                 return false;
-            } else if  (loginRemoteHosts.containsKey(remoteHost)) {
+            } else if (loginRemoteHosts.containsKey(remoteHost)) {
                 return false;
             }
 
@@ -221,7 +220,7 @@ public class SessionCoordinator {
         if (initResult != InitializationResult.SUCCESS) {
             return initResult.getAntiMulticlientResult();
         }
-        
+
         try {
             Hwid clientHwid = client.getHwid(); // thanks Paxum for noticing account stuck after PIC failure
             if (clientHwid == null) {
@@ -267,7 +266,7 @@ public class SessionCoordinator {
             log.warn("Failed to associate hwid {} with account id {}", hwid, accountId, ex);
         }
     }
-    
+
     private static Client fetchInTransitionSessionClient(Client client) {
         Hwid hwid = SessionCoordinator.getInstance().getGameSessionHwid(client);
         if (hwid == null) {   // maybe this session was currently in-transition?
@@ -287,12 +286,12 @@ public class SessionCoordinator {
 
         return fakeClient;
     }
-    
+
     public void closeSession(Client client, Boolean immediately) {
         if (client == null) {
             client = fetchInTransitionSessionClient(client);
         }
-        
+
         final Hwid hwid = client.getHwid();
         client.setHwid(null); // making sure to clean up calls to this function on login phase
         if (hwid != null) {
@@ -321,20 +320,20 @@ public class SessionCoordinator {
         // thanks BHB, resinate for noticing players from same network not being able to login
         return hostHwidCache.removeEntryAndGetItsHwid(remoteHost);
     }
-    
+
     public Hwid getGameSessionHwid(Client client) {
         String remoteHost = getSessionRemoteHost(client);
         return hostHwidCache.getEntryHwid(remoteHost);
     }
-    
+
     public void clearExpiredHwidHistory() {
         hostHwidCache.clearExpired();
     }
-    
+
     public void runUpdateLoginHistory() {
         loginStorage.clearExpiredAttempts();
     }
-    
+
     public void printSessionTrace() {
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, Client>> elist = new ArrayList<>(onlineClients.entrySet());
@@ -343,65 +342,65 @@ public class SessionCoordinator {
                     .sorted(Integer::compareTo)
                     .map(Object::toString)
                     .collect(Collectors.joining(", "));
-            
+
             System.out.println("Current online clients: " + commaSeparatedClients);
         }
-        
+
         if (!onlineRemoteHwids.isEmpty()) {
             List<Hwid> hwids = new ArrayList<>(onlineRemoteHwids);
             hwids.sort(Comparator.comparing(Hwid::hwid));
-            
+
             System.out.println("Current online HWIDs: ");
             for (Hwid s : hwids) {
                 System.out.println("  " + s);
             }
         }
-        
+
         if (!loginRemoteHosts.isEmpty()) {
             List<Entry<String, Client>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             elist.sort(Entry.comparingByKey());
-            
+
             System.out.println("Current login sessions: ");
             for (Entry<String, Client> e : elist) {
                 System.out.println("  " + e.getKey() + ", client: " + e.getValue());
             }
         }
     }
-    
+
     public void printSessionTrace(Client c) {
         String str = "Opened server sessions:\r\n\r\n";
-        
+
         if (!onlineClients.isEmpty()) {
             List<Entry<Integer, Client>> elist = new ArrayList<>(onlineClients.entrySet());
             elist.sort(Entry.comparingByKey());
-            
+
             str += ("Current online clients:\r\n");
             for (Entry<Integer, Client> e : elist) {
                 str += ("  " + e.getKey() + "\r\n");
             }
         }
-        
+
         if (!onlineRemoteHwids.isEmpty()) {
             List<Hwid> hwids = new ArrayList<>(onlineRemoteHwids);
             hwids.sort(Comparator.comparing(Hwid::hwid));
-            
+
             str += ("Current online HWIDs:\r\n");
             for (Hwid s : hwids) {
                 str += ("  " + s + "\r\n");
             }
         }
-        
+
         if (!loginRemoteHosts.isEmpty()) {
             List<Entry<String, Client>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
-            
+
             elist.sort((e1, e2) -> e1.getKey().compareTo(e2.getKey()));
-            
+
             str += ("Current login sessions:\r\n");
             for (Entry<String, Client> e : elist) {
                 str += ("  " + e.getKey() + ", IP: " + e.getValue().getRemoteAddress() + "\r\n");
             }
         }
-        
+
         c.getAbstractPlayerInteraction().npcTalk(2140000, str);
     }
 }

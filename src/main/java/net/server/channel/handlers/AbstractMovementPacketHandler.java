@@ -36,7 +36,9 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
     protected List<LifeMovementFragment> parseMovement(InPacket p) throws EmptyMovementException {
         List<LifeMovementFragment> res = new ArrayList<>();
         byte numCommands = p.readByte();
-        if (numCommands < 1) throw new EmptyMovementException(p);
+        if (numCommands < 1) {
+            throw new EmptyMovementException(p);
+        }
         for (byte i = 0; i < numCommands; i++) {
             byte command = p.readByte();
             switch (command) {
@@ -138,24 +140,26 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     throw new EmptyMovementException(p);
             }
         }
-        
+
         if (res.isEmpty()) {
             throw new EmptyMovementException(p);
         }
         return res;
     }
-    
+
     protected void updatePosition(InPacket p, AnimatedMapObject target, int yOffset) throws EmptyMovementException {
-    	
+
         byte numCommands = p.readByte();
-        if (numCommands < 1) throw new EmptyMovementException(p);
+        if (numCommands < 1) {
+            throw new EmptyMovementException(p);
+        }
         for (byte i = 0; i < numCommands; i++) {
             byte command = p.readByte();
             switch (command) {
                 case 0: // normal move
                 case 5:
                 case 17: { // Float
-                	//Absolute movement - only this is important for the server, other movement can be passed to the client
+                    //Absolute movement - only this is important for the server, other movement can be passed to the client
                     short xpos = p.readShort(); //is signed fine here?
                     short ypos = p.readShort();
                     target.setPosition(new Point(xpos, ypos + yOffset));
@@ -175,8 +179,8 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 19: // Springs on maps
                 case 20: // Aran Combat Step
                 case 22: {
-                	//Relative movement - server only cares about stance
-                	p.skip(4); //xpos = lea.readShort(); ypos = lea.readShort();
+                    //Relative movement - server only cares about stance
+                    p.skip(4); //xpos = lea.readShort(); ypos = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
                     p.readShort(); //duration
@@ -190,8 +194,8 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                 case 11: //chair
                 {
 //                case 14: {
-                	//Teleport movement - same as above
-                	p.skip(8); //xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort();
+                    //Teleport movement - same as above
+                    p.skip(8); //xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
                     break;
@@ -215,8 +219,8 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     break;
                 }*/
                 case 15: {
-                	//Jump down movement - stance only
-                	p.skip(12); //short xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort(); ofh = lea.readShort();
+                    //Jump down movement - stance only
+                    p.skip(12); //short xpos = lea.readShort(); ypos = lea.readShort(); xwobble = lea.readShort(); ywobble = lea.readShort(); fh = lea.readShort(); ofh = lea.readShort();
                     byte newstate = p.readByte();
                     target.setStance(newstate);
                     p.readShort(); // duration

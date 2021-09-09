@@ -54,12 +54,12 @@ public final class RingActionHandler extends AbstractPacketHandler {
     private static int getBoxId(int useItemId) {
         return useItemId == 2240000 ? 4031357 : (useItemId == 2240001 ? 4031359 : (useItemId == 2240002 ? 4031361 : (useItemId == 2240003 ? 4031363 : (1112300 + (useItemId - 2240004)))));
     }
-    
+
     public static void sendEngageProposal(final Client c, final String name, final int itemid) {
         final int newBoxId = getBoxId(itemid);
         final Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
         final Character source = c.getPlayer();
-        
+
         // TODO: get the correct packet bytes for these popups
         if (source.isMarried()) {
             source.dropMessage(1, "You're already married!");
@@ -81,11 +81,11 @@ public final class RingActionHandler extends AbstractPacketHandler {
             source.dropMessage(1, "You can't engage yourself.");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
-        } else if(target.getLevel() < 50) {
+        } else if (target.getLevel() < 50) {
             source.dropMessage(1, "You can only propose to someone level 50 or higher.");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
-        } else if(source.getLevel() < 50) {
+        } else if (source.getLevel() < 50) {
             source.dropMessage(1, "You can only propose being level 50 or higher.");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
@@ -125,11 +125,11 @@ public final class RingActionHandler extends AbstractPacketHandler {
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
         }
-        
+
         source.setMarriageItemId(itemid);
         target.sendPacket(WeddingPackets.onMarriageRequest(source.getName(), source.getId()));
     }
-    
+
     private static void eraseEngagementOffline(int characterId) {
         try (Connection con = DatabaseConnection.getConnection()) {
             eraseEngagementOffline(characterId, con);
@@ -137,14 +137,14 @@ public final class RingActionHandler extends AbstractPacketHandler {
             sqle.printStackTrace();
         }
     }
-    
+
     private static void eraseEngagementOffline(int characterId, Connection con) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET marriageItemId=-1, partnerId=-1 WHERE id=?")) {
             ps.setInt(1, characterId);
             ps.executeUpdate();
         }
     }
-    
+
     private static void breakEngagementOffline(int characterId) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT marriageItemId FROM characters WHERE id=?")) {
@@ -170,20 +170,22 @@ public final class RingActionHandler extends AbstractPacketHandler {
             System.out.println("Error updating offline breakup " + ex.getMessage());
         }
     }
-    
+
     private synchronized static void breakMarriage(Character chr) {
         int partnerid = chr.getPartnerId();
-        if(partnerid <= 0) return;
-        
+        if (partnerid <= 0) {
+            return;
+        }
+
         chr.getClient().getWorldServer().deleteRelationship(chr.getId(), partnerid);
         Ring.removeRing(chr.getMarriageRing());
-        
+
         Character partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
-        if(partner == null) {
+        if (partner == null) {
             eraseEngagementOffline(partnerid);
         } else {
             partner.dropMessage(5, chr.getName() + " has decided to break up the marriage.");
-            
+
             //partner.sendPacket(Wedding.OnMarriageResult((byte) 0)); ok, how to gracefully unengage someone without the need to cc?
             partner.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(0, 0));
             resetRingId(partner);
@@ -191,9 +193,9 @@ public final class RingActionHandler extends AbstractPacketHandler {
             partner.setMarriageItemId(-1);
             partner.addMarriageRing(null);
         }
-        
+
         chr.dropMessage(5, "You have successfully break the marriage with " + Character.getNameById(partnerid) + ".");
-        
+
         //chr.sendPacket(Wedding.OnMarriageResult((byte) 0));
         chr.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(0, 0));
         resetRingId(chr);
@@ -201,55 +203,55 @@ public final class RingActionHandler extends AbstractPacketHandler {
         chr.setMarriageItemId(-1);
         chr.addMarriageRing(null);
     }
-    
+
     private static void resetRingId(Character player) {
         int ringitemid = player.getMarriageRing().getItemId();
-        
+
         Item it = player.getInventory(InventoryType.EQUIP).findById(ringitemid);
-        if(it == null) {
+        if (it == null) {
             it = player.getInventory(InventoryType.EQUIPPED).findById(ringitemid);
         }
 
-        if(it != null) {
+        if (it != null) {
             Equip eqp = (Equip) it;
             eqp.setRingId(-1);
         }
     }
-    
+
     private synchronized static void breakEngagement(Character chr) {
         int partnerid = chr.getPartnerId();
         int marriageitemid = chr.getMarriageItemId();
-        
+
         chr.getClient().getWorldServer().deleteRelationship(chr.getId(), partnerid);
-        
+
         Character partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
-        if(partner == null) {
+        if (partner == null) {
             breakEngagementOffline(partnerid);
         } else {
             partner.dropMessage(5, chr.getName() + " has decided to break up the engagement.");
-            
+
             int partnerMarriageitemid = marriageitemid + ((chr.getGender() == 0) ? 1 : -1);
-            if(partner.haveItem(partnerMarriageitemid)) {
+            if (partner.haveItem(partnerMarriageitemid)) {
                 InventoryManipulator.removeById(partner.getClient(), InventoryType.ETC, partnerMarriageitemid, (short) 1, false, false);
             }
-            
+
             //partner.sendPacket(Wedding.OnMarriageResult((byte) 0)); ok, how to gracefully unengage someone without the need to cc?
             partner.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(0, 0));
             partner.setPartnerId(-1);
             partner.setMarriageItemId(-1);
         }
 
-        if(chr.haveItem(marriageitemid)) {
+        if (chr.haveItem(marriageitemid)) {
             InventoryManipulator.removeById(chr.getClient(), InventoryType.ETC, marriageitemid, (short) 1, false, false);
         }
         chr.dropMessage(5, "You have successfully break the engagement with " + Character.getNameById(partnerid) + ".");
-        
+
         //chr.sendPacket(Wedding.OnMarriageResult((byte) 0));
         chr.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(0, 0));
         chr.setPartnerId(-1);
         chr.setMarriageItemId(-1);
     }
-    
+
     public static void breakMarriageRing(Character chr, final int wItemId) {
         final InventoryType type = InventoryType.getByType((byte) (wItemId / 1000000));
         final Item wItem = chr.getInventory(type).findById(wItemId);
@@ -257,7 +259,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         final boolean weddingRing = (wItem != null && wItemId / 10 == 111280);
 
         if (weddingRing) {
-            if(chr.getPartnerId() > 0) {
+            if (chr.getPartnerId() > 0) {
                 breakMarriage(chr);
             }
 
@@ -270,7 +272,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
             chr.getMap().disappearingItemDrop(chr, chr, wItem, chr.getPosition());
         }
     }
-    
+
     public static void giveMarriageRings(Character player, Character partner, int marriageRingId) {
         Pair<Integer, Integer> rings = Ring.createRing(marriageRingId, player, partner);
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -289,65 +291,65 @@ public final class RingActionHandler extends AbstractPacketHandler {
         InventoryManipulator.addFromDrop(partner.getClient(), ringEqp, false, -1);
         partner.broadcastMarriageMessage();
     }
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         byte mode = p.readByte();
         String name;
         byte slot;
-        switch(mode) {
+        switch (mode) {
             case 0: // Send Proposal
                 sendEngageProposal(c, p.readString(), p.readInt());
                 break;
-                
+
             case 1: // Cancel Proposal
-                if(c.getPlayer().getMarriageItemId() / 1000000 != 4) {
+                if (c.getPlayer().getMarriageItemId() / 1000000 != 4) {
                     c.getPlayer().setMarriageItemId(-1);
                 }
                 break;
-                
+
             case 2: // Accept/Deny Proposal
                 final boolean accepted = p.readByte() > 0;
                 name = p.readString();
                 final int id = p.readInt();
-                
+
                 final Character source = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
                 final Character target = c.getPlayer();
-                
+
                 if (source == null) {
                     target.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 final int itemid = source.getMarriageItemId();
                 if (target.getPartnerId() > 0 || source.getId() != id || itemid <= 0 || !source.haveItem(itemid) || source.getPartnerId() > 0 || !source.isAlive() || !target.isAlive()) {
                     target.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 if (accepted) {
                     final int newItemId = getBoxId(itemid);
                     if (!InventoryManipulator.checkSpace(c, newItemId, 1, "") || !InventoryManipulator.checkSpace(source.getClient(), newItemId, 1, "")) {
                         target.sendPacket(PacketCreator.enableActions());
                         return;
                     }
-                    
+
                     try {
                         InventoryManipulator.removeById(source.getClient(), InventoryType.USE, itemid, 1, false, false);
-                        
+
                         int marriageId = c.getWorldServer().createRelationship(source.getId(), target.getId());
                         source.setPartnerId(target.getId()); // engage them (new marriageitemid, partnerid for both)
                         target.setPartnerId(source.getId());
-                        
+
                         source.setMarriageItemId(newItemId);
                         target.setMarriageItemId(newItemId + 1);
-                        
+
                         InventoryManipulator.addById(source.getClient(), newItemId, (short) 1);
                         InventoryManipulator.addById(c, (newItemId + 1), (short) 1);
-                        
+
                         source.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
                         target.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
-                        
+
                         source.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(target.getId(), target.getMapId()));
                         target.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(source.getId(), source.getMapId()));
                     } catch (Exception e) {
@@ -356,67 +358,67 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 } else {
                     source.dropMessage(1, "She has politely declined your engagement request.");
                     source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
-                    
+
                     source.setMarriageItemId(-1);
                 }
                 break;
-                
+
             case 3: // Break Engagement
                 breakMarriageRing(c.getPlayer(), p.readInt());
                 break;
-                
+
             case 5: // Invite %s to Wedding
                 name = p.readString();
                 int marriageId = p.readInt();
                 slot = p.readByte(); // this is an int
-                
+
                 int itemId;
                 try {
                     itemId = c.getPlayer().getInventory(InventoryType.ETC).getItem(slot).getItemId();
-                } catch(NullPointerException npe) {
+                } catch (NullPointerException npe) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
-                if((itemId != 4031377 && itemId != 4031395) || !c.getPlayer().haveItem(itemId)) {
+
+                if ((itemId != 4031377 && itemId != 4031395) || !c.getPlayer().haveItem(itemId)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 String groom = c.getPlayer().getName(), bride = Character.getNameById(c.getPlayer().getPartnerId());
                 int guest = Character.getIdByName(name);
                 if (groom == null || bride == null || groom.equals("") || bride.equals("") || guest <= 0) {
                     c.getPlayer().dropMessage(5, "Unable to find " + name + "!");
                     return;
                 }
-                
+
                 try {
                     World wserv = c.getWorldServer();
                     Pair<Boolean, Boolean> registration = wserv.getMarriageQueuedLocation(marriageId);
-                    
-                    if(registration != null) {
-                        if(wserv.addMarriageGuest(marriageId, guest)) {
+
+                    if (registration != null) {
+                        if (wserv.addMarriageGuest(marriageId, guest)) {
                             boolean cathedral = registration.getLeft();
                             int newItemId = cathedral ? 4031407 : 4031406;
-                            
+
                             Channel cserv = c.getChannelServer();
                             int resStatus = cserv.getWeddingReservationStatus(marriageId, cathedral);
-                            if(resStatus > 0) {
+                            if (resStatus > 0) {
                                 long expiration = cserv.getWeddingTicketExpireTime(resStatus + 1);
 
                                 Character guestChr = c.getWorldServer().getPlayerStorage().getCharacterById(guest);
-                                if(guestChr != null && InventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && InventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
+                                if (guestChr != null && InventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && InventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
                                     guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding!");
                                 } else {
-                                    if(guestChr != null && guestChr.isLoggedinWorld()) {
+                                    if (guestChr != null && guestChr.isLoggedinWorld()) {
                                         guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding! Receive your invitation from Duey!");
                                     } else {
                                         c.getPlayer().sendNote(name, "You've been invited to " + groom + " and " + bride + "'s Wedding! Receive your invitation from Duey!", (byte) 0);
                                     }
-                                    
+
                                     Item weddingTicket = new Item(newItemId, (short) 0, (short) 1);
                                     weddingTicket.setExpiration(expiration);
-                                    
+
                                     DueyProcessor.dueyCreatePackage(weddingTicket, 0, groom, guest);
                                 }
                             } else {
@@ -428,22 +430,22 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     } else {
                         c.getPlayer().dropMessage(5, "Invitation was not sent to '" + name + "'. Either the time for your marriage reservation already came or it was not found.");
                     }
-                    
+
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     return;
                 }
-                
+
                 c.getAbstractPlayerInteraction().gainItem(itemId, (short) -1);
                 break;
-                
+
             case 6: // Open Wedding Invitation
                 slot = (byte) p.readInt();
                 int invitationid = p.readInt();
-                
-                if(invitationid == 4031406 || invitationid == 4031407) {
+
+                if (invitationid == 4031406 || invitationid == 4031407) {
                     Item item = c.getPlayer().getInventory(InventoryType.ETC).getItem(slot);
-                    if(item == null || item.getItemId() != invitationid) {
+                    if (item == null || item.getItemId() != invitationid) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     }
@@ -455,10 +457,10 @@ public final class RingActionHandler extends AbstractPacketHandler {
                         c.sendPacket(WeddingPackets.sendWeddingInvitation(Character.getNameById(groomId), Character.getNameById(brideId)));
                     }
                 }
-                
+
                 break;
-                
-            case 9: 
+
+            case 9:
                 try {
                     // By -- Dragoso (Drago)
                     // Groom and Bride's Wishlist
@@ -493,15 +495,16 @@ public final class RingActionHandler extends AbstractPacketHandler {
                             }
                         }
                     }
-                } catch (NumberFormatException nfe) {}
-                
+                } catch (NumberFormatException nfe) {
+                }
+
                 break;
-                
+
             default:
-                System.out.println("Unhandled RING_ACTION Mode: " + p.toString());
+                System.out.println("Unhandled RING_ACTION Mode: " + p);
                 break;
         }
-        
+
         c.sendPacket(PacketCreator.enableActions());
     }
 }

@@ -51,42 +51,42 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             AutobanFactory.FAST_ATTACK.alert(chr, "Time: " + timeElapsed);
         }
         chr.getAutobanManager().spam(8);*/
-		
+
         AttackInfo attack = parseDamage(p, chr, true, false);
-        
+
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
-            if(chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
+            if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
                 // How are they attacking when the client won't let them?
                 chr.getClient().disconnect(false, false);
-                return; 
+                return;
             }
         }
-        
+
         if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
-        
+
         if (attack.skill == Buccaneer.ENERGY_ORB || attack.skill == ThunderBreaker.SPARK || attack.skill == Shadower.TAUNT || attack.skill == NightLord.TAUNT) {
             chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             applyAttack(attack, chr, 1);
         } else if (attack.skill == ThunderBreaker.SHARK_WAVE && chr.getSkillLevel(ThunderBreaker.SHARK_WAVE) > 0) {
             chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             applyAttack(attack, chr, 1);
-            
+
             for (int i = 0; i < attack.numAttacked; i++) {
                 chr.handleEnergyChargeGain();
             }
         } else if (attack.skill == Aran.COMBO_SMASH || attack.skill == Aran.COMBO_FENRIR || attack.skill == Aran.COMBO_TEMPEST) {
             chr.getMap().broadcastMessage(chr, PacketCreator.rangedAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, 0, attack.allDamage, attack.speed, attack.direction, attack.display), false);
             if (attack.skill == Aran.COMBO_SMASH && chr.getCombo() >= 30) {
-            	chr.setCombo((short) 0);
-            	applyAttack(attack, chr, 1);
+                chr.setCombo((short) 0);
+                applyAttack(attack, chr, 1);
             } else if (attack.skill == Aran.COMBO_FENRIR && chr.getCombo() >= 100) {
-            	chr.setCombo((short) 0);
-            	applyAttack(attack, chr, 2);
+                chr.setCombo((short) 0);
+                applyAttack(attack, chr, 2);
             } else if (attack.skill == Aran.COMBO_TEMPEST && chr.getCombo() >= 200) {
-            	chr.setCombo((short) 0);
+                chr.setCombo((short) 0);
                 applyAttack(attack, chr, 4);
             }
         } else {
@@ -105,10 +105,10 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 if (effect.getCooldown() > 0) {
                     c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect.getCooldown()));
                 }
-                
-                if(attack.skill == 4111004) {   // shadow meso
+
+                if (attack.skill == 4111004) {   // shadow meso
                     bulletCount = 0;
-                    
+
                     int money = effect.getMoneyCon();
                     if (money != 0) {
                         int moneyMod = money / 2;
@@ -130,13 +130,13 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 if (item != null) {
                     int id = item.getItemId();
                     slot = item.getPosition();
-                    
+
                     boolean bow = ItemConstants.isArrowForBow(id);
                     boolean cbow = ItemConstants.isArrowForCrossBow(id);
                     if (item.getQuantity() >= bulletCount) { //Fixes the bug where you can't use your last arrow.
                         if (type == WeaponType.CLAW && ItemConstants.isThrowingStar(id) && weapon.getItemId() != 1472063) {
                             if (((id == 2070007 || id == 2070018) && chr.getLevel() < 70) || (id == 2070016 && chr.getLevel() < 50)) {
-                            } else {	
+                            } else {
                                 projectile = id;
                                 break;
                             }
@@ -156,7 +156,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         }
                     }
                 }
-            }            
+            }
             boolean soulArrow = chr.getBuffedValue(BuffStat.SOULARROW) != null;
             boolean shadowClaw = chr.getBuffedValue(BuffStat.SHADOW_CLAW) != null;
             if (projectile != 0) {
@@ -164,16 +164,19 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     short bulletConsume = bulletCount;
 
                     if (effect != null && effect.getBulletConsume() != 0) {
-                        bulletConsume = (byte) (effect.getBulletConsume() * (hasShadowPartner ? 2 : 1));           
+                        bulletConsume = (byte) (effect.getBulletConsume() * (hasShadowPartner ? 2 : 1));
                     }
 
-                    if(slot < 0) System.out.println("<ERROR> Projectile to use was unable to be found.");
-                    else InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
+                    if (slot < 0) {
+                        System.out.println("<ERROR> Projectile to use was unable to be found.");
+                    } else {
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
+                    }
                 }
             }
-            
+
             if (projectile != 0 || soulArrow || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 4111004 || attack.skill == 13101005) {
-            	int visProjectile = projectile; //visible projectile sent to players
+                int visProjectile = projectile; //visible projectile sent to players
                 if (ItemConstants.isThrowingStar(projectile)) {
                     Inventory cash = chr.getInventory(InventoryType.CASH);
                     for (int i = 1; i <= cash.getSlotLimit(); i++) { // impose order...
@@ -188,7 +191,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 } else if (soulArrow || attack.skill == 3111004 || attack.skill == 3211004 || attack.skill == 11101004 || attack.skill == 15111007 || attack.skill == 14101006 || attack.skill == 13101005) {
                     visProjectile = 0;
                 }
-                
+
                 final Packet packet;
                 switch (attack.skill) {
                     case 3121004: // Hurricane
@@ -202,7 +205,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         break;
                 }
                 chr.getMap().broadcastMessage(chr, packet, false, true);
-                
+
                 if (attack.skill != 0) {
                     Skill skill = SkillFactory.getSkill(attack.skill);
                     StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
@@ -215,15 +218,15 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                         }
                     }
                 }
-                
+
                 if (chr.getSkillLevel(SkillFactory.getSkill(NightWalker.VANISH)) > 0 && chr.getBuffedValue(BuffStat.DARKSIGHT) != null && attack.numAttacked > 0 && chr.getBuffSource(BuffStat.DARKSIGHT) != 9101004) {
                     chr.cancelEffectFromBuffStat(BuffStat.DARKSIGHT);
                     chr.cancelBuffStats(BuffStat.DARKSIGHT);
-                } else if(chr.getSkillLevel(SkillFactory.getSkill(WindArcher.WIND_WALK)) > 0 && chr.getBuffedValue(BuffStat.WIND_WALK) != null && attack.numAttacked > 0) {
+                } else if (chr.getSkillLevel(SkillFactory.getSkill(WindArcher.WIND_WALK)) > 0 && chr.getBuffedValue(BuffStat.WIND_WALK) != null && attack.numAttacked > 0) {
                     chr.cancelEffectFromBuffStat(BuffStat.WIND_WALK);
                     chr.cancelBuffStats(BuffStat.WIND_WALK);
                 }
-                
+
                 applyAttack(attack, chr, bulletCount);
             }
         }

@@ -26,14 +26,13 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author Drago (Dragohe4rt)
  */
 public final class WeddingHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        
+
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();
@@ -70,7 +69,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
 
                                                         marriage.addGiftItem(groomWishlist, newItem);
                                                         InventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
-                                                        
+
                                                         KarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
                                                         marriage.setIntProperty(groomWishlistProp, giftCount + 1);
 
@@ -83,9 +82,11 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                         } finally {
                                             chrInv.unlockInventory();
                                         }
-                                        
+
                                         if (newItem != null) {
-                                            if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) chr.saveCharToDB(false); 
+                                            if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) {
+                                                chr.saveCharToDB(false);
+                                            }
                                             marriage.saveGiftItemsToDb(c, groomWishlist, cid);
                                         }
                                     } else {
@@ -97,7 +98,8 @@ public final class WeddingHandler extends AbstractPacketHandler {
                             } else {
                                 c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xC, marriage.getWishlistItems(groomWishlist), null));
                             }
-                        } catch (NumberFormatException nfe) {}
+                        } catch (NumberFormatException nfe) {
+                        }
                     } else {
                         c.sendPacket(PacketCreator.enableActions());
                     }
