@@ -49,7 +49,7 @@ import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.channel.MobMistService;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
-import net.server.world.MapleParty;
+import net.server.world.Party;
 import net.server.world.World;
 import scripting.event.EventInstanceManager;
 import scripting.map.MapScriptManager;
@@ -2354,7 +2354,7 @@ public class MapleMap {
     
     public void addPlayer(final Character chr) {
         int chrSize;
-        MapleParty party = chr.getParty();
+        Party party = chr.getParty();
         chrWLock.lock();
         try {
             characters.add(chr);
@@ -2668,7 +2668,7 @@ public class MapleMap {
         service.unregisterFaceExpression(mapid, chr);
         chr.unregisterChairBuff();
         
-        MapleParty party = chr.getParty();
+        Party party = chr.getParty();
         chrWLock.lock();
         try {
             if (party != null && party.getMemberById(chr.getId()) != null) {

@@ -23,7 +23,7 @@
 package server.partyquest;
 
 import client.Character;
-import net.server.world.MapleParty;
+import net.server.world.Party;
 import server.MapleItemInformationProvider;
 import server.TimerManager;
 import tools.PacketCreator;
@@ -57,7 +57,7 @@ public class Pyramid extends PartyQuest {
     ScheduledFuture<?> timer = null;
     ScheduledFuture<?> gaugeSchedule = null;
 
-    public Pyramid(MapleParty party, PyramidMode mode, int mapid) {
+    public Pyramid(Party party, PyramidMode mode, int mapid) {
         super(party);
         this.mode = mode;
         this.map = mapid;

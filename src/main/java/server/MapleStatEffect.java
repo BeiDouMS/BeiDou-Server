@@ -34,8 +34,8 @@ import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.Packet;
 import net.server.Server;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.life.MapleMonster;
@@ -1039,7 +1039,7 @@ public class MapleStatEffect {
             final MCSkill skill = MapleCarnivalFactory.getInstance().getSkill(nuffSkill);
             if (skill != null) {
                 final Disease dis = skill.getDisease();
-                MapleParty opposition = applyfrom.getParty().getEnemy();
+                Party opposition = applyfrom.getParty().getEnemy();
                 if (skill.targetsAll) {
                     for (MaplePartyCharacter enemyChrs : opposition.getPartyMembers()) {
                         Character chrApp = enemyChrs.getPlayer();

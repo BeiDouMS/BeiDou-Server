@@ -27,7 +27,7 @@ import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import net.server.world.MapleParty;
+import net.server.world.Party;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -89,7 +89,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
     }
     
     public void warp(final Character chr) {
-        MapleParty party = chr.getParty();
+        Party party = chr.getParty();
         if (chr.getId() == ownerId || (party != null && party.getMemberById(ownerId) != null)) {
             chr.sendPacket(PacketCreator.playPortalSound());
             
@@ -127,7 +127,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
     public void sendDestroyData(Client client) {
         Character chr = client.getPlayer();
         if (from.getId() == chr.getMapId()) {
-            MapleParty party = chr.getParty();
+            Party party = chr.getParty();
             if (party != null && (ownerId == chr.getId() || party.getMemberById(ownerId) != null)) {
                 client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
             }

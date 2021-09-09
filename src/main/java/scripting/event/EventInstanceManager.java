@@ -32,8 +32,8 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.EventRecallCoordinator;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleItemInformationProvider;
@@ -350,7 +350,7 @@ public class EventInstanceManager {
                 }
         }
         
-	public void registerParty(MapleParty party, MapleMap map) {
+	public void registerParty(Party party, MapleMap map) {
 		for (MaplePartyCharacter mpc : party.getEligibleMembers()) {
                         if (mpc.isOnline()) {   // thanks resinate
                                 Character chr = map.getCharacterById(mpc.getId());

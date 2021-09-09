@@ -24,8 +24,8 @@ package server.partyquest;
 
 import client.Character;
 import net.server.Server;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import tools.FilePrinter;
 
 import java.util.ArrayList;
@@ -37,10 +37,10 @@ import java.util.List;
  */
 public class PartyQuest {
     int channel, world;
-    MapleParty party;
+    Party party;
     List<Character> participants = new ArrayList<>();
 
-    public PartyQuest(MapleParty party) {
+    public PartyQuest(Party party) {
         this.party = party;
         MaplePartyCharacter leader = party.getLeader();
         channel = leader.getChannel();
@@ -55,7 +55,7 @@ public class PartyQuest {
         }
     }
 
-    public MapleParty getParty() {
+    public Party getParty() {
         return party;
     }
 

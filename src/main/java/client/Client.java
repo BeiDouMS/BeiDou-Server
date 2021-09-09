@@ -878,7 +878,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     private void removePartyPlayer(World wserv) {
         MapleMap map = player.getMap();
-        final MapleParty party = player.getParty();
+        final Party party = player.getParty();
         final int idz = player.getId();
 
         if (party != null) {
@@ -1097,7 +1097,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             if (partyid != null) {
                 this.setPlayer(chr);
 
-                MapleParty party = chr.getWorldServer().getParty(partyid);
+                Party party = chr.getWorldServer().getParty(partyid);
                 chr.setParty(party);
                 chr.getMPC();
                 chr.leaveParty();   // thanks Vcoc for pointing out deleted characters would still stay in a party

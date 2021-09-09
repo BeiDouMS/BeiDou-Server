@@ -31,8 +31,8 @@ import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.guild.Guild;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import net.server.world.World;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleMarriage;
@@ -507,15 +507,15 @@ public class EventManager {
     }    
     
     //PQ method: starts a PQ
-    public boolean startInstance(MapleParty party, MapleMap map) {
+    public boolean startInstance(Party party, MapleMap map) {
         return startInstance(-1, party, map);
     }
     
-    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map) {
+    public boolean startInstance(int lobbyId, Party party, MapleMap map) {
         return startInstance(lobbyId, party, map, party.getLeader().getPlayer());
     }
     
-    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, Character leader) {
+    public boolean startInstance(int lobbyId, Party party, MapleMap map, Character leader) {
         if (this.isDisposed()) return false;
         
         try {
@@ -574,15 +574,15 @@ public class EventManager {
     }
     
     //PQ method: starts a PQ with a difficulty level, requires function setup(difficulty, leaderid) instead of setup()
-    public boolean startInstance(MapleParty party, MapleMap map, int difficulty) {
+    public boolean startInstance(Party party, MapleMap map, int difficulty) {
         return startInstance(-1, party, map, difficulty);
     }
     
-    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, int difficulty) {
+    public boolean startInstance(int lobbyId, Party party, MapleMap map, int difficulty) {
         return startInstance(lobbyId, party, map, difficulty, party.getLeader().getPlayer());
     }
     
-    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, int difficulty, Character leader) {
+    public boolean startInstance(int lobbyId, Party party, MapleMap map, int difficulty, Character leader) {
         if (this.isDisposed()) return false;
         
         try {
@@ -702,7 +702,7 @@ public class EventManager {
         return false;
     }
     
-    public List<MaplePartyCharacter> getEligibleParty(MapleParty party) {
+    public List<MaplePartyCharacter> getEligibleParty(Party party) {
         if (party == null) {
             return new ArrayList<>();
         }

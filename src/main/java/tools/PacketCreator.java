@@ -52,8 +52,8 @@ import net.server.channel.handlers.WhisperHandler;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildSummary;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import net.server.world.PartyOperation;
 import net.server.world.World;
 import server.CashShop.CashItem;
@@ -3682,7 +3682,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet partyCreated(MapleParty party, int partycharid) {
+    public static Packet partyCreated(Party party, int partycharid) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         p.writeByte(8);
         p.writeInt(party.getId());
@@ -3764,7 +3764,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addPartyStatus(int forchannel, MapleParty party, OutPacket p, boolean leaving) {
+    private static void addPartyStatus(int forchannel, Party party, OutPacket p, boolean leaving) {
         List<MaplePartyCharacter> partymembers = new ArrayList<>(party.getMembers());
         while (partymembers.size() < 6) {
             partymembers.add(new MaplePartyCharacter());
@@ -3829,7 +3829,7 @@ public class PacketCreator {
         }
     }
 
-    public static Packet updateParty(int forChannel, MapleParty party, PartyOperation op, MaplePartyCharacter target) {
+    public static Packet updateParty(int forChannel, Party party, PartyOperation op, MaplePartyCharacter target) {
         final OutPacket p = OutPacket.create(SendOpcode.PARTY_OPERATION);
         switch (op) {
             case DISBAND:

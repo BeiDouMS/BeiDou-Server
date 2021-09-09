@@ -36,8 +36,8 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.ChannelServices;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -317,7 +317,7 @@ public final class Channel {
         }
     }
 
-    public List<Character> getPartyMembers(MapleParty party) {
+    public List<Character> getPartyMembers(Party party) {
         List<Character> partym = new ArrayList<>(8);
         for (MaplePartyCharacter partychar : party.getMembers()) {
             if (partychar.getChannel() == getId()) {
@@ -465,7 +465,7 @@ public final class Channel {
         this.storedVars.put(key, val);
     }
     
-    public int lookupPartyDojo(MapleParty party) {
+    public int lookupPartyDojo(Party party) {
         if(party == null) return -1;
         
         Integer i = dojoParty.get(party.hashCode());
@@ -476,7 +476,7 @@ public final class Channel {
         return ingressDojo(isPartyDojo, null, fromStage);
     }
     
-    public int ingressDojo(boolean isPartyDojo, MapleParty party, int fromStage) {
+    public int ingressDojo(boolean isPartyDojo, Party party, int fromStage) {
         lock.lock();
         try {
             int dojoList = this.usedDojo;
@@ -516,7 +516,7 @@ public final class Channel {
         }
     }
     
-    private void freeDojoSlot(int slot, MapleParty party) {
+    private void freeDojoSlot(int slot, Party party) {
         int mask = 0b11111111111111111111;
         mask ^= (1 << slot);
         
@@ -594,7 +594,7 @@ public final class Channel {
             this.dojoTask[slot] = TimerManager.getInstance().schedule(() -> {
                 final int delta = (dojoMapId) % 100;
                 final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
-                MapleParty party = null;
+                Party party = null;
 
                 for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
                     if (stage + i > 38) {
@@ -619,7 +619,7 @@ public final class Channel {
         dojoFinishTime[slot] = Server.getInstance().getCurrentTime() + clockTime;
     }
     
-    public void dismissDojoSchedule(int dojoMapId, MapleParty party) {
+    public void dismissDojoSchedule(int dojoMapId, Party party) {
         int slot = getDojoSlot(dojoMapId);
         int stage = (dojoMapId / 100) % 100;
         if(stage <= dojoStage[slot]) return;

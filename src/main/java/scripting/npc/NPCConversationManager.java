@@ -36,8 +36,8 @@ import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchChec
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
 import provider.wz.WZFiles;
@@ -327,7 +327,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
 	@Override
-	public MapleParty getParty() {
+	public Party getParty() {
 		return getPlayer().getParty();
 	}
 
@@ -498,7 +498,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	public boolean createPyramid(String mode, boolean party) {//lol
 		PyramidMode mod = PyramidMode.valueOf(mode);
 
-		MapleParty partyz = getPlayer().getParty();
+		Party partyz = getPlayer().getParty();
 		MapleMapManager mapManager = c.getChannelServer().getMapFactory();
 
 		MapleMap map = null;
@@ -522,7 +522,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 		}
 
 		if (!party) {
-			partyz = new MapleParty(-1, new MaplePartyCharacter(getPlayer()));
+			partyz = new Party(-1, new MaplePartyCharacter(getPlayer()));
 		}
 		Pyramid py = new Pyramid(partyz, mod, map.getId());
 		getPlayer().setPartyQuest(py);
@@ -714,7 +714,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             }
         }
         
-        private int isCPQParty(MapleMap lobby, MapleParty party) {
+        private int isCPQParty(MapleMap lobby, Party party) {
             int cpqMinLvl, cpqMaxLvl;
             
             if (lobby.isCPQLobby()) {
@@ -739,7 +739,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             return 0;
         }
         
-        private int canStartCPQ(MapleMap lobby, MapleParty party, MapleParty challenger) {
+        private int canStartCPQ(MapleMap lobby, Party party, Party challenger) {
             int ret = isCPQParty(lobby, party);
             if (ret != 0) {
                 return ret;
@@ -800,7 +800,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                         return;
                     }
 
-                    MapleParty lobbyParty = getPlayer().getParty(), challengerParty = challenger.getParty();
+                    Party lobbyParty = getPlayer().getParty(), challengerParty = challenger.getParty();
                     int status = canStartCPQ(lobbyMap, lobbyParty, challengerParty);
                     if (status == 0) {
                         new MonsterCarnival(lobbyParty, challengerParty, mapid, true, (field / 100) % 10);
@@ -852,7 +852,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                         return;
                     }
 
-                    MapleParty lobbyParty = getPlayer().getParty(), challengerParty = challenger.getParty();
+                    Party lobbyParty = getPlayer().getParty(), challengerParty = challenger.getParty();
                     int status = canStartCPQ(lobbyMap, lobbyParty, challengerParty);
                     if (status == 0) {
                         new MonsterCarnival(lobbyParty, challengerParty, mapid, false, (field / 1000) % 10);

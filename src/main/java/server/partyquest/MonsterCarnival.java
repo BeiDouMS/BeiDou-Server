@@ -5,8 +5,8 @@ import config.YamlConfig;
 import constants.string.LanguageConstants;
 import net.server.Server;
 import net.server.channel.Channel;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import server.TimerManager;
 import server.maps.MapleMap;
 import server.maps.MapleReactor;
@@ -24,7 +24,7 @@ public class MonsterCarnival {
     public static int B = 1;
     public static int A = 0;
 
-    private MapleParty p1, p2;
+    private Party p1, p2;
     private MapleMap map;
     private ScheduledFuture<?> timer, effectTimer, respawnTask;
     private long startTime = 0;
@@ -33,7 +33,7 @@ public class MonsterCarnival {
     private int redCP, blueCP, redTotalCP, blueTotalCP, redTimeupCP, blueTimeupCP;
     private boolean cpq1;
 
-    public MonsterCarnival(MapleParty p1, MapleParty p2, int mapid, boolean cpq1, int room) {
+    public MonsterCarnival(Party p1, Party p2, int mapid, boolean cpq1, int room) {
         try {
             this.cpq1 = cpq1;
             this.room = room;
@@ -400,19 +400,19 @@ public class MonsterCarnival {
         }
     }
 
-    public MapleParty getRed() {
+    public Party getRed() {
         return p1;
     }
 
-    public void setRed(MapleParty p1) {
+    public void setRed(Party p1) {
         this.p1 = p1;
     }
 
-    public MapleParty getBlue() {
+    public Party getBlue() {
         return p2;
     }
 
-    public void setBlue(MapleParty p2) {
+    public void setBlue(Party p2) {
         this.p2 = p2;
     }
 

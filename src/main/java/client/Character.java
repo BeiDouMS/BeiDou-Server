@@ -161,7 +161,7 @@ public class Character extends AbstractCharacterObject {
     private MapleMiniGame miniGame;
     private MapleRockPaperScissor rps;
     private Mount maplemount;
-    private MapleParty party;
+    private Party party;
     private final Pet[] pets = new Pet[3];
     private MaplePlayerShop playerShop = null;
     private MapleShop shop = null;
@@ -1477,7 +1477,7 @@ public class Character extends AbstractCharacterObject {
         return lastVisited;
     }
 
-    public void partyOperationUpdate(MapleParty party, List<Character> exPartyMembers) {
+    public void partyOperationUpdate(Party party, List<Character> exPartyMembers) {
         List<WeakReference<MapleMap>> mapids;
 
         petLock.lock();
@@ -1529,11 +1529,11 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private static void removePartyPlayerDoor(MapleParty party, Character target) {
+    private static void removePartyPlayerDoor(Party party, Character target) {
         target.removePartyDoor(party);
     }
 
-    private static void updatePartyTownDoors(MapleParty party, Character target, Character partyLeaver, List<Character> partyMembers) {
+    private static void updatePartyTownDoors(Party party, Character target, Character partyLeaver, List<Character> partyMembers) {
         if (partyLeaver != null) {
             removePartyPlayerDoor(party, target);
         } else {
@@ -1679,11 +1679,11 @@ public class Character extends AbstractCharacterObject {
         MapleTrade.cancelTrade(this, MapleTrade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         this.closePlayerInteractions();
 
-        MapleParty e = null;
+        Party e = null;
         if (this.getParty() != null && this.getParty().getEnemy() != null) {
             e = this.getParty().getEnemy();
         }
-        final MapleParty k = e;
+        final Party k = e;
 
         sendPacket(warpPacket);
         map.removePlayer(this);
@@ -4701,7 +4701,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void applyPartyDoor(MapleDoor door, boolean partyUpdate) {
-        MapleParty chrParty;
+        Party chrParty;
         prtLock.lock();
         try {
             if (!partyUpdate) {
@@ -4721,7 +4721,7 @@ public class Character extends AbstractCharacterObject {
 
     public MapleDoor removePartyDoor(boolean partyUpdate) {
         MapleDoor ret = null;
-        MapleParty chrParty;
+        Party chrParty;
 
         prtLock.lock();
         try {
@@ -4742,7 +4742,7 @@ public class Character extends AbstractCharacterObject {
         return ret;
     }
 
-    private void removePartyDoor(MapleParty formerParty) {    // player is no longer registered at this party
+    private void removePartyDoor(Party formerParty) {    // player is no longer registered at this party
         formerParty.removeDoor(id);
     }
 
@@ -5413,7 +5413,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleParty getParty() {
+    public Party getParty() {
         prtLock.lock();
         try {
             return party;
@@ -6191,7 +6191,7 @@ public class Character extends AbstractCharacterObject {
     public boolean isPartyLeader() {
         prtLock.lock();
         try {
-            MapleParty party = getParty();
+            Party party = getParty();
             return party != null && party.getLeaderId() == getId();
         } finally {
             prtLock.unlock();
@@ -6509,7 +6509,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean leaveParty() {
-        MapleParty party;
+        Party party;
         boolean partyLeader;
 
         prtLock.lock();
@@ -6524,7 +6524,7 @@ public class Character extends AbstractCharacterObject {
             if (partyLeader) {
                 party.assignNewLeader(client);
             }
-            MapleParty.leaveParty(party, client);
+            Party.leaveParty(party, client);
 
             return true;
         } else {
@@ -7127,7 +7127,7 @@ public class Character extends AbstractCharacterObject {
                         }
                         ret.setPosition(portal.getPosition());
                         int partyid = rs.getInt("party");
-                        MapleParty party = wserv.getParty(partyid);
+                        Party party = wserv.getParty(partyid);
                         if (party != null) {
                             ret.mpc = party.getMemberById(ret.id);
                             if (ret.mpc != null) {
@@ -9261,7 +9261,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setParty(MapleParty p) {
+    public void setParty(Party p) {
         prtLock.lock();
         try {
             if (p == null) {
@@ -9677,7 +9677,7 @@ public class Character extends AbstractCharacterObject {
         silentPartyUpdateInternal(getParty());
     }
 
-    private void silentPartyUpdateInternal(MapleParty chrParty) {
+    private void silentPartyUpdateInternal(Party chrParty) {
         if (chrParty != null) {
             getWorldServer().updateParty(chrParty.getId(), PartyOperation.SILENT_UPDATE, getMPC());
         }

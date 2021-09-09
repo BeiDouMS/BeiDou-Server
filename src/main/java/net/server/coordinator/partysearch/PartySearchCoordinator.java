@@ -30,7 +30,7 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import net.server.world.MapleParty;
+import net.server.world.Party;
 import provider.MapleData;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -392,7 +392,7 @@ public class PartySearchCoordinator {
         }
 
         for (Character leader : searchedLeaders) {
-            MapleParty party = leader.getParty();
+            Party party = leader.getParty();
             if (party != null && party.getMembers().size() < 6) {
                 addQueueLeader(leader);
             } else {

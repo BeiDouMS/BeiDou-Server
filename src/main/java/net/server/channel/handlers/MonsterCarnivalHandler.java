@@ -26,8 +26,8 @@ import client.Client;
 import client.Disease;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.partyquest.MapleCarnivalFactory;
@@ -100,7 +100,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             return;
                         }
                         final Disease dis = skill.getDisease();
-                        MapleParty enemies = c.getPlayer().getParty().getEnemy();
+                        Party enemies = c.getPlayer().getParty().getEnemy();
                         if (skill.targetsAll) {
                             int hitChance = 0;
                             if (dis.getDisease() == 121 || dis.getDisease() == 122 || dis.getDisease() == 125 || dis.getDisease() == 126) {

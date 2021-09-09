@@ -29,7 +29,7 @@ import net.server.coordinator.matchchecker.MatchCheckerListenerRecipe;
 import net.server.guild.Guild;
 import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.world.MapleParty;
+import net.server.world.Party;
 
 import java.util.Set;
 
@@ -157,7 +157,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
             public void onMatchDeclined(int leaderid, Set<Character> matchPlayers, String message) {
                 for (Character chr : matchPlayers) {
                     if (chr.getId() == leaderid && chr.getClient() != null) {
-                        MapleParty.leaveParty(chr.getParty(), chr.getClient());
+                        Party.leaveParty(chr.getParty(), chr.getClient());
                     }
                     
                     if (chr.isLoggedinWorld()) {
@@ -186,7 +186,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                 
                 for (Character chr : matchPlayers) {
                     if (chr.getId() == leaderid && chr.getClient() != null) {
-                        MapleParty.leaveParty(chr.getParty(), chr.getClient());
+                        Party.leaveParty(chr.getParty(), chr.getClient());
                     }
                     
                     if (chr.isLoggedinWorld()) {

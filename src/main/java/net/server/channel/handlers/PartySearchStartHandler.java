@@ -25,7 +25,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.world.MapleParty;
+import net.server.world.Party;
 import net.server.world.World;
 import tools.PacketCreator;
 
@@ -63,7 +63,7 @@ public class PartySearchStartHandler extends AbstractPacketHandler {
             p.readInt(); // members
             int jobs = p.readInt();
 
-            MapleParty party = c.getPlayer().getParty();
+            Party party = c.getPlayer().getParty();
             if (party == null || !c.getPlayer().isPartyLeader()) return;
 
             World world = c.getWorldServer();

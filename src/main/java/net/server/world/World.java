@@ -104,7 +104,7 @@ public class World {
     private Map<Integer, Set<Integer>> marriageGuests = new ConcurrentHashMap<>();
     
     private Map<Integer, Integer> partyChars = new HashMap<>();
-    private Map<Integer, MapleParty> parties = new HashMap<>();
+    private Map<Integer, Party> parties = new HashMap<>();
     private AtomicInteger runningPartyId = new AtomicInteger();
     private MonitoredReentrantLock partyLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_PARTY, true);
     
@@ -838,9 +838,9 @@ public class World {
         }
     }
     
-    public MapleParty createParty(MaplePartyCharacter chrfor) {
+    public Party createParty(MaplePartyCharacter chrfor) {
         int partyid = runningPartyId.getAndIncrement();
-        MapleParty party = new MapleParty(partyid, chrfor);
+        Party party = new Party(partyid, chrfor);
         
         partyLock.lock();
         try {
@@ -854,7 +854,7 @@ public class World {
         return party;
     }
 
-    public MapleParty getParty(int partyid) {
+    public Party getParty(int partyid) {
         partyLock.lock();
         try {
             return parties.get(partyid);
@@ -863,7 +863,7 @@ public class World {
         }
     }
 
-    private MapleParty disbandParty(int partyid) {
+    private Party disbandParty(int partyid) {
         partyLock.lock();
         try {
             return parties.remove(partyid);
@@ -872,7 +872,7 @@ public class World {
         }
     }
     
-    private void updateCharacterParty(MapleParty party, PartyOperation operation, MaplePartyCharacter target, Collection<MaplePartyCharacter> partyMembers) {
+    private void updateCharacterParty(Party party, PartyOperation operation, MaplePartyCharacter target, Collection<MaplePartyCharacter> partyMembers) {
         switch (operation) {
             case JOIN:
                 registerCharacterParty(target.getId(), party.getId());
@@ -899,7 +899,7 @@ public class World {
         }
     }
     
-    private void updateParty(MapleParty party, PartyOperation operation, MaplePartyCharacter target) {
+    private void updateParty(Party party, PartyOperation operation, MaplePartyCharacter target) {
         Collection<MaplePartyCharacter> partyMembers = party.getMembers();
         updateCharacterParty(party, operation, target, partyMembers);
         
@@ -931,7 +931,7 @@ public class World {
     }
 
     public void updateParty(int partyid, PartyOperation operation, MaplePartyCharacter target) {
-        MapleParty party = getParty(partyid);
+        Party party = getParty(partyid);
         if (party == null) {
             throw new IllegalArgumentException("no party with the specified partyid exists");
         }
@@ -979,7 +979,7 @@ public class World {
     }
 
     public void removeMapPartyMembers(int partyid) {
-        MapleParty party = getParty(partyid);
+        Party party = getParty(partyid);
         if(party == null) return;
         
         for(MaplePartyCharacter mpc : party.getMembers()) {
@@ -1011,7 +1011,7 @@ public class World {
         return channel;
     }
 
-    public void partyChat(MapleParty party, String chattext, String namefrom) {
+    public void partyChat(Party party, String chattext, String namefrom) {
         for (MaplePartyCharacter partychar : party.getMembers()) {
             if (!(partychar.getName().equals(namefrom))) {
                 Character chr = getPlayerStorage().getCharacterByName(partychar.getName());
@@ -2006,7 +2006,7 @@ public class World {
     }
     
     private void clearWorldData() {
-        List<MapleParty> pList;
+        List<Party> pList;
         partyLock.lock();
         try {
             pList = new ArrayList<>(parties.values());
@@ -2014,7 +2014,7 @@ public class World {
             partyLock.unlock();
         }
         
-        for(MapleParty p : pList) {
+        for(Party p : pList) {
             p.disposeLocks();
         }
         

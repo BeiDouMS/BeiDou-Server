@@ -39,8 +39,8 @@ import net.server.services.task.channel.MobClearSkillService;
 import net.server.services.task.channel.MobStatusService;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import scripting.event.EventInstanceManager;
 import server.MapleStatEffect;
 import server.TimerManager;
@@ -582,7 +582,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             return;
         }
         
-        Map<MapleParty, Map<Character, Long>> partyExpDist = new HashMap<>();
+        Map<Party, Map<Character, Long>> partyExpDist = new HashMap<>();
         Map<Character, Long> soloExpDist = new HashMap<>();
         
         Map<Integer, Character> mapPlayers = map.getMapAllPlayers();
@@ -593,7 +593,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             if (chr != null) {
                 long damage = e.getValue().longValue();
                 
-                MapleParty p = chr.getParty();
+                Party p = chr.getParty();
                 if (p != null) {
                     Map<Character, Long> partyParticipation = partyExpDist.get(p);
                     if (partyParticipation == null) {

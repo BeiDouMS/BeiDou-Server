@@ -31,8 +31,8 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.guild.Guild;
-import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
+import net.server.world.Party;
 import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
 import scripting.npc.NPCScriptManager;
@@ -723,7 +723,7 @@ public class AbstractPlayerInteraction {
 		return null;
 	}
 
-	public MapleParty getParty() {
+	public Party getParty() {
 		return getPlayer().getParty();
 	}
         
@@ -804,7 +804,7 @@ public class AbstractPlayerInteraction {
 		//4 players = +10% bonus (110)
 		//5 players = +20% bonus (120)
 		//6 players = +30% bonus (130)
-		MapleParty party = getPlayer().getParty();
+		Party party = getPlayer().getParty();
 		int size = party.getMembers().size();
 
 		if(instance) {
