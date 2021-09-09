@@ -35,7 +35,7 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
-import server.MapleTrade;
+import server.Trade;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameType;
 import tools.FilePrinter;
@@ -144,7 +144,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                 byte createType = p.readByte();
                 if (createType == 3) {  // trade
-                    MapleTrade.startTrade(chr);
+                    Trade.startTrade(chr);
                 } else if (createType == 1) { // omok mini game
                     int status = establishMiniroomStatus(chr, true);
                     if (status > 0) {
@@ -266,13 +266,13 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                MapleTrade.inviteTrade(chr, other);
+                Trade.inviteTrade(chr, other);
             } else if (mode == Action.DECLINE.getCode()) {
-                MapleTrade.declineTrade(chr);
+                Trade.declineTrade(chr);
             } else if (mode == Action.VISIT.getCode()) {
                 if (chr.getTrade() != null && chr.getTrade().getPartner() != null) {
                     if (!chr.getTrade().isFullTrade() && !chr.getTrade().getPartner().isFullTrade()) {
-                        MapleTrade.visitTrade(chr, chr.getTrade().getPartner().getChr());
+                        Trade.visitTrade(chr, chr.getTrade().getPartner().getChr());
                     } else {
                         chr.sendPacket(PacketCreator.getMiniRoomError(2));
                         return;
@@ -332,7 +332,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
             } else if (mode == Action.EXIT.getCode()) {
                 if (chr.getTrade() != null) {
-                    MapleTrade.cancelTrade(chr, MapleTrade.TradeResult.PARTNER_CANCEL);
+                    Trade.cancelTrade(chr, Trade.TradeResult.PARTNER_CANCEL);
                 } else {
                     chr.closePlayerShop();
                     chr.closeMiniGame(false);
@@ -507,7 +507,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                MapleTrade trade = chr.getTrade();
+                Trade trade = chr.getTrade();
                 if (trade != null) {
                     if ((quantity <= item.getQuantity() && quantity >= 0) || ItemConstants.isRechargeable(item.getItemId())) {
                         if (ii.isDropRestricted(item.getItemId())) { // ensure that undroppable items do not make it to the trade window
@@ -552,7 +552,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.CONFIRM.getCode()) {
-                MapleTrade.completeTrade(chr);
+                Trade.completeTrade(chr);
             } else if (mode == Action.ADD_ITEM.getCode() || mode == Action.PUT_ITEM.getCode()) {
                 if (isTradeOpen(chr)) return;
 

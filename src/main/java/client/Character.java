@@ -167,7 +167,7 @@ public class Character extends AbstractCharacterObject {
     private Shop shop = null;
     private SkinColor skinColor = SkinColor.NORMAL;
     private Storage storage = null;
-    private MapleTrade trade = null;
+    private Trade trade = null;
     private MonsterBook monsterbook;
     private CashShop cashshop;
     private final Set<NewYearCardRecord> newyears = new LinkedHashSet<>();
@@ -1676,7 +1676,7 @@ public class Character extends AbstractCharacterObject {
 
         this.unregisterChairBuff();
         this.clearBanishPlayerData();
-        MapleTrade.cancelTrade(this, MapleTrade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
+        Trade.cancelTrade(this, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         this.closePlayerInteractions();
 
         Party e = null;
@@ -5532,7 +5532,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void closeTrade() {
-        MapleTrade.cancelTrade(this, MapleTrade.TradeResult.PARTNER_CANCEL);
+        Trade.cancelTrade(this, Trade.TradeResult.PARTNER_CANCEL);
     }
 
     public void closePlayerShop() {
@@ -5887,7 +5887,7 @@ public class Character extends AbstractCharacterObject {
         return summons.containsValue(summon);
     }
 
-    public MapleTrade getTrade() {
+    public Trade getTrade() {
         return trade;
     }
 
@@ -9574,7 +9574,7 @@ public class Character extends AbstractCharacterObject {
         slots = slotid;
     }
 
-    public void setTrade(MapleTrade trade) {
+    public void setTrade(Trade trade) {
         this.trade = trade;
     }
 

@@ -37,7 +37,7 @@ import constants.inventory.ItemConstants;
 import net.server.channel.Channel;
 import server.DueyPackage;
 import server.ItemInformationProvider;
-import server.MapleTrade;
+import server.Trade;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -281,7 +281,7 @@ public class DueyProcessor {
     public static void dueySendItem(Client c, byte invTypeId, short itemPos, short amount, int sendMesos, String sendMessage, String recipient, boolean quick) {
         if (c.tryacquireClient()) {
             try {
-                int fee = MapleTrade.getFee(sendMesos);
+                int fee = Trade.getFee(sendMesos);
                 if (!quick) {
                     fee += 5000;
                 } else if (!c.getPlayer().haveItem(5330000)) {

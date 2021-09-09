@@ -5,7 +5,7 @@ import client.Client;
 import client.inventory.Item;
 import net.server.Server;
 import server.ItemInformationProvider;
-import server.MapleTrade;
+import server.Trade;
 import server.expeditions.Expedition;
 
 import java.text.SimpleDateFormat;
@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class LogHelper {
 
-	public static void logTrade(MapleTrade trade1, MapleTrade trade2) {
+	public static void logTrade(Trade trade1, Trade trade2) {
 		String name1 = trade1.getChr().getName();
 		String name2 = trade2.getChr().getName();
 		String log = "TRADE BETWEEN " + name1 + " AND " + name2 + "\r\n";

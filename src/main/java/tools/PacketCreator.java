@@ -3243,7 +3243,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getTradeStart(Client c, MapleTrade trade, byte number) {
+    public static Packet getTradeStart(Client c, Trade trade, byte number) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(3);

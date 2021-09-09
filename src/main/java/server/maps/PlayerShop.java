@@ -31,7 +31,7 @@ import client.inventory.manipulator.KarmaManipulator;
 import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import server.MapleTrade;
+import server.Trade;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -283,7 +283,7 @@ public class PlayerShop extends AbstractMapObject {
 
                         if (canBuy(c, newItem)) {
                             c.getPlayer().gainMeso(-price, false);
-                            price -= MapleTrade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
+                            price -= Trade.getFee(price);  // thanks BHB for pointing out trade fees not applying here
                             owner.gainMeso(price, true);
 
                             SoldItem soldItem = new SoldItem(c.getPlayer().getName(), pItem.getItem().getItemId(), quantity, price);

@@ -27,7 +27,7 @@ import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleTrade;
+import server.Trade;
 import server.maps.MapleMap;
 import server.maps.Portal;
 import tools.FilePrinter;
@@ -53,7 +53,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
             return;
         }
         if (chr.getTrade() != null) {
-            MapleTrade.cancelTrade(chr, MapleTrade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
+            Trade.cancelTrade(chr, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         }
         if (p.available() == 0) { //Cash Shop :)
             if (!chr.getCashShop().isOpened()) {

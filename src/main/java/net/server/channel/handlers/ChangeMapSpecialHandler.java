@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleTrade;
-import server.MapleTrade.TradeResult;
+import server.Trade;
+import server.Trade.TradeResult;
 import server.maps.Portal;
 import tools.PacketCreator;
 
@@ -45,7 +45,7 @@ public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
                     return;
             }
             if (c.getPlayer().getTrade() != null) {
-                    MapleTrade.cancelTrade(c.getPlayer(), TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
+                    Trade.cancelTrade(c.getPlayer(), TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
             }
             portal.enterPortal(c);   
     }

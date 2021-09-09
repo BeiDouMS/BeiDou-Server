@@ -43,12 +43,11 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- *
  * @author Matze
  * @author Ronan - concurrency safety + check available slots + trade results
  */
-public class MapleTrade {
-    
+public class Trade {
+
     public enum TradeResult {
         NO_RESPONSE(1),
         PARTNER_CANCEL(2),
@@ -57,29 +56,29 @@ public class MapleTrade {
         UNSUCCESSFUL_UNIQUE_ITEM_LIMIT(9),
         UNSUCCESSFUL_ANOTHER_MAP(12),
         UNSUCCESSFUL_DAMAGED_FILES(13);
-        
+
         private final int res;
 
-        private TradeResult(int res) {
+        TradeResult(int res) {
             this.res = res;
         }
-        
+
         private byte getValue() {
             return (byte) res;
         }
     }
-    
-    private MapleTrade partner = null;
-    private List<Item> items = new ArrayList<>();
+
+    private Trade partner = null;
+    private final List<Item> items = new ArrayList<>();
     private List<Item> exchangeItems;
     private int meso = 0;
     private int exchangeMeso;
-    private AtomicBoolean locked = new AtomicBoolean(false);
-    private Character chr;
-    private byte number;
+    private final AtomicBoolean locked = new AtomicBoolean(false);
+    private final Character chr;
+    private final byte number;
     private boolean fullTrade = false;
-    
-    public MapleTrade(byte number, Character chr) {
+
+    public Trade(byte number, Character chr) {
         this.chr = chr;
         this.number = number;
     }
@@ -117,38 +116,38 @@ public class MapleTrade {
         boolean show = YamlConfig.config.server.USE_DEBUG;
         items.clear();
         meso = 0;
-        
+
         for (Item item : exchangeItems) {
             KarmaManipulator.toggleKarmaFlagToUntradeable(item);
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
-        
+
         if (exchangeMeso > 0) {
             int fee = getFee(exchangeMeso);
-            
+
             chr.gainMeso(exchangeMeso - fee, show, true, show);
-            if(fee > 0) {
+            if (fee > 0) {
                 chr.dropMessage(1, "Transaction completed. You received " + GameConstants.numberWithCommas(exchangeMeso - fee) + " mesos due to trade fees.");
             } else {
                 chr.dropMessage(1, "Transaction completed. You received " + GameConstants.numberWithCommas(exchangeMeso) + " mesos.");
             }
-            
+
             result = TradeResult.NO_RESPONSE.getValue();
         } else {
             result = TradeResult.SUCCESSFUL.getValue();
         }
-        
+
         exchangeMeso = 0;
         if (exchangeItems != null) {
             exchangeItems.clear();
         }
-        
+
         chr.sendPacket(PacketCreator.getTradeResult(number, result));
     }
 
     private void cancel(byte result) {
         boolean show = YamlConfig.config.server.USE_DEBUG;
-        
+
         for (Item item : items) {
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
@@ -163,7 +162,7 @@ public class MapleTrade {
         if (exchangeItems != null) {
             exchangeItems.clear();
         }
-        
+
         chr.sendPacket(PacketCreator.getTradeResult(number, result));
     }
 
@@ -204,10 +203,10 @@ public class MapleTrade {
                     return false;
                 }
             }
-            
+
             items.add(item);
         }
-        
+
         return true;
     }
 
@@ -218,11 +217,11 @@ public class MapleTrade {
         }
     }
 
-    public MapleTrade getPartner() {
+    public Trade getPartner() {
         return partner;
     }
 
-    public void setPartner(MapleTrade partner) {
+    public void setPartner(Trade partner) {
         if (locked.get()) {
             return;
         }
@@ -237,35 +236,35 @@ public class MapleTrade {
         return new LinkedList<>(items);
     }
 
-    public int getExchangeMesos(){
-    	return exchangeMeso;
+    public int getExchangeMesos() {
+        return exchangeMeso;
     }
-    
+
     private boolean fitsMeso() {
         return chr.canHoldMeso(exchangeMeso - getFee(exchangeMeso));
     }
-    
+
     private boolean fitsInInventory() {
         List<Pair<Item, InventoryType>> tradeItems = new LinkedList<>();
         for (Item item : exchangeItems) {
             tradeItems.add(new Pair<>(item, item.getInventoryType()));
         }
-        
+
         return Inventory.checkSpotsAndOwnership(chr, tradeItems);
     }
-    
+
     private boolean fitsUniquesInInventory() {
         List<Integer> exchangeItemids = new LinkedList<>();
         for (Item item : exchangeItems) {
             exchangeItemids.add(item.getItemId());
         }
-        
+
         return chr.canHoldUniques(exchangeItemids);
     }
-    
+
     private synchronized boolean checkTradeCompleteHandshake(boolean updateSelf) {
-        MapleTrade self, other;
-                
+        Trade self, other;
+
         if (updateSelf) {
             self = this;
             other = this.getPartner();
@@ -273,15 +272,15 @@ public class MapleTrade {
             self = this.getPartner();
             other = this;
         }
-        
+
         if (self.isLocked()) {
             return false;
         }
-        
+
         self.lockTrade();
         return other.isLocked();
     }
-    
+
     private boolean checkCompleteHandshake() {  // handshake checkout thanks to Ronan
         if (this.getChr().getId() < this.getPartner().getChr().getId()) {
             return this.checkTradeCompleteHandshake(true);
@@ -289,14 +288,14 @@ public class MapleTrade {
             return this.getPartner().checkTradeCompleteHandshake(false);
         }
     }
-    
+
     public static void completeTrade(Character chr) {
-        MapleTrade local = chr.getTrade();
-        MapleTrade partner = local.getPartner();
+        Trade local = chr.getTrade();
+        Trade partner = local.getPartner();
         if (local.checkCompleteHandshake()) {
             local.fetchExchangedItems();
             partner.fetchExchangedItems();
-            
+
             if (!local.fitsMeso()) {
                 cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL);
                 chr.message("There is not enough meso inventory space to complete the trade.");
@@ -308,7 +307,7 @@ public class MapleTrade {
                 partner.getChr().message("There is not enough meso inventory space to complete the trade.");
                 return;
             }
-            
+
             if (!local.fitsInInventory()) {
                 if (local.fitsUniquesInInventory()) {
                     cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL);
@@ -330,7 +329,7 @@ public class MapleTrade {
                 }
                 return;
             }
-            
+
             if (local.getChr().getLevel() < 15) {
                 if (local.getChr().getMesosTraded() + local.exchangeMeso > 1000000) {
                     cancelTrade(local.getChr(), TradeResult.NO_RESPONSE);
@@ -348,34 +347,36 @@ public class MapleTrade {
                     partner.getChr().addMesosTraded(partner.exchangeMeso);
                 }
             }
-            
+
             LogHelper.logTrade(local, partner);
             local.completeTrade();
             partner.completeTrade();
-            
+
             partner.getChr().setTrade(null);
             chr.setTrade(null);
         }
     }
-    
+
     private static void cancelTradeInternal(Character chr, byte selfResult, byte partnerResult) {
-        MapleTrade trade = chr.getTrade();
-        if(trade == null) return;
-        
+        Trade trade = chr.getTrade();
+        if (trade == null) {
+            return;
+        }
+
         trade.cancel(selfResult);
         if (trade.getPartner() != null) {
             trade.getPartner().cancel(partnerResult);
             trade.getPartner().getChr().setTrade(null);
-            
+
             InviteCoordinator.answerInvite(InviteType.TRADE, trade.getChr().getId(), trade.getPartner().getChr().getId(), false);
             InviteCoordinator.answerInvite(InviteType.TRADE, trade.getPartner().getChr().getId(), trade.getChr().getId(), false);
         }
         chr.setTrade(null);
     }
-    
+
     private static byte[] tradeResultsPair(byte result) {
         byte selfResult, partnerResult;
-        
+
         if (result == TradeResult.PARTNER_CANCEL.getValue()) {
             partnerResult = result;
             selfResult = TradeResult.NO_RESPONSE.getValue();
@@ -386,29 +387,29 @@ public class MapleTrade {
             partnerResult = result;
             selfResult = result;
         }
-        
+
         return new byte[]{selfResult, partnerResult};
     }
-    
+
     private synchronized void tradeCancelHandshake(boolean updateSelf, byte result) {
         byte selfResult, partnerResult;
-        MapleTrade self;
-        
+        Trade self;
+
         byte[] pairedResult = tradeResultsPair(result);
         selfResult = pairedResult[0];
         partnerResult = pairedResult[1];
-        
+
         if (updateSelf) {
             self = this;
         } else {
             self = this.getPartner();
         }
-        
+
         cancelTradeInternal(self.getChr(), selfResult, partnerResult);
     }
-    
+
     private void cancelHandshake(byte result) {  // handshake checkout thanks to Ronan
-        MapleTrade partner = this.getPartner();
+        Trade partner = this.getPartner();
         if (partner == null || this.getChr().getId() < partner.getChr().getId()) {
             this.tradeCancelHandshake(true, result);
         } else {
@@ -417,32 +418,32 @@ public class MapleTrade {
     }
 
     public static void cancelTrade(Character chr, TradeResult result) {
-        MapleTrade trade = chr.getTrade();
-        if(trade == null) return;
-        
+        Trade trade = chr.getTrade();
+        if (trade == null) {
+            return;
+        }
+
         trade.cancelHandshake(result.getValue());
     }
-    
+
     public static void startTrade(Character chr) {
         if (chr.getTrade() == null) {
-            chr.setTrade(new MapleTrade((byte) 0, chr));
+            chr.setTrade(new Trade((byte) 0, chr));
         }
     }
-    
+
     private static boolean hasTradeInviteBack(Character c1, Character c2) {
-        MapleTrade other = c2.getTrade();
+        Trade other = c2.getTrade();
         if (other != null) {
-            MapleTrade otherPartner = other.getPartner();
+            Trade otherPartner = other.getPartner();
             if (otherPartner != null) {
-                if (otherPartner.getChr().getId() == c1.getId()) {
-                    return true;
-                }
+                return otherPartner.getChr().getId() == c1.getId();
             }
         }
-        
+
         return false;
     }
-    
+
     public static void inviteTrade(Character c1, Character c2) {
         if (InviteCoordinator.hasInvite(InviteType.TRADE, c1.getId())) {
             if (hasTradeInviteBack(c1, c2)) {
@@ -450,19 +451,19 @@ public class MapleTrade {
             } else {
                 c1.message("You are already managing someone's trade invitation.");
             }
-            
+
             return;
         } else if (c1.getTrade().isFullTrade()) {
             c1.message("You are already in a trade.");
             return;
         }
-        
+
         if (InviteCoordinator.createInvite(InviteType.TRADE, c1, c1.getId(), c2.getId())) {
             if (c2.getTrade() == null) {
-                c2.setTrade(new MapleTrade((byte) 1, c2));
+                c2.setTrade(new Trade((byte) 1, c2));
                 c2.getTrade().setPartner(c1.getTrade());
                 c1.getTrade().setPartner(c2.getTrade());
-                
+
                 c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 0));
                 c2.sendPacket(PacketCreator.tradeInvite(c1));
             } else {
@@ -478,7 +479,7 @@ public class MapleTrade {
 
     public static void visitTrade(Character c1, Character c2) {
         MapleInviteResult inviteRes = InviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
-        
+
         InviteResult res = inviteRes.result;
         if (res == InviteResult.ACCEPTED) {
             if (c1.getTrade() != null && c1.getTrade().getPartner() == c2.getTrade() && c2.getTrade() != null && c2.getTrade().getPartner() == c1.getTrade()) {
@@ -496,28 +497,28 @@ public class MapleTrade {
     }
 
     public static void declineTrade(Character chr) {
-        MapleTrade trade = chr.getTrade();
+        Trade trade = chr.getTrade();
         if (trade != null) {
             if (trade.getPartner() != null) {
                 Character other = trade.getPartner().getChr();
                 if (InviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResult.DENIED) {
                     other.message(chr.getName() + " has declined your trade request.");
                 }
-                
+
                 other.getTrade().cancel(TradeResult.PARTNER_CANCEL.getValue());
                 other.setTrade(null);
-                
+
             }
             trade.cancel(TradeResult.NO_RESPONSE.getValue());
             chr.setTrade(null);
         }
     }
 
-	public boolean isFullTrade() {
-		return fullTrade;
-	}
+    public boolean isFullTrade() {
+        return fullTrade;
+    }
 
-	public void setFullTrade(boolean fullTrade) {
-		this.fullTrade = fullTrade;
-	}
+    public void setFullTrade(boolean fullTrade) {
+        this.fullTrade = fullTrade;
+    }
 }
