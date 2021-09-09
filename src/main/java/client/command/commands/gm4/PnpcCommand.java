@@ -28,7 +28,7 @@ import client.Client;
 import client.command.Command;
 import net.server.channel.Channel;
 import server.life.LifeFactory;
-import server.life.MapleNPC;
+import server.life.NPC;
 import server.maps.MapleMap;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -59,7 +59,7 @@ public class PnpcCommand extends Command {
             return;
         }
 
-        MapleNPC npc = LifeFactory.getNPC(npcId);
+        NPC npc = LifeFactory.getNPC(npcId);
 
         Point checkpos = player.getMap().getGroundBelow(player.getPosition());
         int xpos = checkpos.x;

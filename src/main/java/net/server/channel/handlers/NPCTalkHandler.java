@@ -27,8 +27,8 @@ import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
-import server.life.MapleNPC;
 import server.life.MaplePlayerNPC;
+import server.life.NPC;
 import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -48,8 +48,8 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         
         int oid = p.readInt();
         MapleMapObject obj = c.getPlayer().getMap().getMapObject(oid);
-        if (obj instanceof MapleNPC) {
-            MapleNPC npc = (MapleNPC) obj;
+        if (obj instanceof NPC) {
+            NPC npc = (NPC) obj;
             if(YamlConfig.config.server.USE_DEBUG == true) c.getPlayer().dropMessage(5, "Talking to NPC " + npc.getId());
             
             if (npc.getId() == 9010009) {   //is duey

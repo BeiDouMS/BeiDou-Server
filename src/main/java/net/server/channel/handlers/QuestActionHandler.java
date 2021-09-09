@@ -26,7 +26,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
-import server.life.MapleNPC;
+import server.life.NPC;
 import server.quest.MapleQuest;
 
 import java.awt.*;
@@ -52,7 +52,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         }
         
         if (!quest.isAutoStart() && !quest.isAutoComplete()) {
-            MapleNPC npc = player.getMap().getNPCById(npcId);
+            NPC npc = player.getMap().getNPCById(npcId);
             if(npc == null) {
                 return false;
             }

@@ -1684,10 +1684,10 @@ public class MapleMap {
         }
     }
 
-    public MapleNPC getNPCById(int id) {
+    public NPC getNPCById(int id) {
         for (MapleMapObject obj : getMapObjects()) {
             if (obj.getType() == MapleMapObjectType.NPC) {
-                MapleNPC npc = (MapleNPC) obj;
+                NPC npc = (NPC) obj;
                 if (npc.getId() == id) {
                     return npc;
                 }
@@ -1702,7 +1702,7 @@ public class MapleMap {
         try {
             for (MapleMapObject obj : mapobjects.values()) {
                 if (obj.getType() == MapleMapObjectType.NPC) {
-                    if (((MapleNPC) obj).getId() == npcid) {
+                    if (((NPC) obj).getId() == npcid) {
                         return true;
                     }
                 }
@@ -1720,7 +1720,7 @@ public class MapleMap {
         objectWLock.lock();
         try {
             for (MapleMapObject obj : npcs) {
-                if (((MapleNPC) obj).getId() == npcid) {
+                if (((NPC) obj).getId() == npcid) {
                     broadcastMessage(PacketCreator.removeNPCController(obj.getObjectId()));
                     broadcastMessage(PacketCreator.removeNPC(obj.getObjectId()));
                     
@@ -3965,7 +3965,7 @@ public class MapleMap {
         try {
             for (MapleMapObject obj : mapobjects.values()) {
                 if (obj.getType() == MapleMapObjectType.NPC) {
-                    MapleNPC npc = (MapleNPC) obj;
+                    NPC npc = (NPC) obj;
                     if (npc.getId() == id) {
                         npc.setHide(!npc.isHidden());
                         if (!npc.isHidden()) //Should only be hidden upon changing maps
