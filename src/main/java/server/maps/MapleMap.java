@@ -2040,7 +2040,7 @@ public class MapleMap {
         spawnAndAddRangedMapObject(reactor, c -> c.sendPacket(reactor.makeSpawnData()));
     }
 
-    public void spawnDoor(final MapleDoorObject door) {
+    public void spawnDoor(final DoorObject door) {
         spawnAndAddRangedMapObject(door, c -> {
             Character chr = c.getPlayer();
             if (chr != null) {

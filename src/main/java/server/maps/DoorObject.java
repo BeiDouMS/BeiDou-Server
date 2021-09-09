@@ -33,33 +33,32 @@ import tools.PacketCreator;
 import java.awt.*;
 
 /**
- *
  * @author Ronan
  */
-public class MapleDoorObject extends AbstractMapObject {
+public class DoorObject extends AbstractMapObject {
     private final int ownerId;
     private int pairOid;
-    
+
     private final MapleMap from;
     private final MapleMap to;
     private int linkedPortalId;
     private Point linkedPos;
-    
+
     private final MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.PLAYER_DOOR, true);
-    private MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
-    private MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
-    
-    public MapleDoorObject(int owner, MapleMap destination, MapleMap origin, int townPortalId, Point targetPosition, Point toPosition) {
+    private final MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
+    private final MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
+
+    public DoorObject(int owner, MapleMap destination, MapleMap origin, int townPortalId, Point targetPosition, Point toPosition) {
         super();
         setPosition(targetPosition);
-        
+
         ownerId = owner;
         linkedPortalId = townPortalId;
         from = origin;
         to = destination;
         linkedPos = toPosition;
     }
-    
+
     public void update(int townPortalId, Point toPosition) {
         wlock.lock();
         try {
@@ -69,7 +68,7 @@ public class MapleDoorObject extends AbstractMapObject {
             wlock.unlock();
         }
     }
-    
+
     private int getLinkedPortalId() {
         rlock.lock();
         try {
@@ -78,7 +77,7 @@ public class MapleDoorObject extends AbstractMapObject {
             rlock.unlock();
         }
     }
-    
+
     private Point getLinkedPortalPosition() {
         rlock.lock();
         try {
@@ -87,13 +86,13 @@ public class MapleDoorObject extends AbstractMapObject {
             rlock.unlock();
         }
     }
-    
+
     public void warp(final Character chr) {
         Party party = chr.getParty();
         if (chr.getId() == ownerId || (party != null && party.getMemberById(ownerId) != null)) {
             chr.sendPacket(PacketCreator.playPortalSound());
-            
-            if(!inTown() && party == null) {
+
+            if (!inTown() && party == null) {
                 chr.changeMap(to, getLinkedPortalId());
             } else {
                 chr.changeMap(to, getLinkedPortalPosition());
@@ -108,7 +107,7 @@ public class MapleDoorObject extends AbstractMapObject {
     public void sendSpawnData(Client client) {
         sendSpawnData(client, true);
     }
-    
+
     public void sendSpawnData(Client client, boolean launched) {
         Character chr = client.getPlayer();
         if (this.getFrom().getId() == chr.getMapId()) {
@@ -134,54 +133,54 @@ public class MapleDoorObject extends AbstractMapObject {
             client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));
         }
     }
-    
+
     public void sendDestroyData(Client client, boolean partyUpdate) {
         if (client != null && from.getId() == client.getPlayer().getMapId()) {
             client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
             client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));
         }
     }
-    
+
     public int getOwnerId() {
         return ownerId;
     }
-    
+
     public void setPairOid(int oid) {
         this.pairOid = oid;
     }
-    
+
     public int getPairOid() {
         return pairOid;
     }
-    
+
     public boolean inTown() {
         return getLinkedPortalId() == -1;
     }
-    
+
     public MapleMap getFrom() {
         return from;
     }
-    
+
     public MapleMap getTo() {
         return to;
     }
-    
+
     public MapleMap getTown() {
         return inTown() ? from : to;
     }
-    
+
     public MapleMap getArea() {
         return !inTown() ? from : to;
     }
-    
+
     public Point getAreaPosition() {
         return !inTown() ? getPosition() : getLinkedPortalPosition();
     }
-    
+
     public Point toPosition() {
         return getLinkedPortalPosition();
     }
-    
+
     @Override
     public MapleMapObjectType getType() {
         return MapleMapObjectType.DOOR;

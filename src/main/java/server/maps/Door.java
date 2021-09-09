@@ -43,8 +43,8 @@ public class Door {
     private long deployTime;
     private boolean active;
 
-    private MapleDoorObject townDoor;
-    private MapleDoorObject areaDoor;
+    private DoorObject townDoor;
+    private DoorObject areaDoor;
 
     public Door(Character owner, Point targetPosition) {
         this.ownerId = owner.getId();
@@ -62,8 +62,8 @@ public class Door {
                 this.active = true;
 
                 if (townPortal != null) {
-                    this.areaDoor = new MapleDoorObject(ownerId, town, target, townPortal.getId(), targetPosition, townPortal.getPosition());
-                    this.townDoor = new MapleDoorObject(ownerId, target, town, -1, townPortal.getPosition(), targetPosition);
+                    this.areaDoor = new DoorObject(ownerId, town, target, townPortal.getId(), targetPosition, townPortal.getPosition());
+                    this.townDoor = new DoorObject(ownerId, target, town, -1, townPortal.getPosition(), targetPosition);
 
                     this.areaDoor.setPairOid(this.townDoor.getObjectId());
                     this.townDoor.setPairOid(this.areaDoor.getObjectId());
@@ -89,8 +89,8 @@ public class Door {
     }
 
     private void broadcastRemoveDoor(Character owner) {
-        MapleDoorObject areaDoor = this.getAreaDoor();
-        MapleDoorObject townDoor = this.getTownDoor();
+        DoorObject areaDoor = this.getAreaDoor();
+        DoorObject townDoor = this.getTownDoor();
 
         MapleMap target = this.getTarget();
         MapleMap town = this.getTown();
@@ -149,11 +149,11 @@ public class Door {
         return ownerId;
     }
 
-    public MapleDoorObject getTownDoor() {
+    public DoorObject getTownDoor() {
         return townDoor;
     }
 
-    public MapleDoorObject getAreaDoor() {
+    public DoorObject getAreaDoor() {
         return areaDoor;
     }
 

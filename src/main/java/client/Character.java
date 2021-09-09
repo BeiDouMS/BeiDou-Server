@@ -1553,7 +1553,7 @@ public class Character extends AbstractCharacterObject {
 
             for (Door door : partyDoors.values()) {
                 for (Character pchar : partyMembers) {
-                    MapleDoorObject mdo = door.getTownDoor();
+                    DoorObject mdo = door.getTownDoor();
                     mdo.sendDestroyData(pchar.getClient(), true);
                     pchar.removeVisibleMapObject(mdo);
                 }
@@ -1563,7 +1563,7 @@ public class Character extends AbstractCharacterObject {
                 Collection<Door> leaverDoors = partyLeaver.getDoors();
                 for (Door door : leaverDoors) {
                     for (Character pchar : partyMembers) {
-                        MapleDoorObject mdo = door.getTownDoor();
+                        DoorObject mdo = door.getTownDoor();
                         mdo.sendDestroyData(pchar.getClient(), true);
                         pchar.removeVisibleMapObject(mdo);
                     }
@@ -1576,7 +1576,7 @@ public class Character extends AbstractCharacterObject {
 
                 if (door != null) {
                     for (Character pchar : partyMembers) {
-                        MapleDoorObject mdo = door.getTownDoor();
+                        DoorObject mdo = door.getTownDoor();
                         mdo.sendSpawnData(pchar.getClient());
                         pchar.addVisibleMapObject(mdo);
                     }
@@ -1589,14 +1589,14 @@ public class Character extends AbstractCharacterObject {
 
             if (partyDoors != null) {
                 for (Door door : partyDoors.values()) {
-                    MapleDoorObject mdo = door.getTownDoor();
+                    DoorObject mdo = door.getTownDoor();
                     mdo.sendDestroyData(partyLeaver.getClient(), true);
                     partyLeaver.removeVisibleMapObject(mdo);
                 }
             }
 
             for (Door door : leaverDoors) {
-                MapleDoorObject mdo = door.getTownDoor();
+                DoorObject mdo = door.getTownDoor();
                 mdo.sendDestroyData(partyLeaver.getClient(), true);
                 partyLeaver.removeVisibleMapObject(mdo);
             }
@@ -1604,7 +1604,7 @@ public class Character extends AbstractCharacterObject {
             for (Door door : leaverDoors) {
                 door.updateDoorPortal(partyLeaver);
 
-                MapleDoorObject mdo = door.getTownDoor();
+                DoorObject mdo = door.getTownDoor();
                 mdo.sendSpawnData(partyLeaver.getClient());
                 partyLeaver.addVisibleMapObject(mdo);
             }

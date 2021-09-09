@@ -3692,7 +3692,7 @@ public class PacketCreator {
             Door door = partyDoors.get(partycharid);
 
             if (door != null) {
-                MapleDoorObject mdo = door.getAreaDoor();
+                DoorObject mdo = door.getAreaDoor();
                 p.writeInt(mdo.getTo().getId());
                 p.writeInt(mdo.getFrom().getId());
                 p.writeInt(mdo.getPosition().x);
@@ -3803,7 +3803,7 @@ public class PacketCreator {
                 if (partyDoors.size() > 0) {
                     Door door = partyDoors.get(partychar.getId());
                     if (door != null) {
-                        MapleDoorObject mdo = door.getTownDoor();
+                        DoorObject mdo = door.getTownDoor();
                         p.writeInt(mdo.getTown().getId());
                         p.writeInt(mdo.getArea().getId());
                         p.writeInt(mdo.getPosition().x);
