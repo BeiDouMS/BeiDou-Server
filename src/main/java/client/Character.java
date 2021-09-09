@@ -166,7 +166,7 @@ public class Character extends AbstractCharacterObject {
     private PlayerShop playerShop = null;
     private Shop shop = null;
     private SkinColor skinColor = SkinColor.NORMAL;
-    private MapleStorage storage = null;
+    private Storage storage = null;
     private MapleTrade trade = null;
     private MonsterBook monsterbook;
     private CashShop cashshop;
@@ -5863,7 +5863,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleStorage getStorage() {
+    public Storage getStorage() {
         return storage;
     }
 

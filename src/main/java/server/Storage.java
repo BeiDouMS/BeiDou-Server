@@ -43,28 +43,27 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 
 /**
- *
  * @author Matze
  */
-public class MapleStorage {
-    private static Map<Integer, Integer> trunkGetCache = new HashMap<>();
-    private static Map<Integer, Integer> trunkPutCache = new HashMap<>();
-    
-    private int id;
+public class Storage {
+    private static final Map<Integer, Integer> trunkGetCache = new HashMap<>();
+    private static final Map<Integer, Integer> trunkPutCache = new HashMap<>();
+
+    private final int id;
     private int currentNpcid;
     private int meso;
     private byte slots;
-    private Map<InventoryType, List<Item>> typeItems = new HashMap<>();
+    private final Map<InventoryType, List<Item>> typeItems = new HashMap<>();
     private List<Item> items = new LinkedList<>();
-    private Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.STORAGE, true);
+    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.STORAGE, true);
 
-    private MapleStorage(int id, byte slots, int meso) {
+    private Storage(int id, byte slots, int meso) {
         this.id = id;
         this.slots = slots;
         this.meso = meso;
     }
 
-    private static MapleStorage create(int id, int world) throws SQLException {
+    private static Storage create(int id, int world) throws SQLException {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO storages (accountid, world, slots, meso) VALUES (?, ?, 4, 0)")) {
             ps.setInt(1, id);
@@ -75,8 +74,8 @@ public class MapleStorage {
         return loadOrCreateFromDB(id, world);
     }
 
-    public static MapleStorage loadOrCreateFromDB(int id, int world) {
-        MapleStorage ret;
+    public static Storage loadOrCreateFromDB(int id, int world) {
+        Storage ret;
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT storageid, slots, meso FROM storages WHERE accountid = ? AND world = ?")) {
             ps.setInt(1, id);
@@ -84,7 +83,7 @@ public class MapleStorage {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ret = new MapleStorage(rs.getInt("storageid"), (byte) rs.getInt("slots"), rs.getInt("meso"));
+                    ret = new Storage(rs.getInt("storageid"), (byte) rs.getInt("slots"), rs.getInt("meso"));
                     for (Pair<Item, InventoryType> item : ItemFactory.STORAGE.loadItems(ret.id, false)) {
                         ret.items.add(item.getLeft());
                     }
@@ -108,7 +107,7 @@ public class MapleStorage {
         slots += this.slots;
         return slots <= 48;
     }
-    
+
     public boolean gainSlots(int slots) {
         lock.lock();
         try {
@@ -123,7 +122,7 @@ public class MapleStorage {
             lock.unlock();
         }
     }
-    
+
     public void saveToDB(Connection con) {
         try {
             try (PreparedStatement ps = con.prepareStatement("UPDATE storages SET slots = ?, meso = ? WHERE storageid = ?")) {
@@ -158,10 +157,10 @@ public class MapleStorage {
         lock.lock();
         try {
             boolean ret = items.remove(item);
-            
+
             InventoryType type = item.getInventoryType();
             typeItems.put(type, new ArrayList<>(filterItems(type)));
-            
+
             return ret;
         } finally {
             lock.unlock();
@@ -174,12 +173,12 @@ public class MapleStorage {
             if (isFull()) { // thanks Optimist for noticing unrestricted amount of insertions here
                 return false;
             }
-            
+
             items.add(item);
-            
+
             InventoryType type = item.getInventoryType();
             typeItems.put(type, new ArrayList<>(filterItems(type)));
-            
+
             return true;
         } finally {
             lock.unlock();
@@ -194,11 +193,11 @@ public class MapleStorage {
             lock.unlock();
         }
     }
-    
+
     private List<Item> filterItems(InventoryType type) {
         List<Item> storageItems = getItems();
         List<Item> ret = new LinkedList<>();
-        
+
         for (Item item : storageItems) {
             if (item.getInventoryType() == type) {
                 ret.add(item);
@@ -206,7 +205,7 @@ public class MapleStorage {
         }
         return ret;
     }
-    
+
     public byte getSlot(InventoryType type, byte slot) {
         lock.lock();
         try {
@@ -223,14 +222,14 @@ public class MapleStorage {
             lock.unlock();
         }
     }
-    
+
     public void sendStorage(Client c, int npcId) {
-        if (c.getPlayer().getLevel() < 15){
+        if (c.getPlayer().getLevel() < 15) {
             c.getPlayer().dropMessage(1, "You may only use the storage once you have reached level 15.");
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        
+
         lock.lock();
         try {
             items.sort((o1, o2) -> {
@@ -241,12 +240,12 @@ public class MapleStorage {
                 }
                 return 1;
             });
-            
+
             List<Item> storageItems = getItems();
             for (InventoryType type : InventoryType.values()) {
                 typeItems.put(type, new ArrayList<>(storageItems));
             }
-            
+
             currentNpcid = npcId;
             c.sendPacket(PacketCreator.getStorage(npcId, slots, storageItems, meso));
         } finally {
@@ -271,18 +270,18 @@ public class MapleStorage {
             lock.unlock();
         }
     }
-    
+
     public void arrangeItems(Client c) {
         lock.lock();
         try {
             MapleStorageInventory msi = new MapleStorageInventory(c, items);
             msi.mergeItems();
             items = msi.sortItems();
-            
+
             for (InventoryType type : InventoryType.values()) {
                 typeItems.put(type, new ArrayList<>(items));
             }
-            
+
             c.sendPacket(PacketCreator.arrangeStorage(slots, items));
         } finally {
             lock.unlock();
@@ -303,40 +302,40 @@ public class MapleStorage {
     public void sendMeso(Client c) {
         c.sendPacket(PacketCreator.mesoStorage(slots, meso));
     }
-    
+
     public int getStoreFee() {  // thanks to GabrielSin
         int npcId = currentNpcid;
         Integer fee = trunkPutCache.get(npcId);
-        if(fee == null) {
+        if (fee == null) {
             fee = 100;
-            
+
             DataProvider npc = DataProviderFactory.getDataProvider(WZFiles.NPC);
             Data npcData = npc.getData(npcId + ".img");
-            if(npcData != null) {
+            if (npcData != null) {
                 fee = DataTool.getIntConvert("info/trunkPut", npcData, 100);
             }
-            
+
             trunkPutCache.put(npcId, fee);
         }
-        
+
         return fee;
     }
-    
+
     public int getTakeOutFee() {
         int npcId = currentNpcid;
         Integer fee = trunkGetCache.get(npcId);
-        if(fee == null) {
+        if (fee == null) {
             fee = 0;
-            
+
             DataProvider npc = DataProviderFactory.getDataProvider(WZFiles.NPC);
             Data npcData = npc.getData(npcId + ".img");
-            if(npcData != null) {
+            if (npcData != null) {
                 fee = DataTool.getIntConvert("info/trunkGet", npcData, 0);
             }
-            
+
             trunkGetCache.put(npcId, fee);
         }
-        
+
         return fee;
     }
 
@@ -348,7 +347,7 @@ public class MapleStorage {
             lock.unlock();
         }
     }
-    
+
     public void close() {
         lock.lock();
         try {
@@ -357,5 +356,5 @@ public class MapleStorage {
             lock.unlock();
         }
     }
-    
+
 }

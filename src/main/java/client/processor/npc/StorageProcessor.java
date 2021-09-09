@@ -33,7 +33,7 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
-import server.MapleStorage;
+import server.Storage;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -47,7 +47,7 @@ public class StorageProcessor {
         public static void storageAction(InPacket p, Client c) {
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 Character chr = c.getPlayer();
-                MapleStorage storage = chr.getStorage();
+                Storage storage = chr.getStorage();
                 byte mode = p.readByte();
 
                 if (chr.getLevel() < 15){

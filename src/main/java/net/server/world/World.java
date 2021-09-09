@@ -53,7 +53,7 @@ import net.server.services.ServicesManager;
 import net.server.services.type.WorldServices;
 import net.server.task.*;
 import scripting.event.EventInstanceManager;
-import server.MapleStorage;
+import server.Storage;
 import server.TimerManager;
 import server.maps.*;
 import tools.DatabaseConnection;
@@ -96,7 +96,7 @@ public class World {
     private MonitoredWriteLock chnWLock = MonitoredWriteLockFactory.createLock(chnLock);
     
     private Map<Integer, SortedMap<Integer, Character>> accountChars = new HashMap<>();
-    private Map<Integer, MapleStorage> accountStorages = new HashMap<>();
+    private Map<Integer, Storage> accountStorages = new HashMap<>();
     private MonitoredReentrantLock accountCharsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_CHARS, true);
     
     private Set<Integer> queuedGuilds = new HashSet<>();
@@ -435,7 +435,7 @@ public class World {
     }
     
     private void registerAccountStorage(Integer accountId) {
-        MapleStorage storage = MapleStorage.loadOrCreateFromDB(accountId, this.id);
+        Storage storage = Storage.loadOrCreateFromDB(accountId, this.id);
         accountCharsLock.lock();
         try {
             accountStorages.put(accountId, storage);
@@ -453,7 +453,7 @@ public class World {
         }
     }
     
-    public MapleStorage getAccountStorage(Integer accountId) {
+    public Storage getAccountStorage(Integer accountId) {
         return accountStorages.get(accountId);
     }
     
