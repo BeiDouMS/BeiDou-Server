@@ -29,9 +29,9 @@ import provider.DataFileEntry;
 import java.util.*;
 
 public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
-    private List<DataDirectoryEntry> subdirs = new ArrayList<>();
-    private List<DataFileEntry> files = new ArrayList<>();
-    private Map<String, DataEntry> entries = new HashMap<>();
+    private final List<DataDirectoryEntry> subdirs = new ArrayList<>();
+    private final List<DataFileEntry> files = new ArrayList<>();
+    private final Map<String, DataEntry> entries = new HashMap<>();
 
     public WZDirectoryEntry(String name, int size, int checksum, DataEntity parent) {
         super(name, size, checksum, parent);

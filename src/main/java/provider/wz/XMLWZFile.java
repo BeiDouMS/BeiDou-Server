@@ -31,8 +31,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class XMLWZFile implements DataProvider {
-    private File root;
-    private WZDirectoryEntry rootForNavigation;
+    private final File root;
+    private final WZDirectoryEntry rootForNavigation;
 
     public XMLWZFile(File fileIn) {
         root = fileIn;
