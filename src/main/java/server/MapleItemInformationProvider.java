@@ -36,7 +36,7 @@ import provider.*;
 import provider.wz.WZFiles;
 import server.MakerItemFactory.MakerItemCreateEntry;
 import server.life.LifeFactory;
-import server.life.MapleMonsterInformationProvider;
+import server.life.MonsterInformationProvider;
 import tools.*;
 
 import java.sql.Connection;
@@ -2059,7 +2059,7 @@ public class MapleItemInformationProvider {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    String resultName = MapleMonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
+                    String resultName = MonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
                     if (!resultName.isEmpty()) {
                         list.add(resultName);
                     }

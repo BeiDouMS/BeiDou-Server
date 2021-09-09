@@ -20,8 +20,8 @@
 package server.loot;
 
 import client.Character;
-import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
+import server.life.MonsterInformationProvider;
 import server.quest.MapleQuest;
 
 import java.util.LinkedList;
@@ -74,7 +74,7 @@ public class MapleLootManager {
     }
     
     public static List<MonsterDropEntry> retrieveRelevantDrops(int monsterId, List<Character> players) {
-        List<MonsterDropEntry> loots = MapleMonsterInformationProvider.getInstance().retrieveEffectiveDrop(monsterId);
+        List<MonsterDropEntry> loots = MonsterInformationProvider.getInstance().retrieveEffectiveDrop(monsterId);
         if(loots.isEmpty()) return loots;
         
         List<MapleLootInventory> playersInv = new LinkedList<>();

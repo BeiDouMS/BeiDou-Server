@@ -278,7 +278,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             if (steal.getEffect(player.getSkillLevel(steal)).makeChanceResult()) {
                                 monster.addStolen(0);
                                 
-                                MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
+                                MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
                                 List<Integer> dropPool = mi.retrieveDropPool(monster.getId());
                                 if(!dropPool.isEmpty()) {
                                     int rndPool = (int) Math.floor(Math.random() * dropPool.get(dropPool.size() - 1));

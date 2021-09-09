@@ -721,7 +721,7 @@ public class MapleMap {
             chRate = 1;
         }
 
-        final MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
+        final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
         final List<MonsterGlobalDropEntry> globalEntry = mi.getRelevantGlobalDrops(this.getId());
         
         final List<MonsterDropEntry>  dropEntry = new ArrayList<>();
@@ -2793,7 +2793,7 @@ public class MapleMap {
         }
         if (monster.isBoss()) {
             if (unclaimOwnership() != null) {
-                String mobName = MapleMonsterInformationProvider.getInstance().getMobNameFromId(monster.getId());
+                String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(monster.getId());
                 if (mobName != null) {
                     mobName = mobName.trim();
                     this.dropMessage(5, "This lawn has been taken siege by " + mobName + "'s forces and will be kept hold until their defeat.");

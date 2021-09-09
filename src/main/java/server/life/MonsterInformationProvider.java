@@ -38,12 +38,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-public class MapleMonsterInformationProvider {
+public class MonsterInformationProvider {
     // Author : LightPepsi
 
-    private static final MapleMonsterInformationProvider instance = new MapleMonsterInformationProvider();
+    private static final MonsterInformationProvider instance = new MonsterInformationProvider();
 
-    public static MapleMonsterInformationProvider getInstance() {
+    public static MonsterInformationProvider getInstance() {
         return instance;
     }
 
@@ -63,7 +63,7 @@ public class MapleMonsterInformationProvider {
     private final Map<Integer, Boolean> mobBossCache = new HashMap<>();
     private final Map<Integer, String> mobNameCache = new HashMap<>();
 
-    protected MapleMonsterInformationProvider() {
+    protected MonsterInformationProvider() {
         retrieveGlobal();
     }
 
@@ -269,7 +269,7 @@ public class MapleMonsterInformationProvider {
         if (mobName == null) {
             DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.STRING);
             Data mobData = dataProvider.getData("Mob.img");
-            
+
             mobName = DataTool.getString(mobData.getChildByPath(id + "/name"), "");
             mobNameCache.put(id, mobName);
         }

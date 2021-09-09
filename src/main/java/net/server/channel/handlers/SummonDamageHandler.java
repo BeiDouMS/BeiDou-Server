@@ -34,8 +34,8 @@ import constants.skills.Outlaw;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
-import server.life.MapleMonsterInformationProvider;
 import server.life.Monster;
+import server.life.MonsterInformationProvider;
 import server.maps.MapleSummon;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -109,7 +109,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
                 if (damage > maxDmg) {
                     AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
 
-                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " used a summon of skillid " + summon.getSkill() + " to attack " + MapleMonsterInformationProvider.getInstance().getMobNameFromId(target.getId()) + " with damage " + damage + " (max: " + maxDmg + ")");
+                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " used a summon of skillid " + summon.getSkill() + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(target.getId()) + " with damage " + damage + " (max: " + maxDmg + ")");
                     damage = maxDmg;
                 }
                 

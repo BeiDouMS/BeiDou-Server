@@ -27,7 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import server.MapleItemInformationProvider;
-import server.life.MapleMonsterInformationProvider;
+import server.life.MonsterInformationProvider;
 import tools.DatabaseConnection;
 import tools.Pair;
 
@@ -65,7 +65,7 @@ public class WhoDropsCommand extends Command {
 
                             try (ResultSet rs = ps.executeQuery()) {
                                 while (rs.next()) {
-                                    String resultName = MapleMonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
+                                    String resultName = MonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
                                     if (resultName != null) {
                                         output += resultName + ", ";
                                     }

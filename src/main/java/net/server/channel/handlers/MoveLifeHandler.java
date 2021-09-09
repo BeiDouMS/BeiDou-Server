@@ -25,10 +25,10 @@ import client.Character;
 import client.Client;
 import config.YamlConfig;
 import net.packet.InPacket;
-import server.life.MapleMonsterInformationProvider;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.life.Monster;
+import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -99,7 +99,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                                 toUse = MobSkillFactory.getMobSkill(useSkillId, useSkillLevel);
                                 
                                 if (monster.canUseSkill(toUse, true)) {
-                                        int animationTime = MapleMonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
+                                        int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
                                         if(animationTime > 0 && toUse.getSkillId() != 129) {
                                                 toUse.applyDelayedEffect(player, monster, true, animationTime);
                                         } else {
