@@ -69,7 +69,7 @@ import server.life.Monster;
 import server.life.PlayerNPC;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameResult;
-import server.minigame.MapleRockPaperScissor;
+import server.minigame.RockPaperScissor;
 import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
 import server.partyquest.MonsterCarnivalParty;
@@ -159,7 +159,7 @@ public class Character extends AbstractCharacterObject {
     private Job job = Job.BEGINNER;
     private Messenger messenger = null;
     private MiniGame miniGame;
-    private MapleRockPaperScissor rps;
+    private RockPaperScissor rps;
     private Mount maplemount;
     private Party party;
     private final Pet[] pets = new Pet[3];
@@ -5496,7 +5496,7 @@ public class Character extends AbstractCharacterObject {
         return playerShop;
     }
 
-    public MapleRockPaperScissor getRPS() { // thanks inhyuk for suggesting RPS addition
+    public RockPaperScissor getRPS() { // thanks inhyuk for suggesting RPS addition
         return rps;
     }
 
@@ -9218,12 +9218,12 @@ public class Character extends AbstractCharacterObject {
         this.name = name;
     }
 
-    public void setRPS(MapleRockPaperScissor rps) {
+    public void setRPS(RockPaperScissor rps) {
         this.rps = rps;
     }
 
     public void closeRPS() {
-        MapleRockPaperScissor rps = this.rps;
+        RockPaperScissor rps = this.rps;
         if (rps != null) {
             rps.dispose(client);
             setRPS(null);
