@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 
@@ -34,9 +34,9 @@ public class InMapCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         String st = "";
-        for (MapleCharacter chr : player.getMap().getCharacters()) {
+        for (Character chr : player.getMap().getCharacters()) {
             st += chr.getName() + " ";
         }
         player.message(st);

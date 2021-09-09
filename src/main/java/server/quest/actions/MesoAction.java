@@ -21,7 +21,7 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -48,11 +48,11 @@ public class MesoAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
                 runAction(chr, mesos);
 	}
         
-        public static void runAction(MapleCharacter chr, int gain) {
+        public static void runAction(Character chr, int gain) {
                 if (gain < 0) {
                         chr.gainMeso(gain, true, false, true);
                 } else {

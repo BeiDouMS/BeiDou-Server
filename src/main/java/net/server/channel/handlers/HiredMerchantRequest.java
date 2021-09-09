@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.ItemFactory;
 import constants.game.GameConstants;
@@ -44,12 +44,12 @@ import java.util.Arrays;
 public final class HiredMerchantRequest extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         
         try {
             for (MapleMapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
-                if (mmo instanceof MapleCharacter) {
-                    MapleCharacter mc = (MapleCharacter) mmo;
+                if (mmo instanceof Character) {
+                    Character mc = (Character) mmo;
 
                     MaplePlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.maps.MapleMap;
@@ -36,7 +36,7 @@ public class JailCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !jail <playername> [<minutes>]");
             return;
@@ -51,7 +51,7 @@ public class JailCommand extends Command {
             }
         }
 
-        MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             victim.addJailExpirationTime(minutesJailed * 60 * 1000);
 

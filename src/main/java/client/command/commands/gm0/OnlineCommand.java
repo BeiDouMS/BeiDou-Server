@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
@@ -36,12 +36,12 @@ public class OnlineCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         for (Channel ch : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
             player.yellowMessage("Players in Channel " + ch.getId() + ":");
-            for (MapleCharacter chr : ch.getPlayerStorage().getAllCharacters()) {
+            for (Character chr : ch.getPlayerStorage().getAllCharacters()) {
                 if (!chr.isGM()) {
-                    player.message(" >> " + MapleCharacter.makeMapleReadable(chr.getName()) + " is at " + chr.getMap().getMapName() + ".");
+                    player.message(" >> " + Character.makeMapleReadable(chr.getName()) + " is at " + chr.getMap().getMapName() + ".");
                 }
             }
         }

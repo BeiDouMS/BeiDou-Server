@@ -19,7 +19,7 @@
 */
 package client.processor.action;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
@@ -304,7 +304,7 @@ public class MakerProcessor {
         return null;
     }
     
-    public static int getMakerSkillLevel(MapleCharacter chr) {
+    public static int getMakerSkillLevel(Character chr) {
         return chr.getSkillLevel((chr.getJob().getId() / 1000) * 10000000 + 1007);
     }
     

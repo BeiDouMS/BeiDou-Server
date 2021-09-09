@@ -20,7 +20,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -35,6 +35,6 @@ public final class TransferNameResultHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         String name = p.readString();
-        c.sendPacket(PacketCreator.sendNameTransferCheck(name, MapleCharacter.canCreateChar(name)));
+        c.sendPacket(PacketCreator.sendNameTransferCheck(name, Character.canCreateChar(name)));
     }
 }

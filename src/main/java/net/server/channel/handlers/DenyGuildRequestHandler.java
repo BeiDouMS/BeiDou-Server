@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -36,7 +36,7 @@ public final class DenyGuildRequestHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         p.readByte();
-        MapleCharacter cfrom = c.getWorldServer().getPlayerStorage().getCharacterByName(p.readString());
+        Character cfrom = c.getWorldServer().getPlayerStorage().getCharacterByName(p.readString());
         if (cfrom != null) {
             MapleGuild.answerInvitation(c.getPlayer().getId(), c.getPlayer().getName(), cfrom.getGuildId(), false);
         }

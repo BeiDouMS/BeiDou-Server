@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import tools.PacketCreator;
 
@@ -29,9 +29,9 @@ import tools.PacketCreator;
 
 public class MapleDragon extends AbstractAnimatedMapleMapObject {
 
-    private MapleCharacter owner;
+    private Character owner;
 
-    public MapleDragon(MapleCharacter chr) {
+    public MapleDragon(Character chr) {
         super();
         this.owner = chr;
         this.setPosition(chr.getPosition());
@@ -59,7 +59,7 @@ public class MapleDragon extends AbstractAnimatedMapleMapObject {
         c.sendPacket(PacketCreator.removeDragon(owner.getId()));
     }
     
-    public MapleCharacter getOwner() {
+    public Character getOwner() {
     	return owner;
     }
 }

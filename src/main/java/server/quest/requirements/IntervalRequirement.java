@@ -21,7 +21,7 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleQuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -51,7 +51,7 @@ public class IntervalRequirement extends MapleQuestRequirement {
 		interval = MapleDataTool.getInt(data) * 60 * 1000;
 	}
 	
-        private static String getIntervalTimeLeft(MapleCharacter chr, IntervalRequirement r) {
+        private static String getIntervalTimeLeft(Character chr, IntervalRequirement r) {
                 StringBuilder str = new StringBuilder();
 
                 long futureTime = chr.getQuest(MapleQuest.getInstance(r.questID)).getCompletionTime() + r.getInterval();
@@ -83,7 +83,7 @@ public class IntervalRequirement extends MapleQuestRequirement {
         }
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		boolean check = !chr.getQuest(MapleQuest.getInstance(questID)).getStatus().equals(MapleQuestStatus.Status.COMPLETED);
 		boolean check2 = chr.getQuest(MapleQuest.getInstance(questID)).getCompletionTime() <= System.currentTimeMillis() - interval;
                 

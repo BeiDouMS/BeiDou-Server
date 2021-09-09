@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -43,7 +43,7 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
         p.readByte();
         p.readPos(); //cpos
         int oid = p.readInt();
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMapObject ob = chr.getMap().getMapObject(oid);
         if(ob == null) return;
         

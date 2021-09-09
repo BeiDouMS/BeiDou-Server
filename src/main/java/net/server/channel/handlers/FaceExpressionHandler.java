@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -30,7 +30,7 @@ import net.packet.InPacket;
 public final class FaceExpressionHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         int emote = p.readInt();
         
         if (emote > 7) {

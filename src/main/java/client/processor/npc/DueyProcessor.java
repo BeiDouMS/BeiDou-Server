@@ -23,7 +23,7 @@
 */
 package client.processor.npc;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
@@ -106,7 +106,7 @@ public class DueyProcessor {
         return ids;
     }
 
-    private static void showDueyNotification(MapleClient c, MapleCharacter player) {
+    private static void showDueyNotification(MapleClient c, Character player) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT SenderName, Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
 
@@ -167,7 +167,7 @@ public class DueyProcessor {
         }
     }
 
-    private static List<DueyPackage> loadPackages(MapleCharacter chr) {
+    private static List<DueyPackage> loadPackages(Character chr) {
         List<DueyPackage> packages = new LinkedList<>();
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages dp WHERE ReceiverId = ?")) {
@@ -348,7 +348,7 @@ public class DueyProcessor {
                 if (channel > -1) {
                     Channel rcserv = c.getWorldServer().getChannel(channel);
                     if (rcserv != null) {
-                        MapleCharacter rChr = rcserv.getPlayerStorage().getCharacterByName(recipient);
+                        Character rChr = rcserv.getPlayerStorage().getCharacterByName(recipient);
                         if (rChr != null) {
                             rClient = rChr.getClient();
                         }

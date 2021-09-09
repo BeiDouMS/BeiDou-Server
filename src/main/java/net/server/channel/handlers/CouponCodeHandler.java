@@ -23,7 +23,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
@@ -51,7 +51,7 @@ import java.util.Map.Entry;
  */
 public final class CouponCodeHandler extends AbstractPacketHandler {
     
-    private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(MapleCharacter chr, Connection con, int codeid) throws SQLException {
+    private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(Character chr, Connection con, int codeid) throws SQLException {
         Map<Integer, Integer> couponItems = new HashMap<>();
         Map<Integer, Integer> couponPoints = new HashMap<>(5);
         
@@ -111,7 +111,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
         return ret;
     }
     
-    private static Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> getNXCodeResult(MapleCharacter chr, String code) {
+    private static Pair<Integer, List<Pair<Integer, Pair<Integer, Integer>>>> getNXCodeResult(Character chr, String code) {
         MapleClient c = chr.getClient();
         List<Pair<Integer, Pair<Integer, Integer>>> ret = new LinkedList<>();
         try {

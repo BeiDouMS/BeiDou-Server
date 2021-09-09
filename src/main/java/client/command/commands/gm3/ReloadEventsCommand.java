@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
@@ -36,7 +36,7 @@ public class ReloadEventsCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         for (Channel ch : Server.getInstance().getAllChannels()) {
             ch.reloadEventScriptManager();
         }

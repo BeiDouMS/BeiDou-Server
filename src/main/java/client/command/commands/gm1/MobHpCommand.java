@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm1;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.life.MapleMonster;
@@ -35,7 +35,7 @@ public class MobHpCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         for(MapleMonster monster : player.getMap().getAllMonsters()) {
             if (monster != null && monster.getHp() > 0) {
                 player.yellowMessage(monster.getName() + " (" + monster.getId() + ") has " + monster.getHp() + " / " + monster.getMaxHp() + " HP.");

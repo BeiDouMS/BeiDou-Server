@@ -1,6 +1,6 @@
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.ThreadManager;
@@ -31,7 +31,7 @@ public class IdCommand extends Command {
 
     @Override
     public void execute(MapleClient client, final String[] params) {
-        final MapleCharacter player = client.getPlayer();
+        final Character player = client.getPlayer();
         if (params.length < 2) {
             player.yellowMessage("Syntax: !id <type> <query>");
             return;

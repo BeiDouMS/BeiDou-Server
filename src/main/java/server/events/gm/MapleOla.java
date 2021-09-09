@@ -21,7 +21,7 @@
 */
 package server.events.gm;
 
-import client.MapleCharacter;
+import client.Character;
 import server.TimerManager;
 import tools.PacketCreator;
 
@@ -32,12 +32,12 @@ import java.util.concurrent.ScheduledFuture;
  * @author kevintjuh93
  */
 public class MapleOla {
-       private MapleCharacter chr;
+       private Character chr;
        private long time = 0;
        private long timeStarted = 0;
        private ScheduledFuture<?> schedule = null;
 
-       public MapleOla(final MapleCharacter chr) {
+       public MapleOla(final Character chr) {
            this.chr = chr;
            this.schedule = TimerManager.getInstance().schedule(() -> {
            if (chr.getMapId() >= 109030001 && chr.getMapId() <= 109030303)

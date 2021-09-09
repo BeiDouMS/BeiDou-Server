@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
@@ -53,7 +53,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
         int skill = 0;
         int maxlevel = 0;
         
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (c.tryacquireClient()) {
             try {
                 Inventory inv = c.getPlayer().getInventory(InventoryType.USE);

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
@@ -36,7 +36,7 @@ public class BuffCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !buff <buffid>");
             return;

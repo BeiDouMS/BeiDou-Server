@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.netty.ChannelServer;
@@ -262,7 +262,7 @@ public final class Channel {
         return Server.getInstance().getWorld(world);
     }
     
-    public void addPlayer(MapleCharacter chr) {
+    public void addPlayer(Character chr) {
         players.addPlayer(chr);
         chr.sendPacket(PacketCreator.serverMessage(serverMessage));
     }
@@ -275,7 +275,7 @@ public final class Channel {
         return players;
     }
 
-    public boolean removePlayer(MapleCharacter chr) {
+    public boolean removePlayer(Character chr) {
         return players.removePlayer(chr.getId()) != null;
     }
     
@@ -284,7 +284,7 @@ public final class Channel {
     }
 
     public void broadcastPacket(Packet packet) {
-        for (MapleCharacter chr : players.getAllCharacters()) {
+        for (Character chr : players.getAllCharacters()) {
             chr.sendPacket(packet);
         }
     }
@@ -310,18 +310,18 @@ public final class Channel {
     }
 
     public void broadcastGMPacket(Packet packet) {
-        for (MapleCharacter chr : players.getAllCharacters()) {
+        for (Character chr : players.getAllCharacters()) {
             if (chr.isGM()) {
                 chr.sendPacket(packet);
             }
         }
     }
 
-    public List<MapleCharacter> getPartyMembers(MapleParty party) {
-        List<MapleCharacter> partym = new ArrayList<>(8);
+    public List<Character> getPartyMembers(MapleParty party) {
+        List<Character> partym = new ArrayList<>(8);
         for (MaplePartyCharacter partychar : party.getMembers()) {
             if (partychar.getChannel() == getId()) {
-                MapleCharacter chr = getPlayerStorage().getCharacterByName(partychar.getName());
+                Character chr = getPlayerStorage().getCharacterByName(partychar.getName());
                 if (chr != null) {
                     partym.add(chr);
                 }
@@ -345,7 +345,7 @@ public final class Channel {
     private void disconnectAwayPlayers() {
         World wserv = getWorldServer();
         for (Integer cid : playersAway) {
-            MapleCharacter chr = wserv.getPlayerStorage().getCharacterById(cid);
+            Character chr = wserv.getPlayerStorage().getCharacterById(cid);
             if (chr != null && chr.isLoggedin()) {
                 chr.getClient().forceDisconnect();
             }
@@ -383,7 +383,7 @@ public final class Channel {
         List<Integer> ret = new ArrayList<>(characterIds.length);
         PlayerStorage playerStorage = getPlayerStorage();
         for (int characterId : characterIds) {
-            MapleCharacter chr = playerStorage.getCharacterById(characterId);
+            Character chr = playerStorage.getCharacterById(characterId);
             if (chr != null) {
                 if (chr.getBuddylist().containsVisible(charIdFrom)) {
                     ret.add(characterId);
@@ -602,7 +602,7 @@ public final class Channel {
                     }
 
                     MapleMap dojoExit = getMapFactory().getMap(925020002);
-                    for(MapleCharacter chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
+                    for(Character chr: getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
                         if(GameConstants.isDojo(chr.getMap().getId())) {
                             chr.changeMap(dojoExit);
                         }
@@ -705,7 +705,7 @@ public final class Channel {
         Pair<Integer, Integer> coupleId = wserv.getMarriageQueuedCouple(ret);
         Pair<Boolean, Set<Integer>> typeGuests = wserv.removeMarriageQueued(ret);
         
-        Pair<String, String> couple = new Pair<>(MapleCharacter.getNameById(coupleId.getLeft()), MapleCharacter.getNameById(coupleId.getRight()));
+        Pair<String, String> couple = new Pair<>(Character.getNameById(coupleId.getLeft()), Character.getNameById(coupleId.getRight()));
         wserv.dropMessage(6, couple.getLeft() + " and " + couple.getRight() + "'s wedding is going to be started at " + (cathedral ? "Cathedral" : "Chapel") + " on Channel " + channel + ".");
         
         return new Pair<>(typeGuests.getLeft(), new Pair<>(ret, typeGuests.getRight()));
@@ -945,7 +945,7 @@ public final class Channel {
     }
     
     public void dropMessage(int type, String message) {
-        for (MapleCharacter player : getPlayerStorage().getAllCharacters()) {
+        for (Character player : getPlayerStorage().getAllCharacters()) {
             player.dropMessage(type, message);
         }
     }

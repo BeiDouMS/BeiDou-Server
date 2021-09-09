@@ -19,14 +19,14 @@
 */
 package client.inventory;
 
-import client.MapleCharacter;
+import client.Character;
 
 /**
  * @author Ronan
  */
 public class InventoryProof extends Inventory {
 
-    public InventoryProof(MapleCharacter mc) {
+    public InventoryProof(Character mc) {
         super(mc, InventoryType.CANHOLD, (byte) 0);
     }
 

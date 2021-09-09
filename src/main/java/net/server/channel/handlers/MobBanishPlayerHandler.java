@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -32,7 +32,7 @@ public final class MobBanishPlayerHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, MapleClient c) {
         int mobid = p.readInt();     // mob banish handling detected thanks to MedicOP
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMonster mob = chr.getMap().getMonsterById(mobid);
         
         if (mob != null) {

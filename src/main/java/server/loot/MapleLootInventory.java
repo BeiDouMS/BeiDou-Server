@@ -19,7 +19,7 @@
 */
 package server.loot;
 
-import client.MapleCharacter;
+import client.Character;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 
@@ -34,7 +34,7 @@ import java.util.Map;
 public class MapleLootInventory {
     Map<Integer, Integer> items = new HashMap<>(50);
     
-    public MapleLootInventory(MapleCharacter from) {
+    public MapleLootInventory(Character from) {
         for (InventoryType values : InventoryType.values()) {
             
             for(Item it : from.getInventory(values).list()) {

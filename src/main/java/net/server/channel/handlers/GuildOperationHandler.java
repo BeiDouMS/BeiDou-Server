@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -46,7 +46,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
             return false;
         }
         for (int i = 0; i < name.length(); i++) {
-            if (!Character.isLowerCase(name.charAt(i)) && !Character.isUpperCase(name.charAt(i))) {
+            if (!java.lang.Character.isLowerCase(name.charAt(i)) && !java.lang.Character.isUpperCase(name.charAt(i))) {
                 return false;
             }
         }
@@ -55,7 +55,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter mc = c.getPlayer();
+        Character mc = c.getPlayer();
         byte type = p.readByte();
         int allianceId = -1;
         switch (type) {
@@ -77,7 +77,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                Set<MapleCharacter> eligibleMembers = new HashSet<>(MapleGuild.getEligiblePlayersForGuild(mc));
+                Set<Character> eligibleMembers = new HashSet<>(MapleGuild.getEligiblePlayersForGuild(mc));
                 if (eligibleMembers.size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
                     if (mc.getMap().getAllPlayers().size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
                         // thanks NovaStory for noticing message in need of smoother info
@@ -96,7 +96,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
                 
                 Set<Integer> eligibleCids = new HashSet<>();
-                for (MapleCharacter chr : eligibleMembers) {
+                for (Character chr : eligibleMembers) {
                     eligibleCids.add(chr.getId());
                 }
                 
@@ -256,7 +256,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 if (leaderid != -1) {
                     boolean result = p.readByte() != 0;
                     if (result && wserv.getMatchCheckerCoordinator().isMatchConfirmationActive(mc.getId())) {
-                        MapleCharacter leader = wserv.getPlayerStorage().getCharacterById(leaderid);
+                        Character leader = wserv.getPlayerStorage().getCharacterById(leaderid);
                         if (leader != null) {
                             int partyid = leader.getPartyId();
                             if (partyid != -1) {

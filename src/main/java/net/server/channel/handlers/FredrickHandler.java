@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.processor.npc.FredrickProcessor;
 import net.AbstractPacketHandler;
@@ -35,7 +35,7 @@ public class FredrickHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         byte operation = p.readByte();
 
         switch (operation) {

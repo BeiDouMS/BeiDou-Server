@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
@@ -68,7 +68,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
         int oid = p.readInt();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (!player.isAlive()) {
             return;
         }
@@ -127,7 +127,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         }
     }
     
-    private static int calcMaxDamage(MapleStatEffect summonEffect, MapleCharacter player, boolean magic) {
+    private static int calcMaxDamage(MapleStatEffect summonEffect, Character player, boolean magic) {
         double maxDamage;
         
         if (magic) {

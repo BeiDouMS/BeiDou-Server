@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import client.inventory.InventoryType;
@@ -38,7 +38,7 @@ public class RechargeCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         for (Item torecharge : c.getPlayer().getInventory(InventoryType.USE).list()) {
             if (ItemConstants.isThrowingStar(torecharge.getItemId())){

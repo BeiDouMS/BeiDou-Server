@@ -21,7 +21,7 @@
 */
 package net.server.world;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleJob;
 
 public class MaplePartyCharacter {
@@ -33,9 +33,9 @@ public class MaplePartyCharacter {
     private int mapid;
     private boolean online;
     private MapleJob job;
-    private MapleCharacter character;
+    private Character character;
     
-    public MaplePartyCharacter(MapleCharacter maplechar) {
+    public MaplePartyCharacter(Character maplechar) {
         this.character = maplechar;
     	this.name = maplechar.getName();
         this.level = maplechar.getLevel();
@@ -52,7 +52,7 @@ public class MaplePartyCharacter {
         this.name = "";
     }
     
-    public MapleCharacter getPlayer() {
+    public Character getPlayer() {
     	return character;
     }
 

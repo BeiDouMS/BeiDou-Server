@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 
@@ -34,13 +34,13 @@ public class DcCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !dc <playername>");
             return;
         }
 
-        MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim == null) {
             victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim == null) {

@@ -19,14 +19,13 @@
 */
 package server.loot;
 
-import client.MapleCharacter;
-import java.util.LinkedList;
-import java.util.List;
-
-//import server.MapleItemInformationProvider;
+import client.Character;
 import server.life.MapleMonsterInformationProvider;
 import server.life.MonsterDropEntry;
 import server.quest.MapleQuest;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -34,7 +33,7 @@ import server.quest.MapleQuest;
  */
 public class MapleLootManager {
     
-    private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<MapleCharacter> players, List<MapleLootInventory> playersInv) {
+    private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<MapleLootInventory> playersInv) {
         int qStartAmount = 0, qCompleteAmount = 0;
         MapleQuest quest = MapleQuest.getInstance(dropEntry.questid);
         if (quest != null) {
@@ -74,12 +73,12 @@ public class MapleLootManager {
         return false;
     }
     
-    public static List<MonsterDropEntry> retrieveRelevantDrops(int monsterId, List<MapleCharacter> players) {
+    public static List<MonsterDropEntry> retrieveRelevantDrops(int monsterId, List<Character> players) {
         List<MonsterDropEntry> loots = MapleMonsterInformationProvider.getInstance().retrieveEffectiveDrop(monsterId);
         if(loots.isEmpty()) return loots;
         
         List<MapleLootInventory> playersInv = new LinkedList<>();
-        for(MapleCharacter chr : players) {
+        for(Character chr : players) {
             MapleLootInventory lootInv = new MapleLootInventory(chr);
             playersInv.add(lootInv);
         }

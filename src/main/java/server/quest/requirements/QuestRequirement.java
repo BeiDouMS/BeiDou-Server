@@ -18,15 +18,15 @@
 */
 package server.quest.requirements;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import client.Character;
+import client.MapleQuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
-import client.MapleQuestStatus;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -55,7 +55,7 @@ public class QuestRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		for(Integer questID : quests.keySet()) {
 			int stateReq = quests.get(questID);
 			MapleQuestStatus qs = chr.getQuest(MapleQuest.getInstance(questID));

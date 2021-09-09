@@ -21,7 +21,7 @@
  */
 package net.server;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleFamily;
 import client.SkillFactory;
@@ -596,7 +596,7 @@ public class Server {
 
     public void commitActiveCoupons() {
         for (World world : getWorlds()) {
-            for (MapleCharacter chr : world.getPlayerStorage().getAllCharacters()) {
+            for (Character chr : world.getPlayerStorage().getAllCharacters()) {
                 if (!chr.isLoggedin()) {
                     continue;
                 }
@@ -656,7 +656,7 @@ public class Server {
 
         while (!processDiseaseAnnounceClients.isEmpty()) {
             MapleClient c = processDiseaseAnnounceClients.remove(0);
-            MapleCharacter player = c.getPlayer();
+            Character player = c.getPlayer();
             if (player != null && player.isLoggedinWorld()) {
                 player.announceDiseases();
                 player.collectDiseases();
@@ -1084,7 +1084,7 @@ public class Server {
         return getGuild(id, world, null);
     }
 
-    public MapleGuild getGuild(int id, int world, MapleCharacter mc) {
+    public MapleGuild getGuild(int id, int world, Character mc) {
         synchronized (guilds) {
             MapleGuild g = guilds.get(id);
             if (g != null) {
@@ -1113,12 +1113,12 @@ public class Server {
         }
     }
 
-    public void setGuildMemberOnline(MapleCharacter mc, boolean bOnline, int channel) {
+    public void setGuildMemberOnline(Character mc, boolean bOnline, int channel) {
         MapleGuild g = getGuild(mc.getGuildId(), mc.getWorld(), mc);
         g.setOnline(mc.getId(), bOnline, channel);
     }
 
-    public int addGuildMember(MapleGuildCharacter mgc, MapleCharacter chr) {
+    public int addGuildMember(MapleGuildCharacter mgc, Character chr) {
         MapleGuild g = guilds.get(mgc.getGuildId());
         if (g != null) {
             return g.addGuildMember(mgc, chr);
@@ -1233,7 +1233,7 @@ public class Server {
         return buffStorage;
     }
 
-    public void deleteGuildCharacter(MapleCharacter mc) {
+    public void deleteGuildCharacter(Character mc) {
         setGuildMemberOnline(mc, false, (byte) -1);
         if (mc.getMGC().getGuildRank() > 1) {
             leaveGuild(mc.getMGC());
@@ -1255,7 +1255,7 @@ public class Server {
 
     public void reloadGuildCharacters(int world) {
         World worlda = getWorld(world);
-        for (MapleCharacter mc : worlda.getPlayerStorage().getAllCharacters()) {
+        for (Character mc : worlda.getPlayerStorage().getAllCharacters()) {
             if (mc.getGuildId() > 0) {
                 setGuildMemberOnline(mc, true, worlda.getId());
                 memberLevelJobUpdate(mc.getMGC());
@@ -1278,7 +1278,7 @@ public class Server {
 
     public boolean isGmOnline(int world) {
         for (Channel ch : getChannelsFromWorld(world)) {
-            for (MapleCharacter player : ch.getPlayerStorage().getAllCharacters()) {
+            for (Character player : ch.getPlayerStorage().getAllCharacters()) {
                 if (player.isGM()) {
                     return true;
                 }
@@ -1354,8 +1354,8 @@ public class Server {
         }
     }
 
-    public void updateCharacterEntry(MapleCharacter chr) {
-        MapleCharacter chrView = chr.generateCharacterEntry();
+    public void updateCharacterEntry(Character chr) {
+        Character chrView = chr.generateCharacterEntry();
 
         lgnWLock.lock();
         try {
@@ -1368,7 +1368,7 @@ public class Server {
         }
     }
 
-    public void createCharacterEntry(MapleCharacter chr) {
+    public void createCharacterEntry(Character chr) {
         Integer accountid = chr.getAccountID(), chrid = chr.getId(), world = chr.getWorld();
 
         lgnWLock.lock();
@@ -1380,7 +1380,7 @@ public class Server {
 
             worldChars.put(chrid, world);
 
-            MapleCharacter chrView = chr.generateCharacterEntry();
+            Character chrView = chr.generateCharacterEntry();
 
             World wserv = this.getWorld(chrView.getWorld());
             if (wserv != null) {
@@ -1411,7 +1411,7 @@ public class Server {
         }
     }
 
-    public void transferWorldCharacterEntry(MapleCharacter chr, Integer toWorld) { // used before setting the new worldid on the character object
+    public void transferWorldCharacterEntry(Character chr, Integer toWorld) { // used before setting the new worldid on the character object
         lgnWLock.lock();
         try {
             Integer chrid = chr.getId(), accountid = chr.getAccountID(), world = worldChars.get(chr.getId());
@@ -1424,7 +1424,7 @@ public class Server {
 
             worldChars.put(chrid, toWorld);
 
-            MapleCharacter chrView = chr.generateCharacterEntry();
+            Character chrView = chr.generateCharacterEntry();
 
             World wserv = this.getWorld(toWorld);
             if (wserv != null) {
@@ -1452,20 +1452,20 @@ public class Server {
     }
     */
 
-    public Pair<Pair<Integer, List<MapleCharacter>>, List<Pair<Integer, List<MapleCharacter>>>> loadAccountCharlist(Integer accountId, int visibleWorlds) {
+    public Pair<Pair<Integer, List<Character>>, List<Pair<Integer, List<Character>>>> loadAccountCharlist(Integer accountId, int visibleWorlds) {
         List<World> wlist = this.getWorlds();
         if (wlist.size() > visibleWorlds) {
             wlist = wlist.subList(0, visibleWorlds);
         }
 
-        List<Pair<Integer, List<MapleCharacter>>> accChars = new ArrayList<>(wlist.size() + 1);
+        List<Pair<Integer, List<Character>>> accChars = new ArrayList<>(wlist.size() + 1);
         int chrTotal = 0;
-        List<MapleCharacter> lastwchars = null;
+        List<Character> lastwchars = null;
 
         lgnRLock.lock();
         try {
             for (World w : wlist) {
-                List<MapleCharacter> wchars = w.getAccountCharactersView(accountId);
+                List<Character> wchars = w.getAccountCharactersView(accountId);
                 if (wchars == null) {
                     if (!accountChars.containsKey(accountId)) {
                         accountCharacterCount.put(accountId, (short) 0);
@@ -1485,14 +1485,14 @@ public class Server {
         return new Pair<>(new Pair<>(chrTotal, lastwchars), accChars);
     }
 
-    private static Pair<Short, List<List<MapleCharacter>>> loadAccountCharactersViewFromDb(int accId, int wlen) {
+    private static Pair<Short, List<List<Character>>> loadAccountCharactersViewFromDb(int accId, int wlen) {
         short characterCount = 0;
-        List<List<MapleCharacter>> wchars = new ArrayList<>(wlen);
+        List<List<Character>> wchars = new ArrayList<>(wlen);
         for (int i = 0; i < wlen; i++) {
             wchars.add(i, new LinkedList<>());
         }
 
-        List<MapleCharacter> chars = new LinkedList<>();
+        List<Character> chars = new LinkedList<>();
         int curWorld = 0;
         try {
             List<Pair<Item, Integer>> accEquips = ItemFactory.loadEquippedItems(accId, true, true);
@@ -1529,7 +1529,7 @@ public class Server {
                         }
 
                         Integer cid = rs.getInt("id");
-                        chars.add(MapleCharacter.loadCharacterEntryFromDB(rs, accPlayerEquips.get(cid)));
+                        chars.add(Character.loadCharacterEntryFromDB(rs, accPlayerEquips.get(cid)));
                     }
                 }
             }
@@ -1579,7 +1579,7 @@ public class Server {
                     int characterId = rs.getInt("characterId");
                     String oldName = rs.getString("old");
                     String newName = rs.getString("new");
-                    boolean success = MapleCharacter.doNameChange(con, characterId, oldName, newName, nameChangeId);
+                    boolean success = Character.doNameChange(con, characterId, oldName, newName, nameChangeId);
                     if (!success) {
                         con.rollback(); //discard changes
                     } else {
@@ -1610,7 +1610,7 @@ public class Server {
                 int characterId = rs.getInt("characterId");
                 int oldWorld = rs.getInt("from");
                 int newWorld = rs.getInt("to");
-                String reason = MapleCharacter.checkWorldTransferEligibility(con, characterId, oldWorld, newWorld); //check if character is still eligible
+                String reason = Character.checkWorldTransferEligibility(con, characterId, oldWorld, newWorld); //check if character is still eligible
                 if (reason != null) {
                     removedTransfers.add(nameChangeId);
                     FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer cancelled : Character ID " + characterId + " at " + Calendar.getInstance().getTime().toString() + ", Reason : " + reason);
@@ -1636,7 +1636,7 @@ public class Server {
                     int characterId = rs.getInt("characterId");
                     int oldWorld = rs.getInt("from");
                     int newWorld = rs.getInt("to");
-                    boolean success = MapleCharacter.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
+                    boolean success = Character.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
                     if (!success) {
                         con.rollback();
                     } else {
@@ -1680,7 +1680,7 @@ public class Server {
                 World wserv = this.getWorld(aw);
 
                 if (wserv != null) {
-                    for (MapleCharacter chr : wserv.getAllCharactersView()) {
+                    for (Character chr : wserv.getAllCharactersView()) {
                         if (gmLevel < chr.gmLevel()) {
                             gmLevel = chr.gmLevel();
                         }
@@ -1698,11 +1698,11 @@ public class Server {
 
     private int loadAccountCharactersView(Integer accId, int gmLevel, int fromWorldid) {    // returns the maximum gmLevel found
         List<World> wlist = this.getWorlds();
-        Pair<Short, List<List<MapleCharacter>>> accCharacters = loadAccountCharactersViewFromDb(accId, wlist.size());
+        Pair<Short, List<List<Character>>> accCharacters = loadAccountCharactersViewFromDb(accId, wlist.size());
 
         lgnWLock.lock();
         try {
-            List<List<MapleCharacter>> accChars = accCharacters.getRight();
+            List<List<Character>> accChars = accCharacters.getRight();
             accountCharacterCount.put(accId, accCharacters.getLeft());
 
             Set<Integer> chars = accountChars.get(accId);
@@ -1712,10 +1712,10 @@ public class Server {
 
             for (int wid = fromWorldid; wid < wlist.size(); wid++) {
                 World w = wlist.get(wid);
-                List<MapleCharacter> wchars = accChars.get(wid);
+                List<Character> wchars = accChars.get(wid);
                 w.loadAccountCharactersView(accId, wchars);
 
-                for (MapleCharacter chr : wchars) {
+                for (Character chr : wchars) {
                     int cid = chr.getId();
                     if (gmLevel < chr.gmLevel()) {
                         gmLevel = chr.gmLevel();

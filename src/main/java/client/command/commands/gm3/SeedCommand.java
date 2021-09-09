@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import client.inventory.Item;
@@ -37,7 +37,7 @@ public class SeedCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (player.getMapId() != 910010000) {
             player.yellowMessage("This command can only be used in HPQ.");
             return;

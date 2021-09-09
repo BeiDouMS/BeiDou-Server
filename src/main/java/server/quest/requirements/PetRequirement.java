@@ -21,7 +21,7 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
+import client.Character;
 import client.inventory.Pet;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -54,7 +54,7 @@ public class PetRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		for(Pet pet : chr.getPets()) {
                         if(pet == null) continue;   // thanks Arufonsu for showing a NPE occurring here
                         

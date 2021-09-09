@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.autoban.AutobanManager;
 import client.inventory.Inventory;
@@ -38,7 +38,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
         if (abm.getLastSpam(2) + 500 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());

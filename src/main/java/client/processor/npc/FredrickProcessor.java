@@ -23,7 +23,7 @@
 */
 package client.processor.npc;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -52,7 +52,7 @@ public class FredrickProcessor {
     
     private static int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
     
-    private static byte canRetrieveFromFredrick(MapleCharacter chr, List<Pair<Item, InventoryType>> items) {
+    private static byte canRetrieveFromFredrick(Character chr, List<Pair<Item, InventoryType>> items) {
         if (!Inventory.checkSpotsAndOwnership(chr, items)) {
             List<Integer> itemids = new LinkedList<>();
             for (Pair<Item, InventoryType> it : items) {
@@ -132,7 +132,7 @@ public class FredrickProcessor {
     private static void removeFredrickReminders(List<Pair<Integer, Integer>> expiredCids) {
         List<String> expiredCnames = new LinkedList<>();
         for (Pair<Integer, Integer> id : expiredCids) {
-            String name = MapleCharacter.getNameById(id.getLeft());
+            String name = Character.getNameById(id.getLeft());
             if (name != null) {
                 expiredCnames.add(name);
             }
@@ -209,7 +209,7 @@ public class FredrickProcessor {
 
                         World wserv = Server.getInstance().getWorld(cid.getRight());
                         if (wserv != null) {
-                            MapleCharacter chr = wserv.getPlayerStorage().getCharacterById(cid.getLeft());
+                            Character chr = wserv.getPlayerStorage().getCharacterById(cid.getLeft());
                             if (chr != null) {
                                 chr.setMerchantMeso(0);
                             }
@@ -239,7 +239,7 @@ public class FredrickProcessor {
                         ps.addBatch();
 
                         String msg = fredrickReminderMessage(cid.getRight() - 1);
-                        MapleCharacter.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
+                        Character.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
                     }
 
                     ps.executeBatch();
@@ -267,7 +267,7 @@ public class FredrickProcessor {
     public static void fredrickRetrieveItems(MapleClient c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
 
                 List<Pair<Item, InventoryType>> items;
                 try {

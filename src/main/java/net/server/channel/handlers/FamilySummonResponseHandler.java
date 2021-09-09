@@ -1,6 +1,6 @@
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
@@ -23,7 +23,7 @@ public class FamilySummonResponseHandler extends AbstractPacketHandler {
         boolean accept = p.readByte() != 0;
         MapleInviteResult inviteResult = MapleInviteCoordinator.answerInvite(InviteType.FAMILY_SUMMON, c.getPlayer().getId(), c.getPlayer(), accept);
         if(inviteResult.result == InviteResult.NOT_FOUND) return;
-        MapleCharacter inviter = inviteResult.from;
+        Character inviter = inviteResult.from;
         MapleFamilyEntry inviterEntry = inviter.getFamilyEntry();
         if(inviterEntry == null) return;
         MapleMap map = (MapleMap) inviteResult.params[0];

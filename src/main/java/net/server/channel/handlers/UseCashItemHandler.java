@@ -21,6 +21,7 @@
  */
 package net.server.channel.handlers;
 
+import client.Character;
 import client.*;
 import client.creator.veteran.*;
 import client.inventory.*;
@@ -53,7 +54,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        final MapleCharacter player = c.getPlayer();
+        final Character player = c.getPlayer();
 
         long timeNow = currentServerTime();
         if (timeNow - player.getLastUsedCashItem() < 3000) {
@@ -112,7 +113,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
             } else {
                 String name = p.readString();
-                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
+                Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
 
                 if (victim != null) {
                     MapleMap targetMap = victim.getMap();
@@ -271,7 +272,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     int tvType = itemId % 10;
                     boolean megassenger = false;
                     boolean ear = false;
-                    MapleCharacter victim = null;
+                    Character victim = null;
                     if (tvType != 1) {
                         if (tvType >= 3) {
                             megassenger = true;
@@ -360,7 +361,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             remove(c, position, itemId);
         } else if (itemType == 512) {
             if (ii.getStateChangeItem(itemId) != 0) {
-                for (MapleCharacter mChar : player.getMap().getCharacters()) {
+                for (Character mChar : player.getMap().getCharacters()) {
                     ii.getItemEffect(ii.getStateChangeItem(itemId)).applyTo(mChar);
                 }
             }

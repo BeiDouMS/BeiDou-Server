@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
@@ -36,7 +36,7 @@ public class ServerAddWorldCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        final MapleCharacter player = c.getPlayer();
+        final Character player = c.getPlayer();
         
         ThreadManager.getInstance().newTask(() -> {
             int wid = Server.getInstance().addWorld();

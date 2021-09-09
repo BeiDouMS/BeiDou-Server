@@ -30,10 +30,10 @@ public class MapleMount {
     private int tiredness;
     private int exp;
     private int level;
-    private MapleCharacter owner;
+    private Character owner;
     private boolean active;
 
-    public MapleMount(MapleCharacter owner, int id, int skillid) {
+    public MapleMount(Character owner, int id, int skillid) {
         this.itemid = id;
         this.skillid = skillid;
         this.tiredness = 0;

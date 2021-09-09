@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.status.MonsterStatus;
@@ -49,7 +49,7 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
         int to = p.readInt();
         boolean magic = p.readByte() == 0;
         int dmg = p.readInt();
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         
         MapleMap map = chr.getMap();
         MapleMonster attacker = map.getMonsterByOid(from);

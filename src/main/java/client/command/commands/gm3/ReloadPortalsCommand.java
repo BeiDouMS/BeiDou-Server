@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import scripting.portal.PortalScriptManager;
@@ -35,7 +35,7 @@ public class ReloadPortalsCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         PortalScriptManager.getInstance().reloadPortalScripts();
         player.dropMessage(5, "Reloaded Portals");
     }

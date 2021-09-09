@@ -21,7 +21,7 @@
 package net.server.channel.handlers;
 
 import client.BuffStat;
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -41,7 +41,7 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
     
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         chr.setMapTransitionComplete();
         
         int beaconid = chr.getBuffSource(BuffStat.HOMING_BEACON);

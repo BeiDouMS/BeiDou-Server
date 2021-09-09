@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -41,7 +41,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         MapleAlliance alliance = null;
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         
         if (chr.getGuild() == null) {
             c.sendPacket(PacketCreator.enableActions());
@@ -159,7 +159,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                     return;
                 }
                 int victimid = p.readInt();
-                MapleCharacter player = Server.getInstance().getWorld(c.getWorld()).getPlayerStorage().getCharacterById(victimid);
+                Character player = Server.getInstance().getWorld(c.getWorld()).getPlayerStorage().getCharacterById(victimid);
                 if (player.getAllianceRank() != 2) {
                     return;
                 }
@@ -181,7 +181,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
                 byte byte1 = p.readByte();
                 
                 //Server.getInstance().allianceMessage(alliance.getId(), sendChangeRank(chr.getGuild().getAllianceId(), chr.getId(), int1, byte1), -1, -1);
-                MapleCharacter player = Server.getInstance().getWorld(c.getWorld()).getPlayerStorage().getCharacterById(int1);
+                Character player = Server.getInstance().getWorld(c.getWorld()).getPlayerStorage().getCharacterById(int1);
                 changePlayerAllianceRank(alliance, player, (byte1 > 0));
                 
                 break;
@@ -200,9 +200,9 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
         alliance.saveToDB();
     }
     
-    private void changeLeaderAllianceRank(MapleAlliance alliance, MapleCharacter newLeader) {
+    private void changeLeaderAllianceRank(MapleAlliance alliance, Character newLeader) {
         MapleGuildCharacter lmgc = alliance.getLeader();
-        MapleCharacter leader = newLeader.getWorldServer().getPlayerStorage().getCharacterById(lmgc.getId());
+        Character leader = newLeader.getWorldServer().getPlayerStorage().getCharacterById(lmgc.getId());
         leader.getMGC().setAllianceRank(2);
         leader.saveGuildStatus();
         
@@ -213,7 +213,7 @@ public final class AllianceOperationHandler extends AbstractPacketHandler {
         alliance.dropMessage("'" + newLeader.getName() + "' has been appointed as the new head of this Alliance.");
     }
     
-    private void changePlayerAllianceRank(MapleAlliance alliance, MapleCharacter chr, boolean raise) {
+    private void changePlayerAllianceRank(MapleAlliance alliance, Character chr, boolean raise) {
         int newRank = chr.getAllianceRank() + (raise ? -1 : 1);
         if(newRank < 3 || newRank > 5) return;
         

@@ -24,7 +24,7 @@
 package client.command.commands.gm3;
 
 import client.BuffStat;
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 
@@ -35,8 +35,8 @@ public class CheckDmgCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
-        MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character player = c.getPlayer();
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             int maxBase = victim.calculateMaxBaseDamage(victim.getTotalWatk());
             Integer watkBuff = victim.getBuffedValue(BuffStat.WATK);

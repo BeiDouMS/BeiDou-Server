@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -36,7 +36,7 @@ public final class SnowballHandler extends AbstractPacketHandler {
 
     public void handlePacket(InPacket p, MapleClient c) {
         //D3 00 02 00 00 A5 01
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMap map = chr.getMap();
         final MapleSnowball snowball = map.getSnowball(chr.getTeam());
         final MapleSnowball othersnowball = map.getSnowball(chr.getTeam() == 0 ? (byte) 1 : 0);

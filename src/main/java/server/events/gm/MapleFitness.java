@@ -22,7 +22,7 @@
 
 package server.events.gm;
 
-import client.MapleCharacter;
+import client.Character;
 import server.TimerManager;
 import tools.PacketCreator;
 
@@ -33,13 +33,13 @@ import java.util.concurrent.ScheduledFuture;
  * @author kevintjuh93
  */
 public class MapleFitness {
-       private MapleCharacter chr;
+       private Character chr;
        private long time = 0;
        private long timeStarted = 0;
        private ScheduledFuture<?> schedule = null;
        private ScheduledFuture<?> schedulemsg = null;
        
-       public MapleFitness(final MapleCharacter chr) {
+       public MapleFitness(final Character chr) {
            this.chr = chr;
            this.schedule = TimerManager.getInstance().schedule(() -> {
            if (chr.getMapId() >= 109040000 && chr.getMapId() <= 109040004)

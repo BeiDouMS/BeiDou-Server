@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
@@ -39,7 +39,7 @@ public class RanksCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         
         List<Pair<String, Integer>> worldRanking = Server.getInstance().getWorldPlayerRanking(player.getWorld());
         player.sendPacket(GuildPackets.showPlayerRanks(9010000, worldRanking));

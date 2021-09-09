@@ -19,18 +19,14 @@
 */
 package net.server.coordinator.matchchecker;
 
-import client.MapleCharacter;
+import client.Character;
 import net.server.PlayerStorage;
 import net.server.Server;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import net.server.world.World;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
+import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -133,15 +129,15 @@ public class MapleMatchCheckerCoordinator {
             return s;
         }
         
-        private Set<MapleCharacter> getMatchCharacters() {
-            Set<MapleCharacter> players = new HashSet<>();
+        private Set<Character> getMatchCharacters() {
+            Set<Character> players = new HashSet<>();
             
             World wserv = Server.getInstance().getWorld(world);
             if (wserv != null) {
                 PlayerStorage ps = wserv.getPlayerStorage();
                 
                 for (Integer cid : getMatchPlayers()) {
-                    MapleCharacter chr = ps.getCharacterById(cid);
+                    Character chr = ps.getCharacterById(cid);
                     if (chr != null) {
                         players.add(chr);
                     }
@@ -152,10 +148,10 @@ public class MapleMatchCheckerCoordinator {
         }
         
         private void dispatchMatchCreated() {
-            Set<MapleCharacter> nonLeaderMatchPlayers = getMatchCharacters();
-            MapleCharacter leader = null;
+            Set<Character> nonLeaderMatchPlayers = getMatchCharacters();
+            Character leader = null;
             
-            for (MapleCharacter chr : nonLeaderMatchPlayers) {
+            for (Character chr : nonLeaderMatchPlayers) {
                 if (chr.getId() == leaderCid) {
                     leader = chr;
                     break;

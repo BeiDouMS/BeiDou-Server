@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm0;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 
@@ -34,7 +34,7 @@ public class LeaveEventCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         int returnMap = player.getSavedLocation("EVENT");
         if(returnMap != -1) {
             if(player.getOla() != null) {

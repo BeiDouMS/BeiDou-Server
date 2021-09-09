@@ -19,7 +19,7 @@
 */
 package tools.packets;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
@@ -53,7 +53,7 @@ public class Fishing {
         return new double[]{yearLikelihood, timeLikelihood};
     }
     
-    private static boolean hitFishingTime(MapleCharacter chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
+    private static boolean hitFishingTime(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
         double baitLikelihood = 0.0002 * chr.getWorldServer().getFishingRate() * baitLevel;   // can improve 10.0 at "max level 50000" on rate 1x
         
         if (YamlConfig.config.server.USE_DEBUG) {
@@ -65,7 +65,7 @@ public class Fishing {
         return (0.23 * yearLikelihood) + (0.77 * timeLikelihood) + (baitLikelihood) > 57.777;
     }
     
-    public static void doFishing(MapleCharacter chr, int baitLevel, double yearLikelihood, double timeLikelihood){
+    public static void doFishing(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood){
         // thanks Fadi, Vcoc for suggesting a custom fishing system
         
         if (!chr.isLoggedinWorld() || !chr.isAlive()) {

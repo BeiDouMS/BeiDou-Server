@@ -1,6 +1,6 @@
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.packet.Packet;
 import tools.PacketCreator;
@@ -9,12 +9,12 @@ import java.awt.*;
 
 public class MapleKite extends AbstractMapleMapObject {
     private final Point pos;
-    private final MapleCharacter owner;
+    private final Character owner;
     private final String text;
     private final int ft;
     private final int itemid;
 
-    public MapleKite(MapleCharacter owner, String text, int itemId) {
+    public MapleKite(Character owner, String text, int itemId) {
         this.owner = owner;
         this.pos = owner.getPosition();
         this.ft = owner.getFh();
@@ -32,7 +32,7 @@ public class MapleKite extends AbstractMapleMapObject {
         return pos.getLocation();
     }
 
-    public MapleCharacter getOwner() {
+    public Character getOwner() {
         return owner;
     }
 

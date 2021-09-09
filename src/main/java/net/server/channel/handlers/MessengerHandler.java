@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -41,7 +41,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
             try {
                 String input;
                 byte mode = p.readByte();
-                MapleCharacter player = c.getPlayer();
+                Character player = c.getPlayer();
                 World world = c.getWorldServer();
                 MapleMessenger messenger = player.getMessenger();
                 switch (mode) {
@@ -85,7 +85,7 @@ public final class MessengerHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.messengerChat(player.getName() + " : This Maple Messenger is currently unavailable. Please quit this chat."));
                         } else if (messenger.getMembers().size() < 3) {
                             input = p.readString();
-                            MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
+                            Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(input);
                             if (target != null) {
                                 if (target.getMessenger() == null) {
                                     if (MapleInviteCoordinator.createInvite(InviteType.MESSENGER, c.getPlayer(), messenger.getId(), target.getId())) {

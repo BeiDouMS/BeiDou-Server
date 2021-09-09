@@ -7,7 +7,7 @@
 package net.server.channel.handlers;
 
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -36,7 +36,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 final byte mode = p.readByte();
 
                 if (mode == 6) { //additem
@@ -54,7 +54,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                             if (giftCount < YamlConfig.config.server.WEDDING_GIFT_LIMIT) {
                                 int cid = marriage.getIntProperty(groomWishlist ? "groomId" : "brideId");
                                 if (chr.getId() != cid) {   // cannot gift yourself
-                                    MapleCharacter spouse = marriage.getPlayerById(cid);
+                                    Character spouse = marriage.getPlayerById(cid);
                                     if (spouse != null) {
                                         InventoryType type = ItemConstants.getInventoryType(itemid);
                                         Inventory chrInv = chr.getInventory(type);

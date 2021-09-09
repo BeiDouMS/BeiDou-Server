@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -32,7 +32,7 @@ import tools.PacketCreator;
 public class UseMapleLifeHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         long timeNow = currentServerTime();
         
         if(timeNow - player.getLastUsedCashItem() < 3000) {
@@ -44,7 +44,7 @@ public class UseMapleLifeHandler extends AbstractPacketHandler {
         player.setLastUsedCashItem(timeNow);
         
         String name = p.readString();
-        if(MapleCharacter.canCreateChar(name)) {
+        if(Character.canCreateChar(name)) {
             c.sendPacket(PacketCreator.sendMapleLifeCharacterInfo());
         } else {
             c.sendPacket(PacketCreator.sendMapleLifeNameError());

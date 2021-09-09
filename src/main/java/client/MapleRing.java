@@ -103,7 +103,7 @@ public class MapleRing implements Comparable<MapleRing> {
         }
     }
     
-    public static Pair<Integer, Integer> createRing(int itemid, final MapleCharacter partner1, final MapleCharacter partner2) {
+    public static Pair<Integer, Integer> createRing(int itemid, final Character partner1, final Character partner2) {
         try {
             if (partner1 == null) {
                 return new Pair<>(-3, -3);

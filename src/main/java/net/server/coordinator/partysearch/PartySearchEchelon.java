@@ -19,12 +19,7 @@
 */
 package net.server.coordinator.partysearch;
 
-import client.MapleCharacter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import client.Character;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -33,6 +28,10 @@ import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -44,15 +43,15 @@ public class PartySearchEchelon {
     private final MonitoredReadLock psRLock = MonitoredReadLockFactory.createLock(psLock);
     private final MonitoredWriteLock psWLock = MonitoredWriteLockFactory.createLock(psLock);
     
-    private Map<Integer, WeakReference<MapleCharacter>> echelon = new HashMap<>(20);
+    private Map<Integer, WeakReference<Character>> echelon = new HashMap<>(20);
     
-    public List<MapleCharacter> exportEchelon() {
+    public List<Character> exportEchelon() {
         psWLock.lock();     // reversing read/write actually could provide a lax yet sure performance/precision trade-off here
         try {
-            List<MapleCharacter> players = new ArrayList<>(echelon.size());
+            List<Character> players = new ArrayList<>(echelon.size());
             
-            for (WeakReference<MapleCharacter> chrRef : echelon.values()) {
-                MapleCharacter chr = chrRef.get();
+            for (WeakReference<Character> chrRef : echelon.values()) {
+                Character chr = chrRef.get();
                 if (chr != null) {
                     players.add(chr);
                 }
@@ -65,7 +64,7 @@ public class PartySearchEchelon {
         }
     }
     
-    public void attachPlayer(MapleCharacter chr) {
+    public void attachPlayer(Character chr) {
         psRLock.lock();
         try {
             echelon.put(chr.getId(), new WeakReference<>(chr));
@@ -74,7 +73,7 @@ public class PartySearchEchelon {
         }
     }
     
-    public boolean detachPlayer(MapleCharacter chr) {
+    public boolean detachPlayer(Character chr) {
         psRLock.lock();
         try {
             return echelon.remove(chr.getId()) != null;

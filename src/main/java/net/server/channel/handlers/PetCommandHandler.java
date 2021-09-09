@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Pet;
 import client.inventory.PetCommand;
@@ -35,7 +35,7 @@ public final class PetCommandHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         int petId = p.readInt();
         byte petIndex = chr.getPetIndex(petId);
         Pet pet;

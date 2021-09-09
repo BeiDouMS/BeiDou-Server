@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
@@ -37,7 +37,7 @@ public class GrenadeEffectHandler extends AbstractPacketHandler {
  
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Point position = new Point(p.readInt(), p.readInt());
         int keyDown = p.readInt();
         int skillId = p.readInt();

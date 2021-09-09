@@ -40,7 +40,7 @@ import java.util.List;
 public class MapleFamilyEntry {
     private final int characterID;
     private volatile MapleFamily family;
-    private volatile MapleCharacter character;
+    private volatile Character character;
 
     private volatile MapleFamilyEntry senior;
     private final MapleFamilyEntry[] juniors = new MapleFamilyEntry[2];
@@ -66,17 +66,17 @@ public class MapleFamilyEntry {
         this.job = job;
     }
 
-    public MapleCharacter getChr() {
+    public Character getChr() {
         return character;
     }
 
-    public void setCharacter(MapleCharacter newCharacter) {
+    public void setCharacter(Character newCharacter) {
         if(newCharacter == null) cacheOffline(newCharacter);
         else newCharacter.setFamilyEntry(this);
         this.character = newCharacter;
     }
 
-    private void cacheOffline(MapleCharacter chr) {
+    private void cacheOffline(Character chr) {
         if(chr != null) {
             charName = chr.getName();
             level = chr.getLevel();
@@ -209,19 +209,19 @@ public class MapleFamilyEntry {
     }
 
     public String getName() {
-        MapleCharacter chr = character;
+        Character chr = character;
         if(chr != null) return chr.getName();
         else return charName;
     }
 
     public int getLevel() {
-        MapleCharacter chr = character;
+        Character chr = character;
         if(chr != null) return chr.getLevel();
         else return level;
     }
 
     public MapleJob getJob() {
-        MapleCharacter chr = character;
+        Character chr = character;
         if(chr != null) return chr.getJob();
         else return job;
     }
@@ -264,7 +264,7 @@ public class MapleFamilyEntry {
         if(gain > 0 && countTowardsTotal) {
             this.totalReputation += gain;
         }
-        MapleCharacter chr = getChr();
+        Character chr = getChr();
         if(chr != null) chr.sendPacket(PacketCreator.sendGainRep(gain, from != null ? from.getName() : ""));
     }
 
@@ -424,7 +424,7 @@ public class MapleFamilyEntry {
     public void announceToSenior(Packet packet, boolean includeSuperSenior) {
         MapleFamilyEntry senior = getSenior();
         if(senior != null) {
-            MapleCharacter seniorChr = senior.getChr();
+            Character seniorChr = senior.getChr();
             if(seniorChr != null) seniorChr.sendPacket(packet);
             senior = senior.getSenior();
             if(includeSuperSenior && senior != null) {
@@ -437,7 +437,7 @@ public class MapleFamilyEntry {
     public void updateSeniorFamilyInfo(boolean includeSuperSenior) {
         MapleFamilyEntry senior = getSenior();
         if(senior != null) {
-            MapleCharacter seniorChr = senior.getChr();
+            Character seniorChr = senior.getChr();
             if(seniorChr != null) seniorChr.sendPacket(PacketCreator.getFamilyInfo(senior));
             senior = senior.getSenior();
             if(includeSuperSenior && senior != null) {

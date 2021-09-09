@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -36,8 +36,8 @@ public final class CharInfoRequestHandler extends AbstractPacketHandler {
         int cid = p.readInt();
         MapleMapObject target = c.getPlayer().getMap().getMapObject(cid);
         if (target != null) {
-            if (target instanceof MapleCharacter) {
-                MapleCharacter player = (MapleCharacter) target;
+            if (target instanceof Character) {
+                Character player = (Character) target;
                 
                 if(c.getPlayer().getId() != player.getId()) {
                     player.exportExcludedItems(c);

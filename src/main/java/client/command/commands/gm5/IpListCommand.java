@@ -19,7 +19,7 @@
 */
 package client.command.commands.gm5;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import constants.game.GameConstants;
@@ -44,12 +44,12 @@ public class IpListCommand extends Command {
         String str = "Player-IP relation:";
         
         for (World w : Server.getInstance().getWorlds()) {
-            Collection<MapleCharacter> chars = w.getPlayerStorage().getAllCharacters();
+            Collection<Character> chars = w.getPlayerStorage().getAllCharacters();
             
             if (!chars.isEmpty()) {
                 str += "\r\n" + GameConstants.WORLD_NAMES[w.getId()] + "\r\n";
                 
-                for (MapleCharacter chr : chars) {
+                for (Character chr : chars) {
                     str += "  " + chr.getName() + " - " + chr.getClient().getRemoteAddress() + "\r\n";
                 }
             }

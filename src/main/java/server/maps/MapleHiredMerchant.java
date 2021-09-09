@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -63,7 +63,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     private long start;
     private String ownerName = "";
     private String description = "";
-    private MapleCharacter[] visitors = new MapleCharacter[3];
+    private Character[] visitors = new Character[3];
     private final List<MaplePlayerShopItem> items = new LinkedList<>();
     private List<Pair<String, Byte>> messages = new LinkedList<>();
     private List<SoldItem> sold = new LinkedList<>();
@@ -72,7 +72,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     private MapleMap map;
     private Lock visitorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.VISITOR_MERCH, true);
 
-    public MapleHiredMerchant(final MapleCharacter owner, String desc, int itemId) {
+    public MapleHiredMerchant(final Character owner, String desc, int itemId) {
         this.setPosition(owner.getPosition());
         this.start = System.currentTimeMillis();
         this.ownerId = owner.getId();
@@ -94,7 +94,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     }
     
     private void broadcastToVisitors(Packet packet) {
-        for (MapleCharacter visitor : visitors) {
+        for (Character visitor : visitors) {
             if (visitor != null) {
                 visitor.sendPacket(packet);
             }
@@ -106,7 +106,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         try {
             byte count = 0;
             if (this.isOpen()) {
-                for (MapleCharacter visitor : visitors) {
+                for (Character visitor : visitors) {
                     if (visitor != null) {
                         count++;
                     }
@@ -121,7 +121,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    public boolean addVisitor(MapleCharacter visitor) {
+    public boolean addVisitor(Character visitor) {
         visitorLock.lock();
         try {
             int i = this.getFreeSlot();
@@ -139,7 +139,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
 
-    public void removeVisitor(MapleCharacter visitor) {
+    public void removeVisitor(Character visitor) {
         visitorLock.lock();
         try {
             int slot = getVisitorSlot(visitor);
@@ -156,7 +156,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
 
-    public int getVisitorSlotThreadsafe(MapleCharacter visitor) {
+    public int getVisitorSlotThreadsafe(Character visitor) {
         visitorLock.lock();
         try {
             return getVisitorSlot(visitor);
@@ -165,7 +165,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    private int getVisitorSlot(MapleCharacter visitor) {
+    private int getVisitorSlot(Character visitor) {
         for (int i = 0; i < 3; i++) {
             if (visitors[i] != null && visitors[i].getId() == visitor.getId()){
                 return i;
@@ -178,7 +178,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
-                MapleCharacter visitor = visitors[i];
+                Character visitor = visitors[i];
                 
                 if (visitor != null) {
                     visitor.setHiredMerchant(null);
@@ -196,7 +196,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    private void removeOwner(MapleCharacter owner) {
+    private void removeOwner(Character owner) {
         if (owner.getHiredMerchant() == this) {
             owner.sendPacket(PacketCreator.hiredMerchantOwnerLeave());
             owner.sendPacket(PacketCreator.leaveHiredMerchant(0x00, 0x03));
@@ -204,7 +204,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
 
-    public void withdrawMesos(MapleCharacter chr) {
+    public void withdrawMesos(Character chr) {
         if (isOwner(chr)) {
             synchronized (items) {
                 chr.withdrawMerchantMesos();
@@ -212,7 +212,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         }
     }
     
-    public void takeItemBack(int slot, MapleCharacter chr) {
+    public void takeItemBack(int slot, Character chr) {
         synchronized (items) {
             MaplePlayerShopItem shopItem = items.get(slot);
             if(shopItem.isExist()) {
@@ -292,7 +292,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                         announceItemSold(newItem, price, getQuantityLeft(pItem.getItem().getItemId()));
                     }
                     
-                    MapleCharacter owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
+                    Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
                     if (owner != null) {
                         owner.addMerchantMesos(price);
                     } else {
@@ -338,7 +338,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     private void announceItemSold(Item item, int mesos, int inStore) {
         String qtyStr = (item.getQuantity() > 1) ? " x " + item.getQuantity() : "";
         
-        MapleCharacter player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
+        Character player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
         if(player != null && player.isLoggedinWorld()) {
             player.dropMessage(6, "[Hired Merchant] Item '" + MapleItemInformationProvider.getInstance().getName(item.getItemId()) + "'" + qtyStr + " has been sold for " + mesos + " mesos. (" + inStore + " left)");
         }
@@ -349,7 +349,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         map.broadcastMessage(PacketCreator.removeHiredMerchantBox(getOwnerId()));
         map.removeMapObject(this);
 
-        MapleCharacter owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
+        Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
 
         visitorLock.lock();
         try {
@@ -374,7 +374,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
             ex.printStackTrace();
         }
 
-        MapleCharacter player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
+        Character player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
         if (player != null) {
             player.setHasMerchant(false);
         } else {
@@ -390,7 +390,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         map = null;
     }
 
-    public void closeOwnerMerchant(MapleCharacter chr) {
+    public void closeOwnerMerchant(Character chr) {
         if(this.isOwner(chr)) {
             this.closeShop(chr.getClient(), false);
             chr.setHasMerchant(false);
@@ -430,7 +430,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
             }
 
             // thanks Rohenn for noticing a possible dupe scenario on closing shop
-            MapleCharacter player = c.getWorldServer().getPlayerStorage().getCharacterById(ownerId);
+            Character player = c.getWorldServer().getPlayerStorage().getCharacterById(ownerId);
             if (player != null) {
                 player.setHasMerchant(false);
             } else {
@@ -455,7 +455,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         Server.getInstance().getWorld(world).unregisterHiredMerchant(this);
     }
     
-    public synchronized void visitShop(MapleCharacter chr) {
+    public synchronized void visitShop(Character chr) {
         visitorLock.lock();
         try {
             if (this.isOwner(chr)) {
@@ -496,10 +496,10 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         return description;
     }
 
-    public MapleCharacter[] getVisitors() {
+    public Character[] getVisitors() {
         visitorLock.lock();
         try {
-            MapleCharacter[] copy = new MapleCharacter[3];
+            Character[] copy = new Character[3];
             for(int i = 0; i < visitors.length; i++) copy[i] = visitors[i];
                     
             return copy;
@@ -589,11 +589,11 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         return itemId;
     }
 
-    public boolean isOwner(MapleCharacter chr) {
+    public boolean isOwner(Character chr) {
         return chr.getId() == ownerId;
     }
     
-    public void sendMessage(MapleCharacter chr, String msg) {
+    public void sendMessage(Character chr, String msg) {
         String message = chr.getName() + " : " + msg;
         byte slot = (byte) (getVisitorSlot(chr) + 1);
         
@@ -647,7 +647,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
         FredrickProcessor.insertFredrickLog(this.ownerId);
     }
 
-    private static boolean check(MapleCharacter chr, List<MaplePlayerShopItem> items) {
+    private static boolean check(Character chr, List<MaplePlayerShopItem> items) {
         List<Pair<Item, InventoryType>> li = new ArrayList<>();
         for (MaplePlayerShopItem item : items) {
             Item it = item.getItem().copy();

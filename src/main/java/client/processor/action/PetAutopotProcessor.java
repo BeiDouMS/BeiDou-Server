@@ -21,7 +21,7 @@
 */
 package client.processor.action;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -53,7 +53,7 @@ public class PetAutopotProcessor {
         private int maxHp, maxMp, curHp, curMp;
         private double incHp, incMp;
         
-        private boolean cursorOnNextAvailablePot(MapleCharacter chr) {
+        private boolean cursorOnNextAvailablePot(Character chr) {
             if(toUseList == null) {
                 toUseList = chr.getInventory(InventoryType.USE).linkedListById(itemId);
             }
@@ -81,7 +81,7 @@ public class PetAutopotProcessor {
         
         public void run() {
             MapleClient c = this.c;
-            MapleCharacter chr = c.getPlayer();
+            Character chr = c.getPlayer();
             if (!chr.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;

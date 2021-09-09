@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleDisease;
 import net.AbstractPacketHandler;
@@ -108,7 +108,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             }
                             if (hitChance <= 80) {
                                 for (MaplePartyCharacter mpc : enemies.getPartyMembers()) {
-                                    MapleCharacter mc = mpc.getPlayer();
+                                    Character mc = mpc.getPlayer();
                                     if (mc != null) {
                                         if (dis == null) {
                                             mc.dispel();
@@ -121,7 +121,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         } else {
                             int amount = enemies.getMembers().size() - 1;
                             int randd = (int) Math.floor(Math.random() * amount);
-                            MapleCharacter chrApp = c.getPlayer().getMap().getCharacterById(enemies.getMemberByPos(randd).getId());
+                            Character chrApp = c.getPlayer().getMap().getCharacterById(enemies.getMemberByPos(randd).getId());
                             if (chrApp != null && chrApp.getMap().isCPQMap()) {
                                 if (dis == null) {
                                     chrApp.dispel();

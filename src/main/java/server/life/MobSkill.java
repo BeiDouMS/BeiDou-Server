@@ -21,7 +21,7 @@
  */
 package server.life;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleDisease;
 import client.status.MonsterStatus;
 import constants.game.GameConstants;
@@ -106,7 +106,7 @@ public class MobSkill {
         this.limit = limit;
     }
 
-    public void applyDelayedEffect(final MapleCharacter player, final MapleMonster monster, final boolean skill, int animationTime) {
+    public void applyDelayedEffect(final Character player, final MapleMonster monster, final boolean skill, int animationTime) {
         Runnable toRun = () -> {
             if (monster.isAlive()) {
                 applyEffect(player, monster, skill, null);
@@ -117,7 +117,7 @@ public class MobSkill {
         service.registerOverallAction(monster.getMap().getId(), toRun, animationTime);
     }
 
-    public void applyEffect(MapleCharacter player, MapleMonster monster, boolean skill, List<MapleCharacter> banishPlayers) {
+    public void applyEffect(Character player, MapleMonster monster, boolean skill, List<Character> banishPlayers) {
         MapleDisease disease = null;
         Map<MonsterStatus, Integer> stats = new ArrayMap<>();
         List<Integer> reflection = new LinkedList<>();
@@ -176,7 +176,7 @@ public class MobSkill {
                 break;
             case 127:
                 if (lt != null && rb != null && skill) {
-                    for (MapleCharacter character : getPlayersInRange(monster)) {
+                    for (Character character : getPlayersInRange(monster)) {
                         character.dispel();
                     }
                 } else {
@@ -327,7 +327,7 @@ public class MobSkill {
         if (disease != null) {
             if (lt != null && rb != null && skill) {
                 int i = 0;
-                for (MapleCharacter character : getPlayersInRange(monster)) {
+                for (Character character : getPlayersInRange(monster)) {
                     if (!character.hasActiveBuff(2321005)) {  // holy shield
                         if (disease.equals(MapleDisease.SEDUCE)) {
                             if (i < count) {
@@ -345,7 +345,7 @@ public class MobSkill {
         }
     }
 
-    private List<MapleCharacter> getPlayersInRange(MapleMonster monster) {
+    private List<Character> getPlayersInRange(MapleMonster monster) {
         return monster.getMap().getPlayersInRange(calculateBoundingBox(monster.getPosition()));
     }
 

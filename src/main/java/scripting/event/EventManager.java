@@ -21,7 +21,7 @@
 */
 package scripting.event;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.server.Server;
@@ -379,7 +379,7 @@ public class EventManager {
     }
 
     //Expedition method: starts an expedition
-    public boolean startInstance(int lobbyId, MapleExpedition exped, MapleCharacter leader) {
+    public boolean startInstance(int lobbyId, MapleExpedition exped, Character leader) {
         if (this.isDisposed()) return false;
         
         try {
@@ -438,15 +438,15 @@ public class EventManager {
     }
 
     //Regular method: player 
-    public boolean startInstance(MapleCharacter chr) {
+    public boolean startInstance(Character chr) {
         return startInstance(-1, chr);
     }
     
-    public boolean startInstance(int lobbyId, MapleCharacter leader) {
+    public boolean startInstance(int lobbyId, Character leader) {
         return startInstance(lobbyId, leader, leader, 1);
     }
     
-    public boolean startInstance(int lobbyId, MapleCharacter chr, MapleCharacter leader, int difficulty) {
+    public boolean startInstance(int lobbyId, Character chr, Character leader, int difficulty) {
         if (this.isDisposed()) return false;
         
         try {
@@ -515,7 +515,7 @@ public class EventManager {
         return startInstance(lobbyId, party, map, party.getLeader().getPlayer());
     }
     
-    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, MapleCharacter leader) {
+    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, Character leader) {
         if (this.isDisposed()) return false;
         
         try {
@@ -582,7 +582,7 @@ public class EventManager {
         return startInstance(lobbyId, party, map, difficulty, party.getLeader().getPlayer());
     }
     
-    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, int difficulty, MapleCharacter leader) {
+    public boolean startInstance(int lobbyId, MapleParty party, MapleMap map, int difficulty, Character leader) {
         if (this.isDisposed()) return false;
         
         try {
@@ -645,7 +645,7 @@ public class EventManager {
         return startInstance(-1, eim, ldr);
     }
     
-    public boolean startInstance(EventInstanceManager eim, MapleCharacter ldr) {
+    public boolean startInstance(EventInstanceManager eim, Character ldr) {
         return startInstance(-1, eim, ldr.getName(), ldr);
     }
     
@@ -653,7 +653,7 @@ public class EventManager {
         return startInstance(-1, eim, ldr, eim.getEm().getChannelServer().getPlayerStorage().getCharacterByName(ldr));  // things they make me do...
     }
     
-    public boolean startInstance(int lobbyId, EventInstanceManager eim, String ldr, MapleCharacter leader) {
+    public boolean startInstance(int lobbyId, EventInstanceManager eim, String ldr, Character leader) {
         if (this.isDisposed()) return false;
         
         try {
@@ -825,7 +825,7 @@ public class EventManager {
     }
     
     public boolean attemptStartGuildInstance() {
-        MapleCharacter chr = null;
+        Character chr = null;
         List<Integer> guildInstance = null;
         while(chr == null) {
             guildInstance = getNextGuildQueue();
@@ -844,7 +844,7 @@ public class EventManager {
         }
     }
     
-    public void startQuest(MapleCharacter chr, int id, int npcid) {
+    public void startQuest(Character chr, int id, int npcid) {
         try {
             MapleQuest.getInstance(id).forceStart(chr, npcid);
         } catch (NullPointerException ex) {
@@ -852,7 +852,7 @@ public class EventManager {
         }
     }
 
-    public void completeQuest(MapleCharacter chr, int id, int npcid) {
+    public void completeQuest(Character chr, int id, int npcid) {
         try {
             MapleQuest.getInstance(id).forceComplete(chr, npcid);
         } catch (NullPointerException ex) {

@@ -21,7 +21,7 @@
 */
 package net.server.world;
 
-import client.MapleCharacter;
+import client.Character;
 
 public class MapleMessengerCharacter {
     private String name;
@@ -29,7 +29,7 @@ public class MapleMessengerCharacter {
     private int channel;
     private boolean online;
 
-    public MapleMessengerCharacter(MapleCharacter maplechar, int position) {
+    public MapleMessengerCharacter(Character maplechar, int position) {
         this.name = maplechar.getName();
         this.channel = maplechar.getClient().getChannel();
         this.id = maplechar.getId();

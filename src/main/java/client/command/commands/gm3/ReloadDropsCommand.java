@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.life.MapleMonsterInformationProvider;
@@ -35,7 +35,7 @@ public class ReloadDropsCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MapleMonsterInformationProvider.getInstance().clearDrops();
         player.dropMessage(5, "Reloaded Drops");
     }

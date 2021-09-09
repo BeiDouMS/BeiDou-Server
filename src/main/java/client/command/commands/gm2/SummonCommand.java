@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
@@ -37,13 +37,13 @@ public class SummonCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !warphere <playername>");
             return;
         }
 
-        MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
+        Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim == null) {
             //If victim isn't on current channel, loop all channels on current world.
             

@@ -21,7 +21,7 @@
 */
 package net.server.handlers.login;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -42,16 +42,16 @@ public final class ViewAllCharHandler extends AbstractPacketHandler {
             }
             
             int accountId = c.getAccID();
-            Pair<Pair<Integer, List<MapleCharacter>>, List<Pair<Integer, List<MapleCharacter>>>> loginBlob = Server.getInstance().loadAccountCharlist(accountId, c.getVisibleWorlds());
+            Pair<Pair<Integer, List<Character>>, List<Pair<Integer, List<Character>>>> loginBlob = Server.getInstance().loadAccountCharlist(accountId, c.getVisibleWorlds());
             
-            List<Pair<Integer, List<MapleCharacter>>> worldChars = loginBlob.getRight();
+            List<Pair<Integer, List<Character>>> worldChars = loginBlob.getRight();
             int chrTotal = loginBlob.getLeft().getLeft();
-            List<MapleCharacter> lastwchars = loginBlob.getLeft().getRight();
+            List<Character> lastwchars = loginBlob.getLeft().getRight();
             
             if (chrTotal > 9) {
                 int padRight = chrTotal % 3;
                 if (padRight > 0 && lastwchars != null) {
-                    MapleCharacter chr = lastwchars.get(lastwchars.size() - 1);
+                    Character chr = lastwchars.get(lastwchars.size() - 1);
                     
                     for(int i = padRight; i < 3; i++) { // filling the remaining slots with the last character loaded
                         chrTotal++;
@@ -64,7 +64,7 @@ public final class ViewAllCharHandler extends AbstractPacketHandler {
             int unk = charsSize + (3 - charsSize % 3); //rowSize?
             c.sendPacket(PacketCreator.showAllCharacter(charsSize, unk));
             
-            for (Pair<Integer, List<MapleCharacter>> wchars : worldChars) {
+            for (Pair<Integer, List<Character>> wchars : worldChars) {
                 c.sendPacket(PacketCreator.showAllCharacterInfo(wchars.getLeft(), wchars.getRight(), YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic()));
             }
         } catch (Exception e) {

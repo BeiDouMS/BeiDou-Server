@@ -21,7 +21,7 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -47,11 +47,11 @@ public class ExpAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		runAction(chr, exp);
 	}
         
-        public static void runAction(MapleCharacter chr, int gain) {
+        public static void runAction(Character chr, int gain) {
                 if (!YamlConfig.config.server.USE_QUEST_RATE) {
                         chr.gainExp(gain * chr.getExpRate(), true, true);
                 } else {

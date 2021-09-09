@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -39,7 +39,7 @@ public final class DoorHandler extends AbstractPacketHandler {
         int ownerid = p.readInt();
         p.readByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if (chr.isChangingMaps() || chr.isBanned()) {
             c.sendPacket(PacketCreator.enableActions());
             return;

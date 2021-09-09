@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package scripting.map;
 
-import client.MapleCharacter.DelayedQuestUpdate;
+import client.Character.DelayedQuestUpdate;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import scripting.AbstractPlayerInteraction;

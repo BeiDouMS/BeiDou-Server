@@ -21,6 +21,7 @@
  */
 package net.server.channel.handlers;
 
+import client.Character;
 import client.*;
 import client.inventory.*;
 import client.keybind.KeyBinding;
@@ -111,7 +112,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
             }
 
-            MapleCharacter player = wserv.getPlayerStorage().getCharacterById(cid);
+            Character player = wserv.getPlayerStorage().getCharacterById(cid);
 
             final Hwid hwid;
             if (player == null) {
@@ -134,7 +135,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             boolean newcomer = false;
             if (player == null) {
                 try {
-                    player = MapleCharacter.loadCharFromDB(cid, c, true);
+                    player = Character.loadCharFromDB(cid, c, true);
                     newcomer = true;
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -398,7 +399,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             if (player.getPartnerId() > 0) {
                 int partnerId = player.getPartnerId();
-                final MapleCharacter partner = wserv.getPlayerStorage().getCharacterById(partnerId);
+                final Character partner = wserv.getPlayerStorage().getCharacterById(partnerId);
 
                 if (partner != null && !partner.isAwayFromWorld()) {
                     player.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(partnerId, partner.getMapId()));
@@ -439,7 +440,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
         }
     }
     
-    private static void showDueyNotification(MapleClient c, MapleCharacter player) {
+    private static void showDueyNotification(MapleClient c, Character player) {
         try (Connection con = DatabaseConnection.getConnection();
             PreparedStatement ps = con.prepareStatement("SELECT Type FROM dueypackages WHERE ReceiverId = ? AND Checked = 1 ORDER BY Type DESC")) {
             ps.setInt(1, player.getId());

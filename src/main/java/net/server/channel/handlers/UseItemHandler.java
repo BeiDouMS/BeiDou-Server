@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleDisease;
 import client.inventory.InventoryType;
@@ -41,7 +41,7 @@ import tools.PacketCreator;
 public final class UseItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         
         if (!chr.isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
@@ -99,7 +99,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
                 ii.getItemEffect(toUse.getItemId()).applyTo(chr);
             } else {
                 MapleStatEffect mse = ii.getItemEffect(toUse.getItemId());
-                for(MapleCharacter player : chr.getMap().getCharacters()) {
+                for(Character player : chr.getMap().getCharacters()) {
                     mse.applyTo(player);
                 }
             }

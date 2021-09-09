@@ -22,7 +22,7 @@
 package client.inventory.manipulator;
 
 import client.BuffStat;
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.*;
 import client.newyear.NewYearCardRecord;
@@ -62,7 +62,7 @@ public class InventoryManipulator {
     }
 
     public static boolean addById(MapleClient c, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         InventoryType type = ItemConstants.getInventoryType(itemId);
 
         Inventory inv = chr.getInventory(type);
@@ -74,7 +74,7 @@ public class InventoryManipulator {
         }
     }
 
-    private static boolean addByIdInternal(MapleClient c, MapleCharacter chr, InventoryType type, Inventory inv, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
+    private static boolean addByIdInternal(MapleClient c, Character chr, InventoryType type, Inventory inv, int itemId, short quantity, String owner, int petid, short flag, long expiration) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         if (!type.equals(InventoryType.EQUIP)) {
             short slotMax = ii.getSlotMax(c, itemId);
@@ -171,7 +171,7 @@ public class InventoryManipulator {
     }
 
     public static boolean addFromDrop(MapleClient c, Item item, boolean show, int petId) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         InventoryType type = item.getInventoryType();
 
         Inventory inv = chr.getInventory(type);
@@ -183,7 +183,7 @@ public class InventoryManipulator {
         }
     }
 
-    private static boolean addFromDropInternal(MapleClient c, MapleCharacter chr, InventoryType type, Inventory inv, Item item, boolean show, int petId) {
+    private static boolean addFromDropInternal(MapleClient c, Character chr, InventoryType type, Inventory inv, Item item, boolean show, int petId) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         int itemid = item.getItemId();
         if (ii.isPickupRestricted(itemid) && chr.haveItemWithId(itemid, true)) {
@@ -286,7 +286,7 @@ public class InventoryManipulator {
     public static boolean checkSpace(MapleClient c, int itemid, int quantity, String owner) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         InventoryType type = ItemConstants.getInventoryType(itemid);
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
 
         if (ii.isPickupRestricted(itemid)) {
@@ -341,7 +341,7 @@ public class InventoryManipulator {
 
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         InventoryType type = !useProofInv ? ItemConstants.getInventoryType(itemid) : InventoryType.CANHOLD;
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
 
         if (ii.isPickupRestricted(itemid)) {
@@ -399,7 +399,7 @@ public class InventoryManipulator {
     }
 
     public static void removeFromSlot(MapleClient c, InventoryType type, short slot, short quantity, boolean fromDrop, boolean consume) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
         Item item = inv.getItem(slot);
         boolean allowZero = consume && ItemConstants.isRechargeable(item.getItemId());
@@ -515,7 +515,7 @@ public class InventoryManipulator {
     public static void equip(MapleClient c, short src, short dst) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Inventory eqpInv = chr.getInventory(InventoryType.EQUIP);
         Inventory eqpdInv = chr.getInventory(InventoryType.EQUIPPED);
 
@@ -630,7 +630,7 @@ public class InventoryManipulator {
     }
 
     public static void unequip(MapleClient c, short src, short dst) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Inventory eqpInv = chr.getInventory(InventoryType.EQUIP);
         Inventory eqpdInv = chr.getInventory(InventoryType.EQUIPPED);
 
@@ -689,7 +689,7 @@ public class InventoryManipulator {
             type = InventoryType.EQUIPPED;
         }
 
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         Inventory inv = chr.getInventory(type);
         Item source = inv.getItem(src);
 

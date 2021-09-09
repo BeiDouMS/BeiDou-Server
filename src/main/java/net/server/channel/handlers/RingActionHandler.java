@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleRing;
 import client.inventory.Equip;
@@ -57,8 +57,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
     
     public static void sendEngageProposal(final MapleClient c, final String name, final int itemid) {
         final int newBoxId = getBoxId(itemid);
-        final MapleCharacter target = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
-        final MapleCharacter source = c.getPlayer();
+        final Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
+        final Character source = c.getPlayer();
         
         // TODO: get the correct packet bytes for these popups
         if (source.isMarried()) {
@@ -171,14 +171,14 @@ public final class RingActionHandler extends AbstractPacketHandler {
         }
     }
     
-    private synchronized static void breakMarriage(MapleCharacter chr) {
+    private synchronized static void breakMarriage(Character chr) {
         int partnerid = chr.getPartnerId();
         if(partnerid <= 0) return;
         
         chr.getClient().getWorldServer().deleteRelationship(chr.getId(), partnerid);
         MapleRing.removeRing(chr.getMarriageRing());
         
-        MapleCharacter partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
+        Character partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
         if(partner == null) {
             eraseEngagementOffline(partnerid);
         } else {
@@ -192,7 +192,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
             partner.addMarriageRing(null);
         }
         
-        chr.dropMessage(5, "You have successfully break the marriage with " + MapleCharacter.getNameById(partnerid) + ".");
+        chr.dropMessage(5, "You have successfully break the marriage with " + Character.getNameById(partnerid) + ".");
         
         //chr.sendPacket(Wedding.OnMarriageResult((byte) 0));
         chr.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(0, 0));
@@ -202,7 +202,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         chr.addMarriageRing(null);
     }
     
-    private static void resetRingId(MapleCharacter player) {
+    private static void resetRingId(Character player) {
         int ringitemid = player.getMarriageRing().getItemId();
         
         Item it = player.getInventory(InventoryType.EQUIP).findById(ringitemid);
@@ -216,13 +216,13 @@ public final class RingActionHandler extends AbstractPacketHandler {
         }
     }
     
-    private synchronized static void breakEngagement(MapleCharacter chr) {
+    private synchronized static void breakEngagement(Character chr) {
         int partnerid = chr.getPartnerId();
         int marriageitemid = chr.getMarriageItemId();
         
         chr.getClient().getWorldServer().deleteRelationship(chr.getId(), partnerid);
         
-        MapleCharacter partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
+        Character partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
         if(partner == null) {
             breakEngagementOffline(partnerid);
         } else {
@@ -242,7 +242,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         if(chr.haveItem(marriageitemid)) {
             InventoryManipulator.removeById(chr.getClient(), InventoryType.ETC, marriageitemid, (short) 1, false, false);
         }
-        chr.dropMessage(5, "You have successfully break the engagement with " + MapleCharacter.getNameById(partnerid) + ".");
+        chr.dropMessage(5, "You have successfully break the engagement with " + Character.getNameById(partnerid) + ".");
         
         //chr.sendPacket(Wedding.OnMarriageResult((byte) 0));
         chr.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(0, 0));
@@ -250,7 +250,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         chr.setMarriageItemId(-1);
     }
     
-    public static void breakMarriageRing(MapleCharacter chr, final int wItemId) {
+    public static void breakMarriageRing(Character chr, final int wItemId) {
         final InventoryType type = InventoryType.getByType((byte) (wItemId / 1000000));
         final Item wItem = chr.getInventory(type).findById(wItemId);
         final boolean weddingToken = (wItem != null && type == InventoryType.ETC && wItemId / 10000 == 403);
@@ -271,7 +271,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         }
     }
     
-    public static void giveMarriageRings(MapleCharacter player, MapleCharacter partner, int marriageRingId) {
+    public static void giveMarriageRings(Character player, Character partner, int marriageRingId) {
         Pair<Integer, Integer> rings = MapleRing.createRing(marriageRingId, player, partner);
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
@@ -311,8 +311,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 name = p.readString();
                 final int id = p.readInt();
                 
-                final MapleCharacter source = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
-                final MapleCharacter target = c.getPlayer();
+                final Character source = c.getWorldServer().getPlayerStorage().getCharacterByName(name);
+                final Character target = c.getPlayer();
                 
                 if (source == null) {
                     target.sendPacket(PacketCreator.enableActions());
@@ -383,8 +383,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     return;
                 }
                 
-                String groom = c.getPlayer().getName(), bride = MapleCharacter.getNameById(c.getPlayer().getPartnerId());
-                int guest = MapleCharacter.getIdByName(name);
+                String groom = c.getPlayer().getName(), bride = Character.getNameById(c.getPlayer().getPartnerId());
+                int guest = Character.getIdByName(name);
                 if (groom == null || bride == null || groom.equals("") || bride.equals("") || guest <= 0) {
                     c.getPlayer().dropMessage(5, "Unable to find " + name + "!");
                     return;
@@ -404,7 +404,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                             if(resStatus > 0) {
                                 long expiration = cserv.getWeddingTicketExpireTime(resStatus + 1);
 
-                                MapleCharacter guestChr = c.getWorldServer().getPlayerStorage().getCharacterById(guest);
+                                Character guestChr = c.getWorldServer().getPlayerStorage().getCharacterById(guest);
                                 if(guestChr != null && InventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && InventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
                                     guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding!");
                                 } else {
@@ -452,7 +452,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     Pair<Integer, Integer> coupleId = c.getWorldServer().getWeddingCoupleForGuest(c.getPlayer().getId(), invitationid == 4031407);
                     if (coupleId != null) {
                         int groomId = coupleId.getLeft(), brideId = coupleId.getRight();
-                        c.sendPacket(WeddingPackets.sendWeddingInvitation(MapleCharacter.getNameById(groomId), MapleCharacter.getNameById(brideId)));
+                        c.sendPacket(WeddingPackets.sendWeddingInvitation(Character.getNameById(groomId), Character.getNameById(brideId)));
                     }
                 }
                 
@@ -463,7 +463,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     // By -- Dragoso (Drago)
                     // Groom and Bride's Wishlist
 
-                    MapleCharacter player = c.getPlayer();
+                    Character player = c.getPlayer();
 
                     EventInstanceManager eim = player.getEventInstance();
                     if (eim != null) {

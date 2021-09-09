@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import tools.DatabaseConnection;
@@ -38,14 +38,14 @@ public class UnBanCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !unban <playername>");
             return;
         }
 
         try (Connection con = DatabaseConnection.getConnection()) {
-            int aid = MapleCharacter.getAccountIdByName(params[0]);
+            int aid = Character.getAccountIdByName(params[0]);
 
             try (PreparedStatement p = con.prepareStatement("UPDATE accounts SET banned = -1 WHERE id = " + aid)) {
                 p.executeUpdate();

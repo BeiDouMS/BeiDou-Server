@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm6;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.Server;
@@ -36,11 +36,11 @@ public class MapPlayersCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         String names = "";
         int map = player.getMapId();
         for (World world : Server.getInstance().getWorlds()) {
-            for (MapleCharacter chr : world.getPlayerStorage().getAllCharacters()) {
+            for (Character chr : world.getPlayerStorage().getAllCharacters()) {
                 int curMap = chr.getMapId();
                 String hp = Integer.toString(chr.getHp());
                 String maxhp = Integer.toString(chr.getCurrentMaxHp());

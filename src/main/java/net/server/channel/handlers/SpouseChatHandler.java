@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -37,7 +37,7 @@ public final class SpouseChatHandler extends AbstractPacketHandler {
         
         int partnerId = c.getPlayer().getPartnerId();
         if (partnerId > 0) { // yay marriage
-            MapleCharacter spouse = c.getWorldServer().getPlayerStorage().getCharacterById(partnerId);
+            Character spouse = c.getWorldServer().getPlayerStorage().getCharacterById(partnerId);
             if (spouse != null) {
                 spouse.sendPacket(PacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
                 c.sendPacket(PacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));

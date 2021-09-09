@@ -23,6 +23,7 @@
 */
 package client.processor.stat;
 
+import client.Character;
 import client.*;
 import client.autoban.AutobanFactory;
 import client.inventory.Equip;
@@ -46,7 +47,7 @@ import java.util.List;
 public class AssignAPProcessor {
     
     public static void APAutoAssignAction(InPacket inPacket, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if (chr.getRemainingAp() < 1) return;
         
         Collection<Item> equippedC = chr.getInventory(InventoryType.EQUIPPED).list();
@@ -420,7 +421,7 @@ public class AssignAPProcessor {
     public static boolean APResetAction(MapleClient c, int APFrom, int APTo) {
         c.lockClient();
         try {
-            MapleCharacter player = c.getPlayer();
+            Character player = c.getPlayer();
 
             switch (APFrom) {
                 case 64: // str
@@ -566,7 +567,7 @@ public class AssignAPProcessor {
         }
     }
     
-    private static boolean addStat(MapleCharacter chr, int apTo, boolean usedAPReset) {
+    private static boolean addStat(Character chr, int apTo, boolean usedAPReset) {
         switch (apTo) {
             case 64:
                 if (!chr.assignStr(1)) {
@@ -617,7 +618,7 @@ public class AssignAPProcessor {
         return true;
     }
 
-    private static int calcHpChange(MapleCharacter player, boolean usedAPReset) {
+    private static int calcHpChange(Character player, boolean usedAPReset) {
         MapleJob job = player.getJob();
         int MaxHP = 0;
         
@@ -710,7 +711,7 @@ public class AssignAPProcessor {
         return MaxHP;
     }
 
-    private static int calcMpChange(MapleCharacter player, boolean usedAPReset) {
+    private static int calcMpChange(Character player, boolean usedAPReset) {
         MapleJob job = player.getJob();
         int MaxMP = 0;
         

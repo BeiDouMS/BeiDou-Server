@@ -19,7 +19,7 @@
 */
 package client.processor.action;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.SkillFactory;
 import client.inventory.InventoryType;
@@ -43,7 +43,7 @@ public class SpawnPetProcessor {
     public static void processSpawnPet(MapleClient c, byte slot, boolean lead) {
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 Pet pet = chr.getInventory(InventoryType.CASH).getItem(slot).getPet();
                 if (pet == null) return;
 

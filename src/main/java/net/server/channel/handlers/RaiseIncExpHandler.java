@@ -1,6 +1,6 @@
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import client.inventory.Inventory;
@@ -39,7 +39,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                 int infoNumber = consItem.questid;
                 Map<Integer, Integer> consumables = consItem.items;
                 
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
                 if (!chr.getQuest(quest).getStatus().equals(MapleQuestStatus.Status.STARTED)) {
                     c.sendPacket(PacketCreator.enableActions());

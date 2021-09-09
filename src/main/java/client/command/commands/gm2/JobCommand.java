@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleJob;
 import client.command.Command;
@@ -35,7 +35,7 @@ public class JobCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length == 1) {
             int jobid = Integer.parseInt(params[0]);
             if (jobid < 0 || jobid >= 2200) {
@@ -46,7 +46,7 @@ public class JobCommand extends Command {
             player.changeJob(MapleJob.getById(jobid));
             player.equipChanged();
         } else if (params.length == 2) {
-            MapleCharacter victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
 
             if (victim != null) {
                 int jobid = Integer.parseInt(params[1]);

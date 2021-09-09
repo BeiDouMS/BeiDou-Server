@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.maps.SavedLocationType;
@@ -35,7 +35,7 @@ public class ClearSavedLocationsCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer(), victim;
+        Character player = c.getPlayer(), victim;
         
         if (params.length > 0) {
             victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);

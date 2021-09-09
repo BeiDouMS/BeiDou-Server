@@ -21,7 +21,7 @@
 */
 package server;
 
-import client.MapleCharacter;
+import client.Character;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -75,11 +75,11 @@ public class MapleTrade {
     private int meso = 0;
     private int exchangeMeso;
     private AtomicBoolean locked = new AtomicBoolean(false);
-    private MapleCharacter chr;
+    private Character chr;
     private byte number;
     private boolean fullTrade = false;
     
-    public MapleTrade(byte number, MapleCharacter chr) {
+    public MapleTrade(byte number, Character chr) {
         this.chr = chr;
         this.number = number;
     }
@@ -229,7 +229,7 @@ public class MapleTrade {
         this.partner = partner;
     }
 
-    public MapleCharacter getChr() {
+    public Character getChr() {
         return chr;
     }
 
@@ -290,7 +290,7 @@ public class MapleTrade {
         }
     }
     
-    public static void completeTrade(MapleCharacter chr) {
+    public static void completeTrade(Character chr) {
         MapleTrade local = chr.getTrade();
         MapleTrade partner = local.getPartner();
         if (local.checkCompleteHandshake()) {
@@ -358,7 +358,7 @@ public class MapleTrade {
         }
     }
     
-    private static void cancelTradeInternal(MapleCharacter chr, byte selfResult, byte partnerResult) {
+    private static void cancelTradeInternal(Character chr, byte selfResult, byte partnerResult) {
         MapleTrade trade = chr.getTrade();
         if(trade == null) return;
         
@@ -416,20 +416,20 @@ public class MapleTrade {
         }
     }
 
-    public static void cancelTrade(MapleCharacter chr, TradeResult result) {
+    public static void cancelTrade(Character chr, TradeResult result) {
         MapleTrade trade = chr.getTrade();
         if(trade == null) return;
         
         trade.cancelHandshake(result.getValue());
     }
     
-    public static void startTrade(MapleCharacter chr) {
+    public static void startTrade(Character chr) {
         if (chr.getTrade() == null) {
             chr.setTrade(new MapleTrade((byte) 0, chr));
         }
     }
     
-    private static boolean hasTradeInviteBack(MapleCharacter c1, MapleCharacter c2) {
+    private static boolean hasTradeInviteBack(Character c1, Character c2) {
         MapleTrade other = c2.getTrade();
         if (other != null) {
             MapleTrade otherPartner = other.getPartner();
@@ -443,7 +443,7 @@ public class MapleTrade {
         return false;
     }
     
-    public static void inviteTrade(MapleCharacter c1, MapleCharacter c2) {
+    public static void inviteTrade(Character c1, Character c2) {
         if (MapleInviteCoordinator.hasInvite(InviteType.TRADE, c1.getId())) {
             if (hasTradeInviteBack(c1, c2)) {
                 c1.message("You are already managing this player's trade invitation.");
@@ -476,7 +476,7 @@ public class MapleTrade {
         }
     }
 
-    public static void visitTrade(MapleCharacter c1, MapleCharacter c2) {
+    public static void visitTrade(Character c1, Character c2) {
         MapleInviteResult inviteRes = MapleInviteCoordinator.answerInvite(InviteType.TRADE, c1.getId(), c2.getId(), true);
         
         InviteResult res = inviteRes.result;
@@ -495,11 +495,11 @@ public class MapleTrade {
         }
     }
 
-    public static void declineTrade(MapleCharacter chr) {
+    public static void declineTrade(Character chr) {
         MapleTrade trade = chr.getTrade();
         if (trade != null) {
             if (trade.getPartner() != null) {
-                MapleCharacter other = trade.getPartner().getChr();
+                Character other = trade.getPartner().getChr();
                 if (MapleInviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResult.DENIED) {
                     other.message(chr.getName() + " has declined your trade request.");
                 }

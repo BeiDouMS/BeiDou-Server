@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.maps.MapleMap;
@@ -37,7 +37,7 @@ public class WarpMapCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !warpmap <mapid>");
             return;
@@ -50,9 +50,9 @@ public class WarpMapCommand extends Command {
                 return;
             }
 
-            Collection<MapleCharacter> characters = player.getMap().getAllPlayers();
+            Collection<Character> characters = player.getMap().getAllPlayers();
             
-            for (MapleCharacter victim : characters) {
+            for (Character victim : characters) {
                 victim.saveLocationOnWarp();
                 victim.changeMap(target, target.getRandomPlayerSpawnpoint());
             }

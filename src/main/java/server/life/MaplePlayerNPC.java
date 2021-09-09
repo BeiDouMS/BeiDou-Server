@@ -21,7 +21,7 @@
 */
 package server.life;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -373,7 +373,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         return availablesBranch.remove(availablesBranch.size() - 1);
     }
 
-    private static MaplePlayerNPC createPlayerNPCInternal(MapleMap map, Point pos, MapleCharacter chr) {
+    private static MaplePlayerNPC createPlayerNPCInternal(MapleMap map, Point pos, Character chr) {
         int mapId = map.getId();
 
         if (!canSpawnPlayerNpc(chr.getName(), mapId)) {
@@ -481,7 +481,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         }
     }
 
-    private static List<Integer> removePlayerNPCInternal(MapleMap map, MapleCharacter chr) {
+    private static List<Integer> removePlayerNPCInternal(MapleMap map, Character chr) {
         Set<Integer> updateMapids = new HashSet<>();
 
         List<Integer> mapids = new LinkedList<>();
@@ -519,7 +519,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         return mapids;
     }
 
-    private static synchronized Pair<MaplePlayerNPC, List<Integer>> processPlayerNPCInternal(MapleMap map, Point pos, MapleCharacter chr, boolean create) {
+    private static synchronized Pair<MaplePlayerNPC, List<Integer>> processPlayerNPCInternal(MapleMap map, Point pos, Character chr, boolean create) {
         if(create) {
             return new Pair<>(createPlayerNPCInternal(map, pos, chr), null);
         } else {
@@ -527,11 +527,11 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         }
     }
 
-    public static boolean spawnPlayerNPC(int mapid, MapleCharacter chr) {
+    public static boolean spawnPlayerNPC(int mapid, Character chr) {
         return spawnPlayerNPC(mapid, null, chr);
     }
 
-    public static boolean spawnPlayerNPC(int mapid, Point pos, MapleCharacter chr) {
+    public static boolean spawnPlayerNPC(int mapid, Point pos, Character chr) {
         if(chr == null) return false;
 
         MaplePlayerNPC pn = processPlayerNPCInternal(chr.getClient().getChannelServer().getMapFactory().getMap(mapid), pos, chr, true).getLeft();
@@ -563,7 +563,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         return null;
     }
 
-    public static void removePlayerNPC(MapleCharacter chr) {
+    public static void removePlayerNPC(Character chr) {
         if(chr == null) return;
 
         List<Integer> updateMapids = processPlayerNPCInternal(null, null, chr, false).getRight();
@@ -592,7 +592,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         c.setWorld(world);
         c.setChannel(1);
 
-        for(MapleCharacter mc : wserv.loadAndGetAllCharactersView()) {
+        for(Character mc : wserv.loadAndGetAllCharactersView()) {
             mc.setClient(c);
             spawnPlayerNPC(mapid, mc);
         }

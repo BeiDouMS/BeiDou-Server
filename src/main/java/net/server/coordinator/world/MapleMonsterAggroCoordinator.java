@@ -19,7 +19,7 @@
 */
 package net.server.coordinator.world;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import net.server.Server;
 import net.server.audit.LockCollector;
@@ -281,7 +281,7 @@ public class MapleMonsterAggroCoordinator {
         }
     }
     
-    public boolean isLeadingCharacterAggro(MapleMonster mob, MapleCharacter player) {
+    public boolean isLeadingCharacterAggro(MapleMonster mob, Character player) {
         if (mob.isLeadingPuppetInVicinity()) {
             return false;
         } else if (mob.isCharacterPuppetInVicinity(player)) {
@@ -299,7 +299,7 @@ public class MapleMonsterAggroCoordinator {
             
             MapleMap map = mob.getMap();
             for (PlayerAggroEntry pae : mobAggroList) {
-                MapleCharacter chr = map.getCharacterById(pae.cid);
+                Character chr = map.getCharacterById(pae.cid);
                 if (chr != null) {
                     if (player.getId() == pae.cid) {
                         return true;
@@ -339,7 +339,7 @@ public class MapleMonsterAggroCoordinator {
         }
     }
     
-    public void addPuppetAggro(MapleCharacter player) {
+    public void addPuppetAggro(Character player) {
         synchronized (mapPuppetEntries) {
             mapPuppetEntries.add(player.getId());
         }

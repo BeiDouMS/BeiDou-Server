@@ -21,7 +21,7 @@
 */
 package net.server.guild;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.packet.Packet;
 import net.server.Server;
@@ -83,13 +83,13 @@ public class MapleAlliance {
         }
     }
 
-    private static List<MapleCharacter> getPartyGuildMasters(MapleParty party) {
-        List<MapleCharacter> mcl = new LinkedList<>();
+    private static List<Character> getPartyGuildMasters(MapleParty party) {
+        List<Character> mcl = new LinkedList<>();
 
         for (MaplePartyCharacter mpc : party.getMembers()) {
-            MapleCharacter chr = mpc.getPlayer();
+            Character chr = mpc.getPlayer();
             if (chr != null) {
-                MapleCharacter lchr = party.getLeader().getPlayer();
+                Character lchr = party.getLeader().getPlayer();
                 if (chr.getGuildRank() == 1 && lchr != null && chr.getMapId() == lchr.getMapId()) {
                     mcl.add(chr);
                 }
@@ -99,7 +99,7 @@ public class MapleAlliance {
         if (!mcl.isEmpty() && !mcl.get(0).isPartyLeader()) {
             for (int i = 1; i < mcl.size(); i++) {
                 if (mcl.get(i).isPartyLeader()) {
-                    MapleCharacter temp = mcl.get(0);
+                    Character temp = mcl.get(0);
                     mcl.set(0, mcl.get(i));
                     mcl.set(i, temp);
                 }
@@ -110,13 +110,13 @@ public class MapleAlliance {
     }
 
     public static MapleAlliance createAlliance(MapleParty party, String name) {
-        List<MapleCharacter> guildMasters = getPartyGuildMasters(party);
+        List<Character> guildMasters = getPartyGuildMasters(party);
         if (guildMasters.size() != 2) {
             return null;
         }
 
         List<Integer> guilds = new LinkedList<>();
-        for (MapleCharacter mc : guildMasters) {
+        for (Character mc : guildMasters) {
             guilds.add(mc.getGuildId());
         }
         MapleAlliance alliance = MapleAlliance.createAllianceOnDb(guilds, name);
@@ -132,7 +132,7 @@ public class MapleAlliance {
                     Server.getInstance().setGuildAllianceId(guilds.get(i), id);
                     Server.getInstance().resetAllianceGuildPlayersRank(guilds.get(i));
 
-                    MapleCharacter chr = guildMasters.get(i);
+                    Character chr = guildMasters.get(i);
                     chr.getMGC().setAllianceRank((i == 0) ? 1 : 2);
                     Server.getInstance().getGuild(chr.getGuildId()).getMGC(chr.getId()).setAllianceRank((i == 0) ? 1 : 2);
                     chr.saveGuildStatus();
@@ -310,7 +310,7 @@ public class MapleAlliance {
         return true;
     }
 
-    public void updateAlliancePackets(MapleCharacter chr) {
+    public void updateAlliancePackets(Character chr) {
         if (allianceId > 0) {
             this.broadcastMessage(GuildPackets.updateAllianceInfo(this, chr.getWorld()));
             this.broadcastMessage(GuildPackets.allianceNotice(this.getId(), this.getNotice()));
@@ -443,7 +443,7 @@ public class MapleAlliance {
             if (mg.getAllianceId() > 0) {
                 c.getPlayer().dropMessage(5, "The entered guild is already registered on a guild alliance.");
             } else {
-                MapleCharacter victim = mg.getMGC(mg.getLeaderId()).getCharacter();
+                Character victim = mg.getMGC(mg.getLeaderId()).getCharacter();
                 if (victim == null) {
                     c.getPlayer().dropMessage(5, "The master of the guild that you offered an invitation is currently not online.");
                 } else {
@@ -461,7 +461,7 @@ public class MapleAlliance {
         MapleInviteResult res = MapleInviteCoordinator.answerInvite(InviteType.ALLIANCE, targetId, allianceId, answer);
 
         String msg;
-        MapleCharacter sender = res.from;
+        Character sender = res.from;
         switch (res.result) {
             case ACCEPTED:
                 return true;

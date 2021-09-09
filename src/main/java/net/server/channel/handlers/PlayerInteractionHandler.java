@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
@@ -109,7 +109,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         }
     }
 
-    private static int establishMiniroomStatus(MapleCharacter chr, boolean isMinigame) {
+    private static int establishMiniroomStatus(Character chr, boolean isMinigame) {
         if (isMinigame && FieldLimit.CANNOTMINIGAME.check(chr.getMap().getFieldLimit())) {
             return 11;
         }
@@ -134,7 +134,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         
         try {
             byte mode = p.readByte();
-            final MapleCharacter chr = c.getPlayer();
+            final Character chr = c.getPlayer();
             
             if (mode == Action.CREATE.getCode()) {
                 if(!chr.isAlive()) {    // thanks GabrielSin for pointing this
@@ -261,7 +261,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
             } else if (mode == Action.INVITE.getCode()) {
                 int otherCid = p.readInt();
-                MapleCharacter other = chr.getMap().getCharacterById(otherCid);
+                Character other = chr.getMap().getCharacterById(otherCid);
                 if (other == null || chr.getId() == other.getId()) {
                     return;
                 }
@@ -760,7 +760,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.EXPEL.getCode()) {
                 MapleMiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null && miniGame.isOwner(chr)) {
-                    MapleCharacter visitor = miniGame.getVisitor();
+                    Character visitor = miniGame.getVisitor();
 
                     if(visitor != null) {
                         visitor.closeMiniGame(false);
@@ -783,7 +783,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         }
     }
     
-    private static boolean isTradeOpen(MapleCharacter chr) {
+    private static boolean isTradeOpen(Character chr) {
         if (chr.getTrade() != null) {   // thanks to Rien dev team
             //Apparently there is a dupe exploit that causes racing conditions when saving/retrieving from the db with stuff like trade open.
             chr.sendPacket(PacketCreator.enableActions());
@@ -793,11 +793,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         return false;
     }
     
-    private static boolean canPlaceStore(MapleCharacter chr) {
+    private static boolean canPlaceStore(Character chr) {
         try {
             for (MapleMapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapleMapObjectType.HIRED_MERCHANT, MapleMapObjectType.PLAYER))) {
-                if (mmo instanceof MapleCharacter) {
-                    MapleCharacter mc = (MapleCharacter) mmo;
+                if (mmo instanceof Character) {
+                    Character mc = (Character) mmo;
                     if (mc.getId() == chr.getId()) {
                         continue;
                     }

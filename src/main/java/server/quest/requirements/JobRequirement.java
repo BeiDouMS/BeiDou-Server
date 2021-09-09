@@ -21,15 +21,15 @@
  */
 package server.quest.requirements;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import client.Character;
+import client.MapleJob;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
-import client.MapleJob;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -56,7 +56,7 @@ public class JobRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		for(Integer job : jobs) {
 			if (chr.getJob().equals(MapleJob.getById(job)) || chr.isGM()) {
 				return true;

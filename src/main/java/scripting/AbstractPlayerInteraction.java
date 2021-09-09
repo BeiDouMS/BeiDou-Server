@@ -21,8 +21,9 @@
  */
 package scripting;
 
+import client.Character;
+import client.Character.DelayedQuestUpdate;
 import client.*;
-import client.MapleCharacter.DelayedQuestUpdate;
 import client.inventory.*;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
@@ -66,11 +67,11 @@ public class AbstractPlayerInteraction {
 		return c;
 	}
 
-	public MapleCharacter getPlayer() {
+	public Character getPlayer() {
 		return c.getPlayer();
 	}
         
-        public MapleCharacter getChar() {
+        public Character getChar() {
 		return c.getPlayer();
 	}
         
@@ -132,7 +133,7 @@ public class AbstractPlayerInteraction {
         }
         
 	public void warpParty(int id, int portalId, int fromMinId, int fromMaxId) {
-                for (MapleCharacter mc : this.getPlayer().getPartyMembersOnline()) {
+                for (Character mc : this.getPlayer().getPartyMembersOnline()) {
                         if (mc.isLoggedinWorld()) {
                                 if(mc.getMapId() >= fromMinId && mc.getMapId() <= fromMaxId) {
                                         mc.changeMap(id, portalId);
@@ -746,8 +747,8 @@ public class AbstractPlayerInteraction {
 		return getEventInstance() != null && getPlayer().getId() == getEventInstance().getLeaderId();
 	}
         
-        public void givePartyItems(int id, short quantity, List<MapleCharacter> party) {
-		for (MapleCharacter chr : party) {
+        public void givePartyItems(int id, short quantity, List<Character> party) {
+		for (Character chr : party) {
 			MapleClient cl = chr.getClient();
 			if (quantity >= 0) {
 				InventoryManipulator.addById(cl, id, quantity);
@@ -775,19 +776,19 @@ public class AbstractPlayerInteraction {
                                 continue;
                         }
                         
-                        MapleCharacter chr = mpc.getPlayer();
+                        Character chr = mpc.getPlayer();
 			if (chr != null && chr.getClient() != null){
 				removeAll(id, chr.getClient());
 			}
 		}
 	}
         
-        public void giveCharacterExp(int amount, MapleCharacter chr) {
+        public void giveCharacterExp(int amount, Character chr) {
                 chr.gainExp((amount * chr.getExpRate()), true, true);
         }
 
-	public void givePartyExp(int amount, List<MapleCharacter> party) {
-		for (MapleCharacter chr : party) {
+	public void givePartyExp(int amount, List<Character> party) {
+		for (Character chr : party) {
 			giveCharacterExp(amount, chr);
 		}
 	}
@@ -811,7 +812,7 @@ public class AbstractPlayerInteraction {
 				if(member == null || !member.isOnline()){
 					size--;
 				} else {
-                                        MapleCharacter chr = member.getPlayer();
+                                        Character chr = member.getPlayer();
                                         if(chr != null && chr.getEventInstance() == null) {
                                                 size--;
                                         }
@@ -824,7 +825,7 @@ public class AbstractPlayerInteraction {
 			if(member == null || !member.isOnline()){
 				continue;
 			}
-			MapleCharacter player = member.getPlayer();
+			Character player = member.getPlayer();
                         if(player == null) {
                                 continue;
                         }
@@ -840,8 +841,8 @@ public class AbstractPlayerInteraction {
 		}
 	}
 
-	public void removeFromParty(int id, List<MapleCharacter> party) {
-		for (MapleCharacter chr : party) {
+	public void removeFromParty(int id, List<Character> party) {
+		for (Character chr : party) {
 			InventoryType type = ItemConstants.getInventoryType(id);
 			Inventory iv = chr.getInventory(type);
 			int possesed = iv.countById(id);
@@ -917,7 +918,7 @@ public class AbstractPlayerInteraction {
 
 	public void teachSkill(int skillid, byte level, byte masterLevel, long expiration, boolean force) {
             Skill skill = SkillFactory.getSkill(skillid);
-            MapleCharacter.SkillEntry skillEntry = getPlayer().getSkills().get(skill);
+            Character.SkillEntry skillEntry = getPlayer().getSkills().get(skill);
             if (skillEntry != null) {
                 if (!force && level > -1) {
                     getPlayer().changeSkillLevel(skill, (byte) Math.max(skillEntry.skillevel, level), Math.max(skillEntry.masterlevel, masterLevel), expiration == -1 ? -1 : Math.max(skillEntry.expiration, expiration));
@@ -994,7 +995,7 @@ public class AbstractPlayerInteraction {
         }
         
         public void resetPartyDojoEnergy() {
-                for(MapleCharacter pchr: c.getPlayer().getPartyMembersOnSameMap()) {
+                for(Character pchr: c.getPlayer().getPartyMembersOnSameMap()) {
                         pchr.setDojoEnergy(0);
                 }
         }
@@ -1071,7 +1072,7 @@ public class AbstractPlayerInteraction {
         }
         
 	public int createExpedition(MapleExpeditionType type, boolean silent, int minPlayers, int maxPlayers) {
-                MapleCharacter player = getPlayer();
+                Character player = getPlayer();
                 MapleExpedition exped = new MapleExpedition(player, type, silent, minPlayers, maxPlayers);
                 
                 int channel = player.getMap().getChannelServer().getId();
@@ -1142,7 +1143,7 @@ public class AbstractPlayerInteraction {
                         return true;
                 }
                 
-                MapleCharacter chr = this.getPlayer();
+                Character chr = this.getPlayer();
                 
                 switch(jobType) {
                     case 1:

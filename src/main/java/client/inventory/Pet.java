@@ -21,7 +21,7 @@
 */
 package client.inventory;
 
-import client.MapleCharacter;
+import client.Character;
 import client.inventory.manipulator.CashIdGenerator;
 import constants.game.ExpTable;
 import server.MapleItemInformationProvider;
@@ -96,7 +96,7 @@ public class Pet extends Item {
         }
     }
 
-    public static void deleteFromDb(MapleCharacter owner, int petid) {
+    public static void deleteFromDb(Character owner, int petid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM pets WHERE `petid` = ?")) {
             // thanks Vcoc for detecting petignores remaining after deletion
@@ -184,7 +184,7 @@ public class Pet extends Item {
         return level;
     }
 
-    public void gainClosenessFullness(MapleCharacter owner, int incCloseness, int incFullness, int type) {
+    public void gainClosenessFullness(Character owner, int incCloseness, int incFullness, int type) {
         byte slot = owner.getPetIndex(this);
         boolean enjoyed;
 
@@ -286,7 +286,7 @@ public class Pet extends Item {
         this.petFlag = flag;
     }
 
-    public void addPetFlag(MapleCharacter owner, PetFlag flag) {
+    public void addPetFlag(Character owner, PetFlag flag) {
         this.petFlag |= flag.getValue();
         saveToDb();
 
@@ -296,7 +296,7 @@ public class Pet extends Item {
         }
     }
 
-    public void removePetFlag(MapleCharacter owner, PetFlag flag) {
+    public void removePetFlag(Character owner, PetFlag flag) {
         this.petFlag &= 0xFFFFFFFF ^ flag.getValue();
         saveToDb();
 

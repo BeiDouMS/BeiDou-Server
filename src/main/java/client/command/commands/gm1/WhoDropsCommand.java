@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm1;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.MapleItemInformationProvider;
@@ -43,7 +43,7 @@ public class WhoDropsCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.dropMessage(5, "Please do @whodrops <item name>");
             return;

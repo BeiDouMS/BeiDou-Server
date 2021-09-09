@@ -19,7 +19,7 @@
 */
 package net.server.coordinator.session;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.server.Server;
@@ -279,7 +279,7 @@ public class SessionCoordinator {
         Integer chrId = Server.getInstance().freeCharacteridInTransition(client);
         if (chrId != null) {
             try {
-                fakeClient.setAccID(MapleCharacter.loadCharFromDB(chrId, client, false).getAccountID());
+                fakeClient.setAccID(Character.loadCharFromDB(chrId, client, false).getAccountID());
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
             }

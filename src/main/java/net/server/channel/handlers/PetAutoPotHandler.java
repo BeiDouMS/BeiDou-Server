@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.processor.action.PetAutopotProcessor;
 import net.AbstractPacketHandler;
@@ -39,7 +39,7 @@ public final class PetAutoPotHandler extends AbstractPacketHandler {
         short slot = p.readShort();
         int itemId = p.readInt();
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleStatEffect stat = MapleItemInformationProvider.getInstance().getItemEffect(itemId);
         if (stat.getHp() > 0 || stat.getHpRate() > 0.0) {
             float estimatedHp = ((float) chr.getHp()) / chr.getMaxHp();

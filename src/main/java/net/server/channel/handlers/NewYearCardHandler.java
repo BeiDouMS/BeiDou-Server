@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Item;
 import client.newyear.NewYearCardRecord;
@@ -45,7 +45,7 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        final MapleCharacter player = c.getPlayer();
+        final Character player = c.getPlayer();
         byte reqMode = p.readByte();                 //[00] -> NewYearReq (0 = Send)
         
         if(reqMode == 0) {  // card has been sent
@@ -107,7 +107,7 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
 
                         player.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(player, newyear, 0xD, 0));
 
-                        MapleCharacter sender = c.getWorldServer().getPlayerStorage().getCharacterById(newyear.getSenderId());
+                        Character sender = c.getWorldServer().getPlayerStorage().getCharacterById(newyear.getSenderId());
                         if(sender != null && sender.isLoggedinWorld()) {
                             sender.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(sender, newyear, 0xD, 0));
                             sender.dropMessage(6, "[New Year] Your addressee successfully received the New Year card.");
@@ -145,7 +145,7 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
         return -1;
     }
     
-    private static int getValidNewYearCardStatus(int itemid, MapleCharacter player, short slot) {
+    private static int getValidNewYearCardStatus(int itemid, Character player, short slot) {
         if(!ItemConstants.isNewYearCardUse(itemid)) return 0x14;
         
         Item it = player.getInventory(ItemConstants.getInventoryType(itemid)).getItem(slot);        

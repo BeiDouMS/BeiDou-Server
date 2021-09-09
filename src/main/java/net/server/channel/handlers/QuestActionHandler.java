@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -38,7 +38,7 @@ import java.awt.*;
 public final class QuestActionHandler extends AbstractPacketHandler {
     
     // isNpcNearby thanks to GabrielSin
-    private static boolean isNpcNearby(InPacket p, MapleCharacter player, MapleQuest quest, int npcId) {
+    private static boolean isNpcNearby(InPacket p, Character player, MapleQuest quest, int npcId) {
         Point playerP;
         Point pos = player.getPosition();
         
@@ -71,7 +71,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, MapleClient c) {
         byte action = p.readByte();
         short questid = p.readShort();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MapleQuest quest = MapleQuest.getInstance(questid);
         
         if (action == 0) { // Restore lost item, Credits Darter ( Rajan )

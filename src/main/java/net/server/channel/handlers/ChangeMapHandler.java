@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
@@ -42,7 +42,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
 
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {

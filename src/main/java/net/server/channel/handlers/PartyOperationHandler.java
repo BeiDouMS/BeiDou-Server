@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -43,7 +43,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         int operation = p.readByte();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         World world = c.getWorldServer();
         MapleParty party = player.getParty();
         switch (operation) {
@@ -53,7 +53,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             }
             case 2: { // leave/disband
                 if (party != null) {
-                    List<MapleCharacter> partymembers = player.getPartyMembersOnline();
+                    List<Character> partymembers = player.getPartyMembersOnline();
 
                     MapleParty.leaveParty(party, c);
                     player.updatePartySearchAvailability(true);
@@ -75,7 +75,7 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
             }
             case 4: { // invite
                 String name = p.readString();
-                MapleCharacter invited = world.getPlayerStorage().getCharacterByName(name);
+                Character invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
                     if(invited.getLevel() < 10 && (!YamlConfig.config.server.USE_PARTY_FOR_STARTERS || player.getLevel() >= 10)) { //min requirement is level 10
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 
@@ -34,7 +34,7 @@ public class PosCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         float xpos = player.getPosition().x;
         float ypos = player.getPosition().y;
         float fh = player.getMap().getFootholds().findBelow(player.getPosition()).getId();

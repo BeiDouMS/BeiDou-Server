@@ -21,14 +21,15 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleQuestStatus;
-import java.util.HashMap;
-import java.util.Map;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -55,7 +56,7 @@ public class QuestAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		for(Integer questID : quests.keySet()) {
 			int stat = quests.get(questID);
 			chr.updateQuestStatus(new MapleQuestStatus(MapleQuest.getInstance(questID), MapleQuestStatus.Status.getById(stat)));

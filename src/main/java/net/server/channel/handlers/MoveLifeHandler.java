@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.packet.InPacket;
@@ -50,7 +50,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         
 	@Override
 	public final void handlePacket(InPacket p, MapleClient c) {
-                MapleCharacter player = c.getPlayer();
+                Character player = c.getPlayer();
                 MapleMap map = player.getMap();
                 
                 if (player.isChangingMaps()) {  // thanks Lame for noticing mob movement shuffle (mob OID on different maps) happening on map transitions
@@ -65,7 +65,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 		}
                 
 		MapleMonster monster = (MapleMonster) mmo;
-                List<MapleCharacter> banishPlayers = null;
+                List<Character> banishPlayers = null;
                 
                 byte pNibbles = p.readByte();
 		byte rawActivity = p.readByte();
@@ -172,7 +172,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 } catch (EmptyMovementException e) {}
                 
                 if (banishPlayers != null) {
-                        for (MapleCharacter chr : banishPlayers) {
+                        for (Character chr : banishPlayers) {
                                chr.changeMapBanish(monster.getBanish().getMap(), monster.getBanish().getPortal(), monster.getBanish().getMsg());
                         }
                 }

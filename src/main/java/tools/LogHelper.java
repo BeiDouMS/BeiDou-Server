@@ -1,6 +1,6 @@
 package tools;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Item;
 import net.server.Server;
@@ -58,13 +58,13 @@ public class LogHelper {
 		return minutes + " Minutes and " + seconds + " Seconds";
 	}
 
-	public static void logLeaf(MapleCharacter player, boolean gotPrize, String operation) {
+	public static void logLeaf(Character player, boolean gotPrize, String operation) {
 		String timeStamp = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date());
 		String log = player.getName() + (gotPrize ? " used a maple leaf to buy " + operation : " redeemed " + operation + " VP for a leaf") + " - " + timeStamp;
 		FilePrinter.print(FilePrinter.LOG_LEAF, log);
 	}
 	
-	public static void logGacha(MapleCharacter player, int itemid, String map) {
+	public static void logGacha(Character player, int itemid, String map) {
 		String itemName = MapleItemInformationProvider.getInstance().getName(itemid);
 		String timeStamp = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss").format(new Date());
 		String log = player.getName() + " got a " + itemName + "(" + itemid + ") from the " + map + " gachapon. - " + timeStamp;

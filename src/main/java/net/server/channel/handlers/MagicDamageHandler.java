@@ -21,6 +21,7 @@
  */
 package net.server.channel.handlers;
 
+import client.Character;
 import client.*;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -36,7 +37,7 @@ import tools.PacketCreator;
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
 	@Override
 	public final void handlePacket(InPacket p, MapleClient c) {
-		MapleCharacter chr = c.getPlayer();
+		Character chr = c.getPlayer();
 
 		/*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
 		if(timeElapsed < 300) {

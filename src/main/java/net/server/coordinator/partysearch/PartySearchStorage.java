@@ -19,7 +19,7 @@
 */
 package net.server.coordinator.partysearch;
 
-import client.MapleCharacter;
+import client.Character;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -52,13 +52,13 @@ public class PartySearchStorage {
         }
     }
     
-    private Map<Integer, MapleCharacter> fetchRemainingPlayers() {
+    private Map<Integer, Character> fetchRemainingPlayers() {
         List<PartySearchCharacter> players = getStorageList();
-        Map<Integer, MapleCharacter> remainingPlayers = new HashMap<>(players.size());
+        Map<Integer, Character> remainingPlayers = new HashMap<>(players.size());
         
         for (PartySearchCharacter psc : players) {
             if (psc.isQueued()) {
-                MapleCharacter chr = psc.getPlayer();
+                Character chr = psc.getPlayer();
                 if (chr != null) {
                     remainingPlayers.put(chr.getId(), chr);
                 }
@@ -68,17 +68,17 @@ public class PartySearchStorage {
         return remainingPlayers;
     }
     
-    public void updateStorage(Collection<MapleCharacter> echelon) {
-        Map<Integer, MapleCharacter> newcomers = new HashMap<>();
-        for (MapleCharacter chr : echelon) {
+    public void updateStorage(Collection<Character> echelon) {
+        Map<Integer, Character> newcomers = new HashMap<>();
+        for (Character chr : echelon) {
             newcomers.put(chr.getId(), chr);
         }
         
-        Map<Integer, MapleCharacter> curStorage = fetchRemainingPlayers();
+        Map<Integer, Character> curStorage = fetchRemainingPlayers();
         curStorage.putAll(newcomers);
         
         List<PartySearchCharacter> pscList = new ArrayList<>(curStorage.size());
-        for (MapleCharacter chr : curStorage.values()) {
+        for (Character chr : curStorage.values()) {
             pscList.add(new PartySearchCharacter(chr));
         }
 
@@ -118,7 +118,7 @@ public class PartySearchStorage {
         return en;
     }
     
-    public MapleCharacter callPlayer(int callerCid, int callerMapid, int minLevel, int maxLevel) {
+    public Character callPlayer(int callerCid, int callerMapid, int minLevel, int maxLevel) {
         if (emptyIntervals.inInterval(minLevel, maxLevel)) {
             return null;
         }
@@ -136,7 +136,7 @@ public class PartySearchStorage {
                 break;
             }
             
-            MapleCharacter chr = psc.callPlayer(callerCid, callerMapid);
+            Character chr = psc.callPlayer(callerCid, callerMapid);
             if (chr != null) {
                 return chr;
             }
@@ -146,10 +146,10 @@ public class PartySearchStorage {
         return null;
     }
     
-    public void detachPlayer(MapleCharacter chr) {
+    public void detachPlayer(Character chr) {
         PartySearchCharacter toRemove = null;
         for (PartySearchCharacter psc : getStorageList()) {
-            MapleCharacter player = psc.getPlayer();
+            Character player = psc.getPlayer();
             
             if (player != null && player.getId() == chr.getId()) {
                 toRemove = psc;

@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -34,7 +34,7 @@ public final class OpenFamilyHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         c.sendPacket(PacketCreator.getFamilyInfo(chr.getFamilyEntry()));
     }
 }

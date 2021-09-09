@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleRing;
 import client.inventory.Equip;
@@ -51,7 +51,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         CashShop cs = chr.getCashShop();
         
         if (!cs.isOpened()) {
@@ -103,7 +103,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                 } else if (action == 0x04) {//TODO check for gender
                     int birthday = p.readInt();
                     CashItem cItem = CashItemFactory.getItem(p.readInt());
-                    Map<String, String> recipient = MapleCharacter.getCharacterFromDatabase(p.readString());
+                    Map<String, String> recipient = Character.getCharacterFromDatabase(p.readString());
                     String message = p.readString();
                     if (!canBuy(chr, cItem, cs.getCash(4)) || message.length() < 1 || message.length() > 73) {
                         c.enableCSActions();
@@ -128,7 +128,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
-                    MapleCharacter receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient.get("name"));
+                    Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient.get("name"));
                     if (receiver != null) receiver.showNote();
                 } else if (action == 0x05) { // Modify wish list
                     cs.clearWishList();
@@ -160,7 +160,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showBoughtInventorySlots(type, chr.getSlots(type)));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots of type " + type + " for player " + MapleCharacter.makeMapleReadable(chr.getName()));
+                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots of type " + type + " for player " + Character.makeMapleReadable(chr.getName()));
                         }
                     } else {
                         CashItem cItem = CashItemFactory.getItem(p.readInt());
@@ -179,7 +179,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showBoughtInventorySlots(type, chr.getSlots(type)));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots of type " + type + " for player " + MapleCharacter.makeMapleReadable(chr.getName()));
+                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots of type " + type + " for player " + Character.makeMapleReadable(chr.getName()));
                         }
                     }
                 } else if (action == 0x07) { // Increase Storage Slots
@@ -204,7 +204,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showBoughtStorageSlots(chr.getStorage().getSlots()));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots to " + MapleCharacter.makeMapleReadable(chr.getName()) + "'s account.");
+                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots to " + Character.makeMapleReadable(chr.getName()) + "'s account.");
                         }
                     } else {
                         CashItem cItem = CashItemFactory.getItem(p.readInt());
@@ -226,7 +226,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showBoughtStorageSlots(chr.getStorage().getSlots()));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots to " + MapleCharacter.makeMapleReadable(chr.getName()) + "'s account.");
+                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots to " + Character.makeMapleReadable(chr.getName()) + "'s account.");
                         }
                     }
                 } else if (action == 0x08) { // Increase Character Slots
@@ -248,7 +248,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.showBoughtCharacterSlot(c.getCharacterSlots()));
                         c.sendPacket(PacketCreator.showCash(chr));
                     } else {
-                        FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add a character slot to " + MapleCharacter.makeMapleReadable(chr.getName()) + "'s account.");
+                        FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add a character slot to " + Character.makeMapleReadable(chr.getName()) + "'s account.");
                         c.enableCSActions();
                         return;
                     }
@@ -305,7 +305,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         String recipientName = p.readString();
                         String text = p.readString();
                         CashItem itemRing = CashItemFactory.getItem(SN);
-                        MapleCharacter partner = c.getChannelServer().getPlayerStorage().getCharacterByName(recipientName);
+                        Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(recipientName);
                         if (partner == null) {
                             chr.sendPacket(PacketCreator.serverNotice(1, "The partner you specified cannot be found.\r\nPlease make sure your partner is online and in the same channel."));
                         } else {
@@ -375,7 +375,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         CashItem itemRing = CashItemFactory.getItem(snID);
                         String sentTo = p.readString();
                         String text = p.readString();
-                        MapleCharacter partner = c.getChannelServer().getPlayerStorage().getCharacterByName(sentTo);
+                        Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(sentTo);
                         if (partner == null) {
                             c.sendPacket(PacketCreator.showCashShopMessage((byte)0xBE));
                         } else {
@@ -412,7 +412,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     if(cItem.getSN() == 50600000 && YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
                         p.readString(); //old name
                         String newName = p.readString();
-                        if(!MapleCharacter.canCreateChar(newName) || chr.getLevel() < 10) { //(longest ban duration isn't tracked currently)
+                        if(!Character.canCreateChar(newName) || chr.getLevel() < 10) { //(longest ban duration isn't tracked currently)
                             c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
                             c.enableCSActions();
                             return;
@@ -482,7 +482,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         return c.checkBirthDate(cal);
     }
     
-    private static boolean canBuy(MapleCharacter chr, CashItem item, int cash) {
+    private static boolean canBuy(Character chr, CashItem item, int cash) {
         if (item != null && item.isOnSale() && item.getPrice() <= cash) {
             FilePrinter.print(FilePrinter.CASHITEM_BOUGHT, chr + " bought " + MapleItemInformationProvider.getInstance().getName(item.getItemId()) + " (SN " + item.getSN() + ") for " + item.getPrice());
             return true;

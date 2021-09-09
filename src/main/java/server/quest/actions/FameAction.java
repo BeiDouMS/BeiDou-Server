@@ -21,7 +21,7 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -47,7 +47,7 @@ public class FameAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		chr.gainFame(fame);
 	}
 } 

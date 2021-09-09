@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -41,7 +41,7 @@ public class PartySearchStartHandler extends AbstractPacketHandler {
             int min = p.readInt();
             int max = p.readInt();
 
-            MapleCharacter chr = c.getPlayer();
+            Character chr = c.getPlayer();
             if (min > max) {
                 chr.dropMessage(1, "The min. value is higher than the max!");
                 c.sendPacket(PacketCreator.enableActions());

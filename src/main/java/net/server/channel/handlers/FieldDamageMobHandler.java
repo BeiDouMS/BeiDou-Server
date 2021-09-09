@@ -19,7 +19,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
@@ -37,7 +37,7 @@ public class FieldDamageMobHandler extends AbstractPacketHandler {
         int mobOid = p.readInt();    // packet structure found thanks to Darter (Rajan)
         int dmg = p.readInt();
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMap map = chr.getMap();
         
         if (map.getEnvironment().isEmpty()) {   // no environment objects activated to actually hit the mob

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import client.inventory.Equip;
@@ -40,7 +40,7 @@ public class ProItemCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 2) {
             player.yellowMessage("Syntax: !proitem <itemid> <stat value> [<spdjmp value>]");
             return;

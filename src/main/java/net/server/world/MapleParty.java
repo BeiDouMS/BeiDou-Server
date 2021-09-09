@@ -21,7 +21,7 @@
  */
 package net.server.world;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.server.audit.LockCollector;
@@ -326,7 +326,7 @@ public class MapleParty {
         return true;
     }
     
-    public static boolean createParty(MapleCharacter player, boolean silentCheck) {
+    public static boolean createParty(Character player, boolean silentCheck) {
         MapleParty party = player.getParty();
         if (party == null) {
             if (player.getLevel() < 10 && !YamlConfig.config.server.USE_PARTY_FOR_STARTERS) {
@@ -359,7 +359,7 @@ public class MapleParty {
         }
     }
     
-    public static boolean joinParty(MapleCharacter player, int partyid, boolean silentCheck) {
+    public static boolean joinParty(Character player, int partyid, boolean silentCheck) {
         MapleParty party = player.getParty();
         World world = player.getWorldServer();
         
@@ -397,7 +397,7 @@ public class MapleParty {
     
     public static void leaveParty(MapleParty party, MapleClient c) {
         World world = c.getWorldServer();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MaplePartyCharacter partyplayer = player.getMPC();
         
         if (party != null && partyplayer != null) {
@@ -445,16 +445,16 @@ public class MapleParty {
     
     public static void expelFromParty(MapleParty party, MapleClient c, int expelCid) {
         World world = c.getWorldServer();
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MaplePartyCharacter partyplayer = player.getMPC();
         
         if (party != null && partyplayer != null) {
             if (partyplayer.equals(party.getLeader())) {
                 MaplePartyCharacter expelled = party.getMemberById(expelCid);
                 if (expelled != null) {
-                    MapleCharacter emc = expelled.getPlayer();
+                    Character emc = expelled.getPlayer();
                     if(emc != null) {
-                        List<MapleCharacter> partyMembers = emc.getPartyMembersOnline();
+                        List<Character> partyMembers = emc.getPartyMembersOnline();
 
                         MapleMap map = emc.getMap();
                         if(map != null) map.removePartyMember(emc, party.getId());

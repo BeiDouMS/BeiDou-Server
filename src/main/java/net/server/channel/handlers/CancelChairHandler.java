@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -31,7 +31,7 @@ public final class CancelChairHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         int id = p.readShort();
-        MapleCharacter mc = c.getPlayer();
+        Character mc = c.getPlayer();
         
         if (id >= mc.getMap().getSeats()) {
             return;

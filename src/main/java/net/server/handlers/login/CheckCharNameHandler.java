@@ -21,7 +21,7 @@
  */
 package net.server.handlers.login;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -32,6 +32,6 @@ public final class CheckCharNameHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
         String name = p.readString();
-        c.sendPacket(PacketCreator.charNameResponse(name, !MapleCharacter.canCreateChar(name)));
+        c.sendPacket(PacketCreator.charNameResponse(name, !Character.canCreateChar(name)));
     }
 }

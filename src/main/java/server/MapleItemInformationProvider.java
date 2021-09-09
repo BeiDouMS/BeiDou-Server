@@ -21,6 +21,7 @@
  */
 package server;
 
+import client.Character;
 import client.*;
 import client.autoban.AutobanFactory;
 import client.inventory.*;
@@ -1580,7 +1581,7 @@ public class MapleItemInformationProvider {
         return false;
     }
 
-    public Collection<Item> canWearEquipment(MapleCharacter chr, Collection<Item> items) {
+    public Collection<Item> canWearEquipment(Character chr, Collection<Item> items) {
         Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
         if (inv.checked()) {
             return items;
@@ -1656,7 +1657,7 @@ public class MapleItemInformationProvider {
         return itemz;
     }
 
-    public boolean canWearEquipment(MapleCharacter chr, Equip equip, int dst) {
+    public boolean canWearEquipment(Character chr, Equip equip, int dst) {
         int id = equip.getItemId();
 
         if(ItemConstants.isWeddingRing(id) && chr.hasJustMarried()) {
@@ -2071,7 +2072,7 @@ public class MapleItemInformationProvider {
         return list;
     }
 
-    private boolean canUseSkillBook(MapleCharacter player, Integer skillBookId) {
+    private boolean canUseSkillBook(Character player, Integer skillBookId) {
         Map<String, Integer> skilldata = getSkillStats(skillBookId, player.getJob().getId());
         if(skilldata == null || skilldata.get("skillid") == 0) return false;
 
@@ -2079,7 +2080,7 @@ public class MapleItemInformationProvider {
         return (skilldata.get("skillid") != 0 && ((player.getSkillLevel(skill2) >= skilldata.get("reqSkillLevel") || skilldata.get("reqSkillLevel") == 0) && player.getMasterLevel(skill2) < skilldata.get("masterLevel")));
     }
 
-    public List<Integer> usableMasteryBooks(MapleCharacter player) {
+    public List<Integer> usableMasteryBooks(Character player) {
         List<Integer> masterybook = new LinkedList<>();
         for(Integer i = 2290000; i <= 2290139; i++) {
             if(canUseSkillBook(player, i)) {
@@ -2090,7 +2091,7 @@ public class MapleItemInformationProvider {
         return masterybook;
     }
 
-    public List<Integer> usableSkillBooks(MapleCharacter player) {
+    public List<Integer> usableSkillBooks(Character player) {
         List<Integer> skillbook = new LinkedList<>();
         for(Integer i = 2280000; i <= 2280019; i++) {
             if(canUseSkillBook(player, i)) {

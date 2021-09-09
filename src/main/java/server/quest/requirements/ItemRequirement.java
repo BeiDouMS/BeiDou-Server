@@ -21,7 +21,7 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
+import client.Character;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import constants.inventory.ItemConstants;
@@ -59,7 +59,7 @@ public class ItemRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 		for(Integer itemId : items.keySet()) {
 			int countNeeded = items.get(itemId);

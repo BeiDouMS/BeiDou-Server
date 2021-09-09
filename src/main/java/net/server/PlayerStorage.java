@@ -21,13 +21,8 @@
 */
 package net.server;
 
+import client.Character;
 import client.MapleClient;
-import client.MapleCharacter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -35,14 +30,16 @@ import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 
+import java.util.*;
+
 public class PlayerStorage {
     private final MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.PLAYER_STORAGE, true);
-    private final Map<Integer, MapleCharacter> storage = new LinkedHashMap<>();
-    private final Map<String, MapleCharacter> nameStorage = new LinkedHashMap<>();
+    private final Map<Integer, Character> storage = new LinkedHashMap<>();
+    private final Map<String, Character> nameStorage = new LinkedHashMap<>();
     private MonitoredReadLock rlock = MonitoredReadLockFactory.createLock(locks);
     private MonitoredWriteLock wlock = MonitoredWriteLockFactory.createLock(locks);
 
-    public void addPlayer(MapleCharacter chr) {
+    public void addPlayer(Character chr) {
         wlock.lock();
         try {
             storage.put(chr.getId(), chr);
@@ -52,10 +49,10 @@ public class PlayerStorage {
 	}
     }
 
-    public MapleCharacter removePlayer(int chr) {
+    public Character removePlayer(int chr) {
         wlock.lock();
         try {
-            MapleCharacter mc = storage.remove(chr);
+            Character mc = storage.remove(chr);
             if(mc != null) nameStorage.remove(mc.getName().toLowerCase());
             
             return mc;
@@ -64,7 +61,7 @@ public class PlayerStorage {
         }
     }
 
-    public MapleCharacter getCharacterByName(String name) {
+    public Character getCharacterByName(String name) {
         rlock.lock();    
         try {
             return nameStorage.get(name.toLowerCase());
@@ -73,7 +70,7 @@ public class PlayerStorage {
         }
     }
 
-    public MapleCharacter getCharacterById(int id) { 
+    public Character getCharacterById(int id) {
         rlock.lock();    
         try {
             return storage.get(id);
@@ -82,7 +79,7 @@ public class PlayerStorage {
         }
     }
 
-    public Collection<MapleCharacter> getAllCharacters() {
+    public Collection<Character> getAllCharacters() {
         rlock.lock();
         try {
             return new ArrayList<>(storage.values());
@@ -92,7 +89,7 @@ public class PlayerStorage {
     }
 
     public final void disconnectAll() {
-        List<MapleCharacter> chrList;
+        List<Character> chrList;
 	rlock.lock();
 	try {
             chrList = new ArrayList<>(storage.values());
@@ -100,7 +97,7 @@ public class PlayerStorage {
 	    rlock.unlock();
 	}
         
-        for(MapleCharacter mc : chrList) {
+        for(Character mc : chrList) {
             MapleClient client = mc.getClient();
             if(client != null) {
                 client.forceDisconnect();

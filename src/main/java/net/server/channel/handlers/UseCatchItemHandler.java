@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.autoban.AutobanManager;
 import client.inventory.InventoryType;
@@ -41,7 +41,7 @@ import tools.PacketCreator;
 public final class UseCatchItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         AutobanManager abm = chr.getAutobanManager();
         p.readInt();
         abm.setTimestamp(5, Server.getInstance().getCurrentTimestamp(), 4);

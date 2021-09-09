@@ -21,7 +21,7 @@
 */
 package scripting.reactor;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
@@ -71,7 +71,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         reactor.getMap().destroyNPC(npcId);
     }
     
-    private static void sortDropEntries(List<ReactorDropEntry> from, List<ReactorDropEntry> item, List<ReactorDropEntry> visibleQuest, List<ReactorDropEntry> otherQuest, MapleCharacter chr) {
+    private static void sortDropEntries(List<ReactorDropEntry> from, List<ReactorDropEntry> item, List<ReactorDropEntry> visibleQuest, List<ReactorDropEntry> otherQuest, Character chr) {
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
         
         for(ReactorDropEntry mde : from) {
@@ -87,7 +87,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
     
-    private static List<ReactorDropEntry> assembleReactorDropEntries(MapleCharacter chr, List<ReactorDropEntry> items) {
+    private static List<ReactorDropEntry> assembleReactorDropEntries(Character chr, List<ReactorDropEntry> items) {
         final List<ReactorDropEntry> dropEntry = new ArrayList<>();
         final List<ReactorDropEntry> visibleQuestEntry = new ArrayList<>();
         final List<ReactorDropEntry> otherQuestEntry = new ArrayList<>();
@@ -152,7 +152,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
     
     public void dropItems(boolean delayed, int posX, int posY, boolean meso, int mesoChance, final int minMeso, final int maxMeso, int minItems) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if(chr == null) return;
         
         List<ReactorDropEntry> items = assembleReactorDropEntries(chr, generateDropList(getDropChances(), chr.getDropRate(), meso, mesoChance, minItems));
@@ -290,7 +290,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         MapleMonster mm = map.getMonsterById(id);
         if(mm != null) {
             int damage = (int)Math.ceil(mm.getMaxHp() / hitsToKill);
-            MapleCharacter chr = this.getPlayer();
+            Character chr = this.getPlayer();
             
             if(chr != null) {
                 map.damageMonster(chr, mm, damage);

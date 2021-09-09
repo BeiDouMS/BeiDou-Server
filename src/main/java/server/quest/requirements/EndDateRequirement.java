@@ -21,12 +21,13 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import java.util.Calendar;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+
+import java.util.Calendar;
 
 /**
  *
@@ -52,7 +53,7 @@ public class EndDateRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Integer.parseInt(timeStr.substring(0, 4)), Integer.parseInt(timeStr.substring(4, 6)), Integer.parseInt(timeStr.substring(6, 8)), Integer.parseInt(timeStr.substring(8, 10)), 0);
 		return cal.getTimeInMillis() >= System.currentTimeMillis();

@@ -19,7 +19,7 @@
 */
 package server;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -102,7 +102,7 @@ public class MapleMarriage extends EventInstanceManager {
         }
     }
         
-    public Boolean isMarriageGroom(MapleCharacter chr) {
+    public Boolean isMarriageGroom(Character chr) {
         Boolean groom = null;
         try {
             int groomid = this.getIntProperty("groomId"), brideid = this.getIntProperty("brideId");
@@ -116,7 +116,7 @@ public class MapleMarriage extends EventInstanceManager {
         return groom;
     }
 
-    public static boolean claimGiftItems(MapleClient c, MapleCharacter chr) {
+    public static boolean claimGiftItems(MapleClient c, Character chr) {
         List<Item> gifts = loadGiftItemsFromDb(c, chr.getId());
         if (Inventory.checkSpot(chr, gifts)) {
             try (Connection con = DatabaseConnection.getConnection()) {

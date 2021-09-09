@@ -1,7 +1,7 @@
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
-import client.MapleCharacter.DelayedQuestUpdate;
+import client.Character;
+import client.Character.DelayedQuestUpdate;
 import client.MapleClient;
 import client.MapleQuestStatus;
 import net.AbstractPacketHandler;
@@ -21,7 +21,7 @@ public class RaiseUIStateHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
                 MapleQuestStatus mqs = chr.getQuest(quest);
                 

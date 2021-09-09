@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleFamily;
 import client.MapleFamilyEntry;
@@ -52,12 +52,12 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         int inviterId = p.readInt();
         p.readString();
         boolean accept = p.readByte() != 0;
         // String inviterName = slea.readMapleAsciiString();
-        MapleCharacter inviter = c.getWorldServer().getPlayerStorage().getCharacterById(inviterId);
+        Character inviter = c.getWorldServer().getPlayerStorage().getCharacterById(inviterId);
         if(inviter != null) {
             MapleInviteResult inviteResult = MapleInviteCoordinator.answerInvite(InviteType.FAMILY, c.getPlayer().getId(), c.getPlayer(), accept);
             if(inviteResult.result == InviteResult.NOT_FOUND) return; //was never invited. (or expired on server only somehow?)

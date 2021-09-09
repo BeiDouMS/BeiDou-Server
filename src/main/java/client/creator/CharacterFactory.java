@@ -19,7 +19,7 @@
 */
 package client.creator;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleSkinColor;
 import client.inventory.Inventory;
@@ -42,11 +42,11 @@ public abstract class CharacterFactory {
                         return -3;
                 }
             
-                if (!MapleCharacter.canCreateChar(name)) {
+                if (!Character.canCreateChar(name)) {
                         return -1;
                 }
                 
-                MapleCharacter newchar = MapleCharacter.getDefault(c);
+                Character newchar = Character.getDefault(c);
                 newchar.setWorld(c.getWorld());
                 newchar.setSkinColor(MapleSkinColor.getById(skin));
                 newchar.setGender(gender);

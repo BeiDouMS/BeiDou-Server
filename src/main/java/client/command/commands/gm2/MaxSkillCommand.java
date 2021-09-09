@@ -23,6 +23,7 @@
 */
 package client.command.commands.gm2;
 
+import client.Character;
 import client.*;
 import client.command.Command;
 import provider.MapleData;
@@ -36,7 +37,7 @@ public class MaxSkillCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         for (MapleData skill_ : MapleDataProviderFactory.getDataProvider(WZFiles.STRING).getData("Skill.img").getChildren()) {
             try {
                 Skill skill = SkillFactory.getSkill(Integer.parseInt(skill_.getName()));

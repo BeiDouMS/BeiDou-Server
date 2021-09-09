@@ -21,7 +21,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -37,7 +37,7 @@ public class EnterCashShopHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
         try {
-            MapleCharacter mc = c.getPlayer();
+            Character mc = c.getPlayer();
 
             if (mc.cannotEnterCashShop()) {
                 c.sendPacket(PacketCreator.enableActions());

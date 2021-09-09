@@ -21,7 +21,7 @@
  */
 package scripting.npc;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.server.world.MaplePartyCharacter;
 import scripting.AbstractScriptManager;
@@ -59,23 +59,23 @@ public class NPCScriptManager extends AbstractScriptManager {
         return engine != null;
     }
 
-    public boolean start(MapleClient c, int npc, MapleCharacter chr) {
+    public boolean start(MapleClient c, int npc, Character chr) {
         return start(c, npc, -1, chr);
     }
 
-    public boolean start(MapleClient c, int npc, int oid, MapleCharacter chr) {
+    public boolean start(MapleClient c, int npc, int oid, Character chr) {
         return start(c, npc, oid, null, chr);
     }
 
-    public boolean start(MapleClient c, int npc, String fileName, MapleCharacter chr) {
+    public boolean start(MapleClient c, int npc, String fileName, Character chr) {
         return start(c, npc, -1, fileName, chr);
     }
 
-    public boolean start(MapleClient c, int npc, int oid, String fileName, MapleCharacter chr) {
+    public boolean start(MapleClient c, int npc, int oid, String fileName, Character chr) {
         return start(c, npc, oid, fileName, chr, false, "cm");
     }
 
-    public boolean start(MapleClient c, ScriptedItem scriptItem, MapleCharacter chr) {
+    public boolean start(MapleClient c, ScriptedItem scriptItem, Character chr) {
         return start(c, scriptItem.getNpc(), -1, scriptItem.getScript(), chr, true, "im");
     }
 
@@ -110,7 +110,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         }
     }
 
-    private boolean start(MapleClient c, int npc, int oid, String fileName, MapleCharacter chr, boolean itemScript, String engineName) {
+    private boolean start(MapleClient c, int npc, int oid, String fileName, Character chr, boolean itemScript, String engineName) {
         try {
             final NPCConversationManager cm = new NPCConversationManager(c, npc, oid, fileName, itemScript);
             if (cms.containsKey(c)) {

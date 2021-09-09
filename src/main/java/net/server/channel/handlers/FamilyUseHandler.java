@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleFamilyEntitlement;
 import client.MapleFamilyEntry;
@@ -52,7 +52,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
             return; // shouldn't even be able to request it
         }
         c.sendPacket(PacketCreator.getFamilyInfo(entry));
-        MapleCharacter victim;
+        Character victim;
         if(type == MapleFamilyEntitlement.FAMILY_REUINION || type == MapleFamilyEntitlement.SUMMON_FAMILY) {
             victim = c.getChannelServer().getPlayerStorage().getCharacterByName(p.readString());
             if(victim != null && victim != c.getPlayer()) {

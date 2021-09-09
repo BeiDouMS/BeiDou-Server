@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import constants.game.GameConstants;
@@ -46,7 +46,7 @@ public class MusicCommand extends Command {
     @Override
     public void execute(MapleClient c, String[] params) {
         
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             String sendMsg = "";
             

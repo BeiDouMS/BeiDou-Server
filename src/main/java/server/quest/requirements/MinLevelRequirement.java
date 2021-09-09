@@ -21,7 +21,7 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -48,7 +48,7 @@ public class MinLevelRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		return chr.getLevel() >= minLevel;
 	}
 }

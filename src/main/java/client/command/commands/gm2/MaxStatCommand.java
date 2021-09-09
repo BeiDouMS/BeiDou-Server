@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleStat;
 import client.command.Command;
@@ -36,7 +36,7 @@ public class MaxStatCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         player.loseExp(player.getExp(), false, false);
         player.setLevel(255);
         player.resetPlayerRates();

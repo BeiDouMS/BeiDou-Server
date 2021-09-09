@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -49,7 +49,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
         }
         byte mode = p.readByte();
         String victim;
-        MapleCharacter target;
+        Character target;
         switch (mode) {
             case 0x00: // Level1~Level8 & Package1~Package2
                 int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(p.readInt());
@@ -85,7 +85,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 String reason = c.getPlayer().getName() + " used /ban to ban";
                 target = c.getChannelServer().getPlayerStorage().getCharacterByName(victim);
                 if (target != null) {
-                    String readableTargetName = MapleCharacter.makeMapleReadable(target.getName());
+                    String readableTargetName = Character.makeMapleReadable(target.getName());
                     String ip = target.getClient().getRemoteAddress();
                     reason += readableTargetName + " (IP: " + ip + ")";
                     if (duration == -1) {
@@ -95,7 +95,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                         target.sendPolice(duration, reason, 6000);
                     }
                     c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
-                } else if (MapleCharacter.ban(victim, reason, false)) {
+                } else if (Character.ban(victim, reason, false)) {
                     c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
                 } else {
                     c.sendPacket(PacketCreator.getGMEffect(6, (byte) 1));
@@ -108,7 +108,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 switch (p.readByte()) {
                     case 0:// /u
                         StringBuilder sb = new StringBuilder("USERS ON THIS MAP: ");
-                        for (MapleCharacter mc : c.getPlayer().getMap().getCharacters()) {
+                        for (Character mc : c.getPlayer().getMap().getCharacters()) {
                             sb.append(mc.getName());
                             sb.append(" ");
                         }

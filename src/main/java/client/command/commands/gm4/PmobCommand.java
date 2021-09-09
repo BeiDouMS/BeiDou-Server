@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.channel.Channel;
@@ -44,7 +44,7 @@ public class PmobCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !pmob <mobid> [<mobtime>]");
             return;

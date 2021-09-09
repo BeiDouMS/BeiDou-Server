@@ -21,13 +21,14 @@
  */
 package server.quest.requirements;
 
-import client.MapleCharacter;
-import java.util.ArrayList;
-import java.util.List;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -55,7 +56,7 @@ public class InfoExRequirement extends MapleQuestRequirement {
 	
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer npcid) {
+	public boolean check(Character chr, Integer npcid) {
 		return true;
 	}
 	

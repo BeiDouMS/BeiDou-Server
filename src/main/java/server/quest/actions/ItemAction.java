@@ -21,7 +21,7 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -83,7 +83,7 @@ public class ItemAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
                 List<ItemData> takeItem = new LinkedList<>();
                 List<ItemData> giveItem = new LinkedList<>();
             
@@ -155,7 +155,7 @@ public class ItemAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public boolean check(MapleCharacter chr, Integer extSelection) {
+	public boolean check(Character chr, Integer extSelection) {
 		List<Pair<Item, InventoryType>> gainList = new LinkedList<>();
                 List<Pair<Item, InventoryType>> selectList = new LinkedList<>();
                 List<Pair<Item, InventoryType>> randomList = new LinkedList<>();
@@ -239,7 +239,7 @@ public class ItemAction extends MapleQuestAction {
 		return true;
 	}
         
-        private void announceInventoryLimit(List<Integer> itemids, MapleCharacter chr) {
+        private void announceInventoryLimit(List<Integer> itemids, Character chr) {
                 for (Integer id : itemids) {
                         if (MapleItemInformationProvider.getInstance().isPickupRestricted(id) && chr.haveItemWithId(id, true)) {
                                 chr.dropMessage(1, "Please check if you already have a similar one-of-a-kind item in your inventory.");
@@ -250,7 +250,7 @@ public class ItemAction extends MapleQuestAction {
                 chr.dropMessage(1, "Please check if you have enough space in your inventory.");
         }
         
-        private boolean canHold(MapleCharacter chr, List<Pair<Item, InventoryType>> gainList) {
+        private boolean canHold(Character chr, List<Pair<Item, InventoryType>> gainList) {
                 List<Integer> toAddItemids = new LinkedList<>();
                 List<Integer> toAddQuantity = new LinkedList<>();
                 List<Integer> toRemoveItemids = new LinkedList<>();
@@ -272,7 +272,7 @@ public class ItemAction extends MapleQuestAction {
                 return chr.getAbstractPlayerInteraction().canHoldAllAfterRemoving(toAddItemids, toAddQuantity, toRemoveItemids, toRemoveQuantity);
         }
 	
-	private boolean canGetItem(ItemData item, MapleCharacter chr) {
+	private boolean canGetItem(ItemData item, Character chr) {
 		if (item.getGender() != 2 && item.getGender() != chr.getGender()) {
 			return false;
 		}
@@ -292,7 +292,7 @@ public class ItemAction extends MapleQuestAction {
                 return true;
         }
         
-        public boolean restoreLostItem(MapleCharacter chr, int itemid) {
+        public boolean restoreLostItem(Character chr, int itemid) {
             if (!MapleItemInformationProvider.getInstance().isQuestItem(itemid)) {
                 return false;
             }

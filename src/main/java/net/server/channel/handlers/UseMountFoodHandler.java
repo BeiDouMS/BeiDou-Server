@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleMount;
 import client.inventory.Inventory;
@@ -44,7 +44,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
         short pos = p.readShort();
         int itemid = p.readInt();
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleMount mount = chr.getMount();
         Inventory useInv = chr.getInventory(InventoryType.USE);
         

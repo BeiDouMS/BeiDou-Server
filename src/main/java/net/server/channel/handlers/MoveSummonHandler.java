@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.packet.InPacket;
 import server.maps.MapleSummon;
@@ -36,7 +36,7 @@ public final class MoveSummonHandler extends AbstractMovementPacketHandler {
     public final void handlePacket(InPacket p, MapleClient c) {
         int oid = p.readInt();
         Point startPos = new Point(p.readShort(), p.readShort());
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         Collection<MapleSummon> summons = player.getSummonsValues();
         MapleSummon summon = null;
         for (MapleSummon sum : summons) {

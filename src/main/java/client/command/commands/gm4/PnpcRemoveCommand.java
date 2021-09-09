@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import net.server.channel.Channel;
@@ -46,7 +46,7 @@ public class PnpcRemoveCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         
         int mapId = player.getMapId();
         int npcId = params.length > 0 ? Integer.parseInt(params[0]) : -1;

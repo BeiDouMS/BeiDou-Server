@@ -19,7 +19,7 @@
 */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
@@ -88,7 +88,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
         }
     }
     
-    public void warp(final MapleCharacter chr) {
+    public void warp(final Character chr) {
         MapleParty party = chr.getParty();
         if (chr.getId() == ownerId || (party != null && party.getMemberById(ownerId) != null)) {
             chr.sendPacket(PacketCreator.playPortalSound());
@@ -110,7 +110,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
     }
     
     public void sendSpawnData(MapleClient client, boolean launched) {
-        MapleCharacter chr = client.getPlayer();
+        Character chr = client.getPlayer();
         if (this.getFrom().getId() == chr.getMapId()) {
             if (chr.getParty() != null && (this.getOwnerId() == chr.getId() || chr.getParty().getMemberById(this.getOwnerId()) != null)) {
                 chr.sendPacket(PacketCreator.partyPortal(this.getFrom().getId(), this.getTo().getId(), this.toPosition()));
@@ -125,7 +125,7 @@ public class MapleDoorObject extends AbstractMapleMapObject {
 
     @Override
     public void sendDestroyData(MapleClient client) {
-        MapleCharacter chr = client.getPlayer();
+        Character chr = client.getPlayer();
         if (from.getId() == chr.getMapId()) {
             MapleParty party = chr.getParty();
             if (party != null && (ownerId == chr.getId() || party.getMemberById(ownerId) != null)) {

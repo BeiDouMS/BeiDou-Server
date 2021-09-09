@@ -19,8 +19,7 @@
 */
 package server.quest.actions;
 
-import client.MapleCharacter;
-import client.MapleQuestStatus;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -48,7 +47,7 @@ public class InfoAction extends MapleQuestAction {
 
 
         @Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
                 chr.getAbstractPlayerInteraction().setQuestProgress(questID, info);
         }
         

@@ -21,9 +21,9 @@
  */
 package server.quest.requirements;
 
+import client.Character;
 import provider.MapleData;
 import server.quest.MapleQuestRequirementType;
-import client.MapleCharacter;
 
 /**
  * Base class for a Quest Requirement. Quest system uses it for all requirements.
@@ -38,11 +38,11 @@ public abstract class MapleQuestRequirement {
 	
 	/**
 	 * Checks the requirement to see if the player currently meets it.
-	 * @param chr	The {@link MapleCharacter} to check on.
+	 * @param chr	The {@link Character} to check on.
 	 * @param npcid	The NPC ID it was called from.
 	 * @return boolean	If the check was passed or not.
 	 */
-	public abstract boolean check(MapleCharacter chr, Integer npcid);
+	public abstract boolean check(Character chr, Integer npcid);
 	
 	/**
 	 * Processes the data and stores it in the class for future use.

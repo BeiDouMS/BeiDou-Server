@@ -1,6 +1,6 @@
 package net.server.guild;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class GuildPackets {
-    public static Packet showGuildInfo(MapleCharacter chr) {
+    public static Packet showGuildInfo(Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.GUILD_OPERATION);
         p.writeByte(0x1A); //signature for showing guild info
         if (chr == null) { //show empty guild (used for leaving, expelled)
@@ -432,7 +432,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet allianceMemberOnline(MapleCharacter mc, boolean online) {
+    public static Packet allianceMemberOnline(Character mc, boolean online) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x0E);
         p.writeInt(mc.getGuild().getAllianceId());
@@ -460,7 +460,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet updateAllianceJobLevel(MapleCharacter mc) {
+    public static Packet updateAllianceJobLevel(Character mc) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x18);
         p.writeInt(mc.getGuild().getAllianceId());
@@ -498,7 +498,7 @@ public class GuildPackets {
         return p;
     }
 
-    public static Packet allianceInvite(int allianceid, MapleCharacter chr) {
+    public static Packet allianceInvite(int allianceid, Character chr) {
         OutPacket p = OutPacket.create(SendOpcode.ALLIANCE_OPERATION);
         p.writeByte(0x03);
         p.writeInt(allianceid);

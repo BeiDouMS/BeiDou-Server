@@ -129,7 +129,7 @@ public class BuddyList {
     
     public void broadcast(Packet packet, PlayerStorage pstorage) {
         for(int bid : getBuddyIds()) {
-            MapleCharacter chr = pstorage.getCharacterById(bid);
+            Character chr = pstorage.getCharacterById(bid);
             
             if(chr != null && chr.isLoggedinWorld()) {
                 chr.sendPacket(packet);

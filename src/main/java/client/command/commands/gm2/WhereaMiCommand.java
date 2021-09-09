@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm2;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.life.MapleMonster;
@@ -40,9 +40,9 @@ public class WhereaMiCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         
-        HashSet<MapleCharacter> chars = new HashSet<>();
+        HashSet<Character> chars = new HashSet<>();
         HashSet<MapleNPC> npcs = new HashSet<>();
         HashSet<MaplePlayerNPC> playernpcs = new HashSet<>();
         HashSet<MapleMonster> mobs = new HashSet<>();
@@ -51,8 +51,8 @@ public class WhereaMiCommand extends Command {
             if (mmo instanceof MapleNPC) {
                 MapleNPC npc = (MapleNPC) mmo;
                 npcs.add(npc);
-            } else if (mmo instanceof MapleCharacter) {
-                MapleCharacter mc = (MapleCharacter) mmo;
+            } else if (mmo instanceof Character) {
+                Character mc = (Character) mmo;
                 chars.add(mc);
             } else if (mmo instanceof MapleMonster) {
                 MapleMonster mob = (MapleMonster) mmo;
@@ -68,7 +68,7 @@ public class WhereaMiCommand extends Command {
         player.yellowMessage("Map ID: " + player.getMap().getId());
         
         player.yellowMessage("Players on this map:");
-        for (MapleCharacter chr : chars) {
+        for (Character chr : chars) {
             player.dropMessage(5, ">> " + chr.getName() + " - " + chr.getId() + " - Oid: " + chr.getObjectId());
         }
         

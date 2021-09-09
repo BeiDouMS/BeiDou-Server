@@ -21,7 +21,7 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.MapleItemInformationProvider;
@@ -41,7 +41,7 @@ public class BuffAction extends MapleQuestAction {
 	}
         
         @Override
-	public boolean check(MapleCharacter chr, Integer extSelection) {
+	public boolean check(Character chr, Integer extSelection) {
 		return true;
 	}
 	
@@ -51,7 +51,7 @@ public class BuffAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		MapleItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
 	}
 } 

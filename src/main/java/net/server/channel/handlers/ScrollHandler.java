@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
@@ -59,7 +59,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 }
 
                 MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(dst);
                 Skill LegendarySpirit = SkillFactory.getSkill(1003);
                 if (chr.getSkillLevel(LegendarySpirit) > 0 && dst >= 0) {

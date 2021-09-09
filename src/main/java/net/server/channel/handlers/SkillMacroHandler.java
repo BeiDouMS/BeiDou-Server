@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.SkillMacro;
 import client.autoban.AutobanFactory;
@@ -32,7 +32,7 @@ public final class SkillMacroHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         int num = p.readByte();
         if (num > 5) return;
 

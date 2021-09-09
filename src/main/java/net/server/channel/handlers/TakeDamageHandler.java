@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package net.server.channel.handlers;
 
+import client.Character;
 import client.*;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -52,9 +53,9 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, MapleClient c) {
-        List<MapleCharacter> banishPlayers = new ArrayList<>();
+        List<Character> banishPlayers = new ArrayList<>();
         
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         p.readInt();
         byte damagefrom = p.readByte();
         p.readByte(); //Element
@@ -277,7 +278,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
         
-        for (MapleCharacter player : banishPlayers) {  // chill, if this list ever gets non-empty an attacker does exist, trust me :)
+        for (Character player : banishPlayers) {  // chill, if this list ever gets non-empty an attacker does exist, trust me :)
             player.changeMapBanish(attacker.getBanish().getMap(), attacker.getBanish().getPortal(), attacker.getBanish().getMsg());
         }
     }

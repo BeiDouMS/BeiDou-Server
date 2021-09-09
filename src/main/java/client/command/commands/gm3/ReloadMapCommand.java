@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.maps.MapleMap;
@@ -37,13 +37,13 @@ public class ReloadMapCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MapleMap newMap = c.getChannelServer().getMapFactory().resetMap(player.getMapId());
         int callerid = c.getPlayer().getId();
 
-        Collection<MapleCharacter> characters = player.getMap().getAllPlayers();
+        Collection<Character> characters = player.getMap().getAllPlayers();
         
-        for (MapleCharacter chr : characters) {
+        for (Character chr : characters) {
             chr.saveLocationOnWarp();
             chr.changeMap(newMap);
             if (chr.getId() != callerid)

@@ -22,7 +22,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -36,7 +36,7 @@ import tools.PacketCreator;
 public class RemoteStoreHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, MapleClient c) {
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         MapleHiredMerchant hm = getMerchant(c);
         if (hm != null && hm.isOwner(chr)) {
             if (hm.getChannel() == chr.getClient().getChannel()) {

@@ -21,7 +21,7 @@
 */
 package net.server.guild;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.packet.Packet;
@@ -275,7 +275,7 @@ public class MapleGuild {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
         for (MapleGuildCharacter mgc : getMembers()) {
-            MapleCharacter chr = ps.getCharacterById(mgc.getId());
+            Character chr = ps.getCharacterById(mgc.getId());
             if (chr == null || !chr.isLoggedinWorld()) {
                 continue;
             }
@@ -289,7 +289,7 @@ public class MapleGuild {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
         for (MapleGuildCharacter mgc : getMembers()) {
-            MapleCharacter chr = ps.getCharacterById(mgc.getId());
+            Character chr = ps.getCharacterById(mgc.getId());
             if (chr == null || !chr.isLoggedinWorld()) {
                 continue;
             }
@@ -303,7 +303,7 @@ public class MapleGuild {
         PlayerStorage ps = Server.getInstance().getWorld(world).getPlayerStorage();
 
         for (MapleGuildCharacter mgc : getMembers()) {
-            MapleCharacter chr = ps.getCharacterById(mgc.getId());
+            Character chr = ps.getCharacterById(mgc.getId());
             if (chr == null || !chr.isLoggedinWorld()) {
                 continue;
             }
@@ -464,7 +464,7 @@ public class MapleGuild {
         }
     }
 
-    public int addGuildMember(MapleGuildCharacter mgc, MapleCharacter chr) {
+    public int addGuildMember(MapleGuildCharacter mgc, Character chr) {
         membersLock.lock();
         try {
             if (members.size() >= capacity) {
@@ -708,7 +708,7 @@ public class MapleGuild {
     }
 
     public static MapleGuildResponse sendInvitation(MapleClient c, String targetName) {
-        MapleCharacter mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
+        Character mc = c.getChannelServer().getPlayerStorage().getCharacterByName(targetName);
         if (mc == null) {
             return MapleGuildResponse.NOT_IN_CHANNEL;
         }
@@ -716,7 +716,7 @@ public class MapleGuild {
             return MapleGuildResponse.ALREADY_IN_GUILD;
         }
 
-        MapleCharacter sender = c.getPlayer();
+        Character sender = c.getPlayer();
         if (MapleInviteCoordinator.createInvite(InviteType.GUILD, sender, sender.getGuildId(), mc.getId())) {
             mc.sendPacket(GuildPackets.guildInvite(sender.getGuildId(), sender.getName()));
             return null;
@@ -729,7 +729,7 @@ public class MapleGuild {
         MapleInviteResult res = MapleInviteCoordinator.answerInvite(InviteType.GUILD, targetId, guildId, answer);
 
         MapleGuildResponse mgr;
-        MapleCharacter sender = res.from;
+        Character sender = res.from;
         switch (res.result) {
             case ACCEPTED:
                 return true;
@@ -748,12 +748,12 @@ public class MapleGuild {
         return false;
     }
 
-    public static Set<MapleCharacter> getEligiblePlayersForGuild(MapleCharacter guildLeader) {
-        Set<MapleCharacter> guildMembers = new HashSet<>();
+    public static Set<Character> getEligiblePlayersForGuild(Character guildLeader) {
+        Set<Character> guildMembers = new HashSet<>();
         guildMembers.add(guildLeader);
 
         MapleMatchCheckerCoordinator mmce = guildLeader.getWorldServer().getMatchCheckerCoordinator();
-        for (MapleCharacter chr : guildLeader.getMap().getAllPlayers()) {
+        for (Character chr : guildLeader.getMap().getAllPlayers()) {
             if (chr.getParty() == null && chr.getGuild() == null && mmce.getMatchConfirmationLeaderid(chr.getId()) == -1) {
                 guildMembers.add(chr);
             }

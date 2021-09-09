@@ -21,7 +21,7 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleQuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -48,7 +48,7 @@ public class NextQuestAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		MapleQuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
 		chr.sendPacket(PacketCreator.updateQuestFinish((short) questID, status.getNpc(), (short) nextQuest));
 	}

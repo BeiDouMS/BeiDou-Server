@@ -19,7 +19,7 @@
 */
 package server;
 
-import client.MapleCharacter;
+import client.Character;
 import provider.MapleData;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -266,7 +266,7 @@ public class MapleSkillbookInformationProvider {
         return sbe != null ? sbe : SkillBookEntry.UNAVAILABLE;
     }
     
-    public static List<Integer> getTeachableSkills(MapleCharacter chr) {
+    public static List<Integer> getTeachableSkills(Character chr) {
         List<Integer> list = new ArrayList<>();
         
         for (Integer book : foundSkillbooks.keySet()) {

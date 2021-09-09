@@ -19,7 +19,7 @@
 */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
@@ -35,7 +35,7 @@ import java.util.concurrent.locks.Lock;
  * @author Ronan
  */
 public class MapleMiniDungeon {
-    List<MapleCharacter> players = new ArrayList<>();
+    List<Character> players = new ArrayList<>();
     ScheduledFuture<?> timeoutTask = null;
     Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MINIDUNGEON, true);
     
@@ -51,7 +51,7 @@ public class MapleMiniDungeon {
         expireTime += System.currentTimeMillis();
     }
     
-    public boolean registerPlayer(MapleCharacter chr) {
+    public boolean registerPlayer(Character chr) {
         int time = (int)((expireTime - System.currentTimeMillis()) / 1000);
         if(time > 0) chr.sendPacket(PacketCreator.getClock(time));
         
@@ -67,7 +67,7 @@ public class MapleMiniDungeon {
         return true;
     }
     
-    public boolean unregisterPlayer(MapleCharacter chr) {
+    public boolean unregisterPlayer(Character chr) {
         chr.sendPacket(PacketCreator.removeClock());
         
         lock.lock();
@@ -92,9 +92,9 @@ public class MapleMiniDungeon {
     public void close() {
         lock.lock();
         try {
-            List<MapleCharacter> lchr = new ArrayList<>(players);
+            List<Character> lchr = new ArrayList<>(players);
 
-            for(MapleCharacter chr : lchr) {
+            for(Character chr : lchr) {
                 chr.changeMap(baseMap);
             }
 

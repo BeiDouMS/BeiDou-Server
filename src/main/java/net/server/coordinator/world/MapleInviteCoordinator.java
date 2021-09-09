@@ -19,7 +19,7 @@
 */
 package net.server.coordinator.world;
 
-import client.MapleCharacter;
+import client.Character;
 import tools.Pair;
 
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public class MapleInviteCoordinator {
         ALLIANCE;
         
         final ConcurrentHashMap<Integer, Object> invites;
-        final ConcurrentHashMap<Integer, MapleCharacter> inviteFrom;
+        final ConcurrentHashMap<Integer, Character> inviteFrom;
         final ConcurrentHashMap<Integer, Integer> inviteTimeouts;
         final ConcurrentHashMap<Integer, Object[]> inviteParams;
 
@@ -70,15 +70,15 @@ public class MapleInviteCoordinator {
             return inviteTimeouts;
         }
         
-        private Pair<MapleCharacter, Object[]> removeRequest(Integer target) {
+        private Pair<Character, Object[]> removeRequest(Integer target) {
             invites.remove(target);
-            MapleCharacter from = inviteFrom.remove(target);
+            Character from = inviteFrom.remove(target);
             inviteTimeouts.remove(target);
             
             return new Pair<>(from, inviteParams.remove(target));
         }
         
-        private boolean addRequest(MapleCharacter from, Object referenceFrom, int targetCid, Object[] params) {
+        private boolean addRequest(Character from, Object referenceFrom, int targetCid, Object[] params) {
             Object v = invites.putIfAbsent(targetCid, referenceFrom);
             if (v != null) {    // there was already an entry
                 return false;
@@ -96,7 +96,7 @@ public class MapleInviteCoordinator {
     }
     
     // note: referenceFrom is a specific value that represents the "common association" created between the sender/recver parties
-    public static boolean createInvite(InviteType type, MapleCharacter from, Object referenceFrom, int targetCid, Object... params) {
+    public static boolean createInvite(InviteType type, Character from, Object referenceFrom, int targetCid, Object... params) {
         return type.addRequest(from, referenceFrom, targetCid, params);
     }
     
@@ -107,9 +107,9 @@ public class MapleInviteCoordinator {
     public static MapleInviteResult answerInvite(InviteType type, int targetCid, Object referenceFrom, boolean answer) {
         Map<Integer, Object> table = type.getRequestsTable();
         
-        MapleCharacter from = null;
+        Character from = null;
         InviteResult result = InviteResult.NOT_FOUND;
-        Pair<MapleCharacter, Object[]> inviteInfo = null;
+        Pair<Character, Object[]> inviteInfo = null;
         
         Object reference = table.get(targetCid);
         if (referenceFrom.equals(reference)) {
@@ -155,10 +155,10 @@ public class MapleInviteCoordinator {
     public static class MapleInviteResult {
         
         public final InviteResult result;
-        public final MapleCharacter from;
+        public final Character from;
         public final Object[] params;
         
-        private MapleInviteResult(InviteResult result, MapleCharacter from, Object[] params) {
+        private MapleInviteResult(InviteResult result, Character from, Object[] params) {
             this.result = result;
             this.from = from;
             this.params = params;

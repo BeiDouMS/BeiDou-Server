@@ -21,6 +21,7 @@
  */
 package server.life;
 
+import client.Character;
 import client.*;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -70,7 +71,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     private AtomicInteger hp = new AtomicInteger(1);
     private AtomicLong maxHpPlusHeal = new AtomicLong(1);
     private int mp;
-    private WeakReference<MapleCharacter> controller = new WeakReference<>(null);
+    private WeakReference<Character> controller = new WeakReference<>(null);
     private boolean controllerHasAggro, controllerKnowsAboutAggro, controllerHasPuppet;
     private Collection<MonsterListener> listeners = new LinkedList<>();
     private EnumMap<MonsterStatus, MonsterStatusEffect> stati = new EnumMap<>(MonsterStatus.class);
@@ -361,7 +362,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         hp.set(-1);
     }
     
-    public void broadcastMobHpBar(MapleCharacter from) {
+    public void broadcastMobHpBar(Character from) {
         if (hasBossHPBar()) {
             from.setPlayerAggro(this.hashCode());
             from.getMap().broadcastBossHpMessage(this, this.hashCode(), makeBossHPBarPacket(), getPosition());
@@ -370,7 +371,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             Packet packet = PacketCreator.showMonsterHP(getObjectId(), remainingHP);
             if (from.getParty() != null) {
                 for (MaplePartyCharacter mpc : from.getParty().getMembers()) {
-                    MapleCharacter member = from.getMap().getCharacterById(mpc.getId()); // god bless
+                    Character member = from.getMap().getCharacterById(mpc.getId()); // god bless
                     if (member != null) {
                         member.sendPacket(packet);
                     }
@@ -381,7 +382,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
     
-    public boolean damage(MapleCharacter attacker, int damage, boolean stayAlive) {
+    public boolean damage(Character attacker, int damage, boolean stayAlive) {
         boolean lastHit = false;
         
         this.lockMonster();
@@ -432,7 +433,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * @param damage
      * @param stayAlive
      */
-    private void applyDamage(MapleCharacter from, int damage, boolean stayAlive, boolean fake) {
+    private void applyDamage(Character from, int damage, boolean stayAlive, boolean fake) {
         Integer trueDamage = applyAndGetHpDamage(damage, stayAlive);
         if (trueDamage == null) {
             return;
@@ -455,7 +456,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         broadcastMobHpBar(from);
     }
     
-    public void applyFakeDamage(MapleCharacter from, int damage, boolean stayAlive) {
+    public void applyFakeDamage(Character from, int damage, boolean stayAlive) {
         applyDamage(from, damage, stayAlive, true);
     }
     
@@ -480,11 +481,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         dispatchMonsterHealed(hpHealed);
     }
 
-    public boolean isAttackedBy(MapleCharacter chr) {
+    public boolean isAttackedBy(Character chr) {
         return takenDamage.containsKey(chr.getId());
     }
     
-    private static boolean isWhiteExpGain(MapleCharacter chr, Map<Integer, Float> personalRatio, double sdevRatio) {
+    private static boolean isWhiteExpGain(Character chr, Map<Integer, Float> personalRatio, double sdevRatio) {
         Float pr = personalRatio.get(chr.getId());
         if (pr == null) {
             return false;
@@ -511,7 +512,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return avgExpReward + Math.sqrt(varExpReward);
     }
     
-    private void distributePlayerExperience(MapleCharacter chr, float exp, float partyBonusMod, int totalPartyLevel, boolean highestPartyDamager, boolean whiteExpGain, boolean hasPartySharers) {
+    private void distributePlayerExperience(Character chr, float exp, float partyBonusMod, int totalPartyLevel, boolean highestPartyDamager, boolean whiteExpGain, boolean hasPartySharers) {
         float playerExp = (YamlConfig.config.server.EXP_SPLIT_COMMON_MOD * chr.getLevel()) / totalPartyLevel;
         if (highestPartyDamager) playerExp += YamlConfig.config.server.EXP_SPLIT_MVP_MOD;
         
@@ -522,13 +523,13 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         giveFamilyRep(chr.getFamilyEntry());
     }
     
-    private void distributePartyExperience(Map<MapleCharacter, Long> partyParticipation, float expPerDmg, Set<MapleCharacter> underleveled, Map<Integer, Float> personalRatio, double sdevRatio) {
+    private void distributePartyExperience(Map<Character, Long> partyParticipation, float expPerDmg, Set<Character> underleveled, Map<Integer, Float> personalRatio, double sdevRatio) {
         IntervalBuilder leechInterval = new IntervalBuilder();
         leechInterval.addInterval(this.getLevel() - YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL, this.getLevel() + YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL);
         
         long maxDamage = 0, partyDamage = 0;
-        MapleCharacter participationMvp = null;
-        for (Entry<MapleCharacter, Long> e : partyParticipation.entrySet()) {
+        Character participationMvp = null;
+        for (Entry<Character, Long> e : partyParticipation.entrySet()) {
             long entryDamage = e.getValue();
             partyDamage += entryDamage;
             
@@ -542,12 +543,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             leechInterval.addInterval(chrLevel - YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL, chrLevel + YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL);
         }
         
-        List<MapleCharacter> expMembers = new LinkedList<>();
+        List<Character> expMembers = new LinkedList<>();
         int totalPartyLevel = 0;
         
         // thanks G h o s t, Alfred, Vcoc, BHB for poiting out a bug in detecting party members after membership transactions in a party took place
         if (YamlConfig.config.server.USE_ENFORCE_MOB_LEVEL_RANGE) {
-            for (MapleCharacter member : partyParticipation.keySet().iterator().next().getPartyMembersOnSameMap()) {
+            for (Character member : partyParticipation.keySet().iterator().next().getPartyMembersOnSameMap()) {
                 if (!leechInterval.inInterval(member.getLevel())) {
                     underleveled.add(member);
                     continue;
@@ -557,7 +558,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 expMembers.add(member);
             }
         } else {    // thanks Ari for noticing unused server flag after EXP system overhaul
-            for (MapleCharacter member : partyParticipation.keySet().iterator().next().getPartyMembersOnSameMap()) {
+            for (Character member : partyParticipation.keySet().iterator().next().getPartyMembersOnSameMap()) {
                 totalPartyLevel += member.getLevel();
                 expMembers.add(member);
             }
@@ -570,7 +571,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         boolean hasPartySharers = membersSize > 1;
         float partyBonusMod = hasPartySharers ? 0.05f * membersSize : 0.0f;
         
-        for (MapleCharacter mc : expMembers) {
+        for (Character mc : expMembers) {
             distributePlayerExperience(mc, participationExp, partyBonusMod, totalPartyLevel, mc == participationMvp, isWhiteExpGain(mc, personalRatio, sdevRatio), hasPartySharers);
             giveFamilyRep(mc.getFamilyEntry());
         }
@@ -581,20 +582,20 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             return;
         }
         
-        Map<MapleParty, Map<MapleCharacter, Long>> partyExpDist = new HashMap<>();
-        Map<MapleCharacter, Long> soloExpDist = new HashMap<>();
+        Map<MapleParty, Map<Character, Long>> partyExpDist = new HashMap<>();
+        Map<Character, Long> soloExpDist = new HashMap<>();
         
-        Map<Integer, MapleCharacter> mapPlayers = map.getMapAllPlayers();
+        Map<Integer, Character> mapPlayers = map.getMapAllPlayers();
         
         int totalEntries = 0;   // counts "participant parties", players who no longer are available in the map is an "independent party"
         for (Entry<Integer, AtomicLong> e : takenDamage.entrySet()) {
-            MapleCharacter chr = mapPlayers.get(e.getKey());
+            Character chr = mapPlayers.get(e.getKey());
             if (chr != null) {
                 long damage = e.getValue().longValue();
                 
                 MapleParty p = chr.getParty();
                 if (p != null) {
-                    Map<MapleCharacter, Long> partyParticipation = partyExpDist.get(p);
+                    Map<Character, Long> partyParticipation = partyExpDist.get(p);
                     if (partyParticipation == null) {
                         partyParticipation = new HashMap<>(6);
                         partyExpDist.put(p, partyParticipation);
@@ -618,16 +619,16 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         
         Map<Integer, Float> personalRatio = new HashMap<>();
         List<Float> entryExpRatio = new LinkedList<>();
-        for (Entry<MapleCharacter, Long> e : soloExpDist.entrySet()) {
+        for (Entry<Character, Long> e : soloExpDist.entrySet()) {
             float ratio = ((float) e.getValue()) / totalDamage;
             
             personalRatio.put(e.getKey().getId(), ratio);
             entryExpRatio.add(ratio);
         }
         
-        for (Map<MapleCharacter, Long> m : partyExpDist.values()) {
+        for (Map<Character, Long> m : partyExpDist.values()) {
             float ratio = 0.0f;
-            for (Entry<MapleCharacter, Long> e : m.entrySet()) {
+            for (Entry<Character, Long> e : m.entrySet()) {
                 float chrRatio = ((float) e.getValue()) / totalDamage;
                 
                 personalRatio.put(e.getKey().getId(), chrRatio);
@@ -640,33 +641,33 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         double sdevRatio = calcExperienceStandDevThreshold(entryExpRatio, totalEntries);
         
         // GMS-like player and party split calculations found thanks to Russt, KaidaTan, Dusk, AyumiLove - src: https://ayumilovemaple.wordpress.com/maplestory_calculator_formula/
-        Set<MapleCharacter> underleveled = new HashSet<>();
-        for (Entry<MapleCharacter, Long> chrParticipation : soloExpDist.entrySet()) {
+        Set<Character> underleveled = new HashSet<>();
+        for (Entry<Character, Long> chrParticipation : soloExpDist.entrySet()) {
             float exp = chrParticipation.getValue() * expPerDmg;
-            MapleCharacter chr = chrParticipation.getKey();
+            Character chr = chrParticipation.getKey();
             
             distributePlayerExperience(chr, exp, 0.0f, chr.getLevel(), true, isWhiteExpGain(chr, personalRatio, sdevRatio), false);
         }
         
-        for (Map<MapleCharacter, Long> partyParticipation : partyExpDist.values()) {
+        for (Map<Character, Long> partyParticipation : partyExpDist.values()) {
             distributePartyExperience(partyParticipation, expPerDmg, underleveled, personalRatio, sdevRatio);
         }
         
         EventInstanceManager eim = getMap().getEventInstance();
         if (eim != null) {
-            MapleCharacter chr = mapPlayers.get(killerId);
+            Character chr = mapPlayers.get(killerId);
             if (chr != null) {
                 eim.monsterKilled(chr, this);
             }
         }
         
-        for(MapleCharacter mc : underleveled) {
+        for(Character mc : underleveled) {
             mc.showUnderleveledInfo(this);
         }
         
     }
     
-    private float getStatusExpMultiplier(MapleCharacter attacker, boolean hasPartySharers) {
+    private float getStatusExpMultiplier(Character attacker, boolean hasPartySharers) {
         float multiplier = 1.0f;
         
         // thanks Prophecy & Aika for finding out Holy Symbol not being applied on party bonuses
@@ -702,7 +703,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return (int) Math.round(exp);    // operations on float point are not point-precise... thanks IxianMace for noticing -1 EXP gains
     }
     
-    private void giveExpToCharacter(MapleCharacter attacker, Float personalExp, Float partyExp, boolean white, boolean hasPartySharers) {
+    private void giveExpToCharacter(Character attacker, Float personalExp, Float partyExp, boolean white, boolean hasPartySharers) {
         if (attacker.isAlive()) {
             if (personalExp != null) {
                 personalExp *= getStatusExpMultiplier(attacker, hasPartySharers);
@@ -739,11 +740,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             return MapleMonsterInformationProvider.getInstance().retrieveEffectiveDrop(this.getId());
         }
         
-        Map<Integer, MapleCharacter> pchars = map.getMapAllPlayers();
+        Map<Integer, Character> pchars = map.getMapAllPlayers();
         
-        List<MapleCharacter> lootChars = new LinkedList<>();
+        List<Character> lootChars = new LinkedList<>();
         for (Integer cid : takenDamage.keySet()) {
-            MapleCharacter chr = pchars.get(cid);
+            Character chr = pchars.get(cid);
             if (chr != null && chr.isLoggedinWorld()) {
                 lootChars.add(chr);
             }
@@ -752,10 +753,10 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return MapleLootManager.retrieveRelevantDrops(this.getId(), lootChars);
     }
     
-    public MapleCharacter killBy(final MapleCharacter killer) {
+    public Character killBy(final Character killer) {
         distributeExperience(killer != null ? killer.getId() : 0);
         
-        final Pair<MapleCharacter, Boolean> lastController = aggroRemoveController();
+        final Pair<Character, Boolean> lastController = aggroRemoveController();
         final List<Integer> toSpawn = this.getRevives();
         if (toSpawn != null) {
             final MapleMap reviveMap = map;
@@ -774,7 +775,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
                 final EventInstanceManager eim = this.getMap().getEventInstance();
                 
                 TimerManager.getInstance().schedule(() -> {
-                    MapleCharacter controller = lastController.getLeft();
+                    Character controller = lastController.getLeft();
                     boolean aggro = lastController.getRight();
 
                     for (Integer mid : toSpawn) {
@@ -823,7 +824,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             System.out.println("[CRITICAL LOSS] toSpawn is null for " + this.getName());
         }
         
-        MapleCharacter looter = map.getCharacterById(getHighestDamagerId());
+        Character looter = map.getCharacterById(getHighestDamagerId());
         return looter != null ? looter : killer;
     }
     
@@ -839,9 +840,9 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             }
 
             MapleMap map = m.getMap();
-            List<MapleCharacter> chrList = map.getAllPlayers();
+            List<Character> chrList = map.getAllPlayers();
             if (!chrList.isEmpty()) {
-                MapleCharacter chr = chrList.get(0);
+                Character chr = chrList.get(0);
 
                 EventInstanceManager eim = map.getEventInstance();
                 if (eim != null) {
@@ -856,12 +857,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     private void dispatchRaiseQuestMobCount() {
         Set<Integer> attackerChrids = takenDamage.keySet();
         if(!attackerChrids.isEmpty()) {
-            Map<Integer, MapleCharacter> mapChars = map.getMapPlayers();
+            Map<Integer, Character> mapChars = map.getMapPlayers();
             if(!mapChars.isEmpty()) {
                 int mobid = getId();
                 
                 for (Integer chrid : attackerChrids) {
-                    MapleCharacter chr = mapChars.get(chrid);
+                    Character chr = mapChars.get(chrid);
 
                     if(chr != null && chr.isLoggedinWorld()) {
                         chr.raiseQuestMobCount(mobid);
@@ -914,7 +915,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
     
-    private void dispatchMonsterDamaged(MapleCharacter from, int trueDmg) {
+    private void dispatchMonsterDamaged(Character from, int trueDmg) {
         MonsterListener[] listenersList;
         statiLock.lock();
         try {
@@ -975,11 +976,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
 
-    public MapleCharacter getController() {
+    public Character getController() {
         return controller.get();
     }
 
-    private void setController(MapleCharacter controller) {
+    private void setController(Character controller) {
         this.controller = new WeakReference<>(controller);
     }
     
@@ -1078,8 +1079,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
 
-    private MapleCharacter getActiveController() {
-        MapleCharacter chr = getController();
+    private Character getActiveController() {
+        Character chr = getController();
         
         if (chr != null && chr.isLoggedinWorld() && chr.getMap() == this.getMap()) {
             return chr;
@@ -1091,7 +1092,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     private void broadcastMonsterStatusMessage(Packet packet) {
         map.broadcastMessage(packet, getPosition());
         
-        MapleCharacter chrController = getActiveController();
+        Character chrController = getActiveController();
         if (chrController != null && !chrController.isMapObjectVisible(MapleMonster.this)) {
             chrController.sendPacket(packet);
         }
@@ -1105,11 +1106,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return animationTime;
     }
     
-    public boolean applyStatus(MapleCharacter from, final MonsterStatusEffect status, boolean poison, long duration) {
+    public boolean applyStatus(Character from, final MonsterStatusEffect status, boolean poison, long duration) {
         return applyStatus(from, status, poison, duration, false);
     }
 
-    public boolean applyStatus(MapleCharacter from, final MonsterStatusEffect status, boolean poison, long duration, boolean venom) {
+    public boolean applyStatus(Character from, final MonsterStatusEffect status, boolean poison, long duration, boolean venom) {
         switch (getMonsterEffectiveness(status.getSkill().getElement())) {
             case IMMUNE:
             case STRONG:
@@ -1602,12 +1603,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     private final class DamageTask implements Runnable {
 
         private final int dealDamage;
-        private final MapleCharacter chr;
+        private final Character chr;
         private final MonsterStatusEffect status;
         private final int type;
         private final MapleMap map;
 
-        private DamageTask(int dealDamage, MapleCharacter chr, MonsterStatusEffect status, int type) {
+        private DamageTask(int dealDamage, Character chr, MonsterStatusEffect status, int type) {
             this.dealDamage = dealDamage;
             this.chr = chr;
             this.status = status;
@@ -1796,7 +1797,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return summon.getPosition().distanceSq(this.getPosition()) < 177777;
     }
     
-    public boolean isCharacterPuppetInVicinity(MapleCharacter chr) {
+    public boolean isCharacterPuppetInVicinity(Character chr) {
         MapleStatEffect mse = chr.getBuffEffect(BuffStat.PUPPET);
         if (mse != null) {
             MapleSummon summon = chr.getSummonByKey(mse.getSourceId());
@@ -1815,7 +1816,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
     }
     
     public boolean isLeadingPuppetInVicinity() {
-        MapleCharacter chrController = this.getActiveController();
+        Character chrController = this.getActiveController();
         
         if (chrController != null) {
             if (this.isCharacterPuppetInVicinity(chrController)) {
@@ -1826,16 +1827,16 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         return false;
     }
     
-    private MapleCharacter getNextControllerCandidate() {
+    private Character getNextControllerCandidate() {
         int mincontrolled = Integer.MAX_VALUE;
-        MapleCharacter newController = null;
+        Character newController = null;
         
         int mincontrolleddead = Integer.MAX_VALUE;
-        MapleCharacter newControllerDead = null;
+        Character newControllerDead = null;
         
-        MapleCharacter newControllerWithPuppet = null;
+        Character newControllerWithPuppet = null;
         
-        for (MapleCharacter chr : getMap().getAllPlayers()) {
+        for (Character chr : getMap().getAllPlayers()) {
             if (!chr.isHidden()) {
                 int ctrlMonsSize = chr.getNumControlledMonsters();
 
@@ -1869,8 +1870,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * Removes controllability status from the current controller of this mob.
      * 
      */
-    public Pair<MapleCharacter, Boolean> aggroRemoveController() {
-        MapleCharacter chrController;
+    public Pair<Character, Boolean> aggroRemoveController() {
+        Character chrController;
         boolean hadAggro;
         
         aggroUpdateLock.lock();
@@ -1898,10 +1899,10 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * player controller.
      * 
      */
-    public void aggroSwitchController(MapleCharacter newController, boolean immediateAggro) {
+    public void aggroSwitchController(Character newController, boolean immediateAggro) {
         if (aggroUpdateLock.tryLock()) {
             try {
-                MapleCharacter prevController = getController();
+                Character prevController = getController();
                 if (prevController == newController) {
                     return;
                 }
@@ -1925,7 +1926,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
     
-    public void aggroAddPuppet(MapleCharacter player) {
+    public void aggroAddPuppet(Character player) {
         MapleMonsterAggroCoordinator mmac = map.getAggroCoordinator();
         mmac.addPuppetAggro(player);
         
@@ -1936,7 +1937,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         }
     }
     
-    public void aggroRemovePuppet(MapleCharacter player) {
+    public void aggroRemovePuppet(Character player) {
         MapleMonsterAggroCoordinator mmac = map.getAggroCoordinator();
         mmac.removePuppetAggro(player.getId());
         
@@ -1953,12 +1954,12 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * 
      */
     public void aggroUpdateController() {
-        MapleCharacter chrController = this.getActiveController();
+        Character chrController = this.getActiveController();
         if (chrController != null && chrController.isAlive()) {
             return;
         }
         
-        MapleCharacter newController = getNextControllerCandidate();
+        Character newController = getNextControllerCandidate();
         if (newController == null) {    // was a new controller found? (if not no one is on the map)
             return;
         }
@@ -1971,8 +1972,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * puppet nearby on the map it is from...
      * 
      */
-    private void aggroUpdatePuppetController(MapleCharacter newController) {
-        MapleCharacter chrController = this.getActiveController();
+    private void aggroUpdatePuppetController(Character newController) {
+        Character chrController = this.getActiveController();
         boolean updateController = false;
         
         if (chrController != null && chrController.isAlive()) {
@@ -1990,7 +1991,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
             List<Integer> toRemovePuppets = new LinkedList<>();
         
             for (Integer cid : puppetOwners) {
-                MapleCharacter chr = map.getCharacterById(cid);
+                Character chr = map.getCharacterById(cid);
 
                 if (chr != null) {
                     if (isCharacterPuppetInVicinity(chr)) {
@@ -2035,8 +2036,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * specified player is currently not this mob's controller.
      * 
      */
-    public Boolean aggroMoveLifeUpdate(MapleCharacter player) {
-        MapleCharacter chrController = getController();
+    public Boolean aggroMoveLifeUpdate(Character player) {
+        Character chrController = getController();
         if (chrController != null && player.getId() == chrController.getId()) {
             boolean aggro = this.isControllerHasAggro();
             if (aggro) {
@@ -2054,8 +2055,8 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * there is already an active controller for this mob.
      * 
      */
-    public void aggroAutoAggroUpdate(MapleCharacter player) {
-        MapleCharacter chrController = this.getActiveController();
+    public void aggroAutoAggroUpdate(Character player) {
+        Character chrController = this.getActiveController();
         
         if (chrController == null) {
             this.aggroSwitchController(player, true);
@@ -2072,11 +2073,11 @@ public class MapleMonster extends AbstractLoadedMapleLife {
      * target update for the attacker shortly.
      * 
      */
-    public void aggroMonsterDamage(MapleCharacter attacker, int damage) {
+    public void aggroMonsterDamage(Character attacker, int damage) {
         MapleMonsterAggroCoordinator mmac = this.getMapAggroCoordinator();
         mmac.addAggroDamage(this, attacker.getId(), damage);
         
-        MapleCharacter chrController = this.getController();    // aggro based on DPS rather than first-come-first-served, now live after suggestions thanks to MedicOP, Thora, Vcoc
+        Character chrController = this.getController();    // aggro based on DPS rather than first-come-first-served, now live after suggestions thanks to MedicOP, Thora, Vcoc
         if (chrController != attacker) {
             if (this.getMapAggroCoordinator().isLeadingCharacterAggro(this, attacker)) {
                 this.aggroSwitchController(attacker, true);
@@ -2104,7 +2105,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         c.sendPacket(PacketCreator.controlMonster(mob, false, immediateAggro));
     }
     
-    private void aggroRefreshPuppetVisibility(MapleCharacter chrController, MapleSummon puppet) {
+    private void aggroRefreshPuppetVisibility(Character chrController, MapleSummon puppet) {
         // lame patch for client to redirect all aggro to the puppet
         
         List<MapleMonster> puppetControlled = new LinkedList<>();
@@ -2134,7 +2135,7 @@ public class MapleMonster extends AbstractLoadedMapleLife {
         availablePuppetUpdate = false;
         Runnable r = () -> {
             try {
-                MapleCharacter chrController = MapleMonster.this.getActiveController();
+                Character chrController = MapleMonster.this.getActiveController();
                 if (chrController == null) {
                     return;
                 }

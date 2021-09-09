@@ -5,7 +5,7 @@
 
 package client.autoban;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import net.server.Server;
 import tools.FilePrinter;
@@ -18,7 +18,7 @@ import java.util.Map;
  * @author kevintjuh93
  */
 public class AutobanManager {
-    private MapleCharacter chr;
+    private Character chr;
     private Map<AutobanFactory, Integer> points = new HashMap<>();
     private Map<AutobanFactory, Long> lastTime = new HashMap<>();
     private int misses = 0;
@@ -29,7 +29,7 @@ public class AutobanManager {
     private byte[] timestampcounter = new byte[20];
 
 
-    public AutobanManager(MapleCharacter chr) {
+    public AutobanManager(Character chr) {
         this.chr = chr;
     }
 
@@ -58,7 +58,7 @@ public class AutobanManager {
         }
         if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
             // Lets log every single point too.
-            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, MapleCharacter.makeMapleReadable(chr.getName()) + " caused " + fac.name() + " " + reason);
+            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, Character.makeMapleReadable(chr.getName()) + " caused " + fac.name() + " " + reason);
         }
     }
 

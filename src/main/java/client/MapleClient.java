@@ -94,7 +94,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
     private volatile boolean inTransition;
 
     private io.netty.channel.Channel ioChannel;
-    private MapleCharacter player;
+    private Character player;
     private int channel = 1;
     private int accId = -4;
     private boolean loggedIn = false;
@@ -288,11 +288,11 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         return getChannelServer().getEventSM().getEventManager(event);
     }
 
-    public MapleCharacter getPlayer() {
+    public Character getPlayer() {
         return player;
     }
 
-    public void setPlayer(MapleCharacter player) {
+    public void setPlayer(Character player) {
         this.player = player;
     }
 
@@ -304,11 +304,11 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         this.sendPacket(PacketCreator.getCharList(this, server, 0));
     }
 
-    public List<MapleCharacter> loadCharacters(int serverId) {
-        List<MapleCharacter> chars = new ArrayList<>(15);
+    public List<Character> loadCharacters(int serverId) {
+        List<Character> chars = new ArrayList<>(15);
         try {
             for (CharNameAndId cni : loadCharactersInternal(serverId)) {
-                chars.add(MapleCharacter.loadCharFromDB(cni.id, this, false));
+                chars.add(Character.loadCharFromDB(cni.id, this, false));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -1091,7 +1091,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
 
     public boolean deleteCharacter(int cid, int senderAccId) {
         try {
-            MapleCharacter chr = MapleCharacter.loadCharFromDB(cid, this, false);
+            Character chr = Character.loadCharFromDB(cid, this, false);
 
             Integer partyid = chr.getWorldServer().getCharacterPartyid(cid);
             if (partyid != null) {
@@ -1105,7 +1105,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
                 this.setPlayer(null);
             }
 
-            return MapleCharacter.deleteCharFromDB(chr, senderAccId);
+            return Character.deleteCharFromDB(chr, senderAccId);
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -1221,7 +1221,7 @@ public class MapleClient extends ChannelInboundHandlerAdapter {
         }
 
         for (World w : Server.getInstance().getWorlds()) {
-            for (MapleCharacter chr : w.getPlayerStorage().getAllCharacters()) {
+            for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                 if (accid == chr.getAccountID()) {
                     FilePrinter.print(FilePrinter.EXPLOITS, "Player:  " + chr.getName() + " has been removed from " + GameConstants.WORLD_NAMES[w.getId()] + ". Possible Dupe attempt.");
                     chr.getClient().forceDisconnect();

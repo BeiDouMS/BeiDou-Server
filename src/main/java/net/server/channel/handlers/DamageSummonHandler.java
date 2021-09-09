@@ -22,7 +22,7 @@
 package net.server.channel.handlers;
 
 import client.BuffStat;
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -38,7 +38,7 @@ public final class DamageSummonHandler extends AbstractPacketHandler {
         int damage = p.readInt();
         int monsterIdFrom = p.readInt();
         
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MapleMapObject mmo = player.getMap().getMapObject(oid);
         
         if(mmo != null && mmo instanceof MapleSummon) {

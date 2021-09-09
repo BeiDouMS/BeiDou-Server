@@ -158,7 +158,7 @@ public class MapleFamily {
 
     public void broadcast(Packet packet, int ignoreID) {
         for(MapleFamilyEntry entry : members.values()) {
-            MapleCharacter chr = entry.getChr();
+            Character chr = entry.getChr();
             if(chr != null) {
                 if(chr.getId() == ignoreID) continue;
                 chr.sendPacket(packet);
@@ -168,7 +168,7 @@ public class MapleFamily {
     
     public void broadcastFamilyInfoUpdate() {
         for(MapleFamilyEntry entry : members.values()) {
-            MapleCharacter chr = entry.getChr();
+            Character chr = entry.getChr();
             if(chr != null) {
                 chr.sendPacket(PacketCreator.getFamilyInfo(entry));
             }

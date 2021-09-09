@@ -19,7 +19,7 @@
 */
 package net.server.services.task.channel;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
@@ -70,7 +70,7 @@ public class FaceExpressionService extends BaseService {
         disposeLocks();
     }
     
-    public void registerFaceExpression(final MapleMap map, final MapleCharacter chr, int emote) {
+    public void registerFaceExpression(final MapleMap map, final Character chr, int emote) {
         int lockid = getChannelSchedulerIndex(map.getId());
         
         Runnable cancelAction = () -> {
@@ -93,7 +93,7 @@ public class FaceExpressionService extends BaseService {
         map.broadcastMessage(chr, PacketCreator.facialExpression(chr, emote), false);
     }
     
-    public void unregisterFaceExpression(int mapid, MapleCharacter chr) {
+    public void unregisterFaceExpression(int mapid, Character chr) {
         int lockid = getChannelSchedulerIndex(mapid);
         
         faceLock[lockid].lock();

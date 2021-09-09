@@ -19,7 +19,7 @@
 */
 package net.server.coordinator.partysearch;
 
-import client.MapleCharacter;
+import client.Character;
 
 import java.lang.ref.WeakReference;
 
@@ -29,11 +29,11 @@ import java.lang.ref.WeakReference;
  */
 public class PartySearchCharacter {
     
-    private WeakReference<MapleCharacter> player;
+    private WeakReference<Character> player;
     private int level;
     private boolean queued;
     
-    public PartySearchCharacter(MapleCharacter chr) {
+    public PartySearchCharacter(Character chr) {
         player = new WeakReference(chr);
         level = chr.getLevel();
         queued = true;
@@ -41,12 +41,12 @@ public class PartySearchCharacter {
     
     @Override
     public String toString() {
-        MapleCharacter chr = player.get();
+        Character chr = player.get();
         return chr == null ? "[empty]" : chr.toString();
     }
     
-    public MapleCharacter callPlayer(int leaderid, int callerMapid) {
-        MapleCharacter chr = player.get();
+    public Character callPlayer(int leaderid, int callerMapid) {
+        Character chr = player.get();
         if (chr == null || !MaplePartySearchCoordinator.isInVicinity(callerMapid, chr.getMapId())) {
             return null;
         }
@@ -63,7 +63,7 @@ public class PartySearchCharacter {
         }
     }
     
-    public MapleCharacter getPlayer() {
+    public Character getPlayer() {
         return player.get();
     }
     

@@ -21,10 +21,10 @@
 */
 package net.server.guild;
 
-import client.MapleCharacter;
+import client.Character;
 
 public class MapleGuildCharacter {
-    private MapleCharacter character;
+    private Character character;
     private int level;
     private int id;
     private int world, channel;
@@ -35,7 +35,7 @@ public class MapleGuildCharacter {
     private boolean online;
     private String name;
 
-    public MapleGuildCharacter(MapleCharacter chr) {
+    public MapleGuildCharacter(Character chr) {
         this.character = chr;
         this.name = chr.getName();
         this.level = chr.getLevel();
@@ -49,7 +49,7 @@ public class MapleGuildCharacter {
         this.allianceRank = chr.getAllianceRank();
     }
 
-    public MapleGuildCharacter(MapleCharacter chr, int _id, int _lv, String _name, int _channel, int _world, int _job, int _rank, int _gid, boolean _on, int _allianceRank) {
+    public MapleGuildCharacter(Character chr, int _id, int _lv, String _name, int _channel, int _world, int _job, int _rank, int _gid, boolean _on, int _allianceRank) {
         this.character = chr;
         this.level = _lv;
         this.id = _id;
@@ -65,11 +65,11 @@ public class MapleGuildCharacter {
         this.allianceRank = _allianceRank;
     }
     
-    public void setCharacter(MapleCharacter ch) {
+    public void setCharacter(Character ch) {
         this.character = ch;
     }
     
-    public MapleCharacter getCharacter() {
+    public Character getCharacter() {
         return character;
     }
 

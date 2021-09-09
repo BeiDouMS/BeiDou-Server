@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.SkillFactory;
 import tools.PacketCreator;
@@ -33,12 +33,12 @@ import java.awt.*;
  * @author Jan
  */
 public class MapleSummon extends AbstractAnimatedMapleMapObject {
-    private MapleCharacter owner;
+    private Character owner;
     private byte skillLevel;
     private int skill, hp;
     private SummonMovementType movementType;
 
-    public MapleSummon(MapleCharacter owner, int skill, Point pos, SummonMovementType movementType) {
+    public MapleSummon(Character owner, int skill, Point pos, SummonMovementType movementType) {
         this.owner = owner;
         this.skill = skill;
         this.skillLevel = owner.getSkillLevel(SkillFactory.getSkill(skill));
@@ -58,7 +58,7 @@ public class MapleSummon extends AbstractAnimatedMapleMapObject {
         client.sendPacket(PacketCreator.removeSummon(this, true));
     }
 
-    public MapleCharacter getOwner() {
+    public Character getOwner() {
         return owner;
     }
 

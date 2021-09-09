@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.packet.Packet;
 import net.server.Server;
@@ -37,8 +37,8 @@ import java.util.List;
  * @author Ronan (HeavenMS)
  */
 public class MapleMiniGame extends AbstractMapleMapObject {
-    private MapleCharacter owner;
-    private MapleCharacter visitor;
+    private Character owner;
+    private Character visitor;
     private String password;
     private MiniGameType GameType = MiniGameType.UNDEFINED;
     private int piecetype;
@@ -73,7 +73,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         WIN, LOSS, TIE
     }
     
-    public MapleMiniGame(MapleCharacter owner, String description, String password) {
+    public MapleMiniGame(Character owner, String description, String password) {
         this.owner = owner;
         this.description = description;
         this.password = password;
@@ -91,11 +91,11 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         return visitor == null;
     }
 
-    public boolean isOwner(MapleCharacter chr) {
+    public boolean isOwner(Character chr) {
         return owner.equals(chr);
     }
     
-    public void addVisitor(MapleCharacter challenger) {
+    public void addVisitor(Character challenger) {
         visitor = challenger;
         if (lastvisitor != challenger.getId()) {
             ownerscore = 0;
@@ -106,7 +106,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
             lastvisitor = challenger.getId();
         }
         
-        MapleCharacter owner = this.getOwner();
+        Character owner = this.getOwner();
         if (GameType == MiniGameType.OMOK) {
             owner.sendPacket(PacketCreator.getMiniGameNewVisitor(this, challenger, 1));
             owner.getMap().broadcastMessage(PacketCreator.addOmokBox(owner, 2, 0));
@@ -133,7 +133,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         owner = null;
     }
 
-    public void removeVisitor(boolean forceClose, MapleCharacter challenger) {
+    public void removeVisitor(boolean forceClose, Character challenger) {
         if (visitor == challenger) {
             if (forceClose) {
                 visitor.sendPacket(PacketCreator.getMiniGameClose(true, 4));
@@ -151,7 +151,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         }
     }
 
-    public boolean isVisitor(MapleCharacter challenger) {
+    public boolean isVisitor(Character challenger) {
         return visitor == challenger;
     }
 
@@ -205,7 +205,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         visitorquit = false;
     }
     
-    public void setQuitAfterGame(MapleCharacter player, boolean quit) {
+    public void setQuitAfterGame(Character player, boolean quit) {
         if (isOwner(player)) {
             ownerquit = quit;
         } else {
@@ -217,7 +217,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         return inprogress != 0;
     }
     
-    public void denyTie(MapleCharacter chr) {
+    public void denyTie(Character chr) {
         if (this.isOwner(chr)) {
             inprogress |= (1 << 1);
         } else {
@@ -225,7 +225,7 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         }
     }
     
-    public boolean isTieDenied(MapleCharacter chr) {
+    public boolean isTieDenied(Character chr) {
         if (this.isOwner(chr)) {
             return ((inprogress >> 2) % 2) == 1;
         } else {
@@ -402,15 +402,15 @@ public class MapleMiniGame extends AbstractMapleMapObject {
         c.sendPacket(PacketCreator.getMatchCard(c, this, isOwner(c.getPlayer()), type));
     }
 
-    public MapleCharacter getOwner() {
+    public Character getOwner() {
         return owner;
     }
 
-    public MapleCharacter getVisitor() {
+    public Character getVisitor() {
         return visitor;
     }
 
-    public void setPiece(int move1, int move2, int type, MapleCharacter chr) {
+    public void setPiece(int move1, int move2, int type, Character chr) {
         int slot = move2 * 15 + move1 + 1;
         if (piece[slot] == 0) {
             piece[slot] = type;

@@ -21,18 +21,19 @@
  */
 package server.quest.actions;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleJob;
 import client.Skill;
 import client.SkillFactory;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -71,7 +72,7 @@ public class SkillAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void run(MapleCharacter chr, Integer extSelection) {
+	public void run(Character chr, Integer extSelection) {
 		for(SkillData skill : skillData.values()) {
 			Skill skillObject = SkillFactory.getSkill(skill.getId());
                         if(skillObject == null) continue;

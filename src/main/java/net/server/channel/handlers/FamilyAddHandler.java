@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -42,8 +42,8 @@ public final class FamilyAddHandler extends AbstractPacketHandler {
             return;
         }
         String toAdd = p.readString();
-        MapleCharacter addChr = c.getChannelServer().getPlayerStorage().getCharacterByName(toAdd);
-        MapleCharacter chr = c.getPlayer();
+        Character addChr = c.getChannelServer().getPlayerStorage().getCharacterByName(toAdd);
+        Character chr = c.getPlayer();
         if(addChr == null) {
             c.sendPacket(PacketCreator.sendFamilyMessage(65, 0));
         } else if(addChr == chr) { //only possible through packet editing/client editing i think?

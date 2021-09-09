@@ -21,7 +21,7 @@
 */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -35,7 +35,7 @@ import tools.PacketCreator;
 public final class MesoDropHandler extends AbstractPacketHandler {
         @Override
         public final void handlePacket(InPacket p, MapleClient c) {
-            MapleCharacter player = c.getPlayer();
+            Character player = c.getPlayer();
             if (!player.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;

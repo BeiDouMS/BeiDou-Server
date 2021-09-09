@@ -20,7 +20,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -51,7 +51,7 @@ public final class TransferNameHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if(chr.getLevel() < 10) {
             c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;

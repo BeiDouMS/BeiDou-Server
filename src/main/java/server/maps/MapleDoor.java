@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import config.YamlConfig;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
@@ -47,7 +47,7 @@ public class MapleDoor {
     private MapleDoorObject townDoor;
     private MapleDoorObject areaDoor;
     
-    public MapleDoor(MapleCharacter owner, Point targetPosition) {
+    public MapleDoor(Character owner, Point targetPosition) {
         this.ownerId = owner.getId();
         this.target = owner.getMap();
         
@@ -79,7 +79,7 @@ public class MapleDoor {
         }
     }
     
-    public void updateDoorPortal(MapleCharacter owner) {
+    public void updateDoorPortal(Character owner) {
         int slot = owner.fetchDoorSlot();
         
         MaplePortal nextTownPortal = getTownDoorPortal(slot);
@@ -89,25 +89,25 @@ public class MapleDoor {
         }
     }
     
-    private void broadcastRemoveDoor(MapleCharacter owner) {
+    private void broadcastRemoveDoor(Character owner) {
         MapleDoorObject areaDoor = this.getAreaDoor();
         MapleDoorObject townDoor = this.getTownDoor();
 
         MapleMap target = this.getTarget();
         MapleMap town = this.getTown();
 
-        Collection<MapleCharacter> targetChars = target.getCharacters();
-        Collection<MapleCharacter> townChars = town.getCharacters();
+        Collection<Character> targetChars = target.getCharacters();
+        Collection<Character> townChars = town.getCharacters();
         
         target.removeMapObject(areaDoor);
         town.removeMapObject(townDoor);
 
-        for (MapleCharacter chr : targetChars) {
+        for (Character chr : targetChars) {
             areaDoor.sendDestroyData(chr.getClient());
             chr.removeVisibleMapObject(areaDoor);
         }
 
-        for (MapleCharacter chr : townChars) {
+        for (Character chr : townChars) {
             townDoor.sendDestroyData(chr.getClient());
             chr.removeVisibleMapObject(townDoor);
         }
@@ -115,7 +115,7 @@ public class MapleDoor {
         owner.removePartyDoor(false);
         
         if (this.getTownPortal().getId() == 0x80) {
-            for (MapleCharacter chr : townChars) {
+            for (Character chr : townChars) {
                 MapleDoor door = chr.getMainTownDoor();
                 if (door != null) {
                     townDoor.sendSpawnData(chr.getClient());
@@ -125,7 +125,7 @@ public class MapleDoor {
         }
     }
     
-    public static void attemptRemoveDoor(final MapleCharacter owner) {
+    public static void attemptRemoveDoor(final Character owner) {
         final MapleDoor destroyDoor = owner.getPlayerDoor();
         if (destroyDoor != null && destroyDoor.dispose()) {
             long effectTimeLeft = 3000 - destroyDoor.getElapsedDeployTime();   // portal deployment effect duration

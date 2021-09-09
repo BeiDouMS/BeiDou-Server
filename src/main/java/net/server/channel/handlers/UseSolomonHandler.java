@@ -21,7 +21,7 @@
  */
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -49,7 +49,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
         
         if (c.tryacquireClient()) {
             try {
-                MapleCharacter chr = c.getPlayer();
+                Character chr = c.getPlayer();
                 Inventory inv = chr.getInventory(InventoryType.USE);
                 inv.lockInventory();
                 try {

@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleStat;
 import client.command.Command;
@@ -37,7 +37,7 @@ public class FaceCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !face [<playername>] <faceid>");
             return;
@@ -60,7 +60,7 @@ public class FaceCommand extends Command {
                     player.yellowMessage("Face id '" + params[1] + "' does not exist.");
                 }
 
-                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
+                Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
                 if (victim == null) {
                     victim.setFace(itemId);
                     victim.updateSingleStat(MapleStat.FACE, itemId);

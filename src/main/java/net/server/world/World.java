@@ -25,7 +25,7 @@ import client.BuddyList;
 import client.BuddyList.BuddyAddResult;
 import client.BuddyList.BuddyOperation;
 import client.BuddylistEntry;
-import client.MapleCharacter;
+import client.Character;
 import client.MapleFamily;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -95,7 +95,7 @@ public class World {
     private MonitoredReadLock chnRLock = MonitoredReadLockFactory.createLock(chnLock);
     private MonitoredWriteLock chnWLock = MonitoredWriteLockFactory.createLock(chnLock);
     
-    private Map<Integer, SortedMap<Integer, MapleCharacter>> accountChars = new HashMap<>();
+    private Map<Integer, SortedMap<Integer, Character>> accountChars = new HashMap<>();
     private Map<Integer, MapleStorage> accountStorages = new HashMap<>();
     private MonitoredReentrantLock accountCharsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_CHARS, true);
     
@@ -140,7 +140,7 @@ public class World {
     private ScheduledFuture<?> timedMapObjectsSchedule;
     private MonitoredReentrantLock timedMapObjectLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MAPOBJS, true);
     
-    private Map<MapleCharacter, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
+    private Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
     
     private ScheduledFuture<?> charactersSchedule;
     private ScheduledFuture<?> marriagesSchedule;
@@ -299,14 +299,14 @@ public class World {
     }
 
     public void setExpRate(int exp) {
-        Collection<MapleCharacter> list = getPlayerStorage().getAllCharacters();
+        Collection<Character> list = getPlayerStorage().getAllCharacters();
         
-        for(MapleCharacter chr : list) {
+        for(Character chr : list) {
             if(!chr.isLoggedin()) continue;
             chr.revertWorldRates();
 	}
         this.exprate = exp;
-        for(MapleCharacter chr : list) {
+        for(Character chr : list) {
             if(!chr.isLoggedin()) continue;
             chr.setWorldRates();
         }
@@ -317,14 +317,14 @@ public class World {
     }
 
     public void setDropRate(int drop) {
-        Collection<MapleCharacter> list = getPlayerStorage().getAllCharacters();
+        Collection<Character> list = getPlayerStorage().getAllCharacters();
         
-        for(MapleCharacter chr : list) {
+        for(Character chr : list) {
             if(!chr.isLoggedin()) continue;
             chr.revertWorldRates();
 	}
         this.droprate = drop;
-        for(MapleCharacter chr : list) {
+        for(Character chr : list) {
             if(!chr.isLoggedin()) continue;
             chr.setWorldRates();
         }
@@ -343,14 +343,14 @@ public class World {
     }
 
     public void setMesoRate(int meso) {
-        Collection<MapleCharacter> list = getPlayerStorage().getAllCharacters();
+        Collection<Character> list = getPlayerStorage().getAllCharacters();
 
-        for(MapleCharacter chr : list) {
+        for(Character chr : list) {
             if(!chr.isLoggedin()) continue;
             chr.revertWorldRates();
 	}
         this.mesorate = meso;
-        for(MapleCharacter chr : list) {
+        for(Character chr : list) {
             if(!chr.isLoggedin()) continue;
             chr.setWorldRates();
         }
@@ -384,9 +384,9 @@ public class World {
         this.fishingrate = quest;
     }
     
-    public void loadAccountCharactersView(Integer accountId, List<MapleCharacter> chars) {
-        SortedMap<Integer, MapleCharacter> charsMap = new TreeMap<>();
-        for(MapleCharacter chr : chars) {
+    public void loadAccountCharactersView(Integer accountId, List<Character> chars) {
+        SortedMap<Integer, Character> charsMap = new TreeMap<>();
+        for(Character chr : chars) {
             charsMap.put(chr.getId(), chr);
         }
         
@@ -398,7 +398,7 @@ public class World {
         }
     }
     
-    public void registerAccountCharacterView(Integer accountId, MapleCharacter chr) {
+    public void registerAccountCharacterView(Integer accountId, Character chr) {
         accountCharsLock.lock();
         try {
             accountChars.get(accountId).put(chr.getId(), chr);
@@ -419,7 +419,7 @@ public class World {
     public void clearAccountCharacterView(Integer accountId) {
         accountCharsLock.lock();
         try {
-            SortedMap<Integer, MapleCharacter> accChars = accountChars.remove(accountId);
+            SortedMap<Integer, Character> accChars = accountChars.remove(accountId);
             if (accChars != null) {
                 accChars.clear();
             }
@@ -457,8 +457,8 @@ public class World {
         return accountStorages.get(accountId);
     }
     
-    private static List<Entry<Integer, SortedMap<Integer, MapleCharacter>>> getSortedAccountCharacterView(Map<Integer, SortedMap<Integer, MapleCharacter>> map) {
-        List<Entry<Integer, SortedMap<Integer, MapleCharacter>>> list = new ArrayList<>(map.size());
+    private static List<Entry<Integer, SortedMap<Integer, Character>>> getSortedAccountCharacterView(Map<Integer, SortedMap<Integer, Character>> map) {
+        List<Entry<Integer, SortedMap<Integer, Character>>> list = new ArrayList<>(map.size());
         list.addAll(map.entrySet());
         
         list.sort((o1, o2) -> o1.getKey() - o2.getKey());
@@ -466,14 +466,14 @@ public class World {
         return list;
     }
     
-    public List<MapleCharacter> loadAndGetAllCharactersView() {
+    public List<Character> loadAndGetAllCharactersView() {
         Server.getInstance().loadAllAccountsCharactersView();
         return getAllCharactersView();
     }
     
-    public List<MapleCharacter> getAllCharactersView() {    // sorting by accountid, charid
-        List<MapleCharacter> chrList = new LinkedList<>();
-        Map<Integer, SortedMap<Integer, MapleCharacter>> accChars;
+    public List<Character> getAllCharactersView() {    // sorting by accountid, charid
+        List<Character> chrList = new LinkedList<>();
+        Map<Integer, SortedMap<Integer, Character>> accChars;
         
         accountCharsLock.lock();
         try {
@@ -482,19 +482,19 @@ public class World {
             accountCharsLock.unlock();
         }
         
-        for (Entry<Integer, SortedMap<Integer, MapleCharacter>> e : getSortedAccountCharacterView(accChars)) {
+        for (Entry<Integer, SortedMap<Integer, Character>> e : getSortedAccountCharacterView(accChars)) {
             chrList.addAll(e.getValue().values());
         }
         
         return chrList;
     }
     
-    public List<MapleCharacter> getAccountCharactersView(Integer accountId) {
-        List<MapleCharacter> chrList;
+    public List<Character> getAccountCharactersView(Integer accountId) {
+        List<Character> chrList;
                 
         accountCharsLock.lock();
         try {
-            SortedMap<Integer, MapleCharacter> accChars = accountChars.get(accountId);
+            SortedMap<Integer, Character> accChars = accountChars.get(accountId);
             
             if(accChars != null) {
                 chrList = new LinkedList<>(accChars.values());
@@ -521,11 +521,11 @@ public class World {
         return partySearch;
     }
     
-    public void addPlayer(MapleCharacter chr) {
+    public void addPlayer(Character chr) {
         players.addPlayer(chr);
     }
     
-    public void removePlayer(MapleCharacter chr) {
+    public void removePlayer(Character chr) {
         Channel cserv = chr.getClient().getChannelServer();
         
         if(cserv != null) {
@@ -657,7 +657,7 @@ public class World {
     }
 
     public void setGuildAndRank(int cid, int guildid, int rank) {
-        MapleCharacter mc = getPlayerStorage().getCharacterById(cid);
+        Character mc = getPlayerStorage().getCharacterById(cid);
         if (mc == null) {
             return;
         }
@@ -693,7 +693,7 @@ public class World {
     }
 
     public void sendPacket(List<Integer> targetIds, Packet packet, int exception) {
-        MapleCharacter chr;
+        Character chr;
         for (int i : targetIds) {
             if (i == exception) {
                 continue;
@@ -904,7 +904,7 @@ public class World {
         updateCharacterParty(party, operation, target, partyMembers);
         
         for (MaplePartyCharacter partychar : partyMembers) {
-            MapleCharacter chr = getPlayerStorage().getCharacterById(partychar.getId());
+            Character chr = getPlayerStorage().getCharacterById(partychar.getId());
             if (chr != null) {
                 if (operation == PartyOperation.DISBAND) {
                     chr.setParty(null);
@@ -919,7 +919,7 @@ public class World {
         switch (operation) {
             case LEAVE:
             case EXPEL:
-                MapleCharacter chr = getPlayerStorage().getCharacterById(target.getId());
+                Character chr = getPlayerStorage().getCharacterById(target.getId());
                 if (chr != null) {
                     chr.sendPacket(PacketCreator.updateParty(chr.getClient().getChannel(), party, operation, target));
                     chr.setParty(null);
@@ -951,7 +951,7 @@ public class World {
                 party.updateMember(target);
                 break;
             case CHANGE_LEADER:
-                MapleCharacter mc = party.getLeader().getPlayer();
+                Character mc = party.getLeader().getPlayer();
                 if (mc != null) {
                     EventInstanceManager eim = mc.getEventInstance();
 
@@ -983,7 +983,7 @@ public class World {
         if(party == null) return;
         
         for(MaplePartyCharacter mpc : party.getMembers()) {
-            MapleCharacter mc = mpc.getPlayer();
+            Character mc = mpc.getPlayer();
             if(mc != null) {
                 MapleMap map = mc.getMap();
                 if(map != null) {
@@ -995,7 +995,7 @@ public class World {
     
     public int find(String name) {
         int channel = -1;
-        MapleCharacter chr = getPlayerStorage().getCharacterByName(name);
+        Character chr = getPlayerStorage().getCharacterByName(name);
         if (chr != null) {
             channel = chr.getClient().getChannel();
         }
@@ -1004,7 +1004,7 @@ public class World {
 
     public int find(int id) {
         int channel = -1;
-        MapleCharacter chr = getPlayerStorage().getCharacterById(id);
+        Character chr = getPlayerStorage().getCharacterById(id);
         if (chr != null) {
             channel = chr.getClient().getChannel();
         }
@@ -1014,7 +1014,7 @@ public class World {
     public void partyChat(MapleParty party, String chattext, String namefrom) {
         for (MaplePartyCharacter partychar : party.getMembers()) {
             if (!(partychar.getName().equals(namefrom))) {
-                MapleCharacter chr = getPlayerStorage().getCharacterByName(partychar.getName());
+                Character chr = getPlayerStorage().getCharacterByName(partychar.getName());
                 if (chr != null) {
                     chr.sendPacket(PacketCreator.multiChat(namefrom, chattext, 1));
                 }
@@ -1025,7 +1025,7 @@ public class World {
     public void buddyChat(int[] recipientCharacterIds, int cidFrom, String nameFrom, String chattext) {
         PlayerStorage playerStorage = getPlayerStorage();
         for (int characterId : recipientCharacterIds) {
-            MapleCharacter chr = playerStorage.getCharacterById(characterId);
+            Character chr = playerStorage.getCharacterById(characterId);
             if (chr != null) {
                 if (chr.getBuddylist().containsVisible(cidFrom)) {
                     chr.sendPacket(PacketCreator.multiChat(nameFrom, chattext, 0));
@@ -1060,11 +1060,11 @@ public class World {
 
     public void messengerInvite(String sender, int messengerid, String target, int fromchannel) {
         if (isConnected(target)) {
-            MapleCharacter targetChr = getPlayerStorage().getCharacterByName(target);
+            Character targetChr = getPlayerStorage().getCharacterByName(target);
             if (targetChr != null) {
                 MapleMessenger messenger = targetChr.getMessenger();
                 if (messenger == null) {
-                    MapleCharacter from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
+                    Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
                     if (from != null) {
                         if (MapleInviteCoordinator.createInvite(InviteType.MESSENGER, from, messengerid, targetChr.getId())) {
                             targetChr.sendPacket(PacketCreator.messengerInvite(sender, messengerid));
@@ -1074,7 +1074,7 @@ public class World {
                         }
                     }
                 } else {
-                    MapleCharacter from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
+                    Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(sender);
                     from.sendPacket(PacketCreator.messengerChat(sender + " : " + target + " is already using Maple Messenger"));
                 }
             }
@@ -1083,12 +1083,12 @@ public class World {
 
     public void addMessengerPlayer(MapleMessenger messenger, String namefrom, int fromchannel, int position) {
     	for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
-    		MapleCharacter chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
+    		Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
     		if(chr == null){
     			continue;
     		}
     		if (!messengerchar.getName().equals(namefrom)) {
-    			MapleCharacter from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(namefrom);
+    			Character from = getChannel(fromchannel).getPlayerStorage().getCharacterByName(namefrom);
     			chr.sendPacket(PacketCreator.addMessengerPlayer(namefrom, from, position, (byte) (fromchannel - 1)));
     			from.sendPacket(PacketCreator.addMessengerPlayer(chr.getName(), chr, messengerchar.getPosition(), (byte) (messengerchar.getChannel() - 1)));
     		} else {
@@ -1099,7 +1099,7 @@ public class World {
 
     public void removeMessengerPlayer(MapleMessenger messenger, int position) {
         for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
-            MapleCharacter chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
+            Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
             if (chr != null) {
                 chr.sendPacket(PacketCreator.removeMessengerPlayer(position));
             }
@@ -1112,7 +1112,7 @@ public class World {
     	String to2 = "";
         for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
             if (!(messengerchar.getName().equals(namefrom))) {
-                MapleCharacter chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
+                Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
                 if (chr != null) {
                     chr.sendPacket(PacketCreator.messengerChat(chattext));
                     if (to1.equals("")){
@@ -1127,9 +1127,9 @@ public class World {
         }
     }
 
-    public void declineChat(String sender, MapleCharacter player) {
+    public void declineChat(String sender, Character player) {
         if (isConnected(sender)) {
-            MapleCharacter senderChr = getPlayerStorage().getCharacterByName(sender);
+            Character senderChr = getPlayerStorage().getCharacterByName(sender);
             if (senderChr != null && senderChr.getMessenger() != null) {
                 if (MapleInviteCoordinator.answerInvite(InviteType.MESSENGER, player.getId(), senderChr.getMessenger().getId(), false).result == InviteResult.DENIED) {
                     senderChr.sendPacket(PacketCreator.messengerNote(player.getName(), 5, 0));
@@ -1148,7 +1148,7 @@ public class World {
         for (MapleMessengerCharacter messengerchar : messenger.getMembers()) {
             Channel ch = getChannel(fromchannel);
             if (!(messengerchar.getName().equals(namefrom))) {
-                MapleCharacter chr = ch.getPlayerStorage().getCharacterByName(messengerchar.getName());
+                Character chr = ch.getPlayerStorage().getCharacterByName(messengerchar.getName());
                 if (chr != null) {
                     chr.sendPacket(PacketCreator.updateMessengerPlayer(namefrom, getChannel(fromchannel).getPlayerStorage().getCharacterByName(namefrom), position, (byte) (fromchannel - 1)));
                 }
@@ -1193,7 +1193,7 @@ public class World {
     }
 
     public BuddyAddResult requestBuddyAdd(String addName, int channelFrom, int cidFrom, String nameFrom) {
-        MapleCharacter addChar = getPlayerStorage().getCharacterByName(addName);
+        Character addChar = getPlayerStorage().getCharacterByName(addName);
         if (addChar != null) {
             BuddyList buddylist = addChar.getBuddylist();
             if (buddylist.isFull()) {
@@ -1209,7 +1209,7 @@ public class World {
     }
 
     public void buddyChanged(int cid, int cidFrom, String name, int channel, BuddyOperation operation) {
-        MapleCharacter addChar = getPlayerStorage().getCharacterById(cid);
+        Character addChar = getPlayerStorage().getCharacterById(cid);
         if (addChar != null) {
             BuddyList buddylist = addChar.getBuddylist();
             switch (operation) {
@@ -1240,7 +1240,7 @@ public class World {
     private void updateBuddies(int characterId, int channel, int[] buddies, boolean offline) {
         PlayerStorage playerStorage = getPlayerStorage();
         for (int buddy : buddies) {
-            MapleCharacter chr = playerStorage.getCharacterById(buddy);
+            Character chr = playerStorage.getCharacterById(buddy);
             if (chr != null) {
                 BuddylistEntry ble = chr.getBuddylist().get(characterId);
                 if (ble != null && ble.isVisible()) {
@@ -1259,7 +1259,7 @@ public class World {
         }
     }
     
-    private static Integer getPetKey(MapleCharacter chr, byte petSlot) {    // assuming max 3 pets
+    private static Integer getPetKey(Character chr, byte petSlot) {    // assuming max 3 pets
         return (chr.getId() << 2) + petSlot;
     }
     
@@ -1396,7 +1396,7 @@ public class World {
         return cashLeaderboards;
     }
     
-    public void registerPetHunger(MapleCharacter chr, byte petSlot) {
+    public void registerPetHunger(Character chr, byte petSlot) {
         if(chr.isGM() && YamlConfig.config.server.GM_PETS_NEVER_HUNGRY || YamlConfig.config.server.PETS_NEVER_HUNGRY) {
             return;
         }
@@ -1415,7 +1415,7 @@ public class World {
         }
     }
     
-    public void unregisterPetHunger(MapleCharacter chr, byte petSlot) {
+    public void unregisterPetHunger(Character chr, byte petSlot) {
         Integer key = getPetKey(chr, petSlot);
         
         activePetsLock.lock();
@@ -1438,7 +1438,7 @@ public class World {
         }
         
         for(Map.Entry<Integer, Integer> dp: deployedPets.entrySet()) {
-            MapleCharacter chr = this.getPlayerStorage().getCharacterById(dp.getKey() / 4);
+            Character chr = this.getPlayerStorage().getCharacterById(dp.getKey() / 4);
             if(chr == null || !chr.isLoggedinWorld()) continue;
             
             int dpVal = dp.getValue() + 1;
@@ -1456,7 +1456,7 @@ public class World {
         }
     }
     
-    public void registerMountHunger(MapleCharacter chr) {
+    public void registerMountHunger(Character chr) {
         if(chr.isGM() && YamlConfig.config.server.GM_PETS_NEVER_HUNGRY || YamlConfig.config.server.PETS_NEVER_HUNGRY) {
             return;
         }
@@ -1474,7 +1474,7 @@ public class World {
         }
     }
     
-    public void unregisterMountHunger(MapleCharacter chr) {
+    public void unregisterMountHunger(Character chr) {
         Integer key = chr.getId();
         
         activeMountsLock.lock();
@@ -1496,7 +1496,7 @@ public class World {
         }
         
         for(Map.Entry<Integer, Integer> dp: deployedMounts.entrySet()) {
-            MapleCharacter chr = this.getPlayerStorage().getCharacterById(dp.getKey());
+            Character chr = this.getPlayerStorage().getCharacterById(dp.getKey());
             if(chr == null || !chr.isLoggedinWorld()) continue;
             
             int dpVal = dp.getValue() + 1;
@@ -1720,7 +1720,7 @@ public class World {
         
         if(!toRemove.isEmpty()) {
             for(Integer chrid : toRemove) {
-                MapleCharacter chr = players.getCharacterById(chrid);
+                Character chr = players.getCharacterById(chrid);
 
                 if(chr != null && chr.isLoggedinWorld()) {
                     chr.sendPacket(PacketCreator.serverMessage(chr.getClient().getChannelServer().getServerMessage()));
@@ -1808,7 +1808,7 @@ public class World {
     }
 
     public void broadcastPacket(Packet packet) {
-        for (MapleCharacter chr : players.getAllCharacters()) {
+        for (Character chr : players.getAllCharacters()) {
             chr.sendPacket(packet);
         }
     }
@@ -1949,12 +1949,12 @@ public class World {
     }
     
     public void dropMessage(int type, String message) {
-        for (MapleCharacter player : getPlayerStorage().getAllCharacters()) {
+        for (Character player : getPlayerStorage().getAllCharacters()) {
             player.dropMessage(type, message);
         }
     }
     
-    public boolean registerFisherPlayer(MapleCharacter chr, int baitLevel) {
+    public boolean registerFisherPlayer(Character chr, int baitLevel) {
         synchronized (fishingAttempters) {
             if (fishingAttempters.containsKey(chr)) {
                 return false;
@@ -1965,7 +1965,7 @@ public class World {
         }
     }
     
-    public int unregisterFisherPlayer(MapleCharacter chr) {
+    public int unregisterFisherPlayer(Character chr) {
         Integer baitLevel = fishingAttempters.remove(chr);
         if (baitLevel != null) {
             return baitLevel;
@@ -1979,13 +1979,13 @@ public class World {
         double yearLikelihood = fishingLikelihoods[0], timeLikelihood = fishingLikelihoods[1];
         
         if (!fishingAttempters.isEmpty()) {
-            List<MapleCharacter> fishingAttemptersList;
+            List<Character> fishingAttemptersList;
             
             synchronized (fishingAttempters) {
                 fishingAttemptersList = new ArrayList<>(fishingAttempters.keySet());
             }
             
-            for (MapleCharacter chr : fishingAttemptersList) {
+            for (Character chr : fishingAttemptersList) {
                 int baitLevel = unregisterFisherPlayer(chr);
                 Fishing.doFishing(chr, baitLevel, yearLikelihood, timeLikelihood);
             }

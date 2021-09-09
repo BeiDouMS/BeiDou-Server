@@ -21,7 +21,7 @@
 */
 package server.events.gm;
 
-import client.MapleCharacter;
+import client.Character;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -51,7 +51,7 @@ public final class MapleOxQuiz {
         this.question = 1;
     }
 
-    private boolean isCorrectAnswer(MapleCharacter chr, int answer) {
+    private boolean isCorrectAnswer(Character chr, int answer) {
         double x = chr.getPosition().getX();
         double y = chr.getPosition().getY();
         if ((x > -234 && y > -26 && answer == 0) || (x < -234 && y > -26 && answer == 1)) {
@@ -63,7 +63,7 @@ public final class MapleOxQuiz {
 
     public void sendQuestion() {
         int gm = 0;
-        for (MapleCharacter mc : map.getCharacters()) {
+        for (Character mc : map.getCharacters()) {
             if (mc.gmLevel() > 1) {
                 gm++;
             }
@@ -72,9 +72,9 @@ public final class MapleOxQuiz {
         map.broadcastMessage(PacketCreator.showOXQuiz(round, question, true));
         TimerManager.getInstance().schedule(() -> {
             map.broadcastMessage(PacketCreator.showOXQuiz(round, question, true));
-            List<MapleCharacter> chars = new ArrayList<>(map.getCharacters());
+            List<Character> chars = new ArrayList<>(map.getCharacters());
 
-            for (MapleCharacter chr : chars) {
+            for (Character chr : chars) {
                 if (chr != null) // make sure they aren't null... maybe something can happen in 12 seconds.
                 {
                     if (!isCorrectAnswer(chr, getOXAnswer(round, question)) && !chr.isGM()) {

@@ -21,6 +21,7 @@
  */
 package server;
 
+import client.Character;
 import client.*;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -123,7 +124,7 @@ public class MapleStatEffect {
         return true;
     }
     
-    public boolean isActive(MapleCharacter applyto) {
+    public boolean isActive(Character applyto) {
         return isEffectActive(applyto.getMapId(), applyto.getPartyMembersOnSameMap().size() > 1);
     }
     
@@ -812,7 +813,7 @@ public class MapleStatEffect {
      * @param obj
      * @param attack damage done by the skill
      */
-    public void applyPassive(MapleCharacter applyto, MapleMapObject obj, int attack) {
+    public void applyPassive(Character applyto, MapleMapObject obj, int attack) {
         if (makeChanceResult()) {
             switch (sourceid) { // MP eater
                 case FPWizard.MP_EATER:
@@ -836,32 +837,32 @@ public class MapleStatEffect {
         }
     }
 
-    public boolean applyEchoOfHero(MapleCharacter applyfrom) {
-        Map<Integer, MapleCharacter> mapPlayers = applyfrom.getMap().getMapPlayers();
+    public boolean applyEchoOfHero(Character applyfrom) {
+        Map<Integer, Character> mapPlayers = applyfrom.getMap().getMapPlayers();
         mapPlayers.remove(applyfrom.getId());
 
         boolean hwResult = applyTo(applyfrom);
-        for (MapleCharacter chr : mapPlayers.values()) {    // Echo of Hero not buffing players in the map detected thanks to Masterrulax
+        for (Character chr : mapPlayers.values()) {    // Echo of Hero not buffing players in the map detected thanks to Masterrulax
             applyTo(applyfrom, chr, false, null, false, 1);
         }
 
         return hwResult;
     }
 
-    public boolean applyTo(MapleCharacter chr) {
+    public boolean applyTo(Character chr) {
         return applyTo(chr, chr, true, null, false, 1);
     }
 
-    public boolean applyTo(MapleCharacter chr, boolean useMaxRange) {
+    public boolean applyTo(Character chr, boolean useMaxRange) {
         return applyTo(chr, chr, true, null, useMaxRange, 1);
     }
 
-    public boolean applyTo(MapleCharacter chr, Point pos) {
+    public boolean applyTo(Character chr, Point pos) {
         return applyTo(chr, chr, true, pos, false, 1);
     }
 
     // primary: the player caster of the buff
-    private boolean applyTo(MapleCharacter applyfrom, MapleCharacter applyto, boolean primary, Point pos, boolean useMaxRange, int affectedPlayers) {
+    private boolean applyTo(Character applyfrom, Character applyto, boolean primary, Point pos, boolean useMaxRange, int affectedPlayers) {
         if (skill && (sourceid == GM.HIDE || sourceid == SuperGM.HIDE)) {
             applyto.toggleHide(false);
             return true;
@@ -1041,7 +1042,7 @@ public class MapleStatEffect {
                 MapleParty opposition = applyfrom.getParty().getEnemy();
                 if (skill.targetsAll) {
                     for (MaplePartyCharacter enemyChrs : opposition.getPartyMembers()) {
-                        MapleCharacter chrApp = enemyChrs.getPlayer();
+                        Character chrApp = enemyChrs.getPlayer();
                         if (chrApp != null && chrApp.getMap().isCPQMap()) {
                             if (dis == null) {
                                 chrApp.dispel();
@@ -1053,7 +1054,7 @@ public class MapleStatEffect {
                 } else {
                     int amount = opposition.getMembers().size();
                     int randd = (int) Math.floor(Math.random() * amount);
-                    MapleCharacter chrApp = applyfrom.getMap().getCharacterById(opposition.getMemberByPos(randd).getId());
+                    Character chrApp = applyfrom.getMap().getCharacterById(opposition.getMemberByPos(randd).getId());
                     if (chrApp != null && chrApp.getMap().isCPQMap()) {
                         if (dis == null) {
                             chrApp.dispel();
@@ -1072,7 +1073,7 @@ public class MapleStatEffect {
             MapleDisease dis = MapleDisease.getBySkill(mobSkill);
             
             if (target > 0) {
-                for (MapleCharacter chr : applyto.getMap().getAllPlayers()) {
+                for (Character chr : applyto.getMap().getAllPlayers()) {
                     if (chr.getId() != applyto.getId()) {
                         chr.giveDebuff(dis, ms);
                     }
@@ -1084,15 +1085,15 @@ public class MapleStatEffect {
         return true;
     }
 
-    private int applyBuff(MapleCharacter applyfrom, boolean useMaxRange) {
+    private int applyBuff(Character applyfrom, boolean useMaxRange) {
         int affectedc = 1;
         
         if (isPartyBuff() && (applyfrom.getParty() != null || isGmBuff())) {
             Rectangle bounds = (!useMaxRange) ? calculateBoundingBox(applyfrom.getPosition(), applyfrom.isFacingLeft()) : new Rectangle(Integer.MIN_VALUE / 2, Integer.MIN_VALUE / 2, Integer.MAX_VALUE, Integer.MAX_VALUE);
             List<MapleMapObject> affecteds = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.PLAYER));
-            List<MapleCharacter> affectedp = new ArrayList<>(affecteds.size());
+            List<Character> affectedp = new ArrayList<>(affecteds.size());
             for (MapleMapObject affectedmo : affecteds) {
-                MapleCharacter affected = (MapleCharacter) affectedmo;
+                Character affected = (Character) affectedmo;
                 if (affected != applyfrom && (isGmBuff() || applyfrom.getParty().equals(affected.getParty()))) {
                     if (!isResurrection()) {
                         if (affected.isAlive()) {
@@ -1107,7 +1108,7 @@ public class MapleStatEffect {
             }
             
             affectedc += affectedp.size();   // used for heal
-            for (MapleCharacter affected : affectedp) {
+            for (Character affected : affectedp) {
                 applyTo(applyfrom, affected, false, null, useMaxRange, affectedc);
                 affected.sendPacket(PacketCreator.showOwnBuffEffect(sourceid, 2));
                 affected.getMap().broadcastMessage(affected, PacketCreator.showBuffEffect(affected.getId(), sourceid, 2), false);
@@ -1117,7 +1118,7 @@ public class MapleStatEffect {
         return affectedc;
     }
 
-    private void applyMonsterBuff(MapleCharacter applyfrom) {
+    private void applyMonsterBuff(Character applyfrom) {
         Rectangle bounds = calculateBoundingBox(applyfrom.getPosition(), applyfrom.isFacingLeft());
         List<MapleMapObject> affected = applyfrom.getMap().getMapObjectsInRect(bounds, Arrays.asList(MapleMapObjectType.MONSTER));
         Skill skill_ = SkillFactory.getSkill(sourceid);
@@ -1161,7 +1162,7 @@ public class MapleStatEffect {
         return !YamlConfig.config.server.USE_BUFF_EVERLASTING ? duration : Integer.MAX_VALUE;
     }
 
-    public void silentApplyBuff(MapleCharacter chr, long localStartTime) {
+    public void silentApplyBuff(Character chr, long localStartTime) {
         int localDuration = getBuffLocalDuration();
         localDuration = alchemistModifyVal(chr, localDuration, false);
         //CancelEffectAction cancelAction = new CancelEffectAction(chr, this, starttime);
@@ -1181,7 +1182,7 @@ public class MapleStatEffect {
         }
     }
 
-    public final void applyComboBuff(final MapleCharacter applyto, int combo) {
+    public final void applyComboBuff(final Character applyto, int combo) {
         final List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.ARAN_COMBO, combo));
         applyto.sendPacket(PacketCreator.giveBuff(sourceid, 99999, stat));
 
@@ -1191,7 +1192,7 @@ public class MapleStatEffect {
         applyto.registerEffect(this, starttime, Long.MAX_VALUE, false);
     }
 
-    public final void applyBeaconBuff(final MapleCharacter applyto, int objectid) { // thanks Thora & Hyun for reporting an issue with homing beacon autoflagging mobs when changing maps
+    public final void applyBeaconBuff(final Character applyto, int objectid) { // thanks Thora & Hyun for reporting an issue with homing beacon autoflagging mobs when changing maps
         final List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.HOMING_BEACON, objectid));
         applyto.sendPacket(PacketCreator.giveBuff(1, sourceid, stat));
 
@@ -1199,7 +1200,7 @@ public class MapleStatEffect {
         applyto.registerEffect(this, starttime, Long.MAX_VALUE, false);
     }
 
-    public void updateBuffEffect(MapleCharacter target, List<Pair<BuffStat, Integer>> activeStats, long starttime) {
+    public void updateBuffEffect(Character target, List<Pair<BuffStat, Integer>> activeStats, long starttime) {
         int localDuration = getBuffLocalDuration();
         localDuration = alchemistModifyVal(target, localDuration, false);
 
@@ -1213,7 +1214,7 @@ public class MapleStatEffect {
         }
     }
     
-    private void applyBuffEffect(MapleCharacter applyfrom, MapleCharacter applyto, boolean primary) {
+    private void applyBuffEffect(Character applyfrom, Character applyto, boolean primary) {
         if (!isMonsterRiding() && !isCouponBuff() && !isMysticDoor() && !isHyperBody() && !isCombo()) {     // last mystic door already dispelled if it has been used before.
             applyto.cancelEffect(this, true, -1);
         }
@@ -1337,7 +1338,7 @@ public class MapleStatEffect {
         }
     }
 
-    private int calcHPChange(MapleCharacter applyfrom, boolean primary, int affectedPlayers) {
+    private int calcHPChange(Character applyfrom, boolean primary, int affectedPlayers) {
         int hpchange = 0;
         if (hp != 0) {
             if (!skill) {
@@ -1379,7 +1380,7 @@ public class MapleStatEffect {
         return (int) ((Math.random() * ((int) (stat * upperfactor * rate) - (int) (stat * lowerfactor * rate) + 1)) + (int) (stat * lowerfactor * rate));
     }
 
-    private int calcMPChange(MapleCharacter applyfrom, boolean primary) {
+    private int calcMPChange(Character applyfrom, boolean primary) {
         int mpchange = 0;
         if (mp != 0) {
             if (primary) {
@@ -1419,7 +1420,7 @@ public class MapleStatEffect {
         return mpchange;
     }
 
-    private int alchemistModifyVal(MapleCharacter chr, int val, boolean withX) {
+    private int alchemistModifyVal(Character chr, int val, boolean withX) {
         if (!skill && (chr.getJob().isA(MapleJob.HERMIT) || chr.getJob().isA(MapleJob.NIGHTWALKER3))) {
             MapleStatEffect alchemistEffect = getAlchemistEffect(chr);
             if (alchemistEffect != null) {
@@ -1429,7 +1430,7 @@ public class MapleStatEffect {
         return val;
     }
 
-    private MapleStatEffect getAlchemistEffect(MapleCharacter chr) {
+    private MapleStatEffect getAlchemistEffect(Character chr) {
         int id = Hermit.ALCHEMIST;
         if (chr.isCygnus()) {
             id = NightWalker.ALCHEMIST;
@@ -1724,7 +1725,7 @@ public class MapleStatEffect {
         return morphId;
     }
 
-    private int getMorph(MapleCharacter chr) {
+    private int getMorph(Character chr) {
         if (morphId == 1000 || morphId == 1001 || morphId == 1003) { // morph skill
             return chr.getGender() == 0 ? morphId : morphId + 100;
         } 
@@ -1784,10 +1785,10 @@ public class MapleStatEffect {
      private static class CancelEffectAction implements Runnable {
 
      private MapleStatEffect effect;
-     private WeakReference<MapleCharacter> target;
+     private WeakReference<Character> target;
      private long startTime;
 
-     public CancelEffectAction(MapleCharacter target, MapleStatEffect effect, long startTime) {
+     public CancelEffectAction(Character target, MapleStatEffect effect, long startTime) {
      this.effect = effect;
      this.target = new WeakReference<>(target);
      this.startTime = startTime;
@@ -1795,7 +1796,7 @@ public class MapleStatEffect {
 
      @Override
      public void run() {
-     MapleCharacter realTarget = target.get();
+     Character realTarget = target.get();
      if (realTarget != null) {
      realTarget.cancelEffect(effect, false, startTime);
      }

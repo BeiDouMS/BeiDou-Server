@@ -20,7 +20,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -47,7 +47,7 @@ public final class TransferWorldHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        MapleCharacter chr = c.getPlayer();
+        Character chr = c.getPlayer();
         if(!YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER || Server.getInstance().getWorldsSize() <= 1) {
             c.sendPacket(PacketCreator.sendWorldTransferRules(9, c));
             return;

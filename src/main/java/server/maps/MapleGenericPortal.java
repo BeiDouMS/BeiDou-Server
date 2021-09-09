@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import constants.game.GameConstants;
 import net.server.audit.locks.MonitoredLockType;
@@ -142,7 +142,7 @@ public class MapleGenericPortal implements MaplePortal {
                 npe.printStackTrace();
             }
         } else if (getTargetMapId() != 999999999) {
-            MapleCharacter chr = c.getPlayer();
+            Character chr = c.getPlayer();
             if (!(chr.getChalkboard() != null && GameConstants.isFreeMarketRoom(getTargetMapId()))) {
                 MapleMap to = chr.getEventInstance() == null ? c.getChannelServer().getMapFactory().getMap(getTargetMapId()) : chr.getEventInstance().getMapInstance(getTargetMapId());
                 MaplePortal pto = to.getPortal(getTarget());

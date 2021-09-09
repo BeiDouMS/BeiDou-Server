@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm4;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.command.Command;
 import server.life.MapleLifeFactory;
@@ -36,7 +36,7 @@ public class CakeCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         MapleMonster monster = MapleLifeFactory.getMonster(9400606);
         if (params.length == 1) {
             double mobHp = Double.parseDouble(params[0]);

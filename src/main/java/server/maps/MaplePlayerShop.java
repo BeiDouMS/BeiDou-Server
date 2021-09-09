@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -46,20 +46,20 @@ import java.util.concurrent.locks.Lock;
  */
 public class MaplePlayerShop extends AbstractMapleMapObject {
     private AtomicBoolean open = new AtomicBoolean(false);
-    private MapleCharacter owner;
+    private Character owner;
     private int itemid;
     
-    private MapleCharacter[] visitors = new MapleCharacter[3];
+    private Character[] visitors = new Character[3];
     private List<MaplePlayerShopItem> items = new ArrayList<>();
     private List<SoldItem> sold = new LinkedList<>();
     private String description;
     private int boughtnumber = 0;
     private List<String> bannedList = new ArrayList<>();
-    private List<Pair<MapleCharacter, String>> chatLog = new LinkedList<>();
+    private List<Pair<Character, String>> chatLog = new LinkedList<>();
     private Map<Integer, Byte> chatSlot = new LinkedHashMap<>();
     private Lock visitorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.VISITOR_PSHOP, true);
 
-    public MaplePlayerShop(MapleCharacter owner, String description, int itemid) {
+    public MaplePlayerShop(Character owner, String description, int itemid) {
         this.setPosition(owner.getPosition());
         this.owner = owner;
         this.description = description;
@@ -100,7 +100,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         try {
             byte count = 0;
             //if (this.isOpen()) {
-                for (MapleCharacter visitor : visitors) {
+                for (Character visitor : visitors) {
                     if (visitor != null) {
                         count++;
                     }
@@ -115,11 +115,11 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         }
     }
 
-    public boolean isOwner(MapleCharacter chr) {
+    public boolean isOwner(Character chr) {
         return owner.equals(chr);
     }
 
-    private void addVisitor(MapleCharacter visitor) {
+    private void addVisitor(Character visitor) {
         for (int i = 0; i < 3; i++) {
             if (visitors[i] == null) {
                 visitors[i] = visitor;
@@ -132,7 +132,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         }
     }
 
-    public void forceRemoveVisitor(MapleCharacter visitor) {
+    public void forceRemoveVisitor(Character visitor) {
         if (visitor == owner) {
             owner.getMap().removeMapObject(this);
             owner.setPlayerShop(null);
@@ -156,7 +156,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         }
     }
     
-    public void removeVisitor(MapleCharacter visitor) {
+    public void removeVisitor(Character visitor) {
         if (visitor == owner) {
             owner.getMap().removeMapObject(this);
             owner.setPlayerShop(null);
@@ -190,7 +190,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         }
     }
 
-    public boolean isVisitor(MapleCharacter visitor) {
+    public boolean isVisitor(Character visitor) {
         visitorLock.lock();
         try {
             return visitors[0] == visitor || visitors[1] == visitor || visitors[2] == visitor;
@@ -216,7 +216,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         return InventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && InventoryManipulator.addFromDrop(c, newItem, false);
     }
     
-    public void takeItemBack(int slot, MapleCharacter chr) {
+    public void takeItemBack(int slot, Character chr) {
         synchronized (items) {
             MaplePlayerShopItem shopItem = items.get(slot);
             if(shopItem.isExist()) {
@@ -351,7 +351,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
     }
 
     public void removeVisitors() {
-        List<MapleCharacter> visitorList = new ArrayList<>(3);
+        List<Character> visitorList = new ArrayList<>(3);
         
         visitorLock.lock();
         try {
@@ -369,7 +369,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
             visitorLock.unlock();
         }
         
-        for(MapleCharacter mc : visitorList) forceRemoveVisitor(mc);
+        for(Character mc : visitorList) forceRemoveVisitor(mc);
         if (owner != null) {
             forceRemoveVisitor(owner);
         }
@@ -383,9 +383,9 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         broadcastToVisitors(packet);
     }
 
-    private byte getVisitorSlot(MapleCharacter chr) {
+    private byte getVisitorSlot(Character chr) {
         byte s = 0;
-        for (MapleCharacter mc : getVisitors()) {
+        for (Character mc : getVisitors()) {
             s++;
             if (mc != null) {
                 if (mc.getName().equalsIgnoreCase(chr.getName())) {
@@ -413,8 +413,8 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
     
     private void recoverChatLog() {
         synchronized(chatLog) {
-            for(Pair<MapleCharacter, String> it : chatLog) {
-                MapleCharacter chr = it.getLeft();
+            for(Pair<Character, String> it : chatLog) {
+                Character chr = it.getLeft();
                 Byte pos = chatSlot.get(chr.getId());
                 
                 broadcastToVisitors(PacketCreator.getPlayerShopChat(chr, it.getRight(), pos));
@@ -443,14 +443,14 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         }
     }
 
-    public MapleCharacter getOwner() {
+    public Character getOwner() {
         return owner;
     }
 
-    public MapleCharacter[] getVisitors() {
+    public Character[] getVisitors() {
         visitorLock.lock();
         try {
-            MapleCharacter[] copy = new MapleCharacter[3];
+            Character[] copy = new Character[3];
             for(int i = 0; i < visitors.length; i++) copy[i] = visitors[i];
                     
             return copy;
@@ -488,7 +488,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
             bannedList.add(name);
         }
         
-        MapleCharacter target = null;
+        Character target = null;
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
@@ -511,7 +511,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
         return bannedList.contains(name);
     }
     
-    public synchronized boolean visitShop(MapleCharacter chr) {
+    public synchronized boolean visitShop(Character chr) {
         if (this.isBanned(chr.getName())) {
             chr.dropMessage(1, "You have been banned from this store.");
             return false;

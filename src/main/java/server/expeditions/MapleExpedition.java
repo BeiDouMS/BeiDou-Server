@@ -22,7 +22,7 @@
 
 package server.expeditions;
 
-import client.MapleCharacter;
+import client.Character;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
@@ -81,7 +81,7 @@ public class MapleExpedition {
 			9420544,// - Furious Targa
 	};
 	
-	private MapleCharacter leader;
+	private Character leader;
 	private MapleExpeditionType type;
 	private boolean registering;
 	private MapleMap startMap;
@@ -95,7 +95,7 @@ public class MapleExpedition {
         private int minSize, maxSize;
         private MonitoredReentrantLock pL = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EIM_PARTY, true);
 
-	public MapleExpedition(MapleCharacter player, MapleExpeditionType met, boolean sil, int minPlayers, int maxPlayers) {
+	public MapleExpedition(Character player, MapleExpeditionType met, boolean sil, int minPlayers, int maxPlayers) {
 		leader = player;
 		members.put(player.getId(), player.getName());
                 startMap = player.getMap();
@@ -162,7 +162,7 @@ dispose(false);
 		Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, "[Expedition] " + type.toString() + " Expedition started with leader: " + leader.getName()));
 	}
 
-	public String addMember(MapleCharacter player) {
+	public String addMember(Character player) {
 		if (!registering){
 			return "Sorry, this expedition is already underway. Registration is closed!";
 		}
@@ -184,7 +184,7 @@ dispose(false);
                 return "You have registered for the expedition successfully!";
 	}
         
-        public int addMemberInt(MapleCharacter player) {
+        public int addMemberInt(Character player) {
                 if (!registering) {
                         return 1; //"Sorry, this expedition is already underway. Registration is closed!";
                 }
@@ -204,18 +204,18 @@ dispose(false);
         private void registerExpeditionAttempt(){
                 int channel = this.getRecruitingMap().getChannelServer().getId();
 
-                for (MapleCharacter chr : getActiveMembers()){
+                for (Character chr : getActiveMembers()){
                         MapleExpeditionBossLog.attemptBoss(chr.getId(), channel, this, true);
                 }
         }
         
 	private void broadcastExped(Packet packet){
-		for (MapleCharacter chr : getActiveMembers()){
+		for (Character chr : getActiveMembers()){
 		    chr.sendPacket(packet);
 		}
 	}
         
-	public boolean removeMember(MapleCharacter chr) {
+	public boolean removeMember(Character chr) {
 		if(members.remove(chr.getId()) != null) {
                     chr.sendPacket(PacketCreator.removeClock());
                     if (!silent) {
@@ -236,7 +236,7 @@ dispose(false);
 
                 if (!silent) broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + chr.getValue() + " has been banned from the expedition."));
 
-                MapleCharacter player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
+                Character player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
                 if (player != null && player.isLoggedinWorld()) {
                     player.sendPacket(PacketCreator.removeClock());
                     if (!silent) player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
@@ -247,7 +247,7 @@ dispose(false);
             }
         }
 
-        public void monsterKilled(MapleCharacter chr, MapleMonster mob) {
+        public void monsterKilled(Character chr, MapleMonster mob) {
             for (int expeditionBoss : EXPEDITION_BOSSES) {
                 if (mob.getId() == expeditionBoss) { //If the monster killed was a boss
                     String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
@@ -279,12 +279,12 @@ dispose(false);
 		return type;
 	}
         
-        public List<MapleCharacter> getActiveMembers() {    // thanks MedicOP for figuring out an issue with broadcasting packets to offline members
+        public List<Character> getActiveMembers() {    // thanks MedicOP for figuring out an issue with broadcasting packets to offline members
                 PlayerStorage ps = startMap.getWorldServer().getPlayerStorage();
                 
-                List<MapleCharacter> activeMembers = new LinkedList<>();
+                List<Character> activeMembers = new LinkedList<>();
 		for (Integer chrid : getMembers().keySet()){
-                        MapleCharacter chr = ps.getCharacterById(chrid);
+                        Character chr = ps.getCharacterById(chrid);
                         if (chr != null && chr.isLoggedinWorld()) {
                                 activeMembers.add(chr);
                         }
@@ -317,11 +317,11 @@ dispose(false);
 	}
         
         public final boolean isExpeditionTeamTogether() {
-                List<MapleCharacter> chars = getActiveMembers();
+                List<Character> chars = getActiveMembers();
                 if(chars.size() <= 1) return true;
 
-                Iterator<MapleCharacter> iterator = chars.iterator();
-                MapleCharacter mc = iterator.next();
+                Iterator<Character> iterator = chars.iterator();
+                Character mc = iterator.next();
                 int mapId = mc.getMapId();
 
                 for (; iterator.hasNext();) {
@@ -333,35 +333,35 @@ dispose(false);
         }
         
         public final void warpExpeditionTeam(int warpFrom, int warpTo) {
-                List<MapleCharacter> players = getActiveMembers();
+                List<Character> players = getActiveMembers();
                 
-                for (MapleCharacter chr : players) {
+                for (Character chr : players) {
                         if(chr.getMapId() == warpFrom)
                                 chr.changeMap(warpTo);
                 }
         }
         
         public final void warpExpeditionTeam(int warpTo) {
-                List<MapleCharacter> players = getActiveMembers();
+                List<Character> players = getActiveMembers();
                 
-                for (MapleCharacter chr : players) {
+                for (Character chr : players) {
                         chr.changeMap(warpTo);
                 }
         }
         
         public final void warpExpeditionTeamToMapSpawnPoint(int warpFrom, int warpTo, int toSp) {
-                List<MapleCharacter> players = getActiveMembers();
+                List<Character> players = getActiveMembers();
                 
-                for (MapleCharacter chr : players) {
+                for (Character chr : players) {
                         if(chr.getMapId() == warpFrom)
                                 chr.changeMap(warpTo, toSp);
                 }
         }
         
         public final void warpExpeditionTeamToMapSpawnPoint(int warpTo, int toSp) {
-                List<MapleCharacter> players = getActiveMembers();
+                List<Character> players = getActiveMembers();
                 
-                for (MapleCharacter chr : players) {
+                for (Character chr : players) {
                         chr.changeMap(warpTo, toSp);
                 }
         }
@@ -374,7 +374,7 @@ dispose(false);
                 ch.removeExpedition(this);
         }
 
-	public MapleCharacter getLeader(){
+	public Character getLeader(){
 		return leader;
 	}
         
@@ -382,11 +382,11 @@ dispose(false);
                 return startMap;
         }
 
-	public boolean contains(MapleCharacter player) {
+	public boolean contains(Character player) {
                 return members.containsKey(player.getId()) || isLeader(player);
 	}
 
-	public boolean isLeader(MapleCharacter player) {
+	public boolean isLeader(Character player) {
 		return isLeader(player.getId());
 	}
         

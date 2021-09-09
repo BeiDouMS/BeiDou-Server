@@ -21,7 +21,7 @@
 */
 package client.inventory;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
@@ -44,11 +44,11 @@ public class Inventory implements Iterable<Item> {
     protected final InventoryType type;
     protected final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.INVENTORY, true);
 
-    protected MapleCharacter owner;
+    protected Character owner;
     protected byte slotLimit;
     protected boolean checked = false;
 
-    public Inventory(MapleCharacter mc, InventoryType type, byte slotLimit) {
+    public Inventory(Character mc, InventoryType type, byte slotLimit) {
         this.owner = mc;
         this.inventory = new LinkedHashMap<>();
         this.type = type;
@@ -434,11 +434,11 @@ public class Inventory implements Iterable<Item> {
         return true;
     }
 
-    public static boolean checkSpot(MapleCharacter chr, Item item) {    // thanks Vcoc for noticing pshops not checking item stacks when taking item back
+    public static boolean checkSpot(Character chr, Item item) {    // thanks Vcoc for noticing pshops not checking item stacks when taking item back
         return checkSpot(chr, Collections.singletonList(item));
     }
 
-    public static boolean checkSpot(MapleCharacter chr, List<Item> items) {
+    public static boolean checkSpot(Character chr, List<Item> items) {
         List<Pair<Item, InventoryType>> listItems = new LinkedList<>();
         for (Item item : items) {
             listItems.add(new Pair<>(item, item.getInventoryType()));
@@ -447,11 +447,11 @@ public class Inventory implements Iterable<Item> {
         return checkSpotsAndOwnership(chr, listItems);
     }
 
-    public static boolean checkSpots(MapleCharacter chr, List<Pair<Item, InventoryType>> items) {
+    public static boolean checkSpots(Character chr, List<Pair<Item, InventoryType>> items) {
         return checkSpots(chr, items, false);
     }
 
-    public static boolean checkSpots(MapleCharacter chr, List<Pair<Item, InventoryType>> items, boolean useProofInv) {
+    public static boolean checkSpots(Character chr, List<Pair<Item, InventoryType>> items, boolean useProofInv) {
         int invTypesSize = InventoryType.values().length;
         List<Integer> zeroedList = new ArrayList<>(invTypesSize);
         for (byte i = 0; i < invTypesSize; i++) {
@@ -461,7 +461,7 @@ public class Inventory implements Iterable<Item> {
         return checkSpots(chr, items, zeroedList, useProofInv);
     }
 
-    public static boolean checkSpots(MapleCharacter chr, List<Pair<Item, InventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
+    public static boolean checkSpots(Character chr, List<Pair<Item, InventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
         // assumption: no "UNDEFINED" or "EQUIPPED" items shall be tested here, all counts are >= 0.
 
         if (!checkItemRestricted(items)) {
@@ -528,11 +528,11 @@ public class Inventory implements Iterable<Item> {
         return (itemId.longValue() << 32L) + fnvHash32(owner);
     }
 
-    public static boolean checkSpotsAndOwnership(MapleCharacter chr, List<Pair<Item, InventoryType>> items) {
+    public static boolean checkSpotsAndOwnership(Character chr, List<Pair<Item, InventoryType>> items) {
         return checkSpotsAndOwnership(chr, items, false);
     }
 
-    public static boolean checkSpotsAndOwnership(MapleCharacter chr, List<Pair<Item, InventoryType>> items, boolean useProofInv) {
+    public static boolean checkSpotsAndOwnership(Character chr, List<Pair<Item, InventoryType>> items, boolean useProofInv) {
         List<Integer> zeroedList = new ArrayList<>(5);
         for (byte i = 0; i < 5; i++) {
             zeroedList.add(0);
@@ -541,7 +541,7 @@ public class Inventory implements Iterable<Item> {
         return checkSpotsAndOwnership(chr, items, zeroedList, useProofInv);
     }
 
-    public static boolean checkSpotsAndOwnership(MapleCharacter chr, List<Pair<Item, InventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
+    public static boolean checkSpotsAndOwnership(Character chr, List<Pair<Item, InventoryType>> items, List<Integer> typesSlotsUsed, boolean useProofInv) {
         //assumption: no "UNDEFINED" or "EQUIPPED" items shall be tested here, all counts are >= 0 and item list to be checked is a legal one.
 
         if (!checkItemRestricted(items)) {

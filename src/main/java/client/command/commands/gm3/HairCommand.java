@@ -23,7 +23,7 @@
 */
 package client.command.commands.gm3;
 
-import client.MapleCharacter;
+import client.Character;
 import client.MapleClient;
 import client.MapleStat;
 import client.command.Command;
@@ -37,7 +37,7 @@ public class HairCommand extends Command {
 
     @Override
     public void execute(MapleClient c, String[] params) {
-        MapleCharacter player = c.getPlayer();
+        Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage("Syntax: !hair [<playername>] <hairid>");
             return;
@@ -61,7 +61,7 @@ public class HairCommand extends Command {
                     return;
                 }
 
-                MapleCharacter victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
+                Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
                 if (victim != null) {
                     victim.setHair(itemId);
                     victim.updateSingleStat(MapleStat.HAIR, itemId);
