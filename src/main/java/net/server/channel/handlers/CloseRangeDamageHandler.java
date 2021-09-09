@@ -27,7 +27,7 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.skills.*;
 import net.packet.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -78,7 +78,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 int advcomboid = chr.isCygnus() ? DawnWarrior.ADVANCED_COMBO : Hero.ADVANCED_COMBO;
                 Skill combo = SkillFactory.getSkill(oid);
                 Skill advcombo = SkillFactory.getSkill(advcomboid);
-                MapleStatEffect ceffect;
+                StatEffect ceffect;
                 int advComboSkillLevel = chr.getSkillLevel(advcombo);
                 if (advComboSkillLevel > 0) {
                     ceffect = advcombo.getEffect(advComboSkillLevel);
@@ -151,7 +151,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
         } else if (attack.skill > 0) {
             Skill skill = SkillFactory.getSkill(attack.skill);
-            MapleStatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+            StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
             if (effect_.getCooldown() > 0) {
                 if (chr.skillIsCooling(attack.skill)) {
                     return;

@@ -42,7 +42,7 @@ import net.server.services.type.ChannelServices;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import scripting.event.EventInstanceManager;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.TimerManager;
 import server.life.LifeFactory.BanishInfo;
 import server.loot.LootManager;
@@ -1801,7 +1801,7 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public boolean isCharacterPuppetInVicinity(Character chr) {
-        MapleStatEffect mse = chr.getBuffEffect(BuffStat.PUPPET);
+        StatEffect mse = chr.getBuffEffect(BuffStat.PUPPET);
         if (mse != null) {
             Summon summon = chr.getSummonByKey(mse.getSourceId());
 
@@ -2133,7 +2133,7 @@ public class Monster extends AbstractLoadedLife {
                     return;
                 }
 
-                MapleStatEffect puppetEffect = chrController.getBuffEffect(BuffStat.PUPPET);
+                StatEffect puppetEffect = chrController.getBuffEffect(BuffStat.PUPPET);
                 if (puppetEffect != null) {
                     Summon puppet = chrController.getSummonByKey(puppetEffect.getSourceId());
 

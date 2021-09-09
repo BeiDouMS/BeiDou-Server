@@ -54,7 +54,7 @@ import net.server.world.World;
 import scripting.event.EventInstanceManager;
 import scripting.map.MapScriptManager;
 import server.ItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.TimerManager;
 import server.events.gm.*;
 import server.life.*;
@@ -1401,7 +1401,7 @@ public class MapleMap {
                         for (MapObject mmo : this.getPlayers()) {
                             Character character = (Character) mmo;
                             if (character.isAlive()) {
-                                MapleStatEffect statEffect = mii.getItemEffect(buff);
+                                StatEffect statEffect = mii.getItemEffect(buff);
                                 character.sendPacket(PacketCreator.showOwnBuffEffect(buff, 1));
                                 broadcastMessage(character, PacketCreator.showBuffEffect(character.getId(), buff, 1), false);
                                 statEffect.applyTo(character);
@@ -2535,7 +2535,7 @@ public class MapleMap {
             }
         }
 
-        MapleStatEffect summonStat = chr.getStatForBuff(BuffStat.SUMMON);
+        StatEffect summonStat = chr.getStatForBuff(BuffStat.SUMMON);
         if (summonStat != null) {
             Summon summon = chr.getSummonByKey(summonStat.getSourceId());
             summon.setPosition(chr.getPosition());

@@ -21,7 +21,7 @@
 */
 package net.server;
 
-import server.MapleStatEffect;
+import server.StatEffect;
 
 /**
  *
@@ -29,9 +29,9 @@ import server.MapleStatEffect;
  */
 public class PlayerBuffValueHolder {
     public int usedTime;
-    public MapleStatEffect effect;
+    public StatEffect effect;
 
-    public PlayerBuffValueHolder(int usedTime, MapleStatEffect effect) {
+    public PlayerBuffValueHolder(int usedTime, StatEffect effect) {
         this.usedTime = usedTime;
         this.effect = effect;
     }

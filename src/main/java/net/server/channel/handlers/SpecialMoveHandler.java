@@ -30,7 +30,7 @@ import constants.skills.*;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Monster;
 import tools.PacketCreator;
 
@@ -69,13 +69,13 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
         }
         if (skillLevel == 0 || skillLevel != __skillLevel) return;
         
-        MapleStatEffect effect = skill.getEffect(skillLevel);
+        StatEffect effect = skill.getEffect(skillLevel);
         if (effect.getCooldown() > 0) {
             if (chr.skillIsCooling(skillid)) {
                 return;
             } else if (skillid != Corsair.BATTLE_SHIP) {
                 int cooldownTime = effect.getCooldown();
-                if(MapleStatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
+                if(StatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
                     cooldownTime /= 60;
                 }
                 
@@ -107,7 +107,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             return;
         } else if (skillid == Brawler.MP_RECOVERY) {// MP Recovery
             Skill s = SkillFactory.getSkill(skillid);
-            MapleStatEffect ef = s.getEffect(chr.getSkillLevel(s));
+            StatEffect ef = s.getEffect(chr.getSkillLevel(s));
             
             int lose = chr.safeAddHP(-1 * (chr.getCurrentMaxHp() / ef.getX()));
             int gain = -lose * (ef.getY() / 100);

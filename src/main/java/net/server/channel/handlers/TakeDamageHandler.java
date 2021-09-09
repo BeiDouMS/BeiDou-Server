@@ -35,7 +35,7 @@ import constants.inventory.ItemConstants;
 import constants.skills.Aran;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.LifeFactory.loseItem;
 import server.life.*;
 import server.maps.MapObject;
@@ -205,7 +205,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                         map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), false, true);
                         attacker.aggroMonsterDamage(chr, bouncedamage);
                     }
-                    MapleStatEffect bPressure = chr.getBuffEffect(BuffStat.BODY_PRESSURE); // thanks Atoot for noticing an issue on Body Pressure neutralise
+                    StatEffect bPressure = chr.getBuffEffect(BuffStat.BODY_PRESSURE); // thanks Atoot for noticing an issue on Body Pressure neutralise
                     if (bPressure != null) {
                         Skill skill = SkillFactory.getSkill(Aran.BODY_PRESSURE);
                         if (!attacker.alreadyBuffedStats().contains(MonsterStatus.NEUTRALISE)) {
@@ -216,7 +216,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     }
                 }
                 
-                MapleStatEffect cBarrier = chr.getBuffEffect(BuffStat.COMBO_BARRIER);  // thanks BHB for noticing Combo Barrier buff not working
+                StatEffect cBarrier = chr.getBuffEffect(BuffStat.COMBO_BARRIER);  // thanks BHB for noticing Combo Barrier buff not working
                 if (cBarrier != null) {
                     damage *= (cBarrier.getX() / 1000.0);
                 }

@@ -27,7 +27,7 @@ import client.Skill;
 import client.SkillFactory;
 import constants.skills.*;
 import net.packet.Packet;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.MobSkill;
 import server.life.Monster;
 import tools.PacketCreator;
@@ -41,7 +41,7 @@ public class Mist extends AbstractMapObject {
     private final Rectangle mistPosition;
     private Character owner = null;
     private Monster mob = null;
-    private MapleStatEffect source;
+    private StatEffect source;
     private MobSkill skill;
     private final boolean isMobMist;
     private boolean isPoisonMist;
@@ -58,7 +58,7 @@ public class Mist extends AbstractMapObject {
         skillDelay = 0;
     }
 
-    public Mist(Rectangle mistPosition, Character owner, MapleStatEffect source) {
+    public Mist(Rectangle mistPosition, Character owner, StatEffect source) {
         this.mistPosition = mistPosition;
         this.owner = owner;
         this.source = source;

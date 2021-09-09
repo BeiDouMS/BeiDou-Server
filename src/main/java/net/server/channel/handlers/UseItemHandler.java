@@ -32,7 +32,7 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import tools.PacketCreator;
 
 /**
@@ -98,7 +98,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
             if(toUse.getItemId() != 2022153) {
                 ii.getItemEffect(toUse.getItemId()).applyTo(chr);
             } else {
-                MapleStatEffect mse = ii.getItemEffect(toUse.getItemId());
+                StatEffect mse = ii.getItemEffect(toUse.getItemId());
                 for(Character player : chr.getMap().getCharacters()) {
                     mse.applyTo(player);
                 }

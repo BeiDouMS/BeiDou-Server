@@ -24,7 +24,7 @@ package client;
 import constants.skills.*;
 import provider.*;
 import provider.wz.WZFiles;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Element;
 
 import java.util.HashMap;
@@ -318,7 +318,7 @@ public class SkillFactory {
         }
 
         for (Data level : data.getChildByPath("level")) {
-            ret.addLevelEffect(MapleStatEffect.loadSkillEffectFromData(level, id, isBuff));
+            ret.addLevelEffect(StatEffect.loadSkillEffectFromData(level, id, isBuff));
         }
         ret.setAnimationTime(0);
         if (effect != null) {

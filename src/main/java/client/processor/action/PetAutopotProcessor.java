@@ -29,7 +29,7 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import server.ItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import tools.PacketCreator;
 
 import java.util.List;
@@ -88,7 +88,7 @@ public class PetAutopotProcessor {
             }
             
             int useCount = 0, qtyCount = 0;
-            MapleStatEffect stat = null;
+            StatEffect stat = null;
             
             maxHp = chr.getCurrentMaxHp();
             maxMp = chr.getCurrentMaxMp();

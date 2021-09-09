@@ -364,7 +364,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 		return GameConstants.getJobName(id);
 	}
 
-	public MapleStatEffect getItemEffect(int itemId) {
+	public StatEffect getItemEffect(int itemId) {
 		return ItemInformationProvider.getInstance().getItemEffect(itemId);
 	}
 

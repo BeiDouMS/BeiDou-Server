@@ -27,7 +27,7 @@ import client.processor.action.PetAutopotProcessor;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 
 public final class PetAutoPotHandler extends AbstractPacketHandler {
     
@@ -40,7 +40,7 @@ public final class PetAutoPotHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         
         Character chr = c.getPlayer();
-        MapleStatEffect stat = ItemInformationProvider.getInstance().getItemEffect(itemId);
+        StatEffect stat = ItemInformationProvider.getInstance().getItemEffect(itemId);
         if (stat.getHp() > 0 || stat.getHpRate() > 0.0) {
             float estimatedHp = ((float) chr.getHp()) / chr.getMaxHp();
             chr.setAutopotHpAlert(estimatedHp + 0.05f);

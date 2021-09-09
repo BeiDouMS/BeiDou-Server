@@ -33,7 +33,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.PlayerBuffValueHolder;
 import scripting.AbstractPlayerInteraction;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.TimerManager;
 import server.life.*;
 import server.maps.MapItem;
@@ -58,7 +58,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         public int speed = 4;
         public Point position = new Point();
         
-        public MapleStatEffect getAttackEffect(Character chr, Skill theSkill) {
+        public StatEffect getAttackEffect(Character chr, Skill theSkill) {
             Skill mySkill = theSkill;
             if (mySkill == null) {
                 mySkill = SkillFactory.getSkill(skill);
@@ -87,7 +87,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         }
         
         Skill theSkill = null;
-        MapleStatEffect attackEffect = null;
+        StatEffect attackEffect = null;
         final int job = player.getJob().getId();
         try {
             if (player.isBanned()) {
@@ -299,13 +299,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     } else if (attack.skill == ILArchMage.ICE_DEMON) {
                         monster.setTempEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK, SkillFactory.getSkill(ILArchMage.ICE_DEMON).getEffect(player.getSkillLevel(SkillFactory.getSkill(ILArchMage.ICE_DEMON))).getDuration() * 1000);
                     } else if (attack.skill == Outlaw.HOMING_BEACON || attack.skill == Corsair.BULLSEYE) {
-                        MapleStatEffect beacon = SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(attack.skill));
+                        StatEffect beacon = SkillFactory.getSkill(attack.skill).getEffect(player.getSkillLevel(attack.skill));
                         beacon.applyBeaconBuff(player, monster.getObjectId());
                     } else if (attack.skill == Outlaw.FLAME_THROWER) {
                         if (!monster.isBoss()) {
                             Skill type = SkillFactory.getSkill(Outlaw.FLAME_THROWER);
                             if (player.getSkillLevel(type) > 0) {
-                                MapleStatEffect DoT = type.getEffect(player.getSkillLevel(type));
+                                StatEffect DoT = type.getEffect(player.getSkillLevel(type));
                                 MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.POISON, 1), type, null, false);
                                 monster.applyStatus(player, monsterStatusEffect, true, DoT.getDuration(), false);
                             }
@@ -378,7 +378,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     } else if (job == 412 || job == 422 || job == 1411) {
                         Skill type = SkillFactory.getSkill(player.getJob().getId() == 412 ? 4120005 : (player.getJob().getId() == 1411 ? 14110004 : 4220005));
                         if (player.getSkillLevel(type) > 0) {
-                            MapleStatEffect venomEffect = type.getEffect(player.getSkillLevel(type));
+                            StatEffect venomEffect = type.getEffect(player.getSkillLevel(type));
                             for (int i = 0; i < attackCount; i++) {
                                 if (venomEffect.makeChanceResult()) {
                                     if (monster.getVenomMulti() < 3) {
@@ -400,7 +400,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                             
                             int skillLevel = player.getSkillLevel(mortalBlow);
                             if (skillLevel > 0) {
-                                MapleStatEffect mortal = mortalBlow.getEffect(skillLevel);
+                                StatEffect mortal = mortalBlow.getEffect(skillLevel);
                                 if (monster.getHp() <= (monster.getStats().getHp() * mortal.getX()) / 100) {
                                     if (Randomizer.rand(1, 100) <= mortal.getY()) {
                                         map.damageMonster(player, monster, Integer.MAX_VALUE);  // thanks Conrad for noticing reduced EXP gain from skill kill
@@ -621,7 +621,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
         if(ret.skill != 0) {
             Skill skill = SkillFactory.getSkill(ret.skill);
-            MapleStatEffect effect = skill.getEffect(ret.skilllevel);
+            StatEffect effect = skill.getEffect(ret.skilllevel);
 
             if (magic) {
                 // Since the skill is magic based, use the magic formula
@@ -668,7 +668,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             
             if(comboBuff > 6) {
                 // Advanced Combo
-                MapleStatEffect ceffect = SkillFactory.getSkill(advcomboid).getEffect(chr.getSkillLevel(advcomboid));
+                StatEffect ceffect = SkillFactory.getSkill(advcomboid).getEffect(chr.getSkillLevel(advcomboid));
                 calcDmgMax = (long) Math.floor(calcDmgMax * (ceffect.getDamage() + 50) / 100 + 0.20 + (comboBuff - 5) * 0.04);
             } else {
                 // Normal Combo
@@ -676,7 +676,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 if(skillLv <= 0 || chr.isGM()) skillLv = SkillFactory.getSkill(oid).getMaxLevel();
                 
                 if(skillLv > 0) {
-                    MapleStatEffect ceffect = SkillFactory.getSkill(oid).getEffect(skillLv);
+                    StatEffect ceffect = SkillFactory.getSkill(oid).getEffect(skillLv);
                     calcDmgMax = (long) Math.floor(calcDmgMax * (ceffect.getDamage() + 50) / 100 + Math.floor((comboBuff - 1) * (skillLv / 6)) / 100);
                 }
             }
@@ -697,7 +697,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
         
         if(chr.getEnergyBar() == 15000) {
             int energycharge = chr.isCygnus() ? ThunderBreaker.ENERGY_CHARGE : Marauder.ENERGY_CHARGE;
-            MapleStatEffect ceffect = SkillFactory.getSkill(energycharge).getEffect(chr.getSkillLevel(energycharge));
+            StatEffect ceffect = SkillFactory.getSkill(energycharge).getEffect(chr.getSkillLevel(energycharge));
             calcDmgMax *= (100 + ceffect.getDamage()) / 100;
         }
         

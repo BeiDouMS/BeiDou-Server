@@ -31,7 +31,7 @@ import constants.skills.FPArchMage;
 import constants.skills.ILArchMage;
 import net.packet.InPacket;
 import net.packet.Packet;
-import server.MapleStatEffect;
+import server.StatEffect;
 import tools.PacketCreator;
 
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
@@ -64,9 +64,9 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
                 Packet packet = PacketCreator.magicAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, charge, attack.speed, attack.direction, attack.display);
 		
 		chr.getMap().broadcastMessage(chr, packet, false, true);
-		MapleStatEffect effect = attack.getAttackEffect(chr, null);
+		StatEffect effect = attack.getAttackEffect(chr, null);
 		Skill skill = SkillFactory.getSkill(attack.skill);
-		MapleStatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+		StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
 		if (effect_.getCooldown() > 0) {
 			if (chr.skillIsCooling(attack.skill)) {
 				return;

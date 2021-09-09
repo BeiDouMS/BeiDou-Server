@@ -33,7 +33,7 @@ import client.status.MonsterStatusEffect;
 import constants.skills.Outlaw;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import server.life.Monster;
 import server.life.MonsterInformationProvider;
 import server.maps.Summon;
@@ -82,7 +82,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             return;
         }
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
-        MapleStatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
+        StatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
         p.skip(4);
         List<SummonAttackEntry> allDamage = new ArrayList<>();
         byte direction = p.readByte();
@@ -127,7 +127,7 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         }
     }
     
-    private static int calcMaxDamage(MapleStatEffect summonEffect, Character player, boolean magic) {
+    private static int calcMaxDamage(StatEffect summonEffect, Character player, boolean magic) {
         double maxDamage;
         
         if (magic) {

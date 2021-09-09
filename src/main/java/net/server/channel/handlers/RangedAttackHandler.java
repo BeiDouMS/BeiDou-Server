@@ -35,7 +35,7 @@ import constants.skills.*;
 import net.packet.InPacket;
 import net.packet.Packet;
 import server.ItemInformationProvider;
-import server.MapleStatEffect;
+import server.StatEffect;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -98,7 +98,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             short slot = -1;
             int projectile = 0;
             short bulletCount = 1;
-            MapleStatEffect effect = null;
+            StatEffect effect = null;
             if (attack.skill != 0) {
                 effect = attack.getAttackEffect(chr, null);
                 bulletCount = effect.getBulletCount();
@@ -205,7 +205,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                 
                 if (attack.skill != 0) {
                     Skill skill = SkillFactory.getSkill(attack.skill);
-                    MapleStatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
+                    StatEffect effect_ = skill.getEffect(chr.getSkillLevel(skill));
                     if (effect_.getCooldown() > 0) {
                         if (chr.skillIsCooling(attack.skill)) {
                             return;
