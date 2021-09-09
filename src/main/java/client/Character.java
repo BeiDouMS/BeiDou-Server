@@ -176,7 +176,7 @@ public class Character extends AbstractCharacterObject {
     private List<Integer> lastmonthfameids;
     private final List<WeakReference<MapleMap>> lastVisitedMaps = new LinkedList<>();
     private WeakReference<MapleMap> ownedMap = new WeakReference<>(null);
-    private final Map<Short, MapleQuestStatus> quests;
+    private final Map<Short, QuestStatus> quests;
     private final Set<MapleMonster> controlled = new LinkedHashSet<>();
     private final Map<Integer, String> entered = new LinkedHashMap<>();
     private final Set<MapleMapObject> visibleMapObjects = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -4622,16 +4622,16 @@ public class Character extends AbstractCharacterObject {
         return client.getAbstractPlayerInteraction();
     }
 
-    private List<MapleQuestStatus> getQuests() {
+    private List<QuestStatus> getQuests() {
         synchronized (quests) {
             return new ArrayList<>(quests.values());
         }
     }
 
-    public final List<MapleQuestStatus> getCompletedQuests() {
-        List<MapleQuestStatus> ret = new LinkedList<>();
-        for (MapleQuestStatus qs : getQuests()) {
-            if (qs.getStatus().equals(MapleQuestStatus.Status.COMPLETED)) {
+    public final List<QuestStatus> getCompletedQuests() {
+        List<QuestStatus> ret = new LinkedList<>();
+        for (QuestStatus qs : getQuests()) {
+            if (qs.getStatus().equals(QuestStatus.Status.COMPLETED)) {
                 ret.add(qs);
             }
         }
@@ -5676,7 +5676,7 @@ public class Character extends AbstractCharacterObject {
 
     public final byte getQuestStatus(final int quest) {
         synchronized (quests) {
-            MapleQuestStatus mqs = quests.get((short) quest);
+            QuestStatus mqs = quests.get((short) quest);
             if (mqs != null) {
                 return (byte) mqs.getStatus().getId();
             } else {
@@ -5685,16 +5685,16 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleQuestStatus getQuest(final int quest) {
+    public QuestStatus getQuest(final int quest) {
         return getQuest(MapleQuest.getInstance(quest));
     }
 
-    public MapleQuestStatus getQuest(MapleQuest quest) {
+    public QuestStatus getQuest(MapleQuest quest) {
         synchronized (quests) {
             short questid = quest.getId();
-            MapleQuestStatus qs = quests.get(questid);
+            QuestStatus qs = quests.get(questid);
             if (qs == null) {
-                qs = new MapleQuestStatus(quest, MapleQuestStatus.Status.NOT_STARTED);
+                qs = new QuestStatus(quest, QuestStatus.Status.NOT_STARTED);
                 quests.put(questid, qs);
             }
             return qs;
@@ -5706,17 +5706,17 @@ public class Character extends AbstractCharacterObject {
     public final void setQuestAdd(final MapleQuest quest, final byte status, final String customData) {
         synchronized (quests) {
             if (!quests.containsKey(quest.getId())) {
-                final MapleQuestStatus stat = new MapleQuestStatus(quest, MapleQuestStatus.Status.getById(status));
+                final QuestStatus stat = new QuestStatus(quest, QuestStatus.Status.getById(status));
                 stat.setCustomData(customData);
                 quests.put(quest.getId(), stat);
             }
         }
     }
 
-    public final MapleQuestStatus getQuestNAdd(final MapleQuest quest) {
+    public final QuestStatus getQuestNAdd(final MapleQuest quest) {
         synchronized (quests) {
             if (!quests.containsKey(quest.getId())) {
-                final MapleQuestStatus status = new MapleQuestStatus(quest, MapleQuestStatus.Status.NOT_STARTED);
+                final QuestStatus status = new QuestStatus(quest, QuestStatus.Status.NOT_STARTED);
                 quests.put(quest.getId(), status);
                 return status;
             }
@@ -5724,13 +5724,13 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public final MapleQuestStatus getQuestNoAdd(final MapleQuest quest) {
+    public final QuestStatus getQuestNoAdd(final MapleQuest quest) {
         synchronized (quests) {
             return quests.get(quest.getId());
         }
     }
 
-    public final MapleQuestStatus getQuestRemove(final MapleQuest quest) {
+    public final QuestStatus getQuestRemove(final MapleQuest quest) {
         synchronized (quests) {
             return quests.remove(quest.getId());
         }
@@ -5838,10 +5838,10 @@ public class Character extends AbstractCharacterObject {
         return slots;
     }
 
-    public final List<MapleQuestStatus> getStartedQuests() {
-        List<MapleQuestStatus> ret = new LinkedList<>();
-        for (MapleQuestStatus qs : getQuests()) {
-            if (qs.getStatus().equals(MapleQuestStatus.Status.STARTED)) {
+    public final List<QuestStatus> getStartedQuests() {
+        List<QuestStatus> ret = new LinkedList<>();
+        for (QuestStatus qs : getQuests()) {
+            if (qs.getStatus().equals(QuestStatus.Status.STARTED)) {
                 ret.add(qs);
             }
         }
@@ -7233,7 +7233,7 @@ public class Character extends AbstractCharacterObject {
             }
 
             if (channelserver) {
-                final Map<Integer, MapleQuestStatus> loadedQuestStatus = new LinkedHashMap<>();
+                final Map<Integer, QuestStatus> loadedQuestStatus = new LinkedHashMap<>();
 
                 // Quest status
                 try (PreparedStatement ps = con.prepareStatement("SELECT * FROM queststatus WHERE characterid = ?")) {
@@ -7242,7 +7242,7 @@ public class Character extends AbstractCharacterObject {
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
                             MapleQuest q = MapleQuest.getInstance(rs.getShort("quest"));
-                            MapleQuestStatus status = new MapleQuestStatus(q, MapleQuestStatus.Status.getById(rs.getInt("status")));
+                            QuestStatus status = new QuestStatus(q, QuestStatus.Status.getById(rs.getInt("status")));
                             long cTime = rs.getLong("time");
                             if (cTime > -1) {
                                 status.setCompletionTime(cTime * 1000);
@@ -7267,7 +7267,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(1, charid);
                     try (ResultSet rsProgress = ps.executeQuery()) {
                         while (rsProgress.next()) {
-                            MapleQuestStatus status = loadedQuestStatus.get(rsProgress.getInt("queststatusid"));
+                            QuestStatus status = loadedQuestStatus.get(rsProgress.getInt("queststatusid"));
                             if (status != null) {
                                 status.setProgress(rsProgress.getInt("progressid"), rsProgress.getString("progress"));
                             }
@@ -7280,7 +7280,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(1, charid);
                     try (ResultSet rsMedalMaps = ps.executeQuery()) {
                         while (rsMedalMaps.next()) {
-                            MapleQuestStatus status = loadedQuestStatus.get(rsMedalMaps.getInt("queststatusid"));
+                            QuestStatus status = loadedQuestStatus.get(rsMedalMaps.getInt("queststatusid"));
                             if (status != null) {
                                 status.addMedalMap(rsMedalMaps.getInt("mapid"));
                             }
@@ -7453,7 +7453,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void reloadQuestExpirations() {
-        for (MapleQuestStatus mqs : getStartedQuests()) {
+        for (QuestStatus mqs : getStartedQuests()) {
             if (mqs.getExpirationTime() > 0) {
                 questTimeLimit2(mqs.getQuest(), mqs.getExpirationTime());
             }
@@ -7521,9 +7521,9 @@ public class Character extends AbstractCharacterObject {
         int lastQuestProcessed = 0;
         try {
             synchronized (quests) {
-                for (MapleQuestStatus qs : getQuests()) {
+                for (QuestStatus qs : getQuests()) {
                     lastQuestProcessed = qs.getQuest().getId();
-                    if (qs.getStatus() == MapleQuestStatus.Status.COMPLETED || qs.getQuest().canComplete(this, null)) {
+                    if (qs.getStatus() == QuestStatus.Status.COMPLETED || qs.getQuest().canComplete(this, null)) {
                         continue;
                     }
 
@@ -8675,7 +8675,7 @@ public class Character extends AbstractCharacterObject {
                      PreparedStatement psMedal = con.prepareStatement("INSERT INTO medalmaps VALUES (DEFAULT, ?, ?, ?)")) {
                     psStatus.setInt(1, id);
 
-                    for (MapleQuestStatus qs : getQuests()) {
+                    for (QuestStatus qs : getQuests()) {
                         psStatus.setInt(2, qs.getQuest().getId());
                         psStatus.setInt(3, qs.getStatus().getId());
                         psStatus.setInt(4, (int) (qs.getCompletionTime() / 1000));
@@ -9822,11 +9822,11 @@ public class Character extends AbstractCharacterObject {
 
     public void setQuestProgress(int id, int infoNumber, String progress) {
         MapleQuest q = MapleQuest.getInstance(id);
-        MapleQuestStatus qs = getQuest(q);
+        QuestStatus qs = getQuest(q);
 
         if (qs.getInfoNumber() == infoNumber && infoNumber > 0) {
             MapleQuest iq = MapleQuest.getInstance(infoNumber);
-            MapleQuestStatus iqs = getQuest(iq);
+            QuestStatus iqs = getQuest(iq);
             iqs.setProgress(0, progress);
         } else {
             qs.setProgress(infoNumber, progress);   // quest progress is thoroughly a string match, infoNumber is actually another questid
@@ -9865,7 +9865,7 @@ public class Character extends AbstractCharacterObject {
 
         switch (questUpdate.getLeft()) {
             case UPDATE:
-                sendPacket(PacketCreator.updateQuest(chr, (MapleQuestStatus) objs[0], (Boolean) objs[1]));
+                sendPacket(PacketCreator.updateQuest(chr, (QuestStatus) objs[0], (Boolean) objs[1]));
                 break;
 
             case FORFEIT:
@@ -9877,7 +9877,7 @@ public class Character extends AbstractCharacterObject {
                 break;
 
             case INFO:
-                MapleQuestStatus qs = (MapleQuestStatus) objs[0];
+                QuestStatus qs = (QuestStatus) objs[0];
                 sendPacket(PacketCreator.updateQuestInfo(qs.getQuest().getId(), qs.getNpc()));
                 break;
         }
@@ -9908,17 +9908,17 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void updateQuestStatus(MapleQuestStatus qs) {
+    public void updateQuestStatus(QuestStatus qs) {
         synchronized (quests) {
             quests.put(qs.getQuestID(), qs);
         }
-        if (qs.getStatus().equals(MapleQuestStatus.Status.STARTED)) {
+        if (qs.getStatus().equals(QuestStatus.Status.STARTED)) {
             announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
             if (qs.getInfoNumber() > 0) {
                 announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);
             }
             announceUpdateQuest(DelayedQuestUpdate.INFO, qs);
-        } else if (qs.getStatus().equals(MapleQuestStatus.Status.COMPLETED)) {
+        } else if (qs.getStatus().equals(QuestStatus.Status.COMPLETED)) {
             MapleQuest mquest = qs.getQuest();
             short questid = mquest.getId();
             if (!mquest.isSameDayRepeatable() && !MapleQuest.isExploitableQuest(questid)) {
@@ -9928,7 +9928,7 @@ public class Character extends AbstractCharacterObject {
 
             announceUpdateQuest(DelayedQuestUpdate.COMPLETE, questid, qs.getCompletionTime());
             //announceUpdateQuest(DelayedQuestUpdate.INFO, qs); // happens after giving rewards, for non-next quests only
-        } else if (qs.getStatus().equals(MapleQuestStatus.Status.NOT_STARTED)) {
+        } else if (qs.getStatus().equals(QuestStatus.Status.NOT_STARTED)) {
             announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
             if (qs.getInfoNumber() > 0) {
                 announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);

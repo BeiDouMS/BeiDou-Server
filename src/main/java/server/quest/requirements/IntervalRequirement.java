@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -84,7 +84,7 @@ public class IntervalRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public boolean check(Character chr, Integer npcid) {
-		boolean check = !chr.getQuest(MapleQuest.getInstance(questID)).getStatus().equals(MapleQuestStatus.Status.COMPLETED);
+		boolean check = !chr.getQuest(MapleQuest.getInstance(questID)).getStatus().equals(QuestStatus.Status.COMPLETED);
 		boolean check2 = chr.getQuest(MapleQuest.getInstance(questID)).getCompletionTime() <= System.currentTimeMillis() - interval;
                 
                 if (check || check2) {

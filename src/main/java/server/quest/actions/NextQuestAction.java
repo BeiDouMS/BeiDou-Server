@@ -22,7 +22,7 @@
 package server.quest.actions;
 
 import client.Character;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -49,7 +49,7 @@ public class NextQuestAction extends MapleQuestAction {
 	
 	@Override
 	public void run(Character chr, Integer extSelection) {
-		MapleQuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+		QuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
 		chr.sendPacket(PacketCreator.updateQuestFinish((short) questID, status.getNpc(), (short) nextQuest));
 	}
 } 

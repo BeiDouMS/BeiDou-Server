@@ -310,29 +310,29 @@ public class PacketCreator {
     }
 
     private static void addQuestInfo(OutPacket p, Character chr) {
-        List<MapleQuestStatus> started = chr.getStartedQuests();
+        List<QuestStatus> started = chr.getStartedQuests();
         int startedSize = 0;
-        for (MapleQuestStatus qs : started) {
+        for (QuestStatus qs : started) {
             if (qs.getInfoNumber() > 0) {
                 startedSize++;
             }
             startedSize++;
         }
         p.writeShort(startedSize);
-        for (MapleQuestStatus qs : started) {
+        for (QuestStatus qs : started) {
             p.writeShort(qs.getQuest().getId());
             p.writeString(qs.getProgressData());
 
             short infoNumber = qs.getInfoNumber();
             if (infoNumber > 0) {
-                MapleQuestStatus iqs = chr.getQuest(infoNumber);
+                QuestStatus iqs = chr.getQuest(infoNumber);
                 p.writeShort(infoNumber);
                 p.writeString(iqs.getProgressData());
             }
         }
-        List<MapleQuestStatus> completed = chr.getCompletedQuests();
+        List<QuestStatus> completed = chr.getCompletedQuests();
         p.writeShort(completed.size());
-        for (MapleQuestStatus qs : completed) {
+        for (QuestStatus qs : completed) {
             p.writeShort(qs.getQuest().getId());
             p.writeLong(getTime(qs.getCompletionTime()));
         }
@@ -2738,8 +2738,8 @@ public class PacketCreator {
             p.writeInt(0);
         }
         ArrayList<Short> medalQuests = new ArrayList<>();
-        List<MapleQuestStatus> completed = chr.getCompletedQuests();
-        for (MapleQuestStatus qs : completed) {
+        List<QuestStatus> completed = chr.getCompletedQuests();
+        for (QuestStatus qs : completed) {
             if (qs.getQuest().getId() >= 29000) { // && q.getQuest().getId() <= 29923
                 medalQuests.add(qs.getQuest().getId());
             }
@@ -2878,11 +2878,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateQuest(Character chr, MapleQuestStatus qs, boolean infoUpdate) {
+    public static Packet updateQuest(Character chr, QuestStatus qs, boolean infoUpdate) {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(1);
         if (infoUpdate) {
-            MapleQuestStatus iqs = chr.getQuest(qs.getInfoNumber());
+            QuestStatus iqs = chr.getQuest(qs.getInfoNumber());
             p.writeShort(iqs.getQuestID());
             p.writeByte(1);
             p.writeString(iqs.getProgressData());

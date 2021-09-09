@@ -22,7 +22,7 @@
 package scripting.quest;
 
 import client.Client;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import constants.game.GameConstants;
 import scripting.AbstractScriptManager;
 import server.quest.MapleQuest;
@@ -110,7 +110,7 @@ public class QuestScriptManager extends AbstractScriptManager {
         
 	public void end(Client c, short questid, int npc) {
         MapleQuest quest = MapleQuest.getInstance(questid);
-        if (!c.getPlayer().getQuest(quest).getStatus().equals(MapleQuestStatus.Status.STARTED) || !c.getPlayer().getMap().containsNPC(npc)) {
+        if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED) || !c.getPlayer().getMap().containsNPC(npc)) {
             dispose(c);
             return;
         }

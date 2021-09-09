@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -62,7 +62,7 @@ public class MobRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public boolean check(Character chr, Integer npcid) {
-		MapleQuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+		QuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
 		for(Integer mobID : mobs.keySet()) {
 			int countReq = mobs.get(mobID);
 			int progress;

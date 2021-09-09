@@ -22,8 +22,8 @@
 package server.quest;
 
 import client.Character;
-import client.MapleQuestStatus;
-import client.MapleQuestStatus.Status;
+import client.QuestStatus;
+import client.QuestStatus.Status;
 import config.YamlConfig;
 import provider.MapleData;
 import provider.MapleDataProvider;
@@ -203,12 +203,12 @@ public class MapleQuest {
     }
     
     public boolean canStartQuestByStatus(Character chr) {
-        MapleQuestStatus mqs = chr.getQuest(this);
+        QuestStatus mqs = chr.getQuest(this);
         return !(!mqs.getStatus().equals(Status.NOT_STARTED) && !(mqs.getStatus().equals(Status.COMPLETED) && repeatable));
     }
     
     public boolean canQuestByInfoProgress(Character chr) {
-        MapleQuestStatus mqs = chr.getQuest(this);
+        QuestStatus mqs = chr.getQuest(this);
         List<String> ix = mqs.getInfoEx();
         if (!ix.isEmpty()) {
             short questid = mqs.getQuestID();
@@ -250,7 +250,7 @@ public class MapleQuest {
     }
 
     public boolean canComplete(Character chr, Integer npcid) {
-        MapleQuestStatus mqs = chr.getQuest(this);
+        QuestStatus mqs = chr.getQuest(this);
         if (!mqs.getStatus().equals(Status.STARTED)) {
             return false;
         }
@@ -306,7 +306,7 @@ public class MapleQuest {
     }
 
     public void reset(Character chr) {
-        MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.NOT_STARTED);
+        QuestStatus newStatus = new QuestStatus(this, QuestStatus.Status.NOT_STARTED);
         chr.updateQuestStatus(newStatus);
     }
 
@@ -317,16 +317,16 @@ public class MapleQuest {
         if (timeLimit > 0) {
             chr.sendPacket(PacketCreator.removeQuestTimeLimit(id));
         }
-        MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.NOT_STARTED);
+        QuestStatus newStatus = new QuestStatus(this, QuestStatus.Status.NOT_STARTED);
         newStatus.setForfeited(chr.getQuest(this).getForfeited() + 1);
         chr.updateQuestStatus(newStatus);
         return true;
     }
 
     public boolean forceStart(Character chr, int npc) {
-        MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.STARTED, npc);
+        QuestStatus newStatus = new QuestStatus(this, QuestStatus.Status.STARTED, npc);
         
-        MapleQuestStatus oldStatus = chr.getQuest(this.getId());
+        QuestStatus oldStatus = chr.getQuest(this.getId());
         for (Entry<Integer, String> e : oldStatus.getProgress().entrySet()) {
             newStatus.setProgress(e.getKey(), e.getValue());
         }
@@ -364,7 +364,7 @@ public class MapleQuest {
             chr.sendPacket(PacketCreator.removeQuestTimeLimit(id));
         }
         
-        MapleQuestStatus newStatus = new MapleQuestStatus(this, MapleQuestStatus.Status.COMPLETED, npc);
+        QuestStatus newStatus = new QuestStatus(this, QuestStatus.Status.COMPLETED, npc);
         newStatus.setForfeited(chr.getQuest(this).getForfeited());
         newStatus.setCompleted(chr.getQuest(this).getCompleted());
         newStatus.setCompletionTime(System.currentTimeMillis());
@@ -581,7 +581,7 @@ public class MapleQuest {
 	}
         
         public boolean restoreLostItem(Character chr, int itemid) {
-                if (chr.getQuest(this).getStatus().equals(MapleQuestStatus.Status.STARTED)) {
+                if (chr.getQuest(this).getStatus().equals(QuestStatus.Status.STARTED)) {
                         ItemAction itemAct = (ItemAction) startActs.get(MapleQuestActionType.ITEM);
                         if (itemAct != null) {
                                 return itemAct.restoreLostItem(chr, itemid);

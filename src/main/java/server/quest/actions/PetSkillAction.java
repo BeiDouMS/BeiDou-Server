@@ -22,7 +22,7 @@
 package server.quest.actions;
 
 import client.Character;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import constants.inventory.ItemConstants;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -50,8 +50,8 @@ public class PetSkillAction extends MapleQuestAction {
 	
 	@Override
 	public boolean check(Character chr, Integer extSelection) {
-		MapleQuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
-		if(!(status.getStatus() == MapleQuestStatus.Status.NOT_STARTED && status.getForfeited() > 0))
+		QuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+		if(!(status.getStatus() == QuestStatus.Status.NOT_STARTED && status.getForfeited() > 0))
 			return false;
 		
 		return chr.getPet(0) != null; 

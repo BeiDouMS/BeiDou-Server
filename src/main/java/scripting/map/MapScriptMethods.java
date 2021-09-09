@@ -23,7 +23,7 @@ package scripting.map;
 
 import client.Character.DelayedQuestUpdate;
 import client.Client;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import scripting.AbstractPlayerInteraction;
 import server.quest.MapleQuest;
 import tools.PacketCreator;
@@ -122,7 +122,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
                 return;
             }
         }
-        MapleQuestStatus qs = getPlayer().getQuest(quest);
+        QuestStatus qs = getPlayer().getQuest(quest);
         if (!qs.addMedalMap(getPlayer().getMapId())) {
             return;
         }
@@ -151,7 +151,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
                 return;
             }
         }
-        MapleQuestStatus qs = getPlayer().getQuest(quest);
+        QuestStatus qs = getPlayer().getQuest(quest);
         if (!qs.addMedalMap(getPlayer().getMapId())) {
             return;
         }

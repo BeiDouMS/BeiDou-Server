@@ -22,7 +22,7 @@
 package server.quest.actions;
 
 import client.Character;
-import client.MapleQuestStatus;
+import client.QuestStatus;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -59,7 +59,7 @@ public class QuestAction extends MapleQuestAction {
 	public void run(Character chr, Integer extSelection) {
 		for(Integer questID : quests.keySet()) {
 			int stat = quests.get(questID);
-			chr.updateQuestStatus(new MapleQuestStatus(MapleQuest.getInstance(questID), MapleQuestStatus.Status.getById(stat)));
+			chr.updateQuestStatus(new QuestStatus(MapleQuest.getInstance(questID), QuestStatus.Status.getById(stat)));
 		}
 	}
 } 
