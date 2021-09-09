@@ -37,10 +37,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Ronan
  */
-public class MapleLoginBypassCoordinator {
-    private final static MapleLoginBypassCoordinator instance = new MapleLoginBypassCoordinator();
+public class LoginBypassCoordinator {
+    private final static LoginBypassCoordinator instance = new LoginBypassCoordinator();
 
-    public static MapleLoginBypassCoordinator getInstance() {
+    public static LoginBypassCoordinator getInstance() {
         return instance;
     }
 

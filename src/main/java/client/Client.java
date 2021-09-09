@@ -38,7 +38,7 @@ import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
-import net.server.coordinator.login.MapleLoginBypassCoordinator;
+import net.server.coordinator.login.LoginBypassCoordinator;
 import net.server.coordinator.session.Hwid;
 import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
@@ -578,7 +578,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
         if (pin.equals(other)) {
             pinattempt = 0;
-            MapleLoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, false);
+            LoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, false);
             return true;
         }
         return false;
@@ -611,7 +611,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
         if (pic.equals(other)) {    // thanks ryantpayton (HeavenClient) for noticing null pics being checked here
             picattempt = 0;
-            MapleLoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, true);
+            LoginBypassCoordinator.getInstance().registerLoginBypassEntry(hwid, accId, true);
             return true;
         }
         return false;
@@ -1560,11 +1560,11 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean canBypassPin() {
-        return MapleLoginBypassCoordinator.getInstance().canLoginBypass(hwid, accId, false);
+        return LoginBypassCoordinator.getInstance().canLoginBypass(hwid, accId, false);
     }
 
     public boolean canBypassPic() {
-        return MapleLoginBypassCoordinator.getInstance().canLoginBypass(hwid, accId, true);
+        return LoginBypassCoordinator.getInstance().canLoginBypass(hwid, accId, true);
     }
 
     public int getLanguage() {

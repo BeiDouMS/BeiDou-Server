@@ -25,7 +25,7 @@ package client.command.commands.gm0;
 
 import client.Client;
 import client.command.Command;
-import net.server.coordinator.login.MapleLoginBypassCoordinator;
+import net.server.coordinator.login.LoginBypassCoordinator;
 
 public class EnableAuthCommand extends Command {
     {
@@ -36,7 +36,7 @@ public class EnableAuthCommand extends Command {
     public void execute(Client c, String[] params) {
         if (c.tryacquireClient()) {
             try {
-                MapleLoginBypassCoordinator.getInstance().unregisterLoginBypassEntry(c.getHwid(), c.getAccID());
+                LoginBypassCoordinator.getInstance().unregisterLoginBypassEntry(c.getHwid(), c.getAccID());
             } finally {
                 c.releaseClient();
             }
