@@ -216,7 +216,7 @@ public class MapleMapFactory {
                 }
             }
         }
-        MapleFootholdTree fTree = new MapleFootholdTree(lBound, uBound);
+        FootholdTree fTree = new FootholdTree(lBound, uBound);
         for (Foothold fh : allFootholds) {
             fTree.insert(fh);
         }

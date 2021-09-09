@@ -98,7 +98,7 @@ public class MapleMap {
     private Map<MobLootEntry, Long> mobLootEntries = new HashMap(20);
     private List<Runnable> statUpdateRunnables = new ArrayList(50);
     private List<Rectangle> areas = new ArrayList<>();
-    private MapleFootholdTree footholds = null;
+    private FootholdTree footholds = null;
     private Pair<Integer, Integer> xLimits;  // caches the min and max x's with available footholds
     private Rectangle mapArea = new Rectangle();
     private int mapid;
@@ -3036,11 +3036,11 @@ public class MapleMap {
         return areas.get(index);
     }
 
-    public void setFootholds(MapleFootholdTree footholds) {
+    public void setFootholds(FootholdTree footholds) {
         this.footholds = footholds;
     }
 
-    public MapleFootholdTree getFootholds() {
+    public FootholdTree getFootholds() {
         return footholds;
     }
     

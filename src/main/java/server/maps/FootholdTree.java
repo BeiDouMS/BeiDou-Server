@@ -27,30 +27,29 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author Matze
  */
-public class MapleFootholdTree {
-    private MapleFootholdTree nw = null;
-    private MapleFootholdTree ne = null;
-    private MapleFootholdTree sw = null;
-    private MapleFootholdTree se = null;
-    private List<Foothold> footholds = new LinkedList<>();
-    private Point p1;
-    private Point p2;
-    private Point center;
+public class FootholdTree {
+    private FootholdTree nw = null;
+    private FootholdTree ne = null;
+    private FootholdTree sw = null;
+    private FootholdTree se = null;
+    private final List<Foothold> footholds = new LinkedList<>();
+    private final Point p1;
+    private final Point p2;
+    private final Point center;
     private int depth = 0;
-    private static int maxDepth = 8;
+    private static final int maxDepth = 8;
     private int maxDropX;
     private int minDropX;
 
-    public MapleFootholdTree(Point p1, Point p2) {
+    public FootholdTree(Point p1, Point p2) {
         this.p1 = p1;
         this.p2 = p2;
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
-    public MapleFootholdTree(Point p1, Point p2, int depth) {
+    public FootholdTree(Point p1, Point p2, int depth) {
         this.p1 = p1;
         this.p2 = p2;
         this.depth = depth;
@@ -74,14 +73,14 @@ public class MapleFootholdTree {
         }
         if (depth == maxDepth ||
                 (f.getX1() >= p1.x && f.getX2() <= p2.x &&
-                f.getY1() >= p1.y && f.getY2() <= p2.y)) {
+                        f.getY1() >= p1.y && f.getY2() <= p2.y)) {
             footholds.add(f);
         } else {
             if (nw == null) {
-                nw = new MapleFootholdTree(p1, center, depth + 1);
-                ne = new MapleFootholdTree(new Point(center.x, p1.y), new Point(p2.x, center.y), depth + 1);
-                sw = new MapleFootholdTree(new Point(p1.x, center.y), new Point(center.x, p2.y), depth + 1);
-                se = new MapleFootholdTree(center, p2, depth + 1);
+                nw = new FootholdTree(p1, center, depth + 1);
+                ne = new FootholdTree(new Point(center.x, p1.y), new Point(p2.x, center.y), depth + 1);
+                sw = new FootholdTree(new Point(p1.x, center.y), new Point(center.x, p2.y), depth + 1);
+                se = new FootholdTree(center, p2, depth + 1);
             }
             if (f.getX2() <= center.x && f.getY2() <= center.y) {
                 nw.insert(f);
@@ -144,9 +143,7 @@ public class MapleFootholdTree {
             }
             if ((p1.x > center.x || p2.x > center.x) && p1.y > center.y) {
                 ret = se.findWallR(p1, p2);
-                if (ret != null) {
-                    return ret;
-                }
+                return ret;
             }
         }
         return null;
