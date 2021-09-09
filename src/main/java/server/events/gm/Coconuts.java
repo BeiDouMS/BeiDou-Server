@@ -22,17 +22,15 @@
 package server.events.gm;
 
 /**
- *
  * @author kevintjuh93
  */
-public class MapleCoconuts {
-	
-    private int id;
+public class Coconuts {
+    private final int id;
     private int hits = 0;
     private boolean hittable = false;
     private long hittime = System.currentTimeMillis();
 
-    public MapleCoconuts(int id) {
+    public Coconuts(int id) {
         this.id = id;
     }
 

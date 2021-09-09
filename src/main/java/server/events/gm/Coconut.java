@@ -42,7 +42,7 @@ public class Coconut extends MapleEvent {
     private int countBombing = 80;
     private int countFalling = 401;
     private int countStopped = 20;
-    private final List<MapleCoconuts> coconuts = new LinkedList<>();
+    private final List<Coconuts> coconuts = new LinkedList<>();
 
     public Coconut(MapleMap map) {
         super(1, 50);
@@ -52,7 +52,7 @@ public class Coconut extends MapleEvent {
     public void startEvent() {
         map.startEvent();
         for (int i = 0; i < 506; i++) {
-            coconuts.add(new MapleCoconuts(i));
+            coconuts.add(new Coconuts(i));
         }
         map.broadcastMessage(PacketCreator.hitCoconut(true, 0, 0));
         setCoconutsHittable(true);
@@ -181,16 +181,16 @@ public class Coconut extends MapleEvent {
         countStopped--;
     }
 
-    public MapleCoconuts getCoconut(int id) {
+    public Coconuts getCoconut(int id) {
         return coconuts.get(id);
     }
 
-    public List<MapleCoconuts> getAllCoconuts() {
+    public List<Coconuts> getAllCoconuts() {
         return coconuts;
     }
 
     public void setCoconutsHittable(boolean hittable) {
-        for (MapleCoconuts nut : coconuts) {
+        for (Coconuts nut : coconuts) {
             nut.setHittable(hittable);
         }
     }
