@@ -3897,7 +3897,7 @@ public class MapleMap {
             chr.setFitness(new Fitness(chr));
             chr.getFitness().startFitness();
         } else if (this.mapid == 109030101 || this.mapid == 109030201 || this.mapid == 109030301 || this.mapid == 109030401) {
-            chr.setOla(new MapleOla(chr));
+            chr.setOla(new Ola(chr));
             chr.getOla().startOla();
         } else if (this.mapid == 109020001 && getOx() == null) {
             setOx(new MapleOxQuiz(this));
