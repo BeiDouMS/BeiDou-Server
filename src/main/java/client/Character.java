@@ -191,7 +191,7 @@ public class Character extends AbstractCharacterObject {
     private final Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
     private final Map<Integer, MapleSummon> summons = new LinkedHashMap<>();
     private final Map<Integer, MapleCoolDownValueHolder> coolDowns = new LinkedHashMap<>();
-    private final EnumMap<Disease, Pair<MapleDiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(Disease.class);
+    private final EnumMap<Disease, Pair<DiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(Disease.class);
     private byte[] m_aQuickslotLoaded;
     private QuickslotBinding m_pQuickslotKeyMapped;
     private MapleDoor pdoor = null;
@@ -2561,8 +2561,8 @@ public class Character extends AbstractCharacterObject {
             Map<Disease, Pair<Long, MobSkill>> ret = new LinkedHashMap<>();
 
             for (Entry<Disease, Long> de : diseaseExpires.entrySet()) {
-                Pair<MapleDiseaseValueHolder, MobSkill> dee = diseases.get(de.getKey());
-                MapleDiseaseValueHolder mdvh = dee.getLeft();
+                Pair<DiseaseValueHolder, MobSkill> dee = diseases.get(de.getKey());
+                DiseaseValueHolder mdvh = dee.getLeft();
 
                 ret.put(de.getKey(), new Pair<>(mdvh.length - (curtime - mdvh.startTime), dee.getRight()));
             }
@@ -2582,7 +2582,7 @@ public class Character extends AbstractCharacterObject {
                 long expTime = curTime + di.getValue().getLeft();
 
                 diseaseExpires.put(di.getKey(), expTime);
-                diseases.put(di.getKey(), new Pair<>(new MapleDiseaseValueHolder(curTime, di.getValue().getLeft()), di.getValue().getRight()));
+                diseases.put(di.getKey(), new Pair<>(new DiseaseValueHolder(curTime, di.getValue().getLeft()), di.getValue().getRight()));
             }
         } finally {
             chrLock.unlock();
@@ -2590,7 +2590,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void announceDiseases() {
-        Set<Entry<Disease, Pair<MapleDiseaseValueHolder, MobSkill>>> chrDiseases;
+        Set<Entry<Disease, Pair<DiseaseValueHolder, MobSkill>>> chrDiseases;
 
         chrLock.lock();
         try {
@@ -2604,7 +2604,7 @@ public class Character extends AbstractCharacterObject {
             chrLock.unlock();
         }
 
-        for (Entry<Disease, Pair<MapleDiseaseValueHolder, MobSkill>> di : chrDiseases) {
+        for (Entry<Disease, Pair<DiseaseValueHolder, MobSkill>> di : chrDiseases) {
             Disease disease = di.getKey();
             MobSkill skill = di.getValue().getRight();
             final List<Pair<Disease, Integer>> debuff = Collections.singletonList(new Pair<>(disease, Integer.valueOf(skill.getX())));
@@ -2647,7 +2647,7 @@ public class Character extends AbstractCharacterObject {
             try {
                 long curTime = Server.getInstance().getCurrentTime();
                 diseaseExpires.put(disease, curTime + skill.getDuration());
-                diseases.put(disease, new Pair<>(new MapleDiseaseValueHolder(curTime, skill.getDuration()), skill));
+                diseases.put(disease, new Pair<>(new DiseaseValueHolder(curTime, skill.getDuration()), skill));
             } finally {
                 chrLock.unlock();
             }
