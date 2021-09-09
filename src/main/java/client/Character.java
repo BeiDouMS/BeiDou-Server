@@ -194,7 +194,7 @@ public class Character extends AbstractCharacterObject {
     private final EnumMap<Disease, Pair<DiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(Disease.class);
     private byte[] m_aQuickslotLoaded;
     private QuickslotBinding m_pQuickslotKeyMapped;
-    private MapleDoor pdoor = null;
+    private Door pdoor = null;
     private Map<MapleQuest, Long> questExpirations = new LinkedHashMap<>();
     private ScheduledFuture<?> dragonBloodSchedule;
     private ScheduledFuture<?> hpDecreaseTask;
@@ -889,7 +889,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean canDoor() {
-        MapleDoor door = getPlayerDoor();
+        Door door = getPlayerDoor();
         return door == null || (door.isActive() && door.getElapsedDeployTime() > 5000);
     }
 
@@ -1523,7 +1523,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private static void addPartyPlayerDoor(Character target) {
-        MapleDoor targetDoor = target.getPlayerDoor();
+        Door targetDoor = target.getPlayerDoor();
         if (targetDoor != null) {
             target.applyPartyDoor(targetDoor, true);
         }
@@ -1540,18 +1540,18 @@ public class Character extends AbstractCharacterObject {
             addPartyPlayerDoor(target);
         }
 
-        Map<Integer, MapleDoor> partyDoors = null;
+        Map<Integer, Door> partyDoors = null;
         if (!partyMembers.isEmpty()) {
             partyDoors = party.getDoors();
 
             for (Character pchr : partyMembers) {
-                MapleDoor door = partyDoors.get(pchr.getId());
+                Door door = partyDoors.get(pchr.getId());
                 if (door != null) {
                     door.updateDoorPortal(pchr);
                 }
             }
 
-            for (MapleDoor door : partyDoors.values()) {
+            for (Door door : partyDoors.values()) {
                 for (Character pchar : partyMembers) {
                     MapleDoorObject mdo = door.getTownDoor();
                     mdo.sendDestroyData(pchar.getClient(), true);
@@ -1560,8 +1560,8 @@ public class Character extends AbstractCharacterObject {
             }
 
             if (partyLeaver != null) {
-                Collection<MapleDoor> leaverDoors = partyLeaver.getDoors();
-                for (MapleDoor door : leaverDoors) {
+                Collection<Door> leaverDoors = partyLeaver.getDoors();
+                for (Door door : leaverDoors) {
                     for (Character pchar : partyMembers) {
                         MapleDoorObject mdo = door.getTownDoor();
                         mdo.sendDestroyData(pchar.getClient(), true);
@@ -1572,7 +1572,7 @@ public class Character extends AbstractCharacterObject {
 
             List<Integer> histMembers = party.getMembersSortedByHistory();
             for (Integer chrid : histMembers) {
-                MapleDoor door = partyDoors.get(chrid);
+                Door door = partyDoors.get(chrid);
 
                 if (door != null) {
                     for (Character pchar : partyMembers) {
@@ -1585,23 +1585,23 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (partyLeaver != null) {
-            Collection<MapleDoor> leaverDoors = partyLeaver.getDoors();
+            Collection<Door> leaverDoors = partyLeaver.getDoors();
 
             if (partyDoors != null) {
-                for (MapleDoor door : partyDoors.values()) {
+                for (Door door : partyDoors.values()) {
                     MapleDoorObject mdo = door.getTownDoor();
                     mdo.sendDestroyData(partyLeaver.getClient(), true);
                     partyLeaver.removeVisibleMapObject(mdo);
                 }
             }
 
-            for (MapleDoor door : leaverDoors) {
+            for (Door door : leaverDoors) {
                 MapleDoorObject mdo = door.getTownDoor();
                 mdo.sendDestroyData(partyLeaver.getClient(), true);
                 partyLeaver.removeVisibleMapObject(mdo);
             }
 
-            for (MapleDoor door : leaverDoors) {
+            for (Door door : leaverDoors) {
                 door.updateDoorPortal(partyLeaver);
 
                 MapleDoorObject mdo = door.getTownDoor();
@@ -3775,7 +3775,7 @@ public class Character extends AbstractCharacterObject {
             effLock.lock();
             try {
                 if (!hasBuffFromSourceid(Priest.MYSTIC_DOOR)) {
-                    MapleDoor.attemptRemoveDoor(this);
+                    Door.attemptRemoveDoor(this);
                 }
             } finally {
                 effLock.unlock();
@@ -4672,16 +4672,16 @@ public class Character extends AbstractCharacterObject {
         return dojoStage;
     }
 
-    public Collection<MapleDoor> getDoors() {
+    public Collection<Door> getDoors() {
         prtLock.lock();
         try {
-            return (party != null ? Collections.unmodifiableCollection(party.getDoors().values()) : (pdoor != null ? Collections.singleton(pdoor) : new LinkedHashSet<MapleDoor>()));
+            return (party != null ? Collections.unmodifiableCollection(party.getDoors().values()) : (pdoor != null ? Collections.singleton(pdoor) : new LinkedHashSet<Door>()));
         } finally {
             prtLock.unlock();
         }
     }
 
-    public MapleDoor getPlayerDoor() {
+    public Door getPlayerDoor() {
         prtLock.lock();
         try {
             return pdoor;
@@ -4690,8 +4690,8 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public MapleDoor getMainTownDoor() {
-        for (MapleDoor door : getDoors()) {
+    public Door getMainTownDoor() {
+        for (Door door : getDoors()) {
             if (door.getTownPortal().getId() == 0x80) {
                 return door;
             }
@@ -4700,7 +4700,7 @@ public class Character extends AbstractCharacterObject {
         return null;
     }
 
-    public void applyPartyDoor(MapleDoor door, boolean partyUpdate) {
+    public void applyPartyDoor(Door door, boolean partyUpdate) {
         Party chrParty;
         prtLock.lock();
         try {
@@ -4719,8 +4719,8 @@ public class Character extends AbstractCharacterObject {
         silentPartyUpdateInternal(chrParty);
     }
 
-    public MapleDoor removePartyDoor(boolean partyUpdate) {
-        MapleDoor ret = null;
+    public Door removePartyDoor(boolean partyUpdate) {
+        Door ret = null;
         Party chrParty;
 
         prtLock.lock();

@@ -31,7 +31,7 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import scripting.event.EventInstanceManager;
-import server.maps.MapleDoor;
+import server.maps.Door;
 import server.maps.MapleMap;
 import server.partyquest.MonsterCarnival;
 import tools.PacketCreator;
@@ -50,7 +50,7 @@ public class Party {
     private final Map<Integer, Integer> histMembers = new HashMap<>();
     private int nextEntry = 0;
 
-    private final Map<Integer, MapleDoor> doors = new HashMap<>();
+    private final Map<Integer, Door> doors = new HashMap<>();
 
     private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.PARTY, true);
 
@@ -234,7 +234,7 @@ public class Party {
         return slot;
     }
 
-    public void addDoor(Integer owner, MapleDoor door) {
+    public void addDoor(Integer owner, Door door) {
         lock.lock();
         try {
             this.doors.put(owner, door);
@@ -252,7 +252,7 @@ public class Party {
         }
     }
 
-    public Map<Integer, MapleDoor> getDoors() {
+    public Map<Integer, Door> getDoors() {
         lock.lock();
         try {
             return Collections.unmodifiableMap(doors);

@@ -3687,9 +3687,9 @@ public class PacketCreator {
         p.writeByte(8);
         p.writeInt(party.getId());
 
-        Map<Integer, MapleDoor> partyDoors = party.getDoors();
+        Map<Integer, Door> partyDoors = party.getDoors();
         if (partyDoors.size() > 0) {
-            MapleDoor door = partyDoors.get(partycharid);
+            Door door = partyDoors.get(partycharid);
 
             if (door != null) {
                 MapleDoorObject mdo = door.getAreaDoor();
@@ -3797,11 +3797,11 @@ public class PacketCreator {
             }
         }
 
-        Map<Integer, MapleDoor> partyDoors = party.getDoors();
+        Map<Integer, Door> partyDoors = party.getDoors();
         for (PartyCharacter partychar : partymembers) {
             if (partychar.getChannel() == forchannel && !leaving) {
                 if (partyDoors.size() > 0) {
-                    MapleDoor door = partyDoors.get(partychar.getId());
+                    Door door = partyDoors.get(partychar.getId());
                     if (door != null) {
                         MapleDoorObject mdo = door.getTownDoor();
                         p.writeInt(mdo.getTown().getId());

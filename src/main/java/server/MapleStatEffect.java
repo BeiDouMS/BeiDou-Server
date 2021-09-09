@@ -1007,7 +1007,7 @@ public class MapleStatEffect {
                 y = applyto.getMap().getGroundBelow(applyto.getPosition()).y;    // thanks Lame for pointing out unusual cases of doors sending players on ground below
             }
             Point doorPosition = new Point(applyto.getPosition().x, y);
-            MapleDoor door = new MapleDoor(applyto, doorPosition);
+            Door door = new Door(applyto, doorPosition);
 
             if (door.getOwnerId() >= 0) {
                 applyto.applyPartyDoor(door, false);

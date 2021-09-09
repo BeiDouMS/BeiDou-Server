@@ -31,38 +31,37 @@ import java.awt.*;
 import java.util.Collection;
 
 /**
- *
  * @author Matze
  * @author Ronan
  */
-public class MapleDoor {
+public class Door {
     private int ownerId;
     private MapleMap town;
     private MaplePortal townPortal;
-    private MapleMap target;
+    private final MapleMap target;
     private Pair<String, Integer> posStatus = null;
     private long deployTime;
     private boolean active;
-    
+
     private MapleDoorObject townDoor;
     private MapleDoorObject areaDoor;
-    
-    public MapleDoor(Character owner, Point targetPosition) {
+
+    public Door(Character owner, Point targetPosition) {
         this.ownerId = owner.getId();
         this.target = owner.getMap();
-        
-        if(target.canDeployDoor(targetPosition)) {
-            if(YamlConfig.config.server.USE_ENFORCE_MDOOR_POSITION) {
+
+        if (target.canDeployDoor(targetPosition)) {
+            if (YamlConfig.config.server.USE_ENFORCE_MDOOR_POSITION) {
                 posStatus = target.getDoorPositionStatus(targetPosition);
             }
-            
-            if(posStatus == null) {
+
+            if (posStatus == null) {
                 this.town = this.target.getReturnMap();
                 this.townPortal = getTownDoorPortal(owner.getDoorSlot());
                 this.deployTime = System.currentTimeMillis();
                 this.active = true;
 
-                if(townPortal != null) {
+                if (townPortal != null) {
                     this.areaDoor = new MapleDoorObject(ownerId, town, target, townPortal.getId(), targetPosition, townPortal.getPosition());
                     this.townDoor = new MapleDoorObject(ownerId, target, town, -1, townPortal.getPosition(), targetPosition);
 
@@ -78,17 +77,17 @@ public class MapleDoor {
             this.ownerId = -2;
         }
     }
-    
+
     public void updateDoorPortal(Character owner) {
         int slot = owner.fetchDoorSlot();
-        
+
         MaplePortal nextTownPortal = getTownDoorPortal(slot);
-        if(nextTownPortal != null) {
+        if (nextTownPortal != null) {
             townPortal = nextTownPortal;
             areaDoor.update(nextTownPortal.getId(), nextTownPortal.getPosition());
         }
     }
-    
+
     private void broadcastRemoveDoor(Character owner) {
         MapleDoorObject areaDoor = this.getAreaDoor();
         MapleDoorObject townDoor = this.getTownDoor();
@@ -98,7 +97,7 @@ public class MapleDoor {
 
         Collection<Character> targetChars = target.getCharacters();
         Collection<Character> townChars = town.getCharacters();
-        
+
         target.removeMapObject(areaDoor);
         town.removeMapObject(townDoor);
 
@@ -111,12 +110,12 @@ public class MapleDoor {
             townDoor.sendDestroyData(chr.getClient());
             chr.removeVisibleMapObject(townDoor);
         }
-        
+
         owner.removePartyDoor(false);
-        
+
         if (this.getTownPortal().getId() == 0x80) {
             for (Character chr : townChars) {
-                MapleDoor door = chr.getMainTownDoor();
+                Door door = chr.getMainTownDoor();
                 if (door != null) {
                     townDoor.sendSpawnData(chr.getClient());
                     chr.addVisibleMapObject(townDoor);
@@ -124,14 +123,14 @@ public class MapleDoor {
             }
         }
     }
-    
+
     public static void attemptRemoveDoor(final Character owner) {
-        final MapleDoor destroyDoor = owner.getPlayerDoor();
+        final Door destroyDoor = owner.getPlayerDoor();
         if (destroyDoor != null && destroyDoor.dispose()) {
             long effectTimeLeft = 3000 - destroyDoor.getElapsedDeployTime();   // portal deployment effect duration
             if (effectTimeLeft > 0) {
                 MapleMap town = destroyDoor.getTown();
-                
+
                 OverallService service = (OverallService) town.getChannelServer().getServiceAccess(ChannelServices.OVERALL);
                 service.registerOverallAction(town.getId(), () -> {
                     destroyDoor.broadcastRemoveDoor(owner);   // thanks BHB88 for noticing doors crashing players when instantly cancelling buff
@@ -141,11 +140,11 @@ public class MapleDoor {
             }
         }
     }
-    
+
     private MaplePortal getTownDoorPortal(int doorid) {
         return town.getDoorPortal(doorid);
     }
-    
+
     public int getOwnerId() {
         return ownerId;
     }
@@ -153,11 +152,11 @@ public class MapleDoor {
     public MapleDoorObject getTownDoor() {
         return townDoor;
     }
-    
+
     public MapleDoorObject getAreaDoor() {
         return areaDoor;
     }
-    
+
     public MapleMap getTown() {
         return town;
     }
@@ -173,11 +172,11 @@ public class MapleDoor {
     public Pair<String, Integer> getDoorStatus() {
         return posStatus;
     }
-    
+
     public long getElapsedDeployTime() {
         return System.currentTimeMillis() - deployTime;
     }
-    
+
     private boolean dispose() {
         if (active) {
             active = false;
@@ -186,7 +185,7 @@ public class MapleDoor {
             return false;
         }
     }
-    
+
     public boolean isActive() {
         return active;
     }
