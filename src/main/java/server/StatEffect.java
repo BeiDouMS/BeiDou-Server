@@ -42,8 +42,8 @@ import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.life.Monster;
 import server.maps.*;
-import server.partyquest.MapleCarnivalFactory;
-import server.partyquest.MapleCarnivalFactory.MCSkill;
+import server.partyquest.CarnivalFactory;
+import server.partyquest.CarnivalFactory.MCSkill;
 import tools.ArrayMap;
 import tools.PacketCreator;
 import tools.Pair;
@@ -1033,7 +1033,7 @@ public class StatEffect {
         } else if (cp != 0 && applyto.getMonsterCarnival() != null) {
             applyto.gainCP(cp);
         } else if (nuffSkill != 0 && applyto.getParty() != null && applyto.getMap().isCPQMap()) { // added by Drago (Dragohe4rt)
-            final MCSkill skill = MapleCarnivalFactory.getInstance().getSkill(nuffSkill);
+            final MCSkill skill = CarnivalFactory.getInstance().getSkill(nuffSkill);
             if (skill != null) {
                 final Disease dis = skill.getDisease();
                 Party opposition = applyfrom.getParty().getEnemy();

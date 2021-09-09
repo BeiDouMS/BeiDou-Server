@@ -59,9 +59,9 @@ import server.TimerManager;
 import server.events.gm.*;
 import server.life.*;
 import server.life.LifeFactory.selfDestruction;
+import server.partyquest.CarnivalFactory;
+import server.partyquest.CarnivalFactory.MCSkill;
 import server.partyquest.GuardianSpawnPoint;
-import server.partyquest.MapleCarnivalFactory;
-import server.partyquest.MapleCarnivalFactory.MCSkill;
 import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
@@ -4288,7 +4288,7 @@ public class MapleMap {
             if (team == 0 && redTeamBuffs.size() >= 4 || team == 1 && blueTeamBuffs.size() >= 4) {
                 return 2;
             }
-            final MCSkill skill = MapleCarnivalFactory.getInstance().getGuardian(num);
+            final MCSkill skill = CarnivalFactory.getInstance().getGuardian(num);
             if (team == 0 && redTeamBuffs.contains(skill)) {
                 return 0;
             } else if (team == 1 && blueTeamBuffs.contains(skill)) {

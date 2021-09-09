@@ -30,8 +30,8 @@ import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import server.life.LifeFactory;
 import server.life.Monster;
-import server.partyquest.MapleCarnivalFactory;
-import server.partyquest.MapleCarnivalFactory.MCSkill;
+import server.partyquest.CarnivalFactory;
+import server.partyquest.CarnivalFactory.MCSkill;
 import server.partyquest.MonsterCarnival;
 import tools.PacketCreator;
 import tools.Pair;
@@ -93,7 +93,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
-                        final MCSkill skill = MapleCarnivalFactory.getInstance().getSkill(skillid.get(num)); //ugh wtf
+                        final MCSkill skill = CarnivalFactory.getInstance().getSkill(skillid.get(num)); //ugh wtf
                         if (skill == null || c.getPlayer().getCP() < skill.cpLoss) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());
@@ -133,7 +133,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         neededCP = skill.cpLoss;
                         c.sendPacket(PacketCreator.enableActions());
                     } else if (tab == 2) { //protectors
-                        final MCSkill skill = MapleCarnivalFactory.getInstance().getGuardian(num);
+                        final MCSkill skill = CarnivalFactory.getInstance().getGuardian(num);
                         if (skill == null || c.getPlayer().getCP() < skill.cpLoss) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());

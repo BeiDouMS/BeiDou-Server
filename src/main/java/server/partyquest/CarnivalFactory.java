@@ -15,24 +15,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
-    *@author Drago (Dragohe4rt)
-*/
-public class MapleCarnivalFactory {
+ * @author Drago (Dragohe4rt)
+ */
+public class CarnivalFactory {
 
-    private final static MapleCarnivalFactory instance = new MapleCarnivalFactory();
+    private final static CarnivalFactory instance = new CarnivalFactory();
     private final Map<Integer, MCSkill> skills = new HashMap<>();
     private final Map<Integer, MCSkill> guardians = new HashMap<>();
     private final DataProvider dataRoot = DataProviderFactory.getDataProvider(WZFiles.SKILL);
-    
+
     private final List<Integer> singleTargetedSkills = new ArrayList<>();
     private final List<Integer> multiTargetedSkills = new ArrayList<>();
 
-    public MapleCarnivalFactory() {
+    public CarnivalFactory() {
         //whoosh
-	initialize();
+        initialize();
     }
 
-    public static final MapleCarnivalFactory getInstance() {
+    public static final CarnivalFactory getInstance() {
         return instance;
     }
 
@@ -43,7 +43,7 @@ public class MapleCarnivalFactory {
         for (Data z : dataRoot.getData("MCSkill.img")) {
             Integer id = Integer.parseInt(z.getName());
             MCSkill ms = new MCSkill(DataTool.getInt("spendCP", z, 0), DataTool.getInt("mobSkillID", z, 0), DataTool.getInt("level", z, 0), DataTool.getInt("target", z, 1) > 1);
-            
+
             skills.put(id, ms);
             if (ms.targetsAll) {
                 multiTargetedSkills.add(id);
@@ -63,7 +63,7 @@ public class MapleCarnivalFactory {
             return skills.get(singleTargetedSkills.get((int) (Math.random() * singleTargetedSkills.size())));
         }
     }
-    
+
     public MCSkill getSkill(final int id) {
         MCSkill skill = skills.get(id);
         if (skill != null && skill.skillid <= 0) {
@@ -92,7 +92,7 @@ public class MapleCarnivalFactory {
         public MobSkill getSkill() {
             return getMobSkill(skillid, level);
         }
-        
+
         public static MobSkill getMobSkill(int skillid, int level) {
             return MobSkillFactory.getMobSkill(skillid, level);
         }

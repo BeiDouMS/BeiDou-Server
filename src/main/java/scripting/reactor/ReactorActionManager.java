@@ -37,8 +37,8 @@ import server.maps.MapMonitor;
 import server.maps.MapleMap;
 import server.maps.Reactor;
 import server.maps.ReactorDropEntry;
-import server.partyquest.MapleCarnivalFactory;
-import server.partyquest.MapleCarnivalFactory.MCSkill;
+import server.partyquest.CarnivalFactory;
+import server.partyquest.CarnivalFactory.MCSkill;
 import tools.PacketCreator;
 
 import javax.script.Invocable;
@@ -324,7 +324,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
     
     public void dispelAllMonsters(int num, int team) { //dispels all mobs, cpq
-        final MCSkill skil = MapleCarnivalFactory.getInstance().getGuardian(num);
+        final MCSkill skil = CarnivalFactory.getInstance().getGuardian(num);
         if (skil != null) {
             for (Monster mons : getMap().getAllMonsters()) {
                 if(mons.getTeam() == team) {
