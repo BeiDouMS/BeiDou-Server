@@ -33,8 +33,8 @@ import java.util.Set;
 /**
  * @author RonanLana
  */
-public class MapleCashidGenerator {
-    private static final Logger log = LoggerFactory.getLogger(MapleCashidGenerator.class);
+public class CashIdGenerator {
+    private static final Logger log = LoggerFactory.getLogger(CashIdGenerator.class);
     private final static Set<Integer> existentCashids = new HashSet<>(10000);
     private static Integer runningCashid = 0;
 

@@ -28,7 +28,7 @@ import client.SkillFactory;
 import client.command.CommandsExecutor;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.manipulator.MapleCashidGenerator;
+import client.inventory.manipulator.CashIdGenerator;
 import client.newyear.NewYearCardRecord;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -852,7 +852,7 @@ public class Server {
             loadCouponRates(con);
             updateActiveCoupons(con);
             NewYearCardRecord.startPendingNewYearCardRequests(con);
-            MapleCashidGenerator.loadExistentCashIdsFromDb(con);
+            CashIdGenerator.loadExistentCashIdsFromDb(con);
             applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
             applyAllWorldTransfers(con);
 

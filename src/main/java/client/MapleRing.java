@@ -21,7 +21,7 @@
 */
 package client;
 
-import client.inventory.manipulator.MapleCashidGenerator;
+import client.inventory.manipulator.CashIdGenerator;
 import tools.DatabaseConnection;
 import tools.Pair;
 
@@ -85,8 +85,8 @@ public class MapleRing implements Comparable<MapleRing> {
                     ps.executeBatch();
                 }
 
-                MapleCashidGenerator.freeCashId(ring.getRingId());
-                MapleCashidGenerator.freeCashId(ring.getPartnerRingId());
+                CashIdGenerator.freeCashId(ring.getRingId());
+                CashIdGenerator.freeCashId(ring.getPartnerRingId());
 
                 try (PreparedStatement ps = con.prepareStatement("UPDATE inventoryequipment SET ringid=-1 WHERE ringid=?")) {
                     ps.setInt(1, ring.getRingId());
@@ -112,8 +112,8 @@ public class MapleRing implements Comparable<MapleRing> {
             }
 
             int[] ringID = new int[2];
-            ringID[0] = MapleCashidGenerator.generateCashId();
-            ringID[1] = MapleCashidGenerator.generateCashId();
+            ringID[0] = CashIdGenerator.generateCashId();
+            ringID[1] = CashIdGenerator.generateCashId();
 
             try (Connection con = DatabaseConnection.getConnection()) {
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO rings (id, itemid, partnerRingId, partnerChrId, partnername) VALUES (?, ?, ?, ?, ?)")) {

@@ -26,7 +26,7 @@ import client.autoban.AutobanManager;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.*;
 import client.inventory.Equip.StatUpgrade;
-import client.inventory.manipulator.MapleCashidGenerator;
+import client.inventory.manipulator.CashIdGenerator;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.keybind.MapleKeyBinding;
 import client.keybind.MapleQuickslotBinding;
@@ -2269,7 +2269,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                                             ps3.executeUpdate();
                                         }
 
-                                        MapleCashidGenerator.freeCashId(ringid);
+                                        CashIdGenerator.freeCashId(ringid);
                                     }
                                 }
                             }
@@ -2286,7 +2286,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                                 ps2.setInt(1, petid);
                                 ps2.executeUpdate();
                             }
-                            MapleCashidGenerator.freeCashId(petid);
+                            CashIdGenerator.freeCashId(petid);
                         }
                     }
                 }

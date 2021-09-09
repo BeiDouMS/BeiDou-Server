@@ -22,7 +22,7 @@
 package client.inventory;
 
 import client.MapleCharacter;
-import client.inventory.manipulator.MapleCashidGenerator;
+import client.inventory.manipulator.CashIdGenerator;
 import constants.game.ExpTable;
 import server.MapleItemInformationProvider;
 import server.movement.AbsoluteLifeMovement;
@@ -103,7 +103,7 @@ public class Pet extends Item {
             ps.setInt(1, petid);
 
             owner.resetExcluded(petid);
-            MapleCashidGenerator.freeCashId(petid);
+            CashIdGenerator.freeCashId(petid);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -128,7 +128,7 @@ public class Pet extends Item {
     public static int createPet(int itemid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, 1, 0, 100, 0, 0)")) {
-            int ret = MapleCashidGenerator.generateCashId();
+            int ret = CashIdGenerator.generateCashId();
             ps.setInt(1, ret);
             ps.setString(2, MapleItemInformationProvider.getInstance().getName(itemid));
             ps.executeUpdate();
@@ -142,7 +142,7 @@ public class Pet extends Item {
     public static int createPet(int itemid, byte level, int closeness, int fullness) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, ?, ?, ?, 0, 0)")) {
-            int ret = MapleCashidGenerator.generateCashId();
+            int ret = CashIdGenerator.generateCashId();
             ps.setInt(1, ret);
             ps.setString(2, MapleItemInformationProvider.getInstance().getName(itemid));
             ps.setByte(3, level);
