@@ -274,7 +274,7 @@ public class Storage {
     public void arrangeItems(Client c) {
         lock.lock();
         try {
-            MapleStorageInventory msi = new MapleStorageInventory(c, items);
+            StorageInventory msi = new StorageInventory(c, items);
             msi.mergeItems();
             items = msi.sortItems();
 
