@@ -22,8 +22,8 @@
 package server;
 
 import client.*;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.status.MonsterStatus;
@@ -940,7 +940,7 @@ public class MapleStatEffect {
         if (isShadowClaw()) {
             short projectileConsume = this.getBulletConsume();  // noticed by shavit
             
-            MapleInventory use = applyto.getInventory(MapleInventoryType.USE);
+            Inventory use = applyto.getInventory(MapleInventoryType.USE);
             use.lockInventory();
             try {
                 Item projectile = null;

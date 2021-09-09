@@ -62,12 +62,10 @@ import server.TimerManager;
 import server.expeditions.MapleExpeditionBossLog;
 import server.life.MaplePlayerNPCFactory;
 import server.quest.MapleQuest;
-import tools.AutoJCE;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.Pair;
 
-import java.security.Security;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -958,8 +956,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        Security.setProperty("crypto.policy", "unlimited");
-        AutoJCE.removeCryptographyRestrictions();
         Server.getInstance().init();
     }
 

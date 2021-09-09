@@ -9,8 +9,8 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
@@ -57,7 +57,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                     MapleCharacter spouse = marriage.getPlayerById(cid);
                                     if (spouse != null) {
                                         MapleInventoryType type = ItemConstants.getInventoryType(itemid);
-                                        MapleInventory chrInv = chr.getInventory(type);
+                                        Inventory chrInv = chr.getInventory(type);
 
                                         Item newItem = null;
                                         chrInv.lockInventory();
@@ -111,7 +111,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                         if (groomWishlist != null) {
                             Item item = marriage.getGiftItem(c, groomWishlist, itemPos);
                             if (item != null) {
-                                if (MapleInventory.checkSpot(chr, item)) {
+                                if (Inventory.checkSpot(chr, item)) {
                                     marriage.removeGiftItem(groomWishlist, item);
                                     marriage.saveGiftItemsToDb(c, groomWishlist, chr.getId());
 
@@ -131,7 +131,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                         List<Item> items = c.getAbstractPlayerInteraction().getUnclaimedMarriageGifts();
                         try {
                             Item item = items.get(itemPos);
-                            if (MapleInventory.checkSpot(chr, item)) {
+                            if (Inventory.checkSpot(chr, item)) {
                                 items.remove(itemPos);
                                 MapleMarriage.saveGiftItemsToDb(c, items, chr.getId());
 

@@ -17,7 +17,7 @@ public enum WZFiles {
     SOUND("Sound"),
     UI("UI");
 
-    public static final String DIRECTORY = "wz";
+    public static final String DIRECTORY = getWzDirectory();
 
     private final String fileName;
 
@@ -31,5 +31,16 @@ public enum WZFiles {
 
     public String getFilePath() {
         return getFile().getPath();
+    }
+
+    private static String getWzDirectory() {
+        // Either provide a custom directory path through the "wz-path" property when launching the .jar,
+        // or don't provide one to use the default "wz" directory
+        String propertyPath = System.getProperty("wz-path");
+        if (propertyPath != null && new File(propertyPath).isDirectory()) {
+            return propertyPath;
+        }
+
+        return "wz";
     }
 }

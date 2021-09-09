@@ -26,9 +26,9 @@ package client.processor.npc;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
+import client.inventory.Inventory;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
@@ -242,7 +242,7 @@ public class DueyProcessor {
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
             MapleInventoryType invType = MapleInventoryType.getByType(invTypeId);
-            MapleInventory inv = c.getPlayer().getInventory(invType);
+            Inventory inv = c.getPlayer().getInventory(invType);
 
             Item item;
             inv.lockInventory();

@@ -246,7 +246,7 @@ public class PacketCreator {
     }
 
     private static void addCharEquips(final OutPacket p, MapleCharacter chr) {
-        MapleInventory equip = chr.getInventory(MapleInventoryType.EQUIPPED);
+        Inventory equip = chr.getInventory(MapleInventoryType.EQUIPPED);
         Collection<Item> ii = MapleItemInformationProvider.getInstance().canWearEquipment(chr, equip.list());
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
@@ -444,7 +444,7 @@ public class PacketCreator {
             p.writeByte(chr.getInventory(MapleInventoryType.getByType(i)).getSlotLimit());
         }
         p.writeLong(getTime(-2));
-        MapleInventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
+        Inventory iv = chr.getInventory(MapleInventoryType.EQUIPPED);
         Collection<Item> equippedC = iv.list();
         List<Item> equipped = new ArrayList<>(equippedC.size());
         List<Item> equippedCash = new ArrayList<>(equippedC.size());

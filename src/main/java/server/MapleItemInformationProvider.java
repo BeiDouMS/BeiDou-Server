@@ -1581,7 +1581,7 @@ public class MapleItemInformationProvider {
     }
 
     public Collection<Item> canWearEquipment(MapleCharacter chr, Collection<Item> items) {
-        MapleInventory inv = chr.getInventory(MapleInventoryType.EQUIPPED);
+        Inventory inv = chr.getInventory(MapleInventoryType.EQUIPPED);
         if (inv.checked()) {
             return items;
         }

@@ -22,8 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package net.server.channel.handlers;
 
 import client.*;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.status.MonsterStatus;
@@ -105,7 +105,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                                     if (dropCount > 0) {
                                         int qty;
                                     
-                                        MapleInventory inv = chr.getInventory(type);
+                                        Inventory inv = chr.getInventory(type);
                                         inv.lockInventory();
                                         try {
                                             qty = Math.min(chr.countItem(loseItem.getId()), dropCount);

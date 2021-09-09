@@ -23,9 +23,9 @@ package server.maps;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
@@ -220,7 +220,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                     Item iitem = shopItem.getItem().copy();
                     iitem.setQuantity((short) (shopItem.getItem().getQuantity() * shopItem.getBundles()));
                     
-                    if (!MapleInventory.checkSpot(chr, iitem)) {
+                    if (!Inventory.checkSpot(chr, iitem)) {
                         chr.sendPacket(PacketCreator.serverNotice(1, "Have a slot available on your inventory to claim back the item."));
                         chr.sendPacket(PacketCreator.enableActions());
                         return;
@@ -656,7 +656,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
             li.add(new Pair<>(it, it.getInventoryType()));
         }
         
-        return MapleInventory.checkSpotsAndOwnership(chr, li);
+        return Inventory.checkSpotsAndOwnership(chr, li);
     }
     
     public int getChannel() {

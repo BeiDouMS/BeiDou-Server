@@ -21,9 +21,9 @@ package server;
 
 import client.MapleCharacter;
 import client.MapleClient;
+import client.inventory.Inventory;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import scripting.event.EventInstanceManager;
@@ -118,7 +118,7 @@ public class MapleMarriage extends EventInstanceManager {
 
     public static boolean claimGiftItems(MapleClient c, MapleCharacter chr) {
         List<Item> gifts = loadGiftItemsFromDb(c, chr.getId());
-        if (MapleInventory.checkSpot(chr, gifts)) {
+        if (Inventory.checkSpot(chr, gifts)) {
             try (Connection con = DatabaseConnection.getConnection()) {
                 ItemFactory.MARRIAGE_GIFTS.saveItems(new LinkedList<>(), chr.getId(), con);
             } catch (SQLException sqle) {

@@ -24,8 +24,8 @@ package client.processor.npc;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
@@ -107,7 +107,7 @@ public class StorageProcessor {
                                         int itemId = p.readInt();
                                         short quantity = p.readShort();
                                         MapleInventoryType invType = ItemConstants.getInventoryType(itemId);
-                                        MapleInventory inv = chr.getInventory(invType);
+                                        Inventory inv = chr.getInventory(invType);
                                         if (slot < 1 || slot > inv.getSlotLimit()) { //player inv starts at one
                                                 AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with storage.");
                                                 FilePrinter.print(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to store item at slot " + slot);

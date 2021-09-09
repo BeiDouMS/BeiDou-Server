@@ -68,7 +68,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 }
                 byte oldLevel = toScroll.getLevel();
                 byte oldSlots = toScroll.getUpgradeSlots();
-                MapleInventory useInventory = chr.getInventory(MapleInventoryType.USE);
+                Inventory useInventory = chr.getInventory(MapleInventoryType.USE);
                 Item scroll = useInventory.getItem(slot);
                 Item wscroll = null;
 
@@ -141,7 +141,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                     if(!ItemConstants.isWeddingRing(toScroll.getItemId())) {
                         mods.add(new ModifyInventory(3, toScroll));
                         if (dst < 0) {
-                            MapleInventory inv = chr.getInventory(MapleInventoryType.EQUIPPED);
+                            Inventory inv = chr.getInventory(MapleInventoryType.EQUIPPED);
 
                             inv.lockInventory();
                             try {
@@ -151,7 +151,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                                 inv.unlockInventory();
                             }
                         } else {
-                            MapleInventory inv = chr.getInventory(MapleInventoryType.EQUIP);
+                            Inventory inv = chr.getInventory(MapleInventoryType.EQUIP);
                             
                             inv.lockInventory();
                             try {

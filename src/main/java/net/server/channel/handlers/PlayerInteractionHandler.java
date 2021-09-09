@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
@@ -518,7 +518,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                             }
                         }
                         
-                        MapleInventory inv = chr.getInventory(ivType);
+                        Inventory inv = chr.getInventory(ivType);
                         inv.lockInventory();
                         try {
                             Item checkItem = chr.getInventory(ivType).getItem(pos);

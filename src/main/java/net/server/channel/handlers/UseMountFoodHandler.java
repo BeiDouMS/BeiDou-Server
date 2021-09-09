@@ -24,8 +24,8 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.MapleMount;
+import client.inventory.Inventory;
 import client.inventory.Item;
-import client.inventory.MapleInventory;
 import client.inventory.MapleInventoryType;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.game.ExpTable;
@@ -46,7 +46,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
         
         MapleCharacter chr = c.getPlayer();
         MapleMount mount = chr.getMount();
-        MapleInventory useInv = chr.getInventory(MapleInventoryType.USE);
+        Inventory useInv = chr.getInventory(MapleInventoryType.USE);
         
         if (c.tryacquireClient()) {
             try {
