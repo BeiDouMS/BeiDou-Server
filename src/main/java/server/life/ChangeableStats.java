@@ -23,7 +23,7 @@ public class ChangeableStats extends OverrideMonsterStats {
 
     public int watk, matk, wdef, mdef, level;
 
-    public ChangeableStats(MapleMonsterStats stats, OverrideMonsterStats ostats) {
+    public ChangeableStats(MonsterStats stats, OverrideMonsterStats ostats) {
         hp = ostats.getHp();
         exp = ostats.getExp();
         mp = ostats.getMp();
@@ -34,7 +34,7 @@ public class ChangeableStats extends OverrideMonsterStats {
         level = stats.getLevel();
     }
 
-    public ChangeableStats(MapleMonsterStats stats, int newLevel, boolean pqMob) { // here we go i think
+    public ChangeableStats(MonsterStats stats, int newLevel, boolean pqMob) { // here we go i think
         final double mod = (double) newLevel / (double) stats.getLevel();
         final double hpRatio = (double) stats.getHp() / (double) stats.getExp();
         final double pqMod = (pqMob ? 1.5 : 1.0); // god damn
@@ -48,7 +48,7 @@ public class ChangeableStats extends OverrideMonsterStats {
         level = newLevel;
     }
 
-    public ChangeableStats(MapleMonsterStats stats, float statModifier, boolean pqMob) {
+    public ChangeableStats(MonsterStats stats, float statModifier, boolean pqMob) {
         this(stats, (int)(statModifier * stats.getLevel()), pqMob);
     }
 }

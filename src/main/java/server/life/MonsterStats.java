@@ -32,7 +32,7 @@ import java.util.*;
 /**
  * @author Frz
  */
-public class MapleMonsterStats {
+public class MonsterStats {
     public boolean changeable;
     public int exp, hp, mp, level, PADamage, PDDamage, MADamage, MDDamage, dropPeriod, cp, buffToGive = -1, removeAfter;
     public boolean boss, undead, ffaLoot, isExplosiveReward, firstAttack, removeOnMiss;
@@ -56,7 +56,7 @@ public class MapleMonsterStats {
     public boolean isChangeable() {
         return changeable;
     }
-    
+
     public int getExp() {
         return exp;
     }
@@ -194,7 +194,7 @@ public class MapleMonsterStats {
         for (int i = this.skills.size(); i < skills.size(); i++) {
             this.skills.add(null);
         }
-        
+
         for (int i = 0; i < skills.size(); i++) {
             this.skills.set(i, skills.get(i));
         }
@@ -279,7 +279,7 @@ public class MapleMonsterStats {
     public void setSelfDestruction(selfDestruction sd) {
         this.selfDestruction = sd;
     }
-    
+
     public void setExplosiveReward(boolean isExplosiveReward) {
         this.isExplosiveReward = isExplosiveReward;
     }
@@ -303,49 +303,49 @@ public class MapleMonsterStats {
     public Pair<Integer, Integer> getCool() {
         return cool;
     }
-    
+
     public int getPDDamage() {
         return PDDamage;
     }
-    
+
     public int getMADamage() {
         return MADamage;
     }
-    
+
     public int getMDDamage() {
         return MDDamage;
     }
-    
+
     public boolean isFriendly() {
         return friendly;
     }
-    
+
     public void setFriendly(boolean value) {
         this.friendly = value;
     }
-    
+
     public void setPDDamage(int PDDamage) {
         this.PDDamage = PDDamage;
     }
-    
+
     public void setMADamage(int MADamage) {
         this.MADamage = MADamage;
     }
-    
+
     public void setMDDamage(int MDDamage) {
         this.MDDamage = MDDamage;
-    } 
-    
+    }
+
     public int getFixedStance() {
         return this.fixedStance;
     }
-    
+
     public void setFixedStance(int stance) {
         this.fixedStance = stance;
     }
-    
-    public MapleMonsterStats copy() {
-        MapleMonsterStats copy = new MapleMonsterStats();
+
+    public MonsterStats copy() {
+        MonsterStats copy = new MonsterStats();
         try {
             FieldCopyUtil.setFields(this, copy);
         } catch (Exception e) {
@@ -353,14 +353,14 @@ public class MapleMonsterStats {
             try {
                 Thread.sleep(10000);
             } catch (Exception ex) {
-                
+
             }
-            
+
         }
-        
+
         return copy;
     }
-    
+
     // FieldCopyUtil src: http://www.codesenior.com/en/tutorial/Java-Copy-Fields-From-One-Object-to-Another-Object-with-Reflection
     private static class FieldCopyUtil { // thanks to Codesenior dev team
         private static void setFields(Object from, Object to) {

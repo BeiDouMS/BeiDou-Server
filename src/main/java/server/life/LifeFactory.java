@@ -39,7 +39,7 @@ public class LifeFactory {
     private final static DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
     private static final Data npcStringData = stringDataWZ.getData("Npc.img");
-    private static final Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
+    private static final Map<Integer, MonsterStats> monsterStats = new HashMap<>();
     private static final Set<Integer> hpbarBosses = getHpBarBosses();
 
     private static Set<Integer> getHpBarBosses() {
@@ -89,7 +89,7 @@ public class LifeFactory {
         }
     }
 
-    private static Pair<MapleMonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
+    private static Pair<MonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
         Data monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
         if (monsterData == null) {
             return null;
@@ -97,11 +97,11 @@ public class LifeFactory {
         Data monsterInfoData = monsterData.getChildByPath("info");
 
         List<MobAttackInfoHolder> attackInfos = new LinkedList<>();
-        MapleMonsterStats stats = new MapleMonsterStats();
+        MonsterStats stats = new MonsterStats();
 
         int linkMid = DataTool.getIntConvert("link", monsterInfoData, 0);
         if (linkMid != 0) {
-            Pair<MapleMonsterStats, List<MobAttackInfoHolder>> linkStats = getMonsterStats(linkMid);
+            Pair<MonsterStats, List<MobAttackInfoHolder>> linkStats = getMonsterStats(linkMid);
             if (linkStats == null) {
                 return null;
             }
@@ -239,9 +239,9 @@ public class LifeFactory {
 
     public static Monster getMonster(int mid) {
         try {
-            MapleMonsterStats stats = monsterStats.get(mid);
+            MonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
-                Pair<MapleMonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
+                Pair<MonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
 
@@ -259,7 +259,7 @@ public class LifeFactory {
 
     public static int getMonsterLevel(int mid) {
         try {
-            MapleMonsterStats stats = monsterStats.get(mid);
+            MonsterStats stats = monsterStats.get(mid);
             if (stats == null) {
                 Data monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
                 if (monsterData == null) {
@@ -278,7 +278,7 @@ public class LifeFactory {
         return -1;
     }
 
-    private static void decodeElementalString(MapleMonsterStats stats, String elemAttr) {
+    private static void decodeElementalString(MonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
             stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.parseInt(String.valueOf(elemAttr.charAt(i + 1)))));
         }

@@ -1,6 +1,6 @@
 package tools.mapletools;
 
-import server.life.MapleMonsterStats;
+import server.life.MonsterStats;
 import tools.Pair;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class MesoFetcher {
 
     private static final Map<Integer, Pair<Integer, Integer>> mobRange = new HashMap<>();
     private static PrintWriter printWriter;
-    private static Map<Integer, MapleMonsterStats> mobStats;
+    private static Map<Integer, MonsterStats> mobStats;
 
     private static Pair<Integer, Integer> calcMesoRange90(int level, boolean boss) {
         int minRange, maxRange;
@@ -76,8 +76,8 @@ public class MesoFetcher {
     private static void calcAllMobsMesoRange() {
         System.out.print("Calculating range... ");
 
-        for (Map.Entry<Integer, MapleMonsterStats> mobStat : mobStats.entrySet()) {
-            MapleMonsterStats mms = mobStat.getValue();
+        for (Map.Entry<Integer, MonsterStats> mobStat : mobStats.entrySet()) {
+            MonsterStats mms = mobStat.getValue();
             Pair<Integer, Integer> mesoRange;
 
             if (mms.getLevel() < 90) {

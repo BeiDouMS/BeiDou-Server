@@ -67,7 +67,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Monster extends AbstractLoadedLife {
 
     private ChangeableStats ostats = null;  //unused, v83 WZs offers no support for changeable stats.
-    private MapleMonsterStats stats;
+    private MonsterStats stats;
     private final AtomicInteger hp = new AtomicInteger(1);
     private final AtomicLong maxHpPlusHeal = new AtomicLong(1);
     private int mp;
@@ -100,7 +100,7 @@ public class Monster extends AbstractLoadedLife {
     private MonitoredReentrantLock animationLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB_ANI);
     private final MonitoredReentrantLock aggroUpdateLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB_AGGRO);
 
-    public Monster(int id, MapleMonsterStats stats) {
+    public Monster(int id, MonsterStats stats) {
         super(id);
         initWithStats(stats);
     }
@@ -118,7 +118,7 @@ public class Monster extends AbstractLoadedLife {
         externalLock.unlock();
     }
 
-    private void initWithStats(MapleMonsterStats baseStats) {
+    private void initWithStats(MonsterStats baseStats) {
         setStance(5);
         this.stats = baseStats.copy();
         hp.set(stats.getHp());
@@ -277,7 +277,7 @@ public class Monster extends AbstractLoadedLife {
         this.VenomMultiplier = multiplier;
     }
 
-    public MapleMonsterStats getStats() {
+    public MonsterStats getStats() {
         return stats;
     }
 

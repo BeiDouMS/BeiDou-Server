@@ -8,7 +8,7 @@ import server.life.ElementalEffectiveness;
 import server.life.LifeFactory.BanishInfo;
 import server.life.LifeFactory.loseItem;
 import server.life.LifeFactory.selfDestruction;
-import server.life.MapleMonsterStats;
+import server.life.MonsterStats;
 import tools.Pair;
 
 import java.util.*;
@@ -17,9 +17,9 @@ public class MonsterStatFetcher {
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
     private static final DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
-    private static final Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
+    private static final Map<Integer, MonsterStats> monsterStats = new HashMap<>();
 
-    static Map<Integer, MapleMonsterStats> getAllMonsterStats() {
+    static Map<Integer, MonsterStats> getAllMonsterStats() {
         DataDirectoryEntry root = data.getRoot();
 
         System.out.print("Parsing mob stats... ");
@@ -36,7 +36,7 @@ public class MonsterStatFetcher {
                 Integer mid = getMonsterId(fileName);
 
                 Data monsterInfoData = monsterData.getChildByPath("info");
-                MapleMonsterStats stats = new MapleMonsterStats();
+                MonsterStats stats = new MonsterStats();
                 stats.setHp(DataTool.getIntConvert("maxHP", monsterInfoData));
                 stats.setFriendly(DataTool.getIntConvert("damagedByMob", monsterInfoData, 0) == 1);
                 stats.setPADamage(DataTool.getIntConvert("PADamage", monsterInfoData));
@@ -134,7 +134,7 @@ public class MonsterStatFetcher {
         return Integer.parseInt(fileName.substring(0, 7));
     }
 
-    private static void decodeElementalString(MapleMonsterStats stats, String elemAttr) {
+    private static void decodeElementalString(MonsterStats stats, String elemAttr) {
         for (int i = 0; i < elemAttr.length(); i += 2) {
             stats.setEffectiveness(Element.getFromChar(elemAttr.charAt(i)), ElementalEffectiveness.getByNumber(Integer.valueOf(String.valueOf(elemAttr.charAt(i + 1)))));
         }
