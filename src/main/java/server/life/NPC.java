@@ -27,9 +27,9 @@ import server.maps.MapleMapObjectType;
 import tools.PacketCreator;
 
 public class NPC extends AbstractLoadedLife {
-    private final MapleNPCStats stats;
+    private final NPCStats stats;
 
-    public NPC(int id, MapleNPCStats stats) {
+    public NPC(int id, NPCStats stats) {
         super(id);
         this.stats = stats;
     }

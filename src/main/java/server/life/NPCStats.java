@@ -22,13 +22,12 @@
 package server.life;
 
 /**
- *
  * @author Matze
  */
-public class MapleNPCStats {
+public class NPCStats {
     private String name;
 
-    public MapleNPCStats(String name) {
+    public NPCStats(String name) {
         this.name = name;
     }
 

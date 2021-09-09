@@ -285,7 +285,7 @@ public class LifeFactory {
     }
 
     public static NPC getNPC(int nid) {
-        return new NPC(nid, new MapleNPCStats(DataTool.getString(nid + "/name", npcStringData, "MISSINGNO")));
+        return new NPC(nid, new NPCStats(DataTool.getString(nid + "/name", npcStringData, "MISSINGNO")));
     }
 
     public static String getNPCDefaultTalk(int nid) {
