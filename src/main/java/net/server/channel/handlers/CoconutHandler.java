@@ -25,7 +25,7 @@ package net.server.channel.handlers;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.events.gm.MapleCoconut;
+import server.events.gm.Coconut;
 import server.events.gm.MapleCoconuts;
 import server.maps.MapleMap;
 import tools.PacketCreator;
@@ -42,7 +42,7 @@ public final class CoconutHandler extends AbstractPacketHandler {
 		 */
 		int id = p.readShort();
 		MapleMap map = c.getPlayer().getMap();
-		MapleCoconut event = map.getCoconut();
+		Coconut event = map.getCoconut();
 		MapleCoconuts nut = event.getCoconut(id);
 		if (!nut.isHittable()){
 			return;

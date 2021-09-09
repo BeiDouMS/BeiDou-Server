@@ -146,7 +146,7 @@ public class MapleMap {
     private boolean eventstarted = false, isMuted = false;
     private MapleSnowball snowball0 = null;
     private MapleSnowball snowball1 = null;
-    private MapleCoconut coconut;
+    private Coconut coconut;
     
     //CPQ
     private int maxMobs;
@@ -3870,11 +3870,11 @@ public class MapleMap {
         return fieldType == 4 || fieldType == 19;
     }
     
-    public void setCoconut(MapleCoconut nut) {
+    public void setCoconut(Coconut nut) {
         this.coconut = nut;
     }
 
-    public MapleCoconut getCoconut() {
+    public Coconut getCoconut() {
         return coconut;
     }
 
@@ -3891,7 +3891,7 @@ public class MapleMap {
 
     public void startEvent(final Character chr) {
         if (this.mapid == 109080000 && getCoconut() == null) {
-            setCoconut(new MapleCoconut(this));
+            setCoconut(new Coconut(this));
             coconut.startEvent();
         } else if (this.mapid == 109040000) {
             chr.setFitness(new MapleFitness(chr));
