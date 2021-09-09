@@ -30,17 +30,17 @@ import scripting.event.EventInstanceManager;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MapleMapManager {
-
-    private int channel, world;
+public class MapManager {
+    private final int channel;
+    private final int world;
     private EventInstanceManager event;
-    
-    private Map<Integer, MapleMap> maps = new HashMap<>();
-    
-    private MonitoredReadLock mapsRLock;
-    private MonitoredWriteLock mapsWLock;
 
-    public MapleMapManager(EventInstanceManager eim, int world, int channel) {
+    private final Map<Integer, MapleMap> maps = new HashMap<>();
+
+    private final MonitoredReadLock mapsRLock;
+    private final MonitoredWriteLock mapsWLock;
+
+    public MapManager(EventInstanceManager eim, int world, int channel) {
         this.world = world;
         this.channel = channel;
         this.event = eim;
@@ -103,7 +103,7 @@ public class MapleMapManager {
 
         return (map != null) ? map : loadMapFromWz(mapid, true);
     }
-    
+
     public MapleMap getDisposableMap(int mapid) {
         return loadMapFromWz(mapid, false);
     }
@@ -125,14 +125,14 @@ public class MapleMapManager {
             mapsRLock.unlock();
         }
     }
-    
+
     public void updateMaps() {
         for (MapleMap map : getMaps().values()) {
             map.respawn();
             map.mobMpRecovery();
         }
     }
-    
+
     public void dispose() {
         for (MapleMap map : getMaps().values()) {
             map.dispose();

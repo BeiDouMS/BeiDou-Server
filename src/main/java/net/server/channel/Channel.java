@@ -67,7 +67,7 @@ public final class Channel {
     private PlayerStorage players = new PlayerStorage();
     private ChannelServer channelServer;
     private String serverMessage;
-    private MapleMapManager mapManager;
+    private MapManager mapManager;
     private EventScriptManager eventSM;
     private ServicesManager services;
     private Map<Integer, HiredMerchant> hiredMerchants = new HashMap<>();
@@ -113,7 +113,7 @@ public final class Channel {
         this.channel = channel;
         
         this.ongoingStartTime = startTime + 10000;  // rude approach to a world's last channel boot time, placeholder for the 1st wedding reservation ever
-        this.mapManager = new MapleMapManager(null, world, channel);
+        this.mapManager = new MapManager(null, world, channel);
         this.port = BASE_PORT + (this.channel - 1) + (world * 100);
         this.ip = YamlConfig.config.server.HOST + ":" + port;
 
@@ -246,7 +246,7 @@ public final class Channel {
         }
     }
     
-    public MapleMapManager getMapFactory() {
+    public MapManager getMapFactory() {
         return mapManager;
     }
     

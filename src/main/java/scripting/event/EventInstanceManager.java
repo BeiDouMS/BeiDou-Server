@@ -44,8 +44,8 @@ import server.expeditions.Expedition;
 import server.life.LifeFactory;
 import server.life.Monster;
 import server.life.NPC;
+import server.maps.MapManager;
 import server.maps.MapleMap;
-import server.maps.MapleMapManager;
 import server.maps.MaplePortal;
 import server.maps.MapleReactor;
 import tools.PacketCreator;
@@ -71,7 +71,7 @@ public class EventInstanceManager {
 	private Map<Character, Integer> killCount = new HashMap<>();
 	private EventManager em;
         private EventScriptScheduler ess;
-	private MapleMapManager mapManager;
+	private MapManager mapManager;
 	private String name;
 	private Properties props = new Properties();
         private Map<String, Object> objectProps = new HashMap<>();
@@ -114,7 +114,7 @@ public class EventInstanceManager {
 		this.em = em;
 		this.name = name;
                 this.ess = new EventScriptScheduler();
-		this.mapManager = new MapleMapManager(this, em.getWorldServer().getId(), em.getChannelServer().getId());
+		this.mapManager = new MapManager(this, em.getWorldServer().getId(), em.getChannelServer().getId());
 	}
         
         public void setName(String name) {
@@ -656,7 +656,7 @@ public class EventInstanceManager {
                 sL = sL.dispose();
         }
 
-	public MapleMapManager getMapFactory() {
+	public MapManager getMapFactory() {
 		return mapManager;
 	}
 

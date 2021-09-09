@@ -51,8 +51,8 @@ import server.gachapon.MapleGachapon;
 import server.gachapon.MapleGachapon.MapleGachaponItem;
 import server.life.LifeFactory;
 import server.life.PlayerNPC;
+import server.maps.MapManager;
 import server.maps.MapleMap;
-import server.maps.MapleMapManager;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
 import server.partyquest.AriantColiseum;
@@ -499,7 +499,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 		PyramidMode mod = PyramidMode.valueOf(mode);
 
 		Party partyz = getPlayer().getParty();
-		MapleMapManager mapManager = c.getChannelServer().getMapFactory();
+		MapManager mapManager = c.getChannelServer().getMapFactory();
 
 		MapleMap map = null;
 		int mapid = 926010100;

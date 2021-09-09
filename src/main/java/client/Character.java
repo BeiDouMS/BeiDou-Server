@@ -7114,7 +7114,7 @@ public class Character extends AbstractCharacterObject {
 
 
                     if (channelserver) {
-                        MapleMapManager mapManager = client.getChannelServer().getMapFactory();
+                        MapManager mapManager = client.getChannelServer().getMapFactory();
                         ret.map = mapManager.getMap(ret.mapid);
 
                         if (ret.map == null) {
