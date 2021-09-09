@@ -129,7 +129,7 @@ public class World {
     private long mountUpdate;
     
     private MonitoredReentrantLock activePlayerShopsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_PSHOPS, true);
-    private Map<Integer, MaplePlayerShop> activePlayerShops = new LinkedHashMap<>();
+    private Map<Integer, PlayerShop> activePlayerShops = new LinkedHashMap<>();
     
     private MonitoredReentrantLock activeMerchantsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MERCHS, true);
     private Map<Integer, Pair<HiredMerchant, Integer>> activeMerchants = new LinkedHashMap<>();
@@ -1516,7 +1516,7 @@ public class World {
         }
     }
     
-    public void registerPlayerShop(MaplePlayerShop ps) {
+    public void registerPlayerShop(PlayerShop ps) {
         activePlayerShopsLock.lock();
         try {
             activePlayerShops.put(ps.getOwner().getId(), ps);
@@ -1525,7 +1525,7 @@ public class World {
         }
     }
     
-    public void unregisterPlayerShop(MaplePlayerShop ps) {
+    public void unregisterPlayerShop(PlayerShop ps) {
         activePlayerShopsLock.lock();
         try {
             activePlayerShops.remove(ps.getOwner().getId());
@@ -1534,8 +1534,8 @@ public class World {
         }
     }
     
-    public List<MaplePlayerShop> getActivePlayerShops() {
-        List<MaplePlayerShop> psList = new ArrayList<>();
+    public List<PlayerShop> getActivePlayerShops() {
+        List<PlayerShop> psList = new ArrayList<>();
         activePlayerShopsLock.lock();
         try {
             psList.addAll(activePlayerShops.values());
@@ -1546,7 +1546,7 @@ public class World {
         }
     }
     
-    public MaplePlayerShop getPlayerShop(int ownerid) {
+    public PlayerShop getPlayerShop(int ownerid) {
         activePlayerShopsLock.lock();
         try {
             return activePlayerShops.get(ownerid);
@@ -1824,7 +1824,7 @@ public class World {
             }
         }
 
-        for (MaplePlayerShop ps : getActivePlayerShops()) {
+        for (PlayerShop ps : getActivePlayerShops()) {
             List<MaplePlayerShopItem> itemBundles = ps.sendAvailableBundles(itemid);
 
             for(MaplePlayerShopItem mpsi : itemBundles) {

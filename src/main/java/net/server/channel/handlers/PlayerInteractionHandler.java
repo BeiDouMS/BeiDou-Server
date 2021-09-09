@@ -245,7 +245,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
 
                     if (ItemConstants.isPlayerShop(itemId)) {
-                        MaplePlayerShop shop = new MaplePlayerShop(chr, desc, itemId);
+                        PlayerShop shop = new PlayerShop(chr, desc, itemId);
                         chr.setPlayerShop(shop);
                         chr.getMap().addMapObject(shop);
                         shop.sendShop(c);
@@ -282,8 +282,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                     int oid = p.readInt();
                     MapObject ob = chr.getMap().getMapObject(oid);
-                    if (ob instanceof MaplePlayerShop) {
-                        MaplePlayerShop shop = (MaplePlayerShop) ob;
+                    if (ob instanceof PlayerShop) {
+                        PlayerShop shop = (PlayerShop) ob;
                         shop.visitShop(chr);
                     } else if (ob instanceof MiniGame) {
                         p.skip(1);
@@ -318,7 +318,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 if (chr.getTrade() != null) {
                     chr.getTrade().chat(p.readString());
                 } else if (chr.getPlayerShop() != null) { //mini game
-                    MaplePlayerShop shop = chr.getPlayerShop();
+                    PlayerShop shop = chr.getPlayerShop();
                     if (shop != null) {
                         shop.chat(c, p.readString());
                     }
@@ -358,7 +358,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
                     if(YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
@@ -600,7 +600,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 MaplePlayerShopItem shopItem = new MaplePlayerShopItem(sellItem, bundles, price);
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
                     if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots
@@ -649,7 +649,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.REMOVE_ITEM.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 if (shop != null && shop.isOwner(chr)) {
                     if (shop.isOpen()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't take it with the store open."));
@@ -695,7 +695,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.disconnect(true, false);
                     return;
                 }
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isVisitor(chr)) {
                     if (shop.buy(c, itemid, quantity)) {
@@ -753,7 +753,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.BAN_PLAYER.getCode()) {
                 p.skip(1);
 
-                MaplePlayerShop shop = chr.getPlayerShop();
+                PlayerShop shop = chr.getPlayerShop();
                 if (shop != null && shop.isOwner(chr)) {
                     shop.banPlayer(p.readString());
                 }
@@ -802,7 +802,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         continue;
                     }
 
-                    MaplePlayerShop shop = mc.getPlayerShop();
+                    PlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(13));
                         return false;

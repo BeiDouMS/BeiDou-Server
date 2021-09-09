@@ -163,7 +163,7 @@ public class Character extends AbstractCharacterObject {
     private Mount maplemount;
     private Party party;
     private final Pet[] pets = new Pet[3];
-    private MaplePlayerShop playerShop = null;
+    private PlayerShop playerShop = null;
     private MapleShop shop = null;
     private SkinColor skinColor = SkinColor.NORMAL;
     private MapleStorage storage = null;
@@ -5492,7 +5492,7 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public MaplePlayerShop getPlayerShop() {
+    public PlayerShop getPlayerShop() {
         return playerShop;
     }
 
@@ -5536,7 +5536,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void closePlayerShop() {
-        MaplePlayerShop mps = this.getPlayerShop();
+        PlayerShop mps = this.getPlayerShop();
         if (mps == null) {
             return;
         }
@@ -9277,7 +9277,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setPlayerShop(MaplePlayerShop playerShop) {
+    public void setPlayerShop(PlayerShop playerShop) {
         this.playerShop = playerShop;
     }
 

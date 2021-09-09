@@ -29,8 +29,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
-import server.maps.MaplePlayerShop;
 import server.maps.MaplePortal;
+import server.maps.PlayerShop;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -51,7 +51,7 @@ public final class HiredMerchantRequest extends AbstractPacketHandler {
                 if (mmo instanceof Character) {
                     Character mc = (Character) mmo;
 
-                    MaplePlayerShop shop = mc.getPlayerShop();
+                    PlayerShop shop = mc.getPlayerShop();
                     if (shop != null && shop.isOwner(mc)) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(13));
                         return;

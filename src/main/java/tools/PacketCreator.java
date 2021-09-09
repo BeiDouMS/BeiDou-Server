@@ -1954,7 +1954,7 @@ public class PacketCreator {
             p.writeInt(chr.getMount().getTiredness());
         }
 
-        MaplePlayerShop mps = chr.getPlayerShop();
+        PlayerShop mps = chr.getPlayerShop();
         if (mps != null && mps.isOwner(chr)) {
             if (mps.hasFreeSlot()) {
                 addAnnounceBox(p, mps, mps.getVisitors().length);
@@ -2134,7 +2134,7 @@ public class PacketCreator {
      *              to.
      * @param shop  The shop to announce.
      */
-    private static void addAnnounceBox(final OutPacket p, MaplePlayerShop shop, int availability) {
+    private static void addAnnounceBox(final OutPacket p, PlayerShop shop, int availability) {
         p.writeByte(4);
         p.writeInt(shop.getObjectId());
         p.writeString(shop.getDescription());
@@ -2173,7 +2173,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void updatePlayerShopBoxInfo(OutPacket p, MaplePlayerShop shop) {
+    private static void updatePlayerShopBoxInfo(OutPacket p, PlayerShop shop) {
         byte[] roomInfo = shop.getShopRoomInfo();
 
         p.writeByte(4);
@@ -2186,14 +2186,14 @@ public class PacketCreator {
         p.writeByte(0);
     }
 
-    public static Packet updatePlayerShopBox(MaplePlayerShop shop) {
+    public static Packet updatePlayerShopBox(PlayerShop shop) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(shop.getOwner().getId());
         updatePlayerShopBoxInfo(p, shop);
         return p;
     }
 
-    public static Packet removePlayerShopBox(MaplePlayerShop shop) {
+    public static Packet removePlayerShopBox(PlayerShop shop) {
         OutPacket p = OutPacket.create(SendOpcode.UPDATE_CHAR_BOX);
         p.writeInt(shop.getOwner().getId());
         p.writeByte(0);
@@ -3168,7 +3168,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerShopItemUpdate(MaplePlayerShop shop) {
+    public static Packet getPlayerShopItemUpdate(PlayerShop shop) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
         p.writeByte(shop.getItems().size());
@@ -3181,7 +3181,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerShopOwnerUpdate(MaplePlayerShop.SoldItem item, int position) {
+    public static Packet getPlayerShopOwnerUpdate(PlayerShop.SoldItem item, int position) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_PLAYERSHOP.getCode());
         p.writeByte(position);
@@ -3197,7 +3197,7 @@ public class PacketCreator {
      * @param owner
      * @return
      */
-    public static Packet getPlayerShop(MaplePlayerShop shop, boolean owner) {
+    public static Packet getPlayerShop(PlayerShop shop, boolean owner) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(4);
@@ -3205,9 +3205,9 @@ public class PacketCreator {
         p.writeByte(owner ? 0 : 1);
 
         if (owner) {
-            List<MaplePlayerShop.SoldItem> sold = shop.getSold();
+            List<PlayerShop.SoldItem> sold = shop.getSold();
             p.writeByte(sold.size());
-            for (MaplePlayerShop.SoldItem s : sold) {
+            for (PlayerShop.SoldItem s : sold) {
                 p.writeInt(s.getItemId());
                 p.writeShort(s.getQuantity());
                 p.writeInt(s.getMesos());
@@ -5016,7 +5016,7 @@ public class PacketCreator {
             MaplePlayerShopItem item = hme.getLeft();
             AbstractMapObject mo = hme.getRight();
 
-            if (mo instanceof MaplePlayerShop ps) {
+            if (mo instanceof PlayerShop ps) {
                 Character owner = ps.getOwner();
 
                 p.writeString(owner.getName());
