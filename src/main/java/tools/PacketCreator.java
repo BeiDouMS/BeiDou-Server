@@ -25,7 +25,7 @@ import client.MapleCharacter.SkillEntry;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
 import client.keybind.KeyBinding;
-import client.keybind.MapleQuickslotBinding;
+import client.keybind.QuickslotBinding;
 import client.newyear.NewYearCardRecord;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
@@ -3484,7 +3484,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet QuickslotMappedInit(MapleQuickslotBinding pQuickslot) {
+    public static Packet QuickslotMappedInit(QuickslotBinding pQuickslot) {
         OutPacket p = OutPacket.create(SendOpcode.QUICKSLOT_INIT);
         pQuickslot.encode(p);
         return p;

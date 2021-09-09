@@ -29,7 +29,7 @@ import client.inventory.Equip.StatUpgrade;
 import client.inventory.manipulator.CashIdGenerator;
 import client.inventory.manipulator.InventoryManipulator;
 import client.keybind.KeyBinding;
-import client.keybind.MapleQuickslotBinding;
+import client.keybind.QuickslotBinding;
 import client.newyear.NewYearCardRecord;
 import client.processor.action.PetAutopotProcessor;
 import client.processor.npc.FredrickProcessor;
@@ -193,7 +193,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private Map<Integer, MapleCoolDownValueHolder> coolDowns = new LinkedHashMap<>();
     private EnumMap<MapleDisease, Pair<MapleDiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(MapleDisease.class);
     private byte[] m_aQuickslotLoaded;
-    private MapleQuickslotBinding m_pQuickslotKeyMapped;
+    private QuickslotBinding m_pQuickslotKeyMapped;
     private MapleDoor pdoor = null;
     private Map<MapleQuest, Long> questExpirations = new LinkedHashMap<>();
     private ScheduledFuture<?> dragonBloodSchedule;
@@ -1212,7 +1212,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     public void changeQuickslotKeybinding(byte[] aQuickslotKeyMapped) {
-        this.m_pQuickslotKeyMapped = new MapleQuickslotBinding(aQuickslotKeyMapped);
+        this.m_pQuickslotKeyMapped = new QuickslotBinding(aQuickslotKeyMapped);
     }
     
     public void broadcastStance(int newStance) {
@@ -7433,7 +7433,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 try (final ResultSet pResultSet = pSelectQuickslotKeyMapped.executeQuery()) {
                     if (pResultSet.next()) {
                         ret.m_aQuickslotLoaded = LongTool.LongToBytes(pResultSet.getLong(1));
-                        ret.m_pQuickslotKeyMapped = new MapleQuickslotBinding(ret.m_aQuickslotLoaded);
+                        ret.m_pQuickslotKeyMapped = new QuickslotBinding(ret.m_aQuickslotLoaded);
                     }
                 }
             }
@@ -8780,10 +8780,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     
     public void sendQuickmap() {
         // send quickslots to user
-        MapleQuickslotBinding pQuickslotKeyMapped = this.m_pQuickslotKeyMapped;
+        QuickslotBinding pQuickslotKeyMapped = this.m_pQuickslotKeyMapped;
 
         if (pQuickslotKeyMapped == null) {
-            pQuickslotKeyMapped = new MapleQuickslotBinding(MapleQuickslotBinding.DEFAULT_QUICKSLOTS);
+            pQuickslotKeyMapped = new QuickslotBinding(QuickslotBinding.DEFAULT_QUICKSLOTS);
         }
 
         this.sendPacket(PacketCreator.QuickslotMappedInit(pQuickslotKeyMapped));
