@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Tyler (Twdtwd)
  */
-public class PetRequirement extends MapleQuestRequirement {
+public class PetRequirement extends AbstractQuestRequirement {
 	List<Integer> petIDs = new ArrayList<>();
 	
 	

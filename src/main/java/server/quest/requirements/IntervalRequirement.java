@@ -32,7 +32,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class IntervalRequirement extends MapleQuestRequirement {
+public class IntervalRequirement extends AbstractQuestRequirement {
 	private int interval = -1;
 	private int questID;
 	

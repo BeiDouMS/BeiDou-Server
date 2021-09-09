@@ -38,7 +38,7 @@ import java.util.Map;
  *
  * @author Tyler (Twdtwd)
  */
-public class ItemRequirement extends MapleQuestRequirement {
+public class ItemRequirement extends AbstractQuestRequirement {
 	Map<Integer, Integer> items = new HashMap<>();
 	
 	

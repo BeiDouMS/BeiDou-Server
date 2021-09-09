@@ -31,7 +31,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class FieldEnterRequirement extends MapleQuestRequirement {
+public class FieldEnterRequirement extends AbstractQuestRequirement {
 	private int mapId = -1;
 	
 	

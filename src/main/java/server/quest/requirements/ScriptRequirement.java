@@ -29,7 +29,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Ronan
  */
-public class ScriptRequirement extends MapleQuestRequirement {
+public class ScriptRequirement extends AbstractQuestRequirement {
         private boolean reqScript;
         
 	public ScriptRequirement(Quest quest, Data data) {

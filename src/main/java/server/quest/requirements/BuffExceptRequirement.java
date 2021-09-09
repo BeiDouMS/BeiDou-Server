@@ -29,7 +29,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Ronan
  */
-public class BuffExceptRequirement extends MapleQuestRequirement {
+public class BuffExceptRequirement extends AbstractQuestRequirement {
         private int buffId = -1;
         
 	public BuffExceptRequirement(Quest quest, Data data) {

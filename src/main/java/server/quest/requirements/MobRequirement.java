@@ -36,7 +36,7 @@ import java.util.Map;
  *
  * @author Tyler (Twdtwd)
  */
-public class MobRequirement extends MapleQuestRequirement {
+public class MobRequirement extends AbstractQuestRequirement {
 	Map<Integer, Integer> mobs = new HashMap<>();
 	private int questID;
 	

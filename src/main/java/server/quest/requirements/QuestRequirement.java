@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author Tyler (Twdtwd)
  */
-public class QuestRequirement extends MapleQuestRequirement {
+public class QuestRequirement extends AbstractQuestRequirement {
 	Map<Integer, Integer> quests = new HashMap<>();
 	
 	public QuestRequirement(Quest quest, Data data) {

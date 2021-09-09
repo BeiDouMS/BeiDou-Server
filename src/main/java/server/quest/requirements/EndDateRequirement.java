@@ -33,7 +33,7 @@ import java.util.Calendar;
  *
  * @author Tyler (Twdtwd)
  */
-public class EndDateRequirement extends MapleQuestRequirement {
+public class EndDateRequirement extends AbstractQuestRequirement {
 	private String timeStr;
 	
 	

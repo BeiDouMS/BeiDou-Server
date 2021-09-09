@@ -31,7 +31,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class MinLevelRequirement extends MapleQuestRequirement {
+public class MinLevelRequirement extends AbstractQuestRequirement {
 	private int minLevel;
 	
 	

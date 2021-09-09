@@ -31,7 +31,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class MaxLevelRequirement extends MapleQuestRequirement {
+public class MaxLevelRequirement extends AbstractQuestRequirement {
 	private int maxLevel;
 	
 	

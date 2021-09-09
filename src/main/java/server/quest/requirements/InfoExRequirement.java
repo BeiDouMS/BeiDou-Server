@@ -34,7 +34,7 @@ import java.util.List;
  *
  * @author Tyler (Twdtwd)
  */
-public class InfoExRequirement extends MapleQuestRequirement {
+public class InfoExRequirement extends AbstractQuestRequirement {
 	private List<String> infoExpected = new ArrayList<>();
 	private int questID;
 	

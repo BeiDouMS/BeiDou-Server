@@ -58,8 +58,8 @@ public class Quest {
 
     protected short id;
     protected int timeLimit, timeLimit2;
-    protected Map<QuestRequirementType, MapleQuestRequirement> startReqs = new EnumMap<>(QuestRequirementType.class);
-    protected Map<QuestRequirementType, MapleQuestRequirement> completeReqs = new EnumMap<>(QuestRequirementType.class);
+    protected Map<QuestRequirementType, AbstractQuestRequirement> startReqs = new EnumMap<>(QuestRequirementType.class);
+    protected Map<QuestRequirementType, AbstractQuestRequirement> completeReqs = new EnumMap<>(QuestRequirementType.class);
     protected Map<QuestActionType, AbstractQuestAction> startActs = new EnumMap<>(QuestActionType.class);
     protected Map<QuestActionType, AbstractQuestAction> completeActs = new EnumMap<>(QuestActionType.class);
     protected List<Integer> relevantMobs = new LinkedList<>();
@@ -113,7 +113,7 @@ public class Quest {
                     }
                 }
 
-                MapleQuestRequirement req = this.getRequirement(type, startReq);
+                AbstractQuestRequirement req = this.getRequirement(type, startReq);
                 if (req == null) {
                     continue;
                 }
@@ -127,7 +127,7 @@ public class Quest {
             for (Data completeReq : completeReqData.getChildren()) {
                 QuestRequirementType type = QuestRequirementType.getByWZName(completeReq.getName());
 
-                MapleQuestRequirement req = this.getRequirement(type, completeReq);
+                AbstractQuestRequirement req = this.getRequirement(type, completeReq);
                 if (req == null) {
                     continue;
                 }
@@ -241,7 +241,7 @@ public class Quest {
             return false;
         }
 
-        for (MapleQuestRequirement r : startReqs.values()) {
+        for (AbstractQuestRequirement r : startReqs.values()) {
             if (!r.check(chr, npcid)) {
                 return false;
             }
@@ -256,7 +256,7 @@ public class Quest {
             return false;
         }
 
-        for (MapleQuestRequirement r : completeReqs.values()) {
+        for (AbstractQuestRequirement r : completeReqs.values()) {
             if (!r.check(chr, npcid)) {
                 return false;
             }
@@ -381,7 +381,7 @@ public class Quest {
     }
 
     public int getStartItemAmountNeeded(int itemid) {
-        MapleQuestRequirement req = startReqs.get(QuestRequirementType.ITEM);
+        AbstractQuestRequirement req = startReqs.get(QuestRequirementType.ITEM);
         if (req == null) {
             return Integer.MIN_VALUE;
         }
@@ -391,7 +391,7 @@ public class Quest {
     }
 
     public int getCompleteItemAmountNeeded(int itemid) {
-        MapleQuestRequirement req = completeReqs.get(QuestRequirementType.ITEM);
+        AbstractQuestRequirement req = completeReqs.get(QuestRequirementType.ITEM);
         if (req == null) {
             return Integer.MAX_VALUE;
         }
@@ -401,7 +401,7 @@ public class Quest {
     }
 
     public int getMobAmountNeeded(int mid) {
-        MapleQuestRequirement req = completeReqs.get(QuestRequirementType.MOB);
+        AbstractQuestRequirement req = completeReqs.get(QuestRequirementType.MOB);
         if (req == null) {
             return 0;
         }
@@ -413,9 +413,9 @@ public class Quest {
 
     public short getInfoNumber(Status qs) {
         boolean checkEnd = qs.equals(Status.STARTED);
-        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
 
-        MapleQuestRequirement req = reqs.get(QuestRequirementType.INFO_NUMBER);
+        AbstractQuestRequirement req = reqs.get(QuestRequirementType.INFO_NUMBER);
         if (req != null) {
             InfoNumberRequirement inReq = (InfoNumberRequirement) req;
             return inReq.getInfoNumber();
@@ -426,9 +426,9 @@ public class Quest {
 
     public String getInfoEx(Status qs, int index) {
         boolean checkEnd = qs.equals(Status.STARTED);
-        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
         try {
-            MapleQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
+            AbstractQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
             InfoExRequirement ixReq = (InfoExRequirement) req;
             return ixReq.getInfo().get(index);
         } catch (Exception e) {
@@ -438,9 +438,9 @@ public class Quest {
 
     public List<String> getInfoEx(Status qs) {
         boolean checkEnd = qs.equals(Status.STARTED);
-        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
         try {
-            MapleQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
+            AbstractQuestRequirement req = reqs.get(QuestRequirementType.INFO_EX);
             InfoExRequirement ixReq = (InfoExRequirement) req;
             return ixReq.getInfo();
         } catch (Exception e) {
@@ -460,8 +460,8 @@ public class Quest {
         quests.clear();
     }
 
-    private MapleQuestRequirement getRequirement(QuestRequirementType type, Data data) {
-        MapleQuestRequirement ret = null;
+    private AbstractQuestRequirement getRequirement(QuestRequirementType type, Data data) {
+        AbstractQuestRequirement ret = null;
         switch (type) {
             case END_DATE:
                 ret = new EndDateRequirement(this, data);
@@ -597,8 +597,8 @@ public class Quest {
     }
 
     public int getNpcRequirement(boolean checkEnd) {
-        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
-        MapleQuestRequirement mqr = reqs.get(QuestRequirementType.NPC);
+        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        AbstractQuestRequirement mqr = reqs.get(QuestRequirementType.NPC);
         if (mqr != null) {
             return ((NpcRequirement) mqr).get();
         } else {
@@ -607,8 +607,8 @@ public class Quest {
     }
 
     public boolean hasScriptRequirement(boolean checkEnd) {
-        Map<QuestRequirementType, MapleQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
-        MapleQuestRequirement mqr = reqs.get(QuestRequirementType.SCRIPT);
+        Map<QuestRequirementType, AbstractQuestRequirement> reqs = !checkEnd ? startReqs : completeReqs;
+        AbstractQuestRequirement mqr = reqs.get(QuestRequirementType.SCRIPT);
 
         if (mqr != null) {
             return ((ScriptRequirement) mqr).get();

@@ -31,7 +31,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class MonsterBookCountRequirement extends MapleQuestRequirement {
+public class MonsterBookCountRequirement extends AbstractQuestRequirement {
 	private int reqCards;
 	
 	

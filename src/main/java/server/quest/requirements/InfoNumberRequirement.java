@@ -29,7 +29,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Ronan
  */
-public class InfoNumberRequirement extends MapleQuestRequirement {
+public class InfoNumberRequirement extends AbstractQuestRequirement {
         
         private short infoNumber;
         private int questID;

@@ -31,7 +31,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class CompletedQuestRequirement extends MapleQuestRequirement {
+public class CompletedQuestRequirement extends AbstractQuestRequirement {
 	private int reqQuest;
 	
 	

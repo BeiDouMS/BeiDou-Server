@@ -32,7 +32,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Tyler (Twdtwd)
  */
-public class MinTamenessRequirement extends MapleQuestRequirement {
+public class MinTamenessRequirement extends AbstractQuestRequirement {
 	private int minTameness;
 	
 	

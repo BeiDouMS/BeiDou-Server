@@ -27,30 +27,33 @@ import server.quest.QuestRequirementType;
 
 /**
  * Base class for a Quest Requirement. Quest system uses it for all requirements.
+ *
  * @author Tyler (Twdtwd)
  */
-public abstract class MapleQuestRequirement {
-	private final QuestRequirementType type;
-	
-	public MapleQuestRequirement(QuestRequirementType type) {
-		this.type = type;
-	}
-	
-	/**
-	 * Checks the requirement to see if the player currently meets it.
-	 * @param chr	The {@link Character} to check on.
-	 * @param npcid	The NPC ID it was called from.
-	 * @return boolean	If the check was passed or not.
-	 */
-	public abstract boolean check(Character chr, Integer npcid);
-	
-	/**
-	 * Processes the data and stores it in the class for future use.
-	 * @param data The data to process.
-	 */
-	public abstract void processData(Data data);
-	
-	public QuestRequirementType getType() {
-            return type;
-        }
+public abstract class AbstractQuestRequirement {
+    private final QuestRequirementType type;
+
+    public AbstractQuestRequirement(QuestRequirementType type) {
+        this.type = type;
+    }
+
+    /**
+     * Checks the requirement to see if the player currently meets it.
+     *
+     * @param chr   The {@link Character} to check on.
+     * @param npcid The NPC ID it was called from.
+     * @return boolean    If the check was passed or not.
+     */
+    public abstract boolean check(Character chr, Integer npcid);
+
+    /**
+     * Processes the data and stores it in the class for future use.
+     *
+     * @param data The data to process.
+     */
+    public abstract void processData(Data data);
+
+    public QuestRequirementType getType() {
+        return type;
+    }
 }

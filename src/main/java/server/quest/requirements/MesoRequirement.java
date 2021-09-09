@@ -29,7 +29,7 @@ import server.quest.QuestRequirementType;
  *
  * @author Ronan
  */
-public class MesoRequirement extends MapleQuestRequirement {
+public class MesoRequirement extends AbstractQuestRequirement {
         private int meso = 0;
     
 	public MesoRequirement(Quest quest, Data data) {

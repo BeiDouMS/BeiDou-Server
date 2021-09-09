@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Tyler (Twdtwd)
  */
-public class JobRequirement extends MapleQuestRequirement {
+public class JobRequirement extends AbstractQuestRequirement {
 	List<Integer> jobs = new ArrayList<>();
 	
 	public JobRequirement(Quest quest, Data data) {
