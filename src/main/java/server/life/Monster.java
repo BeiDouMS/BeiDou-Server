@@ -45,7 +45,7 @@ import scripting.event.EventInstanceManager;
 import server.MapleStatEffect;
 import server.TimerManager;
 import server.life.LifeFactory.BanishInfo;
-import server.loot.MapleLootManager;
+import server.loot.LootManager;
 import server.maps.AbstractAnimatedMapleMapObject;
 import server.maps.MapleMap;
 import server.maps.MapleMapObjectType;
@@ -751,7 +751,7 @@ public class Monster extends AbstractLoadedLife {
             }
         }
 
-        return MapleLootManager.retrieveRelevantDrops(this.getId(), lootChars);
+        return LootManager.retrieveRelevantDrops(this.getId(), lootChars);
     }
 
     public Character killBy(final Character killer) {
