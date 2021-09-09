@@ -37,7 +37,7 @@ import net.server.world.World;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleMarriage;
 import server.ThreadManager;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
@@ -370,16 +370,16 @@ public class EventManager {
         instanceLocks.put(eventName, lobbyId);
     }
     
-    public boolean startInstance(MapleExpedition exped) {
+    public boolean startInstance(Expedition exped) {
         return startInstance(-1, exped);
     }
     
-    public boolean startInstance(int lobbyId, MapleExpedition exped) {
+    public boolean startInstance(int lobbyId, Expedition exped) {
         return startInstance(lobbyId, exped, exped.getLeader());
     }
 
     //Expedition method: starts an expedition
-    public boolean startInstance(int lobbyId, MapleExpedition exped, Character leader) {
+    public boolean startInstance(int lobbyId, Expedition exped, Character leader) {
         if (this.isDisposed()) return false;
         
         try {

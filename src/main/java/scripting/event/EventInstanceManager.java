@@ -40,7 +40,7 @@ import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
 import server.ThreadManager;
 import server.TimerManager;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 import server.life.MapleLifeFactory;
 import server.life.MapleMonster;
 import server.life.MapleNPC;
@@ -77,7 +77,7 @@ public class EventInstanceManager {
         private Map<String, Object> objectProps = new HashMap<>();
 	private long timeStarted = 0;
 	private long eventTime = 0;
-	private MapleExpedition expedition = null;
+	private Expedition expedition = null;
         private List<Integer> mapIds = new LinkedList<>();
         
         private final MonitoredReentrantReadWriteLock lock = new MonitoredReentrantReadWriteLock(MonitoredLockType.EIM, true);
@@ -361,12 +361,12 @@ public class EventInstanceManager {
 		}
 	}
 
-	public void registerExpedition(MapleExpedition exped) {
+	public void registerExpedition(Expedition exped) {
 		expedition = exped;
                 registerExpeditionTeam(exped, exped.getRecruitingMap().getId());
 	}
         
-        private void registerExpeditionTeam(MapleExpedition exped, int recruitMap) {
+        private void registerExpeditionTeam(Expedition exped, int recruitMap) {
 		expedition = exped;
                 
                 for (Character chr: exped.getActiveMembers()) {

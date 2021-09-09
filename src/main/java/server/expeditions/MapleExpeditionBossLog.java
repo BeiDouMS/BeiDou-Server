@@ -168,7 +168,7 @@ public class MapleExpeditionBossLog {
         }
     }
     
-    public static boolean attemptBoss(int cid, int channel, MapleExpedition exped, boolean log) {
+    public static boolean attemptBoss(int cid, int channel, Expedition exped, boolean log) {
         if (!YamlConfig.config.server.USE_ENABLE_DAILY_EXPEDITIONS) {
             return true;
         }

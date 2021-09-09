@@ -38,7 +38,7 @@ import scripting.event.EventManager;
 import scripting.npc.NPCScriptManager;
 import server.MapleItemInformationProvider;
 import server.MapleMarriage;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 import server.expeditions.MapleExpeditionBossLog;
 import server.expeditions.MapleExpeditionType;
 import server.life.*;
@@ -1073,7 +1073,7 @@ public class AbstractPlayerInteraction {
         
 	public int createExpedition(MapleExpeditionType type, boolean silent, int minPlayers, int maxPlayers) {
                 Character player = getPlayer();
-                MapleExpedition exped = new MapleExpedition(player, type, silent, minPlayers, maxPlayers);
+                Expedition exped = new Expedition(player, type, silent, minPlayers, maxPlayers);
                 
                 int channel = player.getMap().getChannelServer().getId();
                 if (!MapleExpeditionBossLog.attemptBoss(player.getId(), channel, exped, false)) {    // thanks Conrad for noticing missing expeditions entry limit
@@ -1087,18 +1087,18 @@ public class AbstractPlayerInteraction {
                 }
 	}
 
-	public void endExpedition(MapleExpedition exped) {
+	public void endExpedition(Expedition exped) {
 		exped.dispose(true);
 		exped.removeChannelExpedition(getPlayer().getClient().getChannelServer());
 	}
 
-	public MapleExpedition getExpedition(MapleExpeditionType type) {
+	public Expedition getExpedition(MapleExpeditionType type) {
                 return getPlayer().getClient().getChannelServer().getExpedition(type);
 	}
         
         public String getExpeditionMemberNames(MapleExpeditionType type) {
                 String members = "";
-                MapleExpedition exped = getExpedition(type);
+                Expedition exped = getExpedition(type);
                 for (String memberName : exped.getMembers().values()) {
                        members += "" + memberName + ", ";
                 }
@@ -1106,7 +1106,7 @@ public class AbstractPlayerInteraction {
         }
 
         public boolean isLeaderExpedition(MapleExpeditionType type) {
-                MapleExpedition exped = getExpedition(type);
+                Expedition exped = getExpedition(type);
                 return exped.isLeader(getPlayer());
         }
         

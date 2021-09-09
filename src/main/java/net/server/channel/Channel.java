@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
 import scripting.event.EventScriptManager;
 import server.TimerManager;
 import server.events.gm.Event;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 import server.expeditions.MapleExpeditionType;
 import server.maps.*;
 import tools.PacketCreator;
@@ -73,7 +73,7 @@ public final class Channel {
     private Map<Integer, MapleHiredMerchant> hiredMerchants = new HashMap<>();
     private final Map<Integer, Integer> storedVars = new HashMap<>();
     private Set<Integer> playersAway = new HashSet<>();
-    private Map<MapleExpeditionType, MapleExpedition> expeditions = new HashMap<>();
+    private Map<MapleExpeditionType, Expedition> expeditions = new HashMap<>();
     private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
     private List<MapleExpeditionType> expedType = new ArrayList<>();
     private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
@@ -398,7 +398,7 @@ public final class Channel {
         return retArr;
     }
     
-    public boolean addExpedition(MapleExpedition exped) {
+    public boolean addExpedition(Expedition exped) {
         synchronized (expeditions) {
             if (expeditions.containsKey(exped.getType())) {
                 return false;
@@ -410,17 +410,17 @@ public final class Channel {
         }
     }
     
-    public void removeExpedition(MapleExpedition exped) {
+    public void removeExpedition(Expedition exped) {
         synchronized (expeditions) {
             expeditions.remove(exped.getType());
         }
     }
     
-    public MapleExpedition getExpedition(MapleExpeditionType type) {
+    public Expedition getExpedition(MapleExpeditionType type) {
         return expeditions.get(type);
     }
     
-    public List<MapleExpedition> getExpeditions() {
+    public List<Expedition> getExpeditions() {
         synchronized (expeditions) {
             return new ArrayList<>(expeditions.values());
         }

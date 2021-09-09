@@ -45,7 +45,7 @@ import scripting.AbstractPlayerInteraction;
 import server.*;
 import server.MapleSkillbookInformationProvider.SkillBookEntry;
 import server.events.gm.Event;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 import server.expeditions.MapleExpeditionType;
 import server.gachapon.MapleGachapon;
 import server.gachapon.MapleGachapon.MapleGachaponItem;
@@ -1014,7 +1014,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             }
         }
         
-        private synchronized boolean setupAriantBattle(MapleExpedition exped, int mapid) {
+        private synchronized boolean setupAriantBattle(Expedition exped, int mapid) {
             MapleMap arenaMap = this.getMap().getChannelServer().getMapFactory().getMap(mapid + 1);
             if (!arenaMap.getAllPlayers().isEmpty()) {
                 return false;
@@ -1029,7 +1029,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 return "You cannot start an Ariant tournament from outside the Battle Arena Entrance.";
             }
             
-            MapleExpedition exped = this.getMap().getChannelServer().getExpedition(expedType);
+            Expedition exped = this.getMap().getChannelServer().getExpedition(expedType);
             if (exped == null) {
                 return "Please register on an expedition before attempting to start an Ariant tournament.";
             }

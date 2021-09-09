@@ -22,7 +22,7 @@ package server.partyquest;
 import client.Character;
 import constants.game.GameConstants;
 import server.TimerManager;
-import server.expeditions.MapleExpedition;
+import server.expeditions.Expedition;
 import server.expeditions.MapleExpeditionType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
@@ -40,7 +40,7 @@ import java.util.concurrent.ScheduledFuture;
  */
 public class AriantColiseum {
     
-    private MapleExpedition exped;
+    private Expedition exped;
     private MapleMap map;
     
     private Map<Character, Integer> score;
@@ -55,7 +55,7 @@ public class AriantColiseum {
     
     private boolean eventClear = false;
     
-    public AriantColiseum(MapleMap eventMap, MapleExpedition expedition) {
+    public AriantColiseum(MapleMap eventMap, Expedition expedition) {
         exped = expedition;
         exped.finishRegistration();
         
