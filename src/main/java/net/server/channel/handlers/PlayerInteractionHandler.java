@@ -37,7 +37,7 @@ import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleTrade;
 import server.maps.*;
-import server.maps.MapleMiniGame.MiniGameType;
+import server.maps.MiniGame.MiniGameType;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
@@ -172,7 +172,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleMiniGame game = new MapleMiniGame(chr, desc, pw);
+                    MiniGame game = new MiniGame(chr, desc, pw);
                     chr.setMiniGame(game);
                     game.setPieceType(type);
                     game.setGameType(MiniGameType.OMOK);
@@ -206,7 +206,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleMiniGame game = new MapleMiniGame(chr, desc, pw);
+                    MiniGame game = new MiniGame(chr, desc, pw);
                     game.setPieceType(type);
                     if (type == 0) {
                         game.setMatchesToWin(6);
@@ -285,11 +285,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     if (ob instanceof MaplePlayerShop) {
                         MaplePlayerShop shop = (MaplePlayerShop) ob;
                         shop.visitShop(chr);
-                    } else if (ob instanceof MapleMiniGame) {
+                    } else if (ob instanceof MiniGame) {
                         p.skip(1);
                         String pw = p.available() > 1 ? p.readString() : "";
 
-                        MapleMiniGame game = (MapleMiniGame) ob;
+                        MiniGame game = (MiniGame) ob;
                         if(game.checkPassword(pw)) {
                             if (game.hasFreeSlot() && !game.isVisitor(chr)) {
                                 game.addVisitor(chr);
@@ -323,7 +323,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         shop.chat(c, p.readString());
                     }
                 } else if (chr.getMiniGame() != null) {
-                    MapleMiniGame game = chr.getMiniGame();
+                    MiniGame game = chr.getMiniGame();
                     if (game != null) {
                         game.chat(c, p.readString());
                     }
@@ -377,13 +377,13 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().broadcastMessage(PacketCreator.spawnHiredMerchantBox(merchant));
                 }
             } else if (mode == Action.READY.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 game.broadcast(PacketCreator.getMiniGameReady(game));
             } else if (mode == Action.UN_READY.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 game.broadcast(PacketCreator.getMiniGameUnReady(game));
             } else if (mode == Action.START.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (game.getGameType().equals(MiniGameType.OMOK)) {
                     game.minigameMatchStarted();
                     game.broadcast(PacketCreator.getMiniGameStart(game, game.getLoser()));
@@ -395,7 +395,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().broadcastMessage(PacketCreator.addMatchCardBox(game.getOwner(), 2, 1));
                 }
             } else if (mode == Action.GIVE_UP.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (game.getGameType().equals(MiniGameType.OMOK)) {
                     if (game.isOwner(chr)) {
                         game.minigameMatchVisitorWins(true);
@@ -410,7 +410,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.REQUEST_TIE.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (!game.isTieDenied(chr)) {
                     if (game.isOwner(chr)) {
                         game.broadcastToVisitor(PacketCreator.getMiniGameRequestTie(game));
@@ -419,7 +419,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.ANSWER_TIE.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (p.readByte() != 0) {
                     game.minigameMatchDraw();
                 } else {
@@ -432,7 +432,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.SKIP.getCode()) {
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 if (game.isOwner(chr)) {
                     game.broadcast(PacketCreator.getMiniGameSkipOwner(game));
                 } else {
@@ -446,7 +446,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.SELECT_CARD.getCode()) {
                 int turn = p.readByte(); // 1st turn = 1; 2nd turn = 0
                 int slot = p.readByte(); // slot
-                MapleMiniGame game = chr.getMiniGame();
+                MiniGame game = chr.getMiniGame();
                 int firstslot = game.getFirstSlot();
                 if (turn == 1) {
                     game.setFirstSlot(slot);
@@ -758,7 +758,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     shop.banPlayer(p.readString());
                 }
             } else if (mode == Action.EXPEL.getCode()) {
-                MapleMiniGame miniGame = chr.getMiniGame();
+                MiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null && miniGame.isOwner(chr)) {
                     Character visitor = miniGame.getVisitor();
 
@@ -768,12 +768,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                 }
             } else if (mode == Action.EXIT_AFTER_GAME.getCode()) {
-                MapleMiniGame miniGame = chr.getMiniGame();
+                MiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null) {
                     miniGame.setQuitAfterGame(chr, true);
                 }
             } else if (mode == Action.CANCEL_EXIT_AFTER_GAME.getCode()) {
-                MapleMiniGame miniGame = chr.getMiniGame();
+                MiniGame miniGame = chr.getMiniGame();
                 if(miniGame != null) {
                     miniGame.setQuitAfterGame(chr, false);
                 }

@@ -68,7 +68,7 @@ import server.life.MobSkillFactory;
 import server.life.Monster;
 import server.life.PlayerNPC;
 import server.maps.*;
-import server.maps.MapleMiniGame.MiniGameResult;
+import server.maps.MiniGame.MiniGameResult;
 import server.minigame.MapleRockPaperScissor;
 import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
@@ -158,7 +158,7 @@ public class Character extends AbstractCharacterObject {
     private Inventory[] inventory;
     private Job job = Job.BEGINNER;
     private Messenger messenger = null;
-    private MapleMiniGame miniGame;
+    private MiniGame miniGame;
     private MapleRockPaperScissor rps;
     private Mount maplemount;
     private Party party;
@@ -5338,7 +5338,7 @@ public class Character extends AbstractCharacterObject {
         setTargetHpBarTime(0);
     }
 
-    public MapleMiniGame getMiniGame() {
+    public MiniGame getMiniGame() {
         return miniGame;
     }
 
@@ -5562,7 +5562,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void closeMiniGame(boolean forceClose) {
-        MapleMiniGame game = this.getMiniGame();
+        MiniGame game = this.getMiniGame();
         if (game == null) {
             return;
         }
@@ -9180,7 +9180,7 @@ public class Character extends AbstractCharacterObject {
         this.messengerposition = position;
     }
 
-    public void setMiniGame(MapleMiniGame miniGame) {
+    public void setMiniGame(MiniGame miniGame) {
         this.miniGame = miniGame;
     }
 

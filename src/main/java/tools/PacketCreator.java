@@ -66,7 +66,7 @@ import server.life.Monster;
 import server.life.NPC;
 import server.life.PlayerNPC;
 import server.maps.*;
-import server.maps.MapleMiniGame.MiniGameResult;
+import server.maps.MiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
 
 import java.awt.*;
@@ -1962,7 +1962,7 @@ public class PacketCreator {
                 addAnnounceBox(p, mps, 1);
             }
         } else {
-            MapleMiniGame miniGame = chr.getMiniGame();
+            MiniGame miniGame = chr.getMiniGame();
             if (miniGame != null && miniGame.isOwner(chr)) {
                 if (miniGame.hasFreeSlot()) {
                     addAnnounceBox(p, miniGame, 1, 0);
@@ -2145,7 +2145,7 @@ public class PacketCreator {
         p.writeByte(0);
     }
 
-    private static void addAnnounceBox(final OutPacket p, MapleMiniGame game, int ammount, int joinable) {
+    private static void addAnnounceBox(final OutPacket p, MiniGame game, int ammount, int joinable) {
         p.writeByte(game.getGameType().getValue());
         p.writeInt(game.getObjectId()); // gameid/shopid
         p.writeString(game.getDescription()); // desc
@@ -4580,7 +4580,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGame(Client c, MapleMiniGame minigame, boolean owner, int piece) {
+    public static Packet getMiniGame(Client c, MiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(1);
@@ -4618,39 +4618,39 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameReady(MapleMiniGame game) {
+    public static Packet getMiniGameReady(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.READY.getCode());
         return p;
     }
 
-    public static Packet getMiniGameUnReady(MapleMiniGame game) {
+    public static Packet getMiniGameUnReady(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UN_READY.getCode());
         return p;
     }
 
-    public static Packet getMiniGameStart(MapleMiniGame game, int loser) {
+    public static Packet getMiniGameStart(MiniGame game, int loser) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.START.getCode());
         p.writeByte(loser);
         return p;
     }
 
-    public static Packet getMiniGameSkipOwner(MapleMiniGame game) {
+    public static Packet getMiniGameSkipOwner(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SKIP.getCode());
         p.writeByte(0x01);
         return p;
     }
 
-    public static Packet getMiniGameRequestTie(MapleMiniGame game) {
+    public static Packet getMiniGameRequestTie(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.REQUEST_TIE.getCode());
         return p;
     }
 
-    public static Packet getMiniGameDenyTie(MapleMiniGame game) {
+    public static Packet getMiniGameDenyTie(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ANSWER_TIE.getCode());
         return p;
@@ -4676,13 +4676,13 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameSkipVisitor(MapleMiniGame game) {
+    public static Packet getMiniGameSkipVisitor(MiniGame game) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeShort(PlayerInteractionHandler.Action.SKIP.getCode());
         return p;
     }
 
-    public static Packet getMiniGameMoveOmok(MapleMiniGame game, int move1, int move2, int move3) {
+    public static Packet getMiniGameMoveOmok(MiniGame game, int move1, int move2, int move3) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.MOVE_OMOK.getCode());
         p.writeInt(move1);
@@ -4691,7 +4691,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameNewVisitor(MapleMiniGame minigame, Character chr, int slot) {
+    public static Packet getMiniGameNewVisitor(MiniGame minigame, Character chr, int slot) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(slot);
@@ -4712,7 +4712,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static Packet getMiniGameResult(MapleMiniGame game, int tie, int result, int forfeit) {
+    private static Packet getMiniGameResult(MiniGame game, int tie, int result, int forfeit) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.GET_RESULT.getCode());
 
@@ -4759,15 +4759,15 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMiniGameOwnerWin(MapleMiniGame game, boolean forfeit) {
+    public static Packet getMiniGameOwnerWin(MiniGame game, boolean forfeit) {
         return getMiniGameResult(game, 0, 1, forfeit ? 1 : 0);
     }
 
-    public static Packet getMiniGameVisitorWin(MapleMiniGame game, boolean forfeit) {
+    public static Packet getMiniGameVisitorWin(MiniGame game, boolean forfeit) {
         return getMiniGameResult(game, 0, 2, forfeit ? 1 : 0);
     }
 
-    public static Packet getMiniGameTie(MapleMiniGame game) {
+    public static Packet getMiniGameTie(MiniGame game) {
         return getMiniGameResult(game, 1, 3, 0);
     }
 
@@ -4779,7 +4779,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCard(Client c, MapleMiniGame minigame, boolean owner, int piece) {
+    public static Packet getMatchCard(Client c, MiniGame minigame, boolean owner, int piece) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(2);
@@ -4819,7 +4819,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCardStart(MapleMiniGame game, int loser) {
+    public static Packet getMatchCardStart(MiniGame game, int loser) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.START.getCode());
         p.writeByte(loser);
@@ -4840,7 +4840,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCardNewVisitor(MapleMiniGame minigame, Character chr, int slot) {
+    public static Packet getMatchCardNewVisitor(MiniGame minigame, Character chr, int slot) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());
         p.writeByte(slot);
@@ -4854,7 +4854,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getMatchCardSelect(MapleMiniGame game, int turn, int slot, int firstslot, int type) {
+    public static Packet getMatchCardSelect(MiniGame game, int turn, int slot, int firstslot, int type) {
         OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.SELECT_CARD.getCode());
         p.writeByte(turn);
