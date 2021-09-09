@@ -21,19 +21,18 @@
 */
 package server.maps;
 
-import java.awt.Point;
+import java.awt.*;
 
 /**
- * 
  * @author Matze
  */
-public class MapleFoothold implements Comparable<MapleFoothold> {
-    private Point p1;
-    private Point p2;
-    private int id;
+public class Foothold implements Comparable<Foothold> {
+    private final Point p1;
+    private final Point p2;
+    private final int id;
     private int next, prev;
 
-    public MapleFoothold(Point p1, Point p2, int id) {
+    public Foothold(Point p1, Point p2, int id) {
         this.p1 = p1;
         this.p2 = p2;
         this.id = id;
@@ -57,8 +56,8 @@ public class MapleFoothold implements Comparable<MapleFoothold> {
 
     public int getY2() {
         return p2.y;
-    }    
-    
+    }
+
     // XXX may need more precision
     public int calculateFooting(int x) {
         if (p1.y == p2.y) {
@@ -70,8 +69,8 @@ public class MapleFoothold implements Comparable<MapleFoothold> {
     }
 
     @Override
-    public int compareTo(MapleFoothold o) {
-        MapleFoothold other = o;
+    public int compareTo(Foothold o) {
+        Foothold other = o;
         if (p2.y < other.getY1()) {
             return -1;
         } else if (p1.y > other.getY2()) {

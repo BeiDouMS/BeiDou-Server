@@ -35,7 +35,7 @@ public class MapleFootholdTree {
     private MapleFootholdTree ne = null;
     private MapleFootholdTree sw = null;
     private MapleFootholdTree se = null;
-    private List<MapleFoothold> footholds = new LinkedList<>();
+    private List<Foothold> footholds = new LinkedList<>();
     private Point p1;
     private Point p2;
     private Point center;
@@ -57,7 +57,7 @@ public class MapleFootholdTree {
         center = new Point((p2.x - p1.x) / 2, (p2.y - p1.y) / 2);
     }
 
-    public void insert(MapleFoothold f) {
+    public void insert(Foothold f) {
         if (depth == 0) {
             if (f.getX1() > maxDropX) {
                 maxDropX = f.getX1();
@@ -95,11 +95,11 @@ public class MapleFootholdTree {
         }
     }
 
-    private List<MapleFoothold> getRelevants(Point p) {
+    private List<Foothold> getRelevants(Point p) {
         return getRelevants(p, new LinkedList<>());
     }
 
-    private List<MapleFoothold> getRelevants(Point p, List<MapleFoothold> list) {
+    private List<Foothold> getRelevants(Point p, List<Foothold> list) {
         list.addAll(footholds);
         if (nw != null) {
             if (p.x <= center.x && p.y <= center.y) {
@@ -115,9 +115,9 @@ public class MapleFootholdTree {
         return list;
     }
 
-    private MapleFoothold findWallR(Point p1, Point p2) {
-        MapleFoothold ret;
-        for (MapleFoothold f : footholds) {
+    private Foothold findWallR(Point p1, Point p2) {
+        Foothold ret;
+        for (Foothold f : footholds) {
             if (f.isWall() && f.getX1() >= p1.x && f.getX1() <= p2.x &&
                     f.getY1() >= p1.y && f.getY2() <= p1.y) {
                 return f;
@@ -152,23 +152,23 @@ public class MapleFootholdTree {
         return null;
     }
 
-    public MapleFoothold findWall(Point p1, Point p2) {
+    public Foothold findWall(Point p1, Point p2) {
         if (p1.y != p2.y) {
             throw new IllegalArgumentException();
         }
         return findWallR(p1, p2);
     }
 
-    public MapleFoothold findBelow(Point p) {
-        List<MapleFoothold> relevants = getRelevants(p);
-        List<MapleFoothold> xMatches = new LinkedList<>();
-        for (MapleFoothold fh : relevants) {
+    public Foothold findBelow(Point p) {
+        List<Foothold> relevants = getRelevants(p);
+        List<Foothold> xMatches = new LinkedList<>();
+        for (Foothold fh : relevants) {
             if (fh.getX1() <= p.x && fh.getX2() >= p.x) {
                 xMatches.add(fh);
             }
         }
         Collections.sort(xMatches);
-        for (MapleFoothold fh : xMatches) {
+        for (Foothold fh : xMatches) {
             if (!fh.isWall()) {
                 if (fh.getY1() != fh.getY2()) {
                     int calcY;

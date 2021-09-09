@@ -187,7 +187,7 @@ public class MapleMapFactory {
             map.setMapLineBoundings(bounds[0], bounds[1], bounds[2], bounds[3]);
         }
 
-        List<MapleFoothold> allFootholds = new LinkedList<>();
+        List<Foothold> allFootholds = new LinkedList<>();
         Point lBound = new Point();
         Point uBound = new Point();
         for (Data footRoot : mapData.getChildByPath("foothold")) {
@@ -197,7 +197,7 @@ public class MapleMapFactory {
                     int y1 = DataTool.getInt(footHold.getChildByPath("y1"));
                     int x2 = DataTool.getInt(footHold.getChildByPath("x2"));
                     int y2 = DataTool.getInt(footHold.getChildByPath("y2"));
-                    MapleFoothold fh = new MapleFoothold(new Point(x1, y1), new Point(x2, y2), Integer.parseInt(footHold.getName()));
+                    Foothold fh = new Foothold(new Point(x1, y1), new Point(x2, y2), Integer.parseInt(footHold.getName()));
                     fh.setPrev(DataTool.getInt(footHold.getChildByPath("prev")));
                     fh.setNext(DataTool.getInt(footHold.getChildByPath("next")));
                     if (fh.getX1() < lBound.x) {
@@ -217,7 +217,7 @@ public class MapleMapFactory {
             }
         }
         MapleFootholdTree fTree = new MapleFootholdTree(lBound, uBound);
-        for (MapleFoothold fh : allFootholds) {
+        for (Foothold fh : allFootholds) {
             fTree.insert(fh);
         }
         map.setFootholds(fTree);

@@ -470,7 +470,7 @@ public class MapleMap {
     }
 
     private Point calcPointBelow(Point initial) {
-        MapleFoothold fh = footholds.findBelow(initial);
+        Foothold fh = footholds.findBelow(initial);
         if (fh == null) {
             return null;
         }
