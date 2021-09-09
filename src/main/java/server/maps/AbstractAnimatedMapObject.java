@@ -26,7 +26,7 @@ import net.packet.*;
 
 import java.util.Arrays;
 
-public abstract class AbstractAnimatedMapObject extends AbstractMapObject implements AnimatedMapleMapObject {
+public abstract class AbstractAnimatedMapObject extends AbstractMapObject implements AnimatedMapObject {
     public static final int IDLE_MOVEMENT_PACKET_LENGTH = 15;
     private static final Packet IDLE_MOVEMENT_PACKET = createIdleMovementPacket();
 
