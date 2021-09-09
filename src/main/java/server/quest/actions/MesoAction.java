@@ -32,7 +32,7 @@ import server.quest.QuestActionType;
  *
  * @author Tyler (Twdtwd)
  */
-public class MesoAction extends MapleQuestAction {
+public class MesoAction extends AbstractQuestAction {
 	int mesos;
 	
 	public MesoAction(Quest quest, Data data) {

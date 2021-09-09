@@ -31,7 +31,7 @@ import server.quest.QuestActionType;
  *
  * @author Ronan
  */
-public class PetTamenessAction extends MapleQuestAction {
+public class PetTamenessAction extends AbstractQuestAction {
 	int tameness;
 	
 	public PetTamenessAction(Quest quest, Data data) {

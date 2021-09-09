@@ -31,7 +31,7 @@ import server.quest.QuestActionType;
  *
  * @author Tyler (Twdtwd)
  */
-public class FameAction extends MapleQuestAction {
+public class FameAction extends AbstractQuestAction {
 	int fame;
 	
 	public FameAction(Quest quest, Data data) {

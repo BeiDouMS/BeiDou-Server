@@ -30,7 +30,7 @@ import server.quest.QuestActionType;
  *
  * @author Ronan
  */
-public class PetSpeedAction extends MapleQuestAction {
+public class PetSpeedAction extends AbstractQuestAction {
 	
 	public PetSpeedAction(Quest quest, Data data) {
 		super(QuestActionType.PETTAMENESS, quest);

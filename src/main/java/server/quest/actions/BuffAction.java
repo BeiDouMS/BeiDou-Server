@@ -32,7 +32,7 @@ import server.quest.QuestActionType;
  *
  * @author Tyler (Twdtwd)
  */
-public class BuffAction extends MapleQuestAction {
+public class BuffAction extends AbstractQuestAction {
 	int itemEffect;
 	
 	public BuffAction(Quest quest, Data data) {

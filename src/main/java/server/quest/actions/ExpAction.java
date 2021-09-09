@@ -32,7 +32,7 @@ import server.quest.QuestActionType;
  *
  * @author Tyler (Twdtwd)
  */
-public class ExpAction extends MapleQuestAction {
+public class ExpAction extends AbstractQuestAction {
 	int exp;
 	
 	public ExpAction(Quest quest, Data data) {

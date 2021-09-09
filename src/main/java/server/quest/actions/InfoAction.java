@@ -29,7 +29,7 @@ import server.quest.QuestActionType;
  *
  * @author Ronan
  */
-public class InfoAction extends MapleQuestAction {
+public class InfoAction extends AbstractQuestAction {
         
         private String info;
         private int questID;

@@ -33,7 +33,7 @@ import server.quest.QuestActionType;
  *
  * @author Tyler (Twdtwd)
  */
-public class PetSkillAction extends MapleQuestAction {
+public class PetSkillAction extends AbstractQuestAction {
 	int flag;
 	
 	public PetSkillAction(Quest quest, Data data) {

@@ -33,7 +33,7 @@ import tools.PacketCreator;
  *
  * @author Tyler (Twdtwd)
  */
-public class NextQuestAction extends MapleQuestAction {
+public class NextQuestAction extends AbstractQuestAction {
 	int nextQuest;
 	
 	public NextQuestAction(Quest quest, Data data) {

@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author Tyler (Twdtwd)
  */
-public class QuestAction extends MapleQuestAction {
+public class QuestAction extends AbstractQuestAction {
 	int mesos;
 	Map<Integer, Integer> quests = new HashMap<>();
 	

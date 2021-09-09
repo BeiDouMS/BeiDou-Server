@@ -47,7 +47,7 @@ import java.util.List;
  * @author Tyler (Twdtwd)
  * @author Ronan
  */
-public class ItemAction extends MapleQuestAction {
+public class ItemAction extends AbstractQuestAction {
 	List<ItemData> items = new ArrayList<>();
 	
 	public ItemAction(Quest quest, Data data) {

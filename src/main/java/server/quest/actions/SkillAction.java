@@ -39,7 +39,7 @@ import java.util.Map;
  *
  * @author Tyler (Twdtwd)
  */
-public class SkillAction extends MapleQuestAction {
+public class SkillAction extends AbstractQuestAction {
 	int itemEffect;
 	Map<Integer, SkillData> skillData = new HashMap<>();
 	

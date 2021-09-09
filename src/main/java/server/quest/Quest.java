@@ -60,8 +60,8 @@ public class Quest {
     protected int timeLimit, timeLimit2;
     protected Map<QuestRequirementType, MapleQuestRequirement> startReqs = new EnumMap<>(QuestRequirementType.class);
     protected Map<QuestRequirementType, MapleQuestRequirement> completeReqs = new EnumMap<>(QuestRequirementType.class);
-    protected Map<QuestActionType, MapleQuestAction> startActs = new EnumMap<>(QuestActionType.class);
-    protected Map<QuestActionType, MapleQuestAction> completeActs = new EnumMap<>(QuestActionType.class);
+    protected Map<QuestActionType, AbstractQuestAction> startActs = new EnumMap<>(QuestActionType.class);
+    protected Map<QuestActionType, AbstractQuestAction> completeActs = new EnumMap<>(QuestActionType.class);
     protected List<Integer> relevantMobs = new LinkedList<>();
     private boolean autoStart;
     private boolean autoPreComplete, autoComplete;
@@ -148,7 +148,7 @@ public class Quest {
         if (startActData != null) {
             for (Data startAct : startActData.getChildren()) {
                 QuestActionType questActionType = QuestActionType.getByWZName(startAct.getName());
-                MapleQuestAction act = this.getAction(questActionType, startAct);
+                AbstractQuestAction act = this.getAction(questActionType, startAct);
 
                 if (act == null) {
                     continue;
@@ -161,7 +161,7 @@ public class Quest {
         if (completeActData != null) {
             for (Data completeAct : completeActData.getChildren()) {
                 QuestActionType questActionType = QuestActionType.getByWZName(completeAct.getName());
-                MapleQuestAction act = this.getAction(questActionType, completeAct);
+                AbstractQuestAction act = this.getAction(questActionType, completeAct);
 
                 if (act == null) {
                     continue;
@@ -267,13 +267,13 @@ public class Quest {
 
     public void start(Character chr, int npc) {
         if (autoStart || canStart(chr, npc)) {
-            Collection<MapleQuestAction> acts = startActs.values();
-            for (MapleQuestAction a : acts) {
+            Collection<AbstractQuestAction> acts = startActs.values();
+            for (AbstractQuestAction a : acts) {
                 if (!a.check(chr, null)) { // would null be good ?
                     return;
                 }
             }
-            for (MapleQuestAction a : acts) {
+            for (AbstractQuestAction a : acts) {
                 a.run(chr, null);
             }
             forceStart(chr, npc);
@@ -286,14 +286,14 @@ public class Quest {
 
     public void complete(Character chr, int npc, Integer selection) {
         if (autoPreComplete || canComplete(chr, npc)) {
-            Collection<MapleQuestAction> acts = completeActs.values();
-            for (MapleQuestAction a : acts) {
+            Collection<AbstractQuestAction> acts = completeActs.values();
+            for (AbstractQuestAction a : acts) {
                 if (!a.check(chr, selection)) {
                     return;
                 }
             }
             forceComplete(chr, npc);
-            for (MapleQuestAction a : acts) {
+            for (AbstractQuestAction a : acts) {
                 a.run(chr, selection);
             }
             if (!this.hasNextQuestAction()) {
@@ -534,8 +534,8 @@ public class Quest {
         return ret;
     }
 
-    private MapleQuestAction getAction(QuestActionType type, Data data) {
-        MapleQuestAction ret = null;
+    private AbstractQuestAction getAction(QuestActionType type, Data data) {
+        AbstractQuestAction ret = null;
         switch (type) {
             case BUFF:
                 ret = new BuffAction(this, data);
@@ -618,8 +618,8 @@ public class Quest {
     }
 
     public boolean hasNextQuestAction() {
-        Map<QuestActionType, MapleQuestAction> acts = completeActs;
-        MapleQuestAction mqa = acts.get(QuestActionType.NEXTQUEST);
+        Map<QuestActionType, AbstractQuestAction> acts = completeActs;
+        AbstractQuestAction mqa = acts.get(QuestActionType.NEXTQUEST);
 
         return mqa != null;
     }
