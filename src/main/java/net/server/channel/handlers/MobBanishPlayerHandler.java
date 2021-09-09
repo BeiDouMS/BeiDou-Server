@@ -23,7 +23,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.life.MapleLifeFactory.BanishInfo;
+import server.life.LifeFactory.BanishInfo;
 import server.life.MapleMonster;
 
 public final class MobBanishPlayerHandler extends AbstractPacketHandler {

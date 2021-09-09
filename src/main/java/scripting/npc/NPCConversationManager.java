@@ -49,7 +49,7 @@ import server.expeditions.Expedition;
 import server.expeditions.ExpeditionType;
 import server.gachapon.MapleGachapon;
 import server.gachapon.MapleGachapon.MapleGachaponItem;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MaplePlayerNPC;
 import server.maps.MapleMap;
 import server.maps.MapleMapManager;
@@ -87,7 +87,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         private String getDefaultTalk(int npcid) {
             String talk = npcDefaultTalks.get(npcid);
             if (talk == null) {
-                talk = MapleLifeFactory.getNPCDefaultTalk(npcid);
+                talk = LifeFactory.getNPCDefaultTalk(npcid);
                 npcDefaultTalks.put(npcid, talk);
             }
             

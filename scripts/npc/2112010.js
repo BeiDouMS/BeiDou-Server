@@ -90,7 +90,7 @@ function action(mode, type, selection) {
                                 } else {
                                         var state = eim.getIntProperty("yuletePassed");
 
-                                        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                                        const LifeFactory = Java.type('server.life.LifeFactory');
                                         const Point = Java.type('java.awt.Point');
                                         if(state == -1) {
                                                 cm.sendOk("Behold! The pinnacle of Magatia's alchemy studies! Hahahahahahaha...");
@@ -99,7 +99,7 @@ function action(mode, type, selection) {
                                                 eim.dropMessage(5, "Yulete: I present you my newest weapon, brought by the finest alchemy, Frankenroid!");
 
                                                 var mapobj = eim.getMapInstance(926110401);
-                                                var bossobj = MapleLifeFactory.getMonster(9300151);
+                                                var bossobj = LifeFactory.getMonster(9300151);
                                                 mapobj.spawnMonsterOnGroundBelow(bossobj, new Point(250, 100));
 
                                                 eim.setIntProperty("statusStg7", 1);
@@ -109,7 +109,7 @@ function action(mode, type, selection) {
                                                 eim.dropMessage(5, "Yulete: I present you my newest weapon, brought by the finest combined alchemy of Alcadno's and Zenumist's, those that the boring people of Magatia societies have banned to bring along, the mighty Frankenroid!!");
 
                                                 var mapobj = eim.getMapInstance(926110401);
-                                                var bossobj = MapleLifeFactory.getMonster(9300152);
+                                                var bossobj = LifeFactory.getMonster(9300152);
                                                 mapobj.spawnMonsterOnGroundBelow(bossobj, new Point(250, 100));
 
                                                 eim.setIntProperty("statusStg7", 2);

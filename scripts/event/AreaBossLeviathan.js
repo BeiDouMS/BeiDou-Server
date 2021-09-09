@@ -42,8 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var leviathansCanyon = em.getChannelServer().getMapFactory().getMap(240040401);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var leviathan = MapleLifeFactory.getMonster(8220003);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var leviathan = LifeFactory.getMonster(8220003);
     if(leviathansCanyon.getMonsterById(8220003) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);
 		return;

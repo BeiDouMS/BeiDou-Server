@@ -248,7 +248,7 @@ public class MapleMonsterInformationProvider {
         Boolean boss = mobBossCache.get(id);
         if (boss == null) {
             try {
-                boss = MapleLifeFactory.getMonster(id).isBoss();
+                boss = LifeFactory.getMonster(id).isBoss();
             } catch (NullPointerException npe) {
                 boss = false;
             } catch (Exception e) {   //nonexistant mob

@@ -31,7 +31,7 @@ function action(mode, type, selection) {
                         } else {
                                 const MapleLifeFactoroy = Java.type('server.life.MapleLifeFactoroy');
                                 const Point = Java.type('java.awt.Point');
-                                cm.getWarpMap(910510202).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(9300346), new Point(95, 200));
+                                cm.getWarpMap(910510202).spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300346), new Point(95, 200));
                                 cm.warp(910510202, 0);
                         }
                     

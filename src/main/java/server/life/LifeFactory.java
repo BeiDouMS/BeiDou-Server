@@ -34,26 +34,25 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class MapleLifeFactory {
-
-    private static DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
+public class LifeFactory {
+    private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
     private final static DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
-    private static Data mobStringData = stringDataWZ.getData("Mob.img");
-    private static Data npcStringData = stringDataWZ.getData("Npc.img");
-    private static Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
-    private static Set<Integer> hpbarBosses = getHpBarBosses();
+    private static final Data mobStringData = stringDataWZ.getData("Mob.img");
+    private static final Data npcStringData = stringDataWZ.getData("Npc.img");
+    private static final Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
+    private static final Set<Integer> hpbarBosses = getHpBarBosses();
 
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
-        
+
         DataProvider uiDataWZ = DataProviderFactory.getDataProvider(WZFiles.UI);
         for (Data bossData : uiDataWZ.getData("UIWindow.img").getChildByPath("MobGage/Mob").getChildren()) {
             ret.add(Integer.valueOf(bossData.getName()));
         }
-        
+
         return ret;
     }
-    
+
     public static AbstractLoadedLife getLife(int id, String type) {
         if (type.equalsIgnoreCase("n")) {
             return getNPC(id);
@@ -70,7 +69,7 @@ public class MapleLifeFactory {
         protected int mpCon;
         protected int coolTime;
         protected int animationTime;
-        
+
         protected MobAttackInfoHolder(int attackPos, int mpCon, int coolTime, int animationTime) {
             this.attackPos = attackPos;
             this.mpCon = mpCon;
@@ -78,7 +77,7 @@ public class MapleLifeFactory {
             this.animationTime = animationTime;
         }
     }
-    
+
     private static void setMonsterAttackInfo(int mid, List<MobAttackInfoHolder> attackInfos) {
         if (!attackInfos.isEmpty()) {
             MapleMonsterInformationProvider mi = MapleMonsterInformationProvider.getInstance();
@@ -89,28 +88,28 @@ public class MapleLifeFactory {
             }
         }
     }
-    
+
     private static Pair<MapleMonsterStats, List<MobAttackInfoHolder>> getMonsterStats(int mid) {
         Data monsterData = data.getData(StringUtil.getLeftPaddedStr(mid + ".img", '0', 11));
         if (monsterData == null) {
             return null;
         }
         Data monsterInfoData = monsterData.getChildByPath("info");
-        
+
         List<MobAttackInfoHolder> attackInfos = new LinkedList<>();
         MapleMonsterStats stats = new MapleMonsterStats();
-        
+
         int linkMid = DataTool.getIntConvert("link", monsterInfoData, 0);
         if (linkMid != 0) {
             Pair<MapleMonsterStats, List<MobAttackInfoHolder>> linkStats = getMonsterStats(linkMid);
             if (linkStats == null) {
                 return null;
             }
-            
+
             // thanks resinate for noticing non-propagable infos such as revives getting retrieved
             attackInfos.addAll(linkStats.getRight());
         }
-        
+
         stats.setHp(DataTool.getIntConvert("maxHP", monsterInfoData));
         stats.setFriendly(DataTool.getIntConvert("damagedByMob", monsterInfoData, stats.isFriendly() ? 1 : 0) == 1);
         stats.setPADamage(DataTool.getIntConvert("PADamage", monsterInfoData));
@@ -157,12 +156,12 @@ public class MapleLifeFactory {
         }
         stats.setFirstAttack(firstAttack > 0);
         stats.setDropPeriod(DataTool.getIntConvert("dropItemPeriod", monsterInfoData, stats.getDropPeriod() / 10000) * 10000);
-        
+
         // thanks yuxaij, Riizade, Z1peR, Anesthetic for noticing some bosses crashing players due to missing requirements
         boolean hpbarBoss = stats.isBoss() && hpbarBosses.contains(mid);
         stats.setTagColor(hpbarBoss ? DataTool.getIntConvert("hpTagColor", monsterInfoData, 0) : 0);
         stats.setTagBgColor(hpbarBoss ? DataTool.getIntConvert("hpTagBgcolor", monsterInfoData, 0) : 0);
-        
+
         for (Data idata : monsterData) {
             if (!idata.getName().equals("info")) {
                 int delay = 0;
@@ -226,7 +225,7 @@ public class MapleLifeFactory {
         if (banishData != null) {
             stats.setBanishInfo(new BanishInfo(DataTool.getString("banMsg", banishData), DataTool.getInt("banMap/0/field", banishData, -1), DataTool.getString("banMap/0/portal", banishData, "sp")));
         }
-        
+
         int noFlip = DataTool.getInt("noFlip", monsterInfoData, 0);
         if (noFlip > 0) {
             Point origin = DataTool.getPoint("stand/0/origin", monsterData, null);
@@ -234,10 +233,10 @@ public class MapleLifeFactory {
                 stats.setFixedStance(origin.getX() < 1 ? 5 : 4);    // fixed left/right
             }
         }
-        
+
         return new Pair<>(stats, attackInfos);
     }
-    
+
     public static MapleMonster getMonster(int mid) {
         try {
             MapleMonsterStats stats = monsterStats.get(mid);
@@ -245,19 +244,19 @@ public class MapleLifeFactory {
                 Pair<MapleMonsterStats, List<MobAttackInfoHolder>> mobStats = getMonsterStats(mid);
                 stats = mobStats.getLeft();
                 setMonsterAttackInfo(mid, mobStats.getRight());
-                
+
                 monsterStats.put(mid, stats);
             }
             MapleMonster ret = new MapleMonster(mid, stats);
             return ret;
-        } catch(NullPointerException npe) {
+        } catch (NullPointerException npe) {
             System.out.println("[SEVERE] MOB " + mid + " failed to load. Issue: " + npe.getMessage() + "\n\n");
             npe.printStackTrace();
-            
+
             return null;
         }
     }
-    
+
     public static int getMonsterLevel(int mid) {
         try {
             MapleMonsterStats stats = monsterStats.get(mid);
@@ -271,11 +270,11 @@ public class MapleLifeFactory {
             } else {
                 return stats.getLevel();
             }
-        } catch(NullPointerException npe) {
+        } catch (NullPointerException npe) {
             System.out.println("[SEVERE] MOB " + mid + " failed to load. Issue: " + npe.getMessage() + "\n\n");
             npe.printStackTrace();
         }
-        
+
         return -1;
     }
 
@@ -288,15 +287,16 @@ public class MapleLifeFactory {
     public static MapleNPC getNPC(int nid) {
         return new MapleNPC(nid, new MapleNPCStats(DataTool.getString(nid + "/name", npcStringData, "MISSINGNO")));
     }
-    
+
     public static String getNPCDefaultTalk(int nid) {
         return DataTool.getString(nid + "/d0", npcStringData, "(...)");
     }
 
     public static class BanishInfo {
 
-        private int map;
-        private String portal, msg;
+        private final int map;
+        private final String portal;
+        private final String msg;
 
         public BanishInfo(String msg, int map, String portal) {
             this.msg = msg;
@@ -319,8 +319,9 @@ public class MapleLifeFactory {
 
     public static class loseItem {
 
-        private int id;
-        private byte chance, x;
+        private final int id;
+        private final byte chance;
+        private final byte x;
 
         public loseItem(int id, byte chance, byte x) {
             this.id = id;
@@ -343,9 +344,9 @@ public class MapleLifeFactory {
 
     public static class selfDestruction {
 
-        private byte action;
-        private int removeAfter;
-        private int hp;
+        private final byte action;
+        private final int removeAfter;
+        private final int hp;
 
         public selfDestruction(byte action, int removeAfter, int hp) {
             this.action = action;
@@ -356,7 +357,7 @@ public class MapleLifeFactory {
         public int getHp() {
             return hp;
         }
-        
+
         public byte getAction() {
             return action;
         }

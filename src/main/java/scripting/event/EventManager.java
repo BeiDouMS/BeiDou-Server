@@ -38,7 +38,7 @@ import scripting.event.scheduler.EventScriptScheduler;
 import server.MapleMarriage;
 import server.ThreadManager;
 import server.expeditions.Expedition;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import server.quest.MapleQuest;
@@ -738,7 +738,7 @@ public class EventManager {
     }
     
     public MapleMonster getMonster(int mid) {
-        return(MapleLifeFactory.getMonster(mid));
+        return(LifeFactory.getMonster(mid));
     }
     
     private void exportReadyGuild(Integer guildId) {

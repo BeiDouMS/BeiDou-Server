@@ -27,7 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import net.server.channel.Channel;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleNPC;
 import server.maps.MapleMap;
 import tools.DatabaseConnection;
@@ -59,7 +59,7 @@ public class PnpcCommand extends Command {
             return;
         }
 
-        MapleNPC npc = MapleLifeFactory.getNPC(npcId);
+        MapleNPC npc = LifeFactory.getNPC(npcId);
 
         Point checkpos = player.getMap().getGroundBelow(player.getPosition());
         int xpos = checkpos.x;
@@ -85,7 +85,7 @@ public class PnpcCommand extends Command {
                 ps.executeUpdate();
 
                 for (Channel ch : player.getWorldServer().getChannels()) {
-                    npc = MapleLifeFactory.getNPC(npcId);
+                    npc = LifeFactory.getNPC(npcId);
                     npc.setPosition(checkpos);
                     npc.setCy(ypos);
                     npc.setRx0(xpos + 50);

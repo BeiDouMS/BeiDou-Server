@@ -28,7 +28,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
@@ -62,7 +62,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             return;
                         }
 
-                        final MapleMonster mob = MapleLifeFactory.getMonster(mobs.get(num).left);
+                        final MapleMonster mob = LifeFactory.getMonster(mobs.get(num).left);
                         MonsterCarnival mcpq = c.getPlayer().getMonsterCarnival();
                         if (mcpq != null) {
                             if (!mcpq.canSummonR() && c.getPlayer().getTeam() == 0 || !mcpq.canSummonB() && c.getPlayer().getTeam() == 1) {

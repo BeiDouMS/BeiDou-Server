@@ -44,7 +44,7 @@ import net.server.world.PartyCharacter;
 import scripting.event.EventInstanceManager;
 import server.MapleStatEffect;
 import server.TimerManager;
-import server.life.MapleLifeFactory.BanishInfo;
+import server.life.LifeFactory.BanishInfo;
 import server.loot.MapleLootManager;
 import server.maps.AbstractAnimatedMapleMapObject;
 import server.maps.MapleMap;
@@ -779,7 +779,7 @@ public class MapleMonster extends AbstractLoadedLife {
                     boolean aggro = lastController.getRight();
 
                     for (Integer mid : toSpawn) {
-                        final MapleMonster mob = MapleLifeFactory.getMonster(mid);
+                        final MapleMonster mob = LifeFactory.getMonster(mid);
                         mob.setPosition(getPosition());
                         mob.setFh(getFh());
                         mob.setParentMobOid(getObjectId());

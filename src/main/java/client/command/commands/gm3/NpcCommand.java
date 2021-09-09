@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleNPC;
 import tools.PacketCreator;
 
@@ -42,7 +42,7 @@ public class NpcCommand extends Command {
             player.yellowMessage("Syntax: !npc <npcid>");
             return;
         }
-        MapleNPC npc = MapleLifeFactory.getNPC(Integer.parseInt(params[0]));
+        MapleNPC npc = LifeFactory.getNPC(Integer.parseInt(params[0]));
         if (npc != null) {
             npc.setPosition(player.getPosition());
             npc.setCy(player.getPosition().y);

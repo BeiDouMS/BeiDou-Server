@@ -948,7 +948,7 @@ public class AbstractPlayerInteraction {
 	}
         
         public void spawnNpc(int npcId, Point pos, MapleMap map) {
-                MapleNPC npc = MapleLifeFactory.getNPC(npcId);
+                MapleNPC npc = LifeFactory.getNPC(npcId);
                 if (npc != null) {
                         npc.setPosition(pos);
                         npc.setCy(pos.y);
@@ -961,13 +961,13 @@ public class AbstractPlayerInteraction {
         }
         
 	public void spawnMonster(int id, int x, int y) {
-		MapleMonster monster = MapleLifeFactory.getMonster(id);
+		MapleMonster monster = LifeFactory.getMonster(id);
 		monster.setPosition(new Point(x, y));
 		getPlayer().getMap().spawnMonster(monster);
 	}
         
 	public MapleMonster getMonsterLifeFactory(int mid) {
-		return MapleLifeFactory.getMonster(mid);
+		return LifeFactory.getMonster(mid);
 	}
         
         public MobSkill getMobSkill(int skill, int level) {

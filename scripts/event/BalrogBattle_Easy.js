@@ -135,16 +135,16 @@ function releaseLeftClaw(eim) {
 function spawnBalrog(eim) {
         var mapObj = eim.getInstanceMap(entryMap);
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
-        mapObj.spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830007), new Point(412, 258));
-        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830009), new Point(412, 258));
-        mapObj.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(8830013), new Point(412, 258));
+        mapObj.spawnFakeMonsterOnGroundBelow(LifeFactory.getMonster(8830007), new Point(412, 258));
+        mapObj.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8830009), new Point(412, 258));
+        mapObj.spawnMonsterOnGroundBelow(LifeFactory.getMonster(8830013), new Point(412, 258));
 }
 
 function spawnSealedBalrog(eim) {
         const Point = Java.type('java.awt.Point');
-        eim.getInstanceMap(entryMap).spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(bossMobId), new Point(412, 258));
+        eim.getInstanceMap(entryMap).spawnMonsterOnGroundBelow(LifeFactory.getMonster(bossMobId), new Point(412, 258));
 }
 
 function playerEntry(eim, player) {

@@ -31,7 +31,7 @@ import constants.inventory.ItemConstants;
 import scripting.AbstractPlayerInteraction;
 import server.MapleItemInformationProvider;
 import server.TimerManager;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 import server.maps.MapMonitor;
 import server.maps.MapleMap;
@@ -262,7 +262,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
     public void spawnMonster(int id, int qty, Point pos) {
         for (int i = 0; i < qty; i++) {
-            reactor.getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), pos);
+            reactor.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(id), pos);
         }
     }
 
@@ -304,7 +304,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
 
     public void spawnFakeMonster(int id) {
-        reactor.getMap().spawnFakeMonsterOnGroundBelow(MapleLifeFactory.getMonster(id), getPosition());
+        reactor.getMap().spawnFakeMonsterOnGroundBelow(LifeFactory.getMonster(id), getPosition());
     }
 
     /**

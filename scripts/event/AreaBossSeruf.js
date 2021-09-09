@@ -43,8 +43,8 @@ function cancelSchedule() {
 
 function start() {
     var theSeaweedTower = em.getChannelServer().getMapFactory().getMap(230020100);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var seruf = MapleLifeFactory.getMonster(4220001);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var seruf = LifeFactory.getMonster(4220001);
 	
 	if(theSeaweedTower.getMonsterById(4220001) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);

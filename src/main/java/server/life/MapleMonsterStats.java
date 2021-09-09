@@ -21,9 +21,9 @@
 */
 package server.life;
 
-import server.life.MapleLifeFactory.BanishInfo;
-import server.life.MapleLifeFactory.loseItem;
-import server.life.MapleLifeFactory.selfDestruction;
+import server.life.LifeFactory.BanishInfo;
+import server.life.LifeFactory.loseItem;
+import server.life.LifeFactory.selfDestruction;
 import tools.Pair;
 
 import java.lang.reflect.Field;

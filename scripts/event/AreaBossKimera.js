@@ -41,9 +41,9 @@ function cancelSchedule() {
 }
 
 function start() {
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     var labSecretBasementPath = em.getChannelServer().getMapFactory().getMap(261030000);
-    var chimera = MapleLifeFactory.getMonster(8220002);
+    var chimera = LifeFactory.getMonster(8220002);
 	
 	if(labSecretBasementPath.getMonsterById(8220002) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);

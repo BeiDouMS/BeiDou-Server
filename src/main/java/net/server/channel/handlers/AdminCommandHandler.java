@@ -29,7 +29,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -55,7 +55,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(p.readInt());
                 for (int[] toSpawnChild : toSpawn) {
                     if (Randomizer.nextInt(100) < toSpawnChild[1]) {
-                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
+                        c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
@@ -141,7 +141,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 int mobId = p.readInt();
                 int quantity = p.readInt();
                 for (int i = 0; i < quantity; i++) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), c.getPlayer().getPosition());
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), c.getPlayer().getPosition());
                 }
                 break;
             case 0x18: // Maple & Mobhp

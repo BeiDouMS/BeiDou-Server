@@ -27,7 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import net.server.channel.Channel;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 import server.maps.MapleMap;
 import tools.DatabaseConnection;
@@ -60,7 +60,7 @@ public class PmobCommand extends Command {
         int ypos = checkpos.y;
         int fh = player.getMap().getFootholds().findBelow(checkpos).getId();
 
-        MapleMonster mob = MapleLifeFactory.getMonster(mobId);
+        MapleMonster mob = LifeFactory.getMonster(mobId);
         if (mob != null && !mob.getName().equals("MISSINGNO")) {
             mob.setPosition(checkpos);
             mob.setCy(ypos);

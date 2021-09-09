@@ -48,11 +48,11 @@ function start() {
         return;
     }
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     const PacketCreator = Java.type('tools.PacketCreator');
 
-    var boss = MapleLifeFactory.getMonster(bossMobid);
+    var boss = LifeFactory.getMonster(bossMobid);
     var bossPos = new Point(251, -841);
     map.spawnMonsterOnGroundBelow(boss, bossPos);
     map.broadcastMessage(PacketCreator.serverNotice(6, bossMsg));

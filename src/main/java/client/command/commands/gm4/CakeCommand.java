@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 
 public class CakeCommand extends Command {
@@ -37,7 +37,7 @@ public class CakeCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        MapleMonster monster = MapleLifeFactory.getMonster(9400606);
+        MapleMonster monster = LifeFactory.getMonster(9400606);
         if (params.length == 1) {
             double mobHp = Double.parseDouble(params[0]);
             int newHp = (mobHp <= 0) ? Integer.MAX_VALUE : ((mobHp > Integer.MAX_VALUE) ? Integer.MAX_VALUE : (int) mobHp);

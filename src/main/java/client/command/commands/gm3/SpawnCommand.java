@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 
 public class SpawnCommand extends Command {
@@ -42,16 +42,16 @@ public class SpawnCommand extends Command {
             return;
         }
 
-        MapleMonster monster = MapleLifeFactory.getMonster(Integer.parseInt(params[0]));
+        MapleMonster monster = LifeFactory.getMonster(Integer.parseInt(params[0]));
         if (monster == null) {
             return;
         }
         if (params.length == 2) {
             for (int i = 0; i < Integer.parseInt(params[1]); i++) {
-                player.getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(Integer.parseInt(params[0])), player.getPosition());
+                player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(Integer.parseInt(params[0])), player.getPosition());
             }
         } else {
-            player.getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(Integer.parseInt(params[0])), player.getPosition());
+            player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(Integer.parseInt(params[0])), player.getPosition());
         }
     }
 }

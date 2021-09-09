@@ -244,16 +244,16 @@ function respawnStages(eim) {
             var mapobj = eim.getMapInstance(926110401);
             var mobcount = mapobj.countMonster(9300150);
             var mobobj;
-            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+            const LifeFactory = Java.type('server.life.LifeFactory');
             const Point = Java.type('java.awt.Point');
             if(mobcount == 0) {
-                mobobj = MapleLifeFactory.getMonster(9300150);
+                mobobj = LifeFactory.getMonster(9300150);
                 mapobj.spawnMonsterOnGroundBelow(mobobj, new Point(-278, -126));
 
-                mobobj = MapleLifeFactory.getMonster(9300150);
+                mobobj = LifeFactory.getMonster(9300150);
                 mapobj.spawnMonsterOnGroundBelow(mobobj, new Point(-542, -126));
             } else if(mobcount == 1) {
-                mobobj = MapleLifeFactory.getMonster(9300150);
+                mobobj = LifeFactory.getMonster(9300150);
                 mapobj.spawnMonsterOnGroundBelow(mobobj, new Point(-542, -126));
             }
         }
@@ -313,12 +313,12 @@ function yuleteAction(eim) {
         
         mapobj.destroyNPC(2112010);
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
         var mobobj1, mobobj2;
         for(var i = 0; i < 5; i++) {
-                mobobj1 = MapleLifeFactory.getMonster(mob1);
-                mobobj2 = MapleLifeFactory.getMonster(mob2);
+                mobobj1 = LifeFactory.getMonster(mob1);
+                mobobj2 = LifeFactory.getMonster(mob2);
             
                 mapobj.spawnMonsterOnGroundBelow(mobobj1, new Point(-455, 135));
                 mapobj.spawnMonsterOnGroundBelow(mobobj2, new Point(-455, 135));
@@ -326,8 +326,8 @@ function yuleteAction(eim) {
         
 
         for(var i = 0; i < 5; i++) {
-                mobobj1 = MapleLifeFactory.getMonster(mob1);
-                mobobj2 = MapleLifeFactory.getMonster(mob2);
+                mobobj1 = LifeFactory.getMonster(mob1);
+                mobobj2 = LifeFactory.getMonster(mob2);
             
                 mapobj.spawnMonsterOnGroundBelow(mobobj1, new Point(0, 135));
                 mapobj.spawnMonsterOnGroundBelow(mobobj2, new Point(0, 135));
@@ -335,8 +335,8 @@ function yuleteAction(eim) {
         
         
         for(var i = 0; i < 5; i++) {
-                mobobj1 = MapleLifeFactory.getMonster(mob1);
-                mobobj2 = MapleLifeFactory.getMonster(mob2);
+                mobobj1 = LifeFactory.getMonster(mob1);
+                mobobj2 = LifeFactory.getMonster(mob2);
             
                 mapobj.spawnMonsterOnGroundBelow(mobobj1, new Point(360, 135));
                 mapobj.spawnMonsterOnGroundBelow(mobobj2, new Point(360, 135));

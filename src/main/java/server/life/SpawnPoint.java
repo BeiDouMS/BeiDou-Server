@@ -75,7 +75,7 @@ public class SpawnPoint {
     }
     
     public MapleMonster getMonster() {
-        MapleMonster mob = new MapleMonster(MapleLifeFactory.getMonster(monster));
+        MapleMonster mob = new MapleMonster(LifeFactory.getMonster(monster));
         mob.setPosition(new Point(pos));
         mob.setTeam(team);
         mob.setFh(fh);

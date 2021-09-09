@@ -47,11 +47,11 @@ function start() {
 		return;
 	}
 
-	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const LifeFactory = Java.type('server.life.LifeFactory');
 	const PacketCreator = Java.type('tools.PacketCreator');
 	const Point = Java.type('java.awt.Point');
 	const spawnpoint = new Point(90, 119);
-    dangeroudCroko1.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(6220000), spawnpoint);
+    dangeroudCroko1.spawnMonsterOnGroundBelow(LifeFactory.getMonster(6220000), spawnpoint);
     dangeroudCroko1.broadcastMessage(PacketCreator.serverNotice(6, "The huge crocodile Dyle has come out from the swamp."));
 	setupTask = em.schedule("start", 3 * 60 * 60 * 1000);
 }

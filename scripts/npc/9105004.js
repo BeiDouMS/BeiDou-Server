@@ -129,7 +129,7 @@ function insidePqAction(mode, type, selection) {
                         }
                 }
         } else if(status == 1) {
-                const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+                const LifeFactory = Java.type('server.life.LifeFactory');
                 const Point = Java.type('java.awt.Point');
 
                 if(stg == -1) {
@@ -140,7 +140,7 @@ function insidePqAction(mode, type, selection) {
                         }
 
                         mapobj.allowSummonState(true);
-                        var snowman = MapleLifeFactory.getMonster(9400317 + (5 * difficulty));
+                        var snowman = LifeFactory.getMonster(9400317 + (5 * difficulty));
                         mapobj.spawnMonsterOnGroundBelow(snowman, new Point(-180, 15));
                         eim.setIntProperty("snowmanLevel", 1);
                         eim.dropMessage(5, "The snowman appeared on the field! Protect it using all means necessary!");
@@ -158,7 +158,7 @@ function insidePqAction(mode, type, selection) {
                         mapobj.broadcastStringMessage(5, "As the snowman grows to it's prime, the Scrooge appears!");
                         eim.getEm().getIv().invokeFunction("snowmanHeal", eim);
 
-                        var boss = MapleLifeFactory.getMonster(9400318 + difficulty);
+                        var boss = LifeFactory.getMonster(9400318 + difficulty);
                         mapobj.spawnMonsterOnGroundBelow(boss, new Point(-180, 15));
                         eim.setProperty("spawnedBoss", "true");
 

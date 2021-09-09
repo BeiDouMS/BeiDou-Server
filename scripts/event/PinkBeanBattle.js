@@ -102,9 +102,9 @@ function setup(channel) {
     eim.getInstanceMap(270050200).resetPQ(level);
     eim.getInstanceMap(270050300).resetPQ(level);
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    var mob = MapleLifeFactory.getMonster(8820000);
+    var mob = LifeFactory.getMonster(8820000);
     mob.disableDrops();
     eim.getInstanceMap(270050100).spawnMonsterOnGroundBelow(mob, new Point(0, -42));
     
@@ -234,8 +234,8 @@ function spawnJrBoss(mobObj, gotKilled) {
         spawnid = mobObj.getId() - 17;
     }
 
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var mob = MapleLifeFactory.getMonster(spawnid);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var mob = LifeFactory.getMonster(spawnid);
     mobObj.getMap().spawnMonsterOnGroundBelow(mob, mobObj.getPosition());
 }
 

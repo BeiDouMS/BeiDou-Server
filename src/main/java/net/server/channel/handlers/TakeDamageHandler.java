@@ -36,7 +36,7 @@ import constants.skills.Aran;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleStatEffect;
-import server.life.MapleLifeFactory.loseItem;
+import server.life.LifeFactory.loseItem;
 import server.life.*;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;

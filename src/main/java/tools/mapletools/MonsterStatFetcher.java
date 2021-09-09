@@ -5,9 +5,9 @@ import provider.wz.DataType;
 import provider.wz.WZFiles;
 import server.life.Element;
 import server.life.ElementalEffectiveness;
-import server.life.MapleLifeFactory.BanishInfo;
-import server.life.MapleLifeFactory.loseItem;
-import server.life.MapleLifeFactory.selfDestruction;
+import server.life.LifeFactory.BanishInfo;
+import server.life.LifeFactory.loseItem;
+import server.life.LifeFactory.selfDestruction;
 import server.life.MapleMonsterStats;
 import tools.Pair;
 

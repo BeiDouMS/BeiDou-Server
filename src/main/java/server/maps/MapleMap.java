@@ -58,7 +58,7 @@ import server.MapleStatEffect;
 import server.TimerManager;
 import server.events.gm.*;
 import server.life.*;
-import server.life.MapleLifeFactory.selfDestruction;
+import server.life.LifeFactory.selfDestruction;
 import server.partyquest.GuardianSpawnPoint;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
@@ -1813,7 +1813,7 @@ public class MapleMap {
     }
 
     public void spawnMonsterOnGroundBelow(int id, int x, int y) {
-        MapleMonster mob = MapleLifeFactory.getMonster(id);
+        MapleMonster mob = LifeFactory.getMonster(id);
         spawnMonsterOnGroundBelow(mob, new Point(x, y));
     }
 
@@ -4039,10 +4039,10 @@ public class MapleMap {
     }
     
     public void spawnHorntailOnGroundBelow(final Point targetPoint) {   // ayy lmao
-        MapleMonster htIntro = MapleLifeFactory.getMonster(8810026);
+        MapleMonster htIntro = LifeFactory.getMonster(8810026);
         spawnMonsterOnGroundBelow(htIntro, targetPoint);    // htintro spawn animation converting into horntail detected thanks to Arnah
         
-        final MapleMonster ht = MapleLifeFactory.getMonster(8810018);
+        final MapleMonster ht = LifeFactory.getMonster(8810018);
         ht.setParentMobOid(htIntro.getObjectId());
         ht.addListener(new MonsterListener() {
             @Override
@@ -4061,7 +4061,7 @@ public class MapleMap {
         spawnMonsterOnGroundBelow(ht, targetPoint);
 
         for (int x = 8810002; x <= 8810009; x++) {
-            MapleMonster m = MapleLifeFactory.getMonster(x);
+            MapleMonster m = LifeFactory.getMonster(x);
             m.setParentMobOid(htIntro.getObjectId());
 
             m.addListener(new MonsterListener() {

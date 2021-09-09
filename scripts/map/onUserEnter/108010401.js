@@ -16,8 +16,8 @@ function spawnMob(x, y, id, map) {
 	if(map.getMonsterById(id) != null)
 		return;
 
-	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+	const LifeFactory = Java.type('server.life.LifeFactory');
 	const Point = Java.type('java.awt.Point');
-	var mob = MapleLifeFactory.getMonster(id);
+	var mob = LifeFactory.getMonster(id);
 	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

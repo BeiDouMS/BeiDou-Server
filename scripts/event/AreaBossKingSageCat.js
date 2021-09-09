@@ -42,8 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var goblinForest2 = em.getChannelServer().getMapFactory().getMap(250010504);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var kingSageCat = MapleLifeFactory.getMonster(7220002);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var kingSageCat = LifeFactory.getMonster(7220002);
 	
 	if(goblinForest2.getMonsterById(7220002) != null) {
 		em.schedule("start", 3 * 60 *60 * 1000);

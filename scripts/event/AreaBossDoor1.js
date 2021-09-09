@@ -50,9 +50,9 @@ function start() {
 
     const Point = Java.type('java.awt.Point');
     const PacketCreator = Java.type('tools.PacketCreator');
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
 
-    var boss = MapleLifeFactory.getMonster(bossMobid);
+    var boss = LifeFactory.getMonster(bossMobid);
     var bossPos = new Point(467, 0);
     map.spawnMonsterOnGroundBelow(boss, bossPos);
     map.broadcastMessage(PacketCreator.serverNotice(6, bossMsg));

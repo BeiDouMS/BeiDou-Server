@@ -211,8 +211,8 @@ function randX() {
 }
 
 function spawnMob(id, x, y, map) {
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+    const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-	var mob = MapleLifeFactory.getMonster(id);
+	var mob = LifeFactory.getMonster(id);
 	map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

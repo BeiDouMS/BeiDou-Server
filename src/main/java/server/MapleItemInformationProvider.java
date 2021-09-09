@@ -35,7 +35,7 @@ import net.server.Server;
 import provider.*;
 import provider.wz.WZFiles;
 import server.MakerItemFactory.MakerItemCreateEntry;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonsterInformationProvider;
 import tools.*;
 
@@ -1913,7 +1913,7 @@ public class MapleItemInformationProvider {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         int dropperid = rs.getInt("dropperid");
-                        itemid = getCrystalForLevel(MapleLifeFactory.getMonsterLevel(dropperid) - 1);
+                        itemid = getCrystalForLevel(LifeFactory.getMonsterLevel(dropperid) - 1);
                     }
                 }
             }

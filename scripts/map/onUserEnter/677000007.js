@@ -11,7 +11,7 @@ function start(ms) {
 		return;   	       
 	}
 
-	const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-	map.spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(mobId), pos);
+	const LifeFactory = Java.type('server.life.LifeFactory');
+	map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), pos);
 	player.message(mobName + " has appeared!");
 }

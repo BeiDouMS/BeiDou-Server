@@ -339,7 +339,7 @@ public class MapleMapFactory {
     }
     
     private static AbstractLoadedLife loadLife(int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide) {
-        AbstractLoadedLife myLife = MapleLifeFactory.getLife(id, type);
+        AbstractLoadedLife myLife = LifeFactory.getLife(id, type);
         myLife.setCy(cy);
         myLife.setF(f);
         myLife.setFh(fh);

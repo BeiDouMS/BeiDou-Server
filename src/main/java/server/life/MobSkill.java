@@ -254,7 +254,7 @@ public class MobSkill {
                         
                         Collections.shuffle(summons);
                         for (Integer mobId : summons.subList(0, summonLimit)) {
-                            MapleMonster toSpawn = MapleLifeFactory.getMonster(mobId);
+                            MapleMonster toSpawn = LifeFactory.getMonster(mobId);
                             if (toSpawn != null) {
                                 if (bossRushMap) {
                                     toSpawn.disableDrops();  // no littering on BRPQ pls

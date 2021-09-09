@@ -72,9 +72,9 @@ function setEventRewards(eim) {
 function spawnCakeBoss(eim) {
         var mapObj = eim.getMapInstance(680000400);
 
-        const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+        const LifeFactory = Java.type('server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
-        var mobObj = MapleLifeFactory.getMonster(9400606);
+        var mobObj = LifeFactory.getMonster(9400606);
         mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(777, -177));
 }
 

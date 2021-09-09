@@ -41,7 +41,7 @@ import server.MapleStatEffect;
 import server.ThreadManager;
 import server.TimerManager;
 import server.expeditions.Expedition;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import server.life.MapleMonster;
 import server.life.MapleNPC;
 import server.maps.MapleMap;
@@ -849,7 +849,7 @@ public class EventInstanceManager {
         }
         
         public void spawnNpc(int npcId, Point pos, MapleMap map) {
-                MapleNPC npc = MapleLifeFactory.getNPC(npcId);
+                MapleNPC npc = LifeFactory.getNPC(npcId);
                 if (npc != null) {
                         npc.setPosition(pos);
                         npc.setCy(pos.y);
@@ -877,7 +877,7 @@ public class EventInstanceManager {
         }
         
         public MapleMonster getMonster(int mid) {
-                return(MapleLifeFactory.getMonster(mid));
+                return(LifeFactory.getMonster(mid));
         }
 
         private List<Integer> convertToIntegerList(List<Object> objects) {

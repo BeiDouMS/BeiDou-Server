@@ -42,8 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var eastRockyMountain5 = em.getChannelServer().getMapFactory().getMap(101030404);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var stumpy = MapleLifeFactory.getMonster(3220000);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var stumpy = LifeFactory.getMonster(3220000);
 	
     if(eastRockyMountain5.getMonsterById(3220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);

@@ -28,7 +28,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
-import server.life.MapleLifeFactory;
+import server.life.LifeFactory;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -54,7 +54,7 @@ public final class UseSummonBagHandler extends AbstractPacketHandler {
             int[][] toSpawn = MapleItemInformationProvider.getInstance().getSummonMobs(itemId);
             for (int[] toSpawnChild : toSpawn) {
                 if (Randomizer.nextInt(100) < toSpawnChild[1]) {
-                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(MapleLifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
+                    c.getPlayer().getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(toSpawnChild[0]), c.getPlayer().getPosition());
                 }
             }
         }

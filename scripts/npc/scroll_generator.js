@@ -244,9 +244,9 @@ function getPlayerCardTierPower() {
         countTier[ceTier] += ce.getValue();
 
         if (ceTier >= 8) {  // is special card
-            const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
+            const LifeFactory = Java.type('server.life.LifeFactory');
             const MapleItemInformationProvider = Java.type('server.MapleItemInformationProvider');
-            var mobLevel = MapleLifeFactory.getMonsterLevel(MapleItemInformationProvider.getInstance().getCardMobId(cardid));
+            var mobLevel = LifeFactory.getMonsterLevel(MapleItemInformationProvider.getInstance().getCardMobId(cardid));
             var mobTier = getLevelTier(mobLevel) - 1;
 
             countTier[mobTier] += (ce.getValue() * 1.2);

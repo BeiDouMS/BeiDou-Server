@@ -42,8 +42,8 @@ function cancelSchedule() {
 
 function start() {
     var territoryOfWanderingBear = em.getChannelServer().getMapFactory().getMap(250010304);
-    const MapleLifeFactory = Java.type('server.life.MapleLifeFactory');
-    var taeRoon = MapleLifeFactory.getMonster(7220000);
+    const LifeFactory = Java.type('server.life.LifeFactory');
+    var taeRoon = LifeFactory.getMonster(7220000);
 	
 	if(territoryOfWanderingBear.getMonsterById(7220000) != null) {
 		em.schedule("start", 3 * 60 * 60 * 1000);
