@@ -33,7 +33,7 @@ public class DisposeCommand extends Command {
     {
         setDescription("Dispose to fix NPC chat.");
     }
-    
+
     @Override
     public void execute(Client c, String[] params) {
         NPCScriptManager.getInstance().dispose(c);

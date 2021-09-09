@@ -42,7 +42,7 @@ public class GiveMesosCommand extends Command {
 
         String recv_, value_;
         long mesos_ = 0;
-        
+
         if (params.length == 2) {
             recv_ = params[0];
             value_ = params[1];
@@ -50,7 +50,7 @@ public class GiveMesosCommand extends Command {
             recv_ = c.getPlayer().getName();
             value_ = params[0];
         }
-        
+
         try {
             mesos_ = Long.parseLong(value_);
             if (mesos_ > Integer.MAX_VALUE) {
@@ -65,7 +65,7 @@ public class GiveMesosCommand extends Command {
                 mesos_ = Integer.MIN_VALUE;
             }
         }
-        
+
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(recv_);
         if (victim != null) {
             victim.gainMeso((int) mesos_, true);

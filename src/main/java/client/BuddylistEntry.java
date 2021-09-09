@@ -22,17 +22,16 @@
 package client;
 
 public class BuddylistEntry {
-    private String name;
+    private final String name;
     private String group;
-    private int cid;
+    private final int cid;
     private int channel;
     private boolean visible;
 
     /**
-     *
      * @param name
      * @param characterId
-     * @param channel should be -1 if the buddy is offline
+     * @param channel     should be -1 if the buddy is offline
      * @param visible
      */
     public BuddylistEntry(String name, String group, int characterId, int channel, boolean visible) {
@@ -102,9 +101,6 @@ public class BuddylistEntry {
             return false;
         }
         final BuddylistEntry other = (BuddylistEntry) obj;
-        if (cid != other.cid) {
-            return false;
-        }
-        return true;
+        return cid == other.cid;
     }
 }

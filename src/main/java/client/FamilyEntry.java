@@ -447,7 +447,9 @@ public class FamilyEntry {
     public synchronized boolean isJunior(FamilyEntry entry) { //require locking since result accuracy is vital
         if (juniors[0] == entry) {
             return true;
-        } else return juniors[1] == entry;
+        } else {
+            return juniors[1] == entry;
+        }
     }
 
     public synchronized boolean removeJunior(FamilyEntry junior) {

@@ -47,14 +47,14 @@ public class PnpcRemoveCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        
+
         int mapId = player.getMapId();
         int npcId = params.length > 0 ? Integer.parseInt(params[0]) : -1;
-        
+
         Point pos = player.getPosition();
         int xpos = pos.x;
         int ypos = pos.y;
-        
+
         List<Pair<Integer, Pair<Integer, Integer>>> toRemove = new LinkedList<>();
         try (Connection con = DatabaseConnection.getConnection()) {
             final PreparedStatement ps;
@@ -76,7 +76,7 @@ public class PnpcRemoveCommand extends Command {
                 ps.setInt(6, ypos - 50);
                 ps.setInt(7, ypos + 50);
             }
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 while (true) {
                     rs.beforeFirst();
@@ -94,9 +94,9 @@ public class PnpcRemoveCommand extends Command {
             e.printStackTrace();
             player.dropMessage(5, "Failed to remove pNPC from the database.");
         }
-        
+
         if (!toRemove.isEmpty()) {
-            for (Channel ch: player.getWorldServer().getChannels()) {
+            for (Channel ch : player.getWorldServer().getChannels()) {
                 MapleMap map = ch.getMapFactory().getMap(mapId);
 
                 for (Pair<Integer, Pair<Integer, Integer>> r : toRemove) {
@@ -104,7 +104,7 @@ public class PnpcRemoveCommand extends Command {
                 }
             }
         }
-        
+
         player.yellowMessage("Cleared " + toRemove.size() + " pNPC placements.");
     }
 }

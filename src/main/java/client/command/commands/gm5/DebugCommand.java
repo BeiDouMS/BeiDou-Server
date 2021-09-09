@@ -41,7 +41,7 @@ import java.util.List;
 
 public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
-    
+
     {
         setDescription("Show a debug message.");
     }
@@ -59,13 +59,13 @@ public class DebugCommand extends Command {
             case "type":
             case "help":
                 String msgTypes = "Available #bdebug types#k:\r\n\r\n";
-                for(int i = 0; i < debugTypes.length; i++) {
+                for (int i = 0; i < debugTypes.length; i++) {
                     msgTypes += ("#L" + i + "#" + debugTypes[i] + "#l\r\n");
                 }
-                
+
                 c.getAbstractPlayerInteraction().npcTalk(9201143, msgTypes);
                 break;
-            
+
             case "monster":
                 List<MapObject> monsters = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.MONSTER));
                 for (MapObject monstermo : monsters) {
@@ -81,16 +81,20 @@ public class DebugCommand extends Command {
 
             case "portal":
                 Portal portal = player.getMap().findClosestPortal(player.getPosition());
-                if (portal != null)
+                if (portal != null) {
                     player.dropMessage(6, "Closest portal: " + portal.getId() + " '" + portal.getName() + "' Type: " + portal.getType() + " --> toMap: " + portal.getTargetMapId() + " scriptname: '" + portal.getScriptName() + "' state: " + (portal.getPortalState() ? 1 : 0) + ".");
-                else player.dropMessage(6, "There is no portal on this map.");
+                } else {
+                    player.dropMessage(6, "There is no portal on this map.");
+                }
                 break;
 
             case "spawnpoint":
                 SpawnPoint sp = player.getMap().findClosestSpawnpoint(player.getPosition());
-                if (sp != null)
+                if (sp != null) {
                     player.dropMessage(6, "Closest mob spawn point: " + " Position: x " + sp.getPosition().getX() + " y " + sp.getPosition().getY() + " Spawns mobid: '" + sp.getMonsterId() + "' --> canSpawn: " + !sp.getDenySpawn() + " canSpawnRightNow: " + sp.shouldSpawn() + ".");
-                else player.dropMessage(6, "There is no mob spawn point on this map.");
+                } else {
+                    player.dropMessage(6, "There is no mob spawn point on this map.");
+                }
                 break;
 
             case "pos":
@@ -106,8 +110,11 @@ public class DebugCommand extends Command {
                 break;
 
             case "event":
-                if (player.getEventInstance() == null) player.dropMessage(6, "Player currently not in an event.");
-                else player.dropMessage(6, "Current event name: " + player.getEventInstance().getName() + ".");
+                if (player.getEventInstance() == null) {
+                    player.dropMessage(6, "Player currently not in an event.");
+                } else {
+                    player.dropMessage(6, "Current event name: " + player.getEventInstance().getName() + ".");
+                }
                 break;
 
             case "areas":
@@ -156,7 +163,7 @@ public class DebugCommand extends Command {
             case "marriage":
                 c.getChannelServer().debugMarriageStatus();
                 break;
-            
+
             case "buff":
                 c.getPlayer().debugListAllBuffs();
                 break;

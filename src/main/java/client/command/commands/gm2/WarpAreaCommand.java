@@ -54,7 +54,7 @@ public class WarpAreaCommand extends Command {
             Point pos = player.getPosition();
 
             Collection<Character> characters = player.getMap().getAllPlayers();
-            
+
             for (Character victim : characters) {
                 if (victim.getPosition().distanceSq(pos) <= 50000) {
                     victim.saveLocationOnWarp();

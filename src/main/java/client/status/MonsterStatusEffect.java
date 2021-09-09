@@ -29,11 +29,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class MonsterStatusEffect {
 
-    private Map<MonsterStatus, Integer> stati;
-    private Skill skill;
-    private MobSkill mobskill;
-    private boolean monsterSkill;
-    
+    private final Map<MonsterStatus, Integer> stati;
+    private final Skill skill;
+    private final MobSkill mobskill;
+    private final boolean monsterSkill;
+
     public MonsterStatusEffect(Map<MonsterStatus, Integer> stati, Skill skillId, MobSkill mobskill, boolean monsterSkill) {
         this.stati = new ConcurrentHashMap<>(stati);
         this.skill = skillId;

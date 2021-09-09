@@ -45,18 +45,18 @@ public class ProItemCommand extends Command {
             player.yellowMessage("Syntax: !proitem <itemid> <stat value> [<spdjmp value>]");
             return;
         }
-        
+
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         int itemid = Integer.parseInt(params[0]);
-        
-        if(ii.getName(itemid) == null) {
+
+        if (ii.getName(itemid) == null) {
             player.yellowMessage("Item id '" + params[0] + "' does not exist.");
             return;
         }
-        
+
         short stat = (short) Math.max(0, Short.parseShort(params[1]));
         short spdjmp = params.length >= 3 ? (short) Math.max(0, Short.parseShort(params[2])) : 0;
-        
+
         InventoryType type = ItemConstants.getInventoryType(itemid);
         if (type.equals(InventoryType.EQUIP)) {
             Item it = ii.getEquipById(itemid);
@@ -68,6 +68,7 @@ public class ProItemCommand extends Command {
             player.dropMessage(6, "Make sure it's an equippable item.");
         }
     }
+
     private static void hardsetItemStats(Equip equip, short stat, short spdjmp) {
         equip.setStr(stat);
         equip.setDex(stat);

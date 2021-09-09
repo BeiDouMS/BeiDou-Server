@@ -43,10 +43,14 @@ public class SetStatCommand extends Command {
         try {
             int x = Integer.parseInt(params[0]);
 
-            if (x > Short.MAX_VALUE) x = Short.MAX_VALUE;
-            else if (x < 4) x = 4;  // thanks Vcoc for pointing the minimal allowed stat value here
+            if (x > Short.MAX_VALUE) {
+                x = Short.MAX_VALUE;
+            } else if (x < 4) {
+                x = 4;  // thanks Vcoc for pointing the minimal allowed stat value here
+            }
 
             player.updateStrDexIntLuk(x);
-        } catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+        }
     }
 }

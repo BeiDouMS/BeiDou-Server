@@ -678,10 +678,14 @@ public class InventoryManipulator {
         } else if (ii.isCash(it.getItemId())) {
             if (YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_CASH) {     // thanks Ari for noticing cash drops not available server-side
                 return true;
-            } else return ItemConstants.isPet(it.getItemId()) && YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_PET;
+            } else {
+                return ItemConstants.isPet(it.getItemId()) && YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_PET;
+            }
         } else if (isDroppedItemRestricted(it)) {
             return true;
-        } else return ItemConstants.isWeddingRing(it.getItemId());
+        } else {
+            return ItemConstants.isWeddingRing(it.getItemId());
+        }
     }
 
     public static void drop(Client c, InventoryType type, short src, short quantity) {

@@ -36,8 +36,8 @@ public class QuestStartCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        
-        if (params.length < 1){
+
+        if (params.length < 1) {
             player.yellowMessage("Syntax: !startquest <questid>");
             return;
         }
@@ -51,7 +51,7 @@ public class QuestStartCommand extends Command {
             } else {
                 c.getAbstractPlayerInteraction().forceStartQuest(questid);
             }
-            
+
             player.dropMessage(5, "QUEST " + questid + " started.");
         } else {
             player.dropMessage(5, "QUESTID " + questid + " already started/completed.");

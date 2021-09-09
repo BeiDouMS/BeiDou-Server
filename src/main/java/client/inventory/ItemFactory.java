@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 
 /**
- *
  * @author Flav
  */
 public enum ItemFactory {
@@ -47,17 +46,17 @@ public enum ItemFactory {
     DUEY(9, false);
     private final int value;
     private final boolean account;
-    
+
     private static final int lockCount = 400;
     private static final Lock[] locks = new Lock[lockCount];  // thanks Masterrulax for pointing out a bottleneck issue here
-    
+
     static {
         for (int i = 0; i < lockCount; i++) {
             locks[i] = MonitoredReentrantLockFactory.createLock(MonitoredLockType.ITEM, true);
         }
     }
-    
-    private ItemFactory(int value, boolean account) {
+
+    ItemFactory(int value, boolean account) {
         this.value = value;
         this.account = account;
     }
@@ -67,21 +66,27 @@ public enum ItemFactory {
     }
 
     public List<Pair<Item, InventoryType>> loadItems(int id, boolean login) throws SQLException {
-        if(value != 6) return loadItemsCommon(id, login);
-        else return loadItemsMerchant(id, login);
+        if (value != 6) {
+            return loadItemsCommon(id, login);
+        } else {
+            return loadItemsMerchant(id, login);
+        }
     }
-    
+
     public void saveItems(List<Pair<Item, InventoryType>> items, int id, Connection con) throws SQLException {
         saveItems(items, null, id, con);
     }
-    
+
     public void saveItems(List<Pair<Item, InventoryType>> items, List<Short> bundlesList, int id, Connection con) throws SQLException {
         // thanks Arufonsu, MedicOP, BHB for pointing a "synchronized" bottleneck here
-        
-        if(value != 6) saveItemsCommon(items, id, con);
-        else saveItemsMerchant(items, bundlesList, id, con);
+
+        if (value != 6) {
+            saveItemsCommon(items, id, con);
+        } else {
+            saveItemsMerchant(items, bundlesList, id, con);
+        }
     }
-    
+
     private static Equip loadEquipFromResultSet(ResultSet rs) throws SQLException {
         Equip equip = new Equip(rs.getInt("itemid"), (short) rs.getInt("position"));
         equip.setOwner(rs.getString("owner"));
@@ -110,13 +115,13 @@ public enum ItemFactory {
         equip.setExpiration(rs.getLong("expiration"));
         equip.setGiftFrom(rs.getString("giftFrom"));
         equip.setRingId(rs.getInt("ringid"));
-        
+
         return equip;
     }
-    
+
     public static List<Pair<Item, Integer>> loadEquippedItems(int id, boolean isAccount, boolean login) throws SQLException {
         List<Pair<Item, Integer>> items = new ArrayList<>();
-        
+
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM ");
         query.append("(SELECT id, accountid FROM characters) AS accountterm ");
@@ -127,11 +132,11 @@ public enum ItemFactory {
         query.append(isAccount ? "accountid" : "characterid");
         query.append("` = ?");
         query.append(login ? " AND `inventorytype` = " + InventoryType.EQUIPPED.getType() : "");
-        
+
         try (Connection con = DatabaseConnection.getConnection()) {
             try (PreparedStatement ps = con.prepareStatement(query.toString())) {
                 ps.setInt(1, id);
-                
+
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Integer cid = rs.getInt("characterid");
@@ -140,10 +145,10 @@ public enum ItemFactory {
                 }
             }
         }
-        
+
         return items;
     }
-    
+
     private List<Pair<Item, InventoryType>> loadItemsCommon(int id, boolean login) throws SQLException {
         List<Pair<Item, InventoryType>> items = new ArrayList<>();
 
@@ -262,7 +267,7 @@ public enum ItemFactory {
             lock.unlock();
         }
     }
-    
+
     private List<Pair<Item, InventoryType>> loadItemsMerchant(int id, boolean login) throws SQLException {
         List<Pair<Item, InventoryType>> items = new ArrayList<>();
 

@@ -25,9 +25,9 @@ public class SkillMacro {
     private int skill1;
     private int skill2;
     private int skill3;
-    private String name;
-    private int shout;
-    private int position;
+    private final String name;
+    private final int shout;
+    private final int position;
 
     public SkillMacro(int skill1, int skill2, int skill3, String name, int shout, int position) {
         this.skill1 = skill1;
@@ -49,7 +49,7 @@ public class SkillMacro {
     public int getSkill3() {
         return skill3;
     }
-    
+
     public void setSkill1(int skill) {
         skill1 = skill;
     }

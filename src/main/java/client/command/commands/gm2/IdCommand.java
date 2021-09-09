@@ -47,7 +47,7 @@ public class IdCommand extends Command {
 
                 if (resultList.size() > 0) {
                     int count = 0;
-                    for (Map.Entry<String, String> entry: resultList.entrySet()) {
+                    for (Map.Entry<String, String> entry : resultList.entrySet()) {
                         sb.append(String.format("Id for %s is: #b%s#k", entry.getKey(), entry.getValue()) + "\r\n");
                         if (++count > 100) {
                             break;
@@ -65,7 +65,7 @@ public class IdCommand extends Command {
                 player.yellowMessage("Error reading file, please contact your administrator.");
             }
         };
-        
+
         ThreadManager.getInstance().newTask(queryRunnable);
     }
 
@@ -85,16 +85,20 @@ public class IdCommand extends Command {
     }
 
     private String joinStringArr(String[] arr, String separator) {
-        if (null == arr || 0 == arr.length) return "";
+        if (null == arr || 0 == arr.length) {
+            return "";
+        }
         StringBuilder sb = new StringBuilder(256);
         sb.append(arr[0]);
-        for (int i = 1; i < arr.length; i++) sb.append(separator).append(arr[i]);
+        for (int i = 1; i < arr.length; i++) {
+            sb.append(separator).append(arr[i]);
+        }
         return sb.toString();
     }
 
     private Map<String, String> fetchResults(Map<String, String> queryMap, String queryItem) {
         Map<String, String> results = new HashMap<>();
-        for (String item: queryMap.keySet()) {
+        for (String item : queryMap.keySet()) {
             if (item.indexOf(queryItem) != -1) {
                 results.put(item, queryMap.get(item));
             }

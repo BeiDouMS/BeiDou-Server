@@ -38,13 +38,13 @@ public class ShutdownCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        if (params.length < 1){
+        if (params.length < 1) {
             player.yellowMessage("Syntax: !shutdown [<time>|NOW]");
             return;
         }
-        
+
         int time = 60000;
-        if (params[0].equalsIgnoreCase("now")){
+        if (params[0].equalsIgnoreCase("now")) {
             time = 1;
         } else {
             time *= Integer.parseInt(params[0]);
@@ -57,8 +57,12 @@ public class ShutdownCommand extends Command {
             int days = (time / (1000 * 60 * 60 * 24));
 
             String strTime = "";
-            if (days > 0) strTime += days + " days, ";
-            if (hours > 0) strTime += hours + " hours, ";
+            if (days > 0) {
+                strTime += days + " days, ";
+            }
+            if (hours > 0) {
+                strTime += hours + " hours, ";
+            }
             strTime += minutes + " minutes, ";
             strTime += seconds + " seconds";
 
@@ -68,7 +72,7 @@ public class ShutdownCommand extends Command {
                 }
             }
         }
-        
+
         TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
     }
 }

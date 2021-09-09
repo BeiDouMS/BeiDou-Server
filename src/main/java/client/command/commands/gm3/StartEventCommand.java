@@ -39,8 +39,9 @@ public class StartEventCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         int players = 50;
-        if (params.length > 1)
+        if (params.length > 1) {
             players = Integer.parseInt(params[0]);
+        }
         c.getChannelServer().setEvent(new Event(player.getMapId(), players));
         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.earnTitleMessage(
                 "[Event] An event has started on "

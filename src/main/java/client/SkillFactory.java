@@ -58,7 +58,7 @@ public class SkillFactory {
 
         skills = loadedSkills;
     }
-    
+
     private static Skill loadFromData(int id, Data data) {
         Skill ret = new Skill(id);
         boolean isBuff = false;
@@ -77,7 +77,7 @@ public class SkillFactory {
         } else {
             Data action_ = data.getChildByPath("action");
             boolean action = false;
-	    if (action_ == null) {
+            if (action_ == null) {
                 if (data.getChildByPath("prepare/action") != null) {
                     action = true;
                 } else {
@@ -88,10 +88,10 @@ public class SkillFactory {
                             break;
                     }
                 }
-	    } else {
-	    	action = true;
-	    }
-	    ret.setAction(action);
+            } else {
+                action = true;
+            }
+            ret.setAction(action);
             Data hit = data.getChildByPath("hit");
             Data ball = data.getChildByPath("ball");
             isBuff = effect != null && hit == null && ball == null;
@@ -185,7 +185,7 @@ public class SkillFactory {
                 case ILMage.SEAL:
                 case ILWizard.SLOW:
                 case ILMage.SPELL_BOOSTER:
-                case ILArchMage.HEROS_WILL:                
+                case ILArchMage.HEROS_WILL:
                 case ILArchMage.INFINITY:
                 case ILArchMage.MANA_REFLECTION:
                 case ILArchMage.MAPLE_WARRIOR:
@@ -227,7 +227,7 @@ public class SkillFactory {
                 case Bandit.DAGGER_BOOSTER:
                 case Bandit.HASTE:
                 case ChiefBandit.MESO_GUARD:
-                case ChiefBandit.PICKPOCKET:              	
+                case ChiefBandit.PICKPOCKET:
                 case Shadower.HEROS_WILL:
                 case Shadower.MAPLE_WARRIOR:
                 case Shadower.NINJA_AMBUSH:
@@ -339,8 +339,9 @@ public class SkillFactory {
         }
         if (data.getChildByPath(skill.toString()) != null) {
             for (Data skilldata : data.getChildByPath(skill.toString()).getChildren()) {
-                if (skilldata.getName().equals("name"))
+                if (skilldata.getName().equals("name")) {
                     return DataTool.getString(skilldata, null);
+                }
             }
         }
 

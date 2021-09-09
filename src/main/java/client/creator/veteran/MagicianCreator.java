@@ -31,68 +31,67 @@ import constants.skills.Magician;
 import server.ItemInformationProvider;
 
 /**
- *
  * @author RonanLana
  */
 public class MagicianCreator extends CharacterFactory {
-        private static int[] equips = {0, 1041041, 0, 1061034, 1072075};
-        private static int[] weapons = {1372003, 1382017};
-        private static int[] startingHpMp = {405, 729};
-        private static int[] mpGain = {0, 40, 80, 118, 156, 194, 230, 266, 302, 336, 370};
-    
-        private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
-                CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
-                ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                
-                recipe.setInt(20);
-                recipe.setRemainingAp(138);
-                recipe.setRemainingSp(67);
+    private static final int[] equips = {0, 1041041, 0, 1061034, 1072075};
+    private static final int[] weapons = {1372003, 1382017};
+    private static final int[] startingHpMp = {405, 729};
+    private static final int[] mpGain = {0, 40, 80, 118, 156, 194, 230, 266, 302, 336, 370};
 
-                recipe.setMaxHp(startingHpMp[0]);
-                recipe.setMaxMp(startingHpMp[1] + mpGain[improveSp]);
-                
-                recipe.setMeso(100000);
-                
-                if(gender == 0) {
-                        giveEquipment(recipe, ii, 1050003);
-                }
+    private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon, int gender, int improveSp) {
+        CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-                for(int i = 1; i < weapons.length; i++) {
-                        giveEquipment(recipe, ii, weapons[i]);
-                }
+        recipe.setInt(20);
+        recipe.setRemainingAp(138);
+        recipe.setRemainingSp(67);
 
-                giveItem(recipe, 2000001, 100, InventoryType.USE);
-                giveItem(recipe, 2000006, 100, InventoryType.USE);
-                giveItem(recipe, 3010000, 1, InventoryType.SETUP);
-                
-                if(improveSp > 0) {
-                        improveSp += 5;
-                        recipe.setRemainingSp(recipe.getRemainingSp() - improveSp);
+        recipe.setMaxHp(startingHpMp[0]);
+        recipe.setMaxMp(startingHpMp[1] + mpGain[improveSp]);
 
-                        int toUseSp = 5;
-                        Skill improveMpRec = SkillFactory.getSkill(Magician.IMPROVED_MP_RECOVERY);
-                        recipe.addStartingSkillLevel(improveMpRec, toUseSp);
-                        improveSp -= toUseSp;
+        recipe.setMeso(100000);
 
-                        if(improveSp > 0) {
-                                Skill improveMaxMp = SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
-                                recipe.addStartingSkillLevel(improveMaxMp, improveSp);
-                        }
-                }
-                
-                return recipe;
+        if (gender == 0) {
+            giveEquipment(recipe, ii, 1050003);
         }
-    
-        private static void giveEquipment(CharacterFactoryRecipe recipe, ItemInformationProvider ii, int equipid) {
-                Item nEquip = ii.getEquipById(equipid);
-                recipe.addStartingEquipment(nEquip);
+
+        for (int i = 1; i < weapons.length; i++) {
+            giveEquipment(recipe, ii, weapons[i]);
         }
-        
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
-                recipe.addStartingItem(itemid, quantity, itemType);
+
+        giveItem(recipe, 2000001, 100, InventoryType.USE);
+        giveItem(recipe, 2000006, 100, InventoryType.USE);
+        giveItem(recipe, 3010000, 1, InventoryType.SETUP);
+
+        if (improveSp > 0) {
+            improveSp += 5;
+            recipe.setRemainingSp(recipe.getRemainingSp() - improveSp);
+
+            int toUseSp = 5;
+            Skill improveMpRec = SkillFactory.getSkill(Magician.IMPROVED_MP_RECOVERY);
+            recipe.addStartingSkillLevel(improveMpRec, toUseSp);
+            improveSp -= toUseSp;
+
+            if (improveSp > 0) {
+                Skill improveMaxMp = SkillFactory.getSkill(Magician.IMPROVED_MAX_MP_INCREASE);
+                recipe.addStartingSkillLevel(improveMaxMp, improveSp);
+            }
         }
-    
-        public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
-                return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.MAGICIAN, 30, 101000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
-        }
+
+        return recipe;
+    }
+
+    private static void giveEquipment(CharacterFactoryRecipe recipe, ItemInformationProvider ii, int equipid) {
+        Item nEquip = ii.getEquipById(equipid);
+        recipe.addStartingEquipment(nEquip);
+    }
+
+    private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
+        recipe.addStartingItem(itemid, quantity, itemType);
+    }
+
+    public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
+        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.MAGICIAN, 30, 101000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
+    }
 }

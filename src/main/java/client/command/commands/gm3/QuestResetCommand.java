@@ -36,8 +36,8 @@ public class QuestResetCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        
-        if (params.length < 1){
+
+        if (params.length < 1) {
             player.yellowMessage("Syntax: !resetquest <questid>");
             return;
         }

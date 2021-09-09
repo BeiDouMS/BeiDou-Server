@@ -468,7 +468,7 @@ public class DueyProcessor {
         c.add(Calendar.DATE, -30);
         final Timestamp ts = new Timestamp(c.getTime().getTime());
 
-        try (Connection con = DatabaseConnection.getConnection()){
+        try (Connection con = DatabaseConnection.getConnection()) {
             List<Integer> toRemove = new LinkedList<>();
             try (PreparedStatement ps = con.prepareStatement("SELECT `PackageId` FROM dueypackages WHERE `TimeStamp` < ?")) {
                 ps.setTimestamp(1, ts);

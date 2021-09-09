@@ -37,12 +37,12 @@ import java.util.Map;
 
 public class Equip extends Item {
 
-    public static enum ScrollResult {
+    public enum ScrollResult {
 
         FAIL(0), SUCCESS(1), CURSE(2);
         private int value = -1;
 
-        private ScrollResult(int value) {
+        ScrollResult(int value) {
             this.value = value;
         }
 
@@ -50,8 +50,8 @@ public class Equip extends Item {
             return value;
         }
     }
-    
-    public static enum StatUpgrade {
+
+    public enum StatUpgrade {
 
         incDEX(0), incSTR(1), incINT(2), incLUK(3),
         incMHP(4), incMMP(5), incPAD(6), incMAD(7),
@@ -59,11 +59,11 @@ public class Equip extends Item {
         incSpeed(12), incJump(13), incVicious(14), incSlot(15);
         private int value = -1;
 
-        private StatUpgrade(int value) {
+        StatUpgrade(int value) {
             this.value = value;
         }
     }
-    
+
     private byte upgradeSlots;
     private byte level, itemLevel;
     private short flag;
@@ -82,7 +82,7 @@ public class Equip extends Item {
         this.upgradeSlots = (byte) slots;
         this.itemExp = 0;
         this.itemLevel = 1;
-        
+
         this.isElemental = (ItemInformationProvider.getInstance().getEquipLevel(id, false) > 1);
     }
 
@@ -127,7 +127,7 @@ public class Equip extends Item {
     public byte getItemType() {
         return 1;
     }
-    
+
     public byte getUpgradeSlots() {
         return upgradeSlots;
     }
@@ -279,108 +279,167 @@ public class Equip extends Item {
 
     private static int getStatModifier(boolean isAttribute) {
         // each set of stat points grants a chance for a bonus stat point upgrade at equip level up.
-        
-        if(YamlConfig.config.server.USE_EQUIPMNT_LVLUP_POWER) {
-            if(isAttribute) return 2;
-            else return 4;
-        }
-        else {
-            if(isAttribute) return 4;
-            else return 16;
+
+        if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_POWER) {
+            if (isAttribute) {
+                return 2;
+            } else {
+                return 4;
+            }
+        } else {
+            if (isAttribute) {
+                return 4;
+            } else {
+                return 16;
+            }
         }
     }
-    
+
     private static int randomizeStatUpgrade(int top) {
         int limit = Math.min(top, YamlConfig.config.server.MAX_EQUIPMNT_LVLUP_STAT_UP);
-        
+
         int poolCount = (limit * (limit + 1) / 2) + limit;
         int rnd = Randomizer.rand(0, poolCount);
-        
+
         int stat = 0;
-        if(rnd >= limit) {
+        if (rnd >= limit) {
             rnd -= limit;
-            stat = 1 + (int)Math.floor((-1 + Math.sqrt((8 * rnd) + 1)) / 2);    // optimized randomizeStatUpgrade author: David A.
+            stat = 1 + (int) Math.floor((-1 + Math.sqrt((8 * rnd) + 1)) / 2);    // optimized randomizeStatUpgrade author: David A.
         }
-        
+
         return stat;
     }
-    
+
     private static boolean isPhysicalWeapon(int itemid) {
         Equip eqp = (Equip) ItemInformationProvider.getInstance().getEquipById(itemid);
         return eqp.getWatk() >= eqp.getMatk();
     }
-    
+
     private boolean isNotWeaponAffinity(StatUpgrade name) {
         // Vcoc's idea - WATK/MATK expected gains lessens outside of weapon affinity (physical/magic)
-        
+
         if (ItemConstants.isWeapon(this.getItemId())) {
             if (name.equals(StatUpgrade.incPAD)) {
-                if (!isPhysicalWeapon(this.getItemId())) {
-                    return true;
-                }
+                return !isPhysicalWeapon(this.getItemId());
             } else if (name.equals(StatUpgrade.incMAD)) {
-                if (isPhysicalWeapon(this.getItemId())) {
-                    return true;
-                }
+                return isPhysicalWeapon(this.getItemId());
             }
         }
-        
+
         return false;
     }
-    
+
     private void getUnitStatUpgrade(List<Pair<StatUpgrade, Integer>> stats, StatUpgrade name, int curStat, boolean isAttribute) {
         isUpgradeable = true;
-        
-        int maxUpgrade = randomizeStatUpgrade((int)(1 + (curStat / (getStatModifier(isAttribute) * (isNotWeaponAffinity(name) ? 2.7 : 1)))));
-        if(maxUpgrade == 0) return;
-            
+
+        int maxUpgrade = randomizeStatUpgrade((int) (1 + (curStat / (getStatModifier(isAttribute) * (isNotWeaponAffinity(name) ? 2.7 : 1)))));
+        if (maxUpgrade == 0) {
+            return;
+        }
+
         stats.add(new Pair<>(name, maxUpgrade));
     }
-    
+
     private static void getUnitSlotUpgrade(List<Pair<StatUpgrade, Integer>> stats, StatUpgrade name) {
-        if(Math.random() < 0.1) {
+        if (Math.random() < 0.1) {
             stats.add(new Pair<>(name, 1));  // 10% success on getting a slot upgrade.
         }
     }
-    
+
     private void improveDefaultStats(List<Pair<StatUpgrade, Integer>> stats) {
-        if(dex > 0) getUnitStatUpgrade(stats, StatUpgrade.incDEX, dex, true);
-        if(str > 0) getUnitStatUpgrade(stats, StatUpgrade.incSTR, str, true);
-        if(_int > 0) getUnitStatUpgrade(stats, StatUpgrade.incINT,_int, true);
-        if(luk > 0) getUnitStatUpgrade(stats, StatUpgrade.incLUK, luk, true);
-        if(hp > 0) getUnitStatUpgrade(stats, StatUpgrade.incMHP, hp, false);
-        if(mp > 0) getUnitStatUpgrade(stats, StatUpgrade.incMMP, mp, false);
-        if(watk > 0) getUnitStatUpgrade(stats, StatUpgrade.incPAD, watk, false);
-        if(matk > 0) getUnitStatUpgrade(stats, StatUpgrade.incMAD, matk, false);
-        if(wdef > 0) getUnitStatUpgrade(stats, StatUpgrade.incPDD, wdef, false);
-        if(mdef > 0) getUnitStatUpgrade(stats, StatUpgrade.incMDD, mdef, false);
-        if(avoid > 0) getUnitStatUpgrade(stats, StatUpgrade.incEVA, avoid, false);
-        if(acc > 0) getUnitStatUpgrade(stats, StatUpgrade.incACC, acc, false);
-        if(speed > 0) getUnitStatUpgrade(stats, StatUpgrade.incSpeed, speed, false);
-        if(jump > 0) getUnitStatUpgrade(stats, StatUpgrade.incJump, jump, false);
+        if (dex > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incDEX, dex, true);
+        }
+        if (str > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incSTR, str, true);
+        }
+        if (_int > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incINT, _int, true);
+        }
+        if (luk > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incLUK, luk, true);
+        }
+        if (hp > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incMHP, hp, false);
+        }
+        if (mp > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incMMP, mp, false);
+        }
+        if (watk > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incPAD, watk, false);
+        }
+        if (matk > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incMAD, matk, false);
+        }
+        if (wdef > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incPDD, wdef, false);
+        }
+        if (mdef > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incMDD, mdef, false);
+        }
+        if (avoid > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incEVA, avoid, false);
+        }
+        if (acc > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incACC, acc, false);
+        }
+        if (speed > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incSpeed, speed, false);
+        }
+        if (jump > 0) {
+            getUnitStatUpgrade(stats, StatUpgrade.incJump, jump, false);
+        }
     }
-    
+
     public Map<StatUpgrade, Short> getStats() {
         Map<StatUpgrade, Short> stats = new HashMap<>(5);
-        
-        if(dex > 0) stats.put(StatUpgrade.incDEX, dex);
-        if(str > 0) stats.put(StatUpgrade.incSTR, str);
-        if(_int > 0) stats.put(StatUpgrade.incINT,_int);
-        if(luk > 0) stats.put(StatUpgrade.incLUK, luk);
-        if(hp > 0) stats.put(StatUpgrade.incMHP, hp);
-        if(mp > 0) stats.put(StatUpgrade.incMMP, mp);
-        if(watk > 0) stats.put(StatUpgrade.incPAD, watk);
-        if(matk > 0) stats.put(StatUpgrade.incMAD, matk);
-        if(wdef > 0) stats.put(StatUpgrade.incPDD, wdef);
-        if(mdef > 0) stats.put(StatUpgrade.incMDD, mdef);
-        if(avoid > 0) stats.put(StatUpgrade.incEVA, avoid);
-        if(acc > 0) stats.put(StatUpgrade.incACC, acc);
-        if(speed > 0) stats.put(StatUpgrade.incSpeed, speed);
-        if(jump > 0) stats.put(StatUpgrade.incJump, jump);
-        
+
+        if (dex > 0) {
+            stats.put(StatUpgrade.incDEX, dex);
+        }
+        if (str > 0) {
+            stats.put(StatUpgrade.incSTR, str);
+        }
+        if (_int > 0) {
+            stats.put(StatUpgrade.incINT, _int);
+        }
+        if (luk > 0) {
+            stats.put(StatUpgrade.incLUK, luk);
+        }
+        if (hp > 0) {
+            stats.put(StatUpgrade.incMHP, hp);
+        }
+        if (mp > 0) {
+            stats.put(StatUpgrade.incMMP, mp);
+        }
+        if (watk > 0) {
+            stats.put(StatUpgrade.incPAD, watk);
+        }
+        if (matk > 0) {
+            stats.put(StatUpgrade.incMAD, matk);
+        }
+        if (wdef > 0) {
+            stats.put(StatUpgrade.incPDD, wdef);
+        }
+        if (mdef > 0) {
+            stats.put(StatUpgrade.incMDD, mdef);
+        }
+        if (avoid > 0) {
+            stats.put(StatUpgrade.incEVA, avoid);
+        }
+        if (acc > 0) {
+            stats.put(StatUpgrade.incACC, acc);
+        }
+        if (speed > 0) {
+            stats.put(StatUpgrade.incSpeed, speed);
+        }
+        if (jump > 0) {
+            stats.put(StatUpgrade.incJump, jump);
+        }
+
         return stats;
     }
-    
+
     public Pair<String, Pair<Boolean, Boolean>> gainStats(List<Pair<StatUpgrade, Integer>> stats) {
         boolean gotSlot = false, gotVicious = false;
         String lvupStr = "";
@@ -457,7 +516,7 @@ public class Equip extends Item {
                     jump += statUp;
                     lvupStr += "+" + statUp + "JUMP ";
                     break;
-                    
+
                 case incVicious:
                     vicious -= stat.getRight();
                     gotVicious = true;
@@ -468,56 +527,64 @@ public class Equip extends Item {
                     break;
             }
         }
-        
+
         return new Pair<>(lvupStr, new Pair<>(gotSlot, gotVicious));
     }
-    
+
     private void gainLevel(Client c) {
         List<Pair<StatUpgrade, Integer>> stats = new LinkedList<>();
-        
-        if(isElemental) {
+
+        if (isElemental) {
             List<Pair<String, Integer>> elementalStats = ItemInformationProvider.getInstance().getItemLevelupStats(getItemId(), itemLevel);
-            
-            for(Pair<String, Integer> p: elementalStats) {
-                if(p.getRight() > 0) stats.add(new Pair<>(StatUpgrade.valueOf(p.getLeft()), p.getRight()));
+
+            for (Pair<String, Integer> p : elementalStats) {
+                if (p.getRight() > 0) {
+                    stats.add(new Pair<>(StatUpgrade.valueOf(p.getLeft()), p.getRight()));
+                }
             }
         }
-        
-        if(!stats.isEmpty()) {
-            if(YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
-                if(vicious > 0) getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
+
+        if (!stats.isEmpty()) {
+            if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
+                if (vicious > 0) {
+                    getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
+                }
                 getUnitSlotUpgrade(stats, StatUpgrade.incSlot);
             }
         } else {
             isUpgradeable = false;
-            
+
             improveDefaultStats(stats);
-            if(YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
-                if(vicious > 0) getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
+            if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
+                if (vicious > 0) {
+                    getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
+                }
                 getUnitSlotUpgrade(stats, StatUpgrade.incSlot);
             }
-            
-            if(isUpgradeable) {
-                while(stats.isEmpty()) {
+
+            if (isUpgradeable) {
+                while (stats.isEmpty()) {
                     improveDefaultStats(stats);
-                    if(YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
-                        if(vicious > 0) getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
+                    if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
+                        if (vicious > 0) {
+                            getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
+                        }
                         getUnitSlotUpgrade(stats, StatUpgrade.incSlot);
                     }
                 }
             }
         }
-        
+
         itemLevel++;
-        
+
         String lvupStr = "'" + ItemInformationProvider.getInstance().getName(this.getItemId()) + "' is now level " + itemLevel + "! ";
         String showStr = "#e'" + ItemInformationProvider.getInstance().getName(this.getItemId()) + "'#b is now #elevel #r" + itemLevel + "#k#b!";
-        
+
         Pair<String, Pair<Boolean, Boolean>> res = this.gainStats(stats);
         lvupStr += res.getLeft();
         boolean gotSlot = res.getRight().getLeft();
         boolean gotVicious = res.getRight().getRight();
-        
+
         if (gotVicious) {
             //c.getPlayer().dropMessage(6, "A new Vicious Hammer opportunity has been found on the '" + ItemInformationProvider.getInstance().getName(getItemId()) + "'!");
             lvupStr += "+VICIOUS ";
@@ -526,12 +593,12 @@ public class Equip extends Item {
             //c.getPlayer().dropMessage(6, "A new upgrade slot has been found on the '" + ItemInformationProvider.getInstance().getName(getItemId()) + "'!");
             lvupStr += "+UPGSLOT ";
         }
-        
+
         c.getPlayer().equipChanged();
-        
+
         showLevelupMessage(showStr, c); // thanks to Polaris dev team !
         c.getPlayer().dropMessage(6, lvupStr);
-        
+
         c.sendPacket(PacketCreator.showEquipmentLevelUp());
         c.getPlayer().getMap().broadcastPacket(c.getPlayer(), PacketCreator.showForeignEffect(c.getPlayer().getId(), 15));
         c.getPlayer().forceUpdateItem(this);
@@ -540,89 +607,93 @@ public class Equip extends Item {
     public int getItemExp() {
         return (int) itemExp;
     }
-    
+
     private static double normalizedMasteryExp(int reqLevel) {
         // Conversion factor between mob exp and equip exp gain. Through many calculations, the expected for equipment levelup
         // from level 1 to 2 is killing about 100~200 mobs of the same level range, on a 1x EXP rate scenario.
-        
-        if(reqLevel < 5) {
+
+        if (reqLevel < 5) {
             return 42;
-        } else if(reqLevel >= 78) {
+        } else if (reqLevel >= 78) {
             return Math.max((10413.648 * Math.exp(reqLevel * 0.03275)), 15);
-        } else if(reqLevel >= 38) {
-            return Math.max(( 4985.818 * Math.exp(reqLevel * 0.02007)), 15);
-        } else if(reqLevel >= 18) {
-            return Math.max((  248.219 * Math.exp(reqLevel * 0.11093)), 15);
+        } else if (reqLevel >= 38) {
+            return Math.max((4985.818 * Math.exp(reqLevel * 0.02007)), 15);
+        } else if (reqLevel >= 18) {
+            return Math.max((248.219 * Math.exp(reqLevel * 0.11093)), 15);
         } else {
             return Math.max(((1334.564 * Math.log(reqLevel)) - 1731.976), 15);
         }
     }
-    
+
     public synchronized void gainItemExp(Client c, int gain) {  // Ronan's Equip Exp gain method
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        if(!ii.isUpgradeable(this.getItemId())) {
+        if (!ii.isUpgradeable(this.getItemId())) {
             return;
         }
-        
+
         int equipMaxLevel = Math.min(30, Math.max(ii.getEquipLevel(this.getItemId(), true), YamlConfig.config.server.USE_EQUIPMNT_LVLUP));
         if (itemLevel >= equipMaxLevel) {
             return;
         }
-        
+
         int reqLevel = ii.getEquipLevelReq(this.getItemId());
-        
-        float masteryModifier = (float)(YamlConfig.config.server.EQUIP_EXP_RATE * ExpTable.getExpNeededForLevel(1)) / (float)normalizedMasteryExp(reqLevel);
+
+        float masteryModifier = (float) (YamlConfig.config.server.EQUIP_EXP_RATE * ExpTable.getExpNeededForLevel(1)) / (float) normalizedMasteryExp(reqLevel);
         float elementModifier = (isElemental) ? 0.85f : 0.6f;
-        
+
         float baseExpGain = gain * elementModifier * masteryModifier;
-        
+
         itemExp += baseExpGain;
         int expNeeded = ExpTable.getEquipExpNeededForLevel(itemLevel);
-        
-        if(YamlConfig.config.server.USE_DEBUG_SHOW_INFO_EQPEXP) System.out.println("'" + ii.getName(this.getItemId()) + "' -> EXP Gain: " + gain + " Mastery: " + masteryModifier + " Base gain: " + baseExpGain + " exp: " + itemExp + " / " + expNeeded + ", Kills TNL: " + expNeeded / (baseExpGain / c.getPlayer().getExpRate()));
-        
+
+        if (YamlConfig.config.server.USE_DEBUG_SHOW_INFO_EQPEXP) {
+            System.out.println("'" + ii.getName(this.getItemId()) + "' -> EXP Gain: " + gain + " Mastery: " + masteryModifier + " Base gain: " + baseExpGain + " exp: " + itemExp + " / " + expNeeded + ", Kills TNL: " + expNeeded / (baseExpGain / c.getPlayer().getExpRate()));
+        }
+
         if (itemExp >= expNeeded) {
-            while(itemExp >= expNeeded) {
+            while (itemExp >= expNeeded) {
                 itemExp -= expNeeded;
                 gainLevel(c);
 
-                if(itemLevel >= equipMaxLevel) {
+                if (itemLevel >= equipMaxLevel) {
                     itemExp = 0.0f;
                     break;
                 }
-                
+
                 expNeeded = ExpTable.getEquipExpNeededForLevel(itemLevel);
             }
         }
-        
+
         c.getPlayer().forceUpdateItem(this);
         //if(YamlConfig.config.server.USE_DEBUG) c.getPlayer().dropMessage("'" + ii.getName(this.getItemId()) + "': " + itemExp + " / " + expNeeded);
     }
-    
+
     private boolean reachedMaxLevel() {
         if (isElemental) {
             if (itemLevel < ItemInformationProvider.getInstance().getEquipLevel(getItemId(), true)) {
                 return false;
             }
         }
-        
+
         return itemLevel >= YamlConfig.config.server.USE_EQUIPMNT_LVLUP;
     }
-    
+
     public String showEquipFeatures(Client c) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        if(!ii.isUpgradeable(this.getItemId())) return "";
-        
+        if (!ii.isUpgradeable(this.getItemId())) {
+            return "";
+        }
+
         String eqpName = ii.getName(getItemId());
-        String eqpInfo = reachedMaxLevel() ? " #e#rMAX LEVEL#k#n" : (" EXP: #e#b" + (int)itemExp + "#k#n / " + ExpTable.getEquipExpNeededForLevel(itemLevel));
-        
+        String eqpInfo = reachedMaxLevel() ? " #e#rMAX LEVEL#k#n" : (" EXP: #e#b" + (int) itemExp + "#k#n / " + ExpTable.getEquipExpNeededForLevel(itemLevel));
+
         return "'" + eqpName + "' -> LV: #e#b" + itemLevel + "#k#n    " + eqpInfo + "\r\n";
     }
 
     private static void showLevelupMessage(String msg, Client c) {
         c.getPlayer().showHint(msg, 300);
     }
-    
+
     public void setItemExp(int exp) {
         this.itemExp = exp;
     }

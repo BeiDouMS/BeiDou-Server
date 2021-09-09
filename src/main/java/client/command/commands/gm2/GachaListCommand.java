@@ -23,7 +23,6 @@ import client.Client;
 import client.command.Command;
 
 /**
- *
  * @author Ronan
  */
 public class GachaListCommand extends Command {
