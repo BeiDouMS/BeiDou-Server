@@ -47,8 +47,8 @@ import server.SkillbookInformationProvider.SkillBookEntry;
 import server.events.gm.Event;
 import server.expeditions.Expedition;
 import server.expeditions.ExpeditionType;
-import server.gachapon.MapleGachapon;
-import server.gachapon.MapleGachapon.MapleGachaponItem;
+import server.gachapon.Gachapon;
+import server.gachapon.Gachapon.GachaponItem;
 import server.life.LifeFactory;
 import server.life.PlayerNPC;
 import server.maps.MapManager;
@@ -401,7 +401,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	public void doGachapon() {
 		int[] maps = {100000000, 101000000, 102000000, 103000000, 105040300, 800000000, 809000101, 809000201, 600000000, 120000000};
 
-		MapleGachaponItem item = MapleGachapon.getInstance().process(npc);
+		GachaponItem item = Gachapon.getInstance().process(npc);
 
 		Item itemGained = gainItem(item.getId(), (short) (item.getId() / 10000 == 200 ? 100 : 1), true, true); // For normal potions, make it give 100.
 

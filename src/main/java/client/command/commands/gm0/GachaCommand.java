@@ -26,7 +26,7 @@ package client.command.commands.gm0;
 import client.Client;
 import client.command.Command;
 import server.ItemInformationProvider;
-import server.gachapon.MapleGachapon;
+import server.gachapon.Gachapon;
 
 public class GachaCommand extends Command {
     {
@@ -35,7 +35,7 @@ public class GachaCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        MapleGachapon.Gachapon gacha = null;
+        Gachapon.GachaponType gacha = null;
         String search = c.getPlayer().getLastCommandMessage();
         String gachaName = "";
         String [] names = {"Henesys", "Ellinia", "Perion", "Kerning City", "Sleepywood", "Mushroom Shrine", "Showa Spa Male", "Showa Spa Female", "New Leaf City", "Nautilus Harbor"};
@@ -43,7 +43,7 @@ public class GachaCommand extends Command {
         for (int i = 0; i < names.length; i++){
             if (search.equalsIgnoreCase(names[i])){
                 gachaName = names[i];
-                gacha = MapleGachapon.Gachapon.getByNpcId(ids[i]);
+                gacha = Gachapon.GachaponType.getByNpcId(ids[i]);
             }
         }
         if (gacha == null){
