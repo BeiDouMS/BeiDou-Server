@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.*;
 import client.inventory.*;
-import client.keybind.MapleKeyBinding;
+import client.keybind.KeyBinding;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
@@ -225,10 +225,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.sendMacros();
 
             // pot bindings being passed through other characters on the account detected thanks to Croosade dev team
-            MapleKeyBinding autohpPot = player.getKeymap().get(91);
+            KeyBinding autohpPot = player.getKeymap().get(91);
             player.sendPacket(PacketCreator.sendAutoHpPot(autohpPot != null ? autohpPot.getAction() : 0));
 
-            MapleKeyBinding autompPot = player.getKeymap().get(92);
+            KeyBinding autompPot = player.getKeymap().get(92);
             player.sendPacket(PacketCreator.sendAutoMpPot(autompPot != null ? autompPot.getAction() : 0));
 
             player.getMap().addPlayer(player);

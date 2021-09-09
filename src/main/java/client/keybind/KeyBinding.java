@@ -21,10 +21,11 @@
 */
 package client.keybind;
 
-public class MapleKeyBinding {
-    private int type, action;
+public class KeyBinding {
+    private final int type;
+    private final int action;
 
-    public MapleKeyBinding(int type, int action) {
+    public KeyBinding(int type, int action) {
         this.type = type;
         this.action = action;
     }

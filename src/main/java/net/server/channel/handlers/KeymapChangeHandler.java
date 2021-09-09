@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.Skill;
 import client.SkillFactory;
 import client.inventory.InventoryType;
-import client.keybind.MapleKeyBinding;
+import client.keybind.KeyBinding;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -61,7 +61,7 @@ public final class KeymapChangeHandler extends AbstractPacketHandler {
                                                 }
                                         }
                                         
-					c.getPlayer().changeKeybinding(key, new MapleKeyBinding(type, action));
+					c.getPlayer().changeKeybinding(key, new KeyBinding(type, action));
 				}
 			} else if(mode == 1) { // Auto HP Potion
 				int itemID = p.readInt();
@@ -69,14 +69,14 @@ public final class KeymapChangeHandler extends AbstractPacketHandler {
 					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
 					return;
 				}
-				c.getPlayer().changeKeybinding(91, new MapleKeyBinding(7, itemID));
+				c.getPlayer().changeKeybinding(91, new KeyBinding(7, itemID));
 			} else if(mode == 2) { // Auto MP Potion
 				int itemID = p.readInt();
 				if(itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
 					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
 					return;
 				}
-				c.getPlayer().changeKeybinding(92, new MapleKeyBinding(7, itemID));
+				c.getPlayer().changeKeybinding(92, new KeyBinding(7, itemID));
 			}
 		}
 	}

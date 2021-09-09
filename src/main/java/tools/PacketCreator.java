@@ -24,7 +24,7 @@ import client.*;
 import client.MapleCharacter.SkillEntry;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
-import client.keybind.MapleKeyBinding;
+import client.keybind.KeyBinding;
 import client.keybind.MapleQuickslotBinding;
 import client.newyear.NewYearCardRecord;
 import client.status.MonsterStatus;
@@ -3468,11 +3468,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getKeymap(Map<Integer, MapleKeyBinding> keybindings) {
+    public static Packet getKeymap(Map<Integer, KeyBinding> keybindings) {
         final OutPacket p = OutPacket.create(SendOpcode.KEYMAP);
         p.writeByte(0);
         for (int x = 0; x < 90; x++) {
-            MapleKeyBinding binding = keybindings.get(x);
+            KeyBinding binding = keybindings.get(x);
             if (binding != null) {
                 p.writeByte(binding.getType());
                 p.writeInt(binding.getAction());

@@ -28,7 +28,7 @@ import client.inventory.*;
 import client.inventory.Equip.StatUpgrade;
 import client.inventory.manipulator.CashIdGenerator;
 import client.inventory.manipulator.InventoryManipulator;
-import client.keybind.MapleKeyBinding;
+import client.keybind.KeyBinding;
 import client.keybind.MapleQuickslotBinding;
 import client.newyear.NewYearCardRecord;
 import client.processor.action.PetAutopotProcessor;
@@ -188,7 +188,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private Map<MapleDisease, Long> diseaseExpires = new LinkedHashMap<>();
     private Map<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private Map<Integer, Long> buffExpires = new LinkedHashMap<>();
-    private Map<Integer, MapleKeyBinding> keymap = new LinkedHashMap<>();
+    private Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
     private Map<Integer, MapleSummon> summons = new LinkedHashMap<>();
     private Map<Integer, MapleCoolDownValueHolder> coolDowns = new LinkedHashMap<>();
     private EnumMap<MapleDisease, Pair<MapleDiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(MapleDisease.class);
@@ -395,7 +395,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
                 
         for (int i = 0; i < selectedKey.length; i++) {
-            ret.keymap.put(selectedKey[i], new MapleKeyBinding(selectedType[i], selectedAction[i]));
+            ret.keymap.put(selectedKey[i], new KeyBinding(selectedType[i], selectedAction[i]));
         }
         
         
@@ -1203,7 +1203,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         sendPacket(packet);
     }
 
-    public void changeKeybinding(int key, MapleKeyBinding keybinding) {
+    public void changeKeybinding(int key, KeyBinding keybinding) {
         if (keybinding.getType() != 0) {
             keymap.put(Integer.valueOf(key), keybinding);
         } else {
@@ -5157,7 +5157,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return job.getId() / 1000;
     }
 
-    public Map<Integer, MapleKeyBinding> getKeymap() {
+    public Map<Integer, KeyBinding> getKeymap() {
         return keymap;
     }
 
@@ -7376,7 +7376,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                             int key = rs.getInt("key");
                             int type = rs.getInt("type");
                             int action = rs.getInt("action");
-                            ret.keymap.put(key, new MapleKeyBinding(type, action));
+                            ret.keymap.put(key, new KeyBinding(type, action));
                         }
                     }
                 }
@@ -8514,8 +8514,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 try (PreparedStatement psKey = con.prepareStatement("INSERT INTO keymap (characterid, `key`, `type`, `action`) VALUES (?, ?, ?, ?)")) {
                     psKey.setInt(1, id);
 
-                    Set<Entry<Integer, MapleKeyBinding>> keybindingItems = Collections.unmodifiableSet(keymap.entrySet());
-                    for (Entry<Integer, MapleKeyBinding> keybinding : keybindingItems) {
+                    Set<Entry<Integer, KeyBinding>> keybindingItems = Collections.unmodifiableSet(keymap.entrySet());
+                    for (Entry<Integer, KeyBinding> keybinding : keybindingItems) {
                         psKey.setInt(2, keybinding.getKey());
                         psKey.setInt(3, keybinding.getValue().getType());
                         psKey.setInt(4, keybinding.getValue().getAction());
@@ -9107,7 +9107,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         
         // autopot on HPMP deplete... thanks shavit for finding out D. Roar doesn't trigger autopot request
         if (hpchange < 0) {
-            MapleKeyBinding autohpPot = this.getKeymap().get(91);
+            KeyBinding autohpPot = this.getKeymap().get(91);
             if (autohpPot != null) {
                 int autohpItemid = autohpPot.getAction();
                 float autohpAlert = this.getAutopotHpAlert();
@@ -9122,7 +9122,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
         
         if (mpchange < 0) {
-            MapleKeyBinding autompPot = this.getKeymap().get(92);
+            KeyBinding autompPot = this.getKeymap().get(92);
             if (autompPot != null) {
                 int autompItemid = autompPot.getAction();
                 float autompAlert = this.getAutopotMpAlert();
