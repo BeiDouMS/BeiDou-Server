@@ -31,18 +31,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
  * @author Danny
  */
-public class MapleRing implements Comparable<MapleRing> {
-    private int ringId;
-    private int ringId2;
-    private int partnerId;
-    private int itemId;
-    private String partnerName;
+public class Ring implements Comparable<Ring> {
+    private final int ringId;
+    private final int ringId2;
+    private final int partnerId;
+    private final int itemId;
+    private final String partnerName;
     private boolean equipped = false;
 
-    public MapleRing(int id, int id2, int partnerId, int itemid, String partnername) {
+    public Ring(int id, int id2, int partnerId, int itemid, String partnername) {
         this.ringId = id;
         this.ringId2 = id2;
         this.partnerId = partnerId;
@@ -50,15 +49,15 @@ public class MapleRing implements Comparable<MapleRing> {
         this.partnerName = partnername;
     }
 
-    public static MapleRing loadFromDb(int ringId) {
-        MapleRing ret = null;
+    public static Ring loadFromDb(int ringId) {
+        Ring ret = null;
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT * FROM rings WHERE id = ?")) {
             ps.setInt(1, ringId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ret = new MapleRing(ringId, rs.getInt("partnerRingId"), rs.getInt("partnerChrId"), rs.getInt("itemid"), rs.getString("partnerName"));
+                    ret = new Ring(ringId, rs.getInt("partnerRingId"), rs.getInt("partnerChrId"), rs.getInt("itemid"), rs.getString("partnerName"));
                 }
             }
             return ret;
@@ -68,12 +67,12 @@ public class MapleRing implements Comparable<MapleRing> {
         }
     }
 
-    public static void removeRing(final MapleRing ring) {
+    public static void removeRing(final Ring ring) {
         try {
             if (ring == null) {
                 return;
             }
-            
+
             try (Connection con = DatabaseConnection.getConnection()) {
                 try (PreparedStatement ps = con.prepareStatement("DELETE FROM rings WHERE id=?")) {
                     ps.setInt(1, ring.getRingId());
@@ -102,7 +101,7 @@ public class MapleRing implements Comparable<MapleRing> {
             ex.printStackTrace();
         }
     }
-    
+
     public static Pair<Integer, Integer> createRing(int itemid, final Character partner1, final Character partner2) {
         try {
             if (partner1 == null) {
@@ -175,12 +174,8 @@ public class MapleRing implements Comparable<MapleRing> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof MapleRing) {
-            if (((MapleRing) o).getRingId() == getRingId()) {
-                return true;
-            } else {
-                return false;
-            }
+        if (o instanceof Ring) {
+            return ((Ring) o).getRingId() == getRingId();
         }
         return false;
     }
@@ -193,7 +188,7 @@ public class MapleRing implements Comparable<MapleRing> {
     }
 
     @Override
-    public int compareTo(MapleRing other) {
+    public int compareTo(Ring other) {
         if (ringId < other.getRingId()) {
             return -1;
         } else if (ringId == other.getRingId()) {

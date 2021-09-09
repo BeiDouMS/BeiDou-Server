@@ -2081,14 +2081,14 @@ public class PacketCreator {
     }
 
     private static void addRingLook(final OutPacket p, Character chr, boolean crush) {
-        List<MapleRing> rings;
+        List<Ring> rings;
         if (crush) {
             rings = chr.getCrushRings();
         } else {
             rings = chr.getFriendshipRings();
         }
         boolean yes = false;
-        for (MapleRing ring : rings) {
+        for (Ring ring : rings) {
             if (ring.equipped()) {
                 if (yes == false) {
                     yes = true;
@@ -2107,7 +2107,7 @@ public class PacketCreator {
     }
 
     private static void addMarriageRingLook(Client target, final OutPacket p, Character chr) {
-        MapleRing ring = chr.getMarriageRing();
+        Ring ring = chr.getMarriageRing();
 
         if (ring == null || !ring.equipped()) {
             p.writeByte(0);
@@ -6712,7 +6712,7 @@ public class PacketCreator {
 
     private static void addRingInfo(OutPacket p, Character chr) {
         p.writeShort(chr.getCrushRings().size());
-        for (MapleRing ring : chr.getCrushRings()) {
+        for (Ring ring : chr.getCrushRings()) {
             p.writeInt(ring.getPartnerChrId());
             p.writeFixedString(getRightPaddedStr(ring.getPartnerName(), '\0', 13));
             p.writeInt(ring.getRingId());
@@ -6721,7 +6721,7 @@ public class PacketCreator {
             p.writeInt(0);
         }
         p.writeShort(chr.getFriendshipRings().size());
-        for (MapleRing ring : chr.getFriendshipRings()) {
+        for (Ring ring : chr.getFriendshipRings()) {
             p.writeInt(ring.getPartnerChrId());
             p.writeFixedString(getRightPaddedStr(ring.getPartnerName(), '\0', 13));
             p.writeInt(ring.getRingId());
@@ -6732,7 +6732,7 @@ public class PacketCreator {
         }
 
         if (chr.getPartnerId() > 0) {
-            MapleRing marriageRing = chr.getMarriageRing();
+            Ring marriageRing = chr.getMarriageRing();
 
             p.writeShort(1);
             p.writeInt(chr.getRelationshipId());

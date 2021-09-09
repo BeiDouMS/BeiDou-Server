@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleRing;
+import client.Ring;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
@@ -176,7 +176,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         if(partnerid <= 0) return;
         
         chr.getClient().getWorldServer().deleteRelationship(chr.getId(), partnerid);
-        MapleRing.removeRing(chr.getMarriageRing());
+        Ring.removeRing(chr.getMarriageRing());
         
         Character partner = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(partnerid);
         if(partner == null) {
@@ -272,20 +272,20 @@ public final class RingActionHandler extends AbstractPacketHandler {
     }
     
     public static void giveMarriageRings(Character player, Character partner, int marriageRingId) {
-        Pair<Integer, Integer> rings = MapleRing.createRing(marriageRingId, player, partner);
+        Pair<Integer, Integer> rings = Ring.createRing(marriageRingId, player, partner);
         MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
 
         Item ringObj = ii.getEquipById(marriageRingId);
         Equip ringEqp = (Equip) ringObj;
         ringEqp.setRingId(rings.getLeft());
-        player.addMarriageRing(MapleRing.loadFromDb(rings.getLeft()));
+        player.addMarriageRing(Ring.loadFromDb(rings.getLeft()));
         InventoryManipulator.addFromDrop(player.getClient(), ringEqp, false, -1);
         player.broadcastMarriageMessage();
 
         ringObj = ii.getEquipById(marriageRingId);
         ringEqp = (Equip) ringObj;
         ringEqp.setRingId(rings.getRight());
-        partner.addMarriageRing(MapleRing.loadFromDb(rings.getRight()));
+        partner.addMarriageRing(Ring.loadFromDb(rings.getRight()));
         InventoryManipulator.addFromDrop(partner.getClient(), ringEqp, false, -1);
         partner.broadcastMarriageMessage();
     }

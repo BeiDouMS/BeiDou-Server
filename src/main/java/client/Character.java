@@ -234,11 +234,11 @@ public class Character extends AbstractCharacterObject {
     private PartyQuest partyQuest = null;
     private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
     private MapleDragon dragon = null;
-    private MapleRing marriageRing;
+    private Ring marriageRing;
     private int marriageItemid = -1;
     private int partnerId = -1;
-    private final List<MapleRing> crushRings = new ArrayList<>();
-    private final List<MapleRing> friendshipRings = new ArrayList<>();
+    private final List<Ring> crushRings = new ArrayList<>();
+    private final List<Ring> friendshipRings = new ArrayList<>();
     private boolean loggedIn = false;
     private boolean useCS;  //chaos scroll upon crafting item.
     private long npcCd;
@@ -524,17 +524,17 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void addCrushRing(MapleRing r) {
+    public void addCrushRing(Ring r) {
         crushRings.add(r);
     }
 
-    public MapleRing getRingById(int id) {
-        for (MapleRing ring : getCrushRings()) {
+    public Ring getRingById(int id) {
+        for (Ring ring : getCrushRings()) {
             if (ring.getRingId() == id) {
                 return ring;
             }
         }
-        for (MapleRing ring : getFriendshipRings()) {
+        for (Ring ring : getFriendshipRings()) {
             if (ring.getRingId() == id) {
                 return ring;
             }
@@ -602,11 +602,11 @@ public class Character extends AbstractCharacterObject {
         this.fame += famechange;
     }
 
-    public void addFriendshipRing(MapleRing r) {
+    public void addFriendshipRing(Ring r) {
         friendshipRings.add(r);
     }
 
-    public void addMarriageRing(MapleRing r) {
+    public void addMarriageRing(Ring r) {
         marriageRing = r;
     }
 
@@ -4639,7 +4639,7 @@ public class Character extends AbstractCharacterObject {
         return Collections.unmodifiableList(ret);
     }
 
-    public List<MapleRing> getCrushRings() {
+    public List<Ring> getCrushRings() {
         Collections.sort(crushRings);
         return crushRings;
     }
@@ -4986,7 +4986,7 @@ public class Character extends AbstractCharacterObject {
         usedStorage = true;
     }
 
-    public List<MapleRing> getFriendshipRings() {
+    public List<Ring> getFriendshipRings() {
         Collections.sort(friendshipRings);
         return friendshipRings;
     }
@@ -5193,7 +5193,7 @@ public class Character extends AbstractCharacterObject {
         return mapid;
     }
 
-    public MapleRing getMarriageRing() {
+    public Ring getMarriageRing() {
         return partnerId > 0 ? marriageRing : null;
     }
 
@@ -6829,7 +6829,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void addPlayerRing(MapleRing ring) {
+    public void addPlayerRing(Ring ring) {
         int ringItemId = ring.getItemId();
         if (ItemConstants.isWeddingRing(ringItemId)) {
             this.addMarriageRing(ring);
@@ -7060,7 +7060,7 @@ public class Character extends AbstractCharacterObject {
                         if (mit.equals(InventoryType.EQUIP) || mit.equals(InventoryType.EQUIPPED)) {
                             Equip equip = (Equip) item.getLeft();
                             if (equip.getRingId() > -1) {
-                                MapleRing ring = MapleRing.loadFromDb(equip.getRingId());
+                                Ring ring = Ring.loadFromDb(equip.getRingId());
                                 if (item.getRight().equals(InventoryType.EQUIPPED)) {
                                     ring.equip();
                                 }

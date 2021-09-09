@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleRing;
+import client.Ring;
 import client.inventory.Equip;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
@@ -265,7 +265,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         if(item instanceof Equip) {
                             Equip equip = (Equip) item;
                             if(equip.getRingId() >= 0) {
-                                MapleRing ring = MapleRing.loadFromDb(equip.getRingId());
+                                Ring ring = Ring.loadFromDb(equip.getRingId());
                                 chr.addPlayerRing(ring);
                             }
                         }
@@ -318,13 +318,13 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
                             if(itemRing.toItem() instanceof Equip) {
                                 Equip eqp = (Equip) itemRing.toItem();
-                                Pair<Integer, Integer> rings = MapleRing.createRing(itemRing.getItemId(), chr, partner);
+                                Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
                                 cs.addToInventory(eqp);
                                 c.sendPacket(PacketCreator.showBoughtCashItem(eqp, c.getAccID()));
                                 cs.gainCash(toCharge, itemRing, chr.getWorld());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
-                                chr.addCrushRing(MapleRing.loadFromDb(rings.getLeft()));
+                                chr.addCrushRing(Ring.loadFromDb(rings.getLeft()));
                                 try {
                                     chr.sendNote(partner.getName(), text, (byte) 1);
                                 } catch (SQLException ex) {
@@ -382,13 +382,13 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             // Need to check to make sure its actually an equip and the right SN...
                             if(itemRing.toItem() instanceof Equip) {
                                 Equip eqp = (Equip) itemRing.toItem();
-                                Pair<Integer, Integer> rings = MapleRing.createRing(itemRing.getItemId(), chr, partner);
+                                Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
                                 cs.addToInventory(eqp);
                                 c.sendPacket(PacketCreator.showBoughtCashRing(eqp, partner.getName(), c.getAccID()));
                                 cs.gainCash(payment, -itemRing.getPrice());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
-                                chr.addFriendshipRing(MapleRing.loadFromDb(rings.getLeft()));
+                                chr.addFriendshipRing(Ring.loadFromDb(rings.getLeft()));
                                 try {
                                     chr.sendNote(partner.getName(), text, (byte) 1);
                                 } catch (SQLException ex) {
