@@ -1736,7 +1736,7 @@ public class PacketCreator {
     /**
      * Gets a packet telling the client that a monster was killed.
      *
-     * @param objId       The objectID of the killed monster.
+     * @param objId     The objectID of the killed monster.
      * @param animation 0 = dissapear, 1 = fade out, 2+ = special
      * @return The kill monster packet.
      */
@@ -2130,9 +2130,9 @@ public class PacketCreator {
     /**
      * Adds an announcement box to an existing OutPacket.
      *
-     * @param p The OutPacket to add an announcement box
-     *              to.
-     * @param shop  The shop to announce.
+     * @param p    The OutPacket to add an announcement box
+     *             to.
+     * @param shop The shop to announce.
      */
     private static void addAnnounceBox(final OutPacket p, PlayerShop shop, int availability) {
         p.writeByte(4);
@@ -5507,9 +5507,9 @@ public class PacketCreator {
     public static Packet showNameChangeCancel(boolean success) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_NAME_CHANGE_RESULT);
         p.writeBool(success);
-            if (!success) {
-                p.writeByte(0);
-            }
+        if (!success) {
+            p.writeByte(0);
+        }
         //p.writeString("Custom message."); //only if ^ != 0
         return p;
     }
@@ -5517,9 +5517,9 @@ public class PacketCreator {
     public static Packet showWorldTransferCancel(boolean success) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_TRANSFER_WORLD_RESULT);
         p.writeBool(success);
-            if (!success) {
-                p.writeByte(0);
-            }
+        if (!success) {
+            p.writeByte(0);
+        }
         //p.writeString("Custom message."); //only if ^ != 0
         return p;
     }
@@ -5854,14 +5854,14 @@ public class PacketCreator {
             }
         }
         for (FamilyEntry junior : entry.getJuniors()) {
-                if (junior == null) {
-                        continue;
-                }
+            if (junior == null) {
+                continue;
+            }
             entryCount++;
             for (FamilyEntry superJunior : junior.getJuniors()) {
-                    if (superJunior == null) {
-                            continue;
-                    }
+                if (superJunior == null) {
+                    continue;
+                }
                 entryCount++;
                 superJuniors.add(superJunior);
             }

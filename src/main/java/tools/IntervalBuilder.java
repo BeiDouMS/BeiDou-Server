@@ -31,16 +31,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Ronan
  */
 public class IntervalBuilder {
-        
-    private List<Line2D> intervalLimits = new ArrayList<>();
-    
+
+    private final List<Line2D> intervalLimits = new ArrayList<>();
+
     protected MonitoredReadLock intervalRlock;
     protected MonitoredWriteLock intervalWlock;
-    
+
     public IntervalBuilder() {
         MonitoredReentrantReadWriteLock locks = new MonitoredReentrantReadWriteLock(MonitoredLockType.INTERVAL, true);
         intervalRlock = MonitoredReadLockFactory.createLock(locks);
@@ -100,7 +99,9 @@ public class IntervalBuilder {
             }
 
             int en = bsearchInterval(to);
-            if (en < st) en = st - 1;
+            if (en < st) {
+                en = st - 1;
+            }
 
             refitOverlappedIntervals(st, en + 1, from, to);
         } finally {
@@ -111,7 +112,7 @@ public class IntervalBuilder {
     public boolean inInterval(int point) {
         return inInterval(point, point);
     }
-    
+
     public boolean inInterval(int from, int to) {
         intervalRlock.lock();
         try {
@@ -130,5 +131,5 @@ public class IntervalBuilder {
             intervalWlock.unlock();
         }
     }
-    
+
 }
