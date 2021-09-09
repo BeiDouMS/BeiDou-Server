@@ -47,7 +47,7 @@ import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import server.partyquest.PartyQuest;
 import server.partyquest.Pyramid;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -320,11 +320,11 @@ public class AbstractPlayerInteraction {
         //---- \/ \/ \/ \/ \/ \/ \/  NOT TESTED  \/ \/ \/ \/ \/ \/ \/ \/ \/ ----
         
         public final QuestStatus getQuestRecord(final int id) {
-            return c.getPlayer().getQuestNAdd(MapleQuest.getInstance(id));
+            return c.getPlayer().getQuestNAdd(Quest.getInstance(id));
         }
 
         public final QuestStatus getQuestNoRecord(final int id) {
-            return c.getPlayer().getQuestNoAdd(MapleQuest.getInstance(id));
+            return c.getPlayer().getQuestNoAdd(Quest.getInstance(id));
         }
         
         //---- /\ /\ /\ /\ /\ /\ /\  NOT TESTED  /\ /\ /\ /\ /\ /\ /\ /\ /\ ----
@@ -344,11 +344,11 @@ public class AbstractPlayerInteraction {
 	}
 
         public int getQuestStatus(int id) {
-		return c.getPlayer().getQuest(MapleQuest.getInstance(id)).getStatus().getId();
+		return c.getPlayer().getQuest(Quest.getInstance(id)).getStatus().getId();
 	}
         
         private QuestStatus.Status getQuestStat(int id) {
-                return c.getPlayer().getQuest(MapleQuest.getInstance(id)).getStatus();
+                return c.getPlayer().getQuest(Quest.getInstance(id)).getStatus();
         }
         
 	public boolean isQuestCompleted(int id) {
@@ -394,10 +394,10 @@ public class AbstractPlayerInteraction {
         }
         
         public String getQuestProgress(int id, int infoNumber) {
-                QuestStatus qs = getPlayer().getQuest(MapleQuest.getInstance(id));
+                QuestStatus qs = getPlayer().getQuest(Quest.getInstance(id));
                 
                 if (qs.getInfoNumber() == infoNumber && infoNumber > 0) {
-                        qs = getPlayer().getQuest(MapleQuest.getInstance(infoNumber));
+                        qs = getPlayer().getQuest(Quest.getInstance(infoNumber));
                         infoNumber = 0;
                 }
                 
@@ -425,7 +425,7 @@ public class AbstractPlayerInteraction {
         }
         
         public void resetAllQuestProgress(int id) {
-                QuestStatus qs = getPlayer().getQuest(MapleQuest.getInstance(id));
+                QuestStatus qs = getPlayer().getQuest(Quest.getInstance(id));
                 if (qs != null) {
                         qs.resetAllProgress();
                         getPlayer().announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
@@ -433,7 +433,7 @@ public class AbstractPlayerInteraction {
         }
         
         public void resetQuestProgress(int id, int infoNumber) {
-                QuestStatus qs = getPlayer().getQuest(MapleQuest.getInstance(id));
+                QuestStatus qs = getPlayer().getQuest(Quest.getInstance(id));
                 if (qs != null) {
                         qs.resetProgress(infoNumber);
                         getPlayer().announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, false);
@@ -482,7 +482,7 @@ public class AbstractPlayerInteraction {
         
         public boolean startQuest(int id, int npc) {
                 try {
-                        return MapleQuest.getInstance(id).forceStart(getPlayer(), npc);
+                        return Quest.getInstance(id).forceStart(getPlayer(), npc);
                 } catch (NullPointerException ex) {
                         ex.printStackTrace();
                         return false;
@@ -491,7 +491,7 @@ public class AbstractPlayerInteraction {
         
         public boolean completeQuest(int id, int npc) {
                 try {
-                        return MapleQuest.getInstance(id).forceComplete(getPlayer(), npc);
+                        return Quest.getInstance(id).forceComplete(getPlayer(), npc);
                 } catch (NullPointerException ex) {
                         ex.printStackTrace();
                         return false;

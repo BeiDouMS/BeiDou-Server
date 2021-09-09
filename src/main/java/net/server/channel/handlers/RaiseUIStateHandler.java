@@ -7,7 +7,7 @@ import client.QuestStatus;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.quest.QuestScriptManager;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 /**
  *
@@ -22,7 +22,7 @@ public class RaiseUIStateHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();
-                MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
+                Quest quest = Quest.getInstanceFromInfoNumber(infoNumber);
                 QuestStatus mqs = chr.getQuest(quest);
                 
                 QuestScriptManager.getInstance().raiseOpen(c, (short) infoNumber, mqs.getNpc());

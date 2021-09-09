@@ -25,8 +25,8 @@ import client.Character;
 import client.inventory.Pet;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -36,7 +36,7 @@ public class MinTamenessRequirement extends MapleQuestRequirement {
 	private int minTameness;
 	
 	
-	public MinTamenessRequirement(MapleQuest quest, Data data) {
+	public MinTamenessRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.MIN_PET_TAMENESS);
 		processData(data);
 	}

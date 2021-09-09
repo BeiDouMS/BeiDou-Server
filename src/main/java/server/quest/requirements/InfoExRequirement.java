@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public class InfoExRequirement extends MapleQuestRequirement {
 	private int questID;
 	
 	
-	public InfoExRequirement(MapleQuest quest, Data data) {
+	public InfoExRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.INFO_EX);
 		questID = quest.getId();
                 processData(data);

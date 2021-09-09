@@ -23,8 +23,8 @@ import client.Character;
 import client.Client;
 import client.inventory.Pet;
 import provider.Data;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
+import server.quest.Quest;
 
 /**
  *
@@ -32,7 +32,7 @@ import server.quest.MapleQuestActionType;
  */
 public class PetSpeedAction extends MapleQuestAction {
 	
-	public PetSpeedAction(MapleQuest quest, Data data) {
+	public PetSpeedAction(Quest quest, Data data) {
 		super(MapleQuestActionType.PETTAMENESS, quest);
 		questID = quest.getId();
 	}

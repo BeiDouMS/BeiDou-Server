@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -35,7 +35,7 @@ public class FieldEnterRequirement extends MapleQuestRequirement {
 	private int mapId = -1;
 	
 	
-	public FieldEnterRequirement(MapleQuest quest, Data data) {
+	public FieldEnterRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.FIELD_ENTER);
 		processData(data);
 	}

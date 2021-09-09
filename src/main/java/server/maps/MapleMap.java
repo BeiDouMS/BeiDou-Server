@@ -1384,7 +1384,7 @@ public class MapleMap {
                         AutobanFactory.GENERAL.alert(chr, " for killing a " + monster.getName() + " which is over 30 levels higher.");
                     }
 
-                    /*if (chr.getQuest(MapleQuest.getInstance(29400)).getStatus().equals(QuestStatus.Status.STARTED)) {
+                    /*if (chr.getQuest(Quest.getInstance(29400)).getStatus().equals(QuestStatus.Status.STARTED)) {
                      if (chr.getLevel() >= 120 && monster.getStats().getLevel() >= 120) {
                      //FIX MEDAL SHET
                      } else if (monster.getStats().getLevel() >= chr.getLevel()) {

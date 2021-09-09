@@ -22,7 +22,7 @@ package server.loot;
 import client.Character;
 import server.life.MonsterDropEntry;
 import server.life.MonsterInformationProvider;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class LootManager {
 
     private static boolean isRelevantDrop(MonsterDropEntry dropEntry, List<Character> players, List<LootInventory> playersInv) {
         int qStartAmount = 0, qCompleteAmount = 0;
-        MapleQuest quest = MapleQuest.getInstance(dropEntry.questid);
+        Quest quest = Quest.getInstance(dropEntry.questid);
         if (quest != null) {
             qStartAmount = quest.getStartItemAmountNeeded(dropEntry.itemId);
             qCompleteAmount = quest.getCompleteItemAmountNeeded(dropEntry.itemId);

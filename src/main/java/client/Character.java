@@ -74,7 +74,7 @@ import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
 import server.partyquest.MonsterCarnivalParty;
 import server.partyquest.PartyQuest;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.*;
 import tools.exceptions.NotEnabledException;
 import tools.packets.WeddingPackets;
@@ -195,7 +195,7 @@ public class Character extends AbstractCharacterObject {
     private byte[] m_aQuickslotLoaded;
     private QuickslotBinding m_pQuickslotKeyMapped;
     private Door pdoor = null;
-    private Map<MapleQuest, Long> questExpirations = new LinkedHashMap<>();
+    private Map<Quest, Long> questExpirations = new LinkedHashMap<>();
     private ScheduledFuture<?> dragonBloodSchedule;
     private ScheduledFuture<?> hpDecreaseTask;
     private ScheduledFuture<?> beholderHealingSchedule, beholderBuffSchedule, berserkSchedule;
@@ -5686,10 +5686,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public QuestStatus getQuest(final int quest) {
-        return getQuest(MapleQuest.getInstance(quest));
+        return getQuest(Quest.getInstance(quest));
     }
 
-    public QuestStatus getQuest(MapleQuest quest) {
+    public QuestStatus getQuest(Quest quest) {
         synchronized (quests) {
             short questid = quest.getId();
             QuestStatus qs = quests.get(questid);
@@ -5703,7 +5703,7 @@ public class Character extends AbstractCharacterObject {
 
     //---- \/ \/ \/ \/ \/ \/ \/  NOT TESTED  \/ \/ \/ \/ \/ \/ \/ \/ \/ ----
 
-    public final void setQuestAdd(final MapleQuest quest, final byte status, final String customData) {
+    public final void setQuestAdd(final Quest quest, final byte status, final String customData) {
         synchronized (quests) {
             if (!quests.containsKey(quest.getId())) {
                 final QuestStatus stat = new QuestStatus(quest, QuestStatus.Status.getById(status));
@@ -5713,7 +5713,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public final QuestStatus getQuestNAdd(final MapleQuest quest) {
+    public final QuestStatus getQuestNAdd(final Quest quest) {
         synchronized (quests) {
             if (!quests.containsKey(quest.getId())) {
                 final QuestStatus status = new QuestStatus(quest, QuestStatus.Status.NOT_STARTED);
@@ -5724,13 +5724,13 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public final QuestStatus getQuestNoAdd(final MapleQuest quest) {
+    public final QuestStatus getQuestNoAdd(final Quest quest) {
         synchronized (quests) {
             return quests.get(quest.getId());
         }
     }
 
-    public final QuestStatus getQuestRemove(final MapleQuest quest) {
+    public final QuestStatus getQuestRemove(final Quest quest) {
         synchronized (quests) {
             return quests.remove(quest.getId());
         }
@@ -5745,14 +5745,14 @@ public class Character extends AbstractCharacterObject {
 
         int amountNeeded, questStatus = this.getQuestStatus(questid);
         if (questStatus == 0) {
-            amountNeeded = MapleQuest.getInstance(questid).getStartItemAmountNeeded(itemid);
+            amountNeeded = Quest.getInstance(questid).getStartItemAmountNeeded(itemid);
             if (amountNeeded == Integer.MIN_VALUE) {
                 return false;
             }
         } else if (questStatus != 1) {
             return false;
         } else {
-            amountNeeded = MapleQuest.getInstance(questid).getCompleteItemAmountNeeded(itemid);
+            amountNeeded = Quest.getInstance(questid).getCompleteItemAmountNeeded(itemid);
             if (amountNeeded == Integer.MAX_VALUE) {
                 return true;
             }
@@ -7241,7 +7241,7 @@ public class Character extends AbstractCharacterObject {
 
                     try (ResultSet rs = ps.executeQuery()) {
                         while (rs.next()) {
-                            MapleQuest q = MapleQuest.getInstance(rs.getShort("quest"));
+                            Quest q = Quest.getInstance(rs.getShort("quest"));
                             QuestStatus status = new QuestStatus(q, QuestStatus.Status.getById(rs.getInt("status")));
                             long cTime = rs.getLong("time");
                             if (cTime > -1) {
@@ -9821,11 +9821,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setQuestProgress(int id, int infoNumber, String progress) {
-        MapleQuest q = MapleQuest.getInstance(id);
+        Quest q = Quest.getInstance(id);
         QuestStatus qs = getQuest(q);
 
         if (qs.getInfoNumber() == infoNumber && infoNumber > 0) {
-            MapleQuest iq = MapleQuest.getInstance(infoNumber);
+            Quest iq = Quest.getInstance(infoNumber);
             QuestStatus iqs = getQuest(iq);
             iqs.setProgress(0, progress);
         } else {
@@ -9919,9 +9919,9 @@ public class Character extends AbstractCharacterObject {
             }
             announceUpdateQuest(DelayedQuestUpdate.INFO, qs);
         } else if (qs.getStatus().equals(QuestStatus.Status.COMPLETED)) {
-            MapleQuest mquest = qs.getQuest();
+            Quest mquest = qs.getQuest();
             short questid = mquest.getId();
-            if (!mquest.isSameDayRepeatable() && !MapleQuest.isExploitableQuest(questid)) {
+            if (!mquest.isSameDayRepeatable() && !Quest.isExploitableQuest(questid)) {
                 awardQuestPoint(YamlConfig.config.server.QUEST_POINT_PER_QUEST_COMPLETE);
             }
             qs.setCompleted(qs.getCompleted() + 1);   // Jayd's idea - count quest completed
@@ -9937,7 +9937,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void expireQuest(MapleQuest quest) {
+    private void expireQuest(Quest quest) {
         if (quest.forfeit(this)) {
             sendPacket(PacketCreator.questExpire(quest.getId()));
         }
@@ -9958,7 +9958,7 @@ public class Character extends AbstractCharacterObject {
     public void forfeitExpirableQuests() {
         evtLock.lock();
         try {
-            for (MapleQuest quest : questExpirations.keySet()) {
+            for (Quest quest : questExpirations.keySet()) {
                 quest.forfeit(this);
             }
 
@@ -9990,16 +9990,16 @@ public class Character extends AbstractCharacterObject {
         evtLock.lock();
         try {
             long timeNow = Server.getInstance().getCurrentTime();
-            List<MapleQuest> expireList = new LinkedList<>();
+            List<Quest> expireList = new LinkedList<>();
 
-            for (Entry<MapleQuest, Long> qe : questExpirations.entrySet()) {
+            for (Entry<Quest, Long> qe : questExpirations.entrySet()) {
                 if (qe.getValue() <= timeNow) {
                     expireList.add(qe.getKey());
                 }
             }
 
             if (!expireList.isEmpty()) {
-                for (MapleQuest quest : expireList) {
+                for (Quest quest : expireList) {
                     expireQuest(quest);
                     questExpirations.remove(quest);
                 }
@@ -10014,7 +10014,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void registerQuestExpire(MapleQuest quest, long time) {
+    private void registerQuestExpire(Quest quest, long time) {
         evtLock.lock();
         try {
             if (questExpireTask == null) {
@@ -10032,12 +10032,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void questTimeLimit(final MapleQuest quest, int seconds) {
+    public void questTimeLimit(final Quest quest, int seconds) {
         registerQuestExpire(quest, seconds * 1000);
         sendPacket(PacketCreator.addQuestTimeLimit(quest.getId(), seconds * 1000));
     }
 
-    public void questTimeLimit2(final MapleQuest quest, long expires) {
+    public void questTimeLimit2(final Quest quest, long expires) {
         long timeLeft = expires - System.currentTimeMillis();
 
         if (timeLeft <= 0) {

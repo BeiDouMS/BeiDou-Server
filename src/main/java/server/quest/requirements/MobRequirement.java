@@ -25,8 +25,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 import tools.FilePrinter;
 
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class MobRequirement extends MapleQuestRequirement {
 	Map<Integer, Integer> mobs = new HashMap<>();
 	private int questID;
 	
-	public MobRequirement(MapleQuest quest, Data data) {
+	public MobRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.MOB);
 		questID = quest.getId();
                 processData(data);
@@ -62,7 +62,7 @@ public class MobRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public boolean check(Character chr, Integer npcid) {
-		QuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
 		for(Integer mobID : mobs.keySet()) {
 			int countReq = mobs.get(mobID);
 			int progress;

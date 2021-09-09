@@ -41,7 +41,7 @@ import server.expeditions.Expedition;
 import server.life.LifeFactory;
 import server.life.Monster;
 import server.maps.MapleMap;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.exceptions.EventInstanceInProgressException;
 
 import javax.script.Invocable;
@@ -846,7 +846,7 @@ public class EventManager {
     
     public void startQuest(Character chr, int id, int npcid) {
         try {
-            MapleQuest.getInstance(id).forceStart(chr, npcid);
+            Quest.getInstance(id).forceStart(chr, npcid);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }
@@ -854,7 +854,7 @@ public class EventManager {
 
     public void completeQuest(Character chr, int id, int npcid) {
         try {
-            MapleQuest.getInstance(id).forceComplete(chr, npcid);
+            Quest.getInstance(id).forceComplete(chr, npcid);
         } catch (NullPointerException ex) {
             ex.printStackTrace();
         }

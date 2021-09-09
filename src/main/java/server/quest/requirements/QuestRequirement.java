@@ -22,8 +22,8 @@ import client.Character;
 import client.QuestStatus;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class QuestRequirement extends MapleQuestRequirement {
 	Map<Integer, Integer> quests = new HashMap<>();
 	
-	public QuestRequirement(MapleQuest quest, Data data) {
+	public QuestRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.QUEST);
 		processData(data);
 	}
@@ -58,7 +58,7 @@ public class QuestRequirement extends MapleQuestRequirement {
 	public boolean check(Character chr, Integer npcid) {
 		for(Integer questID : quests.keySet()) {
 			int stateReq = quests.get(questID);
-			QuestStatus qs = chr.getQuest(MapleQuest.getInstance(questID));
+			QuestStatus qs = chr.getQuest(Quest.getInstance(questID));
 			
 			if(qs == null && QuestStatus.Status.getById(stateReq).equals(QuestStatus.Status.NOT_STARTED))
 				continue;

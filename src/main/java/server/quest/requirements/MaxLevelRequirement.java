@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -35,7 +35,7 @@ public class MaxLevelRequirement extends MapleQuestRequirement {
 	private int maxLevel;
 	
 	
-	public MaxLevelRequirement(MapleQuest quest, Data data) {
+	public MaxLevelRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.MAX_LEVEL);
 		processData(data);
 	}

@@ -22,8 +22,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -32,7 +32,7 @@ import server.quest.MapleQuestRequirementType;
 public class MesoRequirement extends MapleQuestRequirement {
         private int meso = 0;
     
-	public MesoRequirement(MapleQuest quest, Data data) {
+	public MesoRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.MESO);
 		processData(data);
 	}

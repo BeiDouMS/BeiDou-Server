@@ -8,7 +8,7 @@ import provider.*;
 import provider.wz.WZFiles;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -616,7 +616,7 @@ public class GameConstants {
     }
     
     public static boolean isMedalQuest(short questid) {
-        return MapleQuest.getInstance(questid).getMedalRequirement() != -1;
+        return Quest.getInstance(questid).getMedalRequirement() != -1;
     }
     
     public static boolean hasSPTable(Job job) {

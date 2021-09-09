@@ -10,7 +10,7 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
 import server.MapleItemInformationProvider.QuestConsItem;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.PacketCreator;
 
 import java.util.Map;
@@ -40,7 +40,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                 Map<Integer, Integer> consumables = consItem.items;
                 
                 Character chr = c.getPlayer();
-                MapleQuest quest = MapleQuest.getInstanceFromInfoNumber(infoNumber);
+                Quest quest = Quest.getInstanceFromInfoNumber(infoNumber);
                 if (!chr.getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;

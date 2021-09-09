@@ -20,8 +20,8 @@ package server.quest.actions;
 
 import client.Character;
 import provider.Data;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
+import server.quest.Quest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public abstract class MapleQuestAction {
 	private final MapleQuestActionType type;
 	protected int questID;
 	
-	public MapleQuestAction(MapleQuestActionType action, MapleQuest quest) {
+	public MapleQuestAction(MapleQuestActionType action, Quest quest) {
 		this.type = action;
 		this.questID = quest.getId();
 	}

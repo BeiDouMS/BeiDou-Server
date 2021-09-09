@@ -18,12 +18,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package server.quest.requirements;
-    
+
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -32,7 +32,7 @@ import server.quest.MapleQuestRequirementType;
 public class BuffExceptRequirement extends MapleQuestRequirement {
         private int buffId = -1;
         
-	public BuffExceptRequirement(MapleQuest quest, Data data) {
+	public BuffExceptRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.BUFF);
 		processData(data);
 	}

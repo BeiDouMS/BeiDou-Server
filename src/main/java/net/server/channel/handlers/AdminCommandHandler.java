@@ -33,7 +33,7 @@ import server.life.LifeFactory;
 import server.life.Monster;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -135,7 +135,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 }
                 break;
             case 0x16: // Questreset
-                MapleQuest.getInstance(p.readShort()).reset(c.getPlayer());
+                Quest.getInstance(p.readShort()).reset(c.getPlayer());
                 break;
             case 0x17: // Summon
                 int mobId = p.readInt();

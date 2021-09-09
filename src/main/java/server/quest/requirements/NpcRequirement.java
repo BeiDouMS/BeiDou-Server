@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -34,7 +34,7 @@ import server.quest.MapleQuestRequirementType;
 public class NpcRequirement extends MapleQuestRequirement {
 	private int reqNPC;
 	
-	public NpcRequirement(MapleQuest quest, Data data) {
+	public NpcRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.NPC);
 		processData(data);
 	}

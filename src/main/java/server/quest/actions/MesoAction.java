@@ -25,8 +25,8 @@ import client.Character;
 import config.YamlConfig;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
+import server.quest.Quest;
 
 /**
  *
@@ -35,7 +35,7 @@ import server.quest.MapleQuestActionType;
 public class MesoAction extends MapleQuestAction {
 	int mesos;
 	
-	public MesoAction(MapleQuest quest, Data data) {
+	public MesoAction(Quest quest, Data data) {
 		super(MapleQuestActionType.MESO, quest);
 		questID = quest.getId();
 		processData(data);

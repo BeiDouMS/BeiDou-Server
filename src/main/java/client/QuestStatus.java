@@ -21,7 +21,7 @@
 */
 package client;
 
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.StringUtil;
 
 import java.util.*;
@@ -65,7 +65,7 @@ public class QuestStatus {
     private int forfeited = 0, completed = 0;
     private String customData;
 
-    public QuestStatus(MapleQuest quest, Status status) {
+    public QuestStatus(Quest quest, Status status) {
         this.questID = quest.getId();
         this.setStatus(status);
         this.completionTime = System.currentTimeMillis();
@@ -76,7 +76,7 @@ public class QuestStatus {
         }
     }
 
-    public QuestStatus(MapleQuest quest, Status status, int npc) {
+    public QuestStatus(Quest quest, Status status, int npc) {
         this.questID = quest.getId();
         this.setStatus(status);
         this.setNpc(npc);
@@ -88,8 +88,8 @@ public class QuestStatus {
         }
     }
 
-    public MapleQuest getQuest() {
-        return MapleQuest.getInstance(questID);
+    public Quest getQuest() {
+        return Quest.getInstance(questID);
     }
 
     public short getQuestID() {
@@ -127,7 +127,7 @@ public class QuestStatus {
     }
 
     private void registerMobs() {
-        for (int i : MapleQuest.getInstance(questID).getRelevantMobs()) {
+        for (int i : Quest.getInstance(questID).getRelevantMobs()) {
             progress.put(i, "000");
         }
         //this.setUpdated();
@@ -200,21 +200,21 @@ public class QuestStatus {
     }
 
     public short getInfoNumber() {
-        MapleQuest q = this.getQuest();
+        Quest q = this.getQuest();
         Status s = this.getStatus();
 
         return q.getInfoNumber(s);
     }
 
     public String getInfoEx(int index) {
-        MapleQuest q = this.getQuest();
+        Quest q = this.getQuest();
         Status s = this.getStatus();
 
         return q.getInfoEx(s, index);
     }
 
     public List<String> getInfoEx() {
-        MapleQuest q = this.getQuest();
+        Quest q = this.getQuest();
         Status s = this.getStatus();
 
         return q.getInfoEx(s);

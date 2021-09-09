@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 import java.util.Calendar;
 
@@ -37,7 +37,7 @@ public class EndDateRequirement extends MapleQuestRequirement {
 	private String timeStr;
 	
 	
-	public EndDateRequirement(MapleQuest quest, Data data) {
+	public EndDateRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.END_DATE);
 		processData(data);
 	}

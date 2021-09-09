@@ -61,7 +61,7 @@ import server.ThreadManager;
 import server.TimerManager;
 import server.expeditions.ExpeditionBossLog;
 import server.life.PlayerNPCFactory;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.Pair;
@@ -839,7 +839,7 @@ public class Server {
         final List<Future<?>> futures = new ArrayList<>();
         futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
         futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
-        futures.add(initExecutor.submit(() -> MapleQuest.loadAllQuests()));
+        futures.add(initExecutor.submit(() -> Quest.loadAllQuests()));
         futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
         futures.add(initExecutor.submit(() -> PlayerNPCFactory.loadFactoryMetadata()));
 

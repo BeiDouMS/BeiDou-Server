@@ -25,8 +25,8 @@ import client.Character;
 import client.Job;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.List;
 public class JobRequirement extends MapleQuestRequirement {
 	List<Integer> jobs = new ArrayList<>();
 	
-	public JobRequirement(MapleQuest quest, Data data) {
+	public JobRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.JOB);
 		processData(data);
 	}

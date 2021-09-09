@@ -26,7 +26,7 @@ package client.command.commands.gm6;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 
 public class ClearQuestCommand extends Command {
     {
@@ -40,7 +40,7 @@ public class ClearQuestCommand extends Command {
             player.dropMessage(5, "Please include a quest ID.");
             return;
         }
-        MapleQuest.clearCache(Integer.parseInt(params[0]));
+        Quest.clearCache(Integer.parseInt(params[0]));
         player.dropMessage(5, "Quest Cache for quest " + params[0] + " cleared.");
 
     }

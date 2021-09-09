@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -35,7 +35,7 @@ public class CompletedQuestRequirement extends MapleQuestRequirement {
 	private int reqQuest;
 	
 	
-	public CompletedQuestRequirement(MapleQuest quest, Data data) {
+	public CompletedQuestRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.COMPLETED_QUEST);
 		processData(data);
 	}

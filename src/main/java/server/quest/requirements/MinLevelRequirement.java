@@ -24,8 +24,8 @@ package server.quest.requirements;
 import client.Character;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+import server.quest.Quest;
 
 /**
  *
@@ -35,7 +35,7 @@ public class MinLevelRequirement extends MapleQuestRequirement {
 	private int minLevel;
 	
 	
-	public MinLevelRequirement(MapleQuest quest, Data data) {
+	public MinLevelRequirement(Quest quest, Data data) {
 		super(MapleQuestRequirementType.MIN_LEVEL);
 		processData(data);
 	}

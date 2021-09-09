@@ -26,8 +26,8 @@ import client.QuestStatus;
 import constants.inventory.ItemConstants;
 import provider.Data;
 import provider.DataTool;
-import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
+import server.quest.Quest;
 
 /**
  *
@@ -36,7 +36,7 @@ import server.quest.MapleQuestActionType;
 public class PetSkillAction extends MapleQuestAction {
 	int flag;
 	
-	public PetSkillAction(MapleQuest quest, Data data) {
+	public PetSkillAction(Quest quest, Data data) {
 		super(MapleQuestActionType.PETSKILL, quest);
 		questID = quest.getId();
 		processData(data);
@@ -50,7 +50,7 @@ public class PetSkillAction extends MapleQuestAction {
 	
 	@Override
 	public boolean check(Character chr, Integer extSelection) {
-		QuestStatus status = chr.getQuest(MapleQuest.getInstance(questID));
+		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
 		if(!(status.getStatus() == QuestStatus.Status.NOT_STARTED && status.getForfeited() > 0))
 			return false;
 		

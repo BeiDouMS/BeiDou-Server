@@ -32,7 +32,7 @@ import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
 import server.MapleItemInformationProvider;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.Pair;
 
 public class SearchCommand extends Command {
@@ -105,7 +105,7 @@ public class SearchCommand extends Command {
                         }
                     }
                 } else {
-                    for (MapleQuest mq : MapleQuest.getMatchedQuests(search)) {
+                    for (Quest mq : Quest.getMatchedQuests(search)) {
                         sb.append("#b").append(mq.getId()).append("#k - #r");
                         
                         String parentName = mq.getParentName();

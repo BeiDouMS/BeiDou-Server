@@ -25,7 +25,7 @@ import client.Client;
 import client.QuestStatus;
 import constants.game.GameConstants;
 import scripting.AbstractScriptManager;
-import server.quest.MapleQuest;
+import server.quest.Quest;
 import tools.FilePrinter;
 
 import javax.script.Invocable;
@@ -58,7 +58,7 @@ public class QuestScriptManager extends AbstractScriptManager {
     }
         
 	public void start(Client c, short questid, int npc) {
-        MapleQuest quest = MapleQuest.getInstance(questid);
+        Quest quest = Quest.getInstance(questid);
         try {
             QuestActionManager qm = new QuestActionManager(c, questid, npc, true);
             if (qms.containsKey(c)) {
@@ -109,7 +109,7 @@ public class QuestScriptManager extends AbstractScriptManager {
 	}
         
 	public void end(Client c, short questid, int npc) {
-        MapleQuest quest = MapleQuest.getInstance(questid);
+        Quest quest = Quest.getInstance(questid);
         if (!c.getPlayer().getQuest(quest).getStatus().equals(QuestStatus.Status.STARTED) || !c.getPlayer().getMap().containsNPC(npc)) {
             dispose(c);
             return;
