@@ -70,7 +70,7 @@ public final class Channel {
     private MapleMapManager mapManager;
     private EventScriptManager eventSM;
     private ServicesManager services;
-    private Map<Integer, MapleHiredMerchant> hiredMerchants = new HashMap<>();
+    private Map<Integer, HiredMerchant> hiredMerchants = new HashMap<>();
     private final Map<Integer, Integer> storedVars = new HashMap<>();
     private Set<Integer> playersAway = new HashSet<>();
     private Map<ExpeditionType, Expedition> expeditions = new HashMap<>();
@@ -228,7 +228,7 @@ public final class Channel {
     
     private void closeAllMerchants() {
         try {
-            List<MapleHiredMerchant> merchs;
+            List<HiredMerchant> merchs;
             
             merchWlock.lock();
             try {
@@ -238,7 +238,7 @@ public final class Channel {
                 merchWlock.unlock();
             }
 
-            for (MapleHiredMerchant merch : merchs) {
+            for (HiredMerchant merch : merchs) {
                 merch.forceClose();
             }
         } catch (Exception e) {
@@ -352,7 +352,7 @@ public final class Channel {
         }
     }
         
-    public Map<Integer, MapleHiredMerchant> getHiredMerchants() {
+    public Map<Integer, HiredMerchant> getHiredMerchants() {
         merchRlock.lock();
         try {
             return Collections.unmodifiableMap(hiredMerchants);
@@ -361,7 +361,7 @@ public final class Channel {
         }
     }
 
-    public void addHiredMerchant(int chrid, MapleHiredMerchant hm) {
+    public void addHiredMerchant(int chrid, HiredMerchant hm) {
         merchWlock.lock();
         try {
             hiredMerchants.put(chrid, hm);

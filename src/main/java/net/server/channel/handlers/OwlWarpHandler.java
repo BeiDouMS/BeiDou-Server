@@ -23,7 +23,7 @@ import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleHiredMerchant;
+import server.maps.HiredMerchant;
 import server.maps.MaplePlayerShop;
 import tools.PacketCreator;
 
@@ -42,7 +42,7 @@ public final class OwlWarpHandler extends AbstractPacketHandler {
             return;
         }
         
-        MapleHiredMerchant hm = c.getWorldServer().getHiredMerchant(ownerid);   // if both hired merchant and player shop is on the same map
+        HiredMerchant hm = c.getWorldServer().getHiredMerchant(ownerid);   // if both hired merchant and player shop is on the same map
         MaplePlayerShop ps;
         if(hm == null || hm.getMapId() != mapid || !hm.hasItem(c.getPlayer().getOwlSearch())) {
             ps = c.getWorldServer().getPlayerShop(ownerid);

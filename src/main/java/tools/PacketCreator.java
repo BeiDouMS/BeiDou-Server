@@ -2156,7 +2156,7 @@ public class PacketCreator {
         p.writeByte(joinable);
     }
 
-    private static void updateHiredMerchantBoxInfo(OutPacket p, MapleHiredMerchant hm) {
+    private static void updateHiredMerchantBoxInfo(OutPacket p, HiredMerchant hm) {
         byte[] roomInfo = hm.getShopRoomInfo();
 
         p.writeByte(5);
@@ -2166,7 +2166,7 @@ public class PacketCreator {
         p.writeBytes(roomInfo);    // visitor capacity here, thanks GabrielSin
     }
 
-    public static Packet updateHiredMerchantBox(MapleHiredMerchant hm) {
+    public static Packet updateHiredMerchantBox(HiredMerchant hm) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_HIRED_MERCHANT);
         p.writeInt(hm.getOwnerId());
         updateHiredMerchantBoxInfo(p, hm);
@@ -5028,7 +5028,7 @@ public class PacketCreator {
                 p.writeInt(owner.getId());
                 p.writeByte(owner.getClient().getChannel() - 1);
             } else {
-                MapleHiredMerchant hm = (MapleHiredMerchant) mo;
+                HiredMerchant hm = (HiredMerchant) mo;
 
                 p.writeString(hm.getOwner());
                 p.writeInt(hm.getMapId());
@@ -5080,7 +5080,7 @@ public class PacketCreator {
      * 0x12 = FKING POPUP LOL
      */
 
-    public static Packet getHiredMerchant(Character chr, MapleHiredMerchant hm, boolean firstTime) {//Thanks Dustin
+    public static Packet getHiredMerchant(Character chr, HiredMerchant hm, boolean firstTime) {//Thanks Dustin
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.ROOM.getCode());
         p.writeByte(0x05);
@@ -5114,9 +5114,9 @@ public class PacketCreator {
             p.writeShort(0);
             p.writeShort(hm.getTimeOpen());
             p.writeByte(firstTime ? 1 : 0);
-            List<MapleHiredMerchant.SoldItem> sold = hm.getSold();
+            List<HiredMerchant.SoldItem> sold = hm.getSold();
             p.writeByte(sold.size());
-            for (MapleHiredMerchant.SoldItem s : sold) {
+            for (HiredMerchant.SoldItem s : sold) {
                 p.writeInt(s.getItemId());
                 p.writeShort(s.getQuantity());
                 p.writeInt(s.getMesos());
@@ -5141,7 +5141,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet updateHiredMerchant(MapleHiredMerchant hm, Character chr) {
+    public static Packet updateHiredMerchant(HiredMerchant hm, Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
         p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
@@ -5212,7 +5212,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnHiredMerchantBox(MapleHiredMerchant hm) {
+    public static Packet spawnHiredMerchantBox(HiredMerchant hm) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_HIRED_MERCHANT);
         p.writeInt(hm.getOwnerId());
         p.writeInt(hm.getItemId());

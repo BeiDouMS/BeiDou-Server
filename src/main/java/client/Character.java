@@ -151,7 +151,7 @@ public class Character extends AbstractCharacterObject {
     private int merchantmeso;
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
-    private MapleHiredMerchant hiredMerchant = null;
+    private HiredMerchant hiredMerchant = null;
     private Client client;
     private GuildCharacter mgc = null;
     private PartyCharacter mpc = null;
@@ -5032,7 +5032,7 @@ public class Character extends AbstractCharacterObject {
         return hair;
     }
 
-    public MapleHiredMerchant getHiredMerchant() {
+    public HiredMerchant getHiredMerchant() {
         return hiredMerchant;
     }
 
@@ -5575,7 +5575,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void closeHiredMerchant(boolean closeMerchant) {
-        MapleHiredMerchant merchant = this.getHiredMerchant();
+        HiredMerchant merchant = this.getHiredMerchant();
         if (merchant == null) {
             return;
         }
@@ -8997,7 +8997,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setHiredMerchant(MapleHiredMerchant merchant) {
+    public void setHiredMerchant(HiredMerchant merchant) {
         this.hiredMerchant = merchant;
     }
 

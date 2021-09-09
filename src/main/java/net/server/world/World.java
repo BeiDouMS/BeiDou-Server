@@ -132,7 +132,7 @@ public class World {
     private Map<Integer, MaplePlayerShop> activePlayerShops = new LinkedHashMap<>();
     
     private MonitoredReentrantLock activeMerchantsLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MERCHS, true);
-    private Map<Integer, Pair<MapleHiredMerchant, Integer>> activeMerchants = new LinkedHashMap<>();
+    private Map<Integer, Pair<HiredMerchant, Integer>> activeMerchants = new LinkedHashMap<>();
     private ScheduledFuture<?> merchantSchedule;
     private long merchantUpdate;
     
@@ -1555,7 +1555,7 @@ public class World {
         }
     }
     
-    public void registerHiredMerchant(MapleHiredMerchant hm) {
+    public void registerHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
             int initProc;
@@ -1568,7 +1568,7 @@ public class World {
         }
     }
     
-    public void unregisterHiredMerchant(MapleHiredMerchant hm) {
+    public void unregisterHiredMerchant(HiredMerchant hm) {
         activeMerchantsLock.lock();
         try {
             activeMerchants.remove(hm.getOwnerId());
@@ -1578,15 +1578,15 @@ public class World {
     }
     
     public void runHiredMerchantSchedule() {
-        Map<Integer, Pair<MapleHiredMerchant, Integer>> deployedMerchants;
+        Map<Integer, Pair<HiredMerchant, Integer>> deployedMerchants;
         activeMerchantsLock.lock();
         try {
             merchantUpdate = Server.getInstance().getCurrentTime();
             deployedMerchants = new LinkedHashMap<>(activeMerchants);
         
-            for(Map.Entry<Integer, Pair<MapleHiredMerchant, Integer>> dm: deployedMerchants.entrySet()) {
+            for(Map.Entry<Integer, Pair<HiredMerchant, Integer>> dm: deployedMerchants.entrySet()) {
                 int timeOn = dm.getValue().getRight();
-                MapleHiredMerchant hm = dm.getValue().getLeft();
+                HiredMerchant hm = dm.getValue().getLeft();
                 
                 if(timeOn <= 144) {   // 1440 minutes == 24hrs
                     activeMerchants.put(hm.getOwnerId(), new Pair<>(dm.getValue().getLeft(), timeOn + 1));
@@ -1602,12 +1602,12 @@ public class World {
         }
     }
     
-    public List<MapleHiredMerchant> getActiveMerchants() {
-        List<MapleHiredMerchant> hmList = new ArrayList<>();
+    public List<HiredMerchant> getActiveMerchants() {
+        List<HiredMerchant> hmList = new ArrayList<>();
         activeMerchantsLock.lock();
         try {
-            for(Pair<MapleHiredMerchant, Integer> hmp : activeMerchants.values()) {
-                MapleHiredMerchant hm = hmp.getLeft();
+            for(Pair<HiredMerchant, Integer> hmp : activeMerchants.values()) {
+                HiredMerchant hm = hmp.getLeft();
                 if(hm.isOpen()) {
                     hmList.add(hm);
                 }
@@ -1619,7 +1619,7 @@ public class World {
         }
     }
     
-    public MapleHiredMerchant getHiredMerchant(int ownerid) {
+    public HiredMerchant getHiredMerchant(int ownerid) {
         activeMerchantsLock.lock();
         try {
             if(activeMerchants.containsKey(ownerid)) {
@@ -1816,7 +1816,7 @@ public class World {
     public List<Pair<MaplePlayerShopItem, AbstractMapObject>> getAvailableItemBundles(int itemid) {
         List<Pair<MaplePlayerShopItem, AbstractMapObject>> hmsAvailable = new ArrayList<>();
 
-        for (MapleHiredMerchant hm : getActiveMerchants()) {
+        for (HiredMerchant hm : getActiveMerchants()) {
             List<MaplePlayerShopItem> itemBundles = hm.sendAvailableBundles(itemid);
 
             for(MaplePlayerShopItem mpsi : itemBundles) {

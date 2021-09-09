@@ -252,7 +252,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         c.getWorldServer().registerPlayerShop(shop);
                         //c.sendPacket(PacketCreator.getPlayerShopRemoveVisitor(1));
                     } else if (ItemConstants.isHiredMerchant(itemId)) {
-                        MapleHiredMerchant merchant = new MapleHiredMerchant(chr, desc, itemId);
+                        HiredMerchant merchant = new HiredMerchant(chr, desc, itemId);
                         chr.setHiredMerchant(merchant);
                         c.getWorldServer().registerHiredMerchant(merchant);
                         chr.getClient().getChannelServer().addHiredMerchant(chr.getId(), merchant);
@@ -308,13 +308,13 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         } else {
                             chr.sendPacket(PacketCreator.getMiniRoomError(22));
                         }
-                    } else if (ob instanceof MapleHiredMerchant && chr.getHiredMerchant() == null) {
-                        MapleHiredMerchant merchant = (MapleHiredMerchant) ob;
+                    } else if (ob instanceof HiredMerchant && chr.getHiredMerchant() == null) {
+                        HiredMerchant merchant = (HiredMerchant) ob;
                         merchant.visitShop(chr);
                     }
                 }
             } else if (mode == Action.CHAT.getCode()) { // chat lol
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (chr.getTrade() != null) {
                     chr.getTrade().chat(p.readString());
                 } else if (chr.getPlayerShop() != null) { //mini game
@@ -359,7 +359,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 MaplePlayerShop shop = chr.getPlayerShop();
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
                     if(YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
                         try {
@@ -601,7 +601,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                 MaplePlayerShopItem shopItem = new MaplePlayerShopItem(sellItem, bundles, price);
                 MaplePlayerShop shop = chr.getPlayerShop();
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
                     if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't sell it anymore."));
@@ -667,12 +667,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     shop.takeItemBack(slot, chr);
                 }
             } else if (mode == Action.MERCHANT_MESO.getCode()) {
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null) return;
 
                 merchant.withdrawMesos(chr);
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null || !merchant.isOwner(chr)) return;
 
                 merchant.withdrawMesos(chr);
@@ -696,7 +696,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     return;
                 }
                 MaplePlayerShop shop = chr.getPlayerShop();
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isVisitor(chr)) {
                     if (shop.buy(c, itemid, quantity)) {
                         shop.broadcast(PacketCreator.getPlayerShopItemUpdate(shop));
@@ -708,7 +708,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.TAKE_ITEM_BACK.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null && merchant.isOwner(chr)) {
                     if (merchant.isOpen()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't take it with the store open."));
@@ -728,14 +728,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.CLOSE_MERCHANT.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null) {
                     merchant.closeOwnerMerchant(chr);
                 }
             } else if (mode == Action.MAINTENANCE_OFF.getCode()) {
                 if (isTradeOpen(chr)) return;
 
-                MapleHiredMerchant merchant = chr.getHiredMerchant();
+                HiredMerchant merchant = chr.getHiredMerchant();
                 if(merchant != null) {
                     if (merchant.isOwner(chr)) {
                         if (merchant.getItems().isEmpty()) {

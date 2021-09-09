@@ -33,7 +33,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import net.server.Server;
 import net.server.world.World;
 import server.MapleItemInformationProvider;
-import server.maps.MapleHiredMerchant;
+import server.maps.HiredMerchant;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -282,7 +282,7 @@ public class FredrickProcessor {
                     chr.withdrawMerchantMesos();
                     
                     if (deleteFredrickItems(chr.getId())) {
-                        MapleHiredMerchant merchant = chr.getHiredMerchant();
+                        HiredMerchant merchant = chr.getHiredMerchant();
 
                         if(merchant != null)
                             merchant.clearItems();

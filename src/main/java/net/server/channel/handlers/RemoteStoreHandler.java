@@ -26,7 +26,7 @@ import client.Character;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleHiredMerchant;
+import server.maps.HiredMerchant;
 import tools.PacketCreator;
 
 /**
@@ -37,7 +37,7 @@ public class RemoteStoreHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        MapleHiredMerchant hm = getMerchant(c);
+        HiredMerchant hm = getMerchant(c);
         if (hm != null && hm.isOwner(chr)) {
             if (hm.getChannel() == chr.getClient().getChannel()) {
                 hm.visitShop(chr);
@@ -51,7 +51,7 @@ public class RemoteStoreHandler extends AbstractPacketHandler {
         c.sendPacket(PacketCreator.enableActions());
     }
 
-    private static MapleHiredMerchant getMerchant(Client c) {
+    private static HiredMerchant getMerchant(Client c) {
         if (c.getPlayer().hasMerchant()) {
             return c.getWorldServer().getHiredMerchant(c.getPlayer().getId());
         }
