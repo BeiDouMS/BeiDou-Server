@@ -1154,7 +1154,7 @@ public class Character extends AbstractCharacterObject {
         if (this.guildid > 0) {
             getGuild().broadcast(PacketCreator.jobMessage(0, job.getId(), name), this.getId());
         }
-        MapleFamily family = getFamily();
+        Family family = getFamily();
         if (family != null) {
             family.broadcast(PacketCreator.jobMessage(1, job.getId(), name), this.getId());
         }
@@ -1183,7 +1183,7 @@ public class Character extends AbstractCharacterObject {
 
     public void broadcastAcquaintances(Packet packet) {
         buddylist.broadcast(packet, getWorldServer().getPlayerStorage());
-        MapleFamily family = getFamily();
+        Family family = getFamily();
         if (family != null) {
             family.broadcast(packet, id);
         }
@@ -4955,7 +4955,7 @@ public class Character extends AbstractCharacterObject {
         return fame;
     }
 
-    public MapleFamily getFamily() {
+    public Family getFamily() {
         if (familyEntry != null) {
             return familyEntry.getFamily();
         } else {
@@ -10419,7 +10419,7 @@ public class Character extends AbstractCharacterObject {
             guild.broadcast(PacketCreator.marriageMessage(0, name));
         }
 
-        MapleFamily family = this.getFamily();
+        Family family = this.getFamily();
         if (family != null) {
             family.broadcast(PacketCreator.marriageMessage(1, name));
         }

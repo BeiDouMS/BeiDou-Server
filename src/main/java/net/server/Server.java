@@ -23,7 +23,7 @@ package net.server;
 
 import client.Character;
 import client.Client;
-import client.MapleFamily;
+import client.Family;
 import client.SkillFactory;
 import client.command.CommandsExecutor;
 import client.inventory.Item;
@@ -857,7 +857,7 @@ public class Server {
             applyAllWorldTransfers(con);
 
             if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-                MapleFamily.loadAllFamilies(con);
+                Family.loadAllFamilies(con);
             }
         } catch (SQLException sqle) {
             log.error("Failed to run all startup-bound database tasks", sqle);

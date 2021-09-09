@@ -26,7 +26,7 @@ import client.BuddyList.BuddyAddResult;
 import client.BuddyList.BuddyOperation;
 import client.BuddylistEntry;
 import client.Character;
-import client.MapleFamily;
+import client.Family;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import net.packet.Packet;
@@ -82,7 +82,7 @@ public class World {
     private Map<Integer, Short> pnpcPodium = new HashMap<>();
     private Map<Integer, MapleMessenger> messengers = new HashMap<>();
     private AtomicInteger runningMessengerId = new AtomicInteger();
-    private Map<Integer, MapleFamily> families = new LinkedHashMap<>();
+    private Map<Integer, Family> families = new LinkedHashMap<>();
     private Map<Integer, Integer> relationships = new HashMap<>();
     private Map<Integer, Pair<Integer, Integer>> relationshipCouples = new HashMap<>();
     private Map<Integer, MapleGuildSummary> gsStore = new HashMap<>();
@@ -547,7 +547,7 @@ public class World {
         return id;
     }
 
-    public void addFamily(int id, MapleFamily f) {
+    public void addFamily(int id, Family f) {
         synchronized (families) {
             if (!families.containsKey(id)) {
                 families.put(id, f);
@@ -561,7 +561,7 @@ public class World {
         }
     }
 
-    public MapleFamily getFamily(int id) {
+    public Family getFamily(int id) {
         synchronized (families) {
             if (families.containsKey(id)) {
                 return families.get(id);
@@ -570,7 +570,7 @@ public class World {
         }
     }
     
-    public Collection<MapleFamily> getFamilies() {
+    public Collection<Family> getFamilies() {
         synchronized(families) {
             return Collections.unmodifiableCollection(families.values());
         }

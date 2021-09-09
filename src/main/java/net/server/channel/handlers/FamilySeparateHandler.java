@@ -20,7 +20,7 @@
 package net.server.channel.handlers;
 
 import client.Client;
-import client.MapleFamily;
+import client.Family;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -32,7 +32,7 @@ public class FamilySeparateHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         if(!YamlConfig.config.server.USE_FAMILY_SYSTEM) return;
-        MapleFamily oldFamily = c.getPlayer().getFamily();
+        Family oldFamily = c.getPlayer().getFamily();
         if(oldFamily == null) return;
         MapleFamilyEntry forkOn = null;
         boolean isSenior;

@@ -983,7 +983,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                             }
                                                         /*      
                                                         if (fid > 0) {
-                                                                final MapleFamily family = worlda.getFamily(fid);
+                                                                final Family family = worlda.getFamily(fid);
                                                                 family.
                                                         }
                                                         */

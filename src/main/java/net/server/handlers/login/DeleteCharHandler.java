@@ -22,7 +22,7 @@
 package net.server.handlers.login;
 
 import client.Client;
-import client.MapleFamily;
+import client.Family;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -60,7 +60,7 @@ public final class DeleteCharHandler extends AbstractPacketHandler {
 						c.sendPacket(PacketCreator.deleteCharResponse(cid, 0x16));
 						return;
 					} else if (familyId != -1) {
-						MapleFamily family = Server.getInstance().getWorld(world).getFamily(familyId);
+						Family family = Server.getInstance().getWorld(world).getFamily(familyId);
 						if (family != null && family.getTotalMembers() > 1) {
 							c.sendPacket(PacketCreator.deleteCharResponse(cid, 0x1D));
 							return;

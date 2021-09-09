@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import client.MapleFamily;
+import client.Family;
 import client.MapleFamilyEntry;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
@@ -76,7 +76,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                         }
                     } else { //absorb target family
                         MapleFamilyEntry targetEntry = chr.getFamilyEntry();
-                        MapleFamily targetFamily = targetEntry.getFamily();
+                        Family targetFamily = targetEntry.getFamily();
                         if(targetFamily.getLeader() != targetEntry) return;
                         if(inviter.getFamily().getTotalGenerations() + targetFamily.getTotalGenerations() <= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
                             targetEntry.join(inviter.getFamilyEntry());
@@ -92,7 +92,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                         chr.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
                         return;
                     }
-                    MapleFamily newFamily = new MapleFamily(-1, c.getWorld());
+                    Family newFamily = new Family(-1, c.getWorld());
                     c.getWorldServer().addFamily(newFamily.getID(), newFamily);
                     MapleFamilyEntry inviterEntry = new MapleFamilyEntry(newFamily, inviter.getId(), inviter.getName(), inviter.getLevel(), inviter.getJob());
                     inviterEntry.setCharacter(inviter);

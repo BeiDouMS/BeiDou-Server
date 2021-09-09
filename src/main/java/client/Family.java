@@ -41,11 +41,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *
  * @author Jay Estrella - Mr.Trash :3
  * @author Ubaware
  */
-public class MapleFamily {
+public class Family {
 
     private static final AtomicInteger familyIDCounter = new AtomicInteger();
 
@@ -56,11 +55,11 @@ public class MapleFamily {
     private String preceptsMessage = "";
     private int totalGenerations;
 
-    public MapleFamily(int id, int world) {
+    public Family(int id, int world) {
         int newId = id;
-        if(id == -1) {
+        if (id == -1) {
             // get next available family id
-            while(idInUse(newId = familyIDCounter.incrementAndGet())) {
+            while (idInUse(newId = familyIDCounter.incrementAndGet())) {
             }
         }
         this.id = newId;
@@ -68,8 +67,10 @@ public class MapleFamily {
     }
 
     private static boolean idInUse(int id) {
-        for(World world : Server.getInstance().getWorlds()) {
-            if(world.getFamily(id) != null) return true;
+        for (World world : Server.getInstance().getWorlds()) {
+            if (world.getFamily(id) != null) {
+                return true;
+            }
         }
         return false;
     }
@@ -98,11 +99,11 @@ public class MapleFamily {
     public int getTotalMembers() {
         return members.size();
     }
-    
+
     public int getTotalGenerations() {
         return totalGenerations;
     }
-    
+
     public void setTotalGenerations(int generations) {
         this.totalGenerations = generations;
     }
@@ -113,13 +114,13 @@ public class MapleFamily {
 
     public void setMessage(String message, boolean save) {
         this.preceptsMessage = message;
-        if(save) {
+        if (save) {
             try (Connection con = DatabaseConnection.getConnection();
-                    PreparedStatement ps = con.prepareStatement("UPDATE family_character SET precepts = ? WHERE cid = ?")) {
+                 PreparedStatement ps = con.prepareStatement("UPDATE family_character SET precepts = ? WHERE cid = ?")) {
                 ps.setString(1, message);
                 ps.setInt(2, getLeader().getChrId());
                 ps.executeUpdate();
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not save new precepts for family " + getID() + ".");
                 e.printStackTrace();
             }
@@ -136,15 +137,19 @@ public class MapleFamily {
 
     public void removeEntryBranch(MapleFamilyEntry root) {
         members.remove(root.getChrId());
-        for(MapleFamilyEntry junior : root.getJuniors()) {
-            if(junior != null) removeEntryBranch(junior);
+        for (MapleFamilyEntry junior : root.getJuniors()) {
+            if (junior != null) {
+                removeEntryBranch(junior);
+            }
         }
     }
-    
+
     public void addEntryTree(MapleFamilyEntry root) {
         members.put(root.getChrId(), root);
-        for(MapleFamilyEntry junior : root.getJuniors()) {
-            if(junior != null) addEntryTree(junior);
+        for (MapleFamilyEntry junior : root.getJuniors()) {
+            if (junior != null) {
+                addEntryTree(junior);
+            }
         }
     }
 
@@ -157,26 +162,28 @@ public class MapleFamily {
     }
 
     public void broadcast(Packet packet, int ignoreID) {
-        for(MapleFamilyEntry entry : members.values()) {
+        for (MapleFamilyEntry entry : members.values()) {
             Character chr = entry.getChr();
-            if(chr != null) {
-                if(chr.getId() == ignoreID) continue;
+            if (chr != null) {
+                if (chr.getId() == ignoreID) {
+                    continue;
+                }
                 chr.sendPacket(packet);
             }
         }
     }
-    
+
     public void broadcastFamilyInfoUpdate() {
-        for(MapleFamilyEntry entry : members.values()) {
+        for (MapleFamilyEntry entry : members.values()) {
             Character chr = entry.getChr();
-            if(chr != null) {
+            if (chr != null) {
                 chr.sendPacket(PacketCreator.getFamilyInfo(entry));
             }
         }
     }
-    
+
     public void resetDailyReps() {
-        for(MapleFamilyEntry entry : members.values()) {
+        for (MapleFamilyEntry entry : members.values()) {
             entry.setTodaysRep(0);
             entry.setRepsToSenior(0);
             entry.resetEntitlementUsages();
@@ -221,9 +228,9 @@ public class MapleFamily {
                 if (wserv == null) {
                     continue;
                 }
-                MapleFamily family = wserv.getFamily(familyid);
+                Family family = wserv.getFamily(familyid);
                 if (family == null) {
-                    family = new MapleFamily(familyid, world);
+                    family = new Family(familyid, world);
                     Server.getInstance().getWorld(world).addFamily(familyid, family);
                 }
                 MapleFamilyEntry familyEntry = new MapleFamilyEntry(family, cid, name, level, MapleJob.getById(jobID));
@@ -271,30 +278,32 @@ public class MapleFamily {
         }
 
         for (World world : Server.getInstance().getWorlds()) {
-            for (MapleFamily family : world.getFamilies()) {
+            for (Family family : world.getFamilies()) {
                 family.getLeader().doFullCount();
             }
         }
     }
 
     public void saveAllMembersRep() { //was used for autosave task, but character autosave should be enough
-        try(Connection con = DatabaseConnection.getConnection()) {
+        try (Connection con = DatabaseConnection.getConnection()) {
             con.setAutoCommit(false);
             boolean success = true;
-            for(MapleFamilyEntry entry : members.values()) {
+            for (MapleFamilyEntry entry : members.values()) {
                 success = entry.saveReputation(con);
-                if(!success) break;
+                if (!success) {
+                    break;
+                }
             }
-            if(!success) {
+            if (!success) {
                 con.rollback();
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Family rep autosave failed for family " + getID() + " on " + Calendar.getInstance().getTime().toString() + ".");
+                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Family rep autosave failed for family " + getID() + " on " + Calendar.getInstance().getTime() + ".");
             }
             con.setAutoCommit(true);
             //reset repChanged after successful save
-            for(MapleFamilyEntry entry : members.values()) {
+            for (MapleFamilyEntry entry : members.values()) {
                 entry.savedSuccessfully();
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
             e.printStackTrace();
         }

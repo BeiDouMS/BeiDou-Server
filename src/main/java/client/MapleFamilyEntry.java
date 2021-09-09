@@ -39,7 +39,7 @@ import java.util.List;
 
 public class MapleFamilyEntry {
     private final int characterID;
-    private volatile MapleFamily family;
+    private volatile Family family;
     private volatile Character character;
 
     private volatile MapleFamilyEntry senior;
@@ -58,7 +58,7 @@ public class MapleFamilyEntry {
     private int level;
     private MapleJob job;
 
-    public MapleFamilyEntry(MapleFamily family, int characterID, String charName, int level, MapleJob job) {
+    public MapleFamilyEntry(Family family, int characterID, String charName, int level, MapleJob job) {
         this.family = family;
         this.characterID = characterID;
         this.charName = charName;
@@ -86,8 +86,8 @@ public class MapleFamilyEntry {
     
     public synchronized void join(MapleFamilyEntry senior) {
         if(senior == null || getSenior() != null) return;
-        MapleFamily oldFamily = getFamily();
-        MapleFamily newFamily = senior.getFamily();
+        Family oldFamily = getFamily();
+        Family newFamily = senior.getFamily();
         setSenior(senior, false);
         addSeniorCount(newFamily.getTotalGenerations(), newFamily); //count will be overwritten by doFullCount()
         newFamily.getLeader().doFullCount(); //easier than keeping track of numbers
@@ -117,9 +117,9 @@ public class MapleFamilyEntry {
     }
 
     public synchronized void fork() {
-        MapleFamily oldFamily = getFamily();
+        Family oldFamily = getFamily();
         MapleFamilyEntry oldSenior = getSenior();
-        family = new MapleFamily(-1, oldFamily.getWorld());
+        family = new Family(-1, oldFamily.getWorld());
         Server.getInstance().getWorld(family.getWorld()).addFamily(family.getID(), family);
         setSenior(null, false);
         family.setLeader(this);
@@ -185,7 +185,7 @@ public class MapleFamilyEntry {
         return true;
     }
 
-    private synchronized void addSeniorCount(int seniorCount, MapleFamily newFamily) { // traverses tree and subtracts seniors and updates family
+    private synchronized void addSeniorCount(int seniorCount, Family newFamily) { // traverses tree and subtracts seniors and updates family
         if(newFamily != null) this.family = newFamily;
         setTotalSeniors(getTotalSeniors() + seniorCount);
         this.generation += seniorCount;
@@ -200,7 +200,7 @@ public class MapleFamilyEntry {
         if(senior != null) senior.addJuniorCount(juniorCount);
     }
 
-    public MapleFamily getFamily() {
+    public Family getFamily() {
         return family;
     }
 
