@@ -50,7 +50,7 @@ import server.expeditions.ExpeditionType;
 import server.gachapon.MapleGachapon;
 import server.gachapon.MapleGachapon.MapleGachaponItem;
 import server.life.LifeFactory;
-import server.life.MaplePlayerNPC;
+import server.life.PlayerNPC;
 import server.maps.MapleMap;
 import server.maps.MapleMapManager;
 import server.maps.MapleMapObject;
@@ -311,12 +311,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         
         public boolean canSpawnPlayerNpc(int mapid) {
                 Character chr = getPlayer();
-                return !YamlConfig.config.server.PLAYERNPC_AUTODEPLOY && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && MaplePlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
+                return !YamlConfig.config.server.PLAYERNPC_AUTODEPLOY && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
         }
         
-        public MaplePlayerNPC getPlayerNPCByScriptid(int scriptId) {
+        public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
                 for(MapleMapObject pnpcObj : getPlayer().getMap().getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
-                        MaplePlayerNPC pn = (MaplePlayerNPC) pnpcObj;
+                        PlayerNPC pn = (PlayerNPC) pnpcObj;
 
                         if(pn.getScriptId() == scriptId) {
                                 return pn;

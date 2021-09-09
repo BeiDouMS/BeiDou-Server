@@ -22,7 +22,7 @@ package server.life.positioner;
 import config.YamlConfig;
 import net.server.Server;
 import net.server.channel.Channel;
-import server.life.MaplePlayerNPC;
+import server.life.PlayerNPC;
 import server.maps.MapleMap;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -94,7 +94,7 @@ public class PlayerNPCPositioner {
         return null;
     }
 
-    private static Point rearrangePlayerNpcs(MapleMap map, int newStep, List<MaplePlayerNPC> pnpcs) {
+    private static Point rearrangePlayerNpcs(MapleMap map, int newStep, List<PlayerNPC> pnpcs) {
         Rectangle mapArea = map.getMapArea();
 
         int leftPx = mapArea.x + YamlConfig.config.server.PLAYERNPC_INITIAL_X, px, py = mapArea.y + YamlConfig.config.server.PLAYERNPC_INITIAL_Y;
@@ -115,7 +115,7 @@ public class PlayerNPCPositioner {
                             return searchPos;
                         }
 
-                        MaplePlayerNPC pn = pnpcs.get(i);
+                        PlayerNPC pn = pnpcs.get(i);
                         i++;
 
                         pn.updatePlayerNPCPosition(map, searchPos);
@@ -138,9 +138,9 @@ public class PlayerNPCPositioner {
                 System.out.println("Reorganizing pnpc map, step " + newStep);
             }
 
-            List<MaplePlayerNPC> playerNpcs = new ArrayList<>(mmoList.size());
+            List<PlayerNPC> playerNpcs = new ArrayList<>(mmoList.size());
             for (MapleMapObject mmo : mmoList) {
-                playerNpcs.add((MaplePlayerNPC) mmo);
+                playerNpcs.add((PlayerNPC) mmo);
             }
 
             playerNpcs.sort((p1, p2) -> {
@@ -150,7 +150,7 @@ public class PlayerNPCPositioner {
             for (Channel ch : Server.getInstance().getChannelsFromWorld(map.getWorld())) {
                 MapleMap m = ch.getMapFactory().getMap(map.getId());
 
-                for (MaplePlayerNPC pn : playerNpcs) {
+                for (PlayerNPC pn : playerNpcs) {
                     m.removeMapObject(pn);
                     m.broadcastMessage(PacketCreator.removeNPCController(pn.getObjectId()));
                     m.broadcastMessage(PacketCreator.removePlayerNPC(pn.getObjectId()));
@@ -162,7 +162,7 @@ public class PlayerNPCPositioner {
             for (Channel ch : Server.getInstance().getChannelsFromWorld(map.getWorld())) {
                 MapleMap m = ch.getMapFactory().getMap(map.getId());
 
-                for (MaplePlayerNPC pn : playerNpcs) {
+                for (PlayerNPC pn : playerNpcs) {
                     m.addPlayerNPCMapObject(pn);
                     m.broadcastMessage(PacketCreator.spawnPlayerNPC(pn));
                     m.broadcastMessage(PacketCreator.getPlayerNPC(pn));

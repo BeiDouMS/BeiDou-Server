@@ -39,7 +39,7 @@ public class MaplePlayerNPCFactory {
     
     private static DataProvider npcData = DataProviderFactory.getDataProvider(WZFiles.NPC);
     
-    private static final Map<Integer, List<MaplePlayerNPC>> dnpcMaps = new HashMap<>();
+    private static final Map<Integer, List<PlayerNPC>> dnpcMaps = new HashMap<>();
     private static Integer runningDeveloperOid = 2147483000;  // 647 slots, long enough
     
     public synchronized static boolean isExistentScriptid(int scriptid) {
@@ -97,13 +97,13 @@ public class MaplePlayerNPCFactory {
                     equips.put(equippos, equipid);
                 }
 
-                List<MaplePlayerNPC> dnpcSet = dnpcMaps.get(mapid);
+                List<PlayerNPC> dnpcSet = dnpcMaps.get(mapid);
                 if(dnpcSet == null) {
                     dnpcSet = new LinkedList<>();
                     dnpcMaps.put(mapid, dnpcSet);
                 }
 
-                dnpcSet.add(new MaplePlayerNPC(name, scriptId, face, hair, gender, skin, equips, dir, FH, RX0, RX1, CX, CY, runningDeveloperOid));
+                dnpcSet.add(new PlayerNPC(name, scriptId, face, hair, gender, skin, equips, dir, FH, RX0, RX1, CX, CY, runningDeveloperOid));
                 runningDeveloperOid++;
             }
         } else {
@@ -123,19 +123,19 @@ public class MaplePlayerNPCFactory {
                 equips.put((short) -7, 1072154);
                 equips.put((short) -5, 1040103);
 
-                List<MaplePlayerNPC> dnpcSet = dnpcMaps.get(mapid);
+                List<PlayerNPC> dnpcSet = dnpcMaps.get(mapid);
                 if(dnpcSet == null) {
                     dnpcSet = new LinkedList<>();
                     dnpcMaps.put(mapid, dnpcSet);
                 }
 
-                dnpcSet.add(new MaplePlayerNPC(name, scriptId, face, hair, gender, (byte) skin, equips, dir, FH, RX0, RX1, CX, CY, runningDeveloperOid));
+                dnpcSet.add(new PlayerNPC(name, scriptId, face, hair, gender, (byte) skin, equips, dir, FH, RX0, RX1, CX, CY, runningDeveloperOid));
                 runningDeveloperOid++;
             }
         }
     }
     
-    public synchronized static List<MaplePlayerNPC> getDeveloperNpcsFromMapid(int mapid) {
+    public synchronized static List<PlayerNPC> getDeveloperNpcsFromMapid(int mapid) {
         return dnpcMaps.get(mapid);
     }
 }

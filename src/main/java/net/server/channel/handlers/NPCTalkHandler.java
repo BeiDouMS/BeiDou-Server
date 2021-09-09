@@ -27,8 +27,8 @@ import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
-import server.life.MaplePlayerNPC;
 import server.life.NPC;
+import server.life.PlayerNPC;
 import server.maps.MapleMapObject;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -82,8 +82,8 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     }
                 }
             }
-        } else if (obj instanceof MaplePlayerNPC) {
-            MaplePlayerNPC pnpc = (MaplePlayerNPC) obj;
+        } else if (obj instanceof PlayerNPC) {
+            PlayerNPC pnpc = (PlayerNPC) obj;
             NPCScriptManager nsm = NPCScriptManager.getInstance();
             
             if (pnpc.getScriptId() < 9977777 && !nsm.isNpcScriptAvailable(c, "" + pnpc.getScriptId())) {

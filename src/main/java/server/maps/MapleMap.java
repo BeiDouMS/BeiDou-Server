@@ -352,7 +352,7 @@ public class MapleMap {
         return -1;
     }
 
-    public void addPlayerNPCMapObject(MaplePlayerNPC pnpcobject) {
+    public void addPlayerNPCMapObject(PlayerNPC pnpcobject) {
         objectWLock.lock();
         try {
             this.mapobjects.put(pnpcobject.getObjectId(), pnpcobject);

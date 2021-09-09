@@ -242,16 +242,16 @@ public class MapleMapFactory {
 
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
-                        map.addPlayerNPCMapObject(new MaplePlayerNPC(rs));
+                        map.addPlayerNPCMapObject(new PlayerNPC(rs));
                     }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            List<MaplePlayerNPC> dnpcs = MaplePlayerNPCFactory.getDeveloperNpcsFromMapid(mapid);
+            List<PlayerNPC> dnpcs = MaplePlayerNPCFactory.getDeveloperNpcsFromMapid(mapid);
             if (dnpcs != null) {
-                for (MaplePlayerNPC dnpc : dnpcs) {
+                for (PlayerNPC dnpc : dnpcs) {
                     map.addPlayerNPCMapObject(dnpc);
                 }
             }

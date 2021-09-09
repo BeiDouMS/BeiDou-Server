@@ -63,10 +63,10 @@ import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
 import server.events.gm.Ola;
-import server.life.MaplePlayerNPC;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.life.Monster;
+import server.life.PlayerNPC;
 import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
 import server.minigame.MapleRockPaperScissor;
@@ -6410,7 +6410,7 @@ public class Character extends AbstractCharacterObject {
                         ThreadManager.getInstance().newTask(new Runnable() {
                             @Override
                             public void run() {
-                                MaplePlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(job), Character.this);
+                                PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(job), Character.this);
                             }
                         });
                     }

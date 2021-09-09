@@ -47,11 +47,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *
  * @author XoticStory
  * @author Ronan
  */
-public class MaplePlayerNPC extends AbstractMapleMapObject {
+public class PlayerNPC extends AbstractMapleMapObject {
     private static final Map<Byte, List<Integer>> availablePlayerNpcScriptIds = new HashMap<>();
     private static final AtomicInteger runningOverallRank = new AtomicInteger();
     private static final List<AtomicInteger> runningWorldRank = new ArrayList<>();
@@ -68,7 +67,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         getRunningMetadata();
     }
 
-    public MaplePlayerNPC(String name, int scriptId, int face, int hair, int gender, byte skin, Map<Short, Integer> equips, int dir, int FH, int RX0, int RX1, int CX, int CY, int oid) {
+    public PlayerNPC(String name, int scriptId, int face, int hair, int gender, byte skin, Map<Short, Integer> equips, int dir, int FH, int RX0, int RX1, int CX, int CY, int oid) {
         this.equips = equips;
         this.scriptId = scriptId;
         this.face = face;
@@ -87,7 +86,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         setObjectId(oid);
     }
 
-    public MaplePlayerNPC(ResultSet rs) {
+    public PlayerNPC(ResultSet rs) {
         try {
             CY = rs.getInt("cy");
             name = rs.getString("name");
@@ -261,7 +260,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
 
     private static int getAndIncrementRunningWorldJobRanks(int world, int job) {
         AtomicInteger wjr = runningWorldJobRank.get(new Pair<>(world, job));
-        if(wjr == null) {
+        if (wjr == null) {
             wjr = new AtomicInteger(1);
             runningWorldJobRank.put(new Pair<>(world, job), wjr);
         }
@@ -357,15 +356,15 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
     private static int getNextScriptId(byte branch) {
         List<Integer> availablesBranch = availablePlayerNpcScriptIds.get(branch);
 
-        if(availablesBranch == null) {
+        if (availablesBranch == null) {
             availablesBranch = new ArrayList<>(20);
             availablePlayerNpcScriptIds.put(branch, availablesBranch);
         }
 
-        if(availablesBranch.isEmpty()) {
+        if (availablesBranch.isEmpty()) {
             fetchAvailableScriptIdsFromDb(branch, availablesBranch);
 
-            if(availablesBranch.isEmpty()) {
+            if (availablesBranch.isEmpty()) {
                 return -1;
             }
         }
@@ -373,7 +372,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         return availablesBranch.remove(availablesBranch.size() - 1);
     }
 
-    private static MaplePlayerNPC createPlayerNPCInternal(MapleMap map, Point pos, Character chr) {
+    private static PlayerNPC createPlayerNPCInternal(MapleMap map, Point pos, Character chr) {
         int mapId = map.getId();
 
         if (!canSpawnPlayerNpc(chr.getName(), mapId)) {
@@ -406,7 +405,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         int worldId = chr.getWorld();
         int jobId = (chr.getJob().getId() / 100) * 100;
 
-        MaplePlayerNPC ret;
+        PlayerNPC ret;
         try (Connection con = DatabaseConnection.getConnection()) {
             boolean createNew = false;
             try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs WHERE scriptid = ?")) {
@@ -467,7 +466,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
 
                     try (ResultSet rs = ps.executeQuery()) {
                         rs.next();
-                        ret = new MaplePlayerNPC(rs);
+                        ret = new PlayerNPC(rs);
                     }
                 }
             } else {
@@ -519,8 +518,8 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         return mapids;
     }
 
-    private static synchronized Pair<MaplePlayerNPC, List<Integer>> processPlayerNPCInternal(MapleMap map, Point pos, Character chr, boolean create) {
-        if(create) {
+    private static synchronized Pair<PlayerNPC, List<Integer>> processPlayerNPCInternal(MapleMap map, Point pos, Character chr, boolean create) {
+        if (create) {
             return new Pair<>(createPlayerNPCInternal(map, pos, chr), null);
         } else {
             return new Pair<>(null, removePlayerNPCInternal(map, chr));
@@ -532,10 +531,12 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
     }
 
     public static boolean spawnPlayerNPC(int mapid, Point pos, Character chr) {
-        if(chr == null) return false;
+        if (chr == null) {
+            return false;
+        }
 
-        MaplePlayerNPC pn = processPlayerNPCInternal(chr.getClient().getChannelServer().getMapFactory().getMap(mapid), pos, chr, true).getLeft();
-        if(pn != null) {
+        PlayerNPC pn = processPlayerNPCInternal(chr.getClient().getChannelServer().getMapFactory().getMap(mapid), pos, chr, true).getLeft();
+        if (pn != null) {
             for (Channel channel : Server.getInstance().getChannelsFromWorld(chr.getWorld())) {
                 MapleMap m = channel.getMapFactory().getMap(mapid);
 
@@ -550,12 +551,12 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
         }
     }
 
-    private static MaplePlayerNPC getPlayerNPCFromWorldMap(String name, int world, int map) {
+    private static PlayerNPC getPlayerNPCFromWorldMap(String name, int world, int map) {
         World wserv = Server.getInstance().getWorld(world);
-        for(MapleMapObject pnpcObj : wserv.getChannel(1).getMapFactory().getMap(map).getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
-            MaplePlayerNPC pn = (MaplePlayerNPC) pnpcObj;
+        for (MapleMapObject pnpcObj : wserv.getChannel(1).getMapFactory().getMap(map).getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
+            PlayerNPC pn = (PlayerNPC) pnpcObj;
 
-            if(name.contentEquals(pn.getName()) && pn.getScriptId() < 9977777) {
+            if (name.contentEquals(pn.getName()) && pn.getScriptId() < 9977777) {
                 return pn;
             }
         }
@@ -564,15 +565,17 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
     }
 
     public static void removePlayerNPC(Character chr) {
-        if(chr == null) return;
+        if (chr == null) {
+            return;
+        }
 
         List<Integer> updateMapids = processPlayerNPCInternal(null, null, chr, false).getRight();
         int worldid = updateMapids.remove(0);
 
         for (Integer mapid : updateMapids) {
-            MaplePlayerNPC pn = getPlayerNPCFromWorldMap(chr.getName(), worldid, mapid);
+            PlayerNPC pn = getPlayerNPCFromWorldMap(chr.getName(), worldid, mapid);
 
-            if(pn != null) {
+            if (pn != null) {
                 for (Channel channel : Server.getInstance().getChannelsFromWorld(worldid)) {
                     MapleMap m = channel.getMapFactory().getMap(mapid);
                     m.removeMapObject(pn);
@@ -586,13 +589,15 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
 
     public static void multicastSpawnPlayerNPC(int mapid, int world) {
         World wserv = Server.getInstance().getWorld(world);
-        if (wserv == null) return;
+        if (wserv == null) {
+            return;
+        }
 
         Client c = Client.createMock();
         c.setWorld(world);
         c.setChannel(1);
 
-        for(Character mc : wserv.loadAndGetAllCharactersView()) {
+        for (Character mc : wserv.loadAndGetAllCharactersView()) {
             mc.setClient(c);
             spawnPlayerNPC(mapid, mc);
         }
@@ -613,7 +618,7 @@ public class MaplePlayerNPC extends AbstractMapleMapObject {
                     MapleMap m = channel.getMapFactory().getMap(map);
 
                     for (MapleMapObject pnpcObj : m.getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapleMapObjectType.PLAYER_NPC))) {
-                        MaplePlayerNPC pn = (MaplePlayerNPC) pnpcObj;
+                        PlayerNPC pn = (PlayerNPC) pnpcObj;
                         m.removeMapObject(pnpcObj);
                         m.broadcastMessage(PacketCreator.removeNPCController(pn.getObjectId()));
                         m.broadcastMessage(PacketCreator.removePlayerNPC(pn.getObjectId()));

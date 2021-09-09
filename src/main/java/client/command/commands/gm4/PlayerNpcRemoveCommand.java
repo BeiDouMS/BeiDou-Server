@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MaplePlayerNPC;
+import server.life.PlayerNPC;
 
 public class PlayerNpcRemoveCommand extends Command {
     {
@@ -40,6 +40,6 @@ public class PlayerNpcRemoveCommand extends Command {
             player.yellowMessage("Syntax: !playernpcremove <playername>");
             return;
         }
-        MaplePlayerNPC.removePlayerNPC(c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]));
+        PlayerNPC.removePlayerNPC(c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]));
     }
 }

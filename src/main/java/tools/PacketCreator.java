@@ -61,10 +61,10 @@ import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
 import server.*;
 import server.events.gm.Snowball;
-import server.life.MaplePlayerNPC;
 import server.life.MobSkill;
 import server.life.Monster;
 import server.life.NPC;
+import server.life.PlayerNPC;
 import server.maps.*;
 import server.maps.MapleMiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
@@ -5234,7 +5234,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnPlayerNPC(MaplePlayerNPC npc) {
+    public static Packet spawnPlayerNPC(PlayerNPC npc) {
         final OutPacket p = OutPacket.create(SendOpcode.SPAWN_NPC_REQUEST_CONTROLLER);
         p.writeByte(1);
         p.writeInt(npc.getObjectId());
@@ -5249,7 +5249,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getPlayerNPC(MaplePlayerNPC npc) {     // thanks to Arnah
+    public static Packet getPlayerNPC(PlayerNPC npc) {     // thanks to Arnah
         final OutPacket p = OutPacket.create(SendOpcode.IMITATED_NPC_DATA);
         p.writeByte(0x01);
         p.writeInt(npc.getScriptId());

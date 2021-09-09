@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import server.life.MaplePlayerNPC;
+import server.life.PlayerNPC;
 
 public class PlayerNpcCommand extends Command {
     {
@@ -41,7 +41,7 @@ public class PlayerNpcCommand extends Command {
             return;
         }
 
-        if (!MaplePlayerNPC.spawnPlayerNPC(player.getMapId(), player.getPosition(), c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]))) {
+        if (!PlayerNPC.spawnPlayerNPC(player.getMapId(), player.getPosition(), c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]))) {
             player.dropMessage(5, "Could not deploy PlayerNPC. Either there's no room available here or depleted out scriptids to use.");
         }
     }
