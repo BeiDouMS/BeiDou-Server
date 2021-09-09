@@ -1797,32 +1797,32 @@ public class PacketCreator {
         p.writeShort(0); //v83
         p.writeByte(0xFC);
         p.writeByte(1);
-        if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) {
+        if (chr.getBuffedValue(BuffStat.MORPH) != null) {
             p.writeInt(2);
         } else {
             p.writeInt(0);
         }
         long buffmask = 0;
         Integer buffvalue = null;
-        if ((chr.getBuffedValue(MapleBuffStat.DARKSIGHT) != null || chr.getBuffedValue(MapleBuffStat.WIND_WALK) != null) && !chr.isHidden()) {
-            buffmask |= MapleBuffStat.DARKSIGHT.getValue();
+        if ((chr.getBuffedValue(BuffStat.DARKSIGHT) != null || chr.getBuffedValue(BuffStat.WIND_WALK) != null) && !chr.isHidden()) {
+            buffmask |= BuffStat.DARKSIGHT.getValue();
         }
-        if (chr.getBuffedValue(MapleBuffStat.COMBO) != null) {
-            buffmask |= MapleBuffStat.COMBO.getValue();
-            buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.COMBO));
+        if (chr.getBuffedValue(BuffStat.COMBO) != null) {
+            buffmask |= BuffStat.COMBO.getValue();
+            buffvalue = Integer.valueOf(chr.getBuffedValue(BuffStat.COMBO));
         }
-        if (chr.getBuffedValue(MapleBuffStat.SHADOWPARTNER) != null) {
-            buffmask |= MapleBuffStat.SHADOWPARTNER.getValue();
+        if (chr.getBuffedValue(BuffStat.SHADOWPARTNER) != null) {
+            buffmask |= BuffStat.SHADOWPARTNER.getValue();
         }
-        if (chr.getBuffedValue(MapleBuffStat.SOULARROW) != null) {
-            buffmask |= MapleBuffStat.SOULARROW.getValue();
+        if (chr.getBuffedValue(BuffStat.SOULARROW) != null) {
+            buffmask |= BuffStat.SOULARROW.getValue();
         }
-        if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) {
-            buffvalue = Integer.valueOf(chr.getBuffedValue(MapleBuffStat.MORPH));
+        if (chr.getBuffedValue(BuffStat.MORPH) != null) {
+            buffvalue = Integer.valueOf(chr.getBuffedValue(BuffStat.MORPH));
         }
         p.writeInt((int) ((buffmask >> 32) & 0xffffffffL));
         if (buffvalue != null) {
-            if (chr.getBuffedValue(MapleBuffStat.MORPH) != null) { //TEST
+            if (chr.getBuffedValue(BuffStat.MORPH) != null) { //TEST
                 p.writeShort(buffvalue);
             } else {
                 p.writeByte(buffvalue.byteValue());
@@ -1835,7 +1835,7 @@ public class PacketCreator {
         p.writeShort(0);
         p.skip(4);
 
-        boolean dashBuff = chr.getBuffedValue(MapleBuffStat.DASH) != null;
+        boolean dashBuff = chr.getBuffedValue(BuffStat.DASH) != null;
         // Dash Speed
         p.writeInt(dashBuff ? 1 << 24 : 0);
         p.skip(11);
@@ -1847,7 +1847,7 @@ public class PacketCreator {
         p.writeByte(0);
 
         // Monster Riding
-        Integer bv = chr.getBuffedValue(MapleBuffStat.MONSTER_RIDING);
+        Integer bv = chr.getBuffedValue(BuffStat.MONSTER_RIDING);
         if (bv != null) {
             MapleMount mount = chr.getMount();
             if (mount != null) {
@@ -2754,7 +2754,7 @@ public class PacketCreator {
 
     /**
      * It is important that statups is in the correct order (see declaration
-     * order in MapleBuffStat) since this method doesn't do automagical
+     * order in BuffStat) since this method doesn't do automagical
      * reordering.
      *
      * @param buffid
@@ -2763,12 +2763,12 @@ public class PacketCreator {
      * @return
      */
     //1F 00 00 00 00 00 03 00 00 40 00 00 00 E0 00 00 00 00 00 00 00 00 E0 01 8E AA 4F 00 00 C2 EB 0B E0 01 8E AA 4F 00 00 C2 EB 0B 0C 00 8E AA 4F 00 00 C2 EB 0B 44 02 8E AA 4F 00 00 C2 EB 0B 44 02 8E AA 4F 00 00 C2 EB 0B 00 00 E0 7A 1D 00 8E AA 4F 00 00 00 00 00 00 00 00 03
-    public static Packet giveBuff(int buffid, int bufflength, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveBuff(int buffid, int bufflength, List<Pair<BuffStat, Integer>> statups) {
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         boolean special = false;
         writeLongMask(p, statups);
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
-            if (statup.getLeft().equals(MapleBuffStat.MONSTER_RIDING) || statup.getLeft().equals(MapleBuffStat.HOMING_BEACON)) {
+        for (Pair<BuffStat, Integer> statup : statups) {
+            if (statup.getLeft().equals(BuffStat.MONSTER_RIDING) || statup.getLeft().equals(BuffStat.HOMING_BEACON)) {
                 special = true;
             }
             p.writeShort(statup.getRight().shortValue());
@@ -2794,7 +2794,7 @@ public class PacketCreator {
     public static Packet showMonsterRiding(int cid, MapleMount mount) { //Gtfo with this, this is just giveForeignBuff
         final OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
-        p.writeLong(MapleBuffStat.MONSTER_RIDING.getValue());
+        p.writeLong(BuffStat.MONSTER_RIDING.getValue());
         p.writeLong(0);
         p.writeShort(0);
         p.writeInt(mount.getItemId());
@@ -2806,7 +2806,7 @@ public class PacketCreator {
     }
         /*        p.writeInt(cid);
              writeLongMask(mplew, statups);
-             for (Pair<MapleBuffStat, Integer> statup : statups) {
+             for (Pair<BuffStat, Integer> statup : statups) {
              if (morph) {
              p.writeInt(statup.getRight().intValue());
              } else {
@@ -2956,11 +2956,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet giveForeignBuff(int chrId, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveForeignBuff(int chrId, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMask(p, statups);
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
+        for (Pair<BuffStat, Integer> statup : statups) {
             p.writeShort(statup.getRight().shortValue());
         }
         p.writeInt(0);
@@ -2968,24 +2968,24 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet cancelForeignBuff(int chrId, List<MapleBuffStat> statups) {
+    public static Packet cancelForeignBuff(int chrId, List<BuffStat> statups) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_FOREIGN_BUFF);
         p.writeInt(chrId);
         writeLongMaskFromList(p, statups);
         return p;
     }
 
-    public static Packet cancelBuff(List<MapleBuffStat> statups) {
+    public static Packet cancelBuff(List<BuffStat> statups) {
         OutPacket p = OutPacket.create(SendOpcode.CANCEL_BUFF);
         writeLongMaskFromList(p, statups);
         p.writeByte(1);//?
         return p;
     }
 
-    private static void writeLongMask(final OutPacket p, List<Pair<MapleBuffStat, Integer>> statups) {
+    private static void writeLongMask(final OutPacket p, List<Pair<BuffStat, Integer>> statups) {
         long firstmask = 0;
         long secondmask = 0;
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
+        for (Pair<BuffStat, Integer> statup : statups) {
             if (statup.getLeft().isFirst()) {
                 firstmask |= statup.getLeft().getValue();
             } else {
@@ -2996,10 +2996,10 @@ public class PacketCreator {
         p.writeLong(secondmask);
     }
 
-    private static void writeLongMaskFromList(OutPacket p, List<MapleBuffStat> statups) {
+    private static void writeLongMaskFromList(OutPacket p, List<BuffStat> statups) {
         long firstmask = 0;
         long secondmask = 0;
-        for (MapleBuffStat statup : statups) {
+        for (BuffStat statup : statups) {
             if (statup.isFirst()) {
                 firstmask |= statup.getValue();
             } else {
@@ -3087,7 +3087,7 @@ public class PacketCreator {
     }
 
     // packet found thanks to Ronan
-    public static Packet giveForeignWKChargeEffect(int cid, int buffid, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveForeignWKChargeEffect(int cid, int buffid, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         p.writeInt(cid);
         writeLongMask(p, statups);
@@ -5312,12 +5312,12 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet givePirateBuff(List<Pair<MapleBuffStat, Integer>> statups, int buffid, int duration) {
+    public static Packet givePirateBuff(List<Pair<BuffStat, Integer>> statups, int buffid, int duration) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_BUFF);
         boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION || buffid == Corsair.SPEED_INFUSION;
         writeLongMask(p, statups);
         p.writeShort(0);
-        for (Pair<MapleBuffStat, Integer> stat : statups) {
+        for (Pair<BuffStat, Integer> stat : statups) {
             p.writeInt(stat.getRight().shortValue());
             p.writeInt(buffid);
             p.skip(infusion ? 10 : 5);
@@ -5327,13 +5327,13 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet giveForeignPirateBuff(int cid, int buffid, int time, List<Pair<MapleBuffStat, Integer>> statups) {
+    public static Packet giveForeignPirateBuff(int cid, int buffid, int time, List<Pair<BuffStat, Integer>> statups) {
         OutPacket p = OutPacket.create(SendOpcode.GIVE_FOREIGN_BUFF);
         boolean infusion = buffid == Buccaneer.SPEED_INFUSION || buffid == ThunderBreaker.SPEED_INFUSION || buffid == Corsair.SPEED_INFUSION;
         p.writeInt(cid);
         writeLongMask(p, statups);
         p.writeShort(0);
-        for (Pair<MapleBuffStat, Integer> statup : statups) {
+        for (Pair<BuffStat, Integer> statup : statups) {
             p.writeInt(statup.getRight().shortValue());
             p.writeInt(buffid);
             p.skip(infusion ? 10 : 5);

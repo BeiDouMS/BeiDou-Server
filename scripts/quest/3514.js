@@ -44,8 +44,8 @@ function start(mode, type, selection) {
 }
 
 function usedPotion(ch) {
-    const MapleBuffStat = Java.type('client.MapleBuffStat');
-    return ch.getBuffSource(MapleBuffStat.HPREC) == 2022337;
+    const BuffStat = Java.type('client.BuffStat');
+    return ch.getBuffSource(BuffStat.HPREC) == 2022337;
 }
 
 function end(mode, type, selection) {

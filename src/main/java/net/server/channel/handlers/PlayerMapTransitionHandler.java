@@ -20,7 +20,7 @@
 
 package net.server.channel.handlers;
 
-import client.MapleBuffStat;
+import client.BuffStat;
 import client.MapleCharacter;
 import client.MapleClient;
 import net.AbstractPacketHandler;
@@ -44,11 +44,11 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
         MapleCharacter chr = c.getPlayer();
         chr.setMapTransitionComplete();
         
-        int beaconid = chr.getBuffSource(MapleBuffStat.HOMING_BEACON);
+        int beaconid = chr.getBuffSource(BuffStat.HOMING_BEACON);
         if (beaconid != -1) {
-            chr.cancelBuffStats(MapleBuffStat.HOMING_BEACON);
+            chr.cancelBuffStats(BuffStat.HOMING_BEACON);
             
-            final List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.HOMING_BEACON, 0));
+            final List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.HOMING_BEACON, 0));
             chr.sendPacket(PacketCreator.giveBuff(1, beaconid, stat));
         }
         

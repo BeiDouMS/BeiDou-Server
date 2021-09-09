@@ -21,7 +21,7 @@
 */
 package client;
 
-public enum MapleBuffStat {
+public enum BuffStat {
     //SLOW(0x1L),
     MORPH(0x2L),
     RECOVERY(0x4L),
@@ -42,21 +42,21 @@ public enum MapleBuffStat {
     GHOST_MORPH(0x20000L),
     AURA(0x40000L),
     CONFUSE(0x80000L),
-    
+
     // ------ COUPON feature ------
     COUPON_EXP1(0x100000L),
     COUPON_EXP2(0x200000L),
     COUPON_EXP3(0x400000L), COUPON_EXP4(0x400000L),
     COUPON_DRP1(0x800000L),
     COUPON_DRP2(0x1000000L), COUPON_DRP3(0x1000000L),
-    
+
     // ------ monster card buffs, thanks to Arnah (Vertisy) ------
     ITEM_UP_BY_ITEM(0x100000L),
     RESPECT_PIMMUNE(0x200000L),
     RESPECT_MIMMUNE(0x400000L),
     DEFENSE_ATT(0x800000L),
     DEFENSE_STATE(0x1000000L),
-    
+
     HPREC(0x2000000L),
     MPREC(0x4000000L),
     BERSERK_FURY(0x8000000L),
@@ -97,15 +97,15 @@ public enum MapleBuffStat {
     EXP_INCREASE(0x2000000000000000L),
     WEAKEN(0x4000000000000000L),
     MAP_PROTECTION(0x8000000000000000L),
-    
+
     //all incorrect buffstats
-    SLOW(0x200000000L, true), 
-    ELEMENTAL_RESET(0x200000000L, true), 
-    MAGIC_SHIELD(0x400000000L, true), 
-    MAGIC_RESISTANCE(0x800000000L, true), 
+    SLOW(0x200000000L, true),
+    ELEMENTAL_RESET(0x200000000L, true),
+    MAGIC_SHIELD(0x400000000L, true),
+    MAGIC_RESISTANCE(0x800000000L, true),
     // needs Soul Stone
     //end incorrect buffstats
-    
+
     WIND_WALK(0x400000000L, true),
     ARAN_COMBO(0x1000000000L, true),
     COMBO_DRAIN(0x2000000000L, true),
@@ -116,19 +116,19 @@ public enum MapleBuffStat {
     ENERGY_CHARGE(0x4000000000000L, true),
     DASH2(0x8000000000000L, true), // correct (speed)
     DASH(0x10000000000000L, true), // correct (jump)
-    MONSTER_RIDING(0x20000000000000L, true),    
+    MONSTER_RIDING(0x20000000000000L, true),
     SPEED_INFUSION(0x40000000000000L, true),
     HOMING_BEACON(0x80000000000000L, true);
 
     private final long i;
     private final boolean isFirst;
 
-    private MapleBuffStat(long i, boolean isFirst) {
+    BuffStat(long i, boolean isFirst) {
         this.i = i;
         this.isFirst = isFirst;
     }
 
-    private MapleBuffStat(long i) {
+    BuffStat(long i) {
         this.i = i;
         this.isFirst = false;
     }
@@ -140,7 +140,7 @@ public enum MapleBuffStat {
     public boolean isFirst() {
         return isFirst;
     }
-    
+
     @Override
     public String toString() {
         return name();

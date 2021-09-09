@@ -21,7 +21,7 @@
  */
 package client.inventory.manipulator;
 
-import client.MapleBuffStat;
+import client.BuffStat;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.*;
@@ -620,8 +620,8 @@ public class InventoryManipulator {
             target.setPosition(src);
             eqpInv.addItemFromDB(target);
         }
-        if (chr.getBuffedValue(MapleBuffStat.BOOSTER) != null && ItemConstants.isWeapon(source.getItemId())) {
-            chr.cancelBuffStats(MapleBuffStat.BOOSTER);
+        if (chr.getBuffedValue(BuffStat.BOOSTER) != null && ItemConstants.isWeapon(source.getItemId())) {
+            chr.cancelBuffStats(BuffStat.BOOSTER);
         }
 
         mods.add(new ModifyInventory(2, source, src));

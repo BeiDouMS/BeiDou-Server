@@ -87,7 +87,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     if (damage > 0) {
                         loseItems = attacker.getStats().loseItem();
                         if (loseItems != null) {
-                            if (chr.getBuffEffect(MapleBuffStat.AURA) == null) {
+                            if (chr.getBuffEffect(BuffStat.AURA) == null) {
                                 InventoryType type;
                                 final int playerpos = chr.getPosition().x;
                                 byte d = 1;
@@ -157,12 +157,12 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
 	            }
 	            
                     attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
-                    if (chr.getBuffedValue(MapleBuffStat.MANA_REFLECTION) != null && damage > 0 && !attacker.isBoss()) {
+                    if (chr.getBuffedValue(BuffStat.MANA_REFLECTION) != null && damage > 0 && !attacker.isBoss()) {
                         int jobid = chr.getJob().getId();
                         if (jobid == 212 || jobid == 222 || jobid == 232) {
                             int id = jobid * 10000 + 1002;
                             Skill manaReflectSkill = SkillFactory.getSkill(id);
-                            if (chr.isBuffFrom(MapleBuffStat.MANA_REFLECTION, manaReflectSkill) && chr.getSkillLevel(manaReflectSkill) > 0 && manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).makeChanceResult()) {
+                            if (chr.isBuffFrom(BuffStat.MANA_REFLECTION, manaReflectSkill) && chr.getSkillLevel(manaReflectSkill) > 0 && manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).makeChanceResult()) {
                                 int bouncedamage = (damage * manaReflectSkill.getEffect(chr.getSkillLevel(manaReflectSkill)).getX() / 100);
                                 if (bouncedamage > attacker.getMaxHp() / 5) {
                                     bouncedamage = attacker.getMaxHp() / 5;
@@ -196,15 +196,15 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         if (damage > 0 && !chr.isHidden()) {
             if (attacker != null) {
                 if (damagefrom == -1) {
-                    if (chr.getBuffedValue(MapleBuffStat.POWERGUARD) != null) { // PG works on bosses, but only at half of the rate.
-                        int bouncedamage = (int) (damage * (chr.getBuffedValue(MapleBuffStat.POWERGUARD).doubleValue() / (attacker.isBoss() ? 200 : 100)));
+                    if (chr.getBuffedValue(BuffStat.POWERGUARD) != null) { // PG works on bosses, but only at half of the rate.
+                        int bouncedamage = (int) (damage * (chr.getBuffedValue(BuffStat.POWERGUARD).doubleValue() / (attacker.isBoss() ? 200 : 100)));
                         bouncedamage = Math.min(bouncedamage, attacker.getMaxHp() / 10);
                         damage -= bouncedamage;
                         map.damageMonster(chr, attacker, bouncedamage);
                         map.broadcastMessage(chr, PacketCreator.damageMonster(oid, bouncedamage), false, true);
                         attacker.aggroMonsterDamage(chr, bouncedamage);
                     }
-                    MapleStatEffect bPressure = chr.getBuffEffect(MapleBuffStat.BODY_PRESSURE); // thanks Atoot for noticing an issue on Body Pressure neutralise
+                    MapleStatEffect bPressure = chr.getBuffEffect(BuffStat.BODY_PRESSURE); // thanks Atoot for noticing an issue on Body Pressure neutralise
                     if (bPressure != null) {
                         Skill skill = SkillFactory.getSkill(Aran.BODY_PRESSURE);
                         if (!attacker.alreadyBuffedStats().contains(MonsterStatus.NEUTRALISE)) {
@@ -215,7 +215,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     }
                 }
                 
-                MapleStatEffect cBarrier = chr.getBuffEffect(MapleBuffStat.COMBO_BARRIER);  // thanks BHB for noticing Combo Barrier buff not working
+                MapleStatEffect cBarrier = chr.getBuffEffect(BuffStat.COMBO_BARRIER);  // thanks BHB for noticing Combo Barrier buff not working
                 if (cBarrier != null) {
                     damage *= (cBarrier.getX() / 1000.0);
                 }
@@ -238,9 +238,9 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     damage *= Math.ceil(highDef.getEffect(hdLevel).getX() / 1000.0);
                 }
             }
-            Integer mesoguard = chr.getBuffedValue(MapleBuffStat.MESOGUARD);
-            if (chr.getBuffedValue(MapleBuffStat.MAGIC_GUARD) != null && mpattack == 0) {
-                int mploss = (int) (damage * (chr.getBuffedValue(MapleBuffStat.MAGIC_GUARD).doubleValue() / 100.0));
+            Integer mesoguard = chr.getBuffedValue(BuffStat.MESOGUARD);
+            if (chr.getBuffedValue(BuffStat.MAGIC_GUARD) != null && mpattack == 0) {
+                int mploss = (int) (damage * (chr.getBuffedValue(BuffStat.MAGIC_GUARD).doubleValue() / 100.0));
                 int hploss = damage - mploss;
                 
                 int curmp = chr.getMp();
@@ -255,7 +255,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 int mesoloss = (int) (damage * (mesoguard.doubleValue() / 100.0));
                 if (chr.getMeso() < mesoloss) {
                     chr.gainMeso(-chr.getMeso(), false);
-                    chr.cancelBuffStats(MapleBuffStat.MESOGUARD);
+                    chr.cancelBuffStats(BuffStat.MESOGUARD);
                 } else {
                     chr.gainMeso(-mesoloss, false);
                 }

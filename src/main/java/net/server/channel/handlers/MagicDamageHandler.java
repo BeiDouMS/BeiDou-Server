@@ -46,8 +46,8 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
 
 		AttackInfo attack = parseDamage(p, chr, false, true);
                 
-		if (chr.getBuffEffect(MapleBuffStat.MORPH) != null) {
-			if(chr.getBuffEffect(MapleBuffStat.MORPH).isMorphWithoutAttack()) {
+		if (chr.getBuffEffect(BuffStat.MORPH) != null) {
+			if(chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
 				// How are they attacking when the client won't let them?
 				chr.getClient().disconnect(false, false);
 				return; 

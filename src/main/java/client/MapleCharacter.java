@@ -183,10 +183,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private Map<Skill, SkillEntry> skills = new LinkedHashMap<>();
     private Map<Integer, Integer> activeCoupons = new LinkedHashMap<>();
     private Map<Integer, Integer> activeCouponRates = new LinkedHashMap<>();
-    private EnumMap<MapleBuffStat, MapleBuffStatValueHolder> effects = new EnumMap<>(MapleBuffStat.class);
-    private Map<MapleBuffStat, Byte> buffEffectsCount = new LinkedHashMap<>();
+    private EnumMap<BuffStat, MapleBuffStatValueHolder> effects = new EnumMap<>(BuffStat.class);
+    private Map<BuffStat, Byte> buffEffectsCount = new LinkedHashMap<>();
     private Map<MapleDisease, Long> diseaseExpires = new LinkedHashMap<>();
-    private Map<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
+    private Map<Integer, Map<BuffStat, MapleBuffStatValueHolder>> buffEffects = new LinkedHashMap<>(); // non-overriding buffs thanks to Ronan
     private Map<Integer, Long> buffExpires = new LinkedHashMap<>();
     private Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
     private Map<Integer, MapleSummon> summons = new LinkedHashMap<>();
@@ -755,7 +755,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
     public void setCombo(short count) {
         if (count < combocounter) {
-            cancelEffectFromBuffStat(MapleBuffStat.ARAN_COMBO);
+            cancelEffectFromBuffStat(BuffStat.ARAN_COMBO);
         }
         combocounter = (short) Math.min(30000, count);
         if (count > 0) {
@@ -826,7 +826,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             if (!hide) {
                 this.hidden = false;
                 sendPacket(PacketCreator.getGMEffect(0x10, (byte) 0));
-                List<MapleBuffStat> dsstat = Collections.singletonList(MapleBuffStat.DARKSIGHT);
+                List<BuffStat> dsstat = Collections.singletonList(BuffStat.DARKSIGHT);
                 getMap().broadcastGMMessage(this, PacketCreator.cancelForeignBuff(id, dsstat), false);
                 getMap().broadcastSpawnPlayerMapObjectMessage(this, this, false);
                 
@@ -844,7 +844,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 if (!login) {
                     getMap().broadcastNONGMMessage(this, PacketCreator.removePlayerFromMap(getId()), false);
                 }
-                List<Pair<MapleBuffStat, Integer>> ldsstat = Collections.singletonList(new Pair<MapleBuffStat, Integer>(MapleBuffStat.DARKSIGHT, 0));
+                List<Pair<BuffStat, Integer>> ldsstat = Collections.singletonList(new Pair<BuffStat, Integer>(BuffStat.DARKSIGHT, 0));
                 getMap().broadcastGMMessage(this, PacketCreator.giveForeignBuff(id, ldsstat), false);
                 this.releaseControlledMonsters();
             }
@@ -870,7 +870,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    private void cancelPlayerBuffs(List<MapleBuffStat> buffstats) {
+    private void cancelPlayerBuffs(List<BuffStat> buffstats) {
         if (client.getChannelServer().getPlayerStorage().getCharacterById(getId()) != null) {
             updateLocalStats();
             sendPacket(PacketCreator.cancelBuff(buffstats));
@@ -1166,8 +1166,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         broadcastChangeJob();
         
         if (GameConstants.hasSPTable(newJob) && newJob.getId() != 2001) {
-            if (getBuffedValue(MapleBuffStat.MONSTER_RIDING) != null) {
-                cancelBuffStats(MapleBuffStat.MONSTER_RIDING);
+            if (getBuffedValue(BuffStat.MONSTER_RIDING) != null) {
+                cancelBuffStats(BuffStat.MONSTER_RIDING);
             }
             createDragon();
         }
@@ -1437,8 +1437,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            for(Entry<MapleBuffStat, MapleBuffStatValueHolder> mbs : effects.entrySet()) {
-                if(mbs.getKey() == MapleBuffStat.MAP_PROTECTION) {
+            for(Entry<BuffStat, MapleBuffStatValueHolder> mbs : effects.entrySet()) {
+                if(mbs.getKey() == BuffStat.MAP_PROTECTION) {
                     byte value = (byte)mbs.getValue().value;
                     
                     if(value == 1 && ((returnMapid == 211000000 && thisMapid != 200082300) || returnMapid == 193000000)) {
@@ -2072,7 +2072,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
 
     public boolean isRidingBattleship() {
-        Integer bv = getBuffedValue(MapleBuffStat.MONSTER_RIDING);
+        Integer bv = getBuffedValue(BuffStat.MONSTER_RIDING);
         return bv != null && bv.equals(Corsair.BATTLE_SHIP);
     }
     
@@ -2088,7 +2088,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             sendPacket(PacketCreator.skillCooldown(Corsair.BATTLE_SHIP, cooldown));
             addCooldown(Corsair.BATTLE_SHIP, Server.getInstance().getCurrentTime(), (long)(cooldown * 1000));
             removeCooldown(5221999);
-            cancelEffectFromBuffStat(MapleBuffStat.MONSTER_RIDING);
+            cancelEffectFromBuffStat(BuffStat.MONSTER_RIDING);
         } else {
             announceBattleshipHp();
             addCooldown(5221999, 0, Long.MAX_VALUE);
@@ -2501,7 +2501,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         extraRecoveryTask = TimerManager.getInstance().register(new Runnable() {
             @Override
             public void run() {
-                if (getBuffSource(MapleBuffStat.HPREC) == -1 && getBuffSource(MapleBuffStat.MPREC) == -1) {
+                if (getBuffSource(BuffStat.HPREC) == -1 && getBuffSource(BuffStat.MPREC) == -1) {
                     stopExtraTask();
                     return;
                 }
@@ -3293,7 +3293,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return character;
     }
 
-    public Long getBuffedStarttime(MapleBuffStat effect) {
+    public Long getBuffedStarttime(BuffStat effect) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -3308,7 +3308,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    public Integer getBuffedValue(MapleBuffStat effect) {
+    public Integer getBuffedValue(BuffStat effect) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -3323,7 +3323,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    public int getBuffSource(MapleBuffStat stat) {
+    public int getBuffSource(BuffStat stat) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -3338,7 +3338,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    public MapleStatEffect getBuffEffect(MapleBuffStat stat) {
+    public MapleStatEffect getBuffEffect(BuffStat stat) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -3370,7 +3370,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         chrLock.lock();
         try {
             List<MapleBuffStatValueHolder> ret = new ArrayList<>();
-            for(Map<MapleBuffStat, MapleBuffStatValueHolder> bel : buffEffects.values()) {
+            for(Map<BuffStat, MapleBuffStatValueHolder> bel : buffEffects.values()) {
                 for(MapleBuffStatValueHolder mbsvh : bel.values()) {
                     ret.add(mbsvh);
                 }
@@ -3389,7 +3389,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             long curtime = Server.getInstance().getCurrentTime();
             
             Map<Integer, PlayerBuffValueHolder> ret = new LinkedHashMap<>();
-            for(Map<MapleBuffStat, MapleBuffStatValueHolder> bel : buffEffects.values()) {
+            for(Map<BuffStat, MapleBuffStatValueHolder> bel : buffEffects.values()) {
                 for(MapleBuffStatValueHolder mbsvh : bel.values()) {
                     int srcid = mbsvh.effect.getBuffSourceId();
                     if(!ret.containsKey(srcid)) {
@@ -3404,12 +3404,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    public List<Pair<MapleBuffStat, Integer>> getAllActiveStatups() {
+    public List<Pair<BuffStat, Integer>> getAllActiveStatups() {
         effLock.lock();
         chrLock.lock();
         try {
-            List<Pair<MapleBuffStat, Integer>> ret = new ArrayList<>();
-            for (MapleBuffStat mbs : effects.keySet()) {
+            List<Pair<BuffStat, Integer>> ret = new ArrayList<>();
+            for (BuffStat mbs : effects.keySet()) {
                 MapleBuffStatValueHolder mbsvh = effects.get(mbs);
                 ret.add(new Pair<>(mbs, mbsvh.value));
             }
@@ -3451,14 +3451,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return false;
     }
     
-    private List<Pair<MapleBuffStat, Integer>> getActiveStatupsFromSourceid(int sourceid) { // already under effLock & chrLock
-        List<Pair<MapleBuffStat, Integer>> ret = new ArrayList<>();
-        List<Pair<MapleBuffStat, Integer>> singletonStatups = new ArrayList<>();
-        for(Entry<MapleBuffStat, MapleBuffStatValueHolder> bel : buffEffects.get(sourceid).entrySet()) {
-            MapleBuffStat mbs = bel.getKey();
+    private List<Pair<BuffStat, Integer>> getActiveStatupsFromSourceid(int sourceid) { // already under effLock & chrLock
+        List<Pair<BuffStat, Integer>> ret = new ArrayList<>();
+        List<Pair<BuffStat, Integer>> singletonStatups = new ArrayList<>();
+        for(Entry<BuffStat, MapleBuffStatValueHolder> bel : buffEffects.get(sourceid).entrySet()) {
+            BuffStat mbs = bel.getKey();
             MapleBuffStatValueHolder mbsvh = effects.get(bel.getKey());
             
-            Pair<MapleBuffStat, Integer> p;
+            Pair<BuffStat, Integer> p;
             if(mbsvh != null) {
                 p = new Pair<>(mbs, mbsvh.value);
             } else {
@@ -3472,17 +3472,17 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
         }
         
-        Collections.sort(ret, new Comparator<Pair<MapleBuffStat, Integer>>() {
+        Collections.sort(ret, new Comparator<Pair<BuffStat, Integer>>() {
             @Override
-            public int compare(Pair<MapleBuffStat, Integer> p1, Pair<MapleBuffStat, Integer> p2) {
+            public int compare(Pair<BuffStat, Integer> p1, Pair<BuffStat, Integer> p2) {
                 return p1.getLeft().compareTo(p2.getLeft());
             }
         });
         
         if (!singletonStatups.isEmpty()) {
-            Collections.sort(singletonStatups, new Comparator<Pair<MapleBuffStat, Integer>>() {
+            Collections.sort(singletonStatups, new Comparator<Pair<BuffStat, Integer>>() {
                 @Override
-                public int compare(Pair<MapleBuffStat, Integer> p1, Pair<MapleBuffStat, Integer> p2) {
+                public int compare(Pair<BuffStat, Integer> p1, Pair<BuffStat, Integer> p2) {
                     return p1.getLeft().compareTo(p2.getLeft());
                 }
             });
@@ -3493,13 +3493,13 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return ret;
     }
     
-    private void addItemEffectHolder(Integer sourceid, long expirationtime, Map<MapleBuffStat, MapleBuffStatValueHolder> statups) {
+    private void addItemEffectHolder(Integer sourceid, long expirationtime, Map<BuffStat, MapleBuffStatValueHolder> statups) {
         buffEffects.put(sourceid, statups);
         buffExpires.put(sourceid, expirationtime);
     }
     
-    private boolean removeEffectFromItemEffectHolder(Integer sourceid, MapleBuffStat buffStat) {
-        Map<MapleBuffStat, MapleBuffStatValueHolder> lbe = buffEffects.get(sourceid);
+    private boolean removeEffectFromItemEffectHolder(Integer sourceid, BuffStat buffStat) {
+        Map<BuffStat, MapleBuffStatValueHolder> lbe = buffEffects.get(sourceid);
         
         if(lbe.remove(buffStat) != null) {        
             buffEffectsCount.put(buffStat, (byte)(buffEffectsCount.get(buffStat) - 1));
@@ -3516,9 +3516,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     private void removeItemEffectHolder(Integer sourceid) {
-        Map<MapleBuffStat, MapleBuffStatValueHolder> be = buffEffects.remove(sourceid);
+        Map<BuffStat, MapleBuffStatValueHolder> be = buffEffects.remove(sourceid);
         if(be != null) {
-            for(Entry<MapleBuffStat, MapleBuffStatValueHolder> bei : be.entrySet()) {
+            for(Entry<BuffStat, MapleBuffStatValueHolder> bei : be.entrySet()) {
                 buffEffectsCount.put(bei.getKey(), (byte)(buffEffectsCount.get(bei.getKey()) - 1));
             }
         }
@@ -3526,10 +3526,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         buffExpires.remove(sourceid);
     }
     
-    private void dropWorstEffectFromItemEffectHolder(MapleBuffStat mbs) {
+    private void dropWorstEffectFromItemEffectHolder(BuffStat mbs) {
         Integer min = Integer.MAX_VALUE;
         Integer srcid = -1;
-        for(Entry<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> bpl: buffEffects.entrySet()) {
+        for(Entry<Integer, Map<BuffStat, MapleBuffStatValueHolder>> bpl: buffEffects.entrySet()) {
             MapleBuffStatValueHolder mbsvh = bpl.getValue().get(mbs);
             if(mbsvh != null) {
                 if(mbsvh.value < min) {
@@ -3542,10 +3542,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         removeEffectFromItemEffectHolder(srcid, mbs);
     }
     
-    private MapleBuffStatValueHolder fetchBestEffectFromItemEffectHolder(MapleBuffStat mbs) {
+    private MapleBuffStatValueHolder fetchBestEffectFromItemEffectHolder(BuffStat mbs) {
         Pair<Integer, Integer> max = new Pair<>(Integer.MIN_VALUE, 0);
         MapleBuffStatValueHolder mbsvh = null;
-        for(Entry<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> bpl: buffEffects.entrySet()) {
+        for(Entry<Integer, Map<BuffStat, MapleBuffStatValueHolder>> bpl: buffEffects.entrySet()) {
             MapleBuffStatValueHolder mbsvhi = bpl.getValue().get(mbs);
             if(mbsvhi != null) {
                 if(!mbsvhi.effect.isActive(this)) {
@@ -3568,7 +3568,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return mbsvh;
     }
     
-    private void extractBuffValue(int sourceid, MapleBuffStat stat) {
+    private void extractBuffValue(int sourceid, BuffStat stat) {
         chrLock.lock();
         try {
             removeEffectFromItemEffectHolder(sourceid, stat);
@@ -3583,14 +3583,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         try {
             System.out.println("-------------------");
             System.out.println("CACHED BUFF COUNT: ");
-            for(Entry<MapleBuffStat, Byte> bpl : buffEffectsCount.entrySet()) {
+            for(Entry<BuffStat, Byte> bpl : buffEffectsCount.entrySet()) {
                 System.out.println(bpl.getKey() + ": " + bpl.getValue());
             }
             System.out.println("-------------------");
             System.out.println("CACHED BUFFS: ");
-            for(Entry<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> bpl : buffEffects.entrySet()) {
+            for(Entry<Integer, Map<BuffStat, MapleBuffStatValueHolder>> bpl : buffEffects.entrySet()) {
                 System.out.print(bpl.getKey() + ": ");
-                for(Entry<MapleBuffStat, MapleBuffStatValueHolder> pble : bpl.getValue().entrySet()) {
+                for(Entry<BuffStat, MapleBuffStatValueHolder> pble : bpl.getValue().entrySet()) {
                     System.out.print(pble.getKey().name() + pble.getValue().value + ", ");
                 }
                 System.out.println();
@@ -3598,7 +3598,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             System.out.println("-------------------");
             
             System.out.println("IN ACTION:");
-            for(Entry<MapleBuffStat, MapleBuffStatValueHolder> bpl : effects.entrySet()) {
+            for(Entry<BuffStat, MapleBuffStatValueHolder> bpl : effects.entrySet()) {
                 System.out.println(bpl.getKey().name() + " -> " + MapleItemInformationProvider.getInstance().getName(bpl.getValue().effect.getSourceId()));
             }
         } finally {
@@ -3611,7 +3611,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            for(Entry<MapleBuffStat, Byte> mbsl : buffEffectsCount.entrySet()) {
+            for(Entry<BuffStat, Byte> mbsl : buffEffectsCount.entrySet()) {
                 System.out.println(mbsl.getKey().name() + " -> " + mbsl.getValue());
             }
         } finally {
@@ -3625,9 +3625,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             effLock.lock();
             chrLock.lock();
             try {
-                cancelEffectFromBuffStat(MapleBuffStat.SUMMON);
-                cancelEffectFromBuffStat(MapleBuffStat.PUPPET);
-                cancelEffectFromBuffStat(MapleBuffStat.COMBO);
+                cancelEffectFromBuffStat(BuffStat.SUMMON);
+                cancelEffectFromBuffStat(BuffStat.PUPPET);
+                cancelEffectFromBuffStat(BuffStat.COMBO);
                 
                 effects.clear();
                 
@@ -3644,8 +3644,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             effLock.lock();
             chrLock.lock();
             try {
-                for(Entry<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> bpl : buffEffects.entrySet()) {
-                    for(Entry<MapleBuffStat, MapleBuffStatValueHolder> mbse : bpl.getValue().entrySet()) {
+                for(Entry<Integer, Map<BuffStat, MapleBuffStatValueHolder>> bpl : buffEffects.entrySet()) {
+                    for(Entry<BuffStat, MapleBuffStatValueHolder> mbse : bpl.getValue().entrySet()) {
                         mseBuffs.put(mbse.getValue().effect, mbse.getValue().startTime);
                     }
                 }
@@ -3660,8 +3660,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    private void dropBuffStats(List<Pair<MapleBuffStat, MapleBuffStatValueHolder>> effectsToCancel) {
-        for (Pair<MapleBuffStat, MapleBuffStatValueHolder> cancelEffectCancelTasks : effectsToCancel) {
+    private void dropBuffStats(List<Pair<BuffStat, MapleBuffStatValueHolder>> effectsToCancel) {
+        for (Pair<BuffStat, MapleBuffStatValueHolder> cancelEffectCancelTasks : effectsToCancel) {
             //boolean nestedCancel = false;
             
             chrLock.lock();
@@ -3685,18 +3685,18 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    private List<Pair<MapleBuffStat, MapleBuffStatValueHolder>> deregisterBuffStats(Map<MapleBuffStat, MapleBuffStatValueHolder> stats) {
+    private List<Pair<BuffStat, MapleBuffStatValueHolder>> deregisterBuffStats(Map<BuffStat, MapleBuffStatValueHolder> stats) {
         chrLock.lock();
         try {
-            List<Pair<MapleBuffStat, MapleBuffStatValueHolder>> effectsToCancel = new ArrayList<>(stats.size());
-            for (Entry<MapleBuffStat, MapleBuffStatValueHolder> stat : stats.entrySet()) {
+            List<Pair<BuffStat, MapleBuffStatValueHolder>> effectsToCancel = new ArrayList<>(stats.size());
+            for (Entry<BuffStat, MapleBuffStatValueHolder> stat : stats.entrySet()) {
                 int sourceid = stat.getValue().effect.getBuffSourceId();
                 
                 if(!buffEffects.containsKey(sourceid)) {
                     buffExpires.remove(sourceid);
                 }
                 
-                MapleBuffStat mbs = stat.getKey();
+                BuffStat mbs = stat.getKey();
                 effectsToCancel.add(new Pair<>(mbs, stat.getValue()));
                 
                 MapleBuffStatValueHolder mbsvh = effects.get(mbs);
@@ -3704,12 +3704,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     mbsvh.bestApplied = true;
                     effects.remove(mbs);
                     
-                    if (mbs == MapleBuffStat.RECOVERY) {
+                    if (mbs == BuffStat.RECOVERY) {
                         if (recoveryTask != null) {
                             recoveryTask.cancel(false);
                             recoveryTask = null;
                         }
-                    } else if (mbs == MapleBuffStat.SUMMON || mbs == MapleBuffStat.PUPPET) {
+                    } else if (mbs == BuffStat.SUMMON || mbs == BuffStat.PUPPET) {
                         int summonId = mbsvh.effect.getSourceId();
 
                         MapleSummon summon = summons.get(summonId);
@@ -3732,11 +3732,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                                 }
                             }
                         }
-                    } else if (mbs == MapleBuffStat.DRAGONBLOOD) {
+                    } else if (mbs == BuffStat.DRAGONBLOOD) {
                         dragonBloodSchedule.cancel(false);
                         dragonBloodSchedule = null;
-                    } else if (mbs == MapleBuffStat.HPREC || mbs == MapleBuffStat.MPREC) {
-                        if(mbs == MapleBuffStat.HPREC) {
+                    } else if (mbs == BuffStat.HPREC || mbs == BuffStat.MPREC) {
+                        if(mbs == BuffStat.HPREC) {
                             extraHpRec = 0;
                         } else {
                             extraMpRec = 0;
@@ -3792,7 +3792,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return ret;
     }
     
-    private static MapleStatEffect getEffectFromBuffSource(Map<MapleBuffStat, MapleBuffStatValueHolder> buffSource) {
+    private static MapleStatEffect getEffectFromBuffSource(Map<BuffStat, MapleBuffStatValueHolder> buffSource) {
         try {
             return buffSource.entrySet().iterator().next().getValue().effect;
         } catch (Exception e) {
@@ -3815,23 +3815,23 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public void updateActiveEffects() {
         effLock.lock();     // thanks davidlafriniere, maple006, RedHat for pointing a deadlock occurring here
         try {
-            Set<MapleBuffStat> updatedBuffs = new LinkedHashSet<>();
+            Set<BuffStat> updatedBuffs = new LinkedHashSet<>();
             Set<MapleStatEffect> activeEffects = new LinkedHashSet<>();
             
             for (MapleBuffStatValueHolder mse : effects.values()) {
                 activeEffects.add(mse.effect);
             }
             
-            for (Map<MapleBuffStat, MapleBuffStatValueHolder> buff : buffEffects.values()) {
+            for (Map<BuffStat, MapleBuffStatValueHolder> buff : buffEffects.values()) {
                 MapleStatEffect mse = getEffectFromBuffSource(buff);
                 if (isUpdatingEffect(activeEffects, mse)) {
-                    for (Pair<MapleBuffStat, Integer> p : mse.getStatups()) {
+                    for (Pair<BuffStat, Integer> p : mse.getStatups()) {
                         updatedBuffs.add(p.getLeft());
                     }
                 }
             }
             
-            for (MapleBuffStat mbs : updatedBuffs) {
+            for (BuffStat mbs : updatedBuffs) {
                 effects.remove(mbs);
             }
             
@@ -3841,18 +3841,18 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    private void updateEffects(Set<MapleBuffStat> removedStats) {
+    private void updateEffects(Set<BuffStat> removedStats) {
         effLock.lock();
         chrLock.lock();
         try {
-            Set<MapleBuffStat> retrievedStats = new LinkedHashSet<>();
+            Set<BuffStat> retrievedStats = new LinkedHashSet<>();
             
-            for (MapleBuffStat mbs : removedStats) {
+            for (BuffStat mbs : removedStats) {
                 fetchBestEffectFromItemEffectHolder(mbs);
                 
                 MapleBuffStatValueHolder mbsvh = effects.get(mbs);
                 if (mbsvh != null) {
-                    for (Pair<MapleBuffStat, Integer> statup : mbsvh.effect.getStatups()) {
+                    for (Pair<BuffStat, Integer> statup : mbsvh.effect.getStatups()) {
                         retrievedStats.add(statup.getLeft());
                     }
                 }
@@ -3866,7 +3866,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     private boolean cancelEffect(MapleStatEffect effect, boolean overwrite, long startTime, boolean firstCancel) {
-        Set<MapleBuffStat> removedStats = new LinkedHashSet<>();
+        Set<BuffStat> removedStats = new LinkedHashSet<>();
         dropBuffStats(cancelEffectInternal(effect, overwrite, startTime, removedStats));
         updateLocalStats();
         updateEffects(removedStats);
@@ -3874,9 +3874,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return !removedStats.isEmpty();
     }
     
-    private List<Pair<MapleBuffStat, MapleBuffStatValueHolder>> cancelEffectInternal(MapleStatEffect effect, boolean overwrite, long startTime, Set<MapleBuffStat> removedStats) {
-        Map<MapleBuffStat, MapleBuffStatValueHolder> buffstats = null;
-        MapleBuffStat ombs;
+    private List<Pair<BuffStat, MapleBuffStatValueHolder>> cancelEffectInternal(MapleStatEffect effect, boolean overwrite, long startTime, Set<BuffStat> removedStats) {
+        Map<BuffStat, MapleBuffStatValueHolder> buffstats = null;
+        BuffStat ombs;
         if (!overwrite) {   // is removing the source effect, meaning every effect from this srcid is being purged
             buffstats = extractCurrentBuffStats(effect);
         } else if ((ombs = getSingletonStatupFromEffect(effect)) != null) {   // removing all effects of a buff having non-shareable buff stat.
@@ -3894,7 +3894,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             stopChairTask();
         }
         
-        List<Pair<MapleBuffStat, MapleBuffStatValueHolder>> toCancel = deregisterBuffStats(buffstats);
+        List<Pair<BuffStat, MapleBuffStatValueHolder>> toCancel = deregisterBuffStats(buffstats);
         if (effect.isMonsterRiding()) {
             this.getClient().getWorldServer().unregisterMountHunger(this);
             this.getMount().setActive(false);
@@ -3907,7 +3907,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return toCancel;
     }
 
-    public void cancelEffectFromBuffStat(MapleBuffStat stat) {
+    public void cancelEffectFromBuffStat(BuffStat stat) {
         MapleBuffStatValueHolder effect;
         
         effLock.lock();
@@ -3923,14 +3923,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    public void cancelBuffStats(MapleBuffStat stat) {
+    public void cancelBuffStats(BuffStat stat) {
         effLock.lock();
         try {
             List<Pair<Integer, MapleBuffStatValueHolder>> cancelList = new LinkedList<>();
             
             chrLock.lock();
             try {
-                for(Entry<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> bel : this.buffEffects.entrySet()) {
+                for(Entry<Integer, Map<BuffStat, MapleBuffStatValueHolder>> bel : this.buffEffects.entrySet()) {
                     MapleBuffStatValueHolder beli = bel.getValue().get(stat);
                     if(beli != null) {
                         cancelList.add(new Pair<>(bel.getKey(), beli));
@@ -3940,7 +3940,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 chrLock.unlock();
             }
 
-            Map<MapleBuffStat, MapleBuffStatValueHolder> buffStatList = new LinkedHashMap<>();
+            Map<BuffStat, MapleBuffStatValueHolder> buffStatList = new LinkedHashMap<>();
             for(Pair<Integer, MapleBuffStatValueHolder> p : cancelList) {
                 buffStatList.put(stat, p.getRight());
                 extractBuffValue(p.getLeft(), stat);
@@ -3953,14 +3953,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         cancelPlayerBuffs(Arrays.asList(stat));
     }
     
-    private Map<MapleBuffStat, MapleBuffStatValueHolder> extractCurrentBuffStats(MapleStatEffect effect) {
+    private Map<BuffStat, MapleBuffStatValueHolder> extractCurrentBuffStats(MapleStatEffect effect) {
         chrLock.lock();
         try {
-            Map<MapleBuffStat, MapleBuffStatValueHolder> stats = new LinkedHashMap<>();
-            Map<MapleBuffStat, MapleBuffStatValueHolder> buffList = buffEffects.remove(effect.getBuffSourceId());
+            Map<BuffStat, MapleBuffStatValueHolder> stats = new LinkedHashMap<>();
+            Map<BuffStat, MapleBuffStatValueHolder> buffList = buffEffects.remove(effect.getBuffSourceId());
             
             if(buffList != null) {
-                for (Entry<MapleBuffStat, MapleBuffStatValueHolder> stateffect : buffList.entrySet()) {
+                for (Entry<BuffStat, MapleBuffStatValueHolder> stateffect : buffList.entrySet()) {
                     stats.put(stateffect.getKey(), stateffect.getValue());
                     buffEffectsCount.put(stateffect.getKey(), (byte)(buffEffectsCount.get(stateffect.getKey()) - 1));
                 }
@@ -3972,17 +3972,17 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    private Map<MapleBuffStat, MapleBuffStatValueHolder> extractLeastRelevantStatEffectsIfFull(MapleStatEffect effect) {
-        Map<MapleBuffStat, MapleBuffStatValueHolder> extractedStatBuffs = new LinkedHashMap<>();
+    private Map<BuffStat, MapleBuffStatValueHolder> extractLeastRelevantStatEffectsIfFull(MapleStatEffect effect) {
+        Map<BuffStat, MapleBuffStatValueHolder> extractedStatBuffs = new LinkedHashMap<>();
         
         chrLock.lock();
         try {
-            Map<MapleBuffStat, Byte> stats = new LinkedHashMap<>();
-            Map<MapleBuffStat, MapleBuffStatValueHolder> minStatBuffs = new LinkedHashMap<>();
+            Map<BuffStat, Byte> stats = new LinkedHashMap<>();
+            Map<BuffStat, MapleBuffStatValueHolder> minStatBuffs = new LinkedHashMap<>();
             
-            for(Entry<Integer, Map<MapleBuffStat, MapleBuffStatValueHolder>> mbsvhi : buffEffects.entrySet()) {
-                for(Entry<MapleBuffStat, MapleBuffStatValueHolder> mbsvhe : mbsvhi.getValue().entrySet()) {
-                    MapleBuffStat mbs = mbsvhe.getKey();
+            for(Entry<Integer, Map<BuffStat, MapleBuffStatValueHolder>> mbsvhi : buffEffects.entrySet()) {
+                for(Entry<BuffStat, MapleBuffStatValueHolder> mbsvhe : mbsvhi.getValue().entrySet()) {
+                    BuffStat mbs = mbsvhe.getKey();
                     Byte b = stats.get(mbs);
                     
                     if(b != null) {
@@ -3997,18 +3997,18 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 }
             }
             
-            Set<MapleBuffStat> effectStatups = new LinkedHashSet<>();
-            for(Pair<MapleBuffStat, Integer> efstat : effect.getStatups()) {
+            Set<BuffStat> effectStatups = new LinkedHashSet<>();
+            for(Pair<BuffStat, Integer> efstat : effect.getStatups()) {
                 effectStatups.add(efstat.getLeft());
             }
             
-            for(Entry<MapleBuffStat, Byte> it : stats.entrySet()) {
+            for(Entry<BuffStat, Byte> it : stats.entrySet()) {
                 boolean uniqueBuff = isSingletonStatup(it.getKey());
                 
                 if(it.getValue() >= (!uniqueBuff ? YamlConfig.config.server.MAX_MONITORED_BUFFSTATS : 1) && effectStatups.contains(it.getKey())) {
                     MapleBuffStatValueHolder mbsvh = minStatBuffs.get(it.getKey());
                     
-                    Map<MapleBuffStat, MapleBuffStatValueHolder> lpbe = buffEffects.get(mbsvh.effect.getBuffSourceId());
+                    Map<BuffStat, MapleBuffStatValueHolder> lpbe = buffEffects.get(mbsvh.effect.getBuffSourceId());
                     lpbe.remove(it.getKey());
                     buffEffectsCount.put(it.getKey(), (byte)(buffEffectsCount.get(it.getKey()) - 1));
                     
@@ -4025,9 +4025,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return extractedStatBuffs;
     }
     
-    private void cancelInactiveBuffStats(Set<MapleBuffStat> retrievedStats, Set<MapleBuffStat> removedStats) {
-        List<MapleBuffStat> inactiveStats = new LinkedList<>();
-        for (MapleBuffStat mbs : removedStats) {
+    private void cancelInactiveBuffStats(Set<BuffStat> retrievedStats, Set<BuffStat> removedStats) {
+        List<BuffStat> inactiveStats = new LinkedList<>();
+        for (BuffStat mbs : removedStats) {
             if (!retrievedStats.contains(mbs)) {
                 inactiveStats.add(mbs);
             }
@@ -4039,10 +4039,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    private static Map<MapleStatEffect, Integer> topologicalSortLeafStatCount(Map<MapleBuffStat, Stack<MapleStatEffect>> buffStack) {
+    private static Map<MapleStatEffect, Integer> topologicalSortLeafStatCount(Map<BuffStat, Stack<MapleStatEffect>> buffStack) {
         Map<MapleStatEffect, Integer> leafBuffCount = new LinkedHashMap<>();
         
-        for (Entry<MapleBuffStat, Stack<MapleStatEffect>> e : buffStack.entrySet()) {
+        for (Entry<BuffStat, Stack<MapleStatEffect>> e : buffStack.entrySet()) {
             Stack<MapleStatEffect> mseStack = e.getValue();
             if (mseStack.isEmpty()) {
                 continue;
@@ -4060,9 +4060,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return leafBuffCount;
     }
     
-    private static List<MapleStatEffect> topologicalSortRemoveLeafStats(Map<MapleStatEffect, Set<MapleBuffStat>> stackedBuffStats, Map<MapleBuffStat, Stack<MapleStatEffect>> buffStack, Map<MapleStatEffect, Integer> leafStatCount) {
+    private static List<MapleStatEffect> topologicalSortRemoveLeafStats(Map<MapleStatEffect, Set<BuffStat>> stackedBuffStats, Map<BuffStat, Stack<MapleStatEffect>> buffStack, Map<MapleStatEffect, Integer> leafStatCount) {
         List<MapleStatEffect> clearedStatEffects = new LinkedList<>();
-        Set<MapleBuffStat> clearedStats = new LinkedHashSet<>();
+        Set<BuffStat> clearedStats = new LinkedHashSet<>();
         
         for (Entry<MapleStatEffect, Integer> e : leafStatCount.entrySet()) {
             MapleStatEffect mse = e.getKey();
@@ -4070,13 +4070,13 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             if (stackedBuffStats.get(mse).size() <= e.getValue()) {
                 clearedStatEffects.add(mse);
                 
-                for (MapleBuffStat mbs : stackedBuffStats.get(mse)) {
+                for (BuffStat mbs : stackedBuffStats.get(mse)) {
                     clearedStats.add(mbs);
                 }
             }
         }
         
-        for (MapleBuffStat mbs : clearedStats) {
+        for (BuffStat mbs : clearedStats) {
             MapleStatEffect mse = buffStack.get(mbs).pop();
             stackedBuffStats.get(mse).remove(mbs);
         }
@@ -4084,8 +4084,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return clearedStatEffects;
     }
     
-    private static void topologicalSortRebaseLeafStats(Map<MapleStatEffect, Set<MapleBuffStat>> stackedBuffStats, Map<MapleBuffStat, Stack<MapleStatEffect>> buffStack) {
-        for (Entry<MapleBuffStat, Stack<MapleStatEffect>> e : buffStack.entrySet()) {
+    private static void topologicalSortRebaseLeafStats(Map<MapleStatEffect, Set<BuffStat>> stackedBuffStats, Map<BuffStat, Stack<MapleStatEffect>> buffStack) {
+        for (Entry<BuffStat, Stack<MapleStatEffect>> e : buffStack.entrySet()) {
             Stack<MapleStatEffect> mseStack = e.getValue();
             
             if (!mseStack.isEmpty()) {
@@ -4095,12 +4095,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    private static List<MapleStatEffect> topologicalSortEffects(Map<MapleBuffStat, List<Pair<MapleStatEffect, Integer>>> buffEffects) {
-        Map<MapleStatEffect, Set<MapleBuffStat>> stackedBuffStats = new LinkedHashMap<>();
-        Map<MapleBuffStat, Stack<MapleStatEffect>> buffStack = new LinkedHashMap<>();
+    private static List<MapleStatEffect> topologicalSortEffects(Map<BuffStat, List<Pair<MapleStatEffect, Integer>>> buffEffects) {
+        Map<MapleStatEffect, Set<BuffStat>> stackedBuffStats = new LinkedHashMap<>();
+        Map<BuffStat, Stack<MapleStatEffect>> buffStack = new LinkedHashMap<>();
         
-        for (Entry<MapleBuffStat, List<Pair<MapleStatEffect, Integer>>> e : buffEffects.entrySet()) {
-            MapleBuffStat mbs = e.getKey();
+        for (Entry<BuffStat, List<Pair<MapleStatEffect, Integer>>> e : buffEffects.entrySet()) {
+            BuffStat mbs = e.getKey();
             
             Stack<MapleStatEffect> mbsStack = new Stack<>();
             buffStack.put(mbs, mbsStack);
@@ -4109,7 +4109,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 MapleStatEffect mse = emse.getLeft();
                 mbsStack.push(mse);
                 
-                Set<MapleBuffStat> mbsStats = stackedBuffStats.get(mse);
+                Set<BuffStat> mbsStats = stackedBuffStats.get(mse);
                 if (mbsStats == null) {
                     mbsStats = new LinkedHashSet<>();
                     stackedBuffStats.put(mse, mbsStats);
@@ -4136,13 +4136,13 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
     
     private static List<MapleStatEffect> sortEffectsList(Map<MapleStatEffect, Integer> updateEffectsList) {
-        Map<MapleBuffStat, List<Pair<MapleStatEffect, Integer>>> buffEffects = new LinkedHashMap<>();
+        Map<BuffStat, List<Pair<MapleStatEffect, Integer>>> buffEffects = new LinkedHashMap<>();
         
         for (Entry<MapleStatEffect, Integer> p : updateEffectsList.entrySet()) {
             MapleStatEffect mse = p.getKey();
             
-            for (Pair<MapleBuffStat, Integer> statup : mse.getStatups()) {
-                MapleBuffStat stat = statup.getLeft();
+            for (Pair<BuffStat, Integer> statup : mse.getStatups()) {
+                BuffStat stat = statup.getLeft();
                 
                 List<Pair<MapleStatEffect, Integer>> statBuffs = buffEffects.get(stat);
                 if (statBuffs == null) {
@@ -4162,14 +4162,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
         };
         
-        for (Entry<MapleBuffStat, List<Pair<MapleStatEffect, Integer>>> statBuffs : buffEffects.entrySet()) {
+        for (Entry<BuffStat, List<Pair<MapleStatEffect, Integer>>> statBuffs : buffEffects.entrySet()) {
             Collections.sort(statBuffs.getValue(), cmp);
         }
         
         return topologicalSortEffects(buffEffects);
     }
     
-    private List<Pair<Integer, Pair<MapleStatEffect, Long>>> propagatePriorityBuffEffectUpdates(Set<MapleBuffStat> retrievedStats) {
+    private List<Pair<Integer, Pair<MapleStatEffect, Long>>> propagatePriorityBuffEffectUpdates(Set<BuffStat> retrievedStats) {
         List<Pair<Integer, Pair<MapleStatEffect, Long>>> priorityUpdateEffects = new LinkedList<>();
         Map<MapleBuffStatValueHolder, MapleStatEffect> yokeStats = new LinkedHashMap<>();
         
@@ -4183,8 +4183,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             MapleStatEffect mse = mbsvh.effect;
             int buffSourceId = mse.getBuffSourceId();
             if (isPriorityBuffSourceid(buffSourceId) && !hasActiveBuff(buffSourceId)) {
-                for (Pair<MapleBuffStat, Integer> ps : mse.getStatups()) {
-                    MapleBuffStat mbs = ps.getLeft();
+                for (Pair<BuffStat, Integer> ps : mse.getStatups()) {
+                    BuffStat mbs = ps.getLeft();
                     if (retrievedStats.contains(mbs)) {
                         MapleBuffStatValueHolder mbsvhe = effects.get(mbs);
                         
@@ -4207,14 +4207,14 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return priorityUpdateEffects;
     }
     
-    private void propagateBuffEffectUpdates(Map<Integer, Pair<MapleStatEffect, Long>> retrievedEffects, Set<MapleBuffStat> retrievedStats, Set<MapleBuffStat> removedStats) {
+    private void propagateBuffEffectUpdates(Map<Integer, Pair<MapleStatEffect, Long>> retrievedEffects, Set<BuffStat> retrievedStats, Set<BuffStat> removedStats) {
         cancelInactiveBuffStats(retrievedStats, removedStats);
         if (retrievedStats.isEmpty()) {
             return;
         }
         
-        Map<MapleBuffStat, Pair<Integer, MapleStatEffect>> maxBuffValue = new LinkedHashMap<>();
-        for(MapleBuffStat mbs : retrievedStats) {
+        Map<BuffStat, Pair<Integer, MapleStatEffect>> maxBuffValue = new LinkedHashMap<>();
+        for(BuffStat mbs : retrievedStats) {
             MapleBuffStatValueHolder mbsvh = effects.get(mbs);
             if(mbsvh != null) {
                 retrievedEffects.put(mbsvh.effect.getBuffSourceId(), new Pair<>(mbsvh.effect, mbsvh.startTime));
@@ -4237,15 +4237,15 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             
             for(MapleStatEffect mse : mseList) {
                 int maxEffectiveStatup = Integer.MIN_VALUE;
-                for(Pair<MapleBuffStat, Integer> st : mse.getStatups()) {
-                    MapleBuffStat mbs = st.getLeft();
+                for(Pair<BuffStat, Integer> st : mse.getStatups()) {
+                    BuffStat mbs = st.getLeft();
                     
                     boolean relevantStatup = true;
-                    if(mbs == MapleBuffStat.WATK) {  // not relevant for mages
+                    if(mbs == BuffStat.WATK) {  // not relevant for mages
                         if(mageJob) {
                             relevantStatup = false;
                         }
-                    } else if(mbs == MapleBuffStat.MATK) { // not relevant for non-mages
+                    } else if(mbs == BuffStat.MATK) { // not relevant for non-mages
                         if(!mageJob) {
                             relevantStatup = false;
                         }
@@ -4283,11 +4283,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             toUpdateEffects.add(new Pair<>(mse.getBuffSourceId(), retrievedEffects.get(mse.getBuffSourceId())));
         }
         
-        List<Pair<MapleBuffStat, Integer>> activeStatups = new LinkedList<>();
+        List<Pair<BuffStat, Integer>> activeStatups = new LinkedList<>();
         for(Pair<Integer, Pair<MapleStatEffect, Long>> lmse: toUpdateEffects) {
             Pair<MapleStatEffect, Long> msel = lmse.getRight();
             
-            for(Pair<MapleBuffStat, Integer> statup : getActiveStatupsFromSourceid(lmse.getLeft())) {
+            for(Pair<BuffStat, Integer> statup : getActiveStatupsFromSourceid(lmse.getLeft())) {
                 activeStatups.add(statup);
             }
             
@@ -4299,7 +4299,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         for(Pair<Integer, Pair<MapleStatEffect, Long>> lmse: priorityEffects) {
             Pair<MapleStatEffect, Long> msel = lmse.getRight();
             
-            for(Pair<MapleBuffStat, Integer> statup : getActiveStatupsFromSourceid(lmse.getLeft())) {
+            for(Pair<BuffStat, Integer> statup : getActiveStatupsFromSourceid(lmse.getLeft())) {
                 activeStatups.add(statup);
             }
             
@@ -4308,15 +4308,15 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
         
         if (this.isRidingBattleship()) {
-            List<Pair<MapleBuffStat, Integer>> statups = new ArrayList<>(1);
-            statups.add(new Pair<>(MapleBuffStat.MONSTER_RIDING, 0));
+            List<Pair<BuffStat, Integer>> statups = new ArrayList<>(1);
+            statups.add(new Pair<>(BuffStat.MONSTER_RIDING, 0));
             this.sendPacket(PacketCreator.giveBuff(1932000, 5221006, statups));
             this.announceBattleshipHp();
         }
     }
     
-    private static MapleBuffStat getSingletonStatupFromEffect(MapleStatEffect mse) {
-        for(Pair<MapleBuffStat, Integer> mbs : mse.getStatups()) {
+    private static BuffStat getSingletonStatupFromEffect(MapleStatEffect mse) {
+        for(Pair<BuffStat, Integer> mbs : mse.getStatups()) {
             if(isSingletonStatup(mbs.getLeft())) {
                 return mbs.getLeft();
             }
@@ -4325,7 +4325,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return null;
     }
     
-    private static boolean isSingletonStatup(MapleBuffStat mbs) {
+    private static boolean isSingletonStatup(BuffStat mbs) {
         switch(mbs) {           //HPREC and MPREC are supposed to be singleton
             case COUPON_EXP1:
             case COUPON_EXP2:
@@ -4367,7 +4367,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    private void addItemEffectHolderCount(MapleBuffStat stat) {
+    private void addItemEffectHolderCount(BuffStat stat) {
         Byte val = buffEffectsCount.get(stat);
         if (val != null) {
             val = (byte) (val + 1);
@@ -4441,7 +4441,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 recoveryTask = TimerManager.getInstance().register(new Runnable() {
                     @Override
                     public void run() {
-                        if (getBuffSource(MapleBuffStat.RECOVERY) == -1) {
+                        if (getBuffSource(BuffStat.RECOVERY) == -1) {
                             chrLock.lock();
                             try {
                                 if (recoveryTask != null) {
@@ -4491,10 +4491,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         chrLock.lock();
         try {
             Integer sourceid = effect.getBuffSourceId();
-            Map<MapleBuffStat, MapleBuffStatValueHolder> toDeploy;
-            Map<MapleBuffStat, MapleBuffStatValueHolder> appliedStatups = new LinkedHashMap<>();
+            Map<BuffStat, MapleBuffStatValueHolder> toDeploy;
+            Map<BuffStat, MapleBuffStatValueHolder> appliedStatups = new LinkedHashMap<>();
             
-            for(Pair<MapleBuffStat, Integer> ps : effect.getStatups()) {
+            for(Pair<BuffStat, Integer> ps : effect.getStatups()) {
                 appliedStatups.put(ps.getLeft(), new MapleBuffStatValueHolder(effect, starttime, ps.getRight()));
             }
             
@@ -4502,8 +4502,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             if(YamlConfig.config.server.USE_BUFF_MOST_SIGNIFICANT) {
                 toDeploy = new LinkedHashMap<>();
                 Map<Integer, Pair<MapleStatEffect, Long>> retrievedEffects = new LinkedHashMap<>();
-                Set<MapleBuffStat> retrievedStats = new LinkedHashSet<>();
-                for (Entry<MapleBuffStat, MapleBuffStatValueHolder> statup : appliedStatups.entrySet()) {
+                Set<BuffStat> retrievedStats = new LinkedHashSet<>();
+                for (Entry<BuffStat, MapleBuffStatValueHolder> statup : appliedStatups.entrySet()) {
                     MapleBuffStatValueHolder mbsvh = effects.get(statup.getKey());
                     MapleBuffStatValueHolder statMbsvh = statup.getValue();
                     
@@ -4512,7 +4512,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                             toDeploy.put(statup.getKey(), statMbsvh);
                         } else {
                             if(!isSingletonStatup(statup.getKey())) {
-                                for(Pair<MapleBuffStat, Integer> mbs : mbsvh.effect.getStatups()) {
+                                for(Pair<BuffStat, Integer> mbs : mbsvh.effect.getStatups()) {
                                     retrievedStats.add(mbs.getLeft());
                                 }
                             }
@@ -4523,10 +4523,10 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 }
                 
                 // should also propagate update from buffs shared with priority sourceids
-                Set<MapleBuffStat> updated = appliedStatups.keySet();
+                Set<BuffStat> updated = appliedStatups.keySet();
                 for (MapleBuffStatValueHolder mbsvh : this.getAllStatups()) {
                     if (isPriorityBuffSourceid(mbsvh.effect.getBuffSourceId())) {
-                        for (Pair<MapleBuffStat, Integer> p : mbsvh.effect.getStatups()) {
+                        for (Pair<BuffStat, Integer> p : mbsvh.effect.getStatups()) {
                             if (updated.contains(p.getLeft())) {
                                 retrievedStats.add(p.getLeft());
                             }
@@ -4536,7 +4536,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 
                 if(!isSilent) {
                     addItemEffectHolder(sourceid, expirationtime, appliedStatups);
-                    for (Entry<MapleBuffStat, MapleBuffStatValueHolder> statup : toDeploy.entrySet()) {
+                    for (Entry<BuffStat, MapleBuffStatValueHolder> statup : toDeploy.entrySet()) {
                         effects.put(statup.getKey(), statup.getValue());
                     }
                     
@@ -4544,18 +4544,18 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                         retrievedEffects.put(sourceid, new Pair<>(effect, starttime));
                     }
                     
-                    propagateBuffEffectUpdates(retrievedEffects, retrievedStats, new LinkedHashSet<MapleBuffStat>());
+                    propagateBuffEffectUpdates(retrievedEffects, retrievedStats, new LinkedHashSet<BuffStat>());
                 }
             } else {
-                for (Entry<MapleBuffStat, MapleBuffStatValueHolder> statup : appliedStatups.entrySet()) {
+                for (Entry<BuffStat, MapleBuffStatValueHolder> statup : appliedStatups.entrySet()) {
                     addItemEffectHolderCount(statup.getKey());
                 }
                 
-                toDeploy = (active ? appliedStatups : new LinkedHashMap<MapleBuffStat, MapleBuffStatValueHolder>());
+                toDeploy = (active ? appliedStatups : new LinkedHashMap<BuffStat, MapleBuffStatValueHolder>());
             }
             
             addItemEffectHolder(sourceid, expirationtime, appliedStatups);
-            for (Entry<MapleBuffStat, MapleBuffStatValueHolder> statup : toDeploy.entrySet()) {
+            for (Entry<BuffStat, MapleBuffStatValueHolder> statup : toDeploy.entrySet()) {
                 effects.put(statup.getKey(), statup.getValue());
             }
         } finally {
@@ -4936,12 +4936,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         float rate = 100.0f;
         
         if (itemid == 0) {
-            MapleStatEffect mseMeso = getBuffEffect(MapleBuffStat.MESO_UP_BY_ITEM);
+            MapleStatEffect mseMeso = getBuffEffect(BuffStat.MESO_UP_BY_ITEM);
             if (mseMeso != null) {
                 rate += mseMeso.getCardRate(mapid, itemid);
             }
         } else {
-            MapleStatEffect mseItem = getBuffEffect(MapleBuffStat.ITEM_UP_BY_ITEM);
+            MapleStatEffect mseItem = getBuffEffect(BuffStat.ITEM_UP_BY_ITEM);
             if (mseItem != null) {
                 rate += mseItem.getCardRate(mapid, itemid);
             }
@@ -5846,7 +5846,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return Collections.unmodifiableList(ret);
     }
     
-    public MapleStatEffect getStatForBuff(MapleBuffStat effect) {
+    public MapleStatEffect getStatForBuff(BuffStat effect) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -5954,8 +5954,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             if (energybar > 10000) {
                 energybar = 10000;
             }
-            List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ENERGY_CHARGE, energybar));
-            setBuffedValue(MapleBuffStat.ENERGY_CHARGE, energybar);
+            List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.ENERGY_CHARGE, energybar));
+            setBuffedValue(BuffStat.ENERGY_CHARGE, energybar);
             sendPacket(PacketCreator.giveBuff(energybar, 0, stat));
             sendPacket(PacketCreator.showOwnBuffEffect(energycharge.getId(), 2));
             getMap().broadcastPacket(this, PacketCreator.showBuffEffect(id, energycharge.getId(), 2));
@@ -5968,8 +5968,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 @Override
                 public void run() {
                     energybar = 0;
-                    List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.ENERGY_CHARGE, energybar));
-                    setBuffedValue(MapleBuffStat.ENERGY_CHARGE, energybar);
+                    List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.ENERGY_CHARGE, energybar));
+                    setBuffedValue(BuffStat.ENERGY_CHARGE, energybar);
                     sendPacket(PacketCreator.giveBuff(energybar, 0, stat));
                     getMap().broadcastPacket(chr, PacketCreator.cancelForeignFirstDebuff(id, ((long) 1) << 50));
                 }
@@ -5980,9 +5980,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     public void handleOrbconsume() {
         int skillid = isCygnus() ? DawnWarrior.COMBO : Crusader.COMBO;
         Skill combo = SkillFactory.getSkill(skillid);
-        List<Pair<MapleBuffStat, Integer>> stat = Collections.singletonList(new Pair<>(MapleBuffStat.COMBO, 1));
-        setBuffedValue(MapleBuffStat.COMBO, 1);
-        sendPacket(PacketCreator.giveBuff(skillid, combo.getEffect(getSkillLevel(combo)).getDuration() + (int) ((getBuffedStarttime(MapleBuffStat.COMBO) - System.currentTimeMillis())), stat));
+        List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.COMBO, 1));
+        setBuffedValue(BuffStat.COMBO, 1);
+        sendPacket(PacketCreator.giveBuff(skillid, combo.getEffect(getSkillLevel(combo)).getDuration() + (int) ((getBuffedStarttime(BuffStat.COMBO) - System.currentTimeMillis())), stat));
         getMap().broadcastMessage(this, PacketCreator.giveForeignBuff(getId(), stat), false);
     }
 
@@ -6142,7 +6142,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         return true;
     }
 
-    public boolean isBuffFrom(MapleBuffStat stat, Skill skill) {
+    public boolean isBuffFrom(BuffStat stat, Skill skill) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -7596,12 +7596,12 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
         }
         
-        if (getBuffedValue(MapleBuffStat.MORPH) != null) {
-            cancelEffectFromBuffStat(MapleBuffStat.MORPH);
+        if (getBuffedValue(BuffStat.MORPH) != null) {
+            cancelEffectFromBuffStat(BuffStat.MORPH);
         }
 
-        if (getBuffedValue(MapleBuffStat.MONSTER_RIDING) != null) {
-            cancelEffectFromBuffStat(MapleBuffStat.MONSTER_RIDING);
+        if (getBuffedValue(BuffStat.MONSTER_RIDING) != null) {
+            cancelEffectFromBuffStat(BuffStat.MONSTER_RIDING);
         }
 
         unsitChairInternal();
@@ -7750,11 +7750,11 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
             localmagic = Math.min(localmagic, 2000);
 
-            Integer hbhp = getBuffedValue(MapleBuffStat.HYPERBODYHP);
+            Integer hbhp = getBuffedValue(BuffStat.HYPERBODYHP);
             if (hbhp != null) {
                 localmaxhp += (hbhp.doubleValue() / 100) * localmaxhp;
             }
-            Integer hbmp = getBuffedValue(MapleBuffStat.HYPERBODYMP);
+            Integer hbmp = getBuffedValue(BuffStat.HYPERBODYMP);
             if (hbmp != null) {
                 localmaxmp += (hbmp.doubleValue() / 100) * localmaxmp;
             }
@@ -7762,7 +7762,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             localmaxhp = Math.min(30000, localmaxhp);
             localmaxmp = Math.min(30000, localmaxmp);
 
-            MapleStatEffect combo = getBuffEffect(MapleBuffStat.ARAN_COMBO);
+            MapleStatEffect combo = getBuffEffect(BuffStat.ARAN_COMBO);
             if (combo != null) {
                 localwatk += combo.getX();
             }
@@ -7773,7 +7773,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 localwatk += ceffect.getWatk();
             }
 
-            Integer mwarr = getBuffedValue(MapleBuffStat.MAPLE_WARRIOR);
+            Integer mwarr = getBuffedValue(BuffStat.MAPLE_WARRIOR);
             if (mwarr != null) {
                 localstr += getStr() * mwarr / 100;
                 localdex += getDex() * mwarr / 100;
@@ -7795,21 +7795,21 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 }
             }
 
-            Integer watkbuff = getBuffedValue(MapleBuffStat.WATK);
+            Integer watkbuff = getBuffedValue(BuffStat.WATK);
             if (watkbuff != null) {
                 localwatk += watkbuff.intValue();
             }
-            Integer matkbuff = getBuffedValue(MapleBuffStat.MATK);
+            Integer matkbuff = getBuffedValue(BuffStat.MATK);
             if (matkbuff != null) {
                 localmagic += matkbuff.intValue();
             }
 
             /*
-            Integer speedbuff = getBuffedValue(MapleBuffStat.SPEED);
+            Integer speedbuff = getBuffedValue(BuffStat.SPEED);
             if (speedbuff != null) {
                 localspeed += speedbuff.intValue();
             }
-            Integer jumpbuff = getBuffedValue(MapleBuffStat.JUMP);
+            Integer jumpbuff = getBuffedValue(BuffStat.JUMP);
             if (jumpbuff != null) {
                 localjump += jumpbuff.intValue();
             }
@@ -8831,7 +8831,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         sendPacket(PacketCreator.updateBuddyCapacity(capacity));
     }
 
-    public void setBuffedValue(MapleBuffStat effect, int value) {
+    public void setBuffedValue(BuffStat effect, int value) {
         effLock.lock();
         chrLock.lock();
         try {
@@ -10080,7 +10080,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
 
         if (this.isHidden()) {
-            List<Pair<MapleBuffStat, Integer>> dsstat = Collections.singletonList(new Pair<>(MapleBuffStat.DARKSIGHT, 0));
+            List<Pair<BuffStat, Integer>> dsstat = Collections.singletonList(new Pair<>(BuffStat.DARKSIGHT, 0));
             getMap().broadcastGMMessage(this, PacketCreator.giveForeignBuff(getId(), dsstat), false);
         }
     }
