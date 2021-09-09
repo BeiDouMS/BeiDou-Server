@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.MapleCharacter;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
@@ -55,7 +55,7 @@ public class MinTamenessRequirement extends MapleQuestRequirement {
 	public boolean check(MapleCharacter chr, Integer npcid) {
 		int curCloseness = 0;
                 
-		for(MaplePet pet : chr.getPets()) {
+		for(Pet pet : chr.getPets()) {
                     if(pet == null) continue;
                     
                     if(pet.getCloseness() > curCloseness)

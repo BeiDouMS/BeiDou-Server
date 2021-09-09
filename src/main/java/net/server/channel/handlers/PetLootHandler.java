@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.maps.MapleMapItem;
@@ -42,7 +42,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
         MapleCharacter chr = c.getPlayer();
         
         int petIndex = chr.getPetIndex(p.readInt());
-        MaplePet pet = chr.getPet(petIndex);
+        Pet pet = chr.getPet(petIndex);
         if (pet == null || !pet.isSummoned()) {
             c.sendPacket(PacketCreator.enableActions());
             return;

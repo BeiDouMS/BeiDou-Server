@@ -28,7 +28,7 @@ import client.MapleClient;
 import client.command.Command;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
@@ -68,7 +68,7 @@ public class ItemDropCommand extends Command {
                 quantity = 1;
                 long days = Math.max(1, Integer.parseInt(params[1]));
                 long expiration = System.currentTimeMillis() + (days * 24 * 60 * 60 * 1000);
-                int petid = MaplePet.createPet(itemId);
+                int petid = Pet.createPet(itemId);
 
                 Item toDrop = new Item(itemId, (short) 0, quantity, petid);
                 toDrop.setExpiration(expiration);

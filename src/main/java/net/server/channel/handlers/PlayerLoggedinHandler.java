@@ -338,7 +338,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             player.checkBerserk(player.isHidden());
 
             if (newcomer) {
-                for (MaplePet pet : player.getPets()) {
+                for (Pet pet : player.getPets()) {
                     if (pet != null) {
                         wserv.registerPetHunger(player, player.getPetIndex(pet));
                     }

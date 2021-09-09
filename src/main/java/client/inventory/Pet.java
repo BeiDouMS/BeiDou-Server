@@ -40,10 +40,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- *
  * @author Matze
  */
-public class MaplePet extends Item {
+public class Pet extends Item {
     private String name;
     private int uniqueid;
     private int closeness = 0;
@@ -54,13 +53,13 @@ public class MaplePet extends Item {
     private int stance;
     private boolean summoned;
     private int petFlag = 0;
-    
+
     public enum PetFlag {
         OWNER_SPEED(0x01);
-        
-        private int i;
 
-        private PetFlag(int i) {
+        private final int i;
+
+        PetFlag(int i) {
             this.i = i;
         }
 
@@ -69,14 +68,14 @@ public class MaplePet extends Item {
         }
     }
 
-    private MaplePet(int id, short position, int uniqueid) {
+    private Pet(int id, short position, int uniqueid) {
         super(id, position, (short) 1);
         this.uniqueid = uniqueid;
         this.pos = new Point(0, 0);
     }
 
-    public static MaplePet loadFromDb(int itemid, short position, int petid) {
-        MaplePet ret = new MaplePet(itemid, position, petid);
+    public static Pet loadFromDb(int itemid, short position, int petid) {
+        Pet ret = new Pet(itemid, position, petid);
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT name, level, closeness, fullness, summoned, flag FROM pets WHERE petid = ?")) { // Get the pet details...
             ps.setInt(1, petid);
@@ -96,7 +95,7 @@ public class MaplePet extends Item {
             return null;
         }
     }
-    
+
     public static void deleteFromDb(MapleCharacter owner, int petid) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM pets WHERE `petid` = ?")) {
@@ -109,7 +108,7 @@ public class MaplePet extends Item {
             ex.printStackTrace();
         }
     }
-    
+
     public void saveToDb() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, summoned = ?, flag = ? WHERE petid = ?")) {
@@ -184,48 +183,55 @@ public class MaplePet extends Item {
     public byte getLevel() {
         return level;
     }
-    
+
     public void gainClosenessFullness(MapleCharacter owner, int incCloseness, int incFullness, int type) {
         byte slot = owner.getPetIndex(this);
         boolean enjoyed;
-        
+
         //will NOT increase pet's closeness if tried to feed pet with 100% fullness
         if (fullness < 100 || incFullness == 0) {   //incFullness == 0: command given
             int newFullness = fullness + incFullness;
-            if (newFullness > 100) newFullness = 100;
+            if (newFullness > 100) {
+                newFullness = 100;
+            }
             fullness = newFullness;
-            
+
             if (incCloseness > 0 && closeness < 30000) {
                 int newCloseness = closeness + incCloseness;
-                if (newCloseness > 30000) newCloseness = 30000;
-                
+                if (newCloseness > 30000) {
+                    newCloseness = 30000;
+                }
+
                 closeness = newCloseness;
-                while(newCloseness >= ExpTable.getClosenessNeededForLevel(level)) {
+                while (newCloseness >= ExpTable.getClosenessNeededForLevel(level)) {
                     level += 1;
                     owner.sendPacket(PacketCreator.showOwnPetLevelUp(slot));
                     owner.getMap().broadcastMessage(PacketCreator.showPetLevelUp(owner, slot));
                 }
             }
-            
+
             enjoyed = true;
         } else {
             int newCloseness = closeness - 1;
-            if (newCloseness < 0) newCloseness = 0;
+            if (newCloseness < 0) {
+                newCloseness = 0;
+            }
 
             closeness = newCloseness;
             if (level > 1 && newCloseness < ExpTable.getClosenessNeededForLevel(level - 1)) {
                 level -= 1;
             }
-            
+
             enjoyed = false;
         }
-        
+
         owner.getMap().broadcastMessage(PacketCreator.petFoodResponse(owner.getId(), slot, enjoyed, false));
         saveToDb();
-        
+
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
-        if (petz != null)
+        if (petz != null) {
             owner.forceUpdateItem(petz);
+        }
     }
 
     public void setLevel(byte level) {
@@ -271,31 +277,33 @@ public class MaplePet extends Item {
     public void setSummoned(boolean yes) {
         this.summoned = yes;
     }
-    
+
     public int getPetFlag() {
         return this.petFlag;
     }
-    
+
     private void setPetFlag(int flag) {
         this.petFlag = flag;
     }
-    
+
     public void addPetFlag(MapleCharacter owner, PetFlag flag) {
         this.petFlag |= flag.getValue();
         saveToDb();
-        
+
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
-        if (petz != null)
+        if (petz != null) {
             owner.forceUpdateItem(petz);
+        }
     }
-    
+
     public void removePetFlag(MapleCharacter owner, PetFlag flag) {
         this.petFlag &= 0xFFFFFFFF ^ flag.getValue();
         saveToDb();
-        
+
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
-        if (petz != null)
+        if (petz != null) {
             owner.forceUpdateItem(petz);
+        }
     }
 
     public Pair<Integer, Boolean> canConsume(int itemId) {

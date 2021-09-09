@@ -26,7 +26,7 @@ package client.command.commands.gm2;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
@@ -67,7 +67,7 @@ public class ItemCommand extends Command {
                         quantity = 1;
                         long days = Math.max(1, Integer.parseInt(params[1]));
                         long expiration = System.currentTimeMillis() + (days * 24 * 60 * 60 * 1000);
-                        int petid = MaplePet.createPet(itemId);
+                        int petid = Pet.createPet(itemId);
 
                         MapleInventoryManipulator.addById(c, itemId, quantity, player.getName(), petid, expiration);
                         return;

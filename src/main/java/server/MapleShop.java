@@ -24,7 +24,7 @@ package server;
 import client.MapleClient;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import constants.inventory.ItemConstants;
 import tools.DatabaseConnection;
@@ -138,7 +138,7 @@ public class MapleShop {
                 int diff = cardreduce + c.getPlayer().getMeso();
                 if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                     if (ItemConstants.isPet(itemId)) {
-                        int petid = MaplePet.createPet(itemId);
+                        int petid = Pet.createPet(itemId);
                         MapleInventoryManipulator.addById(c, itemId, quantity, "", petid, -1);
                     } else {
                         MapleInventoryManipulator.addById(c, itemId, quantity, "", -1, -1);

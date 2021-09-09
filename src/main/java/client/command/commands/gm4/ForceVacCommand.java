@@ -26,7 +26,7 @@ package client.command.commands.gm4;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
@@ -59,7 +59,7 @@ public class ForceVacCommand extends Command {
                     // Add NX to account, show effect and make item disappear
                     player.getCashShop().gainCash(1, mapItem.getItemId() == 4031865 ? 100 : 250);
                 } else if (mapItem.getItem().getItemId() >= 5000000 && mapItem.getItem().getItemId() <= 5000100) {
-                    int petId = MaplePet.createPet(mapItem.getItem().getItemId());
+                    int petId = Pet.createPet(mapItem.getItem().getItemId());
                     if (petId == -1) {
                         continue;
                     }

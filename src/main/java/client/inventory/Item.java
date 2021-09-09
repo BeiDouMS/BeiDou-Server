@@ -38,7 +38,7 @@ public class Item implements Comparable<Item> {
     private short position;
     private short quantity;
     private int petid = -1;
-    private MaplePet pet = null;
+    private Pet pet = null;
     private String owner = "";
     protected List<String> log;
     private short flag;
@@ -58,7 +58,7 @@ public class Item implements Comparable<Item> {
         this.position = position;
         this.quantity = quantity;
         if (petid > -1) {   // issue with null "pet" having petid > -1 found thanks to MedicOP
-            this.pet = MaplePet.loadFromDb(id, position, petid);
+            this.pet = Pet.loadFromDb(id, position, petid);
             if (this.pet == null) {
                 petid = -1;
             }
@@ -184,7 +184,7 @@ public class Item implements Comparable<Item> {
         this.giftFrom = giftFrom;
     }
 
-    public MaplePet getPet() {
+    public Pet getPet() {
         return pet;
     }
     

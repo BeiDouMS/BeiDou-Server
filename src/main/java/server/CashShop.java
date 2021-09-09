@@ -87,7 +87,7 @@ public class CashShop {
 
             int petid = -1;
             if (ItemConstants.isPet(itemId)) {
-                petid = MaplePet.createPet(itemId);
+                petid = Pet.createPet(itemId);
             }
 
             if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {

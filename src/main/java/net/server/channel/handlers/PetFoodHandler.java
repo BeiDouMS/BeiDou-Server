@@ -27,7 +27,7 @@ import client.autoban.AutobanManager;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -53,7 +53,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
         }
         int previousFullness = 100;
         byte slot = 0;
-        MaplePet[] pets = chr.getPets();
+        Pet[] pets = chr.getPets();
         for (byte i = 0; i < 3; i++) {
             if (pets[i] != null) {
                 if (pets[i].getFullness() < previousFullness) {
@@ -63,7 +63,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
             }
         }
         
-        MaplePet pet = chr.getPet(slot);
+        Pet pet = chr.getPet(slot);
         if(pet == null) return;
         
         short pos = p.readShort();

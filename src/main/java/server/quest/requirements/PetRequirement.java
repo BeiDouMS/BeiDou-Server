@@ -22,13 +22,14 @@
 package server.quest.requirements;
 
 import client.MapleCharacter;
-import client.inventory.MaplePet;
-import java.util.ArrayList;
-import java.util.List;
+import client.inventory.Pet;
 import provider.MapleData;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -54,7 +55,7 @@ public class PetRequirement extends MapleQuestRequirement {
 	
 	@Override
 	public boolean check(MapleCharacter chr, Integer npcid) {
-		for(MaplePet pet : chr.getPets()) {
+		for(Pet pet : chr.getPets()) {
                         if(pet == null) continue;   // thanks Arufonsu for showing a NPE occurring here
                         
 			if(petIDs.contains(pet.getItemId()))

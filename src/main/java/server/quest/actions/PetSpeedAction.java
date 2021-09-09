@@ -19,11 +19,10 @@
 */
 package server.quest.actions;
 
-import client.MapleClient;
 import client.MapleCharacter;
-import client.inventory.MaplePet;
+import client.MapleClient;
+import client.inventory.Pet;
 import provider.MapleData;
-import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -46,12 +45,12 @@ public class PetSpeedAction extends MapleQuestAction {
 	public void run(MapleCharacter chr, Integer extSelection) {
                 MapleClient c = chr.getClient();
                 
-                MaplePet pet = chr.getPet(0);   // assuming here only the pet leader will gain owner speed
+                Pet pet = chr.getPet(0);   // assuming here only the pet leader will gain owner speed
                 if(pet == null) return;
             
                 c.lockClient();
                 try {
-                        pet.addPetFlag(c.getPlayer(), MaplePet.PetFlag.OWNER_SPEED);
+                        pet.addPetFlag(c.getPlayer(), Pet.PetFlag.OWNER_SPEED);
                 } finally {
                     c.unlockClient();
                 }

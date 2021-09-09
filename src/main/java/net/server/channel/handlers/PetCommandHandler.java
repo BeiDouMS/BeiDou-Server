@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.inventory.PetCommand;
 import client.inventory.PetDataFactory;
 import net.AbstractPacketHandler;
@@ -38,7 +38,7 @@ public final class PetCommandHandler extends AbstractPacketHandler {
         MapleCharacter chr = c.getPlayer();
         int petId = p.readInt();
         byte petIndex = chr.getPetIndex(petId);
-        MaplePet pet;
+        Pet pet;
         if (petIndex == -1) {
             return;
         } else {

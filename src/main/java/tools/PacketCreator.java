@@ -137,7 +137,7 @@ public class PacketCreator {
         p.writeInt(chr.getHair()); // hair
 
         for (int i = 0; i < 3; i++) {
-            MaplePet pet = chr.getPet(i);
+            Pet pet = chr.getPet(i);
             if (pet != null) //Checked GMS.. and your pets stay when going into the cash shop.
             {
                 p.writeLong(pet.getUniqueId());
@@ -375,7 +375,7 @@ public class PacketCreator {
         }
         addExpirationTime(p, item.getExpiration());
         if (isPet) {
-            MaplePet pet = item.getPet();
+            Pet pet = item.getPet();
             p.writeFixedString(StringUtil.getRightPaddedStr(pet.getName(), '\0', 13));
             p.writeByte(pet.getLevel());
             p.writeShort(pet.getCloseness());
@@ -1937,7 +1937,7 @@ public class PacketCreator {
 
         p.writeShort(0);//chr.getFh()
         p.writeByte(0);
-        MaplePet[] pet = chr.getPets();
+        Pet[] pet = chr.getPets();
         for (int i = 0; i < 3; i++) {
             if (pet[i] != null) {
                 addPetInfo(p, pet[i], false);
@@ -2693,7 +2693,7 @@ public class PacketCreator {
         p.writeString(allianceName);  // does not seem to work
         p.writeByte(0); // pMedalInfo, thanks to Arnah (Vertisy)
 
-        MaplePet[] pets = chr.getPets();
+        Pet[] pets = chr.getPets();
         Item inv = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -114);
         for (int i = 0; i < 3; i++) {
             if (pets[i] != null) {
@@ -4361,7 +4361,7 @@ public class PacketCreator {
         return p;
     }
 
-    private static void addPetInfo(final OutPacket p, MaplePet pet, boolean showpet) {
+    private static void addPetInfo(final OutPacket p, Pet pet, boolean showpet) {
         p.writeByte(1);
         if (showpet) {
             p.writeByte(0);
@@ -4375,7 +4375,7 @@ public class PacketCreator {
         p.writeInt(pet.getFh());
     }
 
-    public static Packet showPet(MapleCharacter chr, MaplePet pet, boolean remove, boolean hunger) {
+    public static Packet showPet(MapleCharacter chr, Pet pet, boolean remove, boolean hunger) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_PET);
         p.writeInt(chr.getId());
         p.writeByte(chr.getPetIndex(pet));
@@ -4475,7 +4475,7 @@ public class PacketCreator {
         mask |= MapleStat.PET.getValue();
         p.writeByte(0);
         p.writeInt(mask);
-        MaplePet[] pets = chr.getPets();
+        Pet[] pets = chr.getPets();
         for (int i = 0; i < 3; i++) {
             if (pets[i] != null) {
                 p.writeLong(pets[i].getUniqueId());

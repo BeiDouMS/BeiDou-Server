@@ -162,7 +162,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     private MapleRockPaperScissor rps;
     private MapleMount maplemount;
     private MapleParty party;
-    private MaplePet[] pets = new MaplePet[3];
+    private Pet[] pets = new Pet[3];
     private MaplePlayerShop playerShop = null;
     private MapleShop shop = null;
     private MapleSkinColor skinColor = MapleSkinColor.NORMAL;
@@ -616,7 +616,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         this.mesosTraded += gain;
     }
     
-    public void addPet(MaplePet pet) {
+    public void addPet(Pet pet) {
         petLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
@@ -2962,7 +2962,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                                         deletedCoupon = true;
                                     }
                                 } else {
-                                    MaplePet pet = item.getPet();   // thanks Lame for noticing pets not getting despawned after expiration time
+                                    Pet pet = item.getPet();   // thanks Lame for noticing pets not getting despawned after expiration time
                                     if (pet != null) {
                                         unequipPet(pet, true);
                                     }
@@ -5614,7 +5614,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         this.setMessengerPosition(4);
     }
 
-    public MaplePet[] getPets() {
+    public Pet[] getPets() {
         petLock.lock();
         try {
             return Arrays.copyOf(pets, pets.length);
@@ -5623,7 +5623,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    public MaplePet getPet(int index) {
+    public Pet getPet(int index) {
         if (index < 0) {
             return null;
         }
@@ -5652,7 +5652,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
     
-    public byte getPetIndex(MaplePet pet) {
+    public byte getPetIndex(Pet pet) {
         petLock.lock();
         try {
             for (byte i = 0; i < 3; i++) {
@@ -7042,7 +7042,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                         ret.getInventory(item.getRight()).addItemFromDB(item.getLeft());
                         Item itemz = item.getLeft();
                         if (itemz.getPetId() > -1) {
-                            MaplePet pet = itemz.getPet();
+                            Pet pet = itemz.getPet();
                             if (pet != null && pet.isSummoned()) {
                                 ret.addPet(pet);
                             }
@@ -7973,7 +7973,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
     }
 
-    public void removePet(MaplePet pet, boolean shift_left) {
+    public void removePet(Pet pet, boolean shift_left) {
         petLock.lock();
         try {
             int slot = -1;
@@ -8477,7 +8477,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     }
                 }
 
-                List<MaplePet> petList = new LinkedList<>();
+                List<Pet> petList = new LinkedList<>();
                 petLock.lock();
                 try {
                     for (int i = 0; i < 3; i++) {
@@ -8489,7 +8489,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                     petLock.unlock();
                 }
 
-                for (MaplePet pet : petList) {
+                for (Pet pet : petList) {
                     pet.saveToDb();
                 }
 
@@ -9708,7 +9708,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     }
 
     public void runFullnessSchedule(int petSlot) {
-        MaplePet pet = getPet(petSlot);
+        Pet pet = getPet(petSlot);
         if (pet == null) {
             return;
         }
@@ -9762,20 +9762,20 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
     
     public void unequipAllPets() {
         for (int i = 0; i < 3; i++) {
-            MaplePet pet = getPet(i);
+            Pet pet = getPet(i);
             if (pet != null) {
                 unequipPet(pet, true);
             }
         }
     }
 
-    public void unequipPet(MaplePet pet, boolean shift_left) {
+    public void unequipPet(Pet pet, boolean shift_left) {
         unequipPet(pet, shift_left, false);
     }
 
-    public void unequipPet(MaplePet pet, boolean shift_left, boolean hunger) {
+    public void unequipPet(Pet pet, boolean shift_left, boolean hunger) {
         byte petIdx = this.getPetIndex(pet);
-        MaplePet chrPet = this.getPet(petIdx);
+        Pet chrPet = this.getPet(petIdx);
         
         if (chrPet != null) {
             chrPet.setSummoned(false);

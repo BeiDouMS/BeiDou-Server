@@ -28,7 +28,7 @@ import client.autoban.AutobanFactory;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
@@ -2452,8 +2452,8 @@ public class MapleMap {
             chr.sendPacket(PacketCreator.getClock(pqTimer / 1000));
         }
         
-        MaplePet[] pets = chr.getPets();
-        for (MaplePet pet : pets) {
+        Pet[] pets = chr.getPets();
+        for (Pet pet : pets) {
             if (pet != null) {
                 pet.setPos(getGroundBelow(chr.getPosition()));
                 chr.sendPacket(PacketCreator.showPet(chr, pet, false, false));

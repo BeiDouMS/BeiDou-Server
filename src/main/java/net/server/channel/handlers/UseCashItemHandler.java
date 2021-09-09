@@ -367,7 +367,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             player.getMap().startMapEffect(ii.getMsg(itemId).replaceFirst("%s", player.getName()).replaceFirst("%s", p.readString()), itemId);
             remove(c, position, itemId);
         } else if (itemType == 517) {
-            MaplePet pet = player.getPet(0);
+            Pet pet = player.getPet(0);
             if (pet == null) {
                 c.sendPacket(PacketCreator.enableActions());
                 return;
@@ -405,7 +405,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
         } else if (itemType == 524) {
             for (byte i = 0; i < 3; i++) {
-                MaplePet pet = player.getPet(i);
+                Pet pet = player.getPet(i);
                 if (pet != null) {
                     Pair<Integer, Boolean> pair = pet.canConsume(itemId);
 

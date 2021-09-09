@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.autoban.AutobanFactory;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
@@ -43,7 +43,7 @@ public final class PetExcludeItemsHandler extends AbstractPacketHandler {
         byte petIndex = chr.getPetIndex(petId);
         if (petIndex < 0) return;
 
-        final MaplePet pet = chr.getPet(petIndex);
+        final Pet pet = chr.getPet(petIndex);
         if (pet == null) {
             return;
         }

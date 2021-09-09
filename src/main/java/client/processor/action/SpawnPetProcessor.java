@@ -23,7 +23,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.SkillFactory;
 import client.inventory.InventoryType;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import client.inventory.manipulator.MapleInventoryManipulator;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
@@ -44,7 +44,7 @@ public class SpawnPetProcessor {
         if (c.tryacquireClient()) {
             try {
                 MapleCharacter chr = c.getPlayer();
-                MaplePet pet = chr.getInventory(InventoryType.CASH).getItem(slot).getPet();
+                Pet pet = chr.getInventory(InventoryType.CASH).getItem(slot).getPet();
                 if (pet == null) return;
 
                 int petid = pet.getItemId();
@@ -56,7 +56,7 @@ public class SpawnPetProcessor {
                         return;
                     } else {
                         int evolveid = MapleDataTool.getInt("info/evol1", dataRoot.getData("Pet/" + petid + ".img"));
-                        int petId = MaplePet.createPet(evolveid);
+                        int petId = Pet.createPet(evolveid);
                         if (petId == -1) {
                             return;
                         }

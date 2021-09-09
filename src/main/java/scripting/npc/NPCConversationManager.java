@@ -24,7 +24,7 @@ package scripting.npc;
 import client.*;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.MaplePet;
+import client.inventory.Pet;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
@@ -336,7 +336,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 	}
 
 	public void gainCloseness(int closeness) {
-		for (MaplePet pet : getPlayer().getPets()) {
+		for (Pet pet : getPlayer().getPets()) {
                         if(pet != null) {
                                 pet.gainClosenessFullness(getPlayer(), closeness, 0, 0);
                         }

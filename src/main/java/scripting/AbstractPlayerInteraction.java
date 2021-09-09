@@ -498,8 +498,8 @@ public class AbstractPlayerInteraction {
         }
         
         public Item evolvePet(byte slot, int afterId) {
-            MaplePet evolved = null;
-            MaplePet target;
+            Pet evolved = null;
+            Pet target;
             
             long period = (long) 90 * 24 * 60 * 60 * 1000;    //refreshes expiration date: 90 days
             
@@ -512,7 +512,7 @@ public class AbstractPlayerInteraction {
             Item tmp = gainItem(afterId, (short) 1, false, true, period, target);
             
             /*
-            evolved = MaplePet.loadFromDb(tmp.getItemId(), tmp.getPosition(), tmp.getPetId());
+            evolved = Pet.loadFromDb(tmp.getItemId(), tmp.getPosition(), tmp.getPetId());
             
             evolved = tmp.getPet();
             if(evolved == null) {
@@ -561,17 +561,17 @@ public class AbstractPlayerInteraction {
             return gainItem(id, quantity, randomStats, showMessage, expires, null);
         }
         
-        public Item gainItem(int id, short quantity, boolean randomStats, boolean showMessage, long expires, MaplePet from) {
+        public Item gainItem(int id, short quantity, boolean randomStats, boolean showMessage, long expires, Pet from) {
 		Item item = null;
-                MaplePet evolved;
+                Pet evolved;
                 int petId = -1;
                 
                 if (quantity >= 0) {
                         if (ItemConstants.isPet(id)) {
-                                petId = MaplePet.createPet(id);
+                                petId = Pet.createPet(id);
 
                                 if(from != null) {
-                                        evolved = MaplePet.loadFromDb(id, (short) 0, petId);
+                                        evolved = Pet.loadFromDb(id, (short) 0, petId);
 
                                         Point pos = getPlayer().getPosition();
                                         pos.y -= 12;
@@ -1113,13 +1113,13 @@ public class AbstractPlayerInteraction {
                 return getPlayer().getJailExpirationTimeLeft();
         }
         
-        public List<MaplePet> getDriedPets() {
-                List<MaplePet> list = new LinkedList<>();
+        public List<Pet> getDriedPets() {
+                List<Pet> list = new LinkedList<>();
             
                 long curTime = System.currentTimeMillis();
                 for(Item it : getPlayer().getInventory(InventoryType.CASH).list()) {
                         if(ItemConstants.isPet(it.getItemId()) && it.getExpiration() < curTime) {
-                                MaplePet pet = it.getPet();
+                                Pet pet = it.getPet();
                                 if (pet != null) {
                                         list.add(pet);
                                 }
