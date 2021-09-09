@@ -20,7 +20,7 @@
 /**
  * @Author Ronan
  * 3rd Job Event - Bowman
-**/
+ **/
 
 var entryMap = 108010100;
 var exitMap = 105040305;
@@ -37,22 +37,22 @@ function getMaxLobbies() {
 }
 
 function init() {
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function setup(level, lobbyid) {
     var eim = em.newInstance("3rdJob_bowman_" + lobbyid);
     eim.setProperty("level", level);
     eim.setProperty("boss", "0");
-    
+
     return eim;
 }
 
 function playerEntry(eim, player) {
     eim.getInstanceMap(maxMapId).resetPQ(1);
-    
+
     player.changeMap(entryMap, 0);
-    em.setProperty("noEntry","true");
+    em.setProperty("noEntry", "true");
 
     const PacketCreator = Java.type('tools.PacketCreator');
     player.sendPacket(PacketCreator.getClock(eventTime * 60));
@@ -64,7 +64,7 @@ function playerUnregistered(eim, player) {}
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function scheduledTimeout(eim) {
@@ -81,19 +81,21 @@ function clear(eim) {
     var player = eim.getPlayers().get(0);
     eim.unregisterPlayer(player);
     player.changeMap(exitMap);
-    
+
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function changedMap(eim, chr, mapid) {
-    if(mapid < minMapId || mapid > maxMapId) playerExit(eim, chr);
+    if (mapid < minMapId || mapid > maxMapId) {
+        playerExit(eim, chr);
+    }
 }
 
 function monsterKilled(mob, eim) {}
 
 function monsterValue(eim, mobId) {
-        return 1;
+    return 1;
 }
 
 function allMonstersDead(eim) {}

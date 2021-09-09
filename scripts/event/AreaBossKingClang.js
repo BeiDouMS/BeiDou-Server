@@ -20,17 +20,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	King Clang Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ King Clang Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 var hotSand;
 
 function init() {
-	hotSand = em.getChannelServer().getMapFactory().getMap(110040000);
+    hotSand = em.getChannelServer().getMapFactory().getMap(110040000);
     scheduleNew();
 }
 
@@ -39,28 +39,29 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
-    if(hotSand.getMonsterById(5220001) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
+    if (hotSand.getMonsterById(5220001) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
 
     const LifeFactory = Java.type('server.life.LifeFactory');
     var kingClang = LifeFactory.getMonster(5220001);
     var posX;
     var posY = 140;
-    posX =  Math.floor((Math.random() * 2400) - 1600);
+    posX = Math.floor((Math.random() * 2400) - 1600);
     const Point = Java.type('java.awt.Point');
     const spawnpoint = new Point(posX, posY);
     hotSand.spawnMonsterOnGroundBelow(kingClang, spawnpoint);
 
     const PacketCreator = Java.type('tools.PacketCreator');
     hotSand.broadcastMessage(PacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
-	em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

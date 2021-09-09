@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Chimera/Kimera Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Chimera/Kimera Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 function init() {
     scheduleNew();
@@ -36,30 +36,31 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     const LifeFactory = Java.type('server.life.LifeFactory');
     var labSecretBasementPath = em.getChannelServer().getMapFactory().getMap(261030000);
     var chimera = LifeFactory.getMonster(8220002);
-	
-	if(labSecretBasementPath.getMonsterById(8220002) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
-	
+
+    if (labSecretBasementPath.getMonsterById(8220002) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
+
     var posX;
     var posY = 180;
-    posX =  (Math.floor(Math.random() * 900) - 900);
+    posX = (Math.floor(Math.random() * 900) - 900);
     const Point = Java.type('java.awt.Point');
     const spawnpoint = new Point(posX, posY);
     labSecretBasementPath.spawnMonsterOnGroundBelow(chimera, spawnpoint);
 
     const PacketCreator = Java.type('tools.PacketCreator');
     labSecretBasementPath.broadcastMessage(PacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

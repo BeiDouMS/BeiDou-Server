@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Stumpy Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Stumpy Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 function init() {
     scheduleNew();
@@ -36,20 +36,21 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var eastRockyMountain5 = em.getChannelServer().getMapFactory().getMap(101030404);
     const LifeFactory = Java.type('server.life.LifeFactory');
     var stumpy = LifeFactory.getMonster(3220000);
-	
-    if(eastRockyMountain5.getMonsterById(3220000) != null) {
+
+    if (eastRockyMountain5.getMonsterById(3220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;
     }
-	
+
     var posX;
     var posY = 1280;
     posX = Math.floor((Math.random() * 800) + 400);

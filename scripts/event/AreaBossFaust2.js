@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Faust2 Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Faust2 Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 function init() {
     scheduleNew();
@@ -36,27 +36,28 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     const LifeFactory = Java.type('server.life.LifeFactory');
     var theForestOfEvil2 = em.getChannelServer().getMapFactory().getMap(100040106);
     var faust2 = LifeFactory.getMonster(5220002);
-	
-	if(theForestOfEvil2.getMonsterById(5220002) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
 
-	const Point = Java.type('java.awt.Point');
-	const spawnpoint = new Point(474, 278);
+    if (theForestOfEvil2.getMonsterById(5220002) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
+
+    const Point = Java.type('java.awt.Point');
+    const spawnpoint = new Point(474, 278);
     theForestOfEvil2.spawnMonsterOnGroundBelow(faust2, spawnpoint);
 
     const PacketCreator = Java.type('tools.PacketCreator');
     theForestOfEvil2.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

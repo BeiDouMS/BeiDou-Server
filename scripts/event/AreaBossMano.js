@@ -20,11 +20,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Mano Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Mano Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
+ **/
 
 function init() {
     scheduleNew();
@@ -35,15 +35,16 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var thicketAroundTheBeach3 = em.getChannelServer().getMapFactory().getMap(104000400);
     const LifeFactory = Java.type('server.life.LifeFactory');
     var mano = LifeFactory.getMonster(2220000);
-    if(thicketAroundTheBeach3.getMonsterById(2220000) != null) {
+    if (thicketAroundTheBeach3.getMonsterById(2220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
         return;
     }
@@ -54,7 +55,7 @@ function start() {
 
     const PacketCreator = Java.type('tools.PacketCreator');
     thicketAroundTheBeach3.broadcastMessage(PacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
-    em.schedule("start", 3 * 60 *60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

@@ -20,7 +20,7 @@
 /**
  * @Author Ronan
  * Event - Scadur's Mount Quest
-**/
+ **/
 
 var entryMap = 921110000;
 var exitMap = 211050000;
@@ -37,14 +37,14 @@ function getMaxLobbies() {
 }
 
 function init() {
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function setup(level, lobbyid) {
     var eim = em.newInstance("Aran_2ndmount_" + lobbyid);
     eim.setProperty("level", level);
     eim.setProperty("boss", "0");
-    
+
     return eim;
 }
 
@@ -52,13 +52,13 @@ function respawnStages(eim) {}
 
 function playerEntry(eim, player) {
     var mapObj = eim.getInstanceMap(entryMap);
-    
+
     mapObj.resetPQ(1);
     mapObj.instanceMapForceRespawn();
     respawnStages(eim);
-    
+
     player.changeMap(entryMap, 2);
-    em.setProperty("noEntry","true");
+    em.setProperty("noEntry", "true");
 
     const PacketCreator = Java.type('tools.PacketCreator');
     player.sendPacket(PacketCreator.getClock(eventTime * 60));
@@ -70,7 +70,7 @@ function playerUnregistered(eim, player) {}
 function playerExit(eim, player) {
     eim.unregisterPlayer(player);
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function scheduledTimeout(eim) {
@@ -84,29 +84,31 @@ function playerDisconnected(eim, player) {
 }
 
 function changedMap(eim, chr, mapid) {
-    if(mapid < minMapId || mapid > maxMapId) playerExit(eim, chr);
+    if (mapid < minMapId || mapid > maxMapId) {
+        playerExit(eim, chr);
+    }
 }
 
 function clearPQ(eim) {
     eim.stopEventTimer();
     eim.setEventCleared();
-    
+
     var player = eim.getPlayers().get(0);
     eim.unregisterPlayer(player);
     player.changeMap(exitMap);
-    
+
     eim.dispose();
-    em.setProperty("noEntry","false");
+    em.setProperty("noEntry", "false");
 }
 
 function monsterKilled(mob, eim) {}
 
 function monsterValue(eim, mobId) {
-        return 1;
+    return 1;
 }
 
 function friendlyKilled(mob, eim) {
-    if(em.getProperty("noEntry") != "false") {
+    if (em.getProperty("noEntry") != "false") {
         var player = eim.getPlayers().get(0);
         playerExit(eim, player);
         player.changeMap(exitMap);
