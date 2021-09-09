@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import server.maps.MapleReactor;
+import server.maps.Reactor;
 
 /**
  * @author Lerk
@@ -40,7 +40,7 @@ public final class ReactorHitHandler extends AbstractPacketHandler {
         short stance = p.readShort();
         p.skip(4);
         int skillid = p.readInt();
-        MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
+        Reactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
         if (reactor != null) {
             reactor.hitReactor(true, charPos, stance, skillid, c);
         }

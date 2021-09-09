@@ -32,8 +32,8 @@ import server.life.Monster;
 import server.life.SpawnPoint;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
-import server.maps.MapleReactor;
 import server.maps.Portal;
+import server.maps.Reactor;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -124,7 +124,7 @@ public class DebugCommand extends Command {
                 player.dropMessage(6, "Current reactor states on map " + player.getMapId() + ":");
 
                 for (MapObject mmo : player.getMap().getReactors()) {
-                    MapleReactor mr = (MapleReactor) mmo;
+                    Reactor mr = (Reactor) mmo;
                     player.dropMessage(6, "Id: " + mr.getId() + " Oid: " + mr.getObjectId() + " name: '" + mr.getName() + "' -> Type: " + mr.getReactorType() + " State: " + mr.getState() + " Event State: " + mr.getEventState() + " Position: x " + mr.getPosition().getX() + " y " + mr.getPosition().getY() + ".");
                 }
                 break;

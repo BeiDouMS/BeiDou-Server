@@ -46,8 +46,8 @@ import server.life.Monster;
 import server.life.NPC;
 import server.maps.MapManager;
 import server.maps.MapleMap;
-import server.maps.MapleReactor;
 import server.maps.Portal;
+import server.maps.Reactor;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -1350,7 +1350,7 @@ public class EventInstanceManager {
         public boolean activatedAllReactorsOnMap(MapleMap map, int minReactorId, int maxReactorId) {
                 if(map == null) return true;
             
-                for(MapleReactor mr : map.getReactorsByIdRange(minReactorId, maxReactorId)) {
+                for(Reactor mr : map.getReactorsByIdRange(minReactorId, maxReactorId)) {
                         if(mr.getReactorType() != -1) {
                                 return false;
                         }

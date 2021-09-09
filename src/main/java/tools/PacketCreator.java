@@ -4117,7 +4117,7 @@ public class PacketCreator {
     }
 
     // is there a way to spawn reactors non-animated?
-    public static Packet spawnReactor(MapleReactor reactor) {
+    public static Packet spawnReactor(Reactor reactor) {
         OutPacket p = OutPacket.create(SendOpcode.REACTOR_SPAWN);
         p.writeInt(reactor.getObjectId());
         p.writeInt(reactor.getId());
@@ -4129,7 +4129,7 @@ public class PacketCreator {
     }
 
     // is there a way to trigger reactors without performing the hit animation?
-    public static Packet triggerReactor(MapleReactor reactor, int stance) {
+    public static Packet triggerReactor(Reactor reactor, int stance) {
         OutPacket p = OutPacket.create(SendOpcode.REACTOR_HIT);
         p.writeInt(reactor.getObjectId());
         p.writeByte(reactor.getState());
@@ -4140,7 +4140,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet destroyReactor(MapleReactor reactor) {
+    public static Packet destroyReactor(Reactor reactor) {
         OutPacket p = OutPacket.create(SendOpcode.REACTOR_DESTROY);
         p.writeInt(reactor.getObjectId());
         p.writeByte(reactor.getState());

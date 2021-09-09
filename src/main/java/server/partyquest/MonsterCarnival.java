@@ -9,7 +9,7 @@ import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import server.TimerManager;
 import server.maps.MapleMap;
-import server.maps.MapleReactor;
+import server.maps.Reactor;
 import tools.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
@@ -170,7 +170,7 @@ public class MonsterCarnival {
     
     public boolean canGuardianR() {
         int teamReactors = 0;
-        for (MapleReactor react : map.getAllReactors()) {
+        for (Reactor react : map.getAllReactors()) {
             if (react.getName().substring(0, 1).contentEquals("0")) {
                 teamReactors += 1;
             }
@@ -181,7 +181,7 @@ public class MonsterCarnival {
     
     public boolean canGuardianB() {
         int teamReactors = 0;
-        for (MapleReactor react : map.getAllReactors()) {
+        for (Reactor react : map.getAllReactors()) {
             if (react.getName().substring(0, 1).contentEquals("1")) {
                 teamReactors += 1;
             }

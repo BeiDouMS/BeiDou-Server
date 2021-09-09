@@ -40,14 +40,12 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 
 /**
- *
  * @author Lerk
  * @author Ronan
  */
-public class MapleReactor extends AbstractMapObject {
-
-    private int rid;
-    private MapleReactorStats stats;
+public class Reactor extends AbstractMapObject {
+    private final int rid;
+    private final MapleReactorStats stats;
     private byte state;
     private byte evstate;
     private int delay;
@@ -60,10 +58,10 @@ public class MapleReactor extends AbstractMapObject {
     private Runnable delayedRespawnRun = null;
     private GuardianSpawnPoint guardian = null;
     private byte facingDirection = 0;
-    private Lock reactorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR, true);
-    private Lock hitLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR_HIT, true);
+    private final Lock reactorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR, true);
+    private final Lock hitLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.REACTOR_HIT, true);
 
-    public MapleReactor(MapleReactorStats stats, int rid) {
+    public Reactor(MapleReactorStats stats, int rid) {
         this.evstate = (byte) 0;
         this.stats = stats;
         this.rid = rid;
@@ -85,7 +83,7 @@ public class MapleReactor extends AbstractMapObject {
     public void unlockReactor() {
         reactorLock.unlock();
     }
-    
+
     public void hitLockReactor() {
         hitLock.lock();
         reactorLock.lock();
@@ -323,11 +321,12 @@ public class MapleReactor extends AbstractMapObject {
             e.printStackTrace();
         }
     }
-    
+
     public boolean destroy() {
         if (reactorLock.tryLock()) {
             try {
                 boolean alive = this.isAlive();
+                // reactor neither alive nor in delayed respawn, remove map object allowed
                 if (alive) {
                     this.setAlive(false);
                     this.cancelReactorTimeout();
@@ -335,20 +334,16 @@ public class MapleReactor extends AbstractMapObject {
                     if (this.getDelay() > 0) {
                         this.delayedRespawn();
                     }
-                } else if (this.inDelayedRespawn()) {
-                    return false;
-                } else {
-                    return true;    // reactor neither alive nor in delayed respawn, remove map object allowed
-                }
+                } else return !this.inDelayedRespawn();
             } finally {
                 reactorLock.unlock();
             }
         }
-        
+
         map.broadcastMessage(PacketCreator.destroyReactor(this));
         return false;
     }
-    
+
     private void respawn() {
         this.lockReactor();
         try {
@@ -357,25 +352,25 @@ public class MapleReactor extends AbstractMapObject {
         } finally {
             this.unlockReactor();
         }
-        
+
         map.broadcastMessage(this.makeSpawnData());
     }
-    
+
     public void delayedRespawn() {
         Runnable r = () -> {
             delayedRespawnRun = null;
             respawn();
         };
-        
+
         delayedRespawnRun = r;
-        
+
         OverallService service = (OverallService) map.getChannelServer().getServiceAccess(ChannelServices.OVERALL);
         service.registerOverallAction(map.getId(), r, this.getDelay());
     }
-    
+
     public boolean forceDelayedRespawn() {
         Runnable r = delayedRespawnRun;
-        
+
         if (r != null) {
             OverallService service = (OverallService) map.getChannelServer().getServiceAccess(ChannelServices.OVERALL);
             service.forceRunOverallAction(map.getId(), r);
@@ -384,7 +379,7 @@ public class MapleReactor extends AbstractMapObject {
             return false;
         }
     }
-    
+
     public boolean inDelayedRespawn() {
         return delayedRespawnRun != null;
     }

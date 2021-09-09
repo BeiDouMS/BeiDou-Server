@@ -293,7 +293,7 @@ public class MapFactory {
             for (Data reactor : mapData.getChildByPath("reactor")) {
                 String id = DataTool.getString(reactor.getChildByPath("id"));
                 if (id != null) {
-                    MapleReactor newReactor = loadReactor(reactor, id, (byte) DataTool.getInt(reactor.getChildByPath("f"), 0));
+                    Reactor newReactor = loadReactor(reactor, id, (byte) DataTool.getInt(reactor.getChildByPath("f"), 0));
                     map.spawnReactor(newReactor);
                 }
             }
@@ -351,8 +351,8 @@ public class MapFactory {
         return myLife;
     }
 
-    private static MapleReactor loadReactor(Data reactor, String id, final byte FacingDirection) {
-        MapleReactor myReactor = new MapleReactor(MapleReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
+    private static Reactor loadReactor(Data reactor, String id, final byte FacingDirection) {
+        Reactor myReactor = new Reactor(MapleReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
         int x = DataTool.getInt(reactor.getChildByPath("x"));
         int y = DataTool.getInt(reactor.getChildByPath("y"));
         myReactor.setFacingDirection(FacingDirection);

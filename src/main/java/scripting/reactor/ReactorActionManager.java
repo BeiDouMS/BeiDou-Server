@@ -35,7 +35,7 @@ import server.life.LifeFactory;
 import server.life.Monster;
 import server.maps.MapMonitor;
 import server.maps.MapleMap;
-import server.maps.MapleReactor;
+import server.maps.Reactor;
 import server.maps.ReactorDropEntry;
 import server.partyquest.MapleCarnivalFactory;
 import server.partyquest.MapleCarnivalFactory.MCSkill;
@@ -53,11 +53,11 @@ import java.util.concurrent.ScheduledFuture;
  * @author Ronan
  */
 public class ReactorActionManager extends AbstractPlayerInteraction {
-    private final MapleReactor reactor;
+    private final Reactor reactor;
     private final Invocable iv;
     private ScheduledFuture<?> sprayTask = null;
 
-    public ReactorActionManager(Client c, MapleReactor reactor, Invocable iv) {
+    public ReactorActionManager(Client c, Reactor reactor, Invocable iv) {
         super(c);
         this.reactor = reactor;
         this.iv = iv;
@@ -185,7 +185,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 }
             }
         } else {
-            final MapleReactor r = reactor;
+            final Reactor r = reactor;
             final List<ReactorDropEntry> dropItems = items;
             final int worldMesoRate = c.getWorldServer().getMesoRate();
             
@@ -299,7 +299,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
 
-    public MapleReactor getReactor() {
+    public Reactor getReactor() {
         return reactor;
     }
 

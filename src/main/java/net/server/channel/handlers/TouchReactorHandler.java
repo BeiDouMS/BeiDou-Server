@@ -25,7 +25,7 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.reactor.ReactorScriptManager;
-import server.maps.MapleReactor;
+import server.maps.Reactor;
 
 /**
  *
@@ -36,7 +36,7 @@ public final class TouchReactorHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
-        MapleReactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
+        Reactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
         if (reactor != null) {
             if (p.readByte() != 0) {
                 ReactorScriptManager.getInstance().touch(c, reactor);
