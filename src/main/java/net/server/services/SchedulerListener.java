@@ -22,7 +22,6 @@ package net.server.services;
 import java.util.List;
 
 /**
- *
  * @author Ronan
  */
 public interface SchedulerListener {

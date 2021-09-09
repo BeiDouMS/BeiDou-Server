@@ -30,7 +30,7 @@ public class CustomPacketHandler implements PacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         if (p.available() > 0 && c.getGMLevel() == 4) {//w/e
-            c.sendPacket(PacketCreator.customPacket(p.readBytes((int) p.available())));
+            c.sendPacket(PacketCreator.customPacket(p.readBytes(p.available())));
         }
     }
 

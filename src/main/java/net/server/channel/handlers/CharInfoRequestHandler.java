@@ -29,7 +29,7 @@ import server.maps.MapObject;
 import tools.PacketCreator;
 
 public final class CharInfoRequestHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
@@ -38,8 +38,8 @@ public final class CharInfoRequestHandler extends AbstractPacketHandler {
         if (target != null) {
             if (target instanceof Character) {
                 Character player = (Character) target;
-                
-                if(c.getPlayer().getId() != player.getId()) {
+
+                if (c.getPlayer().getId() != player.getId()) {
                     player.exportExcludedItems(c);
                 }
                 c.sendPacket(PacketCreator.charInfo(player));

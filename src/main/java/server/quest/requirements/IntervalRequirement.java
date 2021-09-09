@@ -29,69 +29,69 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class IntervalRequirement extends AbstractQuestRequirement {
-	private int interval = -1;
-	private int questID;
-	
-	public IntervalRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.INTERVAL);
-		questID = quest.getId();
-                processData(data);
-	}
-	
-        public int getInterval() {
-                return interval;
+    private int interval = -1;
+    private final int questID;
+
+    public IntervalRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.INTERVAL);
+        questID = quest.getId();
+        processData(data);
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    @Override
+    public void processData(Data data) {
+        interval = DataTool.getInt(data) * 60 * 1000;
+    }
+
+    private static String getIntervalTimeLeft(Character chr, IntervalRequirement r) {
+        StringBuilder str = new StringBuilder();
+
+        long futureTime = chr.getQuest(Quest.getInstance(r.questID)).getCompletionTime() + r.getInterval();
+        long leftTime = futureTime - System.currentTimeMillis();
+
+        byte mode = 0;
+        if (leftTime / (60 * 1000) > 0) {
+            mode++;     //counts minutes
+
+            if (leftTime / (60 * 60 * 1000) > 0) {
+                mode++;     //counts hours
+            }
         }
-	
-	@Override
-	public void processData(Data data) {
-		interval = DataTool.getInt(data) * 60 * 1000;
-	}
-	
-        private static String getIntervalTimeLeft(Character chr, IntervalRequirement r) {
-                StringBuilder str = new StringBuilder();
 
-                long futureTime = chr.getQuest(Quest.getInstance(r.questID)).getCompletionTime() + r.getInterval();
-                long leftTime = futureTime - System.currentTimeMillis();
+        switch (mode) {
+            case 2:
+                int hours = (int) ((leftTime / (1000 * 60 * 60)));
+                str.append(hours + " hours, ");
 
-                byte mode = 0;
-                if(leftTime / (60*1000) > 0) {
-                        mode++;     //counts minutes
+            case 1:
+                int minutes = (int) ((leftTime / (1000 * 60)) % 60);
+                str.append(minutes + " minutes, ");
 
-                        if(leftTime / (60*60*1000) > 0)
-                               mode++;     //counts hours
-                }
-
-                switch(mode) {
-                        case 2:
-                                int hours   = (int) ((leftTime / (1000*60*60)));
-                                str.append(hours + " hours, ");
-
-                        case 1:
-                                int minutes = (int) ((leftTime / (1000*60)) % 60);
-                                str.append(minutes + " minutes, ");
-
-                        default:
-                                int seconds = (int) (leftTime / 1000) % 60 ;
-                                str.append(seconds + " seconds");
-                }
-
-                return str.toString();
+            default:
+                int seconds = (int) (leftTime / 1000) % 60;
+                str.append(seconds + " seconds");
         }
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		boolean check = !chr.getQuest(Quest.getInstance(questID)).getStatus().equals(QuestStatus.Status.COMPLETED);
-		boolean check2 = chr.getQuest(Quest.getInstance(questID)).getCompletionTime() <= System.currentTimeMillis() - interval;
-                
-                if (check || check2) {
-                        return true;
-                } else {
-                        chr.message("This quest will become available again in approximately " + getIntervalTimeLeft(chr, this) + ".");
-                        return false;
-                }
-	}
+
+        return str.toString();
+    }
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        boolean check = !chr.getQuest(Quest.getInstance(questID)).getStatus().equals(QuestStatus.Status.COMPLETED);
+        boolean check2 = chr.getQuest(Quest.getInstance(questID)).getCompletionTime() <= System.currentTimeMillis() - interval;
+
+        if (check || check2) {
+            return true;
+        } else {
+            chr.message("This quest will become available again in approximately " + getIntervalTimeLeft(chr, this) + ".");
+            return false;
+        }
+    }
 }

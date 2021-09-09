@@ -1,7 +1,7 @@
- /* 
-	NPC Name: 		Divine Bird
-	Map(s): 		Erev
-	Description: 		3rd job KoC Buff
+/*
+   NPC Name: 		Divine Bird
+   Map(s): 		Erev
+   Description: 		3rd job KoC Buff
 */
 
 function start() {
@@ -12,6 +12,6 @@ function start() {
     } else {
         cm.sendOk("Don't stop training. Every ounce of your energy is required to protect the world of Maple....");
     }
-    
+
     cm.dispose();
 }

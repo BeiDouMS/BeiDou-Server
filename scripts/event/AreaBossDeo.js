@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Deo Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Deo Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 function init() {
     scheduleNew();
 }
@@ -35,17 +35,18 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var royalCatthusDesert = em.getChannelServer().getMapFactory().getMap(260010201);
-	
-	if(royalCatthusDesert.getMonsterById(3220001) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
+
+    if (royalCatthusDesert.getMonsterById(3220001) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
 
     const LifeFactory = Java.type('server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
@@ -54,7 +55,7 @@ function start() {
     var deo = LifeFactory.getMonster(3220001);
     royalCatthusDesert.spawnMonsterOnGroundBelow(deo, new Point(645, 275));
     royalCatthusDesert.broadcastMessage(PacketCreator.serverNotice(6, "Deo slowly appeared out of the sand dust."));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

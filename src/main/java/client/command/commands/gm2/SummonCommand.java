@@ -46,7 +46,7 @@ public class SummonCommand extends Command {
         Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim == null) {
             //If victim isn't on current channel, loop all channels on current world.
-            
+
             for (Channel ch : Server.getInstance().getChannelsFromWorld(c.getWorld())) {
                 victim = ch.getPlayerStorage().getCharacterByName(params[0]);
                 if (victim != null) {
@@ -59,19 +59,22 @@ public class SummonCommand extends Command {
                 player.dropMessage(6, "Player currently not logged in or unreachable.");
                 return;
             }
-            
+
             if (player.getClient().getChannel() != victim.getClient().getChannel()) {//And then change channel if needed.
                 victim.dropMessage("Changing channel, please wait a moment.");
                 victim.getClient().changeChannel(player.getClient().getChannel());
             }
-            
+
             try {
                 for (int i = 0; i < 7; i++) {   // poll for a while until the player reconnects
-                    if (victim.isLoggedinWorld()) break;
+                    if (victim.isLoggedinWorld()) {
+                        break;
+                    }
                     Thread.sleep(1777);
                 }
-            } catch (InterruptedException e) {}
-            
+            } catch (InterruptedException e) {
+            }
+
             MapleMap map = player.getMap();
             victim.saveLocationOnWarp();
             victim.forceChangeMap(map, map.findClosestPortal(player.getPosition()));

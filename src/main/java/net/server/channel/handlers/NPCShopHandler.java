@@ -29,7 +29,6 @@ import net.packet.InPacket;
 import tools.FilePrinter;
 
 /**
- * 
  * @author Matze
  */
 public final class NPCShopHandler extends AbstractPacketHandler {
@@ -40,10 +39,10 @@ public final class NPCShopHandler extends AbstractPacketHandler {
             int itemId = p.readInt();
             short quantity = p.readShort();
             if (quantity < 1) {
-            	AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit a npc shop.");
-            	FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to buy quantity " + quantity + " of item id " + itemId);
-            	c.disconnect(true, false);
-            	return;
+                AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit a npc shop.");
+                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to buy quantity " + quantity + " of item id " + itemId);
+                c.disconnect(true, false);
+                return;
             }
             c.getPlayer().getShop().buy(c, slot, itemId, quantity);
         } else if (bmode == 1) { // sell ;)

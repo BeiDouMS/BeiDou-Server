@@ -28,30 +28,28 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class MaxLevelRequirement extends AbstractQuestRequirement {
-	private int maxLevel;
-	
-	
-	public MaxLevelRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.MAX_LEVEL);
-		processData(data);
-	}
-	
-	/**
-	 * 
-	 * @param data 
-	 */
-	@Override
-	public void processData(Data data) {
-		maxLevel = DataTool.getInt(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return maxLevel >= chr.getLevel();
-	}
+    private int maxLevel;
+
+
+    public MaxLevelRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.MAX_LEVEL);
+        processData(data);
+    }
+
+    /**
+     * @param data
+     */
+    @Override
+    public void processData(Data data) {
+        maxLevel = DataTool.getInt(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return maxLevel >= chr.getLevel();
+    }
 }

@@ -30,7 +30,6 @@ import net.server.coordinator.session.SessionCoordinator;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93
  */
 public class SetGenderHandler extends AbstractPacketHandler {

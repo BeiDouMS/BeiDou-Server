@@ -32,7 +32,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *
  * @author Matze
  */
 public abstract class AbstractScriptManager {

@@ -1,7 +1,7 @@
 package constants.net;
 
 public class ServerConstants {
-    
+
     //Server Version
     public static final short VERSION = 83;
 

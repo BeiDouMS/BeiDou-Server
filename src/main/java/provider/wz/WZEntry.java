@@ -25,11 +25,11 @@ import provider.DataEntity;
 import provider.DataEntry;
 
 public class WZEntry implements DataEntry {
-    private String name;
-    private int size;
-    private int checksum;
+    private final String name;
+    private final int size;
+    private final int checksum;
     private int offset;
-    private DataEntity parent;
+    private final DataEntity parent;
 
     public WZEntry(String name, int size, int checksum, DataEntity parent) {
         super();

@@ -24,7 +24,6 @@ package net.server;
 import server.StatEffect;
 
 /**
- *
  * @author Danny
  */
 public class PlayerBuffValueHolder {

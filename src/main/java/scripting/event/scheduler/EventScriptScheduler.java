@@ -36,18 +36,17 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 
 /**
- *
  * @author Ronan
  */
 public class EventScriptScheduler {
 
     private boolean disposed = false;
     private int idleProcs = 0;
-    private Map<Runnable, Long> registeredEntries = new HashMap<>();
+    private final Map<Runnable, Long> registeredEntries = new HashMap<>();
 
     private ScheduledFuture<?> schedulerTask = null;
     private MonitoredReentrantLock schedulerLock;
-    private Runnable monitorTask = () -> runBaseSchedule();
+    private final Runnable monitorTask = () -> runBaseSchedule();
 
     public EventScriptScheduler() {
         schedulerLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.EM_SCHDL, true);

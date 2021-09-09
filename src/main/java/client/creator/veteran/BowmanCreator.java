@@ -28,48 +28,47 @@ import client.inventory.Item;
 import server.ItemInformationProvider;
 
 /**
- *
  * @author RonanLana
  */
 public class BowmanCreator extends CharacterFactory {
-        private static int[] equips = {1040067, 1041054, 1060056, 1061050, 1072081};
-        private static int[] weapons = {1452005, 1462000};
-        private static int[] startingHpMp = {797, 404};
-        
-        private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
-                CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
-                ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                
-                recipe.setDex(25);
-                recipe.setRemainingAp(133);
-                recipe.setRemainingSp(61);
+    private static final int[] equips = {1040067, 1041054, 1060056, 1061050, 1072081};
+    private static final int[] weapons = {1452005, 1462000};
+    private static final int[] startingHpMp = {797, 404};
 
-                recipe.setMaxHp(startingHpMp[0]);
-                recipe.setMaxMp(startingHpMp[1]);
-                
-                recipe.setMeso(100000);
+    private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
+        CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-                for(int i = 1; i < weapons.length; i++) {
-                        giveEquipment(recipe, ii, weapons[i]);
-                }
+        recipe.setDex(25);
+        recipe.setRemainingAp(133);
+        recipe.setRemainingSp(61);
 
-                giveItem(recipe, 2000002, 100, InventoryType.USE);
-                giveItem(recipe, 2000003, 100, InventoryType.USE);
-                giveItem(recipe, 3010000, 1, InventoryType.SETUP);
-                
-                return recipe;
+        recipe.setMaxHp(startingHpMp[0]);
+        recipe.setMaxMp(startingHpMp[1]);
+
+        recipe.setMeso(100000);
+
+        for (int i = 1; i < weapons.length; i++) {
+            giveEquipment(recipe, ii, weapons[i]);
         }
-    
-        private static void giveEquipment(CharacterFactoryRecipe recipe, ItemInformationProvider ii, int equipid) {
-                Item nEquip = ii.getEquipById(equipid);
-                recipe.addStartingEquipment(nEquip);
-        }
-        
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
-                recipe.addStartingItem(itemid, quantity, itemType);
-        }
-    
-        public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
-                return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BOWMAN, 30, 100000000, equips[gender], equips[2 + gender], equips[4], weapons[0]));
-        }
+
+        giveItem(recipe, 2000002, 100, InventoryType.USE);
+        giveItem(recipe, 2000003, 100, InventoryType.USE);
+        giveItem(recipe, 3010000, 1, InventoryType.SETUP);
+
+        return recipe;
+    }
+
+    private static void giveEquipment(CharacterFactoryRecipe recipe, ItemInformationProvider ii, int equipid) {
+        Item nEquip = ii.getEquipById(equipid);
+        recipe.addStartingEquipment(nEquip);
+    }
+
+    private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
+        recipe.addStartingItem(itemid, quantity, itemType);
+    }
+
+    public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
+        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BOWMAN, 30, 100000000, equips[gender], equips[2 + gender], equips[4], weapons[0]));
+    }
 }

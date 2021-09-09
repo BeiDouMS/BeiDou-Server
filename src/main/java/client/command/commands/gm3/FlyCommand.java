@@ -46,12 +46,16 @@ public class FlyCommand extends Command {
         String sendStr = "";
         if (params[0].equalsIgnoreCase("on")) {
             sendStr += "Enabled Fly feature (F1). With fly active, you cannot attack.";
-            if (!srv.canFly(accid)) sendStr += " Re-login to take effect.";
+            if (!srv.canFly(accid)) {
+                sendStr += " Re-login to take effect.";
+            }
 
             srv.changeFly(c.getAccID(), true);
         } else {
             sendStr += "Disabled Fly feature. You can now attack.";
-            if (srv.canFly(accid)) sendStr += " Re-login to take effect.";
+            if (srv.canFly(accid)) {
+                sendStr += " Re-login to take effect.";
+            }
 
             srv.changeFly(c.getAccID(), false);
         }

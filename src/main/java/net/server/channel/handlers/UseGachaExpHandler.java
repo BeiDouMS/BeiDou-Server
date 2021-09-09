@@ -29,16 +29,15 @@ import net.packet.InPacket;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93
- * 
+ * <p>
  * Modified by -- Ronan - concurrency protection
  */
 public class UseGachaExpHandler extends AbstractPacketHandler {
-    
+
     @Override
     public void handlePacket(InPacket p, Client c) {
-        
+
         if (c.tryacquireClient()) {
             try {
                 if (c.getPlayer().getGachaExp() <= 0) {
@@ -49,7 +48,7 @@ public class UseGachaExpHandler extends AbstractPacketHandler {
                 c.releaseClient();
             }
         }
-        
+
         c.sendPacket(PacketCreator.enableActions());
     }
 }

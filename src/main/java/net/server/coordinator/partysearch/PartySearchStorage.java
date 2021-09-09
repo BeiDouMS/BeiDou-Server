@@ -31,18 +31,17 @@ import tools.IntervalBuilder;
 import java.util.*;
 
 /**
- *
  * @author Ronan
  */
 public class PartySearchStorage {
-    
-    private List<PartySearchCharacter> storage = new ArrayList<>(20);
-    private IntervalBuilder emptyIntervals = new IntervalBuilder();
-    
+
+    private final List<PartySearchCharacter> storage = new ArrayList<>(20);
+    private final IntervalBuilder emptyIntervals = new IntervalBuilder();
+
     private final MonitoredReentrantReadWriteLock psLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_PARTY_SEARCH_STORAGE, true);
     private final MonitoredReadLock psRLock = MonitoredReadLockFactory.createLock(psLock);
     private final MonitoredWriteLock psWLock = MonitoredWriteLockFactory.createLock(psLock);
-    
+
     public List<PartySearchCharacter> getStorageList() {
         psRLock.lock();
         try {
@@ -51,11 +50,11 @@ public class PartySearchStorage {
             psRLock.unlock();
         }
     }
-    
+
     private Map<Integer, Character> fetchRemainingPlayers() {
         List<PartySearchCharacter> players = getStorageList();
         Map<Integer, Character> remainingPlayers = new HashMap<>(players.size());
-        
+
         for (PartySearchCharacter psc : players) {
             if (psc.isQueued()) {
                 Character chr = psc.getPlayer();
@@ -64,19 +63,19 @@ public class PartySearchStorage {
                 }
             }
         }
-        
+
         return remainingPlayers;
     }
-    
+
     public void updateStorage(Collection<Character> echelon) {
         Map<Integer, Character> newcomers = new HashMap<>();
         for (Character chr : echelon) {
             newcomers.put(chr.getId(), chr);
         }
-        
+
         Map<Integer, Character> curStorage = fetchRemainingPlayers();
         curStorage.putAll(newcomers);
-        
+
         List<PartySearchCharacter> pscList = new ArrayList<>(curStorage.size());
         for (Character chr : curStorage.values()) {
             pscList.add(new PartySearchCharacter(chr));
@@ -86,7 +85,7 @@ public class PartySearchStorage {
             int levelP1 = c1.getLevel(), levelP2 = c2.getLevel();
             return levelP1 > levelP2 ? 1 : (levelP1 == levelP2 ? 0 : -1);
         });
-        
+
         psWLock.lock();
         try {
             storage.clear();
@@ -94,18 +93,18 @@ public class PartySearchStorage {
         } finally {
             psWLock.unlock();
         }
-        
+
         emptyIntervals.clear();
     }
-    
+
     private static int bsearchStorage(List<PartySearchCharacter> storage, int level) {
         int st = 0, en = storage.size() - 1;
-        
+
         int mid, idx;
         while (en >= st) {
             idx = (st + en) / 2;
             mid = storage.get(idx).getLevel();
-            
+
             if (mid == level) {
                 return idx;
             } else if (mid < level) {
@@ -114,49 +113,49 @@ public class PartySearchStorage {
                 en = idx - 1;
             }
         }
-        
+
         return en;
     }
-    
+
     public Character callPlayer(int callerCid, int callerMapid, int minLevel, int maxLevel) {
         if (emptyIntervals.inInterval(minLevel, maxLevel)) {
             return null;
         }
-        
+
         List<PartySearchCharacter> pscList = getStorageList();
-        
+
         int idx = bsearchStorage(pscList, maxLevel);
         for (int i = idx; i >= 0; i--) {
             PartySearchCharacter psc = pscList.get(i);
             if (!psc.isQueued()) {
                 continue;
             }
-            
+
             if (psc.getLevel() < minLevel) {
                 break;
             }
-            
+
             Character chr = psc.callPlayer(callerCid, callerMapid);
             if (chr != null) {
                 return chr;
             }
         }
-        
+
         emptyIntervals.addInterval(minLevel, maxLevel);
         return null;
     }
-    
+
     public void detachPlayer(Character chr) {
         PartySearchCharacter toRemove = null;
         for (PartySearchCharacter psc : getStorageList()) {
             Character player = psc.getPlayer();
-            
+
             if (player != null && player.getId() == chr.getId()) {
                 toRemove = psc;
                 break;
             }
         }
-        
+
         if (toRemove != null) {
             psWLock.lock();
             try {
@@ -166,5 +165,5 @@ public class PartySearchStorage {
             }
         }
     }
-    
+
 }

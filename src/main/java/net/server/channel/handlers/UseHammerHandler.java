@@ -27,7 +27,6 @@ import net.packet.InPacket;
 import tools.PacketCreator;
 
 /**
- *
  * @author Jay Estrella
  */
 public final class UseHammerHandler extends AbstractPacketHandler {

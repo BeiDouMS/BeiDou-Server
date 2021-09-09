@@ -30,13 +30,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
  * @author Jay Estrella
  * @author Ronan
  */
 public final class ItemConstants {
     protected static Map<Integer, InventoryType> inventoryTypeCache = new HashMap<>();
-    
+
     public final static short LOCK = 0x01;
     public final static short SPIKES = 0x02;
     public final static short KARMA_USE = 0x02;
@@ -53,11 +52,11 @@ public final class ItemConstants {
 
     static {
         int[] pi = {5000060, 5000100, 5000101, 5000102};    // i ain't going to open one gigantic itemid cache just for 4 perma itemids, no way!
-        for(int i : pi) {
+        for (int i : pi) {
             permanentItemids.add(i);
         }
     }
-    
+
     public static int getFlagByInt(int type) {
         if (type == 128) {
             return PET_COME;
@@ -74,16 +73,16 @@ public final class ItemConstants {
     public static boolean isBullet(int itemId) {
         return itemId / 10000 == 233;
     }
-    
+
     public static boolean isPotion(int itemId) {
         return itemId / 1000 == 2000;
     }
-    
+
     public static boolean isFood(int itemId) {
         int useType = itemId / 1000;
         return useType == 2022 || useType == 2010 || useType == 2020;
     }
-    
+
     public static boolean isConsumable(int itemId) {
         return isPotion(itemId) || isFood(itemId);
     }
@@ -99,7 +98,7 @@ public final class ItemConstants {
     public static boolean isArrowForBow(int itemId) {
         return itemId / 1000 == 2060;
     }
-    
+
     public static boolean isArrow(int itemId) {
         return isArrowForBow(itemId) || isArrowForCrossBow(itemId);
     }
@@ -107,112 +106,113 @@ public final class ItemConstants {
     public static boolean isPet(int itemId) {
         return itemId / 1000 == 5000;
     }
-    
+
     public static boolean isExpirablePet(int itemId) {
         return YamlConfig.config.server.USE_ERASE_PET_ON_EXPIRATION || itemId == 5000054;
     }
-    
+
     public static boolean isPermanentItem(int itemId) {
         return permanentItemids.contains(itemId);
     }
-    
-    public static boolean isNewYearCardEtc(int itemId) { 
+
+    public static boolean isNewYearCardEtc(int itemId) {
         return itemId / 10000 == 430;
-    } 
-     
-    public static boolean isNewYearCardUse(int itemId) { 
+    }
+
+    public static boolean isNewYearCardUse(int itemId) {
         return itemId / 10000 == 216;
     }
-    
+
     public static boolean isAccessory(int itemId) {
         return itemId >= 1110000 && itemId < 1140000;
     }
-    
+
     public static boolean isTaming(int itemId) {
         int itemType = itemId / 1000;
         return itemType == 1902 || itemType == 1912;
     }
-    
+
     public static boolean isTownScroll(int itemId) {
         return itemId >= 2030000 && itemId < 2030100;
     }
-    
+
     public static boolean isAntibanishScroll(int itemId) {
         return itemId == 2030100;
     }
-    
+
     public static boolean isCleanSlate(int scrollId) {
         return scrollId > 2048999 && scrollId < 2049004;
     }
-    
+
     public static boolean isModifierScroll(int scrollId) {
         return scrollId == 2040727 || scrollId == 2041058;
     }
-    
+
     public static boolean isFlagModifier(int scrollId, short flag) {
-        if(scrollId == 2041058 && ((flag & ItemConstants.COLD) == ItemConstants.COLD)) return true;
-        if(scrollId == 2040727 && ((flag & ItemConstants.SPIKES) == ItemConstants.SPIKES)) return true;
-        return false;
+        if (scrollId == 2041058 && ((flag & ItemConstants.COLD) == ItemConstants.COLD)) {
+            return true;
+        }
+        return scrollId == 2040727 && ((flag & ItemConstants.SPIKES) == ItemConstants.SPIKES);
     }
-    
+
     public static boolean isChaosScroll(int scrollId) {
-    	return scrollId >= 2049100 && scrollId <= 2049103;
+        return scrollId >= 2049100 && scrollId <= 2049103;
     }
-    
+
     public static boolean isRateCoupon(int itemId) {
         int itemType = itemId / 1000;
         return itemType == 5211 || itemType == 5360;
     }
-    
+
     public static boolean isExpCoupon(int couponId) {
         return couponId / 1000 == 5211;
     }
-    
+
     public static boolean isPartyItem(int itemId) {
         return itemId >= 2022430 && itemId <= 2022433 || itemId >= 2022160 && itemId <= 2022163;
     }
-    
+
     public static boolean isPartyAllcure(int itemId) {
         return itemId == 2022433 || itemId == 2022163;
     }
-    
+
     public static boolean isHiredMerchant(int itemId) {
         return itemId / 10000 == 503;
     }
-    
+
     public static boolean isPlayerShop(int itemId) {
         return itemId / 10000 == 514;
     }
-    
+
     public static InventoryType getInventoryType(final int itemId) {
         if (inventoryTypeCache.containsKey(itemId)) {
             return inventoryTypeCache.get(itemId);
         }
-        
+
         InventoryType ret = InventoryType.UNDEFINED;
-        
-	final byte type = (byte) (itemId / 1000000);
-	if (type >= 1 && type <= 5) {
-	    ret = InventoryType.getByType(type);
-	}
-        
+
+        final byte type = (byte) (itemId / 1000000);
+        if (type >= 1 && type <= 5) {
+            ret = InventoryType.getByType(type);
+        }
+
         inventoryTypeCache.put(itemId, ret);
         return ret;
     }
-    
+
     public static boolean isMakerReagent(int itemId) {
         return itemId / 10000 == 425;
     }
-    
+
     public static boolean isOverall(int itemId) {
         return itemId / 10000 == 105;
     }
-    
+
     public static boolean isCashStore(int itemId) {
         int itemType = itemId / 10000;
         return itemType == 503 || itemType == 514;
     }
-    
+
     public static boolean isMapleLife(int itemId) {
         int itemType = itemId / 10000;
         return itemType == 543 && itemId != 5430000;
@@ -221,7 +221,7 @@ public final class ItemConstants {
     public static boolean isWeapon(int itemId) {
         return itemId >= 1302000 && itemId < 1493000;
     }
-    
+
     public static boolean isEquipment(int itemId) {
         return itemId < 2000000 && itemId != 0;
     }
@@ -229,31 +229,31 @@ public final class ItemConstants {
     public static boolean isFishingChair(int itemId) {
         return itemId == 3011000;
     }
-    
+
     public static boolean isMedal(int itemId) {
         return itemId >= 1140000 && itemId < 1143000;
     }
-    
+
     public static boolean isWeddingRing(int itemId) {
         return itemId >= 1112803 && itemId <= 1112809;
     }
-    
+
     public static boolean isWeddingToken(int itemId) {
         return itemId >= 4031357 && itemId <= 4031364;
     }
-    
+
     public static boolean isFace(int itemId) {
         return itemId >= 20000 && itemId < 22000;
     }
-    
+
     public static boolean isHair(int itemId) {
         return itemId >= 30000 && itemId < 35000;
     }
-    
+
     public static boolean isFaceExpression(int itemId) {
         return itemId / 10000 == 516;
     }
-    
+
     public static boolean isChair(int itemId) {
         return itemId / 10000 == 301;
     }

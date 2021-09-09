@@ -36,16 +36,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class GotoCommand extends Command {
-    
+
     {
         setDescription("Warp to a predefined map.");
-        
+
         List<Entry<String, Integer>> towns = new ArrayList<>(GameConstants.GOTO_TOWNS.entrySet());
         sortGotoEntries(towns);
-        
+
         try {
             // thanks shavit for noticing goto areas getting loaded from wz needlessly only for the name retrieval
-            
+
             for (Map.Entry<String, Integer> e : towns) {
                 GOTO_TOWNS_INFO += ("'" + e.getKey() + "' - #b" + (MapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
             }
@@ -57,16 +57,16 @@ public class GotoCommand extends Command {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            
+
             GOTO_TOWNS_INFO = "(none)";
             GOTO_AREAS_INFO = "(none)";
         }
-        
+
     }
-    
+
     public static String GOTO_TOWNS_INFO = "";
     public static String GOTO_AREAS_INFO = "";
-    
+
     private static void sortGotoEntries(List<Entry<String, Integer>> listEntries) {
         listEntries.sort((e1, e2) -> e1.getValue().compareTo(e2.getValue()));
     }
@@ -74,16 +74,16 @@ public class GotoCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        if (params.length < 1){
+        if (params.length < 1) {
             String sendStr = "Syntax: #b@goto <map name>#k. Available areas:\r\n\r\n#rTowns:#k\r\n" + GOTO_TOWNS_INFO;
             if (player.isGM()) {
                 sendStr += ("\r\n#rAreas:#k\r\n" + GOTO_AREAS_INFO);
             }
-            
+
             player.getAbstractPlayerInteraction().npcTalk(9000020, sendStr);
             return;
         }
-        
+
         if (!player.isAlive()) {
             player.dropMessage(1, "This command cannot be used when you're dead.");
             return;
@@ -103,10 +103,10 @@ public class GotoCommand extends Command {
         } else {
             gotomaps = GameConstants.GOTO_TOWNS;
         }
-        
+
         if (gotomaps.containsKey(params[0])) {
             MapleMap target = c.getChannelServer().getMapFactory().getMap(gotomaps.get(params[0]));
-            
+
             // expedition issue with this command detected thanks to Masterrulax
             Portal targetPortal = target.getRandomPlayerSpawnpoint();
             player.saveLocationOnWarp();
@@ -117,7 +117,7 @@ public class GotoCommand extends Command {
             if (player.isGM()) {
                 sendStr += ("\r\n#rAreas:#k\r\n" + GOTO_AREAS_INFO);
             }
-            
+
             player.getAbstractPlayerInteraction().npcTalk(9000020, sendStr);
         }
     }

@@ -41,7 +41,9 @@ public final class PetExcludeItemsHandler extends AbstractPacketHandler {
 
         Character chr = c.getPlayer();
         byte petIndex = chr.getPetIndex(petId);
-        if (petIndex < 0) return;
+        if (petIndex < 0) {
+            return;
+        }
 
         final Pet pet = chr.getPet(petIndex);
         if (pet == null) {

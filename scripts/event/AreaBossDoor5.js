@@ -20,9 +20,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Door boss Spawner (based on xQuasar's King Clang spawner)
-**/
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Door boss Spawner (based on xQuasar's King Clang spawner)
+ **/
 
 function init() {
     scheduleNew();
@@ -33,15 +33,16 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var bossMobid = 9400612;
     var bossMapid = 677000001;
     var bossMsg = "Marbas has appeared!";
-    
+
     var map = em.getChannelServer().getMapFactory().getMap(bossMapid);
     if (map.getMonsterById(bossMobid) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
@@ -56,7 +57,7 @@ function start() {
     var bossPos = new Point(461, 61);
     map.spawnMonsterOnGroundBelow(boss, bossPos);
     map.broadcastMessage(PacketCreator.serverNotice(6, bossMsg));
-    
+
     em.schedule("start", 3 * 60 * 60 * 1000);
 }
 

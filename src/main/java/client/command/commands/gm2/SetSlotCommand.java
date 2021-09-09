@@ -39,17 +39,17 @@ public class SetSlotCommand extends Command {
             player.yellowMessage("Syntax: !setslot <newlevel>");
             return;
         }
-        
+
         int slots = (Integer.parseInt(params[0]) / 4) * 4;
         for (int i = 1; i < 5; i++) {
             int curSlots = player.getSlots(i);
             if (slots <= -curSlots) {
                 continue;
             }
-            
+
             player.gainSlots(i, slots - curSlots, true);
         }
-        
+
         player.yellowMessage("Slots updated.");
     }
 }

@@ -1,7 +1,6 @@
 package constants.inventory;
 
 /**
- *
  * @author The Spookster (The Real Spookster)
  */
 public enum EquipSlot {
@@ -33,10 +32,10 @@ public enum EquipSlot {
     private String name;
     private int[] allowed;
 
-    private EquipSlot() {
+    EquipSlot() {
     }
 
-    private EquipSlot(String wz, int... in) {
+    EquipSlot(String wz, int... in) {
         name = wz;
         allowed = in;
     }

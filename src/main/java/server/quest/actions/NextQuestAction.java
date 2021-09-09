@@ -30,26 +30,25 @@ import server.quest.QuestActionType;
 import tools.PacketCreator;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class NextQuestAction extends AbstractQuestAction {
-	int nextQuest;
-	
-	public NextQuestAction(Quest quest, Data data) {
-		super(QuestActionType.NEXTQUEST, quest);
-		processData(data);
-	}
-	
-	
-	@Override
-	public void processData(Data data) {
-		nextQuest = DataTool.getInt(data);
-	}
-	
-	@Override
-	public void run(Character chr, Integer extSelection) {
-		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
-		chr.sendPacket(PacketCreator.updateQuestFinish((short) questID, status.getNpc(), (short) nextQuest));
-	}
+    int nextQuest;
+
+    public NextQuestAction(Quest quest, Data data) {
+        super(QuestActionType.NEXTQUEST, quest);
+        processData(data);
+    }
+
+
+    @Override
+    public void processData(Data data) {
+        nextQuest = DataTool.getInt(data);
+    }
+
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        QuestStatus status = chr.getQuest(Quest.getInstance(questID));
+        chr.sendPacket(PacketCreator.updateQuestFinish((short) questID, status.getNpc(), (short) nextQuest));
+    }
 } 

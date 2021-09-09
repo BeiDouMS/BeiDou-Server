@@ -45,27 +45,26 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- *
  * @author RonanLana - synchronization of Fredrick modules and operation results
  */
 public class FredrickProcessor {
-    
-    private static int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
-    
+
+    private static final int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
+
     private static byte canRetrieveFromFredrick(Character chr, List<Pair<Item, InventoryType>> items) {
         if (!Inventory.checkSpotsAndOwnership(chr, items)) {
             List<Integer> itemids = new LinkedList<>();
             for (Pair<Item, InventoryType> it : items) {
                 itemids.add(it.getLeft().getItemId());
             }
-            
+
             if (chr.canHoldUniques(itemids)) {
                 return 0x22;
             } else {
                 return 0x20;
             }
         }
-        
+
         int netMeso = chr.getMerchantNetMeso();
         if (netMeso > 0) {
             if (!chr.canHoldMeso(netMeso)) {
@@ -76,26 +75,26 @@ public class FredrickProcessor {
                 return 0x21;
             }
         }
-        
+
         return 0x0;
     }
-    
+
     public static int timestampElapsedDays(Timestamp then, long timeNow) {
         return (int) ((timeNow - then.getTime()) / (1000 * 60 * 60 * 24));
     }
-    
+
     private static String fredrickReminderMessage(int daynotes) {
         String msg;
-        
+
         if (daynotes < 4) {
             msg = "Hi customer! I am Fredrick, the Union Chief of the Hired Merchant Union. A reminder that " + dailyReminders[daynotes] + " days have passed since you used our service. Please reclaim your stored goods at FM Entrance.";
         } else {
             msg = "Hi customer! I am Fredrick, the Union Chief of the Hired Merchant Union. " + dailyReminders[daynotes] + " days have passed since you used our service. Consider claiming back the items before we move them away for refund.";
         }
-        
+
         return msg;
     }
-    
+
     public static void removeFredrickLog(int cid) {
         try (Connection con = DatabaseConnection.getConnection()) {
             removeFredrickLog(con, cid);
@@ -103,14 +102,14 @@ public class FredrickProcessor {
             sqle.printStackTrace();
         }
     }
-    
+
     private static void removeFredrickLog(Connection con, int cid) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM `fredstorage` WHERE `cid` = ?")) {
             ps.setInt(1, cid);
             ps.executeUpdate();
         }
     }
-    
+
     public static void insertFredrickLog(int cid) {
         try (Connection con = DatabaseConnection.getConnection()) {
 
@@ -124,11 +123,11 @@ public class FredrickProcessor {
             sqle.printStackTrace();
         }
     }
-    
+
     public static void removeFredrickReminders(int cid) {
         removeFredrickReminders(Collections.singletonList(new Pair<>(cid, 0)));
     }
-    
+
     private static void removeFredrickReminders(List<Pair<Integer, Integer>> expiredCids) {
         List<String> expiredCnames = new LinkedList<>();
         for (Pair<Integer, Integer> id : expiredCids) {
@@ -150,7 +149,7 @@ public class FredrickProcessor {
             e.printStackTrace();
         }
     }
-    
+
     public static void runFredrickSchedule() {
         try (Connection con = DatabaseConnection.getConnection()) {
             List<Pair<Integer, Integer>> expiredCids = new LinkedList<>();
@@ -263,7 +262,7 @@ public class FredrickProcessor {
             return false;
         }
     }
-    
+
     public static void fredrickRetrieveItems(Client c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
         if (c.tryacquireClient()) {
             try {
@@ -272,20 +271,21 @@ public class FredrickProcessor {
                 List<Pair<Item, InventoryType>> items;
                 try {
                     items = ItemFactory.MERCHANT.loadItems(chr.getId(), false);
-                    
+
                     byte response = canRetrieveFromFredrick(chr, items);
                     if (response != 0) {
                         chr.sendPacket(PacketCreator.fredrickMessage(response));
                         return;
                     }
-                    
+
                     chr.withdrawMerchantMesos();
-                    
+
                     if (deleteFredrickItems(chr.getId())) {
                         HiredMerchant merchant = chr.getHiredMerchant();
 
-                        if(merchant != null)
+                        if (merchant != null) {
                             merchant.clearItems();
+                        }
 
                         for (Pair<Item, InventoryType> it : items) {
                             Item item = it.getLeft();

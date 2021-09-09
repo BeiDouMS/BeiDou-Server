@@ -52,7 +52,7 @@ public final class MTSHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         // TODO add karma-to-untradeable flag on sold items here
-        
+
         if (!c.getPlayer().getCashShop().isOpened()) {
             return;
         }
@@ -108,7 +108,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                     Connection con = null;
                     try {
                         con = DatabaseConnection.getConnection();
-                        
+
                         PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM mts_items WHERE seller = ?");
                         ps.setInt(1, c.getPlayer().getId());
                         ResultSet rs = ps.executeQuery();
@@ -214,7 +214,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         ps.executeUpdate();
                         ps.close();
                         InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
-                        
+
                         con.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -537,7 +537,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.MTSFailBuy());
                 }
             } else {
-                System.out.println("Unhandled OP(MTS): " + op + " Packet: " + p.toString());
+                System.out.println("Unhandled OP(MTS): " + op + " Packet: " + p);
             }
         } else {
             c.sendPacket(PacketCreator.showMTSCash(c.getPlayer()));

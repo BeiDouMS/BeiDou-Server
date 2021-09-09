@@ -2,33 +2,32 @@ var status = -1;
 var level = 1;
 
 function start() {
-    action(1,0,0);
+    action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
     if (mode == 1) {
-	status++;
+        status++;
     } else {
-	status--;
+        status--;
     }
     if (cm.getPlayer().getMapId() == 925100700) {
-	cm.warp(251010404,0);
-	cm.dispose();
-	return;
-    }
-    
-    if(status == 1) {   // leaders cant withdraw
-        cm.warp(251010404,0);
+        cm.warp(251010404, 0);
+        cm.dispose();
         return;
     }
-    
-    if (!cm.isEventLeader()) {
-	cm.sendYesNo("I wish for your leader to talk to me. Alternatively, you may be wanting to quit. Are you going to abandon this campaign?");
+
+    if (status == 1) {   // leaders cant withdraw
+        cm.warp(251010404, 0);
+        return;
     }
-    else {
+
+    if (!cm.isEventLeader()) {
+        cm.sendYesNo("I wish for your leader to talk to me. Alternatively, you may be wanting to quit. Are you going to abandon this campaign?");
+    } else {
         var eim = cm.getEventInstance();
         if (eim == null) {
-            cm.warp(251010404,0);
+            cm.warp(251010404, 0);
             cm.sendNext("How are you even here without being registered on an instance?");
             cm.dispose();
             return;
@@ -36,7 +35,7 @@ function action(mode, type, selection) {
 
         level = eim.getProperty("level");
 
-        switch(cm.getPlayer().getMapId()) {
+        switch (cm.getPlayer().getMapId()) {
             case 925100000:
                 cm.sendNext("We are heading into the Pirate Ship now! To get in, we must destroy all the monsters guarding it.");
                 cm.dispose();
@@ -44,27 +43,27 @@ function action(mode, type, selection) {
             case 925100100:
                 var emp = eim.getProperty("stage2");
                 if (emp.equals("0")) {
-                    if (cm.haveItem(4001120,20)) {
+                    if (cm.haveItem(4001120, 20)) {
                         cm.sendNext("Excellent! Now hunt me 20 Rising Medals.");
-                        cm.gainItem(4001120,-20);
+                        cm.gainItem(4001120, -20);
                         cm.getMap().killAllMonsters();
                         eim.setProperty("stage2", "1");
                     } else {
                         cm.sendNext("We are heading into the Pirate Ship now! To get in, we must qualify ourselves as noble pirates. Hunt me 20 Rookie Medals.");
                     }
                 } else if (emp.equals("1")) {
-                    if (cm.haveItem(4001121,20)) {
+                    if (cm.haveItem(4001121, 20)) {
                         cm.sendNext("Excellent! Now hunt me 20 Veteran Medals.");
-                        cm.gainItem(4001121,-20);
+                        cm.gainItem(4001121, -20);
                         cm.getMap().killAllMonsters();
                         eim.setProperty("stage2", "2");
                     } else {
                         cm.sendNext("We are heading into the Pirate Ship now! To get in, we must qualify ourselves as noble pirates. Hunt me 20 Rising Medals.");
                     }
                 } else if (emp.equals("2")) {
-                    if (cm.haveItem(4001122,20)) {
+                    if (cm.haveItem(4001122, 20)) {
                         cm.sendNext("Excellent! Now let us go.");
-                        cm.gainItem(4001122,-20);
+                        cm.gainItem(4001122, -20);
                         cm.getMap().killAllMonsters();
                         eim.setProperty("stage2", "3");
                         eim.showClearEffect(cm.getMapId());
@@ -124,6 +123,6 @@ function action(mode, type, selection) {
                 break;
         }
     }
-    
-    
+
+
 }

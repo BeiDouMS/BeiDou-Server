@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Faust1 Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Faust1 Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 function init() {
     scheduleNew();
@@ -36,16 +36,17 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var theForestOfEvil1 = em.getChannelServer().getMapFactory().getMap(100040105);
-	if(theForestOfEvil1.getMonsterById(5220002) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
+    if (theForestOfEvil1.getMonsterById(5220002) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
 
     const LifeFactory = Java.type('server.life.LifeFactory');
     const PacketCreator = Java.type('tools.PacketCreator');
@@ -55,7 +56,7 @@ function start() {
     const spawnpoint = new Point(456, 278);
     theForestOfEvil1.spawnMonsterOnGroundBelow(faust1, spawnpoint);
     theForestOfEvil1.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

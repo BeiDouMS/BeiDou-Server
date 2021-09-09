@@ -37,7 +37,7 @@ function isWeddingIndoors(mapid) {
 function getMarriageInstance(player) {
     var em = cm.getEventManager(weddingEventName);
 
-    for (var iterator = em.getInstances().iterator(); iterator.hasNext(); ) {
+    for (var iterator = em.getInstances().iterator(); iterator.hasNext();) {
         var eim = iterator.next();
         if (eim.isEventLeader(player)) {
             return eim;
@@ -82,15 +82,19 @@ function isSuitedForWedding(player, equipped) {
 }
 
 function getWeddingPreparationStatus(player, partner) {
-    if (!player.haveItem(4000313))
+    if (!player.haveItem(4000313)) {
         return -3;
-    if (!partner.haveItem(4000313))
+    }
+    if (!partner.haveItem(4000313)) {
         return 3;
+    }
 
-    if (!isSuitedForWedding(player, true))
+    if (!isSuitedForWedding(player, true)) {
         return -4;
-    if (!isSuitedForWedding(partner, true))
+    }
+    if (!isSuitedForWedding(partner, true)) {
         return 4;
+    }
 
     var hasEngagement = false;
     for (var x = 4031357; x <= 4031364; x++) {
@@ -99,8 +103,9 @@ function getWeddingPreparationStatus(player, partner) {
             break;
         }
     }
-    if (!hasEngagement)
+    if (!hasEngagement) {
         return -1;
+    }
 
     hasEngagement = false;
     for (var x = 4031357; x <= 4031364; x++) {
@@ -109,13 +114,16 @@ function getWeddingPreparationStatus(player, partner) {
             break;
         }
     }
-    if (!hasEngagement)
+    if (!hasEngagement) {
         return -2;
+    }
 
-    if (!player.canHold(1112803))
+    if (!player.canHold(1112803)) {
         return 1;
-    if (!partner.canHold(1112803))
+    }
+    if (!partner.canHold(1112803)) {
         return 2;
+    }
 
     return 0;
 }
@@ -129,8 +137,9 @@ function giveCoupleBlessings(eim, player, partner) {
 
 function start() {
     weddingIndoors = isWeddingIndoors(cm.getMapId());
-    if (weddingIndoors)
+    if (weddingIndoors) {
         eim = cm.getEventInstance();
+    }
 
     status = -1;
     action(1, 0, 0);
@@ -144,10 +153,11 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
 
         if (!weddingIndoors) {
             if (status == 0) {

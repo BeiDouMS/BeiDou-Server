@@ -36,7 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
@@ -46,23 +46,25 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                 AutobanFactory.FAST_ATTACK.alert(chr, "Time: " + timeElapsed);
         }
         chr.getAutobanManager().spam(8);*/
-        
+
         AttackInfo attack = parseDamage(p, chr, false, false);
         if (chr.getBuffEffect(BuffStat.MORPH) != null) {
-            if(chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
+            if (chr.getBuffEffect(BuffStat.MORPH).isMorphWithoutAttack()) {
                 // How are they attacking when the client won't let them?
                 chr.getClient().disconnect(false, false);
-                return; 
+                return;
             }
         }
-        
+
         if (chr.getDojoEnergy() < 10000 && (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009)) // PE hacking or maybe just lagging
+        {
             return;
+        }
         if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
-        
+
         chr.getMap().broadcastMessage(chr, PacketCreator.closeRangeAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, attack.speed, attack.direction, attack.display), false, true);
         int numFinisherOrbs = 0;
         Integer comboBuff = chr.getBuffedValue(BuffStat.COMBO);
@@ -84,12 +86,17 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                     ceffect = advcombo.getEffect(advComboSkillLevel);
                 } else {
                     int comboLv = chr.getSkillLevel(combo);
-                    if(comboLv <= 0 || chr.isGM()) comboLv = SkillFactory.getSkill(oid).getMaxLevel();
-                    
-                    if(comboLv > 0) ceffect = combo.getEffect(comboLv);
-                    else ceffect = null;
+                    if (comboLv <= 0 || chr.isGM()) {
+                        comboLv = SkillFactory.getSkill(oid).getMaxLevel();
+                    }
+
+                    if (comboLv > 0) {
+                        ceffect = combo.getEffect(comboLv);
+                    } else {
+                        ceffect = null;
+                    }
                 }
-                if(ceffect != null) {
+                if (ceffect != null) {
                     if (orbcount < ceffect.getX() + 1) {
                         int neworbcount = orbcount + 1;
                         if (advComboSkillLevel > 0 && ceffect.makeChanceResult()) {
@@ -99,11 +106,13 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                         }
 
                         int olv = chr.getSkillLevel(oid);
-                        if(olv <= 0) olv = SkillFactory.getSkill(oid).getMaxLevel();
-                        
+                        if (olv <= 0) {
+                            olv = SkillFactory.getSkill(oid).getMaxLevel();
+                        }
+
                         int duration = combo.getEffect(olv).getDuration();
                         List<Pair<BuffStat, Integer>> stat = Collections.singletonList(new Pair<>(BuffStat.COMBO, neworbcount));
-                        chr.setBuffedValue(BuffStat.COMBO, neworbcount);                 
+                        chr.setBuffedValue(BuffStat.COMBO, neworbcount);
                         duration -= (int) (currentServerTime() - chr.getBuffedStarttime(BuffStat.COMBO));
                         c.sendPacket(PacketCreator.giveBuff(oid, duration, stat));
                         chr.getMap().broadcastMessage(chr, PacketCreator.giveForeignBuff(chr.getId(), stat), false);
@@ -121,7 +130,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             if (dmgIt.hasNext()) {
                 totDamageToOneMonster = dmgIt.next().get(0);
             }
-            
+
             chr.safeAddHP(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100);
         }
         if (attack.numAttacked > 0 && attack.skill == 1211002) {
@@ -145,7 +154,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             if (chr.getDojoEnergy() < 10000) { // PE hacking or maybe just lagging
                 return;
             }
-            
+
             chr.setDojoEnergy(0);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
             c.sendPacket(PacketCreator.serverNotice(5, "As you used the secret skill, your energy bar has been reset."));
@@ -164,11 +173,11 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         if ((chr.getSkillLevel(SkillFactory.getSkill(NightWalker.VANISH)) > 0 || chr.getSkillLevel(SkillFactory.getSkill(Rogue.DARK_SIGHT)) > 0) && chr.getBuffedValue(BuffStat.DARKSIGHT) != null) {// && chr.getBuffSource(BuffStat.DARKSIGHT) != 9101004
             chr.cancelEffectFromBuffStat(BuffStat.DARKSIGHT);
             chr.cancelBuffStats(BuffStat.DARKSIGHT);
-        } else if(chr.getSkillLevel(SkillFactory.getSkill(WindArcher.WIND_WALK)) > 0 && chr.getBuffedValue(BuffStat.WIND_WALK) != null) {
+        } else if (chr.getSkillLevel(SkillFactory.getSkill(WindArcher.WIND_WALK)) > 0 && chr.getBuffedValue(BuffStat.WIND_WALK) != null) {
             chr.cancelEffectFromBuffStat(BuffStat.WIND_WALK);
             chr.cancelBuffStats(BuffStat.WIND_WALK);
         }
-        
+
         applyAttack(attack, chr, attackCount);
     }
 }

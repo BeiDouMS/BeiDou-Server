@@ -31,7 +31,7 @@ public final class DistributeSPHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         p.readInt();
         int skillid = p.readInt();
-        
+
         AssignSPProcessor.SPAssignAction(c, skillid);
     }
 }

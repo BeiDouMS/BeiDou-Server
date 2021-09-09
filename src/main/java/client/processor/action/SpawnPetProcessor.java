@@ -34,18 +34,19 @@ import tools.PacketCreator;
 import java.awt.*;
 
 /**
- *
  * @author RonanLana - just added locking on OdinMS' SpawnPetHandler method body
  */
 public class SpawnPetProcessor {
     private static final DataProvider dataRoot = DataProviderFactory.getDataProvider(WZFiles.ITEM);
-    
+
     public static void processSpawnPet(Client c, byte slot, boolean lead) {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();
                 Pet pet = chr.getInventory(InventoryType.CASH).getItem(slot).getPet();
-                if (pet == null) return;
+                if (pet == null) {
+                    return;
+                }
 
                 int petid = pet.getItemId();
                 if (petid == 5000028 || petid == 5000047) //Handles Dragon AND Robos
@@ -63,7 +64,7 @@ public class SpawnPetProcessor {
                         long expiration = chr.getInventory(InventoryType.CASH).getItem(slot).getExpiration();
                         InventoryManipulator.removeById(c, InventoryType.CASH, petid, (short) 1, false, false);
                         InventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
-                        
+
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     }

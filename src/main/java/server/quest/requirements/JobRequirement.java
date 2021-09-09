@@ -32,36 +32,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class JobRequirement extends AbstractQuestRequirement {
-	List<Integer> jobs = new ArrayList<>();
-	
-	public JobRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.JOB);
-		processData(data);
-	}
-	
-	/**
-	 * 
-	 * @param data 
-	 */
-	@Override
-	public void processData(Data data) {
-		for (Data jobEntry : data.getChildren()) {
-			jobs.add(DataTool.getInt(jobEntry));
-		}
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		for(Integer job : jobs) {
-			if (chr.getJob().equals(Job.getById(job)) || chr.isGM()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    List<Integer> jobs = new ArrayList<>();
+
+    public JobRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.JOB);
+        processData(data);
+    }
+
+    /**
+     * @param data
+     */
+    @Override
+    public void processData(Data data) {
+        for (Data jobEntry : data.getChildren()) {
+            jobs.add(DataTool.getInt(jobEntry));
+        }
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        for (Integer job : jobs) {
+            if (chr.getJob().equals(Job.getById(job)) || chr.isGM()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

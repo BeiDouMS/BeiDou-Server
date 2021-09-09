@@ -28,11 +28,10 @@ import scripting.reactor.ReactorScriptManager;
 import server.maps.Reactor;
 
 /**
- *
  * @author Generic
  */
 public final class TouchReactorHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();

@@ -37,15 +37,16 @@ public class JoinEventCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        if(!FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
+        if (!FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
             Event event = c.getChannelServer().getEvent();
-            if(event != null) {
-                if(event.getMapId() != player.getMapId()) {
-                    if(event.getLimit() > 0) {
+            if (event != null) {
+                if (event.getMapId() != player.getMapId()) {
+                    if (event.getLimit() > 0) {
                         player.saveLocation("EVENT");
 
-                        if(event.getMapId() == 109080000 || event.getMapId() == 109060001)
+                        if (event.getMapId() == 109080000 || event.getMapId() == 109060001) {
                             player.setTeam(event.getLimit() % 2);
+                        }
 
                         event.minusLimit();
 

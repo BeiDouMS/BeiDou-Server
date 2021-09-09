@@ -36,7 +36,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author Matze
  */
 public class EventScriptManager extends AbstractScriptManager {
@@ -51,6 +50,7 @@ public class EventScriptManager extends AbstractScriptManager {
             this.iv = iv;
             this.em = em;
         }
+
         public Invocable iv;
         public EventManager em;
     }
@@ -61,7 +61,7 @@ public class EventScriptManager extends AbstractScriptManager {
                 events.put(script, initializeEventEntry(script, channel));
             }
         }
-        
+
         init();
         fallback = events.remove("0_EXAMPLE");
     }
@@ -73,11 +73,11 @@ public class EventScriptManager extends AbstractScriptManager {
         }
         return entry.em;
     }
-    
+
     public boolean isActive() {
         return active;
     }
-    
+
     public final void init() {
         for (EventEntry entry : events.values()) {
             try {
@@ -87,7 +87,7 @@ public class EventScriptManager extends AbstractScriptManager {
                 System.out.println("Error on script: " + entry.em.getName());
             }
         }
-        
+
         active = events.size() > 1; // bootup loads only 1 script
     }
 
@@ -125,15 +125,15 @@ public class EventScriptManager extends AbstractScriptManager {
             entry.em.cancel();
         }
     }
-    
+
     public void dispose() {
         if (events.isEmpty()) {
             return;
         }
-        
+
         Set<EventEntry> eventEntries = new HashSet<>(events.values());
         events.clear();
-        
+
         active = false;
         for (EventEntry entry : eventEntries) {
             entry.em.cancel();

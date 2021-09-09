@@ -58,7 +58,7 @@ public class HexTool {
         int nextb = 0;
         boolean highoc = true;
         outer:
-        for (;;) {
+        for (; ; ) {
             int number = -1;
             while (number == -1) {
                 if (nexti == hex.length()) {

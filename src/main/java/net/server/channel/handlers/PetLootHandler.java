@@ -40,14 +40,14 @@ public final class PetLootHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        
+
         int petIndex = chr.getPetIndex(p.readInt());
         Pet pet = chr.getPet(petIndex);
         if (pet == null || !pet.isSummoned()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        
+
         p.skip(13);
         int oid = p.readInt();
         MapObject ob = chr.getMap().getMapObject(oid);
@@ -61,7 +61,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
 
                 if (chr.isEquippedPetItemIgnore()) {
                     final Set<Integer> petIgnore = chr.getExcludedItems();
-                    if(!petIgnore.isEmpty() && petIgnore.contains(Integer.MAX_VALUE)) {
+                    if (!petIgnore.isEmpty() && petIgnore.contains(Integer.MAX_VALUE)) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     }
@@ -74,7 +74,7 @@ public final class PetLootHandler extends AbstractPacketHandler {
 
                 if (chr.isEquippedPetItemIgnore()) {
                     final Set<Integer> petIgnore = chr.getExcludedItems();
-                    if(!petIgnore.isEmpty() && petIgnore.contains(mapitem.getItem().getItemId())) {
+                    if (!petIgnore.isEmpty() && petIgnore.contains(mapitem.getItem().getItemId())) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     }

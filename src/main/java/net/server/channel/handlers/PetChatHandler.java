@@ -31,7 +31,7 @@ import tools.LogHelper;
 import tools.PacketCreator;
 
 public final class PetChatHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         int petId = p.readInt();
@@ -40,18 +40,18 @@ public final class PetChatHandler extends AbstractPacketHandler {
         int act = p.readByte();
         byte pet = c.getPlayer().getPetIndex(petId);
         if ((pet < 0 || pet > 3) || (act < 0 || act > 9)) {
-        	return;
+            return;
         }
         String text = p.readString();
         if (text.length() > Byte.MAX_VALUE) {
-        	AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with pets.");
-        	FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + text.length());
-        	c.disconnect(true, false);
-        	return;
+            AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with pets.");
+            FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + text.length());
+            c.disconnect(true, false);
+            return;
         }
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.petChat(c.getPlayer().getId(), pet, act, text), true);
         if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
             LogHelper.logChat(c, "Pet", text);
         }
-    } 
+    }
 }

@@ -23,7 +23,6 @@ import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.active.TrackerReadLock;
 
 /**
- *
  * @author RonanLana
  */
 public class MonitoredReadLockFactory {

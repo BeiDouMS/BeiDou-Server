@@ -36,7 +36,7 @@ public class PapCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        
+
         // thanks Conrad for noticing mobid typo here
         player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8500001), player.getPosition());
     }

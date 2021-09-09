@@ -23,12 +23,12 @@ function end(mode, type, selection) {
                 } else {
                     qm.sendOk("Free a space on your USE inventory before receiving your prize.");
                     qm.dispose();
-                    return;
+
                 }
             } else {
                 qm.sendOk("Please return me 10 #t4031092# that went missing on this room.");
                 qm.dispose();
-                return;
+
             }
         } else if (status == 1) {
             qm.gainItem(4031092, -10);

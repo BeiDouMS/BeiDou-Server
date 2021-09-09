@@ -24,7 +24,6 @@ import client.command.Command;
 import net.server.coordinator.session.SessionCoordinator;
 
 /**
- *
  * @author Ronan
  */
 public class ShowSessionsCommand extends Command {

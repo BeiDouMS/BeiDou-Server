@@ -28,26 +28,25 @@ import server.quest.Quest;
 import server.quest.QuestActionType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class FameAction extends AbstractQuestAction {
-	int fame;
-	
-	public FameAction(Quest quest, Data data) {
-		super(QuestActionType.FAME, quest);
-		questID = quest.getId();
-		processData(data);
-	}
-	
-	
-	@Override
-	public void processData(Data data) {
-		fame = DataTool.getInt(data);
-	}
-	
-	@Override
-	public void run(Character chr, Integer extSelection) {
-		chr.gainFame(fame);
-	}
+    int fame;
+
+    public FameAction(Quest quest, Data data) {
+        super(QuestActionType.FAME, quest);
+        questID = quest.getId();
+        processData(data);
+    }
+
+
+    @Override
+    public void processData(Data data) {
+        fame = DataTool.getInt(data);
+    }
+
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        chr.gainFame(fame);
+    }
 } 

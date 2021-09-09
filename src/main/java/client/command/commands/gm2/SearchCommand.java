@@ -40,10 +40,10 @@ public class SearchCommand extends Command {
     private static Data mobStringData;
     private static Data skillStringData;
     private static Data mapStringData;
-    
+
     {
         setDescription("Search String.wz.");
-        
+
         DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.STRING);
         npcStringData = dataProvider.getData("Npc.img");
         mobStringData = dataProvider.getData("Mob.img");
@@ -60,12 +60,12 @@ public class SearchCommand extends Command {
         }
         StringBuilder sb = new StringBuilder();
 
-        String search = joinStringFrom(params,1);
+        String search = joinStringFrom(params, 1);
         long start = System.currentTimeMillis();//for the lulz
         Data data = null;
         if (!params[0].equalsIgnoreCase("ITEM")) {
             int searchType = 0;
-            
+
             if (params[0].equalsIgnoreCase("NPC")) {
                 data = npcStringData;
             } else if (params[0].equalsIgnoreCase("MOB") || params[0].equalsIgnoreCase("MONSTER")) {
@@ -83,7 +83,7 @@ public class SearchCommand extends Command {
             }
             if (data != null) {
                 String name;
-                
+
                 if (searchType == 0) {
                     for (Data searchData : data.getChildren()) {
                         name = DataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
@@ -93,12 +93,12 @@ public class SearchCommand extends Command {
                     }
                 } else if (searchType == 1) {
                     String mapName, streetName;
-                    
+
                     for (Data searchDataDir : data.getChildren()) {
                         for (Data searchData : searchDataDir.getChildren()) {
                             mapName = DataTool.getString(searchData.getChildByPath("mapName"), "NO-NAME");
                             streetName = DataTool.getString(searchData.getChildByPath("streetName"), "NO-NAME");
-                            
+
                             if (mapName.toLowerCase().contains(search.toLowerCase()) || streetName.toLowerCase().contains(search.toLowerCase())) {
                                 sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(streetName).append(" - ").append(mapName).append("\r\n");
                             }
@@ -107,7 +107,7 @@ public class SearchCommand extends Command {
                 } else {
                     for (Quest mq : Quest.getMatchedQuests(search)) {
                         sb.append("#b").append(mq.getId()).append("#k - #r");
-                        
+
                         String parentName = mq.getParentName();
                         if (!parentName.isEmpty()) {
                             sb.append(parentName).append(" - ");

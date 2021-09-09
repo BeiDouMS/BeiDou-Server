@@ -48,8 +48,8 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        
-        if(!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {
+
+        if (!chr.isAlive() && YamlConfig.config.server.USE_BUYBACK_SYSTEM) {
             BuybackProcessor.processBuyback(c);
             c.sendPacket(PacketCreator.enableActions());
         } else {
@@ -58,18 +58,18 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                 return;
             }
 
-            if(chr.getEventInstance() != null) {
+            if (chr.getEventInstance() != null) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Entering Cash Shop or MTS are disabled when registered on an event."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
-            
-            if(MiniDungeonInfo.isDungeonMap(chr.getMapId())) {
+
+            if (MiniDungeonInfo.isDungeonMap(chr.getMapId())) {
                 c.sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
-            
+
             if (FieldLimit.CANNOTMIGRATE.check(chr.getMap().getFieldLimit())) {
                 chr.dropMessage(1, "You can't do it here in this map.");
                 c.sendPacket(PacketCreator.enableActions());
@@ -88,7 +88,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
 
             chr.closePlayerInteractions();
             chr.closePartySearchInteractions();
-            
+
             chr.unregisterChairBuff();
             Server.getInstance().getPlayerBuffStorage().addBuffsToStorage(chr.getId(), chr.getAllBuffs());
             Server.getInstance().getPlayerBuffStorage().addDiseasesToStorage(chr.getId(), chr.getAllDiseases());
@@ -106,7 +106,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
             chr.cancelQuestExpirationTask();
 
             chr.saveCharToDB();
-            
+
             c.getChannelServer().removePlayer(chr);
             chr.getMap().removePlayer(c.getPlayer());
             try {

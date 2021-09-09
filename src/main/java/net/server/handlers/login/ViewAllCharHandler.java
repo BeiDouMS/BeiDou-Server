@@ -36,34 +36,34 @@ public final class ViewAllCharHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         try {
-            if(!c.canRequestCharlist()) {   // client breaks if the charlist request pops too soon
+            if (!c.canRequestCharlist()) {   // client breaks if the charlist request pops too soon
                 c.sendPacket(PacketCreator.showAllCharacter(0, 0));
                 return;
             }
-            
+
             int accountId = c.getAccID();
             Pair<Pair<Integer, List<Character>>, List<Pair<Integer, List<Character>>>> loginBlob = Server.getInstance().loadAccountCharlist(accountId, c.getVisibleWorlds());
-            
+
             List<Pair<Integer, List<Character>>> worldChars = loginBlob.getRight();
             int chrTotal = loginBlob.getLeft().getLeft();
             List<Character> lastwchars = loginBlob.getLeft().getRight();
-            
+
             if (chrTotal > 9) {
                 int padRight = chrTotal % 3;
                 if (padRight > 0 && lastwchars != null) {
                     Character chr = lastwchars.get(lastwchars.size() - 1);
-                    
-                    for(int i = padRight; i < 3; i++) { // filling the remaining slots with the last character loaded
+
+                    for (int i = padRight; i < 3; i++) { // filling the remaining slots with the last character loaded
                         chrTotal++;
                         lastwchars.add(chr);
                     }
                 }
             }
-            
+
             int charsSize = chrTotal;
             int unk = charsSize + (3 - charsSize % 3); //rowSize?
             c.sendPacket(PacketCreator.showAllCharacter(charsSize, unk));
-            
+
             for (Pair<Integer, List<Character>> wchars : worldChars) {
                 c.sendPacket(PacketCreator.showAllCharacterInfo(wchars.getLeft(), wchars.getRight(), YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic()));
             }

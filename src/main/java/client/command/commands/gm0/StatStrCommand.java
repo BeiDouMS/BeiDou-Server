@@ -48,7 +48,7 @@ public class StatStrCommand extends Command {
         } else {
             amount = Math.min(remainingAp, YamlConfig.config.server.MAX_AP - player.getStr());
         }
-        
+
         if (!player.assignStr(Math.max(amount, 0))) {
             player.dropMessage("Please make sure your AP is not over " + YamlConfig.config.server.MAX_AP + " and you have enough to distribute.");
         }

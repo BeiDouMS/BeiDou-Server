@@ -47,11 +47,13 @@ public class SetEqStatCommand extends Command {
         short newStat = (short) Math.max(0, Integer.parseInt(params[0]));
         short newSpdJmp = params.length >= 2 ? (short) Integer.parseInt(params[1]) : 0;
         Inventory equip = player.getInventory(InventoryType.EQUIP);
-        
+
         for (byte i = 1; i <= equip.getSlotLimit(); i++) {
             try {
                 Equip eq = (Equip) equip.getItem(i);
-                if (eq == null) continue;
+                if (eq == null) {
+                    continue;
+                }
 
                 eq.setWdef(newStat);
                 eq.setAcc(newStat);

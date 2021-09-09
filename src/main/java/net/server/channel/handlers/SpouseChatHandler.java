@@ -34,7 +34,7 @@ public final class SpouseChatHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         p.readString();//recipient
         String msg = p.readString();
-        
+
         int partnerId = c.getPlayer().getPartnerId();
         if (partnerId > 0) { // yay marriage
             Character spouse = c.getWorldServer().getPlayerStorage().getCharacterById(partnerId);

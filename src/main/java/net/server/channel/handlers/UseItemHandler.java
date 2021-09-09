@@ -42,7 +42,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        
+
         if (!chr.isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
@@ -58,29 +58,29 @@ public final class UseItemHandler extends AbstractPacketHandler {
                 remove(c, slot);
                 return;
             } else if (itemId == 2050001) {
-		chr.dispelDebuff(Disease.DARKNESS);
+                chr.dispelDebuff(Disease.DARKNESS);
                 remove(c, slot);
                 return;
-	    } else if (itemId == 2050002) {
-		chr.dispelDebuff(Disease.WEAKEN);
+            } else if (itemId == 2050002) {
+                chr.dispelDebuff(Disease.WEAKEN);
                 chr.dispelDebuff(Disease.SLOW);
                 remove(c, slot);
                 return;
             } else if (itemId == 2050003) {
                 chr.dispelDebuff(Disease.SEAL);
-		chr.dispelDebuff(Disease.CURSE);
+                chr.dispelDebuff(Disease.CURSE);
                 remove(c, slot);
                 return;
             } else if (ItemConstants.isTownScroll(itemId)) {
                 int banMap = chr.getMapId();
                 int banSp = chr.getMap().findClosestPlayerSpawnpoint(chr.getPosition()).getId();
                 long banTime = currentServerTime();
-                
+
                 if (ii.getItemEffect(toUse.getItemId()).applyTo(chr)) {
-                    if(YamlConfig.config.server.USE_BANISHABLE_TOWN_SCROLL) {
+                    if (YamlConfig.config.server.USE_BANISHABLE_TOWN_SCROLL) {
                         chr.setBanishPlayerData(banMap, banSp, banTime);
                     }
-                    
+
                     remove(c, slot);
                 }
                 return;
@@ -92,14 +92,14 @@ public final class UseItemHandler extends AbstractPacketHandler {
                 }
                 return;
             }
-            
+
             remove(c, slot);
-            
-            if(toUse.getItemId() != 2022153) {
+
+            if (toUse.getItemId() != 2022153) {
                 ii.getItemEffect(toUse.getItemId()).applyTo(chr);
             } else {
                 StatEffect mse = ii.getItemEffect(toUse.getItemId());
-                for(Character player : chr.getMap().getCharacters()) {
+                for (Character player : chr.getMap().getCharacters()) {
                     mse.applyTo(player);
                 }
             }

@@ -29,29 +29,28 @@ import server.quest.Quest;
 import server.quest.QuestActionType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class BuffAction extends AbstractQuestAction {
-	int itemEffect;
-	
-	public BuffAction(Quest quest, Data data) {
-		super(QuestActionType.BUFF, quest);
-		processData(data);
-	}
-        
-        @Override
-	public boolean check(Character chr, Integer extSelection) {
-		return true;
-	}
-	
-	@Override
-	public void processData(Data data) {
-		itemEffect = DataTool.getInt(data);
-	}
-	
-	@Override
-	public void run(Character chr, Integer extSelection) {
-		ItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
-	}
+    int itemEffect;
+
+    public BuffAction(Quest quest, Data data) {
+        super(QuestActionType.BUFF, quest);
+        processData(data);
+    }
+
+    @Override
+    public boolean check(Character chr, Integer extSelection) {
+        return true;
+    }
+
+    @Override
+    public void processData(Data data) {
+        itemEffect = DataTool.getInt(data);
+    }
+
+    @Override
+    public void run(Character chr, Integer extSelection) {
+        ItemInformationProvider.getInstance().getItemEffect(itemEffect).applyTo(chr);
+    }
 } 

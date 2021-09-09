@@ -37,7 +37,7 @@ public final class MovePetHandler extends AbstractMovementPacketHandler {
         p.readLong();
 //        Point startPos = StreamUtil.readShortPoint(slea);
         List<LifeMovementFragment> res;
-        
+
         try {
             res = parseMovement(p);
         } catch (EmptyMovementException e) {

@@ -33,9 +33,8 @@ import server.ItemInformationProvider;
 import tools.PacketCreator;
 
 /**
- *
  * @author XoticStory
- * 
+ * <p>
  * Modified by -- kevintjuh93, Ronan
  */
 public final class UseSolomonHandler extends AbstractPacketHandler {
@@ -46,7 +45,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
         short slot = p.readShort();
         int itemId = p.readInt();
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        
+
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();
@@ -57,7 +56,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
                     if (slotItem == null) {
                         return;
                     }
-                    
+
                     long gachaexp = ii.getExpById(itemId);
                     if (slotItem.getItemId() != itemId || slotItem.getQuantity() <= 0 || chr.getLevel() > ii.getMaxLevelById(itemId)) {
                         return;
@@ -74,7 +73,7 @@ public final class UseSolomonHandler extends AbstractPacketHandler {
                 c.releaseClient();
             }
         }
-        
+
         c.sendPacket(PacketCreator.enableActions());
     }
 }

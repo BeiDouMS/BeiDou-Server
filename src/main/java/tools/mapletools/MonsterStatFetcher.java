@@ -121,7 +121,7 @@ public class MonsterStatFetcher {
                 }
 
                 monsterStats.put(mid, stats);
-            } catch(NullPointerException npe) {
+            } catch (NullPointerException npe) {
                 //System.out.println("[SEVERE] " + mFile.getName() + " failed to load. Issue: " + npe.getMessage() + "\n\n");
             }
         }

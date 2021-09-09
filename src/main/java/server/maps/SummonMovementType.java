@@ -25,7 +25,7 @@ public enum SummonMovementType {
     STATIONARY(0), FOLLOW(1), CIRCLE_FOLLOW(3);
     private final int val;
 
-    private SummonMovementType(int val) {
+    SummonMovementType(int val) {
         this.val = val;
     }
 

@@ -43,16 +43,22 @@ public class ApCommand extends Command {
 
         if (params.length < 2) {
             int newAp = Integer.parseInt(params[0]);
-            if (newAp < 0) newAp = 0;
-            else if (newAp > YamlConfig.config.server.MAX_AP) newAp = YamlConfig.config.server.MAX_AP;
+            if (newAp < 0) {
+                newAp = 0;
+            } else if (newAp > YamlConfig.config.server.MAX_AP) {
+                newAp = YamlConfig.config.server.MAX_AP;
+            }
 
             player.changeRemainingAp(newAp, false);
         } else {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim != null) {
                 int newAp = Integer.parseInt(params[1]);
-                if (newAp < 0) newAp = 0;
-                else if (newAp > YamlConfig.config.server.MAX_AP) newAp = YamlConfig.config.server.MAX_AP;
+                if (newAp < 0) {
+                    newAp = 0;
+                } else if (newAp > YamlConfig.config.server.MAX_AP) {
+                    newAp = YamlConfig.config.server.MAX_AP;
+                }
 
                 victim.changeRemainingAp(newAp, false);
             } else {

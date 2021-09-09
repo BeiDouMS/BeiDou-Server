@@ -19,6 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /*2519000.js - Reactor used at the door on stage 4.
  *@author Ronan
  */
@@ -28,11 +29,11 @@ function act() {
     var denyPos = rm.getReactor().getPosition();
     const Rectangle = Java.type('java.awt.Rectangle');
     var denyArea = new Rectangle(denyPos.getX() - denyWidth / 2, denyPos.getY() - denyHeight / 2, denyWidth, denyHeight);
-    
+
     rm.getReactor().getMap().setAllowSpawnPointInBox(false, denyArea);
-    
+
     var map = rm.getReactor().getMap();
-    if(map.getReactorByName("sMob2").getState() >= 1 && map.getReactorByName("sMob3").getState() >= 1 && map.getReactorByName("sMob4").getState() >= 1 && map.countMonsters() == 0) {
+    if (map.getReactorByName("sMob2").getState() >= 1 && map.getReactorByName("sMob3").getState() >= 1 && map.getReactorByName("sMob4").getState() >= 1 && map.countMonsters() == 0) {
         rm.getEventInstance().showClearEffect(map.getId());
     }
 }

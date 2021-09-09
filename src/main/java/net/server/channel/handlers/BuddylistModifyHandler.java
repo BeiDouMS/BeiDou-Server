@@ -40,7 +40,7 @@ import static client.BuddyList.BuddyOperation.ADDED;
 
 public class BuddylistModifyHandler extends AbstractPacketHandler {
     private static class CharacterIdNameBuddyCapacity extends CharacterNameAndId {
-        private int buddyCapacity;
+        private final int buddyCapacity;
 
         public CharacterIdNameBuddyCapacity(int id, String name, int buddyCapacity) {
             super(id, name);
@@ -108,7 +108,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                     if (charWithId != null) {
                         BuddyAddResult buddyAddResult = null;
                         if (channel != -1) {
-                           buddyAddResult = world.requestBuddyAdd(addName, c.getChannel(), player.getId(), player.getName());
+                            buddyAddResult = world.requestBuddyAdd(addName, c.getChannel(), player.getId(), player.getName());
                         } else {
                             try (Connection con = DatabaseConnection.getConnection()) {
                                 try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) as buddyCount FROM buddies WHERE characterid = ? AND pending = 0")) {

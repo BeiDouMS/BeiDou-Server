@@ -27,12 +27,12 @@ import server.ItemInformationProvider.ScriptedItem;
 
 public class ItemScriptManager {
 
-    private static ItemScriptManager instance = new ItemScriptManager();
-    
+    private static final ItemScriptManager instance = new ItemScriptManager();
+
     public static ItemScriptManager getInstance() {
         return instance;
     }
-    
+
     public void runItemScript(Client c, ScriptedItem scriptItem) {
         NPCScriptManager.getInstance().start(c, scriptItem, null);
     }

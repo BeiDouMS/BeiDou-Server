@@ -54,7 +54,7 @@ public class MapScriptManager extends AbstractScriptManager {
                 chr.enteredScript(mapScriptPath, mapid);
             }
         }
-        
+
         Invocable iv = scripts.get(mapScriptPath);
         if (iv != null) {
             try {
@@ -64,13 +64,13 @@ public class MapScriptManager extends AbstractScriptManager {
                 e.printStackTrace();
             }
         }
-        
+
         try {
             iv = (Invocable) getInvocableScriptEngine("map/" + mapScriptPath + ".js");
             if (iv == null) {
                 return false;
             }
-            
+
             scripts.put(mapScriptPath, iv);
             iv.invokeFunction("start", new MapScriptMethods(c));
             return true;

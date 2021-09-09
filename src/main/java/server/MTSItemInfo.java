@@ -22,18 +22,20 @@
 package server;
 
 import client.inventory.Item;
+
 import java.util.Calendar;
 
 /**
- *
  * @author Traitor
  */
 public class MTSItemInfo {
-    private int price;
-    private Item item;
-    private String seller;
-    private int id;
-    private int year, month, day = 1;
+    private final int price;
+    private final Item item;
+    private final String seller;
+    private final int id;
+    private final int year;
+    private final int month;
+    private int day = 1;
 
     public MTSItemInfo(Item item, int price, int id, int cid, String seller, String date) {
         this.item = item;

@@ -22,7 +22,6 @@
 package constants.skills;
 
 /**
- *
  * @author BubblesDev
  */
 public class Crossbowman {

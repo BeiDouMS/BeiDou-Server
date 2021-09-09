@@ -38,7 +38,7 @@ public final class ExpTable {
     public static int getMountExpNeededForLevel(int level) {
         return mount[level];
     }
-    
+
     public static int getEquipExpNeededForLevel(int level) {
         return equip[level];
     }

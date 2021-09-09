@@ -39,7 +39,7 @@ public class MapOwnerClaimCommand extends Command {
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();
-                
+
                 if (YamlConfig.config.server.USE_MAP_OWNERSHIP_SYSTEM) {
                     if (chr.getEventInstance() == null) {
                         MapleMap map = chr.getMap();

@@ -40,14 +40,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Danny (Leifde)
  */
 public class MobSkillFactory {
 
-    private static Map<String, MobSkill> mobSkills = new HashMap<>();
+    private static final Map<String, MobSkill> mobSkills = new HashMap<>();
     private final static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
-    private static Data skillRoot = dataSource.getData("MobSkill.img");
+    private static final Data skillRoot = dataSource.getData("MobSkill.img");
     private final static MonitoredReentrantReadWriteLock dataLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MOBSKILL_FACTORY);
     private final static MonitoredReadLock rL = MonitoredReadLockFactory.createLock(dataLock);
     private final static MonitoredWriteLock wL = MonitoredWriteLockFactory.createLock(dataLock);

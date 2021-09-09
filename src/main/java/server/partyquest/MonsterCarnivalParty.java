@@ -13,8 +13,8 @@ import java.util.List;
 public class MonsterCarnivalParty {
 
     private List<Character> members = new LinkedList<>();
-    private Character leader;
-    private byte team;
+    private final Character leader;
+    private final byte team;
     private short availableCP = 0, totalCP = 0;
     private int summons = 8;
     private boolean winner = false;
@@ -77,10 +77,11 @@ public class MonsterCarnivalParty {
     }
 
     public void warpOut() {
-        if (winner == true)
+        if (winner == true) {
             warpOut(980000003 + (leader.getMonsterCarnival().getRoom() * 100));
-        else
+        } else {
             warpOut(980000004 + (leader.getMonsterCarnival().getRoom() * 100));
+        }
     }
 
     public boolean allInMap(MapleMap map) {

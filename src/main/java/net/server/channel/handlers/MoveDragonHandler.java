@@ -43,13 +43,14 @@ public class MoveDragonHandler extends AbstractMovementPacketHandler {
                 updatePosition(p, dragon, 0);
                 long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
                 p.seek(movementDataStart);
-                
+
                 if (chr.isHidden()) {
                     chr.getMap().broadcastGMPacket(chr, PacketCreator.moveDragon(dragon, startPos, p, movementDataLength));
                 } else {
                     chr.getMap().broadcastMessage(chr, PacketCreator.moveDragon(dragon, startPos, p, movementDataLength), dragon.getPosition());
                 }
-            } catch (EmptyMovementException e) {}
+            } catch (EmptyMovementException e) {
+            }
         }
     }
 }

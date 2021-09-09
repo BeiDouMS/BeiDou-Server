@@ -39,7 +39,7 @@ public abstract class Command {
     protected void setDescription(String description) {
         this.description = description;
     }
-    
+
     public int getRank() {
         return rank;
     }

@@ -29,7 +29,6 @@ import server.events.gm.Snowball;
 import server.maps.MapleMap;
 
 /**
- *
  * @author kevintjuh93
  */
 public final class SnowballHandler extends AbstractPacketHandler {
@@ -43,23 +42,31 @@ public final class SnowballHandler extends AbstractPacketHandler {
         int what = p.readByte();
         //slea.skip(4);
 
-        if (snowball == null || othersnowball == null || snowball.getSnowmanHP() == 0) return;
-        if ((currentServerTime() - chr.getLastSnowballAttack()) < 500) return;
-        if (chr.getTeam() != (what % 2)) return;
+        if (snowball == null || othersnowball == null || snowball.getSnowmanHP() == 0) {
+            return;
+        }
+        if ((currentServerTime() - chr.getLastSnowballAttack()) < 500) {
+            return;
+        }
+        if (chr.getTeam() != (what % 2)) {
+            return;
+        }
 
         chr.setLastSnowballAttack(currentServerTime());
         int damage = 0;
-        if (what < 2 && othersnowball.getSnowmanHP() > 0)
+        if (what < 2 && othersnowball.getSnowmanHP() > 0) {
             damage = 10;
-        else if (what == 2 || what == 3) {
-            if (Math.random() < 0.03)
+        } else if (what == 2 || what == 3) {
+            if (Math.random() < 0.03) {
                 damage = 45;
-            else
+            } else {
                 damage = 15;
+            }
         }
 
-        if (what >= 0 && what <= 4)
+        if (what >= 0 && what <= 4) {
             snowball.hit(what, damage);
+        }
 
     }
 }

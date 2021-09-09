@@ -66,19 +66,19 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void hitReactor() {
         reactor.hitReactor(c);
     }
-    
+
     public void destroyNpc(int npcId) {
         reactor.getMap().destroyNPC(npcId);
     }
-    
+
     private static void sortDropEntries(List<ReactorDropEntry> from, List<ReactorDropEntry> item, List<ReactorDropEntry> visibleQuest, List<ReactorDropEntry> otherQuest, Character chr) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        
-        for(ReactorDropEntry mde : from) {
-            if(!ii.isQuestItem(mde.itemId)) {
+
+        for (ReactorDropEntry mde : from) {
+            if (!ii.isQuestItem(mde.itemId)) {
                 item.add(mde);
             } else {
-                if(chr.needQuestItem(mde.questid, mde.itemId)) {
+                if (chr.needQuestItem(mde.questid, mde.itemId)) {
                     visibleQuest.add(mde);
                 } else {
                     otherQuest.add(mde);
@@ -86,25 +86,25 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
             }
         }
     }
-    
+
     private static List<ReactorDropEntry> assembleReactorDropEntries(Character chr, List<ReactorDropEntry> items) {
         final List<ReactorDropEntry> dropEntry = new ArrayList<>();
         final List<ReactorDropEntry> visibleQuestEntry = new ArrayList<>();
         final List<ReactorDropEntry> otherQuestEntry = new ArrayList<>();
         sortDropEntries(items, dropEntry, visibleQuestEntry, otherQuestEntry, chr);
-        
+
         Collections.shuffle(dropEntry);
         Collections.shuffle(visibleQuestEntry);
         Collections.shuffle(otherQuestEntry);
-        
+
         items.clear();
         items.addAll(dropEntry);
         items.addAll(visibleQuestEntry);
         items.addAll(otherQuestEntry);
-        
+
         List<ReactorDropEntry> items1 = new ArrayList<>(items.size());
         List<ReactorDropEntry> items2 = new ArrayList<>(items.size() / 2);
-        
+
         for (int i = 0; i < items.size(); i++) {
             if (i % 2 == 0) {
                 items1.add(items.get(i));
@@ -112,10 +112,10 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 items2.add(items.get(i));
             }
         }
-        
+
         Collections.reverse(items1);
         items1.addAll(items2);
-        
+
         return items1;
     }
 
@@ -126,15 +126,15 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void sprayItems(boolean meso, int mesoChance, int minMeso, int maxMeso) {
         sprayItems(meso, mesoChance, minMeso, maxMeso, 0);
     }
-    
+
     public void sprayItems(boolean meso, int mesoChance, int minMeso, int maxMeso, int minItems) {
-        sprayItems((int)reactor.getPosition().getX(), (int)reactor.getPosition().getY(), meso, mesoChance, minMeso, maxMeso, minItems);
+        sprayItems((int) reactor.getPosition().getX(), (int) reactor.getPosition().getY(), meso, mesoChance, minMeso, maxMeso, minItems);
     }
 
     public void sprayItems(int posX, int posY, boolean meso, int mesoChance, int minMeso, int maxMeso, int minItems) {
         dropItems(true, posX, posY, meso, mesoChance, minMeso, maxMeso, minItems);
     }
-    
+
     public void dropItems() {
         dropItems(false, 0, 0, 0, 0);
     }
@@ -142,31 +142,35 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void dropItems(boolean meso, int mesoChance, int minMeso, int maxMeso) {
         dropItems(meso, mesoChance, minMeso, maxMeso, 0);
     }
-    
+
     public void dropItems(boolean meso, int mesoChance, int minMeso, int maxMeso, int minItems) {
-        dropItems((int)reactor.getPosition().getX(), (int)reactor.getPosition().getY(), meso, mesoChance, minMeso, maxMeso, minItems);
+        dropItems((int) reactor.getPosition().getX(), (int) reactor.getPosition().getY(), meso, mesoChance, minMeso, maxMeso, minItems);
     }
 
     public void dropItems(int posX, int posY, boolean meso, int mesoChance, int minMeso, int maxMeso, int minItems) {
         dropItems(true, posX, posY, meso, mesoChance, minMeso, maxMeso, minItems);  // all reactors actually drop items sequentially... thanks inhyuk for pointing this out!
     }
-    
+
     public void dropItems(boolean delayed, int posX, int posY, boolean meso, int mesoChance, final int minMeso, final int maxMeso, int minItems) {
         Character chr = c.getPlayer();
-        if(chr == null) return;
-        
+        if (chr == null) {
+            return;
+        }
+
         List<ReactorDropEntry> items = assembleReactorDropEntries(chr, generateDropList(getDropChances(), chr.getDropRate(), meso, mesoChance, minItems));
-        if(items.size() % 2 == 0) posX -= 12;
+        if (items.size() % 2 == 0) {
+            posX -= 12;
+        }
         final Point dropPos = new Point(posX, posY);
-        
-        if(!delayed) {
+
+        if (!delayed) {
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
-            
+
             byte p = 1;
             for (ReactorDropEntry d : items) {
                 dropPos.x = posX + ((p % 2 == 0) ? (25 * ((p + 1) / 2)) : -(25 * (p / 2)));
                 p++;
-                
+
                 if (d.itemId == 0) {
                     int range = maxMeso - minMeso;
                     int displayDrop = (int) (Math.random() * range) + minMeso;
@@ -174,7 +178,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                     reactor.getMap().spawnMesoDrop(mesoDrop, reactor.getMap().calcDropPos(dropPos, reactor.getPosition()), reactor, c.getPlayer(), false, (byte) 2);
                 } else {
                     Item drop;
-                    
+
                     if (ItemConstants.getInventoryType(d.itemId) != InventoryType.EQUIP) {
                         drop = new Item(d.itemId, (short) 0, (short) 1);
                     } else {
@@ -188,11 +192,11 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
             final Reactor r = reactor;
             final List<ReactorDropEntry> dropItems = items;
             final int worldMesoRate = c.getWorldServer().getMesoRate();
-            
+
             dropPos.x -= (12 * items.size());
-            
+
             sprayTask = TimerManager.getInstance().register(() -> {
-                if(dropItems.isEmpty()) {
+                if (dropItems.isEmpty()) {
                     sprayTask.cancel(false);
                     return;
                 }
@@ -224,23 +228,23 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     private List<ReactorDropEntry> getDropChances() {
         return ReactorScriptManager.getInstance().getDrops(reactor.getId());
     }
-    
+
     private List<ReactorDropEntry> generateDropList(List<ReactorDropEntry> drops, int dropRate, boolean meso, int mesoChance, int minItems) {
         List<ReactorDropEntry> items = new ArrayList<>();
         if (meso && Math.random() < (1 / (double) mesoChance)) {
             items.add(new ReactorDropEntry(0, mesoChance, -1));
         }
-        
-        for(ReactorDropEntry mde : drops) {
+
+        for (ReactorDropEntry mde : drops) {
             if (Math.random() < (dropRate / (double) mde.chance)) {
                 items.add(mde);
             }
         }
-        
+
         while (items.size() < minItems) {
             items.add(new ReactorDropEntry(0, mesoChance, -1));
         }
-        
+
         return items;
     }
 
@@ -271,28 +275,28 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         pos.y -= 10;
         return pos;
     }
-    
+
     public void spawnNpc(int npcId) {
         spawnNpc(npcId, getPosition());
     }
-    
+
     public void spawnNpc(int npcId, Point pos) {
         spawnNpc(npcId, pos, reactor.getMap());
     }
-    
+
     public void hitMonsterWithReactor(int id, int hitsToKill) {  // until someone comes with a better solution, why not?
         int customTime = YamlConfig.config.server.MOB_REACTOR_REFRESH_TIME;
-        if(customTime > 0) {
+        if (customTime > 0) {
             reactor.setDelay(customTime);
         }
-        
+
         MapleMap map = reactor.getMap();
         Monster mm = map.getMonsterById(id);
-        if(mm != null) {
-            int damage = (int)Math.ceil(mm.getMaxHp() / hitsToKill);
+        if (mm != null) {
+            int damage = (int) Math.ceil(mm.getMaxHp() / hitsToKill);
             Character chr = this.getPlayer();
-            
-            if(chr != null) {
+
+            if (chr != null) {
                 map.damageMonster(chr, mm, damage);
                 map.broadcastMessage(PacketCreator.damageMonster(mm.getObjectId(), damage));
             }
@@ -322,12 +326,12 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         changeMusic(bgmName);
         mapMessage(6, summonMessage);
     }
-    
+
     public void dispelAllMonsters(int num, int team) { //dispels all mobs, cpq
         final MCSkill skil = CarnivalFactory.getInstance().getGuardian(num);
         if (skil != null) {
             for (Monster mons : getMap().getAllMonsters()) {
-                if(mons.getTeam() == team) {
+                if (mons.getTeam() == team) {
                     mons.dispelSkill(skil.getSkill());
                 }
             }

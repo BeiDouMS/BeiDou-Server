@@ -37,13 +37,13 @@ public final class DamageSummonHandler extends AbstractPacketHandler {
         p.skip(1);   // -1
         int damage = p.readInt();
         int monsterIdFrom = p.readInt();
-        
+
         Character player = c.getPlayer();
         MapObject mmo = player.getMap().getMapObject(oid);
-        
-        if(mmo != null && mmo instanceof Summon) {
+
+        if (mmo != null && mmo instanceof Summon) {
             Summon summon = (Summon) mmo;
-        
+
             summon.addHP(-damage);
             if (summon.getHP() <= 0) {
                 player.cancelEffectFromBuffStat(BuffStat.PUPPET);

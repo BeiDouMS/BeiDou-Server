@@ -27,8 +27,8 @@ package server.events;
  */
 public abstract class Events {
     public Events() {
-     
+
     }
-    
+
     public abstract int getInfo();
 }

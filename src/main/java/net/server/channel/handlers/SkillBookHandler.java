@@ -43,16 +43,16 @@ public final class SkillBookHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        
+
         p.readInt();
         short slot = p.readShort();
         int itemId = p.readInt();
-        
+
         boolean canuse;
         boolean success = false;
         int skill = 0;
         int maxlevel = 0;
-        
+
         Character player = c.getPlayer();
         if (c.tryacquireClient()) {
             try {
@@ -95,7 +95,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
             } finally {
                 c.releaseClient();
             }
-            
+
             // thanks Vcoc for noting skill book result not showing for all in area
             player.getMap().broadcastMessage(PacketCreator.skillBookResult(player, skill, maxlevel, canuse, success));
         }

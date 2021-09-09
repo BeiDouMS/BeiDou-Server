@@ -47,32 +47,37 @@ public class ClearSlotCommand extends Command {
             case "all":
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("All Slots Cleared.");
@@ -80,8 +85,9 @@ public class ClearSlotCommand extends Command {
             case "equip":
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Equipment Slot Cleared.");
@@ -89,8 +95,9 @@ public class ClearSlotCommand extends Command {
             case "use":
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Use Slot Cleared.");
@@ -98,8 +105,9 @@ public class ClearSlotCommand extends Command {
             case "setup":
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Set-Up Slot Cleared.");
@@ -107,8 +115,9 @@ public class ClearSlotCommand extends Command {
             case "etc":
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("ETC Slot Cleared.");
@@ -116,8 +125,9 @@ public class ClearSlotCommand extends Command {
             case "cash":
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
-                    if (tempItem == null)
+                    if (tempItem == null) {
                         continue;
+                    }
                     InventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Cash Slot Cleared.");

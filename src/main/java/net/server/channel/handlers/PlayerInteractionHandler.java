@@ -46,7 +46,6 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
- *
  * @author Matze
  * @author Ronan - concurrency safety and reviewed minigames
  */
@@ -100,7 +99,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         SELECT_CARD(0x44);
         final byte code;
 
-        private Action(int code) {
+        Action(int code) {
             this.code = (byte) code;
         }
 
@@ -118,26 +117,26 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             return 13;
         }
 
-        if(chr.getEventInstance() != null) {
+        if (chr.getEventInstance() != null) {
             return 5;
         }
-        
+
         return 0;
     }
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         if (!c.tryacquireClient()) {    // thanks GabrielSin for pointing dupes within player interactions
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        
+
         try {
             byte mode = p.readByte();
             final Character chr = c.getPlayer();
-            
+
             if (mode == Action.CREATE.getCode()) {
-                if(!chr.isAlive()) {    // thanks GabrielSin for pointing this
+                if (!chr.isAlive()) {    // thanks GabrielSin for pointing this
                     chr.sendPacket(PacketCreator.getMiniRoomError(4));
                     return;
                 }
@@ -221,7 +220,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.getMap().broadcastMessage(PacketCreator.addMatchCardBox(chr, 1, 0));
                     game.sendMatchCard(c, type);
                 } else if (createType == 4 || createType == 5) { // shop
-                    if(!GameConstants.isFreeMarketRoom(chr.getMapId())) {
+                    if (!GameConstants.isFreeMarketRoom(chr.getMapId())) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(15));
                         return;
                     }
@@ -231,11 +230,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         chr.sendPacket(PacketCreator.getMiniRoomError(status));
                         return;
                     }
-                    
+
                     if (!canPlaceStore(chr)) {
                         return;
                     }
-                    
+
                     String desc = p.readString();
                     p.skip(3);
                     int itemId = p.readInt();
@@ -265,7 +264,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 if (other == null || chr.getId() == other.getId()) {
                     return;
                 }
-                
+
                 Trade.inviteTrade(chr, other);
             } else if (mode == Action.DECLINE.getCode()) {
                 Trade.declineTrade(chr);
@@ -278,7 +277,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         return;
                     }
                 } else {
-                    if (isTradeOpen(chr)) return;
+                    if (isTradeOpen(chr)) {
+                        return;
+                    }
 
                     int oid = p.readInt();
                     MapObject ob = chr.getMap().getMapObject(oid);
@@ -290,7 +291,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         String pw = p.available() > 1 ? p.readString() : "";
 
                         MiniGame game = (MiniGame) ob;
-                        if(game.checkPassword(pw)) {
+                        if (game.checkPassword(pw)) {
                             if (game.hasFreeSlot() && !game.isVisitor(chr)) {
                                 game.addVisitor(chr);
                                 chr.setMiniGame(game);
@@ -339,8 +340,10 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     chr.closeHiredMerchant(true);
                 }
             } else if (mode == Action.OPEN_STORE.getCode() || mode == Action.OPEN_CASH.getCode()) {
-                if (isTradeOpen(chr)) return;
-                
+                if (isTradeOpen(chr)) {
+                    return;
+                }
+
                 if (mode == Action.OPEN_STORE.getCode()) {
                     p.readByte();    //01
                 } else {
@@ -350,10 +353,10 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.serverNotice(1, "Please check again the birthday date."));
                         return;
                     }
-                    
+
                     c.sendPacket(PacketCreator.hiredMerchantOwnerMaintenanceLeave());
                 }
-                
+
                 if (!canPlaceStore(chr)) {    // thanks Ari for noticing player shops overlapping on opening time
                     return;
                 }
@@ -361,10 +364,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
-                    if(YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
+                    if (YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
                         try {
                             InventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
-                        } catch(RuntimeException re) {} // fella does not have a player shop permit...
+                        } catch (RuntimeException re) {
+                        } // fella does not have a player shop permit...
                     }
 
                     chr.getMap().broadcastMessage(PacketCreator.updatePlayerShopBox(shop));
@@ -483,30 +487,30 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 if (item == null) {
                     c.sendPacket(PacketCreator.serverNotice(1, "Invalid item description."));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 if (ii.isUnmerchable(item.getItemId())) {
                     if (ItemConstants.isPet(item.getItemId())) {
                         c.sendPacket(PacketCreator.serverNotice(1, "Pets are not allowed to be traded."));
                     } else {
                         c.sendPacket(PacketCreator.serverNotice(1, "Cash items are not allowed to be traded."));
                     }
-                    
+
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 if (quantity < 1 || quantity > item.getQuantity()) {
                     c.sendPacket(PacketCreator.serverNotice(1, "You don't have enough quantity of the item."));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-                
+
                 Trade trade = chr.getTrade();
                 if (trade != null) {
                     if ((quantity <= item.getQuantity() && quantity >= 0) || ItemConstants.isRechargeable(item.getItemId())) {
@@ -517,7 +521,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                                 return;
                             }
                         }
-                        
+
                         Inventory inv = chr.getInventory(ivType);
                         inv.lockInventory();
                         try {
@@ -527,18 +531,18 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             }
-                            
+
                             Item tradeItem = item.copy();
                             if (ItemConstants.isRechargeable(item.getItemId())) {
                                 quantity = item.getQuantity();
                             }
-                            
+
                             tradeItem.setQuantity(quantity);
                             tradeItem.setPosition(targetSlot);
-                            
+
                             if (trade.addItem(tradeItem)) {
                                 InventoryManipulator.removeFromSlot(c, ivType, item.getPosition(), quantity, true);
-                                
+
                                 trade.getChr().sendPacket(PacketCreator.getTradeItemAdd((byte) 0, tradeItem));
                                 if (trade.getPartner() != null) {
                                     trade.getPartner().getChr().sendPacket(PacketCreator.getTradeItemAdd((byte) 1, tradeItem));
@@ -554,7 +558,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.CONFIRM.getCode()) {
                 Trade.completeTrade(chr);
             } else if (mode == Action.ADD_ITEM.getCode() || mode == Action.PUT_ITEM.getCode()) {
-                if (isTradeOpen(chr)) return;
+                if (isTradeOpen(chr)) {
+                    return;
+                }
 
                 InventoryType ivType = InventoryType.getByType(p.readByte());
                 short slot = p.readShort();
@@ -571,13 +577,13 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     } else {
                         c.sendPacket(PacketCreator.serverNotice(1, "Cash items are not allowed to be sold on the Player Store."));
                     }
-                    
+
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
                 short perBundle = p.readShort();
-                
+
                 if (ItemConstants.isRechargeable(ivItem.getItemId())) {
                     perBundle = 1;
                     bundles = 1;
@@ -593,9 +599,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " might of possibly packet edited Hired Merchants\nperBundle: " + perBundle + "\nperBundle * bundles (This multiplied cannot be greater than 2000): " + perBundle * bundles + "\nbundles: " + bundles + "\nprice: " + price);
                     return;
                 }
-                
+
                 Item sellItem = ivItem.copy();
-                if(!ItemConstants.isRechargeable(ivItem.getItemId())) {
+                if (!ItemConstants.isRechargeable(ivItem.getItemId())) {
                     sellItem.setQuantity(perBundle);
                 }
 
@@ -607,37 +613,37 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't sell it anymore."));
                         return;
                     }
-                    
+
                     if (ItemConstants.isRechargeable(ivItem.getItemId())) {
                         InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
                     } else {
                         InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
                     }
-                    
+
                     c.sendPacket(PacketCreator.getPlayerShopItemUpdate(shop));
                 } else if (merchant != null && merchant.isOwner(chr)) {
                     if (ivType.equals(InventoryType.CASH) && merchant.isPublished()) {
                         c.sendPacket(PacketCreator.serverNotice(1, "Cash items are only allowed to be sold when first opening the store."));
                         return;
                     }
-                    
+
                     if (merchant.isOpen() || !merchant.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots
                         c.sendPacket(PacketCreator.serverNotice(1, "You can't sell it anymore."));
                         return;
                     }
-                    
+
                     if (ItemConstants.isRechargeable(ivItem.getItemId())) {
                         InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
                     } else {
                         InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
                     }
-                    
+
                     c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));
-                    
+
                     if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) {
                         chr.saveCharToDB(false);
                     }
-                    
+
                     try {
                         merchant.saveItems(false);   // thanks Masterrulax for realizing yet another dupe with merchants/Fredrick
                     } catch (SQLException ex) {
@@ -647,7 +653,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.serverNotice(1, "You can't sell without owning a shop."));
                 }
             } else if (mode == Action.REMOVE_ITEM.getCode()) {
-                if (isTradeOpen(chr)) return;
+                if (isTradeOpen(chr)) {
+                    return;
+                }
 
                 PlayerShop shop = chr.getPlayerShop();
                 if (shop != null && shop.isOwner(chr)) {
@@ -668,12 +676,16 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
             } else if (mode == Action.MERCHANT_MESO.getCode()) {
                 HiredMerchant merchant = chr.getHiredMerchant();
-                if (merchant == null) return;
+                if (merchant == null) {
+                    return;
+                }
 
                 merchant.withdrawMesos(chr);
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
                 HiredMerchant merchant = chr.getHiredMerchant();
-                if (merchant == null || !merchant.isOwner(chr)) return;
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
 
                 merchant.withdrawMesos(chr);
                 merchant.clearInexistentItems();
@@ -685,7 +697,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));
 
             } else if (mode == Action.BUY.getCode() || mode == Action.MERCHANT_BUY.getCode()) {
-                if (isTradeOpen(chr)) return;
+                if (isTradeOpen(chr)) {
+                    return;
+                }
 
                 int itemid = p.readByte();
                 short quantity = p.readShort();
@@ -706,7 +720,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     merchant.broadcastToVisitorsThreadsafe(PacketCreator.updateHiredMerchant(merchant, chr));
                 }
             } else if (mode == Action.TAKE_ITEM_BACK.getCode()) {
-                if (isTradeOpen(chr)) return;
+                if (isTradeOpen(chr)) {
+                    return;
+                }
 
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null && merchant.isOwner(chr)) {
@@ -726,17 +742,21 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     merchant.takeItemBack(slot, chr);
                 }
             } else if (mode == Action.CLOSE_MERCHANT.getCode()) {
-                if (isTradeOpen(chr)) return;
+                if (isTradeOpen(chr)) {
+                    return;
+                }
 
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null) {
                     merchant.closeOwnerMerchant(chr);
                 }
             } else if (mode == Action.MAINTENANCE_OFF.getCode()) {
-                if (isTradeOpen(chr)) return;
+                if (isTradeOpen(chr)) {
+                    return;
+                }
 
                 HiredMerchant merchant = chr.getHiredMerchant();
-                if(merchant != null) {
+                if (merchant != null) {
                     if (merchant.isOwner(chr)) {
                         if (merchant.getItems().isEmpty()) {
                             merchant.closeOwnerMerchant(chr);
@@ -759,22 +779,22 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
             } else if (mode == Action.EXPEL.getCode()) {
                 MiniGame miniGame = chr.getMiniGame();
-                if(miniGame != null && miniGame.isOwner(chr)) {
+                if (miniGame != null && miniGame.isOwner(chr)) {
                     Character visitor = miniGame.getVisitor();
 
-                    if(visitor != null) {
+                    if (visitor != null) {
                         visitor.closeMiniGame(false);
                         visitor.sendPacket(PacketCreator.getMiniGameClose(true, 5));
                     }
                 }
             } else if (mode == Action.EXIT_AFTER_GAME.getCode()) {
                 MiniGame miniGame = chr.getMiniGame();
-                if(miniGame != null) {
+                if (miniGame != null) {
                     miniGame.setQuitAfterGame(chr, true);
                 }
             } else if (mode == Action.CANCEL_EXIT_AFTER_GAME.getCode()) {
                 MiniGame miniGame = chr.getMiniGame();
-                if(miniGame != null) {
+                if (miniGame != null) {
                     miniGame.setQuitAfterGame(chr, false);
                 }
             }
@@ -782,17 +802,17 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             c.releaseClient();
         }
     }
-    
+
     private static boolean isTradeOpen(Character chr) {
         if (chr.getTrade() != null) {   // thanks to Rien dev team
             //Apparently there is a dupe exploit that causes racing conditions when saving/retrieving from the db with stuff like trade open.
             chr.sendPacket(PacketCreator.enableActions());
             return true;
         }
-        
+
         return false;
     }
-    
+
     private static boolean canPlaceStore(Character chr) {
         try {
             for (MapObject mmo : chr.getMap().getMapObjectsInRange(chr.getPosition(), 23000, Arrays.asList(MapObjectType.HIRED_MERCHANT, MapObjectType.PLAYER))) {
@@ -822,7 +842,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return true;
     }
 }

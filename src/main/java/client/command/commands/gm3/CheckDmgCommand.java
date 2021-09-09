@@ -42,8 +42,12 @@ public class CheckDmgCommand extends Command {
             Integer watkBuff = victim.getBuffedValue(BuffStat.WATK);
             Integer matkBuff = victim.getBuffedValue(BuffStat.MATK);
             int blessing = victim.getSkillLevel(10000000 * player.getJobType() + 12);
-            if (watkBuff == null) watkBuff = 0;
-            if (matkBuff == null) matkBuff = 0;
+            if (watkBuff == null) {
+                watkBuff = 0;
+            }
+            if (matkBuff == null) {
+                matkBuff = 0;
+            }
 
             player.dropMessage(5, "Cur Str: " + victim.getTotalStr() + " Cur Dex: " + victim.getTotalDex() + " Cur Int: " + victim.getTotalInt() + " Cur Luk: " + victim.getTotalLuk());
             player.dropMessage(5, "Cur WATK: " + victim.getTotalWatk() + " Cur MATK: " + victim.getTotalMagic());

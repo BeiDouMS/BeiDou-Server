@@ -20,7 +20,6 @@
 package client;
 
 /**
- *
  * @author Ronan
  */
 public interface AbstractCharacterListener {

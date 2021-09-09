@@ -31,12 +31,12 @@ function spawnJrBoss(mobObj) {
 
 function hit() {
     var mapObj = rm.getMap();
-    
+
     //spawnJrBoss(mapObj.getMonsterById(8820019));
     //spawnJrBoss(mapObj.getMonsterById(8820020));
     //spawnJrBoss(mapObj.getMonsterById(8820021));
     //spawnJrBoss(mapObj.getMonsterById(8820022));
     //spawnJrBoss(mapObj.getMonsterById(8820023));
-    
+
     mapObj.killMonster(8820000);
 }

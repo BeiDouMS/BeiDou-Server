@@ -30,7 +30,6 @@ import server.maps.MapObject;
 import tools.PacketCreator;
 
 /**
- *
  * @author Matze
  */
 public final class DoorHandler extends AbstractPacketHandler {
@@ -38,13 +37,13 @@ public final class DoorHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         int ownerid = p.readInt();
         p.readByte(); // specifies if backwarp or not, 1 town to target, 0 target to town
-        
+
         Character chr = c.getPlayer();
         if (chr.isChangingMaps() || chr.isBanned()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        
+
         for (MapObject obj : chr.getMap().getMapObjects()) {
             if (obj instanceof DoorObject) {
                 DoorObject door = (DoorObject) obj;
@@ -54,7 +53,7 @@ public final class DoorHandler extends AbstractPacketHandler {
                 }
             }
         }
-        
+
         c.sendPacket(PacketCreator.blockedMessage(6));
         c.sendPacket(PacketCreator.enableActions());
     }

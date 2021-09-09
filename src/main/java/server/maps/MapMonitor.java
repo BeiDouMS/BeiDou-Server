@@ -45,14 +45,14 @@ public class MapMonitor {
             monitorSchedule.cancel(false);
             monitorSchedule = null;
         }
-        
+
         map.killAllMonsters();
         map.clearDrops();
         if (portal != null) {
             portal.setPortalStatus(Portal.OPEN);
         }
         map.resetReactors();
-        
+
         map = null;
         portal = null;
     }

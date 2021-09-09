@@ -35,13 +35,14 @@ public final class MovePlayerHandler extends AbstractMovementPacketHandler {
             updatePosition(p, c.getPlayer(), 0);
             long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
             p.seek(movementDataStart);
-            
+
             c.getPlayer().getMap().movePlayer(c.getPlayer(), c.getPlayer().getPosition());
             if (c.getPlayer().isHidden()) {
                 c.getPlayer().getMap().broadcastGMMessage(c.getPlayer(), PacketCreator.movePlayer(c.getPlayer().getId(), p, movementDataLength), false);
             } else {
                 c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.movePlayer(c.getPlayer().getId(), p, movementDataLength), false);
             }
-        } catch (EmptyMovementException e) {}
+        } catch (EmptyMovementException e) {
+        }
     }
 }

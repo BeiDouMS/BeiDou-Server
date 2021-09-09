@@ -27,12 +27,12 @@ public final class RegisterPicHandler extends AbstractPacketHandler {
             default -> 9;
         };
     }
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.readByte();
         int charId = p.readInt();
-        
+
         String macs = p.readString();
         String hostString = p.readString();
 
@@ -44,47 +44,47 @@ public final class RegisterPicHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.getAfterLoginError(17));
             return;
         }
-        
+
         c.updateMacs(macs);
         c.updateHwid(hwid);
-        
+
         AntiMulticlientResult res = SessionCoordinator.getInstance().attemptGameSession(c, c.getAccID(), hwid);
         if (res != AntiMulticlientResult.SUCCESS) {
             c.sendPacket(PacketCreator.getAfterLoginError(parseAntiMulticlientError(res)));
             return;
         }
-        
+
         if (c.hasBannedMac() || c.hasBannedHWID()) {
             SessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
-        
+
         Server server = Server.getInstance();
-        if(!server.haveCharacterEntry(c.getAccID(), charId)) {
+        if (!server.haveCharacterEntry(c.getAccID(), charId)) {
             SessionCoordinator.getInstance().closeSession(c, true);
             return;
         }
-		
+
         String pic = p.readString();
         if (c.getPic() == null || c.getPic().equals("")) {
             c.setPic(pic);
-            
+
             c.setWorld(server.getCharacterWorld(charId));
             World wserv = c.getWorldServer();
-            if(wserv == null || wserv.isWorldCapacityFull()) {
+            if (wserv == null || wserv.isWorldCapacityFull()) {
                 c.sendPacket(PacketCreator.getAfterLoginError(10));
                 return;
             }
-            
+
             String[] socket = server.getInetSocket(c, c.getWorld(), c.getChannel());
-            if(socket == null) {
+            if (socket == null) {
                 c.sendPacket(PacketCreator.getAfterLoginError(10));
                 return;
             }
-            
+
             server.unregisterLoginState(c);
             c.setCharacterOnSessionTransitionState(charId);
-            
+
             try {
                 c.sendPacket(PacketCreator.getServerIP(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1]), charId));
             } catch (UnknownHostException e) {

@@ -31,36 +31,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class InfoExRequirement extends AbstractQuestRequirement {
-	private List<String> infoExpected = new ArrayList<>();
-	private int questID;
-	
-	
-	public InfoExRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.INFO_EX);
-		questID = quest.getId();
-                processData(data);
-	}
-	
-	@Override
-	public void processData(Data data) {
-		// Because we have to...
-                for(Data infoEx : data.getChildren()) {
-			Data value = infoEx.getChildByPath("value");
-			infoExpected.add(DataTool.getString(value, ""));
-		}
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return true;
-	}
-	
-	public List<String> getInfo() {
-		return infoExpected;
+    private final List<String> infoExpected = new ArrayList<>();
+    private final int questID;
+
+
+    public InfoExRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.INFO_EX);
+        questID = quest.getId();
+        processData(data);
+    }
+
+    @Override
+    public void processData(Data data) {
+        // Because we have to...
+        for (Data infoEx : data.getChildren()) {
+            Data value = infoEx.getChildByPath("value");
+            infoExpected.add(DataTool.getString(value, ""));
         }
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return true;
+    }
+
+    public List<String> getInfo() {
+        return infoExpected;
+    }
 }

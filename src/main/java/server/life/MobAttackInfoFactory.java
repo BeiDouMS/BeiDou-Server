@@ -32,12 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Danny (Leifde)
  */
 public class MobAttackInfoFactory {
-    private static Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
-    private static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.MOB);
+    private static final Map<String, MobAttackInfo> mobAttacks = new HashMap<>();
+    private static final DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.MOB);
 
     public static MobAttackInfo getMobAttackInfo(Monster mob, int attack) {
         MobAttackInfo ret = mobAttacks.get(mob.getId() + "" + attack);
@@ -55,11 +54,11 @@ public class MobAttackInfoFactory {
                         mobData = dataSource.getData(StringUtil.getLeftPaddedStr(linkedmob + ".img", '0', 11));
                     }
                     Data attackData = mobData.getChildByPath("attack" + (attack + 1) + "/info");
-                   
+
                     if (attackData == null) {
-                    	return null;
+                        return null;
                     }
-                    
+
                     Data deadlyAttack = attackData.getChildByPath("deadlyAttack");
                     int mpBurn = DataTool.getInt("mpBurn", attackData, 0);
                     int disease = DataTool.getInt("disease", attackData, 0);
@@ -70,7 +69,7 @@ public class MobAttackInfoFactory {
                     ret.setMpBurn(mpBurn);
                     ret.setDiseaseSkill(disease);
                     ret.setDiseaseLevel(level);
-                    ret.setMpCon(mpCon);          
+                    ret.setMpCon(mpCon);
                 }
                 mobAttacks.put(mob.getId() + "" + attack, ret);
             }

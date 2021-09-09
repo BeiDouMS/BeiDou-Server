@@ -21,12 +21,13 @@
 */
 package server.movement;
 
-import java.awt.Point;
+import java.awt.*;
 
 public abstract class AbstractLifeMovement implements LifeMovement {
-    private Point position;
-    private int duration;
-    private int newstate, type;
+    private final Point position;
+    private final int duration;
+    private final int newstate;
+    private final int type;
 
     public AbstractLifeMovement(int type, Point position, int duration, int newstate) {
         super();

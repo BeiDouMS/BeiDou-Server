@@ -81,7 +81,7 @@ function scheduledTimeout(eim) {
 function timeOut(eim) {
     if (eim.getPlayerCount() > 0) {
         var pIter = eim.getPlayers().iterator();
-        while (pIter.hasNext()){
+        while (pIter.hasNext()) {
             var player = pIter.next();
             player.dropMessage(6, "You have run out of time to complete this event!");
             playerExit(eim, player);

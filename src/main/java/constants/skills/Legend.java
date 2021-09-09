@@ -22,7 +22,6 @@
 package constants.skills;
 
 /**
- *
  * @author kevintjuh93
  */
 public class Legend {

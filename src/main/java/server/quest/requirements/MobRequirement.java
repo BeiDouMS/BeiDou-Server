@@ -33,57 +33,56 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class MobRequirement extends AbstractQuestRequirement {
-	Map<Integer, Integer> mobs = new HashMap<>();
-	private int questID;
-	
-	public MobRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.MOB);
-		questID = quest.getId();
-                processData(data);
-	}
-	
-	/**
-	 * 
-	 * @param data 
-	 */
-	@Override
-	public void processData(Data data) {
-		for (Data questEntry : data.getChildren()) {
-			int mobID = DataTool.getInt(questEntry.getChildByPath("id"));
-			int countReq = DataTool.getInt(questEntry.getChildByPath("count"));
-			mobs.put(mobID, countReq);
-		}
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		QuestStatus status = chr.getQuest(Quest.getInstance(questID));
-		for(Integer mobID : mobs.keySet()) {
-			int countReq = mobs.get(mobID);
-			int progress;
-			
-			try {
-				progress = Integer.parseInt(status.getProgress(mobID));
-			} catch (NumberFormatException ex) {
-				FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, ex, "Mob: " + mobID + " Quest: " + questID + "CID: " + chr.getId() + " Progress: " + status.getProgress(mobID));
-				return false;
-			}
-			
-			if(progress < countReq)
-				return false;
-		}
-		return true;
-	}
-	
-	public int getRequiredMobCount(int mobid) {
-		if(mobs.containsKey(mobid)) {
-			return mobs.get(mobid);
-		}
-		return 0;
-	}
+    Map<Integer, Integer> mobs = new HashMap<>();
+    private final int questID;
+
+    public MobRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.MOB);
+        questID = quest.getId();
+        processData(data);
+    }
+
+    /**
+     * @param data
+     */
+    @Override
+    public void processData(Data data) {
+        for (Data questEntry : data.getChildren()) {
+            int mobID = DataTool.getInt(questEntry.getChildByPath("id"));
+            int countReq = DataTool.getInt(questEntry.getChildByPath("count"));
+            mobs.put(mobID, countReq);
+        }
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        QuestStatus status = chr.getQuest(Quest.getInstance(questID));
+        for (Integer mobID : mobs.keySet()) {
+            int countReq = mobs.get(mobID);
+            int progress;
+
+            try {
+                progress = Integer.parseInt(status.getProgress(mobID));
+            } catch (NumberFormatException ex) {
+                FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, ex, "Mob: " + mobID + " Quest: " + questID + "CID: " + chr.getId() + " Progress: " + status.getProgress(mobID));
+                return false;
+            }
+
+            if (progress < countReq) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int getRequiredMobCount(int mobid) {
+        if (mobs.containsKey(mobid)) {
+            return mobs.get(mobid);
+        }
+        return 0;
+    }
 }

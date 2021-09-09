@@ -1,19 +1,18 @@
 package server.gachapon;
 
 /**
-*
-* @author Alan (SharpAceX) - gachapon source classes stub & pirate equipment
-* @author Ronan - parsed MapleSEA loots
-* 
-* MapleSEA-like loots thanks to AyumiLove - src: https://ayumilovemaple.wordpress.com/maplestory-gachapon-guide/
-*/
+ * @author Alan (SharpAceX) - gachapon source classes stub & pirate equipment
+ * @author Ronan - parsed MapleSEA loots
+ * <p>
+ * MapleSEA-like loots thanks to AyumiLove - src: https://ayumilovemaple.wordpress.com/maplestory-gachapon-guide/
+ */
 
 public class Ellinia extends GachaponItems {
 
-	@Override
-	public int[] getCommonItems() {
-		return new int[] {
-                
+    @Override
+    public int[] getCommonItems() {
+        return new int[]{
+
                 /* Scroll */
                 2043302, 2040002, 2043102, 2043002, 2044402, 2044302, 2043802, 2044002, 2041017, 2044902,
 
@@ -46,21 +45,21 @@ public class Ellinia extends GachaponItems {
                 1472010, 1472006, 1332011, 1472031, 1041048, 1472019, 1041095, 1040095, 1002128, 1061077, 1060025, 1041040, 1061033, 1472028,
                 1472022, 1472011, 1040096, 1062002, 1002129, 1472026, 1332009, 1060043, 1002249, 1472021, 1040084, 1332015, 1002173, 1002148,
                 1332004, 1332018, 1472009, 1061069, 1002176, 1041044, 1061037, 1060032, 1472020, 1040060, 1472018, 1332013, 1332002, 1402001,
-                
+
                 /* Pirate equipment */
-						1002625, 1002616, 1482005, 1052098, 1482003, 
-						1482001, 1492004, 1002622, 1492005, 1082195
-                };
-	}
+                1002625, 1002616, 1482005, 1052098, 1482003,
+                1482001, 1492004, 1002622, 1492005, 1082195
+        };
+    }
 
-	@Override
-	public int[] getUncommonItems() {
-		return new int [] {1082149, 1002391, 1002419};
-	}
+    @Override
+    public int[] getUncommonItems() {
+        return new int[]{1082149, 1002391, 1002419};
+    }
 
-	@Override
-	public int[] getRareItems() {
-		return new int [] {};
-	}
+    @Override
+    public int[] getRareItems() {
+        return new int[]{};
+    }
 
 }

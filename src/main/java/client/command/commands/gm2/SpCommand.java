@@ -43,16 +43,22 @@ public class SpCommand extends Command {
 
         if (params.length == 1) {
             int newSp = Integer.parseInt(params[0]);
-            if (newSp < 0) newSp = 0;
-            else if (newSp > YamlConfig.config.server.MAX_AP) newSp = YamlConfig.config.server.MAX_AP;
+            if (newSp < 0) {
+                newSp = 0;
+            } else if (newSp > YamlConfig.config.server.MAX_AP) {
+                newSp = YamlConfig.config.server.MAX_AP;
+            }
 
             player.updateRemainingSp(newSp);
         } else {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim != null) {
                 int newSp = Integer.parseInt(params[1]);
-                if (newSp < 0) newSp = 0;
-                else if (newSp > YamlConfig.config.server.MAX_AP) newSp = YamlConfig.config.server.MAX_AP;
+                if (newSp < 0) {
+                    newSp = 0;
+                } else if (newSp > YamlConfig.config.server.MAX_AP) {
+                    newSp = YamlConfig.config.server.MAX_AP;
+                }
 
                 victim.updateRemainingSp(newSp);
 

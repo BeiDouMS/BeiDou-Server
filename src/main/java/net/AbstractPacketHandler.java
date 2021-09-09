@@ -29,7 +29,7 @@ public abstract class AbstractPacketHandler implements PacketHandler {
     public boolean validateState(Client c) {
         return c.isLoggedIn();
     }
-    
+
     protected static long currentServerTime() {
         return Server.getInstance().getCurrentTime();
     }

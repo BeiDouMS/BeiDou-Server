@@ -53,11 +53,11 @@ public class Guild {
     private final List<GuildCharacter> members;
     private final Lock membersLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.GUILD, true);
 
-    private String[] rankTitles = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
+    private final String[] rankTitles = new String[5]; // 1 = master, 2 = jr, 5 = lowest member
     private String name, notice;
     private int id, gp, logo, logoColor, leader, capacity, logoBG, logoBGColor, signature, allianceId;
-    private int world;
-    private Map<Integer, List<Integer>> notifications = new LinkedHashMap<>();
+    private final int world;
+    private final Map<Integer, List<Integer>> notifications = new LinkedHashMap<>();
     private boolean bDirty = true;
 
     public Guild(int guildid, int world) {

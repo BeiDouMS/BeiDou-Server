@@ -11,15 +11,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
- *
  * @author RonanLana
-
-This application gathers info from the WZ.XML files, fetching all cosmetic coupons and tickets from there, and then
-searches the NPC script files, identifying the stylish NPCs that supposedly uses them. It will reports all NPCs that
-uses up a card, as well as report those currently unused.
-
-Estimated parse time: 10 seconds
-
+ * <p>
+ * This application gathers info from the WZ.XML files, fetching all cosmetic coupons and tickets from there, and then
+ * searches the NPC script files, identifying the stylish NPCs that supposedly uses them. It will reports all NPCs that
+ * uses up a card, as well as report those currently unused.
+ * <p>
+ * Estimated parse time: 10 seconds
  */
 public class CashCosmeticsFetcher {
     private static final Map<Integer, String> scriptEntries = new HashMap<>(500);
@@ -41,7 +39,7 @@ public class CashCosmeticsFetcher {
     private static int getNpcIdFromFilename(String name) {
         try {
             return Integer.parseInt(name.substring(0, name.indexOf('.')));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return -1;
         }
     }
@@ -50,7 +48,7 @@ public class CashCosmeticsFetcher {
         ArrayList<File> files = new ArrayList<>();
         listFiles(ToolConstants.SCRIPTS_PATH + "/npc", files);
 
-        for(File f : files) {
+        for (File f : files) {
             Integer npcid = getNpcIdFromFilename(f.getName());
 
             //System.out.println("Parsing " + f.getAbsolutePath());
@@ -60,7 +58,7 @@ public class CashCosmeticsFetcher {
             StringBuilder stringBuffer = new StringBuilder();
             String line;
 
-            while((line = bufferedReader.readLine())!=null){
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuffer.append(line).append("\n");
             }
 
@@ -108,7 +106,7 @@ public class CashCosmeticsFetcher {
             System.out.println("Loaded scripts");
 
             reportCosmeticCouponResults();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

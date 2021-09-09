@@ -34,14 +34,14 @@ import java.awt.*;
  * @author GabrielSin
  */
 public class GrenadeEffectHandler extends AbstractPacketHandler {
- 
+
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         Point position = new Point(p.readInt(), p.readInt());
         int keyDown = p.readInt();
         int skillId = p.readInt();
-       
+
         switch (skillId) {
             case NightWalker.POISON_BOMB:
             case Gunslinger.GRENADE:
@@ -54,5 +54,5 @@ public class GrenadeEffectHandler extends AbstractPacketHandler {
                 FilePrinter.printError(FilePrinter.UNHANDLED_EVENT, "The skill id: " + skillId + " is not coded in " + this.getClass().getName() + ".");
         }
     }
- 
+
 }

@@ -49,7 +49,7 @@ public class PortalScriptManager extends AbstractScriptManager {
         if (script != null) {
             return script;
         }
-        
+
         ScriptEngine engine = getInvocableScriptEngine(scriptPath);
         if (!(engine instanceof Invocable iv)) {
             return null;

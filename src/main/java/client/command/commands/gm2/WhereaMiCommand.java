@@ -41,12 +41,12 @@ public class WhereaMiCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        
+
         HashSet<Character> chars = new HashSet<>();
         HashSet<NPC> npcs = new HashSet<>();
         HashSet<PlayerNPC> playernpcs = new HashSet<>();
         HashSet<Monster> mobs = new HashSet<>();
-        
+
         for (MapObject mmo : player.getMap().getMapObjects()) {
             if (mmo instanceof NPC) {
                 NPC npc = (NPC) mmo;
@@ -64,28 +64,28 @@ public class WhereaMiCommand extends Command {
                 playernpcs.add(npc);
             }
         }
-        
+
         player.yellowMessage("Map ID: " + player.getMap().getId());
-        
+
         player.yellowMessage("Players on this map:");
         for (Character chr : chars) {
             player.dropMessage(5, ">> " + chr.getName() + " - " + chr.getId() + " - Oid: " + chr.getObjectId());
         }
-        
+
         if (!playernpcs.isEmpty()) {
             player.yellowMessage("PlayerNPCs on this map:");
             for (PlayerNPC pnpc : playernpcs) {
                 player.dropMessage(5, ">> " + pnpc.getName() + " - Scriptid: " + pnpc.getScriptId() + " - Oid: " + pnpc.getObjectId());
             }
         }
-        
+
         if (!npcs.isEmpty()) {
             player.yellowMessage("NPCs on this map:");
             for (NPC npc : npcs) {
                 player.dropMessage(5, ">> " + npc.getName() + " - " + npc.getId() + " - Oid: " + npc.getObjectId());
             }
         }
-        
+
         if (!mobs.isEmpty()) {
             player.yellowMessage("Monsters on this map:");
             for (Monster mob : mobs) {

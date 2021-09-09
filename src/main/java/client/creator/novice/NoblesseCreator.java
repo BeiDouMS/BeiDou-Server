@@ -26,23 +26,22 @@ import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 
 /**
- *
  * @author RonanLana
  */
 public class NoblesseCreator extends CharacterFactory {
-        
-        private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
-                CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
-                giveItem(recipe, 4161047, 1, InventoryType.ETC);
-                return recipe;
-        }
-        
-        private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
-                recipe.addStartingItem(itemid, quantity, itemType);
-        }
-        
-        public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
-                int status = createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.NOBLESSE, 1, 130030000, top, bottom, shoes, weapon));
-                return status;
-        }
+
+    private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
+        CharacterFactoryRecipe recipe = new CharacterFactoryRecipe(job, level, map, top, bottom, shoes, weapon);
+        giveItem(recipe, 4161047, 1, InventoryType.ETC);
+        return recipe;
+    }
+
+    private static void giveItem(CharacterFactoryRecipe recipe, int itemid, int quantity, InventoryType itemType) {
+        recipe.addStartingItem(itemid, quantity, itemType);
+    }
+
+    public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
+        int status = createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.NOBLESSE, 1, 130030000, top, bottom, shoes, weapon));
+        return status;
+    }
 }

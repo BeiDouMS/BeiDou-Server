@@ -22,7 +22,6 @@
 package server.life;
 
 /**
- *
  * @author Danny (Leifde)
  */
 public class MobAttackInfo {

@@ -20,12 +20,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Eliza1 Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Eliza1 Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 var setupTask;
 
@@ -38,8 +38,9 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
@@ -47,17 +48,17 @@ function start() {
     var eliza = LifeFactory.getMonster(8220000);
     var stairwayToTheSky2 = em.getChannelServer().getMapFactory().getMap(200010300);
 
-	if(stairwayToTheSky2.getMonsterById(8220000) != null) {
-		em.schedule("start", 3 * 60 *60 * 1000);
-		return;
-	}
+    if (stairwayToTheSky2.getMonsterById(8220000) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
 
     const PacketCreator = Java.type('tools.PacketCreator');
     const Point = Java.type('java.awt.Point');
-	const spawnpoint = new Point(208, 83);
+    const spawnpoint = new Point(208, 83);
     stairwayToTheSky2.spawnMonsterOnGroundBelow(eliza, spawnpoint);
     stairwayToTheSky2.broadcastMessage(PacketCreator.serverNotice(6, "Eliza has appeared with a black whirlwind."));
-	em.schedule("start", 3 * 60 *60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

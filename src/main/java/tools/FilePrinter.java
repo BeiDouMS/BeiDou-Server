@@ -1,16 +1,12 @@
 package tools;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class FilePrinter {
 
-    public static final String 
+    public static final String
             AUTOBAN_WARNING = "game/AutoBanWarning.txt",    // log naming version by Vcoc
             AUTOBAN_DC = "game/AutoBanDC.txt",
             ACCOUNT_STUCK = "players/AccountStuck.txt",
@@ -70,16 +66,16 @@ public class FilePrinter {
             DEADLOCK_LOCKS = "deadlocks/Locks.txt",
             DEADLOCK_STATE = "deadlocks/State.txt",
             DISPOSED_LOCKS = "deadlocks/Disposed.txt";
-    
+
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); //for file system purposes, it's nice to use yyyy-MM-dd
     private static final String FILE_PATH = "logs/" + sdf.format(Calendar.getInstance().getTime()) + "/"; // + sdf.format(Calendar.getInstance().getTime()) + "/"
     private static final String ERROR = "error/";
 
     public static void printError(final String name, final Throwable t) {
         String stringT = getString(t);
-        
-    	System.out.println("Error thrown: " + name);
-    	System.out.println(stringT);
+
+        System.out.println("Error thrown: " + name);
+        System.out.println(stringT);
         System.out.println();
         FileOutputStream out = null;
         final String file = FILE_PATH + ERROR + name;
@@ -107,9 +103,9 @@ public class FilePrinter {
 
     public static void printError(final String name, final Throwable t, final String info) {
         String stringT = getString(t);
-        
-    	System.out.println("Error thrown: " + name);
-    	System.out.println(stringT);
+
+        System.out.println("Error thrown: " + name);
+        System.out.println(stringT);
         System.out.println();
         FileOutputStream out = null;
         final String file = FILE_PATH + ERROR + name;
@@ -137,8 +133,8 @@ public class FilePrinter {
     }
 
     public static void printError(final String name, final String s) {
-    	System.out.println("Error thrown: " + name);
-    	System.out.println(s);
+        System.out.println("Error thrown: " + name);
+        System.out.println(s);
         System.out.println();
         FileOutputStream out = null;
         final String file = FILE_PATH + ERROR + name;
@@ -169,8 +165,8 @@ public class FilePrinter {
     }
 
     public static void print(final String name, final String s, boolean line) {
-    	System.out.println("Log: " + name);
-    	System.out.println(s);
+        System.out.println("Log: " + name);
+        System.out.println(s);
         System.out.println();
         FileOutputStream out = null;
         String file = FILE_PATH + name;

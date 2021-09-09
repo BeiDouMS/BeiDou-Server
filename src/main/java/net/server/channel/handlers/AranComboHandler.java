@@ -39,7 +39,7 @@ public class AranComboHandler extends AbstractPacketHandler {
             final long currentTime = currentServerTime();
             short combo = player.getCombo();
             if ((currentTime - player.getLastCombo()) > 3000 && combo > 0) {
-                combo = 0;                
+                combo = 0;
             }
             combo++;
             switch (combo) {
@@ -53,7 +53,9 @@ public class AranComboHandler extends AbstractPacketHandler {
                 case 80:
                 case 90:
                 case 100:
-                    if (player.getJob().getId() != 2000 && (combo / 10) > skillLevel) break;
+                    if (player.getJob().getId() != 2000 && (combo / 10) > skillLevel) {
+                        break;
+                    }
                     SkillFactory.getSkill(Aran.COMBO_ABILITY).getEffect(combo / 10).applyComboBuff(player, combo);
                     break;
             }

@@ -9,7 +9,6 @@ import tools.LogHelper;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93
  */
 public class AdminChatHandler extends AbstractPacketHandler {

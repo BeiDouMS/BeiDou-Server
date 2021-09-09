@@ -25,7 +25,10 @@ package client.inventory;
  * @author Leifde
  */
 public class PetCommand {
-    private int petId, skillId, prob, inc;
+    private final int petId;
+    private final int skillId;
+    private final int prob;
+    private final int inc;
 
     public PetCommand(int petId, int skillId, int prob, int inc) {
         this.petId = petId;

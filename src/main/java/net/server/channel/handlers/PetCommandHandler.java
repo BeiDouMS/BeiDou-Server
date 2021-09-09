@@ -51,7 +51,7 @@ public final class PetCommandHandler extends AbstractPacketHandler {
         if (petCommand == null) {
             return;
         }
-        
+
         if (Randomizer.nextInt(100) < petCommand.getProbability()) {
             pet.gainClosenessFullness(chr, petCommand.getIncrease(), 0, command);
             chr.getMap().broadcastMessage(PacketCreator.commandResponse(chr.getId(), petIndex, false, command, false));

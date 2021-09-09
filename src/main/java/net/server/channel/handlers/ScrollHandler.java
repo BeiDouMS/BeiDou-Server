@@ -114,31 +114,31 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 } else if (scrolled.getLevel() > oldLevel || (ItemConstants.isCleanSlate(scroll.getItemId()) && scrolled.getUpgradeSlots() == oldSlots + 1) || ItemConstants.isFlagModifier(scroll.getItemId(), scrolled.getFlag())) {
                     scrollSuccess = Equip.ScrollResult.SUCCESS;
                 }
-                
+
                 useInventory.lockInventory();
                 try {
                     if (scroll.getQuantity() < 1) {
                         announceCannotScroll(c, legendarySpirit);
                         return;
                     }
-                    
+
                     if (whiteScroll && !ItemConstants.isCleanSlate(scroll.getItemId())) {
                         if (wscroll.getQuantity() < 1) {
                             announceCannotScroll(c, legendarySpirit);
                             return;
                         }
-                        
+
                         InventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
                     }
-                    
+
                     InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
                 } finally {
                     useInventory.unlockInventory();
                 }
-                
+
                 final List<ModifyInventory> mods = new ArrayList<>();
                 if (scrollSuccess == Equip.ScrollResult.CURSE) {
-                    if(!ItemConstants.isWeddingRing(toScroll.getItemId())) {
+                    if (!ItemConstants.isWeddingRing(toScroll.getItemId())) {
                         mods.add(new ModifyInventory(3, toScroll));
                         if (dst < 0) {
                             Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
@@ -152,7 +152,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                             }
                         } else {
                             Inventory inv = chr.getInventory(InventoryType.EQUIP);
-                            
+
                             inv.lockInventory();
                             try {
                                 inv.removeItem(toScroll.getPosition());
@@ -181,7 +181,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
             }
         }
     }
-    
+
     private static void announceCannotScroll(Client c, boolean legendarySpirit) {
         if (legendarySpirit) {
             c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, false, false));
@@ -192,11 +192,11 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
     private static boolean canScroll(int scrollid, int itemid) {
         int sid = scrollid / 100;
-        
-        switch(sid) {
+
+        switch (sid) {
             case 20492: //scroll for accessory (pendant, belt, ring)
                 return canScroll(2041100, itemid) || canScroll(2041200, itemid) || canScroll(2041300, itemid);
-                
+
             default:
                 return (scrollid / 100) % 100 == (itemid / 10000) % 100;
         }

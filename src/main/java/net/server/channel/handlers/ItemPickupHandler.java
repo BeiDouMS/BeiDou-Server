@@ -31,7 +31,6 @@ import tools.FilePrinter;
 import java.awt.*;
 
 /**
- *
  * @author Matze
  * @author Ronan
  */
@@ -45,15 +44,17 @@ public final class ItemPickupHandler extends AbstractPacketHandler {
         int oid = p.readInt();
         Character chr = c.getPlayer();
         MapObject ob = chr.getMap().getMapObject(oid);
-        if(ob == null) return;
-        
+        if (ob == null) {
+            return;
+        }
+
         Point charPos = chr.getPosition();
         Point obPos = ob.getPosition();
         if (Math.abs(charPos.getX() - obPos.getX()) > 800 || Math.abs(charPos.getY() - obPos.getY()) > 600) {
             FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to pick up an item too far away. Mapid: " + chr.getMapId() + " Player pos: " + charPos + " Object pos: " + obPos);
             return;
         }
-        
+
         chr.pickupItem(ob);
     }
 }

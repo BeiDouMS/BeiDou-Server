@@ -27,12 +27,11 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
- *
  * @author Matze
  */
 public final class StorageHandler extends AbstractPacketHandler {
-	@Override
-	public final void handlePacket(InPacket p, Client c) {
-		StorageProcessor.storageAction(p, c);
-	}
+    @Override
+    public final void handlePacket(InPacket p, Client c) {
+        StorageProcessor.storageAction(p, c);
+    }
 }

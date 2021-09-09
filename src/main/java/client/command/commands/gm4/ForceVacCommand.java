@@ -50,7 +50,9 @@ public class ForceVacCommand extends Command {
 
             mapItem.lockItem();
             try {
-                if (mapItem.isPickedUp()) continue;
+                if (mapItem.isPickedUp()) {
+                    continue;
+                }
 
                 if (mapItem.getMeso() > 0) {
                     player.gainMeso(mapItem.getMeso(), true);

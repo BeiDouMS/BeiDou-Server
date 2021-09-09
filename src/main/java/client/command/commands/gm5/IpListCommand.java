@@ -29,7 +29,6 @@ import net.server.world.World;
 import java.util.Collection;
 
 /**
- *
  * @author Mist
  * @author Blood (Tochi)
  * @author Ronan
@@ -42,20 +41,20 @@ public class IpListCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         String str = "Player-IP relation:";
-        
+
         for (World w : Server.getInstance().getWorlds()) {
             Collection<Character> chars = w.getPlayerStorage().getAllCharacters();
-            
+
             if (!chars.isEmpty()) {
                 str += "\r\n" + GameConstants.WORLD_NAMES[w.getId()] + "\r\n";
-                
+
                 for (Character chr : chars) {
                     str += "  " + chr.getName() + " - " + chr.getClient().getRemoteAddress() + "\r\n";
                 }
             }
         }
-        
+
         c.getAbstractPlayerInteraction().npcTalk(22000, str);
     }
-    
+
 }

@@ -22,8 +22,8 @@
 package client;
 
 public class CharacterNameAndId {
-    private int id;
-    private String name;
+    private final int id;
+    private final String name;
 
     public CharacterNameAndId(int id, String name) {
         super();

@@ -53,12 +53,12 @@ public final class CashOperationHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         CashShop cs = chr.getCashShop();
-        
+
         if (!cs.isOpened()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        
+
         if (c.tryacquireClient()) {     // thanks Thora for finding out an exploit within cash operations
             try {
                 final int action = p.readByte();
@@ -92,7 +92,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.showBoughtCashItem(item, c.getAccID()));
                     } else { // Package
                         cs.gainCash(useNX, cItem, chr.getWorld());
-                        
+
                         List<Item> cashPackage = CashItemFactory.getPackage(cItem.getItemId());
                         for (Item item : cashPackage) {
                             cs.addToInventory(item);
@@ -129,7 +129,9 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         ex.printStackTrace();
                     }
                     Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient.get("name"));
-                    if (receiver != null) receiver.showNote();
+                    if (receiver != null) {
+                        receiver.showNote();
+                    }
                 } else if (action == 0x05) { // Modify wish list
                     cs.clearWishList();
                     for (byte i = 0; i < 10; i++) {
@@ -262,9 +264,9 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         cs.removeFromInventory(item);
                         c.sendPacket(PacketCreator.takeFromCashInventory(item));
 
-                        if(item instanceof Equip) {
+                        if (item instanceof Equip) {
                             Equip equip = (Equip) item;
-                            if(equip.getRingId() >= 0) {
+                            if (equip.getRingId() >= 0) {
                                 Ring ring = Ring.loadFromDb(equip.getRingId());
                                 chr.addPlayerRing(ring);
                             }
@@ -316,7 +318,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 return;
                             }*/ //Gotta let them faggots marry too, hence why this is commented out <3 
 
-                            if(itemRing.toItem() instanceof Equip) {
+                            if (itemRing.toItem() instanceof Equip) {
                                 Equip eqp = (Equip) itemRing.toItem();
                                 Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
@@ -331,7 +333,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                     ex.printStackTrace();
                                 }
                                 partner.showNote();
-                            }   
+                            }
                         }
                     } else {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC4));
@@ -377,10 +379,10 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         String text = p.readString();
                         Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(sentTo);
                         if (partner == null) {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0xBE));
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xBE));
                         } else {
                             // Need to check to make sure its actually an equip and the right SN...
-                            if(itemRing.toItem() instanceof Equip) {
+                            if (itemRing.toItem() instanceof Equip) {
                                 Equip eqp = (Equip) itemRing.toItem();
                                 Pair<Integer, Integer> rings = Ring.createRing(itemRing.getItemId(), chr, partner);
                                 eqp.setRingId(rings.getLeft());
@@ -405,59 +407,59 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                 } else if (action == 0x2E) { //name change
                     CashItem cItem = CashItemFactory.getItem(p.readInt());
                     if (cItem == null || !canBuy(chr, cItem, cs.getCash(4))) {
-                        c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                        c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                         c.enableCSActions();
                         return;
                     }
-                    if(cItem.getSN() == 50600000 && YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
+                    if (cItem.getSN() == 50600000 && YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
                         p.readString(); //old name
                         String newName = p.readString();
-                        if(!Character.canCreateChar(newName) || chr.getLevel() < 10) { //(longest ban duration isn't tracked currently)
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                        if (!Character.canCreateChar(newName) || chr.getLevel() < 10) { //(longest ban duration isn't tracked currently)
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                             c.enableCSActions();
                             return;
-                        } else if(c.getTempBanCalendar() != null && c.getTempBanCalendar().getTimeInMillis() + (30*24*60*60*1000) > Calendar.getInstance().getTimeInMillis()) {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                        } else if (c.getTempBanCalendar() != null && c.getTempBanCalendar().getTimeInMillis() + (30 * 24 * 60 * 60 * 1000) > Calendar.getInstance().getTimeInMillis()) {
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                             c.enableCSActions();
                             return;
                         }
-                        if(chr.registerNameChange(newName)) { //success
+                        if (chr.registerNameChange(newName)) { //success
                             Item item = cItem.toItem();
                             c.sendPacket(PacketCreator.showNameChangeSuccess(item, c.getAccID()));
                             cs.gainCash(4, cItem, chr.getWorld());
                             cs.addToInventory(item);
                         } else {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                         }
                     }
                     c.enableCSActions();
-                } else if(action == 0x31) { //world transfer
+                } else if (action == 0x31) { //world transfer
                     CashItem cItem = CashItemFactory.getItem(p.readInt());
                     if (cItem == null || !canBuy(chr, cItem, cs.getCash(4))) {
-                        c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                        c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                         c.enableCSActions();
                         return;
                     }
-                    if(cItem.getSN() == 50600001 && YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
+                    if (cItem.getSN() == 50600001 && YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
                         int newWorldSelection = p.readInt();
-                        
+
                         int worldTransferError = chr.checkWorldTransferEligibility();
-                        if(worldTransferError != 0 || newWorldSelection >= Server.getInstance().getWorldsSize() || Server.getInstance().getWorldsSize() <= 1) {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                        if (worldTransferError != 0 || newWorldSelection >= Server.getInstance().getWorldsSize() || Server.getInstance().getWorldsSize() <= 1) {
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                             return;
-                        } else if(newWorldSelection == c.getWorld()) {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0xDC));
+                        } else if (newWorldSelection == c.getWorld()) {
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xDC));
                             return;
-                        } else if(c.getAvailableCharacterWorldSlots(newWorldSelection) < 1 || Server.getInstance().getAccountWorldCharacterCount(c.getAccID(), newWorldSelection) >= 3) {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0xDF));
+                        } else if (c.getAvailableCharacterWorldSlots(newWorldSelection) < 1 || Server.getInstance().getAccountWorldCharacterCount(c.getAccID(), newWorldSelection) >= 3) {
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xDF));
                             return;
-                        } else if(chr.registerWorldTransfer(newWorldSelection)) {
+                        } else if (chr.registerWorldTransfer(newWorldSelection)) {
                             Item item = cItem.toItem();
                             c.sendPacket(PacketCreator.showWorldTransferSuccess(item, c.getAccID()));
                             cs.gainCash(4, cItem, chr.getWorld());
                             cs.addToInventory(item);
                         } else {
-                            c.sendPacket(PacketCreator.showCashShopMessage((byte)0));
+                            c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                         }
                     }
                     c.enableCSActions();
@@ -481,7 +483,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         cal.set(year, month - 1, day);
         return c.checkBirthDate(cal);
     }
-    
+
     private static boolean canBuy(Character chr, CashItem item, int cash) {
         if (item != null && item.isOnSale() && item.getPrice() <= cash) {
             FilePrinter.print(FilePrinter.CASHITEM_BOUGHT, chr + " bought " + ItemInformationProvider.getInstance().getName(item.getItemId()) + " (SN " + item.getSN() + ") for " + item.getPrice());

@@ -133,7 +133,9 @@ public class PartyCharacter {
         final PartyCharacter other = (PartyCharacter) obj;
         if (name == null) {
             return other.name == null;
-        } else return name.equals(other.name);
+        } else {
+            return name.equals(other.name);
+        }
     }
 
     public int getWorld() {

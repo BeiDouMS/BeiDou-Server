@@ -21,12 +21,12 @@
 */
 
 /**
--- Odin JavaScript --------------------------------------------------------------------------------
-	Seruf Spawner
--- Edited by --------------------------------------------------------------------------------------
-	ThreeStep - based on xQuasar's King Clang spawner
+ -- Odin JavaScript --------------------------------------------------------------------------------
+ Seruf Spawner
+ -- Edited by --------------------------------------------------------------------------------------
+ ThreeStep - based on xQuasar's King Clang spawner
 
-**/
+ **/
 
 function init() {
     scheduleNew();
@@ -37,30 +37,31 @@ function scheduleNew() {
 }
 
 function cancelSchedule() {
-    if (setupTask != null)
+    if (setupTask != null) {
         setupTask.cancel(true);
+    }
 }
 
 function start() {
     var theSeaweedTower = em.getChannelServer().getMapFactory().getMap(230020100);
     const LifeFactory = Java.type('server.life.LifeFactory');
     var seruf = LifeFactory.getMonster(4220001);
-	
-	if(theSeaweedTower.getMonsterById(4220001) != null) {
-		em.schedule("start", 3 * 60 * 60 * 1000);
-		return;
-	}
-	
+
+    if (theSeaweedTower.getMonsterById(4220001) != null) {
+        em.schedule("start", 3 * 60 * 60 * 1000);
+        return;
+    }
+
     var posX;
     var posY = 520;
-    posX =  Math.floor((Math.random() * 2300) - 1500);
+    posX = Math.floor((Math.random() * 2300) - 1500);
     const Point = Java.type('java.awt.Point');
     const spawnpoint = new Point(posX, posY);
     theSeaweedTower.spawnMonsterOnGroundBelow(seruf, spawnpoint);
 
     const PacketCreator = Java.type('tools.PacketCreator');
     theSeaweedTower.broadcastMessage(PacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
-	em.schedule("start", 3 * 60 * 60 * 1000);
+    em.schedule("start", 3 * 60 * 60 * 1000);
 }
 
 // ---------- FILLER FUNCTIONS ----------

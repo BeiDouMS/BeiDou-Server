@@ -30,32 +30,30 @@ import server.quest.QuestRequirementType;
 import java.util.Calendar;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class EndDateRequirement extends AbstractQuestRequirement {
-	private String timeStr;
-	
-	
-	public EndDateRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.END_DATE);
-		processData(data);
-	}
-	
-	/**
-	 * 
-	 * @param data 
-	 */
-	@Override
-	public void processData(Data data) {
-		timeStr = DataTool.getString(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Integer.parseInt(timeStr.substring(0, 4)), Integer.parseInt(timeStr.substring(4, 6)), Integer.parseInt(timeStr.substring(6, 8)), Integer.parseInt(timeStr.substring(8, 10)), 0);
-		return cal.getTimeInMillis() >= System.currentTimeMillis();
-	}
+    private String timeStr;
+
+
+    public EndDateRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.END_DATE);
+        processData(data);
+    }
+
+    /**
+     * @param data
+     */
+    @Override
+    public void processData(Data data) {
+        timeStr = DataTool.getString(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Integer.parseInt(timeStr.substring(0, 4)), Integer.parseInt(timeStr.substring(4, 6)), Integer.parseInt(timeStr.substring(6, 8)), Integer.parseInt(timeStr.substring(8, 10)), 0);
+        return cal.getTimeInMillis() >= System.currentTimeMillis();
+    }
 }

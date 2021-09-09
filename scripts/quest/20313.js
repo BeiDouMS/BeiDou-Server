@@ -36,10 +36,11 @@ function start(mode, type, selection) {
             qm.dispose();
             return;
         }
-        if (mode == 1)
+        if (mode == 1) {
             status++;
-        else
+        } else {
             status--;
+        }
         if (status == 0) {
             qm.sendNext("The jewel you brought back from the Master of Disguise is Shinsoo's Teardrop. It is the crystalization of Shinsoo's powers. If the Black Mage gets his hands on this, then this spells doom for all of us.");
         } else if (status == 1) {

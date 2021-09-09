@@ -28,26 +28,25 @@ import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
 /**
- *
  * @author Tyler (Twdtwd)
  */
 public class CompletedQuestRequirement extends AbstractQuestRequirement {
-	private int reqQuest;
-	
-	
-	public CompletedQuestRequirement(Quest quest, Data data) {
-		super(QuestRequirementType.COMPLETED_QUEST);
-		processData(data);
-	}
-	
-	@Override
-	public void processData(Data data) {
-		reqQuest = DataTool.getInt(data);
-	}
-	
-	
-	@Override
-	public boolean check(Character chr, Integer npcid) {
-		return chr.getCompletedQuests().size() >= reqQuest;
-	}
+    private int reqQuest;
+
+
+    public CompletedQuestRequirement(Quest quest, Data data) {
+        super(QuestRequirementType.COMPLETED_QUEST);
+        processData(data);
+    }
+
+    @Override
+    public void processData(Data data) {
+        reqQuest = DataTool.getInt(data);
+    }
+
+
+    @Override
+    public boolean check(Character chr, Integer npcid) {
+        return chr.getCompletedQuests().size() >= reqQuest;
+    }
 }

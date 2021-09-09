@@ -29,11 +29,10 @@ import server.maps.FieldLimit;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93
  */
 public final class TrockAddMapHandler extends AbstractPacketHandler {
-    
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
@@ -41,19 +40,21 @@ public final class TrockAddMapHandler extends AbstractPacketHandler {
         boolean vip = p.readByte() == 1;
         if (type == 0x00) {
             int mapId = p.readInt();
-            if (vip)
+            if (vip) {
                 chr.deleteFromVipTrocks(mapId);
-            else
+            } else {
                 chr.deleteFromTrocks(mapId);
+            }
             c.sendPacket(PacketCreator.trockRefreshMapList(chr, true, vip));
         } else if (type == 0x01) {
             if (!FieldLimit.CANNOTVIPROCK.check(chr.getMap().getFieldLimit())) {
-                if (vip)
+                if (vip) {
                     chr.addVipTrockMap();
-                else
+                } else {
                     chr.addTrockMap();
+                }
 
-                 c.sendPacket(PacketCreator.trockRefreshMapList(chr, false, vip));
+                c.sendPacket(PacketCreator.trockRefreshMapList(chr, false, vip));
             } else {
                 chr.message("You may not save this map.");
             }

@@ -31,53 +31,53 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 public final class KeymapChangeHandler extends AbstractPacketHandler {
-	@Override
-	public final void handlePacket(InPacket p, Client c) {
-                if (p.available() >= 8) {
-			int mode = p.readInt();
-			if(mode == 0) {
-				int numChanges = p.readInt();
-				for (int i = 0; i < numChanges; i++) {
-					int key = p.readInt();
-					int type = p.readByte();
-					int action = p.readInt();
-                                        
-                                        if(type == 1) {
-                                                Skill skill = SkillFactory.getSkill(action);
-                                                boolean isBanndedSkill;
-                                                if (skill != null) {
-                                                        isBanndedSkill = GameConstants.bannedBindSkills(skill.getId());
-                                                        if (isBanndedSkill || (!c.getPlayer().isGM() && GameConstants.isGMSkills(skill.getId())) || (!GameConstants.isInJobTree(skill.getId(), c.getPlayer().getJob().getId()) && !c.getPlayer().isGM())) { //for those skills are are "technically" in the beginner tab, like bamboo rain in Dojo or skills you find in PYPQ
-                                                                //AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit keymapping.");
-                                                                //FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use skill " + skill.getId());
-                                                                //c.disconnect(true, false);
-                                                                //return;
+    @Override
+    public final void handlePacket(InPacket p, Client c) {
+        if (p.available() >= 8) {
+            int mode = p.readInt();
+            if (mode == 0) {
+                int numChanges = p.readInt();
+                for (int i = 0; i < numChanges; i++) {
+                    int key = p.readInt();
+                    int type = p.readByte();
+                    int action = p.readInt();
 
-                                                                continue;   // fk that
-                                                        }
+                    if (type == 1) {
+                        Skill skill = SkillFactory.getSkill(action);
+                        boolean isBanndedSkill;
+                        if (skill != null) {
+                            isBanndedSkill = GameConstants.bannedBindSkills(skill.getId());
+                            if (isBanndedSkill || (!c.getPlayer().isGM() && GameConstants.isGMSkills(skill.getId())) || (!GameConstants.isInJobTree(skill.getId(), c.getPlayer().getJob().getId()) && !c.getPlayer().isGM())) { //for those skills are are "technically" in the beginner tab, like bamboo rain in Dojo or skills you find in PYPQ
+                                //AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit keymapping.");
+                                //FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use skill " + skill.getId());
+                                //c.disconnect(true, false);
+                                //return;
+
+                                continue;   // fk that
+                            }
                                                         /* if (c.getPlayer().getSkillLevel(skill) < 1) {    HOW WOULD A SKILL EVEN BE AVAILABLE TO KEYBINDING
                                                                 continue;                                   IF THERE IS NOT EVEN A SINGLE POINT USED INTO IT??
                                                         } */
-                                                }
-                                        }
-                                        
-					c.getPlayer().changeKeybinding(key, new KeyBinding(type, action));
-				}
-			} else if(mode == 1) { // Auto HP Potion
-				int itemID = p.readInt();
-				if(itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
-					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
-					return;
-				}
-				c.getPlayer().changeKeybinding(91, new KeyBinding(7, itemID));
-			} else if(mode == 2) { // Auto MP Potion
-				int itemID = p.readInt();
-				if(itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
-					c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
-					return;
-				}
-				c.getPlayer().changeKeybinding(92, new KeyBinding(7, itemID));
-			}
-		}
-	}
+                        }
+                    }
+
+                    c.getPlayer().changeKeybinding(key, new KeyBinding(type, action));
+                }
+            } else if (mode == 1) { // Auto HP Potion
+                int itemID = p.readInt();
+                if (itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
+                    c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
+                    return;
+                }
+                c.getPlayer().changeKeybinding(91, new KeyBinding(7, itemID));
+            } else if (mode == 2) { // Auto MP Potion
+                int itemID = p.readInt();
+                if (itemID != 0 && c.getPlayer().getInventory(InventoryType.USE).findById(itemID) == null) {
+                    c.disconnect(false, false); // Don't let them send a packet with a use item they dont have.
+                    return;
+                }
+                c.getPlayer().changeKeybinding(92, new KeyBinding(7, itemID));
+            }
+        }
+    }
 }

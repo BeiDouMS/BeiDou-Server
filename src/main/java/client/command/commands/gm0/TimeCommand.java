@@ -35,7 +35,7 @@ public class TimeCommand extends Command {
     {
         setDescription("Show current server time.");
     }
-    
+
     @Override
     public void execute(Client client, String[] params) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");

@@ -45,7 +45,8 @@ public class MaxSkillCommand extends Command {
             } catch (NumberFormatException nfe) {
                 nfe.printStackTrace();
                 break;
-            } catch (NullPointerException npe) { }
+            } catch (NullPointerException npe) {
+            }
         }
 
         if (player.getJob().isA(Job.ARAN1) || player.getJob().isA(Job.LEGEND)) {

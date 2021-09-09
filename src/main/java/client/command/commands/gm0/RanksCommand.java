@@ -40,7 +40,7 @@ public class RanksCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        
+
         List<Pair<String, Integer>> worldRanking = Server.getInstance().getWorldPlayerRanking(player.getWorld());
         player.sendPacket(GuildPackets.showPlayerRanks(9010000, worldRanking));
     }

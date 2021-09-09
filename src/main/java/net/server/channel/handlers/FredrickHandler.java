@@ -28,7 +28,6 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
 /**
- *
  * @author kevintjuh93
  */
 public class FredrickHandler extends AbstractPacketHandler {

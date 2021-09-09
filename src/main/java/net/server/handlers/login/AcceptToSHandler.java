@@ -6,7 +6,6 @@ import net.packet.InPacket;
 import tools.PacketCreator;
 
 /**
- *
  * @author kevintjuh93
  */
 public final class AcceptToSHandler extends AbstractPacketHandler {

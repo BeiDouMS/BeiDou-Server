@@ -21,12 +21,7 @@
 */
 package tools;
 
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ArrayMap<K, V> extends AbstractMap<K, V> {
 
@@ -77,8 +72,9 @@ public class ArrayMap<K, V> extends AbstractMap<K, V> {
             return key + "=" + value;
         }
     }
+
     private Set<? extends java.util.Map.Entry<K, V>> entries = null;
-    private ArrayList<Entry<K, V>> list;
+    private final ArrayList<Entry<K, V>> list;
 
     public ArrayMap() {
         list = new ArrayList<>();
@@ -94,7 +90,7 @@ public class ArrayMap<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    @SuppressWarnings ("unchecked")
+    @SuppressWarnings("unchecked")
     public Set<java.util.Map.Entry<K, V>> entrySet() {
         if (entries == null) {
             entries = new AbstractSet<Entry<K, V>>() {

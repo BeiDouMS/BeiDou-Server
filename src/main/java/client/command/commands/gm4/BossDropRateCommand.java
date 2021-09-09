@@ -25,7 +25,6 @@ import client.command.Command;
 import tools.PacketCreator;
 
 /**
- *
  * @author Ronan
  */
 public class BossDropRateCommand extends Command {
