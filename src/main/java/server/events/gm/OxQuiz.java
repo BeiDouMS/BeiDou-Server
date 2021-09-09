@@ -35,17 +35,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author FloppyDisk
  */
-public final class MapleOxQuiz {
+public final class OxQuiz {
     private int round = 1;
     private int question = 1;
     private MapleMap map = null;
-    private int expGain = 200;
-    private static DataProvider stringData = DataProviderFactory.getDataProvider(WZFiles.ETC);
+    private final int expGain = 200;
+    private static final DataProvider stringData = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
-    public MapleOxQuiz(MapleMap map) {
+    public OxQuiz(MapleMap map) {
         this.map = map;
         this.round = Randomizer.nextInt(9);
         this.question = 1;

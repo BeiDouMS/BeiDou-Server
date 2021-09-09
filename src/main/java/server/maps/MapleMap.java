@@ -122,7 +122,7 @@ public class MapleMap {
     private float recovery = 1.0f;
     private int protectItem = 0;
     private boolean town;
-    private MapleOxQuiz ox;
+    private OxQuiz ox;
     private boolean isOxQuiz = false;
     private boolean dropsOn = true;
     private String onFirstUserEnter;
@@ -3753,11 +3753,11 @@ public class MapleMap {
         }
     }
 
-    public MapleOxQuiz getOx() {
+    public OxQuiz getOx() {
         return ox;
     }
 
-    public void setOx(MapleOxQuiz set) {
+    public void setOx(OxQuiz set) {
         this.ox = set;
     }
 
@@ -3900,7 +3900,7 @@ public class MapleMap {
             chr.setOla(new Ola(chr));
             chr.getOla().startOla();
         } else if (this.mapid == 109020001 && getOx() == null) {
-            setOx(new MapleOxQuiz(this));
+            setOx(new OxQuiz(this));
             getOx().sendQuestion();
             setOxQuiz(true);
         } else if (this.mapid == 109060000 && getSnowball(chr.getTeam()) == null) {
