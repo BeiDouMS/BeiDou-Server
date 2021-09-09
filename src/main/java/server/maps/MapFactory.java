@@ -352,7 +352,7 @@ public class MapFactory {
     }
 
     private static Reactor loadReactor(Data reactor, String id, final byte FacingDirection) {
-        Reactor myReactor = new Reactor(MapleReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
+        Reactor myReactor = new Reactor(ReactorFactory.getReactor(Integer.parseInt(id)), Integer.parseInt(id));
         int x = DataTool.getInt(reactor.getChildByPath("x"));
         int y = DataTool.getInt(reactor.getChildByPath("y"));
         myReactor.setFacingDirection(FacingDirection);

@@ -4299,7 +4299,7 @@ public class MapleMap {
                 return -1;
             }
             int reactorID = 9980000 + team;
-            Reactor reactor = new Reactor(MapleReactorFactory.getReactorS(reactorID), reactorID);
+            Reactor reactor = new Reactor(ReactorFactory.getReactorS(reactorID), reactorID);
             pt.setTaken(true);
             reactor.setPosition(pt.getPosition());
             reactor.setName(team + "" + num); //lol

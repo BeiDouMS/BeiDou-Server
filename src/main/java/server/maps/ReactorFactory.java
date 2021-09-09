@@ -35,11 +35,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapleReactorFactory {
-    private static DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
-    private static Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
+public class ReactorFactory {
+    private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.REACTOR);
+    private static final Map<Integer, MapleReactorStats> reactorStats = new HashMap<>();
 
-    
     public static final MapleReactorStats getReactorS(int rid) {
         MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
@@ -93,7 +92,7 @@ public class MapleReactorFactory {
         }
         return stats;
     }
-    
+
     public static MapleReactorStats getReactor(int rid) {
         MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
@@ -121,7 +120,7 @@ public class MapleReactorFactory {
                         Data eventData = reactorInfoData.getChildByPath("event");
                         if (eventData != null) {
                             int timeOut = -1;
-                            
+
                             for (Data fknexon : eventData.getChildren()) {
                                 if (fknexon.getName().equalsIgnoreCase("timeOut")) {
                                     timeOut = DataTool.getInt(fknexon);
