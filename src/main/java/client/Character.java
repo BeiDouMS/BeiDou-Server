@@ -190,7 +190,7 @@ public class Character extends AbstractCharacterObject {
     private final Map<Integer, Long> buffExpires = new LinkedHashMap<>();
     private final Map<Integer, KeyBinding> keymap = new LinkedHashMap<>();
     private final Map<Integer, Summon> summons = new LinkedHashMap<>();
-    private final Map<Integer, MapleCoolDownValueHolder> coolDowns = new LinkedHashMap<>();
+    private final Map<Integer, CooldownValueHolder> coolDowns = new LinkedHashMap<>();
     private final EnumMap<Disease, Pair<DiseaseValueHolder, MobSkill>> diseases = new EnumMap<>(Disease.class);
     private byte[] m_aQuickslotLoaded;
     private QuickslotBinding m_pQuickslotKeyMapped;
@@ -517,7 +517,7 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            this.coolDowns.put(Integer.valueOf(skillId), new MapleCoolDownValueHolder(skillId, startTime, length));
+            this.coolDowns.put(Integer.valueOf(skillId), new CooldownValueHolder(skillId, startTime, length));
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -2891,7 +2891,7 @@ public class Character extends AbstractCharacterObject {
             skillCooldownTask = TimerManager.getInstance().register(new Runnable() {
                 @Override
                 public void run() {
-                    Set<Entry<Integer, MapleCoolDownValueHolder>> es;
+                    Set<Entry<Integer, CooldownValueHolder>> es;
 
                     effLock.lock();
                     chrLock.lock();
@@ -2903,8 +2903,8 @@ public class Character extends AbstractCharacterObject {
                     }
 
                     long curTime = Server.getInstance().getCurrentTime();
-                    for (Entry<Integer, MapleCoolDownValueHolder> bel : es) {
-                        MapleCoolDownValueHolder mcdvh = bel.getValue();
+                    for (Entry<Integer, CooldownValueHolder> bel : es) {
+                        CooldownValueHolder mcdvh = bel.getValue();
                         if (curTime >= mcdvh.startTime + mcdvh.length) {
                             removeCooldown(mcdvh.skillId);
                             sendPacket(PacketCreator.skillCooldown(mcdvh.skillId, 0));
@@ -3220,7 +3220,7 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            for (MapleCoolDownValueHolder mcdvh : coolDowns.values()) {
+            for (CooldownValueHolder mcdvh : coolDowns.values()) {
                 ret.add(new PlayerCoolDownValueHolder(mcdvh.skillId, mcdvh.startTime, mcdvh.length));
             }
         } finally {
@@ -7488,12 +7488,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public static class MapleCoolDownValueHolder {
+    public static class CooldownValueHolder {
 
         public int skillId;
         public long startTime, length;
 
-        public MapleCoolDownValueHolder(int skillId, long startTime, long length) {
+        public CooldownValueHolder(int skillId, long startTime, long length) {
             super();
             this.skillId = skillId;
             this.startTime = startTime;
@@ -7949,8 +7949,8 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            ArrayList<MapleCoolDownValueHolder> list = new ArrayList<>(coolDowns.values());
-            for (MapleCoolDownValueHolder mcvh : list) {
+            ArrayList<CooldownValueHolder> list = new ArrayList<>(coolDowns.values());
+            for (CooldownValueHolder mcvh : list) {
                 if (mcvh.skillId != id) {
                     coolDowns.remove(mcvh.skillId);
                     if (packet) {
