@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
- 
+
 package constants.string;
- 
+
 /*
  * Thanks to GabrielSin (EllinMS) - gabrielsin@playellin.net
  * Ellin

@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
  * @author RonanLana
  */
 public enum EquipType {
@@ -66,30 +65,30 @@ public enum EquipType {
     private final int i;
     private static final Map<Integer, EquipType> map = new HashMap(34);
 
-    private EquipType(int val) {
+    EquipType(int val) {
         this.i = val;
     }
 
     public int getValue() {
         return i;
     }
-    
+
     static {
         for (EquipType eqEnum : EquipType.values()) {
             map.put(eqEnum.i, eqEnum);
         }
     }
-    
+
     public static EquipType getEquipTypeById(int itemid) {
         EquipType ret;
         int val = itemid / 100000;
-        
-        if(val == 13 || val == 14) {
+
+        if (val == 13 || val == 14) {
             ret = map.get(itemid / 1000);
         } else {
             ret = map.get(itemid / 10000);
         }
-        
+
         return (ret != null) ? ret : EquipType.UNDEFINED;
     }
 }

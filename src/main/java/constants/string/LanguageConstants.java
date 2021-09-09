@@ -3,28 +3,27 @@ package constants.string;
 import client.Character;
 
 /**
- *
  * @author Drago (Dragohe4rt)
  */
 public class LanguageConstants {
-    
+
     enum Language {
         LANG_PRT(0),
         LANG_ESP(1),
         LANG_ENG(2);
-        
+
         int lang;
-        
-        private Language(int lang) {
+
+        Language(int lang) {
             this.lang = lang;
         }
-        
+
         private int getValue() {
             return this.lang;
         }
-        
+
     }
-    
+
     public static String[] CPQBlue = new String[3];
     public static String[] CPQError = new String[3];
     public static String[] CPQEntry = new String[3];
@@ -38,10 +37,10 @@ public class LanguageConstants {
     public static String[] CPQChallengeRoomAnswer = new String[3];
     public static String[] CPQChallengeRoomSent = new String[3];
     public static String[] CPQChallengeRoomDenied = new String[3];
-    
+
     static {
         int lang;
-        
+
         lang = Language.LANG_PRT.getValue();
         LanguageConstants.CPQBlue[lang] = "Maple Azul";
         LanguageConstants.CPQRed[lang] = "Maple Vermelho";
@@ -49,7 +48,7 @@ public class LanguageConstants {
         LanguageConstants.CPQPlayerExit[lang] = " deixou o Carnaval de Monstros.";
         LanguageConstants.CPQError[lang] = "Ocorreu um problema. Favor recriar a sala.";
         LanguageConstants.CPQLeaderNotFound[lang] = "Nao foi possivel encontrar o Lider.";
-        LanguageConstants.CPQPickRoom[lang] = "Inscreva-se no Festival de Monstros!\r\n";            
+        LanguageConstants.CPQPickRoom[lang] = "Inscreva-se no Festival de Monstros!\r\n";
         LanguageConstants.CPQChallengeRoomAnswer[lang] = "O grupo esta respondendo um desafio no momento.";
         LanguageConstants.CPQChallengeRoomSent[lang] = "Um desafio foi enviado para o grupo na sala. Aguarde um momento.";
         LanguageConstants.CPQChallengeRoomDenied[lang] = "O grupo na sala cancelou seu desafio.";
@@ -71,7 +70,7 @@ public class LanguageConstants {
         LanguageConstants.CPQFindError[lang] = "No se pudo encontrar un grupo en esta sala.\r\nProbablemente el grupo fue deshecho dentro de la sala!";
         LanguageConstants.CPQEntryLobby[lang] = "Ahora usted recibira los retos de otros grupos. Si usted no acepta un desafio en 3 minutos, usted sera llevado hacia fuera.";
         LanguageConstants.CPQEntry[lang] = "Usted puede seleccionar \"Invocar Monstruos\", \"Habilidad\", o \"Protector\" como su tactica durante el Carnaval de los Monstruos. Utilice Tab y F1 ~ F12 para acceso rapido!";
-        
+
         lang = Language.LANG_ENG.getValue();
         LanguageConstants.CPQBlue[lang] = "Maple Blue";
         LanguageConstants.CPQRed[lang] = "Maple Red";
@@ -86,8 +85,8 @@ public class LanguageConstants {
         LanguageConstants.CPQFindError[lang] = "We could not find a group in this room.\r\nProbably the group was scrapped inside the room!";
         LanguageConstants.CPQEntryLobby[lang] = "You will now receive challenges from other groups. If you do not accept a challenge within 3 minutes, you will be taken out.";
         LanguageConstants.CPQEntry[lang] = "You can select \"Summon Monsters\", \"Ability\", or \"Protector\" as your tactic during the Monster Carnival. Use Tab and F1 ~ F12 for quick access!";
-            
-        
+
+
     }
 
     public static String getMessage(Character chr, String[] message) {
