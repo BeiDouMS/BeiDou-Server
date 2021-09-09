@@ -3172,7 +3172,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
         p.writeByte(shop.getItems().size());
-        for (MaplePlayerShopItem item : shop.getItems()) {
+        for (PlayerShopItem item : shop.getItems()) {
             p.writeShort(item.getBundles());
             p.writeShort(item.getItem().getQuantity());
             p.writeInt(item.getPrice());
@@ -3231,10 +3231,10 @@ public class PacketCreator {
 
         p.writeByte(0xFF);
         p.writeString(shop.getDescription());
-        List<MaplePlayerShopItem> items = shop.getItems();
+        List<PlayerShopItem> items = shop.getItems();
         p.writeByte(0x10);  //TODO SLOTS, which is 16 for most stores...slotMax
         p.writeByte(items.size());
-        for (MaplePlayerShopItem item : items) {
+        for (PlayerShopItem item : items) {
             p.writeShort(item.getBundles());
             p.writeShort(item.getItem().getQuantity());
             p.writeInt(item.getPrice());
@@ -5004,7 +5004,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<MaplePlayerShopItem, AbstractMapObject>> hmsAvailable) {
+    public static Packet owlOfMinerva(Client c, int itemId, List<Pair<PlayerShopItem, AbstractMapObject>> hmsAvailable) {
         byte itemType = ItemConstants.getInventoryType(itemId).getType();
 
         OutPacket p = OutPacket.create(SendOpcode.SHOP_SCANNER_RESULT);
@@ -5012,8 +5012,8 @@ public class PacketCreator {
         p.writeInt(0);
         p.writeInt(itemId);
         p.writeInt(hmsAvailable.size());
-        for (Pair<MaplePlayerShopItem, AbstractMapObject> hme : hmsAvailable) {
-            MaplePlayerShopItem item = hme.getLeft();
+        for (Pair<PlayerShopItem, AbstractMapObject> hme : hmsAvailable) {
+            PlayerShopItem item = hme.getLeft();
             AbstractMapObject mo = hme.getRight();
 
             if (mo instanceof PlayerShop ps) {
@@ -5131,7 +5131,7 @@ public class PacketCreator {
         if (hm.getItems().isEmpty()) {
             p.writeByte(0);//Hmm??
         } else {
-            for (MaplePlayerShopItem item : hm.getItems()) {
+            for (PlayerShopItem item : hm.getItems()) {
                 p.writeShort(item.getBundles());
                 p.writeShort(item.getItem().getQuantity());
                 p.writeInt(item.getPrice());
@@ -5146,7 +5146,7 @@ public class PacketCreator {
         p.writeByte(PlayerInteractionHandler.Action.UPDATE_MERCHANT.getCode());
         p.writeInt(hm.isOwner(chr) ? chr.getMerchantMeso() : chr.getMeso());
         p.writeByte(hm.getItems().size());
-        for (MaplePlayerShopItem item : hm.getItems()) {
+        for (PlayerShopItem item : hm.getItems()) {
             p.writeShort(item.getBundles());
             p.writeShort(item.getItem().getQuantity());
             p.writeInt(item.getPrice());

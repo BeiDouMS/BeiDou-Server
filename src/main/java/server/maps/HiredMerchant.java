@@ -66,7 +66,7 @@ public class HiredMerchant extends AbstractMapObject {
     private String ownerName = "";
     private String description = "";
     private final Character[] visitors = new Character[3];
-    private final List<MaplePlayerShopItem> items = new LinkedList<>();
+    private final List<PlayerShopItem> items = new LinkedList<>();
     private final List<Pair<String, Byte>> messages = new LinkedList<>();
     private final List<SoldItem> sold = new LinkedList<>();
     private final AtomicBoolean open = new AtomicBoolean();
@@ -216,7 +216,7 @@ public class HiredMerchant extends AbstractMapObject {
 
     public void takeItemBack(int slot, Character chr) {
         synchronized (items) {
-            MaplePlayerShopItem shopItem = items.get(slot);
+            PlayerShopItem shopItem = items.get(slot);
             if (shopItem.isExist()) {
                 if (shopItem.getBundles() > 0) {
                     Item iitem = shopItem.getItem().copy();
@@ -249,7 +249,7 @@ public class HiredMerchant extends AbstractMapObject {
         synchronized (items) {
             int count = 0;
 
-            for (MaplePlayerShopItem mpsi : items) {
+            for (PlayerShopItem mpsi : items) {
                 if (mpsi.getItem().getItemId() == itemid) {
                     count += (mpsi.getBundles() * mpsi.getItem().getQuantity());
                 }
@@ -261,7 +261,7 @@ public class HiredMerchant extends AbstractMapObject {
 
     public void buy(Client c, int item, short quantity) {
         synchronized (items) {
-            MaplePlayerShopItem pItem = items.get(item);
+            PlayerShopItem pItem = items.get(item);
             Item newItem = pItem.getItem().copy();
 
             newItem.setQuantity((short) ((pItem.getItem().getQuantity() * quantity)));
@@ -408,9 +408,9 @@ public class HiredMerchant extends AbstractMapObject {
         this.removeOwner(c.getPlayer());
 
         try {
-            List<MaplePlayerShopItem> copyItems = getItems();
+            List<PlayerShopItem> copyItems = getItems();
             if (check(c.getPlayer(), copyItems) && !timeout) {
-                for (MaplePlayerShopItem mpsi : copyItems) {
+                for (PlayerShopItem mpsi : copyItems) {
                     if (mpsi.isExist()) {
                         if (mpsi.getItem().getInventoryType().equals(InventoryType.EQUIP)) {
                             InventoryManipulator.addFromDrop(c, mpsi.getItem(), false);
@@ -512,14 +512,14 @@ public class HiredMerchant extends AbstractMapObject {
         }
     }
 
-    public List<MaplePlayerShopItem> getItems() {
+    public List<PlayerShopItem> getItems() {
         synchronized (items) {
             return Collections.unmodifiableList(items);
         }
     }
 
     public boolean hasItem(int itemid) {
-        for (MaplePlayerShopItem mpsi : getItems()) {
+        for (PlayerShopItem mpsi : getItems()) {
             if (mpsi.getItem().getItemId() == itemid && mpsi.isExist() && mpsi.getBundles() > 0) {
                 return true;
             }
@@ -528,7 +528,7 @@ public class HiredMerchant extends AbstractMapObject {
         return false;
     }
 
-    public boolean addItem(MaplePlayerShopItem item) {
+    public boolean addItem(PlayerShopItem item) {
         synchronized (items) {
             if (items.size() >= 16) {
                 return false;
@@ -609,9 +609,9 @@ public class HiredMerchant extends AbstractMapObject {
         broadcastToVisitorsThreadsafe(PacketCreator.hiredMerchantChat(message, slot));
     }
 
-    public List<MaplePlayerShopItem> sendAvailableBundles(int itemid) {
-        List<MaplePlayerShopItem> list = new LinkedList<>();
-        List<MaplePlayerShopItem> all = new ArrayList<>();
+    public List<PlayerShopItem> sendAvailableBundles(int itemid) {
+        List<PlayerShopItem> list = new LinkedList<>();
+        List<PlayerShopItem> all = new ArrayList<>();
 
         if (!open.get()) {
             return list;
@@ -621,7 +621,7 @@ public class HiredMerchant extends AbstractMapObject {
             all.addAll(items);
         }
 
-        for (MaplePlayerShopItem mpsi : all) {
+        for (PlayerShopItem mpsi : all) {
             if (mpsi.getItem().getItemId() == itemid && mpsi.getBundles() > 0 && mpsi.isExist()) {
                 list.add(mpsi);
             }
@@ -633,7 +633,7 @@ public class HiredMerchant extends AbstractMapObject {
         List<Pair<Item, InventoryType>> itemsWithType = new ArrayList<>();
         List<Short> bundles = new ArrayList<>();
 
-        for (MaplePlayerShopItem pItems : getItems()) {
+        for (PlayerShopItem pItems : getItems()) {
             Item newItem = pItems.getItem();
             short newBundle = pItems.getBundles();
 
@@ -655,9 +655,9 @@ public class HiredMerchant extends AbstractMapObject {
         FredrickProcessor.insertFredrickLog(this.ownerId);
     }
 
-    private static boolean check(Character chr, List<MaplePlayerShopItem> items) {
+    private static boolean check(Character chr, List<PlayerShopItem> items) {
         List<Pair<Item, InventoryType>> li = new ArrayList<>();
-        for (MaplePlayerShopItem item : items) {
+        for (PlayerShopItem item : items) {
             Item it = item.getItem().copy();
             it.setQuantity((short) (it.getQuantity() * item.getBundles()));
 

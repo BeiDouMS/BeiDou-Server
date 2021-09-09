@@ -599,7 +599,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     sellItem.setQuantity(perBundle);
                 }
 
-                MaplePlayerShopItem shopItem = new MaplePlayerShopItem(sellItem, bundles, price);
+                PlayerShopItem shopItem = new PlayerShopItem(sellItem, bundles, price);
                 PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {

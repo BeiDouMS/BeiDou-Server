@@ -1813,21 +1813,21 @@ public class World {
         }
     }
 
-    public List<Pair<MaplePlayerShopItem, AbstractMapObject>> getAvailableItemBundles(int itemid) {
-        List<Pair<MaplePlayerShopItem, AbstractMapObject>> hmsAvailable = new ArrayList<>();
+    public List<Pair<PlayerShopItem, AbstractMapObject>> getAvailableItemBundles(int itemid) {
+        List<Pair<PlayerShopItem, AbstractMapObject>> hmsAvailable = new ArrayList<>();
 
         for (HiredMerchant hm : getActiveMerchants()) {
-            List<MaplePlayerShopItem> itemBundles = hm.sendAvailableBundles(itemid);
+            List<PlayerShopItem> itemBundles = hm.sendAvailableBundles(itemid);
 
-            for(MaplePlayerShopItem mpsi : itemBundles) {
+            for(PlayerShopItem mpsi : itemBundles) {
                 hmsAvailable.add(new Pair<>(mpsi, hm));
             }
         }
 
         for (PlayerShop ps : getActivePlayerShops()) {
-            List<MaplePlayerShopItem> itemBundles = ps.sendAvailableBundles(itemid);
+            List<PlayerShopItem> itemBundles = ps.sendAvailableBundles(itemid);
 
-            for(MaplePlayerShopItem mpsi : itemBundles) {
+            for(PlayerShopItem mpsi : itemBundles) {
                 hmsAvailable.add(new Pair<>(mpsi, ps));
             }
         }

@@ -5545,7 +5545,7 @@ public class Character extends AbstractCharacterObject {
             mps.setOpen(false);
             getWorldServer().unregisterPlayerShop(mps);
 
-            for (MaplePlayerShopItem mpsi : mps.getItems()) {
+            for (PlayerShopItem mpsi : mps.getItems()) {
                 if (mpsi.getBundles() >= 2) {
                     Item iItem = mpsi.getItem().copy();
                     iItem.setQuantity((short) (mpsi.getBundles() * iItem.getQuantity()));
