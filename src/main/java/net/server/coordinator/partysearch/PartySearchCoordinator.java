@@ -42,32 +42,31 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- *
  * @author Ronan
  */
-public class MaplePartySearchCoordinator {
-    
-    private Map<Job, PartySearchStorage> storage = new HashMap<>();
-    private Map<Job, PartySearchEchelon> upcomers = new HashMap<>();
-    
-    private List<Character> leaderQueue = new LinkedList<>();
+public class PartySearchCoordinator {
+
+    private final Map<Job, PartySearchStorage> storage = new HashMap<>();
+    private final Map<Job, PartySearchEchelon> upcomers = new HashMap<>();
+
+    private final List<Character> leaderQueue = new LinkedList<>();
     private final MonitoredReentrantReadWriteLock leaderQueueLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_PARTY_SEARCH_QUEUE, true);
     private final MonitoredReadLock leaderQueueRLock = MonitoredReadLockFactory.createLock(leaderQueueLock);
     private final MonitoredWriteLock leaderQueueWLock = MonitoredWriteLockFactory.createLock(leaderQueueLock);
-    
-    private Map<Integer, Character> searchLeaders = new HashMap<>();
-    private Map<Integer, LeaderSearchMetadata> searchSettings = new HashMap<>();
-    
-    private Map<Character, LeaderSearchMetadata> timeoutLeaders = new HashMap<>();
-    
+
+    private final Map<Integer, Character> searchLeaders = new HashMap<>();
+    private final Map<Integer, LeaderSearchMetadata> searchSettings = new HashMap<>();
+
+    private final Map<Character, LeaderSearchMetadata> timeoutLeaders = new HashMap<>();
+
     private int updateCount = 0;
-    
-    private static Map<Integer, Set<Integer>> mapNeighbors = fetchNeighbouringMaps();
-    private static Map<Integer, Job> jobTable = instantiateJobTable();
-    
+
+    private static final Map<Integer, Set<Integer>> mapNeighbors = fetchNeighbouringMaps();
+    private static final Map<Integer, Job> jobTable = instantiateJobTable();
+
     private static Map<Integer, Set<Integer>> fetchNeighbouringMaps() {
         Map<Integer, Set<Integer>> mapLinks = new HashMap<>();
-        
+
         MapleData data = MapleDataProviderFactory.getDataProvider(WZFiles.ETC).getData("MapNeighbors.img");
         if (data != null) {
             for (MapleData mapdata : data.getChildren()) {
@@ -85,13 +84,13 @@ public class MaplePartySearchCoordinator {
                 }
             }
         }
-        
+
         return mapLinks;
     }
-    
+
     public static boolean isInVicinity(int callerMapid, int calleeMapid) {
         Set<Integer> vicinityMapids = mapNeighbors.get(calleeMapid);
-        
+
         if (vicinityMapids != null) {
             return vicinityMapids.contains(calleeMapid);
         } else {
@@ -103,10 +102,10 @@ public class MaplePartySearchCoordinator {
             }
         }
     }
-    
+
     private static Map<Integer, Job> instantiateJobTable() {
         Map<Integer, Job> table = new HashMap<>();
-        
+
         List<Pair<Integer, Integer>> jobSearchTypes = new LinkedList<Pair<Integer, Integer>>() {{
             add(new Pair<>(Job.MAPLELEAF_BRIGADIER.getId(), 0));
             add(new Pair<>(0, 0));
@@ -123,33 +122,33 @@ public class MaplePartySearchCoordinator {
             add(new Pair<>(Job.WINDARCHER1.getId(), 0));
             add(new Pair<>(Job.EVAN1.getId(), 0));
         }};
-        
+
         int i = 0;
         for (Pair<Integer, Integer> p : jobSearchTypes) {
             table.put(i, Job.getById(p.getLeft()));
             i++;
-            
+
             for (int j = 1; j <= p.getRight(); j++) {
                 table.put(i, Job.getById(p.getLeft() + 10 * j));
                 i++;
             }
         }
-        
+
         return table;
     }
-    
+
     private class LeaderSearchMetadata {
-        private int minLevel;
-        private int maxLevel;
-        private List<Job> searchedJobs;
-        
+        private final int minLevel;
+        private final int maxLevel;
+        private final List<Job> searchedJobs;
+
         private int reentryCount;
-        
+
         private List<Job> decodeSearchedJobs(int jobsSelected) {
             List<Job> searchedJobs = new LinkedList<>();
-            
-            int topByte = (int)((Math.log(jobsSelected) / Math.log(2)) + 1e-5);
-            
+
+            int topByte = (int) ((Math.log(jobsSelected) / Math.log(2)) + 1e-5);
+
             for (int i = 0; i <= topByte; i++) {
                 if (jobsSelected % 2 == 1) {
                     Job job = jobTable.get(i);
@@ -157,50 +156,50 @@ public class MaplePartySearchCoordinator {
                         searchedJobs.add(job);
                     }
                 }
-                
+
                 jobsSelected = jobsSelected >> 1;
                 if (jobsSelected == 0) {
                     break;
                 }
             }
-            
+
             return searchedJobs;
         }
-        
+
         private LeaderSearchMetadata(int minLevel, int maxLevel, int jobs) {
             this.minLevel = minLevel;
             this.maxLevel = maxLevel;
             this.searchedJobs = decodeSearchedJobs(jobs);
             this.reentryCount = 0;
         }
-        
+
     }
-    
-    public MaplePartySearchCoordinator() {
+
+    public PartySearchCoordinator() {
         for (Job job : jobTable.values()) {
             storage.put(job, new PartySearchStorage());
             upcomers.put(job, new PartySearchEchelon());
         }
     }
-    
+
     public void attachPlayer(Character chr) {
         upcomers.get(getPartySearchJob(chr.getJob())).attachPlayer(chr);
     }
-    
+
     public void detachPlayer(Character chr) {
         Job psJob = getPartySearchJob(chr.getJob());
-        
+
         if (!upcomers.get(psJob).detachPlayer(chr)) {
             storage.get(psJob).detachPlayer(chr);
         }
     }
-    
+
     public void updatePartySearchStorage() {
         for (Entry<Job, PartySearchEchelon> psUpdate : upcomers.entrySet()) {
             storage.get(psUpdate.getKey()).updateStorage(psUpdate.getValue().exportEchelon());
         }
     }
-    
+
     private static Job getPartySearchJob(Job job) {
         if (job.getJobNiche() == 0) {
             return Job.BEGINNER;
@@ -212,11 +211,11 @@ public class MaplePartySearchCoordinator {
             return Job.MAPLELEAF_BRIGADIER;
         }
     }
-    
+
     private Character fetchPlayer(int callerCid, int callerMapid, Job job, int minLevel, int maxLevel) {
         return storage.get(getPartySearchJob(job)).callPlayer(callerCid, callerMapid, minLevel, maxLevel);
     }
-    
+
     private void addQueueLeader(Character leader) {
         leaderQueueRLock.lock();
         try {
@@ -225,7 +224,7 @@ public class MaplePartySearchCoordinator {
             leaderQueueRLock.unlock();
         }
     }
-    
+
     private void removeQueueLeader(Character leader) {
         leaderQueueRLock.lock();
         try {
@@ -234,23 +233,27 @@ public class MaplePartySearchCoordinator {
             leaderQueueRLock.unlock();
         }
     }
-    
+
     public void registerPartyLeader(Character leader, int minLevel, int maxLevel, int jobs) {
-        if (searchLeaders.containsKey(leader.getId())) return;
-        
+        if (searchLeaders.containsKey(leader.getId())) {
+            return;
+        }
+
         searchSettings.put(leader.getId(), new LeaderSearchMetadata(minLevel, maxLevel, jobs));
         searchLeaders.put(leader.getId(), leader);
         addQueueLeader(leader);
     }
-    
+
     private void registerPartyLeader(Character leader, LeaderSearchMetadata settings) {
-        if (searchLeaders.containsKey(leader.getId())) return;
-        
+        if (searchLeaders.containsKey(leader.getId())) {
+            return;
+        }
+
         searchSettings.put(leader.getId(), settings);
         searchLeaders.put(leader.getId(), leader);
         addQueueLeader(leader);
     }
-    
+
     public void unregisterPartyLeader(Character leader) {
         Character toRemove = searchLeaders.remove(leader.getId());
         if (toRemove != null) {
@@ -260,13 +263,13 @@ public class MaplePartySearchCoordinator {
             unregisterLongTermPartyLeader(leader);
         }
     }
-    
+
     private Character searchPlayer(Character leader) {
         LeaderSearchMetadata settings = searchSettings.get(leader.getId());
         if (settings != null) {
             int minLevel = settings.minLevel, maxLevel = settings.maxLevel;
             Collections.shuffle(settings.searchedJobs);
-            
+
             int leaderCid = leader.getId();
             int leaderMapid = leader.getMapId();
             for (Job searchJob : settings.searchedJobs) {
@@ -276,20 +279,20 @@ public class MaplePartySearchCoordinator {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     private boolean sendPartyInviteFromSearch(Character chr, Character leader) {
         if (chr == null) {
             return false;
         }
-        
+
         int partyid = leader.getPartyId();
         if (partyid < 0) {
             return false;
         }
-        
+
         if (MapleInviteCoordinator.createInvite(InviteType.PARTY, leader, partyid, chr.getId())) {
             chr.disablePartySearchInvite(leader.getId());
             chr.sendPacket(PacketCreator.partySearchInvite(leader));
@@ -298,23 +301,23 @@ public class MaplePartySearchCoordinator {
             return false;
         }
     }
-    
+
     private Pair<List<Character>, List<Character>> fetchQueuedLeaders() {
         List<Character> queuedLeaders, nextLeaders;
-        
+
         leaderQueueWLock.lock();
         try {
             int splitIdx = Math.min(leaderQueue.size(), 100);
-            
+
             queuedLeaders = new LinkedList<>(leaderQueue.subList(0, splitIdx));
             nextLeaders = new LinkedList<>(leaderQueue.subList(splitIdx, leaderQueue.size()));
         } finally {
             leaderQueueWLock.unlock();
         }
-        
+
         return new Pair<>(queuedLeaders, nextLeaders);
     }
-    
+
     private void registerLongTermPartyLeaders(List<Pair<Character, LeaderSearchMetadata>> recycledLeaders) {
         leaderQueueRLock.lock();
         try {
@@ -325,7 +328,7 @@ public class MaplePartySearchCoordinator {
             leaderQueueRLock.unlock();
         }
     }
-    
+
     private void unregisterLongTermPartyLeader(Character leader) {
         leaderQueueRLock.lock();
         try {
@@ -334,7 +337,7 @@ public class MaplePartySearchCoordinator {
             leaderQueueRLock.unlock();
         }
     }
-    
+
     private void reinstateLongTermPartyLeaders() {
         Map<Character, LeaderSearchMetadata> timeoutLeadersCopy;
         leaderQueueWLock.lock();
@@ -344,19 +347,19 @@ public class MaplePartySearchCoordinator {
         } finally {
             leaderQueueWLock.unlock();
         }
-        
+
         for (Entry<Character, LeaderSearchMetadata> e : timeoutLeadersCopy.entrySet()) {
             registerPartyLeader(e.getKey(), e.getValue());
         }
     }
-    
+
     public void runPartySearch() {
         Pair<List<Character>, List<Character>> queuedLeaders = fetchQueuedLeaders();
-        
+
         List<Character> searchedLeaders = new LinkedList<>();
         List<Character> recalledLeaders = new LinkedList<>();
         List<Character> expiredLeaders = new LinkedList<>();
-        
+
         for (Character leader : queuedLeaders.getLeft()) {
             Character chr = searchPlayer(leader);
             if (sendPartyInviteFromSearch(chr, leader)) {
@@ -373,7 +376,7 @@ public class MaplePartySearchCoordinator {
                 }
             }
         }
-        
+
         leaderQueueRLock.lock();
         try {
             leaderQueue.clear();
@@ -387,41 +390,45 @@ public class MaplePartySearchCoordinator {
         } finally {
             leaderQueueRLock.unlock();
         }
-        
+
         for (Character leader : searchedLeaders) {
             MapleParty party = leader.getParty();
             if (party != null && party.getMembers().size() < 6) {
                 addQueueLeader(leader);
             } else {
-                if (leader.isLoggedinWorld()) leader.dropMessage(5, "Your Party Search token session has finished as your party reached full capacity.");
+                if (leader.isLoggedinWorld()) {
+                    leader.dropMessage(5, "Your Party Search token session has finished as your party reached full capacity.");
+                }
                 searchLeaders.remove(leader.getId());
                 searchSettings.remove(leader.getId());
             }
         }
-        
+
         List<Pair<Character, LeaderSearchMetadata>> recycledLeaders = new LinkedList<>();
         for (Character leader : expiredLeaders) {
             searchLeaders.remove(leader.getId());
             LeaderSearchMetadata settings = searchSettings.remove(leader.getId());
-            
+
             if (leader.isLoggedinWorld()) {
                 if (settings != null) {
                     recycledLeaders.add(new Pair<>(leader, settings));
-                    if (YamlConfig.config.server.USE_DEBUG && leader.isGM()) leader.dropMessage(5, "Your Party Search token session is now on waiting queue for up to 7 minutes, to get it working right away please stop your Party Search and retry again later.");
+                    if (YamlConfig.config.server.USE_DEBUG && leader.isGM()) {
+                        leader.dropMessage(5, "Your Party Search token session is now on waiting queue for up to 7 minutes, to get it working right away please stop your Party Search and retry again later.");
+                    }
                 } else {
                     leader.dropMessage(5, "Your Party Search token session expired, please stop your Party Search and retry again later.");
                 }
             }
         }
-        
+
         if (!recycledLeaders.isEmpty()) {
             registerLongTermPartyLeaders(recycledLeaders);
         }
-        
+
         updateCount++;
         if (updateCount % 77 == 0) {
             reinstateLongTermPartyLeaders();
         }
     }
-    
+
 }

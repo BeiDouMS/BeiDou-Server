@@ -47,7 +47,7 @@ public class PartySearchCharacter {
     
     public Character callPlayer(int leaderid, int callerMapid) {
         Character chr = player.get();
-        if (chr == null || !MaplePartySearchCoordinator.isInVicinity(callerMapid, chr.getMapId())) {
+        if (chr == null || !PartySearchCoordinator.isInVicinity(callerMapid, chr.getMapId())) {
             return null;
         }
         

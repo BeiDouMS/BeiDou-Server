@@ -40,7 +40,7 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
 import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
-import net.server.coordinator.partysearch.MaplePartySearchCoordinator;
+import net.server.coordinator.partysearch.PartySearchCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteResult;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
@@ -89,7 +89,7 @@ public class World {
     private PlayerStorage players = new PlayerStorage();
     private ServicesManager services = new ServicesManager(WorldServices.SAVE_CHARACTER);
     private MatchCheckerCoordinator matchChecker = new MatchCheckerCoordinator();
-    private MaplePartySearchCoordinator partySearch = new MaplePartySearchCoordinator();
+    private PartySearchCoordinator partySearch = new PartySearchCoordinator();
     
     private final MonitoredReentrantReadWriteLock chnLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.WORLD_CHANNELS, true);
     private MonitoredReadLock chnRLock = MonitoredReadLockFactory.createLock(chnLock);
@@ -517,7 +517,7 @@ public class World {
         return matchChecker;
     }
     
-    public MaplePartySearchCoordinator getPartySearchCoordinator() {
+    public PartySearchCoordinator getPartySearchCoordinator() {
         return partySearch;
     }
     
