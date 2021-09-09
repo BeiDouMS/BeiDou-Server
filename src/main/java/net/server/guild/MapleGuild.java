@@ -30,7 +30,7 @@ import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
-import net.server.coordinator.matchchecker.MapleMatchCheckerCoordinator;
+import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator;
 import net.server.coordinator.world.MapleInviteCoordinator.InviteType;
 import net.server.coordinator.world.MapleInviteCoordinator.MapleInviteResult;
@@ -752,7 +752,7 @@ public class MapleGuild {
         Set<Character> guildMembers = new HashSet<>();
         guildMembers.add(guildLeader);
 
-        MapleMatchCheckerCoordinator mmce = guildLeader.getWorldServer().getMatchCheckerCoordinator();
+        MatchCheckerCoordinator mmce = guildLeader.getWorldServer().getMatchCheckerCoordinator();
         for (Character chr : guildLeader.getMap().getAllPlayers()) {
             if (chr.getParty() == null && chr.getGuild() == null && mmce.getMatchConfirmationLeaderid(chr.getId()) == -1) {
                 guildMembers.add(chr);

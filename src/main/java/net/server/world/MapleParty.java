@@ -28,7 +28,7 @@ import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import net.server.coordinator.matchchecker.MapleMatchCheckerCoordinator;
+import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import scripting.event.EventInstanceManager;
 import server.maps.MapleDoor;
@@ -436,7 +436,7 @@ public class MapleParty {
             
             player.setParty(null);
             
-            MapleMatchCheckerCoordinator mmce = c.getWorldServer().getMatchCheckerCoordinator();
+            MatchCheckerCoordinator mmce = c.getWorldServer().getMatchCheckerCoordinator();
             if (mmce.getMatchConfirmationLeaderid(player.getId()) == player.getId() && mmce.getMatchConfirmationType(player.getId()) == MatchCheckerType.GUILD_CREATION) {
                 mmce.dismissMatchConfirmation(player.getId());
             }
