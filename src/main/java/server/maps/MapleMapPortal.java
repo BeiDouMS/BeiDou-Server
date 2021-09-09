@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-public class MapleMapPortal extends MapleGenericPortal {
+public class MapleMapPortal extends GenericPortal {
     public MapleMapPortal() {
         super(MaplePortal.MAP_PORTAL);
     }

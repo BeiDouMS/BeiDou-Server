@@ -34,17 +34,17 @@ public class MaplePortalFactory {
     }
 
     public MaplePortal makePortal(int type, Data portal) {
-        MapleGenericPortal ret = null;
+        GenericPortal ret = null;
         if (type == MaplePortal.MAP_PORTAL) {
             ret = new MapleMapPortal();
         } else {
-            ret = new MapleGenericPortal(type);
+            ret = new GenericPortal(type);
         }
         loadPortal(ret, portal);
         return ret;
     }
 
-    private void loadPortal(MapleGenericPortal myPortal, Data portal) {
+    private void loadPortal(GenericPortal myPortal, Data portal) {
         myPortal.setName(DataTool.getString(portal.getChildByPath("pn")));
         myPortal.setTarget(DataTool.getString(portal.getChildByPath("tn")));
         myPortal.setTargetMapId(DataTool.getInt(portal.getChildByPath("tm")));

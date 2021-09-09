@@ -32,20 +32,19 @@ import tools.PacketCreator;
 
 import java.awt.*;
 
-public class MapleGenericPortal implements MaplePortal {
-
+public class GenericPortal implements MaplePortal {
     private String name;
     private String target;
     private Point position;
     private int targetmap;
-    private int type;
+    private final int type;
     private boolean status = true;
     private int id;
     private String scriptName;
     private boolean portalState;
     private MonitoredReentrantLock scriptLock = null;
-    
-    public MapleGenericPortal(int type) {
+
+    public GenericPortal(int type) {
         this.type = type;
     }
 
@@ -117,9 +116,9 @@ public class MapleGenericPortal implements MaplePortal {
     @Override
     public void setScriptName(String scriptName) {
         this.scriptName = scriptName;
-        
-        if(scriptName != null) {
-            if(scriptLock == null) {
+
+        if (scriptName != null) {
+            if (scriptLock == null) {
                 scriptLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.PORTAL, true);
             }
         } else {
@@ -138,7 +137,7 @@ public class MapleGenericPortal implements MaplePortal {
                 } finally {
                     scriptLock.unlock();
                 }
-            } catch(NullPointerException npe) {
+            } catch (NullPointerException npe) {
                 npe.printStackTrace();
             }
         } else if (getTargetMapId() != 999999999) {
