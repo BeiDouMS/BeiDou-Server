@@ -331,7 +331,7 @@ public class PlayerNPC extends AbstractMapleMapObject {
                 int j = 0;
                 for (int i = branchSid; i < nextBranchSid; i++) {
                     if (!usedScriptIds.contains(i)) {
-                        if (MaplePlayerNPCFactory.isExistentScriptid(i)) {  // thanks Ark, Zein, geno, Ariel, JrCl0wn for noticing client crashes due to use of missing scriptids
+                        if (PlayerNPCFactory.isExistentScriptid(i)) {  // thanks Ark, Zein, geno, Ariel, JrCl0wn for noticing client crashes due to use of missing scriptids
                             availables.add(i);
                             j++;
 

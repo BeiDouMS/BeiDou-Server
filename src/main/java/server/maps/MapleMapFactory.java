@@ -249,7 +249,7 @@ public class MapleMapFactory {
                 e.printStackTrace();
             }
 
-            List<PlayerNPC> dnpcs = MaplePlayerNPCFactory.getDeveloperNpcsFromMapid(mapid);
+            List<PlayerNPC> dnpcs = PlayerNPCFactory.getDeveloperNpcsFromMapid(mapid);
             if (dnpcs != null) {
                 for (PlayerNPC dnpc : dnpcs) {
                     map.addPlayerNPCMapObject(dnpc);

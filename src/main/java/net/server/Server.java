@@ -60,7 +60,7 @@ import server.MapleSkillbookInformationProvider;
 import server.ThreadManager;
 import server.TimerManager;
 import server.expeditions.ExpeditionBossLog;
-import server.life.MaplePlayerNPCFactory;
+import server.life.PlayerNPCFactory;
 import server.quest.MapleQuest;
 import tools.DatabaseConnection;
 import tools.FilePrinter;
@@ -841,7 +841,7 @@ public class Server {
         futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
         futures.add(initExecutor.submit(() -> MapleQuest.loadAllQuests()));
         futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
-        futures.add(initExecutor.submit(() -> MaplePlayerNPCFactory.loadFactoryMetadata()));
+        futures.add(initExecutor.submit(() -> PlayerNPCFactory.loadFactoryMetadata()));
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
