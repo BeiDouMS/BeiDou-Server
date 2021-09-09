@@ -41,16 +41,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class MapleMapFactory {
+public class MapFactory {
+    private static final Data nameData;
+    private static final DataProvider mapSource;
 
-    private static Data nameData;
-    private static DataProvider mapSource;
-    
     static {
         nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
         mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
     }
-    
+
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
         for (Data life : mapData.getChildByPath("life")) {
             life.getName();
@@ -74,7 +73,7 @@ public class MapleMapFactory {
             int y = DataTool.getInt(life.getChildByPath("y"));
             int hide = DataTool.getInt("hide", life, 0);
             int mobTime = DataTool.getInt("mobTime", life, 0);
-            
+
             loadLifeRaw(map, Integer.parseInt(id), type, cy, f, fh, rx0, rx1, x, y, hide, mobTime, team);
         }
     }
@@ -128,7 +127,7 @@ public class MapleMapFactory {
 
     public static MapleMap loadMapFromWz(int mapid, int world, int channel, EventInstanceManager event) {
         MapleMap map;
-        
+
         String mapName = getMapName(mapid);
         Data mapData = mapSource.getData(mapName);    // source.getData issue with giving nulls in rare ocasions found thanks to MedicOP
         Data infoData = mapData.getChildByPath("info");
@@ -299,10 +298,10 @@ public class MapleMapFactory {
                 }
             }
         }
-        
+
         map.setMapName(loadPlaceName(mapid));
         map.setStreetName(loadStreetName(mapid));
-        
+
         map.setClock(mapData.getChildByPath("clock") != null);
         map.setEverlast(DataTool.getIntConvert("everlast", infoData, 0) != 0); // thanks davidlafriniere for noticing value 0 accounting as true
         map.setTown(DataTool.getIntConvert("town", infoData, 0) != 0);
@@ -313,7 +312,7 @@ public class MapleMapFactory {
         map.setTimeLimit(DataTool.getIntConvert("timeLimit", infoData, -1));
         map.setFieldType(DataTool.getIntConvert("fieldType", infoData, 0));
         map.setMobCapacity(DataTool.getIntConvert("fixedMobCapacity", infoData, 500));//Is there a map that contains more than 500 mobs?
-        
+
         Data recData = infoData.getChildByPath("recovery");
         if (recData != null) {
             map.setRecovery(DataTool.getFloat(recData));
@@ -337,7 +336,7 @@ public class MapleMapFactory {
 
         return map;
     }
-    
+
     private static AbstractLoadedLife loadLife(int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide) {
         AbstractLoadedLife myLife = LifeFactory.getLife(id, type);
         myLife.setCy(cy);
@@ -414,7 +413,7 @@ public class MapleMapFactory {
         builder.append("/").append(mapid);
         return builder.toString();
     }
-    
+
     public static String loadPlaceName(int mapid) {
         try {
             return DataTool.getString("mapName", nameData.getChildByPath(getMapStringName(mapid)), "");
@@ -422,7 +421,7 @@ public class MapleMapFactory {
             return "";
         }
     }
-    
+
     public static String loadStreetName(int mapid) {
         try {
             return DataTool.getString("streetName", nameData.getChildByPath(getMapStringName(mapid)), "");
@@ -430,5 +429,5 @@ public class MapleMapFactory {
             return "";
         }
     }
-    
+
 }

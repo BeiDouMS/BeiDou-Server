@@ -19,8 +19,6 @@
 */
 package server.maps;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -28,6 +26,9 @@ import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import scripting.event.EventInstanceManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapleMapManager {
 
@@ -76,7 +77,7 @@ public class MapleMapManager {
             }
         }
 
-        map = MapleMapFactory.loadMapFromWz(mapid, world, channel, event);
+        map = MapFactory.loadMapFromWz(mapid, world, channel, event);
 
         if (cache) {
             mapsWLock.lock();

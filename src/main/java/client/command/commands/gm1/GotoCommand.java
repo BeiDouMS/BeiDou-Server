@@ -47,13 +47,13 @@ public class GotoCommand extends Command {
             // thanks shavit for noticing goto areas getting loaded from wz needlessly only for the name retrieval
             
             for (Map.Entry<String, Integer> e : towns) {
-                GOTO_TOWNS_INFO += ("'" + e.getKey() + "' - #b" + (MapleMapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
+                GOTO_TOWNS_INFO += ("'" + e.getKey() + "' - #b" + (MapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
             }
 
             List<Entry<String, Integer>> areas = new ArrayList<>(GameConstants.GOTO_AREAS.entrySet());
             sortGotoEntries(areas);
             for (Map.Entry<String, Integer> e : areas) {
-                GOTO_AREAS_INFO += ("'" + e.getKey() + "' - #b" + (MapleMapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
+                GOTO_AREAS_INFO += ("'" + e.getKey() + "' - #b" + (MapFactory.loadPlaceName(e.getValue())) + "#k\r\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
