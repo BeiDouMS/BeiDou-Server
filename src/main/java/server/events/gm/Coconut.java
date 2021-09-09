@@ -35,7 +35,7 @@ import java.util.List;
  * @author kevintjuh93
  */
 //Make them better :)
-public class Coconut extends MapleEvent {
+public class Coconut extends Event {
     private MapleMap map = null;
     private int MapleScore = 0;
     private int StoryScore = 0;

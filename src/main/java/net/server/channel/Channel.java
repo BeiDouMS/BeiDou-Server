@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventScriptManager;
 import server.TimerManager;
-import server.events.gm.MapleEvent;
+import server.events.gm.Event;
 import server.expeditions.MapleExpedition;
 import server.expeditions.MapleExpeditionType;
 import server.maps.*;
@@ -77,7 +77,7 @@ public final class Channel {
     private Map<Integer, MapleMiniDungeon> dungeons = new HashMap<>();
     private List<MapleExpeditionType> expedType = new ArrayList<>();
     private Set<MapleMap> ownedMaps = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
-    private MapleEvent event;
+    private Event event;
     private boolean finishedShutdown = false;
     private Set<Integer> usedMC = new HashSet<>();
     
@@ -297,11 +297,11 @@ public final class Channel {
         return ip;
     }
 
-    public MapleEvent getEvent() {
+    public Event getEvent() {
         return event;
     }
 
-    public void setEvent(MapleEvent event) {
+    public void setEvent(Event event) {
         this.event = event;
     }
 

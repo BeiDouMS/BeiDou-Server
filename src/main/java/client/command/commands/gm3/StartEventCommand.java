@@ -27,7 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import net.server.Server;
-import server.events.gm.MapleEvent;
+import server.events.gm.Event;
 import tools.PacketCreator;
 
 public class StartEventCommand extends Command {
@@ -41,7 +41,7 @@ public class StartEventCommand extends Command {
         int players = 50;
         if (params.length > 1)
             players = Integer.parseInt(params[0]);
-        c.getChannelServer().setEvent(new MapleEvent(player.getMapId(), players));
+        c.getChannelServer().setEvent(new Event(player.getMapId(), players));
         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.earnTitleMessage(
                 "[Event] An event has started on "
                         + player.getMap().getMapName()

@@ -23,14 +23,13 @@
 package server.events.gm;
 
 /**
- *
  * @author kevintjuh93
  */
-public class MapleEvent {
-    private int mapid;
+public class Event {
+    private final int mapid;
     private int limit;
 
-    public MapleEvent(int mapid, int limit) {
+    public Event(int mapid, int limit) {
         this.mapid = mapid;
         this.limit = limit;
     }

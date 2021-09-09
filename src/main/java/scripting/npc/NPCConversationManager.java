@@ -44,7 +44,7 @@ import provider.wz.WZFiles;
 import scripting.AbstractPlayerInteraction;
 import server.*;
 import server.MapleSkillbookInformationProvider.SkillBookEntry;
-import server.events.gm.MapleEvent;
+import server.events.gm.Event;
 import server.expeditions.MapleExpedition;
 import server.expeditions.MapleExpeditionType;
 import server.gachapon.MapleGachapon;
@@ -476,7 +476,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 		return inMap;
 	}
 
-	public MapleEvent getEvent() {
+	public Event getEvent() {
 		return c.getChannelServer().getEvent();
 	}
 
