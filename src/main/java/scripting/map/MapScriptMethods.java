@@ -29,13 +29,13 @@ import server.quest.Quest;
 import tools.PacketCreator;
 
 public class MapScriptMethods extends AbstractPlayerInteraction {
-   
-	private String rewardstring = " title has been rewarded. Please see NPC Dalair to receive your Medal.";
-    
-	public MapScriptMethods(Client c) {
+
+    private final String rewardstring = " title has been rewarded. Please see NPC Dalair to receive your Medal.";
+
+    public MapScriptMethods(Client c) {
         super(c);
     }
-    
+
     public void displayCygnusIntro() {
         switch (c.getPlayer().getMapId()) {
             case 913040100:
@@ -63,7 +63,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
                 break;
         }
     }
-    
+
     public void displayAranIntro() {
         switch (c.getPlayer().getMapId()) {
             case 914090010:

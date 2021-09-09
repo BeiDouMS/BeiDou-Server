@@ -44,13 +44,13 @@ import java.util.Map;
  */
 public class ReactorScriptManager extends AbstractScriptManager {
     private static final ReactorScriptManager instance = new ReactorScriptManager();
-    
+
     private final Map<Integer, List<ReactorDropEntry>> drops = new HashMap<>();
 
     public static ReactorScriptManager getInstance() {
         return instance;
     }
-    
+
     public void onHit(Client c, Reactor reactor) {
         try {
             Invocable iv = initializeInvocable(c, reactor);
@@ -59,9 +59,10 @@ public class ReactorScriptManager extends AbstractScriptManager {
             }
 
             iv.invokeFunction("hit");
-        } catch (final NoSuchMethodException e) {} //do nothing, hit is OPTIONAL
-        
-          catch (final ScriptException | NullPointerException e) {
+        } catch (final NoSuchMethodException e) {
+        } //do nothing, hit is OPTIONAL
+
+        catch (final ScriptException | NullPointerException e) {
             FilePrinter.printError(FilePrinter.REACTOR + reactor.getId() + ".txt", e);
         }
     }

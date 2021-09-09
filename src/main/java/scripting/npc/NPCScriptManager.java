@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
  * @author Matze
  */
 public class NPCScriptManager extends AbstractScriptManager {
@@ -190,7 +189,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         } else {
             resetContext(scriptFolder + "/" + cm.getNpc() + ".js", c);
         }
-        
+
         c.getPlayer().flushDelayedUpdateQuests();
     }
 
