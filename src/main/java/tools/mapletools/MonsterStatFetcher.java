@@ -23,7 +23,7 @@ public class MonsterStatFetcher {
         DataDirectoryEntry root = data.getRoot();
 
         System.out.print("Parsing mob stats... ");
-        for (MapleDataFileEntry mFile : root.getFiles()) {
+        for (DataFileEntry mFile : root.getFiles()) {
             try {
                 String fileName = mFile.getName();
 

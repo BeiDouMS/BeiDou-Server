@@ -166,7 +166,7 @@ public class NoItemNameFetcher {
     private static void readEquipNodeData(MapleDataProvider data, DataDirectoryEntry mDir, String wzFileName, String dirName) {
         EquipType eqType = getEquipTypeFromDirectoryName(dirName);
 
-        for (MapleDataFileEntry mFile : mDir.getFiles()) {
+        for (DataFileEntry mFile : mDir.getFiles()) {
             String fileName = mFile.getName();
 
             try {
@@ -224,7 +224,7 @@ public class NoItemNameFetcher {
 
             curType = getItemTypeFromDirectoryName(dirName);
             if (!dirName.contentEquals("Pet")) {
-                for (MapleDataFileEntry mFile : mDir.getFiles()) {
+                for (DataFileEntry mFile : mDir.getFiles()) {
                     String fileName = mFile.getName();
 
                     Data fileData = data.getData(dirName + "/" + fileName);

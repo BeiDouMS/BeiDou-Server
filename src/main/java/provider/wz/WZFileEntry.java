@@ -22,9 +22,9 @@
 package provider.wz;
 
 import provider.DataEntity;
-import provider.MapleDataFileEntry;
+import provider.DataFileEntry;
 
-public class WZFileEntry extends WZEntry implements MapleDataFileEntry {
+public class WZFileEntry extends WZEntry implements DataFileEntry {
     private int offset;
 
     public WZFileEntry(String name, int size, int checksum, DataEntity parent) {

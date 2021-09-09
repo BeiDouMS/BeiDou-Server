@@ -685,7 +685,7 @@ public class GameConstants {
                 continue;
             }
             
-            for (MapleDataFileEntry obj : objData.getFiles()) {
+            for (DataFileEntry obj : objData.getFiles()) {
                 for (Data l0 : mapSource.getData(objData.getName() + "/" + obj.getName()).getChildren()) {
                     for (Data l1 : l0.getChildren()) {
                         for (Data l2 : l1.getChildren()) {

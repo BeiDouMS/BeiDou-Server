@@ -22,9 +22,8 @@
 package provider;
 
 /**
- *
  * @author Matze
  */
-public interface MapleDataFileEntry extends DataEntry {
+public interface DataFileEntry extends DataEntry {
     void setOffset(int offset);
 }

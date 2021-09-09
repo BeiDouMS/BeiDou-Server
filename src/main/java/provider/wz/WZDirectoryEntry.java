@@ -24,13 +24,13 @@ package provider.wz;
 import provider.DataDirectoryEntry;
 import provider.DataEntity;
 import provider.DataEntry;
-import provider.MapleDataFileEntry;
+import provider.DataFileEntry;
 
 import java.util.*;
 
 public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
     private List<DataDirectoryEntry> subdirs = new ArrayList<>();
-    private List<MapleDataFileEntry> files = new ArrayList<>();
+    private List<DataFileEntry> files = new ArrayList<>();
     private Map<String, DataEntry> entries = new HashMap<>();
 
     public WZDirectoryEntry(String name, int size, int checksum, DataEntity parent) {
@@ -46,7 +46,7 @@ public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
         entries.put(dir.getName(), dir);
     }
 
-    public void addFile(MapleDataFileEntry fileEntry) {
+    public void addFile(DataFileEntry fileEntry) {
         files.add(fileEntry);
         entries.put(fileEntry.getName(), fileEntry);
     }
@@ -55,7 +55,7 @@ public class WZDirectoryEntry extends WZEntry implements DataDirectoryEntry {
         return Collections.unmodifiableList(subdirs);
     }
 
-    public List<MapleDataFileEntry> getFiles() {
+    public List<DataFileEntry> getFiles() {
         return Collections.unmodifiableList(files);
     }
 
