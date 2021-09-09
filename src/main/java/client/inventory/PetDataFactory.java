@@ -21,7 +21,7 @@
 */
 package client.inventory;
 
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -47,7 +47,7 @@ public class PetDataFactory {
         synchronized (petCommands) {
             ret = petCommands.get(petId + "" + skillId);
             if (ret == null) {
-                MapleData skillData = dataRoot.getData("Pet/" + petId + ".img");
+                Data skillData = dataRoot.getData("Pet/" + petId + ".img");
                 int prob = 0;
                 int inc = 0;
                 if (skillData != null) {

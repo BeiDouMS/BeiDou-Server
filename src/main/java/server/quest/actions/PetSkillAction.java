@@ -24,7 +24,7 @@ package server.quest.actions;
 import client.Character;
 import client.QuestStatus;
 import constants.inventory.ItemConstants;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -36,7 +36,7 @@ import server.quest.MapleQuestActionType;
 public class PetSkillAction extends MapleQuestAction {
 	int flag;
 	
-	public PetSkillAction(MapleQuest quest, MapleData data) {
+	public PetSkillAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.PETSKILL, quest);
 		questID = quest.getId();
 		processData(data);
@@ -44,7 +44,7 @@ public class PetSkillAction extends MapleQuestAction {
 	
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		flag = MapleDataTool.getInt("petskill", data);
 	}
 	

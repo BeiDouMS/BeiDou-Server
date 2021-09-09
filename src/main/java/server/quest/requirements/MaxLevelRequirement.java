@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -35,7 +35,7 @@ public class MaxLevelRequirement extends MapleQuestRequirement {
 	private int maxLevel;
 	
 	
-	public MaxLevelRequirement(MapleQuest quest, MapleData data) {
+	public MaxLevelRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.MAX_LEVEL);
 		processData(data);
 	}
@@ -45,7 +45,7 @@ public class MaxLevelRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		maxLevel = MapleDataTool.getInt(data);
 	}
 	

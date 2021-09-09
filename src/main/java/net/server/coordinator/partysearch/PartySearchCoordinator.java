@@ -31,7 +31,7 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.world.Party;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
 import provider.wz.WZFiles;
@@ -67,15 +67,15 @@ public class PartySearchCoordinator {
     private static Map<Integer, Set<Integer>> fetchNeighbouringMaps() {
         Map<Integer, Set<Integer>> mapLinks = new HashMap<>();
 
-        MapleData data = MapleDataProviderFactory.getDataProvider(WZFiles.ETC).getData("MapNeighbors.img");
+        Data data = MapleDataProviderFactory.getDataProvider(WZFiles.ETC).getData("MapNeighbors.img");
         if (data != null) {
-            for (MapleData mapdata : data.getChildren()) {
+            for (Data mapdata : data.getChildren()) {
                 int mapid = Integer.parseInt(mapdata.getName());
 
                 Set<Integer> neighborMaps = new HashSet<>();
                 mapLinks.put(mapid, neighborMaps);
 
-                for (MapleData neighbordata : mapdata.getChildren()) {
+                for (Data neighbordata : mapdata.getChildren()) {
                     int neighborid = MapleDataTool.getInt(neighbordata, 999999999);
 
                     if (neighborid != 999999999) {

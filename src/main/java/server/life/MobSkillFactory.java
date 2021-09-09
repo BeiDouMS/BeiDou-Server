@@ -27,7 +27,7 @@ import net.server.audit.locks.MonitoredReentrantReadWriteLock;
 import net.server.audit.locks.MonitoredWriteLock;
 import net.server.audit.locks.factory.MonitoredReadLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -47,7 +47,7 @@ public class MobSkillFactory {
 
     private static Map<String, MobSkill> mobSkills = new HashMap<>();
     private final static MapleDataProvider dataSource = MapleDataProviderFactory.getDataProvider(WZFiles.SKILL);
-    private static MapleData skillRoot = dataSource.getData("MobSkill.img");
+    private static Data skillRoot = dataSource.getData("MobSkill.img");
     private final static MonitoredReentrantReadWriteLock dataLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MOBSKILL_FACTORY);
     private final static MonitoredReadLock rL = MonitoredReadLockFactory.createLock(dataLock);
     private final static MonitoredWriteLock wL = MonitoredWriteLockFactory.createLock(dataLock);
@@ -68,7 +68,7 @@ public class MobSkillFactory {
             MobSkill ret;
             ret = mobSkills.get(key);
             if (ret == null) {
-                MapleData skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
+                Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
                 if (skillData != null) {
                     int mpCon = MapleDataTool.getInt(skillData.getChildByPath("mpCon"), 0);
                     List<Integer> toSummon = new ArrayList<>();
@@ -88,7 +88,7 @@ public class MobSkillFactory {
                     int iprop = MapleDataTool.getInt("prop", skillData, 100);
                     float prop = iprop / 100;
                     int limit = MapleDataTool.getInt("limit", skillData, 0);
-                    MapleData ltd = skillData.getChildByPath("lt");
+                    Data ltd = skillData.getChildByPath("lt");
                     Point lt = null;
                     Point rb = null;
                     if (ltd != null) {

@@ -21,12 +21,10 @@
 */
 package server.maps;
 
-import java.awt.Point;
-
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
-import server.maps.MapleGenericPortal;
-import server.maps.MapleMapPortal;
+
+import java.awt.*;
 
 public class MaplePortalFactory {
     private int nextDoorPortal;
@@ -35,7 +33,7 @@ public class MaplePortalFactory {
         nextDoorPortal = 0x80;
     }
 
-    public MaplePortal makePortal(int type, MapleData portal) {
+    public MaplePortal makePortal(int type, Data portal) {
         MapleGenericPortal ret = null;
         if (type == MaplePortal.MAP_PORTAL) {
             ret = new MapleMapPortal();
@@ -46,7 +44,7 @@ public class MaplePortalFactory {
         return ret;
     }
 
-    private void loadPortal(MapleGenericPortal myPortal, MapleData portal) {
+    private void loadPortal(MapleGenericPortal myPortal, Data portal) {
         myPortal.setName(MapleDataTool.getString(portal.getChildByPath("pn")));
         myPortal.setTarget(MapleDataTool.getString(portal.getChildByPath("tn")));
         myPortal.setTargetMapId(MapleDataTool.getInt(portal.getChildByPath("tm")));

@@ -27,7 +27,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataEntity;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class XMLDomMapleData implements MapleData {
+public class XMLDomMapleData implements Data {
 	private Node node;
 	private File imageDataDir;
 
@@ -66,10 +66,10 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized MapleData getChildByPath(String path) {  // the whole XML reading system seems susceptible to give nulls on strenuous read scenarios
+	public synchronized Data getChildByPath(String path) {  // the whole XML reading system seems susceptible to give nulls on strenuous read scenarios
 		String[] segments = path.split("/");
 		if (segments[0].equals("..")) {
-			return ((MapleData) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
+			return ((Data) getParent()).getChildByPath(path.substring(path.indexOf("/") + 1));
 		}
 
                 Node myNode;
@@ -96,8 +96,8 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized List<MapleData> getChildren() {
-		List<MapleData> ret = new ArrayList<>();
+	public synchronized List<Data> getChildren() {
+		List<Data> ret = new ArrayList<>();
                 
                 NodeList childNodes = node.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {
@@ -203,7 +203,7 @@ public class XMLDomMapleData implements MapleData {
 	}
 
 	@Override
-	public synchronized Iterator<MapleData> iterator() {
+	public synchronized Iterator<Data> iterator() {
 		return getChildren().iterator();
 	}
 }

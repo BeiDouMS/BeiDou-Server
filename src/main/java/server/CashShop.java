@@ -27,7 +27,7 @@ import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -153,7 +153,7 @@ public class CashShop {
 
             Map<Integer, CashItem> loadedItems = new HashMap<>();
             List<Integer> onSaleItems = new ArrayList<>();
-            for (MapleData item : etc.getData("Commodity.img").getChildren()) {
+            for (Data item : etc.getData("Commodity.img").getChildren()) {
                 int sn = MapleDataTool.getIntConvert("SN", item);
                 int itemId = MapleDataTool.getIntConvert("ItemId", item);
                 int price = MapleDataTool.getIntConvert("Price", item, 0);
@@ -170,10 +170,10 @@ public class CashShop {
             CashItemFactory.randomitemsns = onSaleItems;
 
             Map<Integer, List<Integer>> loadedPackages = new HashMap<>();
-            for (MapleData cashPackage : etc.getData("CashPackage.img").getChildren()) {
+            for (Data cashPackage : etc.getData("CashPackage.img").getChildren()) {
                 List<Integer> cPackage = new ArrayList<>();
 
-                for (MapleData item : cashPackage.getChildByPath("SN").getChildren()) {
+                for (Data item : cashPackage.getChildByPath("SN").getChildren()) {
                     cPackage.add(Integer.parseInt(item.getData().toString()));
                 }
 

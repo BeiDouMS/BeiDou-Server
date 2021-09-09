@@ -23,7 +23,7 @@ package server.quest.requirements;
 
 import client.Character;
 import client.inventory.Pet;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -39,15 +39,15 @@ public class PetRequirement extends MapleQuestRequirement {
 	List<Integer> petIDs = new ArrayList<>();
 	
 	
-	public PetRequirement(MapleQuest quest, MapleData data) {
+	public PetRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.PET);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for(MapleData petData : data.getChildren()) {
+	public void processData(Data data) {
+		for(Data petData : data.getChildren()) {
 			petIDs.add(MapleDataTool.getInt(petData.getChildByPath("id")));
 		}
 	}

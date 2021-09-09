@@ -22,7 +22,7 @@ package server.quest.actions;
 import client.Character;
 import client.Client;
 import client.inventory.Pet;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -34,7 +34,7 @@ import server.quest.MapleQuestActionType;
 public class PetTamenessAction extends MapleQuestAction {
 	int tameness;
 	
-	public PetTamenessAction(MapleQuest quest, MapleData data) {
+	public PetTamenessAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.PETTAMENESS, quest);
 		questID = quest.getId();
 		processData(data);
@@ -42,7 +42,7 @@ public class PetTamenessAction extends MapleQuestAction {
 	
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		tameness = MapleDataTool.getInt(data);
 	}
 	

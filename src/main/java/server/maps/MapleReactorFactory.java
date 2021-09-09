@@ -21,7 +21,7 @@
 */
 package server.maps;
 
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -44,8 +44,8 @@ public class MapleReactorFactory {
         MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
-            MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
-            MapleData link = reactorData.getChildByPath("info/link");
+            Data reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
+            Data link = reactorData.getChildByPath("info/link");
             if (link != null) {
                 infoId = MapleDataTool.getIntConvert("info/link", reactorData);
                 stats = reactorStats.get(infoId);
@@ -60,13 +60,13 @@ public class MapleReactorFactory {
                 boolean areaSet = false;
                 boolean foundState = false;
                 for (byte i = 0; true; i++) {
-                    MapleData reactorD = reactorData.getChildByPath(String.valueOf(i));
+                    Data reactorD = reactorData.getChildByPath(String.valueOf(i));
                     if (reactorD == null) {
                         break;
                     }
-                    MapleData reactorInfoData_ = reactorD.getChildByPath("event");
+                    Data reactorInfoData_ = reactorD.getChildByPath("event");
                     if (reactorInfoData_ != null && reactorInfoData_.getChildByPath("0") != null) {
-                        MapleData reactorInfoData = reactorInfoData_.getChildByPath("0");
+                        Data reactorInfoData = reactorInfoData_.getChildByPath("0");
                         Pair<Integer, Integer> reactItem = null;
                         int type = MapleDataTool.getIntConvert("type", reactorInfoData);
                         if (type == 100) { //reactor waits for item
@@ -98,31 +98,31 @@ public class MapleReactorFactory {
         MapleReactorStats stats = reactorStats.get(rid);
         if (stats == null) {
             int infoId = rid;
-            MapleData reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
-            MapleData link = reactorData.getChildByPath("info/link");
+            Data reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
+            Data link = reactorData.getChildByPath("info/link");
             if (link != null) {
                 infoId = MapleDataTool.getIntConvert("info/link", reactorData);
                 stats = reactorStats.get(infoId);
             }
-            MapleData activateOnTouch = reactorData.getChildByPath("info/activateByTouch");
+            Data activateOnTouch = reactorData.getChildByPath("info/activateByTouch");
             boolean loadArea = false;
             if (activateOnTouch != null) {
                 loadArea = MapleDataTool.getInt("info/activateByTouch", reactorData, 0) != 0;
             }
             if (stats == null) {
                 reactorData = data.getData(StringUtil.getLeftPaddedStr(infoId + ".img", '0', 11));
-                MapleData reactorInfoData = reactorData.getChildByPath("0");
+                Data reactorInfoData = reactorData.getChildByPath("0");
                 stats = new MapleReactorStats();
                 List<StateData> statedatas = new ArrayList<>();
                 if (reactorInfoData != null) {
                     boolean areaSet = false;
                     byte i = 0;
                     while (reactorInfoData != null) {
-                        MapleData eventData = reactorInfoData.getChildByPath("event");
+                        Data eventData = reactorInfoData.getChildByPath("event");
                         if (eventData != null) {
                             int timeOut = -1;
                             
-                            for (MapleData fknexon : eventData.getChildren()) {
+                            for (Data fknexon : eventData.getChildren()) {
                                 if (fknexon.getName().equalsIgnoreCase("timeOut")) {
                                     timeOut = MapleDataTool.getInt(fknexon);
                                 } else {
@@ -136,11 +136,11 @@ public class MapleReactorFactory {
                                             areaSet = true;
                                         }
                                     }
-                                    MapleData activeSkillID = fknexon.getChildByPath("activeSkillID");
+                                    Data activeSkillID = fknexon.getChildByPath("activeSkillID");
                                     List<Integer> skillids = null;
                                     if (activeSkillID != null) {
                                         skillids = new ArrayList<>();
-                                        for (MapleData skill : activeSkillID.getChildren()) {
+                                        for (Data skill : activeSkillID.getChildren()) {
                                             skillids.add(MapleDataTool.getInt(skill));
                                         }
                                     }

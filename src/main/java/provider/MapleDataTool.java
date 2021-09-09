@@ -26,11 +26,11 @@ import provider.wz.DataType;
 import java.awt.*;
 
 public class MapleDataTool {
-    public static String getString(MapleData data) {
+    public static String getString(Data data) {
         return ((String) data.getData());
     }
 
-    public static String getString(MapleData data, String def) {
+    public static String getString(Data data, String def) {
         if (data == null || data.getData() == null) {
             return def;
         } else {
@@ -38,34 +38,34 @@ public class MapleDataTool {
         }
     }
 
-    public static String getString(String path, MapleData data) {
+    public static String getString(String path, Data data) {
         return getString(data.getChildByPath(path));
     }
 
-    public static String getString(String path, MapleData data, String def) {
+    public static String getString(String path, Data data, String def) {
         return getString(data.getChildByPath(path), def);
     }
 
-    public static double getDouble(MapleData data) {
+    public static double getDouble(Data data) {
         return (Double) data.getData();
     }
 
-    public static float getFloat(MapleData data) {
+    public static float getFloat(Data data) {
         return (Float) data.getData();
     }
 
-    public static int getInt(MapleData data) {
+    public static int getInt(Data data) {
         if (data == null || data.getData() == null) {
             return 0;// DEF?
         }
         return (Integer) data.getData();
     }
 
-    public static int getInt(String path, MapleData data) {
+    public static int getInt(String path, Data data) {
         return getInt(data.getChildByPath(path));
     }
 
-    public static int getIntConvert(MapleData data) {
+    public static int getIntConvert(Data data) {
         if (data.getType() == DataType.STRING) {
             return Integer.parseInt(getString(data));
         } else {
@@ -73,7 +73,7 @@ public class MapleDataTool {
         }
     }
     
-    public static int getIntConvert(MapleData data, int def) {
+    public static int getIntConvert(Data data, int def) {
         if (data == null) {
             return def;
         }
@@ -92,8 +92,8 @@ public class MapleDataTool {
         }
     }
 
-    public static int getIntConvert(String path, MapleData data) {
-        MapleData d = data.getChildByPath(path);
+    public static int getIntConvert(String path, Data data) {
+        Data d = data.getChildByPath(path);
         if (d.getType() == DataType.STRING) {
             return Integer.parseInt(getString(d));
         } else {
@@ -101,7 +101,7 @@ public class MapleDataTool {
         }
     }
 
-    public static int getInt(MapleData data, int def) {
+    public static int getInt(Data data, int def) {
         if (data == null || data.getData() == null) {
             return  def;
         } else if (data.getType() == DataType.STRING) {
@@ -116,12 +116,12 @@ public class MapleDataTool {
         }
     }
 
-    public static int getInt(String path, MapleData data, int def) {
+    public static int getInt(String path, Data data, int def) {
         return getInt(data.getChildByPath(path), def);
     }
 
-    public static int getIntConvert(String path, MapleData data, int def) {
-        MapleData d = data.getChildByPath(path);
+    public static int getIntConvert(String path, Data data, int def) {
+        Data d = data.getChildByPath(path);
         if (d == null) {
             return def;
         }
@@ -137,23 +137,23 @@ public class MapleDataTool {
         }
     }
 
-    public static Point getPoint(MapleData data) {
+    public static Point getPoint(Data data) {
         return ((Point) data.getData());
     }
 
-    public static Point getPoint(String path, MapleData data) {
+    public static Point getPoint(String path, Data data) {
         return getPoint(data.getChildByPath(path));
     }
 
-    public static Point getPoint(String path, MapleData data, Point def) {
-        final MapleData pointData = data.getChildByPath(path);
+    public static Point getPoint(String path, Data data, Point def) {
+        final Data pointData = data.getChildByPath(path);
         if (pointData == null) {
             return def;
         }
         return getPoint(pointData);
     }
 
-    public static String getFullDataPath(MapleData data) {
+    public static String getFullDataPath(Data data) {
         String path = "";
         MapleDataEntity myData = data;
         while (myData != null) {

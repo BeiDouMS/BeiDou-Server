@@ -686,9 +686,9 @@ public class GameConstants {
             }
             
             for (MapleDataFileEntry obj : objData.getFiles()) {
-                for (MapleData l0 : mapSource.getData(objData.getName() + "/" + obj.getName()).getChildren()) {
-                    for (MapleData l1 : l0.getChildren()) {
-                        for (MapleData l2 : l1.getChildren()) {
+                for (Data l0 : mapSource.getData(objData.getName() + "/" + obj.getName()).getChildren()) {
+                    for (Data l1 : l0.getChildren()) {
+                        for (Data l2 : l1.getChildren()) {
                             int objDmg = MapleDataTool.getIntConvert("s1/mobdamage", l2, 0);
                             if (maxMobDmg < objDmg) {
                                 maxMobDmg = objDmg;

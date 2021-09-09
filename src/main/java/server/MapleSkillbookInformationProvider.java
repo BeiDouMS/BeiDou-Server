@@ -20,7 +20,7 @@
 package server;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -80,12 +80,12 @@ public class MapleSkillbookInformationProvider {
         return itemid >= 4001107 && itemid <= 4001114 || itemid >= 4161015 && itemid <= 4161023;
     }
     
-    private static int fetchQuestbook(MapleData checkData, String quest) {
-        MapleData questStartData = checkData.getChildByPath(quest).getChildByPath("0");
+    private static int fetchQuestbook(Data checkData, String quest) {
+        Data questStartData = checkData.getChildByPath(quest).getChildByPath("0");
         
-        MapleData startReqItemData = questStartData.getChildByPath("item");
+        Data startReqItemData = questStartData.getChildByPath("item");
         if (startReqItemData != null) {
-            for (MapleData itemData : startReqItemData.getChildren()) {
+            for (Data itemData : startReqItemData.getChildren()) {
                 int itemId = MapleDataTool.getInt("id", itemData, 0);
                 if (isQuestBook(itemId)) {
                     return itemId;
@@ -93,11 +93,11 @@ public class MapleSkillbookInformationProvider {
             }
         }
             
-        MapleData startReqQuestData = questStartData.getChildByPath("quest");
+        Data startReqQuestData = questStartData.getChildByPath("quest");
         if (startReqQuestData != null) {
             Set<Integer> reqQuests = new HashSet<>();
             
-            for (MapleData questStatusData : startReqQuestData.getChildren()) {
+            for (Data questStatusData : startReqQuestData.getChildren()) {
                 int reqQuest = MapleDataTool.getInt("id", questStatusData, 0);
                 if (reqQuest > 0) {
                     reqQuests.add(reqQuest);
@@ -117,16 +117,16 @@ public class MapleSkillbookInformationProvider {
     
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromQuests() {
         MapleDataProvider questDataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
-        MapleData actData = questDataProvider.getData("Act.img");
-        MapleData checkData = questDataProvider.getData("Check.img");
+        Data actData = questDataProvider.getData("Act.img");
+        Data checkData = questDataProvider.getData("Check.img");
 
         final Map<Integer, SkillBookEntry> loadedSkillbooks = new HashMap<>();
-        for (MapleData questData : actData.getChildren()) {
-            for (MapleData questStatusData : questData.getChildren()) {
-                for (MapleData questNodeData : questStatusData.getChildren()) {
+        for (Data questData : actData.getChildren()) {
+            for (Data questStatusData : questData.getChildren()) {
+                for (Data questNodeData : questStatusData.getChildren()) {
                     String actNodeName = questNodeData.getName();
                     if (actNodeName.contentEquals("item")) {
-                        for (MapleData questItemData : questNodeData.getChildren()) {
+                        for (Data questItemData : questNodeData.getChildren()) {
                             int itemId = MapleDataTool.getInt("id", questItemData, 0);
                             int itemCount = MapleDataTool.getInt("count", questItemData, 0);
                             
@@ -140,7 +140,7 @@ public class MapleSkillbookInformationProvider {
                             }
                         }
                     } else if (actNodeName.contentEquals("skill")) {
-                        for (MapleData questSkillData : questNodeData.getChildren()) {
+                        for (Data questSkillData : questNodeData.getChildren()) {
                             int skillId = MapleDataTool.getInt("id", questSkillData, 0);
                             if (is4thJobSkill(skillId)) {
                                 // negative itemids are skill rewards

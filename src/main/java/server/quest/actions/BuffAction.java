@@ -22,7 +22,7 @@
 package server.quest.actions;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
@@ -35,7 +35,7 @@ import server.quest.MapleQuestActionType;
 public class BuffAction extends MapleQuestAction {
 	int itemEffect;
 	
-	public BuffAction(MapleQuest quest, MapleData data) {
+	public BuffAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.BUFF, quest);
 		processData(data);
 	}
@@ -46,7 +46,7 @@ public class BuffAction extends MapleQuestAction {
 	}
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		itemEffect = MapleDataTool.getInt(data);
 	}
 	

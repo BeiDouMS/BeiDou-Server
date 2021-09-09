@@ -23,7 +23,7 @@ package server.quest.actions;
 
 import client.Character;
 import client.QuestStatus;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -36,14 +36,14 @@ import tools.PacketCreator;
 public class NextQuestAction extends MapleQuestAction {
 	int nextQuest;
 	
-	public NextQuestAction(MapleQuest quest, MapleData data) {
+	public NextQuestAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.NEXTQUEST, quest);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		nextQuest = MapleDataTool.getInt(data);
 	}
 	

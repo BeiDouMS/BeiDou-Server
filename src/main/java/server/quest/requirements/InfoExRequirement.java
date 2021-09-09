@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -39,17 +39,17 @@ public class InfoExRequirement extends MapleQuestRequirement {
 	private int questID;
 	
 	
-	public InfoExRequirement(MapleQuest quest, MapleData data) {
+	public InfoExRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.INFO_EX);
 		questID = quest.getId();
                 processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		// Because we have to...
-                for(MapleData infoEx : data.getChildren()) {
-			MapleData value = infoEx.getChildByPath("value");
+                for(Data infoEx : data.getChildren()) {
+			Data value = infoEx.getChildByPath("value");
 			infoExpected.add(MapleDataTool.getString(value, ""));
 		}
 	}

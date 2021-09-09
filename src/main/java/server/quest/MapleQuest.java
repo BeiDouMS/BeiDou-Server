@@ -25,7 +25,7 @@ import client.Character;
 import client.QuestStatus;
 import client.QuestStatus.Status;
 import config.YamlConfig;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -69,20 +69,20 @@ public class MapleQuest {
     private boolean repeatable = false;
     private String name = "", parent = "";
     private final static MapleDataProvider questData = MapleDataProviderFactory.getDataProvider(WZFiles.QUEST);
-    private final static MapleData questInfo = questData.getData("QuestInfo.img");
-    private final static MapleData questAct = questData.getData("Act.img");
-    private final static MapleData questReq = questData.getData("Check.img");
+    private final static Data questInfo = questData.getData("QuestInfo.img");
+    private final static Data questAct = questData.getData("Act.img");
+    private final static Data questReq = questData.getData("Check.img");
 	
     private MapleQuest(int id) {
         this.id = (short) id;
 		
-        MapleData reqData = questReq.getChildByPath(String.valueOf(id));
+        Data reqData = questReq.getChildByPath(String.valueOf(id));
         if (reqData == null) {//most likely infoEx
             return;
         }
         
         if(questInfo != null) {
-            MapleData reqInfo = questInfo.getChildByPath(String.valueOf(id));
+            Data reqInfo = questInfo.getChildByPath(String.valueOf(id));
             if(reqInfo != null) {
                 name = MapleDataTool.getString("name", reqInfo, "");
                 parent = MapleDataTool.getString("parent", reqInfo, "");
@@ -100,14 +100,14 @@ public class MapleQuest {
             }
         }
         
-        MapleData startReqData = reqData.getChildByPath("0");
+        Data startReqData = reqData.getChildByPath("0");
         if (startReqData != null) {
-            for (MapleData startReq : startReqData.getChildren()) {
+            for (Data startReq : startReqData.getChildren()) {
                 MapleQuestRequirementType type = MapleQuestRequirementType.getByWZName(startReq.getName());
                 if (type.equals(MapleQuestRequirementType.INTERVAL)) {
                     repeatable = true;
                 } else if (type.equals(MapleQuestRequirementType.MOB)) {
-                    for (MapleData mob : startReq.getChildren()) {
+                    for (Data mob : startReq.getChildren()) {
                         relevantMobs.add(MapleDataTool.getInt(mob.getChildByPath("id")));
                     }
                 }
@@ -121,9 +121,9 @@ public class MapleQuest {
             }
         }
         
-        MapleData completeReqData = reqData.getChildByPath("1");
+        Data completeReqData = reqData.getChildByPath("1");
         if (completeReqData != null) {
-            for (MapleData completeReq : completeReqData.getChildren()) {
+            for (Data completeReq : completeReqData.getChildren()) {
 		MapleQuestRequirementType type = MapleQuestRequirementType.getByWZName(completeReq.getName());
                 
                 MapleQuestRequirement req = this.getRequirement(type, completeReq);
@@ -132,20 +132,20 @@ public class MapleQuest {
                 }
 				
                 if (type.equals(MapleQuestRequirementType.MOB)) {
-                    for (MapleData mob : completeReq.getChildren()) {
+                    for (Data mob : completeReq.getChildren()) {
                         relevantMobs.add(MapleDataTool.getInt(mob.getChildByPath("id")));
                     }
                 }
                 completeReqs.put(type, req);
             }
         }
-        MapleData actData = questAct.getChildByPath(String.valueOf(id));
+        Data actData = questAct.getChildByPath(String.valueOf(id));
         if (actData == null) {
             return;
         }
-        final MapleData startActData = actData.getChildByPath("0");
+        final Data startActData = actData.getChildByPath("0");
         if (startActData != null) {
-            for (MapleData startAct : startActData.getChildren()) {
+            for (Data startAct : startActData.getChildren()) {
                 MapleQuestActionType questActionType = MapleQuestActionType.getByWZName(startAct.getName());
                 MapleQuestAction act = this.getAction(questActionType, startAct);
 				
@@ -155,9 +155,9 @@ public class MapleQuest {
                 startActs.put(questActionType, act);
             }
         }
-        MapleData completeActData = actData.getChildByPath("1");
+        Data completeActData = actData.getChildByPath("1");
         if (completeActData != null) {
-            for (MapleData completeAct : completeActData.getChildren()) {
+            for (Data completeAct : completeActData.getChildren()) {
                 MapleQuestActionType questActionType = MapleQuestActionType.getByWZName(completeAct.getName());
                 MapleQuestAction act = this.getAction(questActionType, completeAct);
 
@@ -460,7 +460,7 @@ public class MapleQuest {
 		quests.clear();
 	}
 	
-	private MapleQuestRequirement getRequirement(MapleQuestRequirementType type, MapleData data) {
+	private MapleQuestRequirement getRequirement(MapleQuestRequirementType type, Data data) {
 		MapleQuestRequirement ret = null;
 		switch(type) {
 			case END_DATE:
@@ -534,7 +534,7 @@ public class MapleQuest {
 		return ret;
 	}
 	
-	private MapleQuestAction getAction(MapleQuestActionType type, MapleData data) {
+	private MapleQuestAction getAction(MapleQuestActionType type, Data data) {
 		MapleQuestAction ret = null;
 		switch(type) {
 			case BUFF:
@@ -653,7 +653,7 @@ public class MapleQuest {
         final Map<Integer, MapleQuest> loadedQuests = new HashMap<>();
         final Map<Integer, Integer> loadedInfoNumberQuests = new HashMap<>();
 
-        for (MapleData quest : questInfo.getChildren()) {
+        for (Data quest : questInfo.getChildren()) {
             int questID = Integer.parseInt(quest.getName());
 
             MapleQuest q = new MapleQuest(questID);

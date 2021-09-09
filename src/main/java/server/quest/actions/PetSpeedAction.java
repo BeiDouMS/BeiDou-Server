@@ -22,7 +22,7 @@ package server.quest.actions;
 import client.Character;
 import client.Client;
 import client.inventory.Pet;
-import provider.MapleData;
+import provider.Data;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -32,14 +32,14 @@ import server.quest.MapleQuestActionType;
  */
 public class PetSpeedAction extends MapleQuestAction {
 	
-	public PetSpeedAction(MapleQuest quest, MapleData data) {
+	public PetSpeedAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.PETTAMENESS, quest);
 		questID = quest.getId();
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {}
+	public void processData(Data data) {}
 	
 	@Override
 	public void run(Character chr, Integer extSelection) {

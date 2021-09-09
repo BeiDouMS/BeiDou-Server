@@ -36,7 +36,7 @@ import net.packet.Packet;
 import net.server.Server;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.life.MapleMonster;
 import server.life.MobSkill;
@@ -146,11 +146,11 @@ public class MapleStatEffect {
         return 0;
     }
     
-    public static MapleStatEffect loadSkillEffectFromData(MapleData source, int skillid, boolean overtime) {
+    public static MapleStatEffect loadSkillEffectFromData(Data source, int skillid, boolean overtime) {
         return loadFromData(source, skillid, true, overtime);
     }
 
-    public static MapleStatEffect loadItemEffectFromData(MapleData source, int itemid) {
+    public static MapleStatEffect loadItemEffectFromData(Data source, int itemid) {
         return loadFromData(source, itemid, false, false);
     }
 
@@ -170,7 +170,7 @@ public class MapleStatEffect {
         }
     }
 
-    private static MapleStatEffect loadFromData(MapleData source, int sourceid, boolean skill, boolean overTime) {
+    private static MapleStatEffect loadFromData(Data source, int sourceid, boolean skill, boolean overTime) {
         MapleStatEffect ret = new MapleStatEffect();
         ret.duration = MapleDataTool.getIntConvert("time", source, -1);
         ret.hp = (short) MapleDataTool.getInt("hp", source, 0);
@@ -210,7 +210,7 @@ public class MapleStatEffect {
         ret.fatigue = MapleDataTool.getInt("incFatigue", source, 0);
         ret.repeatEffect = MapleDataTool.getInt("repeatEffect", source, 0) > 0;
 
-        MapleData mdd = source.getChildByPath("0");
+        Data mdd = source.getChildByPath("0");
         if (mdd != null && mdd.getChildren().size() > 0) {
             ret.mobSkill = (short) MapleDataTool.getInt("mobSkill", mdd, 0);
             ret.mobSkillLevel = (short) MapleDataTool.getInt("level", mdd, 0);
@@ -221,7 +221,7 @@ public class MapleStatEffect {
             ret.target = 0;
         }
         
-        MapleData mdds = source.getChildByPath("mob");
+        Data mdds = source.getChildByPath("mob");
         if (mdds != null) {
             if (mdds.getChildren()!= null && mdds.getChildren().size() > 0) {
                 ret.mob = MapleDataTool.getInt("mob", mdds, 0);
@@ -308,11 +308,11 @@ public class MapleStatEffect {
                     List<Pair<Integer, Integer>> areas = null;
                     boolean inParty = false;
                     
-                    MapleData con = source.getChildByPath("con");
+                    Data con = source.getChildByPath("con");
                     if (con != null) {
                         areas = new ArrayList<>(3);
 
-                        for (MapleData conData : con.getChildren()) {
+                        for (Data conData : con.getChildren()) {
                             int type = MapleDataTool.getInt("type", conData, -1);
                             
                             if (type == 0) {
@@ -395,7 +395,7 @@ public class MapleStatEffect {
             addBuffStatPairToListIfNotZero(statups, BuffStat.JUMP, (int) ret.jump);
         }
 
-        MapleData ltd = source.getChildByPath("lt");
+        Data ltd = source.getChildByPath("lt");
         if (ltd != null) {
             ret.lt = (Point) ltd.getData();
             ret.rb = (Point) source.getChildByPath("rb").getData();

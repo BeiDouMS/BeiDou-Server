@@ -16,7 +16,7 @@ import java.util.*;
 public class MonsterStatFetcher {
     private static final MapleDataProvider data = MapleDataProviderFactory.getDataProvider(WZFiles.MOB);
     private static final MapleDataProvider stringDataWZ = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
-    private static final MapleData mobStringData = stringDataWZ.getData("Mob.img");
+    private static final Data mobStringData = stringDataWZ.getData("Mob.img");
     private static final Map<Integer, MapleMonsterStats> monsterStats = new HashMap<>();
 
     static Map<Integer, MapleMonsterStats> getAllMonsterStats() {
@@ -28,14 +28,14 @@ public class MonsterStatFetcher {
                 String fileName = mFile.getName();
 
                 //System.out.println("Parsing '" + fileName + "'");
-                MapleData monsterData = data.getData(fileName);
+                Data monsterData = data.getData(fileName);
                 if (monsterData == null) {
                     continue;
                 }
 
                 Integer mid = getMonsterId(fileName);
 
-                MapleData monsterInfoData = monsterData.getChildByPath("info");
+                Data monsterInfoData = monsterData.getChildByPath("info");
                 MapleMonsterStats stats = new MapleMonsterStats();
                 stats.setHp(MapleDataTool.getIntConvert("maxHP", monsterInfoData));
                 stats.setFriendly(MapleDataTool.getIntConvert("damagedByMob", monsterInfoData, 0) == 1);
@@ -56,7 +56,7 @@ public class MonsterStatFetcher {
                 stats.setCP(MapleDataTool.getIntConvert("getCP", monsterInfoData, 0));
                 stats.setRemoveOnMiss(MapleDataTool.getIntConvert("removeOnMiss", monsterInfoData, 0) > 0);
 
-                MapleData special = monsterInfoData.getChildByPath("coolDamage");
+                Data special = monsterInfoData.getChildByPath("coolDamage");
                 if (special != null) {
                     int coolDmg = MapleDataTool.getIntConvert("coolDamage", monsterInfoData);
                     int coolProb = MapleDataTool.getIntConvert("coolDamageProb", monsterInfoData, 0);
@@ -64,7 +64,7 @@ public class MonsterStatFetcher {
                 }
                 special = monsterInfoData.getChildByPath("loseItem");
                 if (special != null) {
-                    for (MapleData liData : special.getChildren()) {
+                    for (Data liData : special.getChildren()) {
                         stats.addLoseItem(new loseItem(MapleDataTool.getInt(liData.getChildByPath("id")), (byte) MapleDataTool.getInt(liData.getChildByPath("prop")), (byte) MapleDataTool.getInt(liData.getChildByPath("x"))));
                     }
                 }
@@ -72,7 +72,7 @@ public class MonsterStatFetcher {
                 if (special != null) {
                     stats.setSelfDestruction(new selfDestruction((byte) MapleDataTool.getInt(special.getChildByPath("action")), MapleDataTool.getIntConvert("removeAfter", special, -1), MapleDataTool.getIntConvert("hp", special, -1)));
                 }
-                MapleData firstAttackData = monsterInfoData.getChildByPath("firstAttack");
+                Data firstAttackData = monsterInfoData.getChildByPath("firstAttack");
                 int firstAttack = 0;
                 if (firstAttackData != null) {
                     if (firstAttackData.getType() == DataType.FLOAT) {
@@ -87,25 +87,25 @@ public class MonsterStatFetcher {
                 stats.setTagColor(MapleDataTool.getIntConvert("hpTagColor", monsterInfoData, 0));
                 stats.setTagBgColor(MapleDataTool.getIntConvert("hpTagBgcolor", monsterInfoData, 0));
 
-                for (MapleData idata : monsterData) {
+                for (Data idata : monsterData) {
                     if (!idata.getName().equals("info")) {
                         int delay = 0;
-                        for (MapleData pic : idata.getChildren()) {
+                        for (Data pic : idata.getChildren()) {
                             delay += MapleDataTool.getIntConvert("delay", pic, 0);
                         }
                         stats.setAnimationTime(idata.getName(), delay);
                     }
                 }
-                MapleData reviveInfo = monsterInfoData.getChildByPath("revive");
+                Data reviveInfo = monsterInfoData.getChildByPath("revive");
                 if (reviveInfo != null) {
                     List<Integer> revives = new LinkedList<>();
-                    for (MapleData data_ : reviveInfo) {
+                    for (Data data_ : reviveInfo) {
                         revives.add(MapleDataTool.getInt(data_));
                     }
                     stats.setRevives(revives);
                 }
                 decodeElementalString(stats, MapleDataTool.getString("elemAttr", monsterInfoData, ""));
-                MapleData monsterSkillData = monsterInfoData.getChildByPath("skill");
+                Data monsterSkillData = monsterInfoData.getChildByPath("skill");
                 if (monsterSkillData != null) {
                     int i = 0;
                     List<Pair<Integer, Integer>> skills = new ArrayList<>();
@@ -115,7 +115,7 @@ public class MonsterStatFetcher {
                     }
                     stats.setSkills(skills);
                 }
-                MapleData banishData = monsterInfoData.getChildByPath("ban");
+                Data banishData = monsterInfoData.getChildByPath("ban");
                 if (banishData != null) {
                     stats.setBanishInfo(new BanishInfo(MapleDataTool.getString("banMsg", banishData), MapleDataTool.getInt("banMap/0/field", banishData, -1), MapleDataTool.getString("banMap/0/portal", banishData, "sp")));
                 }

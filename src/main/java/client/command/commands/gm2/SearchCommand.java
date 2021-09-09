@@ -26,7 +26,7 @@ package client.command.commands.gm2;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -36,10 +36,10 @@ import server.quest.MapleQuest;
 import tools.Pair;
 
 public class SearchCommand extends Command {
-    private static MapleData npcStringData;
-    private static MapleData mobStringData;
-    private static MapleData skillStringData;
-    private static MapleData mapStringData;
+    private static Data npcStringData;
+    private static Data mobStringData;
+    private static Data skillStringData;
+    private static Data mapStringData;
     
     {
         setDescription("Search String.wz.");
@@ -62,7 +62,7 @@ public class SearchCommand extends Command {
 
         String search = joinStringFrom(params,1);
         long start = System.currentTimeMillis();//for the lulz
-        MapleData data = null;
+        Data data = null;
         if (!params[0].equalsIgnoreCase("ITEM")) {
             int searchType = 0;
             
@@ -85,7 +85,7 @@ public class SearchCommand extends Command {
                 String name;
                 
                 if (searchType == 0) {
-                    for (MapleData searchData : data.getChildren()) {
+                    for (Data searchData : data.getChildren()) {
                         name = MapleDataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
                         if (name.toLowerCase().contains(search.toLowerCase())) {
                             sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(name).append("\r\n");
@@ -94,8 +94,8 @@ public class SearchCommand extends Command {
                 } else if (searchType == 1) {
                     String mapName, streetName;
                     
-                    for (MapleData searchDataDir : data.getChildren()) {
-                        for (MapleData searchData : searchDataDir.getChildren()) {
+                    for (Data searchDataDir : data.getChildren()) {
+                        for (Data searchData : searchDataDir.getChildren()) {
                             mapName = MapleDataTool.getString(searchData.getChildByPath("mapName"), "NO-NAME");
                             streetName = MapleDataTool.getString(searchData.getChildByPath("streetName"), "NO-NAME");
                             

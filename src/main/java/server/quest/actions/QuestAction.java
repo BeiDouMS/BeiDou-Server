@@ -23,7 +23,7 @@ package server.quest.actions;
 
 import client.Character;
 import client.QuestStatus;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -39,7 +39,7 @@ public class QuestAction extends MapleQuestAction {
 	int mesos;
 	Map<Integer, Integer> quests = new HashMap<>();
 	
-	public QuestAction(MapleQuest quest, MapleData data) {
+	public QuestAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.QUEST, quest);
 		questID = quest.getId();
 		processData(data);
@@ -47,8 +47,8 @@ public class QuestAction extends MapleQuestAction {
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData qEntry : data) {
+	public void processData(Data data) {
+		for (Data qEntry : data) {
 			int questid = MapleDataTool.getInt(qEntry.getChildByPath("id"));
 			int stat = MapleDataTool.getInt(qEntry.getChildByPath("state"));
 			quests.put(questid, stat);

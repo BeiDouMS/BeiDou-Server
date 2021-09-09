@@ -25,7 +25,7 @@ import client.Character;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import constants.inventory.ItemConstants;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
@@ -42,14 +42,14 @@ public class ItemRequirement extends MapleQuestRequirement {
 	Map<Integer, Integer> items = new HashMap<>();
 	
 	
-	public ItemRequirement(MapleQuest quest, MapleData data) {
+	public ItemRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.ITEM);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData itemEntry : data.getChildren()) {
+	public void processData(Data data) {
+		for (Data itemEntry : data.getChildren()) {
 			int itemId = MapleDataTool.getInt(itemEntry.getChildByPath("id"));
 			int count = MapleDataTool.getInt(itemEntry.getChildByPath("count"), 0);
 			

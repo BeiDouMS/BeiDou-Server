@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -35,13 +35,13 @@ public class CompletedQuestRequirement extends MapleQuestRequirement {
 	private int reqQuest;
 	
 	
-	public CompletedQuestRequirement(MapleQuest quest, MapleData data) {
+	public CompletedQuestRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.COMPLETED_QUEST);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		reqQuest = MapleDataTool.getInt(data);
 	}
 	

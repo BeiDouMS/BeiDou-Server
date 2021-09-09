@@ -23,7 +23,7 @@ package server.quest.requirements;
 
 import client.Character;
 import client.Job;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -38,7 +38,7 @@ import java.util.List;
 public class JobRequirement extends MapleQuestRequirement {
 	List<Integer> jobs = new ArrayList<>();
 	
-	public JobRequirement(MapleQuest quest, MapleData data) {
+	public JobRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.JOB);
 		processData(data);
 	}
@@ -48,8 +48,8 @@ public class JobRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData jobEntry : data.getChildren()) {
+	public void processData(Data data) {
+		for (Data jobEntry : data.getChildren()) {
 			jobs.add(MapleDataTool.getInt(jobEntry));
 		}
 	}

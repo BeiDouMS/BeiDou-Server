@@ -25,11 +25,11 @@ import provider.wz.DataType;
 
 import java.util.List;
 
-public interface MapleData extends MapleDataEntity, Iterable<MapleData> {
+public interface Data extends MapleDataEntity, Iterable<Data> {
     @Override
     String getName();
     DataType getType();
-    List<MapleData> getChildren();
-    MapleData getChildByPath(String path);
+    List<Data> getChildren();
+    Data getChildByPath(String path);
     Object getData();
 }

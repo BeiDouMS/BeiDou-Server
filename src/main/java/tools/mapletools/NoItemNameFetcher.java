@@ -40,11 +40,11 @@ public class NoItemNameFetcher {
         UNDEF, ACCESSORY, CAP, CAPE, COAT, FACE, GLOVE, HAIR, LONGCOAT, PANTS, PETEQUIP, RING, SHIELD, SHOES, TAMING, WEAPON
     }
 
-    private static void processStringSubdirectoryData(MapleData subdirData, String subdirPath) {
-        for (MapleData md : subdirData.getChildren()) {
+    private static void processStringSubdirectoryData(Data subdirData, String subdirPath) {
+        for (Data md : subdirData.getChildren()) {
             try {
-                MapleData nameData = md.getChildByPath("name");
-                MapleData descData = md.getChildByPath("desc");
+                Data nameData = md.getChildByPath("name");
+                Data descData = md.getChildByPath("desc");
 
                 int itemId = Integer.parseInt(md.getName());
                 if (nameData != null && descData != null) {
@@ -64,9 +64,9 @@ public class NoItemNameFetcher {
         }
     }
 
-    private static void readStringSubdirectoryData(MapleData subdirData, int depth, String subdirPath) {
+    private static void readStringSubdirectoryData(Data subdirData, int depth, String subdirPath) {
         if (depth > 0) {
-            for (MapleData mDir : subdirData.getChildren()) {
+            for (Data mDir : subdirData.getChildren()) {
                 readStringSubdirectoryData(mDir, depth - 1, subdirPath + mDir.getName() + "/");
             }
         } else {
@@ -74,7 +74,7 @@ public class NoItemNameFetcher {
         }
     }
 
-    private static void readStringSubdirectoryData(MapleData subdirData, int depth) {
+    private static void readStringSubdirectoryData(Data subdirData, int depth) {
         readStringSubdirectoryData(subdirData, depth, "");
     }
 
@@ -82,22 +82,22 @@ public class NoItemNameFetcher {
         System.out.println("Parsing String.wz...");
         MapleDataProvider stringData = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
 
-        MapleData cashStringData = stringData.getData("Cash.img");
+        Data cashStringData = stringData.getData("Cash.img");
         readStringSubdirectoryData(cashStringData, 0);
 
-        MapleData consumeStringData = stringData.getData("Consume.img");
+        Data consumeStringData = stringData.getData("Consume.img");
         readStringSubdirectoryData(consumeStringData, 0);
 
-        MapleData eqpStringData = stringData.getData("Eqp.img");
+        Data eqpStringData = stringData.getData("Eqp.img");
         readStringSubdirectoryData(eqpStringData, 2);
 
-        MapleData etcStringData = stringData.getData("Etc.img");
+        Data etcStringData = stringData.getData("Etc.img");
         readStringSubdirectoryData(etcStringData, 1);
 
-        MapleData insStringData = stringData.getData("Ins.img");
+        Data insStringData = stringData.getData("Ins.img");
         readStringSubdirectoryData(insStringData, 0);
 
-        MapleData petStringData = stringData.getData("Pet.img");
+        Data petStringData = stringData.getData("Pet.img");
         readStringSubdirectoryData(petStringData, 0);
     }
 
@@ -178,8 +178,8 @@ public class NoItemNameFetcher {
 
                 if (!isAccessory(itemId) && !isTamingMob(itemId)) {
                     try {
-                        MapleData fileData = data.getData(dirName + "/" + fileName);
-                        MapleData mdinfo = fileData.getChildByPath("info");
+                        Data fileData = data.getData(dirName + "/" + fileName);
+                        Data mdinfo = fileData.getChildByPath("info");
                         if (mdinfo.getChildByPath("cash") == null) {
                             equipsWithNoCashProperty.add(itemId);
                         }
@@ -227,8 +227,8 @@ public class NoItemNameFetcher {
                 for (MapleDataFileEntry mFile : mDir.getFiles()) {
                     String fileName = mFile.getName();
 
-                    MapleData fileData = data.getData(dirName + "/" + fileName);
-                    for (MapleData mData : fileData.getChildren()) {
+                    Data fileData = data.getData(dirName + "/" + fileName);
+                    for (Data mData : fileData.getChildren()) {
                         try {
                             int itemId = Integer.parseInt(mData.getName());
                             itemsWithNoNameProperty.put(itemId, curType);

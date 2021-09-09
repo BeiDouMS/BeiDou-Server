@@ -22,7 +22,7 @@ package server.life;
 
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -229,9 +229,9 @@ public class MapleMonsterInformationProvider {
     public static ArrayList<Pair<Integer, String>> getMobsIDsFromName(String search) {
         MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
         ArrayList<Pair<Integer, String>> retMobs = new ArrayList<>();
-        MapleData data = dataProvider.getData("Mob.img");
+        Data data = dataProvider.getData("Mob.img");
         List<Pair<Integer, String>> mobPairList = new LinkedList<>();
-        for (MapleData mobIdData : data.getChildren()) {
+        for (Data mobIdData : data.getChildren()) {
             int mobIdFromData = Integer.parseInt(mobIdData.getName());
             String mobNameFromData = MapleDataTool.getString(mobIdData.getChildByPath("name"), "NO-NAME");
             mobPairList.add(new Pair<>(mobIdFromData, mobNameFromData));
@@ -268,7 +268,7 @@ public class MapleMonsterInformationProvider {
         String mobName = mobNameCache.get(id);
         if (mobName == null) {
             MapleDataProvider dataProvider = MapleDataProviderFactory.getDataProvider(WZFiles.STRING);
-            MapleData mobData = dataProvider.getData("Mob.img");
+            Data mobData = dataProvider.getData("Mob.img");
             
             mobName = MapleDataTool.getString(mobData.getChildByPath(id + "/name"), "");
             mobNameCache.put(id, mobName);

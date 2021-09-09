@@ -21,7 +21,7 @@
 */
 package server.life;
 
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -47,20 +47,20 @@ public class MobAttackInfoFactory {
         synchronized (mobAttacks) {
             ret = mobAttacks.get(mob.getId() + "" + attack);
             if (ret == null) {
-                MapleData mobData = dataSource.getData(StringUtil.getLeftPaddedStr(mob.getId() + ".img", '0', 11));
+                Data mobData = dataSource.getData(StringUtil.getLeftPaddedStr(mob.getId() + ".img", '0', 11));
                 if (mobData != null) {
 //					MapleData infoData = mobData.getChildByPath("info");
                     String linkedmob = MapleDataTool.getString("link", mobData, "");
                     if (!linkedmob.equals("")) {
                         mobData = dataSource.getData(StringUtil.getLeftPaddedStr(linkedmob + ".img", '0', 11));
                     }
-                    MapleData attackData = mobData.getChildByPath("attack" + (attack + 1) + "/info");
+                    Data attackData = mobData.getChildByPath("attack" + (attack + 1) + "/info");
                    
                     if (attackData == null) {
                     	return null;
                     }
                     
-                    MapleData deadlyAttack = attackData.getChildByPath("deadlyAttack");
+                    Data deadlyAttack = attackData.getChildByPath("deadlyAttack");
                     int mpBurn = MapleDataTool.getInt("mpBurn", attackData, 0);
                     int disease = MapleDataTool.getInt("disease", attackData, 0);
                     int level = MapleDataTool.getInt("level", attackData, 0);

@@ -20,7 +20,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -32,13 +32,13 @@ import server.quest.MapleQuestRequirementType;
 public class MesoRequirement extends MapleQuestRequirement {
         private int meso = 0;
     
-	public MesoRequirement(MapleQuest quest, MapleData data) {
+	public MesoRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.MESO);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		meso = MapleDataTool.getInt(data);
 	}
 	

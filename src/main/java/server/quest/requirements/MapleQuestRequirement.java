@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import server.quest.MapleQuestRequirementType;
 
 /**
@@ -48,7 +48,7 @@ public abstract class MapleQuestRequirement {
 	 * Processes the data and stores it in the class for future use.
 	 * @param data The data to process.
 	 */
-	public abstract void processData(MapleData data);
+	public abstract void processData(Data data);
 	
 	public MapleQuestRequirementType getType() {
             return type;

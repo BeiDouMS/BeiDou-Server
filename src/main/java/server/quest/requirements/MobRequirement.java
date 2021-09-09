@@ -23,7 +23,7 @@ package server.quest.requirements;
 
 import client.Character;
 import client.QuestStatus;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -40,7 +40,7 @@ public class MobRequirement extends MapleQuestRequirement {
 	Map<Integer, Integer> mobs = new HashMap<>();
 	private int questID;
 	
-	public MobRequirement(MapleQuest quest, MapleData data) {
+	public MobRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.MOB);
 		questID = quest.getId();
                 processData(data);
@@ -51,8 +51,8 @@ public class MobRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData questEntry : data.getChildren()) {
+	public void processData(Data data) {
+		for (Data questEntry : data.getChildren()) {
 			int mobID = MapleDataTool.getInt(questEntry.getChildByPath("id"));
 			int countReq = MapleDataTool.getInt(questEntry.getChildByPath("count"));
 			mobs.put(mobID, countReq);

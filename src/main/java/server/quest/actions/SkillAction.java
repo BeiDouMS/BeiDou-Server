@@ -25,7 +25,7 @@ import client.Character;
 import client.Job;
 import client.Skill;
 import client.SkillFactory;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -43,26 +43,26 @@ public class SkillAction extends MapleQuestAction {
 	int itemEffect;
 	Map<Integer, SkillData> skillData = new HashMap<>();
 	
-	public SkillAction(MapleQuest quest, MapleData data) {
+	public SkillAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.SKILL, quest);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData sEntry : data) {
+	public void processData(Data data) {
+		for (Data sEntry : data) {
 			byte skillLevel = 0;
 			int skillid = MapleDataTool.getInt(sEntry.getChildByPath("id"));
-			MapleData skillLevelData = sEntry.getChildByPath("skillLevel");
+			Data skillLevelData = sEntry.getChildByPath("skillLevel");
 			if(skillLevelData != null)
 				skillLevel = (byte) MapleDataTool.getInt(skillLevelData);
 			int masterLevel = MapleDataTool.getInt(sEntry.getChildByPath("masterLevel"));
 			List<Integer> jobs = new ArrayList<>();
 			
-			MapleData applicableJobs = sEntry.getChildByPath("job");
+			Data applicableJobs = sEntry.getChildByPath("job");
 			if(applicableJobs != null) {
-				for (MapleData applicableJob : applicableJobs.getChildren()) {
+				for (Data applicableJob : applicableJobs.getChildren()) {
 					jobs.add(MapleDataTool.getInt(applicableJob));
 				}
 			}

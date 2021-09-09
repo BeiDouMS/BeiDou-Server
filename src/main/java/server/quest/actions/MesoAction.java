@@ -23,7 +23,7 @@ package server.quest.actions;
 
 import client.Character;
 import config.YamlConfig;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
@@ -35,7 +35,7 @@ import server.quest.MapleQuestActionType;
 public class MesoAction extends MapleQuestAction {
 	int mesos;
 	
-	public MesoAction(MapleQuest quest, MapleData data) {
+	public MesoAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.MESO, quest);
 		questID = quest.getId();
 		processData(data);
@@ -43,7 +43,7 @@ public class MesoAction extends MapleQuestAction {
 	
 	
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		mesos = MapleDataTool.getInt(data);
 	}
 	

@@ -1,7 +1,7 @@
 package server.partyquest;
 
 import client.Disease;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -40,7 +40,7 @@ public class MapleCarnivalFactory {
         if (skills.size() != 0) {
             return;
         }
-        for (MapleData z : dataRoot.getData("MCSkill.img")) {
+        for (Data z : dataRoot.getData("MCSkill.img")) {
             Integer id = Integer.parseInt(z.getName());
             MCSkill ms = new MCSkill(MapleDataTool.getInt("spendCP", z, 0), MapleDataTool.getInt("mobSkillID", z, 0), MapleDataTool.getInt("level", z, 0), MapleDataTool.getInt("target", z, 1) > 1);
             
@@ -51,7 +51,7 @@ public class MapleCarnivalFactory {
                 singleTargetedSkills.add(id);
             }
         }
-        for (MapleData z : dataRoot.getData("MCGuardian.img")) {
+        for (Data z : dataRoot.getData("MCGuardian.img")) {
             guardians.put(Integer.parseInt(z.getName()), new MCSkill(MapleDataTool.getInt("spendCP", z, 0), MapleDataTool.getInt("mobSkillID", z, 0), MapleDataTool.getInt("level", z, 0), true));
         }
     }

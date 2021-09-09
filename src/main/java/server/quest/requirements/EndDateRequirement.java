@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -37,7 +37,7 @@ public class EndDateRequirement extends MapleQuestRequirement {
 	private String timeStr;
 	
 	
-	public EndDateRequirement(MapleQuest quest, MapleData data) {
+	public EndDateRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.END_DATE);
 		processData(data);
 	}
@@ -47,7 +47,7 @@ public class EndDateRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
+	public void processData(Data data) {
 		timeStr = MapleDataTool.getString(data);
 	}
 	

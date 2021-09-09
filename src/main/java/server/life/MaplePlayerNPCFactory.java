@@ -20,7 +20,7 @@
 package server.life;
 
 import net.server.Server;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -47,7 +47,7 @@ public class MaplePlayerNPCFactory {
     }
     
     private static void loadDeveloperRoomMetadata(MapleDataProvider npc) {
-        MapleData thisData = npc.getData("9977777.img");
+        Data thisData = npc.getData("9977777.img");
         if(thisData != null) {
             MapleDataProvider map = MapleDataProviderFactory.getDataProvider(WZFiles.MAP);
             
@@ -57,7 +57,7 @@ public class MaplePlayerNPCFactory {
                 
                 thisData = sound.getData("Field.img");
                 if(thisData != null) {
-                    MapleData md = thisData.getChildByPath("anthem/brazil");
+                    Data md = thisData.getChildByPath("anthem/brazil");
                     if(md != null) {
                         Server.getInstance().setAvailableDeveloperRoom();
                     }
@@ -71,9 +71,9 @@ public class MaplePlayerNPCFactory {
         loadDeveloperRoomMetadata(npc);
 
         MapleDataProvider etc = MapleDataProviderFactory.getDataProvider(WZFiles.ETC);
-        MapleData dnpcData = etc.getData("DeveloperNpc.img");
+        Data dnpcData = etc.getData("DeveloperNpc.img");
         if(dnpcData != null) {
-            for (MapleData data : dnpcData.getChildren()) {
+            for (Data data : dnpcData.getChildren()) {
                 int scriptId = Integer.parseInt(data.getName());
 
                 String name = MapleDataTool.getString("name", data, "");
@@ -90,7 +90,7 @@ public class MaplePlayerNPCFactory {
                 int CY = MapleDataTool.getIntConvert("cy", data, 0);
 
                 Map<Short, Integer> equips = new HashMap<>();
-                for (MapleData edata : data.getChildByPath("equips").getChildren()) {
+                for (Data edata : data.getChildByPath("equips").getChildren()) {
                     short equippos = (short) MapleDataTool.getIntConvert("pos", edata);
                     int equipid = MapleDataTool.getIntConvert("itemid", edata);
 
@@ -107,7 +107,7 @@ public class MaplePlayerNPCFactory {
                 runningDeveloperOid++;
             }
         } else {
-            MapleData thisData = npc.getData("9977777.img");
+            Data thisData = npc.getData("9977777.img");
             
             if(thisData != null) {
                 byte[] encData = {0x52,0x6F,0x6E,0x61,0x6E};

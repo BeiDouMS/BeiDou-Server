@@ -27,7 +27,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.MapleItemInformationProvider;
 import server.quest.MapleQuest;
@@ -50,21 +50,21 @@ import java.util.List;
 public class ItemAction extends MapleQuestAction {
 	List<ItemData> items = new ArrayList<>();
 	
-	public ItemAction(MapleQuest quest, MapleData data) {
+	public ItemAction(MapleQuest quest, Data data) {
 		super(MapleQuestActionType.ITEM, quest);
 		processData(data);
 	}
 	
 	
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData iEntry : data.getChildren()) {
+	public void processData(Data data) {
+		for (Data iEntry : data.getChildren()) {
 			int id = MapleDataTool.getInt(iEntry.getChildByPath("id"));
 			int count = MapleDataTool.getInt(iEntry.getChildByPath("count"), 1);
                         int period = MapleDataTool.getInt(iEntry.getChildByPath("period"), 0);
 			
 			Integer prop = null;
-			MapleData propData = iEntry.getChildByPath("prop");
+			Data propData = iEntry.getChildByPath("prop");
 			if(propData != null)
 				prop = MapleDataTool.getInt(propData);
 			

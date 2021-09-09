@@ -22,7 +22,7 @@
 package server.quest.requirements;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -35,14 +35,14 @@ public class FieldEnterRequirement extends MapleQuestRequirement {
 	private int mapId = -1;
 	
 	
-	public FieldEnterRequirement(MapleQuest quest, MapleData data) {
+	public FieldEnterRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.FIELD_ENTER);
 		processData(data);
 	}
 	
 	@Override
-	public void processData(MapleData data) {
-		MapleData zeroField = data.getChildByPath("0");
+	public void processData(Data data) {
+		Data zeroField = data.getChildByPath("0");
 		if (zeroField != null) {
 			 mapId = MapleDataTool.getInt(zeroField);
 		}

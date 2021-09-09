@@ -20,7 +20,7 @@ package server.quest.requirements;
 
 import client.Character;
 import client.QuestStatus;
-import provider.MapleData;
+import provider.Data;
 import provider.MapleDataTool;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestRequirementType;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class QuestRequirement extends MapleQuestRequirement {
 	Map<Integer, Integer> quests = new HashMap<>();
 	
-	public QuestRequirement(MapleQuest quest, MapleData data) {
+	public QuestRequirement(MapleQuest quest, Data data) {
 		super(MapleQuestRequirementType.QUEST);
 		processData(data);
 	}
@@ -45,8 +45,8 @@ public class QuestRequirement extends MapleQuestRequirement {
 	 * @param data 
 	 */
 	@Override
-	public void processData(MapleData data) {
-		for (MapleData questEntry : data.getChildren()) {
+	public void processData(Data data) {
+		for (Data questEntry : data.getChildren()) {
 			int questID = MapleDataTool.getInt(questEntry.getChildByPath("id"));
 			int stateReq = MapleDataTool.getInt(questEntry.getChildByPath("state"));
 			quests.put(questID, stateReq);

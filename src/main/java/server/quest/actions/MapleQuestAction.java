@@ -19,7 +19,7 @@
 package server.quest.actions;
 
 import client.Character;
-import provider.MapleData;
+import provider.Data;
 import server.quest.MapleQuest;
 import server.quest.MapleQuestActionType;
 
@@ -40,7 +40,7 @@ public abstract class MapleQuestAction {
 	}
 	
 	public abstract void run(Character chr, Integer extSelection);
-	public abstract void processData(MapleData data);
+	public abstract void processData(Data data);
 	
 	public boolean check(Character chr, Integer extSelection) {
 		return true;
