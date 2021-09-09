@@ -30,7 +30,7 @@ import net.server.services.type.ChannelServices;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
-import server.maps.MapleMist;
+import server.maps.Mist;
 import tools.ArrayMap;
 import tools.Randomizer;
 
@@ -194,7 +194,7 @@ public class MobSkill {
                 }
                 break;
             case 131: // Mist
-                monster.getMap().spawnMist(new MapleMist(calculateBoundingBox(monster.getPosition()), monster, this), x * 100, false, false, false);
+                monster.getMap().spawnMist(new Mist(calculateBoundingBox(monster.getPosition()), monster, this), x * 100, false, false, false);
                 break;
             case 132:
                 disease = Disease.CONFUSE;

@@ -2069,7 +2069,7 @@ public class MapleMap {
         }, null);
     }
 
-    public void spawnMist(final MapleMist mist, final int duration, boolean poison, boolean fake, boolean recovery) {
+    public void spawnMist(final Mist mist, final int duration, boolean poison, boolean fake, boolean recovery) {
         addMapObject(mist);
         broadcastMessage(fake ? mist.makeFakeSpawnData(30) : mist.makeSpawnData());
         TimerManager tMan = TimerManager.getInstance();

@@ -35,19 +35,20 @@ import tools.PacketCreator;
 import java.awt.*;
 
 /**
- *
  * @author LaiLaiNoob
  */
-public class MapleMist extends AbstractMapObject {
-    private Rectangle mistPosition;
+public class Mist extends AbstractMapObject {
+    private final Rectangle mistPosition;
     private Character owner = null;
     private Monster mob = null;
     private MapleStatEffect source;
     private MobSkill skill;
-    private boolean isMobMist, isPoisonMist, isRecoveryMist;
-    private int skillDelay;
+    private final boolean isMobMist;
+    private boolean isPoisonMist;
+    private boolean isRecoveryMist;
+    private final int skillDelay;
 
-    public MapleMist(Rectangle mistPosition, Monster mob, MobSkill skill) {
+    public Mist(Rectangle mistPosition, Monster mob, MobSkill skill) {
         this.mistPosition = mistPosition;
         this.mob = mob;
         this.skill = skill;
@@ -57,7 +58,7 @@ public class MapleMist extends AbstractMapObject {
         skillDelay = 0;
     }
 
-    public MapleMist(Rectangle mistPosition, Character owner, MapleStatEffect source) {
+    public Mist(Rectangle mistPosition, Character owner, MapleStatEffect source) {
         this.mistPosition = mistPosition;
         this.owner = owner;
         this.source = source;
@@ -69,11 +70,11 @@ public class MapleMist extends AbstractMapObject {
             case Evan.RECOVERY_AURA:
                 isRecoveryMist = true;
                 break;
-                
+
             case Shadower.SMOKE_SCREEN: // Smoke Screen
                 isPoisonMist = false;
                 break;
-                
+
             case FPMage.POISON_MIST: // FP mist
             case BlazeWizard.FLAME_GEAR: // Flame Gear
             case NightWalker.POISON_BOMB: // Poison Bomb
@@ -105,9 +106,9 @@ public class MapleMist extends AbstractMapObject {
     }
 
     public boolean isRecoveryMist() {
-    	return isRecoveryMist;
+        return isRecoveryMist;
     }
-    
+
     public int getSkillDelay() {
         return skillDelay;
     }

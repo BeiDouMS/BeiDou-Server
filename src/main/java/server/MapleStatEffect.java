@@ -1029,7 +1029,7 @@ public class MapleStatEffect {
             }
         } else if (isMist()) {
             Rectangle bounds = calculateBoundingBox(sourceid == NightWalker.POISON_BOMB ? pos : applyfrom.getPosition(), applyfrom.isFacingLeft());
-            MapleMist mist = new MapleMist(bounds, applyfrom, this);
+            Mist mist = new Mist(bounds, applyfrom, this);
             applyfrom.getMap().spawnMist(mist, getDuration(), mist.isPoisonMist(), false, mist.isRecoveryMist());
         } else if (isTimeLeap()) {
             applyto.removeAllCooldownsExcept(Buccaneer.TIME_LEAP, true);

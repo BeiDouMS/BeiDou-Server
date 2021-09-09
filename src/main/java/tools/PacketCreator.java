@@ -3981,7 +3981,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnMist(int objId, int ownerChrId, int skill, int level, MapleMist mist) {
+    public static Packet spawnMist(int objId, int ownerChrId, int skill, int level, Mist mist) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MIST);
         p.writeInt(objId);
         p.writeInt(mist.isMobMist() ? 0 : mist.isPoisonMist() ? 1 : mist.isRecoveryMist() ? 4 : 2); // mob mist = 0, player poison = 1, smokescreen = 2, unknown = 3, recovery = 4
