@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.MapleClient;
 import client.inventory.InventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -47,13 +47,13 @@ public final class ItemMoveHandler extends AbstractPacketHandler {
         short quantity = p.readShort();
         
         if (src < 0 && action > 0) {
-            MapleInventoryManipulator.unequip(c, src, action);
+            InventoryManipulator.unequip(c, src, action);
         } else if (action < 0) {
-            MapleInventoryManipulator.equip(c, src, action);
+            InventoryManipulator.equip(c, src, action);
         } else if (action == 0) {
-            MapleInventoryManipulator.drop(c, type, src, quantity);
+            InventoryManipulator.drop(c, type, src, quantity);
         } else {
-            MapleInventoryManipulator.move(c, type, src, action);
+            InventoryManipulator.move(c, type, src, action);
         }
         
         if (c.getPlayer().getMap().getHPDec() > 0) c.getPlayer().resetHpDecreaseTask();

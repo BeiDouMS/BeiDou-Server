@@ -25,7 +25,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import scripting.event.EventInstanceManager;
 import scripting.event.EventManager;
 import tools.DatabaseConnection;
@@ -126,7 +126,7 @@ public class MapleMarriage extends EventInstanceManager {
             }
 
             for (Item item : gifts) {
-                MapleInventoryManipulator.addFromDrop(chr.getClient(), item, false);
+                InventoryManipulator.addFromDrop(chr.getClient(), item, false);
             }
 
             return true;

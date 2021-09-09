@@ -2,7 +2,7 @@ package server.minigame;
 
 import client.MapleClient;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -72,7 +72,7 @@ public class MapleRockPaperScissor{
 
 	public final void reward(final MapleClient c){
 		if(win){
-			MapleInventoryManipulator.addFromDrop(c, new Item(4031332 + round, (short) 0, (short) 1), true);
+			InventoryManipulator.addFromDrop(c, new Item(4031332 + round, (short) 0, (short) 1), true);
 		}
 		c.getPlayer().setRPS(null);
 	}

@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.InventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleTrade;
@@ -94,7 +94,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                         if (wheel && chr.haveItemWithId(5510000, false)) {
                             // thanks lucasziron (lziron) for showing revivePlayer() triggering by Wheel
 
-                            MapleInventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
+                            InventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
                             chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(5510000, false)));
 
                             chr.updateHp(50);

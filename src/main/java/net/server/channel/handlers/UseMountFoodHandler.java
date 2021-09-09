@@ -27,7 +27,7 @@ import client.MapleMount;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.game.ExpTable;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -73,7 +73,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
                             mountLevelup = levelup;
                         }
 
-                        MapleInventoryManipulator.removeById(c, InventoryType.USE, itemid, 1, true, false);
+                        InventoryManipulator.removeById(c, InventoryType.USE, itemid, 1, true, false);
                     }
                 } finally {
                     useInv.unlockInventory();

@@ -28,7 +28,7 @@ import client.MapleClient;
 import client.command.Command;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 
 public class ClearSlotCommand extends Command {
     {
@@ -49,31 +49,31 @@ public class ClearSlotCommand extends Command {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 for (int i = 0; i < 101; i++) {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("All Slots Cleared.");
                 break;
@@ -82,7 +82,7 @@ public class ClearSlotCommand extends Command {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Equipment Slot Cleared.");
                 break;
@@ -91,7 +91,7 @@ public class ClearSlotCommand extends Command {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Use Slot Cleared.");
                 break;
@@ -100,7 +100,7 @@ public class ClearSlotCommand extends Command {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Set-Up Slot Cleared.");
                 break;
@@ -109,7 +109,7 @@ public class ClearSlotCommand extends Command {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("ETC Slot Cleared.");
                 break;
@@ -118,7 +118,7 @@ public class ClearSlotCommand extends Command {
                     Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
                     if (tempItem == null)
                         continue;
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
                 }
                 player.yellowMessage("Cash Slot Cleared.");
                 break;

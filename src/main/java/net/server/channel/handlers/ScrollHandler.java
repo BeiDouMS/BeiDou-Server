@@ -27,7 +27,7 @@ import client.Skill;
 import client.SkillFactory;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -128,10 +128,10 @@ public final class ScrollHandler extends AbstractPacketHandler {
                             return;
                         }
                         
-                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
                     }
                     
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
                 } finally {
                     useInventory.unlockInventory();
                 }

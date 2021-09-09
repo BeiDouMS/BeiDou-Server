@@ -27,7 +27,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
 import client.inventory.Pet;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import server.maps.MapleMapItem;
 import server.maps.MapleMapObject;
 import server.maps.MapleMapObjectType;
@@ -63,8 +63,8 @@ public class ForceVacCommand extends Command {
                     if (petId == -1) {
                         continue;
                     }
-                    MapleInventoryManipulator.addById(c, mapItem.getItem().getItemId(), mapItem.getItem().getQuantity(), null, petId);
-                } else if (MapleInventoryManipulator.addFromDrop(c, mapItem.getItem(), true)) {
+                    InventoryManipulator.addById(c, mapItem.getItem().getItemId(), mapItem.getItem().getQuantity(), null, petId);
+                } else if (InventoryManipulator.addFromDrop(c, mapItem.getItem(), true)) {
                     if (mapItem.getItemId() == 4031868) {
                         player.updateAriantScore();
                     }

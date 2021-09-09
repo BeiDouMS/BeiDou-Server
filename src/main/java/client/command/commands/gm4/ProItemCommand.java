@@ -29,7 +29,7 @@ import client.command.Command;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
 
@@ -63,7 +63,7 @@ public class ProItemCommand extends Command {
             it.setOwner(player.getName());
 
             hardsetItemStats((Equip) it, stat, spdjmp);
-            MapleInventoryManipulator.addFromDrop(c, it);
+            InventoryManipulator.addFromDrop(c, it);
         } else {
             player.dropMessage(6, "Make sure it's an equippable item.");
         }

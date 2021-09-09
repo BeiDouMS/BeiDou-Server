@@ -28,7 +28,7 @@ import client.SkillFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
@@ -76,7 +76,7 @@ public final class SkillBookHandler extends AbstractPacketHandler {
                             return;
                         }
 
-                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
                     } finally {
                         inv.unlockInventory();
                     }

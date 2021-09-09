@@ -24,7 +24,7 @@ import client.MapleClient;
 import client.SkillFactory;
 import client.inventory.InventoryType;
 import client.inventory.Pet;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import provider.MapleDataProvider;
 import provider.MapleDataProviderFactory;
 import provider.MapleDataTool;
@@ -61,8 +61,8 @@ public class SpawnPetProcessor {
                             return;
                         }
                         long expiration = chr.getInventory(InventoryType.CASH).getItem(slot).getExpiration();
-                        MapleInventoryManipulator.removeById(c, InventoryType.CASH, petid, (short) 1, false, false);
-                        MapleInventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
+                        InventoryManipulator.removeById(c, InventoryType.CASH, petid, (short) 1, false, false);
+                        InventoryManipulator.addById(c, evolveid, (short) 1, null, petId, expiration);
                         
                         c.sendPacket(PacketCreator.enableActions());
                         return;

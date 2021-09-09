@@ -25,7 +25,7 @@ import client.*;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
@@ -109,7 +109,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                                         inv.lockInventory();
                                         try {
                                             qty = Math.min(chr.countItem(loseItem.getId()), dropCount);
-                                            MapleInventoryManipulator.removeById(c, type, loseItem.getId(), qty, false, false);
+                                            InventoryManipulator.removeById(c, type, loseItem.getId(), qty, false, false);
                                         } finally {
                                             inv.unlockInventory();
                                         }

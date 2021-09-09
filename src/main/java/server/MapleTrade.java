@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -120,7 +120,7 @@ public class MapleTrade {
         
         for (Item item : exchangeItems) {
             MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
-            MapleInventoryManipulator.addFromDrop(chr.getClient(), item, show);
+            InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
         
         if (exchangeMeso > 0) {
@@ -150,7 +150,7 @@ public class MapleTrade {
         boolean show = YamlConfig.config.server.USE_DEBUG;
         
         for (Item item : items) {
-            MapleInventoryManipulator.addFromDrop(chr.getClient(), item, show);
+            InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
         if (meso > 0) {
             chr.gainMeso(meso, show, true, show);

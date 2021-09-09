@@ -23,7 +23,7 @@ package client.inventory;
 
 import client.MapleCharacter;
 import client.MapleClient;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -497,7 +497,7 @@ public class Inventory implements Iterable<Item> {
             for (Integer itValue : it.getValue()) {
                 int usedSlots = typesSlotsUsed.get(itemType);
 
-                int result = MapleInventoryManipulator.checkSpaceProgressively(c, it.getKey(), itValue, "", usedSlots, useProofInv);
+                int result = InventoryManipulator.checkSpaceProgressively(c, it.getKey(), itValue, "", usedSlots, useProofInv);
                 boolean hasSpace = ((result % 2) != 0);
 
                 if (!hasSpace) {
@@ -583,7 +583,7 @@ public class Inventory implements Iterable<Item> {
 
                 //System.out.print("inserting " + itemId.intValue() + " with type " + itemType + " qty " + it.getValue() + " owner '" + rcvOwners.get(it.getKey()) + "' current usedSlots:");
                 //for(Integer i : typesSlotsUsed) System.out.print(" " + i);
-                int result = MapleInventoryManipulator.checkSpaceProgressively(c, itemId, itValue, rcvOwners.get(it.getKey()), usedSlots, useProofInv);
+                int result = InventoryManipulator.checkSpaceProgressively(c, itemId, itValue, rcvOwners.get(it.getKey()), usedSlots, useProofInv);
                 boolean hasSpace = ((result % 2) != 0);
                 //System.out.print(" -> hasSpace: " + hasSpace + " RESULT : " + result + "\n");
 

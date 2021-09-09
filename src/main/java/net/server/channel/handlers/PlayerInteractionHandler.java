@@ -27,7 +27,7 @@ import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
@@ -363,7 +363,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 if (shop != null && shop.isOwner(chr)) {
                     if(YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
                         try {
-                            MapleInventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
+                            InventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
                         } catch(RuntimeException re) {} // fella does not have a player shop permit...
                     }
 
@@ -537,7 +537,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                             tradeItem.setPosition(targetSlot);
                             
                             if (trade.addItem(tradeItem)) {
-                                MapleInventoryManipulator.removeFromSlot(c, ivType, item.getPosition(), quantity, true);
+                                InventoryManipulator.removeFromSlot(c, ivType, item.getPosition(), quantity, true);
                                 
                                 trade.getChr().sendPacket(PacketCreator.getTradeItemAdd((byte) 0, tradeItem));
                                 if (trade.getPartner() != null) {
@@ -609,9 +609,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                     
                     if (ItemConstants.isRechargeable(ivItem.getItemId())) {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
                     } else {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
                     }
                     
                     c.sendPacket(PacketCreator.getPlayerShopItemUpdate(shop));
@@ -627,9 +627,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
                     
                     if (ItemConstants.isRechargeable(ivItem.getItemId())) {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, ivItem.getQuantity(), true);
                     } else {
-                        MapleInventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
+                        InventoryManipulator.removeFromSlot(c, ivType, slot, (short) (bundles * perBundle), true);
                     }
                     
                     c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));

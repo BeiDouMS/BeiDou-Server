@@ -106,7 +106,7 @@ function end(mode, type, selection) {
             qm.evolvePet(i, after);
 //            var petId = Pet.createPet(rand + 5000049, level, closeness, fullness);
 //            if (petId == -1) return;
-//            MapleInventoryManipulator.addById(qm.getClient(), rand+5000049, 1, "", petId);
+//            InventoryManipulator.addById(qm.getClient(), rand+5000049, 1, "", petId);
             qm.dispose();
         } else {
             qm.dropMessage(1,"Your inventory is full");

@@ -12,7 +12,7 @@ import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
@@ -69,7 +69,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                                         newItem = item.copy();
 
                                                         marriage.addGiftItem(groomWishlist, newItem);
-                                                        MapleInventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
+                                                        InventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
                                                         
                                                         MapleKarmaManipulator.toggleKarmaFlagToUntradeable(newItem);
                                                         marriage.setIntProperty(groomWishlistProp, giftCount + 1);
@@ -115,7 +115,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                     marriage.removeGiftItem(groomWishlist, item);
                                     marriage.saveGiftItemsToDb(c, groomWishlist, chr.getId());
 
-                                    MapleInventoryManipulator.addFromDrop(c, item, true);
+                                    InventoryManipulator.addFromDrop(c, item, true);
 
                                     c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, marriage.getWishlistItems(groomWishlist), marriage.getGiftItems(c, groomWishlist)));
                                 } else {
@@ -135,7 +135,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                 items.remove(itemPos);
                                 MapleMarriage.saveGiftItemsToDb(c, items, chr.getId());
 
-                                MapleInventoryManipulator.addFromDrop(c, item, true);
+                                InventoryManipulator.addFromDrop(c, item, true);
                                 c.sendPacket(WeddingPackets.onWeddingGiftResult((byte) 0xF, Collections.singletonList(""), items));
                             } else {
                                 c.getPlayer().dropMessage(1, "Free a slot on your inventory before collecting this item.");

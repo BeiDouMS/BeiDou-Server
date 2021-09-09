@@ -27,7 +27,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.command.Command;
 import client.inventory.Pet;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import server.MapleItemInformationProvider;
@@ -69,7 +69,7 @@ public class ItemCommand extends Command {
                         long expiration = System.currentTimeMillis() + (days * 24 * 60 * 60 * 1000);
                         int petid = Pet.createPet(itemId);
 
-                        MapleInventoryManipulator.addById(c, itemId, quantity, player.getName(), petid, expiration);
+                        InventoryManipulator.addById(c, itemId, quantity, player.getName(), petid, expiration);
                         return;
                 } else {
                         player.yellowMessage("Pet Syntax: !item <itemid> <expiration>");
@@ -83,6 +83,6 @@ public class ItemCommand extends Command {
                 flag |= ItemConstants.UNTRADEABLE;
         }
         
-        MapleInventoryManipulator.addById(c, itemId, quantity, player.getName(), -1, flag, -1);
+        InventoryManipulator.addById(c, itemId, quantity, player.getName(), -1, flag, -1);
     }
 }

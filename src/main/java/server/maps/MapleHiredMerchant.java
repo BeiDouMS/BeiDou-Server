@@ -27,7 +27,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
@@ -226,7 +226,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                         return;
                     }
                     
-                    MapleInventoryManipulator.addFromDrop(chr.getClient(), iitem, true);
+                    InventoryManipulator.addFromDrop(chr.getClient(), iitem, true);
                 }
                 
                 removeFromSlot(slot);
@@ -240,7 +240,7 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
     }
     
     private static boolean canBuy(MapleClient c, Item newItem) {    // thanks xiaokelvin (Conrad) for noticing a leaked test code here
-        return MapleInventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && MapleInventoryManipulator.addFromDrop(c, newItem, false);
+        return InventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && InventoryManipulator.addFromDrop(c, newItem, false);
     }
     
     private int getQuantityLeft(int itemid) {
@@ -411,9 +411,9 @@ public class MapleHiredMerchant extends AbstractMapleMapObject {
                 for (MaplePlayerShopItem mpsi : copyItems) {
                     if (mpsi.isExist()) {
                         if (mpsi.getItem().getInventoryType().equals(InventoryType.EQUIP)) {
-                            MapleInventoryManipulator.addFromDrop(c, mpsi.getItem(), false);
+                            InventoryManipulator.addFromDrop(c, mpsi.getItem(), false);
                         } else {
-                            MapleInventoryManipulator.addById(c, mpsi.getItem().getItemId(), (short) (mpsi.getBundles() * mpsi.getItem().getQuantity()), mpsi.getItem().getOwner(), -1, mpsi.getItem().getFlag(), mpsi.getItem().getExpiration());
+                            InventoryManipulator.addById(c, mpsi.getItem().getItemId(), (short) (mpsi.getBundles() * mpsi.getItem().getQuantity()), mpsi.getItem().getOwner(), -1, mpsi.getItem().getFlag(), mpsi.getItem().getExpiration());
                         }
                     }
                 }

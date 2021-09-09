@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -213,7 +213,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                         }
                         ps.executeUpdate();
                         ps.close();
-                        MapleInventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
+                        InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
                         
                         con.close();
                     } catch (SQLException e) {
@@ -343,7 +343,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                             pse.setInt(2, c.getPlayer().getId());
                             pse.executeUpdate();
                         }
-                        MapleInventoryManipulator.addFromDrop(c, i, false);
+                        InventoryManipulator.addFromDrop(c, i, false);
                         c.enableCSActions();
                         c.sendPacket(getCart(c.getPlayer().getId()));
                         c.sendPacket(getMTS(c.getPlayer().getCurrentTab(), c.getPlayer().getCurrentType(), c.getPlayer().getCurrentPage()));

@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import net.packet.Packet;
 import net.server.audit.locks.MonitoredLockType;
@@ -213,7 +213,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
     }
 
     private static boolean canBuy(MapleClient c, Item newItem) {
-        return MapleInventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && MapleInventoryManipulator.addFromDrop(c, newItem, false);
+        return InventoryManipulator.checkSpace(c, newItem.getItemId(), newItem.getQuantity(), newItem.getOwner()) && InventoryManipulator.addFromDrop(c, newItem, false);
     }
     
     public void takeItemBack(int slot, MapleCharacter chr) {
@@ -230,7 +230,7 @@ public class MaplePlayerShop extends AbstractMapleMapObject {
                         return;
                     }
                     
-                    MapleInventoryManipulator.addFromDrop(chr.getClient(), iitem, true);
+                    InventoryManipulator.addFromDrop(chr.getClient(), iitem, true);
                 }
                 
                 removeFromSlot(slot);

@@ -27,7 +27,7 @@ import client.autoban.AutobanFactory;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
@@ -83,12 +83,12 @@ public class StorageProcessor {
                                                         chr.gainMeso(-takeoutFee, false);
                                                 }
 
-                                                if (MapleInventoryManipulator.checkSpace(c, item.getItemId(), item.getQuantity(), item.getOwner())) {                
+                                                if (InventoryManipulator.checkSpace(c, item.getItemId(), item.getQuantity(), item.getOwner())) {
                                                         if (storage.takeOut(item)) {
                                                                 chr.setUsedStorage();
                                                                 
                                                                 MapleKarmaManipulator.toggleKarmaFlagToUntradeable(item);
-                                                                MapleInventoryManipulator.addFromDrop(c, item, false);
+                                                                InventoryManipulator.addFromDrop(c, item, false);
 
                                                                 String itemName = ii.getName(item.getItemId());
                                                                 FilePrinter.print(FilePrinter.STORAGE + c.getAccountName() + ".txt", c.getPlayer().getName() + " took out " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
@@ -142,7 +142,7 @@ public class StorageProcessor {
                                                                         quantity = item.getQuantity();
                                                                 }
                                                                 
-                                                                MapleInventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
+                                                                InventoryManipulator.removeFromSlot(c, invType, slot, quantity, false);
                                                         } else {
                                                                 c.sendPacket(PacketCreator.enableActions());
                                                                 return;

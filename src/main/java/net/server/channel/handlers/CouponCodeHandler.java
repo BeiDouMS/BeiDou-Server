@@ -26,7 +26,7 @@ package net.server.channel.handlers;
 import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -244,7 +244,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                                     cs.addToInventory(it);
                                     cashItems.add(it);
                                 } else {
-                                    MapleInventoryManipulator.addById(c, item, qty, "", -1);
+                                    InventoryManipulator.addById(c, item, qty, "", -1);
                                     items.add(new Pair<>((int) qty, item));
                                 }
                                 break;

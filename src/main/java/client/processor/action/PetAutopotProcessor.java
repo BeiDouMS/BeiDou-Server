@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import server.MapleItemInformationProvider;
 import server.MapleStatEffect;
@@ -150,7 +150,7 @@ public class PetAutopotProcessor {
 
                     while (true) {
                         short qtyToUse = (short) Math.min(qtyCount, toUse.getQuantity());
-                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, qtyToUse, false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, qtyToUse, false);
 
                         curHp += (incHp * qtyToUse);
                         curMp += (incMp * qtyToUse);

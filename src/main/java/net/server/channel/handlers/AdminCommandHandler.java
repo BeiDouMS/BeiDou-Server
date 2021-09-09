@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
@@ -65,7 +65,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 Inventory in = c.getPlayer().getInventory(InventoryType.getByType(type));
                 for (short i = 1; i <= in.getSlotLimit(); i++) { //TODO What is the point of this loop?
                     if (in.getItem(i) != null) {
-                        MapleInventoryManipulator.removeFromSlot(c, InventoryType.getByType(type), i, in.getItem(i).getQuantity(), false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.getByType(type), i, in.getItem(i).getQuantity(), false);
                     }
                     return;
                 }

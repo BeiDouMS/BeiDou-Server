@@ -24,7 +24,7 @@ import client.MapleClient;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
@@ -182,7 +182,7 @@ public class MakerProcessor {
 
                     default:
                         if(toDisassemble != -1) {
-                            MapleInventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (short) pos, (short) 1, false);
+                            InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (short) pos, (short) 1, false);
                         } else {
                             for (Pair<Integer, Integer> pair : recipe.getReqItems()) {
                                 c.getAbstractPlayerInteraction().gainItem(pair.getLeft(), (short) -pair.getRight(), false);
@@ -436,7 +436,7 @@ public class MakerProcessor {
             eqp = ii.randomizeUpgradeStats(eqp);
         }
         
-        MapleInventoryManipulator.addFromDrop(c, item, false, -1);
+        InventoryManipulator.addFromDrop(c, item, false, -1);
         return true;
     }
 }

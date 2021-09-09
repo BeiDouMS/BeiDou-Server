@@ -30,7 +30,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
@@ -254,9 +254,9 @@ public class DueyProcessor {
                     }
 
                     if (ItemConstants.isRechargeable(item.getItemId())) {
-                        MapleInventoryManipulator.removeFromSlot(c, invType, itemPos, item.getQuantity(), true);
+                        InventoryManipulator.removeFromSlot(c, invType, itemPos, item.getQuantity(), true);
                     } else {
-                        MapleInventoryManipulator.removeFromSlot(c, invType, itemPos, amount, true, false);
+                        InventoryManipulator.removeFromSlot(c, invType, itemPos, amount, true, false);
                     }
 
                     item = item.copy();
@@ -324,7 +324,7 @@ public class DueyProcessor {
                 }
 
                 if (quick) {
-                    MapleInventoryManipulator.removeById(c, InventoryType.CASH, 5330000, (short) 1, false, false);
+                    InventoryManipulator.removeById(c, InventoryType.CASH, 5330000, (short) 1, false, false);
                 }
 
                 int packageId = createPackage(sendMesos, sendMessage, c.getPlayer().getName(), recipientCid, quick);
@@ -409,7 +409,7 @@ public class DueyProcessor {
                             return;
                         }
 
-                        if (!MapleInventoryManipulator.checkSpace(c, dpItem.getItemId(), dpItem.getQuantity(), dpItem.getOwner())) {
+                        if (!InventoryManipulator.checkSpace(c, dpItem.getItemId(), dpItem.getQuantity(), dpItem.getOwner())) {
                             int itemid = dpItem.getItemId();
                             if (MapleItemInformationProvider.getInstance().isPickupRestricted(itemid) && c.getPlayer().getInventory(ItemConstants.getInventoryType(itemid)).findById(itemid) != null) {
                                 c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_RECEIVER_WITH_UNIQUE.getCode()));
@@ -419,7 +419,7 @@ public class DueyProcessor {
 
                             return;
                         } else {
-                            MapleInventoryManipulator.addFromDrop(c, dpItem, false);
+                            InventoryManipulator.addFromDrop(c, dpItem, false);
                         }
                     }
 

@@ -25,7 +25,7 @@ import client.MapleCharacter;
 import client.MapleClient;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import provider.MapleData;
 import provider.MapleDataTool;
@@ -142,14 +142,14 @@ public class ItemAction extends MapleQuestAction {
                                 }
                         }
 
-                        MapleInventoryManipulator.removeById(chr.getClient(), type, itemid, quantity, true, false);
+                        InventoryManipulator.removeById(chr.getClient(), type, itemid, quantity, true, false);
                         chr.sendPacket(PacketCreator.getShowItemGain(itemid, (short) count, true));
                 }
                 
                 for(ItemData iEntry: giveItem) {
                         int itemid = iEntry.getId(), count = iEntry.getCount(), period = iEntry.getPeriod();    // thanks Vcoc for noticing quest milestone item not getting removed from inventory after a while
                         
-                        MapleInventoryManipulator.addById(chr.getClient(), itemid, (short) count, "", -1, period > 0 ? (System.currentTimeMillis() + period * 60 * 1000) : -1);
+                        InventoryManipulator.addById(chr.getClient(), itemid, (short) count, "", -1, period > 0 ? (System.currentTimeMillis() + period * 60 * 1000) : -1);
                         chr.sendPacket(PacketCreator.getShowItemGain(itemid, (short) count, true));
                 }
 	}
@@ -212,7 +212,7 @@ public class ItemAction extends MapleQuestAction {
                         for(Pair<Item, InventoryType> it: randomList) {
                                 int idx = it.getRight().getType() - 1;
                             
-                                result = MapleInventoryManipulator.checkSpaceProgressively(c, it.getLeft().getItemId(), it.getLeft().getQuantity(), "", rndUsed.get(idx), false);
+                                result = InventoryManipulator.checkSpaceProgressively(c, it.getLeft().getItemId(), it.getLeft().getQuantity(), "", rndUsed.get(idx), false);
                                 if(result % 2 == 0) {
                                     announceInventoryLimit(Collections.singletonList(it.getLeft().getItemId()), chr);
                                     return false;
@@ -307,7 +307,7 @@ public class ItemAction extends MapleQuestAction {
                             return false;
                         }
                         
-                        MapleInventoryManipulator.addById(chr.getClient(), item.getId(), (short) missingQty);
+                        InventoryManipulator.addById(chr.getClient(), item.getId(), (short) missingQty);
                         FilePrinter.print(FilePrinter.QUEST_RESTORE_ITEM, chr + " obtained " + itemid + " qty. " + missingQty + " from quest " + questID);
                     }
                     return true;

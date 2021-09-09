@@ -28,7 +28,7 @@ import client.inventory.Equip;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -361,7 +361,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     if (chr.getMeso() >= itemPrice) {
                         if (chr.canHold(itemId)) {
                             chr.gainMeso(-itemPrice, false);
-                            MapleInventoryManipulator.addById(c, itemId, (short) 1, "", -1);
+                            InventoryManipulator.addById(c, itemId, (short) 1, "", -1);
                             c.sendPacket(PacketCreator.showBoughtQuestItem(itemId));
                         }
                     }

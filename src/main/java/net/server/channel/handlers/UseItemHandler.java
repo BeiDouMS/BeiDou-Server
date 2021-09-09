@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.MapleDisease;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
@@ -107,7 +107,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
     }
 
     private void remove(MapleClient c, short slot) {
-        MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
+        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, (short) 1, false);
         c.sendPacket(PacketCreator.enableActions());
     }
 }

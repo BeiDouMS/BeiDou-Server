@@ -25,7 +25,7 @@ import client.*;
 import client.creator.veteran.*;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.MapleKarmaManipulator;
 import client.processor.npc.DueyProcessor;
 import client.processor.stat.AssignAPProcessor;
@@ -132,7 +132,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
 
             if (!success) {
-                MapleInventoryManipulator.addById(c, itemId, (short) 1);
+                InventoryManipulator.addById(c, itemId, (short) 1);
                 c.sendPacket(PacketCreator.enableActions());
             }
         } else if (itemType == 505) { // AP/SP reset
@@ -243,7 +243,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     return;
                 }
                 if (getIncubatedItem(c, itemId)) {
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.getByType(inventory2), slot2, (short) 1, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.getByType(inventory2), slot2, (short) 1, false);
                     remove(c, position, itemId);
                 }
                 return;
@@ -570,7 +570,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.sendVegaScroll(scrolled.getLevel() > curlevel ? 0x41 : 0x43));
             //opcodes 0x42, 0x44: "this item cannot be used"; 0x39, 0x45: crashes
 
-            MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, uSlot, (short) 1, false);
+            InventoryManipulator.removeFromSlot(c, InventoryType.USE, uSlot, (short) 1, false);
             remove(c, position, itemId);
 
             final MapleClient client = c;
@@ -612,7 +612,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
             }
 
-            MapleInventoryManipulator.removeFromSlot(c, InventoryType.CASH, position, (short) 1, true, false);
+            InventoryManipulator.removeFromSlot(c, InventoryType.CASH, position, (short) 1, true, false);
         } finally {
             cashInv.unlockInventory();
         }
@@ -630,7 +630,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         if (c.getPlayer().getInventory(InventoryType.getByType((byte) (id / 1000000))).isFull()) {
             return false;
         }
-        MapleInventoryManipulator.addById(c, id, (short) amount);
+        InventoryManipulator.addById(c, id, (short) amount);
         return true;
     }
 }

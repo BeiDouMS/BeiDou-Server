@@ -27,7 +27,7 @@ import client.MapleRing;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.processor.npc.DueyProcessor;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -116,11 +116,11 @@ public final class RingActionHandler extends AbstractPacketHandler {
             source.dropMessage(1, "You may only propose to a " + (source.getGender() == 1 ? "male" : "female") + "!");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
-        } else if (!MapleInventoryManipulator.checkSpace(c, newBoxId, 1, "")) {
+        } else if (!InventoryManipulator.checkSpace(c, newBoxId, 1, "")) {
             source.dropMessage(5, "You don't have a ETC slot available right now!");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
-        } else if (!MapleInventoryManipulator.checkSpace(target.getClient(), newBoxId + 1, 1, "")) {
+        } else if (!InventoryManipulator.checkSpace(target.getClient(), newBoxId + 1, 1, "")) {
             source.dropMessage(5, "The girl you proposed doesn't have a ETC slot available right now.");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
@@ -230,7 +230,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
             
             int partnerMarriageitemid = marriageitemid + ((chr.getGender() == 0) ? 1 : -1);
             if(partner.haveItem(partnerMarriageitemid)) {
-                MapleInventoryManipulator.removeById(partner.getClient(), InventoryType.ETC, partnerMarriageitemid, (short) 1, false, false);
+                InventoryManipulator.removeById(partner.getClient(), InventoryType.ETC, partnerMarriageitemid, (short) 1, false, false);
             }
             
             //partner.sendPacket(Wedding.OnMarriageResult((byte) 0)); ok, how to gracefully unengage someone without the need to cc?
@@ -240,7 +240,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         }
 
         if(chr.haveItem(marriageitemid)) {
-            MapleInventoryManipulator.removeById(chr.getClient(), InventoryType.ETC, marriageitemid, (short) 1, false, false);
+            InventoryManipulator.removeById(chr.getClient(), InventoryType.ETC, marriageitemid, (short) 1, false, false);
         }
         chr.dropMessage(5, "You have successfully break the engagement with " + MapleCharacter.getNameById(partnerid) + ".");
         
@@ -279,14 +279,14 @@ public final class RingActionHandler extends AbstractPacketHandler {
         Equip ringEqp = (Equip) ringObj;
         ringEqp.setRingId(rings.getLeft());
         player.addMarriageRing(MapleRing.loadFromDb(rings.getLeft()));
-        MapleInventoryManipulator.addFromDrop(player.getClient(), ringEqp, false, -1);
+        InventoryManipulator.addFromDrop(player.getClient(), ringEqp, false, -1);
         player.broadcastMarriageMessage();
 
         ringObj = ii.getEquipById(marriageRingId);
         ringEqp = (Equip) ringObj;
         ringEqp.setRingId(rings.getRight());
         partner.addMarriageRing(MapleRing.loadFromDb(rings.getRight()));
-        MapleInventoryManipulator.addFromDrop(partner.getClient(), ringEqp, false, -1);
+        InventoryManipulator.addFromDrop(partner.getClient(), ringEqp, false, -1);
         partner.broadcastMarriageMessage();
     }
     
@@ -327,13 +327,13 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 
                 if (accepted) {
                     final int newItemId = getBoxId(itemid);
-                    if (!MapleInventoryManipulator.checkSpace(c, newItemId, 1, "") || !MapleInventoryManipulator.checkSpace(source.getClient(), newItemId, 1, "")) {
+                    if (!InventoryManipulator.checkSpace(c, newItemId, 1, "") || !InventoryManipulator.checkSpace(source.getClient(), newItemId, 1, "")) {
                         target.sendPacket(PacketCreator.enableActions());
                         return;
                     }
                     
                     try {
-                        MapleInventoryManipulator.removeById(source.getClient(), InventoryType.USE, itemid, 1, false, false);
+                        InventoryManipulator.removeById(source.getClient(), InventoryType.USE, itemid, 1, false, false);
                         
                         int marriageId = c.getWorldServer().createRelationship(source.getId(), target.getId());
                         source.setPartnerId(target.getId()); // engage them (new marriageitemid, partnerid for both)
@@ -342,8 +342,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
                         source.setMarriageItemId(newItemId);
                         target.setMarriageItemId(newItemId + 1);
                         
-                        MapleInventoryManipulator.addById(source.getClient(), newItemId, (short) 1);
-                        MapleInventoryManipulator.addById(c, (newItemId + 1), (short) 1);
+                        InventoryManipulator.addById(source.getClient(), newItemId, (short) 1);
+                        InventoryManipulator.addById(c, (newItemId + 1), (short) 1);
                         
                         source.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
                         target.sendPacket(WeddingPackets.OnMarriageResult(marriageId, source, false));
@@ -405,7 +405,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                                 long expiration = cserv.getWeddingTicketExpireTime(resStatus + 1);
 
                                 MapleCharacter guestChr = c.getWorldServer().getPlayerStorage().getCharacterById(guest);
-                                if(guestChr != null && MapleInventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && MapleInventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
+                                if(guestChr != null && InventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && InventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
                                     guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding!");
                                 } else {
                                     if(guestChr != null && guestChr.isLoggedinWorld()) {

@@ -5,7 +5,7 @@ import client.MapleClient;
 import client.MapleQuestStatus;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.MapleItemInformationProvider;
@@ -55,7 +55,7 @@ public class RaiseIncExpHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    MapleInventoryManipulator.removeFromSlot(c, InventoryType.getByType(inventorytype), slot, (short) 1, false, true);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.getByType(inventorytype), slot, (short) 1, false, true);
                 } finally {
                     inv.unlockInventory();
                 }

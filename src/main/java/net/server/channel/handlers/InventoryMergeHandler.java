@@ -26,7 +26,7 @@ import client.MapleClient;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -73,7 +73,7 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
                     if(dstItem.getItemId() != srcItem.getItemId()) continue;
                     if(dstItem.getQuantity() == ii.getSlotMax(c, inventory.getItem(dst).getItemId())) break;
 
-                    MapleInventoryManipulator.move(c, inventoryType, src, dst);
+                    InventoryManipulator.move(c, inventoryType, src, dst);
                 }
             }
 
@@ -94,7 +94,7 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
                         }
                     }
                     if (itemSlot > 0) {
-                        MapleInventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
+                        InventoryManipulator.move(c, inventoryType, itemSlot, freeSlot);
                     } else {
                         sorted = true;
                     }

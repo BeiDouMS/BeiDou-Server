@@ -27,7 +27,7 @@ import client.creator.CharacterFactoryRecipe;
 import client.inventory.*;
 import client.inventory.Equip.StatUpgrade;
 import client.inventory.manipulator.CashIdGenerator;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import client.keybind.MapleKeyBinding;
 import client.keybind.MapleQuickslotBinding;
 import client.newyear.NewYearCardRecord;
@@ -911,8 +911,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             inv.lockInventory();
             try {
                 for(Item item : new ArrayList<>(inv.list())) {
-                    if(MapleInventoryManipulator.isSandboxItem(item)) {
-                        MapleInventoryManipulator.removeFromSlot(client, invType, item.getPosition(), item.getQuantity(), false);
+                    if(InventoryManipulator.isSandboxItem(item)) {
+                        InventoryManipulator.removeFromSlot(client, invType, item.getPosition(), item.getQuantity(), false);
                         dropMessage(5, "[" + ii.getName(item.getItemId()) + "] has passed its trial conditions and will be removed from your inventory.");
                     }
                 }
@@ -1948,7 +1948,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
                 Item mItem = mapitem.getItem();
                 boolean hasSpaceInventory = true;
-                if (mapitem.getItemId() == 4031865 || mapitem.getItemId() == 4031866 || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = MapleInventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
+                if (mapitem.getItemId() == 4031865 || mapitem.getItemId() == 4031866 || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
                     int mapId = this.getMapId();
                     
                     if ((mapId > 209000000 && mapId < 209000016) || (mapId >= 990000500 && mapId <= 990000502)) {//happyville trees and guild PQ
@@ -1974,7 +1974,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                                 showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
-                            } else if (MapleInventoryManipulator.addFromDrop(client, mItem, true)) {
+                            } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else {
                                 sendPacket(PacketCreator.enableActions());
@@ -2011,7 +2011,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                         if (info != null && info.runOnPickup()) {
                             itemScript = info;
                         } else {
-                            if (!MapleInventoryManipulator.addFromDrop(client, mItem, true)) {
+                            if (!InventoryManipulator.addFromDrop(client, mItem, true)) {
                                 sendPacket(PacketCreator.enableActions());
                                 return;
                             }
@@ -2023,7 +2023,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                         
                         showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
-                    } else if (MapleInventoryManipulator.addFromDrop(client, mItem, true)) {
+                    } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
                         if (mItem.getItemId() == 4031868) {
                             updateAriantScore();
                         }
@@ -2980,7 +2980,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                         
                         if(!toberemove.isEmpty()) {
                             for (Item item : toberemove) {
-                                MapleInventoryManipulator.removeFromSlot(client, inv.getType(), item.getPosition(), item.getQuantity(), true);
+                                InventoryManipulator.removeFromSlot(client, inv.getType(), item.getPosition(), item.getQuantity(), true);
                             }
 
                             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
@@ -2994,7 +2994,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                                     }
                                 }
                                 for (Integer itemid : toadd) {
-                                    MapleInventoryManipulator.addById(client, itemid, (short) 1);
+                                    InventoryManipulator.addById(client, itemid, (short) 1);
                                 }
                             }
 
@@ -5547,9 +5547,9 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
                 if (mpsi.getBundles() >= 2) {
                     Item iItem = mpsi.getItem().copy();
                     iItem.setQuantity((short) (mpsi.getBundles() * iItem.getQuantity()));
-                    MapleInventoryManipulator.addFromDrop(this.getClient(), iItem, false);
+                    InventoryManipulator.addFromDrop(this.getClient(), iItem, false);
                 } else if (mpsi.isExist()) {
-                    MapleInventoryManipulator.addFromDrop(this.getClient(), mpsi.getItem(), true);
+                    InventoryManipulator.addFromDrop(this.getClient(), mpsi.getItem(), true);
                 }
             }
             mps.closeShop();
@@ -6474,8 +6474,8 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
 
         if (YamlConfig.config.server.USE_PERFECT_PITCH && level >= 30) {
             //milestones?
-            if (MapleInventoryManipulator.checkSpace(client, 4310000, (short) 1, "")) {
-                MapleInventoryManipulator.addById(client, 4310000, (short) 1, "", -1);
+            if (InventoryManipulator.checkSpace(client, 4310000, (short) 1, "")) {
+                InventoryManipulator.addById(client, 4310000, (short) 1, "", -1);
             }
         } else if (level == 10) {
             Runnable r = new Runnable() {
@@ -7571,7 +7571,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
         }
         if (possesed > 0 && !GameConstants.isDojo(getMapId())) {
             message("You have used a safety charm, so your EXP points have not been decreased.");
-            MapleInventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
+            InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
             usedSafetyCharm = true;
         } else if (getJob() != MapleJob.BEGINNER) { //Hmm...
             if (!FieldLimit.NO_EXP_DECREASE.check(getMap().getFieldLimit())) {  // thanks Conrad for noticing missing FieldLimit check
@@ -9391,7 +9391,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             }
 
             if (quantity <= iQuant && iQuant > 0) {
-                MapleInventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+                InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
                 int recvMesos = ii.getPrice(itemid, quantity);
                 if (recvMesos > 0) {
                     gainMeso(recvMesos, false);
@@ -9558,7 +9558,7 @@ public class MapleCharacter extends AbstractMapleCharacterObject {
             statups.put(s.getKey(), newVal);
         }
         
-        MapleInventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+        InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
     }
     
     public void setShop(MapleShop shop) {

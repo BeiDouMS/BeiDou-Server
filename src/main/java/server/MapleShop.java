@@ -25,7 +25,7 @@ import client.MapleClient;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.Pet;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -93,14 +93,14 @@ public class MapleShop {
         if (item.getPrice() > 0) {
             int amount = (int)Math.min((float) item.getPrice() * quantity, Integer.MAX_VALUE);
             if (c.getPlayer().getMeso() >= amount) {
-                if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
+                if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                     if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
-                        MapleInventoryManipulator.addById(c, itemId, quantity, "", -1);          
+                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
                         c.getPlayer().gainMeso(-amount, false);
                     } else {
                         short slotMax = ii.getSlotMax(c, item.getItemId());
                         quantity = slotMax;
-                        MapleInventoryManipulator.addById(c, itemId, quantity, "", -1);
+                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
                         c.getPlayer().gainMeso(-item.getPrice(), false);
                     }
                     c.sendPacket(PacketCreator.shopTransaction((byte) 0));
@@ -114,15 +114,15 @@ public class MapleShop {
             int amount = (int)Math.min((float) item.getPitch() * quantity, Integer.MAX_VALUE);
             
             if (c.getPlayer().getInventory(InventoryType.ETC).countById(4310000) >= amount) {
-                if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
+                if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                     if (!ItemConstants.isRechargeable(itemId)) {
-                        MapleInventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4310000, amount, false, false);
+                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
+                        InventoryManipulator.removeById(c, InventoryType.ETC, 4310000, amount, false, false);
                     } else {
                         short slotMax = ii.getSlotMax(c, item.getItemId());
                         quantity = slotMax;
-                        MapleInventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        MapleInventoryManipulator.removeById(c, InventoryType.ETC, 4310000, amount, false, false);
+                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
+                        InventoryManipulator.removeById(c, InventoryType.ETC, 4310000, amount, false, false);
                     }
                     c.sendPacket(PacketCreator.shopTransaction((byte) 0));
                 } else
@@ -136,12 +136,12 @@ public class MapleShop {
             if (c.getPlayer().getMeso() + value >= cost) {
                 int cardreduce = value - cost;
                 int diff = cardreduce + c.getPlayer().getMeso();
-                if (MapleInventoryManipulator.checkSpace(c, itemId, quantity, "")) {
+                if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                     if (ItemConstants.isPet(itemId)) {
                         int petid = Pet.createPet(itemId);
-                        MapleInventoryManipulator.addById(c, itemId, quantity, "", petid, -1);
+                        InventoryManipulator.addById(c, itemId, quantity, "", petid, -1);
                     } else {
-                        MapleInventoryManipulator.addById(c, itemId, quantity, "", -1, -1);
+                        InventoryManipulator.addById(c, itemId, quantity, "", -1, -1);
                     }
                     c.getPlayer().gainMeso(diff, false);
                 } else {
@@ -196,7 +196,7 @@ public class MapleShop {
         Item item = c.getPlayer().getInventory(type).getItem(slot);
         if(canSell(item, quantity)) {
             quantity = getSellingQuantity(item, quantity);
-            MapleInventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+            InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
             
             MapleItemInformationProvider ii = MapleItemInformationProvider.getInstance();
             int recvMesos = ii.getPrice(item.getItemId(), quantity);

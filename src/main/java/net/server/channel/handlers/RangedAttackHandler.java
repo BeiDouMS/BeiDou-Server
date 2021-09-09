@@ -26,7 +26,7 @@ import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.WeaponType;
-import client.inventory.manipulator.MapleInventoryManipulator;
+import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
@@ -167,7 +167,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     }
 
                     if(slot < 0) System.out.println("<ERROR> Projectile to use was unable to be found.");
-                    else MapleInventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
+                    else InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
                 }
             }
             
