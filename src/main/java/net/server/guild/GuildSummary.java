@@ -21,15 +21,15 @@
 */
 package net.server.guild;
 
-public class MapleGuildSummary {
-    private String name;
-    private short logoBG;
-    private byte logoBGColor;
-    private short logo;
-    private byte logoColor;
-    private int allianceId;
+public class GuildSummary {
+    private final String name;
+    private final short logoBG;
+    private final byte logoBGColor;
+    private final short logo;
+    private final byte logoColor;
+    private final int allianceId;
 
-    public MapleGuildSummary(Guild g) {
+    public GuildSummary(Guild g) {
         this.name = g.getName();
         this.logoBG = (short) g.getLogoBG();
         this.logoBGColor = (byte) g.getLogoBGColor();

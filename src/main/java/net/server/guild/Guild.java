@@ -333,7 +333,7 @@ public class Guild {
                             if (bcop == BCOp.DISBAND) {
                                 Server.getInstance().getWorld(world).setGuildAndRank(notifications.get(b), 0, 5, exceptionId);
                             } else if (bcop == BCOp.EMBLEMCHANGE) {
-                                Server.getInstance().getWorld(world).changeEmblem(this.id, notifications.get(b), new MapleGuildSummary(this));
+                                Server.getInstance().getWorld(world).changeEmblem(this.id, notifications.get(b), new GuildSummary(this));
                             } else {
                                 Server.getInstance().getWorld(world).sendPacket(notifications.get(b), packet, exceptionId);
                             }

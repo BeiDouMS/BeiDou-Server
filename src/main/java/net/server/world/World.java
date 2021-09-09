@@ -47,7 +47,7 @@ import net.server.coordinator.world.InviteCoordinator.InviteType;
 import net.server.guild.Guild;
 import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.guild.MapleGuildSummary;
+import net.server.guild.GuildSummary;
 import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.WorldServices;
@@ -85,7 +85,7 @@ public class World {
     private Map<Integer, Family> families = new LinkedHashMap<>();
     private Map<Integer, Integer> relationships = new HashMap<>();
     private Map<Integer, Pair<Integer, Integer>> relationshipCouples = new HashMap<>();
-    private Map<Integer, MapleGuildSummary> gsStore = new HashMap<>();
+    private Map<Integer, GuildSummary> gsStore = new HashMap<>();
     private PlayerStorage players = new PlayerStorage();
     private ServicesManager services = new ServicesManager(WorldServices.SAVE_CHARACTER);
     private MatchCheckerCoordinator matchChecker = new MatchCheckerCoordinator();
@@ -582,7 +582,7 @@ public class World {
         int gid = mgc.getGuildId();
         Guild g = Server.getInstance().getGuild(gid, mgc.getWorld(), mgc.getCharacter());
         if (gsStore.get(gid) == null) {
-            gsStore.put(gid, new MapleGuildSummary(g));
+            gsStore.put(gid, new GuildSummary(g));
         }
         return g;
     }
@@ -607,19 +607,19 @@ public class World {
         return status;
     }
     
-    public MapleGuildSummary getGuildSummary(int gid, int wid) {
+    public GuildSummary getGuildSummary(int gid, int wid) {
         if (gsStore.containsKey(gid)) {
             return gsStore.get(gid);
         } else {
             Guild g = Server.getInstance().getGuild(gid, wid, null);
             if (g != null) {
-                gsStore.put(gid, new MapleGuildSummary(g));
+                gsStore.put(gid, new GuildSummary(g));
             }
             return gsStore.get(gid);
         }
     }
 
-    public void updateGuildSummary(int gid, MapleGuildSummary mgs) {
+    public void updateGuildSummary(int gid, GuildSummary mgs) {
         gsStore.put(gid, mgs);
     }
 
@@ -629,7 +629,7 @@ public class World {
         for (int i : gsStore.keySet()) {
             g = server.getGuild(i, getId(), null);
             if (g != null) {
-                gsStore.put(i, new MapleGuildSummary(g));
+                gsStore.put(i, new GuildSummary(g));
             } else {
                 gsStore.remove(i);
             }
@@ -686,7 +686,7 @@ public class World {
         }
     }
 
-    public void changeEmblem(int gid, List<Integer> affectedPlayers, MapleGuildSummary mgs) {
+    public void changeEmblem(int gid, List<Integer> affectedPlayers, GuildSummary mgs) {
         updateGuildSummary(gid, mgs);
         sendPacket(affectedPlayers, GuildPackets.guildEmblemChange(gid, mgs.getLogoBG(), mgs.getLogoBGColor(), mgs.getLogo(), mgs.getLogoColor()), -1);
         setGuildAndRank(affectedPlayers, -1, -1, -1);	//respawn player

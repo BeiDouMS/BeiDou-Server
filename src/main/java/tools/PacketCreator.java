@@ -51,7 +51,7 @@ import net.server.channel.handlers.SummonDamageHandler.SummonAttackEntry;
 import net.server.channel.handlers.WhisperHandler;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
-import net.server.guild.MapleGuildSummary;
+import net.server.guild.GuildSummary;
 import net.server.world.MapleParty;
 import net.server.world.MaplePartyCharacter;
 import net.server.world.PartyOperation;
@@ -1897,7 +1897,7 @@ public class PacketCreator {
             p.writeString("");
             p.writeBytes(new byte[6]);
         } else {
-            MapleGuildSummary gs = chr.getClient().getWorldServer().getGuildSummary(chr.getGuildId(), chr.getWorld());
+            GuildSummary gs = chr.getClient().getWorldServer().getGuildSummary(chr.getGuildId(), chr.getWorld());
             if (gs != null) {
                 p.writeString(gs.getName());
                 p.writeShort(gs.getLogoBG());
