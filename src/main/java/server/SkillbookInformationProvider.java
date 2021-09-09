@@ -38,16 +38,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- *
  * @author RonanLana
  */
 
 /**
  * Only used in 1 script that gives players information about where skillbooks can be found
  */
-public class MapleSkillbookInformationProvider {
+public class SkillbookInformationProvider {
     private static volatile Map<Integer, SkillBookEntry> foundSkillbooks = new HashMap<>();
-    
+
     public enum SkillBookEntry {
         UNAVAILABLE,
         QUEST,
@@ -56,7 +55,7 @@ public class MapleSkillbookInformationProvider {
         REACTOR,
         SCRIPT
     }
-    
+
     private static final int SKILLBOOK_MIN_ITEMID = 2280000;
     private static final int SKILLBOOK_MAX_ITEMID = 2300000;  // exclusively
 
@@ -65,24 +64,24 @@ public class MapleSkillbookInformationProvider {
         loadedSkillbooks.putAll(fetchSkillbooksFromQuests());
         loadedSkillbooks.putAll(fetchSkillbooksFromReactors());
         loadedSkillbooks.putAll(fetchSkillbooksFromScripts());
-        MapleSkillbookInformationProvider.foundSkillbooks = loadedSkillbooks;
+        SkillbookInformationProvider.foundSkillbooks = loadedSkillbooks;
     }
-    
+
     private static boolean is4thJobSkill(int itemid) {
         return itemid / 10000 % 10 == 2;
     }
-    
+
     private static boolean isSkillBook(int itemid) {
         return itemid >= SKILLBOOK_MIN_ITEMID && itemid < SKILLBOOK_MAX_ITEMID;
     }
-    
+
     private static boolean isQuestBook(int itemid) {
         return itemid >= 4001107 && itemid <= 4001114 || itemid >= 4161015 && itemid <= 4161023;
     }
-    
+
     private static int fetchQuestbook(Data checkData, String quest) {
         Data questStartData = checkData.getChildByPath(quest).getChildByPath("0");
-        
+
         Data startReqItemData = questStartData.getChildByPath("item");
         if (startReqItemData != null) {
             for (Data itemData : startReqItemData.getChildren()) {
@@ -92,18 +91,18 @@ public class MapleSkillbookInformationProvider {
                 }
             }
         }
-            
+
         Data startReqQuestData = questStartData.getChildByPath("quest");
         if (startReqQuestData != null) {
             Set<Integer> reqQuests = new HashSet<>();
-            
+
             for (Data questStatusData : startReqQuestData.getChildren()) {
                 int reqQuest = DataTool.getInt("id", questStatusData, 0);
                 if (reqQuest > 0) {
                     reqQuests.add(reqQuest);
                 }
             }
-            
+
             for (Integer reqQuest : reqQuests) {
                 int book = fetchQuestbook(checkData, Integer.toString(reqQuest));
                 if (book > -1) {
@@ -111,10 +110,10 @@ public class MapleSkillbookInformationProvider {
                 }
             }
         }
-        
+
         return -1;
     }
-    
+
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromQuests() {
         DataProvider questDataProvider = DataProviderFactory.getDataProvider(WZFiles.QUEST);
         Data actData = questDataProvider.getData("Act.img");
@@ -129,7 +128,7 @@ public class MapleSkillbookInformationProvider {
                         for (Data questItemData : questNodeData.getChildren()) {
                             int itemId = DataTool.getInt("id", questItemData, 0);
                             int itemCount = DataTool.getInt("count", questItemData, 0);
-                            
+
                             if (isSkillBook(itemId) && itemCount > 0) {
                                 int questbook = fetchQuestbook(checkData, questData.getName());
                                 if (questbook < 0) {
@@ -144,7 +143,7 @@ public class MapleSkillbookInformationProvider {
                             int skillId = DataTool.getInt("id", questSkillData, 0);
                             if (is4thJobSkill(skillId)) {
                                 // negative itemids are skill rewards
-                                
+
                                 int questbook = fetchQuestbook(checkData, questData.getName());
                                 if (questbook < 0) {
                                     loadedSkillbooks.put(-skillId, SkillBookEntry.QUEST_REWARD);
@@ -160,7 +159,7 @@ public class MapleSkillbookInformationProvider {
 
         return loadedSkillbooks;
     }
-    
+
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromReactors() {
         Map<Integer, SkillBookEntry> loadedSkillbooks = new HashMap<>();
 
@@ -182,7 +181,7 @@ public class MapleSkillbookInformationProvider {
 
         return loadedSkillbooks;
     }
-    
+
     private static void listFiles(String directoryName, ArrayList<File> files) {
         File directory = new File(directoryName);
 
@@ -196,27 +195,27 @@ public class MapleSkillbookInformationProvider {
             }
         }
     }
-    
+
     private static List<File> listFilesFromDirectoryRecursively(String directory) {
         ArrayList<File> files = new ArrayList<>();
         listFiles(directory, files);
-        
+
         return files;
     }
-    
+
     private static Set<Integer> findMatchingSkillbookIdsOnFile(String fileContent) {
         Set<Integer> skillbookIds = new HashSet<>(4);
-        
+
         Matcher searchM = Pattern.compile("22(8|9)[0-9]{4}").matcher(fileContent);
         int idx = 0;
         while (searchM.find(idx)) {
             idx = searchM.end();
             skillbookIds.add(Integer.valueOf(fileContent.substring(searchM.start(), idx)));
         }
-        
+
         return skillbookIds;
     }
-    
+
     private static String readFileToString(File file, String encoding) throws IOException {
         Scanner scanner = new Scanner(file, encoding);
         String text = "";
@@ -226,17 +225,18 @@ public class MapleSkillbookInformationProvider {
             } finally {
                 scanner.close();
             }
-        } catch (NoSuchElementException e) {}
-        
+        } catch (NoSuchElementException e) {
+        }
+
         return text;
     }
-    
+
     private static Map<Integer, SkillBookEntry> fileSearchMatchingData(File file) {
         Map<Integer, SkillBookEntry> scriptFileSkillbooks = new HashMap<>();
 
         try {
             String fileContent = readFileToString(file, "UTF-8");
-            
+
             Set<Integer> skillbookIds = findMatchingSkillbookIdsOnFile(fileContent);
             for (Integer skillbookId : skillbookIds) {
                 scriptFileSkillbooks.put(skillbookId, SkillBookEntry.SCRIPT);
@@ -248,7 +248,7 @@ public class MapleSkillbookInformationProvider {
 
         return scriptFileSkillbooks;
     }
-    
+
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
@@ -260,20 +260,20 @@ public class MapleSkillbookInformationProvider {
 
         return scriptSkillbooks;
     }
-    
+
     public static SkillBookEntry getSkillbookAvailability(int itemId) {
         SkillBookEntry sbe = foundSkillbooks.get(itemId);
         return sbe != null ? sbe : SkillBookEntry.UNAVAILABLE;
     }
-    
+
     public static List<Integer> getTeachableSkills(Character chr) {
         List<Integer> list = new ArrayList<>();
-        
+
         for (Integer book : foundSkillbooks.keySet()) {
             if (book >= 0) {
                 continue;
             }
-            
+
             int skillid = -book;
             if (skillid / 10000 == chr.getJob().getId()) {
                 if (chr.getMasterLevel(skillid) == 0) {
@@ -281,8 +281,8 @@ public class MapleSkillbookInformationProvider {
                 }
             }
         }
-        
+
         return list;
     }
-    
+
 }

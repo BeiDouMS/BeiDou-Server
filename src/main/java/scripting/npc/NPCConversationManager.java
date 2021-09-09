@@ -43,7 +43,7 @@ import provider.DataProviderFactory;
 import provider.wz.WZFiles;
 import scripting.AbstractPlayerInteraction;
 import server.*;
-import server.MapleSkillbookInformationProvider.SkillBookEntry;
+import server.SkillbookInformationProvider.SkillBookEntry;
 import server.events.gm.Event;
 import server.expeditions.Expedition;
 import server.expeditions.ExpeditionType;
@@ -572,7 +572,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         
         public Object[] getAvailableSkillBooks() {
                 List<Integer> ret = ItemInformationProvider.getInstance().usableSkillBooks(this.getPlayer());
-                ret.addAll(MapleSkillbookInformationProvider.getTeachableSkills(this.getPlayer()));
+                ret.addAll(SkillbookInformationProvider.getTeachableSkills(this.getPlayer()));
                 
                 return ret.toArray();
         }
@@ -582,7 +582,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
         
         public String getSkillBookInfo(int itemid) {
-                SkillBookEntry sbe = MapleSkillbookInformationProvider.getSkillbookAvailability(itemid);
+                SkillBookEntry sbe = SkillbookInformationProvider.getSkillbookAvailability(itemid);
                 switch (sbe) {
                         case UNAVAILABLE:
                                 return "";

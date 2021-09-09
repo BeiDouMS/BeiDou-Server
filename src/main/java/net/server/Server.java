@@ -56,7 +56,7 @@ import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.CashShop.CashItemFactory;
-import server.MapleSkillbookInformationProvider;
+import server.SkillbookInformationProvider;
 import server.ThreadManager;
 import server.TimerManager;
 import server.expeditions.ExpeditionBossLog;
@@ -840,7 +840,7 @@ public class Server {
         futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
         futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
         futures.add(initExecutor.submit(() -> Quest.loadAllQuests()));
-        futures.add(initExecutor.submit(() -> MapleSkillbookInformationProvider.loadAllSkillbookInformation()));
+        futures.add(initExecutor.submit(() -> SkillbookInformationProvider.loadAllSkillbookInformation()));
         futures.add(initExecutor.submit(() -> PlayerNPCFactory.loadFactoryMetadata()));
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
