@@ -43,7 +43,8 @@ import java.sql.*;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.DAYS;
 
 /**
  * @author RonanLana - synchronization of Fredrick modules and operation results
@@ -81,7 +82,7 @@ public class FredrickProcessor {
     }
 
     public static int timestampElapsedDays(Timestamp then, long timeNow) {
-        return (int) ((timeNow - then.getTime()) / TimeUnit.DAYS.toMillis(1));
+        return (int) ((timeNow - then.getTime()) / DAYS.toMillis(1));
     }
 
     private static String fredrickReminderMessage(int daynotes) {

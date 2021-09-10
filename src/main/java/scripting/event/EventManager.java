@@ -48,10 +48,10 @@ import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 //import jdk.nashorn.api.scripting.ScriptUtils;
 
@@ -392,7 +392,7 @@ public class EventManager {
         }
 
         try {
-            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, TimeUnit.MILLISECONDS)) {
+            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, MILLISECONDS)) {
                 playerPermit.add(leader.getId());
 
                 startLock.lock();
@@ -464,7 +464,7 @@ public class EventManager {
         }
 
         try {
-            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, TimeUnit.MILLISECONDS)) {
+            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, MILLISECONDS)) {
                 playerPermit.add(leader.getId());
 
                 startLock.lock();
@@ -536,7 +536,7 @@ public class EventManager {
         }
 
         try {
-            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, TimeUnit.MILLISECONDS)) {
+            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, MILLISECONDS)) {
                 playerPermit.add(leader.getId());
 
                 startLock.lock();
@@ -608,7 +608,7 @@ public class EventManager {
         }
 
         try {
-            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, TimeUnit.MILLISECONDS)) {
+            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, MILLISECONDS)) {
                 playerPermit.add(leader.getId());
 
                 startLock.lock();
@@ -684,7 +684,7 @@ public class EventManager {
         }
 
         try {
-            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, TimeUnit.MILLISECONDS)) {
+            if (!playerPermit.contains(leader.getId()) && startSemaphore.tryAcquire(7777, MILLISECONDS)) {
                 playerPermit.add(leader.getId());
 
                 startLock.lock();

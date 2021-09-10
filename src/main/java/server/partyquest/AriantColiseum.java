@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * @author Ronan
@@ -65,7 +65,7 @@ public class AriantColiseum {
         map.resetFully();
 
         long pqTimer = MINUTES.toMillis(10);
-        long pqTimerBoard = MINUTES.toMillis(9) + TimeUnit.SECONDS.toMillis(50);
+        long pqTimerBoard = MINUTES.toMillis(9) + SECONDS.toMillis(50);
 
         List<Character> players = exped.getActiveMembers();
         score = new HashMap<>();

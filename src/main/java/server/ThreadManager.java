@@ -21,6 +21,9 @@ package server;
 
 import java.util.concurrent.*;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author Ronan
  */
@@ -53,13 +56,13 @@ public class ThreadManager {
         RejectedExecutionHandler reh = new RejectedExecutionHandlerImpl();
         ThreadFactory tf = Executors.defaultThreadFactory();
 
-        tpe = new ThreadPoolExecutor(20, 1000, 77, TimeUnit.SECONDS, new ArrayBlockingQueue<>(50), tf, reh);
+        tpe = new ThreadPoolExecutor(20, 1000, 77, SECONDS, new ArrayBlockingQueue<>(50), tf, reh);
     }
 
     public void stop() {
         tpe.shutdown();
         try {
-            tpe.awaitTermination(5, TimeUnit.MINUTES);
+            tpe.awaitTermination(5, MINUTES);
         } catch (InterruptedException ie) {
         }
     }
