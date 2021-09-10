@@ -55,6 +55,8 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 public class AbstractPlayerInteraction {
 
     public Client c;
@@ -502,7 +504,8 @@ public class AbstractPlayerInteraction {
         Pet evolved = null;
         Pet target;
 
-        long period = (long) 90 * 24 * 60 * 60 * 1000;    //refreshes expiration date: 90 days
+        long period = DAYS.toMillis(90);    //refreshes expiration date: 90 days
+
 
         target = getPlayer().getPet(slot);
         if (target == null) {

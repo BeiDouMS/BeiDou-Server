@@ -44,6 +44,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 /**
  * @author RonanLana - synchronization of Fredrick modules and operation results
  */
@@ -80,7 +82,7 @@ public class FredrickProcessor {
     }
 
     public static int timestampElapsedDays(Timestamp then, long timeNow) {
-        return (int) ((timeNow - then.getTime()) / (1000 * 60 * 60 * 24));
+        return (int) ((timeNow - then.getTime()) / DAYS.toMillis(1));
     }
 
     private static String fredrickReminderMessage(int daynotes) {

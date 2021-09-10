@@ -8,6 +8,8 @@ package server.events;
 import client.Character;
 import client.SkillFactory;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 /**
  * @author kevintjuh93
  */
@@ -44,7 +46,7 @@ public class RescueGaga extends Events {
                 skillid = 10001014;
         }
 
-        long expiration = (System.currentTimeMillis() + 3600 * 24 * 20 * 1000);//20 days
+        long expiration = (System.currentTimeMillis() + DAYS.toMillis(20));
         if (completed < 20) {
             chr.changeSkillLevel(SkillFactory.getSkill(skillid), (byte) 1, 1, expiration);
             chr.changeSkillLevel(SkillFactory.getSkill(skillid + 1), (byte) 1, 1, expiration);

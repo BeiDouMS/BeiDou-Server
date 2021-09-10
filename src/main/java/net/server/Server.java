@@ -80,6 +80,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Lock;
 
+import static java.util.concurrent.TimeUnit.*;
+
 public class Server {
     private static final Logger log = LoggerFactory.getLogger(Server.class);
     private static Server instance = null;
@@ -551,7 +553,7 @@ public class Server {
             return;
         }
 
-        long timeClear = System.currentTimeMillis() - 14 * 24 * 60 * 60 * 1000;
+        long timeClear = System.currentTimeMillis() - DAYS.toMillis(14);
 
         try (PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode WHERE expiration <= ?")) {
             ps.setLong(1, timeClear);
@@ -939,20 +941,20 @@ public class Server {
 
         long timeLeft = getTimeLeftForNextHour();
         tMan.register(new CharacterDiseaseTask(), YamlConfig.config.server.UPDATE_INTERVAL, YamlConfig.config.server.UPDATE_INTERVAL);
-        tMan.register(new ReleaseLockTask(), 2 * 60 * 1000, 2 * 60 * 1000);
+        tMan.register(new ReleaseLockTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
         tMan.register(new CouponTask(), YamlConfig.config.server.COUPON_INTERVAL, timeLeft);
-        tMan.register(new RankingCommandTask(), 5 * 60 * 1000, 5 * 60 * 1000);
+        tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), YamlConfig.config.server.RANKING_INTERVAL, timeLeft);
-        tMan.register(new LoginCoordinatorTask(), 60 * 60 * 1000, timeLeft);
-        tMan.register(new EventRecallCoordinatorTask(), 60 * 60 * 1000, timeLeft);
-        tMan.register(new LoginStorageTask(), 2 * 60 * 1000, 2 * 60 * 1000);
-        tMan.register(new DueyFredrickTask(), 60 * 60 * 1000, timeLeft);
-        tMan.register(new InvitationTask(), 30 * 1000, 30 * 1000);
+        tMan.register(new LoginCoordinatorTask(), HOURS.toMillis(1), timeLeft);
+        tMan.register(new EventRecallCoordinatorTask(), HOURS.toMillis(1), timeLeft);
+        tMan.register(new LoginStorageTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
+        tMan.register(new DueyFredrickTask(), HOURS.toMillis(1), timeLeft);
+        tMan.register(new InvitationTask(), SECONDS.toMillis(30), SECONDS.toMillis(30));
         tMan.register(new RespawnTask(), YamlConfig.config.server.RESPAWN_INTERVAL, YamlConfig.config.server.RESPAWN_INTERVAL);
 
         timeLeft = getTimeLeftForNextDay();
         ExpeditionBossLog.resetBossLogTable();
-        tMan.register(new BossLogTask(), 24 * 60 * 60 * 1000, timeLeft);
+        tMan.register(new BossLogTask(), DAYS.toMillis(1), timeLeft);
     }
 
     public static void main(String[] args) {

@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.locks.Lock;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author Ronan
  */
@@ -43,7 +45,7 @@ public class MiniDungeon {
 
     public MiniDungeon(int base, long timeLimit) {
         baseMap = base;
-        expireTime = timeLimit * 1000;
+        expireTime = SECONDS.toMillis(timeLimit);
 
         timeoutTask = TimerManager.getInstance().schedule(() -> close(), expireTime);
 

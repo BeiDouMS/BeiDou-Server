@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class MapFactory {
     private static final Data nameData;
     private static final DataProvider mapSource;
@@ -357,7 +359,7 @@ public class MapFactory {
         int y = DataTool.getInt(reactor.getChildByPath("y"));
         myReactor.setFacingDirection(FacingDirection);
         myReactor.setPosition(new Point(x, y));
-        myReactor.setDelay(DataTool.getInt(reactor.getChildByPath("reactorTime")) * 1000);
+        myReactor.setDelay((int) SECONDS.toMillis(DataTool.getInt(reactor.getChildByPath("reactorTime"))));
         myReactor.setName(DataTool.getString(reactor.getChildByPath("name"), ""));
         myReactor.resetReactorActions(0);
         return myReactor;

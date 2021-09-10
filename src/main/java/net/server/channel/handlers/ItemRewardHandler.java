@@ -63,7 +63,8 @@ public final class ItemRewardHandler extends AbstractPacketHandler {
                 if (ItemConstants.getInventoryType(reward.itemid) == InventoryType.EQUIP) {
                     final Item item = ii.getEquipById(reward.itemid);
                     if (reward.period != -1) {
-                        item.setExpiration(currentServerTime() + (reward.period * 60 * 60 * 10));
+                        // TODO is this a bug, meant to be 60 * 60 * 1000?
+                        item.setExpiration(currentServerTime() + reward.period * 60 * 60 * 10);
                     }
                     InventoryManipulator.addFromDrop(c, item, false);
                 } else {

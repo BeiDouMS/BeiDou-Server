@@ -30,6 +30,8 @@ import net.server.Server;
 import net.server.world.World;
 import server.TimerManager;
 
+import static java.util.concurrent.TimeUnit.*;
+
 public class ShutdownCommand extends Command {
     {
         setDescription("Shut down the server.");
@@ -51,10 +53,10 @@ public class ShutdownCommand extends Command {
         }
 
         if (time > 1) {
-            int seconds = (time / 1000) % 60;
-            int minutes = (time / (1000 * 60)) % 60;
-            int hours = (time / (1000 * 60 * 60)) % 24;
-            int days = (time / (1000 * 60 * 60 * 24));
+            int seconds = (time / (int) SECONDS.toMillis(1)) % 60;
+            int minutes = (time / (int) MINUTES.toMillis(1)) % 60;
+            int hours = (time / (int) HOURS.toMillis(1)) % 24;
+            int days = (time / (int) DAYS.toMillis(1));
 
             String strTime = "";
             if (days > 0) {

@@ -26,6 +26,8 @@ import client.inventory.Item;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 public class DueyPackage {
     private String sender = null;
     private Item item = null;
@@ -102,7 +104,7 @@ public class DueyPackage {
         cal.setTimeInMillis(ts.getTime());
 
         if (quick) {
-            if (System.currentTimeMillis() - ts.getTime() < 24 * 60 * 60 * 1000) {  // thanks inhyuk for noticing quick delivery packages unavailable to retrieve from the get-go
+            if (System.currentTimeMillis() - ts.getTime() < DAYS.toMillis(1)) {  // thanks inhyuk for noticing quick delivery packages unavailable to retrieve from the get-go
                 cal.add(Calendar.DATE, -1);
             }
         }

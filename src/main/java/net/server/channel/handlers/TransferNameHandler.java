@@ -31,6 +31,8 @@ import tools.PacketCreator;
 import java.sql.*;
 import java.util.Calendar;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 /**
  * @author Ronan
  * @author Ubaware
@@ -54,7 +56,7 @@ public final class TransferNameHandler extends AbstractPacketHandler {
         if (chr.getLevel() < 10) {
             c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;
-        } else if (c.getTempBanCalendar() != null && c.getTempBanCalendar().getTimeInMillis() + (30 * 24 * 60 * 60 * 1000) < Calendar.getInstance().getTimeInMillis()) {
+        } else if (c.getTempBanCalendar() != null && c.getTempBanCalendar().getTimeInMillis() + DAYS.toMillis(30) < Calendar.getInstance().getTimeInMillis()) {
             c.sendPacket(PacketCreator.sendNameTransferRules(2));
             return;
         }

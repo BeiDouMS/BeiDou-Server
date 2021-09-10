@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
 
     @Override
@@ -166,7 +168,7 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
                     return;
                 } else {
                     c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
-                    chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
+                    chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
                 }
             }
         }

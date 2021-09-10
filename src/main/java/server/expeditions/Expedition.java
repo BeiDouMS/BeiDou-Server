@@ -43,6 +43,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledFuture;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author Alan (SharpAceX)
  */
@@ -116,7 +118,7 @@ public class Expedition {
 
     public void beginRegistration() {
         registering = true;
-        leader.sendPacket(PacketCreator.getClock(type.getRegistrationTime() * 60));
+        leader.sendPacket(PacketCreator.getClock((int) MINUTES.toSeconds(type.getRegistrationMinutes())));
         if (!silent) {
             startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, "[Expedition] " + leader.getName() + " has been declared the expedition captain. Please register for the expedition."), false);
             leader.sendPacket(PacketCreator.serverNotice(6, "[Expedition] You have become the expedition captain. Gather enough people for your team then talk to the NPC to start."));
@@ -126,7 +128,7 @@ public class Expedition {
 
     private void scheduleRegistrationEnd() {
         final Expedition exped = this;
-        startTime = System.currentTimeMillis() + type.getRegistrationTime() * 60 * 1000;
+        startTime = System.currentTimeMillis() + MINUTES.toMillis(type.getRegistrationMinutes());
 
         schedule = TimerManager.getInstance().schedule(() -> {
             if (registering) {
@@ -137,7 +139,7 @@ public class Expedition {
 
                 dispose(false);
             }
-        }, type.getRegistrationTime() * 60 * 1000);
+        }, MINUTES.toMillis(type.getRegistrationMinutes()));
     }
 
     public void dispose(boolean log) {

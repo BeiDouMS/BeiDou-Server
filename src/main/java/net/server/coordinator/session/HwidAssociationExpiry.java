@@ -3,7 +3,9 @@ package net.server.coordinator.session;
 import net.server.Server;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.HOURS;
 
 public class HwidAssociationExpiry {
     public static Instant getHwidAccountExpiry(int relevance) {
@@ -15,9 +17,9 @@ public class HwidAssociationExpiry {
 
         final long baseHours = switch (degree) {
             case 0 -> 2;
-            case 1 -> TimeUnit.DAYS.toHours(1);
-            case 2 -> TimeUnit.DAYS.toHours(7);
-            default -> TimeUnit.DAYS.toHours(70);
+            case 1 -> DAYS.toHours(1);
+            case 2 -> DAYS.toHours(7);
+            default -> DAYS.toHours(70);
         };
 
         int subdegreeTime = (degree * 3) + 1;
@@ -25,7 +27,7 @@ public class HwidAssociationExpiry {
             subdegreeTime = 10;
         }
 
-        return TimeUnit.HOURS.toMillis(baseHours + subdegreeTime);
+        return HOURS.toMillis(baseHours + subdegreeTime);
     }
 
     private static int getHwidExpirationDegree(int relevance) {

@@ -93,6 +93,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.regex.Pattern;
 
+import static java.util.concurrent.TimeUnit.*;
+
 public class Character extends AbstractCharacterObject {
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
     private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
@@ -1255,7 +1257,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean canRecoverLastBanish() {
-        return System.currentTimeMillis() - this.banishTime < 5 * 60 * 1000;
+        return System.currentTimeMillis() - this.banishTime < MINUTES.toMillis(5);
     }
 
     public Pair<Integer, Integer> getLastBanishData() {
@@ -2082,7 +2084,7 @@ public class Character extends AbstractCharacterObject {
             Skill battleship = SkillFactory.getSkill(Corsair.BATTLE_SHIP);
             int cooldown = battleship.getEffect(getSkillLevel(battleship)).getCooldown();
             sendPacket(PacketCreator.skillCooldown(Corsair.BATTLE_SHIP, cooldown));
-            addCooldown(Corsair.BATTLE_SHIP, Server.getInstance().getCurrentTime(), cooldown * 1000);
+            addCooldown(Corsair.BATTLE_SHIP, Server.getInstance().getCurrentTime(), SECONDS.toMillis(cooldown));
             removeCooldown(5221999);
             cancelEffectFromBuffStat(BuffStat.MONSTER_RIDING);
         } else {
@@ -2369,7 +2371,7 @@ public class Character extends AbstractCharacterObject {
 
     private static Pair<Integer, Pair<Integer, Integer>> getChairTaskIntervalRate(int maxhp, int maxmp) {
         float toHeal = Math.max(maxhp, maxmp);
-        float maxDuration = YamlConfig.config.server.CHAIR_EXTRA_HEAL_MAX_DELAY * 1000;
+        float maxDuration = SECONDS.toMillis(YamlConfig.config.server.CHAIR_EXTRA_HEAL_MAX_DELAY);
 
         int rate = 0;
         int minRegen = 1, maxRegen = (256 * YamlConfig.config.server.CHAIR_EXTRA_HEAL_MULTIPLIER) - 1, midRegen = 1;
@@ -4394,7 +4396,7 @@ public class Character extends AbstractCharacterObject {
             int bHealingLvl = getSkillLevel(bHealing);
             if (bHealingLvl > 0) {
                 final StatEffect healEffect = bHealing.getEffect(bHealingLvl);
-                int healInterval = healEffect.getX() * 1000;
+                int healInterval = (int) SECONDS.toMillis(healEffect.getX());
                 beholderHealingSchedule = TimerManager.getInstance().register(new Runnable() {
                     @Override
                     public void run() {
@@ -4412,7 +4414,7 @@ public class Character extends AbstractCharacterObject {
             Skill bBuff = SkillFactory.getSkill(DarkKnight.HEX_OF_BEHOLDER);
             if (getSkillLevel(bBuff) > 0) {
                 final StatEffect buffEffect = bBuff.getEffect(getSkillLevel(bBuff));
-                int buffInterval = buffEffect.getX() * 1000;
+                int buffInterval = (int) SECONDS.toMillis(buffEffect.getX());
                 beholderBuffSchedule = TimerManager.getInstance().register(new Runnable() {
                     @Override
                     public void run() {
@@ -6065,7 +6067,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private long getNextBuybackTime() {
-        return lastBuyback + YamlConfig.config.server.BUYBACK_COOLDOWN_MINUTES * 60 * 1000;
+        return lastBuyback + MINUTES.toMillis(YamlConfig.config.server.BUYBACK_COOLDOWN_MINUTES);
     }
 
     private boolean isBuybackInvincible() {
@@ -6091,12 +6093,12 @@ public class Character extends AbstractCharacterObject {
         boolean avail = true;
         if (!isAlive()) {
             long timeLapsed = timeNow - lastDeathtime;
-            long timeRemaining = YamlConfig.config.server.BUYBACK_RETURN_MINUTES * 60 * 1000 - (timeLapsed + Math.max(0, getNextBuybackTime() - timeNow));
+            long timeRemaining = MINUTES.toMillis(YamlConfig.config.server.BUYBACK_RETURN_MINUTES) - (timeLapsed + Math.max(0, getNextBuybackTime() - timeNow));
             if (timeRemaining < 1) {
                 s += "Buyback #e#rUNAVAILABLE#k#n";
                 avail = false;
             } else {
-                s += "Buyback countdown: #e#b" + getTimeRemaining(YamlConfig.config.server.BUYBACK_RETURN_MINUTES * 60 * 1000 - timeLapsed) + "#k#n";
+                s += "Buyback countdown: #e#b" + getTimeRemaining(MINUTES.toMillis(YamlConfig.config.server.BUYBACK_RETURN_MINUTES) - timeLapsed) + "#k#n";
             }
             s += "\r\n";
         }
@@ -6112,8 +6114,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     private static String getTimeRemaining(long timeLeft) {
-        int seconds = (int) Math.floor(timeLeft / 1000) % 60;
-        int minutes = (int) Math.floor(timeLeft / (1000 * 60)) % 60;
+        int seconds = (int) Math.floor(timeLeft / SECONDS.toMillis(1)) % 60;
+        int minutes = (int) Math.floor(timeLeft / MINUTES.toMillis(1)) % 60;
 
         return (minutes > 0 ? (String.format("%02d", minutes) + " minutes, ") : "") + String.format("%02d", seconds) + " seconds";
     }
@@ -6121,7 +6123,7 @@ public class Character extends AbstractCharacterObject {
     public boolean couldBuyback() {  // Ronan's buyback system
         long timeNow = Server.getInstance().getCurrentTime();
 
-        if (timeNow - lastDeathtime > YamlConfig.config.server.BUYBACK_RETURN_MINUTES * 60 * 1000) {
+        if (timeNow - lastDeathtime > MINUTES.toMillis(YamlConfig.config.server.BUYBACK_RETURN_MINUTES)) {
             this.dropMessage(5, "The period of time to decide has expired, therefore you are unable to buyback.");
             return false;
         }
@@ -7247,7 +7249,7 @@ public class Character extends AbstractCharacterObject {
                             QuestStatus status = new QuestStatus(q, QuestStatus.Status.getById(rs.getInt("status")));
                             long cTime = rs.getLong("time");
                             if (cTime > -1) {
-                                status.setCompletionTime(cTime * 1000);
+                                status.setCompletionTime(SECONDS.toMillis(cTime));
                             }
 
                             long eTime = rs.getLong("expires");
@@ -9618,7 +9620,7 @@ public class Character extends AbstractCharacterObject {
     public void showUnderleveledInfo(Monster mob) {
         long curTime = Server.getInstance().getCurrentTime();
         if (nextWarningTime < curTime) {
-            nextWarningTime = curTime + (60 * 1000);   // show underlevel info again after 1 minute
+            nextWarningTime = curTime + MINUTES.toMillis(1);   // show underlevel info again after 1 minute
 
             showHint("You have gained #rno experience#k from defeating #e#b" + mob.getName() + "#k#n (lv. #b" + mob.getLevel() + "#k)! Take note you must have around the same level as the mob to start earning EXP from it.");
         }
@@ -9627,7 +9629,7 @@ public class Character extends AbstractCharacterObject {
     public void showMapOwnershipInfo(Character mapOwner) {
         long curTime = Server.getInstance().getCurrentTime();
         if (nextWarningTime < curTime) {
-            nextWarningTime = curTime + (60 * 1000);   // show underlevel info again after 1 minute
+            nextWarningTime = curTime + MINUTES.toMillis(1); // show underlevel info again after 1 minute
 
             String medal = "";
             Item medalItem = mapOwner.getInventory(InventoryType.EQUIPPED).getItem((short) -49);
@@ -9980,7 +9982,7 @@ public class Character extends AbstractCharacterObject {
                         public void run() {
                             runQuestExpireTask();
                         }
-                    }, 10 * 1000);
+                    }, SECONDS.toMillis(10));
                 }
             }
         } finally {
@@ -10025,7 +10027,7 @@ public class Character extends AbstractCharacterObject {
                     public void run() {
                         runQuestExpireTask();
                     }
-                }, 10 * 1000);
+                }, SECONDS.toMillis(10));
             }
 
             questExpirations.put(quest, Server.getInstance().getCurrentTime() + time);
@@ -10035,8 +10037,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void questTimeLimit(final Quest quest, int seconds) {
-        registerQuestExpire(quest, seconds * 1000);
-        sendPacket(PacketCreator.addQuestTimeLimit(quest.getId(), seconds * 1000));
+        registerQuestExpire(quest, SECONDS.toMillis(seconds));
+        sendPacket(PacketCreator.addQuestTimeLimit(quest.getId(), (int) SECONDS.toMillis(seconds)));
     }
 
     public void questTimeLimit2(final Quest quest, long expires) {
@@ -10550,7 +10552,7 @@ public class Character extends AbstractCharacterObject {
                     }
                     inventory = null;
                 }
-            }, 5 * 60 * 1000);
+            }, MINUTES.toMillis(5));
         }
     }
 
@@ -10920,7 +10922,7 @@ public class Character extends AbstractCharacterObject {
     public int checkWorldTransferEligibility() {
         if (getLevel() < 20) {
             return 2;
-        } else if (getClient().getTempBanCalendar() != null && getClient().getTempBanCalendar().getTimeInMillis() + (30 * 24 * 60 * 60 * 1000) < Calendar.getInstance().getTimeInMillis()) {
+        } else if (getClient().getTempBanCalendar() != null && getClient().getTempBanCalendar().getTimeInMillis() + (int) DAYS.toMillis(30) < Calendar.getInstance().getTimeInMillis()) {
             return 3;
         } else if (isMarried()) {
             return 4;

@@ -59,6 +59,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author Matze
  * @author Ronan
@@ -665,7 +667,7 @@ public class EventInstanceManager {
             }
 
             disposeLocks();
-        }, 60 * 1000);
+        }, MINUTES.toMillis(1));
     }
 
     private void disposeLocks() {

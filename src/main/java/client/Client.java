@@ -75,8 +75,9 @@ import java.sql.*;
 import java.util.Date;
 import java.util.*;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Client extends ChannelInboundHandlerAdapter {
     private static final Logger log = LoggerFactory.getLogger(Client.class);
@@ -1151,7 +1152,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-        }, TimeUnit.SECONDS.toMillis(15));
+        }, SECONDS.toMillis(15));
     }
 
     public Set<String> getMacs() {
@@ -1421,7 +1422,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         int targetHash = player.getTargetHpBarHash();
 
         if (mobHash != targetHash) {
-            if (timeNow - player.getTargetHpBarTime() >= 5 * 1000) {
+            if (timeNow - player.getTargetHpBarTime() >= SECONDS.toMillis(5)) {
                 // is there a way to INTERRUPT this annoying thread running on the client that drops the boss bar after some time at every attack?
                 announceDisableServerMessage();
                 sendPacket(packet);

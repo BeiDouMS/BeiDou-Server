@@ -3,7 +3,8 @@ package net.server.coordinator.session;
 import net.server.Server;
 
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.DAYS;
 
 record HostHwid(Hwid hwid, Instant expiry) {
     static HostHwid createWithDefaultExpiry(Hwid hwid) {
@@ -11,6 +12,6 @@ record HostHwid(Hwid hwid, Instant expiry) {
     }
 
     private static Instant getDefaultExpiry() {
-        return Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + TimeUnit.DAYS.toMillis(7));
+        return Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + DAYS.toMillis(7));
     }
 }

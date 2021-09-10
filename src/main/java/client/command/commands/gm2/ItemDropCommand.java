@@ -33,6 +33,8 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import server.ItemInformationProvider;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+
 public class ItemDropCommand extends Command {
     {
         setDescription("Spawn an item onto the ground.");
@@ -69,7 +71,7 @@ public class ItemDropCommand extends Command {
             if (params.length >= 2) {   // thanks to istreety & TacoBell
                 quantity = 1;
                 long days = Math.max(1, Integer.parseInt(params[1]));
-                long expiration = System.currentTimeMillis() + (days * 24 * 60 * 60 * 1000);
+                long expiration = System.currentTimeMillis() + DAYS.toMillis(days);
                 int petid = Pet.createPet(itemId);
 
                 Item toDrop = new Item(itemId, (short) 0, quantity, petid);

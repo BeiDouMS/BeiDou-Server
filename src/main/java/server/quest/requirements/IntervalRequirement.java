@@ -28,11 +28,14 @@ import provider.DataTool;
 import server.quest.Quest;
 import server.quest.QuestRequirementType;
 
+import static java.util.concurrent.TimeUnit.HOURS;
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author Tyler (Twdtwd)
  */
 public class IntervalRequirement extends AbstractQuestRequirement {
-    private int interval = -1;
+    private long interval = -1;
     private final int questID;
 
     public IntervalRequirement(Quest quest, Data data) {
@@ -41,13 +44,13 @@ public class IntervalRequirement extends AbstractQuestRequirement {
         processData(data);
     }
 
-    public int getInterval() {
+    public long getInterval() {
         return interval;
     }
 
     @Override
     public void processData(Data data) {
-        interval = DataTool.getInt(data) * 60 * 1000;
+        interval = MINUTES.toMillis(DataTool.getInt(data));
     }
 
     private static String getIntervalTimeLeft(Character chr, IntervalRequirement r) {
@@ -57,21 +60,21 @@ public class IntervalRequirement extends AbstractQuestRequirement {
         long leftTime = futureTime - System.currentTimeMillis();
 
         byte mode = 0;
-        if (leftTime / (60 * 1000) > 0) {
+        if (leftTime / MINUTES.toMillis(1) > 0) {
             mode++;     //counts minutes
 
-            if (leftTime / (60 * 60 * 1000) > 0) {
+            if (leftTime / HOURS.toMillis(1) > 0) {
                 mode++;     //counts hours
             }
         }
 
         switch (mode) {
             case 2:
-                int hours = (int) ((leftTime / (1000 * 60 * 60)));
+                int hours = (int) ((leftTime / HOURS.toMillis(1)));
                 str.append(hours + " hours, ");
 
             case 1:
-                int minutes = (int) ((leftTime / (1000 * 60)) % 60);
+                int minutes = (int) ((leftTime / MINUTES.toMillis(1)) % 60);
                 str.append(minutes + " minutes, ");
 
             default:

@@ -55,6 +55,8 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 
+import static java.util.concurrent.TimeUnit.*;
+
 public final class Channel {
     private static final Logger log = LoggerFactory.getLogger(Channel.class);
     private static final int BASE_PORT = 7575;
@@ -865,7 +867,7 @@ public final class Channel {
 
         ongoingStartTime = System.currentTimeMillis();
         if (weddingId != null) {
-            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(() -> closeOngoingWedding(cathedral), YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT * 60 * 1000);
+            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(() -> closeOngoingWedding(cathedral), MINUTES.toMillis(YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT));
 
             if (cathedral) {
                 cathedralReservationTask = weddingTask;
@@ -904,25 +906,25 @@ public final class Channel {
         }
 
         byte mode = 0;
-        if (leftTime / (60 * 1000) > 0) {
+        if (leftTime / (MINUTES.toMillis(1)) > 0) {
             mode++;     //counts minutes
 
-            if (leftTime / (60 * 60 * 1000) > 0) {
+            if (leftTime / (HOURS.toMillis(1)) > 0) {
                 mode++;     //counts hours
             }
         }
 
         switch (mode) {
             case 2:
-                int hours = (int) ((leftTime / (1000 * 60 * 60)));
+                int hours = (int) ((leftTime / (HOURS.toMillis(1))));
                 str.append(hours + " hours, ");
 
             case 1:
-                int minutes = (int) ((leftTime / (1000 * 60)) % 60);
+                int minutes = (int) ((leftTime / (MINUTES.toMillis(1))) % 60);
                 str.append(minutes + " minutes, ");
 
             default:
-                int seconds = (int) (leftTime / 1000) % 60;
+                int seconds = (int) (leftTime / SECONDS.toMillis(1)) % 60;
                 str.append(seconds + " seconds");
         }
 
@@ -934,7 +936,7 @@ public final class Channel {
     }
 
     public static long getRelativeWeddingTicketExpireTime(int resSlot) {
-        return (resSlot * YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL * 60 * 1000);
+        return MINUTES.toMillis((long) resSlot * YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL);
     }
 
     public String getWeddingReservationTimeLeft(Integer weddingId) {
@@ -962,7 +964,7 @@ public final class Channel {
                 return venue + " - RIGHT NOW";
             }
 
-            return venue + " - " + getTimeLeft(ongoingStartTime + (resStatus * YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL * 60 * 1000)) + " from now";
+            return venue + " - " + getTimeLeft(ongoingStartTime + MINUTES.toMillis((long) resStatus * YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL)) + " from now";
         } finally {
             lock.unlock();
         }

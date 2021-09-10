@@ -34,6 +34,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author Ronan
  */
@@ -61,7 +63,7 @@ public class LoginBypassCoordinator {
         long expireTime = (pic ? YamlConfig.config.server.BYPASS_PIC_EXPIRATION : YamlConfig.config.server.BYPASS_PIN_EXPIRATION);
         if (expireTime > 0) {
             Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);
-            expireTime = Server.getInstance().getCurrentTime() + expireTime * 60 * 1000;
+            expireTime = Server.getInstance().getCurrentTime() + MINUTES.toMillis(expireTime);
             try {
                 pic |= loginBypass.get(entry).getLeft();
                 expireTime = Math.max(loginBypass.get(entry).getRight(), expireTime);
@@ -95,7 +97,7 @@ public class LoginBypassCoordinator {
 
             for (Entry<Pair<Hwid, Integer>, Pair<Boolean, Long>> e : loginBypass.entrySet()) {
                 if (onlineAccounts.contains(e.getKey().getRight())) {
-                    long expireTime = timeNow + 2 * 60 * 1000;
+                    long expireTime = timeNow + MINUTES.toMillis(2);
                     if (expireTime > e.getValue().getRight()) {
                         loginBypass.replace(e.getKey(), new Pair<>(e.getValue().getLeft(), expireTime));
                     }

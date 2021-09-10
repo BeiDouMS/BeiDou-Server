@@ -42,6 +42,9 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.HOURS;
+
 /*
  * @author Flav
  */
@@ -101,18 +104,18 @@ public class CashShop {
             if (ItemConstants.EXPIRING_ITEMS) {
                 if (period == 1) {
                     if (itemId == 5211048 || itemId == 5360042) { // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
-                        item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 4));
+                        item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
-                                    item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 3));
+                                    item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));
                             */
                     } else if (itemId == 5211060) { // 2 Hour 3X coupons.
-                        item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 2));
+                        item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
                     } else {
-                        item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 24));
+                        item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
                     }
                 } else {
-                    item.setExpiration(Server.getInstance().getCurrentTime() + (1000 * 60 * 60 * 24 * period));
+                    item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
                 }
             }
 

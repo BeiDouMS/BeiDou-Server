@@ -50,6 +50,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public final class UseCashItemHandler extends AbstractPacketHandler {
 
     @Override
@@ -231,7 +234,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
 
                 if (period > 0) {
-                    eq.setExpiration(currentServerTime() + (period * 60 * 60 * 24 * 1000));
+                    eq.setExpiration(currentServerTime() + DAYS.toMillis(period));
                 }
 
                 // double-remove found thanks to BHB
@@ -444,7 +447,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
             final int world = c.getWorld();
             Server.getInstance().broadcastMessage(world, PacketCreator.getAvatarMega(player, medal, c.getChannel(), itemId, strLines, (p.readByte() != 0)));
-            TimerManager.getInstance().schedule(() -> Server.getInstance().broadcastMessage(world, PacketCreator.byeAvatarMega()), 1000 * 10);
+            TimerManager.getInstance().schedule(() -> Server.getInstance().broadcastMessage(world, PacketCreator.byeAvatarMega()), SECONDS.toMillis(10));
             remove(c, position, itemId);
         } else if (itemType == 540) {
             p.readByte();
@@ -594,7 +597,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
 
                 client.sendPacket(PacketCreator.enableActions());
-            }, 1000 * 3);
+            }, SECONDS.toMillis(3));
         } else {
             System.out.println("NEW CASH ITEM: " + itemType + "\n" + p);
             c.sendPacket(PacketCreator.enableActions());

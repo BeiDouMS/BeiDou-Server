@@ -33,6 +33,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
+import static java.util.concurrent.TimeUnit.HOURS;
+
 /**
  * @author Ronan - credits to Eric for showing the New Year opcodes and handler layout
  */
@@ -262,7 +264,7 @@ public class NewYearCardRecord {
             if (target != null && target.isLoggedinWorld()) {
                 target.sendPacket(PacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
             }
-        }, 1000 * 60 * 60); //1 Hour
+        }, HOURS.toMillis(1));
     }
 
     public void stopNewYearCardTask() {

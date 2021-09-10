@@ -68,6 +68,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.util.concurrent.TimeUnit.*;
+
 /**
  * @author kevintjuh93
  * @author Ronan - thread-oriented (world schedules + guild queue + marriages + party chars)
@@ -178,22 +180,22 @@ public class World {
         }
 
         TimerManager tman = TimerManager.getInstance();
-        petsSchedule = tman.register(new PetFullnessTask(this), 60 * 1000, 60 * 1000);
-        srvMessagesSchedule = tman.register(new ServerMessageTask(this), 10 * 1000, 10 * 1000);
-        mountsSchedule = tman.register(new MountTirednessTask(this), 60 * 1000, 60 * 1000);
-        merchantSchedule = tman.register(new HiredMerchantTask(this), 10 * 60 * 1000, 10 * 60 * 1000);
-        timedMapObjectsSchedule = tman.register(new TimedMapObjectTask(this), 60 * 1000, 60 * 1000);
-        charactersSchedule = tman.register(new CharacterAutosaverTask(this), 60 * 60 * 1000, 60 * 60 * 1000);
-        marriagesSchedule = tman.register(new WeddingReservationTask(this), YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL * 60 * 1000, YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL * 60 * 1000);
-        mapOwnershipSchedule = tman.register(new MapOwnershipTask(this), 20 * 1000, 20 * 1000);
-        fishingSchedule = tman.register(new FishingTask(this), 10 * 1000, 10 * 1000);
-        partySearchSchedule = tman.register(new PartySearchTask(this), 10 * 1000, 10 * 1000);
-        timeoutSchedule = tman.register(new TimeoutTask(this), 10 * 1000, 10 * 1000);
+        petsSchedule = tman.register(new PetFullnessTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
+        srvMessagesSchedule = tman.register(new ServerMessageTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
+        mountsSchedule = tman.register(new MountTirednessTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
+        merchantSchedule = tman.register(new HiredMerchantTask(this), 10 * MINUTES.toMillis(1), 10 * MINUTES.toMillis(1));
+        timedMapObjectsSchedule = tman.register(new TimedMapObjectTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
+        charactersSchedule = tman.register(new CharacterAutosaverTask(this), HOURS.toMillis(1), HOURS.toMillis(1));
+        marriagesSchedule = tman.register(new WeddingReservationTask(this), MINUTES.toMillis(YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL), MINUTES.toMillis(YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL));
+        mapOwnershipSchedule = tman.register(new MapOwnershipTask(this), SECONDS.toMillis(20), SECONDS.toMillis(20));
+        fishingSchedule = tman.register(new FishingTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
+        partySearchSchedule = tman.register(new PartySearchTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
+        timeoutSchedule = tman.register(new TimeoutTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
 
         if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             long timeLeft = Server.getTimeLeftForNextDay();
             FamilyDailyResetTask.resetEntitlementUsage(this);
-            tman.register(new FamilyDailyResetTask(this), 24 * 60 * 60 * 1000, timeLeft);
+            tman.register(new FamilyDailyResetTask(this), DAYS.toMillis(1), timeLeft);
         }
     }
 
@@ -394,7 +396,7 @@ public class World {
     }
 
     public int getTransportationTime(int travelTime) {
-        return (int) Math.ceil(travelTime / travelrate);
+        return (int) Math.ceil((double) travelTime / travelrate);
     }
 
     public int getFishingRate() {
@@ -1600,7 +1602,7 @@ public class World {
         activeMerchantsLock.lock();
         try {
             int initProc;
-            if (Server.getInstance().getCurrentTime() - merchantUpdate > 5 * 60 * 1000) {
+            if (Server.getInstance().getCurrentTime() - merchantUpdate > MINUTES.toMillis(5)) {
                 initProc = 1;
             } else {
                 initProc = 0;

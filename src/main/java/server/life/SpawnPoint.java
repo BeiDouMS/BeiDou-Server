@@ -27,6 +27,8 @@ import net.server.Server;
 import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class SpawnPoint {
     private final int monster;
     private final int mobTime;
@@ -87,7 +89,7 @@ public class SpawnPoint {
             public void monsterKilled(int aniTime) {
                 nextPossibleSpawn = Server.getInstance().getCurrentTime();
                 if (mobTime > 0) {
-                    nextPossibleSpawn += mobTime * 1000;
+                    nextPossibleSpawn += SECONDS.toMillis(mobTime);
                 } else {
                     nextPossibleSpawn += aniTime;
                 }

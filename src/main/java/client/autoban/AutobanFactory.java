@@ -29,6 +29,9 @@ import net.server.Server;
 import tools.FilePrinter;
 import tools.PacketCreator;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author kevintjuh93
  */
@@ -36,22 +39,22 @@ public enum AutobanFactory {
     MOB_COUNT,
     GENERAL,
     FIX_DAMAGE,
-    DAMAGE_HACK(15, 60 * 1000),
-    DISTANCE_HACK(10, 120 * 1000),
-    PORTAL_DISTANCE(5, 30000),
+    DAMAGE_HACK(15, MINUTES.toMillis(1)),
+    DISTANCE_HACK(10, MINUTES.toMillis(2)),
+    PORTAL_DISTANCE(5, SECONDS.toMillis(30)),
     PACKET_EDIT,
     ACC_HACK,
     CREATION_GENERATOR,
     HIGH_HP_HEALING,
     FAST_HP_HEALING(15),
-    FAST_MP_HEALING(20, 30000),
+    FAST_MP_HEALING(20, SECONDS.toMillis(30)),
     GACHA_EXP,
-    TUBI(20, 15000),
+    TUBI(20, SECONDS.toMillis(15)),
     SHORT_ITEM_VAC,
     ITEM_VAC,
-    FAST_ITEM_PICKUP(5, 30000),
-    FAST_ATTACK(10, 30000),
-    MPCON(25, 30000);
+    FAST_ITEM_PICKUP(5, SECONDS.toMillis(30)),
+    FAST_ATTACK(10, SECONDS.toMillis(30)),
+    MPCON(25, SECONDS.toMillis(30));
 
     private final int points;
     private final long expiretime;
@@ -83,7 +86,7 @@ public enum AutobanFactory {
     }
 
     public void alert(Character chr, String reason) {
-        if (YamlConfig.config.server.USE_AUTOBAN == true) {
+        if (YamlConfig.config.server.USE_AUTOBAN) {
             if (chr != null && MapleLogger.ignored.contains(chr.getId())) {
                 return;
             }
@@ -95,7 +98,7 @@ public enum AutobanFactory {
     }
 
     public void autoban(Character chr, String value) {
-        if (YamlConfig.config.server.USE_AUTOBAN == true) {
+        if (YamlConfig.config.server.USE_AUTOBAN) {
             chr.autoban("Autobanned for (" + this.name() + ": " + value + ")");
             //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");
         }

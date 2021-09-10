@@ -14,6 +14,9 @@ import tools.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author Drago (Dragohe4rt)
  */
@@ -43,7 +46,7 @@ public class MonsterCarnival {
             p1.setEnemy(p2);
             p2.setEnemy(p1);
             map = cs.getMapFactory().getDisposableMap(mapid);
-            startTime = System.currentTimeMillis() + 10 * 60 * 1000;
+            startTime = System.currentTimeMillis() + MINUTES.toMillis(10);
             int redPortal = 0;
             int bluePortal = 0;
             if (map.isPurpleCPQMap()) {
@@ -96,8 +99,8 @@ public class MonsterCarnival {
 
             // thanks Atoot, Vcoc for noting double CPQ functional being sent to players in CPQ start
 
-            timer = TimerManager.getInstance().schedule(() -> timeUp(), map.getTimeDefault() * 1000); // thanks Atoot for noticing an irregular "event extended" issue here
-            effectTimer = TimerManager.getInstance().schedule(() -> complete(), map.getTimeDefault() * 1000 - 10 * 1000);
+            timer = TimerManager.getInstance().schedule(() -> timeUp(), SECONDS.toMillis(map.getTimeDefault())); // thanks Atoot for noticing an irregular "event extended" issue here
+            effectTimer = TimerManager.getInstance().schedule(() -> complete(), SECONDS.toMillis(map.getTimeDefault() - 10));
             respawnTask = TimerManager.getInstance().register(() -> respawn(), YamlConfig.config.server.RESPAWN_INTERVAL);
 
             cs.initMonsterCarnival(cpq1, room);
@@ -344,12 +347,12 @@ public class MonsterCarnival {
         for (Character chrMap : map.getAllPlayers()) {
             chrMap.dropMessage(5, LanguageConstants.getMessage(chrMap, LanguageConstants.CPQExtendTime));
         }
-        startTime = System.currentTimeMillis() + 3 * 60 * 1000;
+        startTime = System.currentTimeMillis() + MINUTES.toMillis(3);
 
-        map.broadcastMessage(PacketCreator.getClock(3 * 60));
+        map.broadcastMessage(PacketCreator.getClock((int) MINUTES.toSeconds(3)));
 
-        timer = TimerManager.getInstance().schedule(() -> timeUp(), map.getTimeExpand() * 1000);
-        effectTimer = TimerManager.getInstance().schedule(() -> complete(), map.getTimeExpand() * 1000 - 10 * 1000); // thanks Vcoc for noticing a time set issue here
+        timer = TimerManager.getInstance().schedule(() -> timeUp(), SECONDS.toMillis(map.getTimeExpand()));
+        effectTimer = TimerManager.getInstance().schedule(() -> complete(), SECONDS.toMillis(map.getTimeExpand() - 10)); // thanks Vcoc for noticing a time set issue here
     }
 
     public void complete() {

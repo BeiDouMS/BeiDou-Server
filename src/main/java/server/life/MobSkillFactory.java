@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author Danny (Leifde)
  */
@@ -82,8 +84,8 @@ public class MobSkillFactory {
                     int x = DataTool.getInt("x", skillData, 1);
                     int y = DataTool.getInt("y", skillData, 1);
                     int count = DataTool.getInt("count", skillData, 1);
-                    long duration = DataTool.getInt("time", skillData, 0) * 1000;
-                    long cooltime = DataTool.getInt("interval", skillData, 0) * 1000;
+                    long duration = SECONDS.toMillis(DataTool.getInt("time", skillData, 0));
+                    long cooltime = SECONDS.toMillis(DataTool.getInt("interval", skillData, 0));
                     int iprop = DataTool.getInt("prop", skillData, 100);
                     float prop = iprop / 100;
                     int limit = DataTool.getInt("limit", skillData, 0);
