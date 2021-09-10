@@ -30,6 +30,8 @@ import tools.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author kevintjuh93
  */
@@ -136,7 +138,7 @@ public class Pyramid extends PartyQuest {
         timer = TimerManager.getInstance().schedule(() -> {
             stage++;
             warp(map + (stage * 100));//Should work :D
-        }, value * 1000);//, 4000
+        }, SECONDS.toMillis(value));//, 4000
         broadcastInfo("party", getParticipants().size() > 1 ? 1 : 0);
         broadcastInfo("hit", kill);
         broadcastInfo("miss", miss);

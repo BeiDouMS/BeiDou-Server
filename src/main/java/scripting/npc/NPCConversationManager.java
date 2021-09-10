@@ -69,6 +69,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author Matze
  */
@@ -670,9 +672,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     mc.changeMap(map, map.getPortal(0));
                     mc.sendPacket(PacketCreator.serverNotice(6, LanguageConstants.getMessage(mc, LanguageConstants.CPQEntryLobby)));
                     TimerManager tMan = TimerManager.getInstance();
-                    tMan.schedule(() -> mapClock(3 * 60), 1500);
+                    tMan.schedule(() -> mapClock((int) MINUTES.toSeconds(3)), 1500);
 
-                    mc.setCpqTimer(TimerManager.getInstance().schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), 3 * 60 * 1000));
+                    mc.setCpqTimer(TimerManager.getInstance().schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), MINUTES.toMillis(3)));
                 }
             }
         } catch (Exception ex) {
@@ -913,9 +915,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                     mc.changeMap(map, map.getPortal(0));
                     mc.sendPacket(PacketCreator.serverNotice(6, LanguageConstants.getMessage(mc, LanguageConstants.CPQEntryLobby)));
                     TimerManager tMan = TimerManager.getInstance();
-                    tMan.schedule(() -> mapClock(3 * 60), 1500);
+                    tMan.schedule(() -> mapClock((int) MINUTES.toSeconds(3)), 1500);
 
-                    mc.setCpqTimer(TimerManager.getInstance().schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), 3 * 60 * 1000));
+                    mc.setCpqTimer(TimerManager.getInstance().schedule(() -> mc.changeMap(mapExit, mapExit.getPortal(0)), MINUTES.toMillis(3)));
                 }
             }
         } catch (Exception ex) {

@@ -29,6 +29,8 @@ import client.command.Command;
 import server.maps.MapleMap;
 import server.maps.Portal;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 public class JailCommand extends Command {
     {
         setDescription("Move a player to the jail.");
@@ -53,7 +55,7 @@ public class JailCommand extends Command {
 
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
-            victim.addJailExpirationTime(minutesJailed * 60 * 1000);
+            victim.addJailExpirationTime(MINUTES.toMillis(minutesJailed));
 
             int mapid = 300000012;
 

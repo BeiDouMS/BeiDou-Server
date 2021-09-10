@@ -39,6 +39,8 @@ import server.StatEffect;
 import tools.PacketCreator;
 import tools.Randomizer;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 
 public final class RangedAttackHandler extends AbstractDealDamageHandler {
 
@@ -214,7 +216,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                             return;
                         } else {
                             c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
-                            chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
+                            chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
                         }
                     }
                 }

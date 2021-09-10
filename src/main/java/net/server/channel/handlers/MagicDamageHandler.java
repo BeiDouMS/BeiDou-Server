@@ -34,6 +34,8 @@ import net.packet.Packet;
 import server.StatEffect;
 import tools.PacketCreator;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public final class MagicDamageHandler extends AbstractDealDamageHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
@@ -72,7 +74,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
                 return;
             } else {
                 c.sendPacket(PacketCreator.skillCooldown(attack.skill, effect_.getCooldown()));
-                chr.addCooldown(attack.skill, currentServerTime(), effect_.getCooldown() * 1000);
+                chr.addCooldown(attack.skill, currentServerTime(), SECONDS.toMillis(effect_.getCooldown()));
             }
         }
         applyAttack(attack, chr, effect.getAttackCount());

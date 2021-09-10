@@ -77,6 +77,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Predicate;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class MapleMap {
 
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
@@ -1880,11 +1883,11 @@ public class MapleMap {
             if (selfDestruction == null) {
                 removeAfterAction = () -> killMonster(monster, null, false);
 
-                registerMapSchedule(removeAfterAction, monster.getStats().removeAfter() * 1000);
+                registerMapSchedule(removeAfterAction, SECONDS.toMillis(monster.getStats().removeAfter()));
             } else {
                 removeAfterAction = () -> killMonster(monster, null, false, selfDestruction.getAction());
 
-                registerMapSchedule(removeAfterAction, selfDestruction.removeAfter() * 1000);
+                registerMapSchedule(removeAfterAction, SECONDS.toMillis(selfDestruction.removeAfter()));
             }
 
             monster.pushRemoveAfterAction(removeAfterAction);
@@ -2396,7 +2399,7 @@ public class MapleMap {
         }
 
         if (mapid == 200090060) { // To Rien
-            int travelTime = getWorldServer().getTransportationTime(1 * 60 * 1000);
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(1));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
                 if (chr.getMapId() == 200090060) {
@@ -2404,7 +2407,7 @@ public class MapleMap {
                 }
             }, travelTime);
         } else if (mapid == 200090070) { // To Lith Harbor
-            int travelTime = getWorldServer().getTransportationTime(1 * 60 * 1000);
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(1));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
                 if (chr.getMapId() == 200090070) {
@@ -2412,7 +2415,7 @@ public class MapleMap {
                 }
             }, travelTime);
         } else if (mapid == 200090030) { // To Ereve (SkyFerry)
-            int travelTime = getWorldServer().getTransportationTime(2 * 60 * 1000);
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(2));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
                 if (chr.getMapId() == 200090030) {
@@ -2420,7 +2423,7 @@ public class MapleMap {
                 }
             }, travelTime);
         } else if (mapid == 200090031) { // To Victoria Island (SkyFerry)
-            int travelTime = getWorldServer().getTransportationTime(2 * 60 * 1000);
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(2));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
                 if (chr.getMapId() == 200090031) {
@@ -2428,7 +2431,7 @@ public class MapleMap {
                 }
             }, travelTime);
         } else if (mapid == 200090021) { // To Orbis (SkyFerry)
-            int travelTime = getWorldServer().getTransportationTime(8 * 60 * 1000);
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(8));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
                 if (chr.getMapId() == 200090021) {
@@ -2436,7 +2439,7 @@ public class MapleMap {
                 }
             }, travelTime);
         } else if (mapid == 200090020) { // To Ereve From Orbis (SkyFerry)
-            int travelTime = getWorldServer().getTransportationTime(8 * 60 * 1000);
+            int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(8));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
                 if (chr.getMapId() == 200090020) {
@@ -2449,7 +2452,7 @@ public class MapleMap {
                 mmd.registerPlayer(chr);
             }
         } else if (GameConstants.isAriantColiseumArena(mapid)) {
-            int pqTimer = (10 * 60 * 1000);
+            int pqTimer = (int) MINUTES.toMillis(10);
             chr.sendPacket(PacketCreator.getClock(pqTimer / 1000));
         }
 

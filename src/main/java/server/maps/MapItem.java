@@ -30,6 +30,8 @@ import tools.PacketCreator;
 import java.awt.*;
 import java.util.concurrent.locks.Lock;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class MapItem extends AbstractMapObject {
     protected Client ownerClient;
     protected Item item;
@@ -128,7 +130,7 @@ public class MapItem extends AbstractMapObject {
     }
 
     public final boolean hasExpiredOwnershipTime() {
-        return System.currentTimeMillis() - dropTime >= 15 * 1000;
+        return System.currentTimeMillis() - dropTime >= SECONDS.toMillis(15);
     }
 
     public final boolean canBePickedBy(Character chr) {

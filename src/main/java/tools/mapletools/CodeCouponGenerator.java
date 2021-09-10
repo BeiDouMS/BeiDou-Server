@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author RonanLana
@@ -237,7 +238,7 @@ public class CodeCouponGenerator {
         generatedKeys = null;
 
         PreparedStatement ps = con.prepareStatement("INSERT IGNORE INTO `nxcode` (`code`, `expiration`) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setLong(2, currentTime + ((long) recipe.duration * 60 * 60 * 1000));
+        ps.setLong(2, currentTime + TimeUnit.HOURS.toMillis(recipe.duration));
 
         for (int i = 0; i < recipe.quantity; i++) {
             ps.setString(1, generateCouponCode());

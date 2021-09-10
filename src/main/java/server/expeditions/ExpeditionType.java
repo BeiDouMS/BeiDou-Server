@@ -47,14 +47,14 @@ public enum ExpeditionType {
     private final int maxSize;
     private final int minLevel;
     private final int maxLevel;
-    private final int registrationTime;
+    private final int registrationMinutes;
 
     ExpeditionType(int minSize, int maxSize, int minLevel, int maxLevel, int minutes) {
         this.minSize = minSize;
         this.maxSize = maxSize;
         this.minLevel = minLevel;
         this.maxLevel = maxLevel;
-        this.registrationTime = minutes;
+        this.registrationMinutes = minutes;
     }
 
     public int getMinSize() {
@@ -73,7 +73,7 @@ public enum ExpeditionType {
         return maxLevel;
     }
 
-    public int getRegistrationTime() {
-        return registrationTime;
+    public int getRegistrationMinutes() {
+        return registrationMinutes;
     }
 }

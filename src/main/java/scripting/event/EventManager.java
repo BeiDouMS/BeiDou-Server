@@ -51,6 +51,8 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 //import jdk.nashorn.api.scripting.ScriptUtils;
 
 /**
@@ -265,7 +267,7 @@ public class EventManager {
             synchronized (instances) {
                 instances.remove(name);
             }
-        }, YamlConfig.config.server.EVENT_LOBBY_DELAY * 1000);
+        }, SECONDS.toMillis(YamlConfig.config.server.EVENT_LOBBY_DELAY));
     }
 
     public void setProperty(String key, String value) {

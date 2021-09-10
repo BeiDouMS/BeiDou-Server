@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+
 /**
  * @author Matze
  * @author Ronan (HeavenMS)
@@ -284,7 +286,7 @@ public class MiniGame extends AbstractMapObject {
             visitorscore += 10;
             ownerscore += 10;
 
-            nextavailabletie = timeNow + 5 * 60 * 1000;
+            nextavailabletie = timeNow + MINUTES.toMillis(5);
         }
 
         this.broadcast(PacketCreator.getMiniGameTie(this));

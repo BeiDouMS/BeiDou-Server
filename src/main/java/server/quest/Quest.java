@@ -38,6 +38,9 @@ import tools.StringUtil;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static java.util.concurrent.TimeUnit.HOURS;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * @author Matze
  * @author Ronan - support for medal quests
@@ -204,7 +207,7 @@ public class Quest {
         }
 
         IntervalRequirement ir = (IntervalRequirement) startReqs.get(QuestRequirementType.INTERVAL);
-        return ir.getInterval() < YamlConfig.config.server.QUEST_POINT_REPEATABLE_INTERVAL * 60 * 60 * 1000;
+        return ir.getInterval() < HOURS.toMillis(YamlConfig.config.server.QUEST_POINT_REPEATABLE_INTERVAL);
     }
 
     public boolean canStartQuestByStatus(Character chr) {
@@ -343,7 +346,7 @@ public class Quest {
         newStatus.setCompleted(chr.getQuest(this).getCompleted());
 
         if (timeLimit > 0) {
-            newStatus.setExpirationTime(System.currentTimeMillis() + (timeLimit * 1000));
+            newStatus.setExpirationTime(System.currentTimeMillis() + SECONDS.toMillis(timeLimit));
             chr.questTimeLimit(this, timeLimit);
         }
         if (timeLimit2 > 0) {

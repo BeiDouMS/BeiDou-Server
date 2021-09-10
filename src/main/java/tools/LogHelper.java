@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public class LogHelper {
 
     public static void logTrade(Trade trade1, Trade trade2) {
@@ -53,8 +56,8 @@ public class LogHelper {
 
     public static String getTimeString(long then) {
         long duration = System.currentTimeMillis() - then;
-        int seconds = (int) (duration / 1000) % 60;
-        int minutes = (int) ((duration / (1000 * 60)) % 60);
+        int seconds = (int) (duration / SECONDS.toMillis(1)) % 60;
+        int minutes = (int) ((duration / MINUTES.toMillis(1)) % 60);
         return minutes + " Minutes and " + seconds + " Seconds";
     }
 

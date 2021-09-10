@@ -28,6 +28,9 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.HOURS;
+
 /**
  * @author Conrad
  * @author Ronan
@@ -97,8 +100,8 @@ public class ExpeditionBossLog {
 
         Calendar now = Calendar.getInstance();
 
-        long weekLength = 7 * 24 * 60 * 60 * 1000;
-        long halfDayLength = 12 * 60 * 60 * 1000;
+        long weekLength = DAYS.toMillis(7);
+        long halfDayLength = HOURS.toMillis(12);
 
         long deltaTime = now.getTime().getTime() - thursday.getTime().getTime();    // 2x time: get Date into millis
         deltaTime += halfDayLength;

@@ -36,6 +36,8 @@ import tools.PacketCreator;
 
 import java.awt.*;
 
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 public final class SpecialMoveHandler extends AbstractPacketHandler {
 
     @Override
@@ -82,7 +84,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                 }
 
                 c.sendPacket(PacketCreator.skillCooldown(skillid, cooldownTime));
-                chr.addCooldown(skillid, currentServerTime(), cooldownTime * 1000);
+                chr.addCooldown(skillid, currentServerTime(), SECONDS.toMillis(cooldownTime));
             }
         }
         if (skillid == Hero.MONSTER_MAGNET || skillid == Paladin.MONSTER_MAGNET || skillid == DarkKnight.MONSTER_MAGNET) { // Monster Magnet

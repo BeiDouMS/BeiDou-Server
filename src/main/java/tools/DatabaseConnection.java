@@ -10,7 +10,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * @author Frz (Big Daddy)
@@ -46,8 +47,8 @@ public class DatabaseConnection {
         config.setPassword(YamlConfig.config.server.DB_PASS);
 
         final int initFailTimeoutSeconds = YamlConfig.config.server.INIT_CONNECTION_POOL_TIMEOUT;
-        config.setInitializationFailTimeout(TimeUnit.SECONDS.toMillis(initFailTimeoutSeconds));
-        config.setConnectionTimeout(30 * 1000); // Hikari default
+        config.setInitializationFailTimeout(SECONDS.toMillis(initFailTimeoutSeconds));
+        config.setConnectionTimeout(SECONDS.toMillis(30)); // Hikari default
         config.setMaximumPoolSize(10); // Hikari default
 
         config.addDataSourceProperty("cachePrepStmts", true);
