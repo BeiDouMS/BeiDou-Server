@@ -5203,6 +5203,19 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * @param chrNames Blacklisted names. The first 20 names will be displayed, anything beyond does no difference.
+     */
+    public static Packet viewBlacklist(List<String> chrNames) {
+        final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
+        p.writeByte(PlayerInteractionHandler.Action.VIEW_BLACKLIST.getCode());
+        p.writeShort(chrNames.size());
+        for (String chrName : chrNames) {
+            p.writeString(chrName);
+        }
+        return p;
+    }
+
     public static Packet hiredMerchantVisitorAdd(Character chr, int slot) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VISIT.getCode());

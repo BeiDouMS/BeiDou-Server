@@ -44,6 +44,7 @@ import tools.PacketCreator;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author Matze
@@ -83,7 +84,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         MERCHANT_MESO(0x2B),
         SOMETHING(0x2D),
         VIEW_VISITORS(0x2E),
-        BLACKLIST(0x2F),
+        VIEW_BLACKLIST(0x2F),
+        ADD_TO_BLACKLIST(0x30),
+        REMOVE_FROM_BLACKLIST(0x31),
         REQUEST_TIE(0x32),
         ANSWER_TIE(0x33),
         GIVE_UP(0x34),
@@ -681,6 +684,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 merchant.withdrawMesos(chr);
+
+            } else if (mode == Action.VIEW_BLACKLIST.getCode()) {
+                List<String> blacklistedNames = List.of("Blanca", "Betsy", "Kevin", "Rosa", "Evan", "Terence",
+                        "Cecilia", "Gayle", "Erma", "Dorothy", "Willis", "Alberta", "Marilyn", "Myron", "Sheryl",
+                        "Marco", "Jose", "Kendra", "Laurence", "Victoria", "NonListed");
+                c.sendPacket(PacketCreator.viewBlacklist(blacklistedNames));
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null || !merchant.isOwner(chr)) {
