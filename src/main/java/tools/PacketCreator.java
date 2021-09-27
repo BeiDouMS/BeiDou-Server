@@ -76,6 +76,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -5204,9 +5205,24 @@ public class PacketCreator {
     }
 
     /**
+     * @param chrNames Merchant visitors. The first 10 names will be shown,
+     *                 everything beyond will layered over each other at the top of the window.
+     */
+    public static Packet viewMerchantVisitors(List<String> chrNames) {
+        final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
+        p.writeByte(PlayerInteractionHandler.Action.VIEW_VISITORS.getCode());
+        p.writeShort(chrNames.size());
+        for (String chrName : chrNames) {
+            p.writeString(chrName);
+            p.writeInt((int) (TimeUnit.HOURS.toMillis(1) + TimeUnit.MINUTES.toMillis(23))); // milliseconds, displayed as hours+minutes
+        }
+        return p;
+    }
+
+    /**
      * @param chrNames Blacklisted names. The first 20 names will be displayed, anything beyond does no difference.
      */
-    public static Packet viewBlacklist(List<String> chrNames) {
+    public static Packet viewMerchantBlacklist(List<String> chrNames) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VIEW_BLACKLIST.getCode());
         p.writeShort(chrNames.size());

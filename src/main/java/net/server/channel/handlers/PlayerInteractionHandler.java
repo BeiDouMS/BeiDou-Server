@@ -685,11 +685,15 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                 merchant.withdrawMesos(chr);
 
+            } else if (mode == Action.VIEW_VISITORS.getCode()) {
+                List<String> visitorNames = List.of("Dwayne", "Ruben", "Ada", "Clifton", "Beatrice", "Kent", "Max",
+                        "Cecelia", "Edward", "Cory");
+                c.sendPacket(PacketCreator.viewMerchantVisitors(visitorNames));
             } else if (mode == Action.VIEW_BLACKLIST.getCode()) {
                 List<String> blacklistedNames = List.of("Blanca", "Betsy", "Kevin", "Rosa", "Evan", "Terence",
                         "Cecilia", "Gayle", "Erma", "Dorothy", "Willis", "Alberta", "Marilyn", "Myron", "Sheryl",
                         "Marco", "Jose", "Kendra", "Laurence", "Victoria", "NonListed");
-                c.sendPacket(PacketCreator.viewBlacklist(blacklistedNames));
+                c.sendPacket(PacketCreator.viewMerchantBlacklist(blacklistedNames));
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null || !merchant.isOwner(chr)) {
