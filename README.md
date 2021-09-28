@@ -5,14 +5,18 @@ This document is currently being worked on, so it may not be fully accurate.
 
 ## Beware
 
-***This emulator is not production ready.***  
+***This emulator is not production ready.***
 
-It can be useful for testing things locally or for trying out ideas, but launching a new private server based on this with no real changes is not recommended.
+It can be useful for testing things locally or for trying out ideas, but launching a new private server based on this
+with no real changes is not recommended.
 
 ---
+
 ### Development information
-#### Status
-The current status is: <span style="color:LightGreen">*in development and gladly accepting contributions*</span>
+
+#### Status (updated 28/9/21)
+
+Development is <span style="color:Orange">**on pause**</span>, but any submitted PRs will be reviewed.
 
 #### Ways to contribute
 
@@ -21,6 +25,7 @@ The current status is: <span style="color:LightGreen">*in development and gladly
 * Spread the word about Cosmic
 
 #### Community
+
 GitHub: https://github.com/P0nk/Cosmic  
 Discord: https://discord.gg/JU5aQapVZK
 

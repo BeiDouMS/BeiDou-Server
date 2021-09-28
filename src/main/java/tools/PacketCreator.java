@@ -5089,7 +5089,7 @@ public class PacketCreator {
         p.writeInt(hm.getItemId());
         p.writeString("Hired Merchant");
 
-        Character[] visitors = hm.getVisitors();
+        Character[] visitors = hm.getVisitorCharacters();
         for (int i = 0; i < 3; i++) {
             if (visitors[i] != null) {
                 p.writeByte(i + 1);
@@ -5200,6 +5200,34 @@ public class PacketCreator {
         p.writeByte(PlayerInteractionHandler.Action.EXIT.getCode());
         p.writeByte(slot);
         p.writeByte(status2);
+        return p;
+    }
+
+    /**
+     * @param pastVisitors Merchant visitors. The first 10 names will be shown,
+     *                     everything beyond will layered over each other at the top of the window.
+     */
+    public static Packet viewMerchantVisitorHistory(List<HiredMerchant.PastVisitor> pastVisitors) {
+        final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
+        p.writeByte(PlayerInteractionHandler.Action.VIEW_VISITORS.getCode());
+        p.writeShort(pastVisitors.size());
+        for (HiredMerchant.PastVisitor pastVisitor : pastVisitors) {
+            p.writeString(pastVisitor.chrName());
+            p.writeInt((int) pastVisitor.visitDuration().toMillis()); // milliseconds, displayed as hours and minutes
+        }
+        return p;
+    }
+
+    /**
+     * @param chrNames Blacklisted names. The first 20 names will be displayed, anything beyond does no difference.
+     */
+    public static Packet viewMerchantBlacklist(Set<String> chrNames) {
+        final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
+        p.writeByte(PlayerInteractionHandler.Action.VIEW_BLACKLIST.getCode());
+        p.writeShort(chrNames.size());
+        for (String chrName : chrNames) {
+            p.writeString(chrName);
+        }
         return p;
     }
 

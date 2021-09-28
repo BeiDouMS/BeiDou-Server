@@ -83,7 +83,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
         MERCHANT_MESO(0x2B),
         SOMETHING(0x2D),
         VIEW_VISITORS(0x2E),
-        BLACKLIST(0x2F),
+        VIEW_BLACKLIST(0x2F),
+        ADD_TO_BLACKLIST(0x30),
+        REMOVE_FROM_BLACKLIST(0x31),
         REQUEST_TIE(0x32),
         ANSWER_TIE(0x33),
         GIVE_UP(0x34),
@@ -283,8 +285,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                     int oid = p.readInt();
                     MapObject ob = chr.getMap().getMapObject(oid);
-                    if (ob instanceof PlayerShop) {
-                        PlayerShop shop = (PlayerShop) ob;
+                    if (ob instanceof PlayerShop shop) {
                         shop.visitShop(chr);
                     } else if (ob instanceof MiniGame) {
                         p.skip(1);
@@ -309,8 +310,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         } else {
                             chr.sendPacket(PacketCreator.getMiniRoomError(22));
                         }
-                    } else if (ob instanceof HiredMerchant && chr.getHiredMerchant() == null) {
-                        HiredMerchant merchant = (HiredMerchant) ob;
+                    } else if (ob instanceof HiredMerchant merchant && chr.getHiredMerchant() == null) {
                         merchant.visitShop(chr);
                     }
                 }
@@ -681,6 +681,34 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
 
                 merchant.withdrawMesos(chr);
+
+            } else if (mode == Action.VIEW_VISITORS.getCode()) {
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+                c.sendPacket(PacketCreator.viewMerchantVisitorHistory(merchant.getVisitorHistory()));
+            } else if (mode == Action.VIEW_BLACKLIST.getCode()) {
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+
+                c.sendPacket(PacketCreator.viewMerchantBlacklist(merchant.getBlacklist()));
+            } else if (mode == Action.ADD_TO_BLACKLIST.getCode()) {
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+                String chrName = p.readString();
+                merchant.addToBlacklist(chrName);
+            } else if (mode == Action.REMOVE_FROM_BLACKLIST.getCode()) {
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+                String chrName = p.readString();
+                merchant.removeFromBlacklist(chrName);
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null || !merchant.isOwner(chr)) {
