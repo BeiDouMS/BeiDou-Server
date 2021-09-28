@@ -312,8 +312,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         } else {
                             chr.sendPacket(PacketCreator.getMiniRoomError(22));
                         }
-                    } else if (ob instanceof HiredMerchant && chr.getHiredMerchant() == null) {
-                        HiredMerchant merchant = (HiredMerchant) ob;
+                    } else if (ob instanceof HiredMerchant merchant && chr.getHiredMerchant() == null) {
                         merchant.visitShop(chr);
                     }
                 }
@@ -686,9 +685,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 merchant.withdrawMesos(chr);
 
             } else if (mode == Action.VIEW_VISITORS.getCode()) {
-                List<String> visitorNames = List.of("Dwayne", "Ruben", "Ada", "Clifton", "Beatrice", "Kent", "Max",
-                        "Cecelia", "Edward", "Cory");
-                c.sendPacket(PacketCreator.viewMerchantVisitors(visitorNames));
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+                c.sendPacket(PacketCreator.viewMerchantVisitorHistory(merchant.getVisitorHistory()));
             } else if (mode == Action.VIEW_BLACKLIST.getCode()) {
                 List<String> blacklistedNames = List.of("Blanca", "Betsy", "Kevin", "Rosa", "Evan", "Terence",
                         "Cecilia", "Gayle", "Erma", "Dorothy", "Willis", "Alberta", "Marilyn", "Myron", "Sheryl",

@@ -45,6 +45,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -57,6 +59,9 @@ import java.util.concurrent.locks.Lock;
  * @author Ronan - concurrency protection
  */
 public class HiredMerchant extends AbstractMapObject {
+    private static final int VISITOR_HISTORY_LIMIT = 10;
+    private static final int BLACKLIST_LIMIT = 20;
+
     private final int ownerId;
     private final int itemId;
     private final int mesos = 0;
@@ -65,14 +70,19 @@ public class HiredMerchant extends AbstractMapObject {
     private final long start;
     private String ownerName = "";
     private String description = "";
-    private final Character[] visitors = new Character[3];
     private final List<PlayerShopItem> items = new LinkedList<>();
     private final List<Pair<String, Byte>> messages = new LinkedList<>();
     private final List<SoldItem> sold = new LinkedList<>();
     private final AtomicBoolean open = new AtomicBoolean();
     private boolean published = false;
     private MapleMap map;
+    private final Visitor[] visitors = new Visitor[3];
+    private final LinkedList<PastVisitor> visitorHistory = new LinkedList<>();
     private final Lock visitorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.VISITOR_MERCH, true);
+
+    private record Visitor(Character chr, Instant enteredAt) {}
+
+    public record PastVisitor(String chrName, Duration visitDuration) {}
 
     public HiredMerchant(final Character owner, String desc, int itemId) {
         this.setPosition(owner.getPosition());
@@ -96,9 +106,9 @@ public class HiredMerchant extends AbstractMapObject {
     }
 
     private void broadcastToVisitors(Packet packet) {
-        for (Character visitor : visitors) {
+        for (Visitor visitor : visitors) {
             if (visitor != null) {
-                visitor.sendPacket(packet);
+                visitor.chr.sendPacket(packet);
             }
         }
     }
@@ -108,7 +118,7 @@ public class HiredMerchant extends AbstractMapObject {
         try {
             byte count = 0;
             if (this.isOpen()) {
-                for (Character visitor : visitors) {
+                for (Visitor visitor : visitors) {
                     if (visitor != null) {
                         count++;
                     }
@@ -128,7 +138,7 @@ public class HiredMerchant extends AbstractMapObject {
         try {
             int i = this.getFreeSlot();
             if (i > -1) {
-                visitors[i] = visitor;
+                visitors[i] = new Visitor(visitor, Instant.now());
                 broadcastToVisitors(PacketCreator.hiredMerchantVisitorAdd(visitor, i + 1));
                 this.getMap().broadcastMessage(PacketCreator.updateHiredMerchantBox(this));
 
@@ -141,20 +151,31 @@ public class HiredMerchant extends AbstractMapObject {
         }
     }
 
-    public void removeVisitor(Character visitor) {
+    public void removeVisitor(Character chr) {
         visitorLock.lock();
         try {
-            int slot = getVisitorSlot(visitor);
+            int slot = getVisitorSlot(chr);
             if (slot < 0) { //Not found
                 return;
             }
-            if (visitors[slot] != null && visitors[slot].getId() == visitor.getId()) {
+
+            Visitor visitor = visitors[slot];
+            if (visitor != null && visitor.chr.getId() == chr.getId()) {
                 visitors[slot] = null;
+                addVisitorToHistory(visitor);
                 broadcastToVisitors(PacketCreator.hiredMerchantVisitorLeave(slot + 1));
                 this.getMap().broadcastMessage(PacketCreator.updateHiredMerchantBox(this));
             }
         } finally {
             visitorLock.unlock();
+        }
+    }
+
+    private void addVisitorToHistory(Visitor visitor) {
+        Duration visitDuration = Duration.between(visitor.enteredAt, Instant.now());
+        visitorHistory.addFirst(new PastVisitor(visitor.chr.getName(), visitDuration));
+        while (visitorHistory.size() > VISITOR_HISTORY_LIMIT) {
+            visitorHistory.removeLast();
         }
     }
 
@@ -169,7 +190,7 @@ public class HiredMerchant extends AbstractMapObject {
 
     private int getVisitorSlot(Character visitor) {
         for (int i = 0; i < 3; i++) {
-            if (visitors[i] != null && visitors[i].getId() == visitor.getId()) {
+            if (visitors[i] != null && visitors[i].chr.getId() == visitor.getId()) {
                 return i;
             }
         }
@@ -180,15 +201,15 @@ public class HiredMerchant extends AbstractMapObject {
         visitorLock.lock();
         try {
             for (int i = 0; i < 3; i++) {
-                Character visitor = visitors[i];
+                Visitor visitor = visitors[i];
 
                 if (visitor != null) {
-                    visitor.setHiredMerchant(null);
-
-                    visitor.sendPacket(PacketCreator.leaveHiredMerchant(i + 1, 0x11));
-                    visitor.sendPacket(PacketCreator.hiredMerchantMaintenanceMessage());
-
+                    final Character visitorChr = visitor.chr;
+                    visitorChr.setHiredMerchant(null);
+                    visitorChr.sendPacket(PacketCreator.leaveHiredMerchant(i + 1, 0x11));
+                    visitorChr.sendPacket(PacketCreator.hiredMerchantMaintenanceMessage());
                     visitors[i] = null;
+                    addVisitorToHistory(visitor);
                 }
             }
 
@@ -498,12 +519,15 @@ public class HiredMerchant extends AbstractMapObject {
         return description;
     }
 
-    public Character[] getVisitors() {
+    public Character[] getVisitorCharacters() {
         visitorLock.lock();
         try {
             Character[] copy = new Character[3];
             for (int i = 0; i < visitors.length; i++) {
-                copy[i] = visitors[i];
+                Visitor visitor = visitors[i];
+                if (visitor != null) {
+                    copy[i] = visitor.chr;
+                }
             }
 
             return copy;
@@ -692,6 +716,10 @@ public class HiredMerchant extends AbstractMapObject {
 
             return msgList;
         }
+    }
+
+    public List<PastVisitor> getVisitorHistory() {
+        return Collections.unmodifiableList(visitorHistory);
     }
 
     public int getMapId() {

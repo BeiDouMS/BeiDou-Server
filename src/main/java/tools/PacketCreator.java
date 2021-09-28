@@ -76,7 +76,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -5090,7 +5089,7 @@ public class PacketCreator {
         p.writeInt(hm.getItemId());
         p.writeString("Hired Merchant");
 
-        Character[] visitors = hm.getVisitors();
+        Character[] visitors = hm.getVisitorCharacters();
         for (int i = 0; i < 3; i++) {
             if (visitors[i] != null) {
                 p.writeByte(i + 1);
@@ -5205,16 +5204,16 @@ public class PacketCreator {
     }
 
     /**
-     * @param chrNames Merchant visitors. The first 10 names will be shown,
-     *                 everything beyond will layered over each other at the top of the window.
+     * @param pastVisitors Merchant visitors. The first 10 names will be shown,
+     *                     everything beyond will layered over each other at the top of the window.
      */
-    public static Packet viewMerchantVisitors(List<String> chrNames) {
+    public static Packet viewMerchantVisitorHistory(List<HiredMerchant.PastVisitor> pastVisitors) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VIEW_VISITORS.getCode());
-        p.writeShort(chrNames.size());
-        for (String chrName : chrNames) {
-            p.writeString(chrName);
-            p.writeInt((int) (TimeUnit.HOURS.toMillis(1) + TimeUnit.MINUTES.toMillis(23))); // milliseconds, displayed as hours+minutes
+        p.writeShort(pastVisitors.size());
+        for (HiredMerchant.PastVisitor pastVisitor : pastVisitors) {
+            p.writeString(pastVisitor.chrName());
+            p.writeInt((int) pastVisitor.visitDuration().toMillis()); // milliseconds, displayed as hours and minutes
         }
         return p;
     }
