@@ -5221,7 +5221,7 @@ public class PacketCreator {
     /**
      * @param chrNames Blacklisted names. The first 20 names will be displayed, anything beyond does no difference.
      */
-    public static Packet viewMerchantBlacklist(List<String> chrNames) {
+    public static Packet viewMerchantBlacklist(Set<String> chrNames) {
         final OutPacket p = OutPacket.create(SendOpcode.PLAYER_INTERACTION);
         p.writeByte(PlayerInteractionHandler.Action.VIEW_BLACKLIST.getCode());
         p.writeShort(chrNames.size());

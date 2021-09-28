@@ -47,10 +47,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 
@@ -78,6 +75,7 @@ public class HiredMerchant extends AbstractMapObject {
     private MapleMap map;
     private final Visitor[] visitors = new Visitor[3];
     private final LinkedList<PastVisitor> visitorHistory = new LinkedList<>();
+    private final LinkedHashSet<String> blacklist = new LinkedHashSet<>(); // case-sensitive character names
     private final Lock visitorLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.VISITOR_MERCH, true);
 
     private record Visitor(Character chr, Instant enteredAt) {}
@@ -489,6 +487,9 @@ public class HiredMerchant extends AbstractMapObject {
             } else if (!this.isOpen()) {
                 chr.sendPacket(PacketCreator.getMiniRoomError(18));
                 return;
+            } else if (isBlacklisted(chr.getName())) {
+                chr.sendPacket(PacketCreator.getMiniRoomError(17));
+                return;
             } else if (!this.addVisitor(chr)) {
                 chr.sendPacket(PacketCreator.getMiniRoomError(2));
                 return;
@@ -720,6 +721,40 @@ public class HiredMerchant extends AbstractMapObject {
 
     public List<PastVisitor> getVisitorHistory() {
         return Collections.unmodifiableList(visitorHistory);
+    }
+
+    public void addToBlacklist(String chrName) {
+        visitorLock.lock();
+        try {
+            if (blacklist.size() >= BLACKLIST_LIMIT) {
+                return;
+            }
+            blacklist.add(chrName);
+        } finally {
+            visitorLock.unlock();
+        }
+    }
+
+    public void removeFromBlacklist(String chrName) {
+        visitorLock.lock();
+        try {
+            blacklist.remove(chrName);
+        } finally {
+            visitorLock.unlock();
+        }
+    }
+
+    public Set<String> getBlacklist() {
+        return Collections.unmodifiableSet(blacklist);
+    }
+
+    private boolean isBlacklisted(String chrName) {
+        visitorLock.lock();
+        try {
+            return blacklist.contains(chrName);
+        } finally {
+            visitorLock.unlock();
+        }
     }
 
     public int getMapId() {

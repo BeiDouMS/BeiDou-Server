@@ -44,7 +44,6 @@ import tools.PacketCreator;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author Matze
@@ -286,8 +285,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                     int oid = p.readInt();
                     MapObject ob = chr.getMap().getMapObject(oid);
-                    if (ob instanceof PlayerShop) {
-                        PlayerShop shop = (PlayerShop) ob;
+                    if (ob instanceof PlayerShop shop) {
                         shop.visitShop(chr);
                     } else if (ob instanceof MiniGame) {
                         p.skip(1);
@@ -691,10 +689,26 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.viewMerchantVisitorHistory(merchant.getVisitorHistory()));
             } else if (mode == Action.VIEW_BLACKLIST.getCode()) {
-                List<String> blacklistedNames = List.of("Blanca", "Betsy", "Kevin", "Rosa", "Evan", "Terence",
-                        "Cecilia", "Gayle", "Erma", "Dorothy", "Willis", "Alberta", "Marilyn", "Myron", "Sheryl",
-                        "Marco", "Jose", "Kendra", "Laurence", "Victoria", "NonListed");
-                c.sendPacket(PacketCreator.viewMerchantBlacklist(blacklistedNames));
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+
+                c.sendPacket(PacketCreator.viewMerchantBlacklist(merchant.getBlacklist()));
+            } else if (mode == Action.ADD_TO_BLACKLIST.getCode()) {
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+                String chrName = p.readString();
+                merchant.addToBlacklist(chrName);
+            } else if (mode == Action.REMOVE_FROM_BLACKLIST.getCode()) {
+                HiredMerchant merchant = chr.getHiredMerchant();
+                if (merchant == null || !merchant.isOwner(chr)) {
+                    return;
+                }
+                String chrName = p.readString();
+                merchant.removeFromBlacklist(chrName);
             } else if (mode == Action.MERCHANT_ORGANIZE.getCode()) {
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant == null || !merchant.isOwner(chr)) {
