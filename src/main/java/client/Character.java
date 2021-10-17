@@ -1101,7 +1101,7 @@ public class Character extends AbstractCharacterObject {
             addmp += Randomizer.rand(100, 150);
         } else if (job_ % 100 == 0) {           // 1st others
             addhp += Randomizer.rand(100, 150);
-            addhp += Randomizer.rand(25, 50);
+            addmp += Randomizer.rand(25, 50);
         } else if (job_ > 0 && job_ < 200) {    // 2nd~4th warrior
             addhp += Randomizer.rand(300, 350);
         } else if (job_ < 300) {                // 2nd~4th mage
