@@ -37,6 +37,7 @@ import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
@@ -405,10 +406,10 @@ public class Character extends AbstractCharacterObject {
 
         //to fix the map 0 lol
         for (int i = 0; i < 5; i++) {
-            ret.trockmaps.add(999999999);
+            ret.trockmaps.add(MapId.NONE);
         }
         for (int i = 0; i < 10; i++) {
-            ret.viptrockmaps.add(999999999);
+            ret.viptrockmaps.add(MapId.NONE);
         }
 
         return ret;
@@ -583,7 +584,8 @@ public class Character extends AbstractCharacterObject {
             String prop = eim.getProperty("groomId");
 
             if (prop != null) {
-                return (Integer.parseInt(prop) == id || eim.getIntProperty("brideId") == id) && (mapid == 680000110 || mapid == 680000210);
+                return (Integer.parseInt(prop) == id || eim.getIntProperty("brideId") == id) &&
+                        (mapid == MapId.CHAPEL_WEDDING_ALTAR || mapid == MapId.CATHEDRAL_WEDDING_ALTAR);
             }
         }
 
@@ -594,7 +596,7 @@ public class Character extends AbstractCharacterObject {
         int pts = 0;
         if (dojoPoints < 17000) {
             pts = 1 + ((mapid - 1) / 100 % 100) / 6;
-            if (!GameConstants.isDojoPartyArea(this.getMapId())) {
+            if (!MapId.isPartyDojo(this.getMapId())) {
                 pts++;
             }
             this.dojoPoints += pts;
@@ -1401,7 +1403,7 @@ public class Character extends AbstractCharacterObject {
         // will actually enter the map given as parameter, regardless of being an eventmap or whatnot
 
         canWarpCounter++;
-        eventChangedMap(999999999);
+        eventChangedMap(MapId.NONE);
 
         EventInstanceManager mapEim = target.getEventInstance();
         if (mapEim != null) {
@@ -1443,10 +1445,10 @@ public class Character extends AbstractCharacterObject {
                 if (mbs.getKey() == BuffStat.MAP_PROTECTION) {
                     byte value = (byte) mbs.getValue().value;
 
-                    if (value == 1 && ((returnMapid == 211000000 && thisMapid != 200082300) || returnMapid == 193000000)) {
+                    if (value == 1 && ((returnMapid == MapId.EL_NATH && thisMapid != MapId.ORBIS_TOWER_BOTTOM) || returnMapid == MapId.INTERNET_CAFE)) {
                         return true;        //protection from cold
                     } else {
-                        return value == 2 && (returnMapid == 230000000 || thisMapid == 200082300);        //breathing underwater
+                        return value == 2 && (returnMapid == MapId.AQUARIUM || thisMapid == MapId.ORBIS_TOWER_BOTTOM);        //breathing underwater
                     }
                 }
             }
@@ -1456,7 +1458,8 @@ public class Character extends AbstractCharacterObject {
         }
 
         for (Item it : this.getInventory(InventoryType.EQUIPPED).list()) {
-            if ((it.getFlag() & ItemConstants.COLD) == ItemConstants.COLD && ((returnMapid == 211000000 && thisMapid != 200082300) || returnMapid == 193000000)) {
+            if ((it.getFlag() & ItemConstants.COLD) == ItemConstants.COLD &&
+                    ((returnMapid == MapId.EL_NATH && thisMapid != MapId.ORBIS_TOWER_BOTTOM) || returnMapid == MapId.INTERNET_CAFE)) {
                 return true;        //protection from cold
             }
         }
@@ -1951,7 +1954,7 @@ public class Character extends AbstractCharacterObject {
                 if (ItemId.isNxCard(mapitem.getItemId()) || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
                     int mapId = this.getMapId();
 
-                    if ((mapId > 209000000 && mapId < 209000016) || (mapId >= 990000500 && mapId <= 990000502)) {//happyville trees and guild PQ
+                    if ((MapId.isSelfLootableOnly(mapId))) {//happyville trees and guild PQ
                         if (!mapitem.isPlayerDrop() || mapitem.getDropper().getObjectId() == client.getPlayer().getObjectId()) {
                             if (mapitem.getMeso() > 0) {
                                 if (!mpcs.isEmpty()) {
@@ -6209,7 +6212,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean attemptCatchFish(int baitLevel) {
-        return YamlConfig.config.server.USE_FISHING_SYSTEM && GameConstants.isFishingArea(mapid) &&
+        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapid) &&
                 this.getPosition().getY() > 0 &&
                 ItemConstants.isFishingChair(chair.get()) &&
                 this.getWorldServer().registerFisherPlayer(this, baitLevel);
@@ -7127,7 +7130,7 @@ public class Character extends AbstractCharacterObject {
                         ret.map = mapManager.getMap(ret.mapid);
 
                         if (ret.map == null) {
-                            ret.map = mapManager.getMap(100000000);
+                            ret.map = mapManager.getMap(MapId.HENESYS);
                         }
                         Portal portal = ret.map.getPortal(ret.initialSpawnPoint);
                         if (portal == null) {
@@ -7175,11 +7178,11 @@ public class Character extends AbstractCharacterObject {
                         }
                     }
                     while (vip < 10) {
-                        ret.viptrockmaps.add(999999999);
+                        ret.viptrockmaps.add(MapId.NONE);
                         vip++;
                     }
                     while (reg < 5) {
-                        ret.trockmaps.add(999999999);
+                        ret.trockmaps.add(MapId.NONE);
                         reg++;
                     }
                 }
@@ -7585,7 +7588,7 @@ public class Character extends AbstractCharacterObject {
                 break;
             }
         }
-        if (possesed > 0 && !GameConstants.isDojo(getMapId())) {
+        if (possesed > 0 && !MapId.isDojo(getMapId())) {
             message("You have used a safety charm, so your EXP points have not been decreased.");
             InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
             usedSafetyCharm = true;
@@ -8410,7 +8413,7 @@ public class Character extends AbstractCharacterObject {
                     if (map == null || (cashshop != null && cashshop.isOpened())) {
                         ps.setInt(21, mapid);
                     } else {
-                        if (map.getForcedReturnId() != 999999999) {
+                        if (map.getForcedReturnId() != MapId.NONE) {
                             ps.setInt(21, map.getForcedReturnId());
                         } else {
                             ps.setInt(21, getHp() < 1 ? map.getReturnMapId() : map.getId());
@@ -8418,7 +8421,7 @@ public class Character extends AbstractCharacterObject {
                     }
                     ps.setInt(22, meso.get());
                     ps.setInt(23, hpMpApUsed);
-                    if (map == null || map.getId() == 610020000 || map.getId() == 610020001) {  // reset to first spawnpoint on those maps
+                    if (map == null || map.getId() == MapId.CRIMSONWOOD_VALLEY_1 || map.getId() == MapId.CRIMSONWOOD_VALLEY_2) {  // reset to first spawnpoint on those maps
                         ps.setInt(24, 0);
                     } else {
                         Portal closest = map.findClosestPlayerSpawnpoint(getPosition());
@@ -8613,7 +8616,7 @@ public class Character extends AbstractCharacterObject {
                 // Vip teleport rocks
                 try (PreparedStatement psVip = con.prepareStatement("INSERT INTO trocklocations(characterid, mapid, vip) VALUES (?, ?, 0)")) {
                     for (int i = 0; i < getTrockSize(); i++) {
-                        if (trockmaps.get(i) != 999999999) {
+                        if (trockmaps.get(i) != MapId.NONE) {
                             psVip.setInt(1, getId());
                             psVip.setInt(2, trockmaps.get(i));
                             psVip.addBatch();
@@ -8625,7 +8628,7 @@ public class Character extends AbstractCharacterObject {
                 // Regular teleport rocks
                 try (PreparedStatement psReg = con.prepareStatement("INSERT INTO trocklocations(characterid, mapid, vip) VALUES (?, ?, 1)")) {
                     for (int i = 0; i < getVipTrockSize(); i++) {
-                        if (viptrockmaps.get(i) != 999999999) {
+                        if (viptrockmaps.get(i) != MapId.NONE) {
                             psReg.setInt(1, getId());
                             psReg.setInt(2, viptrockmaps.get(i));
                             psReg.addBatch();
@@ -10246,7 +10249,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getTrockSize() {
-        int ret = trockmaps.indexOf(999999999);
+        int ret = trockmaps.indexOf(MapId.NONE);
         if (ret == -1) {
             ret = 5;
         }
@@ -10257,12 +10260,12 @@ public class Character extends AbstractCharacterObject {
     public void deleteFromTrocks(int map) {
         trockmaps.remove(Integer.valueOf(map));
         while (trockmaps.size() < 10) {
-            trockmaps.add(999999999);
+            trockmaps.add(MapId.NONE);
         }
     }
 
     public void addTrockMap() {
-        int index = trockmaps.indexOf(999999999);
+        int index = trockmaps.indexOf(MapId.NONE);
         if (index != -1) {
             trockmaps.set(index, getMapId());
         }
@@ -10274,7 +10277,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getVipTrockSize() {
-        int ret = viptrockmaps.indexOf(999999999);
+        int ret = viptrockmaps.indexOf(MapId.NONE);
 
         if (ret == -1) {
             ret = 10;
@@ -10286,12 +10289,12 @@ public class Character extends AbstractCharacterObject {
     public void deleteFromVipTrocks(int map) {
         viptrockmaps.remove(Integer.valueOf(map));
         while (viptrockmaps.size() < 10) {
-            viptrockmaps.add(999999999);
+            viptrockmaps.add(MapId.NONE);
         }
     }
 
     public void addVipTrockMap() {
-        int index = viptrockmaps.indexOf(999999999);
+        int index = viptrockmaps.indexOf(MapId.NONE);
         if (index != -1) {
             viptrockmaps.set(index, getMapId());
         }

@@ -28,6 +28,7 @@ import client.Client;
 import client.command.Command;
 import client.inventory.Item;
 import constants.id.ItemId;
+import constants.id.MapId;
 
 import java.awt.*;
 
@@ -39,7 +40,7 @@ public class SeedCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        if (player.getMapId() != 910010000) {
+        if (player.getMapId() != MapId.HENESYS_PQ) {
             player.yellowMessage("This command can only be used in HPQ.");
             return;
         }

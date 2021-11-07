@@ -29,8 +29,8 @@ import client.inventory.Item;
 import client.inventory.WeaponType;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
-import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.InPacket;
@@ -65,7 +65,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             }
         }
 
-        if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
+        if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }

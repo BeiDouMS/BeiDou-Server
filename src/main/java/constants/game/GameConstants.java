@@ -3,6 +3,7 @@ package constants.game;
 import client.Disease;
 import client.Job;
 import config.YamlConfig;
+import constants.id.MapId;
 import constants.skills.Aran;
 import provider.*;
 import provider.wz.WZFiles;
@@ -52,69 +53,69 @@ public class GameConstants {
     }
 
     // "goto" command for players
-    public static final HashMap<String, Integer> GOTO_TOWNS = new HashMap<String, Integer>() {{
-        put("southperry", 60000);
-        put("amherst", 1000000);
-        put("henesys", 100000000);
-        put("ellinia", 101000000);
-        put("perion", 102000000);
-        put("kerning", 103000000);
-        put("lith", 104000000);
-        put("sleepywood", 105040300);
-        put("florina", 110000000);
-        put("nautilus", 120000000);
-        put("ereve", 130000000);
-        put("rien", 140000000);
-        put("orbis", 200000000);
-        put("happy", 209000000);
-        put("elnath", 211000000);
-        put("ludi", 220000000);
-        put("aqua", 230000000);
-        put("leafre", 240000000);
-        put("mulung", 250000000);
-        put("herb", 251000000);
-        put("omega", 221000000);
-        put("korean", 222000000);
-        put("ellin", 300000000);
-        put("nlc", 600000000);
-        put("showa", 801000000);
-        put("shrine", 800000000);
-        put("ariant", 260000000);
-        put("magatia", 261000000);
-        put("singapore", 540000000);
-        put("quay", 541000000);
-        put("kampung", 551000000);
-        put("amoria", 680000000);
-        put("temple", 270000100);
-        put("square", 103040000);
-        put("neo", 240070000);
-        put("mushking", 106020000);
+    public static final Map<String, Integer> GOTO_TOWNS = new HashMap<>() {{
+        put("southperry", MapId.SOUTHPERRY);
+        put("amherst", MapId.AMHERST);
+        put("henesys", MapId.HENESYS);
+        put("ellinia", MapId.ELLINIA);
+        put("perion", MapId.PERION);
+        put("kerning", MapId.KERNING_CITY);
+        put("lith", MapId.LITH_HARBOUR);
+        put("sleepywood", MapId.SLEEPYWOOD);
+        put("florina", MapId.FLORINA_BEACH);
+        put("nautilus", MapId.NAUTILUS_HARBOR);
+        put("ereve", MapId.EREVE);
+        put("rien", MapId.RIEN);
+        put("orbis", MapId.ORBIS);
+        put("happy", MapId.HAPPYVILLE);
+        put("elnath", MapId.EL_NATH);
+        put("ludi", MapId.LUDIBRIUM);
+        put("aqua", MapId.AQUARIUM);
+        put("leafre", MapId.LEAFRE);
+        put("mulung", MapId.MU_LUNG);
+        put("herb", MapId.HERB_TOWN);
+        put("omega", MapId.OMEGA_SECTOR);
+        put("kft", MapId.KOREAN_FOLK_TOWN);
+        put("ellin", MapId.ELLIN_FOREST);
+        put("nlc", MapId.NEW_LEAF_CITY);
+        put("showa", MapId.SHOWA_TOWN);
+        put("shrine", MapId.MUSHROOM_SHRINE);
+        put("ariant", MapId.ARIANT);
+        put("magatia", MapId.MAGATIA);
+        put("singapore", MapId.SINGAPORE);
+        put("quay", MapId.BOAT_QUAY_TOWN);
+        put("kampung", MapId.KAMPUNG_VILLAGE);
+        put("amoria", MapId.AMORIA);
+        put("temple", MapId.TEMPLE_OF_TIME);
+        put("square", MapId.KERNING_SQUARE);
+        put("neo", MapId.NEO_CITY);
+        put("mushking", MapId.MUSHROOM_KINGDOM);
     }};
 
     // "goto" command for only-GMs
-    public static final HashMap<String, Integer> GOTO_AREAS = new HashMap<String, Integer>() {{
-        put("gmmap", 180000000);
-        put("excavation", 990000000);
-        put("mushmom", 100000005);
-        put("griffey", 240020101);
-        put("manon", 240020401);
-        put("horseman", 682000001);
-        put("balrog", 105090900);
-        put("zakum", 211042300);
-        put("papu", 220080001);
-        put("guild", 200000301);
-        put("skelegon", 240040511);
-        put("hpq", 100000200);
-        put("pianus", 230040420);
-        put("horntail", 240050400);
-        put("pinkbean", 270050000);
-        put("keep", 610020006);
-        put("dojo", 925020001);
-        put("bosspq", 970030000);
-        put("fm", 910000000);
+    public static final Map<String, Integer> GOTO_AREAS = new HashMap<>() {{
+        put("gmmap", MapId.GM_MAP);
+        put("excavation", MapId.EXCAVATION_SITE);
+        put("mushmom", MapId.SOMEONE_ELSES_HOUSE);
+        put("griffey", MapId.GRIFFEY_FOREST);
+        put("manon", MapId.MANONS_FOREST);
+        put("horseman", MapId.HOLLOWED_GROUND);
+        put("balrog", MapId.CURSED_SANCTUARY);
+        put("zakum", MapId.DOOR_TO_ZAKUM);
+        put("papu", MapId.ORIGIN_OF_CLOCKTOWER);
+        put("guild", MapId.GUILD_HQ);
+        put("skelegon", MapId.DRAGON_NEST_LEFT_BEHIND);
+        put("hpq", MapId.HENESYS_PARK);
+        put("pianus", MapId.CAVE_OF_PIANUS);
+        put("horntail", MapId.ENTRANCE_TO_HORNTAILS_CAVE);
+        put("pinkbean", MapId.FORGOTTEN_TWILIGHT);
+        put("keep", MapId.CRIMSONWOOD_KEEP);
+        put("dojo", MapId.MU_LUNG_DOJO_HALL);
+        put("bosspq", MapId.EXCLUSIVE_TRAINING_CENTER);
+        put("fm", MapId.FM_ENTRANCE);
     }};
 
-    public static final List<String> GAME_SONGS = new ArrayList<String>(170) {{
+    public static final List<String> GAME_SONGS = new ArrayList<>(170) {{
         add("Jukebox/Congratulation");
         add("Bgm00/SleepyWood");
         add("Bgm00/FloralLife");
@@ -332,16 +333,16 @@ public class GameConstants {
 
     public static boolean isHallOfFameMap(int mapid) {
         switch (mapid) {
-            case 102000004:     // warrior
-            case 101000004:     // magician
-            case 100000204:     // bowman
-            case 103000008:     // thief
-            case 120000105:     // pirate
-            case 130000100:     // cygnus
-            case 130000101:     // other cygnus
-            case 130000110:     // cygnus 2nd floor
-            case 130000120:     // cygnus 3rd floor (beginners)
-            case 140010110:     // aran
+            case MapId.HALL_OF_WARRIORS:     // warrior
+            case MapId.HALL_OF_MAGICIANS:     // magician
+            case MapId.HALL_OF_BOWMEN:     // bowman
+            case MapId.HALL_OF_THIEVES:     // thief
+            case MapId.NAUTILUS_TRAINING_ROOM:     // pirate
+            case MapId.KNIGHTS_CHAMBER:     // cygnus
+            case MapId.KNIGHTS_CHAMBER_LARGE:     // other cygnus
+            case MapId.KNIGHTS_CHAMBER_2:     // cygnus 2nd floor
+            case MapId.KNIGHTS_CHAMBER_3:     // cygnus 3rd floor (beginners)
+            case MapId.PALACE_OF_THE_MASTER:     // aran
                 return true;
 
             default:
@@ -351,11 +352,11 @@ public class GameConstants {
 
     public static boolean isPodiumHallOfFameMap(int mapid) {
         switch (mapid) {
-            case 102000004:     // warrior
-            case 101000004:     // magician
-            case 100000204:     // bowman
-            case 103000008:     // thief
-            case 120000105:     // pirate
+            case MapId.HALL_OF_WARRIORS:
+            case MapId.HALL_OF_MAGICIANS:     // magician
+            case MapId.HALL_OF_BOWMEN:     // bowman
+            case MapId.HALL_OF_THIEVES:     // thief
+            case MapId.NAUTILUS_TRAINING_ROOM:     // pirate
                 return true;
 
             default:
@@ -428,22 +429,22 @@ public class GameConstants {
         int jobid = job.getId();
 
         if (isCygnus(jobid)) {
-            return 130000100;
+            return MapId.KNIGHTS_CHAMBER;
         } else if (isAran(jobid)) {
-            return 140010110;
+            return MapId.PALACE_OF_THE_MASTER;
         } else {
             if (job.isA(Job.WARRIOR)) {
-                return 102000004;
+                return MapId.HALL_OF_WARRIORS;
             } else if (job.isA(Job.MAGICIAN)) {
-                return 101000004;
+                return MapId.HALL_OF_MAGICIANS;
             } else if (job.isA(Job.BOWMAN)) {
-                return 100000204;
+                return MapId.HALL_OF_BOWMEN;
             } else if (job.isA(Job.THIEF)) {
-                return 103000008;
+                return MapId.HALL_OF_THIEVES;
             } else if (job.isA(Job.PIRATE)) {
-                return 120000105;
+                return MapId.NAUTILUS_TRAINING_ROOM;
             } else {
-                return 130000110;   // beginner explorers are allotted with the Cygnus, available map lul
+                return MapId.KNIGHTS_CHAMBER_2;   // beginner explorers are allotted with the Cygnus, available map lul
             }
         }
     }
@@ -556,7 +557,7 @@ public class GameConstants {
     }
 
     public static boolean isFreeMarketRoom(int mapid) {
-        return mapid / 1000000 == 910 && mapid > 910000000; // FM rooms subset, thanks to shavitush (shavit)
+        return mapid / 1000000 == 910 && mapid > MapId.FM_ENTRANCE; // FM rooms subset, thanks to shavitush (shavit)
     }
 
     public static boolean isMerchantLocked(MapleMap map) {
@@ -564,32 +565,11 @@ public class GameConstants {
             return true;
         }
 
-        switch (map.getId()) {
-            case 910000000:
-                return true;
-        }
-
-        return false;
-    }
-
-    public static boolean isBossRush(int mapid) {
-        return mapid >= 970030100 && mapid <= 970042711;
-    }
-
-    public static boolean isDojo(int mapid) {
-        return mapid >= 925020000 && mapid < 925040000;
-    }
-
-    public static boolean isDojoPartyArea(int mapid) {
-        return mapid >= 925030100 && mapid < 925040000;
+        return map.getId() == MapId.FM_ENTRANCE;
     }
 
     public static boolean isDojoBossArea(int mapid) {
-        return isDojo(mapid) && (((mapid / 100) % 100) % 6) > 0;
-    }
-
-    public static boolean isPyramid(int mapid) {
-        return mapid >= 926010010 & mapid <= 930010000;
+        return MapId.isDojo(mapid) && (((mapid / 100) % 100) % 6) > 0;
     }
 
     public static boolean isAriantColiseumLobby(int mapid) {
@@ -603,11 +583,7 @@ public class GameConstants {
     }
 
     public static boolean isPqSkillMap(int mapid) {
-        return isDojo(mapid) || isPyramid(mapid);
-    }
-
-    public static boolean isFishingArea(int mapid) {
-        return mapid == 120010000 || mapid == 251000100 || mapid == 541010110;
+        return MapId.isDojo(mapid) || MapId.isNettsPyramid(mapid);
     }
 
     public static boolean isFinisherSkill(int skillId) {

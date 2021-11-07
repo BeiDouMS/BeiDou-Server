@@ -24,6 +24,7 @@ package server.maps;
 import client.Character;
 import client.Client;
 import constants.game.GameConstants;
+import constants.id.MapId;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -140,7 +141,7 @@ public class GenericPortal implements Portal {
             } catch (NullPointerException npe) {
                 npe.printStackTrace();
             }
-        } else if (getTargetMapId() != 999999999) {
+        } else if (getTargetMapId() != MapId.NONE) {
             Character chr = c.getPlayer();
             if (!(chr.getChalkboard() != null && GameConstants.isFreeMarketRoom(getTargetMapId()))) {
                 MapleMap to = chr.getEventInstance() == null ? c.getChannelServer().getMapFactory().getMap(getTargetMapId()) : chr.getEventInstance().getMapInstance(getTargetMapId());

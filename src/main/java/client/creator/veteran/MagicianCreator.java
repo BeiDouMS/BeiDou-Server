@@ -28,6 +28,7 @@ import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.skills.Magician;
 import server.ItemInformationProvider;
 
@@ -93,6 +94,6 @@ public class MagicianCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
-        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.MAGICIAN, 30, 101000000, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
+        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.MAGICIAN, 30, MapId.ELLINIA, equips[gender], equips[2 + gender], equips[4], weapons[0], gender, improveSp));
     }
 }

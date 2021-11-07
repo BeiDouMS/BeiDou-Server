@@ -26,6 +26,7 @@ import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import constants.id.ItemId;
+import constants.id.MapId;
 import server.ItemInformationProvider;
 
 /**
@@ -71,6 +72,6 @@ public class BowmanCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int gender, int improveSp) {
-        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BOWMAN, 30, 100000000, equips[gender], equips[2 + gender], equips[4], weapons[0]));
+        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BOWMAN, 30, MapId.HENESYS, equips[gender], equips[2 + gender], equips[4], weapons[0]));
     }
 }

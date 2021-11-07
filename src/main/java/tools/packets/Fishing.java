@@ -21,8 +21,8 @@ package tools.packets;
 
 import client.Character;
 import config.YamlConfig;
-import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import server.ItemInformationProvider;
 import tools.PacketCreator;
@@ -72,7 +72,7 @@ public class Fishing {
             return;
         }
 
-        if (!GameConstants.isFishingArea(chr.getMapId())) {
+        if (!MapId.isFishingArea(chr.getMapId())) {
             chr.dropMessage("You are not in a fishing area!");
             return;
         }

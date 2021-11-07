@@ -97,7 +97,7 @@ public class GotoCommand extends Command {
             }
         }
 
-        HashMap<String, Integer> gotomaps;
+        Map<String, Integer> gotomaps;
         if (player.isGM()) {
             gotomaps = new HashMap<>(GameConstants.GOTO_AREAS);     // distinct map registry for GM/users suggested thanks to Vcoc
             gotomaps.putAll(GameConstants.GOTO_TOWNS);  // thanks Halcyon (UltimateMors) for pointing out duplicates on listed entries functionality

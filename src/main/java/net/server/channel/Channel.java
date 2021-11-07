@@ -23,7 +23,7 @@ package net.server.channel;
 
 import client.Character;
 import config.YamlConfig;
-import constants.game.GameConstants;
+import constants.id.MapId;
 import net.netty.ChannelServer;
 import net.packet.Packet;
 import net.server.PlayerStorage;
@@ -499,7 +499,7 @@ public final class Channel {
             }
 
             if (slot < range) {
-                int slotMapid = (isPartyDojo ? 925030000 : 925020000) + (100 * (fromStage + 1)) + slot;
+                int slotMapid = (isPartyDojo ? MapId.DOJO_PARTY_BASE : MapId.DOJO_SOLO_BASE) + (100 * (fromStage + 1)) + slot;
                 int dojoSlot = getDojoSlot(slotMapid);
 
                 if (party != null) {
@@ -574,7 +574,7 @@ public final class Channel {
         final int slot = getDojoSlot(dojoMapId);
         final int delta = (dojoMapId) % 100;
         final int stage = (dojoMapId / 100) % 100;
-        final int dojoBaseMap = (dojoMapId >= 925030000) ? 925030000 : 925020000;
+        final int dojoBaseMap = (dojoMapId >= MapId.DOJO_PARTY_BASE) ? MapId.DOJO_PARTY_BASE : MapId.DOJO_SOLO_BASE;
 
         for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
             if (stage + i > 38) {
@@ -605,7 +605,7 @@ public final class Channel {
             }
             this.dojoTask[slot] = TimerManager.getInstance().schedule(() -> {
                 final int delta = (dojoMapId) % 100;
-                final int dojoBaseMap = (slot < 5) ? 925030000 : 925020000;
+                final int dojoBaseMap = (slot < 5) ? MapId.DOJO_PARTY_BASE : MapId.DOJO_SOLO_BASE;
                 Party party = null;
 
                 for (int i = 0; i < 5; i++) { //only 32 stages, but 38 maps
@@ -613,9 +613,9 @@ public final class Channel {
                         break;
                     }
 
-                    MapleMap dojoExit = getMapFactory().getMap(925020002);
+                    MapleMap dojoExit = getMapFactory().getMap(MapId.DOJO_EXIT);
                     for (Character chr : getMapFactory().getMap(dojoBaseMap + (100 * (stage + i)) + delta).getAllPlayers()) {
-                        if (GameConstants.isDojo(chr.getMap().getId())) {
+                        if (MapId.isDojo(chr.getMap().getId())) {
                             chr.changeMap(dojoExit);
                         }
                         party = chr.getParty();

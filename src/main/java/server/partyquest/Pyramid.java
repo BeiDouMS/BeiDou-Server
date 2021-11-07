@@ -24,6 +24,7 @@ package server.partyquest;
 
 import client.Character;
 import constants.id.ItemId;
+import constants.id.MapId;
 import net.server.world.Party;
 import server.ItemInformationProvider;
 import server.TimerManager;
@@ -85,7 +86,7 @@ public class Pyramid extends PartyQuest {
             gaugeSchedule = TimerManager.getInstance().register(() -> {
                 gauge -= decrease;
                 if (gauge <= 0) {
-                    warp(926010001);
+                    warp(MapId.NETTS_PYRAMID);
                 }
 
             }, 1000);

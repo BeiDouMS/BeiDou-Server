@@ -23,6 +23,7 @@
 package server.expeditions;
 
 import client.Character;
+import constants.id.MapId;
 import constants.id.MobId;
 import net.packet.Packet;
 import net.server.PlayerStorage;
@@ -256,7 +257,7 @@ public class Expedition {
                     player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
                 }
                 if (ExpeditionType.ARIANT.equals(type) || ExpeditionType.ARIANT1.equals(type) || ExpeditionType.ARIANT2.equals(type)) {
-                    player.changeMap(980010000);
+                    player.changeMap(MapId.ARPQ_LOBBY);
                 }
             }
         }

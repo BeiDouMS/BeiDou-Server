@@ -25,6 +25,7 @@ import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import constants.id.ItemId;
+import constants.id.MapId;
 
 /**
  * @author RonanLana
@@ -42,7 +43,7 @@ public class BeginnerCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
-        int status = createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, 10000, top, bottom, shoes, weapon));
+        int status = createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, MapId.MUSHROOM_TOWN, top, bottom, shoes, weapon));
         return status;
     }
 }

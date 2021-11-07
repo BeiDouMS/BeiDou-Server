@@ -29,6 +29,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
@@ -680,27 +681,15 @@ public class AbstractPlayerInteraction {
     }
 
     public void displayAranIntro() {
-        String intro = "";
-        switch (c.getPlayer().getMapId()) {
-            case 914090010:
-                intro = "Effect/Direction1.img/aranTutorial/Scene0";
-                break;
-            case 914090011:
-                intro = "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-                break;
-            case 914090012:
-                intro = "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-                break;
-            case 914090013:
-                intro = "Effect/Direction1.img/aranTutorial/Scene3";
-                break;
-            case 914090100:
-                intro = "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-                break;
-            case 914090200:
-                intro = "Effect/Direction1.img/aranTutorial/Maha";
-                break;
-        }
+        String intro = switch (c.getPlayer().getMapId()) {
+            case MapId.ARAN_TUTO_1 -> "Effect/Direction1.img/aranTutorial/Scene0";
+            case MapId.ARAN_TUTO_2 -> "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_TUTO_3 -> "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_TUTO_4 -> "Effect/Direction1.img/aranTutorial/Scene3";
+            case MapId.ARAN_POLEARM -> "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_MAHA -> "Effect/Direction1.img/aranTutorial/Maha";
+            default -> "";
+        };
         showIntro(intro);
     }
 

@@ -28,6 +28,7 @@ import client.inventory.ItemFactory;
 import client.inventory.Pet;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MapId;
 import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import constants.string.LanguageConstants;
@@ -406,7 +407,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
         sendNext("You have obtained a #b#t" + item.getId() + "##k.");
 
-        int[] maps = {100000000, 101000000, 102000000, 103000000, 105040300, 800000000, 809000101, 809000201, 600000000, 120000000};
+        int[] maps = {MapId.HENESYS, MapId.ELLINIA, MapId.PERION, MapId.KERNING_CITY, MapId.SLEEPYWOOD, MapId.MUSHROOM_SHRINE,
+                MapId.SHOWA_SPA_M, MapId.SHOWA_SPA_F, MapId.NEW_LEAF_CITY, MapId.NAUTILUS_HARBOR};
         final int mapId = maps[(getNpc() != NpcId.GACHAPON_NAUTILUS && getNpc() != NpcId.GACHAPON_NLC) ?
                 (getNpc() - NpcId.GACHAPON_HENESYS) : getNpc() == NpcId.GACHAPON_NLC ? 8 : 9];
         String map = c.getChannelServer().getMapFactory().getMap(mapId).getMapName();
@@ -500,7 +502,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         MapManager mapManager = c.getChannelServer().getMapFactory();
 
         MapleMap map = null;
-        int mapid = 926010100;
+        int mapid = MapId.NETTS_PYRAMID_SOLO_BASE;
         if (party) {
             mapid += 10000;
         }

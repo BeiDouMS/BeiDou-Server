@@ -31,6 +31,7 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.Packet;
@@ -908,7 +909,7 @@ public class StatEffect {
                 MapleMap target;
                 Portal pt;
 
-                if (moveTo == 999999999) {
+                if (moveTo == MapId.NONE) {
                     if (sourceid != ItemId.ANTI_BANISH_SCROLL) {
                         target = applyto.getMap().getReturnMap();
                         pt = target.getRandomPlayerSpawnpoint();

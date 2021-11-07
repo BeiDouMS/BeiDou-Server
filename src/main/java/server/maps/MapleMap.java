@@ -33,6 +33,7 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MapId;
 import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import net.packet.Packet;
@@ -120,7 +121,7 @@ public class MapleMap {
     private String streetName;
     private MapEffect mapEffect = null;
     private boolean everlast = false;
-    private int forcedReturnMap = 999999999;
+    private int forcedReturnMap = MapId.NONE;
     private int timeLimit;
     private long mapTimer;
     private int decHP = 0;
@@ -264,7 +265,7 @@ public class MapleMap {
     }
 
     public MapleMap getReturnMap() {
-        if (returnMapId == 999999999) {
+        if (returnMapId == MapId.NONE) {
             return this;
         }
         return getChannelServer().getMapFactory().getMap(returnMapId);
@@ -2388,7 +2389,7 @@ public class MapleMap {
             }
         }
         if (onUserEnter.length() != 0) {
-            if (onUserEnter.equals("cygnusTest") && (mapid < 913040000 || mapid > 913040006)) {
+            if (onUserEnter.equals("cygnusTest") && !MapId.isCygnusIntro(mapid)) {
                 chr.saveLocation("INTRO");
             }
 
@@ -2399,52 +2400,52 @@ public class MapleMap {
             chr.cancelBuffStats(BuffStat.MONSTER_RIDING);
         }
 
-        if (mapid == 200090060) { // To Rien
+        if (mapid == MapId.FROM_LITH_TO_RIEN) { // To Rien
             int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(1));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
-                if (chr.getMapId() == 200090060) {
-                    chr.changeMap(140020300, 0);
+                if (chr.getMapId() == MapId.FROM_LITH_TO_RIEN) {
+                    chr.changeMap(MapId.DANGEROUS_FOREST, 0);
                 }
             }, travelTime);
-        } else if (mapid == 200090070) { // To Lith Harbor
+        } else if (mapid == MapId.FROM_RIEN_TO_LITH) { // To Lith Harbor
             int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(1));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
-                if (chr.getMapId() == 200090070) {
-                    chr.changeMap(104000000, 3);
+                if (chr.getMapId() == MapId.FROM_RIEN_TO_LITH) {
+                    chr.changeMap(MapId.LITH_HARBOUR, 3);
                 }
             }, travelTime);
-        } else if (mapid == 200090030) { // To Ereve (SkyFerry)
+        } else if (mapid == MapId.FROM_ELLINIA_TO_EREVE) { // To Ereve (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(2));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
-                if (chr.getMapId() == 200090030) {
-                    chr.changeMap(130000210, 0);
+                if (chr.getMapId() == MapId.FROM_ELLINIA_TO_EREVE) {
+                    chr.changeMap(MapId.SKY_FERRY, 0);
                 }
             }, travelTime);
-        } else if (mapid == 200090031) { // To Victoria Island (SkyFerry)
+        } else if (mapid == MapId.FROM_EREVE_TO_ELLINIA) { // To Victoria Island (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(2));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
-                if (chr.getMapId() == 200090031) {
-                    chr.changeMap(101000400, 0);
+                if (chr.getMapId() == MapId.FROM_EREVE_TO_ELLINIA) {
+                    chr.changeMap(MapId.ELLINIA_SKY_FERRY, 0);
                 }
             }, travelTime);
-        } else if (mapid == 200090021) { // To Orbis (SkyFerry)
+        } else if (mapid == MapId.FROM_EREVE_TO_ORBIS) { // To Orbis (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(8));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
-                if (chr.getMapId() == 200090021) {
-                    chr.changeMap(200000161, 0);
+                if (chr.getMapId() == MapId.FROM_EREVE_TO_ORBIS) {
+                    chr.changeMap(MapId.ORBIS_STATION, 0);
                 }
             }, travelTime);
-        } else if (mapid == 200090020) { // To Ereve From Orbis (SkyFerry)
+        } else if (mapid == MapId.FROM_ORBIS_TO_EREVE) { // To Ereve From Orbis (SkyFerry)
             int travelTime = getWorldServer().getTransportationTime((int) MINUTES.toMillis(8));
             chr.sendPacket(PacketCreator.getClock(travelTime / 1000));
             TimerManager.getInstance().schedule(() -> {
-                if (chr.getMapId() == 200090020) {
-                    chr.changeMap(130000210, 0);
+                if (chr.getMapId() == MapId.FROM_ORBIS_TO_EREVE) {
+                    chr.changeMap(MapId.SKY_FERRY, 0);
                 }
             }, travelTime);
         } else if (MiniDungeonInfo.isDungeonMap(mapid)) {
@@ -2550,7 +2551,7 @@ public class MapleMap {
             mapEffect.sendStartData(chr.getClient());
         }
         chr.sendPacket(PacketCreator.resetForcedStats());
-        if (mapid == 914000200 || mapid == 914000210 || mapid == 914000220) {
+        if (MapId.isGodlyStatMap(mapid)) {
             chr.sendPacket(PacketCreator.aranGodlyStats());
         }
         if (chr.getEventInstance() != null && chr.getEventInstance().isTimerStarted()) {
@@ -2564,7 +2565,7 @@ public class MapleMap {
             chr.sendPacket(PacketCreator.getClock((int) (chr.getOla().getTimeLeft() / 1000)));
         }
 
-        if (mapid == 109060000) {
+        if (mapid == MapId.EVENT_SNOWBALL) {
             chr.sendPacket(PacketCreator.rollSnowBall(true, 0, null, null));
         }
 
@@ -2591,7 +2592,7 @@ public class MapleMap {
     public Portal getRandomPlayerSpawnpoint() {
         List<Portal> spawnPoints = new ArrayList<>();
         for (Portal portal : portals.values()) {
-            if (portal.getType() >= 0 && portal.getType() <= 1 && portal.getTargetMapId() == 999999999) {
+            if (portal.getType() >= 0 && portal.getType() <= 1 && portal.getTargetMapId() == MapId.NONE) {
                 spawnPoints.add(portal);
             }
         }
@@ -2604,7 +2605,7 @@ public class MapleMap {
         double shortestDistance = Double.POSITIVE_INFINITY;
         for (Portal portal : portals.values()) {
             double distance = portal.getPosition().distanceSq(from);
-            if (portal.getType() == Portal.TELEPORT_PORTAL && distance < shortestDistance && portal.getTargetMapId() != 999999999) {
+            if (portal.getType() == Portal.TELEPORT_PORTAL && distance < shortestDistance && portal.getTargetMapId() != MapId.NONE) {
                 closest = portal;
                 shortestDistance = distance;
             }
@@ -2617,7 +2618,7 @@ public class MapleMap {
         double shortestDistance = Double.POSITIVE_INFINITY;
         for (Portal portal : portals.values()) {
             double distance = portal.getPosition().distanceSq(from);
-            if (portal.getType() >= 0 && portal.getType() <= 1 && distance < shortestDistance && portal.getTargetMapId() == 999999999) {
+            if (portal.getType() >= 0 && portal.getType() <= 1 && distance < shortestDistance && portal.getTargetMapId() == MapId.NONE) {
                 closest = portal;
                 shortestDistance = distance;
             }
@@ -3895,20 +3896,21 @@ public class MapleMap {
     }
 
     public void startEvent(final Character chr) {
-        if (this.mapid == 109080000 && getCoconut() == null) {
+        if (this.mapid == MapId.EVENT_COCONUT_HARVEST && getCoconut() == null) {
             setCoconut(new Coconut(this));
             coconut.startEvent();
-        } else if (this.mapid == 109040000) {
+        } else if (this.mapid == MapId.EVENT_PHYSICAL_FITNESS) {
             chr.setFitness(new Fitness(chr));
             chr.getFitness().startFitness();
-        } else if (this.mapid == 109030101 || this.mapid == 109030201 || this.mapid == 109030301 || this.mapid == 109030401) {
+        } else if (this.mapid == MapId.EVENT_OLA_OLA_1 || this.mapid == MapId.EVENT_OLA_OLA_2 ||
+                this.mapid == MapId.EVENT_OLA_OLA_3 || this.mapid == MapId.EVENT_OLA_OLA_4) {
             chr.setOla(new Ola(chr));
             chr.getOla().startOla();
-        } else if (this.mapid == 109020001 && getOx() == null) {
+        } else if (this.mapid == MapId.EVENT_OX_QUIZ && getOx() == null) {
             setOx(new OxQuiz(this));
             getOx().sendQuestion();
             setOxQuiz(true);
-        } else if (this.mapid == 109060000 && getSnowball(chr.getTeam()) == null) {
+        } else if (this.mapid == MapId.EVENT_SNOWBALL && getSnowball(chr.getTeam()) == null) {
             setSnowball(0, new Snowball(0, this));
             setSnowball(1, new Snowball(1, this));
             getSnowball(chr.getTeam()).startEvent();
@@ -3930,13 +3932,13 @@ public class MapleMap {
     public String getEventNPC() {
         StringBuilder sb = new StringBuilder();
         sb.append("Talk to ");
-        if (mapid == 60000) {
+        if (mapid == MapId.SOUTHPERRY) {
             sb.append("Paul!");
-        } else if (mapid == 104000000) {
+        } else if (mapid == MapId.LITH_HARBOUR) {
             sb.append("Jean!");
-        } else if (mapid == 200000000) {
+        } else if (mapid == MapId.ORBIS) {
             sb.append("Martin!");
-        } else if (mapid == 220000000) {
+        } else if (mapid == MapId.LUDIBRIUM) {
             sb.append("Tony!");
         } else {
             return null;
@@ -3945,15 +3947,16 @@ public class MapleMap {
     }
 
     public boolean hasEventNPC() {
-        return this.mapid == 60000 || this.mapid == 104000000 || this.mapid == 200000000 || this.mapid == 220000000;
+        return this.mapid == 60000 || this.mapid == MapId.LITH_HARBOUR || this.mapid == MapId.ORBIS || this.mapid == MapId.LUDIBRIUM;
     }
 
     public boolean isStartingEventMap() {
-        return this.mapid == 109040000 || this.mapid == 109020001 || this.mapid == 109010000 || this.mapid == 109030001 || this.mapid == 109030101;
+        return this.mapid == MapId.EVENT_PHYSICAL_FITNESS || this.mapid == MapId.EVENT_OX_QUIZ ||
+                this.mapid == MapId.EVENT_FIND_THE_JEWEL || this.mapid == MapId.EVENT_OLA_OLA_0 || this.mapid == MapId.EVENT_OLA_OLA_1;
     }
 
     public boolean isEventMap() {
-        return this.mapid >= 109010000 && this.mapid < 109050000 || this.mapid > 109050001 && this.mapid <= 109090000;
+        return this.mapid >= MapId.EVENT_FIND_THE_JEWEL && this.mapid < MapId.EVENT_WINNER || this.mapid > MapId.EVENT_EXIT && this.mapid <= 109090000;
     }
 
     public void setTimeMob(int id, String msg) {

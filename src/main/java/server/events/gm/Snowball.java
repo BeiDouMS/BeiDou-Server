@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package server.events.gm;
 
 import client.Character;
+import constants.id.MapId;
 import server.TimerManager;
 import server.maps.MapleMap;
 import tools.PacketCreator;
@@ -152,10 +153,10 @@ public class Snowball {
 
     public void warpOut() {
         TimerManager.getInstance().schedule(() -> {
-            if (winner == true) {
-                map.warpOutByTeam(team, 109050000);
+            if (winner) {
+                map.warpOutByTeam(team, MapId.EVENT_WINNER);
             } else {
-                map.warpOutByTeam(team, 109050001);
+                map.warpOutByTeam(team, MapId.EVENT_EXIT);
             }
 
             map.setSnowball(team, null);

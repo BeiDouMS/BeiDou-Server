@@ -34,6 +34,7 @@ import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
@@ -1079,8 +1080,8 @@ public class PacketCreator {
         final OutPacket p;
         if (town) {
             p = OutPacket.create(SendOpcode.SPAWN_PORTAL);
-            p.writeInt(999999999);
-            p.writeInt(999999999);
+            p.writeInt(MapId.NONE);
+            p.writeInt(MapId.NONE);
         } else {
             p = OutPacket.create(SendOpcode.REMOVE_DOOR);
             p.writeByte(0);
@@ -3700,14 +3701,14 @@ public class PacketCreator {
                 p.writeInt(mdo.getPosition().x);
                 p.writeInt(mdo.getPosition().y);
             } else {
-                p.writeInt(999999999);
-                p.writeInt(999999999);
+                p.writeInt(MapId.NONE);
+                p.writeInt(MapId.NONE);
                 p.writeInt(0);
                 p.writeInt(0);
             }
         } else {
-            p.writeInt(999999999);
-            p.writeInt(999999999);
+            p.writeInt(MapId.NONE);
+            p.writeInt(MapId.NONE);
             p.writeInt(0);
             p.writeInt(0);
         }
@@ -3811,20 +3812,20 @@ public class PacketCreator {
                         p.writeInt(mdo.getPosition().x);
                         p.writeInt(mdo.getPosition().y);
                     } else {
-                        p.writeInt(999999999);
-                        p.writeInt(999999999);
+                        p.writeInt(MapId.NONE);
+                        p.writeInt(MapId.NONE);
                         p.writeInt(0);
                         p.writeInt(0);
                     }
                 } else {
-                    p.writeInt(999999999);
-                    p.writeInt(999999999);
+                    p.writeInt(MapId.NONE);
+                    p.writeInt(MapId.NONE);
                     p.writeInt(0);
                     p.writeInt(0);
                 }
             } else {
-                p.writeInt(999999999);
-                p.writeInt(999999999);
+                p.writeInt(MapId.NONE);
+                p.writeInt(MapId.NONE);
                 p.writeInt(0);
                 p.writeInt(0);
             }

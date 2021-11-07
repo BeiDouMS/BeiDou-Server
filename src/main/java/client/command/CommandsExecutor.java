@@ -31,6 +31,7 @@ import client.command.commands.gm3.*;
 import client.command.commands.gm4.*;
 import client.command.commands.gm5.*;
 import client.command.commands.gm6.*;
+import constants.id.MapId;
 import tools.FilePrinter;
 import tools.Pair;
 
@@ -87,7 +88,7 @@ public class CommandsExecutor {
     }
 
     private void handleInternal(Client client, String message) {
-        if (client.getPlayer().getMapId() == 300000012) {
+        if (client.getPlayer().getMapId() == MapId.JAIL) {
             client.getPlayer().yellowMessage("You do not have permission to use commands while in jail.");
             return;
         }

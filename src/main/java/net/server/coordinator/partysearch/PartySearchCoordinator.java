@@ -22,6 +22,7 @@ package net.server.coordinator.partysearch;
 import client.Character;
 import client.Job;
 import config.YamlConfig;
+import constants.id.MapId;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -76,9 +77,9 @@ public class PartySearchCoordinator {
                 mapLinks.put(mapid, neighborMaps);
 
                 for (Data neighbordata : mapdata.getChildren()) {
-                    int neighborid = DataTool.getInt(neighbordata, 999999999);
+                    int neighborid = DataTool.getInt(neighbordata, MapId.NONE);
 
-                    if (neighborid != 999999999) {
+                    if (neighborid != MapId.NONE) {
                         neighborMaps.add(neighborid);
                     }
                 }

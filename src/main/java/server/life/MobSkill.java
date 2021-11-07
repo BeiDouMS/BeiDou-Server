@@ -24,7 +24,7 @@ package server.life;
 import client.Character;
 import client.Disease;
 import client.status.MonsterStatus;
-import constants.game.GameConstants;
+import constants.id.MapId;
 import constants.id.MobId;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
@@ -244,7 +244,7 @@ public class MobSkill {
                 int skillLimit = this.getLimit();
                 MapleMap map = monster.getMap();
 
-                if (GameConstants.isDojo(map.getId())) {  // spawns in dojo should be unlimited
+                if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
                     skillLimit = Integer.MAX_VALUE;
                 }
 
@@ -252,7 +252,7 @@ public class MobSkill {
                     List<Integer> summons = getSummons();
                     int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
                     if (summonLimit >= 1) {
-                        boolean bossRushMap = GameConstants.isBossRush(map.getId());
+                        boolean bossRushMap = MapId.isBossRush(map.getId());
 
                         Collections.shuffle(summons);
                         for (Integer mobId : summons.subList(0, summonLimit)) {
@@ -286,14 +286,14 @@ public class MobSkill {
                                         break;
                                 }
                                 switch (map.getId()) {
-                                    case 220080001: //Pap map
+                                    case MapId.ORIGIN_OF_CLOCKTOWER: //Pap map
                                         if (xpos < -890) {
                                             xpos = (int) (Math.ceil(Math.random() * 150) - 890);
                                         } else if (xpos > 230) {
                                             xpos = (int) (230 - Math.ceil(Math.random() * 150));
                                         }
                                         break;
-                                    case 230040420: // Pianus map
+                                    case MapId.CAVE_OF_PIANUS: // Pianus map
                                         if (xpos < -239) {
                                             xpos = (int) (Math.ceil(Math.random() * 150) - 239);
                                         } else if (xpos > 371) {

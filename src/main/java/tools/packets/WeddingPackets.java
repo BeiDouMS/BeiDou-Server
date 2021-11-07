@@ -9,6 +9,7 @@ package tools.packets;
 import client.Character;
 import client.inventory.Item;
 import constants.id.ItemId;
+import constants.id.MapId;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
 import net.packet.Packet;
@@ -139,11 +140,11 @@ public class WeddingPackets extends PacketCreator {
     }
 
     public enum WeddingMap {
-        WEDDINGTOWN(680000000),
-        CHAPEL_STARTMAP(680000110),
-        CATHEDRAL_STARTMAP(680000210),
-        PHOTOMAP(680000300),
-        EXITMAP(680000500);
+        WEDDINGTOWN(MapId.AMORIA),
+        CHAPEL_STARTMAP(MapId.CHAPEL_WEDDING_ALTAR),
+        CATHEDRAL_STARTMAP(MapId.CATHEDRAL_WEDDING_ALTAR),
+        PHOTOMAP(MapId.WEDDING_PHOTO),
+        EXITMAP(MapId.WEDDING_EXIT);
         private final int wm;
 
         WeddingMap(int wm) {

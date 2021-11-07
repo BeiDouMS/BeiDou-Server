@@ -29,6 +29,7 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import constants.id.MobId;
 import constants.skills.*;
 import net.AbstractPacketHandler;
@@ -734,7 +735,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             calcDmgMax = (long) Math.ceil(calcDmgMax * dmgBuff);
         }
 
-        if (chr.getMapId() >= 914000000 && chr.getMapId() <= 914000500) {
+        if (chr.getMapId() >= MapId.ARAN_TUTORIAL_START && chr.getMapId() <= MapId.ARAN_TUTORIAL_MAX) {
             calcDmgMax += 80000; // Aran Tutorial.
         }
 

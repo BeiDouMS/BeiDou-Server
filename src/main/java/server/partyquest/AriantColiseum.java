@@ -22,6 +22,7 @@ package server.partyquest;
 import client.Character;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MapId;
 import server.TimerManager;
 import server.expeditions.Expedition;
 import server.expeditions.ExpeditionType;
@@ -249,9 +250,9 @@ public class AriantColiseum {
 
     private ExpeditionType getExpeditionType() {
         ExpeditionType type;
-        if (map.getId() == 980010101) {
+        if (map.getId() == MapId.ARPQ_ARENA_1) {
             type = ExpeditionType.ARIANT;
-        } else if (map.getId() == 980010201) {
+        } else if (map.getId() == MapId.ARPQ_ARENA_2) {
             type = ExpeditionType.ARIANT1;
         } else {
             type = ExpeditionType.ARIANT2;
@@ -265,7 +266,7 @@ public class AriantColiseum {
         cancelAriantSchedules();
 
         for (Character chr : map.getAllPlayers()) {
-            chr.changeMap(980010010, 0);
+            chr.changeMap(MapId.ARPQ_KINGS_ROOM, 0);
         }
     }
 
@@ -275,7 +276,7 @@ public class AriantColiseum {
 
             for (Character chr : exped.getActiveMembers()) {
                 chr.setAriantColiseum(null);
-                chr.changeMap(980010000, 0);
+                chr.changeMap(MapId.ARPQ_LOBBY, 0);
             }
 
             map.getWorldServer().registerTimedMapObject(() -> {

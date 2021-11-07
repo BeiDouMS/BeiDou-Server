@@ -23,6 +23,7 @@
 package server.events.gm;
 
 import client.Character;
+import constants.id.MapId;
 import server.TimerManager;
 import server.maps.MapleMap;
 import tools.PacketCreator;
@@ -59,7 +60,7 @@ public class Coconut extends Event {
         map.broadcastMessage(PacketCreator.getClock(300));
 
         TimerManager.getInstance().schedule(() -> {
-            if (map.getId() == 109080000) {
+            if (map.getId() == MapId.EVENT_COCONUT_HARVEST) {
                 if (getMapleScore() == getStoryScore()) {
                     bonusTime();
                 } else if (getMapleScore() > getStoryScore()) {
@@ -132,9 +133,9 @@ public class Coconut extends Event {
 
             for (Character chr : chars) {
                 if ((getMapleScore() > getStoryScore() && chr.getTeam() == 0) || (getStoryScore() > getMapleScore() && chr.getTeam() == 1)) {
-                    chr.changeMap(109050000);
+                    chr.changeMap(MapId.EVENT_WINNER);
                 } else {
-                    chr.changeMap(109050001);
+                    chr.changeMap(MapId.EVENT_EXIT);
                 }
             }
             map.setCoconut(null);
