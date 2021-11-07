@@ -26,6 +26,7 @@ package client.command.commands.gm1;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 import server.ItemInformationProvider;
 import server.life.MonsterDropEntry;
 import server.life.MonsterInformationProvider;
@@ -72,6 +73,6 @@ public class WhatDropsFromCommand extends Command {
             }
         }
 
-        c.getAbstractPlayerInteraction().npcTalk(9010000, output);
+        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, output);
     }
 }

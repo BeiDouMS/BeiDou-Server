@@ -3,6 +3,7 @@ package client.command.commands.gm2;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 import server.ThreadManager;
 import tools.exceptions.IdTypeNotSupportedException;
 
@@ -55,7 +56,7 @@ public class IdCommand extends Command {
                     }
                     sb.append(String.format("Results found: #r%d#k | Returned: #b%d#k/100 | Refine search query to improve time.", resultList.size(), count) + "\r\n");
 
-                    player.getAbstractPlayerInteraction().npcTalk(9010000, sb.toString());
+                    player.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, sb.toString());
                 } else {
                     player.yellowMessage(String.format("Id not found for item: %s, of type: %s.", queryItem, params[0]));
                 }

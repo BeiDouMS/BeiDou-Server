@@ -20,6 +20,7 @@
 package server.life;
 
 import constants.id.ItemId;
+import constants.id.NpcId;
 import net.server.Server;
 import provider.Data;
 import provider.DataProvider;
@@ -46,7 +47,7 @@ public class PlayerNPCFactory {
     }
 
     private static void loadDeveloperRoomMetadata(DataProvider npc) {
-        Data thisData = npc.getData("9977777.img");
+        Data thisData = npc.getData(NpcId.CUSTOM_DEV + ".img");
         if (thisData != null) {
             DataProvider map = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
@@ -106,13 +107,13 @@ public class PlayerNPCFactory {
                 runningDeveloperOid++;
             }
         } else {
-            Data thisData = npc.getData("9977777.img");
+            Data thisData = npc.getData(NpcId.CUSTOM_DEV + ".img");
 
             if (thisData != null) {
                 byte[] encData = {0x52, 0x6F, 0x6E, 0x61, 0x6E};
                 String name = new String(encData);
                 int face = 20104, hair = 30215, gender = 0, skin = 0, dir = 0, mapid = 777777777;
-                int FH = 4, RX0 = -143, RX1 = -243, CX = -193, CY = 117, scriptId = 9977777;
+                int FH = 4, RX0 = -143, RX1 = -243, CX = -193, CY = 117, scriptId = NpcId.CUSTOM_DEV;
 
                 Map<Short, Integer> equips = new HashMap<>();
                 equips.put((short) -1, ItemId.GREEN_HEADBAND);

@@ -2,6 +2,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
+import constants.id.NpcId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.minigame.RockPaperScissor;
@@ -21,7 +22,7 @@ public final class RPSActionHandler extends AbstractPacketHandler {
 
         if (c.tryacquireClient()) {
             try {
-                if (p.available() == 0 || !chr.getMap().containsNPC(9000019)) {
+                if (p.available() == 0 || !chr.getMap().containsNPC(NpcId.RPS_ADMIN)) {
                     if (rps != null) {
                         rps.dispose(c);
                     }

@@ -27,6 +27,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.NpcId;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
@@ -312,7 +313,7 @@ public class PlayerNPC extends AbstractMapObject {
     private static void fetchAvailableScriptIdsFromDb(byte branch, List<Integer> list) {
         try {
             int branchLen = (branch < 26) ? 100 : 400;
-            int branchSid = 9900000 + (branch * 100);
+            int branchSid = NpcId.PLAYER_NPC_BASE + (branch * 100);
             int nextBranchSid = branchSid + branchLen;
 
             List<Integer> availables = new ArrayList<>(20);
@@ -556,7 +557,7 @@ public class PlayerNPC extends AbstractMapObject {
         for (MapObject pnpcObj : wserv.getChannel(1).getMapFactory().getMap(map).getMapObjectsInRange(new Point(0, 0), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.PLAYER_NPC))) {
             PlayerNPC pn = (PlayerNPC) pnpcObj;
 
-            if (name.contentEquals(pn.getName()) && pn.getScriptId() < 9977777) {
+            if (name.contentEquals(pn.getName()) && pn.getScriptId() < NpcId.CUSTOM_DEV) {
                 return pn;
             }
         }

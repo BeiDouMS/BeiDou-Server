@@ -26,6 +26,7 @@ package client.command.commands.gm0;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 import net.server.Server;
 import net.server.guild.GuildPackets;
 import tools.Pair;
@@ -42,6 +43,6 @@ public class RanksCommand extends Command {
         Character player = c.getPlayer();
 
         List<Pair<String, Integer>> worldRanking = Server.getInstance().getWorldPlayerRanking(player.getWorld());
-        player.sendPacket(GuildPackets.showPlayerRanks(9010000, worldRanking));
+        player.sendPacket(GuildPackets.showPlayerRanks(NpcId.MAPLE_ADMINISTRATOR, worldRanking));
     }
 }

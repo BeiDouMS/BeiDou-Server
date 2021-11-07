@@ -22,6 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Client;
+import constants.id.NpcId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
@@ -29,6 +30,6 @@ public final class UseWaterOfLifeHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        c.getAbstractPlayerInteraction().openNpc(1032102, "waterOfLife");
+        c.getAbstractPlayerInteraction().openNpc(NpcId.MAR_THE_FAIRY, "waterOfLife");
     }
 }

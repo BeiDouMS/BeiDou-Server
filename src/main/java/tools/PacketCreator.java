@@ -34,6 +34,7 @@ import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
@@ -3312,7 +3313,7 @@ public class PacketCreator {
     public static Packet getDimensionalMirror(String talk) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
-        p.writeInt(9010022);
+        p.writeInt(NpcId.DIMENSIONAL_MIRROR);
         p.writeByte(0x0E);
         p.writeByte(0);
         p.writeInt(0);
@@ -4873,7 +4874,7 @@ public class PacketCreator {
     public static Packet openRPSNPC() {
         OutPacket p = OutPacket.create(SendOpcode.RPS_GAME);
         p.writeByte(8);// open npc
-        p.writeInt(9000019);
+        p.writeInt(NpcId.RPS_ADMIN);
         return p;
     }
 
@@ -4925,7 +4926,7 @@ public class PacketCreator {
     public static Packet getFredrick(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.FREDRICK);
         p.writeByte(0x23);
-        p.writeInt(9030000); // Fredrick
+        p.writeInt(NpcId.FREDRICK);
         p.writeInt(32272); //id
         p.skip(5);
         p.writeInt(chr.getMerchantNetMeso());

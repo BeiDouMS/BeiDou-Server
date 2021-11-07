@@ -24,6 +24,7 @@ package net.server.channel.handlers;
 import client.Client;
 import client.autoban.AutobanFactory;
 import constants.id.ItemId;
+import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -50,11 +51,11 @@ public final class RemoteGachaponHandler extends AbstractPacketHandler {
             c.disconnect(false, false);
             return;
         }
-        int npcId = 9100100;
+        int npcId = NpcId.GACHAPON_HENESYS;
         if (gacha != 8 && gacha != 9) {
             npcId += gacha;
         } else {
-            npcId = gacha == 8 ? 9100109 : 9100117;
+            npcId = gacha == 8 ? NpcId.GACHAPON_NLC : NpcId.GACHAPON_NAUTILUS;
         }
         NPCScriptManager.getInstance().start(c, npcId, "gachaponRemote", null);
     }

@@ -25,6 +25,7 @@ package client.command.commands.gm0;
 
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 
 public class StaffCommand extends Command {
     {
@@ -33,6 +34,6 @@ public class StaffCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        c.getAbstractPlayerInteraction().openNpc(2010007, "credits");
+        c.getAbstractPlayerInteraction().openNpc(NpcId.HERACLE, "credits");
     }
 }

@@ -29,6 +29,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.guild.Guild;
@@ -444,7 +445,7 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean forceStartQuest(int id) {
-        return forceStartQuest(id, 9010000);
+        return forceStartQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean forceStartQuest(int id, int npc) {
@@ -452,7 +453,7 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean forceCompleteQuest(int id) {
-        return forceCompleteQuest(id, 9010000);
+        return forceCompleteQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean forceCompleteQuest(int id, int npc) {
@@ -468,11 +469,11 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean startQuest(int id) {
-        return startQuest(id, 9010000);
+        return startQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean completeQuest(int id) {
-        return completeQuest(id, 9010000);
+        return completeQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean startQuest(short id, int npc) {

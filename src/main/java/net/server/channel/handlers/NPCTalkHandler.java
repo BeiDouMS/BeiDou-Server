@@ -24,6 +24,7 @@ package net.server.channel.handlers;
 import client.Client;
 import client.processor.npc.DueyProcessor;
 import config.YamlConfig;
+import constants.id.NpcId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.npc.NPCScriptManager;
@@ -48,13 +49,12 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
 
         int oid = p.readInt();
         MapObject obj = c.getPlayer().getMap().getMapObject(oid);
-        if (obj instanceof NPC) {
-            NPC npc = (NPC) obj;
-            if (YamlConfig.config.server.USE_DEBUG == true) {
+        if (obj instanceof NPC npc) {
+            if (YamlConfig.config.server.USE_DEBUG) {
                 c.getPlayer().dropMessage(5, "Talking to NPC " + npc.getId());
             }
 
-            if (npc.getId() == 9010009) {   //is duey
+            if (npc.getId() == NpcId.DUEY) {
                 DueyProcessor.dueySendTalk(c, false);
             } else {
                 if (c.getCM() != null || c.getQM() != null) {
@@ -63,7 +63,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                 }
 
                 // Custom handling to reduce the amount of scripts needed.
-                if (npc.getId() >= 9100100 && npc.getId() <= 9100200) {
+                if (npc.getId() >= NpcId.GACHAPON_MIN && npc.getId() <= NpcId.GACHAPON_MAX) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "gachapon", null);
                 } else if (npc.getName().endsWith("Maple TV")) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "mapleTV", null);
@@ -88,7 +88,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
             PlayerNPC pnpc = (PlayerNPC) obj;
             NPCScriptManager nsm = NPCScriptManager.getInstance();
 
-            if (pnpc.getScriptId() < 9977777 && !nsm.isNpcScriptAvailable(c, "" + pnpc.getScriptId())) {
+            if (pnpc.getScriptId() < NpcId.CUSTOM_DEV && !nsm.isNpcScriptAvailable(c, "" + pnpc.getScriptId())) {
                 nsm.start(c, pnpc.getScriptId(), "rank_user", null);
             } else {
                 nsm.start(c, pnpc.getScriptId(), null);

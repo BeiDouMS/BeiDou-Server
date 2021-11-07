@@ -26,6 +26,7 @@ package client.command.commands.gm2;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -133,6 +134,6 @@ public class SearchCommand extends Command {
         }
         sb.append("\r\n#kLoaded within ").append((double) (System.currentTimeMillis() - start) / 1000).append(" seconds.");//because I can, and it's free
 
-        c.getAbstractPlayerInteraction().npcTalk(9010000, sb.toString());
+        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, sb.toString());
     }
 }
