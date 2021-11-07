@@ -27,6 +27,7 @@ import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
+import constants.id.ItemId;
 import constants.skills.Magician;
 import server.ItemInformationProvider;
 
@@ -34,8 +35,8 @@ import server.ItemInformationProvider;
  * @author RonanLana
  */
 public class MagicianCreator extends CharacterFactory {
-    private static final int[] equips = {0, 1041041, 0, 1061034, 1072075};
-    private static final int[] weapons = {1372003, 1382017};
+    private static final int[] equips = {0, ItemId.PURPLE_FAIRY_TOP, 0, ItemId.PURPLE_FAIRY_SKIRT, ItemId.RED_MAGICSHOES};
+    private static final int[] weapons = {ItemId.MITHRIL_WAND, ItemId.CIRCLE_WINDED_STAFF};
     private static final int[] startingHpMp = {405, 729};
     private static final int[] mpGain = {0, 40, 80, 118, 156, 194, 230, 266, 302, 336, 370};
 
@@ -53,16 +54,16 @@ public class MagicianCreator extends CharacterFactory {
         recipe.setMeso(100000);
 
         if (gender == 0) {
-            giveEquipment(recipe, ii, 1050003);
+            giveEquipment(recipe, ii, ItemId.BLUE_WIZARD_ROBE);
         }
 
         for (int i = 1; i < weapons.length; i++) {
             giveEquipment(recipe, ii, weapons[i]);
         }
 
-        giveItem(recipe, 2000001, 100, InventoryType.USE);
-        giveItem(recipe, 2000006, 100, InventoryType.USE);
-        giveItem(recipe, 3010000, 1, InventoryType.SETUP);
+        giveItem(recipe, ItemId.ORANGE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.MANA_ELIXIR, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.RELAXER, 1, InventoryType.SETUP);
 
         if (improveSp > 0) {
             improveSp += 5;

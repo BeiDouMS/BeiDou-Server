@@ -29,6 +29,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import client.processor.npc.DueyProcessor;
+import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.channel.Channel;
@@ -51,12 +52,19 @@ import java.sql.SQLException;
  * @author Drago (Dragohe4rt) - on Wishlist
  */
 public final class RingActionHandler extends AbstractPacketHandler {
-    private static int getBoxId(int useItemId) {
-        return useItemId == 2240000 ? 4031357 : (useItemId == 2240001 ? 4031359 : (useItemId == 2240002 ? 4031361 : (useItemId == 2240003 ? 4031363 : (1112300 + (useItemId - 2240004)))));
+
+    private static int getEngagementBoxId(int useItemId) {
+        return switch (useItemId) {
+            case ItemId.ENGAGEMENT_BOX_MOONSTONE -> ItemId.EMPTY_ENGAGEMENT_BOX_MOONSTONE;
+            case ItemId.ENGAGEMENT_BOX_STAR -> ItemId.EMPTY_ENGAGEMENT_BOX_STAR;
+            case ItemId.ENGAGEMENT_BOX_GOLDEN -> ItemId.EMPTY_ENGAGEMENT_BOX_GOLDEN;
+            case ItemId.ENGAGEMENT_BOX_SILVER -> ItemId.EMPTY_ENGAGEMENT_BOX_SILVER;
+            default -> ItemId.CARAT_RING_BASE + (useItemId - ItemId.CARAT_RING_BOX_BASE);
+        };
     }
 
     public static void sendEngageProposal(final Client c, final String name, final int itemid) {
-        final int newBoxId = getBoxId(itemid);
+        final int newBoxId = getEngagementBoxId(itemid);
         final Character target = c.getChannelServer().getPlayerStorage().getCharacterByName(name);
         final Character source = c.getPlayer();
 
@@ -93,7 +101,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
             source.dropMessage(1, "Make sure your partner is on the same map!");
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
-        } else if (!source.haveItem(itemid) || itemid < 2240000 || itemid > 2240015) {
+        } else if (!source.haveItem(itemid) || itemid < ItemId.ENGAGEMENT_BOX_MIN || itemid > ItemId.ENGAGEMENT_BOX_MAX) {
             source.sendPacket(WeddingPackets.OnMarriageResult((byte) 0));
             return;
         } else if (target.isMarried()) {
@@ -328,7 +336,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 }
 
                 if (accepted) {
-                    final int newItemId = getBoxId(itemid);
+                    final int newItemId = getEngagementBoxId(itemid);
                     if (!InventoryManipulator.checkSpace(c, newItemId, 1, "") || !InventoryManipulator.checkSpace(source.getClient(), newItemId, 1, "")) {
                         target.sendPacket(PacketCreator.enableActions());
                         return;
@@ -380,7 +388,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                if ((itemId != 4031377 && itemId != 4031395) || !c.getPlayer().haveItem(itemId)) {
+                if ((itemId != ItemId.INVITATION_CHAPEL && itemId != ItemId.INVITATION_CATHEDRAL) || !c.getPlayer().haveItem(itemId)) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
@@ -399,7 +407,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     if (registration != null) {
                         if (wserv.addMarriageGuest(marriageId, guest)) {
                             boolean cathedral = registration.getLeft();
-                            int newItemId = cathedral ? 4031407 : 4031406;
+                            int newItemId = cathedral ? ItemId.RECEIVED_INVITATION_CATHEDRAL : ItemId.RECEIVED_INVITATION_CHAPEL;
 
                             Channel cserv = c.getChannelServer();
                             int resStatus = cserv.getWeddingReservationStatus(marriageId, cathedral);
@@ -443,7 +451,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 slot = (byte) p.readInt();
                 int invitationid = p.readInt();
 
-                if (invitationid == 4031406 || invitationid == 4031407) {
+                if (invitationid == ItemId.RECEIVED_INVITATION_CHAPEL || invitationid == ItemId.RECEIVED_INVITATION_CATHEDRAL) {
                     Item item = c.getPlayer().getInventory(InventoryType.ETC).getItem(slot);
                     if (item == null || item.getItemId() != invitationid) {
                         c.sendPacket(PacketCreator.enableActions());
@@ -451,7 +459,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     }
 
                     // collision case: most soon-to-come wedding will show up
-                    Pair<Integer, Integer> coupleId = c.getWorldServer().getWeddingCoupleForGuest(c.getPlayer().getId(), invitationid == 4031407);
+                    Pair<Integer, Integer> coupleId = c.getWorldServer().getWeddingCoupleForGuest(c.getPlayer().getId(), invitationid == ItemId.RECEIVED_INVITATION_CATHEDRAL);
                     if (coupleId != null) {
                         int groomId = coupleId.getLeft(), brideId = coupleId.getRight();
                         c.sendPacket(WeddingPackets.sendWeddingInvitation(Character.getNameById(groomId), Character.getNameById(brideId)));

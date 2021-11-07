@@ -3,6 +3,7 @@ package server.minigame;
 import client.Client;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -71,7 +72,7 @@ public class RockPaperScissor {
 
     public final void reward(final Client c) {
         if (win) {
-            InventoryManipulator.addFromDrop(c, new Item(4031332 + round, (short) 0, (short) 1), true);
+            InventoryManipulator.addFromDrop(c, new Item(ItemId.RPS_CERTIFICATE_BASE + round, (short) 0, (short) 1), true);
         }
         c.getPlayer().setRPS(null);
     }

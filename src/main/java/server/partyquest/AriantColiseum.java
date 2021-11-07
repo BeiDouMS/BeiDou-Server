@@ -21,6 +21,7 @@ package server.partyquest;
 
 import client.Character;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import server.TimerManager;
 import server.expeditions.Expedition;
 import server.expeditions.ExpeditionType;
@@ -180,8 +181,8 @@ public class AriantColiseum {
                 }
                 chr.setAriantColiseum(null);
 
-                int shards = chr.countItem(4031868);
-                chr.getAbstractPlayerInteraction().removeAll(4031868);
+                int shards = chr.countItem(ItemId.ARPQ_SPIRIT_JEWEL);
+                chr.getAbstractPlayerInteraction().removeAll(ItemId.ARPQ_SPIRIT_JEWEL);
                 chr.updateAriantScore(shards);
             }
         }
@@ -241,7 +242,7 @@ public class AriantColiseum {
         }
 
         runnerups.remove(firstTop);
-        if (isUnfairMatch(firstTop, secondTop, map.getDroppedItemsCountById(4031868) + lostShards, runnerups)) {
+        if (isUnfairMatch(firstTop, secondTop, map.getDroppedItemsCountById(ItemId.ARPQ_SPIRIT_JEWEL) + lostShards, runnerups)) {
             rewardTier.put(winner, 1);
         }
     }

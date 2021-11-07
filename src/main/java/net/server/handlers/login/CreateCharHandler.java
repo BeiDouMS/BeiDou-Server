@@ -25,6 +25,7 @@ import client.Client;
 import client.creator.novice.BeginnerCreator;
 import client.creator.novice.LegendCreator;
 import client.creator.novice.NoblesseCreator;
+import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.FilePrinter;
@@ -36,12 +37,19 @@ import java.util.Set;
 
 public final class CreateCharHandler extends AbstractPacketHandler {
 
-    private final static Set<Integer> IDs = new HashSet<>(Arrays.asList(1302000, 1312004, 1322005, 1442079,// weapons
-            1040002, 1040006, 1040010, 1041002, 1041006, 1041010, 1041011, 1042167,// bottom
-            1060002, 1060006, 1061002, 1061008, 1062115, // top
-            1072001, 1072005, 1072037, 1072038, 1072383,// shoes
-            30000, 30010, 30020, 30030, 31000, 31040, 31050,// hair
-            20000, 20001, 20002, 21000, 21001, 21002, 21201, 20401, 20402, 21700, 20100  //face
+    private final static Set<Integer> IDs = new HashSet<>(Arrays.asList(
+            ItemId.SWORD, ItemId.HAND_AXE, ItemId.WOODEN_CLUB, ItemId.BASIC_POLEARM,// weapons
+            ItemId.WHITE_UNDERSHIRT, ItemId.UNDERSHIRT, ItemId.GREY_TSHIRT, ItemId.WHITE_TUBETOP, ItemId.YELLOW_TSHIRT,
+            ItemId.GREEN_TSHIRT, ItemId.RED_STRIPED_TOP, ItemId.SIMPLE_WARRIOR_TOP,// bottom
+            ItemId.BLUE_JEAN_SHORTS, ItemId.BROWN_COTTON_SHORTS, ItemId.RED_MINISKIRT, ItemId.INDIGO_MINISKIRT,
+            ItemId.SIMPLE_WARRIOR_PANTS, // top
+            ItemId.RED_RUBBER_BOOTS, ItemId.LEATHER_SANDALS, ItemId.YELLOW_RUBBER_BOOTS, ItemId.BLUE_RUBBER_BOOTS,
+            ItemId.AVERAGE_MUSASHI_SHOES,// shoes
+            ItemId.BLACK_TOBEN, ItemId.ZETA, ItemId.BLACK_REBEL, ItemId.BLACK_BUZZ, ItemId.BLACK_SAMMY,
+            ItemId.BLACK_EDGY, ItemId.BLACK_CONNIE,// hair
+            ItemId.MOTIVATED_LOOK_M, ItemId.PERPLEXED_STARE, ItemId.LEISURE_LOOK_M, ItemId.MOTIVATED_LOOK_F,
+            ItemId.FEARFUL_STARE_M, ItemId.LEISURE_LOOK_F, ItemId.FEARFUL_STARE_F, ItemId.PERPLEXED_STARE_HAZEL,
+            ItemId.LEISURE_LOOK_HAZEL, ItemId.MOTIVATED_LOOK_AMETHYST, ItemId.MOTIVATED_LOOK_BLUE  //face
             //#NeverTrustStevenCode
     ));
 

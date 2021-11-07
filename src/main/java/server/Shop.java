@@ -26,6 +26,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -48,18 +49,18 @@ public class Shop {
     private final int npcId;
     private final List<ShopItem> items;
     private final int tokenvalue = 1000000000;
-    private final int token = 4000313;
+    private final int token = ItemId.GOLDEN_MAPLE_LEAF;
 
     static {
-        for (int i = 2070000; i < 2070017; i++) {
-            rechargeableItems.add(i);
+        for (int throwingStarId : ItemId.allThrowingStarIds()) {
+            rechargeableItems.add(throwingStarId);
         }
-        rechargeableItems.add(2331000);//Blaze Capsule
-        rechargeableItems.add(2332000);//Glaze Capsule
-        rechargeableItems.add(2070018);
-        rechargeableItems.remove(2070014); // doesn't exist
-        for (int i = 2330000; i <= 2330005; i++) {
-            rechargeableItems.add(i);
+        rechargeableItems.add(ItemId.BLAZE_CAPSULE);
+        rechargeableItems.add(ItemId.GLAZE_CAPSULE);
+        rechargeableItems.add(ItemId.BALANCED_FURY);
+        rechargeableItems.remove(ItemId.DEVIL_RAIN_THROWING_STAR); // doesn't exist
+        for (int bulletId : ItemId.allBulletIds()) {
+            rechargeableItems.add(bulletId);
         }
     }
 
@@ -114,16 +115,16 @@ public class Shop {
         } else if (item.getPitch() > 0) {
             int amount = (int) Math.min((float) item.getPitch() * quantity, Integer.MAX_VALUE);
 
-            if (c.getPlayer().getInventory(InventoryType.ETC).countById(4310000) >= amount) {
+            if (c.getPlayer().getInventory(InventoryType.ETC).countById(ItemId.PERFECT_PITCH) >= amount) {
                 if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
                     if (!ItemConstants.isRechargeable(itemId)) {
                         InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        InventoryManipulator.removeById(c, InventoryType.ETC, 4310000, amount, false, false);
+                        InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
                     } else {
                         short slotMax = ii.getSlotMax(c, item.getItemId());
                         quantity = slotMax;
                         InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        InventoryManipulator.removeById(c, InventoryType.ETC, 4310000, amount, false, false);
+                        InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
                     }
                     c.sendPacket(PacketCreator.shopTransaction((byte) 0));
                 } else {

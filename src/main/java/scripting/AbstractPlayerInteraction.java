@@ -28,6 +28,7 @@ import client.inventory.*;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.guild.Guild;
@@ -611,7 +612,7 @@ public class AbstractPlayerInteraction {
                         if (!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
                             eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));
                         }
-                        item = ItemInformationProvider.getInstance().scrollEquipWithId(item, 2049100, true, 2049100, c.getPlayer().isGM());
+                        item = ItemInformationProvider.getInstance().scrollEquipWithId(item, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60, c.getPlayer().isGM());
                     }
                 }
             } else {
@@ -763,7 +764,8 @@ public class AbstractPlayerInteraction {
     }
 
     public void removeHPQItems() {
-        int[] items = {4001095, 4001096, 4001097, 4001098, 4001099, 4001100, 4001101};
+        int[] items = {ItemId.GREEN_PRIMROSE_SEED, ItemId.PURPLE_PRIMROSE_SEED, ItemId.PINK_PRIMROSE_SEED,
+                ItemId.BROWN_PRIMROSE_SEED, ItemId.YELLOW_PRIMROSE_SEED, ItemId.BLUE_PRIMROSE_SEED, ItemId.MOON_BUNNYS_RICE_CAKE};
         for (int item : items) {
             removePartyItems(item);
         }

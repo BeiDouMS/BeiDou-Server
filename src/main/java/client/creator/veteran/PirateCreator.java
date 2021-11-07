@@ -25,14 +25,15 @@ import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
+import constants.id.ItemId;
 import server.ItemInformationProvider;
 
 /**
  * @author RonanLana
  */
 public class PirateCreator extends CharacterFactory {
-    private static final int[] equips = {0, 0, 0, 0, 1072294};
-    private static final int[] weapons = {1482004, 1492004};
+    private static final int[] equips = {0, 0, 0, 0, ItemId.BROWN_PAULIE_BOOTS};
+    private static final int[] weapons = {ItemId.PRIME_HANDS, ItemId.COLD_MIND};
     private static final int[] startingHpMp = {846, 503};
 
     private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
@@ -48,17 +49,17 @@ public class PirateCreator extends CharacterFactory {
 
         recipe.setMeso(100000);
 
-        giveEquipment(recipe, ii, 1052107);
+        giveEquipment(recipe, ii, ItemId.BROWN_POLLARD);
 
         for (int i = 1; i < weapons.length; i++) {
             giveEquipment(recipe, ii, weapons[i]);
         }
 
-        giveItem(recipe, 2330000, 800, InventoryType.USE);
+        giveItem(recipe, ItemId.BULLET, 800, InventoryType.USE);
 
-        giveItem(recipe, 2000002, 100, InventoryType.USE);
-        giveItem(recipe, 2000003, 100, InventoryType.USE);
-        giveItem(recipe, 3010000, 1, InventoryType.SETUP);
+        giveItem(recipe, ItemId.WHITE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.BLUE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.RELAXER, 1, InventoryType.SETUP);
 
         return recipe;
     }

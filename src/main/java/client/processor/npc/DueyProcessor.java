@@ -33,6 +33,7 @@ import client.inventory.ItemFactory;
 import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.server.channel.Channel;
 import server.DueyPackage;
@@ -284,7 +285,7 @@ public class DueyProcessor {
                 int fee = Trade.getFee(sendMesos);
                 if (!quick) {
                     fee += 5000;
-                } else if (!c.getPlayer().haveItem(5330000)) {
+                } else if (!c.getPlayer().haveItem(ItemId.QUICK_DELIVERY_TICKET)) {
                     AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with Quick Delivery on duey.");
                     FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use duey with Quick Delivery, mesos " + sendMesos + " and amount " + amount);
                     c.disconnect(true, false);
@@ -324,7 +325,7 @@ public class DueyProcessor {
                 }
 
                 if (quick) {
-                    InventoryManipulator.removeById(c, InventoryType.CASH, 5330000, (short) 1, false, false);
+                    InventoryManipulator.removeById(c, InventoryType.CASH, ItemId.QUICK_DELIVERY_TICKET, (short) 1, false, false);
                 }
 
                 int packageId = createPackage(sendMesos, sendMessage, c.getPlayer().getName(), recipientCid, quick);

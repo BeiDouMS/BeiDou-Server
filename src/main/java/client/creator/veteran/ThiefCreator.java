@@ -25,14 +25,16 @@ import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
+import constants.id.ItemId;
 import server.ItemInformationProvider;
 
 /**
  * @author RonanLana
  */
 public class ThiefCreator extends CharacterFactory {
-    private static final int[] equips = {1040057, 1041047, 1060043, 1061043, 1072032};
-    private static final int[] weapons = {1472008, 1332012};
+    private static final int[] equips = {ItemId.DARK_BROWN_STEALER, ItemId.RED_STEAL, ItemId.DARK_BROWN_STEALER_PANTS,
+            ItemId.RED_STEAL_PANTS, ItemId.BRONZE_CHAIN_BOOTS};
+    private static final int[] weapons = {ItemId.STEEL_GUARDS, ItemId.REEF_CLAW};
     private static final int[] startingHpMp = {794, 407};
 
     private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
@@ -52,11 +54,11 @@ public class ThiefCreator extends CharacterFactory {
             giveEquipment(recipe, ii, weapons[i]);
         }
 
-        giveItem(recipe, 2070000, 500, InventoryType.USE);
+        giveItem(recipe, ItemId.SUBI_THROWING_STARS, 500, InventoryType.USE);
 
-        giveItem(recipe, 2000002, 100, InventoryType.USE);
-        giveItem(recipe, 2000003, 100, InventoryType.USE);
-        giveItem(recipe, 3010000, 1, InventoryType.SETUP);
+        giveItem(recipe, ItemId.WHITE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.BLUE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.RELAXER, 1, InventoryType.SETUP);
 
         return recipe;
     }

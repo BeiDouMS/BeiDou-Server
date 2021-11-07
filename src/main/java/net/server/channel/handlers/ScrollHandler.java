@@ -28,6 +28,7 @@ import client.SkillFactory;
 import client.inventory.*;
 import client.inventory.Equip.ScrollResult;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -89,7 +90,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                     return;
                 }
                 if (whiteScroll) {
-                    wscroll = useInventory.findById(2340000);
+                    wscroll = useInventory.findById(ItemId.WHITE_SCROLL);
                     if (wscroll == null) {
                         whiteScroll = false;
                     }
@@ -138,7 +139,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                 final List<ModifyInventory> mods = new ArrayList<>();
                 if (scrollSuccess == Equip.ScrollResult.CURSE) {
-                    if (!ItemConstants.isWeddingRing(toScroll.getItemId())) {
+                    if (!ItemId.isWeddingRing(toScroll.getItemId())) {
                         mods.add(new ModifyInventory(3, toScroll));
                         if (dst < 0) {
                             Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
@@ -195,7 +196,8 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
         switch (sid) {
             case 20492: //scroll for accessory (pendant, belt, ring)
-                return canScroll(2041100, itemid) || canScroll(2041200, itemid) || canScroll(2041300, itemid);
+                return canScroll(ItemId.RING_STR_100_SCROLL, itemid) || canScroll(ItemId.DRAGON_STONE_SCROLL, itemid) ||
+                        canScroll(ItemId.BELT_STR_100_SCROLL, itemid);
 
             default:
                 return (scrollid / 100) % 100 == (itemid / 10000) % 100;

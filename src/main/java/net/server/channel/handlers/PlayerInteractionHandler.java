@@ -31,6 +31,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -168,7 +169,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     } else if (type < 0) {
                         type = 0;
                     }
-                    if (!chr.haveItem(4080000 + type)) {
+                    if (!chr.haveItem(ItemId.MINI_GAME_BASE + type)) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(6));
                         return;
                     }
@@ -202,7 +203,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     } else if (type < 0) {
                         type = 0;
                     }
-                    if (!chr.haveItem(4080100)) {
+                    if (!chr.haveItem(ItemId.MATCH_CARDS)) {
                         chr.sendPacket(PacketCreator.getMiniRoomError(6));
                         return;
                     }

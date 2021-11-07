@@ -33,6 +33,7 @@ import client.processor.stat.AssignAPProcessor;
 import client.processor.stat.AssignSPProcessor;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -145,7 +146,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 return;
             }
 
-            if (itemId > 5050000) {
+            if (itemId > ItemId.AP_RESET) {
                 int SPTo = p.readInt();
                 if (!AssignSPProcessor.canSPAssign(c, SPTo)) {  // exploit found thanks to Arnah
                     return;
@@ -452,15 +453,15 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         } else if (itemType == 540) {
             p.readByte();
             p.readInt();
-            if (itemId == 5400000) { //name change
+            if (itemId == ItemId.NAME_CHANGE) {
                 c.sendPacket(PacketCreator.showNameChangeCancel(player.cancelPendingNameChange()));
-            } else if (itemId == 5401000) { //world transfer
+            } else if (itemId == ItemId.WORLD_TRANSFER) {
                 c.sendPacket(PacketCreator.showWorldTransferCancel(player.cancelPendingWorldTranfer()));
             }
             remove(c, position, itemId);
             c.sendPacket(PacketCreator.enableActions());
         } else if (itemType == 543) {
-            if (itemId == 5432000 && !c.gainCharacterSlot()) {
+            if (itemId == ItemId.MAPLE_LIFE_B && !c.gainCharacterSlot()) {
                 player.dropMessage(1, "You have already used up all 12 extra character slots.");
                 c.sendPacket(PacketCreator.enableActions());
                 return;
@@ -527,7 +528,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             int itemSlot = p.readInt();
             p.readInt();
             final Equip equip = (Equip) player.getInventory(InventoryType.EQUIP).getItem((short) itemSlot);
-            if (equip.getVicious() >= 2 || player.getInventory(InventoryType.CASH).findById(5570000) == null) {
+            if (equip.getVicious() >= 2 || player.getInventory(InventoryType.CASH).findById(ItemId.VICIOUS_HAMMER) == null) {
                 return;
             }
             equip.setVicious(equip.getVicious() + 1);

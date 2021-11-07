@@ -8,6 +8,7 @@ package tools.packets;
 
 import client.Character;
 import client.inventory.Item;
+import constants.id.ItemId;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
 import net.packet.Packet;
@@ -155,37 +156,37 @@ public class WeddingPackets extends PacketCreator {
     }
 
     public enum WeddingItem {
-        WR_MOONSTONE(1112803), // Wedding Ring
-        WR_STARGEM(1112806),
-        WR_GOLDENHEART(1112807),
-        WR_SILVERSWAN(1112809),
-        ERB_MOONSTONE(2240000), // Engagement Ring Box
-        ERB_STARGEM(2240001),
-        ERB_GOLDENHEART(2240002),
-        ERB_SILVERSWAN(2240003),
-        ERBE_MOONSTONE(4031357), // Engagement Ring Box (Empty)
-        ER_MOONSTONE(4031358), // Engagement Ring
-        ERBE_STARGEM(4031359),
-        ER_STARGEM(4031360),
-        ERBE_GOLDENHEART(4031361),
-        ER_GOLDENHEART(4031362),
-        ERBE_SILVERSWAN(4031363),
-        ER_SILVERSWAN(4031364),
-        PARENTS_BLESSING(4031373), // Parents Blessing
-        OFFICIATORS_PERMISSION(4031374), // Officiator's Permission
-        WR_CATHEDRAL_PREMIUM(4031375), // Wedding Ring?
-        WR_VEGAS_PREMIUM(4031376),
-        IB_VEGAS(4031377),      // toSend invitation
-        IB_CATHEDRAL(4031395),  // toSend invitation
-        IG_VEGAS(4031406),      // rcvd invitation
-        IG_CATHEDRAL(4031407),  // rcvd invitation
-        OB_FORCOUPLE(4031424), // Onyx Box? For Couple
-        WR_CATHEDRAL_NORMAL(4031480), // Wedding Ring?
-        WR_VEGAS_NORMAL(4031481),
-        WT_CATHEDRAL_NORMAL(5251000), // Wedding Ticket
-        WT_VEGAS_NORMAL(5251001),
-        WT_VEGAS_PREMIUM(5251002),
-        WT_CATHEDRAL_PREMIUM(5251003);
+        WR_MOONSTONE(ItemId.WEDDING_RING_MOONSTONE), // Wedding Ring
+        WR_STARGEM(ItemId.WEDDING_RING_STAR),
+        WR_GOLDENHEART(ItemId.WEDDING_RING_GOLDEN),
+        WR_SILVERSWAN(ItemId.WEDDING_RING_SILVER),
+        ERB_MOONSTONE(ItemId.ENGAGEMENT_BOX_MOONSTONE), // Engagement Ring Box
+        ERB_STARGEM(ItemId.ENGAGEMENT_BOX_STAR),
+        ERB_GOLDENHEART(ItemId.ENGAGEMENT_BOX_GOLDEN),
+        ERB_SILVERSWAN(ItemId.ENGAGEMENT_BOX_SILVER),
+        ERBE_MOONSTONE(ItemId.EMPTY_ENGAGEMENT_BOX_MOONSTONE), // Engagement Ring Box (Empty)
+        ER_MOONSTONE(ItemId.ENGAGEMENT_RING_MOONSTONE), // Engagement Ring
+        ERBE_STARGEM(ItemId.EMPTY_ENGAGEMENT_BOX_STAR),
+        ER_STARGEM(ItemId.ENGAGEMENT_RING_STAR),
+        ERBE_GOLDENHEART(ItemId.EMPTY_ENGAGEMENT_BOX_GOLDEN),
+        ER_GOLDENHEART(ItemId.ENGAGEMENT_RING_GOLDEN),
+        ERBE_SILVERSWAN(ItemId.EMPTY_ENGAGEMENT_BOX_SILVER),
+        ER_SILVERSWAN(ItemId.ENGAGEMENT_RING_SILVER),
+        PARENTS_BLESSING(ItemId.PARENTS_BLESSING), // Parents Blessing
+        OFFICIATORS_PERMISSION(ItemId.OFFICIATORS_PERMISSION), // Officiator's Permission
+        WR_CATHEDRAL_PREMIUM(ItemId.PREMIUM_CATHEDRAL_RESERVATION_RECEIPT), // Wedding Ring?
+        WR_VEGAS_PREMIUM(ItemId.PREMIUM_CHAPEL_RESERVATION_RECEIPT),
+        IB_VEGAS(ItemId.INVITATION_CHAPEL),      // toSend invitation
+        IB_CATHEDRAL(ItemId.INVITATION_CATHEDRAL),  // toSend invitation
+        IG_VEGAS(ItemId.RECEIVED_INVITATION_CHAPEL),      // rcvd invitation
+        IG_CATHEDRAL(ItemId.RECEIVED_INVITATION_CATHEDRAL),  // rcvd invitation
+        OB_FORCOUPLE(ItemId.ONYX_CHEST_FOR_COUPLE), // Onyx Box? For Couple
+        WR_CATHEDRAL_NORMAL(ItemId.NORMAL_CATHEDRAL_RESERVATION_RECEIPT), // Wedding Ring?
+        WR_VEGAS_NORMAL(ItemId.NORMAL_CHAPEL_RESERVATION_RECEIPT),
+        WT_CATHEDRAL_NORMAL(ItemId.NORMAL_WEDDING_TICKET_CATHEDRAL), // Wedding Ticket
+        WT_VEGAS_NORMAL(ItemId.NORMAL_WEDDING_TICKET_CHAPEL),
+        WT_VEGAS_PREMIUM(ItemId.PREMIUM_WEDDING_TICKET_CHAPEL),
+        WT_CATHEDRAL_PREMIUM(ItemId.PREMIUM_WEDDING_TICKET_CATHEDRAL);
         private final int wi;
 
         WeddingItem(int wi) {
@@ -284,8 +285,8 @@ public class WeddingPackets extends PacketCreator {
             p.writeInt(chr.getMarriageItemId());
             p.writeInt(chr.getMarriageItemId());
         } else {
-            p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
-            p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
+            p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
+            p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
         }
         p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
         p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));

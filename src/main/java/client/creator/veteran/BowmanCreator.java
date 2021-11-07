@@ -25,14 +25,16 @@ import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
 import client.inventory.Item;
+import constants.id.ItemId;
 import server.ItemInformationProvider;
 
 /**
  * @author RonanLana
  */
 public class BowmanCreator extends CharacterFactory {
-    private static final int[] equips = {1040067, 1041054, 1060056, 1061050, 1072081};
-    private static final int[] weapons = {1452005, 1462000};
+    private static final int[] equips = {ItemId.GREEN_HUNTERS_ARMOR, ItemId.GREEN_HUNTRESS_ARMOR,
+            ItemId.GREEN_HUNTERS_PANTS, ItemId.GREEN_HUNTRESS_PANTS, ItemId.GREEN_HUNTER_BOOTS};
+    private static final int[] weapons = {ItemId.RYDEN, ItemId.MOUNTAIN_CROSSBOW};
     private static final int[] startingHpMp = {797, 404};
 
     private static CharacterFactoryRecipe createRecipe(Job job, int level, int map, int top, int bottom, int shoes, int weapon) {
@@ -52,9 +54,9 @@ public class BowmanCreator extends CharacterFactory {
             giveEquipment(recipe, ii, weapons[i]);
         }
 
-        giveItem(recipe, 2000002, 100, InventoryType.USE);
-        giveItem(recipe, 2000003, 100, InventoryType.USE);
-        giveItem(recipe, 3010000, 1, InventoryType.SETUP);
+        giveItem(recipe, ItemId.WHITE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.BLUE_POTION, 100, InventoryType.USE);
+        giveItem(recipe, ItemId.RELAXER, 1, InventoryType.SETUP);
 
         return recipe;
     }

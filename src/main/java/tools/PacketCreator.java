@@ -33,6 +33,7 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
@@ -1922,7 +1923,7 @@ public class PacketCreator {
                 }*/
 
         addCharLook(p, chr, false);
-        p.writeInt(chr.getInventory(InventoryType.CASH).countById(5110000));
+        p.writeInt(chr.getInventory(InventoryType.CASH).countById(ItemId.HEART_SHAPED_CHOCOLATE));
         p.writeInt(chr.getItemEffect());
         p.writeInt(ItemConstants.getInventoryType(chr.getChair()) == InventoryType.SETUP ? chr.getChair() : 0);
 
@@ -6771,8 +6772,8 @@ public class PacketCreator {
                 p.writeInt(marriageRing.getItemId());
                 p.writeInt(marriageRing.getItemId());
             } else {
-                p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
-                p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
+                p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
+                p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
             }
             p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
             p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
@@ -6805,7 +6806,7 @@ public class PacketCreator {
     public static Packet hpqMessage(String text) {
         final OutPacket p = OutPacket.create(SendOpcode.BLOW_WEATHER); // not 100% sure
         p.writeByte(0);
-        p.writeInt(5120016);
+        p.writeInt(ItemId.NPC_WEATHER_GROWLIE);
         p.writeFixedString(text);
         return p;
     }

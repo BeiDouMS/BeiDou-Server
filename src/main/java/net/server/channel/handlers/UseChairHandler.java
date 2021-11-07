@@ -23,7 +23,7 @@ package net.server.channel.handlers;
 
 import client.Client;
 import client.inventory.InventoryType;
-import constants.inventory.ItemConstants;
+import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 
@@ -33,7 +33,7 @@ public final class UseChairHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
 
         // thanks Darter (YungMoozi) for reporting unchecked chair item
-        if (!ItemConstants.isChair(itemId) || c.getPlayer().getInventory(InventoryType.SETUP).findById(itemId) == null) {
+        if (!ItemId.isChair(itemId) || c.getPlayer().getInventory(InventoryType.SETUP).findById(itemId) == null) {
             return;
         }
 

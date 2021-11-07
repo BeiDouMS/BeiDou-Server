@@ -25,6 +25,7 @@ import client.Character;
 import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.Trade;
@@ -91,11 +92,11 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                 if (targetid != -1) {
                     if (!chr.isAlive()) {
                         MapleMap map = chr.getMap();
-                        if (wheel && chr.haveItemWithId(5510000, false)) {
+                        if (wheel && chr.haveItemWithId(ItemId.WHEEL_OF_FORTUNE, false)) {
                             // thanks lucasziron (lziron) for showing revivePlayer() triggering by Wheel
 
-                            InventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
-                            chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(5510000, false)));
+                            InventoryManipulator.removeById(c, InventoryType.CASH, ItemId.WHEEL_OF_FORTUNE, 1, true, false);
+                            chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(ItemId.WHEEL_OF_FORTUNE, false)));
 
                             chr.updateHp(50);
                             chr.changeMap(map, map.findClosestPlayerSpawnpoint(chr.getPosition()));

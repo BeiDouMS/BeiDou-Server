@@ -27,6 +27,7 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
@@ -385,7 +386,7 @@ public class MakerProcessor {
             if (!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
                 eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));
             }
-            item = ItemInformationProvider.getInstance().scrollEquipWithId(eqp, 2049100, true, 2049100, c.getPlayer().isGM());
+            item = ItemInformationProvider.getInstance().scrollEquipWithId(eqp, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60, c.getPlayer().isGM());
         }
 
         if (!reagentids.isEmpty()) {

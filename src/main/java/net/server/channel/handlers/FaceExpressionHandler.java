@@ -23,6 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -35,7 +36,7 @@ public final class FaceExpressionHandler extends AbstractPacketHandler {
 
         if (emote > 7) {
             int itemid = 5159992 + emote;   // thanks RajanGrewal (Darter) for reporting unchecked emote itemid
-            if (!ItemConstants.isFaceExpression(itemid) || chr.getInventory(ItemConstants.getInventoryType(itemid)).findById(itemid) == null) {
+            if (!ItemId.isFaceExpression(itemid) || chr.getInventory(ItemConstants.getInventoryType(itemid)).findById(itemid) == null) {
                 return;
             }
         } else if (emote < 1) {

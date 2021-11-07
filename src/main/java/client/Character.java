@@ -36,6 +36,7 @@ import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.Packet;
@@ -1879,7 +1880,7 @@ public class Character extends AbstractCharacterObject {
                 if (ItemConstants.isPartyItem(itemid)) {
                     List<Character> pchr = this.getPartyMembersOnSameMap();
 
-                    if (!ItemConstants.isPartyAllcure(itemid)) {
+                    if (!ItemId.isPartyAllCure(itemid)) {
                         StatEffect mse = ii.getItemEffect(itemid);
 
                         if (!pchr.isEmpty()) {
@@ -1946,7 +1947,7 @@ public class Character extends AbstractCharacterObject {
 
                 Item mItem = mapitem.getItem();
                 boolean hasSpaceInventory = true;
-                if (mapitem.getItemId() == 4031865 || mapitem.getItemId() == 4031866 || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
+                if (ItemId.isNxCard(mapitem.getItemId()) || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
                     int mapId = this.getMapId();
 
                     if ((mapId > 209000000 && mapId < 209000016) || (mapId >= 990000500 && mapId <= 990000502)) {//happyville trees and guild PQ
@@ -1964,9 +1965,9 @@ public class Character extends AbstractCharacterObject {
                                 }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
-                            } else if (mapitem.getItemId() == 4031865 || mapitem.getItemId() == 4031866) {
+                            } else if (ItemId.isNxCard(mapitem.getItemId())) {
                                 // Add NX to account, show effect and make item disappear
-                                int nxGain = mapitem.getItemId() == 4031865 ? 100 : 250;
+                                int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                                 this.getCashShop().gainCash(1, nxGain);
 
                                 showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
@@ -2014,15 +2015,15 @@ public class Character extends AbstractCharacterObject {
                                 return;
                             }
                         }
-                    } else if (mapitem.getItemId() == 4031865 || mapitem.getItemId() == 4031866) {
+                    } else if (ItemId.isNxCard(mapitem.getItemId())) {
                         // Add NX to account, show effect and make item disappear
-                        int nxGain = mapitem.getItemId() == 4031865 ? 100 : 250;
+                        int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                         this.getCashShop().gainCash(1, nxGain);
 
                         showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
-                        if (mItem.getItemId() == 4031868) {
+                        if (mItem.getItemId() == ItemId.ARPQ_SPIRIT_JEWEL) {
                             updateAriantScore();
                         }
                     } else {
@@ -3252,7 +3253,7 @@ public class Character extends AbstractCharacterObject {
     public void updateAriantScore(int dropQty) {
         AriantColiseum arena = this.getAriantColiseum();
         if (arena != null) {
-            arena.updateAriantScore(this, countItem(4031868));
+            arena.updateAriantScore(this, countItem(ItemId.ARPQ_SPIRIT_JEWEL));
 
             if (dropQty > 0) {
                 arena.addLostShards(dropQty);
@@ -4311,7 +4312,7 @@ public class Character extends AbstractCharacterObject {
         if (this.isRidingBattleship()) {
             List<Pair<BuffStat, Integer>> statups = new ArrayList<>(1);
             statups.add(new Pair<>(BuffStat.MONSTER_RIDING, 0));
-            this.sendPacket(PacketCreator.giveBuff(1932000, 5221006, statups));
+            this.sendPacket(PacketCreator.giveBuff(ItemId.BATTLESHIP, 5221006, statups));
             this.announceBattleshipHp();
         }
     }
@@ -4358,9 +4359,9 @@ public class Character extends AbstractCharacterObject {
 
     private static boolean isPriorityBuffSourceid(int sourceid) {
         switch (sourceid) {
-            case -2022631:
-            case -2022632:
-            case -2022633:
+            case -ItemId.ROSE_SCENT:
+            case -ItemId.FREESIA_SCENT:
+            case -ItemId.LAVENDER_SCENT:
                 return true;
 
             default:
@@ -5120,7 +5121,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean haveWeddingRing() {
-        int[] rings = {1112806, 1112803, 1112807, 1112809};
+        int[] rings = {ItemId.WEDDING_RING_STAR, ItemId.WEDDING_RING_MOONSTONE, ItemId.WEDDING_RING_GOLDEN, ItemId.WEDDING_RING_SILVER};
 
         for (int ringid : rings) {
             if (haveItemWithId(ringid, true)) {
@@ -6207,7 +6208,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean attemptCatchFish(int baitLevel) {
-        return YamlConfig.config.server.USE_FISHING_SYSTEM && GameConstants.isFishingArea(mapid) && this.getPosition().getY() > 0 && ItemConstants.isFishingChair(chair.get()) && this.getWorldServer().registerFisherPlayer(this, baitLevel);
+        return YamlConfig.config.server.USE_FISHING_SYSTEM && GameConstants.isFishingArea(mapid) &&
+                this.getPosition().getY() > 0 &&
+                ItemConstants.isFishingChair(chair.get()) &&
+                this.getWorldServer().registerFisherPlayer(this, baitLevel);
     }
 
     public void leaveMap() {
@@ -6480,8 +6484,8 @@ public class Character extends AbstractCharacterObject {
 
         if (YamlConfig.config.server.USE_PERFECT_PITCH && level >= 30) {
             //milestones?
-            if (InventoryManipulator.checkSpace(client, 4310000, (short) 1, "")) {
-                InventoryManipulator.addById(client, 4310000, (short) 1, "", -1);
+            if (InventoryManipulator.checkSpace(client, ItemId.PERFECT_PITCH, (short) 1, "")) {
+                InventoryManipulator.addById(client, ItemId.PERFECT_PITCH, (short) 1, "", -1);
             }
         } else if (level == 10) {
             Runnable r = new Runnable() {
@@ -6835,7 +6839,7 @@ public class Character extends AbstractCharacterObject {
 
     public void addPlayerRing(Ring ring) {
         int ringItemId = ring.getItemId();
-        if (ItemConstants.isWeddingRing(ringItemId)) {
+        if (ItemId.isWeddingRing(ringItemId)) {
             this.addMarriageRing(ring);
         } else if (ring.getItemId() > 1112012) {
             this.addFriendshipRing(ring);
@@ -7570,7 +7574,7 @@ public class Character extends AbstractCharacterObject {
         if (eim != null) {
             eim.playerKilled(this);
         }
-        int[] charmID = {5130000, 4031283, 4140903};
+        int[] charmID = {ItemId.SAFETY_CHARM, ItemId.EASTER_BASKET, ItemId.EASTER_CHARM};
         int possesed = 0;
         int i;
         for (i = 0; i < charmID.length; i++) {
@@ -9387,7 +9391,7 @@ public class Character extends AbstractCharacterObject {
             int itemid = item.getItemId();
             if (ItemConstants.isRechargeable(itemid)) {
                 quantity = item.getQuantity();
-            } else if (ItemConstants.isWeddingToken(itemid) || ItemConstants.isWeddingRing(itemid)) {
+            } else if (ItemId.isWeddingToken(itemid) || ItemId.isWeddingRing(itemid)) {
                 return (0);
             }
 
@@ -9643,7 +9647,7 @@ public class Character extends AbstractCharacterObject {
             strLines.add("");
             strLines.add(this.getClient().getChannelServer().getServerMessage().isEmpty() ? 0 : 1, "Get off my lawn!!");
 
-            this.sendPacket(PacketCreator.getAvatarMega(mapOwner, medal, this.getClient().getChannel(), 5390006, strLines, true));
+            this.sendPacket(PacketCreator.getAvatarMega(mapOwner, medal, this.getClient().getChannel(), ItemId.ROARING_TIGER_MESSENGER, strLines, true));
         }
     }
 
@@ -10304,13 +10308,13 @@ public class Character extends AbstractCharacterObject {
     public void equippedItem(Equip equip) {
         int itemid = equip.getItemId();
 
-        if (itemid == 1122017) {
+        if (itemid == ItemId.PENDANT_OF_THE_SPIRIT) {
             this.equipPendantOfSpirit();
-        } else if (itemid == 1812000) { // meso magnet
+        } else if (itemid == ItemId.MESO_MAGNET) {
             equippedMesoMagnet = true;
-        } else if (itemid == 1812001) { // item pouch
+        } else if (itemid == ItemId.ITEM_POUCH) {
             equippedItemPouch = true;
-        } else if (itemid == 1812007) { // item ignore pendant
+        } else if (itemid == ItemId.ITEM_IGNORE) {
             equippedPetItemIgnore = true;
         }
     }
@@ -10318,13 +10322,13 @@ public class Character extends AbstractCharacterObject {
     public void unequippedItem(Equip equip) {
         int itemid = equip.getItemId();
 
-        if (itemid == 1122017) {
+        if (itemid == ItemId.PENDANT_OF_THE_SPIRIT) {
             this.unequipPendantOfSpirit();
-        } else if (itemid == 1812000) { // meso magnet
+        } else if (itemid == ItemId.MESO_MAGNET) {
             equippedMesoMagnet = false;
-        } else if (itemid == 1812001) { // item pouch
+        } else if (itemid == ItemId.ITEM_POUCH) {
             equippedItemPouch = false;
-        } else if (itemid == 1812007) { // item ignore pendant
+        } else if (itemid == ItemId.ITEM_IGNORE) {
             equippedPetItemIgnore = false;
         }
     }

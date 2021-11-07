@@ -26,6 +26,7 @@ import client.*;
 import client.autoban.AutobanFactory;
 import client.inventory.*;
 import config.YamlConfig;
+import constants.id.ItemId;
 import constants.inventory.EquipSlot;
 import constants.inventory.ItemConstants;
 import constants.skills.Assassin;
@@ -1037,17 +1038,17 @@ public class ItemInformationProvider {
                 double prop = (double) stats.get("success");
 
                 switch (vegaItemId) {
-                    case 5610000:
+                    case ItemId.VEGAS_SPELL_10:
                         if (prop == 10.0f) {
                             prop = 30.0f;
                         }
                         break;
-                    case 5610001:
+                    case ItemId.VEGAS_SPELL_60:
                         if (prop == 60.0f) {
                             prop = 90.0f;
                         }
                         break;
-                    case 2049100:
+                    case ItemId.CHAOS_SCROll_60:
                         prop = 100.0f;
                         break;
                 }
@@ -1055,25 +1056,25 @@ public class ItemInformationProvider {
                 if (assertGM || rollSuccessChance(prop)) {
                     short flag = nEquip.getFlag();
                     switch (scrollId) {
-                        case 2040727:
+                        case ItemId.SPIKES_SCROLL:
                             flag |= ItemConstants.SPIKES;
                             nEquip.setFlag((byte) flag);
                             break;
-                        case 2041058:
+                        case ItemId.COLD_PROTECTION_SCROLl:
                             flag |= ItemConstants.COLD;
                             nEquip.setFlag((byte) flag);
                             break;
-                        case 2049000:
-                        case 2049001:
-                        case 2049002:
-                        case 2049003:
+                        case ItemId.CLEAN_SLATE_1:
+                        case ItemId.CLEAN_SLATE_3:
+                        case ItemId.CLEAN_SLATE_5:
+                        case ItemId.CLEAN_SLATE_20:
                             if (canUseCleanSlate(nEquip)) {
                                 nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() + 1));
                             }
                             break;
-                        case 2049100:
-                        case 2049101:
-                        case 2049102:
+                        case ItemId.CHAOS_SCROll_60:
+                        case ItemId.LIAR_TREE_SAP:
+                        case ItemId.MAPLE_SYRUP:
                             scrollEquipWithChaos(nEquip, YamlConfig.config.server.CHSCROLL_STAT_RANGE);
                             break;
 
@@ -1787,7 +1788,7 @@ public class ItemInformationProvider {
     public boolean canWearEquipment(Character chr, Equip equip, int dst) {
         int id = equip.getItemId();
 
-        if (ItemConstants.isWeddingRing(id) && chr.hasJustMarried()) {
+        if (ItemId.isWeddingRing(id) && chr.hasJustMarried()) {
             chr.dropMessage(5, "The Wedding Ring cannot be equipped on this map.");  // will dc everyone due to doubled couple effect
             return false;
         }
@@ -1966,32 +1967,19 @@ public class ItemInformationProvider {
         int range = (level - 1) / 10;
 
         if (range < 5) {
-            return 4260000;
+            return ItemId.BASIC_MONSTER_CRYSTAL_1;
         } else if (range > 11) {
-            return 4260008;
+            return ItemId.ADVANCED_MONSTER_CRYSTAL_3;
         } else {
-            switch (range) {
-                case 5:
-                    return 4260001;
-
-                case 6:
-                    return 4260002;
-
-                case 7:
-                    return 4260003;
-
-                case 8:
-                    return 4260004;
-
-                case 9:
-                    return 4260005;
-
-                case 10:
-                    return 4260006;
-
-                default:
-                    return 4260007;
-            }
+            return switch (range) {
+                case 5 -> ItemId.BASIC_MONSTER_CRYSTAL_2;
+                case 6 -> ItemId.BASIC_MONSTER_CRYSTAL_3;
+                case 7 -> ItemId.INTERMEDIATE_MONSTER_CRYSTAL_1;
+                case 8 -> ItemId.INTERMEDIATE_MONSTER_CRYSTAL_2;
+                case 9 -> ItemId.INTERMEDIATE_MONSTER_CRYSTAL_3;
+                case 10 -> ItemId.ADVANCED_MONSTER_CRYSTAL_1;
+                default -> ItemId.ADVANCED_MONSTER_CRYSTAL_2;
+            };
         }
     }
 

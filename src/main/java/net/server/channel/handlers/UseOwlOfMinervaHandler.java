@@ -20,7 +20,7 @@
 package net.server.channel.handlers;
 
 import client.Client;
-import constants.game.GameConstants;
+import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -43,8 +43,8 @@ public final class UseOwlOfMinervaHandler extends AbstractPacketHandler {
 
         if (owlSearched.size() < 5) {
             owlLeaderboards = new LinkedList<>();
-            for (int i : GameConstants.OWL_DATA) {
-                owlLeaderboards.add(i);
+            for (int itemId : ItemId.getOwlItems()) {
+                owlLeaderboards.add(itemId);
             }
         } else {
             // descending order

@@ -26,6 +26,7 @@ import client.Client;
 import client.autoban.AutobanManager;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -56,23 +57,23 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
             return;
         }
         switch (itemId) {
-            case 2270000:
+            case ItemId.PHEROMONE_PERFUME:
                 if (mob.getId() == 9300101) {
                     chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                     mob.getMap().killMonster(mob, null, false);
                     InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                    InventoryManipulator.addById(c, 1902000, (short) 1, "", -1);
+                    InventoryManipulator.addById(c, ItemId.HOG, (short) 1, "", -1);
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
-            case 2270001:
+            case ItemId.POUCH:
                 if (mob.getId() == 9500197) {
                     if ((abm.getLastSpam(10) + 1000) < currentServerTime()) {
                         if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                             chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                             mob.getMap().killMonster(mob, null, false);
                             InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                            InventoryManipulator.addById(c, 4031830, (short) 1, "", -1);
+                            InventoryManipulator.addById(c, ItemId.GHOST_SACK, (short) 1, "", -1);
                         } else {
                             abm.spam(10);
                             c.sendPacket(PacketCreator.catchMessage(0));
@@ -81,16 +82,16 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
-            case 2270002:
+            case ItemId.ARPQ_ELEMENT_ROCK:
                 if (mob.getId() == 9300157) {
                     if ((abm.getLastSpam(10) + 800) < currentServerTime()) {
                         if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
-                            if (chr.canHold(4031868, 1)) {
+                            if (chr.canHold(ItemId.ARPQ_SPIRIT_JEWEL, 1)) {
                                 if (Math.random() < 0.5) { // 50% chance
                                     chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                                     mob.getMap().killMonster(mob, null, false);
                                     InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                                    InventoryManipulator.addById(c, 4031868, (short) 1, "", -1);
+                                    InventoryManipulator.addById(c, ItemId.ARPQ_SPIRIT_JEWEL, (short) 1, "", -1);
                                 } else {
                                     chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 0));
                                 }
@@ -106,79 +107,79 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.enableActions());
                 }
                 break;
-            case 2270003:
+            case ItemId.MAGIC_CANE:
                 if (mob.getId() == 9500320) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
                         InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                        InventoryManipulator.addById(c, 4031887, (short) 1, "", -1);
+                        InventoryManipulator.addById(c, ItemId.TAMED_RUDOLPH, (short) 1, "", -1);
                     } else {
                         c.sendPacket(PacketCreator.catchMessage(0));
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
-            case 2270005:
+            case ItemId.TRANSPARENT_MARBLE_1:
                 if (mob.getId() == 9300187) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
                         InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                        InventoryManipulator.addById(c, 2109001, (short) 1, "", -1);
+                        InventoryManipulator.addById(c, ItemId.MONSTER_MARBLE_1, (short) 1, "", -1);
                     } else {
                         c.sendPacket(PacketCreator.catchMessage(0));
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
-            case 2270006:
+            case ItemId.TRANSPARENT_MARBLE_2:
                 if (mob.getId() == 9300189) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
                         InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                        InventoryManipulator.addById(c, 2109002, (short) 1, "", -1);
+                        InventoryManipulator.addById(c, ItemId.MONSTER_MARBLE_2, (short) 1, "", -1);
                     } else {
                         c.sendPacket(PacketCreator.catchMessage(0));
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
-            case 2270007:
+            case ItemId.TRANSPARENT_MARBLE_3:
                 if (mob.getId() == 9300191) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
                         InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                        InventoryManipulator.addById(c, 2109003, (short) 1, "", -1);
+                        InventoryManipulator.addById(c, ItemId.MONSTER_MARBLE_3, (short) 1, "", -1);
                     } else {
                         c.sendPacket(PacketCreator.catchMessage(0));
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
-            case 2270004:
+            case ItemId.EPQ_PURIFICATION_MARBLE:
                 if (mob.getId() == 9300175) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
                         InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                        InventoryManipulator.addById(c, 4001169, (short) 1, "", -1);
+                        InventoryManipulator.addById(c, ItemId.EPQ_MONSTER_MARBLE, (short) 1, "", -1);
                     } else {
                         c.sendPacket(PacketCreator.catchMessage(0));
                     }
                 }
                 c.sendPacket(PacketCreator.enableActions());
                 break;
-            case 2270008:
+            case ItemId.FISH_NET:
                 if (mob.getId() == 9500336) {
                     if ((abm.getLastSpam(10) + 3000) < currentServerTime()) {
                         abm.spam(10);
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
                         InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
-                        InventoryManipulator.addById(c, 2022323, (short) 1, "", -1);
+                        InventoryManipulator.addById(c, ItemId.FISH_NET_WITH_A_CATCH, (short) 1, "", -1);
                     } else {
                         chr.message("You cannot use the Fishing Net yet.");
                     }

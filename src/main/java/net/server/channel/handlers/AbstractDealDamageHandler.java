@@ -28,6 +28,7 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
 import constants.skills.*;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -439,19 +440,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                     if (skillLv > 0) {
                                         AbstractPlayerInteraction api = player.getAbstractPlayerInteraction();
 
-                                        int shellId;
-                                        switch (skillLv) {
-                                            case 1:
-                                                shellId = 4000019;
-                                                break;
-
-                                            case 2:
-                                                shellId = 4000000;
-                                                break;
-
-                                            default:
-                                                shellId = 4000016;
-                                        }
+                                        int shellId = switch (skillLv) {
+                                            case 1 -> ItemId.SNAIL_SHELL;
+                                            case 2 -> ItemId.BLUE_SNAIL_SHELL;
+                                            default -> ItemId.RED_SNAIL_SHELL;
+                                        };
 
                                         if (api.haveItem(shellId, 1)) {
                                             api.gainItem(shellId, (short) -1, false);

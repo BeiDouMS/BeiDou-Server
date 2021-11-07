@@ -23,6 +23,7 @@ package net.server.channel.handlers;
 
 import client.Client;
 import client.autoban.AutobanFactory;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -36,7 +37,7 @@ public final class RemoteGachaponHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         int ticket = p.readInt();
         int gacha = p.readInt();
-        if (ticket != 5451000) {
+        if (ticket != ItemId.REMOTE_GACHAPON_TICKET) {
             AutobanFactory.GENERAL.alert(c.getPlayer(), " Tried to use RemoteGachaponHandler with item id: " + ticket);
             c.disconnect(false, false);
             return;
