@@ -23,6 +23,7 @@
 package server.expeditions;
 
 import client.Character;
+import constants.id.MobId;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
@@ -51,35 +52,35 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 public class Expedition {
 
     private static final int[] EXPEDITION_BOSSES = {
-            8800000,// - Zakum's first body
-            8800001,// - Zakum's second body
-            8800002,// - Zakum's third body
-            8800003,// - Zakum's Arm 1
-            8800004,// - Zakum's Arm 2
-            8800005,// - Zakum's Arm 3
-            8800006,// - Zakum's Arm 4
-            8800007,// - Zakum's Arm 5
-            8800008,// - Zakum's Arm 6
-            8800009,// - Zakum's Arm 7
-            8800010,// - Zakum's Arm 8
-            8810000,// - Horntail's Left Head
-            8810001,// - Horntail's Right Head
-            8810002,// - Horntail's Head A
-            8810003,// - Horntail's Head B
-            8810004,// - Horntail's Head C
-            8810005,// - Horntail's Left Hand
-            8810006,// - Horntail's Right Hand
-            8810007,// - Horntail's Wings
-            8810008,// - Horntail's Legs
-            8810009,// - Horntail's Tails
-            9420546,// - Scarlion Boss
-            9420547,// - Scarlion Boss
-            9420548,// - Angry Scarlion Boss
-            9420549,// - Furious Scarlion Boss
-            9420541,// - Targa
-            9420542,// - Targa
-            9420543,// - Angry Targa
-            9420544,// - Furious Targa
+            MobId.ZAKUM_1,
+            MobId.ZAKUM_2,
+            MobId.ZAKUM_3,
+            MobId.ZAKUM_ARM_1,
+            MobId.ZAKUM_ARM_2,
+            MobId.ZAKUM_ARM_3,
+            MobId.ZAKUM_ARM_4,
+            MobId.ZAKUM_ARM_5,
+            MobId.ZAKUM_ARM_6,
+            MobId.ZAKUM_ARM_7,
+            MobId.ZAKUM_ARM_8,
+            MobId.HORNTAIL_PREHEAD_LEFT,
+            MobId.HORNTAIL_PREHEAD_RIGHT,
+            MobId.HORNTAIL_HEAD_A,
+            MobId.HORNTAIL_HEAD_B,
+            MobId.HORNTAIL_HEAD_C,
+            MobId.HORNTAIL_HAND_LEFT,
+            MobId.HORNTAIL_HAND_RIGHT,
+            MobId.HORNTAIL_WINGS,
+            MobId.HORNTAIL_LEGS,
+            MobId.HORNTAIL_TAIL,
+            MobId.SCARLION_STATUE,
+            MobId.SCARLION,
+            MobId.ANGRY_SCARLION,
+            MobId.FURIOUS_SCARLION,
+            MobId.TARGA_STATUE,
+            MobId.TARGA,
+            MobId.ANGRY_TARGA,
+            MobId.FURIOUS_TARGA,
     };
 
     private final Character leader;

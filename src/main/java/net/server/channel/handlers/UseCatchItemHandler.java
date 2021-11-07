@@ -27,6 +27,7 @@ import client.autoban.AutobanManager;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.id.ItemId;
+import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -58,7 +59,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
         }
         switch (itemId) {
             case ItemId.PHEROMONE_PERFUME:
-                if (mob.getId() == 9300101) {
+                if (mob.getId() == MobId.TAMABLE_HOG) {
                     chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                     mob.getMap().killMonster(mob, null, false);
                     InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
@@ -67,7 +68,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case ItemId.POUCH:
-                if (mob.getId() == 9500197) {
+                if (mob.getId() == MobId.GHOST) {
                     if ((abm.getLastSpam(10) + 1000) < currentServerTime()) {
                         if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                             chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
@@ -83,7 +84,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 break;
             case ItemId.ARPQ_ELEMENT_ROCK:
-                if (mob.getId() == 9300157) {
+                if (mob.getId() == MobId.ARPQ_SCORPION) {
                     if ((abm.getLastSpam(10) + 800) < currentServerTime()) {
                         if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                             if (chr.canHold(ItemId.ARPQ_SPIRIT_JEWEL, 1)) {
@@ -108,7 +109,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 }
                 break;
             case ItemId.MAGIC_CANE:
-                if (mob.getId() == 9500320) {
+                if (mob.getId() == MobId.LOST_RUDOLPH) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
@@ -121,7 +122,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case ItemId.TRANSPARENT_MARBLE_1:
-                if (mob.getId() == 9300187) {
+                if (mob.getId() == MobId.KING_SLIME_DOJO) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
@@ -134,7 +135,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case ItemId.TRANSPARENT_MARBLE_2:
-                if (mob.getId() == 9300189) {
+                if (mob.getId() == MobId.FAUST_DOJO) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
@@ -147,7 +148,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case ItemId.TRANSPARENT_MARBLE_3:
-                if (mob.getId() == 9300191) {
+                if (mob.getId() == MobId.MUSHMOM_DOJO) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 3)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
@@ -160,7 +161,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case ItemId.EPQ_PURIFICATION_MARBLE:
-                if (mob.getId() == 9300175) {
+                if (mob.getId() == MobId.POISON_FLOWER) {
                     if (mob.getHp() < ((mob.getMaxHp() / 10) * 4)) {
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
                         mob.getMap().killMonster(mob, null, false);
@@ -173,7 +174,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.enableActions());
                 break;
             case ItemId.FISH_NET:
-                if (mob.getId() == 9500336) {
+                if (mob.getId() == MobId.P_JUNIOR) {
                     if ((abm.getLastSpam(10) + 3000) < currentServerTime()) {
                         abm.spam(10);
                         chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 1));
@@ -203,7 +204,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                             mob.getMap().killMonster(mob, null, false);
                             InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
                             InventoryManipulator.addById(c, itemGanho, (short) 1, "", -1);
-                        } else if (mob.getId() != 9500336) {
+                        } else if (mob.getId() != MobId.P_JUNIOR) {
                             if (mobHp != 0) {
                                 abm.spam(10);
                                 c.sendPacket(PacketCreator.catchMessage(0));

@@ -25,6 +25,7 @@ import client.Character;
 import client.Disease;
 import client.status.MonsterStatus;
 import constants.game.GameConstants;
+import constants.id.MobId;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
 import server.maps.MapObject;
@@ -265,17 +266,17 @@ public class MobSkill {
                                 xpos = (int) monster.getPosition().getX();
                                 ypos = (int) monster.getPosition().getY();
                                 switch (mobId) {
-                                    case 8500003: // Pap bomb high
+                                    case MobId.HIGH_DARKSTAR: // Pap bomb high
                                         toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
                                         ypos = -590;
                                         break;
-                                    case 8500004: // Pap bomb
+                                    case MobId.LOW_DARKSTAR: // Pap bomb
                                         xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
                                         if (ypos != -590) {
                                             ypos = (int) monster.getPosition().getY();
                                         }
                                         break;
-                                    case 8510100: //Pianus bomb
+                                    case MobId.BLOODY_BOOM: //Pianus bomb
                                         if (Math.ceil(Math.random() * 5) == 1) {
                                             ypos = 78;
                                             xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
@@ -301,7 +302,7 @@ public class MobSkill {
                                         break;
                                 }
                                 toSpawn.setPosition(new Point(xpos, ypos));
-                                if (toSpawn.getId() == 8500004) {
+                                if (toSpawn.getId() == MobId.LOW_DARKSTAR) {
                                     map.spawnFakeMonster(toSpawn);
                                 } else {
                                     map.spawnMonsterWithEffect(toSpawn, getSpawnEffect(), toSpawn.getPosition());

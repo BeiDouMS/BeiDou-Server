@@ -33,6 +33,7 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import net.packet.Packet;
 import net.server.Server;
@@ -1301,11 +1302,11 @@ public class MapleMap {
     }
 
     public boolean damageMonster(final Character chr, final Monster monster, final int damage) {
-        if (monster.getId() == 8800000) {
+        if (monster.getId() == MobId.ZAKUM_1) {
             for (MapObject object : chr.getMap().getMapObjects()) {
                 Monster mons = chr.getMap().getMonsterByOid(object.getObjectId());
                 if (mons != null) {
-                    if (mons.getId() >= 8800003 && mons.getId() <= 8800010) {
+                    if (mons.getId() >= MobId.ZAKUM_ARM_1 && mons.getId() <= MobId.ZAKUM_ARM_8) {
                         return true;
                     }
                 }
@@ -1412,13 +1413,13 @@ public class MapleMap {
                         }
                     }
 
-                    if (monster.getId() >= 8800003 && monster.getId() <= 8800010) {
+                    if (MobId.isZakumArm(monster.getId())) {
                         boolean makeZakReal = true;
                         Collection<MapObject> objects = getMapObjects();
                         for (MapObject object : objects) {
                             Monster mons = getMonsterByOid(object.getObjectId());
                             if (mons != null) {
-                                if (mons.getId() >= 8800003 && mons.getId() <= 8800010) {
+                                if (MobId.isZakumArm(mons.getId())) {
                                     makeZakReal = false;
                                     break;
                                 }
@@ -1430,7 +1431,7 @@ public class MapleMap {
                             for (MapObject object : objects) {
                                 Monster mons = map.getMonsterByOid(object.getObjectId());
                                 if (mons != null) {
-                                    if (mons.getId() == 8800000) {
+                                    if (mons.getId() == MobId.ZAKUM_1) {
                                         makeMonsterReal(mons);
                                         break;
                                     }
@@ -1974,13 +1975,13 @@ public class MapleMap {
         }
 
         if (monster.getDropPeriodTime() > 0) { //9300102 - Watchhog, 9300061 - Moon Bunny (HPQ), 9300093 - Tylus
-            if (monster.getId() == 9300102) {
+            if (monster.getId() == MobId.WATCH_HOG) {
                 monsterItemDrop(monster, monster.getDropPeriodTime());
-            } else if (monster.getId() == 9300061) {
+            } else if (monster.getId() == MobId.MOON_BUNNY) {
                 monsterItemDrop(monster, monster.getDropPeriodTime() / 3);
-            } else if (monster.getId() == 9300093) {
+            } else if (monster.getId() == MobId.TYLUS) {
                 monsterItemDrop(monster, monster.getDropPeriodTime());
-            } else if (monster.getId() == 9400326 || monster.getId() == 9400331 || monster.getId() == 9400336) {
+            } else if (monster.getId() == MobId.GIANT_SNOWMAN_LV5_EASY || monster.getId() == MobId.GIANT_SNOWMAN_LV5_MEDIUM || monster.getId() == MobId.GIANT_SNOWMAN_LV5_HARD) {
                 monsterItemDrop(monster, monster.getDropPeriodTime());
             } else {
                 FilePrinter.printError(FilePrinter.UNHANDLED_EVENT, "UNCODED TIMED MOB DETECTED: " + monster.getId());
@@ -4033,7 +4034,7 @@ public class MapleMap {
     }
 
     public boolean isHorntailDefeated() {   // all parts of dead horntail can be found here?
-        for (int i = 8810010; i <= 8810017; i++) {
+        for (int i = MobId.DEAD_HORNTAIL_MIN; i <= MobId.DEAD_HORNTAIL_MAX; i++) {
             if (getMonsterById(i) == null) {
                 return false;
             }
@@ -4043,10 +4044,10 @@ public class MapleMap {
     }
 
     public void spawnHorntailOnGroundBelow(final Point targetPoint) {   // ayy lmao
-        Monster htIntro = LifeFactory.getMonster(8810026);
+        Monster htIntro = LifeFactory.getMonster(MobId.SUMMON_HORNTAIL);
         spawnMonsterOnGroundBelow(htIntro, targetPoint);    // htintro spawn animation converting into horntail detected thanks to Arnah
 
-        final Monster ht = LifeFactory.getMonster(8810018);
+        final Monster ht = LifeFactory.getMonster(MobId.HORNTAIL);
         ht.setParentMobOid(htIntro.getObjectId());
         ht.addListener(new MonsterListener() {
             @Override
@@ -4064,8 +4065,8 @@ public class MapleMap {
         });
         spawnMonsterOnGroundBelow(ht, targetPoint);
 
-        for (int x = 8810002; x <= 8810009; x++) {
-            Monster m = LifeFactory.getMonster(x);
+        for (int mobId = MobId.HORNTAIL_HEAD_A; mobId <= MobId.HORNTAIL_TAIL; mobId++) {
+            Monster m = LifeFactory.getMonster(mobId);
             m.setParentMobOid(htIntro.getObjectId());
 
             m.addListener(new MonsterListener() {

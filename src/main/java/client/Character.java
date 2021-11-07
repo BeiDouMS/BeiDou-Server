@@ -37,6 +37,7 @@ import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.Packet;
@@ -7518,12 +7519,12 @@ public class Character extends AbstractCharacterObject {
     public void raiseQuestMobCount(int id) {
         // It seems nexon uses monsters that don't exist in the WZ (except string) to merge multiple mobs together for these 3 monsters.
         // We also want to run mobKilled for both since there are some quest that don't use the updated ID...
-        if (id == 1110100 || id == 1110130) {
-            raiseQuestMobCount(9101000);
-        } else if (id == 2230101 || id == 2230131) {
-            raiseQuestMobCount(9101001);
-        } else if (id == 1140100 || id == 1140130) {
-            raiseQuestMobCount(9101002);
+        if (id == MobId.GREEN_MUSHROOM || id == MobId.DEJECTED_GREEN_MUSHROOM) {
+            raiseQuestMobCount(MobId.GREEN_MUSHROOM_QUEST);
+        } else if (id == MobId.ZOMBIE_MUSHROOM || id == MobId.ANNOYED_ZOMBIE_MUSHROOM) {
+            raiseQuestMobCount(MobId.ZOMBIE_MUSHROOM_QUEST);
+        } else if (id == MobId.GHOST_STUMP || id == MobId.SMIRKING_GHOST_STUMP) {
+            raiseQuestMobCount(MobId.GHOST_STUMP_QUEST);
         }
 
         int lastQuestProcessed = 0;

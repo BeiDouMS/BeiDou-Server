@@ -26,6 +26,7 @@ package client.command.commands.gm4;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.MobId;
 import server.life.LifeFactory;
 
 public class PianusCommand extends Command {
@@ -36,6 +37,6 @@ public class PianusCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8510000), player.getPosition());
+        player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(MobId.PIANUS_R), player.getPosition());
     }
 }

@@ -26,6 +26,7 @@ package client.command.commands.gm4;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.MobId;
 import server.life.LifeFactory;
 
 public class PapCommand extends Command {
@@ -38,6 +39,6 @@ public class PapCommand extends Command {
         Character player = c.getPlayer();
 
         // thanks Conrad for noticing mobid typo here
-        player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(8500001), player.getPosition());
+        player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(MobId.PAPULATUS_CLOCK), player.getPosition());
     }
 }

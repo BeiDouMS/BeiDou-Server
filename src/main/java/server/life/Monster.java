@@ -26,6 +26,7 @@ import client.*;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
+import constants.id.MobId;
 import constants.skills.*;
 import net.packet.Packet;
 import net.server.audit.LockCollector;
@@ -761,7 +762,7 @@ public class Monster extends AbstractLoadedLife {
         final List<Integer> toSpawn = this.getRevives();
         if (toSpawn != null) {
             final MapleMap reviveMap = map;
-            if (toSpawn.contains(9300216) && reviveMap.getId() > 925000000 && reviveMap.getId() < 926000000) {
+            if (toSpawn.contains(MobId.TRANSPARENT_ITEM) && reviveMap.getId() > 925000000 && reviveMap.getId() < 926000000) {
                 reviveMap.broadcastMessage(PacketCreator.playSound("Dojang/clear"));
                 reviveMap.broadcastMessage(PacketCreator.showEffect("dojang/end/clear"));
             }
@@ -790,9 +791,9 @@ public class Monster extends AbstractLoadedLife {
                         }
                         reviveMap.spawnMonster(mob);
 
-                        if (mob.getId() >= 8810010 && mob.getId() <= 8810017 && reviveMap.isHorntailDefeated()) {
+                        if (MobId.isDeadHorntailPart(mob.getId()) && reviveMap.isHorntailDefeated()) {
                             boolean htKilled = false;
-                            Monster ht = reviveMap.getMonsterById(8810018);
+                            Monster ht = reviveMap.getMonsterById(MobId.HORNTAIL);
 
                             if (ht != null) {
                                 ht.lockMonster();
@@ -808,7 +809,7 @@ public class Monster extends AbstractLoadedLife {
                                 }
                             }
 
-                            for (int i = 8810017; i >= 8810010; i--) {
+                            for (int i = MobId.DEAD_HORNTAIL_MAX; i >= MobId.DEAD_HORNTAIL_MIN; i--) {
                                 reviveMap.killMonster(reviveMap.getMonsterById(i), killer, true);
                             }
                         } else if (controller != null) {

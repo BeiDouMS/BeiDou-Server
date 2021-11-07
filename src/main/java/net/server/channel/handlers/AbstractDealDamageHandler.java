@@ -29,6 +29,7 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.ItemId;
+import constants.id.MobId;
 import constants.skills.*;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -237,7 +238,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
 
-                    if (GameConstants.isDojoBoss(monster.getId())) {
+                    if (MobId.isDojoBoss(monster.getId())) {
                         if (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009) {
                             int dmgLimit = (int) Math.ceil(0.3 * monster.getMaxHp());
                             List<Integer> _onedList = new LinkedList<>();
