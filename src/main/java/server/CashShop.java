@@ -23,6 +23,7 @@ package server;
 
 import client.inventory.*;
 import config.YamlConfig;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
@@ -103,13 +104,13 @@ public class CashShop {
 
             if (ItemConstants.EXPIRING_ITEMS) {
                 if (period == 1) {
-                    if (itemId == 5211048 || itemId == 5360042) { // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
+                    if (itemId == ItemId.EXP_COUPON_2X_4H || itemId == ItemId.DROP_COUPON_2X_4H) { // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
                         item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
                                     item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));
                             */
-                    } else if (itemId == 5211060) { // 2 Hour 3X coupons.
+                    } else if (itemId == ItemId.EXP_COUPON_3X_2H) { // 2 Hour 3X coupons.
                         item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
                     } else {
                         item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
@@ -525,7 +526,7 @@ public class CashShop {
     }
 
     public synchronized Pair<Item, Item> openCashShopSurprise() {
-        Item css = getCashShopItemByItemid(5222000);
+        Item css = getCashShopItemByItemid(ItemId.CASH_SHOP_SURPRISE);
 
         if (css != null) {
             CashItem cItem = CashItemFactory.getRandomCashItem();

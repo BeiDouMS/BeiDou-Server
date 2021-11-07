@@ -24,6 +24,7 @@ package client;
 import client.inventory.InventoryType;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MapId;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -930,7 +931,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             if (player.getMap() != null) {
                 int mapId = player.getMapId();
                 player.getMap().removePlayer(player);
-                if (GameConstants.isDojo(mapId)) {
+                if (MapId.isDojo(mapId)) {
                     this.getChannelServer().freeDojoSectionIfEmpty(mapId);
                 }
             }

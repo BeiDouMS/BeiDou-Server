@@ -25,6 +25,7 @@ package client.command.commands.gm0;
 
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 import server.ItemInformationProvider;
 import server.gachapon.Gachapon;
 
@@ -39,7 +40,9 @@ public class GachaCommand extends Command {
         String search = c.getPlayer().getLastCommandMessage();
         String gachaName = "";
         String[] names = {"Henesys", "Ellinia", "Perion", "Kerning City", "Sleepywood", "Mushroom Shrine", "Showa Spa Male", "Showa Spa Female", "New Leaf City", "Nautilus Harbor"};
-        int[] ids = {9100100, 9100101, 9100102, 9100103, 9100104, 9100105, 9100106, 9100107, 9100109, 9100117};
+        int[] ids = {NpcId.GACHAPON_HENESYS, NpcId.GACHAPON_ELLINIA, NpcId.GACHAPON_PERION, NpcId.GACHAPON_KERNING,
+                NpcId.GACHAPON_SLEEPYWOOD, NpcId.GACHAPON_MUSHROOM_SHRINE, NpcId.GACHAPON_SHOWA_MALE,
+                NpcId.GACHAPON_SHOWA_FEMALE, NpcId.GACHAPON_NLC, NpcId.GACHAPON_NAUTILUS};
         for (int i = 0; i < names.length; i++) {
             if (search.equalsIgnoreCase(names[i])) {
                 gachaName = names[i];
@@ -61,6 +64,6 @@ public class GachaCommand extends Command {
         }
         talkStr += "\r\nPlease keep in mind that there are items that are in all gachapons and are not listed here.";
 
-        c.getAbstractPlayerInteraction().npcTalk(9010000, talkStr);
+        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, talkStr);
     }
 }

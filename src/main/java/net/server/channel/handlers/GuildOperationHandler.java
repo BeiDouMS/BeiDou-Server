@@ -25,6 +25,7 @@ import client.Character;
 import client.Client;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MapId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -216,7 +217,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 Server.getInstance().changeRank(mc.getGuildId(), cid, newRank);
                 break;
             case 0x0f:
-                if (mc.getGuildId() <= 0 || mc.getGuildRank() != 1 || mc.getMapId() != 200000301) {
+                if (mc.getGuildId() <= 0 || mc.getGuildRank() != 1 || mc.getMapId() != MapId.GUILD_HQ) {
                     System.out.println("[Hack] " + mc.getName() + " tried to change guild emblem without being the guild leader.");
                     return;
                 }

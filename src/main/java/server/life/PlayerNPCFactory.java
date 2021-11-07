@@ -19,6 +19,9 @@
 */
 package server.life;
 
+import constants.id.ItemId;
+import constants.id.MapId;
+import constants.id.NpcId;
 import net.server.Server;
 import provider.Data;
 import provider.DataProvider;
@@ -45,11 +48,11 @@ public class PlayerNPCFactory {
     }
 
     private static void loadDeveloperRoomMetadata(DataProvider npc) {
-        Data thisData = npc.getData("9977777.img");
+        Data thisData = npc.getData(NpcId.CUSTOM_DEV + ".img");
         if (thisData != null) {
             DataProvider map = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
-            thisData = map.getData("Map/Map7/777777777.img");
+            thisData = map.getData("Map/Map7/" + MapId.DEVELOPERS_HQ + ".img");
             if (thisData != null) {
                 DataProvider sound = DataProviderFactory.getDataProvider(WZFiles.SOUND);
 
@@ -105,21 +108,21 @@ public class PlayerNPCFactory {
                 runningDeveloperOid++;
             }
         } else {
-            Data thisData = npc.getData("9977777.img");
+            Data thisData = npc.getData(NpcId.CUSTOM_DEV + ".img");
 
             if (thisData != null) {
                 byte[] encData = {0x52, 0x6F, 0x6E, 0x61, 0x6E};
                 String name = new String(encData);
-                int face = 20104, hair = 30215, gender = 0, skin = 0, dir = 0, mapid = 777777777;
-                int FH = 4, RX0 = -143, RX1 = -243, CX = -193, CY = 117, scriptId = 9977777;
+                int face = 20104, hair = 30215, gender = 0, skin = 0, dir = 0, mapid = MapId.DEVELOPERS_HQ;
+                int FH = 4, RX0 = -143, RX1 = -243, CX = -193, CY = 117, scriptId = NpcId.CUSTOM_DEV;
 
                 Map<Short, Integer> equips = new HashMap<>();
-                equips.put((short) -1, 1002067);
-                equips.put((short) -11, 1402046);
-                equips.put((short) -8, 1082140);
-                equips.put((short) -6, 1060091);
-                equips.put((short) -7, 1072154);
-                equips.put((short) -5, 1040103);
+                equips.put((short) -1, ItemId.GREEN_HEADBAND);
+                equips.put((short) -11, ItemId.TIMELESS_NIBLEHEIM);
+                equips.put((short) -8, ItemId.BLUE_KORBEN);
+                equips.put((short) -6, ItemId.MITHRIL_PLATINE_PANTS);
+                equips.put((short) -7, ItemId.BLUE_CARZEN_BOOTS);
+                equips.put((short) -5, ItemId.MITHRIL_PLATINE);
 
                 List<PlayerNPC> dnpcSet = dnpcMaps.get(mapid);
                 if (dnpcSet == null) {

@@ -24,6 +24,7 @@ package net.server.channel.handlers;
 import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.Item;
+import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -33,7 +34,7 @@ public final class UseItemEffectHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         Item toUse;
         int itemId = p.readInt();
-        if (itemId == 4290001 || itemId == 4290000) {
+        if (itemId == ItemId.BUMMER_EFFECT || itemId == ItemId.GOLDEN_CHICKEN_EFFECT) {
             toUse = c.getPlayer().getInventory(InventoryType.ETC).findById(itemId);
         } else {
             toUse = c.getPlayer().getInventory(InventoryType.CASH).findById(itemId);

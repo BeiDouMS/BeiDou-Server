@@ -29,7 +29,8 @@ import client.inventory.Item;
 import client.inventory.WeaponType;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
-import constants.game.GameConstants;
+import constants.id.ItemId;
+import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.InPacket;
@@ -64,7 +65,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             }
         }
 
-        if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
+        if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
@@ -136,15 +137,15 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     boolean bow = ItemConstants.isArrowForBow(id);
                     boolean cbow = ItemConstants.isArrowForCrossBow(id);
                     if (item.getQuantity() >= bulletCount) { //Fixes the bug where you can't use your last arrow.
-                        if (type == WeaponType.CLAW && ItemConstants.isThrowingStar(id) && weapon.getItemId() != 1472063) {
-                            if (((id == 2070007 || id == 2070018) && chr.getLevel() < 70) || (id == 2070016 && chr.getLevel() < 50)) {
+                        if (type == WeaponType.CLAW && ItemConstants.isThrowingStar(id) && weapon.getItemId() != ItemId.MAGICAL_MITTEN) {
+                            if (((id == ItemId.HWABI_THROWING_STARS || id == ItemId.BALANCED_FURY) && chr.getLevel() < 70) || (id == ItemId.CRYSTAL_ILBI_THROWING_STARS && chr.getLevel() < 50)) {
                             } else {
                                 projectile = id;
                                 break;
                             }
                         } else if ((type == WeaponType.GUN && ItemConstants.isBullet(id))) {
-                            if (id == 2331000 && id == 2332000) {
-                                if (chr.getLevel() > 69) {
+                            if (id == ItemId.BLAZE_CAPSULE || id == ItemId.GLAZE_CAPSULE) {
+                                if (chr.getLevel() >= 70) {
                                     projectile = id;
                                     break;
                                 }
@@ -152,7 +153,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                                 projectile = id;
                                 break;
                             }
-                        } else if ((type == WeaponType.BOW && bow) || (type == WeaponType.CROSSBOW && cbow) || (weapon.getItemId() == 1472063 && (bow || cbow))) {
+                        } else if ((type == WeaponType.BOW && bow) || (type == WeaponType.CROSSBOW && cbow) || (weapon.getItemId() == ItemId.MAGICAL_MITTEN && (bow || cbow))) {
                             projectile = id;
                             break;
                         }

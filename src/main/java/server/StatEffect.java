@@ -30,6 +30,8 @@ import client.inventory.manipulator.InventoryManipulator;
 import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
+import constants.id.ItemId;
+import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.Packet;
@@ -158,9 +160,9 @@ public class StatEffect {
     }
 
     private static byte mapProtection(int sourceid) {
-        if (sourceid == 2022001 || sourceid == 2022186) {
+        if (sourceid == ItemId.RED_BEAN_PORRIDGE || sourceid == ItemId.SOFT_WHITE_BUN) {
             return 1;   //elnath cold
-        } else if (sourceid == 2022040) {
+        } else if (sourceid == ItemId.AIR_BUBBLE) {
             return 2;   //aqua road underwater
         } else {
             return 0;
@@ -252,14 +254,14 @@ public class StatEffect {
 
         if (ret.overTime && ret.getSummonMovementType() == null) {
             if (!skill) {
-                if (isPyramidBuff(sourceid)) {
+                if (ItemId.isPyramidBuff(sourceid)) {
                     ret.berserk = DataTool.getInt("berserk", source, 0);
                     ret.booster = DataTool.getInt("booster", source, 0);
 
                     addBuffStatPairToListIfNotZero(statups, BuffStat.BERSERK, ret.berserk);
                     addBuffStatPairToListIfNotZero(statups, BuffStat.BOOSTER, ret.booster);
 
-                } else if (isDojoBuff(sourceid) || isHpMpRecovery(sourceid)) {
+                } else if (ItemId.isDojoBuff(sourceid) || isHpMpRecovery(sourceid)) {
                     ret.mhpR = (byte) DataTool.getInt("mhpR", source, 0);
                     ret.mhpRRate = (short) (DataTool.getInt("mhpRRate", source, 0) * 100);
                     ret.mmpR = (byte) DataTool.getInt("mmpR", source, 0);
@@ -268,7 +270,7 @@ public class StatEffect {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.HPREC, (int) ret.mhpR);
                     addBuffStatPairToListIfNotZero(statups, BuffStat.MPREC, (int) ret.mmpR);
 
-                } else if (isRateCoupon(sourceid)) {
+                } else if (ItemId.isRateCoupon(sourceid)) {
                     switch (DataTool.getInt("expR", source, 0)) {
                         case 1:
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP1, 1);
@@ -300,7 +302,7 @@ public class StatEffect {
                             addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_DRP3, 1);
                             break;
                     }
-                } else if (isMonsterCard(sourceid)) {
+                } else if (ItemId.isMonsterCard(sourceid)) {
                     int prob = 0, itemupCode = Integer.MAX_VALUE;
                     List<Pair<Integer, Integer>> areas = null;
                     boolean inParty = false;
@@ -370,7 +372,7 @@ public class StatEffect {
                     }
 
                     ret.cardStats = new CardItemupStats(itemupCode, prob, areas, inParty);
-                } else if (isExpIncrease(sourceid)) {
+                } else if (ItemId.isExpIncrease(sourceid)) {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_INCREASE, DataTool.getInt("expinc", source, 0));
                 }
             } else {
@@ -907,8 +909,8 @@ public class StatEffect {
                 MapleMap target;
                 Portal pt;
 
-                if (moveTo == 999999999) {
-                    if (sourceid != 2030100) {
+                if (moveTo == MapId.NONE) {
+                    if (sourceid != ItemId.ANTI_BANISH_SCROLL) {
                         target = applyto.getMap().getReturnMap();
                         pt = target.getRandomPlayerSpawnpoint();
                     } else {
@@ -1012,7 +1014,7 @@ public class StatEffect {
                 door.getTarget().spawnDoor(door.getAreaDoor());
                 door.getTown().spawnDoor(door.getTownDoor());
             } else {
-                InventoryManipulator.addFromDrop(applyto.getClient(), new Item(4006000, (short) 0, (short) 1), false);
+                InventoryManipulator.addFromDrop(applyto.getClient(), new Item(ItemId.MAGIC_ROCK, (short) 0, (short) 1), false);
 
                 if (door.getOwnerId() == -3) {
                     applyto.dropMessage(5, "Mystic Door cannot be cast far from a spawn point. Nearest one is at " + door.getDoorStatus().getRight() + "pts " + door.getDoorStatus().getLeft());
@@ -1229,7 +1231,7 @@ public class StatEffect {
             }
 
             if (sourceid == Corsair.BATTLE_SHIP) {
-                ridingMountId = 1932000;
+                ridingMountId = ItemId.BATTLESHIP;
             } else if (sourceid == Beginner.SPACESHIP || sourceid == Noblesse.SPACESHIP) {
                 ridingMountId = 1932000 + applyto.getSkillLevel(sourceid);
             } else if (sourceid == Beginner.YETI_MOUNT1 || sourceid == Noblesse.YETI_MOUNT1 || sourceid == Legend.YETI_MOUNT1) {
@@ -1523,38 +1525,12 @@ public class StatEffect {
         return sourceid == Beginner.MAP_CHAIR || sourceid == Noblesse.MAP_CHAIR || sourceid == Legend.MAP_CHAIR;
     }
 
-    public boolean isDojoBuff() {
-        return sourceid >= 2022359 && sourceid <= 2022421;
-    }
-
-    public static boolean isDojoBuff(int sourceid) {
-        return sourceid >= 2022359 && sourceid <= 2022421;
-    }
-
     public static boolean isHpMpRecovery(int sourceid) {
-        return sourceid == 2022198 || sourceid == 2022337;
-    }
-
-    public static boolean isPyramidBuff(int sourceid) {
-        return sourceid >= 2022585 && sourceid <= 2022617;
-    }
-
-    public static boolean isRateCoupon(int sourceid) {
-        int itemType = sourceid / 1000;
-        return itemType == 5211 || itemType == 5360;
-    }
-
-    public static boolean isExpIncrease(int sourceid) {
-        return sourceid >= 2022450 && sourceid <= 2022452;
+        return sourceid == ItemId.RUSSELLONS_PILLS || sourceid == ItemId.SORCERERS_POTION;
     }
 
     public static boolean isAriantShield(int sourceid) {
-        return sourceid == 2022269;
-    }
-
-    public static boolean isMonsterCard(int sourceid) {
-        int itemType = sourceid / 10000;
-        return itemType == 238;
+        return sourceid == ItemId.ARPQ_SHIELD;
     }
 
     private boolean isDs() {
@@ -1586,7 +1562,7 @@ public class StatEffect {
     }
 
     private boolean isCouponBuff() {
-        return isRateCoupon(sourceid);
+        return ItemId.isRateCoupon(sourceid);
     }
 
     private boolean isAriantShield() {
@@ -1649,7 +1625,7 @@ public class StatEffect {
         if (skill) {
             return isHerosWill(sourceid);
         } else {
-            return sourceid == 2022544;
+            return sourceid == ItemId.WHITE_ELIXIR;
         }
     }
 

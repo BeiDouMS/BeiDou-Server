@@ -22,6 +22,7 @@
 package net.server.channel.handlers;
 
 import client.Client;
+import constants.id.MobId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import scripting.event.EventInstanceManager;
@@ -51,19 +52,19 @@ public final class MobDamageMobFriendlyHandler extends AbstractPacketHandler {
         int damage = Randomizer.nextInt(((monster.getMaxHp() / 13 + monster.getPADamage() * 10)) * 2 + 500) / 10; // Formula planned by Beng.
 
         if (monster.getHp() - damage < 1) {     // friendly dies
-            if (monster.getId() == 9300102) {
+            if (monster.getId() == MobId.WATCH_HOG) {
                 map.broadcastMessage(PacketCreator.serverNotice(6, "The Watch Hog has been injured by the aliens. Better luck next time..."));
-            } else if (monster.getId() == 9300061) {  //moon bunny
+            } else if (monster.getId() == MobId.MOON_BUNNY) {  //moon bunny
                 map.broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny went home because he was sick."));
-            } else if (monster.getId() == 9300093) {   //tylus
+            } else if (monster.getId() == MobId.TYLUS) {   //tylus
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Tylus has fallen by the overwhelming forces of the ambush."));
-            } else if (monster.getId() == 9300137) {   //juliet
+            } else if (monster.getId() == MobId.JULIET) {   //juliet
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Juliet has fainted in the middle of the combat."));
-            } else if (monster.getId() == 9300138) {   //romeo
+            } else if (monster.getId() == MobId.ROMEO) {   //romeo
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Romeo has fainted in the middle of the combat."));
-            } else if (monster.getId() == 9400322 || monster.getId() == 9400327 || monster.getId() == 9400332) { //snowman
+            } else if (monster.getId() == MobId.GIANT_SNOWMAN_LV1_EASY || monster.getId() == MobId.GIANT_SNOWMAN_LV1_MEDIUM || monster.getId() == MobId.GIANT_SNOWMAN_LV1_HARD) {
                 map.broadcastMessage(PacketCreator.serverNotice(6, "The Snowman has melted on the heat of the battle."));
-            } else if (monster.getId() == 9300162) {   //delli
+            } else if (monster.getId() == MobId.DELLI) {   //delli
                 map.broadcastMessage(PacketCreator.serverNotice(6, "Delli vanished after the ambush, sheets still laying on the ground..."));
             }
 

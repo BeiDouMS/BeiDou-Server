@@ -33,6 +33,9 @@ import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.game.GameConstants;
+import constants.id.ItemId;
+import constants.id.MapId;
+import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
@@ -1077,8 +1080,8 @@ public class PacketCreator {
         final OutPacket p;
         if (town) {
             p = OutPacket.create(SendOpcode.SPAWN_PORTAL);
-            p.writeInt(999999999);
-            p.writeInt(999999999);
+            p.writeInt(MapId.NONE);
+            p.writeInt(MapId.NONE);
         } else {
             p = OutPacket.create(SendOpcode.REMOVE_DOOR);
             p.writeByte(0);
@@ -1922,7 +1925,7 @@ public class PacketCreator {
                 }*/
 
         addCharLook(p, chr, false);
-        p.writeInt(chr.getInventory(InventoryType.CASH).countById(5110000));
+        p.writeInt(chr.getInventory(InventoryType.CASH).countById(ItemId.HEART_SHAPED_CHOCOLATE));
         p.writeInt(chr.getItemEffect());
         p.writeInt(ItemConstants.getInventoryType(chr.getChair()) == InventoryType.SETUP ? chr.getChair() : 0);
 
@@ -3311,7 +3314,7 @@ public class PacketCreator {
     public static Packet getDimensionalMirror(String talk) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?
-        p.writeInt(9010022);
+        p.writeInt(NpcId.DIMENSIONAL_MIRROR);
         p.writeByte(0x0E);
         p.writeByte(0);
         p.writeInt(0);
@@ -3698,14 +3701,14 @@ public class PacketCreator {
                 p.writeInt(mdo.getPosition().x);
                 p.writeInt(mdo.getPosition().y);
             } else {
-                p.writeInt(999999999);
-                p.writeInt(999999999);
+                p.writeInt(MapId.NONE);
+                p.writeInt(MapId.NONE);
                 p.writeInt(0);
                 p.writeInt(0);
             }
         } else {
-            p.writeInt(999999999);
-            p.writeInt(999999999);
+            p.writeInt(MapId.NONE);
+            p.writeInt(MapId.NONE);
             p.writeInt(0);
             p.writeInt(0);
         }
@@ -3809,20 +3812,20 @@ public class PacketCreator {
                         p.writeInt(mdo.getPosition().x);
                         p.writeInt(mdo.getPosition().y);
                     } else {
-                        p.writeInt(999999999);
-                        p.writeInt(999999999);
+                        p.writeInt(MapId.NONE);
+                        p.writeInt(MapId.NONE);
                         p.writeInt(0);
                         p.writeInt(0);
                     }
                 } else {
-                    p.writeInt(999999999);
-                    p.writeInt(999999999);
+                    p.writeInt(MapId.NONE);
+                    p.writeInt(MapId.NONE);
                     p.writeInt(0);
                     p.writeInt(0);
                 }
             } else {
-                p.writeInt(999999999);
-                p.writeInt(999999999);
+                p.writeInt(MapId.NONE);
+                p.writeInt(MapId.NONE);
                 p.writeInt(0);
                 p.writeInt(0);
             }
@@ -4872,7 +4875,7 @@ public class PacketCreator {
     public static Packet openRPSNPC() {
         OutPacket p = OutPacket.create(SendOpcode.RPS_GAME);
         p.writeByte(8);// open npc
-        p.writeInt(9000019);
+        p.writeInt(NpcId.RPS_ADMIN);
         return p;
     }
 
@@ -4924,7 +4927,7 @@ public class PacketCreator {
     public static Packet getFredrick(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.FREDRICK);
         p.writeByte(0x23);
-        p.writeInt(9030000); // Fredrick
+        p.writeInt(NpcId.FREDRICK);
         p.writeInt(32272); //id
         p.skip(5);
         p.writeInt(chr.getMerchantNetMeso());
@@ -6771,8 +6774,8 @@ public class PacketCreator {
                 p.writeInt(marriageRing.getItemId());
                 p.writeInt(marriageRing.getItemId());
             } else {
-                p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
-                p.writeInt(1112803); // Engagement Ring's Outcome (doesn't matter for engagement)
+                p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
+                p.writeInt(ItemId.WEDDING_RING_MOONSTONE); // Engagement Ring's Outcome (doesn't matter for engagement)
             }
             p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? chr.getName() : Character.getNameById(chr.getPartnerId()), '\0', 13));
             p.writeFixedString(StringUtil.getRightPaddedStr(chr.getGender() == 0 ? Character.getNameById(chr.getPartnerId()) : chr.getName(), '\0', 13));
@@ -6805,7 +6808,7 @@ public class PacketCreator {
     public static Packet hpqMessage(String text) {
         final OutPacket p = OutPacket.create(SendOpcode.BLOW_WEATHER); // not 100% sure
         p.writeByte(0);
-        p.writeInt(5120016);
+        p.writeInt(ItemId.NPC_WEATHER_GROWLIE);
         p.writeFixedString(text);
         return p;
     }

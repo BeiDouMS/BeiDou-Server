@@ -21,6 +21,7 @@
  */
 package server.maps;
 
+import constants.id.MapId;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -309,7 +310,7 @@ public class MapFactory {
         map.setTown(DataTool.getIntConvert("town", infoData, 0) != 0);
         map.setHPDec(DataTool.getIntConvert("decHP", infoData, 0));
         map.setHPDecProtect(DataTool.getIntConvert("protectItem", infoData, 0));
-        map.setForcedReturnMap(DataTool.getInt(infoData.getChildByPath("forcedReturn"), 999999999));
+        map.setForcedReturnMap(DataTool.getInt(infoData.getChildByPath("forcedReturn"), MapId.NONE));
         map.setBoat(mapData.getChildByPath("shipObj") != null);
         map.setTimeLimit(DataTool.getIntConvert("timeLimit", infoData, -1));
         map.setFieldType(DataTool.getIntConvert("fieldType", infoData, 0));
@@ -381,15 +382,15 @@ public class MapFactory {
         StringBuilder builder = new StringBuilder();
         if (mapid < 100000000) {
             builder.append("maple");
-        } else if (mapid >= 100000000 && mapid < 200000000) {
+        } else if (mapid >= 100000000 && mapid < MapId.ORBIS) {
             builder.append("victoria");
-        } else if (mapid >= 200000000 && mapid < 300000000) {
+        } else if (mapid >= MapId.ORBIS && mapid < MapId.ELLIN_FOREST) {
             builder.append("ossyria");
-        } else if (mapid >= 300000000 && mapid < 400000000) {
+        } else if (mapid >= MapId.ELLIN_FOREST && mapid < 400000000) {
             builder.append("elin");
-        } else if (mapid >= 540000000 && mapid < 560000000) {
+        } else if (mapid >= MapId.SINGAPORE && mapid < 560000000) {
             builder.append("singapore");
-        } else if (mapid >= 600000000 && mapid < 620000000) {
+        } else if (mapid >= MapId.NEW_LEAF_CITY && mapid < 620000000) {
             builder.append("MasteriaGL");
         } else if (mapid >= 677000000 && mapid < 677100000) {
             builder.append("Episode1GL");
@@ -403,7 +404,7 @@ public class MapFactory {
             builder.append("HalloweenGL");
         } else if (mapid >= 683000000 && mapid < 684000000) {
             builder.append("event");
-        } else if (mapid >= 800000000 && mapid < 900000000) {
+        } else if (mapid >= MapId.MUSHROOM_SHRINE && mapid < 900000000) {
             if ((mapid >= 889100000 && mapid < 889200000)) {
                 builder.append("etc");
             } else {

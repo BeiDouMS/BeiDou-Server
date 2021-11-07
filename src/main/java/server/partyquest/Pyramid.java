@@ -23,6 +23,8 @@
 package server.partyquest;
 
 import client.Character;
+import constants.id.ItemId;
+import constants.id.MapId;
 import net.server.world.Party;
 import server.ItemInformationProvider;
 import server.TimerManager;
@@ -84,7 +86,7 @@ public class Pyramid extends PartyQuest {
             gaugeSchedule = TimerManager.getInstance().register(() -> {
                 gauge -= decrease;
                 if (gauge <= 0) {
-                    warp(926010001);
+                    warp(MapId.NETTS_PYRAMID);
                 }
 
             }, 1000);
@@ -186,7 +188,7 @@ public class Pyramid extends PartyQuest {
             buffcount++;
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
-                ii.getItemEffect(2022585).applyTo(chr);
+                ii.getItemEffect(ItemId.PHARAOHS_BLESSING_1).applyTo(chr);
             }
 
         } else if (buffcount == 1 && total >= 500) {
@@ -195,7 +197,7 @@ public class Pyramid extends PartyQuest {
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
                 chr.sendPacket(PacketCreator.getEnergy("massacre_skill", skill));
-                ii.getItemEffect(2022586).applyTo(chr);
+                ii.getItemEffect(ItemId.PHARAOHS_BLESSING_2).applyTo(chr);
             }
         } else if (buffcount == 2 && total >= 1000) {
             buffcount++;
@@ -203,7 +205,7 @@ public class Pyramid extends PartyQuest {
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
                 chr.sendPacket(PacketCreator.getEnergy("massacre_skill", skill));
-                ii.getItemEffect(2022587).applyTo(chr);
+                ii.getItemEffect(ItemId.PHARAOHS_BLESSING_3).applyTo(chr);
             }
         } else if (buffcount == 3 && total >= 1500) {
             skill++;
@@ -214,7 +216,7 @@ public class Pyramid extends PartyQuest {
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Character chr : getParticipants()) {
                 chr.sendPacket(PacketCreator.getEnergy("massacre_skill", skill));
-                ii.getItemEffect(2022588).applyTo(chr);
+                ii.getItemEffect(ItemId.PHARAOHS_BLESSING_4).applyTo(chr);
             }
         } else if (buffcount == 5 && total >= 2500) {
             skill++;

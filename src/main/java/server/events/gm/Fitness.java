@@ -23,6 +23,7 @@
 package server.events.gm;
 
 import client.Character;
+import constants.id.MapId;
 import server.TimerManager;
 import tools.PacketCreator;
 
@@ -41,7 +42,7 @@ public class Fitness {
     public Fitness(final Character chr) {
         this.chr = chr;
         this.schedule = TimerManager.getInstance().schedule(() -> {
-            if (chr.getMapId() >= 109040000 && chr.getMapId() <= 109040004) {
+            if (MapId.isPhysicalFitness(chr.getMapId())) {
                 chr.changeMap(chr.getMap().getReturnMap());
             }
         }, 900000);
@@ -82,7 +83,7 @@ public class Fitness {
             if (chr.getFitness() == null) {
                 resetTimes();
             }
-            if (chr.getMap().getId() >= 109040000 && chr.getMap().getId() <= 109040004) {
+            if (MapId.isPhysicalFitness(chr.getMapId())) {
                 if (getTimeLeft() > 9000 && getTimeLeft() < 11000) {
                     chr.sendPacket(PacketCreator.serverNotice(0, "You have 10 sec left. Those of you unable to beat the game, we hope you beat it next time! Great job everyone!! See you later~"));
                 } else if (getTimeLeft() > 99000 && getTimeLeft() < 101000) {

@@ -26,6 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.MobId;
 import server.life.Monster;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
@@ -47,7 +48,7 @@ public class KillAllCommand extends Command {
         int count = 0;
         for (MapObject monstermo : monsters) {
             Monster monster = (Monster) monstermo;
-            if (!monster.getStats().isFriendly() && !(monster.getId() >= 8810010 && monster.getId() <= 8810018)) {
+            if (!monster.getStats().isFriendly() && !(monster.getId() >= MobId.DEAD_HORNTAIL_MIN && monster.getId() <= MobId.HORNTAIL)) {
                 map.damageMonster(player, monster, Integer.MAX_VALUE);
                 count++;
             }

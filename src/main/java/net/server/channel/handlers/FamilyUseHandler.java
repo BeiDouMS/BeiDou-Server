@@ -26,6 +26,7 @@ import client.Client;
 import client.FamilyEntitlement;
 import client.FamilyEntry;
 import config.YamlConfig;
+import constants.id.MapId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.coordinator.world.InviteCoordinator;
@@ -61,7 +62,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                     if (targetMap != null) {
                         if (type == FamilyEntitlement.FAMILY_REUINION) {
                             if (!FieldLimit.CANNOTMIGRATE.check(ownMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(targetMap.getFieldLimit())
-                                    && (targetMap.getForcedReturnId() == 999999999 || targetMap.getId() < 100000000) && targetMap.getEventInstance() == null) {
+                                    && (targetMap.getForcedReturnId() == MapId.NONE || MapId.isMapleIsland(targetMap.getId())) && targetMap.getEventInstance() == null) {
 
                                 c.getPlayer().changeMap(victim.getMap(), victim.getMap().getPortal(0));
                                 useEntitlement(entry, type);
@@ -71,7 +72,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                             }
                         } else {
                             if (!FieldLimit.CANNOTMIGRATE.check(targetMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(ownMap.getFieldLimit())
-                                    && (ownMap.getForcedReturnId() == 999999999 || ownMap.getId() < 100000000) && ownMap.getEventInstance() == null) {
+                                    && (ownMap.getForcedReturnId() == MapId.NONE || MapId.isMapleIsland(ownMap.getId())) && ownMap.getEventInstance() == null) {
 
                                 if (InviteCoordinator.hasInvite(InviteType.FAMILY_SUMMON, victim.getId())) {
                                     c.sendPacket(PacketCreator.sendFamilyMessage(74, 0));

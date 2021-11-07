@@ -23,6 +23,7 @@ package constants.inventory;
 
 import client.inventory.InventoryType;
 import config.YamlConfig;
+import constants.id.ItemId;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,9 +52,9 @@ public final class ItemConstants {
     public final static Set<Integer> permanentItemids = new HashSet<>();
 
     static {
-        int[] pi = {5000060, 5000100, 5000101, 5000102};    // i ain't going to open one gigantic itemid cache just for 4 perma itemids, no way!
-        for (int i : pi) {
-            permanentItemids.add(i);
+        // i ain't going to open one gigantic itemid cache just for 4 perma itemids, no way!
+        for (int petItemId : ItemId.getPermaPets()) {
+            permanentItemids.add(petItemId);
         }
     }
 
@@ -108,7 +109,7 @@ public final class ItemConstants {
     }
 
     public static boolean isExpirablePet(int itemId) {
-        return YamlConfig.config.server.USE_ERASE_PET_ON_EXPIRATION || itemId == 5000054;
+        return YamlConfig.config.server.USE_ERASE_PET_ON_EXPIRATION || itemId == ItemId.PET_SNAIL;
     }
 
     public static boolean isPermanentItem(int itemId) {
@@ -133,11 +134,11 @@ public final class ItemConstants {
     }
 
     public static boolean isTownScroll(int itemId) {
-        return itemId >= 2030000 && itemId < 2030100;
+        return itemId >= 2030000 && itemId < ItemId.ANTI_BANISH_SCROLL;
     }
 
     public static boolean isAntibanishScroll(int itemId) {
-        return itemId == 2030100;
+        return itemId == ItemId.ANTI_BANISH_SCROLL;
     }
 
     public static boolean isCleanSlate(int scrollId) {
@@ -145,14 +146,14 @@ public final class ItemConstants {
     }
 
     public static boolean isModifierScroll(int scrollId) {
-        return scrollId == 2040727 || scrollId == 2041058;
+        return scrollId == ItemId.SPIKES_SCROLL || scrollId == ItemId.COLD_PROTECTION_SCROLl;
     }
 
     public static boolean isFlagModifier(int scrollId, short flag) {
-        if (scrollId == 2041058 && ((flag & ItemConstants.COLD) == ItemConstants.COLD)) {
+        if (scrollId == ItemId.COLD_PROTECTION_SCROLl && ((flag & ItemConstants.COLD) == ItemConstants.COLD)) {
             return true;
         }
-        return scrollId == 2040727 && ((flag & ItemConstants.SPIKES) == ItemConstants.SPIKES);
+        return scrollId == ItemId.SPIKES_SCROLL && ((flag & ItemConstants.SPIKES) == ItemConstants.SPIKES);
     }
 
     public static boolean isChaosScroll(int scrollId) {
@@ -170,10 +171,6 @@ public final class ItemConstants {
 
     public static boolean isPartyItem(int itemId) {
         return itemId >= 2022430 && itemId <= 2022433 || itemId >= 2022160 && itemId <= 2022163;
-    }
-
-    public static boolean isPartyAllcure(int itemId) {
-        return itemId == 2022433 || itemId == 2022163;
     }
 
     public static boolean isHiredMerchant(int itemId) {
@@ -227,19 +224,11 @@ public final class ItemConstants {
     }
 
     public static boolean isFishingChair(int itemId) {
-        return itemId == 3011000;
+        return itemId == ItemId.FISHING_CHAIR;
     }
 
     public static boolean isMedal(int itemId) {
         return itemId >= 1140000 && itemId < 1143000;
-    }
-
-    public static boolean isWeddingRing(int itemId) {
-        return itemId >= 1112803 && itemId <= 1112809;
-    }
-
-    public static boolean isWeddingToken(int itemId) {
-        return itemId >= 4031357 && itemId <= 4031364;
     }
 
     public static boolean isFace(int itemId) {
@@ -248,13 +237,5 @@ public final class ItemConstants {
 
     public static boolean isHair(int itemId) {
         return itemId >= 30000 && itemId < 35000;
-    }
-
-    public static boolean isFaceExpression(int itemId) {
-        return itemId / 10000 == 516;
-    }
-
-    public static boolean isChair(int itemId) {
-        return itemId / 10000 == 301;
     }
 }

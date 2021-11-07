@@ -1,5 +1,7 @@
 package server.gachapon;
 
+import constants.id.ItemId;
+
 /**
  * @author Alan (SharpAceX)
  * @author Ronan - added ores and reworked global loots
@@ -15,7 +17,7 @@ public class Global extends GachaponItems {
 
                 /* Ores */
                 4004000, 4004001, 4004002, 4004003, 4004004,
-                4006000, 4006001,
+                ItemId.MAGIC_ROCK, 4006001,
                 4010000, 4010001, 4010002, 4010003, 4010004, 4010005, 4010006, 4010007,
                 4020000, 4020001, 4020002, 4020003, 4020004, 4020005, 4020006, 4020007, 4020008
         };

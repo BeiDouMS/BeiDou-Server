@@ -21,6 +21,7 @@ package server.maps;
 
 import client.Character;
 import client.Client;
+import constants.id.MapId;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
 import net.server.audit.locks.MonitoredReentrantReadWriteLock;
@@ -128,7 +129,7 @@ public class DoorObject extends AbstractMapObject {
         if (from.getId() == chr.getMapId()) {
             Party party = chr.getParty();
             if (party != null && (ownerId == chr.getId() || party.getMemberById(ownerId) != null)) {
-                client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
+                client.sendPacket(PacketCreator.partyPortal(MapId.NONE, MapId.NONE, new Point(-1, -1)));
             }
             client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));
         }
@@ -136,7 +137,7 @@ public class DoorObject extends AbstractMapObject {
 
     public void sendDestroyData(Client client, boolean partyUpdate) {
         if (client != null && from.getId() == client.getPlayer().getMapId()) {
-            client.sendPacket(PacketCreator.partyPortal(999999999, 999999999, new Point(-1, -1)));
+            client.sendPacket(PacketCreator.partyPortal(MapId.NONE, MapId.NONE, new Point(-1, -1)));
             client.sendPacket(PacketCreator.removeDoor(ownerId, inTown()));
         }
     }

@@ -26,6 +26,7 @@ package client.command.commands.gm2;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.MapId;
 import server.maps.MapleMap;
 import server.maps.Portal;
 
@@ -57,10 +58,8 @@ public class JailCommand extends Command {
         if (victim != null) {
             victim.addJailExpirationTime(MINUTES.toMillis(minutesJailed));
 
-            int mapid = 300000012;
-
-            if (victim.getMapId() != mapid) {    // those gone to jail won't be changing map anyway
-                MapleMap target = c.getChannelServer().getMapFactory().getMap(mapid);
+            if (victim.getMapId() != MapId.JAIL) {    // those gone to jail won't be changing map anyway
+                MapleMap target = c.getChannelServer().getMapFactory().getMap(MapId.JAIL);
                 Portal targetPortal = target.getPortal(0);
                 victim.saveLocationOnWarp();
                 victim.changeMap(target, targetPortal);

@@ -26,6 +26,7 @@ package client.command.commands.gm5;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.NpcId;
 import net.server.Server;
 import server.TimerManager;
 import server.life.Monster;
@@ -63,7 +64,7 @@ public class DebugCommand extends Command {
                     msgTypes += ("#L" + i + "#" + debugTypes[i] + "#l\r\n");
                 }
 
-                c.getAbstractPlayerInteraction().npcTalk(9201143, msgTypes);
+                c.getAbstractPlayerInteraction().npcTalk(NpcId.STEWARD, msgTypes);
                 break;
 
             case "monster":

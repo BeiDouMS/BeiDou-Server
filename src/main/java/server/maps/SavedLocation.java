@@ -22,16 +22,16 @@
 package server.maps;
 
 public class SavedLocation {
-    private int mapid = 102000000;
+    private final int mapId;
     private final int portal;
 
-    public SavedLocation(int mapid, int portal) {
-        this.mapid = mapid;
+    public SavedLocation(int mapId, int portal) {
+        this.mapId = mapId;
         this.portal = portal;
     }
 
     public int getMapId() {
-        return mapid;
+        return mapId;
     }
 
     public int getPortal() {

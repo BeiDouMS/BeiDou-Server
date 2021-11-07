@@ -27,6 +27,7 @@ import client.Client;
 import client.inventory.*;
 import client.newyear.NewYearCardRecord;
 import config.YamlConfig;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import server.ItemInformationProvider;
 import server.maps.MapleMap;
@@ -523,7 +524,8 @@ public class InventoryManipulator {
         if (source == null || !ii.canWearEquipment(chr, source, dst)) {
             c.sendPacket(PacketCreator.enableActions());
             return;
-        } else if ((((source.getItemId() >= 1902000 && source.getItemId() <= 1902002) || source.getItemId() == 1912000) && chr.isCygnus()) || ((source.getItemId() >= 1902005 && source.getItemId() <= 1902007) || source.getItemId() == 1912005) && !chr.isCygnus()) {// Adventurer taming equipment
+        } else if ((ItemId.isExplorerMount(source.getItemId()) && chr.isCygnus()) ||
+                ((ItemId.isCygnusMount(source.getItemId())) && !chr.isCygnus())) {// Adventurer taming equipment
             return;
         }
         boolean itemChanged = false;
@@ -684,7 +686,7 @@ public class InventoryManipulator {
         } else if (isDroppedItemRestricted(it)) {
             return true;
         } else {
-            return ItemConstants.isWeddingRing(it.getItemId());
+            return ItemId.isWeddingRing(it.getItemId());
         }
     }
 
@@ -724,12 +726,12 @@ public class InventoryManipulator {
             c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(1, source))));
 
             if (ItemConstants.isNewYearCardEtc(itemId)) {
-                if (itemId == 4300000) {
+                if (itemId == ItemId.NEW_YEARS_CARD_SEND) {
                     NewYearCardRecord.removeAllNewYearCard(true, chr);
-                    c.getAbstractPlayerInteraction().removeAll(4300000);
+                    c.getAbstractPlayerInteraction().removeAll(ItemId.NEW_YEARS_CARD_SEND);
                 } else {
                     NewYearCardRecord.removeAllNewYearCard(false, chr);
-                    c.getAbstractPlayerInteraction().removeAll(4301000);
+                    c.getAbstractPlayerInteraction().removeAll(ItemId.NEW_YEARS_CARD_RECEIVED);
                 }
             }
 
@@ -755,12 +757,12 @@ public class InventoryManipulator {
             if (src < 0) {
                 chr.equipChanged();
             } else if (ItemConstants.isNewYearCardEtc(itemId)) {
-                if (itemId == 4300000) {
+                if (itemId == ItemId.NEW_YEARS_CARD_SEND) {
                     NewYearCardRecord.removeAllNewYearCard(true, chr);
-                    c.getAbstractPlayerInteraction().removeAll(4300000);
+                    c.getAbstractPlayerInteraction().removeAll(ItemId.NEW_YEARS_CARD_SEND);
                 } else {
                     NewYearCardRecord.removeAllNewYearCard(false, chr);
-                    c.getAbstractPlayerInteraction().removeAll(4301000);
+                    c.getAbstractPlayerInteraction().removeAll(ItemId.NEW_YEARS_CARD_RECEIVED);
                 }
             }
 
@@ -777,11 +779,11 @@ public class InventoryManipulator {
                 chr.setItemEffect(0);
                 map.broadcastMessage(PacketCreator.itemEffect(chr.getId(), 0));
             }
-        } else if (itemId == 5370000 || itemId == 5370001) {
+        } else if (itemId == ItemId.CHALKBOARD_1 || itemId == ItemId.CHALKBOARD_2) {
             if (source.getQuantity() <= 0) {
                 chr.setChalkboard(null);
             }
-        } else if (itemId == 4031868) {
+        } else if (itemId == ItemId.ARPQ_SPIRIT_JEWEL) {
             chr.updateAriantScore(quantityNow);
         }
     }

@@ -28,6 +28,9 @@ import client.inventory.*;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
+import constants.id.MapId;
+import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
 import net.server.guild.Guild;
@@ -443,7 +446,7 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean forceStartQuest(int id) {
-        return forceStartQuest(id, 9010000);
+        return forceStartQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean forceStartQuest(int id, int npc) {
@@ -451,7 +454,7 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean forceCompleteQuest(int id) {
-        return forceCompleteQuest(id, 9010000);
+        return forceCompleteQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean forceCompleteQuest(int id, int npc) {
@@ -467,11 +470,11 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean startQuest(int id) {
-        return startQuest(id, 9010000);
+        return startQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean completeQuest(int id) {
-        return completeQuest(id, 9010000);
+        return completeQuest(id, NpcId.MAPLE_ADMINISTRATOR);
     }
 
     public boolean startQuest(short id, int npc) {
@@ -611,7 +614,7 @@ public class AbstractPlayerInteraction {
                         if (!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
                             eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));
                         }
-                        item = ItemInformationProvider.getInstance().scrollEquipWithId(item, 2049100, true, 2049100, c.getPlayer().isGM());
+                        item = ItemInformationProvider.getInstance().scrollEquipWithId(item, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60, c.getPlayer().isGM());
                     }
                 }
             } else {
@@ -678,27 +681,15 @@ public class AbstractPlayerInteraction {
     }
 
     public void displayAranIntro() {
-        String intro = "";
-        switch (c.getPlayer().getMapId()) {
-            case 914090010:
-                intro = "Effect/Direction1.img/aranTutorial/Scene0";
-                break;
-            case 914090011:
-                intro = "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-                break;
-            case 914090012:
-                intro = "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-                break;
-            case 914090013:
-                intro = "Effect/Direction1.img/aranTutorial/Scene3";
-                break;
-            case 914090100:
-                intro = "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-                break;
-            case 914090200:
-                intro = "Effect/Direction1.img/aranTutorial/Maha";
-                break;
-        }
+        String intro = switch (c.getPlayer().getMapId()) {
+            case MapId.ARAN_TUTO_1 -> "Effect/Direction1.img/aranTutorial/Scene0";
+            case MapId.ARAN_TUTO_2 -> "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_TUTO_3 -> "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_TUTO_4 -> "Effect/Direction1.img/aranTutorial/Scene3";
+            case MapId.ARAN_POLEARM -> "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_MAHA -> "Effect/Direction1.img/aranTutorial/Maha";
+            default -> "";
+        };
         showIntro(intro);
     }
 
@@ -763,7 +754,8 @@ public class AbstractPlayerInteraction {
     }
 
     public void removeHPQItems() {
-        int[] items = {4001095, 4001096, 4001097, 4001098, 4001099, 4001100, 4001101};
+        int[] items = {ItemId.GREEN_PRIMROSE_SEED, ItemId.PURPLE_PRIMROSE_SEED, ItemId.PINK_PRIMROSE_SEED,
+                ItemId.BROWN_PRIMROSE_SEED, ItemId.YELLOW_PRIMROSE_SEED, ItemId.BLUE_PRIMROSE_SEED, ItemId.MOON_BUNNYS_RICE_CAKE};
         for (int item : items) {
             removePartyItems(item);
         }

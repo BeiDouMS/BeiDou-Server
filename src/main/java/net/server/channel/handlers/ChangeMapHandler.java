@@ -25,6 +25,8 @@ import client.Character;
 import client.Client;
 import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
+import constants.id.MapId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import server.Trade;
@@ -91,11 +93,11 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                 if (targetid != -1) {
                     if (!chr.isAlive()) {
                         MapleMap map = chr.getMap();
-                        if (wheel && chr.haveItemWithId(5510000, false)) {
+                        if (wheel && chr.haveItemWithId(ItemId.WHEEL_OF_FORTUNE, false)) {
                             // thanks lucasziron (lziron) for showing revivePlayer() triggering by Wheel
 
-                            InventoryManipulator.removeById(c, InventoryType.CASH, 5510000, 1, true, false);
-                            chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(5510000, false)));
+                            InventoryManipulator.removeById(c, InventoryType.CASH, ItemId.WHEEL_OF_FORTUNE, 1, true, false);
+                            chr.sendPacket(PacketCreator.showWheelsLeft(chr.getItemQuantity(ItemId.WHEEL_OF_FORTUNE, false)));
 
                             chr.updateHp(50);
                             chr.changeMap(map, map.findClosestPlayerSpawnpoint(chr.getPosition()));
@@ -120,17 +122,17 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                                     warp = true;
                                 }
                             } else if (divi == 20100) {
-                                if (targetid == 104000000) {
+                                if (targetid == MapId.LITH_HARBOUR) {
                                     c.sendPacket(PacketCreator.lockUI(false));
                                     c.sendPacket(PacketCreator.disableUI(false));
                                     warp = true;
                                 }
                             } else if (divi == 9130401) { // Only allow warp if player is already in Intro map, or else = hack
-                                if (targetid == 130000000 || targetid / 100 == 9130401) { // Cygnus introduction
+                                if (targetid == MapId.EREVE || targetid / 100 == 9130401) { // Cygnus introduction
                                     warp = true;
                                 }
                             } else if (divi == 9140900) { // Aran Introduction
-                                if (targetid == 914090011 || targetid == 914090012 || targetid == 914090013 || targetid == 140090000) {
+                                if (targetid == MapId.ARAN_TUTO_2 || targetid == MapId.ARAN_TUTO_3 || targetid == MapId.ARAN_TUTO_4 || targetid == MapId.ARAN_INTRO) {
                                     warp = true;
                                 }
                             } else if (divi / 10 == 1020) { // Adventurer movie clip Intro
@@ -138,7 +140,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                                     warp = true;
                                 }
                             } else if (divi / 10 >= 980040 && divi / 10 <= 980045) {
-                                if (targetid == 980040000) {
+                                if (targetid == MapId.WITCH_TOWER_ENTRANCE) {
                                     warp = true;
                                 }
                             }
@@ -156,9 +158,9 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                if (chr.getMapId() == 109040004) {
+                if (chr.getMapId() == MapId.FITNESS_EVENT_LAST) {
                     chr.getFitness().resetTimes();
-                } else if (chr.getMapId() == 109030003 || chr.getMapId() == 109030103) {
+                } else if (chr.getMapId() == MapId.OLA_EVENT_LAST_1 || chr.getMapId() == MapId.OLA_EVENT_LAST_2) {
                     chr.getOla().resetTimes();
                 }
 

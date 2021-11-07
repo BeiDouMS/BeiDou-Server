@@ -26,6 +26,7 @@ package client.command.commands.gm0;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.id.MapId;
 import server.events.gm.Event;
 import server.maps.FieldLimit;
 
@@ -44,7 +45,7 @@ public class JoinEventCommand extends Command {
                     if (event.getLimit() > 0) {
                         player.saveLocation("EVENT");
 
-                        if (event.getMapId() == 109080000 || event.getMapId() == 109060001) {
+                        if (event.getMapId() == MapId.EVENT_COCONUT_HARVEST || event.getMapId() == MapId.EVENT_SNOWBALL_ENTRANCE) {
                             player.setTeam(event.getLimit() % 2);
                         }
 

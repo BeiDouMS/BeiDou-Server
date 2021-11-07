@@ -22,6 +22,7 @@ package net.server.coordinator.session;
 import client.Character;
 import client.Client;
 import config.YamlConfig;
+import constants.id.NpcId;
 import net.server.Server;
 import net.server.coordinator.login.LoginStorage;
 import org.slf4j.Logger;
@@ -401,6 +402,6 @@ public class SessionCoordinator {
             }
         }
 
-        c.getAbstractPlayerInteraction().npcTalk(2140000, str);
+        c.getAbstractPlayerInteraction().npcTalk(NpcId.TEMPLE_KEEPER, str);
     }
 }

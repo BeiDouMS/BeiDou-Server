@@ -28,6 +28,7 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -53,20 +54,20 @@ public final class UseItemHandler extends AbstractPacketHandler {
         int itemId = p.readInt();
         Item toUse = chr.getInventory(InventoryType.USE).getItem(slot);
         if (toUse != null && toUse.getQuantity() > 0 && toUse.getItemId() == itemId) {
-            if (itemId == 2050004) {
+            if (itemId == ItemId.ALL_CURE_POTION) {
                 chr.dispelDebuffs();
                 remove(c, slot);
                 return;
-            } else if (itemId == 2050001) {
+            } else if (itemId == ItemId.EYEDROP) {
                 chr.dispelDebuff(Disease.DARKNESS);
                 remove(c, slot);
                 return;
-            } else if (itemId == 2050002) {
+            } else if (itemId == ItemId.TONIC) {
                 chr.dispelDebuff(Disease.WEAKEN);
                 chr.dispelDebuff(Disease.SLOW);
                 remove(c, slot);
                 return;
-            } else if (itemId == 2050003) {
+            } else if (itemId == ItemId.HOLY_WATER) {
                 chr.dispelDebuff(Disease.SEAL);
                 chr.dispelDebuff(Disease.CURSE);
                 remove(c, slot);
@@ -95,7 +96,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
 
             remove(c, slot);
 
-            if (toUse.getItemId() != 2022153) {
+            if (toUse.getItemId() != ItemId.HAPPY_BIRTHDAY) {
                 ii.getItemEffect(toUse.getItemId()).applyTo(chr);
             } else {
                 StatEffect mse = ii.getItemEffect(toUse.getItemId());

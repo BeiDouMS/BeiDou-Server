@@ -22,6 +22,7 @@
 package server.events.gm;
 
 import client.Character;
+import constants.id.MapId;
 import server.TimerManager;
 import tools.PacketCreator;
 
@@ -39,7 +40,7 @@ public class Ola {
     public Ola(final Character chr) {
         this.chr = chr;
         this.schedule = TimerManager.getInstance().schedule(() -> {
-            if (chr.getMapId() >= 109030001 && chr.getMapId() <= 109030303) {
+            if (MapId.isOlaOla(chr.getMapId())) {
                 chr.changeMap(chr.getMap().getReturnMap());
             }
             resetTimes();

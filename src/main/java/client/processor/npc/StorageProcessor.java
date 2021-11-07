@@ -30,6 +30,7 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.KarmaManipulator;
 import config.YamlConfig;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
 import server.ItemInformationProvider;
@@ -132,7 +133,7 @@ public class StorageProcessor {
                         try {
                             item = inv.getItem(slot);
                             if (item != null && item.getItemId() == itemId && (item.getQuantity() >= quantity || ItemConstants.isRechargeable(itemId))) {
-                                if (ItemConstants.isWeddingRing(itemId) || ItemConstants.isWeddingToken(itemId)) {
+                                if (ItemId.isWeddingRing(itemId) || ItemId.isWeddingToken(itemId)) {
                                     c.sendPacket(PacketCreator.enableActions());
                                     return;
                                 }

@@ -22,6 +22,7 @@ package net.server.coordinator.matchchecker.listener;
 import client.Character;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.MapId;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.coordinator.matchchecker.AbstractMatchCheckerListener;
@@ -92,7 +93,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                     broadcastGuildCreationDismiss(matchPlayers);
                     return;
                 }
-                if (leader.getMapId() != 200000301) {
+                if (leader.getMapId() != MapId.GUILD_HQ) {
                     leader.dropMessage(1, "You cannot establish the creation of a new Guild outside of the Guild Headquarters.");
                     broadcastGuildCreationDismiss(matchPlayers);
                     return;

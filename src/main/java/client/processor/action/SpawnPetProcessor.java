@@ -25,6 +25,7 @@ import client.SkillFactory;
 import client.inventory.InventoryType;
 import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
+import constants.id.ItemId;
 import provider.DataProvider;
 import provider.DataProviderFactory;
 import provider.DataTool;
@@ -49,10 +50,9 @@ public class SpawnPetProcessor {
                 }
 
                 int petid = pet.getItemId();
-                if (petid == 5000028 || petid == 5000047) //Handles Dragon AND Robos
-                {
+                if (petid == ItemId.DRAGON_PET || petid == ItemId.ROBO_PET) {
                     if (chr.haveItem(petid + 1)) {
-                        chr.dropMessage(5, "You can't hatch your " + (petid == 5000028 ? "Dragon egg" : "Robo egg") + " if you already have a Baby " + (petid == 5000028 ? "Dragon." : "Robo."));
+                        chr.dropMessage(5, "You can't hatch your " + (petid == ItemId.DRAGON_PET ? "Dragon egg" : "Robo egg") + " if you already have a Baby " + (petid == ItemId.DRAGON_PET ? "Dragon." : "Robo."));
                         c.sendPacket(PacketCreator.enableActions());
                         return;
                     } else {

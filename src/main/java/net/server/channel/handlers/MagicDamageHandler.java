@@ -24,7 +24,7 @@ package net.server.channel.handlers;
 import client.Character;
 import client.*;
 import config.YamlConfig;
-import constants.game.GameConstants;
+import constants.id.MapId;
 import constants.skills.Bishop;
 import constants.skills.Evan;
 import constants.skills.FPArchMage;
@@ -57,7 +57,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
             }
         }
 
-        if (GameConstants.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
+        if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
             chr.setDojoEnergy(chr.getDojoEnergy() + +YamlConfig.config.server.DOJO_ENERGY_ATK);
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }

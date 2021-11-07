@@ -24,6 +24,7 @@ package scripting.map;
 import client.Character.DelayedQuestUpdate;
 import client.Client;
 import client.QuestStatus;
+import constants.id.MapId;
 import scripting.AbstractPlayerInteraction;
 import server.quest.Quest;
 import tools.PacketCreator;
@@ -38,51 +39,35 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
 
     public void displayCygnusIntro() {
         switch (c.getPlayer().getMapId()) {
-            case 913040100:
+            case MapId.CYGNUS_INTRO_LEAD -> {
                 lockUI();
                 c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene0"));
-                break;
-            case 913040101:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene1"));
-                break;
-            case 913040102:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene2"));
-                break;
-            case 913040103:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene3"));
-                break;
-            case 913040104:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene4"));
-                break;
-            case 913040105:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene5"));
-                break;
-            case 913040106:
+            }
+            case MapId.CYGNUS_INTRO_WARRIOR -> c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene1"));
+            case MapId.CYGNUS_INTRO_BOWMAN -> c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene2"));
+            case MapId.CYGNUS_INTRO_MAGE -> c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene3"));
+            case MapId.CYGNUS_INTRO_PIRATE -> c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene4"));
+            case MapId.CYGNUS_INTRO_THIEF -> c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene5"));
+            case MapId.CYGNUS_INTRO_CONCLUSION -> {
                 lockUI();
                 c.sendPacket(PacketCreator.showIntro("Effect/Direction.img/cygnusJobTutorial/Scene6"));
-                break;
+            }
         }
     }
 
     public void displayAranIntro() {
         switch (c.getPlayer().getMapId()) {
-            case 914090010:
+            case MapId.ARAN_TUTO_1 -> {
                 lockUI();
                 c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene0"));
-                break;
-            case 914090011:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene1" + c.getPlayer().getGender()));
-                break;
-            case 914090012:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene2" + c.getPlayer().getGender()));
-                break;
-            case 914090013:
-                c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene3"));
-                break;
-            case 914090100:
+            }
+            case MapId.ARAN_TUTO_2 -> c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene1" + c.getPlayer().getGender()));
+            case MapId.ARAN_TUTO_3 -> c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene2" + c.getPlayer().getGender()));
+            case MapId.ARAN_TUTO_4 -> c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/Scene3"));
+            case MapId.ARAN_POLEARM -> {
                 lockUI();
                 c.sendPacket(PacketCreator.showIntro("Effect/Direction1.img/aranTutorial/HandedPoleArm" + c.getPlayer().getGender()));
-                break;
+            }
         }
     }
 

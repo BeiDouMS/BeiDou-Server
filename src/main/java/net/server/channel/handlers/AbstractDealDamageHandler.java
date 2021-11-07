@@ -28,6 +28,9 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
 import constants.game.GameConstants;
+import constants.id.ItemId;
+import constants.id.MapId;
+import constants.id.MobId;
 import constants.skills.*;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -236,7 +239,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
 
-                    if (GameConstants.isDojoBoss(monster.getId())) {
+                    if (MobId.isDojoBoss(monster.getId())) {
                         if (attack.skill == 1009 || attack.skill == 10001009 || attack.skill == 20001009) {
                             int dmgLimit = (int) Math.ceil(0.3 * monster.getMaxHp());
                             List<Integer> _onedList = new LinkedList<>();
@@ -439,19 +442,11 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                     if (skillLv > 0) {
                                         AbstractPlayerInteraction api = player.getAbstractPlayerInteraction();
 
-                                        int shellId;
-                                        switch (skillLv) {
-                                            case 1:
-                                                shellId = 4000019;
-                                                break;
-
-                                            case 2:
-                                                shellId = 4000000;
-                                                break;
-
-                                            default:
-                                                shellId = 4000016;
-                                        }
+                                        int shellId = switch (skillLv) {
+                                            case 1 -> ItemId.SNAIL_SHELL;
+                                            case 2 -> ItemId.BLUE_SNAIL_SHELL;
+                                            default -> ItemId.RED_SNAIL_SHELL;
+                                        };
 
                                         if (api.haveItem(shellId, 1)) {
                                             api.gainItem(shellId, (short) -1, false);
@@ -740,7 +735,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             calcDmgMax = (long) Math.ceil(calcDmgMax * dmgBuff);
         }
 
-        if (chr.getMapId() >= 914000000 && chr.getMapId() <= 914000500) {
+        if (chr.getMapId() >= MapId.ARAN_TUTORIAL_START && chr.getMapId() <= MapId.ARAN_TUTORIAL_MAX) {
             calcDmgMax += 80000; // Aran Tutorial.
         }
 

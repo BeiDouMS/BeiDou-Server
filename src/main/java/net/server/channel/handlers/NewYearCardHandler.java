@@ -23,6 +23,7 @@ import client.Character;
 import client.Client;
 import client.inventory.Item;
 import client.newyear.NewYearCardRecord;
+import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
@@ -48,13 +49,13 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
         byte reqMode = p.readByte();                 //[00] -> NewYearReq (0 = Send)
 
         if (reqMode == 0) {  // card has been sent
-            if (player.haveItem(2160101)) {  // new year's card
+            if (player.haveItem(ItemId.NEW_YEARS_CARD)) {  // new year's card
                 short slot = p.readShort();                      //[00 2C] -> nPOS (Item Slot Pos)
                 int itemid = p.readInt();                        //[00 20 F5 E5] -> nItemID (item id)
 
                 int status = getValidNewYearCardStatus(itemid, player, slot);
                 if (status == 0) {
-                    if (player.canHold(4300000, 1)) {
+                    if (player.canHold(ItemId.NEW_YEARS_CARD_SEND, 1)) {
                         String receiver = p.readString();  //[04 00 54 65 73 74] -> sReceiverName (person to send to)
 
                         int receiverid = getReceiverId(receiver, c.getWorld());
@@ -66,8 +67,8 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
                                 NewYearCardRecord.saveNewYearCard(newyear);
                                 player.addNewYearRecord(newyear);
 
-                                player.getAbstractPlayerInteraction().gainItem(2160101, (short) -1);
-                                player.getAbstractPlayerInteraction().gainItem(4300000, (short) 1);
+                                player.getAbstractPlayerInteraction().gainItem(ItemId.NEW_YEARS_CARD, (short) -1);
+                                player.getAbstractPlayerInteraction().gainItem(ItemId.NEW_YEARS_CARD_SEND, (short) 1);
 
                                 Server.getInstance().setNewYearCard(newyear);
                                 newyear.startNewYearCardTask();
@@ -94,11 +95,11 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
 
             if (newyear != null && newyear.getReceiverId() == player.getId() && !newyear.isReceiverCardReceived()) {
                 if (!newyear.isSenderCardDiscarded()) {
-                    if (player.canHold(4301000, 1)) {
+                    if (player.canHold(ItemId.NEW_YEARS_CARD_RECEIVED, 1)) {
                         newyear.stopNewYearCardTask();
                         NewYearCardRecord.updateNewYearCard(newyear);
 
-                        player.getAbstractPlayerInteraction().gainItem(4301000, (short) 1);
+                        player.getAbstractPlayerInteraction().gainItem(ItemId.NEW_YEARS_CARD_RECEIVED, (short) 1);
                         if (!newyear.getMessage().isEmpty()) {
                             player.dropMessage(6, "[New Year] " + newyear.getSenderName() + ": " + newyear.getMessage());
                         }

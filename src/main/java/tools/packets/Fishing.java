@@ -21,7 +21,8 @@ package tools.packets;
 
 import client.Character;
 import config.YamlConfig;
-import constants.game.GameConstants;
+import constants.id.ItemId;
+import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import server.ItemInformationProvider;
 import tools.PacketCreator;
@@ -71,7 +72,7 @@ public class Fishing {
             return;
         }
 
-        if (!GameConstants.isFishingArea(chr.getMapId())) {
+        if (!MapId.isFishingArea(chr.getMapId())) {
             chr.dropMessage("You are not in a fishing area!");
             return;
         }
@@ -124,7 +125,7 @@ public class Fishing {
 
     public static int getRandomItem() {
         int rand = (int) (100.0 * Math.random());
-        int[] commons = {1002851, 2002020, 2002020, 2000006, 2000018, 2002018, 2002024, 2002027, 2002027, 2000018, 2000018, 2000018, 2000018, 2002030, 2002018, 2000016}; // filler' up 
+        int[] commons = {1002851, 2002020, 2002020, ItemId.MANA_ELIXIR, 2000018, 2002018, 2002024, 2002027, 2002027, 2000018, 2000018, 2000018, 2000018, 2002030, 2002018, 2000016}; // filler' up
         int[] uncommons = {1000025, 1002662, 1002812, 1002850, 1002881, 1002880, 1012072, 4020009, 2043220, 2043022, 2040543, 2044420, 2040943, 2043713, 2044220, 2044120, 2040429, 2043220, 2040943}; // filler' uptoo 
         int[] rares = {1002859, 1002553, 1002762, 1002763, 1002764, 1002765, 1002766, 1002663, 1002788, 1002949, 2049100, 2340000, 2040822, 2040822, 2040822, 2040822}; // filler' uplast 
 

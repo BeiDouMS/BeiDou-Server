@@ -27,6 +27,7 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import constants.game.GameConstants;
+import constants.id.NpcId;
 import server.maps.*;
 
 import java.util.ArrayList;
@@ -80,7 +81,7 @@ public class GotoCommand extends Command {
                 sendStr += ("\r\n#rAreas:#k\r\n" + GOTO_AREAS_INFO);
             }
 
-            player.getAbstractPlayerInteraction().npcTalk(9000020, sendStr);
+            player.getAbstractPlayerInteraction().npcTalk(NpcId.SPINEL, sendStr);
             return;
         }
 
@@ -96,7 +97,7 @@ public class GotoCommand extends Command {
             }
         }
 
-        HashMap<String, Integer> gotomaps;
+        Map<String, Integer> gotomaps;
         if (player.isGM()) {
             gotomaps = new HashMap<>(GameConstants.GOTO_AREAS);     // distinct map registry for GM/users suggested thanks to Vcoc
             gotomaps.putAll(GameConstants.GOTO_TOWNS);  // thanks Halcyon (UltimateMors) for pointing out duplicates on listed entries functionality
@@ -118,7 +119,7 @@ public class GotoCommand extends Command {
                 sendStr += ("\r\n#rAreas:#k\r\n" + GOTO_AREAS_INFO);
             }
 
-            player.getAbstractPlayerInteraction().npcTalk(9000020, sendStr);
+            player.getAbstractPlayerInteraction().npcTalk(NpcId.SPINEL, sendStr);
         }
     }
 }
