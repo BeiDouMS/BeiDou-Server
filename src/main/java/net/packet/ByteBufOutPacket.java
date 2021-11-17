@@ -12,7 +12,6 @@ import java.awt.*;
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
     private final ByteBuf byteBuf;
-    private byte[] bytes;
 
     public ByteBufOutPacket() {
         this.byteBuf = Unpooled.buffer();
@@ -32,12 +31,7 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public byte[] getBytes() {
-        if (bytes == null) {
-            // Avoid creating new byte arrays when the packet is broadcast
-            bytes = ByteBufUtil.getBytes(byteBuf);
-        }
-
-        return bytes;
+        return ByteBufUtil.getBytes(byteBuf);
     }
 
     @Override
