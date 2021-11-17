@@ -203,15 +203,4 @@ class ByteBufOutPacketTest {
         assertEquals(0, wrapped.readByte());
         assertEquals(secondWrittenByte, wrapped.readByte());
     }
-
-    @Test
-    void whenGettingBytesRepeatedly_bytesShouldBeLockedInPlace() {
-        outPacket.writeByte(1);
-        byte[] initialWrite = outPacket.getBytes();
-
-        outPacket.writeByte(2);
-        byte[] afterWritingAgain = outPacket.getBytes();
-
-        assertArrayEquals(initialWrite, afterWritingAgain);
-    }
 }
