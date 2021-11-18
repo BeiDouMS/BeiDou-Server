@@ -857,10 +857,6 @@ public class Server {
             CashIdGenerator.loadExistentCashIdsFromDb(con);
             applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
             applyAllWorldTransfers(con);
-
-            if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-                Family.loadAllFamilies(con);
-            }
         } catch (SQLException sqle) {
             log.error("Failed to run all startup-bound database tasks", sqle);
             throw new IllegalStateException(sqle);
@@ -882,6 +878,12 @@ public class Server {
             initWorldPlayerRanking();
 
             loadPlayerNpcMapStepFromDb();
+
+            if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+                try (Connection con = DatabaseConnection.getConnection()) {
+                    Family.loadAllFamilies(con);
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();//For those who get errors
             log.error("[SEVERE] Syntax error in 'world.ini'.");
@@ -898,7 +900,6 @@ public class Server {
             }
         }
 
-        // acceptor = initAcceptor(8484);
         loginServer = initLoginServer(8484);
 
         log.info("Listening on port 8484");
