@@ -844,6 +844,7 @@ public class Server {
         futures.add(initExecutor.submit(() -> Quest.loadAllQuests()));
         futures.add(initExecutor.submit(() -> SkillbookInformationProvider.loadAllSkillbookInformation()));
         futures.add(initExecutor.submit(() -> PlayerNPCFactory.loadFactoryMetadata()));
+        initExecutor.shutdown();
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
