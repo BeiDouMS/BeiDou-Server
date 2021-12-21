@@ -42,7 +42,6 @@ import java.util.Set;
 public class MonitoredChrLogger {
     private static final Logger log = LoggerFactory.getLogger(MonitoredChrLogger.class);
     private static final Set<Integer> monitoredChrIds = new HashSet<>();
-    public static final Set<Integer> ignored = new HashSet<>();
 
     /**
      * Toggle monitored status for a character id
