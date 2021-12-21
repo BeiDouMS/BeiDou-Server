@@ -23,7 +23,8 @@ package net.packet.logging;
 import client.Character;
 import client.Client;
 import net.opcodes.RecvOpcode;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.HexTool;
 
 import java.util.Arrays;
@@ -31,16 +32,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Logs packets to console and file.
+ * Logs packets from monitored characters to a file.
  *
  * @author Alan (SharpAceX)
  */
 
-public class MapleLogger {
+public class MonitoredChrLogger {
+    private static final Logger log = LoggerFactory.getLogger(MonitoredChrLogger.class);
     public static final Set<Integer> monitored = new HashSet<>();
     public static final Set<Integer> ignored = new HashSet<>();
 
-    public static void logRecv(Client c, short packetId, byte[] packetContent) {
+    public static void logPacketIfMonitored(Client c, short packetId, byte[] packetContent) {
         Character chr = c.getPlayer();
         if (chr == null) {
             return;
@@ -52,8 +54,9 @@ public class MapleLogger {
         if (isRecvBlocked(op)) {
             return;
         }
-        String packet = op + "\r\n" + HexTool.toString(packetContent);
-        FilePrinter.printError(FilePrinter.PACKET_LOGS + c.getAccountName() + "-" + chr.getName() + ".txt", packet);
+
+        String packet = packetContent.length > 0 ? HexTool.toString(packetContent) : "<empty>";
+        log.info("{}-{} {}-{}", c.getAccountName(), chr.getName(), packetId, packet);
     }
 
     private static boolean isRecvBlocked(RecvOpcode op) {

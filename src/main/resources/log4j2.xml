@@ -5,6 +5,7 @@
         <Property name="standard-pattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{2} - %msg%n</Property>
         <Property name="packet-pattern">%d{HH:mm:ss.SSS} %-15logger{1} - %msg%n</Property>
     </Properties>
+
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout>
@@ -29,7 +30,14 @@
                 <Pattern>${packet-pattern}</Pattern>
             </PatternLayout>
         </Console>
+
+        <File name="MonitoredPacketFile" fileName="logs/monitored-packets.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
+
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="File" level="debug"/>
@@ -38,6 +46,10 @@
         <Logger name="net.packet.logging" level="debug" additivity="false">
             <AppenderRef ref="PacketConsole"/>
             <AppenderRef ref="File"/>
+        </Logger>
+
+        <Logger name="net.packet.logging.MonitoredChrLogger" level="info" additivity="false">
+            <AppenderRef ref="MonitoredPacketFile"/>
         </Logger>
 
         <Logger name="com.zaxxer.hikari" level="info"/>

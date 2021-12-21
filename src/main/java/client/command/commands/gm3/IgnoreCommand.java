@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import net.packet.logging.MapleLogger;
+import net.packet.logging.MonitoredChrLogger;
 import net.server.Server;
 import tools.PacketCreator;
 
@@ -47,11 +47,11 @@ public class IgnoreCommand extends Command {
             player.message("Player '" + params[0] + "' could not be found on this world.");
             return;
         }
-        boolean monitored_ = MapleLogger.ignored.contains(victim.getId());
+        boolean monitored_ = MonitoredChrLogger.ignored.contains(victim.getId());
         if (monitored_) {
-            MapleLogger.ignored.remove(victim.getId());
+            MonitoredChrLogger.ignored.remove(victim.getId());
         } else {
-            MapleLogger.ignored.add(victim.getId());
+            MonitoredChrLogger.ignored.add(victim.getId());
         }
         player.yellowMessage(victim.getName() + " is " + (!monitored_ ? "now being ignored." : "no longer being ignored."));
         String message_ = player.getName() + (!monitored_ ? " has started ignoring " : " has stopped ignoring ") + victim.getName() + ".";

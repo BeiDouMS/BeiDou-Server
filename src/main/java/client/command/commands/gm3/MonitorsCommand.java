@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import net.packet.logging.MapleLogger;
+import net.packet.logging.MonitoredChrLogger;
 
 public class MonitorsCommand extends Command {
     {
@@ -36,7 +36,7 @@ public class MonitorsCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        for (Integer cid : MapleLogger.monitored) {
+        for (Integer cid : MonitoredChrLogger.monitored) {
             player.yellowMessage(Character.getNameById(cid) + " is being monitored.");
         }
     }

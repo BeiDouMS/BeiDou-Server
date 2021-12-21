@@ -34,7 +34,7 @@ import net.netty.InvalidPacketHeaderException;
 import net.packet.InPacket;
 import net.packet.Packet;
 import net.packet.logging.LoggingUtil;
-import net.packet.logging.MapleLogger;
+import net.packet.logging.MonitoredChrLogger;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -200,7 +200,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
         if (handler != null && handler.validateState(this)) {
             try {
-                MapleLogger.logRecv(this, opcode, packet.getBytes());
+                MonitoredChrLogger.logPacketIfMonitored(this, opcode, packet.getBytes());
                 handler.handlePacket(packet, this);
             } catch (final Throwable t) {
                 FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + packet);

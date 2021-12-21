@@ -26,7 +26,7 @@ package client.command.commands.gm3;
 import client.Character;
 import client.Client;
 import client.command.Command;
-import net.packet.logging.MapleLogger;
+import net.packet.logging.MonitoredChrLogger;
 
 public class IgnoredCommand extends Command {
     {
@@ -36,7 +36,7 @@ public class IgnoredCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        for (Integer cid : MapleLogger.ignored) {
+        for (Integer cid : MonitoredChrLogger.ignored) {
             player.yellowMessage(Character.getNameById(cid) + " is being ignored.");
         }
     }

@@ -24,7 +24,7 @@ package client.autoban;
 
 import client.Character;
 import config.YamlConfig;
-import net.packet.logging.MapleLogger;
+import net.packet.logging.MonitoredChrLogger;
 import net.server.Server;
 import tools.FilePrinter;
 import tools.PacketCreator;
@@ -87,7 +87,7 @@ public enum AutobanFactory {
 
     public void alert(Character chr, String reason) {
         if (YamlConfig.config.server.USE_AUTOBAN) {
-            if (chr != null && MapleLogger.ignored.contains(chr.getId())) {
+            if (chr != null && MonitoredChrLogger.ignored.contains(chr.getId())) {
                 return;
             }
             Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
