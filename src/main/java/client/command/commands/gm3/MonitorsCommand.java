@@ -30,14 +30,14 @@ import net.packet.logging.MonitoredChrLogger;
 
 public class MonitorsCommand extends Command {
     {
-        setDescription("Show all players having their packets logged.");
+        setDescription("Show all characters being monitored for packet logging");
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        for (Integer cid : MonitoredChrLogger.monitored) {
-            player.yellowMessage(Character.getNameById(cid) + " is being monitored.");
+        for (int chrId : MonitoredChrLogger.getMonitoredChrIds()) {
+            player.yellowMessage(Character.getNameById(chrId) + " is being monitored.");
         }
     }
 }

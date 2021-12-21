@@ -32,7 +32,7 @@ import tools.PacketCreator;
 
 public class MonitorCommand extends Command {
     {
-        setDescription("Toggle logging the packets of a player.");
+        setDescription("Toggle monitored packet logging of a character.");
     }
 
     @Override
@@ -47,14 +47,9 @@ public class MonitorCommand extends Command {
             player.message("Player '" + params[0] + "' could not be found on this world.");
             return;
         }
-        boolean monitored = MonitoredChrLogger.monitored.contains(victim.getId());
-        if (monitored) {
-            MonitoredChrLogger.monitored.remove(victim.getId());
-        } else {
-            MonitoredChrLogger.monitored.add(victim.getId());
-        }
-        player.yellowMessage(victim.getId() + " is " + (!monitored ? "now being monitored." : "no longer being monitored."));
-        String message = player.getName() + (!monitored ? " has started monitoring " : " has stopped monitoring ") + victim.getId() + ".";
+        boolean monitored = MonitoredChrLogger.toggleMonitored(victim.getId());
+        player.yellowMessage(victim.getId() + " is " + (monitored ? "now being monitored." : "no longer being monitored."));
+        String message = player.getName() + (monitored ? " has started monitoring " : " has stopped monitoring ") + victim.getId() + ".";
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message));
 
     }
