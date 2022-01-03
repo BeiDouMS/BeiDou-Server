@@ -2,10 +2,8 @@ package tools;
 
 import client.Character;
 import client.Client;
-import client.inventory.Item;
 import net.server.Server;
 import server.ItemInformationProvider;
-import server.Trade;
 import server.expeditions.Expedition;
 
 import java.text.SimpleDateFormat;
@@ -16,26 +14,6 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class LogHelper {
-
-    public static void logTrade(Trade trade1, Trade trade2) {
-        String name1 = trade1.getChr().getName();
-        String name2 = trade2.getChr().getName();
-        String log = "TRADE BETWEEN " + name1 + " AND " + name2 + "\r\n";
-        //Trade 1 to trade 2
-        log += trade1.getExchangeMesos() + " mesos from " + name1 + " to " + name2 + " \r\n";
-        for (Item item : trade1.getItems()) {
-            String itemName = ItemInformationProvider.getInstance().getName(item.getItemId()) + "(" + item.getItemId() + ")";
-            log += item.getQuantity() + " " + itemName + " from " + name1 + " to " + name2 + " \r\n";
-        }
-        //Trade 2 to trade 1
-        log += trade2.getExchangeMesos() + " mesos from " + name2 + " to " + name1 + " \r\n";
-        for (Item item : trade2.getItems()) {
-            String itemName = ItemInformationProvider.getInstance().getName(item.getItemId()) + "(" + item.getItemId() + ")";
-            log += item.getQuantity() + " " + itemName + " from " + name2 + " to " + name1 + " \r\n";
-        }
-        log += "\r\n\r\n";
-        FilePrinter.print(FilePrinter.LOG_TRADE, log);
-    }
 
     public static void logExpedition(Expedition expedition) {
         Server.getInstance().broadcastGMMessage(expedition.getLeader().getWorld(), PacketCreator.serverNotice(6, expedition.getType().toString() + " Expedition with leader " + expedition.getLeader().getName() + " finished after " + getTimeString(expedition.getStartTime())));

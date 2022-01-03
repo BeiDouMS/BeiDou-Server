@@ -36,6 +36,12 @@
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
         </File>
+
+        <File name="TradeFile" fileName="logs/trades.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -43,13 +49,16 @@
             <AppenderRef ref="File" level="debug"/>
             <AppenderRef ref="Console" level="trace"/>
         </Root>
+
         <Logger name="net.packet.logging" level="debug" additivity="false">
             <AppenderRef ref="PacketConsole"/>
             <AppenderRef ref="File"/>
         </Logger>
-
         <Logger name="net.packet.logging.MonitoredChrLogger" level="info" additivity="false">
             <AppenderRef ref="MonitoredPacketFile"/>
+        </Logger>
+        <Logger name="server.Trade" level="info" additivity="false">
+            <AppenderRef ref="TradeFile"/>
         </Logger>
 
         <Logger name="com.zaxxer.hikari" level="info"/>

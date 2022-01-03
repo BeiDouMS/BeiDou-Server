@@ -33,13 +33,15 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
-import tools.LogHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 import tools.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -47,6 +49,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Ronan - concurrency safety + check available slots + trade results
  */
 public class Trade {
+    private static final Logger log = LoggerFactory.getLogger(Trade.class);
 
     public enum TradeResult {
         NO_RESPONSE(1),
@@ -348,7 +351,7 @@ public class Trade {
                 }
             }
 
-            LogHelper.logTrade(local, partner);
+            logTrade(local, partner);
             local.completeTrade();
             partner.completeTrade();
 
@@ -520,5 +523,31 @@ public class Trade {
 
     public void setFullTrade(boolean fullTrade) {
         this.fullTrade = fullTrade;
+    }
+
+    private static void logTrade(Trade trade1, Trade trade2) {
+        String name1 = trade1.getChr().getName();
+        String name2 = trade2.getChr().getName();
+        StringBuilder message = new StringBuilder();
+        message.append(String.format("Committing trade between %s and %s%n", name1, name2));
+        //Trade 1 to trade 2
+        message.append(String.format("Trading %s -> %s: %d mesos, items: %s%n", name1, name2,
+                trade1.getExchangeMesos(), getFormattedItemLogMessage(trade1.getItems())));
+
+        //Trade 2 to trade 1
+        message.append(String.format("Trading %s -> %s: %d mesos, items: %s%n", name2, name1,
+                trade2.getExchangeMesos(), getFormattedItemLogMessage(trade2.getItems())));
+
+        log.info(message.toString());
+    }
+
+    private static String getFormattedItemLogMessage(List<Item> items) {
+        StringJoiner sj = new StringJoiner(", ", "[", "]");
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        for (Item item : items) {
+            String itemName = ii.getName(item.getItemId());
+            sj.add(String.format("%dx %s (%d)", item.getQuantity(), itemName, item.getItemId()));
+        }
+        return sj.toString();
     }
 }
