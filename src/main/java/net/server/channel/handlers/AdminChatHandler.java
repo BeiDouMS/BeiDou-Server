@@ -22,7 +22,7 @@ public class AdminChatHandler extends AbstractPacketHandler {
         String message = p.readString();
         Packet packet = PacketCreator.serverNotice(p.readByte(), message);//maybe I should make a check for the slea.readByte()... but I just hope gm's don't fuck things up :)
         switch (mode) {
-            case 0:// /alertall, /noticeall, /slideall
+            case 0 -> {// /alertall, /noticeall, /slideall
                 c.getWorldServer().broadcastPacket(packet);
                 ChatLogger.log(c, "Alert All", message);
             }
