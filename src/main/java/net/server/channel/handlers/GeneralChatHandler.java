@@ -25,11 +25,10 @@ import client.Character;
 import client.Client;
 import client.autoban.AutobanFactory;
 import client.command.CommandsExecutor;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import server.ChatLogger;
 import tools.FilePrinter;
-import tools.LogHelper;
 import tools.PacketCreator;
 
 public final class GeneralChatHandler extends AbstractPacketHandler {
@@ -59,14 +58,10 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
 
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "General", s);
-                }
+                ChatLogger.log(c, "General", s);
             } else {
                 chr.getMap().broadcastGMMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "GM General", s);
-                }
+                ChatLogger.log(c, "GM General", s);
             }
 
             chr.getAutobanManager().spam(7);

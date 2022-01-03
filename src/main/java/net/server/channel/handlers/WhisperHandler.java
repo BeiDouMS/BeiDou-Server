@@ -24,11 +24,10 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import client.autoban.AutobanFactory;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import server.ChatLogger;
 import tools.FilePrinter;
-import tools.LogHelper;
 import tools.PacketCreator;
 import tools.PacketCreator.WhisperFlag;
 
@@ -99,9 +98,7 @@ public final class WhisperHandler extends AbstractPacketHandler {
             return;
         }
 
-        if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-            LogHelper.logChat(user.getClient(), "Whisper To " + target.getName(), message);
-        }
+        ChatLogger.log(user.getClient(), "Whisper To " + target.getName(), message);
 
         target.sendPacket(PacketCreator.getWhisperReceive(user.getName(), user.getClient().getChannel() - 1, user.isGM(), message));
 

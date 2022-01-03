@@ -23,11 +23,10 @@ package net.server.channel.handlers;
 
 import client.Client;
 import client.autoban.AutobanFactory;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import server.ChatLogger;
 import tools.FilePrinter;
-import tools.LogHelper;
 import tools.PacketCreator;
 
 public final class PetChatHandler extends AbstractPacketHandler {
@@ -50,8 +49,6 @@ public final class PetChatHandler extends AbstractPacketHandler {
             return;
         }
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.petChat(c.getPlayer().getId(), pet, act, text), true);
-        if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-            LogHelper.logChat(c, "Pet", text);
-        }
+        ChatLogger.log(c, "Pet", text);
     }
 }

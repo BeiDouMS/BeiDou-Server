@@ -23,10 +23,9 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.LogHelper;
+import server.ChatLogger;
 import tools.PacketCreator;
 
 public final class SpouseChatHandler extends AbstractPacketHandler {
@@ -41,9 +40,7 @@ public final class SpouseChatHandler extends AbstractPacketHandler {
             if (spouse != null) {
                 spouse.sendPacket(PacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
                 c.sendPacket(PacketCreator.OnCoupleMessage(c.getPlayer().getName(), msg, true));
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "Spouse", msg);
-                }
+                ChatLogger.log(c, "Spouse", msg);
             } else {
                 c.getPlayer().dropMessage(5, "Your spouse is currently offline.");
             }

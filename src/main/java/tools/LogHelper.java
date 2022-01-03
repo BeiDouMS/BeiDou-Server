@@ -1,11 +1,9 @@
 package tools;
 
 import client.Character;
-import client.Client;
 import server.ItemInformationProvider;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -32,10 +30,4 @@ public class LogHelper {
         String log = player.getName() + " got a " + itemName + "(" + itemid + ") from the " + map + " gachapon. - " + timeStamp;
         FilePrinter.print(FilePrinter.LOG_GACHAPON, log);
     }
-
-    public static void logChat(Client player, String chatType, String text) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        FilePrinter.print(FilePrinter.LOG_CHAT, "[" + sdf.format(Calendar.getInstance().getTime()) + "] (" + chatType + ") " + player.getPlayer().getName() + ": " + text);
-    }
-
 }

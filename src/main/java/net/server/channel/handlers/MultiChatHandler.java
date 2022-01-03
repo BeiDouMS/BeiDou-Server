@@ -24,13 +24,12 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import client.autoban.AutobanFactory;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import net.server.world.World;
+import server.ChatLogger;
 import tools.FilePrinter;
-import tools.LogHelper;
 import tools.PacketCreator;
 
 public final class MultiChatHandler extends AbstractPacketHandler {
@@ -57,26 +56,18 @@ public final class MultiChatHandler extends AbstractPacketHandler {
         World world = c.getWorldServer();
         if (type == 0) {
             world.buddyChat(recipients, player.getId(), player.getName(), chattext);
-            if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                LogHelper.logChat(c, "Buddy", chattext);
-            }
+            ChatLogger.log(c, "Buddy", chattext);
         } else if (type == 1 && player.getParty() != null) {
             world.partyChat(player.getParty(), chattext, player.getName());
-            if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                LogHelper.logChat(c, "Party", chattext);
-            }
+            ChatLogger.log(c, "Party", chattext);
         } else if (type == 2 && player.getGuildId() > 0) {
             Server.getInstance().guildChat(player.getGuildId(), player.getName(), player.getId(), chattext);
-            if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                LogHelper.logChat(c, "Guild", chattext);
-            }
+            ChatLogger.log(c, "Guild", chattext);
         } else if (type == 3 && player.getGuild() != null) {
             int allianceId = player.getGuild().getAllianceId();
             if (allianceId > 0) {
                 Server.getInstance().allianceMessage(allianceId, PacketCreator.multiChat(player.getName(), chattext, 3), player.getId(), -1);
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "Ally", chattext);
-                }
+                ChatLogger.log(c, "Ally", chattext);
             }
         }
         player.getAutobanManager().spam(7);

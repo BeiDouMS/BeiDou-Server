@@ -48,6 +48,12 @@
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
         </File>
+
+        <File name="ChatFile" fileName="logs/chat.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -69,6 +75,9 @@
         </Logger>
         <Logger name="server.expeditions.Expedition" level="info" additivity="false">
             <AppenderRef ref="ExpeditionFile"/>
+        </Logger>
+        <Logger name="server.ChatLogger" level="info" additivity="false">
+            <AppenderRef ref="ChatFile"/>
         </Logger>
 
         <Logger name="com.zaxxer.hikari" level="info"/>
