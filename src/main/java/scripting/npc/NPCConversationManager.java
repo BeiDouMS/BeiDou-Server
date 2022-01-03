@@ -62,7 +62,6 @@ import server.partyquest.MonsterCarnival;
 import server.partyquest.Pyramid;
 import server.partyquest.Pyramid.PyramidMode;
 import tools.FilePrinter;
-import tools.LogHelper;
 import tools.PacketCreator;
 import tools.packets.WeddingPackets;
 
@@ -492,7 +491,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void logLeaf(String prize) {
-        LogHelper.logLeaf(getPlayer(), true, prize);
+        MapleLeafLogger.log(getPlayer(), true, prize);
     }
 
     public boolean createPyramid(String mode, boolean party) {//lol

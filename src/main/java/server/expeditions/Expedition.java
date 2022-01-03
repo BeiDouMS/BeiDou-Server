@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
 import server.TimerManager;
 import server.life.Monster;
 import server.maps.MapleMap;
-import tools.LogHelper;
 import tools.PacketCreator;
 
 import java.text.SimpleDateFormat;
@@ -48,6 +47,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ScheduledFuture;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * @author Alan (SharpAceX)
@@ -159,11 +159,11 @@ public class Expedition {
     }
 
     private void log() {
-        final String gmMessage = type + " Expedition with leader " + leader.getName() + " finished after " + LogHelper.getTimeString(getStartTime());
+        final String gmMessage = type + " Expedition with leader " + leader.getName() + " finished after " + getTimeString(getStartTime());
         Server.getInstance().broadcastGMMessage(getLeader().getWorld(), PacketCreator.serverNotice(6, gmMessage));
 
         String log = type + " EXPEDITION\r\n";
-        log += LogHelper.getTimeString(startTime) + "\r\n";
+        log += getTimeString(startTime) + "\r\n";
 
         for (String memberName : getMembers().values()) {
             log += ">>" + memberName + "\r\n";
@@ -175,6 +175,13 @@ public class Expedition {
         log += "\r\n";
 
         Expedition.log.info(log);
+    }
+
+    private static String getTimeString(long then) {
+        long duration = System.currentTimeMillis() - then;
+        int seconds = (int) (duration / SECONDS.toMillis(1)) % 60;
+        int minutes = (int) ((duration / MINUTES.toMillis(1)) % 60);
+        return minutes + " Minutes and " + seconds + " Seconds";
     }
 
     public void finishRegistration() {
@@ -289,7 +296,7 @@ public class Expedition {
         for (int expeditionBoss : EXPEDITION_BOSSES) {
             if (mob.getId() == expeditionBoss) { //If the monster killed was a boss
                 String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                bossLogs.add(">" + mob.getName() + " was killed after " + LogHelper.getTimeString(startTime) + " - " + timeStamp + "\r\n");
+                bossLogs.add(">" + mob.getName() + " was killed after " + getTimeString(startTime) + " - " + timeStamp + "\r\n");
                 return;
             }
         }

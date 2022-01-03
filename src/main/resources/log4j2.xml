@@ -60,6 +60,12 @@
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
         </File>
+
+        <File name="MapleLeafFile" fileName="logs/mapleleaf.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -87,6 +93,9 @@
         </Logger>
         <Logger name="server.gachapon.Gachapon" level="info" additivity="false">
             <AppenderRef ref="GachaponFile"/>
+        </Logger>
+        <Logger name="server.MapleLeafLogger" level="info" additivity="false">
+            <AppenderRef ref="MapleLeafFile"/>
         </Logger>
 
         <Logger name="com.zaxxer.hikari" level="info"/>

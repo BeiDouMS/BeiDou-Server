@@ -57,6 +57,7 @@ import scripting.npc.NPCConversationManager;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestActionManager;
 import scripting.quest.QuestScriptManager;
+import server.MapleLeafLogger;
 import server.ThreadManager;
 import server.TimerManager;
 import server.life.Monster;
@@ -1263,7 +1264,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
         votePoints -= points;
         saveVotePoints();
-        LogHelper.logLeaf(player, false, Integer.toString(points));
+        MapleLeafLogger.log(player, false, Integer.toString(points));
     }
 
     private void saveVotePoints() {
