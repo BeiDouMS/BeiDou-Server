@@ -413,7 +413,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 (getNpc() - NpcId.GACHAPON_HENESYS) : getNpc() == NpcId.GACHAPON_NLC ? 8 : 9];
         String map = c.getChannelServer().getMapFactory().getMap(mapId).getMapName();
 
-        LogHelper.logGacha(getPlayer(), item.getId(), map);
+        Gachapon.log(getPlayer(), item.getId(), map);
 
         if (item.getTier() > 0) { //Uncommon and Rare
             Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.gachaponMessage(itemGained, map, getPlayer()));
