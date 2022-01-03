@@ -2,9 +2,7 @@ package tools;
 
 import client.Character;
 import client.Client;
-import net.server.Server;
 import server.ItemInformationProvider;
-import server.expeditions.Expedition;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,23 +12,6 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class LogHelper {
-
-    public static void logExpedition(Expedition expedition) {
-        Server.getInstance().broadcastGMMessage(expedition.getLeader().getWorld(), PacketCreator.serverNotice(6, expedition.getType().toString() + " Expedition with leader " + expedition.getLeader().getName() + " finished after " + getTimeString(expedition.getStartTime())));
-
-        String log = expedition.getType().toString() + " EXPEDITION\r\n";
-        log += getTimeString(expedition.getStartTime()) + "\r\n";
-
-        for (String memberName : expedition.getMembers().values()) {
-            log += ">>" + memberName + "\r\n";
-        }
-        log += "BOSS KILLS\r\n";
-        for (String message : expedition.getBossLogs()) {
-            log += message;
-        }
-        log += "\r\n";
-        FilePrinter.print(FilePrinter.LOG_EXPEDITION, log);
-    }
 
     public static String getTimeString(long then) {
         long duration = System.currentTimeMillis() - then;
