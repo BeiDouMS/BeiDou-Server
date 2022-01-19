@@ -8464,7 +8464,7 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(i + 31, getSlots(i));
                     }
 
-                    monsterbook.saveCards(getId());
+                    monsterbook.saveCards(con, id);
 
                     ps.setInt(36, bookCover);
                     ps.setInt(37, vanquisherStage);
