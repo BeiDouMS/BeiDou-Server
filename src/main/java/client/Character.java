@@ -57,6 +57,8 @@ import net.server.services.task.world.CharacterSaveService;
 import net.server.services.type.ChannelServices;
 import net.server.services.type.WorldServices;
 import net.server.world.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
@@ -99,6 +101,7 @@ import java.util.regex.Pattern;
 import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
+    private static final Logger log = LoggerFactory.getLogger(Character.class);
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
     private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
     private static final String[] BLOCKED_NAMES = {"admin", "owner", "moderator", "intern", "donor", "administrator", "FREDRICK", "help", "helper", "alert", "notice", "maplestory", "fuck", "wizet", "fucking", "negro", "fuk", "fuc", "penis", "pussy", "asshole", "gay",
@@ -10968,8 +10971,7 @@ public class Character extends AbstractCharacterObject {
                 return "Character is the leader of a guild.";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);
+            log.error("Change character name", e);
             return "SQL Error";
         }
         try (PreparedStatement ps = con.prepareStatement("SELECT tempban FROM accounts WHERE id = ?")) {
@@ -10983,8 +10985,7 @@ public class Character extends AbstractCharacterObject {
                 return "Account has been banned.";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);
+            log.error("Change character name", e);
             return "SQL Error";
         }
         try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS rowcount FROM characters WHERE accountid = ? AND world = ?")) {
@@ -10998,8 +10999,7 @@ public class Character extends AbstractCharacterObject {
                 return "Too many characters on destination world.";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);
+            log.error("Change character name", e);
             return "SQL Error";
         }
         return null;

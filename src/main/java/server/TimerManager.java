@@ -22,7 +22,8 @@
 package server;
 
 import net.server.Server;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
@@ -36,6 +37,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class TimerManager implements TimerManagerMBean {
+    private static final Logger log = LoggerFactory.getLogger(TimerManager.class);
     private static final TimerManager instance = new TimerManager();
 
     public static TimerManager getInstance() {
@@ -147,7 +149,7 @@ public class TimerManager implements TimerManagerMBean {
             try {
                 r.run();
             } catch (Throwable t) {
-                FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, t);
+                log.error("Error in scheduled task", t);
             }
         }
     }

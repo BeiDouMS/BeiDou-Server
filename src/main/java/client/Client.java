@@ -381,7 +381,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 voteTime = rs.getInt("date");
             }
         } catch (SQLException e) {
-            FilePrinter.printError("hasVotedAlready.txt", e);
+            log.error("Error getting voting time");
             return -1;
         }
         return voteTime;
@@ -938,7 +938,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
         } catch (final Throwable t) {
-            FilePrinter.printError(FilePrinter.ACCOUNT_STUCK, t);
+            log.error("Account stuck", t);
         }
     }
 
@@ -1011,7 +1011,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     }
                 }
             } catch (final Exception e) {
-                FilePrinter.printError(FilePrinter.ACCOUNT_STUCK, e);
+                log.error("Account stuck", e);
             } finally {
                 if (!this.serverTransition) {
                     if (chrg != null) {

@@ -24,13 +24,14 @@ package scripting.quest;
 import client.Client;
 import client.QuestStatus;
 import constants.game.GameConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
 import server.quest.Quest;
 import tools.FilePrinter;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ import java.util.Map;
  * @author RMZero213
  */
 public class QuestScriptManager extends AbstractScriptManager {
+    private static final Logger log = LoggerFactory.getLogger(QuestScriptManager.class);
     private static final QuestScriptManager instance = new QuestScriptManager();
 
     private final Map<Client, QuestActionManager> qms = new HashMap<>();
@@ -85,11 +87,8 @@ public class QuestScriptManager extends AbstractScriptManager {
                 c.setClickedNPC();
                 iv.invokeFunction("start", (byte) 1, (byte) 0, 0);
             }
-        } catch (final UndeclaredThrowableException ute) {
-            FilePrinter.printError(FilePrinter.QUEST + questid + ".txt", ute);
-            dispose(c);
         } catch (final Throwable t) {
-            FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", t);
+            log.error("Error starting quest script: {}", questid, t);
             dispose(c);
         }
     }
@@ -101,7 +100,7 @@ public class QuestScriptManager extends AbstractScriptManager {
                 c.setClickedNPC();
                 iv.invokeFunction("start", mode, type, selection);
             } catch (final Exception e) {
-                FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", e);
+                log.error("Error starting quest script: {}", getQM(c).getQuest(), e);
                 dispose(c);
             }
         }
@@ -140,11 +139,8 @@ public class QuestScriptManager extends AbstractScriptManager {
                 c.setClickedNPC();
                 iv.invokeFunction("end", (byte) 1, (byte) 0, 0);
             }
-        } catch (final UndeclaredThrowableException ute) {
-            FilePrinter.printError(FilePrinter.QUEST + questid + ".txt", ute);
-            dispose(c);
         } catch (final Throwable t) {
-            FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", t);
+            log.error("Error starting quest script: {}", questid, t);
             dispose(c);
         }
     }
@@ -156,7 +152,7 @@ public class QuestScriptManager extends AbstractScriptManager {
                 c.setClickedNPC();
                 iv.invokeFunction("end", mode, type, selection);
             } catch (final Exception e) {
-                FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", e);
+                log.error("Error ending quest script: {}", getQM(c).getQuest(), e);
                 dispose(c);
             }
         }
@@ -185,11 +181,8 @@ public class QuestScriptManager extends AbstractScriptManager {
                 c.setClickedNPC();
                 iv.invokeFunction("raiseOpen");
             }
-        } catch (final UndeclaredThrowableException ute) {
-            FilePrinter.printError(FilePrinter.QUEST + questid + ".txt", ute);
-            dispose(c);
         } catch (final Throwable t) {
-            FilePrinter.printError(FilePrinter.QUEST + getQM(c).getQuest() + ".txt", t);
+            log.error("Error during quest script raiseOpen for quest: {}", questid, t);
             dispose(c);
         }
     }

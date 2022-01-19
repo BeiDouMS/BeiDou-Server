@@ -24,9 +24,10 @@ package scripting.npc;
 import client.Character;
 import client.Client;
 import net.server.world.PartyCharacter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
 import server.ItemInformationProvider.ScriptedItem;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import javax.script.Invocable;
@@ -40,6 +41,7 @@ import java.util.Map;
  * @author Matze
  */
 public class NPCScriptManager extends AbstractScriptManager {
+    private static final Logger log = LoggerFactory.getLogger(NPCScriptManager.class);
     private static final NPCScriptManager instance = new NPCScriptManager();
 
     private final Map<Client, NPCConversationManager> cms = new HashMap<>();
@@ -104,7 +106,7 @@ public class NPCScriptManager extends AbstractScriptManager {
             }
 
         } catch (final Exception e) {
-            FilePrinter.printError(FilePrinter.NPC + npc + ".txt", e);
+            log.error("Error starting NPC script: {}", npc, e);
             dispose(c);
         }
     }
@@ -154,7 +156,7 @@ public class NPCScriptManager extends AbstractScriptManager {
             }
             return true;
         } catch (final Exception ute) {
-            FilePrinter.printError(FilePrinter.NPC + npc + ".txt", ute);
+            log.error("Error starting NPC script: {}", npc);
             dispose(c);
 
             return false;
@@ -169,7 +171,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 iv.invokeFunction("action", mode, type, selection);
             } catch (ScriptException | NoSuchMethodException t) {
                 if (getCM(c) != null) {
-                    FilePrinter.printError(FilePrinter.NPC + getCM(c).getNpc() + ".txt", t);
+                    log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
                 dispose(c);
             }

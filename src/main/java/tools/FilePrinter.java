@@ -71,36 +71,6 @@ public class FilePrinter {
     private static final String FILE_PATH = "logs/" + sdf.format(Calendar.getInstance().getTime()) + "/"; // + sdf.format(Calendar.getInstance().getTime()) + "/"
     private static final String ERROR = "error/";
 
-    public static void printError(final String name, final Throwable t) {
-        String stringT = getString(t);
-
-        System.out.println("Error thrown: " + name);
-        System.out.println(stringT);
-        System.out.println();
-        FileOutputStream out = null;
-        final String file = FILE_PATH + ERROR + name;
-        try {
-            File outputFile = new File(file);
-            if (outputFile.getParentFile() != null) {
-                outputFile.getParentFile().mkdirs();
-            }
-            out = new FileOutputStream(file, true);
-            out.write(stringT.getBytes());
-            out.write("\r\n---------------------------------\r\n".getBytes());
-            out.write("\r\n".getBytes()); // thanks Vcoc for suggesting review body log structure
-        } catch (IOException ess) {
-            ess.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException ignore) {
-                ignore.printStackTrace();
-            }
-        }
-    }
-
     public static void printError(final String name, final Throwable t, final String info) {
         String stringT = getString(t);
 

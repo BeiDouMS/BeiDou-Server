@@ -23,8 +23,9 @@ package scripting.map;
 
 import client.Character;
 import client.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
-import tools.FilePrinter;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
@@ -32,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapScriptManager extends AbstractScriptManager {
+    private static final Logger log = LoggerFactory.getLogger(MapScriptManager.class);
     private static final MapScriptManager instance = new MapScriptManager();
 
     private final Map<String, Invocable> scripts = new HashMap<>();
@@ -75,7 +77,7 @@ public class MapScriptManager extends AbstractScriptManager {
             iv.invokeFunction("start", new MapScriptMethods(c));
             return true;
         } catch (final Exception e) {
-            FilePrinter.printError(FilePrinter.MAP_SCRIPT + mapScriptPath + ".txt", e);
+            log.error("Error running map script {}", mapScriptPath, e);
         }
 
         return false;
