@@ -15978,9 +15978,11 @@ CREATE TABLE IF NOT EXISTS `medalmaps` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 CREATE TABLE IF NOT EXISTS `monsterbook` (
-  `charid` int(11) unsigned NOT NULL,
+  `charid` int(11) NOT NULL,
   `cardid` int(11) NOT NULL,
-  `level` int(1) DEFAULT '1'
+  `level` int(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`charid`, `cardid`),
+  CONSTRAINT `FK_monsterbook_characters` FOREIGN KEY (`charid`) REFERENCES `characters`(`id`) ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE IF NOT EXISTS `monstercarddata` (
