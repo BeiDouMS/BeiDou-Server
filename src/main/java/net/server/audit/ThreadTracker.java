@@ -20,6 +20,8 @@
 package net.server.audit;
 
 import net.server.audit.locks.MonitoredLockType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.TimerManager;
 import tools.FilePrinter;
 
@@ -38,6 +40,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * This tool has the main purpose of auditing deadlocks throughout the server and must be used only for debugging. The flag is USE_THREAD_TRACKER.
  */
 public class ThreadTracker {
+    private static final Logger log = LoggerFactory.getLogger(ThreadTracker.class);
     private static ThreadTracker instance = null;
 
     public static ThreadTracker getInstance() {
@@ -147,8 +150,8 @@ public class ThreadTracker {
                                     dateFormat.setTimeZone(TimeZone.getDefault());
                                     String df = dateFormat.format(new Date());
 
-                                    FilePrinter.print(FilePrinter.DEADLOCK_LOCKS, printThreadLog(tt, df));
-                                    FilePrinter.print(FilePrinter.DEADLOCK_STACK, printThreadStack(ste, df));
+                                    log.debug("Thread log - {}", printThreadLog(tt, df));
+                                    log.debug("thread stack - {}", printThreadStack(ste, df));
                                 }
                             }
                         }

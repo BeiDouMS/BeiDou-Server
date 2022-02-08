@@ -32,22 +32,28 @@ import client.command.commands.gm4.*;
 import client.command.commands.gm5.*;
 import client.command.commands.gm6.*;
 import constants.id.MapId;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.Pair;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class CommandsExecutor {
+    private static final Logger log = LoggerFactory.getLogger(CommandsExecutor.class);
+    private static final CommandsExecutor instance = new CommandsExecutor();
+    private static final char USER_HEADING = '@';
+    private static final char GM_HEADING = '!';
 
-    public static CommandsExecutor instance = new CommandsExecutor();
+    private final HashMap<String, Command> registeredCommands = new HashMap<>();
+    private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
+    private Pair<List<String>, List<String>> levelCommandsCursor;
 
     public static CommandsExecutor getInstance() {
         return instance;
     }
-
-    private static final char USER_HEADING = '@';
-    private static final char GM_HEADING = '!';
 
     public static boolean isCommand(Client client, String content) {
         char heading = content.charAt(0);
@@ -56,10 +62,6 @@ public class CommandsExecutor {
         }
         return heading == USER_HEADING;
     }
-
-    private final HashMap<String, Command> registeredCommands = new HashMap<>();
-    private Pair<List<String>, List<String>> levelCommandsCursor;
-    private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
 
     private CommandsExecutor() {
         registerLv0Commands();
@@ -119,13 +121,7 @@ public class CommandsExecutor {
         }
 
         command.execute(client, params);
-        writeLog(client, message);
-    }
-
-    private void writeLog(Client client, String command) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-        FilePrinter.print(FilePrinter.USED_COMMANDS, client.getPlayer().getName() + " used: " + command + " on "
-                + sdf.format(Calendar.getInstance().getTime()));
+        log.info("Chr {} used command {}", client.getPlayer().getName(), command.getClass().getSimpleName());
     }
 
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {

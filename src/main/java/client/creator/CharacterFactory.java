@@ -27,14 +27,16 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import config.YamlConfig;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 /**
  * @author RonanLana
  */
 public abstract class CharacterFactory {
+    private static final Logger log = LoggerFactory.getLogger(CharacterFactory.class);
 
     protected synchronized static int createNewCharacter(Client c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
         if (YamlConfig.config.server.COLLECTIVE_CHARSLOT ? c.getAvailableCharacterSlots() <= 0 : c.getAvailableCharacterWorldSlots() <= 0) {
@@ -93,7 +95,7 @@ public abstract class CharacterFactory {
 
         Server.getInstance().createCharacterEntry(newchar);
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + " has created a new character with IGN " + name));
-        FilePrinter.print(FilePrinter.CREATED_CHAR + c.getAccountName() + ".txt", c.getAccountName() + " created character with IGN " + name);
+        log.info("Account {} created chr with name {}", c.getAccountName(), name);
 
         return 0;
     }

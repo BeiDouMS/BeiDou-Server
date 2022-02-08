@@ -130,40 +130,6 @@ public class FilePrinter {
         }
     }
 
-    public static void print(final String name, final String s) {
-        print(name, s, true);
-    }
-
-    public static void print(final String name, final String s, boolean line) {
-        System.out.println("Log: " + name);
-        System.out.println(s);
-        System.out.println();
-        FileOutputStream out = null;
-        String file = FILE_PATH + name;
-        try {
-            File outputFile = new File(file);
-            if (outputFile.getParentFile() != null) {
-                outputFile.getParentFile().mkdirs();
-            }
-            out = new FileOutputStream(file, true);
-            out.write(s.getBytes());
-            if (line) {
-                out.write("\r\n---------------------------------\r\n".getBytes());
-            }
-            out.write("\r\n".getBytes());
-        } catch (IOException ess) {
-            ess.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException ignore) {
-                ignore.printStackTrace();
-            }
-        }
-    }
-
     private static String getString(final Throwable e) {
         String retValue = null;
         StringWriter sw = null;

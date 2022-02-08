@@ -25,7 +25,8 @@ package client.autoban;
 import client.Character;
 import config.YamlConfig;
 import net.server.Server;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 
 import java.util.Collection;
@@ -59,6 +60,7 @@ public enum AutobanFactory {
     FAST_ATTACK(10, SECONDS.toMillis(30)),
     MPCON(25, SECONDS.toMillis(30));
 
+    private static final Logger log = LoggerFactory.getLogger(AutobanFactory.class);
     private static final Set<Integer> ignoredChrIds = new HashSet<>();
 
     private final int points;
@@ -98,7 +100,8 @@ public enum AutobanFactory {
             Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
         }
         if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
-            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, (chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason);
+            final String chrName = chr != null ? Character.makeMapleReadable(chr.getName()) : "";
+            log.info("Autoban alert - chr {} caused {}-{}", chrName, this.name(), reason);
         }
     }
 

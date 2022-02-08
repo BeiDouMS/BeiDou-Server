@@ -33,9 +33,10 @@ import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.Storage;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 /**
@@ -43,6 +44,7 @@ import tools.PacketCreator;
  * @author Ronan - inventory concurrency protection on storing items
  */
 public class StorageProcessor {
+    private static final Logger log = LoggerFactory.getLogger(StorageProcessor.class);
 
     public static void storageAction(InPacket p, Client c) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
@@ -63,7 +65,7 @@ public class StorageProcessor {
                     byte slot = p.readByte();
                     if (slot < 0 || slot > storage.getSlots()) { // removal starts at zero
                         AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with storage.");
-                        FilePrinter.print(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to work with storage slot " + slot);
+                        log.warn("Chr {} tried to work with storage slot {}", c.getPlayer().getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }
@@ -91,7 +93,7 @@ public class StorageProcessor {
                                 InventoryManipulator.addFromDrop(c, item, false);
 
                                 String itemName = ii.getName(item.getItemId());
-                                FilePrinter.print(FilePrinter.STORAGE + c.getAccountName() + ".txt", c.getPlayer().getName() + " took out " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
+                                log.debug("Chr {} took out {}x {} ({})", c.getPlayer().getName(), item.getQuantity(), itemName, item.getItemId());
 
                                 storage.sendTakenOut(c, item.getInventoryType());
                             } else {
@@ -110,7 +112,7 @@ public class StorageProcessor {
                     Inventory inv = chr.getInventory(invType);
                     if (slot < 1 || slot > inv.getSlotLimit()) { //player inv starts at one
                         AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with storage.");
-                        FilePrinter.print(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to store item at slot " + slot);
+                        log.warn("Chr {} tried to store item at slot {}", c.getPlayer().getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }
@@ -162,8 +164,7 @@ public class StorageProcessor {
                         chr.setUsedStorage();
 
                         String itemName = ii.getName(item.getItemId());
-                        FilePrinter.print(FilePrinter.STORAGE + c.getAccountName() + ".txt", c.getPlayer().getName() + " stored " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
-
+                        log.debug("Chr {} stored {}x {} ({})", c.getPlayer().getName(), item.getQuantity(), itemName, item.getItemId());
                         storage.sendStored(c, ItemConstants.getInventoryType(itemId));
                     }
                 } else if (mode == 6) { // arrange items
@@ -192,7 +193,7 @@ public class StorageProcessor {
                         storage.setMeso(storageMesos - meso);
                         chr.gainMeso(meso, false, true, false);
                         chr.setUsedStorage();
-                        FilePrinter.print(FilePrinter.STORAGE + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + (meso > 0 ? " took out " : " stored ") + Math.abs(meso) + " mesos");
+                        log.debug("Chr {} {} {} mesos", c.getPlayer().getName(), meso > 0 ? "took out" : "stored", Math.abs(meso));
                         storage.sendMeso(c);
                     } else {
                         c.sendPacket(PacketCreator.enableActions());

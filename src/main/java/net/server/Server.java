@@ -1596,7 +1596,7 @@ public class Server {
             }
             //log
             for (Pair<String, String> namePair : changedNames) {
-                log.info("Name change applied - from: \"{}\" to \"{}\" at {}", namePair.getLeft(), namePair.getRight(), Instant.now());
+                log.info("Name change applied - from: \"{}\" to \"{}\"", namePair.getLeft(), namePair.getRight());
             }
         } catch (SQLException e) {
             log.warn("Failed to retrieve list of pending name changes", e);
@@ -1617,7 +1617,7 @@ public class Server {
                 String reason = Character.checkWorldTransferEligibility(con, characterId, oldWorld, newWorld); //check if character is still eligible
                 if (reason != null) {
                     removedTransfers.add(nameChangeId);
-                    FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer cancelled : Character ID " + characterId + " at " + Calendar.getInstance().getTime() + ", Reason : " + reason);
+                    log.info("World transfer canceled: chrId {}, reason {}", characterId, reason);
                     try (PreparedStatement delPs = con.prepareStatement("DELETE FROM worldtransfers WHERE id = ?")) {
                         delPs.setInt(1, nameChangeId);
                         delPs.executeUpdate();
@@ -1657,7 +1657,7 @@ public class Server {
                 int charId = worldTransferPair.getLeft();
                 int oldWorld = worldTransferPair.getRight().getLeft();
                 int newWorld = worldTransferPair.getRight().getRight();
-                log.info("World transfer applied - character id {} from world {} to world {} at {}", charId, oldWorld, newWorld, Instant.now());
+                log.info("World transfer applied - character id {} from world {} to world {}", charId, oldWorld, newWorld);
             }
         } catch (SQLException e) {
             log.warn("Failed to retrieve list of pending world transfers", e);

@@ -8071,7 +8071,7 @@ public class Character extends AbstractCharacterObject {
             if (tap >= 0) {
                 updateStrDexIntLukSp(tstr, tdex, tint, tluk, tap, tsp, GameConstants.getSkillBook(job.getId()));
             } else {
-                FilePrinter.print(FilePrinter.EXCEPTION_CAUGHT, name + " tried to get their stats reseted, without having enough AP available.");
+                log.warn("Chr {} tried to have its stats reset without enough AP available");
             }
         } finally {
             statWlock.unlock();
@@ -8361,12 +8361,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         Calendar c = Calendar.getInstance();
-
-        if (notAutosave) {
-            FilePrinter.print(FilePrinter.SAVING_CHARACTER, "Attempting to save " + name + " at " + c.getTime());
-        } else {
-            FilePrinter.print(FilePrinter.AUTOSAVING_CHARACTER, "Attempting to autosave " + name + " at " + c.getTime());
-        }
+        log.debug("Attempting to {} chr {}", notAutosave ? "save" : "autosave", name);
 
         Server.getInstance().updateCharacterEntry(this);
 
@@ -8775,14 +8770,13 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void sendPolice(String text) {
-        String message = getName() + " received this - " + text;
+        final String message = getName() + " received this - " + text;
         if (Server.getInstance().isGmOnline(this.getWorld())) { //Alert and log if a GM is online
             Server.getInstance().broadcastGMMessage(this.getWorld(), PacketCreator.sendYellowTip(message));
-            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, message);
         } else { //Auto DC and log if no GM is online
             client.disconnect(false, false);
-            FilePrinter.print(FilePrinter.AUTOBAN_DC, message);
         }
+        log.info(message);
         //Server.getInstance().broadcastGMMessage(0, PacketCreator.serverNotice(1, getName() + " received this - " + text));
         //sendPacket(PacketCreator.sendPolice(text));
         //this.isbanned = true;
@@ -10754,8 +10748,7 @@ public class Character extends AbstractCharacterObject {
                     newName = rs.getString("new");
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to retrieve pending name changes for character " + getName() + ".");
+                log.error("Failed to retrieve pending name changes for chr {}", this.name, e);
             }
 
             con.setAutoCommit(false);
@@ -10763,12 +10756,11 @@ public class Character extends AbstractCharacterObject {
             if (!success) {
                 con.rollback();
             } else {
-                FilePrinter.print(FilePrinter.CHANGE_CHARACTER_NAME, "Name change applied : from \"" + getName() + "\" to \"" + newName + "\" at " + Calendar.getInstance().getTime());
+                log.info("Name change applied: from {} to {}", this.name, newName);
             }
             con.setAutoCommit(true);
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection for pending chr name change", e);
         }
     }
 
@@ -10781,8 +10773,7 @@ public class Character extends AbstractCharacterObject {
             }
             con.setAutoCommit(true);
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection for chr name change", e);
         }
     }
 
@@ -10792,8 +10783,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(2, characterId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
+            log.error("Failed to perform chr name change in database for chrId {}", characterId, e);
             return false;
         }
 
@@ -10802,8 +10792,7 @@ public class Character extends AbstractCharacterObject {
             ps.setString(2, oldName);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
+            log.error("Failed to update rings during chr name change for chrId {}", characterId, e);
             return false;
         }
 
@@ -10922,8 +10911,7 @@ public class Character extends AbstractCharacterObject {
                 ps.setInt(2, nameChangeId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
+                log.error("Failed to save chr name change for chrId {}", nameChangeId, e);
                 return false;
             }
         }
