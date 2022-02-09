@@ -21,8 +21,9 @@ package client;
 
 import net.packet.Packet;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -38,6 +39,8 @@ import java.util.List;
  */
 
 public class FamilyEntry {
+    private static final Logger log = LoggerFactory.getLogger(FamilyEntry.class);
+
     private final int characterID;
     private volatile Family family;
     private volatile Character character;
@@ -114,12 +117,11 @@ public class FamilyEntry {
             }
             if (!success) {
                 con.rollback();
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Could not absorb " + oldFamily.getName() + " family into " + newFamily.getName() + " family. (SQL ERROR)");
+                log.error("Could not absorb {}'s family into {}'s family. (SQL ERROR)", oldFamily.getName(), newFamily.getName());
             }
             con.setAutoCommit(true);
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB when joining families", e);
         }
     }
 
@@ -159,13 +161,12 @@ public class FamilyEntry {
             }
             if (!success) {
                 con.rollback();
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Could not fork family with new leader " + getName() + ". (Old senior : " + oldSenior.getName() + ", leader :" + oldFamily.getLeader().getName() + ")");
+                log.error("Could not fork family with new leader {}. (Old senior: {}, leader: {})", getName(), oldSenior.getName(), oldFamily.getLeader().getName());
             }
             con.setAutoCommit(true);
 
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB when forking families", e);
         }
     }
 
@@ -193,8 +194,7 @@ public class FamilyEntry {
             ps.setInt(2, cid);
             ps.executeUpdate();
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not update family id in 'family_character' for character id " + cid + ". (fork)");
-            e.printStackTrace();
+            log.error("Could not update family id in 'family_character' for chrId {}. (fork)", cid, e);
             return false;
         }
         return true;
@@ -375,8 +375,7 @@ public class FamilyEntry {
         try (Connection con = DatabaseConnection.getConnection()) {
             return updateDBChangeFamily(con, cid, familyid, seniorid);
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB while changing family", e);
             return false;
         }
     }
@@ -388,8 +387,7 @@ public class FamilyEntry {
             ps.setInt(3, cid);
             ps.executeUpdate();
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not update seniorid in 'family_character' for character id " + cid + ".");
-            e.printStackTrace();
+            log.error("Could not update seniorId in 'family_character' for chrId {}", cid, e);
             return false;
         }
         return updateCharacterFamilyDB(con, cid, familyid, false);
@@ -401,8 +399,7 @@ public class FamilyEntry {
             ps.setInt(2, charid);
             ps.executeUpdate();
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not update familyid in 'characters' for character id " + charid + " when changing family. " + (fork ? "(fork)" : ""));
-            e.printStackTrace();
+            log.error("Could not update familyId in 'characters' for chrId {} when changing family. {}", charid, fork ? "(fork)" : "", e);
             return false;
         }
         return true;
@@ -549,8 +546,7 @@ public class FamilyEntry {
             ps.setLong(3, System.currentTimeMillis());
             ps.executeUpdate();
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not insert new row in 'family_entitlement' for character " + getName() + ".");
-            e.printStackTrace();
+            log.error("Could not insert new row in 'family_entitlement' for chr {}", getName(), e);
         }
         entitlements[id]++;
         return true;
@@ -563,8 +559,7 @@ public class FamilyEntry {
             ps.setInt(2, getChrId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not refund family entitlement \"" + entitlement.getName() + "\" for character " + getName() + ".");
-            e.printStackTrace();
+            log.error("Could not refund family entitlement \"{}\" for chr {}", entitlement.getName(), getName(), e);
         }
         entitlements[id] = 0;
         return true;
@@ -595,8 +590,7 @@ public class FamilyEntry {
         try (Connection con = DatabaseConnection.getConnection()) {
             return saveReputation(con);
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB while saving reputation", e);
             return false;
         }
     }
@@ -613,8 +607,7 @@ public class FamilyEntry {
             ps.setInt(5, getChrId());
             ps.executeUpdate();
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Failed to autosave rep to 'family_character' for charid " + getChrId());
-            e.printStackTrace();
+            log.error("Failed to autosave rep to 'family_character' for chrId {}", getChrId(), e);
             return false;
         }
         return true;

@@ -7551,7 +7551,7 @@ public class Character extends AbstractCharacterObject {
                 }
             }
         } catch (Exception e) {
-            FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, e, "Character.mobKilled. CID: " + this.id + " last Quest Processed: " + lastQuestProcessed);
+            log.warn("Character.mobKilled. chrId {}, last quest processed: {}", this.id, lastQuestProcessed, e);
         }
     }
 
@@ -8332,7 +8332,7 @@ public class Character extends AbstractCharacterObject {
                 con.setAutoCommit(true);
             }
         } catch (Throwable t) {
-            FilePrinter.printError(FilePrinter.INSERT_CHAR, t, "Error creating " + name + " Level: " + level + " Job: " + job.getId());
+            log.error("Error creating chr {}, level: {}, job: {}", name, level, job.getId(), t);
         }
 
         return false;
@@ -8754,7 +8754,7 @@ public class Character extends AbstractCharacterObject {
                 con.setAutoCommit(true);
             }
         } catch (Exception e) {
-            FilePrinter.printError(FilePrinter.SAVE_CHAR, e, "Error saving " + name + " Level: " + level + " Job: " + job.getId());
+            log.error("Error saving chr {}, level: {}, job: {}", name, level, job.getId(), e);
         }
     }
 
@@ -10691,8 +10691,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to register name change for character " + getName() + ".");
+                log.error("Failed to register name change for chr {}", getName(), e);
                 return false;
             }
 
@@ -10704,12 +10703,10 @@ public class Character extends AbstractCharacterObject {
                 this.pendingNameChange = true;
                 return true;
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to register name change for character " + getName() + ".");
+                log.error("Failed to register name change for chr {}", getName(), e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection while registering name change", e);
         }
         return false;
     }
@@ -10724,8 +10721,7 @@ public class Character extends AbstractCharacterObject {
             }
             return affectedRows > 0; //rows affected
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to cancel name change for character " + getName() + ".");
+            log.error("Failed to cancel name change for chr {}", getName(), e);
             return false;
         }
     }
@@ -11009,8 +11005,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to register world transfer for character " + getName() + ".");
+                log.error("Failed to register world transfer for chr {}", getName(), e);
                 return false;
             }
 
@@ -11021,12 +11016,10 @@ public class Character extends AbstractCharacterObject {
                 ps.executeUpdate();
                 return true;
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to register world transfer for character " + getName() + ".");
+                log.error("Failed to register world transfer for chr {}", getName(), e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection while registering world transfer", e);
         }
         return false;
     }
@@ -11038,8 +11031,7 @@ public class Character extends AbstractCharacterObject {
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0; //rows affected
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to cancel pending world transfer for character " + getName() + ".");
+            log.error("Failed to cancel pending world transfer for chr {}", getName(), e);
             return false;
         }
     }
@@ -11050,13 +11042,12 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(1, characterId);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, "Character data invalid? (charid " + characterId + ")");
+                log.warn("Character data invalid for world transfer? chrId {}", characterId);
                 return false;
             }
             mesos = rs.getInt("meso");
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+            log.error("Failed to do world transfer for chrId {}", characterId, e);
             return false;
         }
         try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET world = ?, meso = ?, guildid = ?, guildrank = ? WHERE id = ?")) {
@@ -11067,8 +11058,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(5, characterId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+            log.error("Failed to update chrId {} during world transfer", characterId, e);
             return false;
         }
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM buddies WHERE characterid = ? OR buddyid = ?")) {
@@ -11076,8 +11066,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(2, characterId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+            log.error("Failed to delete buddies for chrId {} during world transfer", characterId, e);
             return false;
         }
         if (worldTransferId != -1) {
@@ -11086,8 +11075,7 @@ public class Character extends AbstractCharacterObject {
                 ps.setInt(2, worldTransferId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+                log.error("Failed to update world transfer for chrId {}", characterId, e);
                 return false;
             }
         }

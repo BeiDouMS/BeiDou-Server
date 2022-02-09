@@ -35,6 +35,8 @@ import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.Trade;
 import server.maps.*;
@@ -51,6 +53,8 @@ import java.util.Arrays;
  * @author Ronan - concurrency safety and reviewed minigames
  */
 public final class PlayerInteractionHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(PlayerInteractionHandler.class);
+
     public enum Action {
         CREATE(0),
         INVITE(2),
@@ -550,7 +554,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                                 }
                             }
                         } catch (Exception e) {
-                            FilePrinter.printError(FilePrinter.TRADE_EXCEPTION, e, "Player '" + chr + "' tried to add " + ii.getName(item.getItemId()) + " qty. " + item.getQuantity() + " in trade (slot " + targetSlot + ") then exception occurred.");
+                            log.warn("Chr {} tried to add {}x {} in trade (slot {}), then exception occurred", chr, ii.getName(item.getItemId()), item.getQuantity(), targetSlot, e);
                         } finally {
                             inv.unlockInventory();
                         }

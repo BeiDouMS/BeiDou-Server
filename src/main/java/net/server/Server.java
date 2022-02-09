@@ -63,7 +63,6 @@ import server.expeditions.ExpeditionBossLog;
 import server.life.PlayerNPCFactory;
 import server.quest.Quest;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.Pair;
 
 import java.sql.Connection;
@@ -1106,7 +1105,7 @@ public class Server {
                     mc.setMGC(mgc);
                     mgc.setCharacter(mc);
                 } else {
-                    FilePrinter.printError(FilePrinter.GUILD_CHAR_ERROR, "Could not find " + mc.getName() + " when loading guild " + id + ".");
+                    log.error("Could not find chr {} when loading guild {}", mc.getName(), id);
                 }
 
                 g.setOnline(mc.getId(), true, mc.getClient().getChannel());
@@ -1622,8 +1621,7 @@ public class Server {
                         delPs.setInt(1, nameChangeId);
                         delPs.executeUpdate();
                     } catch (SQLException e) {
-                        e.printStackTrace();
-                        FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to delete world transfer for character ID " + characterId);
+                        log.error("Failed to delete world transfer for chrId {}", characterId, e);
                     }
                 }
             }
