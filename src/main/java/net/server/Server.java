@@ -884,8 +884,7 @@ public class Server {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();//For those who get errors
-            log.error("[SEVERE] Syntax error in 'world.ini'.");
+            log.error("[SEVERE] Syntax error in 'world.ini'.", e); //For those who get errors
             System.exit(0);
         }
 
