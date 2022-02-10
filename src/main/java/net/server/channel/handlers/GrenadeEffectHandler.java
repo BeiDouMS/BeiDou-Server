@@ -25,7 +25,8 @@ import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -34,6 +35,7 @@ import java.awt.*;
  * @author GabrielSin
  */
 public class GrenadeEffectHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(GrenadeEffectHandler.class);
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -51,7 +53,7 @@ public class GrenadeEffectHandler extends AbstractPacketHandler {
                 }
                 break;
             default:
-                FilePrinter.printError(FilePrinter.UNHANDLED_EVENT, "The skill id: " + skillId + " is not coded in " + this.getClass().getName() + ".");
+                log.warn("The skill id: {} is not coded in {}", skillId, getClass().getSimpleName());
         }
     }
 

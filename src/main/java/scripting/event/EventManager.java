@@ -34,6 +34,8 @@ import net.server.guild.Guild;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.Marriage;
 import server.ThreadManager;
@@ -48,8 +50,6 @@ import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.util.*;
 import java.util.concurrent.Semaphore;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -60,6 +60,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author Ronan
  */
 public class EventManager {
+    private static final Logger log = LoggerFactory.getLogger(EventManager.class);
     private Invocable iv;
     private Channel cserv;
     private World wserv;
@@ -183,7 +184,7 @@ public class EventManager {
             try {
                 iv.invokeFunction(methodName, eim);
             } catch (ScriptException | NoSuchMethodException ex) {
-                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Event script schedule", ex);
             }
         };
 
@@ -198,7 +199,7 @@ public class EventManager {
             try {
                 iv.invokeFunction(methodName, (Object) null);
             } catch (ScriptException | NoSuchMethodException ex) {
-                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                log.error("Event script scheduleAtTimestamp", ex);
             }
         };
 
@@ -432,7 +433,7 @@ public class EventManager {
 
                         eim.startEvent();
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error("Event script startInstance", ex);
                     }
 
                     return true;
@@ -504,7 +505,7 @@ public class EventManager {
 
                         eim.startEvent();
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error("Event script startInstance", ex);
                     }
 
                     return true;
@@ -576,7 +577,7 @@ public class EventManager {
 
                         eim.startEvent();
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error("Event script startInstance", ex);
                     }
 
                     return true;
@@ -648,7 +649,7 @@ public class EventManager {
 
                         eim.startEvent();
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error("Event script startInstance", ex);
                     }
 
                     return true;
@@ -715,7 +716,7 @@ public class EventManager {
 
                         eim.startEvent();
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+                        log.error("Event script startInstance", ex);
                     }
 
                     return true;
@@ -755,7 +756,7 @@ public class EventManager {
         try {
             iv.invokeFunction("clearPQ", eim);
         } catch (ScriptException | NoSuchMethodException ex) {
-            Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Event script clearPQ", ex);
         }
     }
 
@@ -763,7 +764,7 @@ public class EventManager {
         try {
             iv.invokeFunction("clearPQ", eim, toMap);
         } catch (ScriptException | NoSuchMethodException ex) {
-            Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Event script clearPQ", ex);
         }
     }
 

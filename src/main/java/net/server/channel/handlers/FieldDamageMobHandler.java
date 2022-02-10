@@ -24,13 +24,15 @@ import client.Client;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.life.Monster;
 import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 public class FieldDamageMobHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(FieldDamageMobHandler.class);
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
@@ -41,14 +43,15 @@ public class FieldDamageMobHandler extends AbstractPacketHandler {
         MapleMap map = chr.getMap();
 
         if (map.getEnvironment().isEmpty()) {   // no environment objects activated to actually hit the mob
-            FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack.");
+            log.warn("Chr {} tried to use an obstacle on mapid {} to attack", c.getPlayer().getName(), map.getId());
             return;
         }
 
         Monster mob = map.getMonsterByOid(mobOid);
         if (mob != null) {
             if (dmg < 0 || dmg > GameConstants.MAX_FIELD_MOB_DAMAGE) {
-                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use an obstacle on mapid " + map.getId() + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(mob.getId()) + " with damage " + dmg);
+                log.warn("Chr {} tried to use an obstacle on mapid {} to attack {} with damage {}", c.getPlayer().getName(),
+                        map.getId(), MonsterInformationProvider.getInstance().getMobNameFromId(mob.getId()), dmg);
                 return;
             }
 

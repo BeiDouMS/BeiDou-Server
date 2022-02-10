@@ -32,10 +32,11 @@ import client.inventory.ItemFactory;
 import client.inventory.manipulator.InventoryManipulator;
 import net.server.Server;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.maps.HiredMerchant;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -50,7 +51,7 @@ import static java.util.concurrent.TimeUnit.DAYS;
  * @author RonanLana - synchronization of Fredrick modules and operation results
  */
 public class FredrickProcessor {
-
+    private static final Logger log = LoggerFactory.getLogger(FredrickProcessor.class);
     private static final int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
 
     private static byte canRetrieveFromFredrick(Character chr, List<Pair<Item, InventoryType>> items) {
@@ -293,7 +294,7 @@ public class FredrickProcessor {
                             Item item = it.getLeft();
                             InventoryManipulator.addFromDrop(chr.getClient(), item, false);
                             String itemName = ItemInformationProvider.getInstance().getName(item.getItemId());
-                            FilePrinter.print(FilePrinter.FREDRICK + chr.getName() + ".txt", chr.getName() + " gained " + item.getQuantity() + " " + itemName + " (" + item.getItemId() + ")");
+                            log.debug("Chr {} gained {}x {} ({})", chr.getName(), item.getQuantity(), itemName, item.getItemId());
                         }
 
                         chr.sendPacket(PacketCreator.fredrickMessage((byte) 0x1E));

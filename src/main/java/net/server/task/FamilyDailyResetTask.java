@@ -2,8 +2,9 @@ package net.server.task;
 
 import client.Family;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 
 public class FamilyDailyResetTask implements Runnable {
-
+    private static final Logger log = LoggerFactory.getLogger(FamilyDailyResetTask.class);
     private final World world;
 
     public FamilyDailyResetTask(World world) {
@@ -38,19 +39,16 @@ public class FamilyDailyResetTask implements Runnable {
                 ps.setLong(1, resetTime.getTimeInMillis());
                 ps.executeUpdate();
             } catch (SQLException e) {
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not reset daily rep for families. On " + Calendar.getInstance().getTime());
-                e.printStackTrace();
+                log.error("Could not reset daily rep for families", e);
             }
             try (PreparedStatement ps = con.prepareStatement("DELETE FROM family_entitlement WHERE timestamp <= ?")) {
                 ps.setLong(1, resetTime.getTimeInMillis());
                 ps.executeUpdate();
             } catch (SQLException e) {
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not do daily reset for family entitlements. On " + Calendar.getInstance().getTime());
-                e.printStackTrace();
+                log.error("Could not do daily reset for family entitlements", e);
             }
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB", e);
         }
     }
 }

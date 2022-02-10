@@ -25,6 +25,8 @@ import client.Client;
 import config.YamlConfig;
 import constants.game.ExpTable;
 import constants.inventory.ItemConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import tools.PacketCreator;
 import tools.Pair;
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Equip extends Item {
+    private static final Logger log = LoggerFactory.getLogger(Equip.class);
 
     public enum ScrollResult {
 
@@ -110,7 +113,7 @@ public class Equip extends Item {
         ret.itemLevel = itemLevel;
         ret.itemExp = itemExp;
         ret.level = level;
-        ret.log = new LinkedList<>(log);
+        ret.itemLog = new LinkedList<>(itemLog);
         ret.setOwner(getOwner());
         ret.setQuantity(getQuantity());
         ret.setExpiration(getExpiration());
@@ -647,7 +650,8 @@ public class Equip extends Item {
         int expNeeded = ExpTable.getEquipExpNeededForLevel(itemLevel);
 
         if (YamlConfig.config.server.USE_DEBUG_SHOW_INFO_EQPEXP) {
-            System.out.println("'" + ii.getName(this.getItemId()) + "' -> EXP Gain: " + gain + " Mastery: " + masteryModifier + " Base gain: " + baseExpGain + " exp: " + itemExp + " / " + expNeeded + ", Kills TNL: " + expNeeded / (baseExpGain / c.getPlayer().getExpRate()));
+            log.debug("{} -> EXP Gain: {}, Mastery: {}, Base gain: {}, exp: {} / {}, Kills TNL: {}", ii.getName(getItemId()),
+                    gain, masteryModifier, baseExpGain, itemExp, expNeeded, expNeeded / (baseExpGain / c.getPlayer().getExpRate()));
         }
 
         if (itemExp >= expNeeded) {

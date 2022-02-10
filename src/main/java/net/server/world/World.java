@@ -52,6 +52,8 @@ import net.server.services.BaseService;
 import net.server.services.ServicesManager;
 import net.server.services.type.WorldServices;
 import net.server.task.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.Storage;
 import server.TimerManager;
@@ -75,6 +77,7 @@ import static java.util.concurrent.TimeUnit.*;
  * @author Ronan - thread-oriented (world schedules + guild queue + marriages + party chars)
  */
 public class World {
+    private static final Logger log = LoggerFactory.getLogger(World.class);
 
     private final int id;
     private int flag;
@@ -834,8 +837,8 @@ public class World {
     }
 
     public void debugMarriageStatus() {
-        System.out.println("Queued marriages: " + queuedMarriages);
-        System.out.println("Guest list: " + marriageGuests);
+        log.debug("Queued marriages: {}", queuedMarriages);
+        log.debug("Guest list: {}", marriageGuests);
     }
 
     private void registerCharacterParty(Integer chrid, Integer partyid) {
@@ -1004,7 +1007,7 @@ public class World {
                 }
                 break;
             default:
-                System.out.println("Unhandled updateParty operation " + operation.name());
+                log.warn("Unhandled updateParty operation: {}", operation.name());
         }
         updateParty(party, operation, target);
     }
@@ -2151,6 +2154,6 @@ public class World {
         players = null;
 
         clearWorldData();
-        System.out.println("Finished shutting down world " + id + "\r\n");
+        log.info("Finished shutting down world {}", id);
     }
 }

@@ -27,9 +27,10 @@ import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.ThreadManager;
-import tools.FilePrinter;
 import tools.Pair;
 
 import java.util.*;
@@ -40,6 +41,7 @@ import java.util.concurrent.locks.Lock;
  * @author Matze, Ronan
  */
 public class Inventory implements Iterable<Item> {
+    private static final Logger log = LoggerFactory.getLogger(Inventory.class);
     protected final Map<Short, Item> inventory;
     protected final InventoryType type;
     protected final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.INVENTORY, true);
@@ -117,7 +119,7 @@ public class Inventory implements Iterable<Item> {
         for (Item item : list()) {
             String itemName = ii.getName(item.getItemId());
             if (itemName == null) {
-                FilePrinter.printError(FilePrinter.EXCEPTION, "[CRITICAL] Item " + item.getItemId() + " has no name.");
+                log.error("[CRITICAL] Item {} has no name", item.getItemId());
                 continue;
             }
 

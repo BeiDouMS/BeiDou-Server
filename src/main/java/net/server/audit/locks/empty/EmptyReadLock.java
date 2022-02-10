@@ -21,12 +21,14 @@ package net.server.audit.locks.empty;
 
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReadLock;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author RonanLana
  */
 public class EmptyReadLock extends AbstractEmptyLock implements MonitoredReadLock {
+    private static final Logger log = LoggerFactory.getLogger(EmptyReadLock.class);
     private final MonitoredLockType id;
 
     public EmptyReadLock(MonitoredLockType type) {
@@ -35,7 +37,7 @@ public class EmptyReadLock extends AbstractEmptyLock implements MonitoredReadLoc
 
     @Override
     public void lock() {
-        FilePrinter.printError(FilePrinter.DISPOSED_LOCKS, "Captured locking tentative on disposed lock " + id + ":" + printThreadStack(Thread.currentThread().getStackTrace()));
+        log.warn("Captured locking tentative on disposed lock {}: {}", id, printThreadStack(Thread.currentThread().getStackTrace()));
     }
 
     @Override
@@ -43,7 +45,7 @@ public class EmptyReadLock extends AbstractEmptyLock implements MonitoredReadLoc
 
     @Override
     public boolean tryLock() {
-        FilePrinter.printError(FilePrinter.DISPOSED_LOCKS, "Captured try-locking tentative on disposed lock " + id + ":" + printThreadStack(Thread.currentThread().getStackTrace()));
+        log.warn("Captured try-locking tentative on disposed lock {}: {}", id, printThreadStack(Thread.currentThread().getStackTrace()));
         return false;
     }
 

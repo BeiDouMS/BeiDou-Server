@@ -1,11 +1,10 @@
 package net.server.channel.handlers;
 
 import client.Client;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.packet.Packet;
-import tools.LogHelper;
+import server.ChatLogger;
 import tools.PacketCreator;
 
 /**
@@ -23,25 +22,18 @@ public class AdminChatHandler extends AbstractPacketHandler {
         String message = p.readString();
         Packet packet = PacketCreator.serverNotice(p.readByte(), message);//maybe I should make a check for the slea.readByte()... but I just hope gm's don't fuck things up :)
         switch (mode) {
-            case 0:// /alertall, /noticeall, /slideall
+            case 0 -> {// /alertall, /noticeall, /slideall
                 c.getWorldServer().broadcastPacket(packet);
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "Alert All", message);
-                }
-                break;
-            case 1:// /alertch, /noticech, /slidech
+                ChatLogger.log(c, "Alert All", message);
+            }
+            case 1 -> {// /alertch, /noticech, /slidech
                 c.getChannelServer().broadcastPacket(packet);
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "Alert Ch", message);
-                }
-                break;
-            case 2:// /alertm /alertmap, /noticem /noticemap, /slidem /slidemap
+                ChatLogger.log(c, "Alert Ch", message);
+            }
+            case 2 -> {// /alertm /alertmap, /noticem /noticemap, /slidem /slidemap
                 c.getPlayer().getMap().broadcastMessage(packet);
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "Alert Map", message);
-                }
-                break;
-
+                ChatLogger.log(c, "Alert Map", message);
+            }
         }
     }
 }

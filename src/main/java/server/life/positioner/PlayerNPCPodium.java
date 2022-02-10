@@ -22,6 +22,8 @@ package server.life.positioner;
 import config.YamlConfig;
 import net.server.Server;
 import net.server.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.life.PlayerNPC;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
@@ -40,6 +42,8 @@ import java.util.List;
  * Podium system will implement increase-by-7 to negate that behaviour.
  */
 public class PlayerNPCPodium {
+    private static final Logger log = LoggerFactory.getLogger(PlayerNPCPodium.class);
+
     private static int getPlatformPosX(int platform) {
         return switch (platform) {
             case 0 -> -50;
@@ -76,7 +80,7 @@ public class PlayerNPCPodium {
     private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
             if (YamlConfig.config.server.USE_DEBUG) {
-                System.out.println("Reorganizing pnpc map, step " + newStep);
+                log.debug("Re-organizing pnpc map, step {}", newStep);
             }
 
             List<PlayerNPC> playerNpcs = new ArrayList<>(mmoList.size());

@@ -26,8 +26,9 @@ import client.Family;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.sql.Connection;
@@ -36,9 +37,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class DeleteCharHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(DeleteCharHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         String pic = p.readString();
         int cid = p.readInt();
         if (c.checkPic(pic)) {
@@ -77,12 +79,12 @@ public final class DeleteCharHandler extends AbstractPacketHandler {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                log.error("Failed to delete chrId {}", cid, e);
                 c.sendPacket(PacketCreator.deleteCharResponse(cid, 0x09));
                 return;
             }
             if (c.deleteCharacter(cid, c.getAccID())) {
-                FilePrinter.print(FilePrinter.DELETED_CHAR + c.getAccountName() + ".txt", c.getAccountName() + " deleted CID: " + cid);
+                log.info("Account {} deleted chrId {}", c.getAccountName(), cid);
                 c.sendPacket(PacketCreator.deleteCharResponse(cid, 0));
             } else {
                 c.sendPacket(PacketCreator.deleteCharResponse(cid, 0x09));

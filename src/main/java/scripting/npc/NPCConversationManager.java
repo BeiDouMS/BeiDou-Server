@@ -40,6 +40,8 @@ import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProviderFactory;
 import provider.wz.WZFiles;
@@ -61,8 +63,6 @@ import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
 import server.partyquest.Pyramid;
 import server.partyquest.Pyramid.PyramidMode;
-import tools.FilePrinter;
-import tools.LogHelper;
 import tools.PacketCreator;
 import tools.packets.WeddingPackets;
 
@@ -77,6 +77,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * @author Matze
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
+    private static final Logger log = LoggerFactory.getLogger(NPCConversationManager.class);
 
     private final int npc;
     private int npcOid;
@@ -381,7 +382,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (shop != null) {
             shop.sendShop(c);
         } else {    // check for missing shopids thanks to resinate
-            FilePrinter.printError(FilePrinter.NPC_UNCODED, "Shop ID: " + id + " is missing from database.");
+            log.warn("Shop ID: {} is missing from database.", id);
             ShopFactory.getInstance().getShop(11000).sendShop(c);
         }
     }
@@ -413,7 +414,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
                 (getNpc() - NpcId.GACHAPON_HENESYS) : getNpc() == NpcId.GACHAPON_NLC ? 8 : 9];
         String map = c.getChannelServer().getMapFactory().getMap(mapId).getMapName();
 
-        LogHelper.logGacha(getPlayer(), item.getId(), map);
+        Gachapon.log(getPlayer(), item.getId(), map);
 
         if (item.getTier() > 0) { //Uncommon and Rare
             Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.gachaponMessage(itemGained, map, getPlayer()));
@@ -492,7 +493,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void logLeaf(String prize) {
-        LogHelper.logLeaf(getPlayer(), true, prize);
+        MapleLeafLogger.log(getPlayer(), true, prize);
     }
 
     public boolean createPyramid(String mode, boolean party) {//lol

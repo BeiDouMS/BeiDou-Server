@@ -21,7 +21,10 @@
  */
 package server.gachapon;
 
+import client.Character;
 import constants.id.NpcId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import tools.Randomizer;
 
@@ -29,7 +32,7 @@ import tools.Randomizer;
  * @author Alan (SharpAceX)
  */
 public class Gachapon {
-
+    private static final Logger log = LoggerFactory.getLogger(Gachapon.class);
     private static final Gachapon instance = new Gachapon();
 
     public static Gachapon getInstance() {
@@ -161,5 +164,10 @@ public class Gachapon {
         public int getId() {
             return id;
         }
+    }
+
+    public static void log(Character player, int itemId, String map) {
+        String itemName = ItemInformationProvider.getInstance().getName(itemId);
+        log.info("{} got a {} ({}) from the {} gachapon.", player.getName(), itemName, itemId, map);
     }
 }

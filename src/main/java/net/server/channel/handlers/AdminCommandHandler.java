@@ -28,6 +28,8 @@ import client.inventory.InventoryType;
 import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.life.LifeFactory;
 import server.life.Monster;
@@ -41,9 +43,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class AdminCommandHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(AdminCommandHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         if (!c.getPlayer().isGM()) {
             return;
         }
@@ -170,13 +173,13 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 break;
             case 0x77: //Testing purpose
                 if (p.available() == 4) {
-                    System.out.println(p.readInt());
+                    log.debug("int: {}", p.readInt());
                 } else if (p.available() == 2) {
-                    System.out.println(p.readShort());
+                    log.debug("short: {}", p.readShort());
                 }
                 break;
             default:
-                System.out.println("New GM packet encountered (MODE : " + mode + ": " + p);
+                log.info("New GM packet encountered (MODE: {}): {}", mode, p);
                 break;
         }
     }

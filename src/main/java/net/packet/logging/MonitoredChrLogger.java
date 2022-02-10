@@ -22,38 +22,61 @@ package net.packet.logging;
 
 import client.Character;
 import client.Client;
+import net.jcip.annotations.NotThreadSafe;
 import net.opcodes.RecvOpcode;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.HexTool;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Logs packets to console and file.
+ * Logs packets from monitored characters to a file.
  *
  * @author Alan (SharpAceX)
  */
+@NotThreadSafe
+public class MonitoredChrLogger {
+    private static final Logger log = LoggerFactory.getLogger(MonitoredChrLogger.class);
+    private static final Set<Integer> monitoredChrIds = new HashSet<>();
 
-public class MapleLogger {
-    public static final Set<Integer> monitored = new HashSet<>();
-    public static final Set<Integer> ignored = new HashSet<>();
+    /**
+     * Toggle monitored status for a character id
+     *
+     * @return new status. true if the chrId is now monitored, otherwise false.
+     */
+    public static boolean toggleMonitored(int chrId) {
+        if (monitoredChrIds.contains(chrId)) {
+            monitoredChrIds.remove(chrId);
+            return false;
+        } else {
+            monitoredChrIds.add(chrId);
+            return true;
+        }
+    }
 
-    public static void logRecv(Client c, short packetId, byte[] packetContent) {
+    public static Collection<Integer> getMonitoredChrIds() {
+        return monitoredChrIds;
+    }
+
+    public static void logPacketIfMonitored(Client c, short packetId, byte[] packetContent) {
         Character chr = c.getPlayer();
         if (chr == null) {
             return;
         }
-        if (!monitored.contains(chr.getId())) {
+        if (!monitoredChrIds.contains(chr.getId())) {
             return;
         }
         RecvOpcode op = getOpcodeFromValue(packetId);
         if (isRecvBlocked(op)) {
             return;
         }
-        String packet = op + "\r\n" + HexTool.toString(packetContent);
-        FilePrinter.printError(FilePrinter.PACKET_LOGS + c.getAccountName() + "-" + chr.getName() + ".txt", packet);
+
+        String packet = packetContent.length > 0 ? HexTool.toString(packetContent) : "<empty>";
+        log.info("{}-{} {}-{}", c.getAccountName(), chr.getName(), packetId, packet);
     }
 
     private static boolean isRecvBlocked(RecvOpcode op) {

@@ -21,6 +21,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package server.life;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -35,6 +37,7 @@ import java.util.List;
 import java.util.*;
 
 public class LifeFactory {
+    private static final Logger log = LoggerFactory.getLogger(LifeFactory.class);
     private static final DataProvider data = DataProviderFactory.getDataProvider(WZFiles.MOB);
     private final static DataProvider stringDataWZ = DataProviderFactory.getDataProvider(WZFiles.STRING);
     private static final Data mobStringData = stringDataWZ.getData("Mob.img");
@@ -59,7 +62,7 @@ public class LifeFactory {
         } else if (type.equalsIgnoreCase("m")) {
             return getMonster(id);
         } else {
-            System.out.println("Unknown Life type: " + type);
+            log.warn("Unknown Life type: {}", type);
             return null;
         }
     }
@@ -247,12 +250,9 @@ public class LifeFactory {
 
                 monsterStats.put(mid, stats);
             }
-            Monster ret = new Monster(mid, stats);
-            return ret;
+            return new Monster(mid, stats);
         } catch (NullPointerException npe) {
-            System.out.println("[SEVERE] MOB " + mid + " failed to load. Issue: " + npe.getMessage() + "\n\n");
-            npe.printStackTrace();
-
+            log.error("[SEVERE] MOB {} failed to load.", mid, npe);
             return null;
         }
     }
@@ -271,8 +271,7 @@ public class LifeFactory {
                 return stats.getLevel();
             }
         } catch (NullPointerException npe) {
-            System.out.println("[SEVERE] MOB " + mid + " failed to load. Issue: " + npe.getMessage() + "\n\n");
-            npe.printStackTrace();
+            log.error("[SEVERE] MOB {} failed to load.", mid, npe);
         }
 
         return -1;

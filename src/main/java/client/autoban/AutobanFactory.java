@@ -24,10 +24,14 @@ package client.autoban;
 
 import client.Character;
 import config.YamlConfig;
-import net.packet.logging.MapleLogger;
 import net.server.Server;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -55,6 +59,9 @@ public enum AutobanFactory {
     FAST_ITEM_PICKUP(5, SECONDS.toMillis(30)),
     FAST_ATTACK(10, SECONDS.toMillis(30)),
     MPCON(25, SECONDS.toMillis(30));
+
+    private static final Logger log = LoggerFactory.getLogger(AutobanFactory.class);
+    private static final Set<Integer> ignoredChrIds = new HashSet<>();
 
     private final int points;
     private final long expiretime;
@@ -87,13 +94,14 @@ public enum AutobanFactory {
 
     public void alert(Character chr, String reason) {
         if (YamlConfig.config.server.USE_AUTOBAN) {
-            if (chr != null && MapleLogger.ignored.contains(chr.getId())) {
+            if (chr != null && isIgnored(chr.getId())) {
                 return;
             }
             Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
         }
         if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
-            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, (chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason);
+            final String chrName = chr != null ? Character.makeMapleReadable(chr.getName()) : "";
+            log.info("Autoban alert - chr {} caused {}-{}", chrName, this.name(), reason);
         }
     }
 
@@ -102,5 +110,29 @@ public enum AutobanFactory {
             chr.autoban("Autobanned for (" + this.name() + ": " + value + ")");
             //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");
         }
+    }
+
+    /**
+     * Toggle ignored status for a character id.
+     * An ignored character will not trigger GM alerts.
+     *
+     * @return new status. true if the chrId is now ignored, otherwise false.
+     */
+    public static boolean toggleIgnored(int chrId) {
+        if (ignoredChrIds.contains(chrId)) {
+            ignoredChrIds.remove(chrId);
+            return false;
+        } else {
+            ignoredChrIds.add(chrId);
+            return true;
+        }
+    }
+
+    private static boolean isIgnored(int chrId) {
+        return ignoredChrIds.contains(chrId);
+    }
+
+    public static Collection<Integer> getIgnoredChrIds() {
+        return ignoredChrIds;
     }
 }

@@ -63,7 +63,6 @@ import server.expeditions.ExpeditionBossLog;
 import server.life.PlayerNPCFactory;
 import server.quest.Quest;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.Pair;
 
 import java.sql.Connection;
@@ -304,11 +303,10 @@ public class Server {
     private void dumpData() {
         wldRLock.lock();
         try {
-            System.out.println(worlds);
-            System.out.println(channels);
-            System.out.println(worldRecommendedList);
-            System.out.println();
-            System.out.println("---------------------");
+            log.debug("Worlds: {}", worlds);
+            log.debug("Channels: {}", channels);
+            log.debug("World recommended list: {}", worldRecommendedList);
+            log.debug("---------------------");
         } finally {
             wldRLock.unlock();
         }
@@ -886,8 +884,7 @@ public class Server {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();//For those who get errors
-            log.error("[SEVERE] Syntax error in 'world.ini'.");
+            log.error("[SEVERE] Syntax error in 'world.ini'.", e); //For those who get errors
             System.exit(0);
         }
 
@@ -1106,7 +1103,7 @@ public class Server {
                     mc.setMGC(mgc);
                     mgc.setCharacter(mc);
                 } else {
-                    FilePrinter.printError(FilePrinter.GUILD_CHAR_ERROR, "Could not find " + mc.getName() + " when loading guild " + id + ".");
+                    log.error("Could not find chr {} when loading guild {}", mc.getName(), id);
                 }
 
                 g.setOnline(mc.getId(), true, mc.getClient().getChannel());
@@ -1596,7 +1593,7 @@ public class Server {
             }
             //log
             for (Pair<String, String> namePair : changedNames) {
-                log.info("Name change applied - from: \"{}\" to \"{}\" at {}", namePair.getLeft(), namePair.getRight(), Instant.now());
+                log.info("Name change applied - from: \"{}\" to \"{}\"", namePair.getLeft(), namePair.getRight());
             }
         } catch (SQLException e) {
             log.warn("Failed to retrieve list of pending name changes", e);
@@ -1617,13 +1614,12 @@ public class Server {
                 String reason = Character.checkWorldTransferEligibility(con, characterId, oldWorld, newWorld); //check if character is still eligible
                 if (reason != null) {
                     removedTransfers.add(nameChangeId);
-                    FilePrinter.print(FilePrinter.WORLD_TRANSFER, "World transfer cancelled : Character ID " + characterId + " at " + Calendar.getInstance().getTime() + ", Reason : " + reason);
+                    log.info("World transfer canceled: chrId {}, reason {}", characterId, reason);
                     try (PreparedStatement delPs = con.prepareStatement("DELETE FROM worldtransfers WHERE id = ?")) {
                         delPs.setInt(1, nameChangeId);
                         delPs.executeUpdate();
                     } catch (SQLException e) {
-                        e.printStackTrace();
-                        FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to delete world transfer for character ID " + characterId);
+                        log.error("Failed to delete world transfer for chrId {}", characterId, e);
                     }
                 }
             }
@@ -1657,7 +1653,7 @@ public class Server {
                 int charId = worldTransferPair.getLeft();
                 int oldWorld = worldTransferPair.getRight().getLeft();
                 int newWorld = worldTransferPair.getRight().getRight();
-                log.info("World transfer applied - character id {} from world {} to world {} at {}", charId, oldWorld, newWorld, Instant.now());
+                log.info("World transfer applied - character id {} from world {} to world {}", charId, oldWorld, newWorld);
             }
         } catch (SQLException e) {
             log.warn("Failed to retrieve list of pending world transfers", e);
@@ -1881,7 +1877,7 @@ public class Server {
     }
 
     private synchronized void shutdownInternal(boolean restart) {
-        System.out.println((restart ? "Restarting" : "Shutting down") + " the server!\r\n");
+        log.info("{} the server!", restart ? "Restarting" : "Shutting down");
         if (getWorlds() == null) {
             return;//already shutdown
         }
@@ -1919,8 +1915,7 @@ public class Server {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                    System.err.println("FUCK MY LIFE");
+                    log.error("Error during shutdown sleep", ie);
                 }
             }
         }
@@ -1931,12 +1926,12 @@ public class Server {
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
 
-        System.out.println("Worlds + Channels are offline.");
+        log.info("World and channels are offline.");
         loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             new Thread(() -> System.exit(0)).start();
         } else {
-            System.out.println("\r\nRestarting the server....\r\n");
+            log.info("Restarting the server...");
             try {
                 instance.finalize();//FUU I CAN AND IT'S FREE
             } catch (Throwable ex) {

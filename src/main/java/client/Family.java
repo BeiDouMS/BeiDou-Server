@@ -24,8 +24,9 @@ package client;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -34,7 +35,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,7 +45,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Ubaware
  */
 public class Family {
-
+    private static final Logger log = LoggerFactory.getLogger(Family.class);
     private static final AtomicInteger familyIDCounter = new AtomicInteger();
 
     private final int id, world;
@@ -121,8 +121,7 @@ public class Family {
                 ps.setInt(2, getLeader().getChrId());
                 ps.executeUpdate();
             } catch (SQLException e) {
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not save new precepts for family " + getID() + ".");
-                e.printStackTrace();
+                log.error("Could not save new precepts for family {}", getID(), e);
             }
         }
     }
@@ -209,11 +208,11 @@ public class Family {
                         level = rs.getInt("level");
                         jobID = rs.getInt("job");
                     } else {
-                        FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Could not load character information of " + cid + " in loadAllFamilies(). (RECORD DOES NOT EXIST)");
+                        log.error("Could not load character information of chrId {} in loadAllFamilies(). (RECORD DOES NOT EXIST)", cid);
                         continue;
                     }
                 } catch (SQLException e) {
-                    FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not load character information of " + cid + " in loadAllFamilies(). (SQL ERROR)");
+                    log.error("Could not load character information of chrId {} in loadAllFamilies(). (SQL ERROR)", cid, e);
                     continue;
                 }
                 int familyid = rsEntries.getInt("familyid");
@@ -261,8 +260,7 @@ public class Family {
                 }
             }
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get family_character entries.");
-            e.printStackTrace();
+            log.error("Could not get family_character entries", e);
         }
         // link missing ones (out of order)
         for (Pair<Pair<Integer, Integer>, FamilyEntry> unmatchedJunior : unmatchedJuniors) {
@@ -273,7 +271,7 @@ public class Family {
             if (senior != null) {
                 junior.setSenior(senior, false);
             } else {
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Missing senior for character " + junior.getName() + " in world " + world);
+                log.error("Missing senior for chr {} in world {}", junior.getName(), world);
             }
         }
 
@@ -296,7 +294,7 @@ public class Family {
             }
             if (!success) {
                 con.rollback();
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Family rep autosave failed for family " + getID() + " on " + Calendar.getInstance().getTime() + ".");
+                log.error("Family rep autosave failed for family {}", getID());
             }
             con.setAutoCommit(true);
             //reset repChanged after successful save
@@ -304,8 +302,7 @@ public class Family {
                 entry.savedSuccessfully();
             }
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB while saving all members rep", e);
         }
     }
 }

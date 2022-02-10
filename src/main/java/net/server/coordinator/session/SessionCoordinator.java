@@ -344,27 +344,26 @@ public class SessionCoordinator {
                     .map(Object::toString)
                     .collect(Collectors.joining(", "));
 
-            System.out.println("Current online clients: " + commaSeparatedClients);
+            log.debug("Current online clients: {}", commaSeparatedClients);
         }
 
         if (!onlineRemoteHwids.isEmpty()) {
             List<Hwid> hwids = new ArrayList<>(onlineRemoteHwids);
             hwids.sort(Comparator.comparing(Hwid::hwid));
 
-            System.out.println("Current online HWIDs: ");
-            for (Hwid s : hwids) {
-                System.out.println("  " + s);
-            }
+            log.debug("Current online HWIDs: {}", hwids.stream()
+                    .map(Hwid::hwid)
+                    .collect(Collectors.joining(" ")));
         }
 
         if (!loginRemoteHosts.isEmpty()) {
             List<Entry<String, Client>> elist = new ArrayList<>(loginRemoteHosts.entrySet());
             elist.sort(Entry.comparingByKey());
 
-            System.out.println("Current login sessions: ");
-            for (Entry<String, Client> e : elist) {
-                System.out.println("  " + e.getKey() + ", client: " + e.getValue());
-            }
+            log.debug("Current login sessions: {}", loginRemoteHosts.entrySet().stream()
+                    .sorted(Entry.comparingByKey())
+                    .map(entry -> "(" + entry.getKey() + ", client: " + entry.getValue())
+                    .collect(Collectors.joining(", ")));
         }
     }
 

@@ -27,13 +27,16 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import net.server.Server;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 
 public class ReportBugCommand extends Command {
     {
         setDescription("Send in a bug report.");
     }
+
+    private static final Logger log = LoggerFactory.getLogger(ReportBugCommand.class);
 
     @Override
     public void execute(Client c, String[] params) {
@@ -46,7 +49,7 @@ public class ReportBugCommand extends Command {
         String message = player.getLastCommandMessage();
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[Bug]:" + Character.makeMapleReadable(player.getName()) + ": " + message));
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(1, message));
-        FilePrinter.printError(FilePrinter.COMMAND_BUG, Character.makeMapleReadable(player.getName()) + ": " + message);
+        log.info("{}: {}", Character.makeMapleReadable(player.getName()), message);
         player.dropMessage(5, "Your bug '" + message + "' was submitted successfully to our developers. Thank you!");
 
     }

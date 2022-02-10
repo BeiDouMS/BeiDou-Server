@@ -28,7 +28,8 @@ import client.creator.novice.NoblesseCreator;
 import constants.id.ItemId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 
 import java.util.Arrays;
@@ -36,6 +37,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class CreateCharHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(CreateCharHandler.class);
 
     private final static Set<Integer> IDs = new HashSet<>(Arrays.asList(
             ItemId.SWORD, ItemId.HAND_AXE, ItemId.WOODEN_CLUB, ItemId.BASIC_POLEARM,// weapons
@@ -77,7 +79,7 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         int[] items = new int[]{weapon, top, bottom, shoes, hair, face};
         for (int item : items) {
             if (!isLegal(item)) {
-                FilePrinter.printError(FilePrinter.EXPLOITS + name + ".txt", "Owner from account '" + c.getAccountName() + "' tried to packet edit in char creation.");
+                log.warn("Owner from account {} tried to packet edit in chr creation", c.getAccountName());
                 c.disconnect(true, false);
                 return;
             }

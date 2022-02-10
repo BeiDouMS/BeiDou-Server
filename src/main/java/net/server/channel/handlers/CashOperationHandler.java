@@ -35,11 +35,12 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.CashShop;
 import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
 import server.ItemInformationProvider;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -51,9 +52,10 @@ import java.util.Map;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 public final class CashOperationHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(CashOperationHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         CashShop cs = chr.getCashShop();
 
@@ -71,7 +73,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     final int snCS = p.readInt();
                     CashItem cItem = CashItemFactory.getItem(snCS);
                     if (!canBuy(chr, cItem, cs.getCash(useNX))) {
-                        FilePrinter.printError(FilePrinter.ITEM, "Denied to sell cash item with SN " + snCS);   // preventing NPE here thanks to MedicOP
+                        log.error("Denied to sell cash item with SN {}", snCS); // preventing NPE here thanks to MedicOP
                         c.enableCSActions();
                         return;
                     }
@@ -165,7 +167,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showBoughtInventorySlots(type, chr.getSlots(type)));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots of type " + type + " for player " + Character.makeMapleReadable(chr.getName()));
+                            log.warn("Could not add {} slots of type {} for chr {}", qty, type, Character.makeMapleReadable(chr.getName()));
                         }
                     } else {
                         CashItem cItem = CashItemFactory.getItem(p.readInt());
@@ -184,7 +186,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.showBoughtInventorySlots(type, chr.getSlots(type)));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots of type " + type + " for player " + Character.makeMapleReadable(chr.getName()));
+                            log.warn("Could not add {} slots of type {} for chr {}", qty, type, Character.makeMapleReadable(chr.getName()));
                         }
                     }
                 } else if (action == 0x07) { // Increase Storage Slots
@@ -203,13 +205,13 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
                         cs.gainCash(cash, -4000);
                         if (chr.getStorage().gainSlots(qty)) {
-                            FilePrinter.print(FilePrinter.STORAGE + c.getAccountName() + ".txt", c.getPlayer().getName() + " bought " + qty + " slots to their account storage.");
+                            log.debug("Chr {} bought {} slots to their account storage.", c.getPlayer().getName(), qty);
                             chr.setUsedStorage();
 
                             c.sendPacket(PacketCreator.showBoughtStorageSlots(chr.getStorage().getSlots()));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots to " + Character.makeMapleReadable(chr.getName()) + "'s account.");
+                            log.warn("Could not add {} slots to {}'s account.", qty, Character.makeMapleReadable(chr.getName()));
                         }
                     } else {
                         CashItem cItem = CashItemFactory.getItem(p.readInt());
@@ -225,13 +227,13 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         }
                         cs.gainCash(cash, cItem, chr.getWorld());
                         if (chr.getStorage().gainSlots(qty)) {    // thanks ABaldParrot & Thora for detecting storage issues here
-                            FilePrinter.print(FilePrinter.STORAGE + c.getAccountName() + ".txt", c.getPlayer().getName() + " bought " + qty + " slots to their account storage.");
+                            log.debug("Chr {} bought {} slots to their account storage", c.getPlayer().getName(), qty);
                             chr.setUsedStorage();
 
                             c.sendPacket(PacketCreator.showBoughtStorageSlots(chr.getStorage().getSlots()));
                             c.sendPacket(PacketCreator.showCash(chr));
                         } else {
-                            FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add " + qty + " slots to " + Character.makeMapleReadable(chr.getName()) + "'s account.");
+                            log.warn("Could not add {} slots to {}'s account", qty, Character.makeMapleReadable(chr.getName()));
                         }
                     }
                 } else if (action == 0x08) { // Increase Character Slots
@@ -253,7 +255,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.showBoughtCharacterSlot(c.getCharacterSlots()));
                         c.sendPacket(PacketCreator.showCash(chr));
                     } else {
-                        FilePrinter.printError(FilePrinter.CASHITEM_BOUGHT, "Could not add a character slot to " + Character.makeMapleReadable(chr.getName()) + "'s account.");
+                        log.warn("Could not add a chr slot to {}'s account", Character.makeMapleReadable(chr.getName()));
                         c.enableCSActions();
                         return;
                     }
@@ -467,7 +469,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     }
                     c.enableCSActions();
                 } else {
-                    System.out.println("Unhandled action: " + action + "\n" + p);
+                    log.warn("Unhandled action: {}, packet: {}", action, p);
                 }
             } finally {
                 c.releaseClient();
@@ -489,7 +491,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
     private static boolean canBuy(Character chr, CashItem item, int cash) {
         if (item != null && item.isOnSale() && item.getPrice() <= cash) {
-            FilePrinter.print(FilePrinter.CASHITEM_BOUGHT, chr + " bought " + ItemInformationProvider.getInstance().getName(item.getItemId()) + " (SN " + item.getSN() + ") for " + item.getPrice());
+            log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSN(), item.getPrice());
             return true;
         } else {
             return false;

@@ -57,6 +57,8 @@ import net.server.services.task.world.CharacterSaveService;
 import net.server.services.type.ChannelServices;
 import net.server.services.type.WorldServices;
 import net.server.world.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
@@ -95,10 +97,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
+    private static final Logger log = LoggerFactory.getLogger(Character.class);
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
     private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
     private static final String[] BLOCKED_NAMES = {"admin", "owner", "moderator", "intern", "donor", "administrator", "FREDRICK", "help", "helper", "alert", "notice", "maplestory", "fuck", "wizet", "fucking", "negro", "fuk", "fuc", "penis", "pussy", "asshole", "gay",
@@ -1721,7 +1725,7 @@ public class Character extends AbstractCharacterObject {
                 resetHpDecreaseTask();
             }
         } else {
-            FilePrinter.printError(FilePrinter.MAPLE_MAP, "Character " + this.getName() + " got stuck when moving to map " + map.getId() + ".");
+            log.warn("Chr {} got stuck when moving to map {}", getName(), map.getId());
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here
             return;
         }
@@ -3584,26 +3588,25 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            System.out.println("-------------------");
-            System.out.println("CACHED BUFF COUNT: ");
-            for (Entry<BuffStat, Byte> bpl : buffEffectsCount.entrySet()) {
-                System.out.println(bpl.getKey() + ": " + bpl.getValue());
-            }
-            System.out.println("-------------------");
-            System.out.println("CACHED BUFFS: ");
-            for (Entry<Integer, Map<BuffStat, BuffStatValueHolder>> bpl : buffEffects.entrySet()) {
-                System.out.print(bpl.getKey() + ": ");
-                for (Entry<BuffStat, BuffStatValueHolder> pble : bpl.getValue().entrySet()) {
-                    System.out.print(pble.getKey().name() + pble.getValue().value + ", ");
-                }
-                System.out.println();
-            }
-            System.out.println("-------------------");
+            log.debug("-------------------");
+            log.debug("CACHED BUFF COUNT: {}", buffEffectsCount.entrySet().stream()
+                    .map(entry -> entry.getKey() + ": " + entry.getValue())
+                    .collect(Collectors.joining(", "))
+            );
 
-            System.out.println("IN ACTION:");
-            for (Entry<BuffStat, BuffStatValueHolder> bpl : effects.entrySet()) {
-                System.out.println(bpl.getKey().name() + " -> " + ItemInformationProvider.getInstance().getName(bpl.getValue().effect.getSourceId()));
-            }
+            log.debug("-------------------");
+            log.debug("CACHED BUFFS: {}", buffEffects.entrySet().stream()
+                    .map(entry -> entry.getKey() + ": (" + entry.getValue().entrySet().stream()
+                            .map(innerEntry -> innerEntry.getKey().name() + innerEntry.getValue().value)
+                            .collect(Collectors.joining(", ")) + ")")
+                    .collect(Collectors.joining(", "))
+            );
+
+            log.debug("-------------------");
+            log.debug("IN ACTION: {}", effects.entrySet().stream()
+                    .map(entry -> entry.getKey().name() + " -> " + ItemInformationProvider.getInstance().getName(entry.getValue().effect.getSourceId()))
+                    .collect(Collectors.joining(", "))
+            );
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -3614,9 +3617,10 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            for (Entry<BuffStat, Byte> mbsl : buffEffectsCount.entrySet()) {
-                System.out.println(mbsl.getKey().name() + " -> " + mbsl.getValue());
-            }
+            log.debug("ALL BUFFS COUNT: {}", buffEffectsCount.entrySet().stream()
+                    .map(entry -> entry.getKey().name() + " -> " + entry.getValue())
+                    .collect(Collectors.joining(", "))
+            );
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -5604,9 +5608,8 @@ public class Character extends AbstractCharacterObject {
             }
             try {
                 merchant.saveItems(false);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, "Error while saving " + name + "'s Hired Merchant items.");
+            } catch (SQLException e) {
+                log.error("Error while saving {}'s Hired Merchant items.", name, e);
             }
         }
     }
@@ -7548,7 +7551,7 @@ public class Character extends AbstractCharacterObject {
                 }
             }
         } catch (Exception e) {
-            FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, e, "Character.mobKilled. CID: " + this.id + " last Quest Processed: " + lastQuestProcessed);
+            log.warn("Character.mobKilled. chrId {}, last quest processed: {}", this.id, lastQuestProcessed, e);
         }
     }
 
@@ -8068,7 +8071,7 @@ public class Character extends AbstractCharacterObject {
             if (tap >= 0) {
                 updateStrDexIntLukSp(tstr, tdex, tint, tluk, tap, tsp, GameConstants.getSkillBook(job.getId()));
             } else {
-                FilePrinter.print(FilePrinter.EXCEPTION_CAUGHT, name + " tried to get their stats reseted, without having enough AP available.");
+                log.warn("Chr {} tried to have its stats reset without enough AP available");
             }
         } finally {
             statWlock.unlock();
@@ -8241,7 +8244,7 @@ public class Character extends AbstractCharacterObject {
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
-                        FilePrinter.printError(FilePrinter.INSERT_CHAR, "Error trying to insert " + name);
+                        log.error("Error trying to insert chr {}", name);
                         return false;
                     }
 
@@ -8249,7 +8252,7 @@ public class Character extends AbstractCharacterObject {
                         if (rs.next()) {
                             this.id = rs.getInt(1);
                         } else {
-                            FilePrinter.printError(FilePrinter.INSERT_CHAR, "Inserting char failed " + name);
+                            log.error("Inserting chr {} failed", name);
                             return false;
                         }
                     }
@@ -8329,7 +8332,7 @@ public class Character extends AbstractCharacterObject {
                 con.setAutoCommit(true);
             }
         } catch (Throwable t) {
-            FilePrinter.printError(FilePrinter.INSERT_CHAR, t, "Error creating " + name + " Level: " + level + " Job: " + job.getId());
+            log.error("Error creating chr {}, level: {}, job: {}", name, level, job.getId(), t);
         }
 
         return false;
@@ -8358,12 +8361,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         Calendar c = Calendar.getInstance();
-
-        if (notAutosave) {
-            FilePrinter.print(FilePrinter.SAVING_CHARACTER, "Attempting to save " + name + " at " + c.getTime());
-        } else {
-            FilePrinter.print(FilePrinter.AUTOSAVING_CHARACTER, "Attempting to autosave " + name + " at " + c.getTime());
-        }
+        log.debug("Attempting to {} chr {}", notAutosave ? "save" : "autosave", name);
 
         Server.getInstance().updateCharacterEntry(this);
 
@@ -8756,7 +8754,7 @@ public class Character extends AbstractCharacterObject {
                 con.setAutoCommit(true);
             }
         } catch (Exception e) {
-            FilePrinter.printError(FilePrinter.SAVE_CHAR, e, "Error saving " + name + " Level: " + level + " Job: " + job.getId());
+            log.error("Error saving chr {}, level: {}, job: {}", name, level, job.getId(), e);
         }
     }
 
@@ -8772,14 +8770,13 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void sendPolice(String text) {
-        String message = getName() + " received this - " + text;
+        final String message = getName() + " received this - " + text;
         if (Server.getInstance().isGmOnline(this.getWorld())) { //Alert and log if a GM is online
             Server.getInstance().broadcastGMMessage(this.getWorld(), PacketCreator.sendYellowTip(message));
-            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, message);
         } else { //Auto DC and log if no GM is online
             client.disconnect(false, false);
-            FilePrinter.print(FilePrinter.AUTOBAN_DC, message);
         }
+        log.info(message);
         //Server.getInstance().broadcastGMMessage(0, PacketCreator.serverNotice(1, getName() + " received this - " + text));
         //sendPacket(PacketCreator.sendPolice(text));
         //this.isbanned = true;
@@ -10694,8 +10691,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to register name change for character " + getName() + ".");
+                log.error("Failed to register name change for chr {}", getName(), e);
                 return false;
             }
 
@@ -10707,12 +10703,10 @@ public class Character extends AbstractCharacterObject {
                 this.pendingNameChange = true;
                 return true;
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to register name change for character " + getName() + ".");
+                log.error("Failed to register name change for chr {}", getName(), e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection while registering name change", e);
         }
         return false;
     }
@@ -10727,8 +10721,7 @@ public class Character extends AbstractCharacterObject {
             }
             return affectedRows > 0; //rows affected
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to cancel name change for character " + getName() + ".");
+            log.error("Failed to cancel name change for chr {}", getName(), e);
             return false;
         }
     }
@@ -10751,8 +10744,7 @@ public class Character extends AbstractCharacterObject {
                     newName = rs.getString("new");
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to retrieve pending name changes for character " + getName() + ".");
+                log.error("Failed to retrieve pending name changes for chr {}", this.name, e);
             }
 
             con.setAutoCommit(false);
@@ -10760,12 +10752,11 @@ public class Character extends AbstractCharacterObject {
             if (!success) {
                 con.rollback();
             } else {
-                FilePrinter.print(FilePrinter.CHANGE_CHARACTER_NAME, "Name change applied : from \"" + getName() + "\" to \"" + newName + "\" at " + Calendar.getInstance().getTime());
+                log.info("Name change applied: from {} to {}", this.name, newName);
             }
             con.setAutoCommit(true);
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection for pending chr name change", e);
         }
     }
 
@@ -10778,8 +10769,7 @@ public class Character extends AbstractCharacterObject {
             }
             con.setAutoCommit(true);
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection for chr name change", e);
         }
     }
 
@@ -10789,8 +10779,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(2, characterId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
+            log.error("Failed to perform chr name change in database for chrId {}", characterId, e);
             return false;
         }
 
@@ -10799,8 +10788,7 @@ public class Character extends AbstractCharacterObject {
             ps.setString(2, oldName);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
+            log.error("Failed to update rings during chr name change for chrId {}", characterId, e);
             return false;
         }
 
@@ -10919,8 +10907,7 @@ public class Character extends AbstractCharacterObject {
                 ps.setInt(2, nameChangeId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
+                log.error("Failed to save chr name change for chrId {}", nameChangeId, e);
                 return false;
             }
         }
@@ -10968,8 +10955,7 @@ public class Character extends AbstractCharacterObject {
                 return "Character is the leader of a guild.";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);
+            log.error("Change character name", e);
             return "SQL Error";
         }
         try (PreparedStatement ps = con.prepareStatement("SELECT tempban FROM accounts WHERE id = ?")) {
@@ -10983,8 +10969,7 @@ public class Character extends AbstractCharacterObject {
                 return "Account has been banned.";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);
+            log.error("Change character name", e);
             return "SQL Error";
         }
         try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS rowcount FROM characters WHERE accountid = ? AND world = ?")) {
@@ -10998,8 +10983,7 @@ public class Character extends AbstractCharacterObject {
                 return "Too many characters on destination world.";
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e);
+            log.error("Change character name", e);
             return "SQL Error";
         }
         return null;
@@ -11021,8 +11005,7 @@ public class Character extends AbstractCharacterObject {
                     }
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to register world transfer for character " + getName() + ".");
+                log.error("Failed to register world transfer for chr {}", getName(), e);
                 return false;
             }
 
@@ -11033,12 +11016,10 @@ public class Character extends AbstractCharacterObject {
                 ps.executeUpdate();
                 return true;
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to register world transfer for character " + getName() + ".");
+                log.error("Failed to register world transfer for chr {}", getName(), e);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to get DB connection.");
+            log.error("Failed to get DB connection while registering world transfer", e);
         }
         return false;
     }
@@ -11050,8 +11031,7 @@ public class Character extends AbstractCharacterObject {
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0; //rows affected
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Failed to cancel pending world transfer for character " + getName() + ".");
+            log.error("Failed to cancel pending world transfer for chr {}", getName(), e);
             return false;
         }
     }
@@ -11062,13 +11042,12 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(1, characterId);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, "Character data invalid? (charid " + characterId + ")");
+                log.warn("Character data invalid for world transfer? chrId {}", characterId);
                 return false;
             }
             mesos = rs.getInt("meso");
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+            log.error("Failed to do world transfer for chrId {}", characterId, e);
             return false;
         }
         try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET world = ?, meso = ?, guildid = ?, guildrank = ? WHERE id = ?")) {
@@ -11079,8 +11058,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(5, characterId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+            log.error("Failed to update chrId {} during world transfer", characterId, e);
             return false;
         }
         try (PreparedStatement ps = con.prepareStatement("DELETE FROM buddies WHERE characterid = ? OR buddyid = ?")) {
@@ -11088,8 +11066,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(2, characterId);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+            log.error("Failed to delete buddies for chrId {} during world transfer", characterId, e);
             return false;
         }
         if (worldTransferId != -1) {
@@ -11098,8 +11075,7 @@ public class Character extends AbstractCharacterObject {
                 ps.setInt(2, worldTransferId);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.WORLD_TRANSFER, e, "Character ID : " + characterId);
+                log.error("Failed to update world transfer for chrId {}", characterId, e);
                 return false;
             }
         }

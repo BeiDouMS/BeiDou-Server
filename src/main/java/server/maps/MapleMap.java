@@ -53,6 +53,8 @@ import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
 import net.server.world.Party;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import scripting.map.MapScriptManager;
 import server.ItemInformationProvider;
@@ -64,7 +66,6 @@ import server.life.LifeFactory.selfDestruction;
 import server.partyquest.CarnivalFactory;
 import server.partyquest.CarnivalFactory.MCSkill;
 import server.partyquest.GuardianSpawnPoint;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -83,7 +84,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MapleMap {
-
+    private static final Logger log = LoggerFactory.getLogger(MapleMap.class);
     private static final List<MapObjectType> rangedMapobjectTypes = Arrays.asList(MapObjectType.SHOP, MapObjectType.ITEM, MapObjectType.NPC, MapObjectType.MONSTER, MapObjectType.DOOR, MapObjectType.SUMMON, MapObjectType.REACTOR);
     private static final Map<Integer, Pair<Integer, Integer>> dropBoundsCache = new HashMap<>(100);
 
@@ -1985,7 +1986,7 @@ public class MapleMap {
             } else if (monster.getId() == MobId.GIANT_SNOWMAN_LV5_EASY || monster.getId() == MobId.GIANT_SNOWMAN_LV5_MEDIUM || monster.getId() == MobId.GIANT_SNOWMAN_LV5_HARD) {
                 monsterItemDrop(monster, monster.getDropPeriodTime());
             } else {
-                FilePrinter.printError(FilePrinter.UNHANDLED_EVENT, "UNCODED TIMED MOB DETECTED: " + monster.getId());
+                log.error("UNCODED TIMED MOB DETECTED: {}", monster.getId());
             }
         }
 
@@ -2059,7 +2060,7 @@ public class MapleMap {
     public Portal getDoorPortal(int doorid) {
         Portal doorPortal = portals.get(0x80 + doorid);
         if (doorPortal == null) {
-            FilePrinter.printError(FilePrinter.EXCEPTION, "[Door] " + mapName + "(" + mapid + ") does not contain door portalid " + doorid);
+            log.warn("[Door] {} ({}) does not contain door portalid {}", mapName, mapid, doorid);
             return portals.get(0x80);
         }
 

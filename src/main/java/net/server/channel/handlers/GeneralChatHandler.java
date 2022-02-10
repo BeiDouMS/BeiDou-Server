@@ -25,16 +25,18 @@ import client.Character;
 import client.Client;
 import client.autoban.AutobanFactory;
 import client.command.CommandsExecutor;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.FilePrinter;
-import tools.LogHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import server.ChatLogger;
 import tools.PacketCreator;
 
 public final class GeneralChatHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(GeneralChatHandler.class);
+
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         String s = p.readString();
         Character chr = c.getPlayer();
         if (chr.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
@@ -43,7 +45,7 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
         }
         if (s.length() > Byte.MAX_VALUE && !chr.isGM()) {
             AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit in General Chat.");
-            FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + s.length());
+            log.warn("Chr {} tried to send text with length of {}", c.getPlayer().getName(), s.length());
             c.disconnect(true, false);
             return;
         }
@@ -59,14 +61,10 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
 
             if (!chr.isHidden()) {
                 chr.getMap().broadcastMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "General", s);
-                }
+                ChatLogger.log(c, "General", s);
             } else {
                 chr.getMap().broadcastGMMessage(PacketCreator.getChatText(chr.getId(), s, chr.getWhiteChat(), show));
-                if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-                    LogHelper.logChat(c, "GM General", s);
-                }
+                ChatLogger.log(c, "GM General", s);
             }
 
             chr.getAutobanManager().spam(7);

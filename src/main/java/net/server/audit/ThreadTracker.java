@@ -20,8 +20,9 @@
 package net.server.audit;
 
 import net.server.audit.locks.MonitoredLockType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.TimerManager;
-import tools.FilePrinter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * This tool has the main purpose of auditing deadlocks throughout the server and must be used only for debugging. The flag is USE_THREAD_TRACKER.
  */
 public class ThreadTracker {
+    private static final Logger log = LoggerFactory.getLogger(ThreadTracker.class);
     private static ThreadTracker instance = null;
 
     public static ThreadTracker getInstance() {
@@ -147,8 +149,8 @@ public class ThreadTracker {
                                     dateFormat.setTimeZone(TimeZone.getDefault());
                                     String df = dateFormat.format(new Date());
 
-                                    FilePrinter.print(FilePrinter.DEADLOCK_LOCKS, printThreadLog(tt, df));
-                                    FilePrinter.print(FilePrinter.DEADLOCK_STACK, printThreadStack(ste, df));
+                                    log.debug("Thread log - {}", printThreadLog(tt, df));
+                                    log.debug("thread stack - {}", printThreadStack(ste, df));
                                 }
                             }
                         }
@@ -188,7 +190,7 @@ public class ThreadTracker {
                     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
                     dateFormat.setTimeZone(TimeZone.getDefault());
 
-                    FilePrinter.printError(FilePrinter.DEADLOCK_STATE, printThreadTrackerState(dateFormat.format(new Date())));
+                    log.error("Deadlock state: {}", printThreadTrackerState(dateFormat.format(new Date())));
                     //FilePrinter.printError(FilePrinter.DEADLOCK_STATE, "[" + dateFormat.format(new Date()) + "] Presenting current lock path for lockid " + lockId.name() + ".\r\n" + printLockStatus(lockId) + "\r\n-------------------------------");
                 }
             } else {

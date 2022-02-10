@@ -24,7 +24,8 @@ package scripting;
 import client.Client;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import constants.string.CharsetConstants;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.script.*;
 import java.io.File;
@@ -35,6 +36,7 @@ import java.io.IOException;
  * @author Matze
  */
 public abstract class AbstractScriptManager {
+    private static final Logger log = LoggerFactory.getLogger(AbstractScriptManager.class);
     private final ScriptEngineFactory sef;
 
     protected AbstractScriptManager() {
@@ -58,7 +60,7 @@ public abstract class AbstractScriptManager {
         try (FileReader fr = new FileReader(scriptFile, CharsetConstants.CHARSET)) {
             engine.eval(fr);
         } catch (final ScriptException | IOException t) {
-            FilePrinter.printError(FilePrinter.INVOCABLE + path.substring(12), t, path);
+            log.warn("Exception during script eval for file: {}", path, t);
             return null;
         }
 

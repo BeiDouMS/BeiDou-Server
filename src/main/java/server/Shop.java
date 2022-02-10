@@ -28,6 +28,8 @@ import client.inventory.Pet;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -44,7 +46,9 @@ import java.util.Set;
  * @author Matze
  */
 public class Shop {
+    private static final Logger log = LoggerFactory.getLogger(Shop.class);
     private static final Set<Integer> rechargeableItems = new LinkedHashSet<>();
+
     private final int id;
     private final int npcId;
     private final List<ShopItem> items;
@@ -83,7 +87,7 @@ public class Shop {
         ShopItem item = findBySlot(slot);
         if (item != null) {
             if (item.getItemId() != itemId) {
-                System.out.println("Wrong slot number in shop " + id);
+                log.warn("Wrong slot number in shop {}", id);
                 return;
             }
         } else {

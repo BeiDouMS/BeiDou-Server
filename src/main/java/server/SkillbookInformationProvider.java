@@ -20,6 +20,8 @@
 package server;
 
 import client.Character;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -45,6 +47,7 @@ import java.util.regex.Pattern;
  * Only used in 1 script that gives players information about where skillbooks can be found
  */
 public class SkillbookInformationProvider {
+    private static final Logger log = LoggerFactory.getLogger(SkillbookInformationProvider.class);
     private static volatile Map<Integer, SkillBookEntry> foundSkillbooks = new HashMap<>();
 
     public enum SkillBookEntry {
@@ -242,8 +245,7 @@ public class SkillbookInformationProvider {
                 scriptFileSkillbooks.put(skillbookId, SkillBookEntry.SCRIPT);
             }
         } catch (IOException ioe) {
-            System.out.println("Failed to read " + file.getName() + ".");
-            ioe.printStackTrace();
+            log.error("Failed to read file:{}", file.getName(), ioe);
         }
 
         return scriptFileSkillbooks;

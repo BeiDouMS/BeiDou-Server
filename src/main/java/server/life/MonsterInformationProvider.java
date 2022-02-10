@@ -22,6 +22,8 @@ package server.life;
 
 import config.YamlConfig;
 import constants.inventory.ItemConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -39,6 +41,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class MonsterInformationProvider {
+    private static final Logger log = LoggerFactory.getLogger(MonsterInformationProvider.class);
     // Author : LightPepsi
 
     private static final MonsterInformationProvider instance = new MonsterInformationProvider();
@@ -100,7 +103,7 @@ public class MonsterInformationProvider {
                         rs.getShort("questid")));
             }
         } catch (SQLException e) {
-            System.err.println("Error retrieving drop" + e);
+            log.error("Error retrieving global drops", e);
         }
     }
 
@@ -254,8 +257,7 @@ public class MonsterInformationProvider {
             } catch (Exception e) {   //nonexistant mob
                 boss = false;
 
-                e.printStackTrace();
-                System.err.println("Nonexistant mob id " + id);
+                log.warn("Non-existent mob id {}", id, e);
             }
 
             mobBossCache.put(id, boss);

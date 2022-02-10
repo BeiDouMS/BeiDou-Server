@@ -23,17 +23,18 @@ package net.server.channel.handlers;
 
 import client.Client;
 import client.autoban.AutobanFactory;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.FilePrinter;
-import tools.LogHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import server.ChatLogger;
 import tools.PacketCreator;
 
 public final class PetChatHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(PetChatHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         int petId = p.readInt();
         p.readInt();
         p.readByte();
@@ -45,13 +46,11 @@ public final class PetChatHandler extends AbstractPacketHandler {
         String text = p.readString();
         if (text.length() > Byte.MAX_VALUE) {
             AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with pets.");
-            FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + text.length());
+            log.warn("Chr {} tried to send text with length of {}", c.getPlayer().getName(), text.length());
             c.disconnect(true, false);
             return;
         }
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.petChat(c.getPlayer().getId(), pet, act, text), true);
-        if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-            LogHelper.logChat(c, "Pet", text);
-        }
+        ChatLogger.log(c, "Pet", text);
     }
 }

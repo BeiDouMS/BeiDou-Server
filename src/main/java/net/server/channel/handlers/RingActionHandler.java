@@ -34,6 +34,8 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.channel.Channel;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.ItemInformationProvider;
 import tools.DatabaseConnection;
@@ -52,6 +54,7 @@ import java.sql.SQLException;
  * @author Drago (Dragohe4rt) - on Wishlist
  */
 public final class RingActionHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(RingActionHandler.class);
 
     private static int getEngagementBoxId(int useItemId) {
         return switch (useItemId) {
@@ -175,7 +178,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
 
             eraseEngagementOffline(characterId, con);
         } catch (SQLException ex) {
-            System.out.println("Error updating offline breakup " + ex.getMessage());
+            log.error("Error updating offline breakup", ex);
         }
     }
 
@@ -361,7 +364,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                         source.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(target.getId(), target.getMapId()));
                         target.sendPacket(WeddingPackets.OnNotifyWeddingPartnerTransfer(source.getId(), source.getMapId()));
                     } catch (Exception e) {
-                        System.out.println("Error with engagement " + e.getMessage());
+                        log.error("Error with engagement", e);
                     }
                 } else {
                     source.dropMessage(1, "She has politely declined your engagement request.");
@@ -509,7 +512,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                 break;
 
             default:
-                System.out.println("Unhandled RING_ACTION Mode: " + p);
+                log.warn("Unhandled RING_ACTION mode. Packet: {}", p);
                 break;
         }
 

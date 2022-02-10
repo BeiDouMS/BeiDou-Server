@@ -31,7 +31,8 @@ import net.PacketHandler;
 import net.PacketProcessor;
 import net.packet.ByteBufInPacket;
 import net.packet.InPacket;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.HexTool;
 
 import java.io.FileReader;
@@ -43,6 +44,8 @@ public class PeCommand extends Command {
     {
         setDescription("Handle synthesized packets from file, and handle them as if sent from a client");
     }
+
+    private static final Logger log = LoggerFactory.getLogger(PeCommand.class);
 
     @Override
     public void execute(Client c, String[] params) {
@@ -70,7 +73,9 @@ public class PeCommand extends Command {
                 player.yellowMessage("Receiving: " + packet);
                 packetHandler.handlePacket(inPacket, c);
             } catch (final Throwable t) {
-                FilePrinter.printError(FilePrinter.PACKET_HANDLER + packetHandler.getClass().getName() + ".txt", t, "Error for " + (c.getPlayer() == null ? "" : "player ; " + c.getPlayer() + " on map ; " + c.getPlayer().getMapId() + " - ") + "account ; " + c.getAccountName() + "\r\n" + inPacket);
+                final String chrInfo = player != null ? player.getName() + " on map " + player.getMapId() : "?";
+                log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", packetHandler.getClass().getSimpleName(),
+                        chrInfo, c.getAccountName(), packet, t);
             }
         }
     }

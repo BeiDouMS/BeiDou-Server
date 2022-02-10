@@ -33,6 +33,8 @@ import net.packet.InPacket;
 import net.packet.Packet;
 import net.server.Server;
 import net.server.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.MTSItemInfo;
 import tools.DatabaseConnection;
@@ -48,9 +50,10 @@ import java.util.Calendar;
 import java.util.List;
 
 public final class MTSHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(MTSHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         // TODO add karma-to-untradeable flag on sold items here
 
         if (!c.getPlayer().getCashShop().isOpened()) {
@@ -354,8 +357,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                     ps.close();
                     con.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
-                    System.out.println("MTS Transfer error: " + e);
+                    log.error("MTS Transfer error", e);
                 }
             } else if (op == 9) { //add to cart
                 int id = p.readInt(); //id of the item
@@ -537,7 +539,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.MTSFailBuy());
                 }
             } else {
-                System.out.println("Unhandled OP(MTS): " + op + " Packet: " + p);
+                log.warn("Unhandled OP (MTS): {}, packet: {}", op, p);
             }
         } else {
             c.sendPacket(PacketCreator.showMTSCash(c.getPlayer()));

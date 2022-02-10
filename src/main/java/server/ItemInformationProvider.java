@@ -33,6 +33,8 @@ import constants.skills.Assassin;
 import constants.skills.Gunslinger;
 import constants.skills.NightWalker;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.*;
 import provider.wz.WZFiles;
 import server.MakerItemFactory.MakerItemCreateEntry;
@@ -51,6 +53,7 @@ import java.util.Map.Entry;
  * @author Matze
  */
 public class ItemInformationProvider {
+    private static final Logger log = LoggerFactory.getLogger(ItemInformationProvider.class);
     private final static ItemInformationProvider instance = new ItemInformationProvider();
 
     public static ItemInformationProvider getInstance() {
@@ -1799,7 +1802,7 @@ public class ItemInformationProvider {
             String itemName = ItemInformationProvider.getInstance().getName(equip.getItemId());
             Server.getInstance().broadcastGMMessage(chr.getWorld(), PacketCreator.sendYellowTip("[Warning]: " + chr.getName() + " tried to equip " + itemName + " into slot " + dst + "."));
             AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to forcibly equip an item.");
-            FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to equip " + itemName + " into " + dst + " slot.");
+            log.warn("Chr {} tried to equip {} into slot {}", chr.getName(), itemName, dst);
             return false;
         }
 

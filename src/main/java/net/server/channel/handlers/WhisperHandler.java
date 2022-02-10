@@ -24,11 +24,11 @@ package net.server.channel.handlers;
 import client.Character;
 import client.Client;
 import client.autoban.AutobanFactory;
-import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.FilePrinter;
-import tools.LogHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import server.ChatLogger;
 import tools.PacketCreator;
 import tools.PacketCreator.WhisperFlag;
 
@@ -36,6 +36,7 @@ import tools.PacketCreator.WhisperFlag;
  * @author Chronos
  */
 public final class WhisperHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(WhisperHandler.class);
 
     // result types, not sure if there are proper names for these
     public static final byte RT_ITC = 0x00;
@@ -66,7 +67,7 @@ public final class WhisperHandler extends AbstractPacketHandler {
                 handleFind(c.getPlayer(), target, WhisperFlag.LOCATION_FRIEND);
                 break;
             default:
-                FilePrinter.printError(FilePrinter.PACKET_HANDLER + c.getPlayer().getName() + ".txt", "Unknown request " + request + " triggered by " + c.getPlayer().getName());
+                log.warn("Unknown request {} triggered by {}", request, c.getPlayer().getName());
                 break;
         }
     }
@@ -94,14 +95,12 @@ public final class WhisperHandler extends AbstractPacketHandler {
 
         if (message.length() > Byte.MAX_VALUE) {
             AutobanFactory.PACKET_EDIT.alert(user, user.getName() + " tried to packet edit with whispers.");
-            FilePrinter.printError(FilePrinter.EXPLOITS + user.getName() + ".txt", user.getName() + " tried to send text with length of " + message.length());
+            log.warn("Chr {} tried to send text with length of {}", user.getName(), message.length());
             user.getClient().disconnect(true, false);
             return;
         }
 
-        if (YamlConfig.config.server.USE_ENABLE_CHAT_LOG) {
-            LogHelper.logChat(user.getClient(), "Whisper To " + target.getName(), message);
-        }
+        ChatLogger.log(user.getClient(), "Whisper To " + target.getName(), message);
 
         target.sendPacket(PacketCreator.getWhisperReceive(user.getName(), user.getClient().getChannel() - 1, user.isGM(), message));
 

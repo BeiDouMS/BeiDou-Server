@@ -34,7 +34,7 @@ import net.netty.InvalidPacketHeaderException;
 import net.packet.InPacket;
 import net.packet.Packet;
 import net.packet.logging.LoggingUtil;
-import net.packet.logging.MapleLogger;
+import net.packet.logging.MonitoredChrLogger;
 import net.server.Server;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
@@ -57,13 +57,17 @@ import scripting.npc.NPCConversationManager;
 import scripting.npc.NPCScriptManager;
 import scripting.quest.QuestActionManager;
 import scripting.quest.QuestScriptManager;
+import server.MapleLeafLogger;
 import server.ThreadManager;
 import server.TimerManager;
 import server.life.Monster;
 import server.maps.FieldLimit;
 import server.maps.MapleMap;
 import server.maps.MiniDungeonInfo;
-import tools.*;
+import tools.BCrypt;
+import tools.DatabaseConnection;
+import tools.HexTool;
+import tools.PacketCreator;
 
 import javax.script.ScriptEngine;
 import java.io.IOException;
@@ -200,10 +204,12 @@ public class Client extends ChannelInboundHandlerAdapter {
 
         if (handler != null && handler.validateState(this)) {
             try {
-                MapleLogger.logRecv(this, opcode, packet.getBytes());
+                MonitoredChrLogger.logPacketIfMonitored(this, opcode, packet.getBytes());
                 handler.handlePacket(packet, this);
             } catch (final Throwable t) {
-                FilePrinter.printError(FilePrinter.PACKET_HANDLER + handler.getClass().getName() + ".txt", t, "Error for " + (getPlayer() == null ? "" : "player ; " + getPlayer() + " on map ; " + getPlayer().getMapId() + " - ") + "account ; " + getAccountName() + "\r\n" + packet);
+                final String chrInfo = player != null ? player.getName() + " on map " + player.getMapId() : "?";
+                log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", handler.getClass().getSimpleName(),
+                        chrInfo, getAccountName(), packet, t);
                 //client.sendPacket(PacketCreator.enableActions());//bugs sometimes
             }
         }
@@ -380,7 +386,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 voteTime = rs.getInt("date");
             }
         } catch (SQLException e) {
-            FilePrinter.printError("hasVotedAlready.txt", e);
+            log.error("Error getting voting time");
             return -1;
         }
         return voteTime;
@@ -638,7 +644,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 if (rs.next()) {
                     accId = rs.getInt("id");
                     if (accId <= 0) {
-                        FilePrinter.printError(FilePrinter.LOGIN_EXCEPTION, "Tried to login with accid " + accId);
+                        log.warn("Tried to log in with accId {}", accId);
                         return 15;
                     }
 
@@ -937,7 +943,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
         } catch (final Throwable t) {
-            FilePrinter.printError(FilePrinter.ACCOUNT_STUCK, t);
+            log.error("Account stuck", t);
         }
     }
 
@@ -1010,7 +1016,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     }
                 }
             } catch (final Exception e) {
-                FilePrinter.printError(FilePrinter.ACCOUNT_STUCK, e);
+                log.error("Account stuck", e);
             } finally {
                 if (!this.serverTransition) {
                     if (chrg != null) {
@@ -1225,7 +1231,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         for (World w : Server.getInstance().getWorlds()) {
             for (Character chr : w.getPlayerStorage().getAllCharacters()) {
                 if (accid == chr.getAccountID()) {
-                    FilePrinter.print(FilePrinter.EXPLOITS, "Player:  " + chr.getName() + " has been removed from " + GameConstants.WORLD_NAMES[w.getId()] + ". Possible Dupe attempt.");
+                    log.warn("Chr {} has been removed from world {}. Possible Dupe attempt.", chr.getName(), GameConstants.WORLD_NAMES[w.getId()]);
                     chr.getClient().forceDisconnect();
                     w.getPlayerStorage().removePlayer(chr.getId());
                 }
@@ -1263,7 +1269,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         }
         votePoints -= points;
         saveVotePoints();
-        LogHelper.logLeaf(player, false, Integer.toString(points));
+        MapleLeafLogger.log(player, false, Integer.toString(points));
     }
 
     private void saveVotePoints() {

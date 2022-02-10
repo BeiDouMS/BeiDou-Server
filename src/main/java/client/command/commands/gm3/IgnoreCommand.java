@@ -25,14 +25,14 @@ package client.command.commands.gm3;
 
 import client.Character;
 import client.Client;
+import client.autoban.AutobanFactory;
 import client.command.Command;
-import net.packet.logging.MapleLogger;
 import net.server.Server;
 import tools.PacketCreator;
 
 public class IgnoreCommand extends Command {
     {
-        setDescription("Toggle enable/disable ignore a player in packet logs and autoban.");
+        setDescription("Toggle ignore a character from auto-ban alerts.");
     }
 
     @Override
@@ -47,14 +47,10 @@ public class IgnoreCommand extends Command {
             player.message("Player '" + params[0] + "' could not be found on this world.");
             return;
         }
-        boolean monitored_ = MapleLogger.ignored.contains(victim.getId());
-        if (monitored_) {
-            MapleLogger.ignored.remove(victim.getId());
-        } else {
-            MapleLogger.ignored.add(victim.getId());
-        }
-        player.yellowMessage(victim.getName() + " is " + (!monitored_ ? "now being ignored." : "no longer being ignored."));
-        String message_ = player.getName() + (!monitored_ ? " has started ignoring " : " has stopped ignoring ") + victim.getName() + ".";
+
+        boolean ignored = AutobanFactory.toggleIgnored(victim.getId());
+        player.yellowMessage(victim.getName() + " is " + (ignored ? "now being ignored." : "no longer being ignored."));
+        String message_ = player.getName() + (ignored ? " has started ignoring " : " has stopped ignoring ") + victim.getName() + ".";
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message_));
 
     }

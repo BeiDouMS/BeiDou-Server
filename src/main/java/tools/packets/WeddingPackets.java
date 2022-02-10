@@ -13,6 +13,8 @@ import constants.id.MapId;
 import net.opcodes.SendOpcode;
 import net.packet.OutPacket;
 import net.packet.Packet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 import tools.StringUtil;
 
@@ -27,6 +29,8 @@ import java.util.List;
  * Wishlists edited by Drago (Dragohe4rt)
  */
 public class WeddingPackets extends PacketCreator {
+    private static final Logger log = LoggerFactory.getLogger(WeddingPackets.class);
+
     /*
         00000000 CWeddingMan     struc ; (sizeof=0x104)
         00000000 vfptr           dd ?                    ; offset
@@ -409,7 +413,7 @@ public class WeddingPackets extends PacketCreator {
                 break;
             }
             default: {
-                System.out.println("Unknown Wishlist Mode: " + mode);
+                log.warn("Unknown Wishlist Mode: {}", mode);
                 break;
             }
         }

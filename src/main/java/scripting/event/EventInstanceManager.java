@@ -34,6 +34,8 @@ import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.coordinator.world.EventRecallCoordinator;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.scheduler.EventScriptScheduler;
 import server.ItemInformationProvider;
@@ -56,8 +58,6 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -66,6 +66,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * @author Ronan
  */
 public class EventInstanceManager {
+    private static final Logger log = LoggerFactory.getLogger(EventInstanceManager.class);
     private final Map<Integer, Character> chars = new HashMap<>();
     private int leaderId = -1;
     private final List<Monster> mobs = new LinkedList<>();
@@ -298,7 +299,7 @@ public class EventInstanceManager {
             try {
                 invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
             } catch (ScriptException | NoSuchMethodException ex) {
-                Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement scheduledTimeout function.", ex);
+                log.error("Event script {} does not implement the scheduledTimeout function", em.getName(), ex);
             }
         }, time);
     }
@@ -315,7 +316,7 @@ public class EventInstanceManager {
                     try {
                         invokeScriptFunction("scheduledTimeout", EventInstanceManager.this);
                     } catch (ScriptException | NoSuchMethodException ex) {
-                        Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement scheduledTimeout function.", ex);
+                        log.error("Event script {} does not implement the scheduledTimeout function", em.getName(), ex);
                     }
                 }, nextTime);
             }
@@ -387,7 +388,7 @@ public class EventInstanceManager {
         try {
             invokeScriptFunction("playerUnregistered", EventInstanceManager.this, chr);
         } catch (ScriptException | NoSuchMethodException ex) {
-            Logger.getLogger(EventManager.class.getName()).log(Level.SEVERE, "Event '" + em.getName() + "' does not implement playerUnregistered function.", ex);
+            log.error("Event script {} does not implement the playerUnregistered function", em.getName(), ex);
         }
 
         wL.lock();

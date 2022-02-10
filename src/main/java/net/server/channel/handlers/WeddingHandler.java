@@ -18,6 +18,8 @@ import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.Marriage;
 import tools.PacketCreator;
 import tools.packets.WeddingPackets;
@@ -29,9 +31,10 @@ import java.util.List;
  * @author Drago (Dragohe4rt)
  */
 public final class WeddingHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(WeddingHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
 
         if (c.tryacquireClient()) {
             try {
@@ -151,7 +154,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                 } else if (mode == 8) { // out of Wedding Registry
                     c.sendPacket(PacketCreator.enableActions());
                 } else {
-                    System.out.println(mode);
+                    log.warn("Unhandled wedding mode: {}", mode);
                 }
             } finally {
                 c.releaseClient();

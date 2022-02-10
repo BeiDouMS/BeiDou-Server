@@ -27,12 +27,13 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.inventory.ItemConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataTool;
 import server.ItemInformationProvider;
 import server.quest.Quest;
 import server.quest.QuestActionType;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
@@ -49,6 +50,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * @author Ronan
  */
 public class ItemAction extends AbstractQuestAction {
+    private static final Logger log = LoggerFactory.getLogger(ItemAction.class);
     List<ItemData> items = new ArrayList<>();
 
     public ItemAction(Quest quest, Data data) {
@@ -318,7 +320,7 @@ public class ItemAction extends AbstractQuestAction {
                     }
 
                     InventoryManipulator.addById(chr.getClient(), item.getId(), (short) missingQty);
-                    FilePrinter.print(FilePrinter.QUEST_RESTORE_ITEM, chr + " obtained " + itemid + " qty. " + missingQty + " from quest " + questID);
+                    log.debug("Chr {} obtained {}x {} from questId {}", chr, itemid, missingQty, questID);
                 }
                 return true;
             }

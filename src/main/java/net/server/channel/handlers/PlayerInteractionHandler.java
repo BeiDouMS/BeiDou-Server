@@ -35,11 +35,12 @@ import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.Trade;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameType;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -51,6 +52,8 @@ import java.util.Arrays;
  * @author Ronan - concurrency safety and reviewed minigames
  */
 public final class PlayerInteractionHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(PlayerInteractionHandler.class);
+
     public enum Action {
         CREATE(0),
         INVITE(2),
@@ -484,7 +487,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 byte targetSlot = p.readByte();
 
                 if (targetSlot < 1 || targetSlot > 9) {
-                    System.out.println("[Hack] " + chr.getName() + " Trying to dupe on trade slot.");
+                    log.warn("[Hack] Chr {} Trying to dupe on trade slot.", chr.getName());
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
@@ -550,7 +553,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                                 }
                             }
                         } catch (Exception e) {
-                            FilePrinter.printError(FilePrinter.TRADE_EXCEPTION, e, "Player '" + chr + "' tried to add " + ii.getName(item.getItemId()) + " qty. " + item.getQuantity() + " in trade (slot " + targetSlot + ") then exception occurred.");
+                            log.warn("Chr {} tried to add {}x {} in trade (slot {}), then exception occurred", chr, ii.getName(item.getItemId()), item.getQuantity(), targetSlot, e);
                         } finally {
                             inv.unlockInventory();
                         }
@@ -597,7 +600,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 int price = p.readInt();
                 if (perBundle <= 0 || perBundle * bundles > 2000 || bundles <= 0 || price <= 0 || price > Integer.MAX_VALUE) {
                     AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with hired merchants.");
-                    FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " might of possibly packet edited Hired Merchants\nperBundle: " + perBundle + "\nperBundle * bundles (This multiplied cannot be greater than 2000): " + perBundle * bundles + "\nbundles: " + bundles + "\nprice: " + price);
+                    log.warn("Chr {} might possibly have packet edited Hired Merchants. perBundle: {}, perBundle * bundles (This multiplied cannot be greater than 2000): {}, bundles: {}, price: {}",
+                            chr.getName(), perBundle, perBundle * bundles, bundles, price);
                     return;
                 }
 
@@ -668,7 +672,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     int slot = p.readShort();
                     if (slot >= shop.getItems().size() || slot < 0) {
                         AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a player shop.");
-                        FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to remove item at slot " + slot);
+                        log.warn("Chr {} tried to remove item at slot {}", chr.getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }
@@ -734,7 +738,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 short quantity = p.readShort();
                 if (quantity < 1) {
                     AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a hired merchant and or player shop.");
-                    FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to buy item " + itemid + " with quantity " + quantity);
+                    log.warn("Chr {} tried to buy item {} with quantity {}", chr.getName(), itemid, quantity);
                     c.disconnect(true, false);
                     return;
                 }
@@ -763,7 +767,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     int slot = p.readShort();
                     if (slot >= merchant.getItems().size() || slot < 0) {
                         AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a hired merchant.");
-                        FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to remove item at slot " + slot);
+                        log.warn("Chr {} tried to remove item at slot {}", chr.getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }

@@ -36,12 +36,16 @@ import net.server.guild.GuildPackets;
 import net.server.guild.GuildResponse;
 import net.server.world.Party;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public final class GuildOperationHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(GuildOperationHandler.class);
+
     private boolean isGuildNameAcceptable(String name) {
         if (name.length() < 3 || name.length() > 12) {
             return false;
@@ -55,7 +59,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         Character mc = c.getPlayer();
         byte type = p.readByte();
         int allianceId = -1;
@@ -118,13 +122,13 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 break;
             case 0x06:
                 if (mc.getGuildId() > 0) {
-                    System.out.println("[Hack] " + mc.getName() + " attempted to join a guild when s/he is already in one.");
+                    log.warn("[Hack] Chr {} attempted to join a guild when s/he is already in one.", mc.getName());
                     return;
                 }
                 int gid = p.readInt();
                 int cid = p.readInt();
                 if (cid != mc.getId()) {
-                    System.out.println("[Hack] " + mc.getName() + " attempted to join a guild with a different character id.");
+                    log.warn("[Hack] Chr {} attempted to join a guild with a different chrId", mc.getName());
                     return;
                 }
 
@@ -158,7 +162,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 cid = p.readInt();
                 String name = p.readString();
                 if (cid != mc.getId() || !name.equals(mc.getName()) || mc.getGuildId() <= 0) {
-                    System.out.println("[Hack] " + mc.getName() + " tried to quit guild under the name \"" + name + "\" and current guild id of " + mc.getGuildId() + ".");
+                    log.warn("[Hack] Chr {} tried to quit guild under the name {} and current guild id of {}", mc.getName(), name, mc.getGuildId());
                     return;
                 }
 
@@ -183,7 +187,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 cid = p.readInt();
                 name = p.readString();
                 if (mc.getGuildRank() > 2 || mc.getGuildId() <= 0) {
-                    System.out.println("[Hack] " + mc.getName() + " is trying to expel without rank 1 or 2.");
+                    log.warn("[Hack] Chr {} is trying to expel without rank 1 or 2", mc.getName());
                     return;
                 }
 
@@ -194,7 +198,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 break;
             case 0x0d:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() != 1) {
-                    System.out.println("[Hack] " + mc.getName() + " tried to change guild rank titles when s/he does not have permission.");
+                    log.warn("[Hack] Chr {} tried to change guild rank titles when s/he does not have permission", mc.getName());
                     return;
                 }
                 String[] ranks = new String[5];
@@ -208,7 +212,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 cid = p.readInt();
                 byte newRank = p.readByte();
                 if (mc.getGuildRank() > 2 || (newRank <= 2 && mc.getGuildRank() != 1) || mc.getGuildId() <= 0) {
-                    System.out.println("[Hack] " + mc.getName() + " is trying to change rank outside of his/her permissions.");
+                    log.warn("[Hack] Chr {} is trying to change rank outside of his/her permissions.", mc.getName());
                     return;
                 }
                 if (newRank <= 1 || newRank > 5) {
@@ -218,7 +222,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 break;
             case 0x0f:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() != 1 || mc.getMapId() != MapId.GUILD_HQ) {
-                    System.out.println("[Hack] " + mc.getName() + " tried to change guild emblem without being the guild leader.");
+                    log.warn("[Hack] Chr {} tried to change guild emblem without being the guild leader", mc.getName());
                     return;
                 }
                 if (mc.getMeso() < YamlConfig.config.server.CHANGE_EMBLEM_COST) {
@@ -243,7 +247,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
             case 0x10:
                 if (mc.getGuildId() <= 0 || mc.getGuildRank() > 2) {
                     if (mc.getGuildId() <= 0) {
-                        System.out.println("[Hack] " + mc.getName() + " tried to change guild notice while not in a guild.");
+                        log.warn("[Hack] Chr {} tried to change guild notice while not in a guild", mc.getName());
                     }
                     return;
                 }
@@ -280,7 +284,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
 
                 break;
             default:
-                System.out.println("Unhandled GUILD_OPERATION packet: \n" + p);
+                log.warn("Unhandled GUILD_OPERATION packet: {}", p);
         }
     }
 }

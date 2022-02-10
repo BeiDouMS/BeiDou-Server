@@ -34,6 +34,8 @@ import net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -45,6 +47,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 
 public class Guild {
+    private static final Logger log = LoggerFactory.getLogger(Guild.class);
 
     private enum BCOp {
         NONE, DISBAND, EMBLEMCHANGE
@@ -102,8 +105,7 @@ public class Guild {
                 }
             }
         } catch (SQLException se) {
-            se.printStackTrace();
-            System.out.println("Unable to read guild information from sql: " + se);
+            log.error("Unable to read guild information from sql", se);
         }
     }
 
@@ -340,8 +342,7 @@ public class Guild {
                         }
                     }
                 } catch (Exception re) {
-                    re.printStackTrace();
-                    System.out.println("Failed to contact channel(s) for broadcast.");//fu?
+                    log.error("Failed to contact channel(s) for broadcast.", re);
                 }
             }
         } finally {
@@ -520,8 +521,7 @@ public class Guild {
                                 ps.setLong(4, System.currentTimeMillis());
                                 ps.executeUpdate();
                             } catch (SQLException e) {
-                                e.printStackTrace();
-                                System.out.println("expelMember - Guild " + e);
+                                log.error("expelMember - Guild", e);
                             }
                             Server.getInstance().getWorld(mgc.getWorld()).setOfflineGuildStatus((short) 0, (byte) 5, cid);
                         }
@@ -532,7 +532,7 @@ public class Guild {
                     return;
                 }
             }
-            System.out.println("Unable to find member with name " + name + " and id " + cid);
+            log.warn("Unable to find member with name {} and id {}", name, cid);
         } finally {
             membersLock.unlock();
         }
@@ -768,8 +768,7 @@ public class Guild {
              ResultSet rs = ps.executeQuery()) {
             c.sendPacket(GuildPackets.showGuildRanks(npcid, rs));
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("failed to display guild ranks. " + e);
+            log.error("Failed to display guild ranks.", e);
         }
     }
 

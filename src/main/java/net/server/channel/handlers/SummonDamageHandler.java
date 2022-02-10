@@ -32,18 +32,20 @@ import client.inventory.WeaponType;
 import client.status.MonsterStatusEffect;
 import constants.skills.Outlaw;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.StatEffect;
 import server.life.Monster;
 import server.life.MonsterInformationProvider;
 import server.maps.Summon;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class SummonDamageHandler extends AbstractDealDamageHandler {
+    private static final Logger log = LoggerFactory.getLogger(SummonDamageHandler.class);
 
     public final class SummonAttackEntry {
 
@@ -108,8 +110,9 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
             if (target != null) {
                 if (damage > maxDmg) {
                     AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
-
-                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " used a summon of skillid " + summon.getSkill() + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(target.getId()) + " with damage " + damage + " (max: " + maxDmg + ")");
+                    final String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(target.getId());
+                    log.info("Possible exploit - chr {} used a summon of skillId {} to attack {} with damage {} (max: {})",
+                            c.getPlayer().getName(), summon.getSkill(), mobName, damage, maxDmg);
                     damage = maxDmg;
                 }
 

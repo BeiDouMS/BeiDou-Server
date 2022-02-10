@@ -8,7 +8,8 @@ package client.autoban;
 import client.Character;
 import config.YamlConfig;
 import net.server.Server;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +18,8 @@ import java.util.Map;
  * @author kevintjuh93
  */
 public class AutobanManager {
+    private static final Logger log = LoggerFactory.getLogger(AutobanManager.class);
+
     private final Character chr;
     private final Map<AutobanFactory, Integer> points = new HashMap<>();
     private final Map<AutobanFactory, Long> lastTime = new HashMap<>();
@@ -59,7 +62,7 @@ public class AutobanManager {
         }
         if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
             // Lets log every single point too.
-            FilePrinter.print(FilePrinter.AUTOBAN_WARNING, Character.makeMapleReadable(chr.getName()) + " caused " + fac.name() + " " + reason);
+            log.info("Autoban - chr {} caused {} {}", Character.makeMapleReadable(chr.getName()), fac.name(), reason);
         }
     }
 
@@ -119,7 +122,7 @@ public class AutobanManager {
                     chr.getClient().disconnect(false, false);
                 }
 
-                FilePrinter.print(FilePrinter.EXPLOITS, "Player " + chr + " was caught spamming TYPE " + type + " and has been disconnected.");
+                log.info("Autoban - Chr {} was caught spamming TYPE {} and has been disconnected", chr, type);
             }
         } else {
             this.timestamp[type] = time;

@@ -25,13 +25,14 @@ import client.inventory.ItemFactory;
 import constants.game.GameConstants;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -46,6 +47,7 @@ import java.util.concurrent.locks.Lock;
  * @author Matze
  */
 public class Storage {
+    private static final Logger log = LoggerFactory.getLogger(Storage.class);
     private static final Map<Integer, Integer> trunkGetCache = new HashMap<>();
     private static final Map<Integer, Integer> trunkPutCache = new HashMap<>();
 
@@ -94,7 +96,7 @@ public class Storage {
 
             return ret;
         } catch (SQLException ex) { // exceptions leading to deploy null storages found thanks to Jefe
-            FilePrinter.printError(FilePrinter.STORAGE, ex, "SQL error occurred when trying to load storage for accountid " + id + ", world " + GameConstants.WORLD_NAMES[world]);
+            log.error("SQL error occurred when trying to load storage for accId {}, world {}", id, GameConstants.WORLD_NAMES[world], ex);
             throw new RuntimeException(ex);
         }
     }

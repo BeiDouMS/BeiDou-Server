@@ -32,8 +32,9 @@ import net.server.coordinator.world.InviteCoordinator;
 import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.sql.Connection;
@@ -45,9 +46,10 @@ import java.sql.SQLException;
  * @author Ubaware
  */
 public final class AcceptFamilyHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(AcceptFamilyHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             return;
         }
@@ -134,8 +136,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                 ps.setInt(3, seniorID);
                 ps.executeUpdate();
             } catch (SQLException e) {
-                FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not save new family record for char id " + characterID + ".");
-                e.printStackTrace();
+                log.error("Could not save new family record for chrId {}", characterID, e);
             }
             if (updateChar) {
                 try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET familyid = ? WHERE id = ?")) {
@@ -143,13 +144,11 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                     ps.setInt(2, characterID);
                     ps.executeUpdate();
                 } catch (SQLException e) {
-                    FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not update 'characters' 'familyid' record for char id " + characterID + ".");
-                    e.printStackTrace();
+                    log.error("Could not update 'characters' 'familyid' record for chrId {}", characterID, e);
                 }
             }
         } catch (SQLException e) {
-            FilePrinter.printError(FilePrinter.FAMILY_ERROR, e, "Could not get connection to DB.");
-            e.printStackTrace();
+            log.error("Could not get connection to DB while inserting new family record", e);
         }
     }
 }

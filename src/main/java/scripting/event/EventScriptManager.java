@@ -22,6 +22,7 @@
 package scripting.event;
 
 import net.server.channel.Channel;
+import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
 import scripting.SynchronizedInvocable;
 
@@ -32,13 +33,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Matze
  */
 public class EventScriptManager extends AbstractScriptManager {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(EventScriptManager.class);
     private static final String INJECTED_VARIABLE_NAME = "em";
     private static EventEntry fallback;
     private final Map<String, EventEntry> events = new ConcurrentHashMap<>();
@@ -83,8 +83,7 @@ public class EventScriptManager extends AbstractScriptManager {
             try {
                 entry.iv.invokeFunction("init", (Object) null);
             } catch (Exception ex) {
-                Logger.getLogger(EventScriptManager.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Error on script: " + entry.em.getName());
+                log.error("Error on script: {}", entry.em.getName(), ex);
             }
         }
 

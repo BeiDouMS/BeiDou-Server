@@ -23,11 +23,12 @@ package server.quest.requirements;
 
 import client.Character;
 import client.QuestStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataTool;
 import server.quest.Quest;
 import server.quest.QuestRequirementType;
-import tools.FilePrinter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ import java.util.Map;
  * @author Tyler (Twdtwd)
  */
 public class MobRequirement extends AbstractQuestRequirement {
+    private static final Logger log = LoggerFactory.getLogger(MobRequirement.class);
     Map<Integer, Integer> mobs = new HashMap<>();
     private final int questID;
 
@@ -68,7 +70,7 @@ public class MobRequirement extends AbstractQuestRequirement {
             try {
                 progress = Integer.parseInt(status.getProgress(mobID));
             } catch (NumberFormatException ex) {
-                FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, ex, "Mob: " + mobID + " Quest: " + questID + "CID: " + chr.getId() + " Progress: " + status.getProgress(mobID));
+                log.warn("Mob: {}, quest: {}, chrId: {}, progress: {}", mobID, questID, chr.getId(), status.getProgress(mobID), ex);
                 return false;
             }
 

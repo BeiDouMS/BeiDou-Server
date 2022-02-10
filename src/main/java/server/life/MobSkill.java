@@ -28,6 +28,8 @@ import constants.id.MapId;
 import constants.id.MobId;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
@@ -43,6 +45,7 @@ import java.util.*;
  * @author Danny (Leifde)
  */
 public class MobSkill {
+    private static final Logger log = LoggerFactory.getLogger(MobSkill.class);
 
     private final int skillId;
     private final int skillLevel;
@@ -314,7 +317,7 @@ public class MobSkill {
                 }
                 break;
             default:
-                System.out.println("Unhandled Mob skill: " + skillId);
+                log.warn("Unhandled Mob skill: {}", skillId);
                 break;
         }
         if (stats.size() > 0) {
