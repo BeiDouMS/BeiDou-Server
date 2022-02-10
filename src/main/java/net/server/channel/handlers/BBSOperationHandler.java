@@ -26,6 +26,8 @@ import client.Client;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.guild.GuildPackets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.DatabaseConnection;
 
 import java.sql.Connection;
@@ -34,13 +36,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class BBSOperationHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(BBSOperationHandler.class);
 
     private String correctLength(String in, int maxSize) {
         return in.length() > maxSize ? in.substring(0, maxSize) : in;
     }
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         if (c.getPlayer().getGuildId() < 1) {
             return;
         }
@@ -324,10 +327,9 @@ public final class BBSOperationHandler extends AbstractPacketHandler {
                 ps2.close();
             }
         } catch (SQLException se) {
-            se.printStackTrace();
+            log.error("Error displaying thread", se);
         } catch (RuntimeException re) {//btw we get this everytime for some reason, but replies work!
-            re.printStackTrace();
-            System.out.println("The number of reply rows does not match the replycount in thread.");
+            log.error("The number of reply rows does not match the replycount in thread.", re);
         }
     }
 }

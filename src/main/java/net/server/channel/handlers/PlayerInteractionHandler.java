@@ -487,7 +487,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 byte targetSlot = p.readByte();
 
                 if (targetSlot < 1 || targetSlot > 9) {
-                    System.out.println("[Hack] " + chr.getName() + " Trying to dupe on trade slot.");
+                    log.warn("[Hack] Chr {} Trying to dupe on trade slot.", chr.getName());
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }

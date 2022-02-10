@@ -97,6 +97,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -3587,26 +3588,25 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            System.out.println("-------------------");
-            System.out.println("CACHED BUFF COUNT: ");
-            for (Entry<BuffStat, Byte> bpl : buffEffectsCount.entrySet()) {
-                System.out.println(bpl.getKey() + ": " + bpl.getValue());
-            }
-            System.out.println("-------------------");
-            System.out.println("CACHED BUFFS: ");
-            for (Entry<Integer, Map<BuffStat, BuffStatValueHolder>> bpl : buffEffects.entrySet()) {
-                System.out.print(bpl.getKey() + ": ");
-                for (Entry<BuffStat, BuffStatValueHolder> pble : bpl.getValue().entrySet()) {
-                    System.out.print(pble.getKey().name() + pble.getValue().value + ", ");
-                }
-                System.out.println();
-            }
-            System.out.println("-------------------");
+            log.debug("-------------------");
+            log.debug("CACHED BUFF COUNT: {}", buffEffectsCount.entrySet().stream()
+                    .map(entry -> entry.getKey() + ": " + entry.getValue())
+                    .collect(Collectors.joining(", "))
+            );
 
-            System.out.println("IN ACTION:");
-            for (Entry<BuffStat, BuffStatValueHolder> bpl : effects.entrySet()) {
-                System.out.println(bpl.getKey().name() + " -> " + ItemInformationProvider.getInstance().getName(bpl.getValue().effect.getSourceId()));
-            }
+            log.debug("-------------------");
+            log.debug("CACHED BUFFS: {}", buffEffects.entrySet().stream()
+                    .map(entry -> entry.getKey() + ": (" + entry.getValue().entrySet().stream()
+                            .map(innerEntry -> innerEntry.getKey().name() + innerEntry.getValue().value)
+                            .collect(Collectors.joining(", ")) + ")")
+                    .collect(Collectors.joining(", "))
+            );
+
+            log.debug("-------------------");
+            log.debug("IN ACTION: {}", effects.entrySet().stream()
+                    .map(entry -> entry.getKey().name() + " -> " + ItemInformationProvider.getInstance().getName(entry.getValue().effect.getSourceId()))
+                    .collect(Collectors.joining(", "))
+            );
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -3617,9 +3617,10 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            for (Entry<BuffStat, Byte> mbsl : buffEffectsCount.entrySet()) {
-                System.out.println(mbsl.getKey().name() + " -> " + mbsl.getValue());
-            }
+            log.debug("ALL BUFFS COUNT: {}", buffEffectsCount.entrySet().stream()
+                    .map(entry -> entry.getKey().name() + " -> " + entry.getValue())
+                    .collect(Collectors.joining(", "))
+            );
         } finally {
             chrLock.unlock();
             effLock.unlock();

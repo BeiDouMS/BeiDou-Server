@@ -23,6 +23,8 @@ package net.server.channel.handlers;
 
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.maps.AnimatedMapObject;
 import server.movement.*;
 import tools.exceptions.EmptyMovementException;
@@ -32,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractMovementPacketHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(AbstractMovementPacketHandler.class);
 
     protected List<LifeMovementFragment> parseMovement(InPacket p) throws EmptyMovementException {
         List<LifeMovementFragment> res = new ArrayList<>();
@@ -136,7 +139,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     break;
                 }
                 default:
-                    System.out.println("Unhandled Case:" + command);
+                    log.warn("Unhandled case: {}", command);
                     throw new EmptyMovementException(p);
             }
         }
@@ -235,7 +238,7 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     break;
                 }
                 default:
-                    System.out.println("Unhandled Case:" + command);
+                    log.warn("Unhandled Case: {}", command);
                     throw new EmptyMovementException(p);
             }
         }

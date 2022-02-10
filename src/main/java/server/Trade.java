@@ -182,7 +182,7 @@ public class Trade {
             throw new RuntimeException("Trade is locked.");
         }
         if (meso < 0) {
-            System.out.println("[Hack] " + chr.getName() + " Trying to trade < 0 mesos");
+            log.warn("[Hack] Chr {} is trying to trade negative mesos", chr.getName());
             return;
         }
         if (chr.getMeso() >= meso) {

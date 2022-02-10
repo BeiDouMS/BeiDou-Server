@@ -42,6 +42,8 @@ import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.StatEffect;
 import server.TimerManager;
@@ -66,6 +68,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Monster extends AbstractLoadedLife {
+    private static final Logger log = LoggerFactory.getLogger(Monster.class);
 
     private ChangeableStats ostats = null;  //unused, v83 WZs offers no support for changeable stats.
     private MonsterStats stats;
@@ -823,7 +826,7 @@ public class Monster extends AbstractLoadedLife {
                 }, getAnimationTime("die1"));
             }
         } else {  // is this even necessary?
-            System.out.println("[CRITICAL LOSS] toSpawn is null for " + this.getName());
+            log.warn("[CRITICAL LOSS] toSpawn is null for {}", getName());
         }
 
         Character looter = map.getCharacterById(getHighestDamagerId());
@@ -1124,7 +1127,7 @@ public class Monster extends AbstractLoadedLife {
             case WEAK:
                 break;
             default: {
-                System.out.println("Unknown elemental effectiveness: " + getMonsterEffectiveness(status.getSkill().getElement()));
+                log.warn("Unknown elemental effectiveness: {}", getMonsterEffectiveness(status.getSkill().getElement()));
                 return false;
             }
         }

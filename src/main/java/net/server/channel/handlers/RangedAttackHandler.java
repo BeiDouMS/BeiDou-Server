@@ -35,6 +35,8 @@ import constants.inventory.ItemConstants;
 import constants.skills.*;
 import net.packet.InPacket;
 import net.packet.Packet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.StatEffect;
 import tools.PacketCreator;
@@ -44,9 +46,10 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 
 public final class RangedAttackHandler extends AbstractDealDamageHandler {
+    private static final Logger log = LoggerFactory.getLogger(RangedAttackHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         
         /*long timeElapsed = currentServerTime() - chr.getAutobanManager().getLastSpam(8);
@@ -171,7 +174,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     }
 
                     if (slot < 0) {
-                        System.out.println("<ERROR> Projectile to use was unable to be found.");
+                        log.warn("<ERROR> Projectile to use was unable to be found.");
                     } else {
                         InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
                     }

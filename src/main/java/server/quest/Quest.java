@@ -25,6 +25,8 @@ import client.Character;
 import client.QuestStatus;
 import client.QuestStatus.Status;
 import config.YamlConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -46,6 +48,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author Ronan - support for medal quests
  */
 public class Quest {
+    private static final Logger log = LoggerFactory.getLogger(Quest.class);
     private static volatile Map<Integer, Quest> quests = new HashMap<>();
     private static volatile Map<Integer, Integer> infoNumberQuests = new HashMap<>();
     private static final Map<Short, Integer> medals = new HashMap<>();
@@ -100,7 +103,7 @@ public class Quest {
                     medals.put(this.id, medalid);
                 }
             } else {
-                System.out.println("no data " + id);
+                log.warn("No quest data for id {}", id);
             }
         }
 

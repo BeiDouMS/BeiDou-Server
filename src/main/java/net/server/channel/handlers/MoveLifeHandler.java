@@ -25,6 +25,8 @@ import client.Character;
 import client.Client;
 import config.YamlConfig;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.life.Monster;
@@ -47,9 +49,10 @@ import java.util.List;
  * @author Ronan (HeavenMS)
  */
 public final class MoveLifeHandler extends AbstractMovementPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(MoveLifeHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         Character player = c.getPlayer();
         MapleMap map = player.getMap();
 
@@ -165,7 +168,9 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             p.seek(movementDataStart);
 
             if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE) {
-                System.out.println((isSkill ? "SKILL " : (isAttack ? "ATTCK " : " ")) + "castPos: " + castPos + " rawAct: " + rawActivity + " opt: " + pOption + " skillID: " + useSkillId + " skillLV: " + useSkillLevel + " " + "allowSkill: " + nextMovementCouldBeSkill + " mobMp: " + mobMp);
+                log.debug("{} castPos: {}, rawAct: {}, opt: {}, skillId: {}, skillLv: {}, allowSkill: {}, mobMp: {}",
+                        isSkill ? "SKILL" : (isAttack ? "ATTCK" : ""), castPos, rawActivity, pOption, useSkillId,
+                        useSkillLevel, nextMovementCouldBeSkill, mobMp);
             }
 
             map.broadcastMessage(player, PacketCreator.moveMonster(objectid, nextMovementCouldBeSkill, rawActivity, useSkillId, useSkillLevel, pOption, startPos, p, movementDataLength), serverStartPos);

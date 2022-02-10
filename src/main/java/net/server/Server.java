@@ -303,11 +303,10 @@ public class Server {
     private void dumpData() {
         wldRLock.lock();
         try {
-            System.out.println(worlds);
-            System.out.println(channels);
-            System.out.println(worldRecommendedList);
-            System.out.println();
-            System.out.println("---------------------");
+            log.debug("Worlds: {}", worlds);
+            log.debug("Channels: {}", channels);
+            log.debug("World recommended list: {}", worldRecommendedList);
+            log.debug("---------------------");
         } finally {
             wldRLock.unlock();
         }
@@ -1879,7 +1878,7 @@ public class Server {
     }
 
     private synchronized void shutdownInternal(boolean restart) {
-        System.out.println((restart ? "Restarting" : "Shutting down") + " the server!\r\n");
+        log.info("{} the server!", restart ? "Restarting" : "Shutting down");
         if (getWorlds() == null) {
             return;//already shutdown
         }
@@ -1917,8 +1916,7 @@ public class Server {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                    System.err.println("FUCK MY LIFE");
+                    log.error("Error during shutdown sleep", ie);
                 }
             }
         }
@@ -1929,12 +1927,12 @@ public class Server {
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
 
-        System.out.println("Worlds + Channels are offline.");
+        log.info("World and channels are offline.");
         loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             new Thread(() -> System.exit(0)).start();
         } else {
-            System.out.println("\r\nRestarting the server....\r\n");
+            log.info("Restarting the server...");
             try {
                 instance.finalize();//FUU I CAN AND IT'S FREE
             } catch (Throwable ex) {

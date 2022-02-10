@@ -31,6 +31,8 @@ import constants.id.NpcId;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.life.positioner.PlayerNPCPodium;
 import server.life.positioner.PlayerNPCPositioner;
 import server.maps.AbstractMapObject;
@@ -52,6 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Ronan
  */
 public class PlayerNPC extends AbstractMapObject {
+    private static final Logger log = LoggerFactory.getLogger(PlayerNPC.class);
     private static final Map<Byte, List<Integer>> availablePlayerNpcScriptIds = new HashMap<>();
     private static final AtomicInteger runningOverallRank = new AtomicInteger();
     private static final List<AtomicInteger> runningWorldRank = new ArrayList<>();
@@ -400,7 +403,7 @@ public class PlayerNPC extends AbstractMapObject {
         }
 
         if (YamlConfig.config.server.USE_DEBUG) {
-            System.out.println("GOT SID " + scriptId + " POS " + pos);
+            log.debug("GOT SID {}, POS {}", scriptId, pos);
         }
 
         int worldId = chr.getWorld();

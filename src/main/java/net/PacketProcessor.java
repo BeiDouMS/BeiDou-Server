@@ -28,13 +28,15 @@ import net.server.handlers.CustomPacketHandler;
 import net.server.handlers.KeepAliveHandler;
 import net.server.handlers.LoginRequiringNoOpHandler;
 import net.server.handlers.login.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class PacketProcessor {
-
-    private final static Map<String, PacketProcessor> instances = new LinkedHashMap<>();
+    private static final Logger log = LoggerFactory.getLogger(PacketProcessor.class);
+    private static final Map<String, PacketProcessor> instances = new LinkedHashMap<>();
     private PacketHandler[] handlers;
 
     private PacketProcessor() {
@@ -67,8 +69,7 @@ public final class PacketProcessor {
         try {
             handlers[code.getValue()] = handler;
         } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-            System.out.println("Error registering handler - " + code.name());
+            log.error("Error registering handler {}", code.name(), e);
         }
     }
 

@@ -42,7 +42,7 @@ public class Item implements Comparable<Item> {
     private int petid = -1;
     private Pet pet = null;
     private String owner = "";
-    protected List<String> log;
+    protected List<String> itemLog;
     private short flag;
     private long expiration = -1;
     private String giftFrom = "";
@@ -51,7 +51,7 @@ public class Item implements Comparable<Item> {
         this.id = id;
         this.position = position;
         this.quantity = quantity;
-        this.log = new LinkedList<>();
+        this.itemLog = new LinkedList<>();
         this.flag = 0;
     }
 
@@ -67,7 +67,7 @@ public class Item implements Comparable<Item> {
         }
         this.petid = petid;
         this.flag = 0;
-        this.log = new LinkedList<>();
+        this.itemLog = new LinkedList<>();
     }
 
     public Item copy() {
@@ -75,7 +75,7 @@ public class Item implements Comparable<Item> {
         ret.flag = flag;
         ret.owner = owner;
         ret.expiration = expiration;
-        ret.log = new LinkedList<>(log);
+        ret.itemLog = new LinkedList<>(itemLog);
         return ret;
     }
 
@@ -147,8 +147,8 @@ public class Item implements Comparable<Item> {
         return "Item: " + id + " quantity: " + quantity;
     }
 
-    public List<String> getLog() {
-        return Collections.unmodifiableList(log);
+    public List<String> getItemLog() {
+        return Collections.unmodifiableList(itemLog);
     }
 
     public short getFlag() {

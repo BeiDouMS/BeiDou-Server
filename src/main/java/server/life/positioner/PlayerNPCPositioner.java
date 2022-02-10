@@ -22,6 +22,8 @@ package server.life.positioner;
 import config.YamlConfig;
 import net.server.Server;
 import net.server.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.life.PlayerNPC;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
@@ -38,6 +40,7 @@ import java.util.List;
  * @author RonanLana
  */
 public class PlayerNPCPositioner {
+    private static final Logger log = LoggerFactory.getLogger(PlayerNPCPositioner.class);
 
     private static boolean isPlayerNpcNearby(List<Point> otherPos, Point searchPos, int xLimit, int yLimit) {
         int xLimit2 = xLimit / 2, yLimit2 = yLimit / 2;
@@ -135,7 +138,7 @@ public class PlayerNPCPositioner {
     private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
             if (YamlConfig.config.server.USE_DEBUG) {
-                System.out.println("Reorganizing pnpc map, step " + newStep);
+                log.debug("Re-organizing pnpc map, step {}", newStep);
             }
 
             List<PlayerNPC> playerNpcs = new ArrayList<>(mmoList.size());

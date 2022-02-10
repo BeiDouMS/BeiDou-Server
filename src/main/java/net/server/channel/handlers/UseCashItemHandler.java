@@ -39,6 +39,8 @@ import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.Shop;
 import server.ShopFactory;
@@ -56,9 +58,10 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public final class UseCashItemHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(UseCashItemHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         final Character player = c.getPlayer();
 
         long timeNow = currentServerTime();
@@ -601,7 +604,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 client.sendPacket(PacketCreator.enableActions());
             }, SECONDS.toMillis(3));
         } else {
-            System.out.println("NEW CASH ITEM: " + itemType + "\n" + p);
+            log.warn("NEW CASH ITEM TYPE: {}, packet: {}", itemType, p);
             c.sendPacket(PacketCreator.enableActions());
         }
     }

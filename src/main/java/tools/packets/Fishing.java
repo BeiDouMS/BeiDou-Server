@@ -24,6 +24,8 @@ import config.YamlConfig;
 import constants.id.ItemId;
 import constants.id.MapId;
 import constants.inventory.ItemConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import tools.PacketCreator;
 
@@ -34,6 +36,7 @@ import java.util.Calendar;
  * @author Ronan - timing pattern
  */
 public class Fishing {
+    private static final Logger log = LoggerFactory.getLogger(Fishing.class);
 
     private static double getFishingLikelihood(int x) {
         return 50.0 + 7.0 * (7.0 * Math.sin(x)) * (Math.cos(Math.pow(x, 0.777)));
@@ -192,8 +195,8 @@ public class Fishing {
             }
         }
 
-        System.out.println("Diary   min " + minhit + " max " + maxhit);
-        System.out.println("Diary10 min " + minhit10 + " max " + maxhit10);
-        System.out.println("Hits: " + hits + "Hits10: " + hits10 + " Total: " + total + "   --  %1000: " + (hits * 1000 / total) + ", +10 %1000: " + (hits10 * 1000 / total));
+        log.debug("Diary   min {} max {}", minhit, maxhit);
+        log.debug("Diary10 min {} max {}", minhit10, maxhit10);
+        log.debug("Hits: {}, Hits10: {}, Total: {} -- %1000 {}, +10 %1000: {}", hits, hits10, total, (hits * 1000 / total), (hits10 * 1000 / total));
     }
 } 

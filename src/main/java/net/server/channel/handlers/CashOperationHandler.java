@@ -469,7 +469,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     }
                     c.enableCSActions();
                 } else {
-                    System.out.println("Unhandled action: " + action + "\n" + p);
+                    log.warn("Unhandled action: {}, packet: {}", action, p);
                 }
             } finally {
                 c.releaseClient();

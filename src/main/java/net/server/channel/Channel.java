@@ -164,13 +164,13 @@ public final class Channel {
         eventSM = new EventScriptManager(this, getEvents());
     }
 
-    public final synchronized void shutdown() {
+    public synchronized void shutdown() {
         try {
             if (finishedShutdown) {
                 return;
             }
 
-            System.out.println("Shutting down Channel " + channel + " on World " + world);
+            log.info("Shutting down channel {} in world {}", channel, world);
 
             closeAllMerchants();
             disconnectAwayPlayers();
@@ -188,10 +188,9 @@ public final class Channel {
             channelServer.stop();
 
             finishedShutdown = true;
-            System.out.println("Successfully shut down Channel " + channel + " on World " + world + "\r\n");
+            log.info("Successfully shut down channel {} in world {}", channel, world);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error while shutting down Channel " + channel + " on World " + world + "\r\n" + e);
+            log.error("Error while shutting down channel {} in world {}", channel, world, e);
         }
     }
 
@@ -1024,26 +1023,22 @@ public final class Channel {
     }
 
     public void debugMarriageStatus() {
-        System.out.println(" ----- WORLD DATA -----");
+        log.debug(" ----- WORLD DATA -----");
         getWorldServer().debugMarriageStatus();
 
-        System.out.println(" ----- CH. " + channel + " -----");
-        System.out.println(" ----- CATHEDRAL -----");
-        System.out.println("Current Queue: " + cathedralReservationQueue);
-        System.out.println("Cancel Task: " + (cathedralReservationTask != null));
-        System.out.println("Ongoing wid: " + ongoingCathedral);
-        System.out.println();
-        System.out.println("Ongoing wid: " + ongoingCathedral + " isPremium: " + ongoingCathedralType);
-        System.out.println("Guest list: " + ongoingCathedralGuests);
-        System.out.println();
-        System.out.println(" ----- CHAPEL -----");
-        System.out.println("Current Queue: " + chapelReservationQueue);
-        System.out.println("Cancel Task: " + (chapelReservationTask != null));
-        System.out.println("Ongoing wid: " + ongoingChapel);
-        System.out.println();
-        System.out.println("Ongoing wid: " + ongoingChapel + " isPremium: " + ongoingChapelType);
-        System.out.println("Guest list: " + ongoingChapelGuests);
-        System.out.println();
-        System.out.println("Starttime: " + ongoingStartTime);
+        log.debug(" ----- CH. {} -----", channel);
+        log.debug(" ----- CATHEDRAL -----");
+        log.debug("Current Queue: {}", cathedralReservationQueue);
+        log.debug("Cancel Task?: {}", cathedralReservationTask != null);
+        log.debug("Ongoing wid: {}", ongoingCathedral);
+        log.debug("Ongoing wid: {}, isPremium: {}", ongoingCathedral, ongoingCathedralType);
+        log.debug("Guest list: {}", ongoingCathedralGuests);
+        log.debug(" ----- CHAPEL -----");
+        log.debug("Current Queue: {}", chapelReservationQueue);
+        log.debug("Cancel Task?: {}", chapelReservationTask != null);
+        log.debug("Ongoing wid: {}", ongoingChapel);
+        log.debug("Ongoing wid: {}, isPremium: {}", ongoingChapel, ongoingChapelType);
+        log.debug("Guest list: {}", ongoingChapelGuests);
+        log.debug("Starttime: {}", ongoingStartTime);
     }
 }
