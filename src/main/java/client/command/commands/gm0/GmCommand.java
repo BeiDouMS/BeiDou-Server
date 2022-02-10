@@ -27,7 +27,8 @@ import client.Character;
 import client.Client;
 import client.command.Command;
 import net.server.Server;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -35,6 +36,8 @@ public class GmCommand extends Command {
     {
         setDescription("Send a message to the game masters.");
     }
+
+    private static final Logger log = LoggerFactory.getLogger(GmCommand.class);
 
     @Override
     public void execute(Client c, String[] params) {
@@ -53,7 +56,7 @@ public class GmCommand extends Command {
         String message = player.getLastCommandMessage();
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[GM Message]:" + Character.makeMapleReadable(player.getName()) + ": " + message));
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(1, message));
-        FilePrinter.printError(FilePrinter.COMMAND_GM, Character.makeMapleReadable(player.getName()) + ": " + message);
+        log.info("{}: {}", Character.makeMapleReadable(player.getName()), message);
         player.dropMessage(5, "Your message '" + message + "' was sent to GMs.");
         player.dropMessage(5, tips[Randomizer.nextInt(tips.length)]);
     }

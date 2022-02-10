@@ -23,7 +23,6 @@ import net.server.audit.locks.MonitoredLockType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.TimerManager;
-import tools.FilePrinter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -191,7 +190,7 @@ public class ThreadTracker {
                     DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
                     dateFormat.setTimeZone(TimeZone.getDefault());
 
-                    FilePrinter.printError(FilePrinter.DEADLOCK_STATE, printThreadTrackerState(dateFormat.format(new Date())));
+                    log.error("Deadlock state: {}", printThreadTrackerState(dateFormat.format(new Date())));
                     //FilePrinter.printError(FilePrinter.DEADLOCK_STATE, "[" + dateFormat.format(new Date()) + "] Presenting current lock path for lockid " + lockId.name() + ".\r\n" + printLockStatus(lockId) + "\r\n-------------------------------");
                 }
             } else {

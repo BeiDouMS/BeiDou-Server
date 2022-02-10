@@ -29,26 +29,27 @@ import constants.id.ItemId;
 import constants.id.MapId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.Trade;
 import server.maps.MapleMap;
 import server.maps.Portal;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Calendar;
 
 public final class ChangeMapHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(ChangeMapHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
 
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {
-                FilePrinter.printError(FilePrinter.PORTAL_STUCK + chr.getName() + ".txt", "Player " + chr.getName() + " got stuck when changing maps. Timestamp: " + Calendar.getInstance().getTime() + " Last visited mapids: " + chr.getLastVisitedMapids());
+                log.warn("Chr {} got stuck when changing maps. Last visited mapids: {}", chr.getName(), chr.getLastVisitedMapids());
             }
 
             c.sendPacket(PacketCreator.enableActions());

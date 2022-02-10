@@ -42,10 +42,11 @@ import net.server.guild.GuildPackets;
 import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.life.MobSkill;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.packets.WeddingPackets;
@@ -59,7 +60,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
-
+    private static final Logger log = LoggerFactory.getLogger(PlayerLoggedinHandler.class);
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
 
     private boolean tryAcquireAccount(int accId) {
@@ -257,10 +258,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.getFamilyInfo(familyEntry));
                         familyEntry.announceToSenior(PacketCreator.sendFamilyLoginNotice(player.getName(), true), true);
                     } else {
-                        FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Player " + player.getName() + "'s family doesn't have an entry for them. (" + f.getID() + ")");
+                        log.error("Chr {}'s family doesn't have an entry for them. (familyId {})", player.getName(), f.getID());
                     }
                 } else {
-                    FilePrinter.printError(FilePrinter.FAMILY_ERROR, "Player " + player.getName() + " has an invalid family ID. (" + player.getFamilyId() + ")");
+                    log.error("Chr {} has an invalid family ID ({})", player.getName(), player.getFamilyId());
                     c.sendPacket(PacketCreator.getFamilyInfo(null));
                 }
             } else {

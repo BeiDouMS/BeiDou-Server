@@ -35,12 +35,13 @@ import constants.inventory.ItemConstants;
 import constants.skills.Aran;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.StatEffect;
 import server.life.LifeFactory.loseItem;
 import server.life.*;
 import server.maps.MapObject;
 import server.maps.MapleMap;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Randomizer;
 
@@ -50,9 +51,10 @@ import java.util.Collections;
 import java.util.List;
 
 public final class TakeDamageHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(TakeDamageHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         List<Character> banishPlayers = new ArrayList<>();
 
         Character chr = c.getPlayer();
@@ -135,10 +137,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                 }
             } catch (ClassCastException e) {
                 //this happens due to mob on last map damaging player just before changing maps
-
-                e.printStackTrace();
-                FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, "Attacker is not a mob-type, rather is a " + map.getMapObject(oid).getClass().getName() + " entity.");
-
+                log.warn("Attack is not a mob-type, rather is a {} entity", map.getMapObject(oid).getClass().getSimpleName(), e);
                 return;
             }
 

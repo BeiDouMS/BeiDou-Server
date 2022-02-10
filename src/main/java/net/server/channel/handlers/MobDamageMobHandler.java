@@ -28,10 +28,11 @@ import client.status.MonsterStatus;
 import client.status.MonsterStatusEffect;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.life.Monster;
 import server.life.MonsterInformationProvider;
 import server.maps.MapleMap;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.util.Map;
@@ -41,8 +42,10 @@ import java.util.Map;
  * @author Ronan
  */
 public final class MobDamageMobHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(MobDamageMobHandler.class);
+
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         int from = p.readInt();
         p.readInt();
         int to = p.readInt();
@@ -59,8 +62,10 @@ public final class MobDamageMobHandler extends AbstractPacketHandler {
 
             if (dmg > maxDmg) {
                 AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing hypnotize damage exploit.");   // thanks Rien dev team
-
-                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " had hypnotized " + MonsterInformationProvider.getInstance().getMobNameFromId(attacker.getId()) + " to attack " + MonsterInformationProvider.getInstance().getMobNameFromId(damaged.getId()) + " with damage " + dmg + " (max: " + maxDmg + ")");
+                String attackerName = MonsterInformationProvider.getInstance().getMobNameFromId(attacker.getId());
+                String damagedName = MonsterInformationProvider.getInstance().getMobNameFromId(damaged.getId());
+                log.warn("Chr {} had hypnotized {} to attack {} with damage {} (max: {})", c.getPlayer().getName(),
+                        attackerName, damagedName, dmg, maxDmg);
                 dmg = maxDmg;
             }
 

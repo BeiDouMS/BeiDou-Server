@@ -40,6 +40,8 @@ import net.server.guild.Guild;
 import net.server.guild.GuildPackets;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataProviderFactory;
 import provider.wz.WZFiles;
@@ -61,7 +63,6 @@ import server.partyquest.AriantColiseum;
 import server.partyquest.MonsterCarnival;
 import server.partyquest.Pyramid;
 import server.partyquest.Pyramid.PyramidMode;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.packets.WeddingPackets;
 
@@ -76,6 +77,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * @author Matze
  */
 public class NPCConversationManager extends AbstractPlayerInteraction {
+    private static final Logger log = LoggerFactory.getLogger(NPCConversationManager.class);
 
     private final int npc;
     private int npcOid;
@@ -380,7 +382,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         if (shop != null) {
             shop.sendShop(c);
         } else {    // check for missing shopids thanks to resinate
-            FilePrinter.printError(FilePrinter.NPC_UNCODED, "Shop ID: " + id + " is missing from database.");
+            log.warn("Shop ID: {} is missing from database.", id);
             ShopFactory.getInstance().getShop(11000).sendShop(c);
         }
     }

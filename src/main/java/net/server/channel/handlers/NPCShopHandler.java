@@ -26,13 +26,17 @@ import client.autoban.AutobanFactory;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Matze
  */
 public final class NPCShopHandler extends AbstractPacketHandler {
-    public final void handlePacket(InPacket p, Client c) {
+    private static final Logger log = LoggerFactory.getLogger(NPCShopHandler.class);
+
+    @Override
+    public void handlePacket(InPacket p, Client c) {
         byte bmode = p.readByte();
         if (bmode == 0) { // mode 0 = buy :)
             short slot = p.readShort();// slot
@@ -40,7 +44,7 @@ public final class NPCShopHandler extends AbstractPacketHandler {
             short quantity = p.readShort();
             if (quantity < 1) {
                 AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit a npc shop.");
-                FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to buy quantity " + quantity + " of item id " + itemId);
+                log.warn("Chr {} tried to buy quantity {} of itemid {}", c.getPlayer().getName(), quantity, itemId);
                 c.disconnect(true, false);
                 return;
             }

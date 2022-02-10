@@ -28,7 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.AbstractScriptManager;
 import server.quest.Quest;
-import tools.FilePrinter;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -75,7 +74,7 @@ public class QuestScriptManager extends AbstractScriptManager {
 
                 ScriptEngine engine = getQuestScriptEngine(c, questid);
                 if (engine == null) {
-                    FilePrinter.printError(FilePrinter.QUEST_UNCODED, "START Quest " + questid + " is uncoded.");
+                    log.warn("START Quest {} is uncoded.", questid);
                     qm.dispose();
                     return;
                 }
@@ -127,7 +126,7 @@ public class QuestScriptManager extends AbstractScriptManager {
 
                 ScriptEngine engine = getQuestScriptEngine(c, questid);
                 if (engine == null) {
-                    FilePrinter.printError(FilePrinter.QUEST_UNCODED, "END Quest " + questid + " is uncoded.");
+                    log.warn("END Quest {} is uncoded.", questid);
                     qm.dispose();
                     return;
                 }

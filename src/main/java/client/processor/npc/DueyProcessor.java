@@ -36,11 +36,12 @@ import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.server.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.DueyPackage;
 import server.ItemInformationProvider;
 import server.Trade;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -54,6 +55,7 @@ import java.util.List;
  * @author RonanLana - synchronization of Duey modules
  */
 public class DueyProcessor {
+    private static final Logger log = LoggerFactory.getLogger(DueyProcessor.class);
 
     public enum Actions {
         TOSERVER_RECV_ITEM(0x00),
@@ -204,7 +206,7 @@ public class DueyProcessor {
 
             int updateRows = ps.executeUpdate();
             if (updateRows < 1) {
-                FilePrinter.printError(FilePrinter.INSERT_CHAR, "Error trying to create package [mesos: " + mesos + ", " + sender + ", quick: " + quick + ", to CharacterId: " + toCid + "]");
+                log.error("Error trying to create package [mesos: {}, sender: {}, quick: {}, receiver chrId: {}]", mesos, sender, quick, toCid);
                 return -1;
             }
 
@@ -213,7 +215,7 @@ public class DueyProcessor {
                 if (rs.next()) {
                     packageId = rs.getInt(1);
                 } else {
-                    FilePrinter.printError(FilePrinter.INSERT_CHAR, "Failed inserting package [mesos: " + mesos + ", " + sender + ", quick: " + quick + ", to CharacterId: " + toCid + "]");
+                    log.error("Failed inserting package [mesos: {}, sender: {}, quick: {}, receiver chrId: {}]", mesos, sender, quick, toCid);
                     return -1;
                 }
             }
@@ -287,7 +289,7 @@ public class DueyProcessor {
                     fee += 5000;
                 } else if (!c.getPlayer().haveItem(ItemId.QUICK_DELIVERY_TICKET)) {
                     AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with Quick Delivery on duey.");
-                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use duey with Quick Delivery, mesos " + sendMesos + " and amount " + amount);
+                    log.warn("Chr {} tried to use duey with Quick Delivery without a ticket, mesos {} and amount {}", c.getPlayer().getName(), sendMesos, amount);
                     c.disconnect(true, false);
                     return;
                 }
@@ -295,7 +297,7 @@ public class DueyProcessor {
                 long finalcost = (long) sendMesos + fee;
                 if (finalcost < 0 || finalcost > Integer.MAX_VALUE || (amount < 1 && sendMesos == 0)) {
                     AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with duey.");
-                    FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use duey with mesos " + sendMesos + " and amount " + amount);
+                    log.warn("Chr {} tried to use duey with mesos {} and amount {}", c.getPlayer().getName(), sendMesos, amount);
                     c.disconnect(true, false);
                     return;
                 }
@@ -394,7 +396,7 @@ public class DueyProcessor {
 
                     if (dp == null) {
                         c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
-                        FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to receive package from duey with id " + packageId);
+                        log.warn("Chr {} tried to receive package from duey with id {}", c.getPlayer().getName(), packageId);
                         return;
                     }
 

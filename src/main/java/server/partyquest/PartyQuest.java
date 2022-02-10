@@ -26,7 +26,8 @@ import client.Character;
 import net.server.Server;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ import java.util.List;
  * @author kevintjuh93
  */
 public class PartyQuest {
+    private static final Logger log = LoggerFactory.getLogger(PartyQuest.class);
+
     int channel, world;
     Party party;
     List<Character> participants = new ArrayList<>();
@@ -108,7 +111,7 @@ public class PartyQuest {
         } else if (PQ.equals("LudiPQLast")) {
             return 800 * level / 5;
         }
-        FilePrinter.printError(FilePrinter.NPC, "Unhandled PartyQuest: " + PQ);
+        log.warn("Unhandled PartyQuest: {}", PQ);
         return 0;
     }
 }

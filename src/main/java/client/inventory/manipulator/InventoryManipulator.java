@@ -29,9 +29,10 @@ import client.newyear.NewYearCardRecord;
 import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.maps.MapleMap;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -45,6 +46,7 @@ import java.util.List;
  * @author Ronan - improved check space feature and removed redundant object calls
  */
 public class InventoryManipulator {
+    private static final Logger log = LoggerFactory.getLogger(InventoryManipulator.class);
 
     public static boolean addById(Client c, int itemId, short quantity) {
         return addById(c, itemId, quantity, null, -1, -1);
@@ -269,7 +271,7 @@ public class InventoryManipulator {
                 chr.setHasSandboxItem();
             }
         } else {
-            FilePrinter.printError(FilePrinter.ITEM, "Tried to pickup Equip id " + itemid + " containing more than 1 quantity --> " + quantity);
+            log.warn("Tried to pickup Equip id {} containing more than 1 quantity --> {}", itemid, quantity);
             c.sendPacket(PacketCreator.getInventoryFull());
             c.sendPacket(PacketCreator.showItemUnavailable());
             return false;

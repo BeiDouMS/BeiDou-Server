@@ -30,13 +30,15 @@ import client.SkillFactory;
 import client.autoban.AutobanFactory;
 import constants.game.GameConstants;
 import constants.skills.Aran;
-import tools.FilePrinter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
 
 /**
  * @author RonanLana - synchronization of SP transaction modules
  */
 public class AssignSPProcessor {
+    private static final Logger log = LoggerFactory.getLogger(AssignSPProcessor.class);
 
     public static boolean canSPAssign(Client c, int skillid) {
         if (skillid == Aran.HIDDEN_FULL_DOUBLE || skillid == Aran.HIDDEN_FULL_TRIPLE || skillid == Aran.HIDDEN_OVER_DOUBLE || skillid == Aran.HIDDEN_OVER_TRIPLE) {
@@ -47,7 +49,7 @@ public class AssignSPProcessor {
         Character player = c.getPlayer();
         if ((!GameConstants.isPqSkillMap(player.getMapId()) && GameConstants.isPqSkill(skillid)) || (!player.isGM() && GameConstants.isGMSkills(skillid)) || (!GameConstants.isInJobTree(skillid, player.getJob().getId()) && !player.isGM())) {
             AutobanFactory.PACKET_EDIT.alert(player, "tried to packet edit in distributing sp.");
-            FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to use skill " + skillid + " without it being in their job.");
+            log.warn("Chr {} tried to use skill {} without it being in their job.", c.getPlayer().getName(), skillid);
 
             c.disconnect(true, false);
             return false;

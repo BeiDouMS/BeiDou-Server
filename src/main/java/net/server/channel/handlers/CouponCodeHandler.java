@@ -30,10 +30,11 @@ import client.inventory.manipulator.InventoryManipulator;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.CashShop;
 import server.ItemInformationProvider;
 import tools.DatabaseConnection;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -49,6 +50,7 @@ import java.util.Map.Entry;
  * @author Ronan (HeavenMS)
  */
 public final class CouponCodeHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(CouponCodeHandler.class);
 
     private static List<Pair<Integer, Pair<Integer, Integer>>> getNXCodeItems(Character chr, Connection con, int codeid) throws SQLException {
         Map<Integer, Integer> couponItems = new HashMap<>();
@@ -90,7 +92,7 @@ public final class CouponCodeHandler extends AbstractPacketHandler {
                     item = 4000000;
                     qty = 1;
 
-                    FilePrinter.printError(FilePrinter.UNHANDLED_EVENT, "Error trying to redeem itemid " + item + " from codeid " + codeid + ".");
+                    log.warn("Error trying to redeem itemid {} from coupon codeid {}", item, codeid);
                 }
 
                 if (!chr.canHold(item, qty)) {

@@ -25,14 +25,16 @@ import client.Client;
 import client.autoban.AutobanFactory;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ChatLogger;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 public final class PetChatHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(PetChatHandler.class);
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         int petId = p.readInt();
         p.readInt();
         p.readByte();
@@ -44,7 +46,7 @@ public final class PetChatHandler extends AbstractPacketHandler {
         String text = p.readString();
         if (text.length() > Byte.MAX_VALUE) {
             AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with pets.");
-            FilePrinter.printError(FilePrinter.EXPLOITS + c.getPlayer().getName() + ".txt", c.getPlayer().getName() + " tried to send text with length of " + text.length());
+            log.warn("Chr {} tried to send text with length of {}", c.getPlayer().getName(), text.length());
             c.disconnect(true, false);
             return;
         }

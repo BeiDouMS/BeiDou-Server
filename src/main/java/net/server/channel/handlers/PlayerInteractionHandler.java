@@ -41,7 +41,6 @@ import server.ItemInformationProvider;
 import server.Trade;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameType;
-import tools.FilePrinter;
 import tools.PacketCreator;
 
 import java.awt.*;
@@ -601,7 +600,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 int price = p.readInt();
                 if (perBundle <= 0 || perBundle * bundles > 2000 || bundles <= 0 || price <= 0 || price > Integer.MAX_VALUE) {
                     AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with hired merchants.");
-                    FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " might of possibly packet edited Hired Merchants\nperBundle: " + perBundle + "\nperBundle * bundles (This multiplied cannot be greater than 2000): " + perBundle * bundles + "\nbundles: " + bundles + "\nprice: " + price);
+                    log.warn("Chr {} might possibly have packet edited Hired Merchants. perBundle: {}, perBundle * bundles (This multiplied cannot be greater than 2000): {}, bundles: {}, price: {}",
+                            chr.getName(), perBundle, perBundle * bundles, bundles, price);
                     return;
                 }
 
@@ -672,7 +672,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     int slot = p.readShort();
                     if (slot >= shop.getItems().size() || slot < 0) {
                         AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a player shop.");
-                        FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to remove item at slot " + slot);
+                        log.warn("Chr {} tried to remove item at slot {}", chr.getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }
@@ -738,7 +738,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 short quantity = p.readShort();
                 if (quantity < 1) {
                     AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a hired merchant and or player shop.");
-                    FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to buy item " + itemid + " with quantity " + quantity);
+                    log.warn("Chr {} tried to buy item {} with quantity {}", chr.getName(), itemid, quantity);
                     c.disconnect(true, false);
                     return;
                 }
@@ -767,7 +767,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     int slot = p.readShort();
                     if (slot >= merchant.getItems().size() || slot < 0) {
                         AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a hired merchant.");
-                        FilePrinter.printError(FilePrinter.EXPLOITS + chr.getName() + ".txt", chr.getName() + " tried to remove item at slot " + slot);
+                        log.warn("Chr {} tried to remove item at slot {}", chr.getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }

@@ -1724,7 +1724,7 @@ public class Character extends AbstractCharacterObject {
                 resetHpDecreaseTask();
             }
         } else {
-            FilePrinter.printError(FilePrinter.MAPLE_MAP, "Character " + this.getName() + " got stuck when moving to map " + map.getId() + ".");
+            log.warn("Chr {} got stuck when moving to map {}", getName(), map.getId());
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here
             return;
         }
@@ -5607,9 +5607,8 @@ public class Character extends AbstractCharacterObject {
             }
             try {
                 merchant.saveItems(false);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                FilePrinter.printError(FilePrinter.EXCEPTION_CAUGHT, "Error while saving " + name + "'s Hired Merchant items.");
+            } catch (SQLException e) {
+                log.error("Error while saving {}'s Hired Merchant items.", name, e);
             }
         }
     }
@@ -8244,7 +8243,7 @@ public class Character extends AbstractCharacterObject {
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
-                        FilePrinter.printError(FilePrinter.INSERT_CHAR, "Error trying to insert " + name);
+                        log.error("Error trying to insert chr {}", name);
                         return false;
                     }
 
@@ -8252,7 +8251,7 @@ public class Character extends AbstractCharacterObject {
                         if (rs.next()) {
                             this.id = rs.getInt(1);
                         } else {
-                            FilePrinter.printError(FilePrinter.INSERT_CHAR, "Inserting char failed " + name);
+                            log.error("Inserting chr {} failed", name);
                             return false;
                         }
                     }

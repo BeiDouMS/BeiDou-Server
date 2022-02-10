@@ -30,10 +30,11 @@ import constants.game.GameConstants;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.packet.InPacket;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.MakerItemFactory;
 import server.MakerItemFactory.MakerItemCreateEntry;
-import tools.FilePrinter;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -46,7 +47,7 @@ import java.util.Map;
  * @author Ronan
  */
 public class MakerProcessor {
-
+    private static final Logger log = LoggerFactory.getLogger(MakerProcessor.class);
     private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
     public static void makerAction(InPacket p, Client c) {
@@ -150,7 +151,7 @@ public class MakerProcessor {
 
                 switch (createStatus) {
                     case -1:// non-available for Maker itemid has been tried to forge
-                        FilePrinter.printError(FilePrinter.EXPLOITS, "Player " + c.getPlayer().getName() + " tried to craft itemid " + toCreate + " using the Maker skill.");
+                        log.warn("Chr {} tried to craft itemid {} using the Maker skill.", c.getPlayer().getName(), toCreate);
                         c.sendPacket(PacketCreator.serverNotice(1, "The requested item could not be crafted on this operation."));
                         c.sendPacket(PacketCreator.makerEnableActions());
                         break;
