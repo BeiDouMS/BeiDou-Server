@@ -11,45 +11,58 @@
     <packaging>jar</packaging>
 
     <properties>
+        <!-- Project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <mainClass>net.server.Server</mainClass>
 
-        <log4j.version>2.17.1</log4j.version>
-        <graalvm.version>21.1.0</graalvm.version>
-        <netty.version>4.1.67.Final</netty.version>
-        <junit.version>5.7.2</junit.version>
+        <!-- Maven plugins -->
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version> <!-- For running unit tests -->
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version> <!-- Disabled. (for building thin jar) -->
+        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version> <!-- For packaging the executable fat jar -->
+
+        <!-- Dependencies -->
+        <slf4j-api.version>1.7.36</slf4j-api.version> <!-- Logging facade -->
+        <log4j.version>2.17.1</log4j.version> <!-- Slf4j implementation -->
+        <graalvm.version>21.1.0</graalvm.version> <!-- ScriptEngine implementation -->
+        <netty.version>4.1.74.Final</netty.version> <!-- Networking -->
+        <junit.version>5.8.2</junit.version> <!-- Unit test -->
+        <yamlbeans.version>1.15</yamlbeans.version> <!-- Config file -->
+        <jcip-annotations.version>1.0</jcip-annotations.version> <!-- Annotations for concurrency documentation -->
+        <commons-io.version>2.11.0</commons-io.version> <!-- Util library used by some of our tools -->
+        <HikariCP.version>5.0.1</HikariCP.version> <!-- Database connection pool -->
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version> <!-- MySQL JDBC driver -->
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.esotericsoftware.yamlbeans</groupId>
             <artifactId>yamlbeans</artifactId>
-            <version>1.15</version>
+            <version>${yamlbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
+            <version>${jcip-annotations.version}</version>
         </dependency>
         <dependency> <!-- only used for some tools -->
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <!-- Database -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>5.0.0</version>
+            <version>${HikariCP.version}</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.26</version>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
 
         <!-- Networking -->
@@ -78,7 +91,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
+            <version>${slf4j-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -120,7 +133,6 @@
             <version>${junit.version}</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
@@ -129,7 +141,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>${maven-jar-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>default-jar</id>
@@ -141,14 +153,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
 
             <!-- Enable assembling jar that includes all dependencies -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>${maven-assembly-plugin.version}</version>
                 <configuration>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
