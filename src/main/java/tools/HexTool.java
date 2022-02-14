@@ -25,7 +25,9 @@ import constants.string.CharsetConstants;
 import io.netty.buffer.ByteBufUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HexFormat;
 
+// TODO: use HexFormat from Java 17
 public class HexTool {
     private static final char[] HEX = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -44,12 +46,19 @@ public class HexTool {
         return hexed.substring(0, hexed.length() - 1);
     }
 
-    public static String toCompressedString(byte[] bytes) {
-        StringBuilder hexed = new StringBuilder();
-        for (byte aByte : bytes) {
-            hexed.append(toString(aByte));
-        }
-        return hexed.substring(0, hexed.length());
+    /**
+     * Convert a hex string to its byte array representation. Two consecutive hex characters are equivalent to one byte.
+     *
+     * @param hexString Hex string to convert to bytes. Hex character pairs may be delimited by a space or not (compact)
+     *                  Example: "01 10 7F FF" is converted to {1, 16, 127, -1}.
+     * @return The byte array
+     */
+    public static byte[] toBytes(String hexString) {
+        return HexFormat.of().parseHex(removeAllSpaces(hexString));
+    }
+
+    private static String removeAllSpaces(String input) {
+        return input.replaceAll("\\s", "");
     }
 
     public static byte[] getByteArrayFromHexString(String hex) {
@@ -85,6 +94,7 @@ public class HexTool {
                 baos.write(nextb);
             }
         }
+        // return toBytes(hex);
         return baos.toByteArray();
     }
 
