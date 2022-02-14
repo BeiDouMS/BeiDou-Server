@@ -3307,7 +3307,7 @@ public class PacketCreator {
         p.writeByte(msgType);
         p.writeByte(speaker);
         p.writeString(talk);
-        p.writeBytes(HexTool.getByteArrayFromHexString(endBytes));
+        p.writeBytes(HexTool.toBytes(endBytes));
         return p;
     }
 
@@ -6887,7 +6887,7 @@ public class PacketCreator {
 
     public static Packet customPacket(String packet) {
         OutPacket p = new ByteBufOutPacket();
-        p.writeBytes(HexTool.getByteArrayFromHexString(packet));
+        p.writeBytes(HexTool.toBytes(packet));
         return p;
     }
 

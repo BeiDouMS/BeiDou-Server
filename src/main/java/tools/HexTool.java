@@ -24,26 +24,21 @@ package tools;
 import constants.string.CharsetConstants;
 import io.netty.buffer.ByteBufUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.util.HexFormat;
 
 // TODO: use HexFormat from Java 17
 public class HexTool {
-    private static final char[] HEX = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    private static String toString(byte byteValue) {
-        int tmp = byteValue << 8;
-        char[] retstr = new char[]{HEX[(tmp >> 12) & 0x0F], HEX[(tmp >> 8) & 0x0F]};
-        return String.valueOf(retstr);
-    }
-
+    /**
+     * Convert a byte array to its hex string representation.
+     * Each byte value is equivalent to two hex characters delimited by a space.
+     *
+     * @param bytes Byte array to convert to a hex string.
+     *              Example: {1, 16, 127, -1} is converted to "01 F0 7F FF"
+     * @return The hex string
+     */
     public static String toString(byte[] bytes) {
-        StringBuilder hexed = new StringBuilder();
-        for (byte aByte : bytes) {
-            hexed.append(toString(aByte));
-            hexed.append(' ');
-        }
-        return hexed.substring(0, hexed.length() - 1);
+        return HexFormat.ofDelimiter(" ").withUpperCase().formatHex(bytes);
     }
 
     /**
@@ -59,43 +54,6 @@ public class HexTool {
 
     private static String removeAllSpaces(String input) {
         return input.replaceAll("\\s", "");
-    }
-
-    public static byte[] getByteArrayFromHexString(String hex) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int nexti = 0;
-        int nextb = 0;
-        boolean highoc = true;
-        outer:
-        for (; ; ) {
-            int number = -1;
-            while (number == -1) {
-                if (nexti == hex.length()) {
-                    break outer;
-                }
-                char chr = hex.charAt(nexti);
-                if (chr >= '0' && chr <= '9') {
-                    number = chr - '0';
-                } else if (chr >= 'a' && chr <= 'f') {
-                    number = chr - 'a' + 10;
-                } else if (chr >= 'A' && chr <= 'F') {
-                    number = chr - 'A' + 10;
-                } else {
-                    number = -1;
-                }
-                nexti++;
-            }
-            if (highoc) {
-                nextb = number << 4;
-                highoc = false;
-            } else {
-                nextb |= number;
-                highoc = true;
-                baos.write(nextb);
-            }
-        }
-        // return toBytes(hex);
-        return baos.toByteArray();
     }
 
     public static String toStringFromAscii(final byte[] bytes) {
