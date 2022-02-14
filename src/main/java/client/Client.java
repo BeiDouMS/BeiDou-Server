@@ -1335,7 +1335,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         try {
             MessageDigest digester = MessageDigest.getInstance(type);
             digester.update(password.getBytes(StandardCharsets.UTF_8), 0, password.length());
-            return HexTool.toString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
+            return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Encoding the string failed", e);
         }

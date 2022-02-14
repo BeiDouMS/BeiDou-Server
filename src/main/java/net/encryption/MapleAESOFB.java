@@ -180,7 +180,7 @@ public class MapleAESOFB {
 
     @Override
     public String toString() {
-        return "IV: " + HexTool.toString(this.iv);
+        return "IV: " + HexTool.toHexString(this.iv);
     }
 
     private static byte[] funnyShit(byte inputByte, byte[] in) {

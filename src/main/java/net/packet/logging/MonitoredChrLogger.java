@@ -75,7 +75,7 @@ public class MonitoredChrLogger {
             return;
         }
 
-        String packet = packetContent.length > 0 ? HexTool.toString(packetContent) : "<empty>";
+        String packet = packetContent.length > 0 ? HexTool.toHexString(packetContent) : "<empty>";
         log.info("{}-{} {}-{}", c.getAccountName(), chr.getName(), packetId, packet);
     }
 
