@@ -2473,11 +2473,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showAllCharacter(int chars, int unk) {
+    public static Packet showAllCharacter(int totalWorlds, int totalChrs) {
         OutPacket p = OutPacket.create(SendOpcode.VIEW_ALL_CHAR);
-        p.writeByte(chars > 0 ? 1 : 5); // 2: already connected to server, 3 : unk error (view-all-characters), 5 : cannot find any
-        p.writeInt(chars);
-        p.writeInt(unk);
+        p.writeByte(totalChrs > 0 ? 1 : 5); // 2: already connected to server, 3 : unk error (view-all-characters), 5 : cannot find any
+        p.writeInt(totalWorlds);
+        p.writeInt(totalChrs);
         return p;
     }
 

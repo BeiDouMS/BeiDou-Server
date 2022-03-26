@@ -1453,37 +1453,33 @@ public class Server {
     }
     */
 
-    public Pair<Pair<Integer, List<Character>>, List<Pair<Integer, List<Character>>>> loadAccountCharlist(Integer accountId, int visibleWorlds) {
-        List<World> wlist = this.getWorlds();
-        if (wlist.size() > visibleWorlds) {
-            wlist = wlist.subList(0, visibleWorlds);
+    public SortedMap<Integer, List<Character>> loadAccountCharlist(int accountId, int visibleWorlds) {
+        List<World> worlds = this.getWorlds();
+        if (worlds.size() > visibleWorlds) {
+            worlds = worlds.subList(0, visibleWorlds);
         }
 
-        List<Pair<Integer, List<Character>>> accChars = new ArrayList<>(wlist.size() + 1);
+        SortedMap<Integer, List<Character>> worldChrs = new TreeMap<>();
         int chrTotal = 0;
-        List<Character> lastwchars = null;
 
         lgnRLock.lock();
         try {
-            for (World w : wlist) {
-                List<Character> wchars = w.getAccountCharactersView(accountId);
-                if (wchars == null) {
+            for (World world : worlds) {
+                List<Character> chrs = world.getAccountCharactersView(accountId);
+                if (chrs == null) {
                     if (!accountChars.containsKey(accountId)) {
                         accountCharacterCount.put(accountId, (short) 0);
                         accountChars.put(accountId, new HashSet<>());    // not advisable at all to write on the map on a read-protected environment
                     }                                                           // yet it's known there's no problem since no other point in the source does
-                } else if (!wchars.isEmpty()) {                                  // this action.
-                    lastwchars = wchars;
-
-                    accChars.add(new Pair<>(w.getId(), wchars));
-                    chrTotal += wchars.size();
+                } else if (!chrs.isEmpty()) {                                  // this action.
+                    worldChrs.put(world.getId(), chrs);
                 }
             }
         } finally {
             lgnRLock.unlock();
         }
 
-        return new Pair<>(new Pair<>(chrTotal, lastwchars), accChars);
+        return worldChrs;
     }
 
     private static Pair<Short, List<List<Character>>> loadAccountCharactersViewFromDb(int accId, int wlen) {
