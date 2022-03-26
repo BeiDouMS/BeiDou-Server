@@ -28,11 +28,12 @@ import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
 import tools.PacketCreator;
-import tools.Pair;
 
-import java.util.List;
+import java.util.*;
 
 public final class ViewAllCharHandler extends AbstractPacketHandler {
+    private static final int CHARACTER_LIMIT = 60; // Client will crash if sending 61 or more characters
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
         try {
@@ -41,34 +42,88 @@ public final class ViewAllCharHandler extends AbstractPacketHandler {
                 return;
             }
 
-            int accountId = c.getAccID();
-            Pair<Pair<Integer, List<Character>>, List<Pair<Integer, List<Character>>>> loginBlob = Server.getInstance().loadAccountCharlist(accountId, c.getVisibleWorlds());
+            SortedMap<Integer, List<Character>> worldChrs = Server.getInstance().loadAccountCharlist(c.getAccID(), c.getVisibleWorlds());
+            worldChrs = limitTotalChrs(worldChrs, CHARACTER_LIMIT);
 
-            List<Pair<Integer, List<Character>>> worldChars = loginBlob.getRight();
-            int chrTotal = loginBlob.getLeft().getLeft();
-            List<Character> lastwchars = loginBlob.getLeft().getRight();
+            padChrsIfNeeded(worldChrs);
 
-            if (chrTotal > 9) {
-                int padRight = chrTotal % 3;
-                if (padRight > 0 && lastwchars != null) {
-                    Character chr = lastwchars.get(lastwchars.size() - 1);
+            int totalWorlds = worldChrs.size();
+            int totalChrs = countTotalChrs(worldChrs);
+            c.sendPacket(PacketCreator.showAllCharacter(totalWorlds, totalChrs));
 
-                    for (int i = padRight; i < 3; i++) { // filling the remaining slots with the last character loaded
-                        chrTotal++;
-                        lastwchars.add(chr);
-                    }
-                }
-            }
-
-            int charsSize = chrTotal;
-            int unk = charsSize + (3 - charsSize % 3); //rowSize?
-            c.sendPacket(PacketCreator.showAllCharacter(charsSize, unk));
-
-            for (Pair<Integer, List<Character>> wchars : worldChars) {
-                c.sendPacket(PacketCreator.showAllCharacterInfo(wchars.getLeft(), wchars.getRight(), YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic()));
-            }
+            final boolean usePic = YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic();
+            worldChrs.forEach((worldId, chrs) ->
+                    c.sendPacket(PacketCreator.showAllCharacterInfo(worldId, chrs, usePic))
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    private static SortedMap<Integer, List<Character>> limitTotalChrs(SortedMap<Integer, List<Character>> worldChrs,
+                                                                      int limit) {
+        if (countTotalChrs(worldChrs) <= limit) {
+            return worldChrs;
+        } else {;
+            return cutAfterChrLimit(worldChrs, limit);
+        }
+    }
+
+    private static int countTotalChrs(Map<Integer, List<Character>> worldChrs) {
+        return worldChrs.values().stream()
+                .mapToInt(List::size)
+                .sum();
+    }
+
+    private static SortedMap<Integer, List<Character>> cutAfterChrLimit(SortedMap<Integer, List<Character>> worldChrs,
+                                                                        int limit) {
+        SortedMap<Integer, List<Character>> cappedCopy = new TreeMap<>();
+        int runningChrTotal = 0;
+        for (Map.Entry<Integer, List<Character>> entry : worldChrs.entrySet()) {
+            int worldId = entry.getKey();
+            List<Character> chrs = entry.getValue();
+            if (runningChrTotal + chrs.size() <= limit) { // Limit not reached, move them all
+                runningChrTotal += chrs.size();
+                cappedCopy.put(worldId, chrs);
+            } else { // Limit would be reached if all chrs were moved. Move just enough to fit within limit.
+                int remainingSlots = limit - runningChrTotal;
+                List<Character> lastChrs = chrs.subList(0, remainingSlots);
+                cappedCopy.put(worldId, lastChrs);
+                break;
+            }
+        }
+
+        return cappedCopy;
+    }
+
+    /**
+     * If there are more characters than fits the screen (9), and you start scrolling down,
+     * the characters on the last row will not appear unless the row is completely filled.
+     * Meaning, if there are 1 or 2 characters remaining on the last row, they will not appear.
+     *
+     * @param totalChrs total amount of characters to display on 'View all characters' screen
+     * @return if we need to pad the last row to include the characters that would otherwise not appear
+     */
+    private static void padChrsIfNeeded(SortedMap<Integer, List<Character>> worldChrs) {
+        while (shouldPadLastRow(countTotalChrs(worldChrs))) {
+            final List<Character> lastWorldChrs = getLastWorldChrs(worldChrs);
+            final Character lastChrForPadding = getLastItem(lastWorldChrs);
+            lastWorldChrs.add(lastChrForPadding);
+        }
+    }
+
+    private static boolean shouldPadLastRow(int totalChrs) {
+        boolean shouldScroll = totalChrs > 9;
+        boolean isLastRowFilled = totalChrs % 3 == 0;
+        return shouldScroll && !isLastRowFilled;
+    }
+
+    private static List<Character> getLastWorldChrs(SortedMap<Integer, List<Character>> worldChrs) {
+        return worldChrs.get(worldChrs.lastKey());
+    }
+
+    private static <T> T getLastItem(List<T> list) {
+        Objects.requireNonNull(list);
+        return list.get(list.size() - 1);
     }
 }

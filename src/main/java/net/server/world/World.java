@@ -515,8 +515,8 @@ public class World {
         return chrList;
     }
 
-    public List<Character> getAccountCharactersView(Integer accountId) {
-        List<Character> chrList;
+    public List<Character> getAccountCharactersView(int accountId) {
+        final List<Character> chrList;
 
         accountCharsLock.lock();
         try {
