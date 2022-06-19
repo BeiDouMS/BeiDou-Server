@@ -53,6 +53,7 @@ import net.server.guild.Guild;
 import net.server.guild.GuildCharacter;
 import net.server.task.*;
 import net.server.world.World;
+import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.CashShop.CashItemFactory;
@@ -1922,9 +1923,13 @@ public class Server {
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
 
-        log.info("World and channels are offline.");
+        log.info("Worlds and channels are offline.");
         loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
+            // We disabled log4j's shutdown hook in the config file, so we have to manually shut it down here,
+            // after our last log statement.
+            LogManager.shutdown();
+
             new Thread(() -> System.exit(0)).start();
         } else {
             log.info("Restarting the server...");
