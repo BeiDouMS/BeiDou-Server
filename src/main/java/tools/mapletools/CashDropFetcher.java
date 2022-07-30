@@ -5,6 +5,8 @@ import tools.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +22,7 @@ import java.util.*;
  * Estimated parse time: 2 minutes
  */
 public class CashDropFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("cash_drop_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("cash_drop_report.txt");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
     private static final int INITIAL_STRING_LENGTH = 50;
     private static final int ITEM_FILE_NAME_SIZE = 13;
@@ -260,7 +262,8 @@ public class CashDropFetcher {
     }
 
     private static void reportNxDropData() {
-        try {
+        //NEED FUTURE UPDATE
+    	try {
             System.out.println("Reading Character.wz ...");
             ArrayList<File> files = new ArrayList<>();
             listFiles(WZFiles.CHARACTER.getFilePath(), files);
@@ -311,7 +314,7 @@ public class CashDropFetcher {
             System.out.println("Reporting results...");
 
             // report suspects of missing quest drop data, as well as those drop data that may have incorrect questids.
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
             printReportFileHeader();
 
             reportNxDropResults(true);

@@ -4,6 +4,8 @@ import provider.wz.WZFiles;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -14,8 +16,8 @@ import java.util.*;
  * And it removes from the String.wz XMLs all entries which misses properties on Item.wz.
  */
 public class EmptyItemWzChecker {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("empty_item_wz_report.txt");
-    private static final String OUTPUT_PATH = ToolConstants.OUTPUT_DIRECTORY.getPath();
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("empty_item_wz_report.txt");
+    private static final String OUTPUT_PATH = ToolConstants.OUTPUT_DIRECTORY.toString();
     private static final int INITIAL_STRING_LENGTH = 50;
     private static final int ITEM_FILE_NAME_SIZE = 13;
 
@@ -338,12 +340,11 @@ public class EmptyItemWzChecker {
 
     private static void reportItemNameDiff(Set<Integer> emptyItemNames, Set<Integer> emptyNameItems) throws IOException {
         System.out.println("Reporting results...");
-        printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-
-        printReportFileHeader();
-        printReportFileResults(emptyItemNames, emptyNameItems);
-
-        printWriter.close();
+        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+        	printWriter = pw;
+        	printReportFileHeader();
+            printReportFileResults(emptyItemNames, emptyNameItems);
+        }
     }
 
     private static void locateItemStringWzDiff() throws IOException {

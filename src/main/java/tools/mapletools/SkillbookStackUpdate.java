@@ -3,7 +3,12 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * @author RonanLana
@@ -15,8 +20,8 @@ import java.nio.charset.StandardCharsets;
  * Estimated parse time: 10 seconds
  */
 public class SkillbookStackUpdate {
-    private static final File INPUT_DIRECTORY = new File(WZFiles.ITEM.getFile(), "Consume");
-    private static final File OUTPUT_DIRECTORY = ToolConstants.getOutputFile("skillbook-update");
+    private static final Path INPUT_DIRECTORY = WZFiles.ITEM.getFile().resolve("Consume");
+    private static final Path OUTPUT_DIRECTORY = ToolConstants.getOutputFile("skillbook-update");
     private static final int INITIAL_STRING_LENGTH = 50;
 
     private static PrintWriter printWriter = null;
@@ -65,7 +70,6 @@ public class SkillbookStackUpdate {
 
     private static void forwardCursor(int st) {
         String line = null;
-
         try {
             while (status >= st && (line = bufferedReader.readLine()) != null) {
                 simpleToken(line);
@@ -111,47 +115,56 @@ public class SkillbookStackUpdate {
         printWriter.println(token);
     }
 
-    private static void parseItemFile(File file, File outputFile) {
+    private static void parseItemFile(Path file, Path outputFile) {
         setupDirectories(outputFile);
-        // This will reference one line at a time
-        String line = null;
-
-        try {
-            printWriter = new PrintWriter(outputFile);
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
-
-            while ((line = bufferedReader.readLine()) != null) {
-                translateItemToken(line);
-            }
-
-            bufferedReader.close();
-            fileReader.close();
-            printWriter.close();
+        
+        try(BufferedReader br = Files.newBufferedReader(file);
+        		PrintWriter pw = new PrintWriter(Files.newOutputStream(outputFile))) {
+        	bufferedReader = br;
+        	printWriter = pw;
+        	String line;
+        	while ((line = bufferedReader.readLine()) != null) {
+              translateItemToken(line);
+        	}
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + file.getName() + "'");
+            System.out.println("Error reading file '" + file.getFileName() + "'");
             ex.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void setupDirectories(File file) {
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
+    private static void setupDirectories(Path file) {
+    	if(!Files.exists(file.getParent())) {
+    		try {
+				Files.createDirectories(file.getParent());
+			} catch (IOException e) {
+				System.out.println("Error creating folder '" + file.getParent() + "'");
+				e.printStackTrace();
+			}
+    	}
     }
 
-    private static void parseItemDirectory(File inputDirectory, File outputDirectory) {
-        for (File f : inputDirectory.listFiles()) {
-            parseItemFile(f, new File(outputDirectory, f.getName()));
-        }
+    private static void parseItemDirectory(Path inputDirectory, Path outputDirectory) {
+    	try (DirectoryStream<Path> stream = Files.newDirectoryStream(inputDirectory)) {
+        	for (Path path : stream) {
+        		parseItemFile(path, outputDirectory.resolve(path.getFileName()));
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     public static void main(String[] args) {
+    	Instant instantStarted = Instant.now();
         System.out.println("Reading item files...");
         parseItemDirectory(INPUT_DIRECTORY, OUTPUT_DIRECTORY);
         System.out.println("Done!");
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+        System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 
 }

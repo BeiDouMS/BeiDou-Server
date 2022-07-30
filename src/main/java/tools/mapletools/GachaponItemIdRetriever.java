@@ -2,6 +2,8 @@ package tools.mapletools;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,8 +24,8 @@ import java.util.regex.Pattern;
  * Estimated parse time: 1 minute
  */
 public class GachaponItemIdRetriever {
-    private static final File INPUT_FILE = ToolConstants.getInputFile("gachapon_items.txt");
-    private static final File OUTPUT_DIRECTORY = ToolConstants.getOutputFile("gachapons");
+    private static final Path INPUT_FILE = ToolConstants.getInputFile("gachapon_items.txt");
+    private static final Path OUTPUT_DIRECTORY = ToolConstants.getOutputFile("gachapons");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
     private static final Pattern pattern = Pattern.compile("(\\d*)%");
     private static final int[] scrollsChances = new int[]{10, 15, 30, 60, 65, 70, 100};
@@ -247,12 +249,8 @@ public class GachaponItemIdRetriever {
 
     private static void fetchDataOnMapleHandbook() throws SQLException {
         String line;
-
-        try {
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-            int skip = 0;
+        try(BufferedReader bufferedReader = Files.newBufferedReader(INPUT_FILE)) {
+        	int skip = 0;
             boolean lineHeader = false;
             while ((line = bufferedReader.readLine()) != null) {
                 if (skip > 0) {
@@ -276,10 +274,10 @@ public class GachaponItemIdRetriever {
                     if (printWriter != null) {
                         printWriter.close();
                     }
-                    File outputFile = new File(OUTPUT_DIRECTORY, gachaponName + ".txt");
+                    Path outputFile = OUTPUT_DIRECTORY.resolve(gachaponName + ".txt");
                     setupDirectories(outputFile);
 
-                    printWriter = new PrintWriter(outputFile, StandardCharsets.UTF_8);
+                    printWriter = new PrintWriter(Files.newOutputStream(outputFile));
 
                     skip = 2;
                     lineHeader = true;
@@ -297,30 +295,30 @@ public class GachaponItemIdRetriever {
                     }
                 }
             }
-
-            if (printWriter != null) {
-                printWriter.close();
-            }
-            bufferedReader.close();
-            fileReader.close();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
             ex.printStackTrace();
         }
+        
+        
+        
     }
 
-    private static void setupDirectories(File file) {
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
-        }
+    private static void setupDirectories(Path file) {
+    	if(!Files.exists(file.getParent())) {
+    		try {
+				Files.createDirectories(file.getParent());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
 
     public static void main(String[] args) {
-        try {
-            loadHandbookUseNames();
+        try(con) {
+        	loadHandbookUseNames();
             fetchDataOnMapleHandbook();
-
-            con.close();
         } catch (SQLException e) {
             System.out.println("Error: invalid SQL syntax");
             System.out.println(e.getMessage());

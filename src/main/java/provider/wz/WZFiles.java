@@ -1,6 +1,8 @@
 package provider.wz;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public enum WZFiles {
     QUEST("Quest"),
@@ -25,12 +27,12 @@ public enum WZFiles {
         this.fileName = name + ".wz";
     }
 
-    public File getFile() {
-        return new File(DIRECTORY, fileName);
+    public Path getFile() {
+    	return Paths.get(DIRECTORY).resolve(fileName);
     }
 
     public String getFilePath() {
-        return getFile().getPath();
+        return getFile().toString();
     }
 
     private static String getWzDirectory() {
