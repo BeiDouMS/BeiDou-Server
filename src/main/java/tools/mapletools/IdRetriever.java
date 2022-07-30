@@ -2,10 +2,14 @@ package tools.mapletools;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 /**
@@ -26,8 +30,8 @@ import java.util.ArrayList;
  */
 public class IdRetriever {
     private static final boolean INSTALL_SQLTABLE = true;
-    private static final File INPUT_FILE = ToolConstants.getInputFile("fetch_ids.txt");
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("fetched_ids.txt");
+    private static final Path INPUT_FILE = ToolConstants.getInputFile("fetch_ids.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("fetched_ids.txt");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
 
     private static InputStreamReader fileReader = null;
@@ -132,15 +136,11 @@ public class IdRetriever {
     }
 
     private static void fetchDataOnMapleHandbook() throws SQLException {
-        String line;
-
-        try {
-            fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
-
-            PrintWriter printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-
-            while ((line = bufferedReader.readLine()) != null) {
+    	try(BufferedReader br = Files.newBufferedReader(INPUT_FILE);
+    		PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
+    		bufferedReader = br;
+    		String line;
+    		while ((line = bufferedReader.readLine()) != null) {
                 if (line.isEmpty()) {
                     printWriter.println("");
                     continue;
@@ -164,17 +164,13 @@ public class IdRetriever {
 
                 printWriter.println(str);
             }
-
-            printWriter.close();
-            bufferedReader.close();
-            fileReader.close();
-        } catch (IOException ex) {
+    	} catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     public static void main(String[] args) {
-
+    	Instant instantStarted = Instant.now();
         try {
             if (INSTALL_SQLTABLE) {
                 parseMapleHandbook();
@@ -187,6 +183,10 @@ public class IdRetriever {
             System.out.println("Error: invalid SQL syntax");
             e.printStackTrace();
         }
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+      	System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 }
 

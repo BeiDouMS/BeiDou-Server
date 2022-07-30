@@ -4,6 +4,8 @@ import provider.wz.WZFiles;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +18,7 @@ import java.sql.SQLException;
  * puts them on a SQL table with the correspondent mob cardid.
  */
 public class MobBookIndexer {
-    private static final File INPUT_FILE = new File(WZFiles.STRING.getFile(), "MonsterBook.img.xml");
+    private static final Path INPUT_FILE = WZFiles.STRING.getFile().resolve("MonsterBook.img.xml");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
 
     private static BufferedReader bufferedReader = null;
@@ -123,14 +125,13 @@ public class MobBookIndexer {
     }
 
     private static void indexFromDropData() {
-        // This will reference one line at a time
-        String line = null;
-
-        try {
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
-
-            PreparedStatement ps = con.prepareStatement("DROP TABLE IF EXISTS monstercardwz;");
+        
+    	try(con;
+    		BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+    		bufferedReader = br;
+    		String line = null;
+    		
+    		PreparedStatement ps = con.prepareStatement("DROP TABLE IF EXISTS monstercardwz;");
             ps.execute();
 
             ps = con.prepareStatement("CREATE TABLE `monstercardwz` ("
@@ -144,12 +145,7 @@ public class MobBookIndexer {
             while ((line = bufferedReader.readLine()) != null) {
                 translateToken(line);
             }
-
-            bufferedReader.close();
-            fileReader.close();
-
-            con.close();
-        } catch (FileNotFoundException ex) {
+    	} catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + INPUT_FILE + "'");
         } catch (IOException ex) {
             System.out.println("Error reading file '" + INPUT_FILE + "'");

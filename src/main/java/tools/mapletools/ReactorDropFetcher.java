@@ -3,6 +3,8 @@ package tools.mapletools;
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +18,7 @@ import java.util.*;
  * not yet coded.
  */
 public class ReactorDropFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("reactor_drop_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("reactor_drop_report.txt");
     private static final String REACTOR_SCRIPT_PATH = ToolConstants.SCRIPTS_PATH + "/reactor";
     private static final Connection con = SimpleDatabaseConnection.getConnection();
 
@@ -84,19 +86,18 @@ public class ReactorDropFetcher {
     }
 
     private static void reportMissingReactors() {
-        try {
+        try(con;
+        	PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             System.out.println("Fetching reactors from DB...");
             fetchMissingReactorDrops();
 
-            con.close();
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            printWriter = pw;
 
             // report suspects of missing quest drop data, as well as those drop data that may have incorrect questids.
             System.out.println("Reporting results...");
             printReportFileHeader();
             reportMissingReactorDrops();
 
-            printWriter.close();
             System.out.println("Done!");
         } catch (SQLException e) {
             System.out.println("Warning: Could not establish connection to database to report quest data.");

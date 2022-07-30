@@ -5,6 +5,8 @@ import tools.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -14,7 +16,7 @@ import java.util.*;
  * throughout the map tree (area map -> continent map -> world map) but are currently missing.
  */
 public class WorldmapChecker {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("worldmap_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("worldmap_report.txt");
     private static final int INITIAL_STRING_LENGTH = 50;
     private static final Map<String, Set<Integer>> worldMapids = new HashMap<>();
     private static final Map<String, String> parentWorldmaps = new HashMap<>();
@@ -186,8 +188,8 @@ public class WorldmapChecker {
     }
 
     private static void verifyWorldmapTreeMapids() {
-        try {
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
             printReportFileHeader();
 
             if (rootWorldmaps.size() > 1) {
@@ -242,7 +244,6 @@ public class WorldmapChecker {
                 printReportFileResults(unreferencedEntries);
             }
 
-            printWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

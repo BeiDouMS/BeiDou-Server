@@ -6,6 +6,8 @@ import tools.DatabaseConnection;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,8 +22,8 @@ import java.util.Map;
  */
 
 public class SkillMakerFetcher {
-    private static final File INPUT_FILE = new File(WZFiles.ETC.getFile(), "ItemMake.img.xml");
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("maker-data.sql");
+    private static final Path INPUT_FILE = WZFiles.ETC.getFile().resolve("ItemMake.img.xml");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("maker-data.sql");
     private static final int INITIAL_STRING_LENGTH = 50;
 
     private static PrintWriter printWriter = null;
@@ -303,10 +305,10 @@ public class SkillMakerFetcher {
         // This will reference one line at a time
         String line = null;
 
-        try {
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+        	BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+            printWriter = pw;
+            bufferedReader = br;
 
             resetMakerDataFields();
 
@@ -316,9 +318,6 @@ public class SkillMakerFetcher {
 
             WriteMakerTableFile();
 
-            printWriter.close();
-            bufferedReader.close();
-            fileReader.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + INPUT_FILE + "'");
         } catch (IOException ex) {

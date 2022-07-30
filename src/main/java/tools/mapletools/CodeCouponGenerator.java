@@ -4,6 +4,8 @@ import tools.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,7 +24,7 @@ import static java.util.concurrent.TimeUnit.HOURS;
  * Estimated parse time: 2 minutes (for 100 code entries)
  */
 public class CodeCouponGenerator {
-    private static final File INPUT_FILE = ToolConstants.getInputFile("CouponCodes.img.xml");
+    private static final Path INPUT_FILE = ToolConstants.getInputFile("CouponCodes.img.xml");
     private static final int INITIAL_STRING_LENGTH = 250;
     private static final Connection con = SimpleDatabaseConnection.getConnection();
 
@@ -312,24 +314,19 @@ public class CodeCouponGenerator {
         ps.close();
     }
 
-    private static void generateCodeCoupons(File file) throws IOException {
-        InputStreamReader fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-        bufferedReader = new BufferedReader(fileReader);
+    private static void generateCodeCoupons(Path file) throws IOException {
+    	try(BufferedReader br = Files.newBufferedReader(file); con;) {
+    		bufferedReader = br;
+    		resetCouponPackage();
+            status = 0;
 
-        resetCouponPackage();
-        status = 0;
+            System.out.println("Reading XML coupon information...");
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                translateToken(line);
+            }
+            System.out.println();
 
-        System.out.println("Reading XML coupon information...");
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            translateToken(line);
-        }
-
-        bufferedReader.close();
-        fileReader.close();
-        System.out.println();
-
-        try {
             System.out.println("Loading DB coupon codes...");
             loadUsedCouponCodes();
             System.out.println();
@@ -340,10 +337,9 @@ public class CodeCouponGenerator {
                 commitCodeCouponDescription(ccd);
             }
             System.out.println();
-
-            con.close();
             System.out.println("Done.");
-        } catch (SQLException e) {
+
+    	} catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -352,7 +348,7 @@ public class CodeCouponGenerator {
         try {
             generateCodeCoupons(INPUT_FILE);
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + INPUT_FILE.getAbsolutePath() + "'");
+            System.out.println("Error reading file '" + INPUT_FILE.toAbsolutePath() + "'");
         }
     }
 }
