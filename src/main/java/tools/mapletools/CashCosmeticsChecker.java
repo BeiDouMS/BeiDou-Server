@@ -616,9 +616,9 @@ public class CashCosmeticsChecker {
     private static void reportCosmeticResults() throws IOException {
         System.out.println("Reporting results ...");
         
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
-        	printWriter = pw;
-	        printReportFileHeader();
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
+			printWriter = pw;
+			printReportFileHeader();
 	
 	        if (!missingCosmeticsNpcTypes.isEmpty()) {
 	            printWriter.println("Found " + missingCosmeticsNpcTypes.size() + " entries with missing cosmetic entries.");

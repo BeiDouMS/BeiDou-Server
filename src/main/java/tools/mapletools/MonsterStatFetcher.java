@@ -145,7 +145,7 @@ public class MonsterStatFetcher {
     public static void main(String[] args) {
     	Instant instantStarted = Instant.now();
     	// load mob stats from WZ
-    	 Map<Integer, MonsterStats> mobStats = MonsterStatFetcher.getAllMonsterStats();
+    	Map<Integer, MonsterStats> mobStats = MonsterStatFetcher.getAllMonsterStats();
         Instant instantStopped = Instant.now();
         Duration durationBetween = Duration.between(instantStarted, instantStopped);
         System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());

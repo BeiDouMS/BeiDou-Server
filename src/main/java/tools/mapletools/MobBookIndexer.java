@@ -125,14 +125,13 @@ public class MobBookIndexer {
     }
 
     private static void indexFromDropData() {
-        
-    	try(con;
-    		BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
-    		bufferedReader = br;
-    		String line = null;
-    		
-    		PreparedStatement ps = con.prepareStatement("DROP TABLE IF EXISTS monstercardwz;");
-            ps.execute();
+
+		try (con; BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+			bufferedReader = br;
+			String line = null;
+
+			PreparedStatement ps = con.prepareStatement("DROP TABLE IF EXISTS monstercardwz;");
+			ps.execute();
 
             ps = con.prepareStatement("CREATE TABLE `monstercardwz` ("
                     + "`id` int(10) unsigned NOT NULL AUTO_INCREMENT,"
@@ -142,20 +141,20 @@ public class MobBookIndexer {
                     + ");");
             ps.execute();
 
-            while ((line = bufferedReader.readLine()) != null) {
-                translateToken(line);
-            }
-    	} catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + INPUT_FILE + "'");
-        } catch (IOException ex) {
-            System.out.println("Error reading file '" + INPUT_FILE + "'");
-        } catch (SQLException e) {
-            System.out.println("Warning: Could not establish connection to database to change card chance rate.");
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			while ((line = bufferedReader.readLine()) != null) {
+				translateToken(line);
+			}
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + INPUT_FILE + "'");
+		} catch (IOException ex) {
+			System.out.println("Error reading file '" + INPUT_FILE + "'");
+		} catch (SQLException e) {
+			System.out.println("Warning: Could not establish connection to database to change card chance rate.");
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     public static void main(String[] args) {

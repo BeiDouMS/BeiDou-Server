@@ -228,29 +228,29 @@ public class QuestMesoFetcher {
     }
 
     private static void reportQuestMesoData() {
-        // This will reference one line at a time
+		// This will reference one line at a time
 
-    	try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-            System.out.println("Reading WZs...");
-            readQuestMesoData();
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			System.out.println("Reading WZs...");
+			readQuestMesoData();
 
-            System.out.println("Reporting results...");
-            // report missing meso checks on quest completes
-            printWriter = pw;
+			System.out.println("Reporting results...");
+			// report missing meso checks on quest completes
+			printWriter = pw;
 
-            printReportFileHeader();
+			printReportFileHeader();
 
-            printReportFileResults(checkedMesoQuests, appliedMesoQuests, true);
-            printReportFileResults(appliedMesoQuests, checkedMesoQuests, false);
+			printReportFileResults(checkedMesoQuests, appliedMesoQuests, true);
+			printReportFileResults(appliedMesoQuests, checkedMesoQuests, false);
 
-            System.out.println("Done!");
-        } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open quest file.");
-        } catch (IOException ex) {
-            System.out.println("Error reading quest file.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			System.out.println("Done!");
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open quest file.");
+		} catch (IOException ex) {
+			System.out.println("Error reading quest file.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     public static void main(String[] args) {

@@ -130,19 +130,19 @@ public class MapInfoRetriever {
         }
     }
 
-    private static void writeReport() {
-        try(PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-        	if (!missingInfo.isEmpty()) {
-                for (Integer i : missingInfo) {
-                    printWriter.println(i);
-                }
-            } else {
-                printWriter.println("All map files contain 'info' node.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	private static void writeReport() {
+		try (PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			if (!missingInfo.isEmpty()) {
+				for (Integer i : missingInfo) {
+					printWriter.println(i);
+				}
+			} else {
+				printWriter.println("All map files contain 'info' node.");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
     public static void main(String[] args) {
         for (int i = 0; i <= 9; i++) {

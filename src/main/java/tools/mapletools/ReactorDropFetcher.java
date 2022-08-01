@@ -86,25 +86,25 @@ public class ReactorDropFetcher {
     }
 
     private static void reportMissingReactors() {
-        try(con;
-        	PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-            System.out.println("Fetching reactors from DB...");
-            fetchMissingReactorDrops();
+		try (con; PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			System.out.println("Fetching reactors from DB...");
+			fetchMissingReactorDrops();
 
-            printWriter = pw;
+			printWriter = pw;
 
-            // report suspects of missing quest drop data, as well as those drop data that may have incorrect questids.
-            System.out.println("Reporting results...");
-            printReportFileHeader();
-            reportMissingReactorDrops();
+			// report suspects of missing quest drop data, as well as those drop data that
+			// may have incorrect questids.
+			System.out.println("Reporting results...");
+			printReportFileHeader();
+			reportMissingReactorDrops();
 
-            System.out.println("Done!");
-        } catch (SQLException e) {
-            System.out.println("Warning: Could not establish connection to database to report quest data.");
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			System.out.println("Done!");
+		} catch (SQLException e) {
+			System.out.println("Warning: Could not establish connection to database to report quest data.");
+			System.out.println(e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     public static void main(String[] args) {

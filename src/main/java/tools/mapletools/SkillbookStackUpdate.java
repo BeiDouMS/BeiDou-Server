@@ -116,26 +116,26 @@ public class SkillbookStackUpdate {
     }
 
     private static void parseItemFile(Path file, Path outputFile) {
-        setupDirectories(outputFile);
-        
-        try(BufferedReader br = Files.newBufferedReader(file);
-        		PrintWriter pw = new PrintWriter(Files.newOutputStream(outputFile))) {
-        	bufferedReader = br;
-        	printWriter = pw;
-        	String line;
-        	while ((line = bufferedReader.readLine()) != null) {
-              translateItemToken(line);
-        	}
-        } catch (IOException ex) {
-            System.out.println("Error reading file '" + file.getFileName() + "'");
-            ex.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		setupDirectories(outputFile);
+
+		try (BufferedReader br = Files.newBufferedReader(file);
+				PrintWriter pw = new PrintWriter(Files.newOutputStream(outputFile))) {
+			bufferedReader = br;
+			printWriter = pw;
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				translateItemToken(line);
+			}
+		} catch (IOException ex) {
+			System.out.println("Error reading file '" + file.getFileName() + "'");
+			ex.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     private static void setupDirectories(Path file) {
-    	if(!Files.exists(file.getParent())) {
+    	if (!Files.exists(file.getParent())) {
     		try {
 				Files.createDirectories(file.getParent());
 			} catch (IOException e) {

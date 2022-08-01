@@ -188,7 +188,7 @@ public class WorldmapChecker {
     }
 
     private static void verifyWorldmapTreeMapids() {
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             printWriter = pw;
             printReportFileHeader();
 

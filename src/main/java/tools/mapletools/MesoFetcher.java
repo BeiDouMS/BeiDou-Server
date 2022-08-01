@@ -123,7 +123,7 @@ public class MesoFetcher {
 
     private static void generateMissingMobsMesoRange() {
         System.out.print("Generating missing ranges... ");
-        try(Connection con = SimpleDatabaseConnection.getConnection();
+        try (Connection con = SimpleDatabaseConnection.getConnection();
         	PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE dropperid NOT IN (SELECT DISTINCT dropperid FROM drop_data WHERE itemid = 0) GROUP BY dropperid HAVING count(*) >= " + MIN_ITEMS + ";");
         	ResultSet rs = ps.executeQuery();) {
         	
@@ -139,7 +139,7 @@ public class MesoFetcher {
                 }
 
                 if (!existingMobs.isEmpty()) {
-                    try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+                    try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
                     	printWriter = pw;
                     	
                     	printSqlHeader();
@@ -169,7 +169,6 @@ public class MesoFetcher {
                 e.printStackTrace();
             }
         }
-
     }
 
     public static void main(String[] args) {

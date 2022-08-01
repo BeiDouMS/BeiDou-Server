@@ -134,18 +134,16 @@ public class BossHpBarFetcher {
     }
 
     private static void readBossHpBarData() throws IOException {
-        
-
-        final Path mobDirectory = WZFiles.MOB.getFile();
+    	final Path mobDirectory = WZFiles.MOB.getFile();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(mobDirectory)) { 
         	for (Path path : stream) { 
-        		if(Files.isRegularFile(path)) {
-        			try(BufferedReader br = Files.newBufferedReader(path)) {
+        		if (Files.isRegularFile(path)) {
+        			try (BufferedReader br = Files.newBufferedReader(path)) {
         				bufferedReader = br;
         				String line;
         				while ((line = bufferedReader.readLine()) != null) {
-                            translateToken(line);
-                        }
+        					translateToken(line);
+        				}
         			}
         		}
         	}
@@ -167,7 +165,7 @@ public class BossHpBarFetcher {
     private static void reportBossHpBarData() {
         // This will reference one line at a time
 
-        try(final PrintWriter printWriter = new PrintWriter(Files.newOutputStream(ToolConstants.getOutputFile(OUTPUT_FILE_NAME)))) {
+        try (PrintWriter printWriter = new PrintWriter(Files.newOutputStream(ToolConstants.getOutputFile(OUTPUT_FILE_NAME)))) {
             System.out.println("Reading WZs...");
             readBossHpBarData();
 

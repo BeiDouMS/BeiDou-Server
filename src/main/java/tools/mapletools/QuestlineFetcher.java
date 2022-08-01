@@ -291,33 +291,33 @@ public class QuestlineFetcher {
     }
 
     private static void reportQuestlineData() {
-        // This will reference one line at a time
+		// This will reference one line at a time
 
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-            System.out.println("Reading quest scripts...");
-            instantiateQuestScriptFiles(ToolConstants.SCRIPTS_PATH + "/quest");
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			System.out.println("Reading quest scripts...");
+			instantiateQuestScriptFiles(ToolConstants.SCRIPTS_PATH + "/quest");
 
-            System.out.println("Reading WZs...");
-            readQuestsWithSkillReward();
-            readQuestsWithMissingScripts();
+			System.out.println("Reading WZs...");
+			readQuestsWithSkillReward();
+			readQuestsWithMissingScripts();
 
-            System.out.println("Calculating skill related quests...");
-            calculateSkillRelatedMissingQuestScripts();
+			System.out.println("Calculating skill related quests...");
+			calculateSkillRelatedMissingQuestScripts();
 
-            System.out.println("Reporting results...");
-            printWriter = pw;
+			System.out.println("Reporting results...");
+			printWriter = pw;
 
-            printReportFileHeader();
-            printReportFileResults();
+			printReportFileHeader();
+			printReportFileResults();
 
-            System.out.println("Done!");
-        } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open quest file.");
-        } catch (IOException ex) {
-            System.out.println("Error reading quest file.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			System.out.println("Done!");
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open quest file.");
+		} catch (IOException ex) {
+			System.out.println("Error reading quest file.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 
     /*

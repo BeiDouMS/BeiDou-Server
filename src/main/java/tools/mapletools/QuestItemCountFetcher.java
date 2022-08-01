@@ -240,28 +240,28 @@ public class QuestItemCountFetcher {
         }
     }
 
-    private static void reportQuestItemCountData() {
-        // This will reference one line at a time
+	private static void reportQuestItemCountData() {
+		// This will reference one line at a time
 
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-            System.out.println("Reading WZs...");
-            readQuestItemCountData();
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			System.out.println("Reading WZs...");
+			readQuestItemCountData();
 
-            System.out.println("Reporting results...");
-            printWriter = pw;
+			System.out.println("Reporting results...");
+			printWriter = pw;
 
-            printReportFileHeader();
-            printReportFileResults();
+			printReportFileHeader();
+			printReportFileResults();
 
-            System.out.println("Done!");
-        } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open quest file.");
-        } catch (IOException ex) {
-            System.out.println("Error reading quest file.");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			System.out.println("Done!");
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open quest file.");
+		} catch (IOException ex) {
+			System.out.println("Error reading quest file.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
     public static void main(String[] args) {
         reportQuestItemCountData();

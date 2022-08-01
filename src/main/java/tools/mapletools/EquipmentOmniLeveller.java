@@ -403,41 +403,41 @@ public class EquipmentOmniLeveller {
     }
 
     private static void parseDirectoryEquipData(String curPath) {
-    	Path folder = OUTPUT_DIRECTORY.resolve(curPath);
-        if (!Files.exists(folder)) {
-            try {
+		Path folder = OUTPUT_DIRECTORY.resolve(curPath);
+		if (!Files.exists(folder)) {
+			try {
 				Files.createDirectory(folder);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				System.out.println("Unable to create folder " + folder.toAbsolutePath() + ".");
 				e.printStackTrace();
 			}
-        }
+		}
 
-        System.out.println("Parsing directory '" + curPath + "'");
-        folder = INPUT_DIRECTORY.resolve(curPath);
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) { 
-        	for (Path path : stream) { 
-        		if(Files.isRegularFile(path)) {
-        			try {
-        				parseEquipData(path, curPath);
-                    } catch (FileNotFoundException ex) {
-                        System.out.println("Unable to open dojo file " + path.toAbsolutePath() + ".");
-                    } catch (IOException ex) {
-                        System.out.println("Error reading dojo file " + path.toAbsolutePath() + ".");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-        		} else {
-        			parseDirectoryEquipData(curPath + path.getFileName() + "/");
-        		}
-        	}
-        } catch (IOException e1) {
-        	System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
-        	// TODO Auto-generated catch block
+		System.out.println("Parsing directory '" + curPath + "'");
+		folder = INPUT_DIRECTORY.resolve(curPath);
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
+			for (Path path : stream) {
+				if (Files.isRegularFile(path)) {
+					try {
+						parseEquipData(path, curPath);
+					} catch (FileNotFoundException ex) {
+						System.out.println("Unable to open dojo file " + path.toAbsolutePath() + ".");
+					} catch (IOException ex) {
+						System.out.println("Error reading dojo file " + path.toAbsolutePath() + ".");
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					parseDirectoryEquipData(curPath + path.getFileName() + "/");
+				}
+			}
+		} catch (IOException e1) {
+			System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
+			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    }
+	}
 
     public static void main(String[] args) {
     	Instant instantStarted = Instant.now();

@@ -176,7 +176,7 @@ public class NoItemIdFetcher {
     }
 
     private static void evaluateDropsFromDb() {
-        try {
+        try (con) {
             System.out.println("Evaluating item data on DB...");
 
             evaluateDropsFromTable("drop_data");
@@ -194,22 +194,21 @@ public class NoItemIdFetcher {
             System.out.println("Inexistent itemid count: " + nonExistingIds.size());
             System.out.println("Total itemid count: " + existingIds.size());
 
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-        	printWriter = pw;
-        	existingIds.add(0); // meso itemid
-            readEquipDataDirectory(WZFiles.CHARACTER.getFilePath());
-            readItemDataDirectory(WZFiles.ITEM.getFilePath());
+	public static void main(String[] args) {
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			printWriter = pw;
+			existingIds.add(0); // meso itemid
+			readEquipDataDirectory(WZFiles.CHARACTER.getFilePath());
+			readItemDataDirectory(WZFiles.ITEM.getFilePath());
 
-            evaluateDropsFromDb();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			evaluateDropsFromDb();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }
