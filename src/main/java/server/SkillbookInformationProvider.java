@@ -26,11 +26,17 @@ import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
 import provider.DataTool;
+import provider.wz.WZDirectoryEntry;
+import provider.wz.WZFileEntry;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -185,26 +191,31 @@ public class SkillbookInformationProvider {
         return loadedSkillbooks;
     }
 
-    private static void listFiles(String directoryName, ArrayList<File> files) {
-        File directory = new File(directoryName);
+	private static void listFiles(String directoryName, ArrayList<Path> files) {
+		Path directory = Paths.get(directoryName);
 
-        // get all the files from a directory
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
-            if (file.isFile()) {
-                files.add(file);
-            } else if (file.isDirectory()) {
-                listFiles(file.getAbsolutePath(), files);
-            }
-        }
-    }
+		// get all the files from a directory
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
+			for (Path path : stream) {
 
-    private static List<File> listFilesFromDirectoryRecursively(String directory) {
-        ArrayList<File> files = new ArrayList<>();
-        listFiles(directory, files);
+				if (Files.isRegularFile(path)) {
+					files.add(path);
+				} else if (Files.isDirectory(path)) {
+					listFiles(path.toAbsolutePath().toString(), files);
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-        return files;
-    }
+	private static List<Path> listFilesFromDirectoryRecursively(String directory) {
+		ArrayList<Path> files = new ArrayList<>();
+		listFiles(directory, files);
+
+		return files;
+	}
 
     private static Set<Integer> findMatchingSkillbookIdsOnFile(String fileContent) {
         Set<Integer> skillbookIds = new HashSet<>(4);
@@ -219,22 +230,20 @@ public class SkillbookInformationProvider {
         return skillbookIds;
     }
 
-    private static String readFileToString(File file, String encoding) throws IOException {
+    private static String readFileToString(Path file, String encoding) throws IOException {
         Scanner scanner = new Scanner(file, encoding);
         String text = "";
-        try {
-            try {
-                text = scanner.useDelimiter("\\A").next();
-            } finally {
-                scanner.close();
-            }
+        try(scanner) {
+           
+           text = scanner.useDelimiter("\\A").next();
+            
         } catch (NoSuchElementException e) {
         }
 
         return text;
     }
 
-    private static Map<Integer, SkillBookEntry> fileSearchMatchingData(File file) {
+    private static Map<Integer, SkillBookEntry> fileSearchMatchingData(Path file) {
         Map<Integer, SkillBookEntry> scriptFileSkillbooks = new HashMap<>();
 
         try {
@@ -245,7 +254,7 @@ public class SkillbookInformationProvider {
                 scriptFileSkillbooks.put(skillbookId, SkillBookEntry.SCRIPT);
             }
         } catch (IOException ioe) {
-            log.error("Failed to read file:{}", file.getName(), ioe);
+            log.error("Failed to read file:{}", file.getFileName(), ioe);
         }
 
         return scriptFileSkillbooks;
@@ -254,8 +263,8 @@ public class SkillbookInformationProvider {
     private static Map<Integer, SkillBookEntry> fetchSkillbooksFromScripts() {
         Map<Integer, SkillBookEntry> scriptSkillbooks = new HashMap<>();
 
-        for (File file : listFilesFromDirectoryRecursively("./scripts")) {
-            if (file.getName().endsWith(".js")) {
+        for (Path file : listFilesFromDirectoryRecursively("./scripts")) {
+            if (file.getFileName().endsWith(".js")) {
                 scriptSkillbooks.putAll(fileSearchMatchingData(file));
             }
         }

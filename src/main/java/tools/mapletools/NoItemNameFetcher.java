@@ -435,41 +435,41 @@ public class NoItemNameFetcher {
         }
     }
 
-    private static void writeMissingStringWZNames(Map<String, List<Integer>> missingNames) throws Exception {
-        System.out.println("Writing remaining 'String.wz' names...");
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_XML_FILE))) {
-        	printWriter = pw;
-        	
-            printOutputFileHeader();
+	private static void writeMissingStringWZNames(Map<String, List<Integer>> missingNames) throws Exception {
+		System.out.println("Writing remaining 'String.wz' names...");
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_XML_FILE))) {
+			printWriter = pw;
 
-            String[] nodePaths = {"Cash.img", "Consume.img", "Eqp.img", "Etc.img", "Ins.img", "Pet.img"};
-            for (int i = 0; i < nodePaths.length; i++) {
-                writeMissingStringWZNode(nodePaths[i], missingNames.get(nodePaths[i]), i == 2);
-            }
+			printOutputFileHeader();
 
-        }
-    }
+			String[] nodePaths = { "Cash.img", "Consume.img", "Eqp.img", "Etc.img", "Ins.img", "Pet.img" };
+			for (int i = 0; i < nodePaths.length; i++) {
+				writeMissingStringWZNode(nodePaths[i], missingNames.get(nodePaths[i]), i == 2);
+			}
 
-    public static void main(String[] args) {
-    	try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-        	printWriter = pw;
-            curType = ItemType.EQP;
-            readEquipWZData();
+		}
+	}
 
-            curType = ItemType.UNDEF;
-            readItemWZData();
-            readStringWZData();             // calculates the diff and effectively holds all items with no name property on the WZ
+	public static void main(String[] args) {
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+			printWriter = pw;
+			curType = ItemType.EQP;
+			readEquipWZData();
 
-            System.out.println("Reporting results...");
-            printReportFileHeader();
-            printReportFileResults();
+			curType = ItemType.UNDEF;
+			readItemWZData();
+			readStringWZData(); // calculates the diff and effectively holds all items with no name property on the WZ
 
-            Map<String, List<Integer>> missingNames = filterMissingItemNames();
-            writeMissingStringWZNames(missingNames);
+			System.out.println("Reporting results...");
+			printReportFileHeader();
+			printReportFileResults();
 
-            System.out.println("Done!");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+			Map<String, List<Integer>> missingNames = filterMissingItemNames();
+			writeMissingStringWZNames(missingNames);
+
+			System.out.println("Done!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
 }

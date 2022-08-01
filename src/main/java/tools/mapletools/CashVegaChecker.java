@@ -156,18 +156,16 @@ public class CashVegaChecker {
     }
 
     private static void reportMissingVegaItems() {
-        //NEED FUTURE UPDATE
     	System.out.println("Reporting results ...");
 
-        try {
-            printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
             printReportFileHeader();
 
             for (Integer itemid : vegaItems) {
                 printWriter.println("  " + itemid);
             }
 
-            printWriter.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

@@ -136,10 +136,10 @@ public class IdRetriever {
     }
 
     private static void fetchDataOnMapleHandbook() throws SQLException {
-    	try(BufferedReader br = Files.newBufferedReader(INPUT_FILE);
-    		PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
-    		bufferedReader = br;
-    		String line;
+		try (BufferedReader br = Files.newBufferedReader(INPUT_FILE);
+				PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
+			bufferedReader = br;
+			String line;
     		while ((line = bufferedReader.readLine()) != null) {
                 if (line.isEmpty()) {
                     printWriter.println("");
@@ -171,14 +171,12 @@ public class IdRetriever {
 
     public static void main(String[] args) {
     	Instant instantStarted = Instant.now();
-        try {
+        try (con) {
             if (INSTALL_SQLTABLE) {
                 parseMapleHandbook();
             } else {
                 fetchDataOnMapleHandbook();
             }
-
-            con.close();
         } catch (SQLException e) {
             System.out.println("Error: invalid SQL syntax");
             e.printStackTrace();

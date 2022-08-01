@@ -301,31 +301,31 @@ public class SkillMakerFetcher {
         printWriter.println(sb_reward);
     }
 
-    private static void writeMakerTableData() {
-        // This will reference one line at a time
-        String line = null;
+	private static void writeMakerTableData() {
+		// This will reference one line at a time
+		String line = null;
 
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
-        	BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
-            printWriter = pw;
-            bufferedReader = br;
+		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+				BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+			printWriter = pw;
+			bufferedReader = br;
 
-            resetMakerDataFields();
+			resetMakerDataFields();
 
-            while ((line = bufferedReader.readLine()) != null) {
-                translateToken(line);
-            }
+			while ((line = bufferedReader.readLine()) != null) {
+				translateToken(line);
+			}
 
-            WriteMakerTableFile();
+			WriteMakerTableFile();
 
-        } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + INPUT_FILE + "'");
-        } catch (IOException ex) {
-            System.out.println("Error reading file '" + INPUT_FILE + "'");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+		} catch (FileNotFoundException ex) {
+			System.out.println("Unable to open file '" + INPUT_FILE + "'");
+		} catch (IOException ex) {
+			System.out.println("Error reading file '" + INPUT_FILE + "'");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
     public static void main(String[] args) {
         DatabaseConnection.initializeConnectionPool(); // Using ItemInformationProvider which loads som unrelated things from the db

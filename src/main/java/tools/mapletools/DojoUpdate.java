@@ -3,7 +3,6 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +21,6 @@ import java.time.Instant;
  * Estimated parse time: 10 seconds
  */
 public class DojoUpdate {
-    //private static final Path INPUT_DIRECTORY = WZFiles.MAP.getFile().resolve("/Map/Map9");
 	private static final Path INPUT_DIRECTORY = WZFiles.MAP.getFile().resolve("Map").resolve("Map9");
     private static final Path OUTPUT_DIRECTORY = ToolConstants.getOutputFile("dojo-maps");
     private static final Path WORKING_DIRECTORY = Paths.get("").toAbsolutePath();
