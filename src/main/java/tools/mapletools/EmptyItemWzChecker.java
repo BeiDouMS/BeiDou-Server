@@ -409,7 +409,7 @@ public class EmptyItemWzChecker {
 
     private static void generateStringWz() throws IOException {
         System.out.println("Generating clean String.wz ...");
-        String[][] stringWzFiles = {{"Cash", "Consume", "Ins", "Pet"}, {"Etc"}, {"Eqp"}};
+        String[][] stringWzFiles = { { "Cash", "Consume", "Ins", "Pet" }, { "Etc" }, { "Eqp" } };
         String stringWzPath = "/String.wz/";
 
         File folder = new File(OUTPUT_PATH + "/String.wz/");

@@ -3,7 +3,6 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -144,29 +143,29 @@ public class MobBookUpdate {
 
     }
 
-	private static void updateFromDropData() {
-		try (con;
-				PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
-				BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
-			printWriter = pw;
-			bufferedReader = br;
+    private static void updateFromDropData() {
+        try (con;
+                PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+                BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+            printWriter = pw;
+            bufferedReader = br;
 
-			String line = null;
+            String line = null;
 
-			while ((line = bufferedReader.readLine()) != null) {
-				translateToken(line);
-			}
-		} catch (FileNotFoundException ex) {
-			System.out.println("Unable to open file '" + INPUT_FILE + "'");
-		} catch (IOException ex) {
-			System.out.println("Error reading file '" + INPUT_FILE + "'");
-		} catch (SQLException e) {
-			System.out.println("Warning: Could not establish connection to database to change card chance rate.");
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            while ((line = bufferedReader.readLine()) != null) {
+                translateToken(line);
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + INPUT_FILE + "'");
+        } catch (IOException ex) {
+            System.out.println("Error reading file '" + INPUT_FILE + "'");
+        } catch (SQLException e) {
+            System.out.println("Warning: Could not establish connection to database to change card chance rate.");
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         updateFromDropData();

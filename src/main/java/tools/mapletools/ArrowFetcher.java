@@ -23,7 +23,6 @@ import server.life.MonsterStats;
 import tools.Pair;
 
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -214,7 +213,7 @@ public class ArrowFetcher {
     }
 
     public static void main(String[] args) {
-    	Instant instantStarted = Instant.now();
+        Instant instantStarted = Instant.now();
         // load mob stats from WZ
         mobStats = MonsterStatFetcher.getAllMonsterStats();
 

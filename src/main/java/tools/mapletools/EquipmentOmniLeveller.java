@@ -3,7 +3,6 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -358,41 +357,40 @@ public class EquipmentOmniLeveller {
     }
 
     private static void copyCashItemData(Path file, String curPath) throws IOException {
-    	try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
-            	BufferedReader br = Files.newBufferedReader(file);) {
-    		printWriter = pw;
-    		bufferedReader = br;
-    		String line;
+        try (PrintWriter pw = new PrintWriter(
+                Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
+                BufferedReader br = Files.newBufferedReader(file);) {
+            printWriter = pw;
+            bufferedReader = br;
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 printWriter.println(line);
             }
-    	}
+        }
     }
 
     private static void parseEquipData(Path file, String curPath) throws IOException {
-        
-    	try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
-            	BufferedReader br = Files.newBufferedReader(file);) {
-    		printWriter = pw;
-    		bufferedReader = br;
-    		status = 0;
+        try (PrintWriter pw = new PrintWriter(
+                Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
+                BufferedReader br = Files.newBufferedReader(file);) {
+            printWriter = pw;
+            bufferedReader = br;
+            status = 0;
             upgradeable = false;
             cash = false;
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (translateToken(line)) {
-                    infoTagState = status;  // status: 2
+                    infoTagState = status; // status: 2
                     translateInfoTag(status);
                     infoTagState = -1;
                 }
             }
             printFileFooter();
-    	} catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             copyCashItemData(file, curPath);
         }
-
-
     }
 
     private static void printFileFooter() {
@@ -403,48 +401,48 @@ public class EquipmentOmniLeveller {
     }
 
     private static void parseDirectoryEquipData(String curPath) {
-		Path folder = OUTPUT_DIRECTORY.resolve(curPath);
-		if (!Files.exists(folder)) {
-			try {
-				Files.createDirectory(folder);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Unable to create folder " + folder.toAbsolutePath() + ".");
-				e.printStackTrace();
-			}
-		}
+        Path folder = OUTPUT_DIRECTORY.resolve(curPath);
+        if (!Files.exists(folder)) {
+            try {
+                Files.createDirectory(folder);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                System.out.println("Unable to create folder " + folder.toAbsolutePath() + ".");
+                e.printStackTrace();
+            }
+        }
 
-		System.out.println("Parsing directory '" + curPath + "'");
-		folder = INPUT_DIRECTORY.resolve(curPath);
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
-			for (Path path : stream) {
-				if (Files.isRegularFile(path)) {
-					try {
-						parseEquipData(path, curPath);
-					} catch (FileNotFoundException ex) {
-						System.out.println("Unable to open dojo file " + path.toAbsolutePath() + ".");
-					} catch (IOException ex) {
-						System.out.println("Error reading dojo file " + path.toAbsolutePath() + ".");
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					parseDirectoryEquipData(curPath + path.getFileName() + "/");
-				}
-			}
-		} catch (IOException e1) {
-			System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
+        System.out.println("Parsing directory '" + curPath + "'");
+        folder = INPUT_DIRECTORY.resolve(curPath);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    try {
+                        parseEquipData(path, curPath);
+                    } catch (FileNotFoundException ex) {
+                        System.out.println("Unable to open dojo file " + path.toAbsolutePath() + ".");
+                    } catch (IOException ex) {
+                        System.out.println("Error reading dojo file " + path.toAbsolutePath() + ".");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    parseDirectoryEquipData(curPath + path.getFileName() + "/");
+                }
+            }
+        } catch (IOException e1) {
+            System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
-    	Instant instantStarted = Instant.now();
+        Instant instantStarted = Instant.now();
         parseDirectoryEquipData("");
         Instant instantStopped = Instant.now();
         Duration durationBetween = Duration.between(instantStarted, instantStopped);
         System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
-      	System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
+        System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 }

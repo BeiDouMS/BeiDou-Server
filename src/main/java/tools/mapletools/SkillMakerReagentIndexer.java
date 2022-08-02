@@ -4,7 +4,6 @@ import provider.wz.WZFiles;
 import tools.Pair;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -150,29 +149,29 @@ public class SkillMakerReagentIndexer {
     }
 
 	private static void writeMakerReagentTableData() {
-		// This will reference one line at a time
-		String line = null;
+        // This will reference one line at a time
+        String line = null;
 
-		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
-				BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
-			bufferedReader = br;
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+                BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+            bufferedReader = br;
 
-			while ((line = bufferedReader.readLine()) != null) {
-				translateToken(line);
-			}
+            while ((line = bufferedReader.readLine()) != null) {
+                translateToken(line);
+            }
 
-			SortReagentList();
+            SortReagentList();
 
-			printWriter = pw;
-			WriteMakerReagentTableFile();
-		} catch (FileNotFoundException ex) {
-			System.out.println("Unable to open file '" + OUTPUT_FILE + "'");
-		} catch (IOException ex) {
-			System.out.println("Error reading file '" + OUTPUT_FILE + "'");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            printWriter = pw;
+            WriteMakerReagentTableFile();
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + OUTPUT_FILE + "'");
+        } catch (IOException ex) {
+            System.out.println("Error reading file '" + OUTPUT_FILE + "'");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         writeMakerReagentTableData();

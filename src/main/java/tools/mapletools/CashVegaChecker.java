@@ -156,7 +156,7 @@ public class CashVegaChecker {
     }
 
     private static void reportMissingVegaItems() {
-    	System.out.println("Reporting results ...");
+        System.out.println("Reporting results ...");
 
         try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             printWriter = pw;

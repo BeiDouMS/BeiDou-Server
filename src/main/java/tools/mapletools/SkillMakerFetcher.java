@@ -5,7 +5,6 @@ import server.ItemInformationProvider;
 import tools.DatabaseConnection;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -303,28 +302,28 @@ public class SkillMakerFetcher {
 
 	private static void writeMakerTableData() {
 		// This will reference one line at a time
-		String line = null;
+        String line = null;
 
-		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
-				BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
-			printWriter = pw;
-			bufferedReader = br;
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+                BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+            printWriter = pw;
+            bufferedReader = br;
 
-			resetMakerDataFields();
+            resetMakerDataFields();
 
-			while ((line = bufferedReader.readLine()) != null) {
-				translateToken(line);
-			}
+            while ((line = bufferedReader.readLine()) != null) {
+                translateToken(line);
+            }
 
-			WriteMakerTableFile();
+            WriteMakerTableFile();
 
-		} catch (FileNotFoundException ex) {
-			System.out.println("Unable to open file '" + INPUT_FILE + "'");
-		} catch (IOException ex) {
-			System.out.println("Error reading file '" + INPUT_FILE + "'");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + INPUT_FILE + "'");
+        } catch (IOException ex) {
+            System.out.println("Error reading file '" + INPUT_FILE + "'");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 
     public static void main(String[] args) {

@@ -126,8 +126,9 @@ public class DojoUpdate {
         if (!isDojoMapid) {
             return;
         }
-        try(PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
-        	BufferedReader br = Files.newBufferedReader(file);) {
+        try (PrintWriter pw = new PrintWriter(
+                Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
+                BufferedReader br = Files.newBufferedReader(file);) {
             printWriter = pw;
             bufferedReader = br;
             status = 0;
@@ -136,7 +137,7 @@ public class DojoUpdate {
             while ((line = bufferedReader.readLine()) != null) {
                 translateToken(line);
             }
-            
+
             printFileFooter();
         }
     }
@@ -156,20 +157,20 @@ public class DojoUpdate {
         Path folder = OUTPUT_DIRECTORY.resolve(curPath);
         if (!Files.exists(folder)) {
             try {
-				Files.createDirectory(folder);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Unable to create folder " + folder.toAbsolutePath() + ".");
-				e.printStackTrace();
-			}
+                Files.createDirectory(folder);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                System.out.println("Unable to create folder " + folder.toAbsolutePath() + ".");
+                e.printStackTrace();
+            }
         }
 
         System.out.println("Parsing directory '" + curPath + "'");
         folder = INPUT_DIRECTORY.resolve(curPath);
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) { 
-        	for (Path path : stream) { 
-        		if(Files.isRegularFile(path)) {
-        			try {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    try {
                         parseDojoData(path, curPath);
                     } catch (FileNotFoundException ex) {
                         System.out.println("Unable to open dojo file " + path.toAbsolutePath() + ".");
@@ -178,24 +179,23 @@ public class DojoUpdate {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-        		} else {
-        			parseDirectoryDojoData(curPath + path.getFileName() + "/");
-        		}
-        	}
+                } else {
+                    parseDirectoryDojoData(curPath + path.getFileName() + "/");
+                }
+            }
         } catch (IOException e1) {
-        	System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
-        	// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+            System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-    	Instant instantStarted = Instant.now();
+        Instant instantStarted = Instant.now();
         parseDirectoryDojoData("");
         Instant instantStopped = Instant.now();
         Duration durationBetween = Duration.between(instantStarted, instantStopped);
         System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
         System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
-
     }
 }
