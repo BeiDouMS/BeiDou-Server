@@ -32,8 +32,8 @@ function enter(pi) {
             pi.goDojoUp();
             pi.getPlayer().getMap().setReactorState();
             var stage = Math.floor(pi.getPlayer().getMapId() / 100) % 100;
-            const GameConstants = Java.type('constants.game.GameConstants');
-            if ((stage - (stage / 6) | 0) == pi.getPlayer().getVanquisherStage() && !GameConstants.isDojoPartyArea(pi.getPlayer().getMapId())) // we can also try 5 * stage / 6 | 0 + 1
+            const MapId = Java.type('constants.id.MapId');
+            if ((stage - (stage / 6) | 0) == pi.getPlayer().getVanquisherStage() && !MapId.isPartyDojo(pi.getPlayer().getMapId())) // we can also try 5 * stage / 6 | 0 + 1
             {
                 pi.getPlayer().setVanquisherKills(pi.getPlayer().getVanquisherKills() + 1);
             }

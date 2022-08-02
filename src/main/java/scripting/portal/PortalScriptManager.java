@@ -71,7 +71,7 @@ public class PortalScriptManager extends AbstractScriptManager {
                 return script.enter(new PortalPlayerInteraction(c, portal));
             }
         } catch (Exception e) {
-            log.warn("Portal script {}", portal.getScriptName(), e);
+            log.warn("Portal script error in: {}", portal.getScriptName(), e);
         }
         return false;
     }
