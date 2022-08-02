@@ -408,113 +408,113 @@ public class QuestItemFetcher {
         return (!limitedQuestids.contains(questid) ? "" : " EXPIRED");
     }
 
-	private static void reportQuestItemData() {
-		// This will reference one line at a time
-		String line = null;
-		Path file = null;
+    private static void reportQuestItemData() {
+        // This will reference one line at a time
+        String line = null;
+        Path file = null;
 
-		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-			System.out.println("Reading WZs...");
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            System.out.println("Reading WZs...");
 
-			file = WZFiles.QUEST.getFile().resolve("Check.img.xml");
-			bufferedReader = Files.newBufferedReader(file);
+            file = WZFiles.QUEST.getFile().resolve("Check.img.xml");
+            bufferedReader = Files.newBufferedReader(file);
 
-			while ((line = bufferedReader.readLine()) != null) {
-				translateCheckToken(line); // fetch expired quests through here as well
-			}
+            while ((line = bufferedReader.readLine()) != null) {
+                translateCheckToken(line); // fetch expired quests through here as well
+            }
 
-			bufferedReader.close();
+            bufferedReader.close();
 
-			file = WZFiles.QUEST.getFile().resolve("Act.img.xml");
-			bufferedReader = Files.newBufferedReader(file);
+            file = WZFiles.QUEST.getFile().resolve("Act.img.xml");
+            bufferedReader = Files.newBufferedReader(file);
 
-			while ((line = bufferedReader.readLine()) != null) {
-				translateActToken(line);
-			}
+            while ((line = bufferedReader.readLine()) != null) {
+                translateActToken(line);
+            }
 
-			bufferedReader.close();
+            bufferedReader.close();
 
-			System.out.println("Calculating table diffs...");
-			calculateQuestItemDiff();
+            System.out.println("Calculating table diffs...");
+            calculateQuestItemDiff();
 
-			System.out.println("Filtering drops on DB...");
-			List<Pair<Integer, Integer>> itemsWithQuest = getPairsQuestItem();
+            System.out.println("Filtering drops on DB...");
+            List<Pair<Integer, Integer>> itemsWithQuest = getPairsQuestItem();
 
-			filterQuestDropsOnDB(itemsWithQuest);
-			con.close();
+            filterQuestDropsOnDB(itemsWithQuest);
+            con.close();
 
-			System.out.println("Filtering drops on project files...");
-			// finally, filter whether this item is mentioned on the source code or not.
-			filterDirectorySearchMatchingData("scripts", itemsWithQuest);
-			filterDirectorySearchMatchingData("sql", itemsWithQuest);
-			filterDirectorySearchMatchingData("src", itemsWithQuest);
+            System.out.println("Filtering drops on project files...");
+            // finally, filter whether this item is mentioned on the source code or not.
+            filterDirectorySearchMatchingData("scripts", itemsWithQuest);
+            filterDirectorySearchMatchingData("sql", itemsWithQuest);
+            filterDirectorySearchMatchingData("src", itemsWithQuest);
 
-			System.out.println("Reporting results...");
-			// report suspects of missing quest drop data, as well as those drop data that
-			// may have incorrect questids.
-			printWriter = pw;
+            System.out.println("Reporting results...");
+            // report suspects of missing quest drop data, as well as those drop data that
+            // may have incorrect questids.
+            printWriter = pw;
 
-			printReportFileHeader();
+            printReportFileHeader();
 
-			if (!mixedQuestidItems.isEmpty()) {
-				printWriter.println("INCORRECT QUESTIDS ON DB");
-				for (Map.Entry<Integer, int[]> emqi : getSortedMapEntries1(mixedQuestidItems)) {
-					int[] mqi = emqi.getValue();
-					printWriter.println(mqi[0] + " : " + mqi[1] + " -> " + mqi[2] + getExpiredStringLabel(mqi[2]));
-				}
-				printWriter.println("\n\n\n\n\n");
-			}
+            if (!mixedQuestidItems.isEmpty()) {
+                printWriter.println("INCORRECT QUESTIDS ON DB");
+                for (Map.Entry<Integer, int[]> emqi : getSortedMapEntries1(mixedQuestidItems)) {
+                    int[] mqi = emqi.getValue();
+                    printWriter.println(mqi[0] + " : " + mqi[1] + " -> " + mqi[2] + getExpiredStringLabel(mqi[2]));
+                }
+                printWriter.println("\n\n\n\n\n");
+            }
 
-			if (!itemsWithQuest.isEmpty()) {
-				Map<Integer, Integer> mapIwq = new HashMap<>(itemsWithQuest.size());
-				for (Pair<Integer, Integer> iwq : itemsWithQuest) {
-					mapIwq.put(iwq.getLeft(), iwq.getRight());
-				}
+            if (!itemsWithQuest.isEmpty()) {
+                Map<Integer, Integer> mapIwq = new HashMap<>(itemsWithQuest.size());
+                for (Pair<Integer, Integer> iwq : itemsWithQuest) {
+                    mapIwq.put(iwq.getLeft(), iwq.getRight());
+                }
 
-				printWriter.println("ITEMS WITH NO QUEST DROP DATA ON DB");
-				for (Map.Entry<Integer, Integer> iwq : getSortedMapEntries0(mapIwq)) {
-					printWriter.println(iwq.getKey() + " - " + iwq.getValue() + getExpiredStringLabel(iwq.getValue()));
-				}
-				printWriter.println("\n\n\n\n\n");
-			}
+                printWriter.println("ITEMS WITH NO QUEST DROP DATA ON DB");
+                for (Map.Entry<Integer, Integer> iwq : getSortedMapEntries0(mapIwq)) {
+                    printWriter.println(iwq.getKey() + " - " + iwq.getValue() + getExpiredStringLabel(iwq.getValue()));
+                }
+                printWriter.println("\n\n\n\n\n");
+            }
 
-			if (DISPLAY_EXTRA_INFO) {
-				if (!zeroedStartQuestItems.isEmpty()) {
-					printWriter.println("START QUEST ITEMS WITH ZERO QUANTITY");
-					for (Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedStartQuestItems)) {
-						printWriter.println(iwq.getLeft() + getExpiredStringLabel(iwq.getLeft()) + ":");
-						for (Integer i : iwq.getRight()) {
-							printWriter.println("  " + i);
-						}
-						printWriter.println();
-					}
-					printWriter.println("\n\n\n\n\n");
-				}
+            if (DISPLAY_EXTRA_INFO) {
+                if (!zeroedStartQuestItems.isEmpty()) {
+                    printWriter.println("START QUEST ITEMS WITH ZERO QUANTITY");
+                    for (Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedStartQuestItems)) {
+                        printWriter.println(iwq.getLeft() + getExpiredStringLabel(iwq.getLeft()) + ":");
+                        for (Integer i : iwq.getRight()) {
+                            printWriter.println("  " + i);
+                        }
+                        printWriter.println();
+                    }
+                    printWriter.println("\n\n\n\n\n");
+                }
 
-				if (!zeroedCompleteQuestItems.isEmpty()) {
-					printWriter.println("COMPLETE QUEST ITEMS WITH ZERO QUANTITY");
-					for (Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedCompleteQuestItems)) {
-						printWriter.println(iwq.getLeft() + getExpiredStringLabel(iwq.getLeft()) + ":");
-						for (Integer i : iwq.getRight()) {
-							printWriter.println("  " + i);
-						}
-						printWriter.println();
-					}
-					printWriter.println("\n\n\n\n\n");
-				}
-			}
+                if (!zeroedCompleteQuestItems.isEmpty()) {
+                    printWriter.println("COMPLETE QUEST ITEMS WITH ZERO QUANTITY");
+                    for (Pair<Integer, List<Integer>> iwq : getSortedMapEntries2(zeroedCompleteQuestItems)) {
+                        printWriter.println(iwq.getLeft() + getExpiredStringLabel(iwq.getLeft()) + ":");
+                        for (Integer i : iwq.getRight()) {
+                            printWriter.println("  " + i);
+                        }
+                        printWriter.println();
+                    }
+                    printWriter.println("\n\n\n\n\n");
+                }
+            }
 
-			System.out.println("Done!");
-		} catch (FileNotFoundException ex) {
-			System.out.println("Unable to open file '" + file + "'");
-		} catch (IOException ex) {
-			System.out.println("Error reading file '" + file + "'");
-		} catch (SQLException e) {
-			System.out.println("Warning: Could not establish connection to database to report quest data.");
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            System.out.println("Done!");
+        } catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file '" + file + "'");
+        } catch (IOException ex) {
+            System.out.println("Error reading file '" + file + "'");
+        } catch (SQLException e) {
+            System.out.println("Warning: Could not establish connection to database to report quest data.");
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

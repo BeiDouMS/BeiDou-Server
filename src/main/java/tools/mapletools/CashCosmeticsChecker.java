@@ -615,49 +615,50 @@ public class CashCosmeticsChecker {
 
     private static void reportCosmeticResults() throws IOException {
         System.out.println("Reporting results ...");
-        
-		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
-			printWriter = pw;
-			printReportFileHeader();
-	
-	        if (!missingCosmeticsNpcTypes.isEmpty()) {
-	            printWriter.println("Found " + missingCosmeticsNpcTypes.size() + " entries with missing cosmetic entries.");
-	
-	            for (Pair<Pair<Integer, String>, List<Integer>> mcn : getSortedMapEntries(missingCosmeticsNpcTypes)) {
-	                printWriter.println("  NPC " + mcn.getLeft());
-	
-	                Pair<List<Integer>, List<Integer>> genderItemids = getCosmeticReport(mcn.getRight());
-	                reportNpcCosmetics(genderItemids.getLeft());
-	                reportNpcCosmetics(genderItemids.getRight());
-	                printWriter.println();
-	            }
-	        }
-	
-	        if (!unusedCosmetics.isEmpty()) {
-	            printWriter.println("Unused cosmetics: " + unusedCosmetics.size());
-	
-	            List<Integer> list = new ArrayList<>(unusedCosmetics);
-	            Collections.sort(list);
-	
-	            for (Integer i : list) {
-	                printWriter.println(i + " " + cosmeticIdNames.get(i));
-	            }
-	
-	            printWriter.println();
-	        }
-	
-	        if (!missingCosmeticNames.isEmpty()) {
-	            printWriter.println("Missing cosmetic itemids: " + missingCosmeticNames.size());
-	
-	            List<String> listString = new ArrayList<>(missingCosmeticNames);
-	            Collections.sort(listString);
-	
-	            for (String c : listString) {
-	                printWriter.println(c);
-	            }
-	
-	            printWriter.println();
-	        }
+
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
+            printWriter = pw;
+            printReportFileHeader();
+
+            if (!missingCosmeticsNpcTypes.isEmpty()) {
+                printWriter.println(
+                        "Found " + missingCosmeticsNpcTypes.size() + " entries with missing cosmetic entries.");
+
+                for (Pair<Pair<Integer, String>, List<Integer>> mcn : getSortedMapEntries(missingCosmeticsNpcTypes)) {
+                    printWriter.println("  NPC " + mcn.getLeft());
+
+                    Pair<List<Integer>, List<Integer>> genderItemids = getCosmeticReport(mcn.getRight());
+                    reportNpcCosmetics(genderItemids.getLeft());
+                    reportNpcCosmetics(genderItemids.getRight());
+                    printWriter.println();
+                }
+            }
+
+            if (!unusedCosmetics.isEmpty()) {
+                printWriter.println("Unused cosmetics: " + unusedCosmetics.size());
+
+                List<Integer> list = new ArrayList<>(unusedCosmetics);
+                Collections.sort(list);
+
+                for (Integer i : list) {
+                    printWriter.println(i + " " + cosmeticIdNames.get(i));
+                }
+
+                printWriter.println();
+            }
+
+            if (!missingCosmeticNames.isEmpty()) {
+                printWriter.println("Missing cosmetic itemids: " + missingCosmeticNames.size());
+
+                List<String> listString = new ArrayList<>(missingCosmeticNames);
+                Collections.sort(listString);
+
+                for (String c : listString) {
+                    printWriter.println(c);
+                }
+
+                printWriter.println();
+            }
         }
     }
 

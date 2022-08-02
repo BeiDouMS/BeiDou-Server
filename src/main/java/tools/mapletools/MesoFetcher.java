@@ -3,9 +3,7 @@ package tools.mapletools;
 import server.life.MonsterStats;
 import tools.Pair;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -128,7 +126,7 @@ public class MesoFetcher {
         	ResultSet rs = ps.executeQuery();) {
         	
             List<Integer> existingMobs = new ArrayList<>(200);
-            
+
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
                     int mobid = rs.getInt(1);
@@ -140,9 +138,9 @@ public class MesoFetcher {
 
                 if (!existingMobs.isEmpty()) {
                     try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-                    	printWriter = pw;
-                    	
-                    	printSqlHeader();
+                        printWriter = pw;
+
+                        printSqlHeader();
 
                         for (int i = 0; i < existingMobs.size() - 1; i++) {
                             printSqlMobMesoRange(existingMobs.get(i));
@@ -159,9 +157,9 @@ public class MesoFetcher {
             } else {
                 throw new Exception("ALREADY UPDATED");
             }
-            
+
             System.out.println("done!");
-            
+
         } catch (Exception e) {
             if (e.getMessage() != null && e.getMessage().equals("ALREADY UPDATED")) {
                 System.out.println("done! The DB is already up-to-date, no file generated.");

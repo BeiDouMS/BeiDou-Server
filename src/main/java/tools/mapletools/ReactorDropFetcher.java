@@ -1,10 +1,11 @@
 package tools.mapletools;
 
-import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,14 +41,14 @@ public class ReactorDropFetcher {
     }
 
     private static void removeScriptedReactorids(String directoryName) {
-        File directory = new File(directoryName);
-
-        // get all the files from a directory
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
-            if (file.isFile()) {
-                reactors.remove(getReactorIdFromFilename(file.getName()));
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(directoryName))) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    reactors.remove(getReactorIdFromFilename(path.getFileName().toString()));
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -86,25 +87,25 @@ public class ReactorDropFetcher {
     }
 
     private static void reportMissingReactors() {
-		try (con; PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-			System.out.println("Fetching reactors from DB...");
-			fetchMissingReactorDrops();
+        try (con; PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            System.out.println("Fetching reactors from DB...");
+            fetchMissingReactorDrops();
 
-			printWriter = pw;
+            printWriter = pw;
 
-			// report suspects of missing quest drop data, as well as those drop data that
-			// may have incorrect questids.
-			System.out.println("Reporting results...");
-			printReportFileHeader();
-			reportMissingReactorDrops();
+            // report suspects of missing quest drop data, as well as those drop data that
+            // may have incorrect questids.
+            System.out.println("Reporting results...");
+            printReportFileHeader();
+            reportMissingReactorDrops();
 
-			System.out.println("Done!");
-		} catch (SQLException e) {
-			System.out.println("Warning: Could not establish connection to database to report quest data.");
-			System.out.println(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            System.out.println("Done!");
+        } catch (SQLException e) {
+            System.out.println("Warning: Could not establish connection to database to report quest data.");
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

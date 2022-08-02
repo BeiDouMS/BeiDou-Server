@@ -3,7 +3,6 @@ package tools.mapletools;
 import tools.Pair;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.*;
@@ -315,34 +314,34 @@ public class CodeCouponGenerator {
     }
 
     private static void generateCodeCoupons(Path file) throws IOException {
-		try (BufferedReader br = Files.newBufferedReader(file); con;) {
-			bufferedReader = br;
-			resetCouponPackage();
-			status = 0;
+        try (BufferedReader br = Files.newBufferedReader(file); con;) {
+            bufferedReader = br;
+            resetCouponPackage();
+            status = 0;
 
-			System.out.println("Reading XML coupon information...");
-			String line;
-			while ((line = bufferedReader.readLine()) != null) {
-				translateToken(line);
-			}
-			System.out.println();
+            System.out.println("Reading XML coupon information...");
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                translateToken(line);
+            }
+            System.out.println();
 
-			System.out.println("Loading DB coupon codes...");
-			loadUsedCouponCodes();
-			System.out.println();
+            System.out.println("Loading DB coupon codes...");
+            loadUsedCouponCodes();
+            System.out.println();
 
-			System.out.println("Saving generated coupons...");
-			currentTime = System.currentTimeMillis();
-			for (CodeCouponDescriptor ccd : activeCoupons) {
-				commitCodeCouponDescription(ccd);
-			}
-			System.out.println();
-			System.out.println("Done.");
+            System.out.println("Saving generated coupons...");
+            currentTime = System.currentTimeMillis();
+            for (CodeCouponDescriptor ccd : activeCoupons) {
+                commitCodeCouponDescription(ccd);
+            }
+            System.out.println();
+            System.out.println("Done.");
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         try {

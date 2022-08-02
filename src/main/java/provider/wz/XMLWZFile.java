@@ -38,50 +38,50 @@ import org.slf4j.LoggerFactory;
 public class XMLWZFile implements DataProvider {
 	private static final Logger log = LoggerFactory.getLogger(DataProvider.class);
 	private final Path root;
-	private final WZDirectoryEntry rootForNavigation;
+    private final WZDirectoryEntry rootForNavigation;
 
-	public XMLWZFile(Path fileIn) {
-		root = fileIn;
-		rootForNavigation = new WZDirectoryEntry(fileIn.getFileName().toString(), 0, 0, null);
-		fillMapleDataEntitys(root, rootForNavigation);
-	}
+    public XMLWZFile(Path fileIn) {
+        root = fileIn;
+        rootForNavigation = new WZDirectoryEntry(fileIn.getFileName().toString(), 0, 0, null);
+        fillMapleDataEntitys(root, rootForNavigation);
+    }
 
-	private void fillMapleDataEntitys(Path lroot, WZDirectoryEntry wzdir) {
+    private void fillMapleDataEntitys(Path lroot, WZDirectoryEntry wzdir) {
 
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(lroot)) {
-			for (Path path : stream) {
-				String fileName = path.getFileName().toString();
-				if (Files.isDirectory(path) && !fileName.endsWith(".img")) {
-					WZDirectoryEntry newDir = new WZDirectoryEntry(fileName, 0, 0, wzdir);
-					wzdir.addDirectory(newDir);
-					fillMapleDataEntitys(path, newDir);
-				} else if (fileName.endsWith(".xml")) {
-					wzdir.addFile(new WZFileEntry(fileName.substring(0, fileName.length() - 4), 0, 0, wzdir));
-				}
-			}
-		} catch (IOException e) {
-			log.warn("Can not open file/directory at " + lroot);
-		}
-	}
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(lroot)) {
+            for (Path path : stream) {
+                String fileName = path.getFileName().toString();
+                if (Files.isDirectory(path) && !fileName.endsWith(".img")) {
+                    WZDirectoryEntry newDir = new WZDirectoryEntry(fileName, 0, 0, wzdir);
+                    wzdir.addDirectory(newDir);
+                    fillMapleDataEntitys(path, newDir);
+                } else if (fileName.endsWith(".xml")) {
+                    wzdir.addFile(new WZFileEntry(fileName.substring(0, fileName.length() - 4), 0, 0, wzdir));
+                }
+            }
+        } catch (IOException e) {
+            log.warn("Can not open file/directory at " + lroot);
+        }
+    }
 
-	@Override
-	public synchronized Data getData(String path) {
-		Path dataFile = root.resolve(path + ".xml");
-		Path imageDataDir = root.resolve(path);
-		if (!Files.exists(dataFile)) {
-			return null;// bitches
-		}
-		final XMLDomMapleData domMapleData;
-		try (FileInputStream fis = new FileInputStream(dataFile.toString())) {
-			domMapleData = new XMLDomMapleData(fis, imageDataDir.getParent());
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException("Datafile " + path + " does not exist in " + root.toAbsolutePath());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+    @Override
+    public synchronized Data getData(String path) {
+        Path dataFile = root.resolve(path + ".xml");
+        Path imageDataDir = root.resolve(path);
+        if (!Files.exists(dataFile)) {
+            return null;// bitches
+        }
+        final XMLDomMapleData domMapleData;
+        try (FileInputStream fis = new FileInputStream(dataFile.toString())) {
+            domMapleData = new XMLDomMapleData(fis, imageDataDir.getParent());
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Datafile " + path + " does not exist in " + root.toAbsolutePath());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-		return domMapleData;
-	}
+        return domMapleData;
+    }
 
 	@Override
 	public DataDirectoryEntry getRoot() {

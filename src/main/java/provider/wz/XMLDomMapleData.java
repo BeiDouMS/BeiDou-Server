@@ -80,7 +80,8 @@ public class XMLDomMapleData implements Data {
             boolean foundChild = false;
             for (int i = 0; i < childNodes.getLength(); i++) {
                 Node childNode = childNodes.item(i);
-                if (childNode.getNodeType() == Node.ELEMENT_NODE && childNode.getAttributes().getNamedItem("name").getNodeValue().equals(s)) {
+                if (childNode.getNodeType() == Node.ELEMENT_NODE
+                        && childNode.getAttributes().getNamedItem("name").getNodeValue().equals(s)) {
                     myNode = childNode;
                     foundChild = true;
                     break;
@@ -104,12 +105,12 @@ public class XMLDomMapleData implements Data {
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node childNode = childNodes.item(i);
             if (childNode.getNodeType() == Node.ELEMENT_NODE) {
-            	XMLDomMapleData child = new XMLDomMapleData(childNode);
+                XMLDomMapleData child = new XMLDomMapleData(childNode);
                 child.imageDataDir = imageDataDir.resolve(getName().trim());
                 ret.add(child);
             }
         }
-        
+
         return ret;
     }
 

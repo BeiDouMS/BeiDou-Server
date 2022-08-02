@@ -191,24 +191,24 @@ public class SkillbookInformationProvider {
         return loadedSkillbooks;
     }
 
-	private static void listFiles(String directoryName, ArrayList<Path> files) {
-		Path directory = Paths.get(directoryName);
+    private static void listFiles(String directoryName, ArrayList<Path> files) {
+        Path directory = Paths.get(directoryName);
 
-		// get all the files from a directory
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
-			for (Path path : stream) {
+        // get all the files from a directory
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
+            for (Path path : stream) {
 
-				if (Files.isRegularFile(path)) {
-					files.add(path);
-				} else if (Files.isDirectory(path)) {
-					listFiles(path.toAbsolutePath().toString(), files);
-				}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+                if (Files.isRegularFile(path)) {
+                    files.add(path);
+                } else if (Files.isDirectory(path)) {
+                    listFiles(path.toAbsolutePath().toString(), files);
+                }
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
 	private static List<Path> listFilesFromDirectoryRecursively(String directory) {
 		ArrayList<Path> files = new ArrayList<>();
@@ -233,7 +233,7 @@ public class SkillbookInformationProvider {
     private static String readFileToString(Path file, String encoding) throws IOException {
         Scanner scanner = new Scanner(file, encoding);
         String text = "";
-        try(scanner) {
+        try (scanner) {
            
            text = scanner.useDelimiter("\\A").next();
             

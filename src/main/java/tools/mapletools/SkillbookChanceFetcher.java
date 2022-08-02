@@ -3,10 +3,8 @@ package tools.mapletools;
 import server.life.MonsterStats;
 import tools.Pair;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -103,22 +101,22 @@ public class SkillbookChanceFetcher {
         printWriter.println("  REPLACE INTO drop_data (`dropperid`, `itemid`, `minimum_quantity`, `maximum_quantity`, `questid`, `chance`) VALUES");
     }
 
-	private static void generateSkillbookChanceUpdateFile() {
-		try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
-			printWriter = pw;
+    private static void generateSkillbookChanceUpdateFile() {
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
 
-			printSkillbookChanceUpdateSqlHeader();
+            printSkillbookChanceUpdateSqlHeader();
 
-			List<Map.Entry<Pair<Integer, Integer>, Integer>> skillbookChancesList = sortedSkillbookChances();
-			for (Map.Entry<Pair<Integer, Integer>, Integer> e : skillbookChancesList) {
-				printWriter.println("(" + e.getKey().getLeft() + ", " + e.getKey().getRight() + ", 1, 1, 0, "
-						+ e.getValue() + "),");
-			}
+            List<Map.Entry<Pair<Integer, Integer>, Integer>> skillbookChancesList = sortedSkillbookChances();
+            for (Map.Entry<Pair<Integer, Integer>, Integer> e : skillbookChancesList) {
+                printWriter.println("(" + e.getKey().getLeft() + ", " + e.getKey().getRight() + ", 1, 1, 0, "
+                        + e.getValue() + "),");
+            }
 
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         // load mob stats from WZ

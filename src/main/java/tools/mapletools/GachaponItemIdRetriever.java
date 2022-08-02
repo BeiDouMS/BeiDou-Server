@@ -1,7 +1,6 @@
 package tools.mapletools;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -248,73 +247,73 @@ public class GachaponItemIdRetriever {
     }
 
     private static void fetchDataOnMapleHandbook() throws SQLException {
-		String line;
-		try (BufferedReader bufferedReader = Files.newBufferedReader(INPUT_FILE)) {
-			int skip = 0;
-			boolean lineHeader = false;
-			while ((line = bufferedReader.readLine()) != null) {
-				if (skip > 0) {
-					skip--;
+        String line;
+        try (BufferedReader bufferedReader = Files.newBufferedReader(INPUT_FILE)) {
+            int skip = 0;
+            boolean lineHeader = false;
+            while ((line = bufferedReader.readLine()) != null) {
+                if (skip > 0) {
+                    skip--;
 
-					if (lineHeader) {
-						if (!line.isEmpty()) {
-							lineHeader = false;
-							printWriter.println();
-							printWriter.println(line + ":");
-						}
-					}
-				} else if (line.isEmpty()) {
-					printWriter.println("");
+                    if (lineHeader) {
+                        if (!line.isEmpty()) {
+                            lineHeader = false;
+                            printWriter.println();
+                            printWriter.println(line + ":");
+                        }
+                    }
+                } else if (line.isEmpty()) {
+                    printWriter.println("");
                 } else if (line.startsWith("Gachapon ")) {
-                	String[] s = line.split("� ");
-					String gachaponName = s[s.length - 1];
-					gachaponName = gachaponName.replace(" ", "_");
-					gachaponName = gachaponName.toLowerCase();
+                    String[] s = line.split("� ");
+                    String gachaponName = s[s.length - 1];
+                    gachaponName = gachaponName.replace(" ", "_");
+                    gachaponName = gachaponName.toLowerCase();
 
-					if (printWriter != null) {
-						printWriter.close();
-					}
-					Path outputFile = OUTPUT_DIRECTORY.resolve(gachaponName + ".txt");
-					setupDirectories(outputFile);
+                    if (printWriter != null) {
+                        printWriter.close();
+                    }
+                    Path outputFile = OUTPUT_DIRECTORY.resolve(gachaponName + ".txt");
+                    setupDirectories(outputFile);
 
-					printWriter = new PrintWriter(Files.newOutputStream(outputFile));
+                    printWriter = new PrintWriter(Files.newOutputStream(outputFile));
 
-					skip = 2;
-					lineHeader = true;
-				} else if (line.startsWith(".")) {
-					skip = 1;
-					lineHeader = true;
-				} else {
-                	line = line.replace("�", "'");
+                    skip = 2;
+                    lineHeader = true;
+                } else if (line.startsWith(".")) {
+                    skip = 1;
+                    lineHeader = true;
+                } else {
+                    line = line.replace("�", "'");
                     for (String item : line.split("\\s\\|\\s")) {
-                    	item = item.trim();
-                    	if (!item.contentEquals("n/a")) {
-                    		String[] itemInfo = item.split(" - ");
-                    		fetchLineOnMapleHandbook(itemInfo[0], itemInfo.length > 1 ? itemInfo[1] : null);
-                    	}
-					}
-				}
-			}
-		} catch (IOException ex) {
-			System.out.println(ex.getMessage());
-			ex.printStackTrace();
-		}
-	}
+                        item = item.trim();
+                        if (!item.contentEquals("n/a")) {
+                            String[] itemInfo = item.split(" - ");
+                            fetchLineOnMapleHandbook(itemInfo[0], itemInfo.length > 1 ? itemInfo[1] : null);
+                        }
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 
     private static void setupDirectories(Path file) {
-    	if(!Files.exists(file.getParent())) {
-    		try {
-				Files.createDirectories(file.getParent());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
+        if (!Files.exists(file.getParent())) {
+            try {
+                Files.createDirectories(file.getParent());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void main(String[] args) {
-        try(con) {
-        	loadHandbookUseNames();
+        try (con) {
+            loadHandbookUseNames();
             fetchDataOnMapleHandbook();
         } catch (SQLException e) {
             System.out.println("Error: invalid SQL syntax");

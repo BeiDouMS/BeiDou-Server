@@ -136,11 +136,11 @@ public class IdRetriever {
     }
 
     private static void fetchDataOnMapleHandbook() throws SQLException {
-		try (BufferedReader br = Files.newBufferedReader(INPUT_FILE);
-				PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
-			bufferedReader = br;
-			String line;
-    		while ((line = bufferedReader.readLine()) != null) {
+        try (BufferedReader br = Files.newBufferedReader(INPUT_FILE);
+                PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));) {
+            bufferedReader = br;
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
                 if (line.isEmpty()) {
                     printWriter.println("");
                     continue;
@@ -164,13 +164,13 @@ public class IdRetriever {
 
                 printWriter.println(str);
             }
-    	} catch (IOException ex) {
+        } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
     public static void main(String[] args) {
-    	Instant instantStarted = Instant.now();
+        Instant instantStarted = Instant.now();
         try (con) {
             if (INSTALL_SQLTABLE) {
                 parseMapleHandbook();
@@ -184,7 +184,7 @@ public class IdRetriever {
         Instant instantStopped = Instant.now();
         Duration durationBetween = Duration.between(instantStarted, instantStopped);
         System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
-      	System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
+        System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 }
 

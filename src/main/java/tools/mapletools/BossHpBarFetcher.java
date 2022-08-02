@@ -3,7 +3,6 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -134,19 +133,19 @@ public class BossHpBarFetcher {
     }
 
     private static void readBossHpBarData() throws IOException {
-    	final Path mobDirectory = WZFiles.MOB.getFile();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mobDirectory)) { 
-        	for (Path path : stream) { 
-        		if (Files.isRegularFile(path)) {
-        			try (BufferedReader br = Files.newBufferedReader(path)) {
-        				bufferedReader = br;
-        				String line;
-        				while ((line = bufferedReader.readLine()) != null) {
-        					translateToken(line);
-        				}
-        			}
-        		}
-        	}
+        final Path mobDirectory = WZFiles.MOB.getFile();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mobDirectory)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    try (BufferedReader br = Files.newBufferedReader(path)) {
+                        bufferedReader = br;
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            translateToken(line);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -170,7 +169,6 @@ public class BossHpBarFetcher {
             readBossHpBarData();
 
             System.out.println("Reporting results...");
-            
 
             printReportFileHeader(printWriter);
             printReportFileResults(printWriter);

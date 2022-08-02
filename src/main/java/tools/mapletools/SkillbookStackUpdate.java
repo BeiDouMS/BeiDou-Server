@@ -6,7 +6,6 @@ import java.io.*;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -151,7 +150,6 @@ public class SkillbookStackUpdate {
         		parseItemFile(path, outputDirectory.resolve(path.getFileName()));
             }
         } catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
