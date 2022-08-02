@@ -256,8 +256,8 @@ public class Reactor extends AbstractMapObject {
                     cancelReactorTimeout();
                     attackHit = wHit;
 
-                    if (YamlConfig.config.server.USE_DEBUG == true) {
-                        c.getPlayer().dropMessage(5, "Hitted REACTOR " + this.getId() + " with POS " + charPos + " , STANCE " + stance + " , SkillID " + skillid + " , STATE " + stats.getType(state) + " STATESIZE " + stats.getStateSize(state));
+                    if (YamlConfig.config.server.USE_DEBUG) {
+                        c.getPlayer().dropMessage(5, "Hitted REACTOR " + this.getId() + " with POS " + charPos + " , STANCE " + stance + " , SkillID " + skillid + " , STATE " + state + " STATESIZE " + stats.getStateSize(state));
                     }
                     ReactorScriptManager.getInstance().onHit(c, this);
 
