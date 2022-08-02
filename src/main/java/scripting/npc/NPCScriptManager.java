@@ -155,8 +155,8 @@ public class NPCScriptManager extends AbstractScriptManager {
                 c.sendPacket(PacketCreator.enableActions());
             }
             return true;
-        } catch (final Exception ute) {
-            log.error("Error starting NPC script: {}", npc);
+        } catch (Exception e) {
+            log.error("Error starting NPC script: {}", npc, e);
             dispose(c);
 
             return false;
