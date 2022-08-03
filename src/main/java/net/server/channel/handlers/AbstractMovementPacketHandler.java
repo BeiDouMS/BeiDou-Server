@@ -61,8 +61,8 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     res.add(alm);
                     break;
                 }
-                case 1:
-                case 2:
+                case 1: // jump
+                case 2: // knockback
                 case 6: // fj
                 case 12:
                 case 13: // Shot-jump-back thing
@@ -79,8 +79,8 @@ public abstract class AbstractMovementPacketHandler extends AbstractPacketHandle
                     res.add(rlm);
                     break;
                 }
-                case 3:
-                case 4: // tele... -.-
+                case 3: // teleport disappear
+                case 4: // teleport appear
                 case 7: // assaulter
                 case 8: // assassinate
                 case 9: // rush

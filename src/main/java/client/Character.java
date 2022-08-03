@@ -1924,8 +1924,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
-        if (ob instanceof MapItem) {
-            MapItem mapitem = (MapItem) ob;
+        if (ob instanceof MapItem mapitem) {
             if (System.currentTimeMillis() - mapitem.getDropTime() < 400 || !mapitem.canBePickedBy(this)) {
                 sendPacket(PacketCreator.enableActions());
                 return;

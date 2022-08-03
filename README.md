@@ -1,39 +1,44 @@
-﻿# Cosmic - MapleStory v83
+﻿# Cosmic - MapleStory v83 server
+
+## Introduction
 Cosmic launched as a successor to HeavenMS on March 21st 2021.
 
-This document is currently being worked on, so it may not be fully accurate.
+HeavenMS is archived, ie. it receives no further updates. This project aims to continue its development; mainly by improving code quality and make getting into PS development as easy as possible.
 
-## Beware
+This is an open source project. Anyone may contribute by opening a pull request.
 
-***This emulator is not production ready.***
+Only the server side is maintained. The client is directly copied from HeavenMS.
 
-It can be useful for testing things locally or for trying out ideas, but launching a new private server based on this
-with no real changes is not recommended.
 
----
+Beware - ***This server emulator is not production ready.***
+It can be useful for testing things locally or for trying out ideas, but launching a new private server based on this and opening it up to the public
+without knowing what you're doing is not recommended.
 
-### Development information
 
-#### Status (updated 28/9/21)
+## Development information
 
-Development is <span style="color:Orange">**on pause**</span>, but any submitted PRs will be reviewed.
+### Status (updated 2022-08-02)
 
-#### Ways to contribute
+Development is currently <span style="color:Yellow">**sporadic**</span>. Bugs may be fixed, and pull requests reviewed, but don't expect anything groundbreaking.
+
+### Ways to contribute
 
 * Submit a Pull Request (fork -> commit -> PR)
 * Submit a bug report (add a new issue on GitHub, or post in `bug-report` on Discord)
 * Spread the word about Cosmic
 
-#### Community
+### Cosmic
 
-GitHub: https://github.com/P0nk/Cosmic  
-Discord: https://discord.gg/JU5aQapVZK
+- GitHub: https://github.com/P0nk/Cosmic
+- Discord: https://discord.gg/JU5aQapVZK
 
----
+### HeavenMS
+- GitHub: https://github.com/ronancpl/HeavenMS
+- Discord: https://discord.gg/Q7wKxHX
 
-## Tools
-* **Java 16 SDK** - Needed to compile and run Java code. Install manually or through IntelliJ depending on how you prefer to launch the server. Not required for launching with Docker.
-  * Link: https://jdk.java.net/16/
+## Tools / downloads
+* **Java 17 SDK** - Needed to compile and run Java code. Install manually or through IntelliJ depending on how you prefer to launch the server. Not required for launching with Docker.
+  * Link: https://jdk.java.net/17/
 	
 
 * **IntelliJ IDEA** - Java IDE and your main tool for working with the source code. Community edition is good enough.
@@ -56,64 +61,41 @@ Discord: https://discord.gg/JU5aQapVZK
   * Link: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
 	
 
-## Client 
+### MapleStory client 
 
-Latest localhost client: https://hostr.co/amuX5SLeeVZx
+- Latest localhost client: https://hostr.co/amuX5SLeeVZx
 
 **Important note about localhost clients**: these executables are red-flagged by antivirus tools as __potentially malicious software__,
 this happens due to the reverse engineering methods that were applied onto these software artifacts. 
 Those depicted here have been put to use for years already and posed no harm so far, so they are soundly assumed to be safe.
 
-The following list, in bottom-up chronological order, 
-holds information regarding all changes that were applied from the starting localhost used in this development. 
-Some lines have a link attached, that will lead you to a snapshot of the localhost at that version of the artifact. 
-Naturally, later versions holds all previous changes along with the proposed changes.
-
-**Change log:**
-
-  * Fixed Monster Magnet crashing the caster when trying to pull fixed mobs, credits to Shavit. https://gofile.io/?c=BW7dVM (dead link)
-  * Cleared need for administrator privileges (OS) to play the game, credits to Ubaware.
-  * Set a higher cap for AP assigning with AP Reset, credits to Ubaware.
-  * Fixed Monster Magnet crashing the caster when trying to pull bosses. Drawback: Dojo HPBar becomes unavailable. https://hostr.co/SvnSKrGzXhG0
-  * Fixed some 'rn' problems with quest icons & removed "tab" from party leader changed message. https://hostr.co/tsYsQzzV6xT0
-  * Removed block on applying attack-based strengthening gems on non-weapon equipments. https://hostr.co/m2bVtnizCtmD
-  * Set a higher cap for SPEED.
-  * Removed the AP assigning block for beginners below level 10. https://hostr.co/AHAHzneCti9B
-  * Removed block on party for beginners level 10 or below. https://hostr.co/JZq53mMtToCz
-  * Removed block on MTS entering in some maps, rendering the buyback option available.
-  * Removed "AP excess" popup and limited actions on Admin/MWLB, credits to kevintjuh93.
-  * Removed "You've gained a level!" popup, credits to PrinceReborn.
-  * Removed caps for WATK, WDEF, MDEF, ACC, AVOID.
-  * 'n' problem fixed.
-  * Fraysa's https://hostr.co/gJbLZITRVHmv
-  * Eric's MapleSilver starting on window-mode.
-
----
 
 ## Getting started
-* Install the client
-* Install the server
+The localhost MapleStory client needs to be installed, as well as the server that will host the game.
 
 ### Installing the client
 
-1. From "MapleGlobal-v83-setup.exe", install MapleStory on your folder of preference (e.g. "C:\Nexon\MapleStory") and follow their instructions.
+1. Install MapleStory with "MapleGlobal-v83-setup.exe" in your folder of choice (e.g. "C:\Nexon\MapleStory") and follow their instructions.
 2. Once done, erase these files: "HShield" (folder), "ASPLnchr.exe", "MapleStory.exe" and "Patcher.exe".
-3. Extract into the client folder the "localhost.exe" from the provided link.
-4. Overwrite the original WZ files with the ones provided from either one of those folders on the Google Drive:
-	- "commit397_wz" (last published RELEASE, referring to commit of same number).
-	- "current_wz" (latest source update).
+3. Extract into the client folder the "HeavenMS-localhost-WINDOW.exe" (from now on referred to as "localhost.exe") from the provided link.
+4. Overwrite the original WZ files with the ones provided on the Google Drive: "CosmicWZ-v1-2021.05.10.zip"
+	- This is currently identical to the latest HeavenMS WZ files (except for the file name): "commit397_wz-20210321T173600Z-001.zip"
 
 #### Editing localhost IP target
 
-If you are not using "localhost" as the target IP on the server's config file, you will need to HEX-EDIT "localhost.exe" to fetch your IP. Track down all IP locations by searching for "Type: String" "127.0.0.1", and applying the changes wherever it fits.
+If you are not using "localhost" as the target IP on the server's config file, you will need to HEX-EDIT localhost.exe to fetch your IP. Track down all IP locations by searching for "Type: String" "127.0.0.1", and applying the changes wherever it fits.
 
-To hex-edit, install the Neo Hex Editor from "free-hex-editor-neo.exe" and follow their instructions. Once done, open "localhost.exe" for editing and overwrite the IP values under the 3 addresses. Save the changes and exit the editor.
+To hex-edit, install the Neo Hex Editor from "free-hex-editor-neo.exe" and follow their instructions. Once done, open localhost.exe for editing and overwrite the IP values under the 3 addresses. Save the changes and exit the editor.
+
+(TODO: find suitable alternative to Neo Hex Editor)
 
 #### Testing the localhost
 
 Open the "localhost.exe" client. 
 If by any means the program did not open, and checking the server log your ping has been listened by the server 
-and you are using Windows 8 or 10, it probably might be some compatibility issue.
+and you are using Windows 8, 10 or 11, it is probably some compatibility issue.
+
+In some cases it helps to spam click the exe a few times (2-3 times usually works for me on W10).
 
 In that case, extract "lolwut.exe" from "lolwut-v0.01.rar" and place it on the MapleStory client folder ("C:\Nexon\MapleStory"). 
 Your "localhost.exe" property settings must follow these:
@@ -128,6 +110,7 @@ Note: "lolwut.exe" is currently not available in the Google Drive.
 * Opening "lolwut.exe", use Fraysa's method.
 
 Important: should the client be refused a connection to the game server, it may be because of firewall issues. Head to the end of this file to proceed in allowing this connection through the computer's firewall. Alternatively, one can deactivate the firewall and try opening the client again.
+You can also search the server logs (/logs/cosmic-log.log) if any connection attempts have been made to ease debugging.
 
 ---
 ### Installing the server 
@@ -171,7 +154,7 @@ At the end of the execution of these sql scripts, you should have installed a da
 REGISTER YOUR FIRST ACCOUNT to be used in-game by **manually creating** an entry in the table "accounts" in the database with a username and password.
 
 
-### Launching the server
+### Running the server
 
 Configure the IP you want to use for your MapleStory server in "config.yaml" file, or set it as "localhost" if you want to run it only on your machine.
 Alternatively, you can use the IP given by Hamachi to use on a Hamachi network, or you can use a non-Hamachi method of port-forwarding. Neither will be approached here.
@@ -182,13 +165,13 @@ To launch the server, you may either:
 * Launch a built jar file
 * Launch with Docker
 
-#### Launch inside IntelliJ
+#### Run inside IntelliJ
 1. Open the file src/main/java/net/server/Server.java.
 2. Click the green arrow to the left of the class definition "public class Server", and then "Run Cosmic". 
    * Alternatively (recommended), create a new Configuration that points to "net.server.Server".
 3. The server launches in a terminal window inside IntelliJ.
 
-#### Launch a jar file
+#### Run from a jar file
 1. Create the jar file
    * The jar file is created by the Maven assembly plugin in the package lifecycle.
    * If you already have Maven installed, simply run the command "mvn clean install" to create the jar file.
@@ -196,13 +179,13 @@ To launch the server, you may either:
 2. Launch the jar file
    * Double click on "launch.bat" (need to have Java 16 installed)
     
-#### Launch with Docker
+#### Run as containers with Docker
 1. Start Docker
 2. Run the command "docker compose up" at the root of the project.
     * If you make any changes to the code, make sure you append the "--build" option at the end of the command to force rebuild the server image.
 
 ---
-### Creating an account and logging into the game
+### Getting into the game
 
 If you ran the admin sql script, there already exists an account in your database with an admin character on it. You don't need to change its GM level. Log in using these credentials:
 * Username: "admin"
@@ -227,12 +210,17 @@ To change a character's GM level, make sure that character is not logged in, the
 
 ---
 ### Some notes about WZ/WZ.XML EDITING 
+Brief introduction to WZ files: they are the asset/data files required by the client and server. The client can read the .wz files directly, but the server requires them in XML format.
+The server also does not make use of any of the sprites, which is where different kinds of exporting comes into the picture. HaRepacker allows you to export to Private server XML, which is the .img files packaged in the .wz stripped of sprites and converted to XML.
+
+Link to HaRepacker-resurrected, the standard tool for handling WZ files: https://github.com/lastbattle/Harepacker-resurrected
 
 NOTE: Be extremely wary when using server-side's XMLs data being reimported into the client's WZ, as some means of synchronization between the server and client modules, this action COULD generate some kind of bugs afterwards. Client-to-server data reimporting seems to be fine, though.
 
 #### Editing the v83 WZ's:
 
-* Use the HaRepacker 4.2.4 editor, encryption "GMS (old)".
+
+* Use the HaRepacker-resurrected 4.2.4 editor, encryption "GMS (old)".
 * Open the desired WZ for editing and use the node hierarchy to make the desired changes (copy/pasting nodes may be unreliable in rare scenarios).
 * Save the changed WZ, **overwriting the original content** at the client folder.
 * Finally, **RE-EXPORT (using the "Private Server..." exporting option) the changed XMLs into the server's WZ.XML files**, overwriting the old contents.
@@ -260,97 +248,27 @@ After all these steps, the portforwarding process should now be complete.
 
 ---
 
----
+### Client changelog
+The following list, in bottom-up chronological order,
+holds information regarding all changes that were applied from the starting localhost used in this development.
+Some lines have a link attached, that will lead you to a snapshot of the localhost at that version of the artifact.
+Naturally, later versions holds all previous changes along with the proposed changes.
 
----
+**Change log:**
 
-# HeavenMS
-
-Old sections left from the HeavenMS README that might still be relevant.
-
-## Head developer, Ronan C. P. Lana
-
-Besides myself for maintaining this repository, credits are to be given to Wizet/Nexon (owners of MapleStory & it's IP contents), the original MapleSolaxia staff and other colaborators, as just some changes/patches on the game were applied by myself, in which some of them diverged from the original v83 patch contents (alright, not just "some patches" by now since a whole lot of major server core changes have been applied on this development).
-
-Regarding distributability and usage of the code presented here: like it was before, this MapleStory server is open-source. By that, it is meant that anyone is **free to install, use, modify and redistribute the contents**, as long as there is **no kind of commercial trading involved** and the **credits to the original creators are maintained** within the codes.
-
-In this project, many gameplay-wise issues generated from either the original WZ files and the server source have been partially or completely solved. Considering the use of the provided edited WZ's and server-side wz.xml files should be of the greatest importance when dealing with this instance of server source, in order to perceive it at it's full potential. My opinion, though!
-
-- In other case, as fallback from the provided ones, consider using **whole clean set**. Selecting part of the provided ones to play pretty much *may eventually* lead to unexpected issues.
-
-The main objective of this effort is to try as best as possible to recreate what once was the original MapleStory v83, while adding up some flavors that spices up the gameplay. In other words, aim to get the best of the MapleStory of that era.
-
----
-
-#### Mission
-
-With non-profitting means intended, provide nostalgic pre-BB maplers world-wide a quality local server for freestyle entertainment.
-
-#### Vision
-
-By taking the v83 MapleStory as the angular stone, incrementally look forward to improve the gaming experience whilst still retaining the "clean v83" conservative ideal. Also, through reviewing distinguished aspects of the server's behavior that could be classified as a potential server threat, in the long run look for ways to improve or even stabilize some of it's uncertain aspects.
-
-#### Values
-
-* Autonomy, seek self-improvement for tackling issues head-on;
-* Adventurous, take no fear of failures on the path of progress;
-* Light-hearted support, general people out there didn't experience what you've already had;
-* Humility, no matter how good you are, there's no good in boasting yourself over experiences only a few have had.
-
----
-
-#### The MobBookUpdate example
-
-As an example of client WZ editing, consider the MapleMobBookUpdate tool project I developed, it updates all reported drop data on the Monster Book with what is currently being hold on the database:
-
-To make it happen:
-
-* Open the MobBookUpdate project on NetBeans, located at "tools\MapleMobBookUpdate", and build it.
-* At the subfolder "lib", copy the file "MonsterBook.img.xml". This is from the original WZ v83.
-* Paste it on the "dist" subfolder.
-* Inside "dist", open the command prompt by alt+right clicking there.
-* Execute "java -jar MobBookUpdate.jar". It will generate a "MonsterBook_updated.img.xml" file.
-* At last, overwrite the "MonsterBook.img.xml" on "C:\Nexon\Cosmic\wz\String.wz" with this file, renaming it back to "MonsterBook.img.xml".
-
-At this point, **just the server-side** Monster Book has been updated with the current state of the database's drop data.
-
-To **update the client as well**, open HaRepacker 4.2.2 and load "String.wz" from "C:\Nexon\MapleStory". Drop the "MonsterBook.img" node by removing it from the hierarchy tree, then import the server's "MonsterBook.img.xml".
-
-**Note:** On this case, a server-to-client data transfer has been instanced. This kind of action **could cause** problems on the client-side if done unwary, however the nodes being updated on client-side and server-side provides no conflicts whatsoever, so this is fine. Remember, server-to-client data reimport may be problematic, whereas client-to-server data reimport is fine.
-
-The client's WZ now has the proper item drops described by the DB updated into the MobBook drop list.
-
-**Save the changes and overwrite the older WZ** on the MapleStory client folder.
-
----
-
-#### Announcements
-
-HeavenMS development as we can see right now achieved an acceptable state-of-the-art. A heartfelt thanks for everyone that contributed in some way for the progress of this server!
-
-A case study has been conducted with the objective of overview results achieved during HeavenMS development. Those can be checked out on: https://heavenms-survey.home.blog/2019/12/24/project-visualizations/
-
----
-### Open-source client development - HeavenClient
-
-Continuing from where **SYJourney**'s JourneyClient has finished contributions (as of 5 Jul 2016), an open-source development of a software artifact designed to handle both gaming operations and interactions with the server is being conducted.
-
-Newer implementations are being maintained by **頼晏 (ryantpayton)** and aims to offer higher display resolution, bring recent UI contents for the pre-BB gameplay and incremental support on overall gaming perspective.
-
-HeavenClient GitHub: https://github.com/ryantpayton/HeavenClient
-
-#### Support HeavenMS
-
-If you liked this project, please don't forget to __star__ the repo ;) .
-
-It's never enough to tell this, thanks to everyone that have been contributing something for the continuous improvement of the server! Be it through bug reports, donation, code snippets and/or pull requests.
-
-Our Discord channel is still available on: https://discord.gg/Q7wKxHX
-
-<hr id="donate" />
-
-### Disclaimer
-
-* HeavenMS staff has __no current intention__ to publicly open a server with this source, if that ever comes to happen this note will be lifted. __Don't be scammed!__
-
-* This server source is __NOT intended to be stable__ as is. Proper deadlock review and other maintenance contributions are needed in order to make it steps ahead on viability.
+* Fixed Monster Magnet crashing the caster when trying to pull fixed mobs, credits to Shavit. https://gofile.io/?c=BW7dVM (dead link)
+* Cleared need for administrator privileges (OS) to play the game, credits to Ubaware.
+* Set a higher cap for AP assigning with AP Reset, credits to Ubaware.
+* Fixed Monster Magnet crashing the caster when trying to pull bosses. Drawback: Dojo HPBar becomes unavailable. https://hostr.co/SvnSKrGzXhG0
+* Fixed some 'rn' problems with quest icons & removed "tab" from party leader changed message. https://hostr.co/tsYsQzzV6xT0
+* Removed block on applying attack-based strengthening gems on non-weapon equipments. https://hostr.co/m2bVtnizCtmD
+* Set a higher cap for SPEED.
+* Removed the AP assigning block for beginners below level 10. https://hostr.co/AHAHzneCti9B
+* Removed block on party for beginners level 10 or below. https://hostr.co/JZq53mMtToCz
+* Removed block on MTS entering in some maps, rendering the buyback option available.
+* Removed "AP excess" popup and limited actions on Admin/MWLB, credits to kevintjuh93.
+* Removed "You've gained a level!" popup, credits to PrinceReborn.
+* Removed caps for WATK, WDEF, MDEF, ACC, AVOID.
+* 'n' problem fixed.
+* Fraysa's https://hostr.co/gJbLZITRVHmv
+* Eric's MapleSilver starting on window-mode.

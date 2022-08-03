@@ -33,7 +33,7 @@ public final class ReactorHitHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         //System.out.println(slea); //To see if there are any differences with packets
-        //CD 00 6B 00 00 00 01 00 00 00 03 00 00 00 20 03 F7 03 00 00
+        //[CD 00] [6B 00 00 00] [01 00 00 00] [03 00] [00 00 20 03] [F7 03 00 00]
         //[CD 00] [66 00 00 00] [00 00 00 00] [02 00] [00 00 19 01] [00 00 00 00]
         int oid = p.readInt();
         int charPos = p.readInt();

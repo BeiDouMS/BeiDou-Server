@@ -504,7 +504,9 @@ public class MapleMap {
                 xLimits = bounds;
             } else {
                 // assuming MINIMAP always have an equal-greater picture representation of the map area (players won't walk beyond the area known by the minimap).
-                Point lp = new Point(mapArea.x, mapArea.y), rp = new Point(mapArea.x + mapArea.width, mapArea.y), fallback = new Point(mapArea.x + (mapArea.width / 2), mapArea.y);
+                Point lp = new Point(mapArea.x, mapArea.y);
+                Point rp = new Point(mapArea.x + mapArea.width, mapArea.y);
+                Point fallback = new Point(mapArea.x + (mapArea.width / 2), mapArea.y);
 
                 lp = bsearchDropPos(lp, fallback);  // approximated leftmost fh node position
                 rp = bsearchDropPos(rp, fallback);  // approximated rightmost fh node position

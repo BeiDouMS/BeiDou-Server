@@ -36,12 +36,14 @@ public final class TouchReactorHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         int oid = p.readInt();
         Reactor reactor = c.getPlayer().getMap().getReactorByOid(oid);
-        if (reactor != null) {
-            if (p.readByte() != 0) {
-                ReactorScriptManager.getInstance().touch(c, reactor);
-            } else {
-                ReactorScriptManager.getInstance().untouch(c, reactor);
-            }
+        if (reactor == null) {
+            return;
+        }
+
+        if (p.readByte() != 0) {
+            ReactorScriptManager.getInstance().touch(c, reactor);
+        } else {
+            ReactorScriptManager.getInstance().untouch(c, reactor);
         }
     }
 }
