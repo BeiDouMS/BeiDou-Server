@@ -958,6 +958,7 @@ public class Server {
     }
 
     public static void main(String[] args) {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
         Server.getInstance().init();
     }
 
