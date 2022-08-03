@@ -3,9 +3,9 @@ package tools.mapletools;
 import provider.*;
 import provider.wz.WZFiles;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -19,8 +19,8 @@ import java.util.*;
  * Estimated parse time: 2 minutes
  */
 public class NoItemNameFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("no_item_name_result.txt");
-    private static final File OUTPUT_XML_FILE = ToolConstants.getOutputFile("no_item_name_xml.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("no_item_name_result.txt");
+    private static final Path OUTPUT_XML_FILE = ToolConstants.getOutputFile("no_item_name_xml.txt");
 
     private static final Map<Integer, String> itemsWzPath = new HashMap<>();
     private static final Map<Integer, EquipType> equipTypes = new HashMap<>();
@@ -435,32 +435,32 @@ public class NoItemNameFetcher {
 
     private static void writeMissingStringWZNames(Map<String, List<Integer>> missingNames) throws Exception {
         System.out.println("Writing remaining 'String.wz' names...");
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_XML_FILE))) {
+            printWriter = pw;
 
-        printWriter = new PrintWriter(OUTPUT_XML_FILE, StandardCharsets.UTF_8);
-        printOutputFileHeader();
+            printOutputFileHeader();
 
-        String[] nodePaths = {"Cash.img", "Consume.img", "Eqp.img", "Etc.img", "Ins.img", "Pet.img"};
-        for (int i = 0; i < nodePaths.length; i++) {
-            writeMissingStringWZNode(nodePaths[i], missingNames.get(nodePaths[i]), i == 2);
+            String[] nodePaths = { "Cash.img", "Consume.img", "Eqp.img", "Etc.img", "Ins.img", "Pet.img" };
+            for (int i = 0; i < nodePaths.length; i++) {
+                writeMissingStringWZNode(nodePaths[i], missingNames.get(nodePaths[i]), i == 2);
+            }
+
         }
-
-        printWriter.close();
     }
 
     public static void main(String[] args) {
-        try {
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
             curType = ItemType.EQP;
             readEquipWZData();
 
             curType = ItemType.UNDEF;
             readItemWZData();
-            readStringWZData();             // calculates the diff and effectively holds all items with no name property on the WZ
+            readStringWZData(); // calculates the diff and effectively holds all items with no name property on the WZ
 
             System.out.println("Reporting results...");
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
             printReportFileHeader();
             printReportFileResults();
-            printWriter.close();
 
             Map<String, List<Integer>> missingNames = filterMissingItemNames();
             writeMissingStringWZNames(missingNames);

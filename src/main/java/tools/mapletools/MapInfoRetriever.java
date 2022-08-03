@@ -5,6 +5,8 @@ import provider.wz.WZFiles;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +18,7 @@ import java.util.List;
  * the "info" node in their WZ node tree.
  */
 public class MapInfoRetriever {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("map_info_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("map_info_report.txt");
     private static final List<Integer> missingInfo = new ArrayList<>();
 
     private static BufferedReader bufferedReader = null;
@@ -129,9 +131,7 @@ public class MapInfoRetriever {
     }
 
     private static void writeReport() {
-        try {
-            PrintWriter printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-
+        try (PrintWriter printWriter = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             if (!missingInfo.isEmpty()) {
                 for (Integer i : missingInfo) {
                     printWriter.println(i);
@@ -139,8 +139,6 @@ public class MapInfoRetriever {
             } else {
                 printWriter.println("All map files contain 'info' node.");
             }
-
-            printWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

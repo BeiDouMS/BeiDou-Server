@@ -3,7 +3,11 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 
 /**
  * @author RonanLana
@@ -16,14 +20,13 @@ import java.nio.charset.StandardCharsets;
  * Estimated parse time: 7 minutes
  */
 public class EquipmentOmniLeveller {
-    private static final File INPUT_DIRECTORY = WZFiles.CHARACTER.getFile();
-    private static final File OUTPUT_DIRECTORY = ToolConstants.getOutputFile("equips-with-levels");
+    private static final Path INPUT_DIRECTORY = WZFiles.CHARACTER.getFile();
+    private static final Path OUTPUT_DIRECTORY = ToolConstants.getOutputFile("equips-with-levels");
     private static final int INITIAL_STRING_LENGTH = 250;
     private static final int FIXED_EXP = 10000;
     private static final int MAX_EQP_LEVEL = 30;
 
     private static PrintWriter printWriter = null;
-    private static InputStreamReader fileReader = null;
     private static BufferedReader bufferedReader = null;
 
     private static int infoTagState = -1;
@@ -353,30 +356,25 @@ public class EquipmentOmniLeveller {
         return accessInfoTag;
     }
 
-    private static void copyCashItemData(File file, String curPath) throws IOException {
-        printWriter = new PrintWriter(new File(OUTPUT_DIRECTORY, curPath + file.getName()), StandardCharsets.UTF_8);
-
-        fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-        bufferedReader = new BufferedReader(fileReader);
-
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            printWriter.println(line);
+    private static void copyCashItemData(Path file, String curPath) throws IOException {
+        try (PrintWriter pw = new PrintWriter(
+                Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
+                BufferedReader br = Files.newBufferedReader(file);) {
+            printWriter = pw;
+            bufferedReader = br;
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                printWriter.println(line);
+            }
         }
-
-        bufferedReader.close();
-        fileReader.close();
-
-        printWriter.close();
     }
 
-    private static void parseEquipData(File file, String curPath) throws IOException {
-        printWriter = new PrintWriter(new File(OUTPUT_DIRECTORY, curPath + file.getName()), StandardCharsets.UTF_8);
-
-        fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-        bufferedReader = new BufferedReader(fileReader);
-
-        try {
+    private static void parseEquipData(Path file, String curPath) throws IOException {
+        try (PrintWriter pw = new PrintWriter(
+                Files.newOutputStream(OUTPUT_DIRECTORY.resolve(curPath).resolve(file.getFileName())));
+                BufferedReader br = Files.newBufferedReader(file);) {
+            printWriter = pw;
+            bufferedReader = br;
             status = 0;
             upgradeable = false;
             cash = false;
@@ -384,23 +382,13 @@ public class EquipmentOmniLeveller {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (translateToken(line)) {
-                    infoTagState = status;  // status: 2
+                    infoTagState = status; // status: 2
                     translateInfoTag(status);
                     infoTagState = -1;
                 }
             }
-
-            bufferedReader.close();
-            fileReader.close();
-
             printFileFooter();
-            printWriter.close();
         } catch (RuntimeException e) {
-            bufferedReader.close();
-            fileReader.close();
-
-            printWriter.close();
-
             copyCashItemData(file, curPath);
         }
     }
@@ -413,31 +401,48 @@ public class EquipmentOmniLeveller {
     }
 
     private static void parseDirectoryEquipData(String curPath) {
-        File folder = new File(OUTPUT_DIRECTORY, curPath);
-        if (!folder.exists()) {
-            folder.mkdir();
+        Path folder = OUTPUT_DIRECTORY.resolve(curPath);
+        if (!Files.exists(folder)) {
+            try {
+                Files.createDirectory(folder);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                System.out.println("Unable to create folder " + folder.toAbsolutePath() + ".");
+                e.printStackTrace();
+            }
         }
 
         System.out.println("Parsing directory '" + curPath + "'");
-        folder = new File(INPUT_DIRECTORY, curPath);
-        for (File file : folder.listFiles()) {
-            if (file.isFile()) {
-                try {
-                    parseEquipData(file, curPath);
-                } catch (FileNotFoundException ex) {
-                    System.out.println("Unable to open equip file " + file.getAbsolutePath() + ".");
-                } catch (IOException ex) {
-                    System.out.println("Error reading equip file " + file.getAbsolutePath() + ".");
-                } catch (Exception e) {
-                    e.printStackTrace();
+        folder = INPUT_DIRECTORY.resolve(curPath);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    try {
+                        parseEquipData(path, curPath);
+                    } catch (FileNotFoundException ex) {
+                        System.out.println("Unable to open dojo file " + path.toAbsolutePath() + ".");
+                    } catch (IOException ex) {
+                        System.out.println("Error reading dojo file " + path.toAbsolutePath() + ".");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    parseDirectoryEquipData(curPath + path.getFileName() + "/");
                 }
-            } else {
-                parseDirectoryEquipData(curPath + file.getName() + "/");
             }
+        } catch (IOException e1) {
+            System.out.println("Unable to read folder " + folder.toAbsolutePath() + ".");
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
+        Instant instantStarted = Instant.now();
         parseDirectoryEquipData("");
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+        System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 }

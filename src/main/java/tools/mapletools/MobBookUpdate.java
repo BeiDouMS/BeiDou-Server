@@ -3,7 +3,8 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,8 +27,8 @@ import java.sql.SQLException;
  * remove the property 'MonsterBook.img' inside 'string.wz' and choose to import the xml generated with this software.
  */
 public class MobBookUpdate {
-    private static final File INPUT_FILE = new File(WZFiles.STRING.getFile(), "MonsterBook.img.xml");
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("MonsterBook_updated.img.xml");
+    private static final Path INPUT_FILE = WZFiles.STRING.getFile().resolve("MonsterBook.img.xml");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("MonsterBook_updated.img.xml");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
 
     private static PrintWriter printWriter = null;
@@ -143,23 +144,17 @@ public class MobBookUpdate {
     }
 
     private static void updateFromDropData() {
-        // This will reference one line at a time
-        String line = null;
+        try (con;
+                PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+                BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+            printWriter = pw;
+            bufferedReader = br;
 
-        try {
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+            String line = null;
 
             while ((line = bufferedReader.readLine()) != null) {
                 translateToken(line);
             }
-
-            printWriter.close();
-            bufferedReader.close();
-            fileReader.close();
-
-            con.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + INPUT_FILE + "'");
         } catch (IOException ex) {

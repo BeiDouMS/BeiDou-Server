@@ -23,10 +23,12 @@ import server.life.MonsterStats;
 import tools.Pair;
 
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -171,7 +173,7 @@ public class ArrowFetcher {
                 if (!existingEntries.isEmpty()) {
                     List<int[]> entryValues = getArrowEntryValues(existingEntries);
 
-                    printWriter = new PrintWriter(ToolConstants.getOutputFile(OUTPUT_FILE_NAME), StandardCharsets.UTF_8);
+                    printWriter = new PrintWriter(Files.newOutputStream(ToolConstants.getOutputFile(OUTPUT_FILE_NAME)));
                     printSqlHeader();
 
                     for (int[] arrowEntry : entryValues) {
@@ -211,10 +213,15 @@ public class ArrowFetcher {
     }
 
     public static void main(String[] args) {
+        Instant instantStarted = Instant.now();
         // load mob stats from WZ
         mobStats = MonsterStatFetcher.getAllMonsterStats();
 
         calcAllMobsArrowRange();
         updateMobsArrowRange();
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+        System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 }

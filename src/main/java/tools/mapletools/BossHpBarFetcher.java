@@ -3,7 +3,11 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,20 +133,18 @@ public class BossHpBarFetcher {
     }
 
     private static void readBossHpBarData() throws IOException {
-        String line;
-
-        final File mobDirectory = WZFiles.MOB.getFile();
-        for (File file : mobDirectory.listFiles()) {
-            if (file.isFile()) {
-                InputStreamReader fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-                bufferedReader = new BufferedReader(fileReader);
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    translateToken(line);
+        final Path mobDirectory = WZFiles.MOB.getFile();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(mobDirectory)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    try (BufferedReader br = Files.newBufferedReader(path)) {
+                        bufferedReader = br;
+                        String line;
+                        while ((line = bufferedReader.readLine()) != null) {
+                            translateToken(line);
+                        }
+                    }
                 }
-
-                bufferedReader.close();
-                fileReader.close();
             }
         }
     }
@@ -162,17 +164,15 @@ public class BossHpBarFetcher {
     private static void reportBossHpBarData() {
         // This will reference one line at a time
 
-        try {
+        try (PrintWriter printWriter = new PrintWriter(Files.newOutputStream(ToolConstants.getOutputFile(OUTPUT_FILE_NAME)))) {
             System.out.println("Reading WZs...");
             readBossHpBarData();
 
             System.out.println("Reporting results...");
-            final PrintWriter printWriter = new PrintWriter(ToolConstants.getOutputFile(OUTPUT_FILE_NAME), StandardCharsets.UTF_8);
 
             printReportFileHeader(printWriter);
             printReportFileResults(printWriter);
 
-            printWriter.close();
             System.out.println("Done!");
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open mob file.");
@@ -184,7 +184,12 @@ public class BossHpBarFetcher {
     }
 
     public static void main(String[] args) {
+    	Instant instantStarted = Instant.now();
         reportBossHpBarData();
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+        System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
     }
 
 }

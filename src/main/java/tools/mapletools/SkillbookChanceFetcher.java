@@ -3,10 +3,10 @@ package tools.mapletools;
 import server.life.MonsterStats;
 import tools.Pair;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ import java.util.Map;
  * drops.
  */
 public class SkillbookChanceFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("skillbook_drop_data.sql");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("skillbook_drop_data.sql");
     private static final Map<Pair<Integer, Integer>, Integer> skillbookChances = new HashMap<>();
 
     private static PrintWriter printWriter;
@@ -102,17 +102,17 @@ public class SkillbookChanceFetcher {
     }
 
     private static void generateSkillbookChanceUpdateFile() {
-        try {
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
 
             printSkillbookChanceUpdateSqlHeader();
 
             List<Map.Entry<Pair<Integer, Integer>, Integer>> skillbookChancesList = sortedSkillbookChances();
             for (Map.Entry<Pair<Integer, Integer>, Integer> e : skillbookChancesList) {
-                printWriter.println("(" + e.getKey().getLeft() + ", " + e.getKey().getRight() + ", 1, 1, 0, " + e.getValue() + "),");
+                printWriter.println("(" + e.getKey().getLeft() + ", " + e.getKey().getRight() + ", 1, 1, 0, "
+                        + e.getValue() + "),");
             }
 
-            printWriter.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

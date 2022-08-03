@@ -8,6 +8,8 @@ import tools.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,7 +27,7 @@ import java.util.*;
  * Estimated parse time: 1 minute
  */
 public class QuestItemFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("quest_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("quest_report.txt");
     private static final int INITIAL_STRING_LENGTH = 50;
     private static final int INITIAL_LENGTH = 200;
     private static final boolean DISPLAY_EXTRA_INFO = true;     // display items with zero quantity over the quest act WZ
@@ -409,32 +411,28 @@ public class QuestItemFetcher {
     private static void reportQuestItemData() {
         // This will reference one line at a time
         String line = null;
-        String fileName = null;
+        Path file = null;
 
-        try {
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             System.out.println("Reading WZs...");
 
-            fileName = WZFiles.QUEST.getFilePath() + "/Check.img.xml";
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+            file = WZFiles.QUEST.getFile().resolve("Check.img.xml");
+            bufferedReader = Files.newBufferedReader(file);
 
             while ((line = bufferedReader.readLine()) != null) {
-                translateCheckToken(line);  // fetch expired quests through here as well
+                translateCheckToken(line); // fetch expired quests through here as well
             }
 
             bufferedReader.close();
-            fileReader.close();
 
-            fileName = WZFiles.QUEST.getFilePath() + "/Act.img.xml";
-            fileReader = new InputStreamReader(new FileInputStream(fileName), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+            file = WZFiles.QUEST.getFile().resolve("Act.img.xml");
+            bufferedReader = Files.newBufferedReader(file);
 
             while ((line = bufferedReader.readLine()) != null) {
                 translateActToken(line);
             }
 
             bufferedReader.close();
-            fileReader.close();
 
             System.out.println("Calculating table diffs...");
             calculateQuestItemDiff();
@@ -452,8 +450,9 @@ public class QuestItemFetcher {
             filterDirectorySearchMatchingData("src", itemsWithQuest);
 
             System.out.println("Reporting results...");
-            // report suspects of missing quest drop data, as well as those drop data that may have incorrect questids.
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            // report suspects of missing quest drop data, as well as those drop data that
+            // may have incorrect questids.
+            printWriter = pw;
 
             printReportFileHeader();
 
@@ -505,12 +504,11 @@ public class QuestItemFetcher {
                 }
             }
 
-            printWriter.close();
             System.out.println("Done!");
         } catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + fileName + "'");
+            System.out.println("Unable to open file '" + file + "'");
         } catch (IOException ex) {
-            System.out.println("Error reading file '" + fileName + "'");
+            System.out.println("Error reading file '" + file + "'");
         } catch (SQLException e) {
             System.out.println("Warning: Could not establish connection to database to report quest data.");
             System.out.println(e.getMessage());

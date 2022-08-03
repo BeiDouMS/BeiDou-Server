@@ -3,7 +3,9 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 /**
@@ -72,17 +74,17 @@ public class MapFieldLimitChecker {
         }
     }
 
-    private static void listFiles(String directoryName, ArrayList<File> files) {
-        File directory = new File(directoryName);
-
-        // get all the files from a directory
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
-            if (file.isFile()) {
-                files.add(file);
-            } else if (file.isDirectory()) {
-                listFiles(file.getAbsolutePath(), files);
+    private static void listFiles(Path directory, ArrayList<Path> files) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    files.add(path);
+                } else if (Files.isDirectory(path)) {
+                    listFiles(path, files);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -134,18 +136,17 @@ public class MapFieldLimitChecker {
 
     private static void loadMapWz() throws IOException {
         System.out.println("Reading Map.wz ...");
-        ArrayList<File> files = new ArrayList<>();
-        listFiles(WZFiles.MAP.getFilePath() + "/Map", files);
+        ArrayList<Path> files = new ArrayList<>();
+        listFiles(WZFiles.MAP.getFile().resolve("Map"), files);
 
-        for (File f : files) {
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+        for (Path f : files) {
+            try (BufferedReader br = Files.newBufferedReader(f)) {
+                bufferedReader = br;
 
-            mapid = getMapIdFromFilename(f.getName());
-            inspectMapEntry();
+                mapid = getMapIdFromFilename(f.getFileName().toString());
+                inspectMapEntry();
 
-            bufferedReader.close();
-            fileReader.close();
+            }
         }
     }
 

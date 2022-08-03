@@ -50,7 +50,11 @@ import server.maps.*;
 import tools.PacketCreator;
 import tools.Pair;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
@@ -448,8 +452,14 @@ public final class Channel {
 
     private static String[] getEvents() {
         List<String> events = new ArrayList<>();
-        for (File file : new File("scripts/event").listFiles()) {
-            events.add(file.getName().substring(0, file.getName().length() - 3));
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("scripts/event"))) {
+            for (Path path : stream) {
+                String fileName = path.getFileName().toString();
+                events.add(fileName.substring(0, fileName.length() - 3));
+            }
+        } catch (IOException e) {
+            log.warn("Unable to load events !");
+            e.printStackTrace();
         }
         return events.toArray(new String[0]);
     }

@@ -11,6 +11,8 @@ import server.life.LifeFactory.selfDestruction;
 import server.life.MonsterStats;
 import tools.Pair;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 
 public class MonsterStatFetcher {
@@ -140,4 +142,15 @@ public class MonsterStatFetcher {
         }
     }
 
+    public static void main(String[] args) {
+    	Instant instantStarted = Instant.now();
+    	// load mob stats from WZ
+    	Map<Integer, MonsterStats> mobStats = MonsterStatFetcher.getAllMonsterStats();
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+      	System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
+
+    }
+    
 }

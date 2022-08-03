@@ -1,18 +1,19 @@
 package tools.mapletools;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 class ToolConstants {
-    static final File INPUT_DIRECTORY = new File("tools/input");
-    static final File OUTPUT_DIRECTORY = new File("tools/output");
+    static final Path INPUT_DIRECTORY = Paths.get("tools/input");
+    static final Path OUTPUT_DIRECTORY = Paths.get("tools/output");
     static final String SCRIPTS_PATH = "scripts";
     static final String HANDBOOK_PATH = "handbook";
 
-    static File getInputFile(String fileName) {
-        return new File(INPUT_DIRECTORY, fileName);
+    static Path getInputFile(String fileName) {
+        return INPUT_DIRECTORY.resolve(fileName);
     }
 
-    static File getOutputFile(String fileName) {
-        return new File(OUTPUT_DIRECTORY, fileName);
+    static Path getOutputFile(String fileName) {
+        return OUTPUT_DIRECTORY.resolve(fileName);
     }
 }
