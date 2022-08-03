@@ -4,6 +4,8 @@ import provider.wz.WZFiles;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ import java.util.Set;
  * Estimated parse time: 10 seconds
  */
 public class CashVegaChecker {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("vega_checker_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("vega_checker_report.txt");
     private static final int INITIAL_STRING_LENGTH = 1000;
     private static final Set<Integer> vegaItems = new HashSet<>();
 
@@ -156,16 +158,14 @@ public class CashVegaChecker {
     private static void reportMissingVegaItems() {
         System.out.println("Reporting results ...");
 
-        try {
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
             printReportFileHeader();
 
             for (Integer itemid : vegaItems) {
                 printWriter.println("  " + itemid);
             }
 
-            printWriter.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

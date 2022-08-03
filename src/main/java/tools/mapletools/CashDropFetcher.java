@@ -4,7 +4,9 @@ import provider.wz.WZFiles;
 import tools.Pair;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +22,7 @@ import java.util.*;
  * Estimated parse time: 2 minutes
  */
 public class CashDropFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("cash_drop_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("cash_drop_report.txt");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
     private static final int INITIAL_STRING_LENGTH = 50;
     private static final int ITEM_FILE_NAME_SIZE = 13;
@@ -175,17 +177,19 @@ public class CashDropFetcher {
         printWriter.println();
     }
 
-    private static void listFiles(String directoryName, ArrayList<File> files) {
-        File directory = new File(directoryName);
-
+    private static void listFiles(Path directoryName, ArrayList<Path> files) {
         // get all the files from a directory
-        File[] fList = directory.listFiles();
-        for (File file : fList) {
-            if (file.isFile()) {
-                files.add(file);
-            } else if (file.isDirectory()) {
-                listFiles(file.getAbsolutePath(), files);
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(directoryName)) {
+            for (Path path : stream) {
+                if (Files.isRegularFile(path)) {
+                    files.add(path);
+                } else if (Files.isDirectory(path)) {
+                    listFiles(path, files);
+                }
             }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
@@ -260,42 +264,39 @@ public class CashDropFetcher {
     }
 
     private static void reportNxDropData() {
-        try {
+        try (con; PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             System.out.println("Reading Character.wz ...");
-            ArrayList<File> files = new ArrayList<>();
-            listFiles(WZFiles.CHARACTER.getFilePath(), files);
+            ArrayList<Path> files = new ArrayList<>();
+            listFiles(WZFiles.CHARACTER.getFile(), files);
 
-            InputStreamReader fileReader = null;
-            for (File f : files) {
-                //System.out.println("Parsing " + f.getAbsolutePath());
-                int itemid = getItemIdFromFilename(f.getName());
+            for (Path path : files) {
+                // System.out.println("Parsing " + f.getAbsolutePath());
+                int itemid = getItemIdFromFilename(path.getFileName().toString());
                 if (itemid < 0) {
                     continue;
                 }
 
-                fileReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
-                bufferedReader = new BufferedReader(fileReader);
+                bufferedReader = Files.newBufferedReader(path);
 
                 currentItemid = itemid;
                 inspectEquipWzEntry();
 
                 bufferedReader.close();
-                fileReader.close();
             }
 
             System.out.println("Reading Item.wz ...");
             files = new ArrayList<>();
-            listFiles(WZFiles.ITEM.getFilePath(), files);
+            listFiles(WZFiles.ITEM.getFile(), files);
 
-            for (File f : files) {
-                //System.out.println("Parsing " + f.getAbsolutePath());
-                fileReader = new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8);
-                bufferedReader = new BufferedReader(fileReader);
+            for (Path path : files) {
+                // System.out.println("Parsing " + f.getAbsolutePath());
+                bufferedReader = Files.newBufferedReader(path);
 
-                if (f.getName().length() <= ITEM_FILE_NAME_SIZE) {
+                if (path.getFileName().toString().length() <= ITEM_FILE_NAME_SIZE) {
                     inspectItemWzEntry();
-                } else {    // pet file structure is similar to equips, maybe there are other item-types following this behaviour?
-                    int itemid = getItemIdFromFilename(f.getName());
+                } else { // pet file structure is similar to equips, maybe there are other item-types
+                         // following this behaviour?
+                    int itemid = getItemIdFromFilename(path.getFileName().toString());
                     if (itemid < 0) {
                         continue;
                     }
@@ -305,27 +306,23 @@ public class CashDropFetcher {
                 }
 
                 bufferedReader.close();
-                fileReader.close();
             }
 
             System.out.println("Reporting results...");
 
-            // report suspects of missing quest drop data, as well as those drop data that may have incorrect questids.
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            // report suspects of missing quest drop data, as well as those drop data that
+            // may have incorrect questids.
+            printWriter = pw;
             printReportFileHeader();
 
             reportNxDropResults(true);
             reportNxDropResults(false);
 
             /*
-            printWriter.println("NX LIST");     // list of all cash items found
-            for(Integer nx : nxItems) {
-                printWriter.println(nx);
-            }
-            */
+             * printWriter.println("NX LIST"); // list of all cash items found for(Integer
+             * nx : nxItems) { printWriter.println(nx); }
+             */
 
-            con.close();
-            printWriter.close();
             System.out.println("Done!");
         } catch (SQLException e) {
             System.out.println("Warning: Could not establish connection to database to report quest data.");

@@ -3,7 +3,8 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -16,7 +17,7 @@ import java.util.*;
  * Running it should generate a report file under "output" folder with the search results.
  */
 public class QuestMesoFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("quest_meso_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("quest_meso_report.txt");
     private static final boolean PRINT_FEES = true;    // print missing values as additional info report
     private static final int INITIAL_STRING_LENGTH = 50;
 
@@ -147,25 +148,21 @@ public class QuestMesoFetcher {
     private static void readQuestMesoData() throws IOException {
         String line;
 
-        InputStreamReader fileReader = new InputStreamReader(new FileInputStream(WZFiles.QUEST.getFilePath() + "/Act.img.xml"), StandardCharsets.UTF_8);
-        bufferedReader = new BufferedReader(fileReader);
+        bufferedReader = Files.newBufferedReader(WZFiles.QUEST.getFile().resolve("Act.img.xml"));
 
         while ((line = bufferedReader.readLine()) != null) {
             translateTokenAct(line);
         }
 
         bufferedReader.close();
-        fileReader.close();
 
-        fileReader = new InputStreamReader(new FileInputStream(WZFiles.QUEST.getFilePath() + "/Check.img.xml"), StandardCharsets.UTF_8);
-        bufferedReader = new BufferedReader(fileReader);
+        bufferedReader = Files.newBufferedReader(WZFiles.QUEST.getFile().resolve("Check.img.xml"));
 
         while ((line = bufferedReader.readLine()) != null) {
             translateTokenCheck(line);
         }
 
         bufferedReader.close();
-        fileReader.close();
     }
 
     private static void printReportFileHeader() {
@@ -232,20 +229,19 @@ public class QuestMesoFetcher {
     private static void reportQuestMesoData() {
         // This will reference one line at a time
 
-        try {
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             System.out.println("Reading WZs...");
             readQuestMesoData();
 
             System.out.println("Reporting results...");
             // report missing meso checks on quest completes
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            printWriter = pw;
 
             printReportFileHeader();
 
             printReportFileResults(checkedMesoQuests, appliedMesoQuests, true);
             printReportFileResults(appliedMesoQuests, checkedMesoQuests, false);
 
-            printWriter.close();
             System.out.println("Done!");
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open quest file.");

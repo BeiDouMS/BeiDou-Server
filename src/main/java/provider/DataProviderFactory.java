@@ -25,9 +25,10 @@ import provider.wz.WZFiles;
 import provider.wz.XMLWZFile;
 
 import java.io.File;
+import java.nio.file.Path;
 
 public class DataProviderFactory {
-    private static DataProvider getWZ(File in) {
+    private static DataProvider getWZ(Path in) {
         return new XMLWZFile(in);
     }
 

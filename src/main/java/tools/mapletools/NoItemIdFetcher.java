@@ -4,6 +4,8 @@ import provider.wz.WZFiles;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +22,7 @@ import java.util.*;
  * A file is generated listing all the inexistent ids.
  */
 public class NoItemIdFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("no_item_id_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("no_item_id_report.txt");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
 
     private static final Set<Integer> existingIds = new HashSet<>();
@@ -174,7 +176,7 @@ public class NoItemIdFetcher {
     }
 
     private static void evaluateDropsFromDb() {
-        try {
+        try (con) {
             System.out.println("Evaluating item data on DB...");
 
             evaluateDropsFromTable("drop_data");
@@ -192,23 +194,19 @@ public class NoItemIdFetcher {
             System.out.println("Inexistent itemid count: " + nonExistingIds.size());
             System.out.println("Total itemid count: " + existingIds.size());
 
-            con.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        try {
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+            printWriter = pw;
             existingIds.add(0); // meso itemid
             readEquipDataDirectory(WZFiles.CHARACTER.getFilePath());
             readItemDataDirectory(WZFiles.ITEM.getFilePath());
 
             evaluateDropsFromDb();
-
-            printWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

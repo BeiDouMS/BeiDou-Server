@@ -1,6 +1,8 @@
 package provider.wz;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public enum WZFiles {
     QUEST("Quest"),
@@ -25,17 +27,16 @@ public enum WZFiles {
         this.fileName = name + ".wz";
     }
 
-    public File getFile() {
-        return new File(DIRECTORY, fileName);
+    public Path getFile() {
+        return Paths.get(DIRECTORY).resolve(fileName);
     }
 
     public String getFilePath() {
-        return getFile().getPath();
+        return getFile().toString();
     }
 
     private static String getWzDirectory() {
-        // Either provide a custom directory path through the "wz-path" property when launching the .jar,
-        // or don't provide one to use the default "wz" directory
+        // Either provide a custom directory path through the "wz-path" property when launching the .jar, or don't provide one to use the default "wz" directory
         String propertyPath = System.getProperty("wz-path");
         if (propertyPath != null && new File(propertyPath).isDirectory()) {
             return propertyPath;

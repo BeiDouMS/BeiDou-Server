@@ -3,7 +3,8 @@ package tools.mapletools;
 import provider.wz.WZFiles;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -16,8 +17,8 @@ import java.sql.SQLException;
  * a SQL table that the server will make use.
  */
 public class CouponInstaller {
-    private static final File COUPON_INPUT_FILE_1 = new File(WZFiles.ITEM.getFilePath(), "/Cash/0521.img.xml");
-    private static final File COUPON_INPUT_FILE_2 = new File(WZFiles.ITEM.getFilePath(), "/Cash/0536.img.xml");
+    private static final Path COUPON_INPUT_FILE_1 = WZFiles.ITEM.getFile().resolve("Cash/0521.img.xml");
+    private static final Path COUPON_INPUT_FILE_2 = WZFiles.ITEM.getFile().resolve("Cash/0536.img.xml");
     private static final Connection con = SimpleDatabaseConnection.getConnection();
     private static BufferedReader bufferedReader = null;
     private static byte status = 0;
@@ -192,20 +193,17 @@ public class CouponInstaller {
         }
     }
 
-    private static void installRateCoupons(File file) {
+    private static void installRateCoupons(Path file) {
         // This will reference one line at a time
         String line = null;
 
-        try {
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+        try (BufferedReader br = Files.newBufferedReader(file)) {
+            bufferedReader = br;
 
             while ((line = bufferedReader.readLine()) != null) {
                 translateToken(line);
             }
 
-            bufferedReader.close();
-            fileReader.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + file + "'");
         } catch (IOException ex) {

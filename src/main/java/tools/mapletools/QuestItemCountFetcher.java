@@ -5,6 +5,8 @@ import tools.Pair;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -17,7 +19,7 @@ import java.util.*;
  * Running it should generate a report file under "output" folder with the search results.
  */
 public class QuestItemCountFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("quest_item_count_report.txt");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("quest_item_count_report.txt");
     private static final String ACT_NAME = WZFiles.QUEST.getFilePath() + "/Act.img.xml";
     private static final String CHECK_NAME = WZFiles.QUEST.getFilePath() + "/Check.img.xml";
     private static final int INITIAL_STRING_LENGTH = 50;
@@ -241,17 +243,16 @@ public class QuestItemCountFetcher {
     private static void reportQuestItemCountData() {
         // This will reference one line at a time
 
-        try {
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
             System.out.println("Reading WZs...");
             readQuestItemCountData();
 
             System.out.println("Reporting results...");
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            printWriter = pw;
 
             printReportFileHeader();
             printReportFileResults();
 
-            printWriter.close();
             System.out.println("Done!");
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open quest file.");

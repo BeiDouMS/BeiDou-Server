@@ -4,7 +4,8 @@ import provider.wz.WZFiles;
 import tools.Pair;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,8 @@ import java.util.List;
  * by the server source.
  */
 public class SkillMakerReagentIndexer {
-    private static final File INPUT_FILE = new File(WZFiles.ITEM.getFile(), "Etc/0425.img.xml");
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("maker-reagent-data.sql");
+    private static final Path INPUT_FILE = WZFiles.ITEM.getFile().resolve("Etc/0425.img.xml");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("maker-reagent-data.sql");
     private static final int INITIAL_STRING_LENGTH = 50;
     private static final List<Pair<Integer, Pair<String, Integer>>> reagentList = new ArrayList<>();
 
@@ -147,26 +148,22 @@ public class SkillMakerReagentIndexer {
         printWriter.println(sb);
     }
 
-    private static void writeMakerReagentTableData() {
+	private static void writeMakerReagentTableData() {
         // This will reference one line at a time
         String line = null;
 
-        try {
-            InputStreamReader fileReader = new InputStreamReader(new FileInputStream(INPUT_FILE), StandardCharsets.UTF_8);
-            bufferedReader = new BufferedReader(fileReader);
+        try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE));
+                BufferedReader br = Files.newBufferedReader(INPUT_FILE);) {
+            bufferedReader = br;
 
             while ((line = bufferedReader.readLine()) != null) {
                 translateToken(line);
             }
 
-            bufferedReader.close();
-            fileReader.close();
-
             SortReagentList();
 
-            printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
+            printWriter = pw;
             WriteMakerReagentTableFile();
-            printWriter.close();
         } catch (FileNotFoundException ex) {
             System.out.println("Unable to open file '" + OUTPUT_FILE + "'");
         } catch (IOException ex) {

@@ -3,12 +3,14 @@ package tools.mapletools;
 import server.life.MonsterStats;
 import tools.Pair;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.Map;
  */
 
 public class MesoFetcher {
-    private static final File OUTPUT_FILE = ToolConstants.getOutputFile("meso_drop_data.sql");
+    private static final Path OUTPUT_FILE = ToolConstants.getOutputFile("meso_drop_data.sql");
     private static final boolean PERMIT_MESOS_ON_DOJO_BOSSES = false;
     private static final int MESO_ID = 0;
     private static final int MIN_ITEMS = 4;
@@ -119,13 +121,11 @@ public class MesoFetcher {
 
     private static void generateMissingMobsMesoRange() {
         System.out.print("Generating missing ranges... ");
-        Connection con = SimpleDatabaseConnection.getConnection();
-        List<Integer> existingMobs = new ArrayList<>(200);
-
-        try {
-            // select all mobs which doesn't drop mesos and have a fair amount of items dropping (meaning they are not an event mob)
-            PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE dropperid NOT IN (SELECT DISTINCT dropperid FROM drop_data WHERE itemid = 0) GROUP BY dropperid HAVING count(*) >= " + MIN_ITEMS + ";");
-            ResultSet rs = ps.executeQuery();
+        try (Connection con = SimpleDatabaseConnection.getConnection();
+        	PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE dropperid NOT IN (SELECT DISTINCT dropperid FROM drop_data WHERE itemid = 0) GROUP BY dropperid HAVING count(*) >= " + MIN_ITEMS + ";");
+        	ResultSet rs = ps.executeQuery();) {
+        	
+            List<Integer> existingMobs = new ArrayList<>(200);
 
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
@@ -137,18 +137,19 @@ public class MesoFetcher {
                 }
 
                 if (!existingMobs.isEmpty()) {
-                    printWriter = new PrintWriter(OUTPUT_FILE, StandardCharsets.UTF_8);
-                    printSqlHeader();
+                    try (PrintWriter pw = new PrintWriter(Files.newOutputStream(OUTPUT_FILE))) {
+                        printWriter = pw;
 
-                    for (int i = 0; i < existingMobs.size() - 1; i++) {
-                        printSqlMobMesoRange(existingMobs.get(i));
+                        printSqlHeader();
+
+                        for (int i = 0; i < existingMobs.size() - 1; i++) {
+                            printSqlMobMesoRange(existingMobs.get(i));
+                        }
+
+                        printSqlMobMesoRangeFinal(existingMobs.get(existingMobs.size() - 1));
+
+                        printSqlExceptions();
                     }
-
-                    printSqlMobMesoRangeFinal(existingMobs.get(existingMobs.size() - 1));
-
-                    printSqlExceptions();
-
-                    printWriter.close();
                 } else {
                     throw new Exception("ALREADY UPDATED");
                 }
@@ -156,10 +157,6 @@ public class MesoFetcher {
             } else {
                 throw new Exception("ALREADY UPDATED");
             }
-
-            rs.close();
-            ps.close();
-            con.close();
 
             System.out.println("done!");
 
@@ -173,11 +170,17 @@ public class MesoFetcher {
     }
 
     public static void main(String[] args) {
-        // load mob stats from WZ
+    	Instant instantStarted = Instant.now();
+    	// load mob stats from WZ
         mobStats = MonsterStatFetcher.getAllMonsterStats();
 
         calcAllMobsMesoRange();
         generateMissingMobsMesoRange();
+        Instant instantStopped = Instant.now();
+        Duration durationBetween = Duration.between(instantStarted, instantStopped);
+        System.out.println("Get elapsed time in milliseconds: " + durationBetween.toMillis());
+      	System.out.println("Get elapsed time in seconds: " + durationBetween.toSeconds());
+
     }
 
 }
