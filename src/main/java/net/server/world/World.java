@@ -153,6 +153,7 @@ public class World {
     private MonitoredReentrantLock timedMapObjectLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.WORLD_MAPOBJS, true);
 
     private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
+    private Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
 
     private ScheduledFuture<?> charactersSchedule;
     private ScheduledFuture<?> marriagesSchedule;
@@ -160,6 +161,7 @@ public class World {
     private ScheduledFuture<?> fishingSchedule;
     private ScheduledFuture<?> partySearchSchedule;
     private ScheduledFuture<?> timeoutSchedule;
+    private ScheduledFuture<?> hpDecSchedule;
 
     public World(int world, int flag, String eventmsg, int exprate, int droprate, int bossdroprate, int mesorate, int questrate, int travelrate, int fishingrate) {
         this.id = world;
@@ -194,6 +196,7 @@ public class World {
         fishingSchedule = tman.register(new FishingTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         partySearchSchedule = tman.register(new PartySearchTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         timeoutSchedule = tman.register(new TimeoutTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
+        hpDecSchedule = tman.register(new CharacterHpDecreaseTask(this), YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL, YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL);
 
         if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
             long timeLeft = Server.getTimeLeftForNextDay();
@@ -1715,6 +1718,33 @@ public class World {
             r.run();
         }
     }
+    
+    public void addPlayerHpDecrease(Character chr) {
+        playerHpDec.putIfAbsent(chr, 0);
+    }
+    
+    public void removePlayerHpDecrease(Character chr) {
+        playerHpDec.remove(chr);
+    }
+    
+    public void runPlayerHpDecreaseSchedule() {
+        Map<Character, Integer> m = new HashMap<>();
+        m.putAll(playerHpDec);
+        
+        for (Entry<Character, Integer> e : m.entrySet()) {
+            Character chr = e.getKey();
+            
+            if (!chr.isAwayFromWorld()) {
+                int c = e.getValue();
+                c = (c + 1) % YamlConfig.config.server.MAP_DAMAGE_OVERTIME_COUNT;
+                playerHpDec.replace(chr, c);
+
+                if (c == 0) {
+                    chr.doHurtHp();
+                }
+            }
+        }
+    }
 
     public void resetDisabledServerMessages() {
         srvMessagesLock.lock();
@@ -2148,6 +2178,11 @@ public class World {
         if (timeoutSchedule != null) {
             timeoutSchedule.cancel(false);
             timeoutSchedule = null;
+        }
+        
+        if(hpDecSchedule != null) {
+            hpDecSchedule.cancel(false);
+            hpDecSchedule = null;
         }
 
         players.disconnectAll();

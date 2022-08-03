@@ -2379,6 +2379,12 @@ public class MapleMap {
 
         chr.setMapId(mapid);
         chr.updateActiveEffects();
+        
+        if (this.getHPDec() > 0) {
+            getWorldServer().addPlayerHpDecrease(chr);
+        } else {
+            getWorldServer().removePlayerHpDecrease(chr);
+        }
 
         MapScriptManager msm = MapScriptManager.getInstance();
         if (chrSize == 1) {
