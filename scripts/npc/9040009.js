@@ -128,7 +128,7 @@ function getReactors() {
     var iter = cm.getPlayer().getMap().getReactors().iterator();
     while (iter.hasNext()) {
         var mo = iter.next();
-        if (!mo.getName() === "statuegate") {
+        if (mo.getName() !== "statuegate") {
             reactors.push(mo.getObjectId());
         }
     }
