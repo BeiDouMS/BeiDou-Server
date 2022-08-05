@@ -19,7 +19,7 @@ function start() {
             var em = cm.getEventManager("s4aWorld");
             if (em == null) {
                 cm.sendOk("You're not allowed to enter with unknown reason. Try again.");
-            } else if (em.getProperty("started").equals("true")) {
+            } else if (em.getProperty("started") === "true") {
                 cm.sendOk("Someone else is already attempting to defeat the Jr.Balrog in another world.");
             } else {
                 var eli = em.getEligibleParty(cm.getParty());

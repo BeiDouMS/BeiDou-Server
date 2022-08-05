@@ -65,7 +65,7 @@ function action(mode, type, selection) {
                 } else if (channelMaps.getMap(980010301).getCharacters().isEmpty()) {
                     toSnd += "#L2#Join Battle Arena (3)  Owner (" + expedicao2.getLeader().getName() + ")" + " Current Member: " + cm.getExpeditionMemberNames(exped2) + "\r\n";
                 }
-                if (toSnd.equals(startSnd)) {
+                if (toSnd === startSnd) {
                     cm.sendOk("All the Battle Arena is currently occupied. I suggest you to come back later or change channels.");
                     cm.dispose();
                 } else {
