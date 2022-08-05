@@ -57,7 +57,7 @@ function action(mode, type, selection) {
             return;
         }
     }
-    while (quest[rand].equals("") && status <= 4) {
+    while (quest[rand] === "" && status <= 4) {
         rand = parseInt(Math.random() * quest.length);
     }
     if (status <= 4) {
