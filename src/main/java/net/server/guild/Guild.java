@@ -604,11 +604,10 @@ public class Guild {
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof GuildCharacter)) {
-            return false;
+        if (other instanceof GuildCharacter o) {
+            return (o.getId() == id && o.getName().equals(name));
         }
-        GuildCharacter o = (GuildCharacter) other;
-        return (o.getId() == id && o.getName().equals(name));
+        return false;
     }
 
     @Override
