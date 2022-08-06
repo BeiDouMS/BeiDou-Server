@@ -36,9 +36,9 @@ function act() {
     var eim = rm.getPlayer().getEventInstance();
     if (eim != null) {
         var status = eim.getProperty("stage1status");
-        if (status != null && !status.equals("waiting")) {
+        if (status != null && status !== "waiting") {
             var stage = parseInt(eim.getProperty("stage1phase"));
-            if (status.equals("display")) {
+            if (status === "display") {
                 if (!rm.getReactor().isRecentHitFromAttack()) {
                     var prevCombo = eim.getProperty("stage1combo");
 

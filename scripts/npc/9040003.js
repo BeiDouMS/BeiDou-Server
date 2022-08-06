@@ -55,7 +55,7 @@ function action(mode, type, selection) {
 
         var eim = cm.getPlayer().getEventInstance();
 
-        if (eim.getProperty("stage4clear") != null && eim.getProperty("stage4clear").equals("true")) {
+        if (eim.getProperty("stage4clear") != null && eim.getProperty("stage4clear") === "true") {
             cm.sendOk("After what I thought would be an immortal sleep, I have finally found someone that will save Sharenian. I can truly rest in peace now.");
             cm.dispose();
             return;
