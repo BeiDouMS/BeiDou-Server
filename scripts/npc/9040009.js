@@ -60,7 +60,7 @@ function action(mode, type, selection) {
 
             if (cm.isEventLeader()) {
                 if (status == 0) {
-                    if (eim.getProperty("stage1status") == null || eim.getProperty("stage1status").equals("waiting")) {
+                    if (eim.getProperty("stage1status") == null || eim.getProperty("stage1status") === "waiting") {
                         if (eim.getProperty("stage1phase") == null) {
                             stage = 1;
                             eim.setProperty("stage1phase", stage);
@@ -73,10 +73,10 @@ function action(mode, type, selection) {
                         } else {
                             cm.sendOk("I shall now present a more difficult puzzle for you. Good luck.");
                         }
-                    } else if (eim.getProperty("stage1status").equals("active")) {
+                    } else if (eim.getProperty("stage1status") === "active") {
                         stage = parseInt(eim.getProperty("stage1phase"));
 
-                        if (eim.getProperty("stage1combo").equals(eim.getProperty("stage1guess"))) {
+                        if (eim.getProperty("stage1combo") === eim.getProperty("stage1guess")) {
                             if (stage == 3) {
                                 cm.getPlayer().getMap().getReactorByName("statuegate").forceHitReactor(1);
                                 clearStage(1, eim);
@@ -128,7 +128,7 @@ function getReactors() {
     var iter = cm.getPlayer().getMap().getReactors().iterator();
     while (iter.hasNext()) {
         var mo = iter.next();
-        if (!mo.getName().equals("statuegate")) {
+        if (mo.getName() !== "statuegate") {
             reactors.push(mo.getObjectId());
         }
     }

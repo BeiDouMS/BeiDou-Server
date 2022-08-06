@@ -42,7 +42,7 @@ function action(mode, type, selection) {
                 break;
             case 925100100:
                 var emp = eim.getProperty("stage2");
-                if (emp.equals("0")) {
+                if (emp === "0") {
                     if (cm.haveItem(4001120, 20)) {
                         cm.sendNext("Excellent! Now hunt me 20 Rising Medals.");
                         cm.gainItem(4001120, -20);
@@ -51,7 +51,7 @@ function action(mode, type, selection) {
                     } else {
                         cm.sendNext("We are heading into the Pirate Ship now! To get in, we must qualify ourselves as noble pirates. Hunt me 20 Rookie Medals.");
                     }
-                } else if (emp.equals("1")) {
+                } else if (emp === "1") {
                     if (cm.haveItem(4001121, 20)) {
                         cm.sendNext("Excellent! Now hunt me 20 Veteran Medals.");
                         cm.gainItem(4001121, -20);
@@ -60,7 +60,7 @@ function action(mode, type, selection) {
                     } else {
                         cm.sendNext("We are heading into the Pirate Ship now! To get in, we must qualify ourselves as noble pirates. Hunt me 20 Rising Medals.");
                     }
-                } else if (emp.equals("2")) {
+                } else if (emp === "2") {
                     if (cm.haveItem(4001122, 20)) {
                         cm.sendNext("Excellent! Now let us go.");
                         cm.gainItem(4001122, -20);
@@ -95,7 +95,7 @@ function action(mode, type, selection) {
             case 925100301:
                 if (cm.getMap().getMonsters().size() == 0) {
                     cm.sendNext("The Lord Pirate's chest has appeared! If you happen to have a key, drop it by the chest to reveal it's treasures. That will certainly make him upset.");
-                    if (eim.getProperty("stage3a").equals("0")) {
+                    if (eim.getProperty("stage3a") === "0") {
                         cm.getMap().setReactorState();
                         eim.setProperty("stage3a", "1");
                     }

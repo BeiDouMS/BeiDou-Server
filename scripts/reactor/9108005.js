@@ -6,7 +6,7 @@ function act() {
         var newStage = stage.toString();
         eim.setProperty("stage", newStage);
         react.forceHitReactor(react.getState() + 1);
-        if (eim.getProperty("stage").equals("6")) {
+        if (eim.getProperty("stage") === "6") {
             rm.mapMessage(6, "Protect the Moon Bunny!!!");
             var map = eim.getMapInstance(rm.getReactor().getMap().getId());
             map.allowSummonState(true);
