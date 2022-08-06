@@ -47,8 +47,7 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path) {
-        path = "scripts/" + path;
-        Path scriptFile = Paths.get(path);
+        Path scriptFile = Paths.get("scripts").resolve(path);
         if (!Files.exists(scriptFile)) {
             return null;
         }
