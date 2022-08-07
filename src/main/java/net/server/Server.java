@@ -1934,13 +1934,7 @@ public class Server {
             new Thread(() -> System.exit(0)).start();
         } else {
             log.info("Restarting the server...");
-            try {
-                instance.finalize();//FUU I CAN AND IT'S FREE
-            } catch (Throwable ex) {
-                ex.printStackTrace();
-            }
             instance = null;
-            System.gc();
             getInstance().init();//DID I DO EVERYTHING?! D:
         }
     }
