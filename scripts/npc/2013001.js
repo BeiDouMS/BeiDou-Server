@@ -158,7 +158,7 @@ function action(mode, type, selection) {
                     } else {
                         var num_correct = 0;
                         for (var i = 0; i < 3; i++) {
-                            if (eim.getProperty("stage4_" + i).equals("" + players[i])) {
+                            if (eim.getProperty("stage4_" + i) === ("" + players[i])) {
                                 num_correct++;
                             }
                         }

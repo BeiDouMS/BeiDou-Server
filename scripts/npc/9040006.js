@@ -26,7 +26,7 @@ function start() {
     } else {
         if (cm.isEventLeader()) {
             var currentCombo = eim.getProperty("stage3combo");
-            if (currentCombo == null || currentCombo.equals("reset")) {
+            if (currentCombo == null || currentCombo === "reset") {
                 var newCombo = makeCombo();
                 eim.setProperty("stage3combo", newCombo);
                 //cm.playerMessage("Debug: " + newCombo);
