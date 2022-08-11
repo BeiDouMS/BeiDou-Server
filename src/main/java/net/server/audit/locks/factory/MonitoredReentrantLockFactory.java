@@ -26,10 +26,6 @@ import net.server.audit.locks.active.TrackerReentrantLock;
  * @author RonanLana
  */
 public class MonitoredReentrantLockFactory {
-    public static TrackerReentrantLock createLock(MonitoredLockType id) {
-        return new TrackerReentrantLock(id);
-    }
-
     public static TrackerReentrantLock createLock(MonitoredLockType id, boolean fair) {
         return new TrackerReentrantLock(id, fair);
     }

@@ -66,6 +66,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Monster extends AbstractLoadedLife {
     private static final Logger log = LoggerFactory.getLogger(Monster.class);
@@ -98,11 +100,11 @@ public class Monster extends AbstractLoadedLife {
     private Runnable removeAfterAction = null;
     private boolean availablePuppetUpdate = true;
 
-    private MonitoredReentrantLock externalLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB_EXT);
+    private final Lock externalLock = new ReentrantLock();
     private MonitoredReentrantLock monsterLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB, true);
-    private MonitoredReentrantLock statiLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB_STATI);
-    private MonitoredReentrantLock animationLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB_ANI);
-    private final MonitoredReentrantLock aggroUpdateLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB_AGGRO);
+    private final Lock statiLock = new ReentrantLock();
+    private final Lock animationLock = new ReentrantLock();
+    private final Lock aggroUpdateLock = new ReentrantLock();
 
     public Monster(int id, MonsterStats stats) {
         super(id);
@@ -2203,9 +2205,6 @@ public class Monster extends AbstractLoadedLife {
     }
 
     private void emptyLocks() {
-        externalLock = externalLock.dispose();
         monsterLock = monsterLock.dispose();
-        statiLock = statiLock.dispose();
-        animationLock = animationLock.dispose();
     }
 }
