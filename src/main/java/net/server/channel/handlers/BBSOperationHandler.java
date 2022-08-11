@@ -318,9 +318,6 @@ public final class BBSOperationHandler extends AbstractPacketHandler {
                     }
                     client.sendPacket(GuildPackets.showThread(bIsThreadIdLocal ? threadid : threadRS.getInt("localthreadid"), threadRS, repliesRS));
                 }
-                /* repliesRS.close(); 
-                 * Don't need because ResultSet will be closed
-                 * when associated Statement close*/
             }
         } catch (SQLException se) {
             log.error("Error displaying thread", se);

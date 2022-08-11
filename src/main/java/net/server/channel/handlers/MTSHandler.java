@@ -359,7 +359,6 @@ public final class MTSHandler extends AbstractPacketHandler {
                             c.sendPacket(PacketCreator.MTSConfirmTransfer(i.getQuantity(), i.getPosition()));
                             c.sendPacket(PacketCreator.transferInventory(getTransfer(c.getPlayer().getId())));
                         }
-                        // rs.close(); Closing statement will also close related resultset
                     }
                 } catch (SQLException e) {
                     log.error("MTS Transfer error", e);
