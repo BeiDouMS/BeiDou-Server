@@ -20,7 +20,6 @@
 package net.server.services.task.channel;
 
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -65,8 +64,6 @@ public class MobAnimationService extends BaseService {
         private final Lock animationLock = new ReentrantLock(true);
 
         public MobAnimationScheduler() {
-            super(MonitoredLockType.CHANNEL_MOBACTION);
-
             super.addListener((toRemove, update) -> {
                 animationLock.lock();
                 try {

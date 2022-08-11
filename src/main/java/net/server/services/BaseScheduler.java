@@ -21,8 +21,6 @@ package net.server.services;
 
 import config.YamlConfig;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
 import server.TimerManager;
 import tools.Pair;
 
@@ -38,18 +36,18 @@ import java.util.concurrent.locks.ReentrantLock;
 public abstract class BaseScheduler {
     private int idleProcs = 0;
     private final List<SchedulerListener> listeners = new LinkedList<>();
-    private final List<MonitoredReentrantLock> externalLocks = new LinkedList<>();
+    private final List<Lock> externalLocks = new LinkedList<>();
     private final Map<Object, Pair<Runnable, Long>> registeredEntries = new HashMap<>();
 
     private ScheduledFuture<?> schedulerTask = null;
     private final Lock schedulerLock = new ReentrantLock(true);
     private final Runnable monitorTask = () -> runBaseSchedule();
 
-    protected BaseScheduler(MonitoredLockType lockType) {
+    protected BaseScheduler() {
     }
 
     // NOTE: practice EXTREME caution when adding external locks to the scheduler system, if you don't know what you're doing DON'T USE THIS.
-    protected BaseScheduler(MonitoredLockType lockType, List<MonitoredReentrantLock> extLocks) {
+    protected BaseScheduler(List<Lock> extLocks) {
         externalLocks.addAll(extLocks);
     }
 
@@ -58,22 +56,12 @@ public abstract class BaseScheduler {
     }
 
     private void lockScheduler() {
-        if (!externalLocks.isEmpty()) {
-            for (MonitoredReentrantLock l : externalLocks) {
-                l.lock();
-            }
-        }
-
+        externalLocks.forEach(Lock::lock);
         schedulerLock.lock();
     }
 
     private void unlockScheduler() {
-        if (!externalLocks.isEmpty()) {
-            for (MonitoredReentrantLock l : externalLocks) {
-                l.unlock();
-            }
-        }
-
+        externalLocks.forEach(Lock::unlock);
         schedulerLock.unlock();
     }
 

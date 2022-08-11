@@ -21,7 +21,6 @@ package net.server.services.task.channel;
 
 import client.status.MonsterStatusEffect;
 import config.YamlConfig;
-import net.server.audit.locks.MonitoredLockType;
 import net.server.services.BaseScheduler;
 import net.server.services.BaseService;
 
@@ -93,8 +92,6 @@ public class MobStatusService extends BaseService {
         }
 
         public MobStatusScheduler() {
-            super(MonitoredLockType.CHANNEL_MOBSTATUS);
-
             super.addListener((toRemove, update) -> {
                 List<Runnable> toRun = new ArrayList<>();
 

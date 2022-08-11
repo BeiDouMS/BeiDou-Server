@@ -37,7 +37,6 @@ import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
 import net.netty.LoginServer;
 import net.packet.Packet;
-import net.server.audit.ThreadTracker;
 import net.server.channel.Channel;
 import net.server.coordinator.session.IpAddresses;
 import net.server.coordinator.session.SessionCoordinator;
@@ -869,10 +868,6 @@ public class Server {
         ThreadManager.getInstance().start();
         initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
 
-        if (YamlConfig.config.server.USE_THREAD_TRACKER) {
-            ThreadTracker.getInstance().registerThreadTrackerTask();
-        }
-
         try {
             int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
 
@@ -945,7 +940,6 @@ public class Server {
 
         long timeLeft = getTimeLeftForNextHour();
         tMan.register(new CharacterDiseaseTask(), YamlConfig.config.server.UPDATE_INTERVAL, YamlConfig.config.server.UPDATE_INTERVAL);
-        tMan.register(new ReleaseLockTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
         tMan.register(new CouponTask(), YamlConfig.config.server.COUPON_INTERVAL, timeLeft);
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), YamlConfig.config.server.RANKING_INTERVAL, timeLeft);
@@ -1907,10 +1901,6 @@ public class Server {
         }*/
 
         List<Channel> allChannels = getAllChannels();
-
-        if (YamlConfig.config.server.USE_THREAD_TRACKER) {
-            ThreadTracker.getInstance().cancelThreadTrackerTask();
-        }
 
         for (Channel ch : allChannels) {
             while (!ch.finishedShutdown()) {
