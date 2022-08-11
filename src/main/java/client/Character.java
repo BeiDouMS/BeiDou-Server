@@ -7405,11 +7405,7 @@ public class Character extends AbstractCharacterObject {
                 
                 ret.buddylist.loadFromDb(charid);
                 ret.storage = wserv.getAccountStorage(ret.accountid);
-                /*
-                 * Bugs when player first time into server
-                 * The storage won't exist so nothing to load
-                 * and must wait until next login
-                 */
+
                 if(ret.storage == null) {
                     wserv.loadAccountStorage(ret.accountid);
                     ret.storage = wserv.getAccountStorage(ret.accountid);
