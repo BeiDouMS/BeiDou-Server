@@ -7402,10 +7402,18 @@ public class Character extends AbstractCharacterObject {
                         }
                     }
                 }
-
+                
                 ret.buddylist.loadFromDb(charid);
                 ret.storage = wserv.getAccountStorage(ret.accountid);
 
+                /* Double-check storage incase player is first time on server
+                 * The storage won't exist so nothing to load
+                 */
+                if(ret.storage == null) {
+                    wserv.loadAccountStorage(ret.accountid);
+                    ret.storage = wserv.getAccountStorage(ret.accountid);
+                }
+                
                 int startHp = ret.hp, startMp = ret.mp;
                 ret.reapplyLocalStats();
                 ret.changeHpMp(startHp, startMp, true);
@@ -8296,7 +8304,7 @@ public class Character extends AbstractCharacterObject {
                         ps.executeBatch();
                     }
                 }
-
+                
                 con.commit();
                 return true;
             } catch (Exception e) {
