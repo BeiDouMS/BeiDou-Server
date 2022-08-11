@@ -8304,16 +8304,7 @@ public class Character extends AbstractCharacterObject {
                         ps.executeBatch();
                     }
                 }
-
-                /*
-                 * Bugs when player first time into server
-                 * The storage won't get initialize
-                 * and must wait until next login
-                 */
-                if (getStorage() == null) {
-                    Server.getInstance().getWorld(world).loadAccountStorage(accountid);
-                }
-
+                
                 con.commit();
                 return true;
             } catch (Exception e) {
