@@ -26,8 +26,6 @@ import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import provider.Data;
 import provider.DataProvider;
 import provider.DataProviderFactory;
@@ -42,6 +40,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
@@ -261,7 +260,7 @@ public class CashShop {
     private final List<Item> inventory = new ArrayList<>();
     private final List<Integer> wishList = new ArrayList<>();
     private int notes = 0;
-    private final Lock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CASHSHOP);
+    private final Lock lock = new ReentrantLock();
 
     public CashShop(int accountId, int characterId, int jobType) throws SQLException {
         this.accountId = accountId;
