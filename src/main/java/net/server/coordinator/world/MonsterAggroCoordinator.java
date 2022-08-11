@@ -22,9 +22,6 @@ package net.server.coordinator.world;
 import client.Character;
 import config.YamlConfig;
 import net.server.Server;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
 import server.life.Monster;
 import server.maps.MapleMap;
@@ -41,7 +38,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class MonsterAggroCoordinator {
     private final Lock lock = new ReentrantLock();
-    private final MonitoredReentrantLock idleLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MAP_AGGRO_IDLE, true);
+    private final Lock idleLock = new ReentrantLock(true);
     private long lastStopTime = Server.getInstance().getCurrentTime();
 
     private ScheduledFuture<?> aggroMonitor = null;

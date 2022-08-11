@@ -29,10 +29,6 @@ import config.YamlConfig;
 import constants.id.MobId;
 import constants.skills.*;
 import net.packet.Packet;
-import net.server.audit.LockCollector;
-import net.server.audit.locks.MonitoredLockType;
-import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.world.MonsterAggroCoordinator;
 import net.server.services.task.channel.MobAnimationService;
@@ -101,7 +97,7 @@ public class Monster extends AbstractLoadedLife {
     private boolean availablePuppetUpdate = true;
 
     private final Lock externalLock = new ReentrantLock();
-    private MonitoredReentrantLock monsterLock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.MOB, true);
+    private final Lock monsterLock = new ReentrantLock(true);
     private final Lock statiLock = new ReentrantLock();
     private final Lock animationLock = new ReentrantLock();
     private final Lock aggroUpdateLock = new ReentrantLock();
@@ -2197,14 +2193,5 @@ public class Monster extends AbstractLoadedLife {
         }
 
         this.getMap().dismissRemoveAfter(this);
-        disposeLocks();
-    }
-
-    private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        monsterLock = monsterLock.dispose();
     }
 }

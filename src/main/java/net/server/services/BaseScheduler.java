@@ -21,16 +21,16 @@ package net.server.services;
 
 import config.YamlConfig;
 import net.server.Server;
-import net.server.audit.LockCollector;
 import net.server.audit.locks.MonitoredLockType;
 import net.server.audit.locks.MonitoredReentrantLock;
-import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import server.TimerManager;
 import tools.Pair;
 
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @author Ronan
@@ -42,17 +42,14 @@ public abstract class BaseScheduler {
     private final Map<Object, Pair<Runnable, Long>> registeredEntries = new HashMap<>();
 
     private ScheduledFuture<?> schedulerTask = null;
-    private MonitoredReentrantLock schedulerLock;
+    private final Lock schedulerLock = new ReentrantLock(true);
     private final Runnable monitorTask = () -> runBaseSchedule();
 
     protected BaseScheduler(MonitoredLockType lockType) {
-        schedulerLock = MonitoredReentrantLockFactory.createLock(lockType, true);
     }
 
     // NOTE: practice EXTREME caution when adding external locks to the scheduler system, if you don't know what you're doing DON'T USE THIS.
     protected BaseScheduler(MonitoredLockType lockType, List<MonitoredReentrantLock> extLocks) {
-        schedulerLock = MonitoredReentrantLockFactory.createLock(lockType, true);
-
         externalLocks.addAll(extLocks);
     }
 
@@ -184,15 +181,5 @@ public abstract class BaseScheduler {
             unlockScheduler();
             externalLocks.clear();
         }
-
-        disposeLocks();
-    }
-
-    private void disposeLocks() {
-        LockCollector.getInstance().registerDisposeAction(() -> emptyLocks());
-    }
-
-    private void emptyLocks() {
-        schedulerLock = schedulerLock.dispose();
     }
 }

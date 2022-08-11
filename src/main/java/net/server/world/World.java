@@ -2103,10 +2103,6 @@ public class World {
             partyLock.unlock();
         }
 
-        for (Party p : pList) {
-            p.disposeLocks();
-        }
-
         closeWorldServices();
     }
 
