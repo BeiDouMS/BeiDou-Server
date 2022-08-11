@@ -52,9 +52,7 @@ import net.server.guild.Alliance;
 import net.server.guild.Guild;
 import net.server.guild.GuildCharacter;
 import net.server.guild.GuildPackets;
-import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.world.CharacterSaveService;
-import net.server.services.type.ChannelServices;
 import net.server.services.type.WorldServices;
 import net.server.world.*;
 import org.slf4j.Logger;
@@ -2754,11 +2752,10 @@ public class Character extends AbstractCharacterObject {
 
     public void changeFaceExpression(int emote) {
         long timeNow = Server.getInstance().getCurrentTime();
-        if (timeNow - lastExpression > 2000) {
+        // Client allows changing every 2 seconds. Give it a little bit of overhead for packet delays.
+        if (timeNow - lastExpression > 1500) {
             lastExpression = timeNow;
-
-            FaceExpressionService service = (FaceExpressionService) client.getChannelServer().getServiceAccess(ChannelServices.FACE_EXPRESSION);
-            service.registerFaceExpression(map, this, emote);
+            getMap().broadcastMessage(this, PacketCreator.facialExpression(this, emote), false);
         }
     }
 

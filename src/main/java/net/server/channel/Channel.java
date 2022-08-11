@@ -109,9 +109,6 @@ public final class Channel {
     private final MonitoredReentrantReadWriteLock merchantLock = new MonitoredReentrantReadWriteLock(MonitoredLockType.MERCHANT, true);
     private final MonitoredReadLock merchRlock = MonitoredReadLockFactory.createLock(merchantLock);
     private final MonitoredWriteLock merchWlock = MonitoredWriteLockFactory.createLock(merchantLock);
-
-    private final MonitoredReentrantLock[] faceLock = new MonitoredReentrantLock[YamlConfig.config.server.CHANNEL_LOCKS];
-
     private MonitoredReentrantLock lock = MonitoredReentrantLockFactory.createLock(MonitoredLockType.CHANNEL, true);
 
     public Channel(final int world, final int channel, long startTime) {
@@ -224,10 +221,6 @@ public final class Channel {
     }
 
     private void emptyLocks() {
-        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
-            faceLock[i] = faceLock[i].dispose();
-        }
-
         lock = lock.dispose();
     }
 

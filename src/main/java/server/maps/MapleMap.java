@@ -47,7 +47,6 @@ import net.server.audit.locks.factory.MonitoredReentrantLockFactory;
 import net.server.audit.locks.factory.MonitoredWriteLockFactory;
 import net.server.channel.Channel;
 import net.server.coordinator.world.MonsterAggroCoordinator;
-import net.server.services.task.channel.FaceExpressionService;
 import net.server.services.task.channel.MobMistService;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
@@ -2677,9 +2676,6 @@ public class MapleMap {
 
     public void removePlayer(Character chr) {
         Channel cserv = chr.getClient().getChannelServer();
-
-        FaceExpressionService service = (FaceExpressionService) this.getChannelServer().getServiceAccess(ChannelServices.FACE_EXPRESSION);
-        service.unregisterFaceExpression(mapid, chr);
         chr.unregisterChairBuff();
 
         Party party = chr.getParty();
