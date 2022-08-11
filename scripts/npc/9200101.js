@@ -79,12 +79,12 @@ function selectedRegularCoupon() {
 }
 
 function selectedVipCoupon() {
-    if (cm.getPlayer().getGender() == 0) {
+    if (cm.getPlayer().isMale()) {
         var current = cm.getPlayer().getFace() % 100 + 20000;
-    }
-    if (cm.getPlayer().getGender() == 1) {
+    } else {
         var current = cm.getPlayer().getFace() % 100 + 21000;
     }
+
     colors = Array();
     pushIfItemsExists(colors, [current + 100, current + 300, current + 400, current + 700]);
     cm.sendStyle("With our new computer program, you can see yourself after the treatment in advance. What kind of lens would you like to wear? Please choose the style of your liking.", colors);
@@ -101,10 +101,9 @@ function pushIfItemsExists(array, itemidList) {
 }
 
 function selectedOneTimeCoupon() {
-    if (cm.getPlayer().getGender() == 0) {
+    if (cm.getPlayer().isMale()) {
         var current = cm.getPlayer().getFace() % 100 + 20000;
-    }
-    if (cm.getPlayer().getGender() == 1) {
+    } else {
         var current = cm.getPlayer().getFace() % 100 + 21000;
     }
 
@@ -132,8 +131,9 @@ function pushIfItemExists(array, itemid) {
 }
 
 function acceptedRegularCoupon() {
-    if (cm.haveItem(5152011)) {
-        cm.gainItem(5152011, -1);
+    const regularCouponItemId = 5152011
+    if (cm.haveItem(regularCouponItemId)) {
+        cm.gainItem(regularCouponItemId, -1);
         cm.setFace(colors[Math.floor(Math.random() * colors.length)]);
         cm.sendOk("Enjoy your new and improved cosmetic lenses!");
     } else {
@@ -142,9 +142,11 @@ function acceptedRegularCoupon() {
 }
 
 function selectedVipStyle(selection) {
-    if (cm.haveItem(5152014)) {
-        cm.gainItem(5152014, -1);
-        cm.setFace(colors[selection]);
+    const vipCouponItemId = 5152014
+    if (cm.haveItem(vipCouponItemId)) {
+        cm.gainItem(vipCouponItemId, -1);
+        const selectedFace = colors[selection]
+        cm.setFace(selectedFace);
         cm.sendOk("Enjoy your new and improved cosmetic lenses!");
     } else {
         sendLackingCoupon()
@@ -152,11 +154,13 @@ function selectedVipStyle(selection) {
 }
 
 function selectedOneTimeStyle(selection) {
-    var color = (colors[selection] / 100) % 100 | 0;
+    const selectedFace = colors[selection]
+    const color = Math.floor(selectedFace / 100) % 10;
 
-    if (cm.haveItem(5152100 + color)) {
-        cm.gainItem(5152100 + color, -1);
-        cm.setFace(colors[selection]);
+    const oneTimeCouponItemId = 5152100 + color
+    if (cm.haveItem(oneTimeCouponItemId)) {
+        cm.gainItem(oneTimeCouponItemId, -1);
+        cm.setFace(selectedFace);
         cm.sendOk("Enjoy your new and improved cosmetic lenses!");
     } else {
         sendLackingCoupon()
