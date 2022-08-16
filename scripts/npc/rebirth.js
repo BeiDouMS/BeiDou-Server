@@ -24,6 +24,7 @@
     @author wejrox
 */
 var status;
+var jobId = 0;
 
 function start() {
     status = -1;
@@ -49,18 +50,29 @@ function action(mode, type, selection) {
         cm.sendSimple("What do you want me to do today: \r\n \r\n #L0##bI want to be reborn!#l \r\n #L1##bNothing for now...#k#l");
     } else if (status === 2) {
         if (selection === 0) {
-            if (cm.getChar().getLevel() === 200) {
-                cm.sendYesNo("Are you sure you want to be reborn?");
+            if (cm.getChar().getLevel() === cm.getChar().getMaxClassLevel()) {
+                cm.sendSimple("I see... and which path would you like to take? \r\n\r\n #L0##bExplorer (Beginner)#l \r\n #L1##bCygnus Knight (Noblesse)#l \r\n #L2##bAran (Legend)#l");
             } else {
-                cm.sendOk("You are not level 200, please come back when you hit level 200.");
+                cm.sendOk("It looks like your journey has not yet ended... come back when you're level " + cm.getChar().getMaxClassLevel());
                 cm.dispose();
             }
         } else if (selection === 1) {
             cm.sendOk("See you soon!")
             cm.dispose();
         }
-    } else if (status === 3 && type === 1) {
-        cm.getChar().executeReborn();
+    } else if (status === 3) {
+        // 0 => beginner, 1000 => noblesse, 2000 => legend
+        // makes this very easy :-)
+        jobId = selection * 1000;
+
+        var job = "";
+        if (selection === 0) job = "Beginner";
+        else if (selection === 1) job = "Noblesse";
+        else if (selection === 2) job = "Legend";
+        cm.sendYesNo("Are you sure you want to be reborn as a " + job + "?");
+    }
+    else if (status === 4 && type === 1) {
+        cm.getChar().executeRebornAsId(jobId);
         cm.sendOk("You have now been reborn. That's a total of #r" + cm.getChar().getReborns() + "#k rebirths");
         cm.dispose();
     }

@@ -11137,15 +11137,25 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void executeReborn() {
+        // default to beginner: job id = 0
+        // this prevents a breaking change
+        executeRebornAs(Job.BEGINNER);
+    }
+
+    public void executeRebornAsId(int jobId) {
+        executeRebornAs(Job.getById(jobId));
+    }
+
+    public void executeRebornAs(Job job) {
         if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
             yellowMessage("Rebirth system is not enabled!");
             throw new NotEnabledException();
         }
-        if (getLevel() != 200) {
+        if (getLevel() != getMaxClassLevel()) {
             return;
         }
         addReborns();
-        changeJob(Job.BEGINNER);
+        changeJob(job);
         setLevel(0);
         levelUp(true);
     }
