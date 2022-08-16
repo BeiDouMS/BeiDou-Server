@@ -11151,7 +11151,7 @@ public class Character extends AbstractCharacterObject {
             yellowMessage("Rebirth system is not enabled!");
             throw new NotEnabledException();
         }
-        if (getLevel() != 200) {
+        if (getLevel() != getMaxClassLevel()) {
             return;
         }
         addReborns();
