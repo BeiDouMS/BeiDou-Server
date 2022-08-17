@@ -58,8 +58,8 @@ public class MinTamenessRequirement extends AbstractQuestRequirement {
                 continue;
             }
 
-            if (pet.getCloseness() > curCloseness) {
-                curCloseness = pet.getCloseness();
+            if (pet.getTameness() > curCloseness) {
+                curCloseness = pet.getTameness();
             }
         }
 

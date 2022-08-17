@@ -588,7 +588,7 @@ public class AbstractPlayerInteraction {
                     evolved.setSummoned(true);
 
                     evolved.setName(from.getName().compareTo(ItemInformationProvider.getInstance().getName(from.getItemId())) != 0 ? from.getName() : ItemInformationProvider.getInstance().getName(id));
-                    evolved.setCloseness(from.getCloseness());
+                    evolved.setTameness(from.getTameness());
                     evolved.setFullness(from.getFullness());
                     evolved.setLevel(from.getLevel());
                     evolved.setExpiration(System.currentTimeMillis() + expires);

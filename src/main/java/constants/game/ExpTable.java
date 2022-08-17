@@ -31,7 +31,7 @@ public final class ExpTable {
         return level > 200 ? 2000000000 : exp[level];
     }
 
-    public static int getClosenessNeededForLevel(int level) {
+    public static int getTamenessNeededForLevel(int level) {
         return pet[level];
     }
 
