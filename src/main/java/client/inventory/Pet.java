@@ -185,11 +185,16 @@ public class Pet extends Item {
     }
 
     public void gainClosenessFullness(Character owner, int incTameness, int incFullness, int type) {
+        gainClosenessFullness(owner, incTameness, incFullness, type, false);
+    }
+
+    public void gainClosenessFullness(Character owner, int incTameness, int incFullness, int type, boolean forceEnjoy) {
         byte slot = owner.getPetIndex(this);
         boolean enjoyed;
 
         //will NOT increase pet's closeness if tried to feed pet with 100% fullness
-        if (fullness < 100 || incFullness == 0) {   //incFullness == 0: command given
+        // unless forceEnjoy == true (cash shop)
+        if (fullness < 100 || incFullness == 0 || forceEnjoy) {   //incFullness == 0: command given
             int newFullness = fullness + incFullness;
             if (newFullness > 100) {
                 newFullness = 100;
