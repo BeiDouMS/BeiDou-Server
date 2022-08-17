@@ -43,7 +43,7 @@ function end(mode, type, selection) {
         if (status == 0) {
             if (isPillUsed(qm.getPlayer())) {
                 if (qm.canHoldAll([2050004, 2022224], [10, 20])) {
-                    qm.sendNext("You did took my experiments. Hmm, so THAT is the result of it, hehehehe... Ok, take that as compensation will you? And oh, you can #rspew that#k right away (#bright-click on the pill icon at the top-right corner of the screen#k), no worries.");
+                    qm.sendNext("You did take my experiments. Hmm, so THAT is the result of it, hehehehe... Ok, take that as compensation will you? And oh, you can #rspew that#k right away (#bright-click on the pill icon at the top-right corner of the screen#k), no worries.");
 
                     qm.gainExp(12500);
                     qm.gainItem(2050004, 10);
