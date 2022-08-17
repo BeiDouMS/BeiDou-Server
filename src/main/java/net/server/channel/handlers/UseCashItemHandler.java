@@ -419,7 +419,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     Pair<Integer, Boolean> pair = pet.canConsume(itemId);
 
                     if (pair.getRight()) {
-                        pet.gainClosenessFullness(player, pair.getLeft(), 100, 1);
+                        pet.gainClosenessFullness(player, pair.getLeft(), 100, 1, true);
                         remove(c, position, itemId);
                         break;
                     }
