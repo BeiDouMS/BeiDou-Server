@@ -41,15 +41,10 @@ function action(mode, type, selection) {
 
         if (status == 0) {
             if (cm.isQuestStarted(3311)) {
-                var progress = cm.getQuestProgressInt(3311);
-
-                if (progress == 4) {
-                    progress = 7;
-                } else {
-                    progress = 5;
-                }
-
-                cm.setQuestProgress(3311, progress);
+                // For some reason this quest has to go 4 -> 7 -> 5?
+                // Let's bypass this to avoid having to double-click the NPC
+                cm.setQuestProgress(3311, 7);
+                cm.setQuestProgress(3311, 5);
 
                 cm.sendOk("The diary of Dr. De Lang. A lot of formulas and pompous scientific texts can be found all way through the pages, but it is worth noting that in the last entry (3 weeks ago), it is written that he concluded the researches on an improvement on the blueprints for the Neo Huroids, thus making the last preparations to show it to the 'society'... No words after this...", 2);
             } else if (cm.isQuestStarted(3322) && !cm.haveItem(4031697, 1)) {
