@@ -382,13 +382,13 @@ public class PacketCreator {
             Pet pet = item.getPet();
             p.writeFixedString(StringUtil.getRightPaddedStr(pet.getName(), '\0', 13));
             p.writeByte(pet.getLevel());
-            p.writeShort(pet.getCloseness());
+            p.writeShort(pet.getTameness());
             p.writeByte(pet.getFullness());
             addExpirationTime(p, item.getExpiration());
-            p.writeInt(pet.getPetFlag());  /* pet flags noticed by lrenex & Spoon */
-
-            p.writeBytes(new byte[]{(byte) 0x50, (byte) 0x46}); //wonder what this is
-            p.writeInt(0);
+            p.writeShort(pet.getPetAttribute()); // PetAttribute noticed by lrenex & Spoon
+            p.writeShort(0); // PetSkill
+            p.writeInt(18000); // RemainLife
+            p.writeShort(0); // attribute
             return;
         }
         if (equip == null) {
@@ -2705,7 +2705,7 @@ public class PacketCreator {
                 p.writeInt(pets[i].getItemId()); // petid
                 p.writeString(pets[i].getName());
                 p.writeByte(pets[i].getLevel()); // pet level
-                p.writeShort(pets[i].getCloseness()); // pet closeness
+                p.writeShort(pets[i].getTameness()); // pet closeness
                 p.writeByte(pets[i].getFullness()); // pet fullness
                 p.writeShort(0);
                 p.writeInt(inv != null ? inv.getItemId() : 0);

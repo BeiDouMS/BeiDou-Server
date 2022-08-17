@@ -45,21 +45,21 @@ import java.util.List;
 public class Pet extends Item {
     private String name;
     private int uniqueid;
-    private int closeness = 0;
+    private int tameness = 0;
     private byte level = 1;
     private int fullness = 100;
     private int Fh;
     private Point pos;
     private int stance;
     private boolean summoned;
-    private int petFlag = 0;
+    private int petAttribute = 0;
 
-    public enum PetFlag {
+    public enum PetAttribute {
         OWNER_SPEED(0x01);
 
         private final int i;
 
-        PetFlag(int i) {
+        PetAttribute(int i) {
             this.i = i;
         }
 
@@ -83,11 +83,11 @@ public class Pet extends Item {
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
                 ret.setName(rs.getString("name"));
-                ret.setCloseness(Math.min(rs.getInt("closeness"), 30000));
+                ret.setTameness(Math.min(rs.getInt("closeness"), 30000));
                 ret.setLevel((byte) Math.min(rs.getByte("level"), 30));
                 ret.setFullness(Math.min(rs.getInt("fullness"), 100));
                 ret.setSummoned(rs.getInt("summoned") == 1);
-                ret.setPetFlag(rs.getInt("flag"));
+                ret.setPetAttribute(rs.getInt("flag"));
             }
             return ret;
         } catch (SQLException e) {
@@ -114,10 +114,10 @@ public class Pet extends Item {
              PreparedStatement ps = con.prepareStatement("UPDATE pets SET name = ?, level = ?, closeness = ?, fullness = ?, summoned = ?, flag = ? WHERE petid = ?")) {
             ps.setString(1, getName());
             ps.setInt(2, getLevel());
-            ps.setInt(3, getCloseness());
+            ps.setInt(3, getTameness());
             ps.setInt(4, getFullness());
             ps.setInt(5, isSummoned() ? 1 : 0);
-            ps.setInt(6, getPetFlag());
+            ps.setInt(6, getPetAttribute());
             ps.setInt(7, getUniqueId());
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -139,14 +139,14 @@ public class Pet extends Item {
         }
     }
 
-    public static int createPet(int itemid, byte level, int closeness, int fullness) {
+    public static int createPet(int itemid, byte level, int tameness, int fullness) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO pets (petid, name, level, closeness, fullness, summoned, flag) VALUES (?, ?, ?, ?, ?, 0, 0)")) {
             int ret = CashIdGenerator.generateCashId();
             ps.setInt(1, ret);
             ps.setString(2, ItemInformationProvider.getInstance().getName(itemid));
             ps.setByte(3, level);
-            ps.setInt(4, closeness);
+            ps.setInt(4, tameness);
             ps.setInt(5, fullness);
             ps.executeUpdate();
             return ret;
@@ -172,19 +172,19 @@ public class Pet extends Item {
         this.uniqueid = id;
     }
 
-    public int getCloseness() {
-        return closeness;
+    public int getTameness() {
+        return tameness;
     }
 
-    public void setCloseness(int closeness) {
-        this.closeness = closeness;
+    public void setTameness(int tameness) {
+        this.tameness = tameness;
     }
 
     public byte getLevel() {
         return level;
     }
 
-    public void gainClosenessFullness(Character owner, int incCloseness, int incFullness, int type) {
+    public void gainClosenessFullness(Character owner, int incTameness, int incFullness, int type) {
         byte slot = owner.getPetIndex(this);
         boolean enjoyed;
 
@@ -196,14 +196,14 @@ public class Pet extends Item {
             }
             fullness = newFullness;
 
-            if (incCloseness > 0 && closeness < 30000) {
-                int newCloseness = closeness + incCloseness;
-                if (newCloseness > 30000) {
-                    newCloseness = 30000;
+            if (incTameness > 0 && tameness < 30000) {
+                int newTameness = tameness + incTameness;
+                if (newTameness > 30000) {
+                    newTameness = 30000;
                 }
 
-                closeness = newCloseness;
-                while (newCloseness >= ExpTable.getClosenessNeededForLevel(level)) {
+                tameness = newTameness;
+                while (newTameness >= ExpTable.getTamenessNeededForLevel(level)) {
                     level += 1;
                     owner.sendPacket(PacketCreator.showOwnPetLevelUp(slot));
                     owner.getMap().broadcastMessage(PacketCreator.showPetLevelUp(owner, slot));
@@ -212,13 +212,13 @@ public class Pet extends Item {
 
             enjoyed = true;
         } else {
-            int newCloseness = closeness - 1;
-            if (newCloseness < 0) {
-                newCloseness = 0;
+            int newTameness = tameness - 1;
+            if (newTameness < 0) {
+                newTameness = 0;
             }
 
-            closeness = newCloseness;
-            if (level > 1 && newCloseness < ExpTable.getClosenessNeededForLevel(level - 1)) {
+            tameness = newTameness;
+            if (level > 1 && newTameness < ExpTable.getTamenessNeededForLevel(level - 1)) {
                 level -= 1;
             }
 
@@ -278,16 +278,16 @@ public class Pet extends Item {
         this.summoned = yes;
     }
 
-    public int getPetFlag() {
-        return this.petFlag;
+    public int getPetAttribute() {
+        return this.petAttribute;
     }
 
-    private void setPetFlag(int flag) {
-        this.petFlag = flag;
+    private void setPetAttribute(int flag) {
+        this.petAttribute = flag;
     }
 
-    public void addPetFlag(Character owner, PetFlag flag) {
-        this.petFlag |= flag.getValue();
+    public void addPetAttribute(Character owner, PetAttribute flag) {
+        this.petAttribute |= flag.getValue();
         saveToDb();
 
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
@@ -296,8 +296,8 @@ public class Pet extends Item {
         }
     }
 
-    public void removePetFlag(Character owner, PetFlag flag) {
-        this.petFlag &= 0xFFFFFFFF ^ flag.getValue();
+    public void removePetAttribute(Character owner, PetAttribute flag) {
+        this.petAttribute &= 0xFFFFFFFF ^ flag.getValue();
         saveToDb();
 
         Item petz = owner.getInventory(InventoryType.CASH).getItem(getPosition());
