@@ -32,7 +32,7 @@ function enter(pi) {
         return doorCross(pi);
     } else if (pi.isQuestStarted(3360)) {
         var pw = pi.getQuestProgress(3360);
-        if (pw.length() > 1) {
+        if (pw.length > 1) {
             pi.openNpc(2111024, "MagatiaPassword");
             return false;
         } else {
