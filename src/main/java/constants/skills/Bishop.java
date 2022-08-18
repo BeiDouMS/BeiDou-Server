@@ -32,6 +32,7 @@ public class Bishop {
     public static final int INFINITY = 2321004;
     public static final int HOLY_SHIELD = 2321005;
     public static final int RESURRECTION = 2321006;
+    public static final int ANGEL_RAY = 2321007;
     public static final int GENESIS = 2321008;
     public static final int HEROS_WILL = 2321009;
 }
