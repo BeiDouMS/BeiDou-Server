@@ -27,6 +27,7 @@ package constants.skills;
 public class Bowmaster {
     public static final int MAPLE_WARRIOR = 3121000;
     public static final int SHARP_EYES = 3121002;
+    public static final int DRAGONS_BREATH = 3121003;
     public static final int HURRICANE = 3121004;
     public static final int BOW_EXPERT = 3120005;
     public static final int PHOENIX = 3121006;
