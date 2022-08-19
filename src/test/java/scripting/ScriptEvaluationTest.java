@@ -21,22 +21,34 @@ public class ScriptEvaluationTest {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
     }
 
-    public static List<String> npcScriptFiles() throws IOException {
-        Path npcScriptDirectory = Path.of("scripts", "npc");
-        try (Stream<Path> pathStream = Files.walk(npcScriptDirectory)) {
+    private static List<String> npcScriptFilePaths() throws IOException {
+        return getScriptFilePaths("npc");
+    }
+
+    private static List<String> eventScriptFilePaths() throws IOException {
+        return getScriptFilePaths("event");
+    }
+
+    private static List<String> getScriptFilePaths(final String scriptsSubdirectory) throws IOException {
+        Path scriptDirectory = Path.of("scripts", scriptsSubdirectory);
+        try (Stream<Path> pathStream = Files.walk(scriptDirectory)) {
             return pathStream
                     .filter(Files::isRegularFile)
-                    .map(ScriptEvaluationTest::mapToNpcScriptPath)
+                    .map(path -> "%s/%s".formatted(scriptsSubdirectory, path.getFileName().toString()))
                     .toList();
         }
     }
 
-    private static String mapToNpcScriptPath(Path path) {
-        return "npc/%s".formatted(path.getFileName().toString());
+    @ParameterizedTest
+    @MethodSource("eventScriptFilePaths")
+    void eventScriptShouldEvaluate(String eventScriptPath) {
+        ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(eventScriptPath);
+
+        assertNotNull(scriptEngine);
     }
 
     @ParameterizedTest
-    @MethodSource("npcScriptFiles")
+    @MethodSource("npcScriptFilePaths")
     void npcScriptShouldEvaluate(String npcScriptPath) {
         ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(npcScriptPath);
 
