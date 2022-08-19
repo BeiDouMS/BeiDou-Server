@@ -21,12 +21,16 @@ public class ScriptEvaluationTest {
         System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
     }
 
-    private static List<String> npcScriptFilePaths() throws IOException {
-        return getScriptFilePaths("npc");
-    }
-
     private static List<String> eventScriptFilePaths() throws IOException {
         return getScriptFilePaths("event");
+    }
+
+    private static List<String> itemScriptFilePaths() throws IOException {
+        return getScriptFilePaths("item");
+    }
+
+    private static List<String> npcScriptFilePaths() throws IOException {
+        return getScriptFilePaths("npc");
     }
 
     private static List<String> getScriptFilePaths(final String scriptsSubdirectory) throws IOException {
@@ -43,6 +47,14 @@ public class ScriptEvaluationTest {
     @MethodSource("eventScriptFilePaths")
     void eventScriptShouldEvaluate(String eventScriptPath) {
         ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(eventScriptPath);
+
+        assertNotNull(scriptEngine);
+    }
+
+    @ParameterizedTest
+    @MethodSource("itemScriptFilePaths")
+    void itemScriptShouldEvaluate(String itemScriptPath) {
+        ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(itemScriptPath);
 
         assertNotNull(scriptEngine);
     }
