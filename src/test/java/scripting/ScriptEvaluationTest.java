@@ -33,6 +33,10 @@ public class ScriptEvaluationTest {
         return getScriptFilePaths("npc");
     }
 
+    private static List<String> portalScriptFilePaths() throws IOException {
+        return getScriptFilePaths("portal");
+    }
+
     private static List<String> getScriptFilePaths(final String scriptsSubdirectory) throws IOException {
         Path scriptDirectory = Path.of("scripts", scriptsSubdirectory);
         try (Stream<Path> pathStream = Files.walk(scriptDirectory)) {
@@ -63,6 +67,14 @@ public class ScriptEvaluationTest {
     @MethodSource("npcScriptFilePaths")
     void npcScriptShouldEvaluate(String npcScriptPath) {
         ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(npcScriptPath);
+
+        assertNotNull(scriptEngine);
+    }
+
+    @ParameterizedTest
+    @MethodSource("portalScriptFilePaths")
+    void portalScriptShouldEvaluate(String portalScriptPath) {
+        ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(portalScriptPath);
 
         assertNotNull(scriptEngine);
     }
