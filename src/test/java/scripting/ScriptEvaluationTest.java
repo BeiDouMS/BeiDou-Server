@@ -41,6 +41,10 @@ public class ScriptEvaluationTest {
         return getScriptFilePaths("quest");
     }
 
+    private static List<String> reactorScriptFilePaths() throws IOException {
+        return getScriptFilePaths("reactor");
+    }
+
     private static List<String> getScriptFilePaths(final String scriptsSubdirectory) throws IOException {
         Path scriptDirectory = Path.of("scripts", scriptsSubdirectory);
         try (Stream<Path> pathStream = Files.walk(scriptDirectory)) {
@@ -87,6 +91,14 @@ public class ScriptEvaluationTest {
     @MethodSource("questScriptFilePaths")
     void questScriptShouldEvaluate(String questScriptPath) {
         ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(questScriptPath);
+
+        assertNotNull(scriptEngine);
+    }
+
+    @ParameterizedTest
+    @MethodSource("reactorScriptFilePaths")
+    void reactorScriptShouldEvaluate(String reactorScriptPath) {
+        ScriptEngine scriptEngine = scriptManager.getInvocableScriptEngine(reactorScriptPath);
 
         assertNotNull(scriptEngine);
     }
