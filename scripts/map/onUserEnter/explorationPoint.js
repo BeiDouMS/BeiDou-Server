@@ -31,7 +31,7 @@ function start(ms) {
         ms.explorerQuest(29014, "Sleepywood Explorer");//Sleepywood Explorer
     } else if (ms.getPlayer().getMapId() >= 200000000 && ms.getPlayer().getMapId() <= 211041800) {
         ms.explorerQuest(29006, "El Nath Mts. Explorer");//El Nath Mts. Explorer
-    } else if (ms.getPlayer().getMapId() >= 220000000 && ms.getPlayer().getMapId() <= 222010400) {
+    } else if (ms.getPlayer().getMapId() >= 220000000 && ms.getPlayer().getMapId() <= 222020000) {
         ms.explorerQuest(29007, "Ludus Lake Explorer");//Ludus Lake Explorer
     } else if (ms.getPlayer().getMapId() >= 230000000 && ms.getPlayer().getMapId() <= 230040401) {
         ms.explorerQuest(29008, "Undersea Explorer");//Undersea Explorer
