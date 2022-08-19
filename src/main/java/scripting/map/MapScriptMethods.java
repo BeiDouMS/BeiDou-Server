@@ -103,6 +103,10 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
 
     public void explorerQuest(short questid, String questName) {
         Quest quest = Quest.getInstance(questid);
+        if (isQuestCompleted(questid)) {
+            return;
+        }
+        
         if (!isQuestStarted(questid)) {
             if (!quest.forceStart(getPlayer(), 9000066)) {
                 return;
