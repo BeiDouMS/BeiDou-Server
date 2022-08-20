@@ -103,6 +103,10 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
 
     public void explorerQuest(short questid, String questName) {
         Quest quest = Quest.getInstance(questid);
+        if (isQuestCompleted(questid)) {
+            return;
+        }
+        
         if (!isQuestStarted(questid)) {
             if (!quest.forceStart(getPlayer(), 9000066)) {
                 return;
@@ -114,7 +118,11 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         }
         String status = Integer.toString(qs.getMedalProgress());
         String infoex = qs.getInfoEx(0);
-        getPlayer().announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);
+
+        // explorer quests all have an infoex/infonumber requirement that points to another quest
+        // THAT quest's progress needs to be updated for Quest.canComplete() to return true
+        getPlayer().setQuestProgress(quest.getId(), (int)quest.getInfoNumber(qs.getStatus()), status);
+
         StringBuilder smp = new StringBuilder();
         StringBuilder etm = new StringBuilder();
         if (status.equals(infoex)) {
