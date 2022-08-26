@@ -36,7 +36,7 @@ function action(mode, type, selection) {
     }
 
     if (eim == null) { // Not in instance, ready to enter
-        cm.removeAll(4031092); // This doesn't belong here - these should be removed on exit, handled by portal script
+        cm.removeAll(4031092); // This handling is done in the portal script and in the event end, just for legacy purposes here
         if (!em.startInstance(cm.getPlayer())) {
             cm.sendOk("Someone else is already gathering some parts for me. Please wait until the area is cleared.");
         }

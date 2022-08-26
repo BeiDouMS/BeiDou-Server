@@ -10,6 +10,7 @@ function init() {
 
 function setup(level, lobbyid) {
     var eim = em.newInstance("q3239_" + lobbyid);
+    eim.setExclusiveItems([4031092]);
     return eim;
 }
 
