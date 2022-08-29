@@ -1185,4 +1185,30 @@ public class AbstractPlayerInteraction {
     public long getCurrentTime() {
         return Server.getInstance().getCurrentTime();
     }
+
+    public void weakenAreaBoss(int monsterId, String message) {
+        MapleMap map = c.getPlayer().getMap();
+        Monster monster = map.getMonsterById(monsterId);
+        if (monster == null) {
+            return;
+        }
+
+        applySealSkill(monster);
+        applyReduceAvoid(monster);
+        sendBlueNotice(map, message);
+    }
+
+    private void applySealSkill(Monster monster) {
+        MobSkill sealSkill = MobSkillFactory.getMobSkill(157, 1);
+        sealSkill.applyEffect(monster);
+    }
+
+    private void applyReduceAvoid(Monster monster) {
+        MobSkill reduceAvoidSkill = MobSkillFactory.getMobSkill(155, 2);
+        reduceAvoidSkill.applyEffect(monster);
+    }
+
+    private void sendBlueNotice(MapleMap map, String message) {
+        map.dropMessage(6, message);
+    }
 }

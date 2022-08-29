@@ -46,8 +46,12 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendOk("A small focus of light lighting in the immersive darkness.");
-            cm.dispose();
+            cm.sendAcceptDecline("This is a small lamp with a switch. Would you like to turn it on?");
+            return;
+        } else if (status == 1) {
+            cm.weakenAreaBoss(5090000, "You have turned the lamp on. Shade's strength will rapidly weaken due to the light.");
         }
+
+        cm.dispose();
     }
 }
