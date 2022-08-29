@@ -270,8 +270,11 @@ public class Reactor extends AbstractMapObject {
                                         continue;
                                     }
                                 }
-                                state = stats.getNextState(state, b);
-                                if (stats.getNextState(state, b) == -1) {//end of reactor
+
+                                this.state = stats.getNextState(state, b);
+                                byte nextState = stats.getNextState(state, b);
+                                boolean isInEndState = nextState < this.state;
+                                if (isInEndState) {//end of reactor
                                     if (reactorType < 100) {//reactor broken
                                         if (delay > 0) {
                                             map.destroyReactor(getObjectId());
