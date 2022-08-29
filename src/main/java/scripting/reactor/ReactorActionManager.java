@@ -32,6 +32,8 @@ import scripting.AbstractPlayerInteraction;
 import server.ItemInformationProvider;
 import server.TimerManager;
 import server.life.LifeFactory;
+import server.life.MobSkill;
+import server.life.MobSkillFactory;
 import server.life.Monster;
 import server.maps.MapMonitor;
 import server.maps.MapleMap;
@@ -341,5 +343,32 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         } else {
             getPlayer().getMap().getBlueTeamBuffs().remove(skil);
         }
+    }
+
+    public void weakenAreaBoss(int monsterId, String message) {
+        MapleMap map = reactor.getMap();
+        Monster monster = map.getMonsterById(monsterId);
+        if (monster == null) {
+            System.err.println("Area boss not found. Monster id " + monsterId);
+            return;
+        }
+
+        applySealSkill(monster);
+        applyReduceAvoid(monster);
+        sendBlueNotice(map, message);
+    }
+
+    private void applySealSkill(Monster monster) {
+        MobSkill sealSkill = MobSkillFactory.getMobSkill(157, 1);
+        sealSkill.applyEffect(monster);
+    }
+
+    private void applyReduceAvoid(Monster monster) {
+        MobSkill reduceAvoidSkill = MobSkillFactory.getMobSkill(155, 2);
+        reduceAvoidSkill.applyEffect(monster);
+    }
+
+    private void sendBlueNotice(MapleMap map, String message) {
+        map.dropMessage(6, message);
     }
 }

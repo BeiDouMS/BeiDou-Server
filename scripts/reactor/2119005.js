@@ -20,6 +20,5 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function hit() {
-    rm.hitMonsterWithReactor(6090001, 4);
-    rm.getReactor().setEventState(Math.floor(Math.random() * 3));
+    rm.weakenAreaBoss(6090001, "The light at the altar appeases the hatred of the Snow Witch. The force of the Witch has weakened.");
 }
