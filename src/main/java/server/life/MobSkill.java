@@ -243,6 +243,9 @@ public class MobSkill {
             case 156:
                 stats.put(MonsterStatus.SPEED, x);
                 break;
+            case 157:
+                stats.put(MonsterStatus.SEAL_SKILL, x);
+                break;
             case 200: // summon
                 int skillLimit = this.getLimit();
                 MapleMap map = monster.getMap();
