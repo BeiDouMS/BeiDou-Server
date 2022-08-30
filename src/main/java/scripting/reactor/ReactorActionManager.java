@@ -26,7 +26,6 @@ import client.Client;
 import client.inventory.Equip;
 import client.inventory.InventoryType;
 import client.inventory.Item;
-import config.YamlConfig;
 import constants.inventory.ItemConstants;
 import scripting.AbstractPlayerInteraction;
 import server.ItemInformationProvider;
@@ -34,12 +33,10 @@ import server.TimerManager;
 import server.life.LifeFactory;
 import server.life.Monster;
 import server.maps.MapMonitor;
-import server.maps.MapleMap;
 import server.maps.Reactor;
 import server.maps.ReactorDropEntry;
 import server.partyquest.CarnivalFactory;
 import server.partyquest.CarnivalFactory.MCSkill;
-import tools.PacketCreator;
 
 import javax.script.Invocable;
 import java.awt.*;
@@ -282,25 +279,6 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
     public void spawnNpc(int npcId, Point pos) {
         spawnNpc(npcId, pos, reactor.getMap());
-    }
-
-    public void hitMonsterWithReactor(int id, int hitsToKill) {  // until someone comes with a better solution, why not?
-        int customTime = YamlConfig.config.server.MOB_REACTOR_REFRESH_TIME;
-        if (customTime > 0) {
-            reactor.setDelay(customTime);
-        }
-
-        MapleMap map = reactor.getMap();
-        Monster mm = map.getMonsterById(id);
-        if (mm != null) {
-            int damage = (int) Math.ceil(mm.getMaxHp() / hitsToKill);
-            Character chr = this.getPlayer();
-
-            if (chr != null) {
-                map.damageMonster(chr, mm, damage);
-                map.broadcastMessage(PacketCreator.damageMonster(mm.getObjectId(), damage));
-            }
-        }
     }
 
     public Reactor getReactor() {
