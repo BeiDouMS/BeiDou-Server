@@ -41,3 +41,5 @@ function hit() {
         }
     }
 }
+
+function act() {}

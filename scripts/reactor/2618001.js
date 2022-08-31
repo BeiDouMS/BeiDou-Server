@@ -20,11 +20,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*2618000.js - MagatiaPQ Beaker
+/*2618001.js - MagatiaPQ Door
  *@author Ronan
  */
 
-function hit() {
+function act() {
     var eim = rm.getEventInstance();
 
     var isAlcadno = eim.getIntProperty("isAlcadno");
