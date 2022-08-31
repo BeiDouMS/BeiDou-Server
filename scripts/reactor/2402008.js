@@ -25,6 +25,6 @@
  * Neo City Trash Can
 */
 
-function hit() {
+function act() {
     rm.dropItems(true, 2, 5, 10, 1);
 }

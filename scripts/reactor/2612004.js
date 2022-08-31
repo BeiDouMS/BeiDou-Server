@@ -27,3 +27,5 @@
 function hit() {
     rm.sprayItems();
 }
+
+function act() {}

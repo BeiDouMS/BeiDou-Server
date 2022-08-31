@@ -1448,7 +1448,7 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public boolean canUseSkill(MobSkill toUse, boolean apply) {
-        if (toUse == null) {
+        if (toUse == null || isBuffed(MonsterStatus.SEAL_SKILL)) {
             return false;
         }
 

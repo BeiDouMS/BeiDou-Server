@@ -40,3 +40,5 @@ function hit() {
 
     mapObj.killMonster(8820000);
 }
+
+function act() {}

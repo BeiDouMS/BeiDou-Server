@@ -122,6 +122,10 @@ public class MobSkill {
         service.registerOverallAction(monster.getMap().getId(), toRun, animationTime);
     }
 
+    public void applyEffect(Monster monster) {
+        applyEffect(null, monster, false, Collections.emptyList());
+    }
+
     public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayers) {
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new ArrayMap<>();
@@ -242,6 +246,9 @@ public class MobSkill {
                 break;
             case 156:
                 stats.put(MonsterStatus.SPEED, x);
+                break;
+            case 157:
+                stats.put(MonsterStatus.SEAL_SKILL, x);
                 break;
             case 200: // summon
                 int skillLimit = this.getLimit();
