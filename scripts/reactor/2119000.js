@@ -19,7 +19,18 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/**
+    Tombstone in Forest of Dead Trees I
+    MSEA reference: http://mymapleland.blogspot.com/2009/09/kill-lich-at-forest-of-dead-trees-i-to.html
+*/
+function hit() {
+    if (rm.getReactor().getState() !== 0) {
+        return
+    }
+
+    rm.weakenAreaBoss(6090000, "As the tombstone lit up and vanished, Lich lost all his magic abilities.")
+}
+
 function act() {
-    // I could not find the text from GMS, so I made something up.
-    rm.weakenAreaBoss(6090000, "Riche has been weakened.")
+    // If the chest is destroyed before Riche, killing him should yield no exp
 }
