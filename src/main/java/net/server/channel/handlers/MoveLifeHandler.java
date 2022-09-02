@@ -27,10 +27,7 @@ import config.YamlConfig;
 import net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import server.life.MobSkill;
-import server.life.MobSkillFactory;
-import server.life.Monster;
-import server.life.MonsterInformationProvider;
+import server.life.*;
 import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
@@ -103,7 +100,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 
                 if (monster.canUseSkill(toUse, true)) {
                     int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
-                    if (animationTime > 0 && toUse.getSkillId() != 129) {
+                    if (animationTime > 0 && toUse.getType() != MobSkillType.BANISH) {
                         toUse.applyDelayedEffect(player, monster, true, animationTime);
                     } else {
                         banishPlayers = new LinkedList<>();

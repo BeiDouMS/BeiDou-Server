@@ -1276,11 +1276,11 @@ public class Monster extends AbstractLoadedLife {
         return true;
     }
 
-    public final void dispelSkill(final MobSkill skillId) {
+    public final void dispelSkill(final MobSkill skill) {
         List<MonsterStatus> toCancel = new ArrayList<>();
         for (Entry<MonsterStatus, MonsterStatusEffect> effects : stati.entrySet()) {
             MonsterStatusEffect mse = effects.getValue();
-            if (mse.getMobSkill() != null && mse.getMobSkill().getSkillId() == skillId.getSkillId()) { //not checking for level.
+            if (mse.getMobSkill() != null && mse.getMobSkill().getType() == skill.getType()) { //not checking for level.
                 toCancel.add(effects.getKey());
             }
         }
@@ -1452,8 +1452,7 @@ public class Monster extends AbstractLoadedLife {
             return false;
         }
 
-        int useSkillid = toUse.getSkillId();
-        if (useSkillid >= 143 && useSkillid <= 145) {
+        if (isReflectSkill(toUse)) {
             if (this.isBuffed(MonsterStatus.WEAPON_REFLECT) || this.isBuffed(MonsterStatus.MAGIC_REFLECT)) {
                 return false;
             }
@@ -1462,7 +1461,7 @@ public class Monster extends AbstractLoadedLife {
         monsterLock.lock();
         try {
             for (Pair<Integer, Integer> skill : usedSkills) {   // thanks OishiiKawaiiDesu for noticing an issue with mobskill cooldown
-                if (skill.getLeft() == useSkillid && skill.getRight() == toUse.getSkillLevel()) {
+                if (skill.getLeft() == toUse.getSkillId() && skill.getRight() == toUse.getSkillLevel()) {
                     return false;
                 }
             }
@@ -1488,8 +1487,16 @@ public class Monster extends AbstractLoadedLife {
         return true;
     }
 
+    private boolean isReflectSkill(MobSkill mobSkill) {
+        return switch (mobSkill.getType()) {
+            case PHYSICAL_COUNTER, MAGIC_COUNTER, PHYSICAL_AND_MAGIC_COUNTER -> true;
+            default -> false        ;
+        };
+    }
+
     private void usedSkill(MobSkill skill) {
-        final int skillId = skill.getSkillId(), level = skill.getSkillLevel();
+        final int skillId = skill.getSkillId();
+        final int level = skill.getSkillLevel();
         long cooltime = skill.getCoolTime();
 
         monsterLock.lock();

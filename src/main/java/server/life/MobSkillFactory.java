@@ -63,8 +63,7 @@ public class MobSkillFactory {
         }
         writeLock.lock();
         try {
-            MobSkill ret;
-            ret = mobSkills.get(key);
+            MobSkill ret = mobSkills.get(key);
             if (ret == null) {
                 Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
                 if (skillData != null) {
@@ -93,7 +92,7 @@ public class MobSkillFactory {
                         lt = (Point) ltd.getData();
                         rb = (Point) skillData.getChildByPath("rb").getData();
                     }
-                    ret = new MobSkill(skillId, level);
+                    ret = new MobSkill(MobSkillType.from(skillId), level);
                     ret.addSummons(toSummon);
                     ret.setCoolTime(cooltime);
                     ret.setDuration(duration);

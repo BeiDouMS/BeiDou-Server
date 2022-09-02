@@ -47,7 +47,7 @@ import java.util.*;
 public class MobSkill {
     private static final Logger log = LoggerFactory.getLogger(MobSkill.class);
 
-    private final int skillId;
+    private final MobSkillType type;
     private final int skillLevel;
     private int mpCon;
     private final List<Integer> toSummon = new ArrayList<>();
@@ -57,8 +57,8 @@ public class MobSkill {
     private Point lt, rb;
     private int limit;
 
-    public MobSkill(int skillId, int level) {
-        this.skillId = skillId;
+    public MobSkill(MobSkillType type, int level) {
+        this.type = type;
         this.skillLevel = level;
     }
 
@@ -130,28 +130,12 @@ public class MobSkill {
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new ArrayMap<>();
         List<Integer> reflection = new LinkedList<>();
-        switch (skillId) {
-            case 100:
-            case 110:
-            case 150:
-                stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
-                break;
-            case 101:
-            case 111:
-            case 151:
-                stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
-                break;
-            case 102:
-            case 112:
-            case 152:
-                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
-                break;
-            case 103:
-            case 113:
-            case 153:
-                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
-                break;
-            case 114:
+        switch (type) {
+            case ATTACK_UP, ATTACK_UP_M, PAD -> stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
+            case MAGIC_ATTACK_UP, MAGIC_ATTACK_UP_M, MAD -> stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
+            case DEFENSE_UP, DEFENSE_UP_M, PDR -> stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
+            case MAGIC_DEFENSE_UP, MAGIC_DEFENSE_UP_M, MDR -> stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
+            case HEAL_M -> {
                 if (lt != null && rb != null && skill) {
                     List<MapObject> objects = getObjectsInRange(monster, MapObjectType.MONSTER);
                     final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
@@ -161,29 +145,15 @@ public class MobSkill {
                 } else {
                     monster.heal(getX(), getY());
                 }
-                break;
-            case 120:
-                disease = Disease.SEAL;
-                break;
-            case 121:
-                disease = Disease.DARKNESS;
-                break;
-            case 122:
-                disease = Disease.WEAKEN;
-                break;
-            case 123:
-                disease = Disease.STUN;
-                break;
-            case 124:
-                disease = Disease.CURSE;
-                break;
-            case 125:
-                disease = Disease.POISON;
-                break;
-            case 126: // Slow
-                disease = Disease.SLOW;
-                break;
-            case 127:
+            }
+            case SEAL -> disease = Disease.SEAL;
+            case DARKNESS -> disease = Disease.DARKNESS;
+            case WEAKNESS -> disease = Disease.WEAKEN;
+            case STUN -> disease = Disease.STUN;
+            case CURSE -> disease = Disease.CURSE;
+            case POISON -> disease = Disease.POISON;
+            case SLOW -> disease = Disease.SLOW;
+            case DISPEL -> {
                 if (lt != null && rb != null && skill) {
                     for (Character character : getPlayersInRange(monster)) {
                         character.dispel();
@@ -191,66 +161,52 @@ public class MobSkill {
                 } else {
                     player.dispel();
                 }
-                break;
-            case 128: // Seduce
-                disease = Disease.SEDUCE;
-                break;
-            case 129: // Banish
+            }
+            case SEDUCE -> disease = Disease.SEDUCE;
+            case BANISH -> {
                 if (lt != null && rb != null && skill) {
                     banishPlayers.addAll(getPlayersInRange(monster));
                 } else {
                     banishPlayers.add(player);
                 }
-                break;
-            case 131: // Mist
+            }
+            case AREA_POISON -> {
                 monster.getMap().spawnMist(new Mist(calculateBoundingBox(monster.getPosition()), monster, this), x * 100, false, false, false);
-                break;
-            case 132:
-                disease = Disease.CONFUSE;
-                break;
-            case 133: // zombify
-                disease = Disease.ZOMBIFY;
-                break;
-            case 140:
+            }
+            case REVERSE_INPUT -> disease = Disease.CONFUSE;
+            case UNDEAD -> disease = Disease.ZOMBIFY;
+            case PHYSICAL_IMMUNE -> {
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
                     stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 }
-                break;
-            case 141:
+            }
+            case MAGIC_IMMUNE -> {
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
                     stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 }
-                break;
-            case 143: // Weapon Reflect
+            }
+            case PHYSICAL_COUNTER -> {
                 stats.put(MonsterStatus.WEAPON_REFLECT, 10);
                 stats.put(MonsterStatus.WEAPON_IMMUNITY, 10);
                 reflection.add(x);
-                break;
-            case 144: // Magic Reflect
+            }
+            case MAGIC_COUNTER -> {
                 stats.put(MonsterStatus.MAGIC_REFLECT, 10);
                 stats.put(MonsterStatus.MAGIC_IMMUNITY, 10);
                 reflection.add(x);
-                break;
-            case 145: // Weapon / Magic reflect
+            }
+            case PHYSICAL_AND_MAGIC_COUNTER -> {
                 stats.put(MonsterStatus.WEAPON_REFLECT, 10);
                 stats.put(MonsterStatus.WEAPON_IMMUNITY, 10);
                 stats.put(MonsterStatus.MAGIC_REFLECT, 10);
                 stats.put(MonsterStatus.MAGIC_IMMUNITY, 10);
                 reflection.add(x);
-                break;
-            case 154:
-                stats.put(MonsterStatus.ACC, x);
-                break;
-            case 155:
-                stats.put(MonsterStatus.AVOID, x);
-                break;
-            case 156:
-                stats.put(MonsterStatus.SPEED, x);
-                break;
-            case 157:
-                stats.put(MonsterStatus.SEAL_SKILL, x);
-                break;
-            case 200: // summon
+            }
+            case ACC -> stats.put(MonsterStatus.ACC, x);
+            case EVA -> stats.put(MonsterStatus.AVOID, x);
+            case SPEED -> stats.put(MonsterStatus.SPEED, x);
+            case SEAL_SKILL -> stats.put(MonsterStatus.SEAL_SKILL, x);
+            case SUMMON -> {
                 int skillLimit = this.getLimit();
                 MapleMap map = monster.getMap();
 
@@ -322,18 +278,15 @@ public class MobSkill {
                         }
                     }
                 }
-                break;
-            default:
-                log.warn("Unhandled Mob skill: {}", skillId);
-                break;
+            }
         }
         if (stats.size() > 0) {
             if (lt != null && rb != null && skill) {
                 for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
-                    ((Monster) mons).applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
+                    ((Monster) mons).applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
                 }
             } else {
-                monster.applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
+                monster.applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
             }
         }
         if (disease != null) {
@@ -361,8 +314,12 @@ public class MobSkill {
         return monster.getMap().getPlayersInRange(calculateBoundingBox(monster.getPosition()));
     }
 
+    public MobSkillType getType() {
+        return type;
+    }
+
     public int getSkillId() {
-        return skillId;
+        return type.getId();
     }
 
     public int getSkillLevel() {
