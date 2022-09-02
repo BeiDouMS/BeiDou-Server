@@ -26,6 +26,7 @@ import client.Disease;
 import client.status.MonsterStatus;
 import constants.id.MapId;
 import constants.id.MobId;
+import constants.skills.Bishop;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
 import org.slf4j.Logger;
@@ -49,66 +50,130 @@ public class MobSkill {
 
     private final MobSkillType type;
     private final int skillLevel;
-    private int mpCon;
-    private final List<Integer> toSummon = new ArrayList<>();
-    private int spawnEffect, hp, x, y, count;
-    private long duration, cooltime;
-    private float prop;
-    private Point lt, rb;
-    private int limit;
+    private final int mpCon;
+    private final int spawnEffect;
+    private final int hp;
+    private final int x;
+    private final int y;
+    private final int count;
+    private final long duration;
+    private final long cooltime;
+    private final float prop;
+    private final Point lt;
+    private final Point rb;
+    private final int limit;
+    private final List<Integer> toSummon;
 
-    public MobSkill(MobSkillType type, int level) {
+    private MobSkill(MobSkillType type, int level, int mpCon, int spawnEffect, int hp, int x, int y, int count,
+                     long duration, long cooltime, float prop, Point lt, Point rb, int limit, List<Integer> toSummon) {
         this.type = type;
         this.skillLevel = level;
-    }
-
-    public void setMpCon(int mpCon) {
         this.mpCon = mpCon;
-    }
-
-    public void addSummons(List<Integer> toSummon) {
-        this.toSummon.addAll(toSummon);
-    }
-
-    public void setSpawnEffect(int spawnEffect) {
         this.spawnEffect = spawnEffect;
-    }
-
-    public void setHp(int hp) {
         this.hp = hp;
-    }
-
-    public void setX(int x) {
         this.x = x;
-    }
-
-    public void setY(int y) {
         this.y = y;
-    }
-
-    public void setCount(int count) {
         this.count = count;
-    }
-
-    public void setDuration(long duration) {
         this.duration = duration;
-    }
-
-    public void setCoolTime(long cooltime) {
         this.cooltime = cooltime;
-    }
-
-    public void setProp(float prop) {
         this.prop = prop;
-    }
-
-    public void setLtRb(Point lt, Point rb) {
         this.lt = lt;
         this.rb = rb;
+        this.limit = limit;
+        this.toSummon = toSummon;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
+    static class Builder {
+        private final MobSkillType type;
+        private final int level;
+        private int mpCon;
+        private int spawnEffect;
+        private int hp;
+        private int x;
+        private int y;
+        private int count;
+        private long duration;
+        private long cooltime;
+        private float prop;
+        private Point lt;
+        private Point rb;
+        private int limit;
+        private List<Integer> toSummon;
+
+        public Builder(MobSkillType type, int level) {
+            this.type = type;
+            this.level = level;
+        }
+
+        public Builder mpCon(int mpCon) {
+            this.mpCon = mpCon;
+            return this;
+        }
+
+        public Builder spawnEffect(int spawnEffect) {
+            this.spawnEffect = spawnEffect;
+            return this;
+        }
+
+        public Builder hp(int hp) {
+            this.hp = hp;
+            return this;
+        }
+
+        public Builder x(int x) {
+            this.x = x;
+            return this;
+        }
+
+        public Builder y(int y) {
+            this.y = y;
+            return this;
+        }
+
+        public Builder count(int count) {
+            this.count = count;
+            return this;
+        }
+
+        public Builder duration(long duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder cooltime(long cooltime) {
+            this.cooltime = cooltime;
+            return this;
+        }
+
+        public Builder prop(float prop) {
+            this.prop = prop;
+            return this;
+        }
+
+        public Builder lt(Point lt) {
+            this.lt = lt;
+            return this;
+        }
+
+        public Builder rb(Point rb) {
+            this.rb = rb;
+            return this;
+        }
+
+        public Builder limit(int limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        public Builder toSummon(List<Integer> toSummon) {
+            this.toSummon = Collections.unmodifiableList(toSummon);
+            return this;
+        }
+
+        public MobSkill build() {
+            return new MobSkill(type, level, mpCon, spawnEffect, hp, x, y, count, duration, cooltime, prop, lt, rb,
+                    limit, toSummon);
+        }
     }
 
     public void applyDelayedEffect(final Character player, final Monster monster, final boolean skill, int animationTime) {
@@ -293,7 +358,7 @@ public class MobSkill {
             if (lt != null && rb != null && skill) {
                 int i = 0;
                 for (Character character : getPlayersInRange(monster)) {
-                    if (!character.hasActiveBuff(2321005)) {  // holy shield
+                    if (!character.hasActiveBuff(Bishop.HOLY_SHIELD)) {
                         if (disease.equals(Disease.SEDUCE)) {
                             if (i < count) {
                                 character.giveDebuff(Disease.SEDUCE, this);

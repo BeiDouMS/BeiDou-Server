@@ -47,12 +47,13 @@ public class MobSkillFactory {
     private static final Lock readLock = readWriteLock.readLock();
     private static final Lock writeLock = readWriteLock.writeLock();
 
+    // TODO: take in MobSkillType as argument instead of skillId
     public static MobSkill getMobSkill(final int skillId, final int level) { // TODO: return Optional
         readLock.lock();
         try {
-            MobSkill ret = mobSkills.get(createKey(skillId, level));
-            if (ret != null) {
-                return ret;
+            MobSkill ms = mobSkills.get(createKey(skillId, level));
+            if (ms != null) {
+                return ms;
             }
         } finally {
             readLock.unlock();
@@ -64,9 +65,9 @@ public class MobSkillFactory {
     private static Optional<MobSkill> loadMobSkill(final int skillId, final int level) {
         writeLock.lock();
         try {
-            MobSkill ms = mobSkills.get(createKey(skillId, level));
-            if (ms != null) {
-                return Optional.of(ms);
+            MobSkill existingMs = mobSkills.get(createKey(skillId, level));
+            if (existingMs != null) {
+                return Optional.of(existingMs);
             }
 
             Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
@@ -102,22 +103,22 @@ public class MobSkillFactory {
                 rb = (Point) rbData.getData();
             }
 
-            ms = new MobSkill(MobSkillType.from(skillId), level);
-            ms.addSummons(toSummon);
-            ms.setCoolTime(cooltime);
-            ms.setDuration(duration);
-            ms.setHp(hp);
-            ms.setMpCon(mpCon);
-            ms.setSpawnEffect(effect);
-            ms.setX(x);
-            ms.setY(y);
-            ms.setCount(count);
-            ms.setProp(prop);
-            ms.setLimit(limit);
-            ms.setLtRb(lt, rb);
+            MobSkill loadedMobSkill = new MobSkill.Builder(MobSkillType.from(skillId), level)
+                    .toSummon(toSummon)
+                    .cooltime(cooltime)
+                    .duration(duration)
+                    .hp(hp)
+                    .x(x)
+                    .y(y)
+                    .count(count)
+                    .prop(prop)
+                    .limit(limit)
+                    .lt(lt)
+                    .rb(rb)
+                    .build();
 
-            mobSkills.put(createKey(skillId, level), ms);
-            return Optional.of(ms);
+            mobSkills.put(createKey(skillId, level), loadedMobSkill);
+            return Optional.of(loadedMobSkill);
         } finally {
             writeLock.unlock();
         }
