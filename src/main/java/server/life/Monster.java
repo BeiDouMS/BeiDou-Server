@@ -82,8 +82,7 @@ public class Monster extends AbstractLoadedLife {
     private int VenomMultiplier = 0;
     private boolean fake = false;
     private boolean dropsDisabled = false;
-    private final List<Pair<Integer, Integer>> usedSkills = new ArrayList<>(); // TODO: change to Set<MobSkillId>
-    private final Map<Pair<Integer, Integer>, Integer> skillsUsed = new HashMap<>();
+    private final Set<MobSkillId> usedSkills = new HashSet<>();
     private final Set<Integer> usedAttacks = new HashSet<>();
     private Set<Integer> calledMobOids = null;
     private WeakReference<Monster> callerMob = new WeakReference<>(null);
@@ -1447,11 +1446,8 @@ public class Monster extends AbstractLoadedLife {
 
         monsterLock.lock();
         try {
-            for (Pair<Integer, Integer> skill : usedSkills) {   // thanks OishiiKawaiiDesu for noticing an issue with mobskill cooldown
-                MobSkillId msId = toUse.getId();
-                if (skill.getLeft() == msId.type().getId() && skill.getRight() == msId.level()) {
-                    return false;
-                }
+            if (usedSkills.contains(toUse.getId())) {
+                return false;
             }
 
             int mpCon = toUse.getMpCon();
@@ -1483,48 +1479,28 @@ public class Monster extends AbstractLoadedLife {
     }
 
     private void usedSkill(MobSkill skill) {
-        final int skillId = skill.getId().type().getId();
-        final int level = skill.getId().level();
-        long cooltime = skill.getCoolTime();
-
+        final MobSkillId msId = skill.getId();
         monsterLock.lock();
         try {
             mp -= skill.getMpCon();
 
-            Pair<Integer, Integer> skillKey = new Pair<>(skillId, level);
-            this.usedSkills.add(skillKey);
-
-            Integer useCount = this.skillsUsed.remove(skillKey);
-            if (useCount != null) {
-                this.skillsUsed.put(skillKey, useCount + 1);
-            } else {
-                this.skillsUsed.put(skillKey, 1);
-            }
+            this.usedSkills.add(msId);
         } finally {
             monsterLock.unlock();
         }
 
         final Monster mons = this;
         MapleMap mmap = mons.getMap();
-        Runnable r = () -> mons.clearSkill(skillId, level);
+        Runnable r = () -> mons.clearSkill(skill.getId());
 
         MobClearSkillService service = (MobClearSkillService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
-        service.registerMobClearSkillAction(mmap.getId(), r, cooltime);
+        service.registerMobClearSkillAction(mmap.getId(), r, skill.getCoolTime());
     }
 
-    private void clearSkill(int skillId, int level) {
+    private void clearSkill(MobSkillId msId) {
         monsterLock.lock();
         try {
-            int index = -1;
-            for (Pair<Integer, Integer> skill : usedSkills) {
-                if (skill.getLeft() == skillId && skill.getRight() == level) {
-                    index = usedSkills.indexOf(skill);
-                    break;
-                }
-            }
-            if (index != -1) {
-                usedSkills.remove(index);
-            }
+            usedSkills.remove(msId);
         } finally {
             monsterLock.unlock();
         }
