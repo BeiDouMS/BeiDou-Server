@@ -39,8 +39,10 @@ import tools.ArrayMap;
 import tools.Randomizer;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
 
 /**
  * @author Danny (Leifde)
@@ -191,26 +193,17 @@ public class MobSkill {
         applyEffect(null, monster, false, Collections.emptyList());
     }
 
-    public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayers) {
+    // TODO: avoid output argument banishPlayersOutput
+    public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayersOutput) {
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new ArrayMap<>();
-        List<Integer> reflection = new LinkedList<>();
+        List<Integer> reflection = new ArrayList<>();
         switch (type) {
             case ATTACK_UP, ATTACK_UP_M, PAD -> stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
             case MAGIC_ATTACK_UP, MAGIC_ATTACK_UP_M, MAD -> stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
             case DEFENSE_UP, DEFENSE_UP_M, PDR -> stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
             case MAGIC_DEFENSE_UP, MAGIC_DEFENSE_UP_M, MDR -> stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
-            case HEAL_M -> {
-                if (lt != null && rb != null && skill) {
-                    List<MapObject> objects = getObjectsInRange(monster, MapObjectType.MONSTER);
-                    final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
-                    for (MapObject mons : objects) {
-                        ((Monster) mons).heal(hps, getY());
-                    }
-                } else {
-                    monster.heal(getX(), getY());
-                }
-            }
+            case HEAL_M -> applyHealEffect(skill, monster);
             case SEAL -> disease = Disease.SEAL;
             case DARKNESS -> disease = Disease.DARKNESS;
             case WEAKNESS -> disease = Disease.WEAKEN;
@@ -218,26 +211,10 @@ public class MobSkill {
             case CURSE -> disease = Disease.CURSE;
             case POISON -> disease = Disease.POISON;
             case SLOW -> disease = Disease.SLOW;
-            case DISPEL -> {
-                if (lt != null && rb != null && skill) {
-                    for (Character character : getPlayersInRange(monster)) {
-                        character.dispel();
-                    }
-                } else {
-                    player.dispel();
-                }
-            }
+            case DISPEL -> applyDispelEffect(skill, monster, player);
             case SEDUCE -> disease = Disease.SEDUCE;
-            case BANISH -> {
-                if (lt != null && rb != null && skill) {
-                    banishPlayers.addAll(getPlayersInRange(monster));
-                } else {
-                    banishPlayers.add(player);
-                }
-            }
-            case AREA_POISON -> {
-                monster.getMap().spawnMist(new Mist(calculateBoundingBox(monster.getPosition()), monster, this), x * 100, false, false, false);
-            }
+            case BANISH -> applyBanishEffect(skill, monster, player, banishPlayersOutput);
+            case AREA_POISON -> spawnMonsterMist(monster);
             case REVERSE_INPUT -> disease = Disease.CONFUSE;
             case UNDEAD -> disease = Disease.ZOMBIFY;
             case PHYSICAL_IMMUNE -> {
@@ -271,107 +248,153 @@ public class MobSkill {
             case EVA -> stats.put(MonsterStatus.AVOID, x);
             case SPEED -> stats.put(MonsterStatus.SPEED, x);
             case SEAL_SKILL -> stats.put(MonsterStatus.SEAL_SKILL, x);
-            case SUMMON -> {
-                int skillLimit = this.getLimit();
-                MapleMap map = monster.getMap();
-
-                if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
-                    skillLimit = Integer.MAX_VALUE;
-                }
-
-                if (map.getSpawnedMonstersOnMap() < 80) {
-                    List<Integer> summons = getSummons();
-                    int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
-                    if (summonLimit >= 1) {
-                        boolean bossRushMap = MapId.isBossRush(map.getId());
-
-                        Collections.shuffle(summons);
-                        for (Integer mobId : summons.subList(0, summonLimit)) {
-                            Monster toSpawn = LifeFactory.getMonster(mobId);
-                            if (toSpawn != null) {
-                                if (bossRushMap) {
-                                    toSpawn.disableDrops();  // no littering on BRPQ pls
-                                }
-                                toSpawn.setPosition(monster.getPosition());
-                                int ypos, xpos;
-                                xpos = (int) monster.getPosition().getX();
-                                ypos = (int) monster.getPosition().getY();
-                                switch (mobId) {
-                                    case MobId.HIGH_DARKSTAR: // Pap bomb high
-                                        toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
-                                        ypos = -590;
-                                        break;
-                                    case MobId.LOW_DARKSTAR: // Pap bomb
-                                        xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
-                                        if (ypos != -590) {
-                                            ypos = (int) monster.getPosition().getY();
-                                        }
-                                        break;
-                                    case MobId.BLOODY_BOOM: //Pianus bomb
-                                        if (Math.ceil(Math.random() * 5) == 1) {
-                                            ypos = 78;
-                                            xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
-                                        } else {
-                                            xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
-                                        }
-                                        break;
-                                }
-                                switch (map.getId()) {
-                                    case MapId.ORIGIN_OF_CLOCKTOWER: //Pap map
-                                        if (xpos < -890) {
-                                            xpos = (int) (Math.ceil(Math.random() * 150) - 890);
-                                        } else if (xpos > 230) {
-                                            xpos = (int) (230 - Math.ceil(Math.random() * 150));
-                                        }
-                                        break;
-                                    case MapId.CAVE_OF_PIANUS: // Pianus map
-                                        if (xpos < -239) {
-                                            xpos = (int) (Math.ceil(Math.random() * 150) - 239);
-                                        } else if (xpos > 371) {
-                                            xpos = (int) (371 - Math.ceil(Math.random() * 150));
-                                        }
-                                        break;
-                                }
-                                toSpawn.setPosition(new Point(xpos, ypos));
-                                if (toSpawn.getId() == MobId.LOW_DARKSTAR) {
-                                    map.spawnFakeMonster(toSpawn);
-                                } else {
-                                    map.spawnMonsterWithEffect(toSpawn, getSpawnEffect(), toSpawn.getPosition());
-                                }
-                                monster.addSummonedMob(toSpawn);
-                            }
-                        }
-                    }
-                }
-            }
+            case SUMMON -> summonMonsters(monster);
         }
         if (stats.size() > 0) {
-            if (lt != null && rb != null && skill) {
-                for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
-                    ((Monster) mons).applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
-                }
-            } else {
-                monster.applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
-            }
+            applyMonsterBuffs(stats, skill, monster, reflection);
         }
         if (disease != null) {
-            if (lt != null && rb != null && skill) {
-                int i = 0;
-                for (Character character : getPlayersInRange(monster)) {
-                    if (!character.hasActiveBuff(Bishop.HOLY_SHIELD)) {
-                        if (disease.equals(Disease.SEDUCE)) {
-                            if (i < count) {
-                                character.giveDebuff(Disease.SEDUCE, this);
-                                i++;
-                            }
-                        } else {
-                            character.giveDebuff(disease, this);
+            applyDisease(disease, skill, monster, player);
+        }
+    }
+
+    private void applyHealEffect(boolean skill, Monster monster) {
+        if (lt != null && rb != null && skill) {
+            List<MapObject> objects = getObjectsInRange(monster, MapObjectType.MONSTER);
+            final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
+            for (MapObject mons : objects) {
+                ((Monster) mons).heal(hps, getY());
+            }
+        } else {
+            monster.heal(getX(), getY());
+        }
+    }
+
+    private void applyDispelEffect(boolean skill, Monster monster, Character player) {
+        if (lt != null && rb != null && skill) {
+            getPlayersInRange(monster).forEach(Character::dispel);
+        } else {
+            player.dispel();
+        }
+    }
+
+    private void applyBanishEffect(boolean skill, Monster monster, Character player,
+                                   List<Character> banishPlayersOutput) {
+        if (lt != null && rb != null && skill) {
+            banishPlayersOutput.addAll(getPlayersInRange(monster));
+        } else {
+            banishPlayersOutput.add(player);
+        }
+    }
+
+    private void spawnMonsterMist(Monster monster) {
+        Rectangle mistArea = calculateBoundingBox(monster.getPosition());
+        var mist = new Mist(mistArea, monster, this);
+        int mistDuration = x * 100;
+        monster.getMap().spawnMist(mist, mistDuration, false, false, false);
+    }
+
+    private void summonMonsters(Monster monster) {
+        int skillLimit = this.getLimit();
+        MapleMap map = monster.getMap();
+
+        if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
+            skillLimit = Integer.MAX_VALUE;
+        }
+
+        if (map.getSpawnedMonstersOnMap() < 80) {
+            List<Integer> summons = getSummons();
+            int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
+            if (summonLimit >= 1) {
+                boolean bossRushMap = MapId.isBossRush(map.getId());
+
+                Collections.shuffle(summons);
+                for (Integer mobId : summons.subList(0, summonLimit)) {
+                    Monster toSpawn = LifeFactory.getMonster(mobId);
+                    if (toSpawn != null) {
+                        if (bossRushMap) {
+                            toSpawn.disableDrops();  // no littering on BRPQ pls
                         }
+                        toSpawn.setPosition(monster.getPosition());
+                        int ypos, xpos;
+                        xpos = (int) monster.getPosition().getX();
+                        ypos = (int) monster.getPosition().getY();
+                        switch (mobId) {
+                            case MobId.HIGH_DARKSTAR: // Pap bomb high
+                                toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
+                                ypos = -590;
+                                break;
+                            case MobId.LOW_DARKSTAR: // Pap bomb
+                                xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
+                                if (ypos != -590) {
+                                    ypos = (int) monster.getPosition().getY();
+                                }
+                                break;
+                            case MobId.BLOODY_BOOM: //Pianus bomb
+                                if (Math.ceil(Math.random() * 5) == 1) {
+                                    ypos = 78;
+                                    xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
+                                } else {
+                                    xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
+                                }
+                                break;
+                        }
+                        switch (map.getId()) {
+                            case MapId.ORIGIN_OF_CLOCKTOWER: //Pap map
+                                if (xpos < -890) {
+                                    xpos = (int) (Math.ceil(Math.random() * 150) - 890);
+                                } else if (xpos > 230) {
+                                    xpos = (int) (230 - Math.ceil(Math.random() * 150));
+                                }
+                                break;
+                            case MapId.CAVE_OF_PIANUS: // Pianus map
+                                if (xpos < -239) {
+                                    xpos = (int) (Math.ceil(Math.random() * 150) - 239);
+                                } else if (xpos > 371) {
+                                    xpos = (int) (371 - Math.ceil(Math.random() * 150));
+                                }
+                                break;
+                        }
+                        toSpawn.setPosition(new Point(xpos, ypos));
+                        if (toSpawn.getId() == MobId.LOW_DARKSTAR) {
+                            map.spawnFakeMonster(toSpawn);
+                        } else {
+                            map.spawnMonsterWithEffect(toSpawn, getSpawnEffect(), toSpawn.getPosition());
+                        }
+                        monster.addSummonedMob(toSpawn);
                     }
                 }
-            } else {
-                player.giveDebuff(disease, this);
             }
+        }
+    }
+
+    private void applyMonsterBuffs(Map<MonsterStatus, Integer> stats, boolean skill, Monster monster, List<Integer> reflection) {
+        if (lt != null && rb != null && skill) {
+            for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
+                ((Monster) mons).applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
+            }
+        } else {
+            monster.applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
+        }
+    }
+
+    private void applyDisease(Disease disease, boolean skill, Monster monster, Character player) {
+        if (lt != null && rb != null && skill) {
+            int i = 0;
+            for (Character character : getPlayersInRange(monster)) {
+                if (!character.hasActiveBuff(Bishop.HOLY_SHIELD)) {
+                    if (disease.equals(Disease.SEDUCE)) {
+                        if (i < count) {
+                            character.giveDebuff(Disease.SEDUCE, this);
+                            i++;
+                        }
+                    } else {
+                        character.giveDebuff(disease, this);
+                    }
+                }
+            }
+        } else {
+            player.giveDebuff(disease, this);
         }
     }
 

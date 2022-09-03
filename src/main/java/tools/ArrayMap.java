@@ -23,6 +23,7 @@ package tools;
 
 import java.util.*;
 
+// TODO: remove
 public class ArrayMap<K, V> extends AbstractMap<K, V> {
 
     static class Entry<K, V> implements Map.Entry<K, V> {
