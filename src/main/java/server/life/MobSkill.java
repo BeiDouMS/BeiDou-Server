@@ -35,14 +35,11 @@ import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import server.maps.Mist;
-import tools.ArrayMap;
 import tools.Randomizer;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Danny (Leifde)
@@ -196,7 +193,7 @@ public class MobSkill {
     // TODO: avoid output argument banishPlayersOutput
     public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayersOutput) {
         Disease disease = null;
-        Map<MonsterStatus, Integer> stats = new ArrayMap<>();
+        Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
         List<Integer> reflection = new ArrayList<>();
         switch (type) {
             case ATTACK_UP, ATTACK_UP_M, PAD -> stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
@@ -419,7 +416,7 @@ public class MobSkill {
     }
 
     public List<Integer> getSummons() {
-        return new ArrayList<>(toSummon);
+        return toSummon;
     }
 
     public int getSpawnEffect() {

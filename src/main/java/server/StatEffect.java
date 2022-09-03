@@ -46,7 +46,6 @@ import server.life.Monster;
 import server.maps.*;
 import server.partyquest.CarnivalFactory;
 import server.partyquest.CarnivalFactory.MCSkill;
-import tools.ArrayMap;
 import tools.PacketCreator;
 import tools.Pair;
 
@@ -422,7 +421,7 @@ public class StatEffect {
         ret.itemCon = DataTool.getInt("itemCon", source, 0);
         ret.itemConNo = DataTool.getInt("itemConNo", source, 0);
         ret.moveTo = DataTool.getInt("moveTo", source, -1);
-        Map<MonsterStatus, Integer> monsterStatus = new ArrayMap<>();
+        Map<MonsterStatus, Integer> monsterStatus = new EnumMap<>(MonsterStatus.class);
         if (skill) {
             switch (sourceid) {
                 // BEGINNER
