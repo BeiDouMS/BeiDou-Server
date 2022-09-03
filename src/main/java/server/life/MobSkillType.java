@@ -52,7 +52,10 @@ public enum MobSkillType {
     }
 
     public static MobSkillType from(int id) {
-        return Arrays.stream(values()).findFirst().orElseThrow(IllegalArgumentException::new);
+        return Arrays.stream(values())
+                .filter(type -> type.getId() == id)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
     }
 
     public int getId() {
