@@ -43,7 +43,15 @@ public class CarnivalFactory {
         }
         for (Data z : dataRoot.getData("MCSkill.img")) {
             Integer id = Integer.parseInt(z.getName());
-            MCSkill ms = new MCSkill(DataTool.getInt("spendCP", z, 0), DataTool.getInt("mobSkillID", z, 0), DataTool.getInt("level", z, 0), DataTool.getInt("target", z, 1) > 1);
+            int spendCp = DataTool.getInt("spendCP", z, 0);
+            int mobSkillId = DataTool.getInt("mobSkillID", z, 0);
+            MobSkillType mobSkillType = null;
+            if (mobSkillId != 0) {
+                mobSkillType = MobSkillType.from(mobSkillId);
+            }
+            int level = DataTool.getInt("level", z, 0);
+            boolean isMultiTarget = DataTool.getInt("target", z, 1) > 1;
+            MCSkill ms = new MCSkill(spendCp, mobSkillType, level, isMultiTarget);
 
             skills.put(id, ms);
             if (ms.targetsAll) {
@@ -53,7 +61,11 @@ public class CarnivalFactory {
             }
         }
         for (Data z : dataRoot.getData("MCGuardian.img")) {
-            guardians.put(Integer.parseInt(z.getName()), new MCSkill(DataTool.getInt("spendCP", z, 0), DataTool.getInt("mobSkillID", z, 0), DataTool.getInt("level", z, 0), true));
+            int spendCp = DataTool.getInt("spendCP", z, 0);
+            int mobSkillId = DataTool.getInt("mobSkillID", z, 0);
+            MobSkillType mobSkillType = MobSkillType.from(mobSkillId);
+            int level = DataTool.getInt("level", z, 0);
+            guardians.put(Integer.parseInt(z.getName()), new MCSkill(spendCp, mobSkillType, level, true));
         }
     }
 
@@ -67,7 +79,7 @@ public class CarnivalFactory {
 
     public MCSkill getSkill(final int id) {
         MCSkill skill = skills.get(id);
-        if (skill != null && skill.skillid <= 0) {
+        if (skill != null && skill.mobSkillType == null) {
             return randomizeSkill(skill.targetsAll);
         } else {
             return skill;
@@ -80,26 +92,28 @@ public class CarnivalFactory {
 
     public static class MCSkill {
 
-        public int cpLoss, skillid, level;
+        public int cpLoss;
+        public MobSkillType mobSkillType;
+        public int level;
         public boolean targetsAll;
 
-        public MCSkill(int _cpLoss, int _skillid, int _level, boolean _targetsAll) {
+        public MCSkill(int _cpLoss, MobSkillType mobSkillType, int _level, boolean _targetsAll) {
             cpLoss = _cpLoss;
-            skillid = _skillid;
+            mobSkillType = mobSkillType;
             level = _level;
             targetsAll = _targetsAll;
         }
 
         public MobSkill getSkill() {
-            return getMobSkill(skillid, level);
+            return getMobSkill(mobSkillType, level);
         }
 
-        public static MobSkill getMobSkill(int skillid, int level) {
-            return MobSkillFactory.getMobSkill(MobSkillType.from(skillid), level);
+        public static MobSkill getMobSkill(MobSkillType type, int level) {
+            return MobSkillFactory.getMobSkill(type, level);
         }
 
         public Disease getDisease() {
-            return Disease.getBySkill(skillid);
+            return Disease.getBySkill(mobSkillType);
         }
     }
 }

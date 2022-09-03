@@ -29,6 +29,7 @@ import net.packet.InPacket;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import server.life.LifeFactory;
+import server.life.MobSkillType;
 import server.life.Monster;
 import server.partyquest.CarnivalFactory;
 import server.partyquest.CarnivalFactory.MCSkill;
@@ -102,10 +103,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                         final Disease dis = skill.getDisease();
                         Party enemies = c.getPlayer().getParty().getEnemy();
                         if (skill.targetsAll) {
-                            int hitChance = 0;
-                            if (dis.getDisease() == 121 || dis.getDisease() == 122 || dis.getDisease() == 125 || dis.getDisease() == 126) {
-                                hitChance = (int) (Math.random() * 100);
-                            }
+                            int hitChance = rollHitChance(dis.getMobSkillType());
                             if (hitChance <= 80) {
                                 for (PartyCharacter mpc : enemies.getPartyMembers()) {
                                     Character mc = mpc.getPlayer();
@@ -178,5 +176,12 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                 c.releaseClient();
             }
         }
+    }
+
+    private int rollHitChance(MobSkillType type) {
+        return switch (type) {
+            case DARKNESS, WEAKNESS, POISON, SLOW -> (int) (Math.random() * 100);
+            default -> 0;
+        };
     }
 }

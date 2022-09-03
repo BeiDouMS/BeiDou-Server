@@ -22,37 +22,34 @@
 package client;
 
 import constants.game.GameConstants;
+import server.life.MobSkillType;
+
+import java.util.Arrays;
 
 public enum Disease {
     NULL(0x0),
-    SLOW(0x1, 126),
-    SEDUCE(0x80, 128),
+    SLOW(0x1, MobSkillType.SLOW),
+    SEDUCE(0x80, MobSkillType.SEDUCE),
     FISHABLE(0x100),
     ZOMBIFY(0x4000),
-    CONFUSE(0x80000, 132),
-    STUN(0x2000000000000L, 123),
-    POISON(0x4000000000000L, 125),
-    SEAL(0x8000000000000L, 120),
-    DARKNESS(0x10000000000000L, 121),
-    WEAKEN(0x4000000000000000L, 122),
-    CURSE(0x8000000000000000L, 124);
+    CONFUSE(0x80000, MobSkillType.REVERSE_INPUT),
+    STUN(0x2000000000000L, MobSkillType.STUN),
+    POISON(0x4000000000000L, MobSkillType.POISON),
+    SEAL(0x8000000000000L, MobSkillType.SEAL),
+    DARKNESS(0x10000000000000L, MobSkillType.DARKNESS),
+    WEAKEN(0x4000000000000000L, MobSkillType.WEAKNESS),
+    CURSE(0x8000000000000000L, MobSkillType.CURSE);
 
     private final long i;
-    private final boolean first;
-    private final int mobskill;
+    private final MobSkillType mobSkillType;
 
     Disease(long i) {
-        this(i, false, 0);
+        this(i, null);
     }
 
-    Disease(long i, int skill) {
-        this(i, false, skill);
-    }
-
-    Disease(long i, boolean first, int skill) {
+    Disease(long i, MobSkillType skill) {
         this.i = i;
-        this.first = first;
-        this.mobskill = skill;
+        this.mobSkillType = skill;
     }
 
     public long getValue() {
@@ -60,11 +57,11 @@ public enum Disease {
     }
 
     public boolean isFirst() {
-        return first;
+        return false;
     }
 
-    public int getDisease() {
-        return mobskill;
+    public MobSkillType getMobSkillType() {
+        return mobSkillType;
     }
 
     public static Disease ordinal(int ord) {
@@ -80,13 +77,14 @@ public enum Disease {
         return diseases[(int) (Math.random() * diseases.length)];
     }
 
-    public static final Disease getBySkill(final int skill) {
-        for (Disease d : Disease.values()) {
-            if (d.getDisease() == skill && d.getDisease() != 0) {
-                return d;
-            }
+    public static final Disease getBySkill(MobSkillType skill) {
+        if (skill == null) {
+            return null;
         }
-        return null;
+        return Arrays.stream(Disease.values())
+                .filter(d -> d.mobSkillType == skill)
+                .findAny()
+                .orElse(null);
     }
 
 }
