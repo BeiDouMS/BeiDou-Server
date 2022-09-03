@@ -188,11 +188,12 @@ public class LifeFactory {
         Data monsterSkillInfoData = monsterInfoData.getChildByPath("skill");
         if (monsterSkillInfoData != null) {
             int i = 0;
-            List<Pair<Integer, Integer>> skills = new ArrayList<>();
+            List<MobSkillId> skills = new ArrayList<>();
             while (monsterSkillInfoData.getChildByPath(Integer.toString(i)) != null) {
                 int skillId = DataTool.getInt(i + "/skill", monsterSkillInfoData, 0);
                 int skillLv = DataTool.getInt(i + "/level", monsterSkillInfoData, 0);
-                skills.add(new Pair<>(skillId, skillLv));
+                MobSkillType type = MobSkillType.from(skillId);
+                skills.add(new MobSkillId(type, skillLv));
 
                 Data monsterSkillData = monsterData.getChildByPath("skill" + (i + 1));
                 if (monsterSkillData != null) {
@@ -201,7 +202,7 @@ public class LifeFactory {
                         animationTime += DataTool.getIntConvert("delay", effectEntry, 0);
                     }
 
-                    MobSkill skill = MobSkillFactory.getMobSkill(MobSkillType.from(skillId), skillLv);
+                    MobSkill skill = MobSkillFactory.getMobSkill(type, skillLv);
                     mi.setMobSkillAnimationTime(skill, animationTime);
                 }
 

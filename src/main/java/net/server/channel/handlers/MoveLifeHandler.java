@@ -32,7 +32,6 @@ import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.Pair;
 import tools.Randomizer;
 import tools.exceptions.EmptyMovementException;
 
@@ -124,9 +123,9 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             if (noSkills > 0) {
                 int rndSkill = Randomizer.nextInt(noSkills);
 
-                Pair<Integer, Integer> skillToUse = monster.getSkills().get(rndSkill);
-                nextSkillId = skillToUse.getLeft();
-                nextSkillLevel = skillToUse.getRight();
+                MobSkillId skillToUse = monster.getSkills().get(rndSkill);
+                nextSkillId = skillToUse.type().getId();
+                nextSkillLevel = skillToUse.level();
                 nextUse = MobSkillFactory.getMobSkill(MobSkillType.from(nextSkillId), nextSkillLevel);
 
                 if (!(nextUse != null && monster.canUseSkill(nextUse, false) && nextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && mobMp >= nextUse.getMpCon())) {

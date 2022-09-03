@@ -1426,7 +1426,7 @@ public class Monster extends AbstractLoadedLife {
         return map.getAggroCoordinator();
     }
 
-    public List<Pair<Integer, Integer>> getSkills() {
+    public List<MobSkillId> getSkills() {
         return stats.getSkills();
     }
 
@@ -1436,8 +1436,8 @@ public class Monster extends AbstractLoadedLife {
 
     public int getSkillPos(int skillId, int level) {
         int pos = 0;
-        for (Pair<Integer, Integer> ms : this.getSkills()) {
-            if (ms.getLeft() == skillId && ms.getRight() == level) {
+        for (MobSkillId ms : this.getSkills()) {
+            if (ms.type().getId() == skillId && ms.level() == level) {
                 return pos;
             }
 
@@ -1490,7 +1490,7 @@ public class Monster extends AbstractLoadedLife {
     private boolean isReflectSkill(MobSkill mobSkill) {
         return switch (mobSkill.getType()) {
             case PHYSICAL_COUNTER, MAGIC_COUNTER, PHYSICAL_AND_MAGIC_COUNTER -> true;
-            default -> false        ;
+            default -> false;
         };
     }
 

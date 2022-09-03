@@ -69,7 +69,7 @@ public class MobSkillFactory {
                 return Optional.of(existingMs);
             }
 
-            Data skillData = skillRoot.getChildByPath(type + "/level/" + level);
+            Data skillData = skillRoot.getChildByPath("%d/level/%d".formatted(type.getId(), level));
             if (skillData == null) {
                 return Optional.empty();
             }
