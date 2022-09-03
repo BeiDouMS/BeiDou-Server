@@ -41,7 +41,7 @@ public class MonsterStats {
     public Map<Element, ElementalEffectiveness> resistance = new HashMap<>();
     public List<Integer> revives = Collections.emptyList();
     public byte tagColor, tagBgColor;
-    public List<MobSkillId> skills = new ArrayList<>();
+    public Set<MobSkillId> skills = new HashSet<>();
     public Pair<Integer, Integer> cool = null;
     public BanishInfo banish = null;
     public List<loseItem> loseItem = null;
@@ -190,17 +190,12 @@ public class MonsterStats {
         this.tagBgColor = (byte) tagBgColor;
     }
 
-    public void setSkills(List<MobSkillId> skills) {
-        for (int i = this.skills.size(); i < skills.size(); i++) {
-            this.skills.add(null);
-        }
-        for (int i = 0; i < skills.size(); i++) {
-            this.skills.set(i, skills.get(i));
-        }
+    public void setSkills(Set<MobSkillId> skills) {
+        this.skills = skills;
     }
 
-    public List<MobSkillId> getSkills() {
-        return Collections.unmodifiableList(this.skills);
+    public Set<MobSkillId> getSkills() {
+        return Collections.unmodifiableSet(this.skills);
     }
 
     public int getNoSkills() {

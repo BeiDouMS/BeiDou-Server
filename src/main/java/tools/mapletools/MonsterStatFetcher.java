@@ -108,7 +108,7 @@ public class MonsterStatFetcher {
                 Data monsterSkillData = monsterInfoData.getChildByPath("skill");
                 if (monsterSkillData != null) {
                     int i = 0;
-                    List<MobSkillId> skills = new ArrayList<>();
+                    Set<MobSkillId> skills = new HashSet<>();
                     while (monsterSkillData.getChildByPath(Integer.toString(i)) != null) {
                         int skillId = DataTool.getInt(i + "/skill", monsterSkillData, 0);
                         MobSkillType type = MobSkillType.from(skillId);

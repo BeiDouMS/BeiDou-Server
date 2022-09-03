@@ -1426,25 +1426,12 @@ public class Monster extends AbstractLoadedLife {
         return map.getAggroCoordinator();
     }
 
-    public List<MobSkillId> getSkills() {
+    public Set<MobSkillId> getSkills() {
         return stats.getSkills();
     }
 
     public boolean hasSkill(int skillId, int level) {
         return stats.hasSkill(skillId, level);
-    }
-
-    public int getSkillPos(int skillId, int level) {
-        int pos = 0;
-        for (MobSkillId ms : this.getSkills()) {
-            if (ms.type().getId() == skillId && ms.level() == level) {
-                return pos;
-            }
-
-            pos++;
-        }
-
-        return -1;
     }
 
     public boolean canUseSkill(MobSkill toUse, boolean apply) {
@@ -1600,8 +1587,20 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    public int getNoSkills() {
-        return this.stats.getNoSkills();
+    public boolean hasAnySkill() {
+        return this.stats.getNoSkills() > 0;
+    }
+
+    public MobSkillId getRandomSkill() {
+        Set<MobSkillId> skills = stats.getSkills();
+        if (skills.size() == 0) {
+            return null;
+        }
+        // There is no simple way of getting a random element from a Set. Have to make do with this.
+        return skills.stream()
+                .skip(Randomizer.nextInt(skills.size()))
+                .findAny()
+                .orElse(null);
     }
 
     public boolean isFirstAttack() {

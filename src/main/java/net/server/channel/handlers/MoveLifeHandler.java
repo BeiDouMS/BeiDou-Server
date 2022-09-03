@@ -32,7 +32,6 @@ import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.Randomizer;
 import tools.exceptions.EmptyMovementException;
 
 import java.awt.*;
@@ -80,7 +79,6 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         boolean isAttack = inRangeInclusive(rawActivity, 24, 41);
         boolean isSkill = inRangeInclusive(rawActivity, 42, 59);
 
-        MobSkill toUse = null;
         int useSkillId = 0, useSkillLevel = 0;
 
         MobSkill nextUse = null;
@@ -88,14 +86,12 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 
         boolean nextMovementCouldBeSkill = !(isSkill || (pNibbles != 0));
 
-        int castPos;
         if (isSkill) {
             useSkillId = skillId;
             useSkillLevel = skillLv;
 
-            castPos = monster.getSkillPos(useSkillId, useSkillLevel);
-            if (castPos != -1) {
-                toUse = MobSkillFactory.getMobSkill(MobSkillType.from(useSkillId), useSkillLevel);
+            if (monster.hasSkill(useSkillId, useSkillLevel)) {
+                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.from(useSkillId), useSkillLevel);
 
                 if (monster.canUseSkill(toUse, true)) {
                     int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
@@ -108,8 +104,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 }
             }
         } else {
-            castPos = (rawActivity - 24) / 2;
-
+            int castPos = (rawActivity - 24) / 2;
             int atkStatus = monster.canUseAttack(castPos, isSkill);
             if (atkStatus < 1) {
                 rawActivity = -1;
@@ -118,23 +113,18 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         }
 
         int mobMp = monster.getMp();
-        if (nextMovementCouldBeSkill) {
-            int noSkills = monster.getNoSkills();
-            if (noSkills > 0) {
-                int rndSkill = Randomizer.nextInt(noSkills);
+        if (nextMovementCouldBeSkill && monster.hasAnySkill()) {
+            MobSkillId skillToUse = monster.getRandomSkill();
+            nextSkillId = skillToUse.type().getId();
+            nextSkillLevel = skillToUse.level();
+            nextUse = MobSkillFactory.getMobSkill(skillToUse.type(), skillToUse.level());
 
-                MobSkillId skillToUse = monster.getSkills().get(rndSkill);
-                nextSkillId = skillToUse.type().getId();
-                nextSkillLevel = skillToUse.level();
-                nextUse = MobSkillFactory.getMobSkill(MobSkillType.from(nextSkillId), nextSkillLevel);
+            if (!(nextUse != null && monster.canUseSkill(nextUse, false) && nextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && mobMp >= nextUse.getMpCon())) {
+                // thanks OishiiKawaiiDesu for noticing mobs trying to cast skills they are not supposed to be able
 
-                if (!(nextUse != null && monster.canUseSkill(nextUse, false) && nextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && mobMp >= nextUse.getMpCon())) {
-                    // thanks OishiiKawaiiDesu for noticing mobs trying to cast skills they are not supposed to be able
-
-                    nextSkillId = 0;
-                    nextSkillLevel = 0;
-                    nextUse = null;
-                }
+                nextSkillId = 0;
+                nextSkillLevel = 0;
+                nextUse = null;
             }
         }
 
@@ -164,8 +154,8 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             p.seek(movementDataStart);
 
             if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE) {
-                log.debug("{} castPos: {}, rawAct: {}, opt: {}, skillId: {}, skillLv: {}, allowSkill: {}, mobMp: {}",
-                        isSkill ? "SKILL" : (isAttack ? "ATTCK" : ""), castPos, rawActivity, pOption, useSkillId,
+                log.debug("{} rawAct: {}, opt: {}, skillId: {}, skillLv: {}, allowSkill: {}, mobMp: {}",
+                        isSkill ? "SKILL" : (isAttack ? "ATTCK" : ""), rawActivity, pOption, useSkillId,
                         useSkillLevel, nextMovementCouldBeSkill, mobMp);
             }
 

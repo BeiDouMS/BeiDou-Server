@@ -188,7 +188,7 @@ public class LifeFactory {
         Data monsterSkillInfoData = monsterInfoData.getChildByPath("skill");
         if (monsterSkillInfoData != null) {
             int i = 0;
-            List<MobSkillId> skills = new ArrayList<>();
+            Set<MobSkillId> skills = new HashSet<>();
             while (monsterSkillInfoData.getChildByPath(Integer.toString(i)) != null) {
                 int skillId = DataTool.getInt(i + "/skill", monsterSkillInfoData, 0);
                 int skillLv = DataTool.getInt(i + "/level", monsterSkillInfoData, 0);
