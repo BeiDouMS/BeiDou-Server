@@ -47,8 +47,7 @@ import java.util.*;
 public class MobSkill {
     private static final Logger log = LoggerFactory.getLogger(MobSkill.class);
 
-    private final MobSkillType type;
-    private final int skillLevel;
+    private final MobSkillId id;
     private final int mpCon;
     private final int spawnEffect;
     private final int hp;
@@ -65,8 +64,7 @@ public class MobSkill {
 
     private MobSkill(MobSkillType type, int level, int mpCon, int spawnEffect, int hp, int x, int y, int count,
                      long duration, long cooltime, float prop, Point lt, Point rb, int limit, List<Integer> toSummon) {
-        this.type = type;
-        this.skillLevel = level;
+        this.id = new MobSkillId(type, level);
         this.mpCon = mpCon;
         this.spawnEffect = spawnEffect;
         this.hp = hp;
@@ -195,7 +193,7 @@ public class MobSkill {
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
         List<Integer> reflection = new ArrayList<>();
-        switch (type) {
+        switch (id.type()) {
             case ATTACK_UP, ATTACK_UP_M, PAD -> stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
             case MAGIC_ATTACK_UP, MAGIC_ATTACK_UP_M, MAD -> stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
             case DEFENSE_UP, DEFENSE_UP_M, PDR -> stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
@@ -368,10 +366,10 @@ public class MobSkill {
     private void applyMonsterBuffs(Map<MonsterStatus, Integer> stats, boolean skill, Monster monster, List<Integer> reflection) {
         if (lt != null && rb != null && skill) {
             for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
-                ((Monster) mons).applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
+                ((Monster) mons).applyMonsterBuff(stats, getX(), getDuration(), this, reflection);
             }
         } else {
-            monster.applyMonsterBuff(stats, getX(), type.getId(), getDuration(), this, reflection);
+            monster.applyMonsterBuff(stats, getX(), getDuration(), this, reflection);
         }
     }
 
@@ -399,16 +397,12 @@ public class MobSkill {
         return monster.getMap().getPlayersInRange(calculateBoundingBox(monster.getPosition()));
     }
 
+    public MobSkillId getId() {
+        return id;
+    }
+
     public MobSkillType getType() {
-        return type;
-    }
-
-    public int getSkillId() {
-        return type.getId();
-    }
-
-    public int getSkillLevel() {
-        return skillLevel;
+        return id.type();
     }
 
     public int getMpCon() {

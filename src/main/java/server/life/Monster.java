@@ -82,7 +82,7 @@ public class Monster extends AbstractLoadedLife {
     private int VenomMultiplier = 0;
     private boolean fake = false;
     private boolean dropsDisabled = false;
-    private final List<Pair<Integer, Integer>> usedSkills = new ArrayList<>();
+    private final List<Pair<Integer, Integer>> usedSkills = new ArrayList<>(); // TODO: change to Set<MobSkillId>
     private final Map<Pair<Integer, Integer>, Integer> skillsUsed = new HashMap<>();
     private final Set<Integer> usedAttacks = new HashSet<>();
     private Set<Integer> calledMobOids = null;
@@ -1289,7 +1289,7 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    public void applyMonsterBuff(final Map<MonsterStatus, Integer> stats, final int x, int skillId, long duration, MobSkill skill, final List<Integer> reflection) {
+    public void applyMonsterBuff(final Map<MonsterStatus, Integer> stats, final int x, long duration, MobSkill skill, final List<Integer> reflection) {
         final Runnable cancelTask = () -> {
             if (isAlive()) {
                 Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), stats);
@@ -1448,7 +1448,8 @@ public class Monster extends AbstractLoadedLife {
         monsterLock.lock();
         try {
             for (Pair<Integer, Integer> skill : usedSkills) {   // thanks OishiiKawaiiDesu for noticing an issue with mobskill cooldown
-                if (skill.getLeft() == toUse.getSkillId() && skill.getRight() == toUse.getSkillLevel()) {
+                MobSkillId msId = toUse.getId();
+                if (skill.getLeft() == msId.type().getId() && skill.getRight() == msId.level()) {
                     return false;
                 }
             }
@@ -1482,8 +1483,8 @@ public class Monster extends AbstractLoadedLife {
     }
 
     private void usedSkill(MobSkill skill) {
-        final int skillId = skill.getSkillId();
-        final int level = skill.getSkillLevel();
+        final int skillId = skill.getId().type().getId();
+        final int level = skill.getId().level();
         long cooltime = skill.getCoolTime();
 
         monsterLock.lock();

@@ -8108,8 +8108,9 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(2, e.getKey().ordinal());
 
                         MobSkill ms = e.getValue().getRight();
-                        ps.setInt(3, ms.getSkillId());
-                        ps.setInt(4, ms.getSkillLevel());
+                        MobSkillId msId = ms.getId();
+                        ps.setInt(3, msId.type().getId());
+                        ps.setInt(4, msId.level());
                         ps.setInt(5, e.getValue().getLeft().intValue());
                         ps.addBatch();
                     }
