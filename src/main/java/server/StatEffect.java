@@ -1039,14 +1039,15 @@ public class StatEffect {
             if (skill != null) {
                 final Disease dis = skill.getDisease();
                 Party opposition = applyfrom.getParty().getEnemy();
-                if (skill.targetsAll) {
+                if (skill.targetsAll()) {
                     for (PartyCharacter enemyChrs : opposition.getPartyMembers()) {
                         Character chrApp = enemyChrs.getPlayer();
                         if (chrApp != null && chrApp.getMap().isCPQMap()) {
                             if (dis == null) {
                                 chrApp.dispel();
                             } else {
-                                chrApp.giveDebuff(dis, MCSkill.getMobSkill(dis.getMobSkillType(), skill.level));
+                                MobSkill mobSkill = MobSkillFactory.getMobSkill(dis.getMobSkillType(), skill.level());
+                                chrApp.giveDebuff(dis, mobSkill);
                             }
                         }
                     }
@@ -1058,7 +1059,8 @@ public class StatEffect {
                         if (dis == null) {
                             chrApp.dispel();
                         } else {
-                            chrApp.giveDebuff(dis, MCSkill.getMobSkill(dis.getMobSkillType(), skill.level));
+                            MobSkill mobSkill = MobSkillFactory.getMobSkill(dis.getMobSkillType(), skill.level());
+                            chrApp.giveDebuff(dis, mobSkill);
                         }
                     }
                 }

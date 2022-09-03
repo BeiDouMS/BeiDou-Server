@@ -47,7 +47,7 @@ public class MobSkillFactory {
     private static final Lock readLock = readWriteLock.readLock();
     private static final Lock writeLock = readWriteLock.writeLock();
 
-    public static MobSkill getMobSkill(final MobSkillType type, final int level) { // TODO: return Optional
+    public static MobSkill getMobSkill(final MobSkillType type, final int level) {
         readLock.lock();
         try {
             MobSkill ms = mobSkills.get(createKey(type, level));

@@ -90,26 +90,9 @@ public class CarnivalFactory {
         return guardians.get(id);
     }
 
-    public static class MCSkill {
-
-        public int cpLoss;
-        public MobSkillType mobSkillType;
-        public int level;
-        public boolean targetsAll;
-
-        public MCSkill(int _cpLoss, MobSkillType mobSkillType, int _level, boolean _targetsAll) {
-            cpLoss = _cpLoss;
-            mobSkillType = mobSkillType;
-            level = _level;
-            targetsAll = _targetsAll;
-        }
-
+    public record MCSkill(int cpLoss, MobSkillType mobSkillType, int level, boolean targetsAll) {
         public MobSkill getSkill() {
-            return getMobSkill(mobSkillType, level);
-        }
-
-        public static MobSkill getMobSkill(MobSkillType type, int level) {
-            return MobSkillFactory.getMobSkill(type, level);
+            return MobSkillFactory.getMobSkill(mobSkillType, level);
         }
 
         public Disease getDisease() {
