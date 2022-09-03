@@ -8,6 +8,7 @@ import provider.DataTool;
 import provider.wz.WZFiles;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.MobSkillType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,7 +95,7 @@ public class CarnivalFactory {
         }
 
         public static MobSkill getMobSkill(int skillid, int level) {
-            return MobSkillFactory.getMobSkill(skillid, level);
+            return MobSkillFactory.getMobSkill(MobSkillType.from(skillid), level);
         }
 
         public Disease getDisease() {

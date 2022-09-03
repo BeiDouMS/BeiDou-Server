@@ -47,11 +47,10 @@ public class MobSkillFactory {
     private static final Lock readLock = readWriteLock.readLock();
     private static final Lock writeLock = readWriteLock.writeLock();
 
-    // TODO: take in MobSkillType as argument instead of skillId
-    public static MobSkill getMobSkill(final int skillId, final int level) { // TODO: return Optional
+    public static MobSkill getMobSkill(final MobSkillType type, final int level) { // TODO: return Optional
         readLock.lock();
         try {
-            MobSkill ms = mobSkills.get(createKey(skillId, level));
+            MobSkill ms = mobSkills.get(createKey(type, level));
             if (ms != null) {
                 return ms;
             }
@@ -59,18 +58,18 @@ public class MobSkillFactory {
             readLock.unlock();
         }
 
-        return loadMobSkill(skillId, level).orElse(null);
+        return loadMobSkill(type, level).orElse(null);
     }
 
-    private static Optional<MobSkill> loadMobSkill(final int skillId, final int level) {
+    private static Optional<MobSkill> loadMobSkill(final MobSkillType type, final int level) {
         writeLock.lock();
         try {
-            MobSkill existingMs = mobSkills.get(createKey(skillId, level));
+            MobSkill existingMs = mobSkills.get(createKey(type, level));
             if (existingMs != null) {
                 return Optional.of(existingMs);
             }
 
-            Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
+            Data skillData = skillRoot.getChildByPath(type + "/level/" + level);
             if (skillData == null) {
                 return Optional.empty();
             }
@@ -103,7 +102,7 @@ public class MobSkillFactory {
                 rb = (Point) rbData.getData();
             }
 
-            MobSkill loadedMobSkill = new MobSkill.Builder(MobSkillType.from(skillId), level)
+            MobSkill loadedMobSkill = new MobSkill.Builder(type, level)
                     .toSummon(toSummon)
                     .cooltime(cooltime)
                     .duration(duration)
@@ -117,14 +116,14 @@ public class MobSkillFactory {
                     .rb(rb)
                     .build();
 
-            mobSkills.put(createKey(skillId, level), loadedMobSkill);
+            mobSkills.put(createKey(type, level), loadedMobSkill);
             return Optional.of(loadedMobSkill);
         } finally {
             writeLock.unlock();
         }
     }
 
-    private static String createKey(int skillId, int skillLevel) {
-        return skillId + "" + skillLevel;
+    private static String createKey(MobSkillType type, int skillLevel) {
+        return type.getId() + "" + skillLevel;
     }
 }

@@ -201,7 +201,7 @@ public class LifeFactory {
                         animationTime += DataTool.getIntConvert("delay", effectEntry, 0);
                     }
 
-                    MobSkill skill = MobSkillFactory.getMobSkill(skillId, skillLv);
+                    MobSkill skill = MobSkillFactory.getMobSkill(MobSkillType.from(skillId), skillLv);
                     mi.setMobSkillAnimationTime(skill, animationTime);
                 }
 

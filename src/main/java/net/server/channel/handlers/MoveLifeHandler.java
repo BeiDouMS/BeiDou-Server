@@ -96,7 +96,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
 
             castPos = monster.getSkillPos(useSkillId, useSkillLevel);
             if (castPos != -1) {
-                toUse = MobSkillFactory.getMobSkill(useSkillId, useSkillLevel);
+                toUse = MobSkillFactory.getMobSkill(MobSkillType.from(useSkillId), useSkillLevel);
 
                 if (monster.canUseSkill(toUse, true)) {
                     int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
@@ -127,7 +127,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                 Pair<Integer, Integer> skillToUse = monster.getSkills().get(rndSkill);
                 nextSkillId = skillToUse.getLeft();
                 nextSkillLevel = skillToUse.getRight();
-                nextUse = MobSkillFactory.getMobSkill(nextSkillId, nextSkillLevel);
+                nextUse = MobSkillFactory.getMobSkill(MobSkillType.from(nextSkillId), nextSkillLevel);
 
                 if (!(nextUse != null && monster.canUseSkill(nextUse, false) && nextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && mobMp >= nextUse.getMpCon())) {
                     // thanks OishiiKawaiiDesu for noticing mobs trying to cast skills they are not supposed to be able

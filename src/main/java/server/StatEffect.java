@@ -42,6 +42,7 @@ import provider.Data;
 import provider.DataTool;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.MobSkillType;
 import server.life.Monster;
 import server.maps.*;
 import server.partyquest.CarnivalFactory;
@@ -1067,7 +1068,7 @@ public class StatEffect {
                 applyfrom.dispelDebuff(debuff);
             }
         } else if (mobSkill > 0 && mobSkillLevel > 0) {
-            MobSkill ms = MobSkillFactory.getMobSkill(mobSkill, mobSkillLevel);
+            MobSkill ms = MobSkillFactory.getMobSkill(MobSkillType.from(mobSkill), mobSkillLevel);
             Disease dis = Disease.getBySkill(mobSkill);
 
             if (target > 0) {

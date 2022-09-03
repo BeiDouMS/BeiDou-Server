@@ -494,8 +494,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         List<Pair<Integer, Integer>> mobSkills = monster.getSkills();
 
                         for (Pair<Integer, Integer> ms : mobSkills) {
-                            if (ms.left == 145) {
-                                MobSkill toUse = MobSkillFactory.getMobSkill(ms.left, ms.right);
+                            if (ms.left == 145) { // TODO: de-magic
+                                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, ms.right);
                                 player.addHP(-toUse.getX());
                                 map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getX(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }
@@ -505,8 +505,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         List<Pair<Integer, Integer>> mobSkills = monster.getSkills();
 
                         for (Pair<Integer, Integer> ms : mobSkills) {
-                            if (ms.left == 145) {
-                                MobSkill toUse = MobSkillFactory.getMobSkill(ms.left, ms.right);
+                            if (ms.left == 145) { // TODO: de-magic
+                                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, ms.right);
                                 player.addHP(-toUse.getY());
                                 map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getY(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }

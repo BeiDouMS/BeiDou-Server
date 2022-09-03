@@ -151,7 +151,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     is_deadly = true;
                 }
                 mpattack += attackInfo.getMpBurn();
-                MobSkill mobSkill = MobSkillFactory.getMobSkill(attackInfo.getDiseaseSkill(), attackInfo.getDiseaseLevel());
+                MobSkill mobSkill = MobSkillFactory.getMobSkill(MobSkillType.from(attackInfo.getDiseaseSkill()), attackInfo.getDiseaseLevel());
                 if (mobSkill != null && damage > 0) {
                     mobSkill.applyEffect(chr, attacker, false, banishPlayers);
                 }

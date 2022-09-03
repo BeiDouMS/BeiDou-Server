@@ -5,6 +5,7 @@ import client.Client;
 import client.command.Command;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
+import server.life.MobSkillType;
 
 import java.util.Collections;
 
@@ -21,7 +22,8 @@ public class MobSkillCommand extends Command {
 
         String skillId = params[0];
         String skillLevel = params[1];
-        MobSkill mobSkill = MobSkillFactory.getMobSkill(Integer.parseInt(skillId), Integer.parseInt(skillLevel));
+        MobSkillType type = MobSkillType.from(Integer.parseInt(skillId));
+        MobSkill mobSkill = MobSkillFactory.getMobSkill(type, Integer.parseInt(skillLevel));
         if (mobSkill == null) {
             throw new IllegalArgumentException("Mob skill not found. Id: %s, level: %s".formatted(skillId, skillLevel));
         }
