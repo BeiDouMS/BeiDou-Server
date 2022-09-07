@@ -3,12 +3,10 @@ package tools.mapletools;
 import provider.*;
 import provider.wz.DataType;
 import provider.wz.WZFiles;
-import server.life.Element;
-import server.life.ElementalEffectiveness;
+import server.life.*;
 import server.life.LifeFactory.BanishInfo;
 import server.life.LifeFactory.loseItem;
 import server.life.LifeFactory.selfDestruction;
-import server.life.MonsterStats;
 import tools.Pair;
 
 import java.time.Duration;
@@ -110,9 +108,12 @@ public class MonsterStatFetcher {
                 Data monsterSkillData = monsterInfoData.getChildByPath("skill");
                 if (monsterSkillData != null) {
                     int i = 0;
-                    List<Pair<Integer, Integer>> skills = new ArrayList<>();
+                    Set<MobSkillId> skills = new HashSet<>();
                     while (monsterSkillData.getChildByPath(Integer.toString(i)) != null) {
-                        skills.add(new Pair<>(DataTool.getInt(i + "/skill", monsterSkillData, 0), DataTool.getInt(i + "/level", monsterSkillData, 0)));
+                        int skillId = DataTool.getInt(i + "/skill", monsterSkillData, 0);
+                        MobSkillType type = MobSkillType.from(skillId);
+                        int skillLevel = DataTool.getInt(i + "/level", monsterSkillData, 0);
+                        skills.add(new MobSkillId(type, skillLevel));
                         i++;
                     }
                     stats.setSkills(skills);

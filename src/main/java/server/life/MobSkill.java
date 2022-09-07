@@ -26,6 +26,7 @@ import client.Disease;
 import client.status.MonsterStatus;
 import constants.id.MapId;
 import constants.id.MobId;
+import constants.skills.Bishop;
 import net.server.services.task.channel.OverallService;
 import net.server.services.type.ChannelServices;
 import org.slf4j.Logger;
@@ -34,7 +35,6 @@ import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import server.maps.Mist;
-import tools.ArrayMap;
 import tools.Randomizer;
 
 import java.awt.*;
@@ -47,68 +47,130 @@ import java.util.*;
 public class MobSkill {
     private static final Logger log = LoggerFactory.getLogger(MobSkill.class);
 
-    private final int skillId;
-    private final int skillLevel;
-    private int mpCon;
-    private final List<Integer> toSummon = new ArrayList<>();
-    private int spawnEffect, hp, x, y, count;
-    private long duration, cooltime;
-    private float prop;
-    private Point lt, rb;
-    private int limit;
+    private final MobSkillId id;
+    private final int mpCon;
+    private final int spawnEffect;
+    private final int hp;
+    private final int x;
+    private final int y;
+    private final int count;
+    private final long duration;
+    private final long cooltime;
+    private final float prop;
+    private final Point lt;
+    private final Point rb;
+    private final int limit;
+    private final List<Integer> toSummon;
 
-    public MobSkill(int skillId, int level) {
-        this.skillId = skillId;
-        this.skillLevel = level;
-    }
-
-    public void setMpCon(int mpCon) {
+    private MobSkill(MobSkillType type, int level, int mpCon, int spawnEffect, int hp, int x, int y, int count,
+                     long duration, long cooltime, float prop, Point lt, Point rb, int limit, List<Integer> toSummon) {
+        this.id = new MobSkillId(type, level);
         this.mpCon = mpCon;
-    }
-
-    public void addSummons(List<Integer> toSummon) {
-        this.toSummon.addAll(toSummon);
-    }
-
-    public void setSpawnEffect(int spawnEffect) {
         this.spawnEffect = spawnEffect;
-    }
-
-    public void setHp(int hp) {
         this.hp = hp;
-    }
-
-    public void setX(int x) {
         this.x = x;
-    }
-
-    public void setY(int y) {
         this.y = y;
-    }
-
-    public void setCount(int count) {
         this.count = count;
-    }
-
-    public void setDuration(long duration) {
         this.duration = duration;
-    }
-
-    public void setCoolTime(long cooltime) {
         this.cooltime = cooltime;
-    }
-
-    public void setProp(float prop) {
         this.prop = prop;
-    }
-
-    public void setLtRb(Point lt, Point rb) {
         this.lt = lt;
         this.rb = rb;
+        this.limit = limit;
+        this.toSummon = toSummon;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
+    static class Builder {
+        private final MobSkillType type;
+        private final int level;
+        private int mpCon;
+        private int spawnEffect;
+        private int hp;
+        private int x;
+        private int y;
+        private int count;
+        private long duration;
+        private long cooltime;
+        private float prop;
+        private Point lt;
+        private Point rb;
+        private int limit;
+        private List<Integer> toSummon;
+
+        public Builder(MobSkillType type, int level) {
+            this.type = type;
+            this.level = level;
+        }
+
+        public Builder mpCon(int mpCon) {
+            this.mpCon = mpCon;
+            return this;
+        }
+
+        public Builder spawnEffect(int spawnEffect) {
+            this.spawnEffect = spawnEffect;
+            return this;
+        }
+
+        public Builder hp(int hp) {
+            this.hp = hp;
+            return this;
+        }
+
+        public Builder x(int x) {
+            this.x = x;
+            return this;
+        }
+
+        public Builder y(int y) {
+            this.y = y;
+            return this;
+        }
+
+        public Builder count(int count) {
+            this.count = count;
+            return this;
+        }
+
+        public Builder duration(long duration) {
+            this.duration = duration;
+            return this;
+        }
+
+        public Builder cooltime(long cooltime) {
+            this.cooltime = cooltime;
+            return this;
+        }
+
+        public Builder prop(float prop) {
+            this.prop = prop;
+            return this;
+        }
+
+        public Builder lt(Point lt) {
+            this.lt = lt;
+            return this;
+        }
+
+        public Builder rb(Point rb) {
+            this.rb = rb;
+            return this;
+        }
+
+        public Builder limit(int limit) {
+            this.limit = limit;
+            return this;
+        }
+
+        public Builder toSummon(List<Integer> toSummon) {
+            this.toSummon = Collections.unmodifiableList(toSummon);
+            return this;
+        }
+
+        public MobSkill build() {
+            return new MobSkill(type, level, mpCon, spawnEffect, hp, x, y, count, duration, cooltime, prop, lt, rb,
+                    limit, toSummon);
+        }
     }
 
     public void applyDelayedEffect(final Character player, final Monster monster, final boolean skill, int animationTime) {
@@ -126,234 +188,208 @@ public class MobSkill {
         applyEffect(null, monster, false, Collections.emptyList());
     }
 
-    public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayers) {
+    // TODO: avoid output argument banishPlayersOutput
+    public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayersOutput) {
         Disease disease = null;
-        Map<MonsterStatus, Integer> stats = new ArrayMap<>();
-        List<Integer> reflection = new LinkedList<>();
-        switch (skillId) {
-            case 100:
-            case 110:
-            case 150:
-                stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
-                break;
-            case 101:
-            case 111:
-            case 151:
-                stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
-                break;
-            case 102:
-            case 112:
-            case 152:
-                stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
-                break;
-            case 103:
-            case 113:
-            case 153:
-                stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
-                break;
-            case 114:
-                if (lt != null && rb != null && skill) {
-                    List<MapObject> objects = getObjectsInRange(monster, MapObjectType.MONSTER);
-                    final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
-                    for (MapObject mons : objects) {
-                        ((Monster) mons).heal(hps, getY());
-                    }
-                } else {
-                    monster.heal(getX(), getY());
-                }
-                break;
-            case 120:
-                disease = Disease.SEAL;
-                break;
-            case 121:
-                disease = Disease.DARKNESS;
-                break;
-            case 122:
-                disease = Disease.WEAKEN;
-                break;
-            case 123:
-                disease = Disease.STUN;
-                break;
-            case 124:
-                disease = Disease.CURSE;
-                break;
-            case 125:
-                disease = Disease.POISON;
-                break;
-            case 126: // Slow
-                disease = Disease.SLOW;
-                break;
-            case 127:
-                if (lt != null && rb != null && skill) {
-                    for (Character character : getPlayersInRange(monster)) {
-                        character.dispel();
-                    }
-                } else {
-                    player.dispel();
-                }
-                break;
-            case 128: // Seduce
-                disease = Disease.SEDUCE;
-                break;
-            case 129: // Banish
-                if (lt != null && rb != null && skill) {
-                    banishPlayers.addAll(getPlayersInRange(monster));
-                } else {
-                    banishPlayers.add(player);
-                }
-                break;
-            case 131: // Mist
-                monster.getMap().spawnMist(new Mist(calculateBoundingBox(monster.getPosition()), monster, this), x * 100, false, false, false);
-                break;
-            case 132:
-                disease = Disease.CONFUSE;
-                break;
-            case 133: // zombify
-                disease = Disease.ZOMBIFY;
-                break;
-            case 140:
+        Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
+        List<Integer> reflection = new ArrayList<>();
+        switch (id.type()) {
+            case ATTACK_UP, ATTACK_UP_M, PAD -> stats.put(MonsterStatus.WEAPON_ATTACK_UP, x);
+            case MAGIC_ATTACK_UP, MAGIC_ATTACK_UP_M, MAD -> stats.put(MonsterStatus.MAGIC_ATTACK_UP, x);
+            case DEFENSE_UP, DEFENSE_UP_M, PDR -> stats.put(MonsterStatus.WEAPON_DEFENSE_UP, x);
+            case MAGIC_DEFENSE_UP, MAGIC_DEFENSE_UP_M, MDR -> stats.put(MonsterStatus.MAGIC_DEFENSE_UP, x);
+            case HEAL_M -> applyHealEffect(skill, monster);
+            case SEAL -> disease = Disease.SEAL;
+            case DARKNESS -> disease = Disease.DARKNESS;
+            case WEAKNESS -> disease = Disease.WEAKEN;
+            case STUN -> disease = Disease.STUN;
+            case CURSE -> disease = Disease.CURSE;
+            case POISON -> disease = Disease.POISON;
+            case SLOW -> disease = Disease.SLOW;
+            case DISPEL -> applyDispelEffect(skill, monster, player);
+            case SEDUCE -> disease = Disease.SEDUCE;
+            case BANISH -> applyBanishEffect(skill, monster, player, banishPlayersOutput);
+            case AREA_POISON -> spawnMonsterMist(monster);
+            case REVERSE_INPUT -> disease = Disease.CONFUSE;
+            case UNDEAD -> disease = Disease.ZOMBIFY;
+            case PHYSICAL_IMMUNE -> {
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
                     stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 }
-                break;
-            case 141:
+            }
+            case MAGIC_IMMUNE -> {
                 if (makeChanceResult() && !monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
                     stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 }
-                break;
-            case 143: // Weapon Reflect
+            }
+            case PHYSICAL_COUNTER -> {
                 stats.put(MonsterStatus.WEAPON_REFLECT, 10);
                 stats.put(MonsterStatus.WEAPON_IMMUNITY, 10);
                 reflection.add(x);
-                break;
-            case 144: // Magic Reflect
+            }
+            case MAGIC_COUNTER -> {
                 stats.put(MonsterStatus.MAGIC_REFLECT, 10);
                 stats.put(MonsterStatus.MAGIC_IMMUNITY, 10);
                 reflection.add(x);
-                break;
-            case 145: // Weapon / Magic reflect
+            }
+            case PHYSICAL_AND_MAGIC_COUNTER -> {
                 stats.put(MonsterStatus.WEAPON_REFLECT, 10);
                 stats.put(MonsterStatus.WEAPON_IMMUNITY, 10);
                 stats.put(MonsterStatus.MAGIC_REFLECT, 10);
                 stats.put(MonsterStatus.MAGIC_IMMUNITY, 10);
                 reflection.add(x);
-                break;
-            case 154:
-                stats.put(MonsterStatus.ACC, x);
-                break;
-            case 155:
-                stats.put(MonsterStatus.AVOID, x);
-                break;
-            case 156:
-                stats.put(MonsterStatus.SPEED, x);
-                break;
-            case 157:
-                stats.put(MonsterStatus.SEAL_SKILL, x);
-                break;
-            case 200: // summon
-                int skillLimit = this.getLimit();
-                MapleMap map = monster.getMap();
-
-                if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
-                    skillLimit = Integer.MAX_VALUE;
-                }
-
-                if (map.getSpawnedMonstersOnMap() < 80) {
-                    List<Integer> summons = getSummons();
-                    int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
-                    if (summonLimit >= 1) {
-                        boolean bossRushMap = MapId.isBossRush(map.getId());
-
-                        Collections.shuffle(summons);
-                        for (Integer mobId : summons.subList(0, summonLimit)) {
-                            Monster toSpawn = LifeFactory.getMonster(mobId);
-                            if (toSpawn != null) {
-                                if (bossRushMap) {
-                                    toSpawn.disableDrops();  // no littering on BRPQ pls
-                                }
-                                toSpawn.setPosition(monster.getPosition());
-                                int ypos, xpos;
-                                xpos = (int) monster.getPosition().getX();
-                                ypos = (int) monster.getPosition().getY();
-                                switch (mobId) {
-                                    case MobId.HIGH_DARKSTAR: // Pap bomb high
-                                        toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
-                                        ypos = -590;
-                                        break;
-                                    case MobId.LOW_DARKSTAR: // Pap bomb
-                                        xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
-                                        if (ypos != -590) {
-                                            ypos = (int) monster.getPosition().getY();
-                                        }
-                                        break;
-                                    case MobId.BLOODY_BOOM: //Pianus bomb
-                                        if (Math.ceil(Math.random() * 5) == 1) {
-                                            ypos = 78;
-                                            xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
-                                        } else {
-                                            xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
-                                        }
-                                        break;
-                                }
-                                switch (map.getId()) {
-                                    case MapId.ORIGIN_OF_CLOCKTOWER: //Pap map
-                                        if (xpos < -890) {
-                                            xpos = (int) (Math.ceil(Math.random() * 150) - 890);
-                                        } else if (xpos > 230) {
-                                            xpos = (int) (230 - Math.ceil(Math.random() * 150));
-                                        }
-                                        break;
-                                    case MapId.CAVE_OF_PIANUS: // Pianus map
-                                        if (xpos < -239) {
-                                            xpos = (int) (Math.ceil(Math.random() * 150) - 239);
-                                        } else if (xpos > 371) {
-                                            xpos = (int) (371 - Math.ceil(Math.random() * 150));
-                                        }
-                                        break;
-                                }
-                                toSpawn.setPosition(new Point(xpos, ypos));
-                                if (toSpawn.getId() == MobId.LOW_DARKSTAR) {
-                                    map.spawnFakeMonster(toSpawn);
-                                } else {
-                                    map.spawnMonsterWithEffect(toSpawn, getSpawnEffect(), toSpawn.getPosition());
-                                }
-                                monster.addSummonedMob(toSpawn);
-                            }
-                        }
-                    }
-                }
-                break;
-            default:
-                log.warn("Unhandled Mob skill: {}", skillId);
-                break;
+            }
+            case ACC -> stats.put(MonsterStatus.ACC, x);
+            case EVA -> stats.put(MonsterStatus.AVOID, x);
+            case SPEED -> stats.put(MonsterStatus.SPEED, x);
+            case SEAL_SKILL -> stats.put(MonsterStatus.SEAL_SKILL, x);
+            case SUMMON -> summonMonsters(monster);
         }
         if (stats.size() > 0) {
-            if (lt != null && rb != null && skill) {
-                for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
-                    ((Monster) mons).applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
-                }
-            } else {
-                monster.applyMonsterBuff(stats, getX(), getSkillId(), getDuration(), this, reflection);
-            }
+            applyMonsterBuffs(stats, skill, monster, reflection);
         }
         if (disease != null) {
-            if (lt != null && rb != null && skill) {
-                int i = 0;
-                for (Character character : getPlayersInRange(monster)) {
-                    if (!character.hasActiveBuff(2321005)) {  // holy shield
-                        if (disease.equals(Disease.SEDUCE)) {
-                            if (i < count) {
-                                character.giveDebuff(Disease.SEDUCE, this);
-                                i++;
-                            }
-                        } else {
-                            character.giveDebuff(disease, this);
+            applyDisease(disease, skill, monster, player);
+        }
+    }
+
+    private void applyHealEffect(boolean skill, Monster monster) {
+        if (lt != null && rb != null && skill) {
+            List<MapObject> objects = getObjectsInRange(monster, MapObjectType.MONSTER);
+            final int hps = (getX() / 1000) * (int) (950 + 1050 * Math.random());
+            for (MapObject mons : objects) {
+                ((Monster) mons).heal(hps, getY());
+            }
+        } else {
+            monster.heal(getX(), getY());
+        }
+    }
+
+    private void applyDispelEffect(boolean skill, Monster monster, Character player) {
+        if (lt != null && rb != null && skill) {
+            getPlayersInRange(monster).forEach(Character::dispel);
+        } else {
+            player.dispel();
+        }
+    }
+
+    private void applyBanishEffect(boolean skill, Monster monster, Character player,
+                                   List<Character> banishPlayersOutput) {
+        if (lt != null && rb != null && skill) {
+            banishPlayersOutput.addAll(getPlayersInRange(monster));
+        } else {
+            banishPlayersOutput.add(player);
+        }
+    }
+
+    private void spawnMonsterMist(Monster monster) {
+        Rectangle mistArea = calculateBoundingBox(monster.getPosition());
+        var mist = new Mist(mistArea, monster, this);
+        int mistDuration = x * 100;
+        monster.getMap().spawnMist(mist, mistDuration, false, false, false);
+    }
+
+    private void summonMonsters(Monster monster) {
+        int skillLimit = this.getLimit();
+        MapleMap map = monster.getMap();
+
+        if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
+            skillLimit = Integer.MAX_VALUE;
+        }
+
+        if (map.getSpawnedMonstersOnMap() < 80) {
+            List<Integer> summons = getSummons();
+            int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
+            if (summonLimit >= 1) {
+                boolean bossRushMap = MapId.isBossRush(map.getId());
+
+                Collections.shuffle(summons);
+                for (Integer mobId : summons.subList(0, summonLimit)) {
+                    Monster toSpawn = LifeFactory.getMonster(mobId);
+                    if (toSpawn != null) {
+                        if (bossRushMap) {
+                            toSpawn.disableDrops();  // no littering on BRPQ pls
                         }
+                        toSpawn.setPosition(monster.getPosition());
+                        int ypos, xpos;
+                        xpos = (int) monster.getPosition().getX();
+                        ypos = (int) monster.getPosition().getY();
+                        switch (mobId) {
+                            case MobId.HIGH_DARKSTAR: // Pap bomb high
+                                toSpawn.setFh((int) Math.ceil(Math.random() * 19.0));
+                                ypos = -590;
+                                break;
+                            case MobId.LOW_DARKSTAR: // Pap bomb
+                                xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
+                                if (ypos != -590) {
+                                    ypos = (int) monster.getPosition().getY();
+                                }
+                                break;
+                            case MobId.BLOODY_BOOM: //Pianus bomb
+                                if (Math.ceil(Math.random() * 5) == 1) {
+                                    ypos = 78;
+                                    xpos = Randomizer.nextInt(5) + (Randomizer.nextInt(2) == 1 ? 180 : 0);
+                                } else {
+                                    xpos = (int) (monster.getPosition().getX() + Randomizer.nextInt(1000) - 500);
+                                }
+                                break;
+                        }
+                        switch (map.getId()) {
+                            case MapId.ORIGIN_OF_CLOCKTOWER: //Pap map
+                                if (xpos < -890) {
+                                    xpos = (int) (Math.ceil(Math.random() * 150) - 890);
+                                } else if (xpos > 230) {
+                                    xpos = (int) (230 - Math.ceil(Math.random() * 150));
+                                }
+                                break;
+                            case MapId.CAVE_OF_PIANUS: // Pianus map
+                                if (xpos < -239) {
+                                    xpos = (int) (Math.ceil(Math.random() * 150) - 239);
+                                } else if (xpos > 371) {
+                                    xpos = (int) (371 - Math.ceil(Math.random() * 150));
+                                }
+                                break;
+                        }
+                        toSpawn.setPosition(new Point(xpos, ypos));
+                        if (toSpawn.getId() == MobId.LOW_DARKSTAR) {
+                            map.spawnFakeMonster(toSpawn);
+                        } else {
+                            map.spawnMonsterWithEffect(toSpawn, getSpawnEffect(), toSpawn.getPosition());
+                        }
+                        monster.addSummonedMob(toSpawn);
                     }
                 }
-            } else {
-                player.giveDebuff(disease, this);
             }
+        }
+    }
+
+    private void applyMonsterBuffs(Map<MonsterStatus, Integer> stats, boolean skill, Monster monster, List<Integer> reflection) {
+        if (lt != null && rb != null && skill) {
+            for (MapObject mons : getObjectsInRange(monster, MapObjectType.MONSTER)) {
+                ((Monster) mons).applyMonsterBuff(stats, getX(), getDuration(), this, reflection);
+            }
+        } else {
+            monster.applyMonsterBuff(stats, getX(), getDuration(), this, reflection);
+        }
+    }
+
+    private void applyDisease(Disease disease, boolean skill, Monster monster, Character player) {
+        if (lt != null && rb != null && skill) {
+            int i = 0;
+            for (Character character : getPlayersInRange(monster)) {
+                if (!character.hasActiveBuff(Bishop.HOLY_SHIELD)) {
+                    if (disease.equals(Disease.SEDUCE)) {
+                        if (i < count) {
+                            character.giveDebuff(Disease.SEDUCE, this);
+                            i++;
+                        }
+                    } else {
+                        character.giveDebuff(disease, this);
+                    }
+                }
+            }
+        } else {
+            player.giveDebuff(disease, this);
         }
     }
 
@@ -361,12 +397,12 @@ public class MobSkill {
         return monster.getMap().getPlayersInRange(calculateBoundingBox(monster.getPosition()));
     }
 
-    public int getSkillId() {
-        return skillId;
+    public MobSkillId getId() {
+        return id;
     }
 
-    public int getSkillLevel() {
-        return skillLevel;
+    public MobSkillType getType() {
+        return id.type();
     }
 
     public int getMpCon() {
@@ -374,7 +410,7 @@ public class MobSkill {
     }
 
     public List<Integer> getSummons() {
-        return new ArrayList<>(toSummon);
+        return toSummon;
     }
 
     public int getSpawnEffect() {

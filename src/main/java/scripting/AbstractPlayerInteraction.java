@@ -965,10 +965,6 @@ public class AbstractPlayerInteraction {
         return LifeFactory.getMonster(mid);
     }
 
-    public MobSkill getMobSkill(int skill, int level) {
-        return MobSkillFactory.getMobSkill(skill, level);
-    }
-
     public void spawnGuide() {
         c.sendPacket(PacketCreator.spawnGuide(true));
     }
@@ -1199,12 +1195,12 @@ public class AbstractPlayerInteraction {
     }
 
     private void applySealSkill(Monster monster) {
-        MobSkill sealSkill = MobSkillFactory.getMobSkill(157, 1);
+        MobSkill sealSkill = MobSkillFactory.getMobSkill(MobSkillType.SEAL_SKILL, 1);
         sealSkill.applyEffect(monster);
     }
 
     private void applyReduceAvoid(Monster monster) {
-        MobSkill reduceAvoidSkill = MobSkillFactory.getMobSkill(155, 2);
+        MobSkill reduceAvoidSkill = MobSkillFactory.getMobSkill(MobSkillType.EVA, 2);
         reduceAvoidSkill.applyEffect(monster);
     }
 

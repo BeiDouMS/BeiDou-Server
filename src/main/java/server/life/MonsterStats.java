@@ -41,7 +41,7 @@ public class MonsterStats {
     public Map<Element, ElementalEffectiveness> resistance = new HashMap<>();
     public List<Integer> revives = Collections.emptyList();
     public byte tagColor, tagBgColor;
-    public List<Pair<Integer, Integer>> skills = new ArrayList<>();
+    public Set<MobSkillId> skills = new HashSet<>();
     public Pair<Integer, Integer> cool = null;
     public BanishInfo banish = null;
     public List<loseItem> loseItem = null;
@@ -190,18 +190,12 @@ public class MonsterStats {
         this.tagBgColor = (byte) tagBgColor;
     }
 
-    public void setSkills(List<Pair<Integer, Integer>> skills) {
-        for (int i = this.skills.size(); i < skills.size(); i++) {
-            this.skills.add(null);
-        }
-
-        for (int i = 0; i < skills.size(); i++) {
-            this.skills.set(i, skills.get(i));
-        }
+    public void setSkills(Set<MobSkillId> skills) {
+        this.skills = skills;
     }
 
-    public List<Pair<Integer, Integer>> getSkills() {
-        return Collections.unmodifiableList(this.skills);
+    public Set<MobSkillId> getSkills() {
+        return Collections.unmodifiableSet(this.skills);
     }
 
     public int getNoSkills() {
@@ -209,8 +203,8 @@ public class MonsterStats {
     }
 
     public boolean hasSkill(int skillId, int level) {
-        for (Pair<Integer, Integer> skill : skills) {
-            if (skill.getLeft() == skillId && skill.getRight() == level) {
+        for (MobSkillId skill : skills) {
+            if (skill.type().getId() == skillId && skill.level() == level) {
                 return true;
             }
         }

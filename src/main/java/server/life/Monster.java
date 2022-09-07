@@ -82,8 +82,7 @@ public class Monster extends AbstractLoadedLife {
     private int VenomMultiplier = 0;
     private boolean fake = false;
     private boolean dropsDisabled = false;
-    private final List<Pair<Integer, Integer>> usedSkills = new ArrayList<>();
-    private final Map<Pair<Integer, Integer>, Integer> skillsUsed = new HashMap<>();
+    private final Set<MobSkillId> usedSkills = new HashSet<>();
     private final Set<Integer> usedAttacks = new HashSet<>();
     private Set<Integer> calledMobOids = null;
     private WeakReference<Monster> callerMob = new WeakReference<>(null);
@@ -1276,11 +1275,11 @@ public class Monster extends AbstractLoadedLife {
         return true;
     }
 
-    public final void dispelSkill(final MobSkill skillId) {
+    public final void dispelSkill(final MobSkill skill) {
         List<MonsterStatus> toCancel = new ArrayList<>();
         for (Entry<MonsterStatus, MonsterStatusEffect> effects : stati.entrySet()) {
             MonsterStatusEffect mse = effects.getValue();
-            if (mse.getMobSkill() != null && mse.getMobSkill().getSkillId() == skillId.getSkillId()) { //not checking for level.
+            if (mse.getMobSkill() != null && mse.getMobSkill().getType() == skill.getType()) { //not checking for level.
                 toCancel.add(effects.getKey());
             }
         }
@@ -1289,7 +1288,7 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    public void applyMonsterBuff(final Map<MonsterStatus, Integer> stats, final int x, int skillId, long duration, MobSkill skill, final List<Integer> reflection) {
+    public void applyMonsterBuff(final Map<MonsterStatus, Integer> stats, final int x, long duration, MobSkill skill, final List<Integer> reflection) {
         final Runnable cancelTask = () -> {
             if (isAlive()) {
                 Packet packet = PacketCreator.cancelMonsterStatus(getObjectId(), stats);
@@ -1426,7 +1425,7 @@ public class Monster extends AbstractLoadedLife {
         return map.getAggroCoordinator();
     }
 
-    public List<Pair<Integer, Integer>> getSkills() {
+    public Set<MobSkillId> getSkills() {
         return stats.getSkills();
     }
 
@@ -1434,26 +1433,12 @@ public class Monster extends AbstractLoadedLife {
         return stats.hasSkill(skillId, level);
     }
 
-    public int getSkillPos(int skillId, int level) {
-        int pos = 0;
-        for (Pair<Integer, Integer> ms : this.getSkills()) {
-            if (ms.getLeft() == skillId && ms.getRight() == level) {
-                return pos;
-            }
-
-            pos++;
-        }
-
-        return -1;
-    }
-
     public boolean canUseSkill(MobSkill toUse, boolean apply) {
         if (toUse == null || isBuffed(MonsterStatus.SEAL_SKILL)) {
             return false;
         }
 
-        int useSkillid = toUse.getSkillId();
-        if (useSkillid >= 143 && useSkillid <= 145) {
+        if (isReflectSkill(toUse)) {
             if (this.isBuffed(MonsterStatus.WEAPON_REFLECT) || this.isBuffed(MonsterStatus.MAGIC_REFLECT)) {
                 return false;
             }
@@ -1461,10 +1446,8 @@ public class Monster extends AbstractLoadedLife {
 
         monsterLock.lock();
         try {
-            for (Pair<Integer, Integer> skill : usedSkills) {   // thanks OishiiKawaiiDesu for noticing an issue with mobskill cooldown
-                if (skill.getLeft() == useSkillid && skill.getRight() == toUse.getSkillLevel()) {
-                    return false;
-                }
+            if (usedSkills.contains(toUse.getId())) {
+                return false;
             }
 
             int mpCon = toUse.getMpCon();
@@ -1488,48 +1471,36 @@ public class Monster extends AbstractLoadedLife {
         return true;
     }
 
-    private void usedSkill(MobSkill skill) {
-        final int skillId = skill.getSkillId(), level = skill.getSkillLevel();
-        long cooltime = skill.getCoolTime();
+    private boolean isReflectSkill(MobSkill mobSkill) {
+        return switch (mobSkill.getType()) {
+            case PHYSICAL_COUNTER, MAGIC_COUNTER, PHYSICAL_AND_MAGIC_COUNTER -> true;
+            default -> false;
+        };
+    }
 
+    private void usedSkill(MobSkill skill) {
+        final MobSkillId msId = skill.getId();
         monsterLock.lock();
         try {
             mp -= skill.getMpCon();
 
-            Pair<Integer, Integer> skillKey = new Pair<>(skillId, level);
-            this.usedSkills.add(skillKey);
-
-            Integer useCount = this.skillsUsed.remove(skillKey);
-            if (useCount != null) {
-                this.skillsUsed.put(skillKey, useCount + 1);
-            } else {
-                this.skillsUsed.put(skillKey, 1);
-            }
+            this.usedSkills.add(msId);
         } finally {
             monsterLock.unlock();
         }
 
         final Monster mons = this;
         MapleMap mmap = mons.getMap();
-        Runnable r = () -> mons.clearSkill(skillId, level);
+        Runnable r = () -> mons.clearSkill(skill.getId());
 
         MobClearSkillService service = (MobClearSkillService) map.getChannelServer().getServiceAccess(ChannelServices.MOB_CLEAR_SKILL);
-        service.registerMobClearSkillAction(mmap.getId(), r, cooltime);
+        service.registerMobClearSkillAction(mmap.getId(), r, skill.getCoolTime());
     }
 
-    private void clearSkill(int skillId, int level) {
+    private void clearSkill(MobSkillId msId) {
         monsterLock.lock();
         try {
-            int index = -1;
-            for (Pair<Integer, Integer> skill : usedSkills) {
-                if (skill.getLeft() == skillId && skill.getRight() == level) {
-                    index = usedSkills.indexOf(skill);
-                    break;
-                }
-            }
-            if (index != -1) {
-                usedSkills.remove(index);
-            }
+            usedSkills.remove(msId);
         } finally {
             monsterLock.unlock();
         }
@@ -1593,8 +1564,20 @@ public class Monster extends AbstractLoadedLife {
         }
     }
 
-    public int getNoSkills() {
-        return this.stats.getNoSkills();
+    public boolean hasAnySkill() {
+        return this.stats.getNoSkills() > 0;
+    }
+
+    public MobSkillId getRandomSkill() {
+        Set<MobSkillId> skills = stats.getSkills();
+        if (skills.size() == 0) {
+            return null;
+        }
+        // There is no simple way of getting a random element from a Set. Have to make do with this.
+        return skills.stream()
+                .skip(Randomizer.nextInt(skills.size()))
+                .findAny()
+                .orElse(null);
     }
 
     public boolean isFirstAttack() {

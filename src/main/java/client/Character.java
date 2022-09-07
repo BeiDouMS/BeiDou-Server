@@ -64,10 +64,7 @@ import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
 import server.events.gm.Ola;
-import server.life.MobSkill;
-import server.life.MobSkillFactory;
-import server.life.Monster;
-import server.life.PlayerNPC;
+import server.life.*;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameResult;
 import server.minigame.RockPaperScissor;
@@ -7329,10 +7326,8 @@ public class Character extends AbstractCharacterObject {
                             final int skilllv = rs.getInt("mobskilllv");
                             final long length = rs.getInt("length");
 
-                            MobSkill ms = MobSkillFactory.getMobSkill(skillid, skilllv);
-                            if (ms != null) {
-                                loadedDiseases.put(disease, new Pair<>(length, ms));
-                            }
+                            MobSkill ms = MobSkillFactory.getMobSkill(MobSkillType.from(skillid), skilllv);
+                            loadedDiseases.put(disease, new Pair<>(length, ms));
                         }
                     }
                 }
@@ -8111,8 +8106,9 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(2, e.getKey().ordinal());
 
                         MobSkill ms = e.getValue().getRight();
-                        ps.setInt(3, ms.getSkillId());
-                        ps.setInt(4, ms.getSkillLevel());
+                        MobSkillId msId = ms.getId();
+                        ps.setInt(3, msId.type().getId());
+                        ps.setInt(4, msId.level());
                         ps.setInt(5, e.getValue().getLeft().intValue());
                         ps.addBatch();
                     }

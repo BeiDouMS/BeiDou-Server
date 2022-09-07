@@ -138,14 +138,14 @@ public class Mist extends AbstractMapObject {
         if (owner != null) {
             return PacketCreator.spawnMist(getObjectId(), owner.getId(), getSourceSkill().getId(), owner.getSkillLevel(SkillFactory.getSkill(source.getSourceId())), this);
         }
-        return PacketCreator.spawnMist(getObjectId(), mob.getId(), skill.getSkillId(), skill.getSkillLevel(), this);
+        return PacketCreator.spawnMobMist(getObjectId(), mob.getId(), skill.getId(), this);
     }
 
     public final Packet makeFakeSpawnData(int level) {
         if (owner != null) {
             return PacketCreator.spawnMist(getObjectId(), owner.getId(), getSourceSkill().getId(), level, this);
         }
-        return PacketCreator.spawnMist(getObjectId(), mob.getId(), skill.getSkillId(), skill.getSkillLevel(), this);
+        return PacketCreator.spawnMobMist(getObjectId(), mob.getId(), skill.getId(), this);
     }
 
     @Override

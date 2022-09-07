@@ -29,6 +29,7 @@ import net.packet.InPacket;
 import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import server.life.LifeFactory;
+import server.life.MobSkillType;
 import server.life.Monster;
 import server.partyquest.CarnivalFactory;
 import server.partyquest.CarnivalFactory.MCSkill;
@@ -94,18 +95,15 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                             return;
                         }
                         final MCSkill skill = CarnivalFactory.getInstance().getSkill(skillid.get(num)); //ugh wtf
-                        if (skill == null || c.getPlayer().getCP() < skill.cpLoss) {
+                        if (skill == null || c.getPlayer().getCP() < skill.cpLoss()) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());
                             return;
                         }
                         final Disease dis = skill.getDisease();
                         Party enemies = c.getPlayer().getParty().getEnemy();
-                        if (skill.targetsAll) {
-                            int hitChance = 0;
-                            if (dis.getDisease() == 121 || dis.getDisease() == 122 || dis.getDisease() == 125 || dis.getDisease() == 126) {
-                                hitChance = (int) (Math.random() * 100);
-                            }
+                        if (skill.targetsAll()) {
+                            int hitChance = rollHitChance(dis.getMobSkillType());
                             if (hitChance <= 80) {
                                 for (PartyCharacter mpc : enemies.getPartyMembers()) {
                                     Character mc = mpc.getPlayer();
@@ -130,11 +128,11 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                                 }
                             }
                         }
-                        neededCP = skill.cpLoss;
+                        neededCP = skill.cpLoss();
                         c.sendPacket(PacketCreator.enableActions());
                     } else if (tab == 2) { //protectors
                         final MCSkill skill = CarnivalFactory.getInstance().getGuardian(num);
-                        if (skill == null || c.getPlayer().getCP() < skill.cpLoss) {
+                        if (skill == null || c.getPlayer().getCP() < skill.cpLoss()) {
                             c.sendPacket(PacketCreator.CPQMessage((byte) 1));
                             c.sendPacket(PacketCreator.enableActions());
                             return;
@@ -165,7 +163,7 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             } else {
-                                neededCP = skill.cpLoss;
+                                neededCP = skill.cpLoss();
                             }
                         }
                     }
@@ -178,5 +176,12 @@ public final class MonsterCarnivalHandler extends AbstractPacketHandler {
                 c.releaseClient();
             }
         }
+    }
+
+    private int rollHitChance(MobSkillType type) {
+        return switch (type) {
+            case DARKNESS, WEAKNESS, POISON, SLOW -> (int) (Math.random() * 100);
+            default -> 0;
+        };
     }
 }

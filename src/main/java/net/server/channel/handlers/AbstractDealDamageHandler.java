@@ -44,7 +44,6 @@ import server.maps.MapObject;
 import server.maps.MapObjectType;
 import server.maps.MapleMap;
 import tools.PacketCreator;
-import tools.Pair;
 import tools.Randomizer;
 
 import java.awt.*;
@@ -491,22 +490,18 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         map.damageMonster(player, monster, totDamageToOneMonster);
                     }
                     if (monster.isBuffed(MonsterStatus.WEAPON_REFLECT) && !attack.magic) {
-                        List<Pair<Integer, Integer>> mobSkills = monster.getSkills();
-
-                        for (Pair<Integer, Integer> ms : mobSkills) {
-                            if (ms.left == 145) {
-                                MobSkill toUse = MobSkillFactory.getMobSkill(ms.left, ms.right);
+                        for (MobSkillId msId : monster.getSkills()) {
+                            if (msId.type() == MobSkillType.PHYSICAL_AND_MAGIC_COUNTER) {
+                                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, msId.level());
                                 player.addHP(-toUse.getX());
                                 map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getX(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }
                         }
                     }
                     if (monster.isBuffed(MonsterStatus.MAGIC_REFLECT) && attack.magic) {
-                        List<Pair<Integer, Integer>> mobSkills = monster.getSkills();
-
-                        for (Pair<Integer, Integer> ms : mobSkills) {
-                            if (ms.left == 145) {
-                                MobSkill toUse = MobSkillFactory.getMobSkill(ms.left, ms.right);
+                        for (MobSkillId msId : monster.getSkills()) {
+                            if (msId.type() == MobSkillType.PHYSICAL_AND_MAGIC_COUNTER) {
+                                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, msId.level());
                                 player.addHP(-toUse.getY());
                                 map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getY(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }

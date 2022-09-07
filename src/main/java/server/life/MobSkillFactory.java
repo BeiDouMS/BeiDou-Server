@@ -28,10 +28,8 @@ import provider.DataTool;
 import provider.wz.WZFiles;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -42,76 +40,93 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * @author Danny (Leifde)
  */
 public class MobSkillFactory {
-
     private static final Map<String, MobSkill> mobSkills = new HashMap<>();
-    private final static DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
+    private static final DataProvider dataSource = DataProviderFactory.getDataProvider(WZFiles.SKILL);
     private static final Data skillRoot = dataSource.getData("MobSkill.img");
-    private final static ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-    private final static Lock readLock = readWriteLock.readLock();
-    private final static Lock writeLock = readWriteLock.writeLock();
+    private static final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+    private static final Lock readLock = readWriteLock.readLock();
+    private static final Lock writeLock = readWriteLock.writeLock();
 
-    public static MobSkill getMobSkill(final int skillId, final int level) {
-        final String key = skillId + "" + level;
+    public static MobSkill getMobSkill(final MobSkillType type, final int level) {
         readLock.lock();
         try {
-            MobSkill ret = mobSkills.get(key);
-            if (ret != null) {
-                return ret;
+            MobSkill ms = mobSkills.get(createKey(type, level));
+            if (ms != null) {
+                return ms;
             }
         } finally {
             readLock.unlock();
         }
+
+        return loadMobSkill(type, level).orElseThrow(
+                () -> new IllegalArgumentException("No MobSkill exists for type %s, level %d".formatted(type, level))
+        );
+    }
+
+    private static Optional<MobSkill> loadMobSkill(final MobSkillType type, final int level) {
         writeLock.lock();
         try {
-            MobSkill ret;
-            ret = mobSkills.get(key);
-            if (ret == null) {
-                Data skillData = skillRoot.getChildByPath(skillId + "/level/" + level);
-                if (skillData != null) {
-                    int mpCon = DataTool.getInt(skillData.getChildByPath("mpCon"), 0);
-                    List<Integer> toSummon = new ArrayList<>();
-                    for (int i = 0; i > -1; i++) {
-                        if (skillData.getChildByPath(String.valueOf(i)) == null) {
-                            break;
-                        }
-                        toSummon.add(DataTool.getInt(skillData.getChildByPath(String.valueOf(i)), 0));
-                    }
-                    int effect = DataTool.getInt("summonEffect", skillData, 0);
-                    int hp = DataTool.getInt("hp", skillData, 100);
-                    int x = DataTool.getInt("x", skillData, 1);
-                    int y = DataTool.getInt("y", skillData, 1);
-                    int count = DataTool.getInt("count", skillData, 1);
-                    long duration = SECONDS.toMillis(DataTool.getInt("time", skillData, 0));
-                    long cooltime = SECONDS.toMillis(DataTool.getInt("interval", skillData, 0));
-                    int iprop = DataTool.getInt("prop", skillData, 100);
-                    float prop = iprop / 100;
-                    int limit = DataTool.getInt("limit", skillData, 0);
-                    Data ltd = skillData.getChildByPath("lt");
-                    Point lt = null;
-                    Point rb = null;
-                    if (ltd != null) {
-                        lt = (Point) ltd.getData();
-                        rb = (Point) skillData.getChildByPath("rb").getData();
-                    }
-                    ret = new MobSkill(skillId, level);
-                    ret.addSummons(toSummon);
-                    ret.setCoolTime(cooltime);
-                    ret.setDuration(duration);
-                    ret.setHp(hp);
-                    ret.setMpCon(mpCon);
-                    ret.setSpawnEffect(effect);
-                    ret.setX(x);
-                    ret.setY(y);
-                    ret.setCount(count);
-                    ret.setProp(prop);
-                    ret.setLimit(limit);
-                    ret.setLtRb(lt, rb);
-                }
-                mobSkills.put(skillId + "" + level, ret);
+            MobSkill existingMs = mobSkills.get(createKey(type, level));
+            if (existingMs != null) {
+                return Optional.of(existingMs);
             }
-            return ret;
+
+            Data skillData = skillRoot.getChildByPath("%d/level/%d".formatted(type.getId(), level));
+            if (skillData == null) {
+                return Optional.empty();
+            }
+
+            int mpCon = DataTool.getInt("mpCon", skillData, 0);
+            List<Integer> toSummon = new ArrayList<>();
+            for (int i = 0; i > -1; i++) {
+                if (skillData.getChildByPath(String.valueOf(i)) == null) {
+                    break;
+                }
+                toSummon.add(DataTool.getInt(skillData.getChildByPath(String.valueOf(i)), 0));
+            }
+            int effect = DataTool.getInt("summonEffect", skillData, 0);
+            int hp = DataTool.getInt("hp", skillData, 100);
+            int x = DataTool.getInt("x", skillData, 1);
+            int y = DataTool.getInt("y", skillData, 1);
+            int count = DataTool.getInt("count", skillData, 1);
+            long duration = SECONDS.toMillis(DataTool.getInt("time", skillData, 0));
+            long cooltime = SECONDS.toMillis(DataTool.getInt("interval", skillData, 0));
+            int iprop = DataTool.getInt("prop", skillData, 100);
+            float prop = iprop / 100;
+            int limit = DataTool.getInt("limit", skillData, 0);
+
+            Data ltData = skillData.getChildByPath("lt");
+            Data rbData = skillData.getChildByPath("rb");
+            Point lt = null;
+            Point rb = null;
+            if (ltData != null && rbData != null) {
+                lt = (Point) ltData.getData();
+                rb = (Point) rbData.getData();
+            }
+
+            MobSkill loadedMobSkill = new MobSkill.Builder(type, level)
+                    .mpCon(mpCon)
+                    .toSummon(toSummon)
+                    .cooltime(cooltime)
+                    .duration(duration)
+                    .hp(hp)
+                    .x(x)
+                    .y(y)
+                    .count(count)
+                    .prop(prop)
+                    .limit(limit)
+                    .lt(lt)
+                    .rb(rb)
+                    .build();
+
+            mobSkills.put(createKey(type, level), loadedMobSkill);
+            return Optional.of(loadedMobSkill);
         } finally {
             writeLock.unlock();
         }
+    }
+
+    private static String createKey(MobSkillType type, int skillLevel) {
+        return type.getId() + "" + skillLevel;
     }
 }

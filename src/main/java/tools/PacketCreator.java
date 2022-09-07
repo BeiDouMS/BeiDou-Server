@@ -64,10 +64,7 @@ import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
 import server.*;
 import server.events.gm.Snowball;
-import server.life.MobSkill;
-import server.life.Monster;
-import server.life.NPC;
-import server.life.PlayerNPC;
+import server.life.*;
 import server.maps.*;
 import server.maps.MiniGame.MiniGameResult;
 import server.movement.LifeMovementFragment;
@@ -104,6 +101,11 @@ public class PacketCreator {
         }
 
         return utcTimestamp * 10000 + FT_UT_OFFSET;
+    }
+
+    private static void writeMobSkillId(OutPacket packet, MobSkillId msId) {
+        packet.writeShort(msId.type().getId());
+        packet.writeShort(msId.level());
     }
 
     public static Packet showHpHealed(int cid, int amount) {
@@ -1410,8 +1412,7 @@ public class PacketCreator {
 
             MobSkill mobSkill = mse.getMobSkill();
             if (mobSkill != null) {
-                p.writeShort(mobSkill.getSkillId());
-                p.writeShort(mobSkill.getSkillLevel());
+                writeMobSkillId(p, mobSkill.getId());
 
                 switch (s.getKey()) {
                     case WEAPON_REFLECT -> pCounter = mobSkill.getX();
@@ -2917,8 +2918,7 @@ public class PacketCreator {
         writeLongMaskD(p, statups);
         for (Pair<Disease, Integer> statup : statups) {
             p.writeShort(statup.getRight().shortValue());
-            p.writeShort(skill.getSkillId());
-            p.writeShort(skill.getSkillLevel());
+            writeMobSkillId(p, skill.getId());
             p.writeInt((int) skill.getDuration());
         }
         p.writeShort(0); // ??? wk charges have 600 here o.o
@@ -2936,8 +2936,7 @@ public class PacketCreator {
             if (statup.getLeft() == Disease.POISON) {
                 p.writeShort(statup.getRight().shortValue());
             }
-            p.writeShort(skill.getSkillId());
-            p.writeShort(skill.getSkillLevel());
+            writeMobSkillId(p, skill.getId());
         }
         p.writeShort(0); // same as give_buff
         p.writeShort(900);//Delay
@@ -3051,8 +3050,7 @@ public class PacketCreator {
             if (statup.getLeft() == Disease.POISON) {
                 p.writeShort(statup.getRight().shortValue());
             }
-            p.writeShort(skill.getSkillId());
-            p.writeShort(skill.getSkillLevel());
+            writeMobSkillId(p, skill.getId());
         }
         p.writeShort(0); // same as give_buff
         p.writeShort(900);//Delay
@@ -3932,8 +3930,7 @@ public class PacketCreator {
         for (Map.Entry<MonsterStatus, Integer> stat : stati.entrySet()) {
             p.writeShort(stat.getValue());
             if (mse.isMonsterSkill()) {
-                p.writeShort(mse.getMobSkill().getSkillId());
-                p.writeShort(mse.getMobSkill().getSkillLevel());
+                writeMobSkillId(p, mse.getMobSkill().getId());
             } else {
                 p.writeInt(mse.getSkill().getId());
             }
@@ -3984,11 +3981,15 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet spawnMist(int objId, int ownerChrId, int skill, int level, Mist mist) {
+    public static Packet spawnMobMist(int objId, int ownerMobId, MobSkillId msId, Mist mist) {
+        return spawnMist(objId, ownerMobId, msId.type().getId(), msId.level(), mist);
+    }
+
+    public static Packet spawnMist(int objId, int ownerId, int skill, int level, Mist mist) {
         OutPacket p = OutPacket.create(SendOpcode.SPAWN_MIST);
         p.writeInt(objId);
         p.writeInt(mist.isMobMist() ? 0 : mist.isPoisonMist() ? 1 : mist.isRecoveryMist() ? 4 : 2); // mob mist = 0, player poison = 1, smokescreen = 2, unknown = 3, recovery = 4
-        p.writeInt(ownerChrId);
+        p.writeInt(ownerId);
         p.writeInt(skill);
         p.writeByte(level);
         p.writeShort(mist.getSkillDelay()); // Skill delay
