@@ -7327,9 +7327,7 @@ public class Character extends AbstractCharacterObject {
                             final long length = rs.getInt("length");
 
                             MobSkill ms = MobSkillFactory.getMobSkill(MobSkillType.from(skillid), skilllv);
-                            if (ms != null) {
-                                loadedDiseases.put(disease, new Pair<>(length, ms));
-                            }
+                            loadedDiseases.put(disease, new Pair<>(length, ms));
                         }
                     }
                 }

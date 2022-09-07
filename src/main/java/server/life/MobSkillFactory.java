@@ -58,7 +58,9 @@ public class MobSkillFactory {
             readLock.unlock();
         }
 
-        return loadMobSkill(type, level).orElse(null);
+        return loadMobSkill(type, level).orElseThrow(
+                () -> new IllegalArgumentException("No MobSkill exists for type %s, level %d".formatted(type, level))
+        );
     }
 
     private static Optional<MobSkill> loadMobSkill(final MobSkillType type, final int level) {

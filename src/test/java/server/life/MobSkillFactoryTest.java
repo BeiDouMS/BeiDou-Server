@@ -61,10 +61,8 @@ class MobSkillFactoryTest {
     }
 
     @Test
-    void shouldReturnNullForNonExistingMobSkill() {
-        MobSkill mobSkill = MobSkillFactory.getMobSkill(MobSkillType.DEFENSE_UP, 1);
-
-        assertNull(mobSkill);
+    void shouldThrowExceptionOnNonExisting() {
+        assertThrows(IllegalArgumentException.class, () -> MobSkillFactory.getMobSkill(MobSkillType.DEFENSE_UP, 1));
     }
 
 }
