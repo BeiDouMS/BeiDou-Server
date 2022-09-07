@@ -74,7 +74,7 @@ public class MobSkillFactory {
                 return Optional.empty();
             }
 
-            int mpCon = DataTool.getInt(skillData.getChildByPath("mpCon"), 0);
+            int mpCon = DataTool.getInt("mpCon", skillData, 0);
             List<Integer> toSummon = new ArrayList<>();
             for (int i = 0; i > -1; i++) {
                 if (skillData.getChildByPath(String.valueOf(i)) == null) {
@@ -103,6 +103,7 @@ public class MobSkillFactory {
             }
 
             MobSkill loadedMobSkill = new MobSkill.Builder(type, level)
+                    .mpCon(mpCon)
                     .toSummon(toSummon)
                     .cooltime(cooltime)
                     .duration(duration)
