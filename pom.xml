@@ -28,11 +28,12 @@
         <log4j.version>2.18.0</log4j.version> <!-- Slf4j implementation -->
         <graalvm.version>22.2.0</graalvm.version> <!-- ScriptEngine implementation -->
         <netty.version>4.1.79.Final</netty.version> <!-- Networking -->
-        <junit.version>5.9.0</junit.version> <!-- Unit test -->
         <yamlbeans.version>1.15</yamlbeans.version> <!-- Config file -->
         <jcip-annotations.version>1.0</jcip-annotations.version> <!-- Annotations for concurrency documentation -->
         <HikariCP.version>5.0.1</HikariCP.version> <!-- Database connection pool -->
         <mysql-connector-java.version>8.0.30</mysql-connector-java.version> <!-- MySQL JDBC driver -->
+        <junit.version>5.9.0</junit.version> <!-- Unit test -->
+        <mockito.version>4.7.0</mockito.version> <!-- Unit test -->
     </properties>
 
     <dependencies>
@@ -120,16 +121,25 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
