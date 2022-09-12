@@ -111,7 +111,7 @@ public class MonsterStatFetcher {
                     Set<MobSkillId> skills = new HashSet<>();
                     while (monsterSkillData.getChildByPath(Integer.toString(i)) != null) {
                         int skillId = DataTool.getInt(i + "/skill", monsterSkillData, 0);
-                        MobSkillType type = MobSkillType.from(skillId);
+                        MobSkillType type = MobSkillType.from(skillId).orElseThrow();
                         int skillLevel = DataTool.getInt(i + "/level", monsterSkillData, 0);
                         skills.add(new MobSkillId(type, skillLevel));
                         i++;

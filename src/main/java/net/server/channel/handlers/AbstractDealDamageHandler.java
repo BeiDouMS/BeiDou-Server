@@ -492,7 +492,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     if (monster.isBuffed(MonsterStatus.WEAPON_REFLECT) && !attack.magic) {
                         for (MobSkillId msId : monster.getSkills()) {
                             if (msId.type() == MobSkillType.PHYSICAL_AND_MAGIC_COUNTER) {
-                                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, msId.level());
+                                MobSkill toUse = MobSkillFactory.getMobSkillOrThrow(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, msId.level());
                                 player.addHP(-toUse.getX());
                                 map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getX(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }
@@ -501,7 +501,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                     if (monster.isBuffed(MonsterStatus.MAGIC_REFLECT) && attack.magic) {
                         for (MobSkillId msId : monster.getSkills()) {
                             if (msId.type() == MobSkillType.PHYSICAL_AND_MAGIC_COUNTER) {
-                                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, msId.level());
+                                MobSkill toUse = MobSkillFactory.getMobSkillOrThrow(MobSkillType.PHYSICAL_AND_MAGIC_COUNTER, msId.level());
                                 player.addHP(-toUse.getY());
                                 map.broadcastMessage(player, PacketCreator.damagePlayer(0, monster.getId(), player.getId(), toUse.getY(), 0, 0, false, 0, true, monster.getObjectId(), 0, 0), true);
                             }

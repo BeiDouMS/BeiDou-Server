@@ -34,6 +34,7 @@ import server.maps.MapObject;
 import server.maps.MapObjectType;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class DebuffCommand extends Command {
     {
@@ -49,7 +50,7 @@ public class DebuffCommand extends Command {
         }
 
         Disease disease = null;
-        MobSkill skill = null;
+        Optional<MobSkill> skill = Optional.empty();
 
         switch (params[0].toUpperCase()) {
             case "SLOW" -> {
@@ -94,7 +95,7 @@ public class DebuffCommand extends Command {
             }
         }
 
-        if (disease == null) {
+        if (disease == null || skill.isEmpty()) {
             player.yellowMessage("Syntax: !debuff SLOW|SEDUCE|ZOMBIFY|CONFUSE|STUN|POISON|SEAL|DARKNESS|WEAKEN|CURSE");
             return;
         }
@@ -103,7 +104,7 @@ public class DebuffCommand extends Command {
             Character chr = (Character) mmo;
 
             if (chr.getId() != player.getId()) {
-                chr.giveDebuff(disease, skill);
+                chr.giveDebuff(disease, skill.get());
             }
         }
     }

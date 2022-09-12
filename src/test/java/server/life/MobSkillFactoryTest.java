@@ -8,6 +8,7 @@ import org.mockito.MockitoAnnotations;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,9 +50,10 @@ class MobSkillFactoryTest {
 
     @Test
     void shouldLoadExistingMobSkill() {
-        MobSkill mobSkill = MobSkillFactory.getMobSkill(MobSkillType.ATTACK_UP, 1);
+        Optional<MobSkill> possibleSkill = MobSkillFactory.getMobSkill(MobSkillType.ATTACK_UP, 1);
 
-        assertNotNull(mobSkill);
+        assertTrue(possibleSkill.isPresent());
+        MobSkill mobSkill = possibleSkill.get();
         assertAll("MobSkill",
                 () -> assertEquals(115, mobSkill.getX()),
                 () -> assertEquals(5, mobSkill.getMpCon()),
@@ -62,7 +64,7 @@ class MobSkillFactoryTest {
 
     @Test
     void shouldThrowExceptionOnNonExisting() {
-        assertThrows(IllegalArgumentException.class, () -> MobSkillFactory.getMobSkill(MobSkillType.DEFENSE_UP, 1));
+        assertThrows(IllegalArgumentException.class, () -> MobSkillFactory.getMobSkillOrThrow(MobSkillType.DEFENSE_UP, 1));
     }
 
 }

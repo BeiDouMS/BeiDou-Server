@@ -47,7 +47,7 @@ public class CarnivalFactory {
             int mobSkillId = DataTool.getInt("mobSkillID", z, 0);
             MobSkillType mobSkillType = null;
             if (mobSkillId != 0) {
-                mobSkillType = MobSkillType.from(mobSkillId);
+                mobSkillType = MobSkillType.from(mobSkillId).orElseThrow();
             }
             int level = DataTool.getInt("level", z, 0);
             boolean isMultiTarget = DataTool.getInt("target", z, 1) > 1;
@@ -63,7 +63,7 @@ public class CarnivalFactory {
         for (Data z : dataRoot.getData("MCGuardian.img")) {
             int spendCp = DataTool.getInt("spendCP", z, 0);
             int mobSkillId = DataTool.getInt("mobSkillID", z, 0);
-            MobSkillType mobSkillType = MobSkillType.from(mobSkillId);
+            MobSkillType mobSkillType = MobSkillType.from(mobSkillId).orElseThrow();
             int level = DataTool.getInt("level", z, 0);
             guardians.put(Integer.parseInt(z.getName()), new MCSkill(spendCp, mobSkillType, level, true));
         }
@@ -92,7 +92,7 @@ public class CarnivalFactory {
 
     public record MCSkill(int cpLoss, MobSkillType mobSkillType, int level, boolean targetsAll) {
         public MobSkill getSkill() {
-            return MobSkillFactory.getMobSkill(mobSkillType, level);
+            return MobSkillFactory.getMobSkillOrThrow(mobSkillType, level);
         }
 
         public Disease getDisease() {

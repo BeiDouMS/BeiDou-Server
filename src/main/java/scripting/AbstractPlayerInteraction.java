@@ -1195,12 +1195,12 @@ public class AbstractPlayerInteraction {
     }
 
     private void applySealSkill(Monster monster) {
-        MobSkill sealSkill = MobSkillFactory.getMobSkill(MobSkillType.SEAL_SKILL, 1);
+        MobSkill sealSkill = MobSkillFactory.getMobSkillOrThrow(MobSkillType.SEAL_SKILL, 1);
         sealSkill.applyEffect(monster);
     }
 
     private void applyReduceAvoid(Monster monster) {
-        MobSkill reduceAvoidSkill = MobSkillFactory.getMobSkill(MobSkillType.EVA, 2);
+        MobSkill reduceAvoidSkill = MobSkillFactory.getMobSkillOrThrow(MobSkillType.EVA, 2);
         reduceAvoidSkill.applyEffect(monster);
     }
 

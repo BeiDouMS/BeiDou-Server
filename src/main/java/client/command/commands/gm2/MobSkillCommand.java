@@ -8,6 +8,7 @@ import server.life.MobSkillFactory;
 import server.life.MobSkillType;
 
 import java.util.Collections;
+import java.util.Optional;
 
 public class MobSkillCommand extends Command {
     {
@@ -22,13 +23,18 @@ public class MobSkillCommand extends Command {
 
         String skillId = params[0];
         String skillLevel = params[1];
-        MobSkillType type = MobSkillType.from(Integer.parseInt(skillId));
-        MobSkill mobSkill = MobSkillFactory.getMobSkill(type, Integer.parseInt(skillLevel));
-        if (mobSkill == null) {
-            throw new IllegalArgumentException("Mob skill not found. Id: %s, level: %s".formatted(skillId, skillLevel));
+        Optional<MobSkillType> possibleType = MobSkillType.from(Integer.parseInt(skillId));
+        Optional<MobSkill> possibleSkill = possibleType.map(
+                type -> MobSkillFactory.getMobSkillOrThrow(type, Integer.parseInt(skillLevel))
+        );
+        if (possibleSkill.isEmpty()) {
+            return;
         }
 
         Character chr = client.getPlayer();
-        chr.getMap().getAllMonsters().forEach(monster -> mobSkill.applyEffect(chr, monster, false, Collections.emptyList()));
+        MobSkill mobSkill = possibleSkill.get();
+        chr.getMap().getAllMonsters().forEach(
+                monster -> mobSkill.applyEffect(chr, monster, false, Collections.emptyList())
+        );
     }
 }

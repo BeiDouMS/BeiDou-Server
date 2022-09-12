@@ -79,19 +79,16 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         boolean isAttack = inRangeInclusive(rawActivity, 24, 41);
         boolean isSkill = inRangeInclusive(rawActivity, 42, 59);
 
-        int useSkillId = 0, useSkillLevel = 0;
-
-        MobSkill nextUse = null;
-        int nextSkillId = 0, nextSkillLevel = 0;
-
-        boolean nextMovementCouldBeSkill = !(isSkill || (pNibbles != 0));
+        int useSkillId = 0;
+        int useSkillLevel = 0;
 
         if (isSkill) {
             useSkillId = skillId;
             useSkillLevel = skillLv;
 
             if (monster.hasSkill(useSkillId, useSkillLevel)) {
-                MobSkill toUse = MobSkillFactory.getMobSkill(MobSkillType.from(useSkillId), useSkillLevel);
+                MobSkillType mobSkillType = MobSkillType.from(useSkillId).orElseThrow();
+                MobSkill toUse = MobSkillFactory.getMobSkillOrThrow(mobSkillType, useSkillLevel);
 
                 if (monster.canUseSkill(toUse, true)) {
                     int animationTime = MonsterInformationProvider.getInstance().getMobSkillAnimationTime(toUse);
@@ -112,12 +109,16 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             }
         }
 
+        boolean nextMovementCouldBeSkill = !(isSkill || (pNibbles != 0));
+        MobSkill nextUse = null;
+        int nextSkillId = 0;
+        int nextSkillLevel = 0;
         int mobMp = monster.getMp();
         if (nextMovementCouldBeSkill && monster.hasAnySkill()) {
             MobSkillId skillToUse = monster.getRandomSkill();
             nextSkillId = skillToUse.type().getId();
             nextSkillLevel = skillToUse.level();
-            nextUse = MobSkillFactory.getMobSkill(skillToUse.type(), skillToUse.level());
+            nextUse = MobSkillFactory.getMobSkillOrThrow(skillToUse.type(), skillToUse.level());
 
             if (!(nextUse != null && monster.canUseSkill(nextUse, false) && nextUse.getHP() >= (int) (((float) monster.getHp() / monster.getMaxHp()) * 100) && mobMp >= nextUse.getMpCon())) {
                 // thanks OishiiKawaiiDesu for noticing mobs trying to cast skills they are not supposed to be able
