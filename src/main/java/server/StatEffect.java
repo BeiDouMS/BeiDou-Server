@@ -1046,7 +1046,7 @@ public class StatEffect {
                             if (dis == null) {
                                 chrApp.dispel();
                             } else {
-                                MobSkill mobSkill = MobSkillFactory.getMobSkill(dis.getMobSkillType(), skill.level());
+                                MobSkill mobSkill = MobSkillFactory.getMobSkillOrThrow(dis.getMobSkillType(), skill.level());
                                 chrApp.giveDebuff(dis, mobSkill);
                             }
                         }
@@ -1059,7 +1059,7 @@ public class StatEffect {
                         if (dis == null) {
                             chrApp.dispel();
                         } else {
-                            MobSkill mobSkill = MobSkillFactory.getMobSkill(dis.getMobSkillType(), skill.level());
+                            MobSkill mobSkill = MobSkillFactory.getMobSkillOrThrow(dis.getMobSkillType(), skill.level());
                             chrApp.giveDebuff(dis, mobSkill);
                         }
                     }
@@ -1070,8 +1070,8 @@ public class StatEffect {
                 applyfrom.dispelDebuff(debuff);
             }
         } else if (mobSkill > 0 && mobSkillLevel > 0) {
-            var mobSkillType = MobSkillType.from(mobSkill);
-            MobSkill ms = MobSkillFactory.getMobSkill(mobSkillType, mobSkillLevel);
+            MobSkillType mobSkillType = MobSkillType.from(mobSkill).orElseThrow();
+            MobSkill ms = MobSkillFactory.getMobSkillOrThrow(mobSkillType, mobSkillLevel);
             Disease dis = Disease.getBySkill(mobSkillType);
 
             if (target > 0) {

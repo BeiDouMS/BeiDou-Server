@@ -47,20 +47,24 @@ public class MobSkillFactory {
     private static final Lock readLock = readWriteLock.readLock();
     private static final Lock writeLock = readWriteLock.writeLock();
 
-    public static MobSkill getMobSkill(final MobSkillType type, final int level) {
+    public static MobSkill getMobSkillOrThrow(MobSkillType type, int level) {
+        return getMobSkill(type, level).orElseThrow(
+                () -> new IllegalArgumentException("No MobSkill exists for type %s, level %d".formatted(type, level))
+        );
+    }
+
+    public static Optional<MobSkill> getMobSkill(final MobSkillType type, final int level) {
         readLock.lock();
         try {
             MobSkill ms = mobSkills.get(createKey(type, level));
             if (ms != null) {
-                return ms;
+                return Optional.of(ms);
             }
         } finally {
             readLock.unlock();
         }
 
-        return loadMobSkill(type, level).orElseThrow(
-                () -> new IllegalArgumentException("No MobSkill exists for type %s, level %d".formatted(type, level))
-        );
+        return loadMobSkill(type, level);
     }
 
     private static Optional<MobSkill> loadMobSkill(final MobSkillType type, final int level) {

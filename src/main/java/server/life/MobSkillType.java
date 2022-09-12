@@ -1,6 +1,7 @@
 package server.life;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum MobSkillType {
     ATTACK_UP(100),
@@ -51,11 +52,18 @@ public enum MobSkillType {
         this.id = id;
     }
 
-    public static MobSkillType from(int id) {
+    public static Optional<MobSkillType> from(int id) {
+        if (isOutOfIdRange(id)) {
+            return Optional.empty();
+        }
+
         return Arrays.stream(values())
                 .filter(type -> type.getId() == id)
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .findAny();
+    }
+
+    private static boolean isOutOfIdRange(int id) {
+        return id < 100 || id > 200;
     }
 
     public int getId() {

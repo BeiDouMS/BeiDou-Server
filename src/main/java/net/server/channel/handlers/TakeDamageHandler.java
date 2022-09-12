@@ -49,6 +49,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public final class TakeDamageHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(TakeDamageHandler.class);
@@ -151,9 +152,11 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
                     is_deadly = true;
                 }
                 mpattack += attackInfo.getMpBurn();
-                MobSkill mobSkill = MobSkillFactory.getMobSkill(MobSkillType.from(attackInfo.getDiseaseSkill()), attackInfo.getDiseaseLevel());
-                if (mobSkill != null && damage > 0) {
-                    mobSkill.applyEffect(chr, attacker, false, banishPlayers);
+
+                Optional<MobSkillType> possibleType = MobSkillType.from(attackInfo.getDiseaseSkill());
+                Optional<MobSkill> possibleMobSkill = possibleType.map(type -> MobSkillFactory.getMobSkillOrThrow(type, attackInfo.getDiseaseLevel()));
+                if (possibleMobSkill.isPresent() && damage > 0) {
+                    possibleMobSkill.get().applyEffect(chr, attacker, false, banishPlayers);
                 }
 
                 attacker.setMp(attacker.getMp() - attackInfo.getMpCon());
