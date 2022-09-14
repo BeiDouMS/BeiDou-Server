@@ -290,7 +290,7 @@ public class MobSkill {
     }
 
     private void summonMonsters(Monster monster) {
-        int skillLimit = this.getLimit();
+        int skillLimit = this.limit;
         MapleMap map = monster.getMap();
 
         if (MapId.isDojo(map.getId())) {  // spawns in dojo should be unlimited
@@ -298,7 +298,7 @@ public class MobSkill {
         }
 
         if (map.getSpawnedMonstersOnMap() < 80) {
-            List<Integer> summons = getSummons();
+            List<Integer> summons = new ArrayList<>(toSummon);
             int summonLimit = monster.countAvailableMobSummons(summons.size(), skillLimit);
             if (summonLimit >= 1) {
                 boolean bossRushMap = MapId.isBossRush(map.getId());
@@ -354,7 +354,7 @@ public class MobSkill {
                         if (toSpawn.getId() == MobId.LOW_DARKSTAR) {
                             map.spawnFakeMonster(toSpawn);
                         } else {
-                            map.spawnMonsterWithEffect(toSpawn, getSpawnEffect(), toSpawn.getPosition());
+                            map.spawnMonsterWithEffect(toSpawn, spawnEffect, toSpawn.getPosition());
                         }
                         monster.addSummonedMob(toSpawn);
                     }
@@ -409,14 +409,6 @@ public class MobSkill {
         return mpCon;
     }
 
-    public List<Integer> getSummons() {
-        return toSummon;
-    }
-
-    public int getSpawnEffect() {
-        return spawnEffect;
-    }
-
     public int getHP() {
         return hp;
     }
@@ -435,18 +427,6 @@ public class MobSkill {
 
     public long getCoolTime() {
         return cooltime;
-    }
-
-    public Point getLt() {
-        return lt;
-    }
-
-    public Point getRb() {
-        return rb;
-    }
-
-    public int getLimit() {
-        return limit;
     }
 
     public boolean makeChanceResult() {
