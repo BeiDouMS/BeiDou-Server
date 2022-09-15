@@ -2706,7 +2706,7 @@ public class PacketCreator {
                 p.writeInt(pets[i].getItemId()); // petid
                 p.writeString(pets[i].getName());
                 p.writeByte(pets[i].getLevel()); // pet level
-                p.writeShort(pets[i].getTameness()); // pet closeness
+                p.writeShort(pets[i].getTameness()); // pet tameness
                 p.writeByte(pets[i].getFullness()); // pet fullness
                 p.writeShort(0);
                 p.writeInt(inv != null ? inv.getItemId() : 0);

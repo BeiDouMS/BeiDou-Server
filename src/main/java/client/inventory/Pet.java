@@ -184,15 +184,15 @@ public class Pet extends Item {
         return level;
     }
 
-    public void gainClosenessFullness(Character owner, int incTameness, int incFullness, int type) {
-        gainClosenessFullness(owner, incTameness, incFullness, type, false);
+    public void gainTamenessFullness(Character owner, int incTameness, int incFullness, int type) {
+        gainTamenessFullness(owner, incTameness, incFullness, type, false);
     }
 
-    public void gainClosenessFullness(Character owner, int incTameness, int incFullness, int type, boolean forceEnjoy) {
+    public void gainTamenessFullness(Character owner, int incTameness, int incFullness, int type, boolean forceEnjoy) {
         byte slot = owner.getPetIndex(this);
         boolean enjoyed;
 
-        //will NOT increase pet's closeness if tried to feed pet with 100% fullness
+        //will NOT increase pet's tameness if tried to feed pet with 100% fullness
         // unless forceEnjoy == true (cash shop)
         if (fullness < 100 || incFullness == 0 || forceEnjoy) {   //incFullness == 0: command given
             int newFullness = fullness + incFullness;

@@ -43,7 +43,7 @@ function action(mode, type, selection) {
             cm.sendNextPrev("Hmmm ... did you really get here with your pet? These obstacles are for pets. What are you here for without it?? Get outta here!");
         } else {
             cm.gainItem(4031035, -1);
-            cm.gainCloseness(2, 0);
+            cm.gainTameness(2);
             cm.sendNextPrev("What do you think? Don't you think you have gotten much closer with your pet? If you have time, train your pet again on this obstacle course...of course, with my brother's permission.");
         }
         cm.dispose();

@@ -340,10 +340,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getClient().getChannelServer().getMapFactory().getMap(mapid).resetReactors();
     }
 
-    public void gainCloseness(int closeness) {
+    public void gainTameness(int tameness) {
         for (Pet pet : getPlayer().getPets()) {
             if (pet != null) {
-                pet.gainClosenessFullness(getPlayer(), closeness, 0, 0);
+                pet.gainTamenessFullness(getPlayer(), tameness, 0, 0);
             }
         }
     }
