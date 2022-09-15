@@ -81,7 +81,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    pet.gainClosenessFullness(chr, (pet.getFullness() <= 75) ? 1 : 0, 30, 1);   // 25+ "emptyness" to get +1 closeness
+                    pet.gainTamenessFullness(chr, (pet.getFullness() <= 75) ? 1 : 0, 30, 1);   // 25+ "emptyness" to get +1 tameness
                     InventoryManipulator.removeFromSlot(c, InventoryType.USE, pos, (short) 1, false);
                 } finally {
                     useInv.unlockInventory();
