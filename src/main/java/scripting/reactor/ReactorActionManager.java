@@ -272,12 +272,11 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     }
 
     public void killMonster(int id, boolean withDrops) {
-        MapleMap map = getMap();
         if (withDrops) {
-            map.killMonsterWithDrops(id);
+            getMap().killMonsterWithDrops(id);
         }
         else {
-            map.killMonster(id);
+            getMap().killMonster(id);
         }
     }
 
