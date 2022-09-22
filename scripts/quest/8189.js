@@ -50,7 +50,7 @@ function end(mode, type, selection) {
             var petidx = -1;
             var petItemid;
             for (var i = 0; i < 3; i++) {
-                var pet = qm.getPlayer().getPet(pet);
+                var pet = qm.getPlayer().getPet(i);
                 if (pet != null) {
                     var id = pet.getItemId();
                     if (id >= 5000029 && id <= 5000033) {
@@ -95,6 +95,7 @@ function end(mode, type, selection) {
             qm.gainMeso(-10000);
             qm.gainItem(5380000, -1);
             qm.evolvePet(petidx, after);
+            qm.completeQuest();
 
             qm.sendOk("Woo! It worked again! #rYou may find your new pet under your 'CASH' inventory.\r #kIt used to be a #b#i" + id + "##t" + id + "##k, and now it's \r a#b #i" + after + "##t" + after + "##k! \r\n Come back with 10,000 mesos and another Rock of Evolution if you don't like it!\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v" + after + "# #t" + after + "#");
         } else if (status == 3) {
