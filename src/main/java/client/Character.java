@@ -5551,9 +5551,6 @@ public class Character extends AbstractCharacterObject {
         if (game.isOwner(this)) {
             game.closeRoom(forceClose);
         } else {
-            if (game.isMatchInProgress()) {
-                game.minigameMatchOwnerWins(true);
-            }
             game.removeVisitor(forceClose, this);
         }
     }
