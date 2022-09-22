@@ -50,7 +50,7 @@ function end(mode, type, selection) {
             var petidx = -1;
             var petItemid;
             for (var i = 0; i < 3; i++) {
-                var pet = qm.getPlayer().getPet(pet);
+                var pet = qm.getPlayer().getPet(i);
                 if (pet != null) {
                     var id = pet.getItemId();
                     if (id >= 5000029 && id <= 5000033) {
