@@ -101,8 +101,9 @@ function end(mode, type, selection) {
             //qm.gainItem(5000048 + rand);
             qm.gainItem(5380000, -1);
             qm.gainMeso(-10000);
-
             qm.evolvePet(i, after);
+            qm.completeQuest();
+            
 //            var petId = Pet.createPet(rand + 5000049, level, closeness, fullness);
 //            if (petId == -1) return;
 //            InventoryManipulator.addById(qm.getClient(), rand+5000049, 1, "", petId);
