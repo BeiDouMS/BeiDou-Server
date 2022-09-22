@@ -69,8 +69,8 @@ function end(mode, type, selection) {
                 return;
             }
 
-            var closeness = pet.getCloseness();
-            if (closeness < 1642) {
+            var tameness = pet.getTameness();
+            if (tameness < 1642) {
                 qm.sendOk("It looks like your pet is not grown enough to be evolved yet. Train it a bit more, util it reaches #blevel 15#k.");
                 qm.dispose();
                 return;
