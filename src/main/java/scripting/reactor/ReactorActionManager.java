@@ -267,6 +267,19 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         }
     }
 
+    public void killMonster(int id) {
+        killMonster(id, false);
+    }
+
+    public void killMonster(int id, boolean withDrops) {
+        if (withDrops) {
+            getMap().killMonsterWithDrops(id);
+        }
+        else {
+            getMap().killMonster(id);
+        }
+    }
+
     public Point getPosition() {
         Point pos = reactor.getPosition();
         pos.y -= 10;
