@@ -136,6 +136,9 @@ public class MiniGame extends AbstractMapObject {
 
     public void removeVisitor(boolean forceClose, Character challenger) {
         if (visitor == challenger) {
+            if (isMatchInProgress()) { // owner is winner if visitor leave in progress
+                minigameMatchOwnerWins(true);
+            }
             if (forceClose) {
                 visitor.sendPacket(PacketCreator.getMiniGameClose(true, 4));
             }
