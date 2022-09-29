@@ -22,7 +22,7 @@ public class MapId {
     public static final int MUSHROOM_TOWN = 10000;
 
     // Town
-    public static final int SOUTHPERRY = 60000;
+    public static final int SOUTHPERRY = 2000000;
     public static final int AMHERST = 1000000;
     public static final int HENESYS = 100000000;
     public static final int ELLINIA = 101000000;
