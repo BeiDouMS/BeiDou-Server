@@ -1966,7 +1966,9 @@ public class Character extends AbstractCharacterObject {
                                 int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                                 this.getCashShop().gainCash(1, nxGain);
 
-                                showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
+                                if (YamlConfig.config.server.USE_NX_COUPON_LOOT_NOTICE) {
+                                    showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
+                                }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
@@ -2016,7 +2018,9 @@ public class Character extends AbstractCharacterObject {
                         int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                         this.getCashShop().gainCash(1, nxGain);
 
-                        showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
+                        if (YamlConfig.config.server.USE_NX_COUPON_LOOT_NOTICE) {
+                            showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(1) + " NX)", 300);
+                        }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
                         if (mItem.getItemId() == ItemId.ARPQ_SPIRIT_JEWEL) {
