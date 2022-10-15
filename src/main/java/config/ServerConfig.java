@@ -122,6 +122,7 @@ public class ServerConfig {
     //Announcement Configuration
     public boolean USE_ANNOUNCE_SHOPITEMSOLD;
     public boolean USE_ANNOUNCE_CHANGEJOB;
+    public boolean USE_ANNOUNCE_NX_COUPON_LOOT;
 
     //Cash Shop Configuration
     public boolean USE_JOINT_CASHSHOP_INVENTORY;
