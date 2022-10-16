@@ -17,15 +17,38 @@ without knowing what you're doing is not recommended.
 
 ## Development information
 
-### Status (updated 2022-08-02)
+### Status (updated 2022-10-16)
 
-Development is currently <span style="color:Yellow">**sporadic**</span>. Bugs may be fixed, and pull requests reviewed, but don't expect anything groundbreaking.
+Development is currently <span style="color:Yellow">**sporadic**</span>. 
+
+My time is very limited nowadays, but I try to keep up with the submitted pull requests. I may submit some stuff of my own, once in a while.
 
 ### Ways to contribute
 
-* Submit a Pull Request (fork -> commit -> PR)
-* Submit a bug report (add a new issue on GitHub, or post in `bug-report` on Discord)
+* Submit a Pull Request (fork -> commit -> PR). If you don't know where to start, have a look at the issues on GitHub.
+* Report a bug (preferably as an Issue on GitHub, as reports on Discord may be forgotten or lost)
 * Spread the word about Cosmic
+
+### Working with GitHub
+
+Anyone with a GitHub account can contribute by making some changes in a branch and opening up a PR. 
+
+All activity on the GitHub repo (opening PR, commenting, creating issue, etc.) is automatically pushed (via webhook) to a public Discord channel for visibility.
+
+Issues is the main place where bugs, issues or general improvements are tracked. Feel free to submit a new issue, but please keep it in English. By providing a good description, you increase the chance of a bug being fixed.
+
+Tasks (past, present and future) are kept in the Cosmic project, which you get to via the "Projects" tab. This gives you an idea of where the project is moving.
+
+### Versioning
+
+The project follows the [SemVer](https://semver.org/) versioning scheme using git tags. 
+As a pull request gets merged, a new version is automatically created.
+
+Bug fixes result in bumped patch version: 1.2.__3__ -> 1.2.__4__
+
+General improvements result in bumped minor version: 1.__2__.3 -> 1.__3__.3
+
+Major changes result in bumped major version: __1__.2.3 -> __2__.2.3
 
 ### Cosmic
 
@@ -59,6 +82,7 @@ Development is currently <span style="color:Yellow">**sporadic**</span>. Bugs ma
 
 * **Client files and general tools**
   * Link: https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT?usp=sharing
+  * This is Ponk's own Google Drive, similar to how Ronan provides files for HeavenMS.
 	
 
 ### MapleStory client 
