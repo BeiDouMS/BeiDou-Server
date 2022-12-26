@@ -30,6 +30,9 @@ import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.manipulator.InventoryManipulator;
+import database.DaoException;
+import database.NoteDao;
+import model.Note;
 import net.server.Server;
 import net.server.world.World;
 import org.slf4j.Logger;
@@ -241,7 +244,7 @@ public class FredrickProcessor {
                         ps.addBatch();
 
                         String msg = fredrickReminderMessage(cid.getRight() - 1);
-                        Character.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
+                        saveFredrickReminderNote(msg, cid.getLeft().getRight());
                     }
 
                     ps.executeBatch();
@@ -249,6 +252,15 @@ public class FredrickProcessor {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void saveFredrickReminderNote(String message, String to) {
+        Note reminderNote = Note.createNormal(message, "FREDRICK", to, Server.getInstance().getCurrentTime());
+        try {
+            NoteDao.save(reminderNote);
+        } catch (DaoException e) {
+            log.error("Failed to save Fredrick reminder note", e);
         }
     }
 
