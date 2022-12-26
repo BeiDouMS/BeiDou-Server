@@ -40,6 +40,7 @@ import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
+import model.Note;
 import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
 import net.packet.ByteBufOutPacket;
@@ -5422,18 +5423,17 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showNotes(ResultSet notes, int count) throws SQLException {
+    public static Packet showNotes(List<Note> notes) {
         final OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
         p.writeByte(3);
-        p.writeByte(count);
-        for (int i = 0; i < count; i++) {
-            p.writeInt(notes.getInt("id"));
-            p.writeString(notes.getString("from") + " ");//Stupid nexon forgot space lol
-            p.writeString(notes.getString("message"));
-            p.writeLong(getTime(notes.getLong("timestamp")));
-            p.writeByte(notes.getByte("fame"));//FAME :D
-            notes.next();
-        }
+        p.writeByte(notes.size());
+        notes.forEach(note -> {
+            p.writeInt(note.id());
+            p.writeString(note.from() + " ");//Stupid nexon forgot space lol
+            p.writeString(note.message());
+            p.writeLong(getTime(note.timestamp()));
+            p.writeByte(note.fame());//FAME :D
+        });
         return p;
     }
 

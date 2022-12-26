@@ -41,6 +41,9 @@ import constants.id.MapId;
 import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
+import database.DaoException;
+import database.NoteDao;
+import model.Note;
 import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
@@ -9641,18 +9644,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void showNote() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM notes WHERE `to` = ? AND `deleted` = 0", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE)) {
-            ps.setString(1, this.getName());
-            try (ResultSet rs = ps.executeQuery()) {
-                rs.last();
-                int count = rs.getRow();
-                rs.first();
-                sendPacket(PacketCreator.showNotes(rs, count));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        final List<Note> notes;
+        try {
+            notes = NoteDao.findAllByTo(name);
+        } catch (DaoException e) {
+            log.error("Failed to find notes for chr name {}", name, e);
+            return;
         }
+
+        sendPacket(PacketCreator.showNotes(notes));
     }
 
     public void silentGiveBuffs(List<Pair<Long, PlayerBuffValueHolder>> buffs) {
