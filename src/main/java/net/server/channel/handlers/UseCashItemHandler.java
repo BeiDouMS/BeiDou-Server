@@ -36,6 +36,9 @@ import constants.game.GameConstants;
 import constants.id.ItemId;
 import constants.id.MapId;
 import constants.inventory.ItemConstants;
+import database.DaoException;
+import database.NoteDao;
+import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -358,10 +361,11 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         } else if (itemType == 509) {
             String sendTo = p.readString();
             String msg = p.readString();
+            Note note = Note.createNormal(msg, player.getName(), sendTo, Server.getInstance().getCurrentTime());
             try {
-                player.sendNote(sendTo, msg, (byte) 0);
-            } catch (SQLException e) {
-                e.printStackTrace();
+                NoteDao.save(note);
+            } catch (DaoException e) {
+                log.error("Failed to save note {}", note, e);
             }
             remove(c, position, itemId);
         } else if (itemType == 510) {

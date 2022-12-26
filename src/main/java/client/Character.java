@@ -8795,18 +8795,6 @@ public class Character extends AbstractCharacterObject {
         return skillMacros;
     }
 
-    public void sendNote(String to, String msg, byte fame) throws SQLException {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`, `fame`) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, to);
-            ps.setString(2, this.getName());
-            ps.setString(3, msg);
-            ps.setLong(4, Server.getInstance().getCurrentTime());
-            ps.setByte(5, fame);
-            ps.executeUpdate();
-        }
-    }
-
     public static void setAriantRoomLeader(int room, String charname) {
         ariantroomleader[room] = charname;
     }

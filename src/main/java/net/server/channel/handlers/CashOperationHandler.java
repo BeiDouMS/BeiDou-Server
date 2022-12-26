@@ -32,6 +32,9 @@ import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
+import database.DaoException;
+import database.NoteDao;
+import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -128,11 +131,9 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     cs.gift(Integer.parseInt(recipient.get("id")), chr.getName(), message, cItem.getSN());
                     c.sendPacket(PacketCreator.showGiftSucceed(recipient.get("name"), cItem));
                     c.sendPacket(PacketCreator.showCash(chr));
-                    try {
-                        chr.sendNote(recipient.get("name"), chr.getName() + " has sent you a gift! Go check out the Cash Shop.", (byte) 0); //fame or not
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    }
+
+                    sendGiftNotificationNote(chr.getName(), recipient.get("name"));
+
                     Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient.get("name"));
                     if (receiver != null) {
                         receiver.showNote();
@@ -330,11 +331,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 cs.gainCash(toCharge, itemRing, chr.getWorld());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
                                 chr.addCrushRing(Ring.loadFromDb(rings.getLeft()));
-                                try {
-                                    chr.sendNote(partner.getName(), text, (byte) 1);
-                                } catch (SQLException ex) {
-                                    ex.printStackTrace();
-                                }
+                                sendGiftNote(text, chr.getName(), partner.getName());
                                 partner.showNote();
                             }
                         }
@@ -393,11 +390,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 cs.gainCash(payment, -itemRing.getPrice());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
                                 chr.addFriendshipRing(Ring.loadFromDb(rings.getLeft()));
-                                try {
-                                    chr.sendNote(partner.getName(), text, (byte) 1);
-                                } catch (SQLException ex) {
-                                    ex.printStackTrace();
-                                }
+                                sendGiftNote(text, chr.getName(), partner.getName());
                                 partner.showNote();
                             }
                         }
@@ -492,6 +485,25 @@ public final class CashOperationHandler extends AbstractPacketHandler {
             return true;
         } else {
             return false;
+        }
+    }
+
+    private void sendGiftNote(String message, String from, String to) {
+        Note giftNote = Note.createGift(message, from, to, Server.getInstance().getCurrentTime());
+        sendGiftNote(giftNote);
+    }
+
+    private void sendGiftNotificationNote(String from, String to) {
+        String message = from + " has sent you a gift! Go check out the Cash Shop.";
+        Note giftNotificationNote = Note.createNormal(message, from, to, Server.getInstance().getCurrentTime());
+        sendGiftNote(giftNotificationNote);
+    }
+
+    private void sendGiftNote(Note giftNote) {
+        try {
+            NoteDao.save(giftNote);
+        } catch (DaoException e) {
+            log.error("Failed to send gift note {}", giftNote, e);
         }
     }
 }

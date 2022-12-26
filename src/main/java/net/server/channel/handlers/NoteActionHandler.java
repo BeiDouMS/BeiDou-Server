@@ -27,6 +27,7 @@ import database.NoteDao;
 import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.PacketCreator;
@@ -40,20 +41,18 @@ public final class NoteActionHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         int action = p.readByte();
-        if (action == 0 && c.getPlayer().getCashShop().getAvailableNotes() > 0) {
+        if (action == 0 && c.getPlayer().getCashShop().getAvailableNotes() > 0) { // Reply to gift in cash shop
             String charname = p.readString();
             String message = p.readString();
-            try {
-                if (c.getPlayer().getCashShop().isOpened()) {
-                    c.sendPacket(PacketCreator.showCashInventory(c));
-                }
-
-                c.getPlayer().sendNote(charname, message, (byte) 1);
-                c.getPlayer().getCashShop().decreaseNotes();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (c.getPlayer().getCashShop().isOpened()) {
+                c.sendPacket(PacketCreator.showCashInventory(c));
             }
-        } else if (action == 1) {
+
+            boolean sendNoteSuccess = sendGiftReplyNote(message, c.getPlayer().getName(), charname);
+            if (sendNoteSuccess) {
+                c.getPlayer().getCashShop().decreaseNotes();
+            }
+        } else if (action == 1) { // Discard notes in game
             int num = p.readByte();
             p.readByte();
             p.readByte();
@@ -81,5 +80,17 @@ public final class NoteActionHandler extends AbstractPacketHandler {
                 c.getPlayer().gainFame(fame);
             }
         }
+    }
+
+    private boolean sendGiftReplyNote(String message, String from, String to) {
+        Note giftReplyNote = Note.createGift(message, from, to, Server.getInstance().getCurrentTime());
+        try {
+            NoteDao.save(giftReplyNote);
+        } catch (DaoException e) {
+            log.error("Failed to send gift reply note {}", giftReplyNote, e);
+            return false;
+        }
+
+        return true;
     }
 }
