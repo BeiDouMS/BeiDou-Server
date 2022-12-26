@@ -3,6 +3,7 @@ package tools;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import config.YamlConfig;
+import database.NoteRowMapper;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.slf4j.Logger;
@@ -99,7 +100,7 @@ public class DatabaseConnection {
     }
 
     private static void initializeJdbi(DataSource dataSource) {
-        // TODO: configure row mappers
-        jdbi = Jdbi.create(dataSource);
+        jdbi = Jdbi.create(dataSource)
+                .registerRowMapper(new NoteRowMapper());
     }
 }

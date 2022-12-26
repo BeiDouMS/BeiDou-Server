@@ -11,11 +11,11 @@ public record Note(int id, String message, String from, String to, long timestam
         Objects.requireNonNull(to);
     }
 
-    public Note createNormal(String message, String from, String to, long timestamp) {
+    public static Note createNormal(String message, String from, String to, long timestamp) {
         return new Note(PLACEHOLDER_ID, message, from, to, timestamp, 0);
     }
 
-    public Note createGift(String message, String from, String to, long timestamp) {
+    public static Note createGift(String message, String from, String to, long timestamp) {
         return new Note(PLACEHOLDER_ID, message, from, to, timestamp, 1);
     }
 }
