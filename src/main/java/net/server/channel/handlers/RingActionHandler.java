@@ -30,8 +30,12 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import client.processor.npc.DueyProcessor;
 import constants.id.ItemId;
+import database.DaoException;
+import database.NoteDao;
+import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
 import org.slf4j.Logger;
@@ -396,7 +400,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                String groom = c.getPlayer().getName(), bride = Character.getNameById(c.getPlayer().getPartnerId());
+                String groom = c.getPlayer().getName();
+                String bride = Character.getNameById(c.getPlayer().getPartnerId());
                 int guest = Character.getIdByName(name);
                 if (groom == null || bride == null || groom.equals("") || bride.equals("") || guest <= 0) {
                     c.getPlayer().dropMessage(5, "Unable to find " + name + "!");
@@ -417,14 +422,16 @@ public final class RingActionHandler extends AbstractPacketHandler {
                             if (resStatus > 0) {
                                 long expiration = cserv.getWeddingTicketExpireTime(resStatus + 1);
 
+                                String baseMessage = "You've been invited to %s and %s's Wedding!".formatted(groom, bride);
                                 Character guestChr = c.getWorldServer().getPlayerStorage().getCharacterById(guest);
                                 if (guestChr != null && InventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && InventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
-                                    guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding!");
+                                    guestChr.dropMessage(6, "[Wedding] %s".formatted(baseMessage));
                                 } else {
+                                    String dueyMessage = baseMessage + " Receive your invitation from Duey!";
                                     if (guestChr != null && guestChr.isLoggedinWorld()) {
-                                        guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding! Receive your invitation from Duey!");
+                                        guestChr.dropMessage(6, "[Wedding] %s".formatted(dueyMessage));
                                     } else {
-                                        c.getPlayer().sendNote(name, "You've been invited to " + groom + " and " + bride + "'s Wedding! Receive your invitation from Duey!", (byte) 0);
+                                        sendWeddingInvitationNote(dueyMessage, groom, name);
                                     }
 
                                     Item weddingTicket = new Item(newItemId, (short) 0, (short) 1);
@@ -442,7 +449,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                         c.getPlayer().dropMessage(5, "Invitation was not sent to '" + name + "'. Either the time for your marriage reservation already came or it was not found.");
                     }
 
-                } catch (SQLException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                     return;
                 }
@@ -517,5 +524,14 @@ public final class RingActionHandler extends AbstractPacketHandler {
         }
 
         c.sendPacket(PacketCreator.enableActions());
+    }
+
+    private void sendWeddingInvitationNote(String message, String from, String to) {
+        Note invitationNote = Note.createNormal(message, from, to, Server.getInstance().getCurrentTime());
+        try {
+            NoteDao.save(invitationNote);
+        } catch (DaoException e) {
+            log.error("Failed to save wedding invitation note: {}", invitationNote, e);
+        }
     }
 }
