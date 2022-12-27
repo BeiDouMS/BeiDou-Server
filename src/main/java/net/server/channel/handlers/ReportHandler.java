@@ -59,7 +59,7 @@ public final class ReportHandler extends AbstractPacketHandler {
                 return;
             }
             Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(6, victim + " was reported for: " + description));
-            addReport(c.getPlayer().getId(), Character.getIdByName(victim), 0, description, null);
+            addReport(c.getPlayer().getId(), Character.getIdByName(victim), 0, description, "");
         } else if (type == 1) {
             String chatlog = p.readString();
             if (chatlog == null) {
@@ -81,7 +81,7 @@ public final class ReportHandler extends AbstractPacketHandler {
         }
     }
 
-    public void addReport(int reporterid, int victimid, int reason, String description, String chatlog) {
+    private void addReport(int reporterid, int victimid, int reason, String description, String chatlog) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO reports (`reporttime`, `reporterid`, `victimid`, `reason`, `chatlog`, `description`) VALUES (?, ?, ?, ?, ?, ?)")) {
             ps.setTimestamp(1, Timestamp.from(Instant.now()));
@@ -90,8 +90,7 @@ public final class ReportHandler extends AbstractPacketHandler {
             ps.setInt(4, reason);
             ps.setString(5, chatlog);
             ps.setString(6, description);
-            ps.addBatch();
-            ps.executeBatch();
+            ps.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
