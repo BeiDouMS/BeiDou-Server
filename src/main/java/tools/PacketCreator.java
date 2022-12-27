@@ -5403,12 +5403,6 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet noteSendMsg() {
-        OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
-        p.writeByte(4);
-        return p;
-    }
-
     /*
      *  0 = Player online, use whisper
      *  1 = Check player's name

@@ -38,6 +38,7 @@ import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import net.packet.out.SendNoteSuccessPacket;
 import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -367,6 +368,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             boolean sendSuccess = noteService.sendNormal(msg, player.getName(), sendTo);
             if (sendSuccess) {
                 remove(c, position, itemId);
+                c.sendPacket(new SendNoteSuccessPacket());
             }
         } else if (itemType == 510) {
             player.getMap().broadcastMessage(PacketCreator.musicChange("Jukebox/Congratulation"));
