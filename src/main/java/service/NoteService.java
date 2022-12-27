@@ -44,7 +44,7 @@ public class NoteService {
 
     private boolean send(Note note) {
         try {
-            NoteDao.save(note);
+            noteDao.save(note);
             return true;
         } catch (DaoException e) {
             log.error("Failed to send note {}", note, e);

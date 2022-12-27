@@ -96,6 +96,7 @@ public class Server {
     private static final Set<Integer> activeFly = new HashSet<>();
     private static final Map<Integer, Integer> couponRates = new HashMap<>(30);
     private static final List<Integer> activeCoupons = new LinkedList<>();
+    private static ChannelDependencies channelDependencies;
 
     private LoginServer loginServer;
     private final List<Map<Integer, String>> channels = new LinkedList<>();
@@ -843,7 +844,7 @@ public class Server {
             throw new IllegalStateException("Failed to initiate a connection to the database");
         }
 
-        ChannelDependencies channelDependencies = registerChannelDependencies();
+        channelDependencies = registerChannelDependencies();
 
         final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
         // Run slow operations asynchronously to make startup faster
@@ -1181,7 +1182,7 @@ public class Server {
     public void expelMember(GuildCharacter initiator, String name, int cid) {
         Guild g = guilds.get(initiator.getGuildId());
         if (g != null) {
-            g.expelMember(initiator, name, cid);
+            g.expelMember(initiator, name, cid, channelDependencies.noteService());
         }
     }
 

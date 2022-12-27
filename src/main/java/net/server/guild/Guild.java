@@ -24,9 +24,6 @@ package net.server.guild;
 import client.Character;
 import client.Client;
 import config.YamlConfig;
-import database.DaoException;
-import database.note.NoteDao;
-import model.Note;
 import net.packet.Packet;
 import net.server.PlayerStorage;
 import net.server.Server;
@@ -37,6 +34,7 @@ import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -500,7 +498,7 @@ public class Guild {
         }
     }
 
-    public void expelMember(GuildCharacter initiator, String name, int cid) {
+    public void expelMember(GuildCharacter initiator, String name, int cid, NoteService noteService) {
         membersLock.lock();
         try {
             java.util.Iterator<GuildCharacter> itr = members.iterator();
@@ -515,7 +513,7 @@ public class Guild {
                         if (mgc.isOnline()) {
                             Server.getInstance().getWorld(mgc.getWorld()).setGuildAndRank(cid, 0, 5);
                         } else {
-                            sendExpelledNote(initiator.getName(), mgc.getName());
+                            noteService.sendNormal("You have been expelled from the guild.", initiator.getName(), mgc.getName());
                             Server.getInstance().getWorld(mgc.getWorld()).setOfflineGuildStatus((short) 0, (byte) 5, cid);
                         }
                     } catch (Exception re) {
@@ -528,16 +526,6 @@ public class Guild {
             log.warn("Unable to find member with name {} and id {}", name, cid);
         } finally {
             membersLock.unlock();
-        }
-    }
-
-    private void sendExpelledNote(String expelledBy, String expelledChr) {
-        Note expelledNote = Note.createNormal("You have been expelled from the guild.", expelledBy, expelledChr,
-                System.currentTimeMillis());
-        try {
-            NoteDao.save(expelledNote);
-        } catch (DaoException e) {
-            log.error("Failed to save guild expel note - {} expelled from {} by {}", expelledChr, name, expelledBy, e);
         }
     }
 

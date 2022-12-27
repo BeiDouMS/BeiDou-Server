@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class NoteDao {
 
-    public static void save(Note note) {
+    public void save(Note note) {
         try (Handle handle = DatabaseConnection.getHandle()) {
             handle.createUpdate("""
                             INSERT INTO notes (`message`, `from`, `to`, `timestamp`, `fame`, `deleted`)
