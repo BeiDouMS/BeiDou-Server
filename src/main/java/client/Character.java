@@ -41,9 +41,6 @@ import constants.id.MapId;
 import constants.id.MobId;
 import constants.inventory.ItemConstants;
 import constants.skills.*;
-import database.DaoException;
-import database.NoteDao;
-import model.Note;
 import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
@@ -9625,18 +9622,6 @@ public class Character extends AbstractCharacterObject {
 
     public void showHint(String msg, int length) {
         client.announceHint(msg, length);
-    }
-
-    public void showNote() {
-        final List<Note> notes;
-        try {
-            notes = NoteDao.findAllByTo(name);
-        } catch (DaoException e) {
-            log.error("Failed to find notes for chr name {}", name, e);
-            return;
-        }
-
-        sendPacket(PacketCreator.showNotes(notes));
     }
 
     public void silentGiveBuffs(List<Pair<Long, PlayerBuffValueHolder>> buffs) {

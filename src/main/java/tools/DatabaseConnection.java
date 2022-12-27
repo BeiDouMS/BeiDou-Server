@@ -3,7 +3,7 @@ package tools;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import config.YamlConfig;
-import database.NoteRowMapper;
+import database.note.NoteRowMapper;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.slf4j.Logger;

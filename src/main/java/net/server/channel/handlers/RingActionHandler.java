@@ -30,18 +30,15 @@ import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
 import client.processor.npc.DueyProcessor;
 import constants.id.ItemId;
-import database.DaoException;
-import database.NoteDao;
-import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.Server;
 import net.server.channel.Channel;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.ItemInformationProvider;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
@@ -59,6 +56,12 @@ import java.sql.SQLException;
  */
 public final class RingActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(RingActionHandler.class);
+
+    private final NoteService noteService;
+
+    public RingActionHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     private static int getEngagementBoxId(int useItemId) {
         return switch (useItemId) {
@@ -431,7 +434,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                                     if (guestChr != null && guestChr.isLoggedinWorld()) {
                                         guestChr.dropMessage(6, "[Wedding] %s".formatted(dueyMessage));
                                     } else {
-                                        sendWeddingInvitationNote(dueyMessage, groom, name);
+                                        noteService.sendNormal(dueyMessage, groom, name);
                                     }
 
                                     Item weddingTicket = new Item(newItemId, (short) 0, (short) 1);
@@ -524,14 +527,5 @@ public final class RingActionHandler extends AbstractPacketHandler {
         }
 
         c.sendPacket(PacketCreator.enableActions());
-    }
-
-    private void sendWeddingInvitationNote(String message, String from, String to) {
-        Note invitationNote = Note.createNormal(message, from, to, Server.getInstance().getCurrentTime());
-        try {
-            NoteDao.save(invitationNote);
-        } catch (DaoException e) {
-            log.error("Failed to save wedding invitation note: {}", invitationNote, e);
-        }
     }
 }

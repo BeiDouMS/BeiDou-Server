@@ -1,4 +1,4 @@
-package database;
+package database.note;
 
 import model.Note;
 import org.jdbi.v3.core.mapper.RowMapper;

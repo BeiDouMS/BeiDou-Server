@@ -32,9 +32,6 @@ import client.inventory.manipulator.InventoryManipulator;
 import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
-import database.DaoException;
-import database.NoteDao;
-import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -44,10 +41,10 @@ import server.CashShop;
 import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
 import server.ItemInformationProvider;
+import service.NoteService;
 import tools.PacketCreator;
 import tools.Pair;
 
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +53,12 @@ import static java.util.concurrent.TimeUnit.DAYS;
 
 public final class CashOperationHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(CashOperationHandler.class);
+
+    private final NoteService noteService;
+
+    public CashOperationHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -132,11 +135,12 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.showGiftSucceed(recipient.get("name"), cItem));
                     c.sendPacket(PacketCreator.showCash(chr));
 
-                    sendGiftNotificationNote(chr.getName(), recipient.get("name"));
+                    String noteMessage = chr.getName() + " has sent you a gift! Go check out the Cash Shop.";
+                    noteService.sendNormal(noteMessage, chr.getName(), recipient.get("name"));
 
                     Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient.get("name"));
                     if (receiver != null) {
-                        receiver.showNote();
+                        noteService.show(receiver);
                     }
                 } else if (action == 0x05) { // Modify wish list
                     cs.clearWishList();
@@ -331,8 +335,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 cs.gainCash(toCharge, itemRing, chr.getWorld());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
                                 chr.addCrushRing(Ring.loadFromDb(rings.getLeft()));
-                                sendGiftNote(text, chr.getName(), partner.getName());
-                                partner.showNote();
+                                noteService.sendWithFame(text, chr.getName(), partner.getName());
+                                noteService.show(partner);
                             }
                         }
                     } else {
@@ -390,8 +394,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 cs.gainCash(payment, -itemRing.getPrice());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
                                 chr.addFriendshipRing(Ring.loadFromDb(rings.getLeft()));
-                                sendGiftNote(text, chr.getName(), partner.getName());
-                                partner.showNote();
+                                noteService.sendWithFame(text, chr.getName(), partner.getName());
+                                noteService.show(partner);
                             }
                         }
                     } else {
@@ -485,25 +489,6 @@ public final class CashOperationHandler extends AbstractPacketHandler {
             return true;
         } else {
             return false;
-        }
-    }
-
-    private void sendGiftNote(String message, String from, String to) {
-        Note giftNote = Note.createGift(message, from, to, Server.getInstance().getCurrentTime());
-        sendGiftNote(giftNote);
-    }
-
-    private void sendGiftNotificationNote(String from, String to) {
-        String message = from + " has sent you a gift! Go check out the Cash Shop.";
-        Note giftNotificationNote = Note.createNormal(message, from, to, Server.getInstance().getCurrentTime());
-        sendGiftNote(giftNotificationNote);
-    }
-
-    private void sendGiftNote(Note giftNote) {
-        try {
-            NoteDao.save(giftNote);
-        } catch (DaoException e) {
-            log.error("Failed to send gift note {}", giftNote, e);
         }
     }
 }

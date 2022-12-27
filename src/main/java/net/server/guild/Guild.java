@@ -25,7 +25,7 @@ import client.Character;
 import client.Client;
 import config.YamlConfig;
 import database.DaoException;
-import database.NoteDao;
+import database.note.NoteDao;
 import model.Note;
 import net.packet.Packet;
 import net.server.PlayerStorage;

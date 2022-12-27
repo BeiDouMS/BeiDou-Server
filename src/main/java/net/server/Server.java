@@ -35,6 +35,9 @@ import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
 import constants.net.OpcodeConstants;
 import constants.net.ServerConstants;
+import database.note.NoteDao;
+import net.ChannelDependencies;
+import net.PacketProcessor;
 import net.netty.LoginServer;
 import net.packet.Packet;
 import net.server.channel.Channel;
@@ -55,6 +58,7 @@ import server.TimerManager;
 import server.expeditions.ExpeditionBossLog;
 import server.life.PlayerNPCFactory;
 import server.quest.Quest;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.Pair;
 
@@ -838,6 +842,8 @@ public class Server {
             throw new IllegalStateException("Failed to initiate a connection to the database");
         }
 
+        registerChannelDependencies();
+
         final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
         // Run slow operations asynchronously to make startup faster
         final List<Future<?>> futures = new ArrayList<>();
@@ -912,6 +918,16 @@ public class Server {
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
         }
+    }
+
+    private void registerChannelDependencies() {
+        NoteDao noteDao = new NoteDao();
+
+        ChannelDependencies channelDependencies = new ChannelDependencies(
+                new NoteService(noteDao)
+        );
+
+        PacketProcessor.registerGameHandlerDependencies(channelDependencies);
     }
 
     private LoginServer initLoginServer(int port) {

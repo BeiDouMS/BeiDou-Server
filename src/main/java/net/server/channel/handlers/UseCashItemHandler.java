@@ -36,9 +36,6 @@ import constants.game.GameConstants;
 import constants.id.ItemId;
 import constants.id.MapId;
 import constants.inventory.ItemConstants;
-import database.DaoException;
-import database.NoteDao;
-import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -49,10 +46,10 @@ import server.Shop;
 import server.ShopFactory;
 import server.TimerManager;
 import server.maps.*;
+import service.NoteService;
 import tools.PacketCreator;
 import tools.Pair;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +59,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public final class UseCashItemHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(UseCashItemHandler.class);
+
+    private final NoteService noteService;
+
+    public UseCashItemHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -361,13 +364,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         } else if (itemType == 509) {
             String sendTo = p.readString();
             String msg = p.readString();
-            Note note = Note.createNormal(msg, player.getName(), sendTo, Server.getInstance().getCurrentTime());
-            try {
-                NoteDao.save(note);
-            } catch (DaoException e) {
-                log.error("Failed to save note {}", note, e);
+            boolean sendSuccess = noteService.sendNormal(msg, player.getName(), sendTo);
+            if (sendSuccess) {
+                remove(c, position, itemId);
             }
-            remove(c, position, itemId);
         } else if (itemType == 510) {
             player.getMap().broadcastMessage(PacketCreator.musicChange("Jukebox/Congratulation"));
             remove(c, position, itemId);

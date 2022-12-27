@@ -31,7 +31,7 @@ import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.manipulator.InventoryManipulator;
 import database.DaoException;
-import database.NoteDao;
+import database.note.NoteDao;
 import model.Note;
 import net.server.Server;
 import net.server.world.World;

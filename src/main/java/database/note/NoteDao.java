@@ -1,5 +1,6 @@
-package database;
+package database.note;
 
+import database.DaoException;
 import model.Note;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.JdbiException;
@@ -27,7 +28,7 @@ public class NoteDao {
         }
     }
 
-    public static List<Note> findAllByTo(String to) {
+    public List<Note> findAllByTo(String to) {
         try (Handle handle = DatabaseConnection.getHandle()) {
             return handle.createQuery("""
                             SELECT * 
@@ -38,11 +39,11 @@ public class NoteDao {
                     .mapTo(Note.class)
                     .list();
         } catch (JdbiException e) {
-            throw new DaoException("Failed to find notes with \"to\": %s".formatted(to), e);
+            throw new DaoException("Failed to find notes sent to: %s".formatted(to), e);
         }
     }
 
-    public static Optional<Note> delete(int id) {
+    public Optional<Note> delete(int id) {
         try (Handle handle = DatabaseConnection.getHandle()) {
             Optional<Note> note = findById(handle, id);
             if (note.isEmpty()) {

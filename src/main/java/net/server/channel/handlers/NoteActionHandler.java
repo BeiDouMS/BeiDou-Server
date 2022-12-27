@@ -22,21 +22,24 @@
 package net.server.channel.handlers;
 
 import client.Client;
-import database.DaoException;
-import database.NoteDao;
 import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.NoteService;
 import tools.PacketCreator;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 public final class NoteActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NoteActionHandler.class);
+
+    private final NoteService noteService;
+
+    public NoteActionHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -48,7 +51,7 @@ public final class NoteActionHandler extends AbstractPacketHandler {
                 c.sendPacket(PacketCreator.showCashInventory(c));
             }
 
-            boolean sendNoteSuccess = sendGiftReplyNote(message, c.getPlayer().getName(), charname);
+            boolean sendNoteSuccess = noteService.sendWithFame(message, c.getPlayer().getName(), charname);
             if (sendNoteSuccess) {
                 c.getPlayer().getCashShop().decreaseNotes();
             }
@@ -61,36 +64,17 @@ public final class NoteActionHandler extends AbstractPacketHandler {
                 int id = p.readInt();
                 p.readByte(); //Fame, but we read it from the database :)
 
-                final Optional<Note> note;
-                try {
-                    note = NoteDao.delete(id);
-                } catch (DaoException e) {
-                    log.error("Failed to delete note {}", id, e);
+                Optional<Note> discardedNote = noteService.discard(id);
+                if (discardedNote.isEmpty()) {
+                    log.warn("Note with id {} not able to be discarded. Already discarded?", id);
                     continue;
                 }
 
-                if (note.isEmpty()) {
-                    log.warn("Note with id {} not able to be deleted. Already deleted?", id);
-                    continue;
-                }
-
-                fame += note.get().fame();
+                fame += discardedNote.get().fame();
             }
             if (fame > 0) {
                 c.getPlayer().gainFame(fame);
             }
         }
-    }
-
-    private boolean sendGiftReplyNote(String message, String from, String to) {
-        Note giftReplyNote = Note.createGift(message, from, to, Server.getInstance().getCurrentTime());
-        try {
-            NoteDao.save(giftReplyNote);
-        } catch (DaoException e) {
-            log.error("Failed to send gift reply note {}", giftReplyNote, e);
-            return false;
-        }
-
-        return true;
     }
 }
