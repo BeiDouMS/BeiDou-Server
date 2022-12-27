@@ -32,7 +32,8 @@ import tools.PacketCreator;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.time.OffsetDateTime;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 /*
  *
@@ -40,7 +41,7 @@ import java.time.OffsetDateTime;
  */
 public final class ReportHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
-        int type = p.readByte(); //01 = Conversation claim 00 = illegal program
+        int type = p.readByte(); //00 = Illegal program claim, 01 = Conversation claim
         String victim = p.readString();
         int reason = p.readByte();
         String description = p.readString();
@@ -83,7 +84,7 @@ public final class ReportHandler extends AbstractPacketHandler {
     public void addReport(int reporterid, int victimid, int reason, String description, String chatlog) {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("INSERT INTO reports (`reporttime`, `reporterid`, `victimid`, `reason`, `chatlog`, `description`) VALUES (?, ?, ?, ?, ?, ?)")) {
-            ps.setString(1, OffsetDateTime.now().toString());
+            ps.setTimestamp(1, Timestamp.from(Instant.now()));
             ps.setInt(2, reporterid);
             ps.setInt(3, victimid);
             ps.setInt(4, reason);
