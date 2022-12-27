@@ -31,6 +31,11 @@ import net.packet.InPacket;
  * @author kevintjuh93
  */
 public class FredrickHandler extends AbstractPacketHandler {
+    private final FredrickProcessor fredrickProcessor;
+
+    public FredrickHandler(FredrickProcessor fredrickProcessor) {
+        this.fredrickProcessor = fredrickProcessor;
+    }
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -42,7 +47,7 @@ public class FredrickHandler extends AbstractPacketHandler {
                 //c.sendPacket(PacketCreator.getFredrick((byte) 0x24));
                 break;
             case 0x1A:
-                FredrickProcessor.fredrickRetrieveItems(c);
+                fredrickProcessor.fredrickRetrieveItems(c);
                 break;
             case 0x1C: //Exit
                 break;

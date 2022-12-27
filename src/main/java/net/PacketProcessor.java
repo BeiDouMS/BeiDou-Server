@@ -38,7 +38,7 @@ public final class PacketProcessor {
     private static final Logger log = LoggerFactory.getLogger(PacketProcessor.class);
     private static final Map<String, PacketProcessor> instances = new LinkedHashMap<>();
 
-    private static ChannelDependencies channelDependencies;
+    private static ChannelDependencies channelDeps;
 
     private PacketHandler[] handlers;
 
@@ -53,7 +53,7 @@ public final class PacketProcessor {
     }
 
     public static void registerGameHandlerDependencies(ChannelDependencies channelDependencies) {
-        PacketProcessor.channelDependencies = channelDependencies;
+        PacketProcessor.channelDeps = channelDependencies;
     }
 
     public static PacketProcessor getLoginServerProcessor() {
@@ -61,7 +61,7 @@ public final class PacketProcessor {
     }
 
     public static PacketProcessor getChannelServerProcessor(int world, int channel) {
-        if (channelDependencies == null) {
+        if (channelDeps == null) {
             throw new IllegalStateException("Unable to get channel server processor - dependencies are not registered");
         }
 
@@ -152,7 +152,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.ITEM_SORT, new InventoryMergeHandler());
         registerHandler(RecvOpcode.ITEM_MOVE, new ItemMoveHandler());
         registerHandler(RecvOpcode.MESO_DROP, new MesoDropHandler());
-        registerHandler(RecvOpcode.PLAYER_LOGGEDIN, new PlayerLoggedinHandler(channelDependencies.noteService()));
+        registerHandler(RecvOpcode.PLAYER_LOGGEDIN, new PlayerLoggedinHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.CHANGE_MAP, new ChangeMapHandler());
         registerHandler(RecvOpcode.MOVE_LIFE, new MoveLifeHandler());
         registerHandler(RecvOpcode.CLOSE_RANGE_ATTACK, new CloseRangeDamageHandler());
@@ -160,7 +160,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.MAGIC_ATTACK, new MagicDamageHandler());
         registerHandler(RecvOpcode.TAKE_DAMAGE, new TakeDamageHandler());
         registerHandler(RecvOpcode.MOVE_PLAYER, new MovePlayerHandler());
-        registerHandler(RecvOpcode.USE_CASH_ITEM, new UseCashItemHandler(channelDependencies.noteService()));
+        registerHandler(RecvOpcode.USE_CASH_ITEM, new UseCashItemHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.USE_ITEM, new UseItemHandler());
         registerHandler(RecvOpcode.USE_RETURN_SCROLL, new UseItemHandler());
         registerHandler(RecvOpcode.USE_UPGRADE_SCROLL, new ScrollHandler());
@@ -202,7 +202,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.MESSENGER, new MessengerHandler());
         registerHandler(RecvOpcode.NPC_ACTION, new NPCAnimationHandler());
         registerHandler(RecvOpcode.CHECK_CASH, new TouchingCashShopHandler());
-        registerHandler(RecvOpcode.CASHSHOP_OPERATION, new CashOperationHandler(channelDependencies.noteService()));
+        registerHandler(RecvOpcode.CASHSHOP_OPERATION, new CashOperationHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.COUPON_CODE, new CouponCodeHandler());
         registerHandler(RecvOpcode.SPAWN_PET, new SpawnPetHandler());
         registerHandler(RecvOpcode.MOVE_PET, new MovePetHandler());
@@ -215,11 +215,11 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.CANCEL_DEBUFF, new CancelDebuffHandler());
         registerHandler(RecvOpcode.USE_SKILL_BOOK, new SkillBookHandler());
         registerHandler(RecvOpcode.SKILL_MACRO, new SkillMacroHandler());
-        registerHandler(RecvOpcode.NOTE_ACTION, new NoteActionHandler(channelDependencies.noteService()));
+        registerHandler(RecvOpcode.NOTE_ACTION, new NoteActionHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.CLOSE_CHALKBOARD, new CloseChalkboardHandler());
         registerHandler(RecvOpcode.USE_MOUNT_FOOD, new UseMountFoodHandler());
         registerHandler(RecvOpcode.MTS_OPERATION, new MTSHandler());
-        registerHandler(RecvOpcode.RING_ACTION, new RingActionHandler(channelDependencies.noteService()));
+        registerHandler(RecvOpcode.RING_ACTION, new RingActionHandler(channelDeps.noteService()));
         registerHandler(RecvOpcode.SPOUSE_CHAT, new SpouseChatHandler());
         registerHandler(RecvOpcode.PET_AUTO_POT, new PetAutoPotHandler());
         registerHandler(RecvOpcode.PET_EXCLUDE_ITEMS, new PetExcludeItemsHandler());
@@ -273,7 +273,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.COCONUT, new CoconutHandler());
         registerHandler(RecvOpcode.ARAN_COMBO_COUNTER, new AranComboHandler());
         registerHandler(RecvOpcode.CLICK_GUIDE, new ClickGuideHandler());
-        registerHandler(RecvOpcode.FREDRICK_ACTION, new FredrickHandler());
+        registerHandler(RecvOpcode.FREDRICK_ACTION, new FredrickHandler(channelDeps.fredrickProcessor()));
         registerHandler(RecvOpcode.MONSTER_CARNIVAL, new MonsterCarnivalHandler());
         registerHandler(RecvOpcode.REMOTE_STORE, new RemoteStoreHandler());
         registerHandler(RecvOpcode.WEDDING_ACTION, new WeddingHandler());

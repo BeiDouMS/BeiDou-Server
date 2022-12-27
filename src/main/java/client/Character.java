@@ -9203,20 +9203,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void changeName(String name) {
-        FredrickProcessor.removeFredrickReminders(this.getId());
-
-        this.name = name;
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE `characters` SET `name` = ? WHERE `id` = ?")) {
-            ps.setString(1, name);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public int getDoorSlot() {
         if (doorSlot != -1) {
             return doorSlot;

@@ -57,7 +57,7 @@ public class NoteDao {
         }
     }
 
-    private static Optional<Note> findById(Handle handle, int id) {
+    private Optional<Note> findById(Handle handle, int id) {
         final Optional<Note> note;
         try {
             note = handle.createQuery("""
@@ -74,7 +74,7 @@ public class NoteDao {
         return note;
     }
 
-    private static void deleteById(Handle handle, int id) {
+    private void deleteById(Handle handle, int id) {
         try {
             handle.createUpdate("""
                         UPDATE notes

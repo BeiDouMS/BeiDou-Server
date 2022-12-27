@@ -26,10 +26,15 @@ import client.processor.npc.FredrickProcessor;
  * @author Ronan
  */
 public class DueyFredrickTask implements Runnable {
+    private final FredrickProcessor fredrickProcessor;
+
+    public DueyFredrickTask(FredrickProcessor fredrickProcessor) {
+        this.fredrickProcessor = fredrickProcessor;
+    }
 
     @Override
     public void run() {
-        FredrickProcessor.runFredrickSchedule();
+        fredrickProcessor.runFredrickSchedule();
         DueyProcessor.runDueyExpireSchedule();
     }
 }

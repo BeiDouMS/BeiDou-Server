@@ -30,6 +30,7 @@ import client.inventory.Item;
 import client.inventory.ItemFactory;
 import client.inventory.manipulator.CashIdGenerator;
 import client.newyear.NewYearCardRecord;
+import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.inventory.ItemConstants;
@@ -842,7 +843,7 @@ public class Server {
             throw new IllegalStateException("Failed to initiate a connection to the database");
         }
 
-        registerChannelDependencies();
+        ChannelDependencies channelDependencies = registerChannelDependencies();
 
         final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
         // Run slow operations asynchronously to make startup faster
@@ -872,7 +873,7 @@ public class Server {
         }
 
         ThreadManager.getInstance().start();
-        initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
+        initializeTimelyTasks(channelDependencies);    // aggregated method for timely tasks thanks to lxconan
 
         try {
             int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
@@ -920,14 +921,14 @@ public class Server {
         }
     }
 
-    private void registerChannelDependencies() {
-        NoteDao noteDao = new NoteDao();
-
-        ChannelDependencies channelDependencies = new ChannelDependencies(
-                new NoteService(noteDao)
-        );
+    private ChannelDependencies registerChannelDependencies() {
+        NoteService noteService = new NoteService(new NoteDao());
+        FredrickProcessor fredrickProcessor = new FredrickProcessor(noteService);
+        ChannelDependencies channelDependencies = new ChannelDependencies(noteService, fredrickProcessor);
 
         PacketProcessor.registerGameHandlerDependencies(channelDependencies);
+
+        return channelDependencies;
     }
 
     private LoginServer initLoginServer(int port) {
@@ -948,7 +949,7 @@ public class Server {
         }
     }
 
-    private void initializeTimelyTasks() {
+    private void initializeTimelyTasks(ChannelDependencies channelDependencies) {
         TimerManager tMan = TimerManager.getInstance();
         tMan.start();
         tMan.register(tMan.purge(), YamlConfig.config.server.PURGING_INTERVAL);//Purging ftw...
@@ -962,7 +963,7 @@ public class Server {
         tMan.register(new LoginCoordinatorTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new EventRecallCoordinatorTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new LoginStorageTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
-        tMan.register(new DueyFredrickTask(), HOURS.toMillis(1), timeLeft);
+        tMan.register(new DueyFredrickTask(channelDependencies.fredrickProcessor()), HOURS.toMillis(1), timeLeft);
         tMan.register(new InvitationTask(), SECONDS.toMillis(30), SECONDS.toMillis(30));
         tMan.register(new RespawnTask(), YamlConfig.config.server.RESPAWN_INTERVAL, YamlConfig.config.server.RESPAWN_INTERVAL);
 
