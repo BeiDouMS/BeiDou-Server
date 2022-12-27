@@ -40,7 +40,6 @@ import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
-import model.Note;
 import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
 import net.packet.ByteBufOutPacket;
@@ -72,7 +71,6 @@ import server.movement.LifeMovementFragment;
 
 import java.awt.*;
 import java.net.InetAddress;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
@@ -5420,20 +5418,6 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
         p.writeByte(5);
         p.writeByte(error);
-        return p;
-    }
-
-    public static Packet showNotes(List<Note> notes) {
-        final OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
-        p.writeByte(3);
-        p.writeByte(notes.size());
-        notes.forEach(note -> {
-            p.writeInt(note.id());
-            p.writeString(note.from() + " ");//Stupid nexon forgot space lol
-            p.writeString(note.message());
-            p.writeLong(getTime(note.timestamp()));
-            p.writeByte(note.fame());//FAME :D
-        });
         return p;
     }
 

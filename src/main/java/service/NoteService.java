@@ -4,12 +4,12 @@ import client.Character;
 import database.DaoException;
 import database.note.NoteDao;
 import model.Note;
-import net.packet.Packet;
+import net.packet.out.ShowNotesPacket;
 import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import tools.PacketCreator;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,32 +62,43 @@ public class NoteService {
             throw new IllegalArgumentException("Unable to show notes - chr is null");
         }
 
-        final List<Note> notes;
-        try {
-            notes = noteDao.findAllByTo(chr.getName());
-        } catch (DaoException e) {
-            log.error("Failed to find notes sent to chr name {}", chr.getName(), e);
+        List<Note> notes = getNotes(chr.getName());
+        if (notes.isEmpty()) {
             return;
         }
 
-        Packet showNotesPacket = PacketCreator.showNotes(notes);
-        chr.sendPacket(showNotesPacket);
+        chr.sendPacket(new ShowNotesPacket(notes));
+    }
+
+    private List<Note> getNotes(String to) {
+        final List<Note> notes;
+        try {
+            notes = noteDao.findAllByTo(to);
+        } catch (DaoException e) {
+            log.error("Failed to find notes sent to chr name {}", to, e);
+            return Collections.emptyList();
+        }
+
+        if (notes == null || notes.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return notes;
     }
 
     /**
-     * Discard a read note
+     * Delete a read note
      *
-     * @param id Id of note to discard
+     * @param noteId Id of note to discard
      * @return Discarded note. Empty optional if failed to discard.
      */
-    public Optional<Note> discard(int id) {
+    public Optional<Note> delete(int noteId) {
         try {
-            return noteDao.delete(id);
+            return noteDao.delete(noteId);
         } catch (DaoException e) {
-            log.error("Failed to discard note with id {}", id, e);
+            log.error("Failed to discard note with id {}", noteId, e);
             return Optional.empty();
         }
     }
-
 
 }

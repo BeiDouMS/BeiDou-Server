@@ -64,7 +64,7 @@ public final class NoteActionHandler extends AbstractPacketHandler {
                 int id = p.readInt();
                 p.readByte(); //Fame, but we read it from the database :)
 
-                Optional<Note> discardedNote = noteService.discard(id);
+                Optional<Note> discardedNote = noteService.delete(id);
                 if (discardedNote.isEmpty()) {
                     log.warn("Note with id {} not able to be discarded. Already discarded?", id);
                     continue;
