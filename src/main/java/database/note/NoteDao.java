@@ -12,7 +12,7 @@ public class NoteDao {
 
     public static void save(Note note) {
         try (Handle handle = DatabaseConnection.getHandle()) {
-            handle.createScript("""
+            handle.createUpdate("""
                             INSERT INTO notes (`message`, `from`, `to`, `timestamp`, `fame`, `deleted`)
                             VALUES (?, ?, ?, ?, ?, ?)""")
                     .bind(0, note.message())
