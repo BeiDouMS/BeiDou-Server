@@ -97,7 +97,6 @@ import static java.util.concurrent.TimeUnit.*;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
-    private static final ItemInformationProvider ii = ItemInformationProvider.getInstance();
     private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
     private static final String[] BLOCKED_NAMES = {"admin", "owner", "moderator", "intern", "donor", "administrator", "FREDRICK", "help", "helper", "alert", "notice", "maplestory", "fuck", "wizet", "fucking", "negro", "fuk", "fuc", "penis", "pussy", "asshole", "gay",
             "nigger", "homo", "suck", "cum", "shit", "shitty", "condom", "security", "official", "rape", "nigga", "sex", "tit", "boner", "orgy", "clit", "asshole", "fatass", "bitch", "support", "gamemaster", "cock", "gaay", "gm",
@@ -717,7 +716,7 @@ public class Character extends AbstractCharacterObject {
         int maxbasedamage;
         Item weapon_item = getInventory(InventoryType.EQUIPPED).getItem((short) -11);
         if (weapon_item != null) {
-            maxbasedamage = calculateMaxBaseDamage(watk, ii.getWeaponType(weapon_item.getItemId()));
+            maxbasedamage = calculateMaxBaseDamage(watk, ItemInformationProvider.getInstance().getWeaponType(weapon_item.getItemId()));
         } else {
             if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
                 double weapMulti = 3;
@@ -817,7 +816,7 @@ public class Character extends AbstractCharacterObject {
         String medal = "";
         final Item medalItem = getInventory(InventoryType.EQUIPPED).getItem((short) -49);
         if (medalItem != null) {
-            medal = "<" + ii.getName(medalItem.getItemId()) + "> ";
+            medal = "<" + ItemInformationProvider.getInstance().getName(medalItem.getItemId()) + "> ";
         }
         return medal;
     }
@@ -1873,6 +1872,7 @@ public class Character extends AbstractCharacterObject {
 
     public boolean applyConsumeOnPickup(final int itemId) {
         if (itemId / 1000000 == 2) {
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             if (ii.isConsumeOnPickup(itemId)) {
                 if (ItemConstants.isPartyItem(itemId)) {
                     List<Character> partyMembers = this.getPartyMembersOnSameMap();
@@ -1943,6 +1943,7 @@ public class Character extends AbstractCharacterObject {
 
                 Item mItem = mapitem.getItem();
                 boolean hasSpaceInventory = true;
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 if (ItemId.isNxCard(mapitem.getItemId()) || mapitem.getMeso() > 0 || ii.isConsumeOnPickup(mapitem.getItemId()) || (hasSpaceInventory = InventoryManipulator.checkSpace(client, mapitem.getItemId(), mItem.getQuantity(), mItem.getOwner()))) {
                     int mapId = this.getMapId();
 
@@ -2061,6 +2062,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean canHoldUniques(List<Integer> itemids) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Integer itemid : itemids) {
             if (ii.isPickupRestricted(itemid) && this.haveItem(itemid)) {
                 return false;
@@ -3740,6 +3742,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void cancelEffect(int itemId) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         cancelEffect(ii.getItemEffect(itemId), false, -1);
     }
 
@@ -6793,6 +6796,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         StatEffect mse = ii.getItemEffect(couponid);
         mse.applyTo(this);
     }
@@ -7825,6 +7829,7 @@ public class Character extends AbstractCharacterObject {
             if (job.isA(Job.THIEF) || job.isA(Job.BOWMAN) || job.isA(Job.PIRATE) || job.isA(Job.NIGHTWALKER1) || job.isA(Job.WINDARCHER1)) {
                 Item weapon_item = getInventory(InventoryType.EQUIPPED).getItem((short) -11);
                 if (weapon_item != null) {
+                    ItemInformationProvider ii = ItemInformationProvider.getInstance();
                     WeaponType weapon = ii.getWeaponType(weapon_item.getItemId());
                     boolean bow = weapon == WeaponType.BOW;
                     boolean crossbow = weapon == WeaponType.CROSSBOW;
@@ -9301,6 +9306,7 @@ public class Character extends AbstractCharacterObject {
                 return (-1);
             }
 
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             return (sellAllItemsFromPosition(ii, type, it.getPosition()));
         } finally {
             inv.unlockInventory();
@@ -9383,6 +9389,7 @@ public class Character extends AbstractCharacterObject {
     private List<Equip> getUpgradeableEquipped() {
         List<Equip> list = new LinkedList<>();
 
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : getInventory(InventoryType.EQUIPPED)) {
             if (ii.isUpgradeable(item.getItemId())) {
                 list.add((Equip) item);
@@ -9495,6 +9502,7 @@ public class Character extends AbstractCharacterObject {
 
     private void standaloneMerge(Map<StatUpgrade, Float> statups, Client c, InventoryType type, short slot, Item item) {
         short quantity;
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         if (item == null || (quantity = item.getQuantity()) < 1 || ii.isCash(item.getItemId()) || !ii.isUpgradeable(item.getItemId()) || hasMergeFlag(item)) {
             return;
         }
@@ -9589,7 +9597,7 @@ public class Character extends AbstractCharacterObject {
             String medal = "";
             Item medalItem = mapOwner.getInventory(InventoryType.EQUIPPED).getItem((short) -49);
             if (medalItem != null) {
-                medal = "<" + ii.getName(medalItem.getItemId()) + "> ";
+                medal = "<" + ItemInformationProvider.getInstance().getName(medalItem.getItemId()) + "> ";
             }
 
             List<String> strLines = new LinkedList<>();
@@ -10312,6 +10320,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         Collection<Item> eqpList = new LinkedHashSet<>();
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item it : fullList) {
             if (!ii.isCash(it.getItemId())) {
                 eqpList.add(it);
@@ -10327,6 +10336,7 @@ public class Character extends AbstractCharacterObject {
                 expGain = Integer.MAX_VALUE;
             }
 
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (Item item : getUpgradeableEquipList()) {
                 Equip nEquip = (Equip) item;
                 String itemName = ii.getName(nEquip.getItemId());
@@ -10342,6 +10352,7 @@ public class Character extends AbstractCharacterObject {
     public void showAllEquipFeatures() {
         String showMsg = "";
 
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
             Equip nEquip = (Equip) item;
             String itemName = ii.getName(nEquip.getItemId());
