@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.life.MobSkill;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
@@ -62,6 +63,12 @@ import java.util.stream.Collectors;
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(PlayerLoggedinHandler.class);
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
+
+    private final NoteService noteService;
+
+    public PlayerLoggedinHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     private boolean tryAcquireAccount(int accId) {
         synchronized (attemptingLoginAccounts) {
@@ -302,7 +309,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 }
             }
 
-            player.showNote();
+            noteService.show(player);
+
             if (player.getParty() != null) {
                 PartyCharacter pchar = player.getMPC();
 

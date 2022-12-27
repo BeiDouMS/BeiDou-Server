@@ -211,11 +211,16 @@ To launch the server, you may either:
 ---
 ### Getting into the game
 
-If you ran the admin sql script, there already exists an account in your database with an admin character on it. You don't need to change its GM level. Log in using these credentials:
+If you ran the admin sql script, there already exists an account in the database with an admin character on it (GM level 6).
+
+Log in using these credentials:
 * Username: "admin"
 * Password: "admin"
 * Pin: "0000"
 * Pic: "000000"
+
+Admin characters have "hide" mode enabled by default. This means your character will be translucent on your screen, and completely invisible to others.
+It will also prevent you from controlling mobs (making them stand still). To toggle this mode on and off, type "@hide" in the in-game chat.
 
 By default, the server source is set to allow AUTO-REGISTERING. This means that, by simply typing in a "Login ID" and a "Password", you're able to create a new account.
 

@@ -22,34 +22,40 @@
 package net.server.channel.handlers;
 
 import client.Client;
+import model.Note;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import tools.DatabaseConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import service.NoteService;
 import tools.PacketCreator;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Optional;
 
 public final class NoteActionHandler extends AbstractPacketHandler {
+    private static final Logger log = LoggerFactory.getLogger(NoteActionHandler.class);
+
+    private final NoteService noteService;
+
+    public NoteActionHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
+
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public void handlePacket(InPacket p, Client c) {
         int action = p.readByte();
-        if (action == 0 && c.getPlayer().getCashShop().getAvailableNotes() > 0) {
+        if (action == 0 && c.getPlayer().getCashShop().getAvailableNotes() > 0) { // Reply to gift in cash shop
             String charname = p.readString();
             String message = p.readString();
-            try {
-                if (c.getPlayer().getCashShop().isOpened()) {
-                    c.sendPacket(PacketCreator.showCashInventory(c));
-                }
-
-                c.getPlayer().sendNote(charname, message, (byte) 1);
-                c.getPlayer().getCashShop().decreaseNotes();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (c.getPlayer().getCashShop().isOpened()) {
+                c.sendPacket(PacketCreator.showCashInventory(c));
             }
-        } else if (action == 1) {
+
+            boolean sendNoteSuccess = noteService.sendWithFame(message, c.getPlayer().getName(), charname);
+            if (sendNoteSuccess) {
+                c.getPlayer().getCashShop().decreaseNotes();
+            }
+        } else if (action == 1) { // Discard notes in game
             int num = p.readByte();
             p.readByte();
             p.readByte();
@@ -58,24 +64,13 @@ public final class NoteActionHandler extends AbstractPacketHandler {
                 int id = p.readInt();
                 p.readByte(); //Fame, but we read it from the database :)
 
-                try (Connection con = DatabaseConnection.getConnection()) {
-                    try (PreparedStatement ps = con.prepareStatement("SELECT `fame` FROM notes WHERE id=? AND deleted=0")) {
-                        ps.setInt(1, id);
-                        try (ResultSet rs = ps.executeQuery()) {
-                            if (rs.next()) {
-                                fame += rs.getInt("fame");
-                            }
-
-                        }
-                    }
-
-                    try (PreparedStatement ps = con.prepareStatement("UPDATE notes SET `deleted` = 1 WHERE id = ?")) {
-                        ps.setInt(1, id);
-                        ps.executeUpdate();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                Optional<Note> discardedNote = noteService.delete(id);
+                if (discardedNote.isEmpty()) {
+                    log.warn("Note with id {} not able to be discarded. Already discarded?", id);
+                    continue;
                 }
+
+                fame += discardedNote.get().fame();
             }
             if (fame > 0) {
                 c.getPlayer().gainFame(fame);

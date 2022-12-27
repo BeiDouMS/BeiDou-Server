@@ -36,12 +36,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.maps.HiredMerchant;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
 
 import java.sql.*;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,6 +53,12 @@ import static java.util.concurrent.TimeUnit.DAYS;
 public class FredrickProcessor {
     private static final Logger log = LoggerFactory.getLogger(FredrickProcessor.class);
     private static final int[] dailyReminders = new int[]{2, 5, 10, 15, 30, 60, 90, Integer.MAX_VALUE};
+
+    private final NoteService noteService;
+
+    public FredrickProcessor(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     private static byte canRetrieveFromFredrick(Character chr, List<Pair<Item, InventoryType>> items) {
         if (!Inventory.checkSpotsAndOwnership(chr, items)) {
@@ -127,10 +133,6 @@ public class FredrickProcessor {
         }
     }
 
-    public static void removeFredrickReminders(int cid) {
-        removeFredrickReminders(Collections.singletonList(new Pair<>(cid, 0)));
-    }
-
     private static void removeFredrickReminders(List<Pair<Integer, Integer>> expiredCids) {
         List<String> expiredCnames = new LinkedList<>();
         for (Pair<Integer, Integer> id : expiredCids) {
@@ -153,7 +155,7 @@ public class FredrickProcessor {
         }
     }
 
-    public static void runFredrickSchedule() {
+    public void runFredrickSchedule() {
         try (Connection con = DatabaseConnection.getConnection()) {
             List<Pair<Integer, Integer>> expiredCids = new LinkedList<>();
             List<Pair<Pair<Integer, String>, Integer>> notifCids = new LinkedList<>();
@@ -241,7 +243,7 @@ public class FredrickProcessor {
                         ps.addBatch();
 
                         String msg = fredrickReminderMessage(cid.getRight() - 1);
-                        Character.sendNote(cid.getLeft().getRight(), "FREDRICK", msg, (byte) 0);
+                        noteService.sendNormal(msg, "FREDRICK", cid.getLeft().getRight());
                     }
 
                     ps.executeBatch();
@@ -266,7 +268,7 @@ public class FredrickProcessor {
         }
     }
 
-    public static void fredrickRetrieveItems(Client c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
+    public void fredrickRetrieveItems(Client c) {     // thanks Gustav for pointing out the dupe on Fredrick handling
         if (c.tryacquireClient()) {
             try {
                 Character chr = c.getPlayer();

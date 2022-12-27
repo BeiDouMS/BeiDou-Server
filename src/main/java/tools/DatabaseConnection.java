@@ -3,9 +3,13 @@ package tools;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import config.YamlConfig;
+import database.note.NoteRowMapper;
+import org.jdbi.v3.core.Handle;
+import org.jdbi.v3.core.Jdbi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
@@ -21,13 +25,22 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class DatabaseConnection {
     private static final Logger log = LoggerFactory.getLogger(DatabaseConnection.class);
     private static HikariDataSource dataSource;
+    private static Jdbi jdbi;
 
     public static Connection getConnection() throws SQLException {
         if (dataSource == null) {
-            throw new IllegalStateException("Unable to get connection from uninitialized connection pool");
+            throw new IllegalStateException("Unable to get connection - connection pool is uninitialized");
         }
 
         return dataSource.getConnection();
+    }
+
+    public static Handle getHandle() {
+        if (jdbi == null) {
+            throw new IllegalStateException("Unable to get handle - connection pool is uninitialized");
+        }
+
+        return jdbi.open();
     }
 
     private static String getDbUrl() {
@@ -73,6 +86,7 @@ public class DatabaseConnection {
         Instant initStart = Instant.now();
         try {
             dataSource = new HikariDataSource(config);
+            initializeJdbi(dataSource);
             long initDuration = Duration.between(initStart, Instant.now()).toMillis();
             log.info("Connection pool initialized in {} ms", initDuration);
             return true;
@@ -83,5 +97,10 @@ public class DatabaseConnection {
 
         // Timed out - failed to initialize
         return false;
+    }
+
+    private static void initializeJdbi(DataSource dataSource) {
+        jdbi = Jdbi.create(dataSource)
+                .registerRowMapper(new NoteRowMapper());
     }
 }

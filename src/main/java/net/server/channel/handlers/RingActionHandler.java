@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.ItemInformationProvider;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 import tools.Pair;
@@ -55,6 +56,12 @@ import java.sql.SQLException;
  */
 public final class RingActionHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(RingActionHandler.class);
+
+    private final NoteService noteService;
+
+    public RingActionHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     private static int getEngagementBoxId(int useItemId) {
         return switch (useItemId) {
@@ -396,7 +403,8 @@ public final class RingActionHandler extends AbstractPacketHandler {
                     return;
                 }
 
-                String groom = c.getPlayer().getName(), bride = Character.getNameById(c.getPlayer().getPartnerId());
+                String groom = c.getPlayer().getName();
+                String bride = Character.getNameById(c.getPlayer().getPartnerId());
                 int guest = Character.getIdByName(name);
                 if (groom == null || bride == null || groom.equals("") || bride.equals("") || guest <= 0) {
                     c.getPlayer().dropMessage(5, "Unable to find " + name + "!");
@@ -417,14 +425,16 @@ public final class RingActionHandler extends AbstractPacketHandler {
                             if (resStatus > 0) {
                                 long expiration = cserv.getWeddingTicketExpireTime(resStatus + 1);
 
+                                String baseMessage = "You've been invited to %s and %s's Wedding!".formatted(groom, bride);
                                 Character guestChr = c.getWorldServer().getPlayerStorage().getCharacterById(guest);
                                 if (guestChr != null && InventoryManipulator.checkSpace(guestChr.getClient(), newItemId, 1, "") && InventoryManipulator.addById(guestChr.getClient(), newItemId, (short) 1, expiration)) {
-                                    guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding!");
+                                    guestChr.dropMessage(6, "[Wedding] %s".formatted(baseMessage));
                                 } else {
+                                    String dueyMessage = baseMessage + " Receive your invitation from Duey!";
                                     if (guestChr != null && guestChr.isLoggedinWorld()) {
-                                        guestChr.dropMessage(6, "[Wedding] You've been invited to " + groom + " and " + bride + "'s Wedding! Receive your invitation from Duey!");
+                                        guestChr.dropMessage(6, "[Wedding] %s".formatted(dueyMessage));
                                     } else {
-                                        c.getPlayer().sendNote(name, "You've been invited to " + groom + " and " + bride + "'s Wedding! Receive your invitation from Duey!", (byte) 0);
+                                        noteService.sendNormal(dueyMessage, groom, name);
                                     }
 
                                     Item weddingTicket = new Item(newItemId, (short) 0, (short) 1);
@@ -442,7 +452,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                         c.getPlayer().dropMessage(5, "Invitation was not sent to '" + name + "'. Either the time for your marriage reservation already came or it was not found.");
                     }
 
-                } catch (SQLException ex) {
+                } catch (Exception ex) {
                     ex.printStackTrace();
                     return;
                 }

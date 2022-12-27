@@ -34,6 +34,7 @@ import net.server.coordinator.world.InviteCoordinator.InviteResult;
 import net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
 
@@ -497,7 +498,7 @@ public class Guild {
         }
     }
 
-    public void expelMember(GuildCharacter initiator, String name, int cid) {
+    public void expelMember(GuildCharacter initiator, String name, int cid, NoteService noteService) {
         membersLock.lock();
         try {
             java.util.Iterator<GuildCharacter> itr = members.iterator();
@@ -512,16 +513,7 @@ public class Guild {
                         if (mgc.isOnline()) {
                             Server.getInstance().getWorld(mgc.getWorld()).setGuildAndRank(cid, 0, 5);
                         } else {
-                            try (Connection con = DatabaseConnection.getConnection();
-                                 PreparedStatement ps = con.prepareStatement("INSERT INTO notes (`to`, `from`, `message`, `timestamp`) VALUES (?, ?, ?, ?)")) {
-                                ps.setString(1, mgc.getName());
-                                ps.setString(2, initiator.getName());
-                                ps.setString(3, "You have been expelled from the guild.");
-                                ps.setLong(4, System.currentTimeMillis());
-                                ps.executeUpdate();
-                            } catch (SQLException e) {
-                                log.error("expelMember - Guild", e);
-                            }
+                            noteService.sendNormal("You have been expelled from the guild.", initiator.getName(), mgc.getName());
                             Server.getInstance().getWorld(mgc.getWorld()).setOfflineGuildStatus((short) 0, (byte) 5, cid);
                         }
                     } catch (Exception re) {

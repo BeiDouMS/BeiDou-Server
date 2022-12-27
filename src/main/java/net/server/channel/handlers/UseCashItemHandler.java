@@ -38,6 +38,7 @@ import constants.id.MapId;
 import constants.inventory.ItemConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
+import net.packet.out.SendNoteSuccessPacket;
 import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +47,10 @@ import server.Shop;
 import server.ShopFactory;
 import server.TimerManager;
 import server.maps.*;
+import service.NoteService;
 import tools.PacketCreator;
 import tools.Pair;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +60,12 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public final class UseCashItemHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(UseCashItemHandler.class);
+
+    private final NoteService noteService;
+
+    public UseCashItemHandler(NoteService noteService) {
+        this.noteService = noteService;
+    }
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -358,12 +365,11 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         } else if (itemType == 509) {
             String sendTo = p.readString();
             String msg = p.readString();
-            try {
-                player.sendNote(sendTo, msg, (byte) 0);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            boolean sendSuccess = noteService.sendNormal(msg, player.getName(), sendTo);
+            if (sendSuccess) {
+                remove(c, position, itemId);
+                c.sendPacket(new SendNoteSuccessPacket());
             }
-            remove(c, position, itemId);
         } else if (itemType == 510) {
             player.getMap().broadcastMessage(PacketCreator.musicChange("Jukebox/Congratulation"));
             remove(c, position, itemId);

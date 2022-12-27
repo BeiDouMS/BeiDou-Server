@@ -71,7 +71,6 @@ import server.movement.LifeMovementFragment;
 
 import java.awt.*;
 import java.net.InetAddress;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.*;
@@ -5404,12 +5403,6 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet noteSendMsg() {
-        OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
-        p.writeByte(4);
-        return p;
-    }
-
     /*
      *  0 = Player online, use whisper
      *  1 = Check player's name
@@ -5419,21 +5412,6 @@ public class PacketCreator {
         OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
         p.writeByte(5);
         p.writeByte(error);
-        return p;
-    }
-
-    public static Packet showNotes(ResultSet notes, int count) throws SQLException {
-        final OutPacket p = OutPacket.create(SendOpcode.MEMO_RESULT);
-        p.writeByte(3);
-        p.writeByte(count);
-        for (int i = 0; i < count; i++) {
-            p.writeInt(notes.getInt("id"));
-            p.writeString(notes.getString("from") + " ");//Stupid nexon forgot space lol
-            p.writeString(notes.getString("message"));
-            p.writeLong(getTime(notes.getLong("timestamp")));
-            p.writeByte(notes.getByte("fame"));//FAME :D
-            notes.next();
-        }
         return p;
     }
 
