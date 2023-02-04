@@ -3,68 +3,121 @@ package client.command.commands.gm2;
 import client.Character;
 import client.Client;
 import client.command.Command;
+import constants.game.NpcChat;
 import constants.id.NpcId;
 import server.ThreadManager;
 import tools.exceptions.IdTypeNotSupportedException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class IdCommand extends Command {
     {
         setDescription("Search in handbook.");
     }
+    private final static int MAX_SEARCH_HITS = 100;
+    private final Map<String, String> handbookDirectory = typeFilePaths();
+    private final Map<String, HandbookFileItems> typeItems = new ConcurrentHashMap<>();
 
-    private final Map<String, String> handbookDirectory = new HashMap<>();
-    private final Map<String, HashMap<String, String>> itemMap = new HashMap<>();
+    private Map<String, String> typeFilePaths() {
+        return Map.ofEntries(
+                Map.entry("map", "handbook/Map.txt"),
+                Map.entry("etc", "handbook/Etc.txt"),
+                Map.entry("npc", "handbook/NPC.txt"),
+                Map.entry("use", "handbook/Use.txt"),
+                Map.entry("weapon", "handbook/Equip/Weapon.txt") // TODO add more into this
+        );
+    }
 
-    public IdCommand() {
-        handbookDirectory.put("map", "handbook/Map.txt");
-        handbookDirectory.put("etc", "handbook/Etc.txt");
-        handbookDirectory.put("npc", "handbook/NPC.txt");
-        handbookDirectory.put("use", "handbook/Use.txt");
-        handbookDirectory.put("weapon", "handbook/Equip/Weapon.txt"); // TODO add more into this
+    private static class HandbookFileItems {
+        private final List<HandbookItem> items;
+
+        public HandbookFileItems(List<String> fileLines) {
+            this.items = fileLines.stream()
+                    .map(this::parseLine)
+                    .filter(Predicate.not(Objects::isNull))
+                    .toList();
+        }
+
+        private HandbookItem parseLine(String line) {
+            if (line == null) {
+                return null;
+            }
+
+            String[] splitLine = line.split(" - ", 2);
+            if (splitLine.length < 2 || splitLine[1].isBlank()) {
+                return null;
+            }
+            return new HandbookItem(splitLine[0], splitLine[1]);
+        }
+
+        public List<HandbookItem> search(String query) {
+            if (query == null || query.isBlank()) {
+                return Collections.emptyList();
+            }
+            return items.stream()
+                    .filter(item -> item.matches(query))
+                    .toList();
+        }
+    }
+
+    private record HandbookItem(String id, String name) {
+
+        public HandbookItem {
+            Objects.requireNonNull(id);
+            Objects.requireNonNull(name);
+        }
+
+        public boolean matches(String query) {
+            if (query == null) {
+                return false;
+            }
+            return this.name.toLowerCase().contains(query.toLowerCase());
+        }
     }
 
     @Override
     public void execute(Client client, final String[] params) {
-        final Character player = client.getPlayer();
+        final Character chr = client.getPlayer();
         if (params.length < 2) {
-            player.yellowMessage("Syntax: !id <type> <query>");
+            chr.yellowMessage("Syntax: !id <type> <query>");
             return;
         }
-        final String queryItem = joinStringArr(Arrays.copyOfRange(params, 1, params.length), " ");
-        player.yellowMessage("Querying for entry... May take some time... Please try to refine your search.");
+        final String type = params[0].toLowerCase();
+        final String[] queryItems = Arrays.copyOfRange(params, 1, params.length);
+        final String query = String.join(" ", queryItems);
+        chr.yellowMessage("Querying for entry... May take some time... Please try to refine your search.");
         Runnable queryRunnable = () -> {
             try {
-                populateIdMap(params[0].toLowerCase());
+                populateIdMap(type);
 
-                Map<String, String> resultList = fetchResults(itemMap.get(params[0]), queryItem);
-                StringBuilder sb = new StringBuilder();
+                final HandbookFileItems handbookFileItems = typeItems.get(type);
+                if (handbookFileItems == null) {
+                    return;
+                }
+                final List<HandbookItem> searchHits = handbookFileItems.search(query);
 
-                if (resultList.size() > 0) {
-                    int count = 0;
-                    for (Map.Entry<String, String> entry : resultList.entrySet()) {
-                        sb.append(String.format("Id for %s is: #b%s#k", entry.getKey(), entry.getValue()) + "\r\n");
-                        if (++count > 100) {
-                            break;
-                        }
-                    }
-                    sb.append(String.format("Results found: #r%d#k | Returned: #b%d#k/100 | Refine search query to improve time.", resultList.size(), count) + "\r\n");
-
-                    player.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, sb.toString());
+                if (!searchHits.isEmpty()) {
+                    String searchHitsText = searchHits.stream()
+                            .limit(MAX_SEARCH_HITS)
+                            .map(item -> "Id for %s is: #b%s#k".formatted(item.name, item.id))
+                            .collect(Collectors.joining(NpcChat.NEW_LINE));
+                    int hitsCount = Math.min(searchHits.size(), MAX_SEARCH_HITS);
+                    String summaryText = "Results found: #r%d#k | Returned: #b%d#k/100 | Refine search query to improve time.".formatted(searchHits.size(), hitsCount);
+                    String fullText = searchHitsText + NpcChat.NEW_LINE + summaryText;
+                    chr.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, fullText);
                 } else {
-                    player.yellowMessage(String.format("Id not found for item: %s, of type: %s.", queryItem, params[0]));
+                    chr.yellowMessage(String.format("Id not found for item: %s, of type: %s.", query, type));
                 }
             } catch (IdTypeNotSupportedException e) {
-                player.yellowMessage("Your query type is not supported.");
+                chr.yellowMessage("Your query type is not supported.");
             } catch (IOException e) {
-                player.yellowMessage("Error reading file, please contact your administrator.");
+                chr.yellowMessage("Error reading file, please contact your administrator.");
             }
         };
 
@@ -72,40 +125,15 @@ public class IdCommand extends Command {
     }
 
     private void populateIdMap(String type) throws IdTypeNotSupportedException, IOException {
-        if (!handbookDirectory.containsKey(type)) {
+        final String filePath = handbookDirectory.get(type);
+        if (filePath == null) {
             throw new IdTypeNotSupportedException();
         }
-        itemMap.put(type, new HashMap<>());
-        try (BufferedReader reader = Files.newBufferedReader(Path.of(handbookDirectory.get(type)))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] row = line.split(" - ", 2);
-                if (row.length == 2) {
-                    itemMap.get(type).put(row[1].toLowerCase(), row[0]);
-                }
-            }
+        if (typeItems.containsKey(type)) {
+            return;
         }
-    }
 
-    private String joinStringArr(String[] arr, String separator) {
-        if (null == arr || 0 == arr.length) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder(256);
-        sb.append(arr[0]);
-        for (int i = 1; i < arr.length; i++) {
-            sb.append(separator).append(arr[i]);
-        }
-        return sb.toString();
-    }
-
-    private Map<String, String> fetchResults(Map<String, String> queryMap, String queryItem) {
-        Map<String, String> results = new HashMap<>();
-        for (String item : queryMap.keySet()) {
-            if (item.indexOf(queryItem) != -1) {
-                results.put(item, queryMap.get(item));
-            }
-        }
-        return results;
+        final List<String> fileLines = Files.readAllLines(Path.of(filePath));
+        typeItems.put(type, new HandbookFileItems(fileLines));
     }
 }
