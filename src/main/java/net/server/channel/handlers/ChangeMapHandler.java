@@ -78,7 +78,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
             p.readByte();
             boolean wheel = p.readByte() > 0;
 
-            boolean chasing = p.readByte() == 1 && chr.isGM();
+            boolean chasing = p.readByte() == 1 && chr.isGM() && p.available() == 2 * Integer.BYTES;
             if (chasing) {
                 chr.setChasing(true);
                 chr.setPosition(new Point(p.readInt(), p.readInt()));
