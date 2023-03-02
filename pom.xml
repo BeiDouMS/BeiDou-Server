@@ -19,22 +19,22 @@
         <mainClass>net.server.Server</mainClass>
 
         <!-- Maven plugins -->
-        <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version> <!-- For running unit tests -->
-        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version> <!-- Disabled. (for building thin jar) -->
-        <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version> <!-- For packaging the executable fat jar -->
+        <maven-surefire-plugin.version>3.0.0-M9</maven-surefire-plugin.version> <!-- For running unit tests -->
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version> <!-- Disabled. (for building thin jar) -->
+        <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version> <!-- For packaging the executable fat jar -->
 
         <!-- Dependencies -->
         <slf4j-api.version>1.7.36</slf4j-api.version> <!-- Logging facade -->
-        <log4j.version>2.18.0</log4j.version> <!-- Slf4j implementation -->
-        <graalvm.version>22.2.0</graalvm.version> <!-- ScriptEngine implementation -->
-        <netty.version>4.1.79.Final</netty.version> <!-- Networking -->
+        <log4j.version>2.20.0</log4j.version> <!-- Slf4j implementation -->
+        <graalvm.version>22.3.1</graalvm.version> <!-- ScriptEngine implementation -->
+        <netty.version>4.1.89.Final</netty.version> <!-- Networking -->
         <yamlbeans.version>1.15</yamlbeans.version> <!-- Config file -->
         <jcip-annotations.version>1.0</jcip-annotations.version> <!-- Annotations for concurrency documentation -->
         <HikariCP.version>5.0.1</HikariCP.version> <!-- Database connection pool -->
-        <mysql-connector-java.version>8.0.30</mysql-connector-java.version> <!-- MySQL JDBC driver -->
-        <jdbi-version>3.35.0</jdbi-version> <!-- Convenience wrapper around JDBC -->
-        <junit.version>5.9.0</junit.version> <!-- Unit test -->
-        <mockito.version>4.7.0</mockito.version> <!-- Unit test -->
+        <mysql-connector-j.version>8.0.32</mysql-connector-j.version> <!-- MySQL JDBC driver -->
+        <jdbi-version>3.37.1</jdbi-version> <!-- Convenience wrapper around JDBC -->
+        <junit.version>5.9.2</junit.version> <!-- Unit test -->
+        <mockito.version>5.1.1</mockito.version> <!-- Unit test -->
     </properties>
 
     <dependencies>
@@ -56,9 +56,9 @@
             <version>${HikariCP.version}</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>${mysql-connector-j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jdbi</groupId>
