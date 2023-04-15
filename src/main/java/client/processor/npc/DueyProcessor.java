@@ -285,7 +285,7 @@ public class DueyProcessor {
         if (c.tryacquireClient()) {
             try {
                 int fee = Trade.getFee(sendMesos);
-                if (sendMessage.length() > 100) {
+                if (sendMessage != null && sendMessage.length() > 100) {
                     AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with Quick Delivery on duey.");
                     log.warn("Chr {} tried to use duey with too long of a text", c.getPlayer().getName());
                     c.disconnect(true, false);
