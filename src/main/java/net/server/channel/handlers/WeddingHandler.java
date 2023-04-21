@@ -69,7 +69,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                                 if (!item.isUntradeable()) {
                                                     if (itemid == item.getItemId() && quantity <= item.getQuantity()) {
                                                         newItem = item.copy();
-
+                                                        newItem.setQuantity(quantity);
                                                         marriage.addGiftItem(groomWishlist, newItem);
                                                         InventoryManipulator.removeFromSlot(c, type, slot, quantity, false, false);
 
