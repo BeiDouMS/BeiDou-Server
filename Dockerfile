@@ -4,7 +4,7 @@
 #
 # Cosmic JAR creation stage
 #
-FROM maven:3.8.4-openjdk-17 AS jar
+FROM maven:3.9.1-eclipse-temurin-17 AS jar
 
 # Build in a separated location which won't have permissions issues.
 WORKDIR /opt/cosmic
@@ -21,7 +21,7 @@ RUN mvn -f ./pom.xml clean package -Dmaven.test.skip -T 1C
 #
 # Server creation stage
 #
-FROM openjdk:17.0.2
+FROM eclipse-temurin:17.0.6_10-jre
 
 # Host the server in a location that won't have permissions issues.
 WORKDIR /opt/server
