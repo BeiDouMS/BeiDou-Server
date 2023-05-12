@@ -52,6 +52,13 @@ public class StorageProcessor {
         Storage storage = chr.getStorage();
         byte mode = p.readByte();
 
+        if (chr.isGM() && chr.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_USE_STORAGE) {
+            chr.dropMessage(1, "You cannot use the storage as a GM of this level.");
+            log.info(String.format("GM %s blocked from placing items in storage", chr.getName()));
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        }
+
         if (chr.getLevel() < 15) {
             chr.dropMessage(1, "You may only use the storage once you have reached level 15.");
             c.sendPacket(PacketCreator.enableActions());

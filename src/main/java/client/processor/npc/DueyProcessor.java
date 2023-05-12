@@ -284,6 +284,13 @@ public class DueyProcessor {
     public static void dueySendItem(Client c, byte invTypeId, short itemPos, short amount, int sendMesos, String sendMessage, String recipient, boolean quick) {
         if (c.tryacquireClient()) {
             try {
+                if (c.getPlayer().isGM() && c.getPlayer().gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_USE_DUEY) {
+                    c.getPlayer().message("You cannot use Duey to send items at your GM level.");
+                    log.info(String.format("GM %s tried to send a package to %s", c.getPlayer().getName(), recipient));
+                    c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_INCORRECT_REQUEST.getCode()));
+                    return;
+                }
+
                 int fee = Trade.getFee(sendMesos);
                 if (sendMessage != null && sendMessage.length() > 100) {
                     AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with Quick Delivery on duey.");

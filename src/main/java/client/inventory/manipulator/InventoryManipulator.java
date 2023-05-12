@@ -706,6 +706,12 @@ public class InventoryManipulator {
         Inventory inv = chr.getInventory(type);
         Item source = inv.getItem(src);
 
+        if (chr.isGM() && chr.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_DROP) {
+            chr.message("You cannot drop items at your GM level.");
+            log.info("GM %s tried to drop item id %d", chr.getName(), source.getItemId());
+            return;
+        }
+
         if (chr.getTrade() != null || chr.getMiniGame() != null || source == null) { //Only check needed would prob be merchants (to see if the player is in one)
             return;
         }
