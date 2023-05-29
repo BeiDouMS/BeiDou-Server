@@ -23,6 +23,7 @@ package net.server.channel.handlers;
 
 import client.Character;
 import client.Client;
+import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
@@ -41,6 +42,11 @@ public final class MesoDropHandler extends AbstractPacketHandler {
         }
         p.skip(4);
         int meso = p.readInt();
+
+        if (player.isGM() && player.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_DROP) {
+            player.message("You cannot drop mesos at your GM level.");
+            return;
+        }
 
         if (c.tryacquireClient()) {     // thanks imbee for noticing players not being able to throw mesos too fast
             try {

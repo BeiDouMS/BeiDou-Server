@@ -50,6 +50,8 @@ public class StorageProcessor {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Character chr = c.getPlayer();
         Storage storage = chr.getStorage();
+        String gmBlockedStorageMessage = "You cannot use the storage as a GM of this level.";
+
         byte mode = p.readByte();
 
         if (chr.getLevel() < 15) {
@@ -61,7 +63,7 @@ public class StorageProcessor {
         if (c.tryacquireClient()) {
             try {
                 switch (mode) {
-                case 4: { // take out
+                case 4: { // Take out
                     byte type = p.readByte();
                     byte slot = p.readByte();
                     if (slot < 0 || slot > storage.getSlots()) { // removal starts at zero
@@ -70,8 +72,17 @@ public class StorageProcessor {
                         c.disconnect(true, false);
                         return;
                     }
+
                     slot = storage.getSlot(InventoryType.getByType(type), slot);
                     Item item = storage.getItem(slot);
+
+                    if (hasGMRestrictions(chr)) {
+                        chr.dropMessage(1, gmBlockedStorageMessage);
+                        log.info(String.format("GM %s blocked from using storage", chr.getName()));
+                        chr.sendPacket(PacketCreator.enableActions());
+                        return;
+                    }
+
                     if (item != null) {
                         if (ii.isPickupRestricted(item.getItemId()) && chr.haveItemWithId(item.getItemId(), true)) {
                             c.sendPacket(PacketCreator.getStorageError((byte) 0x0C));
@@ -107,7 +118,7 @@ public class StorageProcessor {
                     }
                     break;
                 }
-                case 5: { // store
+                case 5: { // Store
                     short slot = p.readShort();
                     int itemId = p.readInt();
                     short quantity = p.readShort();
@@ -120,6 +131,14 @@ public class StorageProcessor {
                         c.disconnect(true, false);
                         return;
                     }
+
+                    if (hasGMRestrictions(chr)) {
+                        chr.dropMessage(1, gmBlockedStorageMessage);
+                        log.info(String.format("GM %s blocked from using storage", chr.getName()));
+                        chr.sendPacket(PacketCreator.enableActions());
+                        return;
+                    }
+
                     if (quantity < 1) {
                         c.sendPacket(PacketCreator.enableActions());
                         return;
@@ -173,16 +192,24 @@ public class StorageProcessor {
                     }
                     break;
                 }
-                case 6: // arrange items
+                case 6: // Arrange items
                     if (YamlConfig.config.server.USE_STORAGE_ITEM_SORT) {
                         storage.arrangeItems(c);
                     }
                     c.sendPacket(PacketCreator.enableActions());
                     break;
-                case 7: { // meso
+                case 7: { // Mesos
                     int meso = p.readInt();
                     int storageMesos = storage.getMeso();
                     int playerMesos = chr.getMeso();
+
+                    if (hasGMRestrictions(chr)) {
+                        chr.dropMessage(1, gmBlockedStorageMessage);
+                        log.info(String.format("GM %s blocked from using storage", chr.getName()));
+                        chr.sendPacket(PacketCreator.enableActions());
+                        return;
+                    }
+
                     if ((meso > 0 && storageMesos >= meso) || (meso < 0 && playerMesos >= -meso)) {
                         if (meso < 0 && (storageMesos - meso) < 0) {
                             meso = Integer.MIN_VALUE + storageMesos;
@@ -208,7 +235,7 @@ public class StorageProcessor {
                     }
                     break;
                 }
-                case 8: // close... unless the player decides to enter cash shop!
+                case 8: // Close (unless the player decides to enter cash shop)
                     storage.close();
                     break;
                 }
@@ -216,5 +243,9 @@ public class StorageProcessor {
                 c.releaseClient();
             }
         }
+    }
+
+    private static boolean hasGMRestrictions(Character character) {
+        return character.isGM() && character.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_USE_STORAGE;
     }
 }

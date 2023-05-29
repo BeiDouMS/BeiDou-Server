@@ -309,6 +309,12 @@ public class ServerConfig {
     //Event End Timestamp
     public long EVENT_END_TIMESTAMP;
 
+    //GM Security Configuration
+    public int MINIMUM_GM_LEVEL_TO_TRADE;
+    public int MINIMUM_GM_LEVEL_TO_USE_STORAGE;
+    public int MINIMUM_GM_LEVEL_TO_USE_DUEY;
+    public int MINIMUM_GM_LEVEL_TO_DROP;
+
     //Custom NPC overrides. List of NPC IDs.
     public Map<String, String> NPCS_SCRIPTABLE = new HashMap<>();
 }
