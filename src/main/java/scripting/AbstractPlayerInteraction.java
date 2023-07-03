@@ -133,6 +133,16 @@ public class AbstractPlayerInteraction {
         warpParty(id, portalId, mapid, mapid);
     }
 
+    public void warpParty(int map, String portalName) {
+
+        int mapid = getMapId();
+        var warpMap = c.getChannelServer().getMapFactory().getMap(map);
+        var portal = warpMap.getPortal(portalName).getId();
+
+        warpParty(map, portal, mapid, mapid);
+
+    }
+
     public void warpParty(int id, int fromMinId, int fromMaxId) {
         warpParty(id, 0, fromMinId, fromMaxId);
     }
