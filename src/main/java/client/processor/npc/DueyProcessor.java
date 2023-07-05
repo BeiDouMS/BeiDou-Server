@@ -316,27 +316,22 @@ public class DueyProcessor {
                     return;
                 }
 
-                Pair<Integer, Integer> accIdCid;
-                if (c.getPlayer().getMeso() >= finalcost) {
-                    accIdCid = getAccountCharacterIdFromCNAME(recipient);
-                    int recipientAccId = accIdCid.getLeft();
-                    if (recipientAccId != -1) {
-                        if (recipientAccId == c.getAccID()) {
-                            c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_SAMEACC_ERROR.getCode()));
-                            return;
-                        }
-                    } else {
-                        c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_NAME_DOES_NOT_EXIST.getCode()));
-                        return;
-                    }
-                } else {
+                if(c.getPlayer().getMeso() < finalcost) {
                     c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_NOT_ENOUGH_MESOS.getCode()));
                     return;
                 }
 
-                int recipientCid = accIdCid.getRight();
-                if (recipientCid == -1) {
+                var accIdCid = getAccountCharacterIdFromCNAME(recipient);
+                var recipientAccId = accIdCid.getLeft();
+                var recipientCid = accIdCid.getRight();
+
+                if (recipientAccId == -1 || recipientCid == -1) {
                     c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_NAME_DOES_NOT_EXIST.getCode()));
+                    return;
+                }
+
+                if (recipientAccId == c.getAccID()) {
+                    c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_SAMEACC_ERROR.getCode()));
                     return;
                 }
 
