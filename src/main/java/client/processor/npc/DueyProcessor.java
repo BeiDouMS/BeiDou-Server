@@ -92,14 +92,15 @@ public class DueyProcessor {
     }
 
     private static Pair<Integer, Integer> getAccountCharacterIdFromCNAME(String name) {
-        Pair<Integer, Integer> ids = null;
+        Pair<Integer, Integer> ids = new Pair<>(-1, -1);
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT id,accountid FROM characters WHERE name = ?")) {
             ps.setString(1, name);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    ids = new Pair<>(rs.getInt("accountid"), rs.getInt("id"));
+                    ids.left = rs.getInt("accountid");
+                    ids.right = rs.getInt("id");
                 }
             }
         } catch (SQLException e) {
