@@ -137,9 +137,16 @@ public class AbstractPlayerInteraction {
 
         int mapid = getMapId();
         var warpMap = c.getChannelServer().getMapFactory().getMap(map);
-        var portal = warpMap.getPortal(portalName).getId();
 
-        warpParty(map, portal, mapid, mapid);
+        var portal = warpMap.getPortal(portalName);
+
+        if (portal == null) {
+            portal = warpMap.getPortal(0);
+        }
+
+        var portalId = portal.getId();
+
+        warpParty(map, portalId, mapid, mapid);
 
     }
 
