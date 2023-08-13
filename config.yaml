@@ -159,11 +159,11 @@ worlds:
 
 server:
     #Database Configuration
-    DB_URL_FORMAT: "jdbc:mysql://%s:3306/cosmic"
+    DB_URL_FORMAT: "jdbc:mysql://%s:3307/cosmic"
     DB_HOST: "localhost"
     DB_USER: "cosmic_server"
     DB_PASS: "snailshell"
-    INIT_CONNECTION_POOL_TIMEOUT: 90    # Seconds
+    INIT_CONNECTION_POOL_TIMEOUT: 50    # Seconds
 
     #Login Configuration
     WORLDS: 1                           #Initial number of worlds on the server.
