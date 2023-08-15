@@ -335,7 +335,7 @@ INSERT INTO `shopitems` ( `shopid`, `itemid`, `price`, `pitch`, `position`) VALU
  (1301000, 2000006, 620, 0, 156),
  (1301000, 2000003, 200, 0, 160),
  (1301000, 2000002, 320, 0, 164),
- (1301000, 2000015, 160, 0, 168),
+ (1301000, 2000001, 160, 0, 168),
  (1301000, 2000000, 50, 0, 172);
 
 # adding missing pirate items at Singapore npc's
