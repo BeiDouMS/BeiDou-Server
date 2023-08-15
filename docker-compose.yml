@@ -27,8 +27,6 @@ services:
       MYSQL_DATABASE: "cosmic"
       MYSQL_USER: "cosmic_server"
       MYSQL_PASSWORD: "snailshell"
-    cap_add:
-      - SYS_NICE
     ports:
       - "3307:3306"
     volumes:
