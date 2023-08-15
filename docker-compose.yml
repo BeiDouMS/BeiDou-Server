@@ -18,7 +18,7 @@ services:
       - ./scripts:/opt/server/scripts
       - ./wz:/opt/server/wz
     environment:
-      DB_HOST: "db" ## Remember if this is present it will OVERRIDE the host in the config.yaml, this one is optional.
+      DB_HOST: "db" ## Remember if this is present it will OVERRIDE the host in the config.yaml, if you put here anything other than db, you'll need to change the config.yaml jdbc string to port 3307, and not port 3306
     
   db:
     image: mysql:8.0.23
@@ -30,8 +30,7 @@ services:
     cap_add:
       - SYS_NICE
     ports:
-      - "3307:3307"
+      - "3307:3306"
     volumes:
       - ./database/docker-db-data:/var/lib/mysql
       - ./database/sql:/docker-entrypoint-initdb.d
-      - ./mysql.cnf:/etc/mysql/conf.d/mysql.cnf ## conf file for mysql internal container, relevant only if mysql host is not 'db' as mentioned above
