@@ -159,8 +159,8 @@ worlds:
 
 server:
     #Database Configuration
-    DB_URL_FORMAT: "jdbc:mysql://%s:3306/cosmic"
-    DB_HOST: "localhost"
+    DB_URL_FORMAT: "jdbc:mysql://%s:3306/cosmic" # If the docker ENV for DB_HOST is anything but "db", this string format should be changed from 3306 to 3307 (or whichever port it was changed to in docker) 
+    DB_HOST: "localhost" 
     DB_USER: "cosmic_server"
     DB_PASS: "snailshell"
     INIT_CONNECTION_POOL_TIMEOUT: 90    # Seconds
