@@ -43,7 +43,7 @@ public class KarmaManipulator {
             flag ^= karmaFlag;
             flag |= ItemConstants.UNTRADEABLE;
 
-            item.setFlag((byte) flag);
+            item.setFlag(flag);
         }
     }
 
@@ -53,6 +53,6 @@ public class KarmaManipulator {
 
         flag |= karmaFlag;
         flag &= (0xFFFFFFFF ^ ItemConstants.UNTRADEABLE);
-        item.setFlag((byte) flag);
+        item.setFlag(flag);
     }
 }
