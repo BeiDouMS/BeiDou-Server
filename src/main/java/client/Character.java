@@ -59,6 +59,7 @@ import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
 import server.*;
+import server.ExpLogger.ExpLogRecord;
 import server.ItemInformationProvider.ScriptedItem;
 import server.events.Events;
 import server.events.RescueGaga;
@@ -150,6 +151,7 @@ public class Character extends AbstractCharacterObject {
     private final AtomicInteger gachaexp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
+    private long totalExpGained = 0;
     private int merchantmeso;
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
@@ -234,7 +236,7 @@ public class Character extends AbstractCharacterObject {
     private final List<Integer> viptrockmaps = new ArrayList<>();
     private Map<String, Events> events = new LinkedHashMap<>();
     private PartyQuest partyQuest = null;
-    private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
+private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
     private Dragon dragon = null;
     private Ring marriageRing;
     private int marriageItemid = -1;
@@ -3092,6 +3094,7 @@ public class Character extends AbstractCharacterObject {
                 leftover = nextExp - Integer.MAX_VALUE;
             }
             updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
+            totalExpGained += total;
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
             }
@@ -3108,6 +3111,20 @@ public class Character extends AbstractCharacterObject {
                 gainExpInternal(leftover, equip, party, false, inChat, white);
             } else {
                 lastExpGainTime = System.currentTimeMillis();
+
+                if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
+                    ExpLogRecord expLogRecord = new ExpLogger.ExpLogRecord(
+                        getWorldServer().getExpRate(),
+                        expCoupon,
+                        totalExpGained,
+                        exp.get(),
+                        new Timestamp(lastExpGainTime),
+                        id
+                    );
+                    ExpLogger.putExpLogRecord(expLogRecord);
+                }
+
+                totalExpGained = 0;
             }
         }
     }
