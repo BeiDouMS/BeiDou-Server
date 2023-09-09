@@ -150,6 +150,8 @@ public class Character extends AbstractCharacterObject {
     private final AtomicInteger gachaexp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
+    private long totalExpGained = 0;
+    private static final LinkedList<Map<String, Object>> expGainLogQueue = new LinkedList<>();
     private int merchantmeso;
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
@@ -321,6 +323,45 @@ public class Character extends AbstractCharacterObject {
         }
         quests = new LinkedHashMap<>();
         setPosition(new Point(0, 0));
+    }
+
+    static {
+        if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
+            SaveExpLogToDBThread expThread = new SaveExpLogToDBThread();
+            expThread.setPriority(Thread.MIN_PRIORITY); // Set to the lowest priority
+            expThread.start();
+        }
+    }
+
+    // Nested static class for saving exp logs to the database
+    private static class SaveExpLogToDBThread extends Thread {
+        @Override
+        public void run() {
+            while(true) {
+                try {
+                    if (expGainLogQueue.isEmpty()) {
+                        synchronized (expGainLogQueue) {
+                            expGainLogQueue.wait();
+                        }
+                    }
+                    try (Connection con = DatabaseConnection.getConnection();
+                        PreparedStatement ps = con.prepareStatement("INSERT INTO characterexplogs (world_exp_rate, exp_coupon, gained_exp, current_exp, exp_gain_time, charid) VALUES (?, ?, ?, ?, ?, ?)")) {
+                        while (!expGainLogQueue.isEmpty()) {
+                            Map<String, Object> psMap = expGainLogQueue.poll();
+                            ps.setInt(1, (int) psMap.get("world_exp_rate"));
+                            ps.setInt(2, (int) psMap.get("exp_coupon"));
+                            ps.setLong(3,(long) psMap.get("gained_exp"));
+                            ps.setInt(4, (int) psMap.get("current_exp"));
+                            ps.setTimestamp(5, (Timestamp) psMap.get("exp_gain_time"));
+                            ps.setInt(6, (int) psMap.get("charid"));
+                            ps.executeUpdate();
+                        }
+                    }
+                } catch (SQLException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     private static Job getJobStyleInternal(int jobid, byte opt) {
@@ -3092,6 +3133,7 @@ public class Character extends AbstractCharacterObject {
                 leftover = nextExp - Integer.MAX_VALUE;
             }
             updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
+            totalExpGained += total;
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
             }
@@ -3107,8 +3149,26 @@ public class Character extends AbstractCharacterObject {
             if (leftover > 0) {
                 gainExpInternal(leftover, equip, party, false, inChat, white);
             } else {
+                saveExpLogToDB();
                 lastExpGainTime = System.currentTimeMillis();
             }
+        }
+    }
+
+    private void saveExpLogToDB() {
+        if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
+                Map<String, Object> psMap = new HashMap<>();
+                psMap.put("world_exp_rate", getWorldServer().getExpRate());
+                psMap.put("exp_coupon", expCoupon);
+                psMap.put("gained_exp", totalExpGained);
+                psMap.put("current_exp", exp.get());
+                psMap.put("charid", id);
+                psMap.put("exp_gain_time", new Timestamp(System.currentTimeMillis()));
+                expGainLogQueue.add(psMap);
+                synchronized (expGainLogQueue){
+                    expGainLogQueue.notifyAll();        
+                }
+                totalExpGained = 0;
         }
     }
 
