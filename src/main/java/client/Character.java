@@ -236,7 +236,7 @@ public class Character extends AbstractCharacterObject {
     private final List<Integer> viptrockmaps = new ArrayList<>();
     private Map<String, Events> events = new LinkedHashMap<>();
     private PartyQuest partyQuest = null;
-private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
+    private final List<Pair<DelayedQuestUpdate, Object[]>> npcUpdateQuests = new LinkedList<>();
     private Dragon dragon = null;
     private Ring marriageRing;
     private int marriageItemid = -1;
