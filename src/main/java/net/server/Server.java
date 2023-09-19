@@ -57,7 +57,7 @@ import server.SkillbookInformationProvider;
 import server.ThreadManager;
 import server.TimerManager;
 import server.expeditions.ExpeditionBossLog;
-import server.life.PlayerNPCFactory;
+import server.life.PlayerNPC;
 import server.quest.Quest;
 import service.NoteService;
 import tools.DatabaseConnection;
@@ -849,15 +849,15 @@ public class Server {
         final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
         // Run slow operations asynchronously to make startup faster
         final List<Future<?>> futures = new ArrayList<>();
-        futures.add(initExecutor.submit(() -> SkillFactory.loadAllSkills()));
-        futures.add(initExecutor.submit(() -> CashItemFactory.loadAllCashItems()));
-        futures.add(initExecutor.submit(() -> Quest.loadAllQuests()));
-        futures.add(initExecutor.submit(() -> SkillbookInformationProvider.loadAllSkillbookInformation()));
-        futures.add(initExecutor.submit(() -> PlayerNPCFactory.loadFactoryMetadata()));
+        futures.add(initExecutor.submit(SkillFactory::loadAllSkills));
+        futures.add(initExecutor.submit(CashItemFactory::loadAllCashItems));
+        futures.add(initExecutor.submit(Quest::loadAllQuests));
+        futures.add(initExecutor.submit(SkillbookInformationProvider::loadAllSkillbookInformation));
         initExecutor.shutdown();
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
+        final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
         try (Connection con = DatabaseConnection.getConnection()) {
             setAllLoggedOut(con);
             setAllMerchantsInactive(con);
@@ -868,6 +868,7 @@ public class Server {
             CashIdGenerator.loadExistentCashIdsFromDb(con);
             applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
             applyAllWorldTransfers(con);
+            PlayerNPC.loadRunningRankData(con, worldCount);
         } catch (SQLException sqle) {
             log.error("Failed to run all startup-bound database tasks", sqle);
             throw new IllegalStateException(sqle);
@@ -877,8 +878,6 @@ public class Server {
         initializeTimelyTasks(channelDependencies);    // aggregated method for timely tasks thanks to lxconan
 
         try {
-            int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
-
             for (int i = 0; i < worldCount; i++) {
                 initWorld();
             }

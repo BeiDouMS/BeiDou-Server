@@ -53,6 +53,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author XoticStory
  * @author Ronan
  */
+// TODO: remove dependency on custom Npc.wz. All NPCs with id 9901910 and above are custom additions for player npcs.
+// In summary: NPCs 9901910-9906599 and 9977777 are custom additions to HeavenMS that should be removed.
 public class PlayerNPC extends AbstractMapObject {
     private static final Logger log = LoggerFactory.getLogger(PlayerNPC.class);
     private static final Map<Byte, List<Integer>> availablePlayerNpcScriptIds = new HashMap<>();
@@ -66,10 +68,6 @@ public class PlayerNPC extends AbstractMapObject {
     private String name = "";
     private int dir, FH, RX0, RX1, CY;
     private int worldRank, overallRank, worldJobRank, overallJobRank;
-
-    static {
-        getRunningMetadata();
-    }
 
     public PlayerNPC(String name, int scriptId, int face, int hair, int gender, byte skin, Map<Short, Integer> equips, int dir, int FH, int RX0, int RX1, int CX, int CY, int oid) {
         this.equips = equips;
@@ -126,6 +124,12 @@ public class PlayerNPC extends AbstractMapObject {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void loadRunningRankData(Connection con, int worlds) throws SQLException {
+        getRunningOverallRanks(con);
+        getRunningWorldRanks(con, worlds);
+        getRunningWorldJobRanks(con);
     }
 
     public Map<Short, Integer> getEquips() {
@@ -213,16 +217,6 @@ public class PlayerNPC extends AbstractMapObject {
         client.sendPacket(PacketCreator.removePlayerNPC(this.getObjectId()));
     }
 
-    private static void getRunningMetadata() {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            getRunningOverallRanks(con);
-            getRunningWorldRanks(con);
-            getRunningWorldJobRanks(con);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     private static void getRunningOverallRanks(Connection con) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement("SELECT max(overallrank) FROM playernpcs");
              ResultSet rs = ps.executeQuery()) {
@@ -235,9 +229,8 @@ public class PlayerNPC extends AbstractMapObject {
         }
     }
 
-    private static void getRunningWorldRanks(Connection con) throws SQLException {
-        int numWorlds = Server.getInstance().getWorldsSize();
-        for (int i = 0; i < numWorlds; i++) {
+    private static void getRunningWorldRanks(Connection con, int worlds) throws SQLException {
+        for (int i = 0; i < worlds; i++) {
             runningWorldRank.add(new AtomicInteger(1));
         }
 
@@ -246,7 +239,7 @@ public class PlayerNPC extends AbstractMapObject {
 
             while (rs.next()) {
                 int wid = rs.getInt(1);
-                if (wid < numWorlds) {
+                if (wid < worlds) {
                     runningWorldRank.get(wid).set(rs.getInt(2) + 1);
                 }
             }
