@@ -204,13 +204,13 @@ public class ItemInformationProvider {
         } else if (itemId >= 1040000 && itemId < 1050000) {
             theData = eqpStringData;
             cat = "Eqp/Coat";
-        } else if (itemId >= 20000 && itemId < 22000) {
+        } else if (ItemConstants.isFace(itemId)) {
             theData = eqpStringData;
             cat = "Eqp/Face";
         } else if (itemId >= 1080000 && itemId < 1090000) {
             theData = eqpStringData;
             cat = "Eqp/Glove";
-        } else if (itemId >= 30000 && itemId < 35000) {
+        } else if (ItemConstants.isHair(itemId)) {
             theData = eqpStringData;
             cat = "Eqp/Hair";
         } else if (itemId >= 1050000 && itemId < 1060000) {
