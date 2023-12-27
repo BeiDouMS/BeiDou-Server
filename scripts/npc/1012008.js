@@ -96,7 +96,7 @@ function action(mode, type, selection) {
 
     } else if (status == 5) {
         if (current == 1) {
-            cm.sendNextPrev("When the first fame starts, #bthe room owner goes first#k. Beward that you'll be given a time limit, and you may lose your turn if you don't make your move on time. Normally, 3 x 3 is not allowed, but if there comes a point that it's absolutely necessary to put your piece there or face ending the game, then you can put it there. 3 x 3 is allowed as the last line of defense! Oh, and it won't count if it's #r6 or 7 straight#k. Only 5!");
+            cm.sendNextPrev("When the first game starts, #bthe room owner goes first#k. Beward that you'll be given a time limit, and you may lose your turn if you don't make your move on time. Normally, 3 x 3 is not allowed, but if there comes a point that it's absolutely necessary to put your piece there or face ending the game, then you can put it there. 3 x 3 is allowed as the last line of defense! Oh, and it won't count if it's #r6 or 7 straight#k. Only 5!");
         } else if (current == 2) {
             cm.sendNextPrev("Oh, and unlike Omok, when you create the game room for Match Cards, you'll need to set your game on the number of cards you'll use for the game. There are 3 modes avaliable, 3x4, 4x5, and 5x6, which will require 12, 20, and 30 cards respectively. Remember that you won't beable to change it up once the room is open, so if you really wish to change it up, you may have to close the room and open another one.");
         }
@@ -111,12 +111,14 @@ function action(mode, type, selection) {
     } else if (status == 7) {
         if (current == 1) {
             cm.sendPrev("When the next game starts, the loser will go first. Also, no one is allowed to leave in the middle of a game. If you do, you may need to request either a #bforfeit or tie#k. (Of course, if you request a forfeit, you'll lose the game.) And if you click on 'Leave' in the middle of the game and call to leave after the game, you'll leave the room right after the game is over. This will be a much more useful way to leave.");
+            cm.dispose();
         } else if (current == 2) {
             cm.sendNextPrev("If you and your opponent have the same number of matched pairs, then whoever had a longer streak of matched pairs will win. If you ever feel the need to go to the bathroom, or take an extended break, you can request a #btie#k. The game will end in a tie if the opponent accepts the request. Tip: this may be a good way to keep your friendships in tact.");
         }
     } else if (status == 8) {
         if (current == 2) {
             cm.sendPrev("When the next game starts, the loser will go first. Also, no one is allowed to leave in the middle of a game. If you do, you may need to request either a #bforfeit or tie#k. (Of course, if you request a forfeit, you'll lose the game.) And if you click on 'Leave' in the middle of the game and call to leave after the game, you'll leave the room right after the game is over. This will be a much more useful way to leave.");
+            cm.dispose();
         }
     }
 }  
