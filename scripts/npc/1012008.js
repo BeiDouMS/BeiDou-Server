@@ -31,7 +31,7 @@ function action(mode, type, selection) {
     }
 
     if (status == 0) {
-        cm.sendSimple("Hey, you look like you need a breather. You should be enjoying the life, just like I am. Well, if you have a couple of items, I can trade you for an item you can play minigames with. Now... what can I do for you?#b\r\n#L0#Create a minigame item#l\r\n#L1#Explain to me what the minigames are about#l#k");
+        cm.sendSimple("Hey, you look like you need a breather from all that hunting. You should be enjoying the life, just like I am. Well, if you have a couple of items, I can trade you for an item you can play minigames with. Now... what can I do for you?#b\r\n#L0#Create a minigame item#l\r\n#L1#Explain to me what the minigames are about#l#k");
 
     } else if (status == 1) {
         if (selection == 0) {
@@ -82,7 +82,7 @@ function action(mode, type, selection) {
         if (current == 1 || current == 2) {
             cm.sendNextPrev("Enter the room, and when you're ready to play, click on #bReady#k.\r\nOnce the visitor clicks on #bReady#k, the room owner can press #bStart#k to begin the game. If an unwanted visitor walks in, and you don't want to play with that person, the room owner has the right to kick the visitor out of the room. There will be a square box with x written on the right of that person. Click on that for a cold goodbye, okay?"); //Oh yeah, because people WALK in Omok Rooms.
         } else if (current == 3) {
-            if (cm.haveItem(omok1piece[selection], 99) && cm.haveItem(omok2piece[selection], 99) && cm.haveItem(4030009, 1)) {
+            if (cm.haveItem(omok1piece[selection], omokamount) && cm.haveItem(omok2piece[selection], omokamount) && cm.haveItem(4030009, 1)) {
                 cm.gainItem(omok1piece[selection], -omokamount);
                 cm.gainItem(omok2piece[selection], -omokamount);
                 cm.gainItem(4030009, -1);
