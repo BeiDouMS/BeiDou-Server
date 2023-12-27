@@ -57,6 +57,7 @@ function action(mode, type, selection) {
             if (cm.haveItem(4030012, 15)) {
                 cm.gainItem(4030012, -15);
                 cm.gainItem(4080100, 1);
+                cm.dispose();
             } else {
                 cm.sendNext("You want #bA set of Match Cards#k? Hmm...to make A set of Match Cards, you'll need some #bMonster Cards#k. Monster Card can be obtained by taking out the monsters all around the island. Collect 15 Monster Cards and you can make a set of A set of Match Cards."); //Lmfao a set of A set xD
                 cm.dispose();
