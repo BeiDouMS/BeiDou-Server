@@ -59,12 +59,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
             if (p.available() >= 4) {
                 selection = p.readInt();
             } else if (p.available() > 0) {
-                selection = p.readByte();
-                // If there are more than 127 choices, don't underflow to -128.
-                // This is useful if you want to have more than 127 hairs/faces at a stylist NPC.
-                if (selection < 0) {
-                    selection += 256;
-                }
+                selection = p.readUnsignedByte();
             }
             if (c.getQM() != null) {
                 if (c.getQM().isStart()) {

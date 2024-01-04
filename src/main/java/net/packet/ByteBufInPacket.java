@@ -22,6 +22,8 @@ public class ByteBufInPacket implements InPacket {
     public byte readByte() {
         return byteBuf.readByte();
     }
+    @Override
+    public short readUnsignedByte() { return byteBuf.readUnsignedByte(); }
 
     @Override
     public short readShort() {
