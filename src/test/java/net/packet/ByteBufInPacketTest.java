@@ -39,6 +39,36 @@ class ByteBufInPacketTest {
     }
 
     @Test
+    void readUnsignedByte() {
+        final byte writtenByte = Byte.MAX_VALUE;
+        byteBuf.writeByte(writtenByte);
+
+        short readUnsignedByte = inPacket.readUnsignedByte();
+
+        assertEquals(writtenByte, readUnsignedByte);
+    }
+
+    @Test
+    void readUnsignedByte_shouldBeNonnegative() {
+        final byte writtenByte = Byte.MIN_VALUE;
+        byteBuf.writeByte(writtenByte);
+
+        short readUnsignedByte = inPacket.readUnsignedByte();
+
+        assertEquals((short)writtenByte + 256, readUnsignedByte);
+    }
+
+    @Test
+    void readUnsignedByte_shouldBeNonnegative2() {
+        final byte writtenByte = -1;
+        byteBuf.writeByte(writtenByte);
+
+        short readUnsignedByte = inPacket.readUnsignedByte();
+
+        assertEquals((short)writtenByte + 256, readUnsignedByte);
+    }
+
+    @Test
     void readShort() {
         final short writtenShort = 12_345;
         byteBuf.writeShortLE(writtenShort);
