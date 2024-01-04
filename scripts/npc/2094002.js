@@ -23,7 +23,12 @@ function action(mode, type, selection) {
     }
 
     if (!cm.isEventLeader()) {
-        cm.sendYesNo("I wish for your leader to talk to me. Alternatively, you may be wanting to quit. Are you going to abandon this campaign?");
+        // Player chose "No" or "End Chat"
+        if (mode <= 0) {
+            cm.dispose();
+        } else {
+            cm.sendYesNo("I wish for your leader to talk to me. Alternatively, you may be wanting to quit. Are you going to abandon this campaign?");
+        }
     } else {
         var eim = cm.getEventInstance();
         if (eim == null) {
