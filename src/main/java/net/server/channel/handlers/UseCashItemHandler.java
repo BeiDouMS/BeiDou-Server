@@ -228,10 +228,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     return;
                 }
                 short flag = eq.getFlag();
-                flag |= ItemConstants.LOCK;
                 if (eq.getExpiration() > -1 && (eq.getFlag() & ItemConstants.LOCK) != ItemConstants.LOCK) {
                     return; //No perma items pls
                 }
+                flag |= ItemConstants.LOCK;
                 eq.setFlag(flag);
 
                 long period = 0;
