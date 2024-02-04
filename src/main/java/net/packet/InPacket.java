@@ -4,6 +4,7 @@ import java.awt.*;
 
 public interface InPacket extends Packet {
     byte readByte();
+    short readUnsignedByte();
     short readShort();
     int readInt();
     long readLong();
