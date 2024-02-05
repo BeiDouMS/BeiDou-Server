@@ -47,19 +47,19 @@ public abstract class CharacterFactory {
             return -1;
         }
 
-        Character newchar = Character.getDefault(c);
-        newchar.setWorld(c.getWorld());
-        newchar.setSkinColor(SkinColor.getById(skin));
-        newchar.setGender(gender);
-        newchar.setName(name);
-        newchar.setHair(hair);
-        newchar.setFace(face);
+        Character newCharacter = Character.getDefault(c);
+        newCharacter.setWorld(c.getWorld());
+        newCharacter.setSkinColor(SkinColor.getById(skin));
+        newCharacter.setGender(gender);
+        newCharacter.setName(name);
+        newCharacter.setHair(hair);
+        newCharacter.setFace(face);
 
-        newchar.setLevel(recipe.getLevel());
-        newchar.setJob(recipe.getJob());
-        newchar.setMapId(recipe.getMap());
+        newCharacter.setLevel(recipe.getLevel());
+        newCharacter.setJob(recipe.getJob());
+        newCharacter.setMapId(recipe.getMap());
 
-        Inventory equipped = newchar.getInventory(InventoryType.EQUIPPED);
+        Inventory equipped = newCharacter.getInventory(InventoryType.EQUIPPED);
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         int top = recipe.getTop(), bottom = recipe.getBottom(), shoes = recipe.getShoes(), weapon = recipe.getWeapon();
@@ -88,12 +88,17 @@ public abstract class CharacterFactory {
             equipped.addItemFromDB(eq_weapon.copy());
         }
 
-        if (!newchar.insertNewChar(recipe)) {
+        if (!MakeCharInfoValidator.isNewCharacterValid(newCharacter)) {
+            log.warn("Owner from account {} tried to packet edit in character creation", c.getAccountName());
             return -2;
         }
-        c.sendPacket(PacketCreator.addNewCharEntry(newchar));
 
-        Server.getInstance().createCharacterEntry(newchar);
+        if (!newCharacter.insertNewChar(recipe)) {
+            return -2;
+        }
+        c.sendPacket(PacketCreator.addNewCharEntry(newCharacter));
+
+        Server.getInstance().createCharacterEntry(newCharacter);
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + " has created a new character with IGN " + name));
         log.info("Account {} created chr with name {}", c.getAccountName(), name);
 
