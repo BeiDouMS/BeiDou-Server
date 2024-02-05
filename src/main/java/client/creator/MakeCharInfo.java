@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import provider.Data;
 import provider.DataTool;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MakeCharInfo {
     private static final Logger log = LoggerFactory.getLogger(MakeCharInfo.class);
@@ -22,14 +22,14 @@ public class MakeCharInfo {
     private static final String SHOE_ID = "6";
     private static final String WEAPON_ID = "7";
 
-    private final List<Integer> charFaces = new ArrayList<>();
-    private final List<Integer> charHairs = new ArrayList<>();
-    private final List<Integer> charHairColors = new ArrayList<>();
-    private final List<Integer> charSkins = new ArrayList<>();
-    private final List<Integer> charTops = new ArrayList<>();
-    private final List<Integer> charBottoms = new ArrayList<>();
-    private final List<Integer> charShoes = new ArrayList<>();
-    private final List<Integer> charWeapons = new ArrayList<>();
+    private final Set<Integer> charFaces = new HashSet<>();
+    private final Set<Integer> charHairs = new HashSet<>();
+    private final Set<Integer> charHairColors = new HashSet<>();
+    private final Set<Integer> charSkins = new HashSet<>();
+    private final Set<Integer> charTops = new HashSet<>();
+    private final Set<Integer> charBottoms = new HashSet<>();
+    private final Set<Integer> charShoes = new HashSet<>();
+    private final Set<Integer> charWeapons = new HashSet<>();
 
     public MakeCharInfo(Data charInfoData) {
         for (Data data : charInfoData.getChildren()) {

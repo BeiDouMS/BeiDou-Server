@@ -5,7 +5,7 @@ import provider.Data;
 import provider.DataProviderFactory;
 import provider.wz.WZFiles;
 
-public class MakeCharInfoHandler {
+public class MakeCharInfoValidator {
     private static final MakeCharInfo charFemale;
     private static final MakeCharInfo charMale;
     private static final MakeCharInfo orientCharFemale;

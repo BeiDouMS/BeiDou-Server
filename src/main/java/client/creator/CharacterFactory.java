@@ -88,7 +88,7 @@ public abstract class CharacterFactory {
             equipped.addItemFromDB(eq_weapon.copy());
         }
 
-        if (!MakeCharInfoHandler.isNewCharacterValid(newCharacter)) {
+        if (!MakeCharInfoValidator.isNewCharacterValid(newCharacter)) {
             log.warn("Owner from account {} tried to packet edit in character creation", c.getAccountName());
             return -2;
         }
