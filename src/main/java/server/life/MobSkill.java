@@ -190,6 +190,11 @@ public class MobSkill {
 
     // TODO: avoid output argument banishPlayersOutput
     public void applyEffect(Character player, Monster monster, boolean skill, List<Character> banishPlayersOutput) {
+        // See if the MobSkill is successful before doing anything
+        if (!makeChanceResult()) {
+            return;
+        }
+
         Disease disease = null;
         Map<MonsterStatus, Integer> stats = new EnumMap<>(MonsterStatus.class);
         List<Integer> reflection = new ArrayList<>();
@@ -213,12 +218,12 @@ public class MobSkill {
             case REVERSE_INPUT -> disease = Disease.CONFUSE;
             case UNDEAD -> disease = Disease.ZOMBIFY;
             case PHYSICAL_IMMUNE -> {
-                if (makeChanceResult() && !monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
+                if (!monster.isBuffed(MonsterStatus.MAGIC_IMMUNITY)) {
                     stats.put(MonsterStatus.WEAPON_IMMUNITY, x);
                 }
             }
             case MAGIC_IMMUNE -> {
-                if (makeChanceResult() && !monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
+                if (!monster.isBuffed(MonsterStatus.WEAPON_IMMUNITY)) {
                     stats.put(MonsterStatus.MAGIC_IMMUNITY, x);
                 }
             }
