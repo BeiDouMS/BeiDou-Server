@@ -25,8 +25,12 @@ import client.Character;
 import client.Client;
 import client.Skill;
 import client.SkillFactory;
-import client.inventory.*;
+import client.inventory.Equip;
 import client.inventory.Equip.ScrollResult;
+import client.inventory.Inventory;
+import client.inventory.InventoryType;
+import client.inventory.Item;
+import client.inventory.ModifyInventory;
 import client.inventory.manipulator.InventoryManipulator;
 import constants.id.ItemId;
 import constants.inventory.ItemConstants;
@@ -37,7 +41,6 @@ import tools.PacketCreator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Matze
@@ -50,8 +53,8 @@ public final class ScrollHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {
             try {
                 p.readInt(); // whatever...
-                short slot = p.readShort();
-                short dst = p.readShort();
+                short scrollSlot = p.readShort();
+                short equipSlot = p.readShort();
                 byte ws = (byte) p.readShort();
                 boolean whiteScroll = false; // white scroll being used?
                 boolean legendarySpirit = false; // legendary spirit skill
@@ -61,24 +64,21 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                 ItemInformationProvider ii = ItemInformationProvider.getInstance();
                 Character chr = c.getPlayer();
-                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(dst);
+                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(equipSlot);
                 Skill LegendarySpirit = SkillFactory.getSkill(1003);
-                if (chr.getSkillLevel(LegendarySpirit) > 0 && dst >= 0) {
+                if (chr.getSkillLevel(LegendarySpirit) > 0 && equipSlot >= 0) {
                     legendarySpirit = true;
-                    toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(dst);
+                    toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(equipSlot);
                 }
                 byte oldLevel = toScroll.getLevel();
                 byte oldSlots = toScroll.getUpgradeSlots();
                 Inventory useInventory = chr.getInventory(InventoryType.USE);
-                Item scroll = useInventory.getItem(slot);
+                Item scroll = useInventory.getItem(scrollSlot);
                 Item wscroll = null;
 
-                if (ItemConstants.isCleanSlate(scroll.getItemId())) {
-                    Map<String, Integer> eqStats = ii.getEquipStats(toScroll.getItemId());  // clean slate issue found thanks to Masterrulax
-                    if (eqStats == null || eqStats.get("tuc") == 0) {
-                        announceCannotScroll(c, legendarySpirit);
-                        return;
-                    }
+                if (ItemConstants.isCleanSlate(scroll.getItemId()) && !ii.canUseCleanSlate(toScroll)) {
+                    announceCannotScroll(c, legendarySpirit);
+                    return;
                 } else if (!ItemConstants.isModifierScroll(scroll.getItemId()) && toScroll.getUpgradeSlots() < 1) {
                     announceCannotScroll(c, legendarySpirit);   // thanks onechord for noticing zero upgrade slots freezing Legendary Scroll UI
                     return;
@@ -101,11 +101,6 @@ public final class ScrollHandler extends AbstractPacketHandler {
                         announceCannotScroll(c, legendarySpirit);
                         return;
                     }
-                }
-
-                if (ItemConstants.isCleanSlate(scroll.getItemId()) && !ii.canUseCleanSlate(toScroll)) {
-                    announceCannotScroll(c, legendarySpirit);
-                    return;
                 }
 
                 Equip scrolled = (Equip) ii.scrollEquipWithId(toScroll, scroll.getItemId(), whiteScroll, 0, chr.isGM());
@@ -141,7 +136,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 if (scrollSuccess == Equip.ScrollResult.CURSE) {
                     if (!ItemId.isWeddingRing(toScroll.getItemId())) {
                         mods.add(new ModifyInventory(3, toScroll));
-                        if (dst < 0) {
+                        if (equipSlot < 0) {
                             Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
 
                             inv.lockInventory();
@@ -174,7 +169,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
                 }
                 c.sendPacket(PacketCreator.modifyInventory(true, mods));
                 chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, whiteScroll));
-                if (dst < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE)) {
+                if (equipSlot < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE)) {
                     chr.equipChanged();
                 }
             } finally {

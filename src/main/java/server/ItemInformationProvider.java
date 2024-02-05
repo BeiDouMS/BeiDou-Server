@@ -22,9 +22,16 @@
 package server;
 
 import client.Character;
-import client.*;
+import client.Client;
+import client.Job;
+import client.Skill;
+import client.SkillFactory;
 import client.autoban.AutobanFactory;
-import client.inventory.*;
+import client.inventory.Equip;
+import client.inventory.Inventory;
+import client.inventory.InventoryType;
+import client.inventory.Item;
+import client.inventory.WeaponType;
 import config.YamlConfig;
 import constants.id.ItemId;
 import constants.inventory.EquipSlot;
@@ -35,19 +42,36 @@ import constants.skills.NightWalker;
 import net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import provider.*;
+import provider.Data;
+import provider.DataDirectoryEntry;
+import provider.DataFileEntry;
+import provider.DataProvider;
+import provider.DataProviderFactory;
+import provider.DataTool;
 import provider.wz.WZFiles;
 import server.MakerItemFactory.MakerItemCreateEntry;
 import server.life.LifeFactory;
 import server.life.MonsterInformationProvider;
-import tools.*;
+import tools.DatabaseConnection;
+import tools.PacketCreator;
+import tools.Pair;
+import tools.Randomizer;
+import tools.StringUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * @author Matze
@@ -1025,9 +1049,16 @@ public class ItemInformationProvider {
         Issue with clean slate found thanks to Masterrulax
         Vicious added in the clean slate check thanks to Crypter (CrypterDEV)
     */
-    public boolean canUseCleanSlate(Equip nEquip) {
-        Map<String, Integer> eqstats = this.getEquipStats(nEquip.getItemId());
-        return YamlConfig.config.server.USE_ENHANCED_CLNSLATE || nEquip.getUpgradeSlots() < (byte) (eqstats.get("tuc") + nEquip.getVicious());
+    public boolean canUseCleanSlate(Equip equip) {
+        Map<String, Integer> eqStats = getEquipStats(equip.getItemId());
+        if (eqStats == null || eqStats.get("tuc") == 0 ) {
+            return false;
+        }
+        int totalUpgradeCount = eqStats.get("tuc");
+        int freeUpgradeCount = equip.getUpgradeSlots();
+        int viciousCount = equip.getVicious();
+        int appliedScrollCount = equip.getLevel();
+        return freeUpgradeCount + appliedScrollCount < totalUpgradeCount + viciousCount;
     }
 
     public Item scrollEquipWithId(Item equip, int scrollId, boolean usingWhiteScroll, int vegaItemId, boolean isGM) {
