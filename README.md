@@ -3,7 +3,7 @@ Cosmic is a server emulator for Global MapleStory (GMS) version 83.
 
 ## Introduction
 
-Cosmic launched on March 2021. It is based on code from a long line of server sources spanning over a decade - starting with OdinMS (2008) and ending with HeavenMS (2019).
+Cosmic launched on March 2021. It is based on code from a long line of server emulators spanning over a decade - starting with OdinMS (2008) and ending with HeavenMS (2019).
 
 This is mainly a Java based project, but there are also a bunch of scripts written in JavaScript.
 
@@ -32,6 +32,7 @@ You may contribute to the project in various ways, mainly through GitHub:
 * Providing improvements to the code through a [Pull Request](https://github.com/P0nk/Cosmic/pulls) from your own fork. 
 * Reporting a bug by creating an [Issue](https://github.com/P0nk/Cosmic/issues).
 * Providing information to existing issues or reviewing pull requests that others have made.
+* ...and in other ways that I haven't thought of!
 
 ### Continuous integration
 A GitHub Actions pipeline is set up to run the build automatically when a new pull request is opened or commits are pushed to an existing one. This ensures that the code compiles and all the tests pass.
@@ -50,9 +51,12 @@ The project follows the [semantic versioning](https://semver.org/) scheme using 
 ## Getting started
 Follow along as I go through the steps to play the game on your local computer from start to finish. I won't go into extreme detail, so if you don't have prior experience with Java or git, you might struggle.
 
-### 1 - Database
-The database contains game data used by the server such as accounts and inventory items. It is required for the server to start. 
+We will set up the following:
+- Database - the database is used by the server to store game data such as accounts, characters and inventory items.
+- Server - the server is the "brain" and routes network traffic between the clients.
+- Client - the client is the application used to _play the game_, i.e. MapleStory.exe.
 
+### 1 - Database 
 You will start by installing the database server and client, and then run some scripts to prepare it for the server.
 
 #### Steps
@@ -77,12 +81,23 @@ You will start by cloning the repository, then configure the database properties
 3. Start the server. The main method is located in `net.server.Server`.
 4. If you see "Cosmic is now online" in the console, it means the server is online and ready to serve traffic. Yay!
 
+Below, I list other ways of running the server which are completely optional.
+
 #### Docker
 Support for Docker is also provided out of the box, as an alternative to running straight in the IDE. If you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed it's as easy as running `docker compose up`.
 
 Making changes becomes a bit more tedious though as you have to rebuild the server image via `docker compose up --build`.
 
-On the first launch, the database container will run the scripts which may take so long that the server fails to start. In that case, just wait until the database is done running the scripts and then retry (Ctrl+C and re-run the command). 
+On the first launch, the database container will run the scripts which may take so long that the server fails to start. In that case, just wait until the database is done running the scripts and then retry (Ctrl+C and re-run the command).
+
+#### Jar
+Another option is to start the server from a terminal by running a jar file. You first need to build the jar file from source which requires [Maven](https://maven.apache.org/).
+
+Building the jar file is as easy as running ``mvn clean package``. The project is configured to produce a "fat" jar which contains all dependencies (by utilizing the _maven-assembly-plugin_). Note that the WZ XML files are __not__ included in the jar.
+
+To run the jar, a ``launch.bat`` file is provided for convenience. Simply double-click it and the server will start in a new terminal window. 
+
+Alternatively, run the jar file from the terminal. Just remember to provide the `wz-path` system property pointing to your wz directory.
 
 ### 3 - Client
 You will start by installing the game with the old installer, then overwrite some WZ files with our custom ones, and lastly get the localhost executable in place.
