@@ -77,7 +77,12 @@ You will start by cloning the repository, then configure the database properties
 3. Start the server. The main method is located in `net.server.Server`.
 4. If you see "Cosmic is now online" in the console, it means the server is online and ready to serve traffic. Yay!
 
-Support for Docker is also provided out of the box, as an alternative to running straight in the IDE. If you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed it's as easy as running `docker compose up`. Making changes becomes a bit more tedious though as you have to rebuild the server image via `docker compose up --build`. 
+#### Docker
+Support for Docker is also provided out of the box, as an alternative to running straight in the IDE. If you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed it's as easy as running `docker compose up`.
+
+Making changes becomes a bit more tedious though as you have to rebuild the server image via `docker compose up --build`.
+
+On the first launch, the database container will run the scripts which may take so long that the server fails to start. In that case, just wait until the database is done running the scripts and then retry (Ctrl+C and re-run the command). 
 
 ### 3 - Client
 You will start by installing the game with the old installer, then overwrite some WZ files with our custom ones, and lastly get the localhost executable in place.
