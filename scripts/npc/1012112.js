@@ -51,7 +51,7 @@ function action(mode, type, selection) {
             if (status == 0) {
                 em = cm.getEventManager("HenesysPQ");
                 if (em == null) {
-                    cm.sendOk("The Henesys PQ has encountered an error.");
+                    cm.sendOk("加载脚本迎月花山丘组队任务失败，请联系管理员");
                     cm.dispose();
                     return;
                 } else if (cm.isUsingOldPqNpcStyle()) {
@@ -59,71 +59,80 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                cm.sendSimple("#e#b<Party Quest: Primrose Hill>\r\n#k#n" + em.getProperty("party") + "\r\n\r\nI'm Tory. Inside here is a beautiful hill where the primrose blooms. There's a tiger that lives in the hill, Growlie, and he seems to be looking for something to eat. Would you like to head over to the hill of primrose and join forces with your party members to help Growlie out?#b\r\n#L0#I want to participate in the party quest.\r\n#L1#I would like to " + (cm.getPlayer().isRecvPartySearchInviteEnabled() ? "disable" : "enable") + " Party Search.\r\n#L2#I would like to hear more details.\r\n#L3#I would like to redeem an instance hat.");
+                cm.sendSimple("#e#b<组队任务：迎月花山丘>\r\n" +
+                    "#k#n" + em.getProperty("party") + "\r\n\r\n" +
+                    "这里面有一座美丽的山丘，山上开满了迎月花，还住着一只老虎，这只老虎现在看起来饥肠辘辘的。你愿意和同伴一起去迎月花山丘帮助它吗？#b\r\n" +
+                    "#L0#开启组队任务\r\n" +
+                    "#L1#" + (cm.getPlayer().isRecvPartySearchInviteEnabled() ? "关闭" : "开启") + " 组队搜索\r\n" +
+                    "#L2#关于这个任务\r\n" +
+                    "#L3#兑换头顶年糕");
             } else if (status == 1) {
                 if (selection == 0) {
                     if (cm.getParty() == null) {
-                        cm.sendOk("Hi there! I'm Tory. This place is covered with mysterious aura of the full moon, and no one person can enter here by him/herself.");
+                        cm.sendOk("你要先创建或者加入一支队伍才可以进去。");
                         cm.dispose();
                     } else if (!cm.isLeader()) {
-                        cm.sendOk("If you'd like to enter here, the leader of your party will have to talk to me. Talk to your party leader about this.");
+                        cm.sendOk("请让队长来和我对话。");
                         cm.dispose();
                     } else {
                         var eli = em.getEligibleParty(cm.getParty());
                         if (eli.size() > 0) {
                             if (!em.startInstance(cm.getParty(), cm.getPlayer().getMap(), 1)) {
-                                cm.sendOk("Someone is already attempting the PQ. Please wait for them to finish, or find another channel.");
+                                cm.sendOk("有其他队伍已经在里面了，请耐心等待他们出来或者换个频道试试。");
                             }
                         } else {
-                            cm.sendOk("You cannot start this party quest yet, because either your party is not in the range size, some of your party members are not eligible to attempt it or they are not in this map. If you're having trouble finding party members, try Party Search.");
+                            cm.sendOk("看起来你队伍里有人不满足任务限制。");
                         }
 
                         cm.dispose();
                     }
                 } else if (selection == 1) {
                     var psState = cm.getPlayer().toggleRecvPartySearchInvite();
-                    cm.sendOk("Your Party Search status is now: #b" + (psState ? "enabled" : "disabled") + "#k. Talk to me whenever you want to change it back.");
+                    cm.sendOk("队伍搜索功能已 #b" + (psState ? "开启" : "关闭"));
                     cm.dispose();
                 } else if (selection == 2) {
-                    cm.sendOk("#e#b<Party Quest: Primrose Hill>#k#n\r\nCollect primrose seeds from the flowers at the bottom part of the map and drop them by the platforms above the stage. Primrose seed color must match to grow the seeds, so test until you find the correct combination. When all the seeds have been planted, that is, starting second part of the mission, scout the Moon Bunny while it prepares Rice Cakes for the hungry Growlie. Once Growlie becomes satisfied, your mission is complete.");
+                    cm.sendOk("#e#b<组队任务：迎月花山丘>#k#n\r\n" +
+                        "搜集6种颜色的种子，并把它们种在月亮周围的六个平台上。把种子放在正确的平台上就会开出迎月花来，当六个平台开满迎月花，月亮就会变成满月，同时月妙将会出来捣年糕，收集#r10#k个年糕给老虎吃吧。");
                     cm.dispose();
                 } else {
-                    cm.sendYesNo("So you want to exchange #b20 #b#t4001158##k for the instance-designed hat?");
+                    cm.sendYesNo("你要用#r20副本积分#k交换#b#t1002798##k吗？");
                 }
             } else {
-                if (cm.hasItem(4001158, 20)) {
+                if (cm.getPlayer().getPQPoint() >= 20) {
                     if (cm.canHold(1002798)) {
-                        cm.gainItem(4001158, -20);
-                        cm.gainItem(1002798, 20);
-                        cm.sendNext("Here it is. Enjoy!");
+                        cm.getPlayer().gainPQPoint(-20);
+                        cm.gainItem(1002798, 1, true, true);
+                        cm.sendNext("请拿好！");
+                    } else {
+                        cm.sendOk("#r你的背包满了。")
                     }
                 } else {
-                    cm.sendNext("You don't have enough #t4001158# to buy it yet!");
+                    cm.sendNext("你的副本积分不够20点啊（你现在有#r" + cm.getPlayer().getPQPoint() + "副本积分#k）");
                 }
 
                 cm.dispose();
             }
         } else if (cm.getMapId() == 910010100) {
             if (status == 0) {
-                cm.sendYesNo("Thank you for aiding in the effort of feeding the Growlie. As a matter of fact, your team has already been rewarded for reaching this far. With this problem now solved, there is another issue happening right now, if you are interessed check #bTommy#k there for the info. So, are you returning straight to Henesys now?");
+                cm.sendYesNo("你们的事迹#b#p1012114##k已经跟我说了，感谢你的帮助。如果你还觉得够尽兴的话可以去找#b#p1012113##k。要我带你返回射手村吗？");
             } else if (status == 1) {
                 if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
                     cm.warp(100000200);
                 } else {
-                    cm.sendOk("It seems you are short on space in one of your inventories. Please check that first to get rewarded properly.");
+                    cm.sendOk("#r你的背包满了。");
                 }
                 cm.dispose();
             }
         } else if (cm.getMapId() == 910010400) {
             if (status == 0) {
-                cm.sendYesNo("So, are you returning to Henesys now?");
+                cm.sendYesNo("要回射手村了吗？");
             } else if (status == 1) {
                 if (cm.getEventInstance() == null) {
                     cm.warp(100000200);
                 } else if (cm.getEventInstance().giveEventReward(cm.getPlayer())) {
                     cm.warp(100000200);
                 } else {
-                    cm.sendOk("It seems you are short on space in one of your inventories. Please check that first to get rewarded properly.");
+                    cm.sendOk("#r你的背包满了。");
                 }
                 cm.dispose();
             }

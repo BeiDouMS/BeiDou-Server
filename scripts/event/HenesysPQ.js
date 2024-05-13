@@ -24,7 +24,7 @@
  */
 
 var isPq = true;
-var minPlayers = 3, maxPlayers = 6;
+var minPlayers = 1, maxPlayers = 6;
 var minLevel = 10, maxLevel = 255;
 var entryMap = 910010000;
 var exitMap = 910010300;
@@ -34,7 +34,7 @@ var clearMap = 910010100;
 var minMapId = 910010000;
 var maxMapId = 910010400;
 
-var eventTime = 10;     // 10 minutes
+var eventTime = 15;     // 10 minutes
 
 const maxLobbies = 1;
 
@@ -49,22 +49,22 @@ function getMaxLobbies() {
 function setEventRequirements() {
     var reqStr = "";
 
-    reqStr += "\r\n    Number of players: ";
+    reqStr += "\r\n    参与人数：";
     if (maxPlayers - minPlayers >= 1) {
         reqStr += minPlayers + " ~ " + maxPlayers;
     } else {
         reqStr += minPlayers;
     }
 
-    reqStr += "\r\n    Level range: ";
+    reqStr += "\r\n    等级要求：";
     if (maxLevel - minLevel >= 1) {
         reqStr += minLevel + " ~ " + maxLevel;
     } else {
         reqStr += minLevel;
     }
 
-    reqStr += "\r\n    Time limit: ";
-    reqStr += eventTime + " minutes";
+    reqStr += "\r\n    时间限制：";
+    reqStr += eventTime + " 分钟";
 
     em.setProperty("party", reqStr);
 }
@@ -151,7 +151,7 @@ function scheduledTimeout(eim) {
 }
 
 function bunnyDefeated(eim) {
-    eim.dropMessage(5, "Due to your failure to protect the Moon Bunny, you have been transported to the Exile Map.");
+    eim.dropMessage(5, "月妙倒地不起，任务失败。");
     end(eim);
 }
 
@@ -257,7 +257,7 @@ function friendlyItemDrop(eim, mob) {
         eim.setIntProperty("bunnyCake", cakes);
 
         const PacketCreator = Java.type('tools.PacketCreator');
-        mob.getMap().broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
+        mob.getMap().broadcastMessage(PacketCreator.serverNotice(6, "月妙成功捣出第 " + cakes + " 个年糕"));
     }
 }
 
@@ -266,7 +266,7 @@ function friendlyDamaged(eim, mob) {
         var bunnyDamage = eim.getIntProperty("bunnyDamaged") + 1;
         if (bunnyDamage > 5) {
             const PacketCreator = Java.type('tools.PacketCreator');
-            broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
+            broadcastMessage(PacketCreator.serverNotice(6, "月妙感到有危险靠近，请保护好月妙！"));
             eim.setIntProperty("bunnyDamaged", 0);
         }
     }

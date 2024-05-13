@@ -37,32 +37,37 @@ function action(mode, type, selection) {
 
         if (status == 0) {
             if (cm.isEventLeader()) {
-                cm.sendSimple("Growl! I am Growlie, always ready to protect this place. What brought you here?\r\n#b#L0# Please tell me what this place is all about.#l\r\n#L1# I have brought #t4001101#.#l\r\n#L2# I would like to leave this place.#l");
+                cm.sendSimple("嗷哦！~我是#p1012114#是这里的守护者，你来这里做什么？\r\n" +
+                    "#b#L0#请告诉我这里的事情#l\r\n" +
+                    "#L1#我带来了10个 #t4001101##l\r\n" +
+                    "#L2#我想离开这里#l");
             } else {
-                cm.sendSimple("Growl! I am Growlie, always ready to protect this place. What brought you here?\r\n#b#L0# Please tell me what this place is all about.#l\r\n#L2# I would like to leave this place.#l");
+                cm.sendSimple("嗷哦！~我是#p1012114#是这里的守护者，你来这里做什么？\r\n" +
+                    "#b#L0#请告诉我这里的事情#l\r\n" +
+                    "#L2#我想离开这里#l");
             }
         } else if (status == 1) {
             if (chosen == -1) {
                 chosen = selection;
             }
             if (chosen == 0) {
-                cm.sendNext("This place can be best described as the prime spot where you can taste the delicious rice cakes made by Moon Bunny every full moon.");
+                cm.sendNext("在每个满月的夜晚，这座山丘是品尝月妙年糕的最佳地点！");
             } else if (chosen == 1) {
                 if (cm.haveItem(4001101, 10)) {
-                    cm.sendNext("Oh... isn't this rice cake made by Moon Bunny? Please hand me the rice cake. Mmmm ... these seems delicious. Please come see me next time for more #b#t4001101##k. Have a safe trip home!");
+                    cm.sendNext("这正是月妙制作的年糕！请快点给我！谢谢你们的帮助！我已经吃饱了，现在送你们回去吧。");
                 } else {
-                    cm.sendOk("I advise you to check and make sure that you have indeed gathered up #b10 #t4001101#s#k.");
+                    cm.sendOk("你确定你有 #b10 #t4001101#s#k？");
                     cm.dispose();
                 }
             } else if (chosen == 2) {
-                cm.sendYesNo("Are you sure you want to leave?");
+                cm.sendYesNo("你确定要离开吗？");
             } else {
                 cm.dispose();
 
             }
         } else if (status == 2) {
             if (chosen == 0) {
-                cm.sendNextPrev("Gather up the primrose seeds from the primrose leaves all over this area, and plant the seeds at the footing near the crescent moon to see the primrose bloom. There are 6 types of primroses, and all of them require different footings. It is imperative that the footing fits the seed of the flower.");
+                cm.sendNextPrev("普通下面的草，收获六种颜色的种子，把它们种在月亮周围的六个平台上，如果是正确的平台，种子就会开出迎月花。");
             } else if (chosen == 1) {
                 cm.gainItem(4001101, -10);
 
@@ -78,17 +83,17 @@ function action(mode, type, selection) {
                 if (mode == 1) {
                     cm.warp(910010300);
                 } else {
-                    cm.sendOk("You better collect some delicious rice cakes for me then, because time is running out, Growl!");
+                    cm.sendOk("请快点收集年糕给我，时间不多了！");
                 }
                 cm.dispose();
             }
         } else if (status == 3) {
             if (chosen == 0) {
-                cm.sendNextPrev("When the flowers of primrose blooms, the full moon will rise, and that's when the Moon Bunnies will appear and start pounding the mill. Your task is to fight off the monsters to make sure that Moon Bunny can concentrate on making the best rice cake possible.");
+                cm.sendNextPrev("当平台上开满迎月花（提示：褐黄蓝绿紫浅紫），满月就会召唤月妙出来了，你们需要确保月妙专心捣年糕不被打扰。");
             }
         } else if (status == 4) {
             if (chosen == 0) {
-                cm.sendNextPrev("I would like for you and your party members to cooperate and get me 10 rice cakes. I strongly advise you to get me the rice cakes within the allotted time.");
+                cm.sendNextPrev("我会在这里等待你们给我送来#b10个#k年糕，我现在很饿，请你们抓紧时间！");
             }
         } else {
             cm.dispose();

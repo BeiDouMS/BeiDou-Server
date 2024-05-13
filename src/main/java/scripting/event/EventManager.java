@@ -720,11 +720,16 @@ public class EventManager {
     }
 
     public List<PartyCharacter> getEligibleParty(Party party) {
+        return getEligibleParty(party, false);
+    }
+
+    public List<PartyCharacter> getEligibleParty(Party party, boolean singleMode) {
         if (party == null) {
             return new ArrayList<>();
         }
         try {
-            Object o = iv.invokeFunction("getEligibleParty", party.getPartyMembersOnline());
+            String fc = singleMode ? "getEligibleSingle" : "getEligibleParty";
+            Object o = iv.invokeFunction(fc, party.getPartyMembersOnline());
 
             if (o instanceof PartyCharacter[] partyChrs) {
                 final List<PartyCharacter> eligibleParty = new ArrayList<>(Arrays.asList(partyChrs));

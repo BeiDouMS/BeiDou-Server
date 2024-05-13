@@ -25,7 +25,7 @@
 
 var isPq = true;
 var minPlayers = 3, maxPlayers = 4;
-var minLevel = 21, maxLevel = 30;
+var minLevel = 21, maxLevel = 255;
 var entryMap = 103000800;
 var exitMap = 103000890;
 var recruitMap = 103000000;
@@ -49,22 +49,22 @@ function getMaxLobbies() {
 function setEventRequirements() {
     var reqStr = "";
 
-    reqStr += "\r\n    Number of players: ";
+    reqStr += "\r\n    参数人数：";
     if (maxPlayers - minPlayers >= 1) {
         reqStr += minPlayers + " ~ " + maxPlayers;
     } else {
         reqStr += minPlayers;
     }
 
-    reqStr += "\r\n    Level range: ";
+    reqStr += "\r\n    等级要求：";
     if (maxLevel - minLevel >= 1) {
         reqStr += minLevel + " ~ " + maxLevel;
     } else {
         reqStr += minLevel;
     }
 
-    reqStr += "\r\n    Time limit: ";
-    reqStr += eventTime + " minutes";
+    reqStr += "\r\n    时间限制：";
+    reqStr += eventTime + " 分钟";
 
     em.setProperty("party", reqStr);
 }
@@ -87,6 +87,24 @@ function setEventRewards(eim) {
 
     pointStages = [1, 1, 1, 1, 2];
     eim.setEventClearStagePoint(pointStages);
+}
+
+function getEligibleSingle(party) { // 单人模式, 只对等级做判断
+    let eligible = [];
+
+    if (party.size() === 1) {
+        let partyList = party.toArray();
+
+        for (let i = 0; i < party.size(); i++) {
+            let ch = partyList[i];
+
+            if (ch.getMapId() === recruitMap && ch.getLevel() >= minLevel && ch.getLevel() <= maxLevel && ch.isLeader()) {
+                eligible.push(ch);
+                break;
+            }
+        }
+    }
+    return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
 }
 
 function getEligibleParty(party) {      //selects, from the given party, the team that is allowed to attempt this event

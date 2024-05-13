@@ -46,16 +46,16 @@ function action(mode, type, selection) {
     var mapId = cm.getPlayer().getMapId();
     if (mapId == 103000890) {
         if (status == 0) {
-            cm.sendNext("To return back to the city, follow this way.");
+            cm.sendNext("要回去废弃都市了吗？");
         } else {
             cm.warp(103000000);
             cm.dispose();
         }
     } else {
         if (status == 0) {
-            var outText = "Once you leave the map, you'll have to restart the whole quest if you want to try it again.  Do you still want to leave this map?";
+            var outText = "一旦离开，组队任务就要重头再来了，你要走了吗？";
             if (mapId == 103000805) {
-                outText = "Are you ready to leave this map?";
+                outText = "你准备好离开了吗？";
             }
             cm.sendYesNo(outText);
         } else if (mode == 1) {
