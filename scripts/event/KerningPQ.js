@@ -75,7 +75,7 @@ function setEventExclusives(eim) {
 }
 
 function setEventRewards(eim) {
-    var itemSet, itemQty, evLevel, expStages;
+    var itemSet, itemQty, evLevel, expStages, pointStages;
 
     evLevel = 1;    //Rewards at clear PQ
     itemSet = [2040505, 2040514, 2040502, 2040002, 2040602, 2040402, 2040802, 1032009, 1032004, 1032005, 1032006, 1032007, 1032010, 1032002, 1002026, 1002089, 1002090, 2000003, 2000001, 2000002, 2000006, 2022003, 2022000, 2000004, 4003000, 4010000, 4010001, 4010002, 4010003, 4010004, 4010005, 4010006, 4010007, 4020000, 4020001, 4020002, 4020003, 4020004, 4020005, 4020006, 4020007, 4020008];
@@ -84,6 +84,9 @@ function setEventRewards(eim) {
 
     expStages = [100, 200, 400, 800, 1500];    //bonus exp given on CLEAR stage signal
     eim.setEventClearStageExp(expStages);
+
+    pointStages = [1, 1, 1, 1, 2];
+    eim.setEventClearStagePoint(pointStages);
 }
 
 function getEligibleParty(party) {      //selects, from the given party, the team that is allowed to attempt this event

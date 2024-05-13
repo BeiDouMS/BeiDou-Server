@@ -248,6 +248,7 @@ public class Character extends AbstractCharacterObject {
     private final AtomicInteger exp = new AtomicInteger();
     private final AtomicInteger gachaexp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
+    private final AtomicInteger pqPoint = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
     private int merchantmeso;
@@ -7034,6 +7035,7 @@ public class Character extends AbstractCharacterObject {
                     ret.buddylist = new BuddyList(buddyCapacity);
                     ret.lastExpGainTime = rs.getTimestamp("lastExpGainTime").getTime();
                     ret.canRecvPartySearchInvite = rs.getBoolean("partySearch");
+                    ret.pqPoint.set(rs.getInt("PQPoints"));
 
                     wserv = Server.getInstance().getWorld(ret.world);
 
@@ -8364,7 +8366,7 @@ public class Character extends AbstractCharacterObject {
             con.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
 
             try {
-                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET level = ?, fame = ?, str = ?, dex = ?, luk = ?, `int` = ?, exp = ?, gachaexp = ?, hp = ?, mp = ?, maxhp = ?, maxmp = ?, sp = ?, ap = ?, gm = ?, skincolor = ?, gender = ?, job = ?, hair = ?, face = ?, map = ?, meso = ?, hpMpUsed = ?, spawnpoint = ?, party = ?, buddyCapacity = ?, messengerid = ?, messengerposition = ?, mountlevel = ?, mountexp = ?, mounttiredness= ?, equipslots = ?, useslots = ?, setupslots = ?, etcslots = ?,  monsterbookcover = ?, vanquisherStage = ?, dojoPoints = ?, lastDojoStage = ?, finishedDojoTutorial = ?, vanquisherKills = ?, matchcardwins = ?, matchcardlosses = ?, matchcardties = ?, omokwins = ?, omoklosses = ?, omokties = ?, dataString = ?, fquest = ?, jailexpire = ?, partnerId = ?, marriageItemId = ?, lastExpGainTime = ?, ariantPoints = ?, partySearch = ?, PQPoints = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
                     ps.setInt(1, level);    // thanks CanIGetaPR for noticing an unnecessary "level" limitation when persisting DB data
                     ps.setInt(2, fame);
 
@@ -8478,7 +8480,8 @@ public class Character extends AbstractCharacterObject {
                     ps.setTimestamp(53, new Timestamp(lastExpGainTime));
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
-                    ps.setInt(56, id);
+                    ps.setInt(56, getPQPoint());
+                    ps.setInt(57, id);
 
                     int updateRows = ps.executeUpdate();
                     if (updateRows < 1) {
@@ -11324,5 +11327,28 @@ public class Character extends AbstractCharacterObject {
     public boolean isFighting() {
         long timeNow = Server.getInstance().getCurrentTime();
         return timeNow - lastFightTime <= 60000;
+    }
+
+    public int getPQPoint() {
+        return pqPoint.get();
+    }
+
+    public void gainPQPoint(int gain) {
+        gainPQPoint(gain, true);
+    }
+
+    public void gainPQPoint(int gain, boolean show) {
+        long nextPoint = (long) pqPoint.get() + gain;
+        if (nextPoint > Integer.MAX_VALUE) {
+            gain -= (nextPoint - Integer.MAX_VALUE);
+        } else if (nextPoint < 0) {
+            gain = -pqPoint.get();
+        }
+
+        pqPoint.addAndGet(gain);
+
+        if (show) {
+            message((gain >= 0 ? "获得 " : "消耗 ") + Math.abs(gain) + " 点组队任务积分");
+        }
     }
 }

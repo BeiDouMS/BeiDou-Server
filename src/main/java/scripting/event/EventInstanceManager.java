@@ -100,6 +100,7 @@ public class EventInstanceManager {
     // Exp/Meso rewards by CLEAR on a stage
     private final List<Integer> onMapClearExp = new ArrayList<>();
     private final List<Integer> onMapClearMeso = new ArrayList<>();
+    private final List<Integer> onMapClearPoint = new ArrayList<>();
 
     // registers player status on an event (null on this Map structure equals to 0)
     private final Map<Integer, Integer> playerGrid = new HashMap<>();
@@ -218,6 +219,31 @@ public class EventInstanceManager {
             for (Character mc : players) {
                 if (mc.getMapId() == mapId) {
                     mc.gainMeso(gain * mc.getMesoRate());
+                }
+            }
+        }
+
+    }
+
+    public void giveEventPlayersPoint(int gain) {
+        giveEventPlayersPoint(gain, -1);
+    }
+
+    public void giveEventPlayersPoint(int gain, int mapId) {
+        if (gain == 0) {
+            return;
+        }
+
+        List<Character> players = getPlayerList();
+
+        if (mapId == -1) {
+            for (Character mc : players) {
+                mc.gainPQPoint(gain);
+            }
+        } else {
+            for (Character mc : players) {
+                if (mc.getMapId() == mapId) {
+                    mc.gainPQPoint(gain);
                 }
             }
         }
@@ -915,6 +941,11 @@ public class EventInstanceManager {
         onMapClearMeso.addAll(convertToIntegerList(gain));
     }
 
+    public void setEventClearStagePoint(List<Object> gain) {
+        onMapClearPoint.clear();
+        onMapClearPoint.addAll(convertToIntegerList(gain));
+    }
+
     public Integer getClearStageExp(int stage) {    //stage counts from ONE.
         if (stage > onMapClearExp.size()) {
             return 0;
@@ -929,10 +960,18 @@ public class EventInstanceManager {
         return onMapClearMeso.get(stage - 1);
     }
 
+    public Integer getClearStagePoint(int stage) {    //stage counts from ONE.
+        if (stage > onMapClearPoint.size()) {
+            return 0;
+        }
+        return onMapClearPoint.get(stage - 1);
+    }
+
     public List<Integer> getClearStageBonus(int stage) {
         List<Integer> list = new ArrayList<>();
         list.add(getClearStageExp(stage));
         list.add(getClearStageMeso(stage));
+        list.add(getClearStagePoint(stage));
 
         return list;
     }
@@ -1314,6 +1353,7 @@ public class EventInstanceManager {
         List<Integer> list = getClearStageBonus(thisStage);     // will give bonus exp & mesos to everyone in the event
         giveEventPlayersExp(list.get(0));
         giveEventPlayersMeso(list.get(1));
+        giveEventPlayersPoint(list.get(2));
     }
 
     public final void linkToNextStage(int thisStage, String eventFamily, int thisMapId) {
