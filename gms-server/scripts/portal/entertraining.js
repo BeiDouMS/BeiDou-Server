@@ -12,7 +12,7 @@ function enter(pi) {
         pi.playPortalSound();
         pi.warp(1010400, 4);
     } else {
-        pi.message("Only the adventurers that have been trained by Mai may enter.");
+        pi.message("只有接受了麦加训练的人才可以进入训练场");
         return false;
     }
     return true;

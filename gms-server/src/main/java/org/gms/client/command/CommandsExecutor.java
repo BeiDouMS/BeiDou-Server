@@ -288,7 +288,7 @@ public class CommandsExecutor {
         }
 
         command.execute(client, params);
-        log.info("Chr {} used command {}", client.getPlayer().getName(), command.getClass().getSimpleName());
+        log.info("玩家 {} 使用命令 {}", client.getPlayer().getName(), command.getClass().getSimpleName());
     }
 
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {

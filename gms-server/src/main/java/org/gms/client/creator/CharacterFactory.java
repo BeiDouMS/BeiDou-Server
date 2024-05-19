@@ -100,7 +100,7 @@ public abstract class CharacterFactory {
 
         Server.getInstance().createCharacterEntry(newCharacter);
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[New Char]: " + c.getAccountName() + " has created a new character with IGN " + name));
-        log.info("Account {} created chr with name {}", c.getAccountName(), name);
+        log.info("账号 {} 创建了角色 {}", c.getAccountName(), name);
 
         return 0;
     }

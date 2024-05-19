@@ -31,7 +31,7 @@ import org.gms.tools.PacketCreator;
 
 public class MapScriptMethods extends AbstractPlayerInteraction {
 
-    private final String rewardstring = " title has been rewarded. Please see NPC Dalair to receive your Medal.";
+    private final String rewardstring = " 勋章挑战已完成！请找勋章老人领取你的勋章。";
 
     public MapScriptMethods(Client c) {
         super(c);
@@ -126,13 +126,13 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         StringBuilder smp = new StringBuilder();
         StringBuilder etm = new StringBuilder();
         if (status.equals(infoex)) {
-            etm.append("Earned the ").append(questName).append(" title!");
-            smp.append("You have earned the <").append(questName).append(">").append(rewardstring);
+            etm.append("获得 ").append(questName).append(" 勋章！");
+            smp.append("你获得了 <").append(questName).append(">").append(rewardstring);
             getPlayer().sendPacket(PacketCreator.getShowQuestCompletion(quest.getId()));
         } else {
-            getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/" + infoex + " regions explored."));
-            etm.append("Trying for the ").append(questName).append(" title.");
-            smp.append("You made progress on the ").append(questName).append(" title. ").append(status).append("/").append(infoex);
+            getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/" + infoex + " 区域已探索"));
+            etm.append("正在挑战 ").append(questName).append(" 勋章");
+            smp.append("你正在挑战 ").append(questName).append(" 勋章。 ").append(status).append("/").append(infoex);
         }
         getPlayer().sendPacket(PacketCreator.earnTitleMessage(etm.toString()));
         showInfoText(smp.toString());
@@ -151,13 +151,13 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
         }
         String status = Integer.toString(qs.getMedalProgress());
         getPlayer().announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);
-        getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/5 Completed"));
-        getPlayer().sendPacket(PacketCreator.earnTitleMessage("The One Who's Touched the Sky title in progress."));
+        getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/5 已完成"));
+        getPlayer().sendPacket(PacketCreator.earnTitleMessage("站在巅峰的人 勋章挑战正在进行中"));
         if (Integer.toString(qs.getMedalProgress()).equals(qs.getInfoEx(0))) {
-            showInfoText("The One Who's Touched the Sky" + rewardstring);
+            showInfoText("站在巅峰的人" + rewardstring);
             getPlayer().sendPacket(PacketCreator.getShowQuestCompletion(quest.getId()));
         } else {
-            showInfoText("The One Who's Touched the Sky title in progress. " + status + "/5 Completed");
+            showInfoText("站在巅峰的人 勋章挑战正在进行中。 " + status + "/5 已完成");
         }
     }
 }
