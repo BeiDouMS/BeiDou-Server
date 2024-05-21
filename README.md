@@ -107,7 +107,7 @@ You will start by installing the game with the old installer, then overwrite som
 1. Download _MapleGlobal-v83-setup.exe_ from my [Google Drive](https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT). This is the official installer from back then.
 2. Install it in a directory of your choice.
 3. Delete the following files from the installation directory: _HShield_ (entire directory), _ASPLnchr.exe_, _MapleStory.exe_, and _Patcher.exe_.
-4. Download _CosmicWZ-v1-2021.05.10.zip_ from my [Google Drive](https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT).
+4. Download _CosmicWZ-2024-05-21-v0.13.0.zip_ from my [Google Drive](https://drive.google.com/drive/folders/1hgnb92MGL6xqEp9szEMBh0K9pSJcJ6IT).
 5. Unzip it and copy all .wz-files into the installation directory. Replace the existing ones.
 6. Download _HeavenMS-localhost-WINDOW.exe_ from [hostr.co](https://hostr.co/amuX5SLeeVZx). This is a client modified to connect to your localhost instead of Nexon's server (along with some fixes and custom changes). 
    - Your antivirus will likely detect the file as a trojan or similar and automatically delete it. To prevent this from happening, add your _Downloads_ directory and the installation directory as exclusions in your antivirus software. On W11, this is under "Virus & threat protection settings" -> "Add or remove exclusions". 
