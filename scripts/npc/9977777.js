@@ -217,7 +217,6 @@ function writeFeatureTab_Serverpotentials() {
     addFeature("Poison damage value visible for other players.");
     addFeature("M. book announcer displays info based on demand.");
     addFeature("Custom jail system.");
-    addFeature("Custom buyback system, uses mesos / NX, via MTS.");
     addFeature("Custom fishing system having 'seasonal' catch times.");
     addFeature("Actual fishing handling w/ F. Net - thanks Dragohe4rt!");
     addFeature("Custom map leasing system.");
@@ -260,7 +259,7 @@ function writeFeatureTab_CustomNPCs() {
 function writeFeatureTab_Localhostedits() {
     addFeature("Removed the 'n' NPC dialog issue.");
     addFeature("Removed caps for MATK, WMDEF, ACC and AVOID.");
-    addFeature("Removed MTS block, buyback available anywhere.");
+    addFeature("Removed MTS block.");
     addFeature("Removed party blocks for novices under level 10.");
     addFeature("Set a much more higher cap for SPEED.");
     addFeature("Removed AP usage block for novices.");
