@@ -184,6 +184,7 @@ import client.command.commands.gm5.ShowSessionsCommand;
 import client.command.commands.gm6.ClearQuestCacheCommand;
 import client.command.commands.gm6.ClearQuestCommand;
 import client.command.commands.gm6.DCAllCommand;
+import client.command.commands.gm6.DevtestCommand;
 import client.command.commands.gm6.EraseAllPNpcsCommand;
 import client.command.commands.gm6.GetAccCommand;
 import client.command.commands.gm6.MapPlayersCommand;
@@ -556,6 +557,7 @@ public class CommandsExecutor {
         addCommand("addworld", 6, ServerAddWorldCommand.class);
         addCommand("removechannel", 6, ServerRemoveChannelCommand.class);
         addCommand("removeworld", 6, ServerRemoveWorldCommand.class);
+        addCommand("devtest", 6, DevtestCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
