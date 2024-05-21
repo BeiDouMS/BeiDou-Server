@@ -24,7 +24,6 @@
 
 var status;
 
-var anthemSong = "Field/anthem/brazil";     // sound src: https://c7.rbxcdn.com/f91060652a6e9fbfbf92cb1418435448
 var ambientSong = "Bgm04/Shinin'Harbor";
 
 var feature_tree = [];
@@ -307,8 +306,6 @@ function writeAllFeatures() {
 }
 
 function start() {
-    const PacketCreator = Java.type('tools.PacketCreator');
-    cm.getPlayer().sendPacket(PacketCreator.musicChange(anthemSong));
     status = -1;
     writeAllFeatures();
     action(1, 0, 0);
