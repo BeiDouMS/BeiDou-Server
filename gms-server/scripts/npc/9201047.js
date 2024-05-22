@@ -67,7 +67,7 @@ function action(mode, type, selection) {
                         var mapObj = cm.getMap();
                         mapObj.toggleDrops();
 
-                        const LifeFactory = Java.type('server.life.LifeFactory');
+                        const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
                         const Point = Java.type('java.awt.Point');
                         var mobObj = LifeFactory.getMonster(9400518);
                         mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(-245, 810));

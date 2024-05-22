@@ -42,7 +42,7 @@ function cancelSchedule() {
 
 function start() {
     var thicketAroundTheBeach3 = em.getChannelServer().getMapFactory().getMap(104000400);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var mano = LifeFactory.getMonster(2220000);
     if (thicketAroundTheBeach3.getMonsterById(2220000) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
@@ -53,7 +53,7 @@ function start() {
     const spawnpoint = new Point(279, -496);
     thicketAroundTheBeach3.spawnMonsterOnGroundBelow(mano, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     thicketAroundTheBeach3.broadcastMessage(PacketCreator.serverNotice(6, "A cool breeze was felt when Mano appeared."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

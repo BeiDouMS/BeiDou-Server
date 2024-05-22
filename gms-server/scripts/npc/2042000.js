@@ -30,7 +30,7 @@ var feeMultiplier = 7.0;
 function start() {
     status = -1;
 
-    const YamlConfig = Java.type('config.YamlConfig');
+    const YamlConfig = Java.type('org.gms.config.YamlConfig');
     if (!YamlConfig.config.server.USE_CPQ) {
         if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
             status = 0;
@@ -60,7 +60,7 @@ function action(mode, type, selection) {
             status--;
         }
 
-        const YamlConfig = Java.type('config.YamlConfig');
+        const YamlConfig = Java.type('org.gms.config.YamlConfig');
         if (cm.getPlayer().getMapId() == 980000010) {
             if (status == 0) {
                 cm.sendNext("I hope you had fun at the Monster Carnival!");
@@ -501,7 +501,7 @@ function refineItems(refineType) {
     var refineFees = [[300, 300, 300, 500, 500, 500, 800, 270], [500, 500, 500, 500, 500, 500, 500, 1000, 3000], [5000, 5000, 5000, 5000, 1000000]];
     var itemCount = {};
 
-    const InventoryType = Java.type('client.inventory.InventoryType');
+    const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
     var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
@@ -557,7 +557,7 @@ function refineRockItems() {
     var rockItems = [4011007, 4021009];
     var rockFees = [10000, 15000];
 
-    const InventoryType = Java.type('client.inventory.InventoryType');
+    const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
     var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();

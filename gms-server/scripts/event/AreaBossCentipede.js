@@ -48,9 +48,9 @@ function start() {
         return;
     }
 
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
 
     var gcent = LifeFactory.getMonster(5220004);
     herbGarden.spawnMonsterOnGroundBelow(gcent, new Point(560, 50));

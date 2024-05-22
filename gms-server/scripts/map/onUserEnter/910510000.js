@@ -2,7 +2,7 @@ function start(ms) {
     var player = ms.getPlayer();
     var map = player.getMap();
 
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     if (player.isCygnus()) {
         if (ms.isQuestStarted(20730) && ms.getQuestProgressInt(20730, 9300285) == 0) {

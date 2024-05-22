@@ -34,7 +34,7 @@ function start() {
 
         cm.gainItem(4031028, 30);
     } else {
-        const InventoryType = Java.type('client.inventory.InventoryType');
+        const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
         if (cm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
             cm.sendNext("Check for a available slot on your ETC inventory.");
             cm.dispose();

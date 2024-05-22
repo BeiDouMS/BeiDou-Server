@@ -43,7 +43,7 @@ function cancelSchedule() {
 
 function start() {
     var goblinForest2 = em.getChannelServer().getMapFactory().getMap(250010504);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var kingSageCat = LifeFactory.getMonster(7220002);
 
     if (goblinForest2.getMonsterById(7220002) != null) {
@@ -57,7 +57,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     goblinForest2.spawnMonsterOnGroundBelow(kingSageCat, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     goblinForest2.broadcastMessage(PacketCreator.serverNotice(6, "The ghostly air around here has become stronger. The unpleasant sound of a cat crying can be heard."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

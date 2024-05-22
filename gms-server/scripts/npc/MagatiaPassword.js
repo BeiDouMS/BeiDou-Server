@@ -20,7 +20,7 @@ function action(mode, type, selection) {
     } else if (status == 1) {
         if (cm.getText() == cm.getQuestProgress(3360)) {
             cm.setQuestProgress(3360, 1);
-            const PacketCreator = Java.type('tools.PacketCreator');
+            const PacketCreator = Java.type('org.gms.tools.PacketCreator');
             cm.getPlayer().sendPacket(PacketCreator.playPortalSound());
             cm.warp(261030000, "sp_" + ((cm.getMapId() == 261010000) ? "jenu" : "alca"));
         } else {

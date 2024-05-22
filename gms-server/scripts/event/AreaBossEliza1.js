@@ -44,7 +44,7 @@ function cancelSchedule() {
 }
 
 function start() {
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var eliza = LifeFactory.getMonster(8220000);
     var stairwayToTheSky2 = em.getChannelServer().getMapFactory().getMap(200010300);
 
@@ -53,7 +53,7 @@ function start() {
         return;
     }
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     const Point = Java.type('java.awt.Point');
     const spawnpoint = new Point(208, 83);
     stairwayToTheSky2.spawnMonsterOnGroundBelow(eliza, spawnpoint);

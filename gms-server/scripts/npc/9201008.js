@@ -252,7 +252,7 @@ function action(mode, type, selection) {
                             if (cm.canHold(weddingSendTicket, 3)) {
                                 cm.gainItem(5251100, -1);
 
-                                const Channel = Java.type('net.server.channel.Channel');
+                                const Channel = Java.type('org.gms.net.server.channel.Channel');
                                 var expirationTime = Channel.getRelativeWeddingTicketExpireTime(resStatus);
                                 cm.gainItem(weddingSendTicket, 3, false, true, expirationTime);
                             } else {

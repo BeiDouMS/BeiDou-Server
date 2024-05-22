@@ -55,7 +55,7 @@ function start(mode, type, selection) {
                 } else {
                     qm.completeQuest();
                     qm.gainItem(1142068, 1);
-                    const Job = Java.type('client.Job');
+                    const Job = Java.type('org.gms.client.Job');
                     qm.getPlayer().changeJob(Job.DAWNWARRIOR3);
                     qm.sendOk("#h #, as of this moment, you are an Advanced Knight. From this moment on, you shall carry yourself with dignity and respect befitting your new title, an Advanced Knight of Cygnus Knights. May your glory continue to shine as bright as this moment.");
                 }

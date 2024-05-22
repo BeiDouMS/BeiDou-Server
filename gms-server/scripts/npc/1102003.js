@@ -33,7 +33,7 @@ var maxJobType = 15;
 
 function start() {
     var jobType = parseInt(cm.getJobId() / 100);
-    const GameConstants = Java.type('constants.game.GameConstants');
+    const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (jobType >= minJobType && jobType <= maxJobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
 
@@ -66,8 +66,8 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                const PlayerNPC = Java.type('server.life.PlayerNPC');
-                const GameConstants = Java.type('constants.game.GameConstants');
+                const PlayerNPC = Java.type('org.gms.server.life.PlayerNPC');
+                const GameConstants = Java.type('org.gms.constants.game.GameConstants');
                 if (PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(cm.getJob()), cm.getPlayer())) {
                     cm.sendOk("There you go! Hope you will like it.");
                     cm.gainMeso(-spawnPnpcFee);

@@ -40,7 +40,7 @@ function action(mode, type, selection) {
             if (cm.getParty().getMembers().size() == party.size()) {
                 cm.getPlayer().setChallenged(true);
 
-                const GameConstants = Java.type('constants.game.GameConstants');
+                const GameConstants = Java.type('org.gms.constants.game.GameConstants');
                 var snd = "";
                 for (var i = 0; i < party.size(); i++) {
                     snd += "#bName: " + party.get(i).getName() + " / (Level: " + party.get(i).getLevel() + ") / " + GameConstants.getJobName(party.get(i).getJobId()) + "#k\r\n\r\n";

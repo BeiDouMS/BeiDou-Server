@@ -43,7 +43,7 @@ function cancelSchedule() {
 
 function start() {
     var moonRidge = em.getChannelServer().getMapFactory().getMap(222010310);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var nineTailedFox = LifeFactory.getMonster(7220001);
     if (moonRidge.getMonsterById(7220001) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
@@ -56,7 +56,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     moonRidge.spawnMonsterOnGroundBelow(nineTailedFox, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     moonRidge.broadcastMessage(PacketCreator.serverNotice(6, "As the moon light dims, a long fox cry can be heard and the presence of the old fox can be felt"));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

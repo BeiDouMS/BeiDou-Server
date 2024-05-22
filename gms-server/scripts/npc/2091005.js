@@ -42,7 +42,7 @@ function start() {
         return;
     }
 
-    const YamlConfig = Java.type('config.YamlConfig');
+    const YamlConfig = Java.type('org.gms.config.YamlConfig');
     belt_points = YamlConfig.config.server.USE_FAST_DOJO_UPGRADE ? Array(10, 90, 200, 460, 850) : Array(200, 1800, 4000, 9200, 17000);
 
     belt_on_inventory = [];
@@ -70,7 +70,7 @@ function action(mode, type, selection) {
             if (isRestingSpot(cm.getPlayer().getMap().getId())) {
                 var text = "I'm surprised you made it this far! But it won't be easy from here on out. You still want the challenge?\r\n\r\n#b#L0#I want to continue#l\r\n#L1#I want to leave#l\r\n";
 
-                const MapId = Java.type('constants.id.MapId');
+                const MapId = Java.type('org.gms.constants.id.MapId');
                 if (!MapId.isPartyDojo(cm.getPlayer().getMapId())) {
                     text += "#L2#I want to record my score up to this point#l";
                 }

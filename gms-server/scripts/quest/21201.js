@@ -66,7 +66,7 @@ function end(mode, type, selection) {
                 qm.gainItem(1142130, true);
                 qm.changeJobById(2110);
 
-                const YamlConfig = Java.type('config.YamlConfig');
+                const YamlConfig = Java.type('org.gms.config.YamlConfig');
                 if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
                     qm.teachSkill(21100000, 0, 20, -1);   //polearm mastery
                     qm.teachSkill(21100002, 0, 30, -1);   //final charge

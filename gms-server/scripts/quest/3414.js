@@ -13,7 +13,7 @@ function end(mode, type, selection) {
     if (status == 0) {
         qm.sendNext("Whoa... this is it!!! With this sample, the studies that are taking place in Omega Sector will be reinvigorated with results! I am also at a loss for words for finding someone that is more talented than me at hunting. I'll have to get back on track! Anyway, for your job well done, I'll have to reward you accordingly.");
     } else if (status == 1) {
-        const InventoryType = Java.type('client.inventory.InventoryType');
+        const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
         if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 1) {
             qm.getPlayer().dropMessage(1, "USE inventory full.");
             qm.dispose();
@@ -23,7 +23,7 @@ function end(mode, type, selection) {
         var talkStr = "Here, please select the scroll of your choice. All success rates are at 10%. \r\n\r\n#rSELECT A ITEM\r\n#b"
         stance = qm.getPlayer().getJobStyle();
 
-        const Job = Java.type('client.Job');
+        const Job = Java.type('org.gms.client.Job');
         if (stance == Job.WARRIOR || stance == Job.BEGINNER) {
             vecItem = [2043002, 2043102, 2043202, 2044002, 2044102, 2044202, 2044402, 2044302];
         } else if (stance == Job.MAGICIAN) {

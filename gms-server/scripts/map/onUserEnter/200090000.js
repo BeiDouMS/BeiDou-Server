@@ -5,7 +5,7 @@ function start(ms) {
     var map = ms.getClient().getChannelServer().getMapFactory().getMap(mapId);
 
     if (map.getDocked()) {
-        const PacketCreator = Java.type('tools.PacketCreator');
+        const PacketCreator = Java.type('org.gms.tools.PacketCreator');
         ms.getClient().sendPacket(PacketCreator.musicChange("Bgm04/ArabPirate"));
         ms.getClient().sendPacket(PacketCreator.crogBoatPacket(true));
     }

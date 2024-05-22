@@ -102,8 +102,8 @@ function action(mode, type, selection) {
             }
         } else if (status == 2) {
             if (selection == 0) {
-                const InventoryManipulator = Java.type('client.inventory.manipulator.InventoryManipulator');
-                const InventoryType = Java.type('client.inventory.InventoryType');
+                const InventoryManipulator = Java.type('org.gms.client.inventory.manipulator.InventoryManipulator');
+                const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
                 InventoryManipulator.removeFromSlot(cm.getClient(), InventoryType.CASH, 1, 1, true);
                 cm.sendOk("Your cash first slot is removed.");
             } else if (selection == 1) {

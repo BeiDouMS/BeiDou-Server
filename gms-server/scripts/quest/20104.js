@@ -38,7 +38,7 @@ function end(mode, type, selection) {
                 qm.gainItem(1472061, 1);
                 qm.gainItem(2070000, 800);
                 qm.gainItem(1142066, 1);
-                const Job = Java.type('client.Job');
+                const Job = Java.type('org.gms.client.Job');
                 qm.changeJob(Job.NIGHTWALKER1);
                 qm.getPlayer().resetStats();
             }

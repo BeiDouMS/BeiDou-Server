@@ -65,7 +65,7 @@ function spawnMob(x, y, id, map) {
         return;
     }
 
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     var mob = LifeFactory.getMonster(id);
     map.spawnMonsterOnGroundBelow(mob, new Point(x, y));

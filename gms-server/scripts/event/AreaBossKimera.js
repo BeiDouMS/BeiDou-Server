@@ -42,7 +42,7 @@ function cancelSchedule() {
 }
 
 function start() {
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var labSecretBasementPath = em.getChannelServer().getMapFactory().getMap(261030000);
     var chimera = LifeFactory.getMonster(8220002);
 
@@ -58,7 +58,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     labSecretBasementPath.spawnMonsterOnGroundBelow(chimera, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     labSecretBasementPath.broadcastMessage(PacketCreator.serverNotice(6, "Kimera has appeared out of the darkness of the underground with a glitter in her eyes."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

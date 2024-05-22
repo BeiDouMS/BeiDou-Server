@@ -19,7 +19,7 @@
 */
 
 function start() {
-    const ShopFactory = Java.type('server.ShopFactory');
+    const ShopFactory = Java.type('org.gms.server.ShopFactory');
     ShopFactory.getInstance().getShop(11000).sendShop(cm.getClient());
     cm.dispose();
 }

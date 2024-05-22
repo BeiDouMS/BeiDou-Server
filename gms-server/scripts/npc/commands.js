@@ -15,7 +15,7 @@ var levels = ["Common", "Donator", "JrGM", "GM", "SuperGM", "Developer", "Admin"
 var commands;
 
 function writeHeavenMSCommands() {
-    const CommandsExecutor = Java.type('client.command.CommandsExecutor');
+    const CommandsExecutor = Java.type('org.gms.client.command.CommandsExecutor');
     commands = CommandsExecutor.getInstance().getGmCommands();
 }
 

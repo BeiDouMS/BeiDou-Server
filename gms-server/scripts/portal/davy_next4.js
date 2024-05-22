@@ -7,7 +7,7 @@ function enter(pi) {
             var chests = parseInt(eim.getProperty("openedChests"));
             var boss;
 
-            const LifeFactory = Java.type('server.life.LifeFactory');
+            const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
             if (chests == 0) {
                 boss = LifeFactory.getMonster(9300119);
             }//lord pirate

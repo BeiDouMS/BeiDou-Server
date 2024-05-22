@@ -50,7 +50,7 @@ function end(mode, type, selection) {
             qm.gainItem(1142131, true);
             qm.changeJobById(2111);
 
-            const YamlConfig = Java.type('config.YamlConfig');
+            const YamlConfig = Java.type('org.gms.config.YamlConfig');
             if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
                 qm.teachSkill(21110002, 0, 20, -1);   //full swing
             }

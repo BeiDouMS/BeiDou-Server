@@ -28,7 +28,7 @@ var jobId = 0;
 
 function start() {
     status = -1;
-    const YamlConfig = Java.type('config.YamlConfig');
+    const YamlConfig = Java.type('org.gms.config.YamlConfig');
     if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
         cm.sendOk("Rebirths aren't enabled on this server, how did you get here?");
         cm.dispose();

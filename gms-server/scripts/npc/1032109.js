@@ -34,7 +34,7 @@ function action(mode, type, selection) {
         var player = cm.getPlayer();
         var map = player.getMap();
 
-        const LifeFactory = Java.type('server.life.LifeFactory');
+        const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
         for (var i = 0; i < 10; i++) {
             map.spawnMonsterOnGroundBelow(LifeFactory.getMonster(mobId), new Point(117, 183));

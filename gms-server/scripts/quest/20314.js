@@ -54,7 +54,7 @@ function start(mode, type, selection) {
                     qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
                 } else {
                     qm.gainItem(1142068, 1);
-                    const Job = Java.type('client.Job');
+                    const Job = Java.type('org.gms.client.Job');
                     qm.getPlayer().changeJob(Job.NIGHTWALKER3);
                     qm.completeQuest();
                     qm.sendOk("#h #, from here on out, you are an Advanced Knight of Cygnus Knights. The title comes with a newfound broad view on everything. You may encounter temptations here and there, but I want you to keep your faith and beliefs intact and do not succumb to the darkness.");

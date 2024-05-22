@@ -13,7 +13,7 @@ function end(mode, type, selection) {
     if (status == 0) {
         qm.sendNext("What the? Are you telling me you've already taken out 150 #o4230120#s? And these ... yes, these really are 120 #t4000122#s. I was wondering how you were going to complete this mission all by yourself, but you took care of it just fine. Alright, here ... this is a very important item for me, but please take it.");
     } else if (status == 1) {
-        const InventoryType = Java.type('client.inventory.InventoryType');
+        const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
         if (qm.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 1) {
             qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
             qm.dispose();
@@ -23,7 +23,7 @@ function end(mode, type, selection) {
         var talkStr = "Do you like the glove? I've kept this for a while, and I was planning on using it someday, but it looks much better on you. Please put it to good use; besides, I got so much stuff from the Sector, that I don't need it anymore.";
         stance = qm.getPlayer().getJobStyle();
 
-        const Job = Java.type('client.Job');
+        const Job = Java.type('org.gms.client.Job');
         if (stance == Job.WARRIOR) {
             item = 1082024;
         } else if (stance == Job.MAGICIAN) {

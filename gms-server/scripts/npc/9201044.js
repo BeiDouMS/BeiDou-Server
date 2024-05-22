@@ -37,7 +37,7 @@ function spawnMobs(maxSpawn) {
     var spawnPosY;
 
     var mapObj = cm.getMap();
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     if (stage == 2) {
         spawnPosX = [619, 299, 47, -140, -471];

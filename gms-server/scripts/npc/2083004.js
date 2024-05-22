@@ -29,7 +29,7 @@ var expedition;
 var expedMembers;
 var player;
 var em;
-const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
+const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
 const exped = ExpeditionType.HORNTAIL;
 var expedName = "Horntail";
 var expedBoss = "mighty Horntail";
@@ -151,7 +151,7 @@ function action(mode, type, selection) {
                 cm.sendOk("Good luck! All of Leafre is counting on you.");
                 status = 4;
             } else if (selection == 3) {
-                const PacketCreator = Java.type('tools.PacketCreator');
+                const PacketCreator = Java.type('org.gms.tools.PacketCreator');
                 player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("The expedition has now ended. Sometimes the best strategy is to run away.");

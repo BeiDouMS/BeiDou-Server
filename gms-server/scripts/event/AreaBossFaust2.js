@@ -42,7 +42,7 @@ function cancelSchedule() {
 }
 
 function start() {
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var theForestOfEvil2 = em.getChannelServer().getMapFactory().getMap(100040106);
     var faust2 = LifeFactory.getMonster(5220002);
 
@@ -55,7 +55,7 @@ function start() {
     const spawnpoint = new Point(474, 278);
     theForestOfEvil2.spawnMonsterOnGroundBelow(faust2, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     theForestOfEvil2.broadcastMessage(PacketCreator.serverNotice(6, "Faust appeared amidst the blue fog."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }
