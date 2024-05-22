@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="GBK"?>
+<configuration status="ERROR" monitorInterval="300">
+
+    <Properties>
+        <property name="basePath">logs</property>
+        <property name="console_log_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%5level] ==> %m%n</property>
+        <property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%5level] ==> %m%n</property>
+        <property name="every_file_size">10MB</property>
+        <property name="rolling_fileName">${basePath}/out.log</property>
+        <property name="rolling_filePattern">${basePath}/%d{yyyyMMdd}/out%i.log</property>
+        <property name="rolling_max">10</property>
+        <property name="rolling_timeInterval">1</property>
+        <property name="rolling_timeModulate">true</property>
+        <property name="console_print_level">DEBUG</property>
+        <property name="file_print_level">DEBUG</property>
+        <property name="output_log_level">INFO</property>
+    </Properties>
+
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="${console_print_level}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${console_log_pattern}"/>
+        </Console>
+
+        <RollingFile name="RollingFile" fileName="${rolling_fileName}" filePattern="${rolling_filePattern}">
+            <ThresholdFilter level="${file_print_level}" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${log_pattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="${rolling_timeInterval}" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="${every_file_size}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${rolling_max}">
+                <Delete basePath="${basePath}" maxDepth="2">
+                    <IfLastModified age="1d"/>
+                    <IfAccumulatedFileSize exceeds="100MB" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <!-- 降低 Druid 的日志级别 -->
+        <Logger name="com.alibaba.druid" level="ERROR">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <!-- 降低 iBatis 的日志级别 -->
+        <Logger name="org.apache.ibatis" level="ERROR">
+            <AppenderRef ref="Console"/>
+        </Logger>
+
+        <root level="${output_log_level}">
+            <appender-ref ref="RollingFile"/>
+            <appender-ref ref="Console"/>
+        </root>
+    </loggers>
+
+</configuration>

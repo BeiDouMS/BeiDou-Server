@@ -1,0 +1,13 @@
+server:
+  port: 8585
+
+mybatis-flex:
+  datasource:
+    mysql:
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/napms?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: root
+      password: root
+  global-config:
+    print-banner: false

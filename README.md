@@ -3,6 +3,9 @@
 # gms-server 服务端
 
 
+# gms-api 给web提供api
+
+
 # gms-ui web端
 
 
