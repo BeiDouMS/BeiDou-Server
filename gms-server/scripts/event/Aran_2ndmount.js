@@ -60,7 +60,7 @@ function playerEntry(eim, player) {
     player.changeMap(entryMap, 2);
     em.setProperty("noEntry", "true");
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     player.sendPacket(PacketCreator.getClock(eventTime * 60));
     eim.startEventTimer(eventTime * 60000);
 }

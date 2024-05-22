@@ -43,7 +43,7 @@ function cancelSchedule() {
 
 function start() {
     var territoryOfWanderingBear = em.getChannelServer().getMapFactory().getMap(250010304);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var taeRoon = LifeFactory.getMonster(7220000);
 
     if (territoryOfWanderingBear.getMonsterById(7220000) != null) {
@@ -58,7 +58,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     territoryOfWanderingBear.spawnMonsterOnGroundBelow(taeRoon, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     territoryOfWanderingBear.broadcastMessage(PacketCreator.serverNotice(6, "Tae Roon has appeared with a soft whistling sound."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

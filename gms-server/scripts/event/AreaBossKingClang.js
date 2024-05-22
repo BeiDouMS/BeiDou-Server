@@ -50,7 +50,7 @@ function start() {
         return;
     }
 
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var kingClang = LifeFactory.getMonster(5220001);
     var posX;
     var posY = 140;
@@ -59,7 +59,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     hotSand.spawnMonsterOnGroundBelow(kingClang, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     hotSand.broadcastMessage(PacketCreator.serverNotice(6, "A strange turban shell has appeared on the beach."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

@@ -27,7 +27,7 @@ var eim;
 var weddingEventName = "WeddingChapel";
 var cathedralWedding = false;
 var weddingIndoors;
-const YamlConfig = Java.type('config.YamlConfig');
+const YamlConfig = Java.type('org.gms.config.YamlConfig');
 var weddingBlessingExp = YamlConfig.config.server.WEDDING_BLESS_EXP;
 
 function detectPlayerItemid(player) {
@@ -187,7 +187,7 @@ function action(mode, type, selection) {
             if (state == 0) {    // give player blessings
                 eim.gridInsert(cm.getPlayer(), 1);
 
-                const PacketCreator = Java.type('tools.PacketCreator');
+                const PacketCreator = Java.type('org.gms.tools.PacketCreator');
                 if (YamlConfig.config.server.WEDDING_BLESSER_SHOWFX) {
                     var target = cm.getPlayer();
                     target.sendPacket(PacketCreator.showSpecialEffect(9));
@@ -238,7 +238,7 @@ function action(mode, type, selection) {
                                         cm.gainItem(playerItemId, -1);
                                         cmPartner.gainItem(partnerItemId, -1);
 
-                                        const RingActionHandler = Java.type('net.server.channel.handlers.RingActionHandler');
+                                        const RingActionHandler = Java.type('org.gms.net.server.channel.handlers.RingActionHandler');
                                         RingActionHandler.giveMarriageRings(player, partner, marriageRingId);
                                         player.setMarriageItemId(marriageRingId);
                                         partner.setMarriageItemId(marriageRingId);

@@ -45,7 +45,7 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            const InventoryType = Java.type('client.inventory.InventoryType');
+            const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
             if (qm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
                 qm.sendOk("Make room on your ETC inventory first.");
                 qm.dispose();

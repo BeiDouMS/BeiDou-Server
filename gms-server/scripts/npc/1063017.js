@@ -30,7 +30,7 @@ function action(mode, type, selection) {
             if (cm.getClient().getChannelServer().getMapFactory().getMap(925020010).getCharacters().size() > 0) {
                 cm.sendOk("Someone is already challenging the Master. Try again later.");
             } else {
-                const LifeFactory = Java.type('server.life.LifeFactory');
+                const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
                 const Point = Java.type('java.awt.Point');
                 cm.getWarpMap(910510202).spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300346), new Point(95, 200));
                 cm.warp(910510202, 0);

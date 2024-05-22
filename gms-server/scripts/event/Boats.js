@@ -86,7 +86,7 @@ function approach() {
         em.setProperty("haveBalrog", "true");
         Boat_to_Orbis.broadcastEnemyShip(true);
         Boat_to_Ellinia.broadcastEnemyShip(true);
-        const PacketCreator = Java.type('tools.PacketCreator');
+        const PacketCreator = Java.type('org.gms.tools.PacketCreator');
         Boat_to_Orbis.broadcastMessage(PacketCreator.musicChange("Bgm04/ArabPirate"));
         Boat_to_Ellinia.broadcastMessage(PacketCreator.musicChange("Bgm04/ArabPirate"));
 
@@ -95,7 +95,7 @@ function approach() {
 }
 
 function invasion() {
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
 
     var map1 = Boat_to_Ellinia;
     var pos1 = new java.awt.Point(-538, 143);

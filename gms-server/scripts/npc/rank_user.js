@@ -46,7 +46,7 @@ function action(mode, type, selection) {
             var pnpc = cm.getPlayerNPCByScriptid(cm.getNpc());
 
             if (pnpc != null) {
-                const GameConstants = Java.type('constants.game.GameConstants');
+                const GameConstants = Java.type('org.gms.constants.game.GameConstants');
                 var branchJobName = GameConstants.getJobName(pnpc.getJob());
 
                 var rankStr = "Hi, I am #b" + pnpc.getName() + "#k, #r" + GameConstants.ordinal(pnpc.getWorldJobRank()) + "#k in the #r" + branchJobName + "#k class to reach the max level and obtain a statue on " + GameConstants.WORLD_NAMES[cm.getPlayer().getWorld()] + ".\r\n";

@@ -43,7 +43,7 @@ function cancelSchedule() {
 
 function start() {
     var leviathansCanyon = em.getChannelServer().getMapFactory().getMap(240040401);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var leviathan = LifeFactory.getMonster(8220003);
     if (leviathansCanyon.getMonsterById(8220003) != null) {
         em.schedule("start", 3 * 60 * 60 * 1000);
@@ -57,7 +57,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     leviathansCanyon.spawnMonsterOnGroundBelow(leviathan, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     leviathansCanyon.broadcastMessage(PacketCreator.serverNotice(6, "Leviathan emerges from the canyon and the cold icy wind blows."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

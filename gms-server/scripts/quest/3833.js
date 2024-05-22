@@ -8,7 +8,7 @@ function end(mode, type, selection) {
         if (status == 0) {
             qm.sendOk("Great! You managed to get the herb I need. As a #btoken of gratitude#k, take this item to help on your journey.");
         } else if (status == 1) {
-            const InventoryType = Java.type('client.inventory.InventoryType');
+            const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
             if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 2) {
                 if (qm.haveItem(4000294, 1000)) {
                     qm.gainItem(4000294, -1000);

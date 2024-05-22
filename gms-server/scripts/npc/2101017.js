@@ -10,7 +10,7 @@ var arena;
 var arenaName;
 var type;
 var map;
-const ExpeditionType = Java.type('server.expeditions.ExpeditionType');
+const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
 var exped;
 var expedicao;
 var expedMembers;
@@ -29,7 +29,7 @@ function action(mode, type, selection) {
             return;
         }
 
-        const GameConstants = Java.type('constants.game.GameConstants');
+        const GameConstants = Java.type('org.gms.constants.game.GameConstants');
         if (cm.getPlayer().getMapId() == 980010100 || cm.getPlayer().getMapId() == 980010200 || cm.getPlayer().getMapId() == 980010300) {
             if (cm.getPlayer().getMapId() == 980010100) {
                 exped = ExpeditionType.ARIANT;

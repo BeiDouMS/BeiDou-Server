@@ -13,7 +13,7 @@ function end(mode, type, selection) {
     if (status == 0) {
         qm.sendNext("THIS is the deed to the land that my son lost! And you even brought all the necessary materials to build the house! Thank you so much ... my relatives can all move in and live in #m102000000#! As a sign of appreciation ...");
     } else if (status == 1) {
-        const InventoryType = Java.type('client.inventory.InventoryType');
+        const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
         if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 1) {
             qm.getPlayer().dropMessage(1, "USE inventory full.");
             qm.dispose();
@@ -23,7 +23,7 @@ function end(mode, type, selection) {
         var talkStr = "Okay, now choose the scroll of your liking ... The odds of winning are 10% each. \r\n\r\n#rSELECT A ITEM\r\n#b";
         stance = qm.getPlayer().getJobStyle();
 
-        const Job = Java.type('client.Job');
+        const Job = Java.type('org.gms.client.Job');
         if (stance == Job.WARRIOR || stance == Job.BEGINNER) {
             vecItem = [2043002, 2043102, 2043202, 2044002, 2044102, 2044202, 2044402, 2044302];
         } else if (stance == Job.MAGICIAN) {

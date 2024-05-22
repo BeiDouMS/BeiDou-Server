@@ -55,7 +55,7 @@ function start(mode, type, selection) {
                 } else {
                     qm.completeQuest();
                     qm.gainItem(1142068, 1);
-                    const Job = Java.type('client.Job');
+                    const Job = Java.type('org.gms.client.Job');
                     qm.getPlayer().changeJob(Job.BLAZEWIZARD3);
                     qm.sendOk("#h #, as of this moment, you are an Advanced Knight. From this moment on, you will train yourself with fervor as you will lead your group of Knights for the safety of this world. That fervor will provide you with plenty of courage.");
                 }

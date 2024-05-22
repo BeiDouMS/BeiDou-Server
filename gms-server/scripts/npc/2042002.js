@@ -29,7 +29,7 @@ var feeMultiplier = 7.0;
 function start() {
     status = -1;
 
-    const YamlConfig = Java.type('config.YamlConfig');
+    const YamlConfig = Java.type('org.gms.config.YamlConfig');
     if (!YamlConfig.config.server.USE_CPQ) {
         if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
             status = 0;
@@ -238,7 +238,7 @@ function action(mode, type, selection) {
             if (status == 0) {
                 var talk = "What would you like to do? If you have never participate in the Monster Carnival, you will need to know a few things before participating! \r\n#b#L0# Go to the Monster Carnival 1.#l \r\n#L3# Go to the Monster Carnival 2.#l \r\n#L1# Learn about the Monster Carnival.#l\r\n#L2# Trade #t4001129#.#l";
 
-                const YamlConfig = Java.type('config.YamlConfig');
+                const YamlConfig = Java.type('org.gms.config.YamlConfig');
                 if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
                     talk += "\r\n#L4# ... Can I just refine my ores?#l";
                 }
@@ -501,7 +501,7 @@ function refineItems(refineType) {
     var refineFees = [[300, 300, 300, 500, 500, 500, 800, 270], [500, 500, 500, 500, 500, 500, 500, 1000, 3000], [5000, 5000, 5000, 5000, 1000000]];
     var itemCount = {};
 
-    const InventoryType = Java.type('client.inventory.InventoryType');
+    const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
     var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();
@@ -557,7 +557,7 @@ function refineRockItems() {
     var rockItems = [4011007, 4021009];
     var rockFees = [10000, 15000];
 
-    const InventoryType = Java.type('client.inventory.InventoryType');
+    const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
     var iter = cm.getPlayer().getInventory(InventoryType.ETC).iterator();
     while (iter.hasNext()) {
         var it = iter.next();

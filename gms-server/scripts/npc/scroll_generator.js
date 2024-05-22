@@ -158,7 +158,7 @@ function getJobTierScrolls() {
     var job = cm.getPlayer().getJob();
     var jobScrolls = jobWeaponRestricted[Math.floor(cm.getPlayer().getJobStyle().getId() / 100)];
 
-    const GameConstants = Java.type('constants.game.GameConstants');
+    const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     var jobBranch = GameConstants.getJobBranch(job);
     if (jobBranch >= 2) {
         Array.prototype.push.apply(scrolls, jobScrolls[Math.floor((job.getId() / 10) % 10) - 1]);
@@ -208,7 +208,7 @@ function getScrollTier(scrollStats) {
 function getScrollSuccessTier(scrollStats) {
     var prop = scrollStats.get("success");
 
-    const YamlConfig = Java.type('config.YamlConfig');
+    const YamlConfig = Java.type('org.gms.config.YamlConfig');
     if (prop > 90) {
         return 3;
     } else if (prop < 50) {
@@ -220,7 +220,7 @@ function getScrollSuccessTier(scrollStats) {
 
 function getAvailableScrollsPool(baseScrolls, rewardTier, successTier) {
     var scrolls = [];
-    const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+    const ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');
     var ii = ItemInformationProvider.getInstance();
 
     for (var i = 0; i < baseScrolls.length; i++) {
@@ -257,8 +257,8 @@ function getPlayerCardTierPower() {
         countTier[ceTier] += ce.getValue();
 
         if (ceTier >= 8) {  // is special card
-            const LifeFactory = Java.type('server.life.LifeFactory');
-            const ItemInformationProvider = Java.type('server.ItemInformationProvider');
+            const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
+            const ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');
             var mobLevel = LifeFactory.getMonsterLevel(ItemInformationProvider.getInstance().getCardMobId(cardid));
             var mobTier = getLevelTier(mobLevel) - 1;
 
@@ -292,7 +292,7 @@ function calculateMobBookBuckets() {
         playerLevelTier = 8;
     }
 
-    const MonsterBook = Java.type('client.MonsterBook');
+    const MonsterBook = Java.type('org.gms.client.MonsterBook');
     var tierSize = MonsterBook.getCardTierSize();
     var playerCards = getPlayerCardTierPower();
 
@@ -434,7 +434,7 @@ function performExchange(sgItemid, sgCount) {
 }
 
 function generateRandomScroll() {
-    const InventoryType = Java.type('client.inventory.InventoryType');
+    const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
     if (cm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
         var itemid = getRandomScroll(calculateScrollTiers());
         if (itemid != -1) {

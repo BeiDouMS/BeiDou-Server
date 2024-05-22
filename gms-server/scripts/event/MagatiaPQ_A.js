@@ -108,7 +108,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
     if (!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) {
         eligible = [];
     }
-    return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
+    return Java.to(eligible, Java.type('org.gms.net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -254,7 +254,7 @@ function respawnStages(eim) {
         var mapobj = eim.getMapInstance(926110401);
         var mobcount = mapobj.countMonster(9300150);
         var mobobj;
-        const LifeFactory = Java.type('server.life.LifeFactory');
+        const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
         const Point = Java.type('java.awt.Point');
         if (mobcount == 0) {
             mobobj = LifeFactory.getMonster(9300150);
@@ -323,7 +323,7 @@ function yuleteAction(eim) {
 
     mapobj.destroyNPC(2112010);
 
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
     var mobobj1, mobobj2;
     for (var i = 0; i < 5; i++) {

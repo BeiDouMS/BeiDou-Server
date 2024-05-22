@@ -108,7 +108,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
     if (!(hasLeader && eligible.length >= minPlayers && eligible.length <= maxPlayers)) {
         eligible = [];
     }
-    return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
+    return Java.to(eligible, Java.type('org.gms.net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {
@@ -259,7 +259,7 @@ function friendlyItemDrop(eim, mob) {
         var cakes = eim.getIntProperty("bunnyCake") + 1;
         eim.setIntProperty("bunnyCake", cakes);
 
-        const PacketCreator = Java.type('tools.PacketCreator');
+        const PacketCreator = Java.type('org.gms.tools.PacketCreator');
         mob.getMap().broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny made rice cake number " + cakes + "."));
     }
 }
@@ -268,7 +268,7 @@ function friendlyDamaged(eim, mob) {
     if (mob.getId() == 9300061) {
         var bunnyDamage = eim.getIntProperty("bunnyDamaged") + 1;
         if (bunnyDamage > 5) {
-            const PacketCreator = Java.type('tools.PacketCreator');
+            const PacketCreator = Java.type('org.gms.tools.PacketCreator');
             broadcastMessage(PacketCreator.serverNotice(6, "The Moon Bunny is feeling sick. Please protect it so it can make delicious rice cakes."));
             eim.setIntProperty("bunnyDamaged", 0);
         }

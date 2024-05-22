@@ -36,7 +36,7 @@ jobType = 5;
 var advQuest = 0;
 
 function start() {
-    const GameConstants = Java.type('constants.game.GameConstants');
+    const GameConstants = Java.type('org.gms.constants.game.GameConstants');
     if (cm.isQuestStarted(6330)) {
         if (cm.getEventInstance() != null) {    // missing script for skill test found thanks to Jade™
             advQuest = 5;                       // string visibility thanks to iPunchEm & Glvelturall
@@ -145,8 +145,8 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                const PlayerNPC = Java.type('server.life.PlayerNPC');
-                const GameConstants = Java.type('constants.game.GameConstants');
+                const PlayerNPC = Java.type('org.gms.server.life.PlayerNPC');
+                const GameConstants = Java.type('org.gms.constants.game.GameConstants');
                 if (PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(cm.getJob()), cm.getPlayer())) {
                     cm.sendOk("There you go! Hope you will like it.");
                     cm.gainMeso(-spawnPnpcFee);

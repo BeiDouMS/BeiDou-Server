@@ -44,7 +44,7 @@ function cancelSchedule() {
 
 function start() {
     var theSeaweedTower = em.getChannelServer().getMapFactory().getMap(230020100);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var seruf = LifeFactory.getMonster(4220001);
 
     if (theSeaweedTower.getMonsterById(4220001) != null) {
@@ -59,7 +59,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     theSeaweedTower.spawnMonsterOnGroundBelow(seruf, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     theSeaweedTower.broadcastMessage(PacketCreator.serverNotice(6, "A strange shell has appeared from a grove of seaweed"));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

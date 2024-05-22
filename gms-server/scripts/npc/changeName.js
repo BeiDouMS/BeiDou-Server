@@ -49,7 +49,7 @@ function action(mode, type, selection) {
         } else if (status == 2) {
             var text = cm.getText();
 
-            const Character = Java.type('client.Character');
+            const Character = Java.type('org.gms.client.Character');
             var canCreate = Character.canCreateChar(text);
             if (canCreate) {
                 cm.getPlayer().setName(text);

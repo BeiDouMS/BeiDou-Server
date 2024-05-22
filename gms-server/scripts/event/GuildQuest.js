@@ -122,7 +122,7 @@ function getEligibleParty(party) {      //selects, from the given party, the tea
     if (!(hasLeader)) {
         eligible = [];
     }
-    return Java.to(eligible, Java.type('net.server.world.PartyCharacter[]'));
+    return Java.to(eligible, Java.type('org.gms.net.server.world.PartyCharacter[]'));
 }
 
 function setup(level, lobbyid) {

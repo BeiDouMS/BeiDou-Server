@@ -124,7 +124,7 @@ function action(mode, type, selection) {
                 if (!(cm.isQuestStarted(100200) || cm.isQuestCompleted(100200))) {
                     cm.startQuest(100200);
                 }
-                const YamlConfig = Java.type('config.YamlConfig');
+                const YamlConfig = Java.type('org.gms.config.YamlConfig');
                 if (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS && !cm.isQuestCompleted(100201)) {
                     cm.completeQuest(100201);
                 }

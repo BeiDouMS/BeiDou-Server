@@ -55,7 +55,7 @@ function end(mode, type, selection) {
                     }
                     qm.gainItem(4032096, -30);
                     qm.gainItem(1142067, 1);
-                    const Job = Java.type('client.Job');
+                    const Job = Java.type('org.gms.client.Job');
                     qm.getPlayer().changeJob(Job.DAWNWARRIOR2);
                     qm.completeQuest();
                 }

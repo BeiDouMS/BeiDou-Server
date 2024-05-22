@@ -42,7 +42,7 @@ function cancelSchedule() {
 
 function start() {
     var whirlpoolOfTime = em.getChannelServer().getMapFactory().getMap(220050100);
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     var timer1 = LifeFactory.getMonster(5220003);
 
     if (whirlpoolOfTime.getMonsterById(5220003) != null) {
@@ -57,7 +57,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     whirlpoolOfTime.spawnMonsterOnGroundBelow(timer1, spawnpoint);
 
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
     whirlpoolOfTime.broadcastMessage(PacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

@@ -51,9 +51,9 @@ function start() {
     var setPos = [[-626, -604], [735, -600]];
     var rndPos = setPos[Math.floor(Math.random() * setPos.length)];
 
-    const LifeFactory = Java.type('server.life.LifeFactory');
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
 
     var snackBar = LifeFactory.getMonster(8220008);
     snackBarMap.spawnMonsterOnGroundBelow(snackBar, new Point(rndPos[0], rndPos[1]));
