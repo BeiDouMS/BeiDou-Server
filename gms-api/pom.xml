@@ -11,10 +11,30 @@
 
     <artifactId>gms-api</artifactId>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <lombok.version>1.18.30</lombok.version>
+        <fastjson2.version>2.0.47</fastjson2.version>
+        <druid-spring-boot-starter.version>1.2.22</druid-spring-boot-starter.version>
+        <mybatis-flex-spring-boot3-starter.version>1.8.9</mybatis-flex-spring-boot3-starter.version>
+        <mysql-connector-j.version>8.4.0</mysql-connector-j.version>
+        <flyway-core.version>10.13.0</flyway-core.version>
     </properties>
 
     <dependencyManagement>
@@ -56,28 +76,34 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
+            <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
-            <version>2.0.47</version>
+            <version>${fastjson2.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.22</version>
+            <version>${druid-spring-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.mybatis-flex</groupId>
             <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
-            <version>1.8.9</version>
+            <version>${mybatis-flex-spring-boot3-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.4.0</version>
+            <version>${mysql-connector-j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway-core.version}</version>
+        </dependency>
+
     </dependencies>
 </project>

@@ -11,6 +11,19 @@
 
     <artifactId>gms-server</artifactId>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
         <!-- Project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,6 +50,7 @@
         <jdbi-version>3.45.1</jdbi-version> <!-- Convenience wrapper around JDBC -->
         <junit.version>5.10.2</junit.version> <!-- Unit test -->
         <mockito.version>5.11.0</mockito.version> <!-- Unit test -->
+        <flyway-core.version>10.13.0</flyway-core.version>
     </properties>
 
     <dependencies>
@@ -124,6 +138,13 @@
             <artifactId>js-scriptengine</artifactId>
             <version>${graalvm-js-scriptengine.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway-core.version}</version>
+        </dependency>
+
 
         <!-- Testing -->
         <dependency>
