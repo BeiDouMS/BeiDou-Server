@@ -1,3 +1,0 @@
-function act() {
-    rm.dropItems();
-}
