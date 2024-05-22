@@ -33,6 +33,7 @@ public class CharsetConstants {
 
     private enum Language {
         LANGUAGE_US("US-ASCII"),
+        LANGUAGE_CN("GBK"),
         LANGUAGE_PT_BR("ISO-8859-1"),
         LANGUAGE_THAI("TIS620"),
         LANGUAGE_KOREAN("MS949");
@@ -62,7 +63,7 @@ public class CharsetConstants {
 
     private static String loadCharsetFromConfig() {
         try {
-            YamlReader reader = new YamlReader(Files.newBufferedReader(Path.of(YamlConfig.CONFIG_FILE_NAME), StandardCharsets.US_ASCII));
+            YamlReader reader = new YamlReader(Files.newBufferedReader(Path.of(YamlConfig.CONFIG_FILE_NAME), StandardCharsets.UTF_8));
             reader.getConfig().readConfig.setIgnoreUnknownProperties(true);
             StrippedYamlConfig charsetConfig = reader.read(StrippedYamlConfig.class);
             reader.close();

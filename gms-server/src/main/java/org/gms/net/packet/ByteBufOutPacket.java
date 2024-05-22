@@ -8,6 +8,7 @@ import net.jcip.annotations.NotThreadSafe;
 import org.gms.net.opcodes.SendOpcode;
 
 import java.awt.*;
+import java.util.Arrays;
 
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
@@ -78,7 +79,11 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public void writeFixedString(String value) {
-        writeBytes(value.getBytes(CharsetConstants.CHARSET));
+        byte[] bytes = value.getBytes(CharsetConstants.CHARSET);
+        if (bytes.length > 13) {
+            bytes = Arrays.copyOf(bytes, 13);
+        }
+        writeBytes(bytes);
     }
 
     @Override
