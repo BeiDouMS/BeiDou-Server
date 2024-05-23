@@ -50,7 +50,7 @@
         <jdbi-version>3.45.1</jdbi-version> <!-- Convenience wrapper around JDBC -->
         <junit.version>5.10.2</junit.version> <!-- Unit test -->
         <mockito.version>5.11.0</mockito.version> <!-- Unit test -->
-        <flyway-core.version>10.13.0</flyway-core.version>
+        <flyway-mysql.version>10.13.0</flyway-mysql.version>
     </properties>
 
     <dependencies>
@@ -141,8 +141,8 @@
 
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>${flyway-core.version}</version>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${flyway-mysql.version}</version>
         </dependency>
 
 

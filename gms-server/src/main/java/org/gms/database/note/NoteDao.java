@@ -1,7 +1,7 @@
-package database.note;
+package org.gms.database.note;
 
-import database.DaoException;
-import model.Note;
+import org.gms.database.DaoException;
+import org.gms.model.Note;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.JdbiException;
 import org.gms.tools.DatabaseConnection;

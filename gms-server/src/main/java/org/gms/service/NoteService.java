@@ -1,9 +1,9 @@
 package service;
 
 import org.gms.client.Character;
-import database.DaoException;
-import database.note.NoteDao;
-import model.Note;
+import org.gms.database.DaoException;
+import org.gms.database.note.NoteDao;
+import org.gms.model.Note;
 import org.gms.net.packet.out.ShowNotesPacket;
 import org.gms.net.server.Server;
 import org.slf4j.Logger;

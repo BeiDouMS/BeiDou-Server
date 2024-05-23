@@ -2214,6 +2214,6 @@ public class World {
         players = null;
 
         clearWorldData();
-        log.info("Finished shutting down world {}", id);
+        log.info("大区 {} 已关闭", id);
     }
 }

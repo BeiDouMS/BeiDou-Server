@@ -22,7 +22,7 @@
 package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
-import model.Note;
+import org.gms.model.Note;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;

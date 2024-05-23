@@ -36,7 +36,7 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
-import database.note.NoteDao;
+import org.gms.database.note.NoteDao;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
 import org.gms.net.netty.LoginServer;
@@ -424,7 +424,7 @@ public class Server {
             wldRLock.unlock();
         }
 
-        log.info("Starting world {}", i);
+        log.info("正在启动大区：{}", i);
 
         int exprate = YamlConfig.config.worlds.get(i).exp_rate;
         int mesorate = YamlConfig.config.worlds.get(i).meso_rate;
@@ -470,10 +470,10 @@ public class Server {
         if (canDeploy) {
             world.setServerMessage(YamlConfig.config.worlds.get(i).server_message);
 
-            log.info("Finished loading world {}", i);
+            log.info("大区 {} 启动完毕！", i);
             return i;
         } else {
-            log.error("Could not load world {}...", i);
+            log.error("无法获取大区 {}，正在关闭该大区", i);
             world.shutdown();
             return -2;
         }
@@ -859,14 +859,14 @@ public class Server {
 
     public void init() {
         Instant beforeInit = Instant.now();
-        log.info("Cosmic-Nap v{} starting up.", ServerConstants.VERSION);
+        log.info("Cosmic-Nap v{} 正在启动中...", ServerConstants.VERSION);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
         }
 
         if (!DatabaseConnection.initializeConnectionPool()) {
-            throw new IllegalStateException("Failed to initiate a connection to the database");
+            throw new IllegalStateException("初始化数据库连接失败");
         }
 
         channelDependencies = registerChannelDependencies();
@@ -895,7 +895,7 @@ public class Server {
             applyAllWorldTransfers(con);
             PlayerNPC.loadRunningRankData(con, worldCount);
         } catch (SQLException sqle) {
-            log.error("Failed to run all startup-bound database tasks", sqle);
+            log.error("数据库任务执行失败：{}", sqle.getMessage(), sqle);
             throw new IllegalStateException(sqle);
         }
 
@@ -916,7 +916,7 @@ public class Server {
                 }
             }
         } catch (Exception e) {
-            log.error("[SEVERE] Syntax error in 'world.ini'.", e); //For those who get errors
+            log.error("'world.ini'配置错误：{}", e.getMessage(), e); //For those who get errors
             System.exit(0);
         }
 
@@ -925,18 +925,18 @@ public class Server {
             try {
                 future.get();
             } catch (Exception e) {
-                log.error("Failed to run all startup-bound loading tasks", e);
+                log.error("加载wz任务执行失败：{}", e.getMessage(), e);
                 throw new IllegalStateException(e);
             }
         }
 
         loginServer = initLoginServer(8484);
 
-        log.info("Listening on port 8484");
+        log.info("已开启监听 8484 端口");
 
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
-        log.info("Cosmic-Nap is now online after {} ms.", initDuration.toMillis());
+        log.info("Cosmic-Nap 启动完成，耗时：{} s.", initDuration.toMillis() / 1000.0);
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
@@ -1915,7 +1915,7 @@ public class Server {
     }
 
     private synchronized void shutdownInternal(boolean restart) {
-        log.info("{} the server!", restart ? "Restarting" : "Shutting down");
+        log.info("正在 {} 服务！", restart ? "重启" : "关闭");
         if (getWorlds() == null) {
             return;//already shutdown
         }
@@ -1960,7 +1960,7 @@ public class Server {
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
 
-        log.info("Worlds and channels are offline.");
+        log.info("所有大区和频道已全部关闭");
         loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             // We disabled log4j's shutdown hook in the config file, so we have to manually shut it down here,
@@ -1969,7 +1969,7 @@ public class Server {
 
             new Thread(() -> System.exit(0)).start();
         } else {
-            log.info("Restarting the server...");
+            log.info("重启中...");
             instance = null;
             getInstance().init();//DID I DO EVERYTHING?! D:
         }

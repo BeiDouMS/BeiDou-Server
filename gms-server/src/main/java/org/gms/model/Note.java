@@ -1,4 +1,4 @@
-package model;
+package org.gms.model;
 
 import java.util.Objects;
 

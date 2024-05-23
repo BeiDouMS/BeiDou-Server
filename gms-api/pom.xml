@@ -34,7 +34,7 @@
         <druid-spring-boot-starter.version>1.2.22</druid-spring-boot-starter.version>
         <mybatis-flex-spring-boot3-starter.version>1.8.9</mybatis-flex-spring-boot3-starter.version>
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version>
-        <flyway-core.version>10.13.0</flyway-core.version>
+        <flyway-mysql.version>10.13.0</flyway-mysql.version>
     </properties>
 
     <dependencyManagement>
@@ -101,8 +101,8 @@
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>${flyway-core.version}</version>
+            <artifactId>flyway-mysql</artifactId>
+            <version>${flyway-mysql.version}</version>
         </dependency>
 
     </dependencies>

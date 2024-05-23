@@ -1,6 +1,6 @@
 package org.gms.net.packet.out;
 
-import model.Note;
+import org.gms.model.Note;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.ByteBufOutPacket;
 import org.gms.tools.PacketCreator;

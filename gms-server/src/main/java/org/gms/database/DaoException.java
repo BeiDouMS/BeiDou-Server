@@ -1,4 +1,4 @@
-package database;
+package org.gms.database;
 
 import org.jdbi.v3.core.JdbiException;
 

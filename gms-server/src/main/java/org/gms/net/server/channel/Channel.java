@@ -158,9 +158,9 @@ public final class Channel {
 
             services = new ServicesManager(ChannelServices.OVERALL);
 
-            log.info("Channel {}: Listening on port {}", getId(), port);
+            log.info("频道 {}：开放的端口 {}", getId(), port);
         } catch (Exception e) {
-            log.warn("Error during channel initialization", e);
+            log.warn("频道初始化异常：{}", e.getMessage(), e);
         }
     }
 
@@ -186,7 +186,7 @@ public final class Channel {
                 return;
             }
 
-            log.info("Shutting down channel {} in world {}", channel, world);
+            log.info("正在关闭大区 {}，频道 {}", world, channel);
 
             closeAllMerchants();
             disconnectAwayPlayers();
@@ -204,9 +204,9 @@ public final class Channel {
             channelServer.stop();
 
             finishedShutdown = true;
-            log.info("Successfully shut down channel {} in world {}", channel, world);
+            log.info("大区 {}，频道 {} 已关闭", world, channel);
         } catch (Exception e) {
-            log.error("Error while shutting down channel {} in world {}", channel, world, e);
+            log.info("大区 {}，频道 {} 关闭发生异常：{}", world, channel, e.getMessage(), e);
         }
     }
 
