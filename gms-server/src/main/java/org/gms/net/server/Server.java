@@ -39,6 +39,7 @@ import org.gms.constants.net.ServerConstants;
 import org.gms.database.note.NoteDao;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
+import org.gms.net.netty.ApiServer;
 import org.gms.net.netty.LoginServer;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.channel.Channel;
@@ -124,6 +125,7 @@ public class Server {
     private static ChannelDependencies channelDependencies;
 
     private LoginServer loginServer;
+    private ApiServer apiServer;
     private final List<Map<Integer, String>> channels = new LinkedList<>();
     private final List<World> worlds = new ArrayList<>();
     private final Properties subnetInfo = new Properties();
@@ -931,8 +933,9 @@ public class Server {
         }
 
         loginServer = initLoginServer(8484);
-
-        log.info("已开启监听 8484 端口");
+        log.info("已开启登录端口 8484");
+        apiServer = initApiServer(8585);
+        log.info("已开启API端口 8585");
 
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
@@ -960,6 +963,12 @@ public class Server {
         LoginServer loginServer = new LoginServer(port);
         loginServer.start();
         return loginServer;
+    }
+
+    private ApiServer initApiServer(int port) {
+        ApiServer apiServer = new ApiServer(port);
+        apiServer.start();
+        return apiServer;
     }
 
     private static void setAllLoggedOut(Connection con) throws SQLException {
@@ -1962,6 +1971,7 @@ public class Server {
 
         log.info("所有大区和频道已全部关闭");
         loginServer.stop();
+        apiServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             // We disabled log4j's shutdown hook in the config file, so we have to manually shut it down here,
             // after our last log statement.

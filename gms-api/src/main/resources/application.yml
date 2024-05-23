@@ -1,5 +1,5 @@
 server:
-  port: 8585
+  port: 8686
 
 mybatis-flex:
   datasource:
@@ -11,3 +11,8 @@ mybatis-flex:
       password: root
   global-config:
     print-banner: false
+
+gms:
+  server:
+    host: 127.0.0.1
+    port: 8585

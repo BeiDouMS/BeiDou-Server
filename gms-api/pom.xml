@@ -34,7 +34,8 @@
         <druid-spring-boot-starter.version>1.2.22</druid-spring-boot-starter.version>
         <mybatis-flex-spring-boot3-starter.version>1.8.9</mybatis-flex-spring-boot3-starter.version>
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version>
-        <flyway-mysql.version>10.13.0</flyway-mysql.version>
+        <flyway-mysql.version>9.15.2</flyway-mysql.version> <!-- 有的时候不是不想用新版，但是阿里云镜像仓库里只有老版本 -->
+        <netty-all.version>4.1.109.Final</netty-all.version>
     </properties>
 
     <dependencyManagement>
@@ -104,6 +105,10 @@
             <artifactId>flyway-mysql</artifactId>
             <version>${flyway-mysql.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty-all.version}</version>
+        </dependency>
     </dependencies>
 </project>

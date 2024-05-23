@@ -50,7 +50,9 @@
         <jdbi-version>3.45.1</jdbi-version> <!-- Convenience wrapper around JDBC -->
         <junit.version>5.10.2</junit.version> <!-- Unit test -->
         <mockito.version>5.11.0</mockito.version> <!-- Unit test -->
-        <flyway-mysql.version>10.13.0</flyway-mysql.version>
+        <flyway-mysql.version>9.15.2</flyway-mysql.version>
+        <lombok.version>1.18.30</lombok.version>
+        <fastjson2.version>2.0.47</fastjson2.version>
     </properties>
 
     <dependencies>
@@ -144,7 +146,17 @@
             <artifactId>flyway-mysql</artifactId>
             <version>${flyway-mysql.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+            <version>${fastjson2.version}</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
