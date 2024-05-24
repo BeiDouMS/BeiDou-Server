@@ -113,8 +113,9 @@ public class DatabaseConnection {
         String dbUrl = getDbUrl();
         // 分离数据库连接和库名
         String[] dbUrlParts = dbUrl.split("/");
-        String dbName = dbUrlParts[dbUrlParts.length - 1];
-        String dbPrefix = dbUrl.substring(0, dbUrl.length() - dbName.length());
+        String dbSuffix = dbUrlParts[dbUrlParts.length - 1];
+        String dbName = dbSuffix.split("\\?")[0];
+        String dbPrefix = dbUrl.substring(0, dbUrl.length() - dbSuffix.length());
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
