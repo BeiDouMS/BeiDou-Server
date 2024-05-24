@@ -50,7 +50,8 @@ public class CharactersDO implements Serializable {
 
     private Integer luk;
 
-    private Integer int;
+    @Column("int")
+    private Integer inte;
 
     private Integer hp;
 

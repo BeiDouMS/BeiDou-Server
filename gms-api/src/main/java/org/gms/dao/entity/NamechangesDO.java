@@ -34,9 +34,11 @@ public class NamechangesDO implements Serializable {
 
     private Integer characterid;
 
-    private String old;
+    @Column("old")
+    private String older;
 
-    private String new;
+    @Column("new")
+    private String newer;
 
     @Column("requestTime")
     private Timestamp requestTime;

@@ -63,7 +63,8 @@ public class MtsItemsDO implements Serializable {
 
     private Integer dex;
 
-    private Integer int;
+    @Column("int")
+    private Integer inte;
 
     private Integer luk;
 
