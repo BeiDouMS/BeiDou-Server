@@ -1,5 +1,6 @@
 package org.gms.tools.mapletools;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.config.Configurator;
@@ -24,7 +25,7 @@ final class SimpleDatabaseConnection {
 
     private static void muffleLogging() {
         final Level minimumVisibleLevel = Level.WARN;
-        Configurator.setLevel(LogManager.getLogger(com.zaxxer.hikari.HikariDataSource.class).getName(), minimumVisibleLevel);
+        Configurator.setLevel(LogManager.getLogger(DruidDataSource.class).getName(), minimumVisibleLevel);
         Configurator.setRootLevel(minimumVisibleLevel);
     }
 }

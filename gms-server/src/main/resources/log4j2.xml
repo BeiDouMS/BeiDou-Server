@@ -39,8 +39,8 @@
     </appenders>
 
     <loggers>
-        <!-- 降低 hikari 的日志级别 -->
-        <Logger name="com.zaxxer.hikari" level="ERROR">
+        <!-- 降低 Druid 的日志级别 -->
+        <Logger name="com.alibaba.druid" level="ERROR">
             <AppenderRef ref="Console"/>
         </Logger>
 

@@ -1,7 +1,9 @@
 package org.gms.tools;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.alibaba.druid.pool.DruidDataSource;
+import com.mybatisflex.core.FlexGlobalConfig;
+import com.mybatisflex.core.MybatisFlexBootstrap;
+import org.apache.ibatis.logging.nologging.NoLoggingImpl;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.Location;
 import org.gms.config.YamlConfig;
@@ -12,6 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -19,8 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
+import java.util.Properties;
 
 /**
  * @author Frz (Big Daddy)
@@ -29,7 +33,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  */
 public class DatabaseConnection {
     private static final Logger log = LoggerFactory.getLogger(DatabaseConnection.class);
-    private static HikariDataSource dataSource;
+    private static DruidDataSource dataSource;
     private static Jdbi jdbi;
 
     public static Connection getConnection() throws SQLException {
@@ -56,25 +60,6 @@ public class DatabaseConnection {
         return String.format(YamlConfig.config.server.DB_URL_FORMAT, host);
     }
 
-    private static HikariConfig getConfig() {
-        HikariConfig config = new HikariConfig();
-
-        config.setJdbcUrl(getDbUrl());
-        config.setUsername(YamlConfig.config.server.DB_USER);
-        config.setPassword(YamlConfig.config.server.DB_PASS);
-
-        final int initFailTimeoutSeconds = YamlConfig.config.server.INIT_CONNECTION_POOL_TIMEOUT;
-        config.setInitializationFailTimeout(SECONDS.toMillis(initFailTimeoutSeconds));
-        config.setConnectionTimeout(SECONDS.toMillis(30)); // Hikari default
-        config.setMaximumPoolSize(10); // Hikari default
-
-        config.addDataSourceProperty("cachePrepStmts", true);
-        config.addDataSourceProperty("prepStmtCacheSize", 25);
-        config.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);
-
-        return config;
-    }
-
     /**
      * Initiate connection to the database
      *
@@ -85,17 +70,27 @@ public class DatabaseConnection {
             return true;
         }
 
-        final HikariConfig config = getConfig();
-
         try {
             Instant initStart = Instant.now();
             log.info("正在自动更新数据库...");
-            initDb();
-            initSql();
+            initializeDb();
+            initializeSql();
             log.info("数据库更新完成，耗时：{} s", Duration.between(initStart, Instant.now()).toMillis()/ 1000.0);
+
             initStart = Instant.now();
             log.info("正在初始化数据库连接池...");
-            dataSource = new HikariDataSource(config);
+            dataSource = new DruidDataSource();
+            Properties properties = new Properties();
+            properties.setProperty("druid.name", "mysql");
+            properties.setProperty("druid.url", getDbUrl());
+            properties.setProperty("druid.username", YamlConfig.config.server.DB_USER);
+            properties.setProperty("druid.password", YamlConfig.config.server.DB_PASS);
+            properties.setProperty("druid.testWhileIdle", "true");
+            properties.setProperty("druid.validationQuery", "SELECT 1");
+            dataSource.configFromPropeties(properties);
+            // 测试一次连接，避免后面报错
+            dataSource.validateConnection(dataSource.getConnection());
+            initializeMybatisFlex();
             initializeJdbi(dataSource);
             long initDuration = Duration.between(initStart, Instant.now()).toMillis();
             log.info("数据库连接池初始化完成，耗时：{} s", initDuration / 1000.0);
@@ -103,8 +98,6 @@ public class DatabaseConnection {
         } catch (Exception e) {
             log.error("数据库连接池初始化失败：{}", e.getMessage(), e);
         }
-
-        // Timed out - failed to initialize
         return false;
     }
 
@@ -116,12 +109,13 @@ public class DatabaseConnection {
     /**
      * 自动创建数据库
      */
-    private static void initDb() {
+    private static void initializeDb() {
         String dbUrl = getDbUrl();
         // 分离数据库连接和库名
         String[] dbUrlParts = dbUrl.split("/");
-        String dbName = dbUrlParts[dbUrlParts.length - 1];
-        String dbPrefix = dbUrl.substring(0, dbUrl.length() - dbName.length());
+        String dbSuffix = dbUrlParts[dbUrlParts.length - 1];
+        String dbName = dbSuffix.split("\\?")[0];
+        String dbPrefix = dbUrl.substring(0, dbUrl.length() - dbSuffix.length());
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -145,12 +139,39 @@ public class DatabaseConnection {
     /**
      * 自动执行初始化sql
      */
-    public static void initSql() {
+    private static void initializeSql() {
         String dbUrl = getDbUrl();
         Flyway.configure()
                 .locations(Location.FILESYSTEM_PREFIX + "database/flyway")
                 .dataSource(dbUrl, YamlConfig.config.server.DB_USER, YamlConfig.config.server.DB_PASS)
                 .load()
                 .migrate();
+    }
+
+    private static void initializeMybatisFlex() throws Exception {
+        MybatisFlexBootstrap.getInstance()
+                .setLogImpl(NoLoggingImpl.class)
+                .addDataSource("mysql", dataSource);
+        String mapperPackage = "org.gms.dao.mapper";
+        String packagePath = mapperPackage.replaceAll("\\.", "/");
+        URL resource = DatabaseConnection.class.getClassLoader().getResource(packagePath);
+        if (resource == null) {
+            throw new FileNotFoundException("找不到mapper路径");
+        }
+        File[] files = new File(resource.getPath()).listFiles();
+        if (files == null) {
+            throw new FileNotFoundException("找不到mapper路径");
+        }
+
+        for (File file : files) {
+            if (file.isFile() && file.getName().endsWith(".class")) {
+                MybatisFlexBootstrap.getInstance().addMapper(Class.forName(mapperPackage + "." + file.getName().replace(".class", "")));
+            }
+        }
+        FlexGlobalConfig defaultConfig = FlexGlobalConfig.getDefaultConfig();
+        // 不打印banner
+        defaultConfig.setPrintBanner(false);
+        FlexGlobalConfig.setDefaultConfig(defaultConfig);
+        MybatisFlexBootstrap.getInstance().start();
     }
 }

@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("org.gms.mapper")
+@MapperScan("org.gms.dao.mapper")
 public class ApiApplication {
 
     public static void main(String[] args) {
