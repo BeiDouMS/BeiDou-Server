@@ -19,4 +19,9 @@ public class TestController {
     public String testAccount() {
         return testService.testAccount();
     }
+
+    @RequestMapping(value = "/testPackage", method = RequestMethod.GET)
+    public void testPackage() {
+        testService.testPackage();
+    }
 }

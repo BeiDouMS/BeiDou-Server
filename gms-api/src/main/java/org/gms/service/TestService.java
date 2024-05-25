@@ -30,4 +30,8 @@ public class TestService {
     public String testAccount() {
         return accountMapper.selectAll().toString();
     }
+
+    public void testPackage() {
+        nettyClient.sendPacket("test".getBytes());
+    }
 }
