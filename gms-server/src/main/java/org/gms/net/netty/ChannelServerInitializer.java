@@ -22,7 +22,7 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
     @Override
     public void initChannel(SocketChannel socketChannel) {
         final String clientIp = socketChannel.remoteAddress().getHostString();
-        log.debug("Client connecting to world {}, channel {} from {}", world, channel, clientIp);
+        log.info("客户端 {} 连接到了大区 {}, 频道 {}", clientIp, world, channel);
 
         PacketProcessor packetProcessor = PacketProcessor.getChannelServerProcessor(world, channel);
         final long clientSessionId = sessionId.getAndIncrement();

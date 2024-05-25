@@ -26,21 +26,21 @@
 */
 function start(ms) {
     if (ms.getPlayer().getMapId() == 110000000 || (ms.getPlayer().getMapId() >= 100000000 && ms.getPlayer().getMapId() < 105040300)) {
-        ms.explorerQuest(29005, "Beginner Explorer");//Beginner Explorer
+        ms.explorerQuest(29005, "新手冒险家");//Beginner Explorer
     } else if (ms.getPlayer().getMapId() >= 105040300 && ms.getPlayer().getMapId() <= 105090900) {
-        ms.explorerQuest(29014, "Sleepywood Explorer");//Sleepywood Explorer
+        ms.explorerQuest(29014, "林中之城探险家");//Sleepywood Explorer
     } else if (ms.getPlayer().getMapId() >= 200000000 && ms.getPlayer().getMapId() <= 211041800) {
-        ms.explorerQuest(29006, "El Nath Mts. Explorer");//El Nath Mts. Explorer
+        ms.explorerQuest(29006, "冰峰雪域山脉探险家");//El Nath Mts. Explorer
     } else if (ms.getPlayer().getMapId() >= 220000000 && ms.getPlayer().getMapId() <= 222020000) {
-        ms.explorerQuest(29007, "Ludus Lake Explorer");//Ludus Lake Explorer
+        ms.explorerQuest(29007, "时间静止之湖探险家");//Ludus Lake Explorer
     } else if (ms.getPlayer().getMapId() >= 230000000 && ms.getPlayer().getMapId() <= 230040401) {
-        ms.explorerQuest(29008, "Undersea Explorer");//Undersea Explorer
+        ms.explorerQuest(29008, "海底探险家");//Undersea Explorer
     } else if (ms.getPlayer().getMapId() >= 250000000 && ms.getPlayer().getMapId() <= 251010500) {
-        ms.explorerQuest(29009, "Mu Lung Explorer");//Mu Lung Explorer
+        ms.explorerQuest(29009, "武陵探险家");//Mu Lung Explorer
     } else if (ms.getPlayer().getMapId() >= 260000000 && ms.getPlayer().getMapId() <= 261030000) {
-        ms.explorerQuest(29010, "Nihal Desert Explorer");//Nihal Desert Explorer
+        ms.explorerQuest(29010, "尼哈沙漠探险家");//Nihal Desert Explorer
     } else if (ms.getPlayer().getMapId() >= 240000000 && ms.getPlayer().getMapId() <= 240050000) {
-        ms.explorerQuest(29011, "Minar Forest Explorer");//Minar Forest Explorer
+        ms.explorerQuest(29011, "米纳尔森林探险家");//Minar Forest Explorer
     }
     if (ms.getPlayer().getMapId() == 104000000) {
         ms.mapEffect("maplemap/enter/104000000");

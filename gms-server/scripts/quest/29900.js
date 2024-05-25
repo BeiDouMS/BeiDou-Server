@@ -29,7 +29,7 @@ var status = -1;
 
 function start(mode, type, selection) {
     if (qm.forceStartQuest()) {
-        qm.showInfoText("You have earned the <Beginner Adventurer> title. You can receive a Medal from NPC Dalair.");
+        qm.showInfoText("你获得了 <新手冒险家> 勋章，请去勋章老人处领取。");
     }
     qm.dispose();
 }

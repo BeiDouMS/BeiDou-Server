@@ -13,7 +13,7 @@ public class LoginServerInitializer extends ServerChannelInitializer {
     @Override
     public void initChannel(SocketChannel socketChannel) {
         final String clientIp = socketChannel.remoteAddress().getHostString();
-        log.debug("Client connected to login server from {} ", clientIp);
+        log.info("客户端 {} 连接到了登陆端口", clientIp);
 
         PacketProcessor packetProcessor = PacketProcessor.getLoginServerProcessor();
         final long clientSessionId = sessionId.getAndIncrement();
