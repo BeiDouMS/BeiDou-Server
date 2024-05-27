@@ -12,6 +12,16 @@ mybatis-flex:
   global-config:
     print-banner: false
 
+# swagger路径：http://localhost:8686/swagger-ui/index.html
+springdoc:
+  # 生产环境需要关闭这2个参数
+  api-docs:
+    # 是否开启OpenApi，如果为false，则SwaggerUI也会被禁用
+    enabled: true
+  swagger-ui:
+    # 是否开启SwaggerUI，依赖OpenApi的开启
+    enabled: true
+
 gms:
   server:
     host: 127.0.0.1

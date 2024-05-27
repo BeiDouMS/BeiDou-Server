@@ -10,17 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class TestController {
     private final TestService testService;
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/test/test", method = RequestMethod.GET)
     public String test() {
         return testService.test();
     }
 
-    @RequestMapping(value = "/testAccount", method = RequestMethod.GET)
-    public String testAccount() {
-        return testService.testAccount();
-    }
-
-    @RequestMapping(value = "/testPackage", method = RequestMethod.GET)
+    @RequestMapping(value = "/test/package", method = RequestMethod.GET)
     public void testPackage() {
         testService.testPackage();
     }
