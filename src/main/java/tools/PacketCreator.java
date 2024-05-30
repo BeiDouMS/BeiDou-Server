@@ -478,7 +478,7 @@ public class PacketCreator {
             long expNibble = (ExpTable.getExpNeededForLevel(ii.getEquipLevelReq(item.getItemId())) * equip.getItemExp());
             expNibble /= ExpTable.getEquipExpNeededForLevel(itemLevel);
 
-            p.writeByte(0);
+            p.writeByte(equip.getSkill() ? 1 : 0); // Item Skill
             p.writeByte(itemLevel); //Item Level
             p.writeInt((int) expNibble);
             p.writeInt(equip.getVicious()); //WTF NEXON ARE YOU SERIOUS?

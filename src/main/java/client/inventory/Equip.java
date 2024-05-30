@@ -27,6 +27,8 @@ import constants.game.ExpTable;
 import constants.inventory.ItemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import provider.Data;
+import provider.DataTool;
 import server.ItemInformationProvider;
 import tools.PacketCreator;
 import tools.Pair;
@@ -75,6 +77,7 @@ public class Equip extends Item {
     private int ringid = -1;
     private boolean wear = false;
     private boolean isUpgradeable, isElemental = false;    // timeless or reverse, or any equip that could levelup on GMS for all effects
+    private boolean skill = false;
 
     public Equip(int id, short position) {
         this(id, position, 0);
@@ -109,6 +112,7 @@ public class Equip extends Item {
         ret.jump = jump;
         ret.flag = flag;
         ret.vicious = vicious;
+        ret.skill = skill;
         ret.upgradeSlots = upgradeSlots;
         ret.itemLevel = itemLevel;
         ret.itemExp = itemExp;
@@ -197,6 +201,14 @@ public class Equip extends Item {
 
     public short getVicious() {
         return vicious;
+    }
+
+    public boolean getSkill() {
+        return skill;
+    }
+
+    public void setSkill(boolean skill) {
+        this.skill = skill;
     }
 
     @Override
@@ -597,6 +609,12 @@ public class Equip extends Item {
             lvupStr += "+UPGSLOT ";
         }
 
+        if (gainSkill(itemLevel)) {
+            setSkill(true);
+            lvupStr += "+装备技能";
+            c.getPlayer().updateEquipSkill(this, true);
+        }
+
         c.getPlayer().equipChanged();
 
         showLevelupMessage(showStr, c); // thanks to Polaris dev team !
@@ -740,5 +758,20 @@ public class Equip extends Item {
 
     public byte getItemLevel() {
         return itemLevel;
+    }
+
+    private boolean gainSkill(int level) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        Data skill = ii.getEquipSkillData(getItemId());
+        if (skill == null) return false;
+
+        Data curLvData = skill.getChildByPath("1/" + level);
+        if (curLvData == null) return false;
+
+        int failRate = DataTool.getInt(skill.getChildByPath("0/prob"));
+        int successRate = DataTool.getInt(skill.getChildByPath("1/prob"));
+        int rnd = Randomizer.rand(0, failRate + successRate);
+        
+        return rnd < successRate;
     }
 }

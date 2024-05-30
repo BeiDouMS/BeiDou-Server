@@ -152,6 +152,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                         equip.setRingId(rs.getInt("ringid"));
                         equip.setExpiration(rs.getLong("expiration"));
                         equip.setGiftFrom(rs.getString("giftFrom"));
+                        equip.setSkill(rs.getBoolean("skill"));
 
                         items.add(new MTSItemInfo(equip, rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
                     }
@@ -212,6 +213,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                         equip.setFlag((short) rs.getInt("flag"));
                         equip.setExpiration(rs.getLong("expiration"));
                         equip.setGiftFrom(rs.getString("giftFrom"));
+                        equip.setSkill(rs.getBoolean("skill"));
                         items.add(new MTSItemInfo(equip, rs.getInt("price"), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
                     }
                 }
@@ -262,6 +264,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
                         equip.setFlag((short) rs.getInt("flag"));
                         equip.setExpiration(rs.getLong("expiration"));
                         equip.setGiftFrom(rs.getString("giftFrom"));
+                        equip.setSkill(rs.getBoolean("skill"));
                         items.add(new MTSItemInfo(equip, rs.getInt("price"), rs.getInt("id"), rs.getInt("seller"), rs.getString("sellername"), rs.getString("sell_ends")));
                     }
                 }

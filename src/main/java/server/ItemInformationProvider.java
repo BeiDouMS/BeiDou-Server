@@ -99,6 +99,7 @@ public class ItemInformationProvider {
     protected Map<Integer, Map<String, Integer>> equipStatsCache = new HashMap<>();
     protected Map<Integer, Equip> equipCache = new HashMap<>();
     protected Map<Integer, Data> equipLevelInfoCache = new HashMap<>();
+    protected Map<Integer, Data> equipSkillCache = new HashMap<>();
     protected Map<Integer, Integer> equipLevelReqCache = new HashMap<>();
     protected Map<Integer, Integer> equipMaxLevelCache = new HashMap<>();
     protected Map<Integer, List<Integer>> scrollReqsCache = new HashMap<>();
@@ -1949,6 +1950,27 @@ public class ItemInformationProvider {
         }
 
         return eqLevel;
+    }
+
+    public Data getEquipSkillData(int itemId) {
+        Data equipSkillData = equipSkillCache.get(itemId);
+        if (equipSkillData == null) {
+            if (equipSkillCache.containsKey(itemId)) {
+                return null;
+            }
+
+            Data iData = getItemData(itemId);
+            if (iData != null) {
+                Data data = iData.getChildByPath("info/level");
+                if (data != null) {
+                    equipSkillData = data.getChildByPath("case");
+                }
+            }
+
+            equipSkillCache.put(itemId, equipSkillData);
+        }
+
+        return equipSkillData;
     }
 
     public List<Pair<String, Integer>> getItemLevelupStats(int itemId, int level) {

@@ -97,6 +97,8 @@ import net.server.world.PartyOperation;
 import net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import provider.Data;
+import provider.DataTool;
 import scripting.AbstractPlayerInteraction;
 import scripting.event.EventInstanceManager;
 import scripting.item.ItemScriptManager;
@@ -172,6 +174,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -362,6 +365,7 @@ public class Character extends AbstractCharacterObject {
     private boolean chasing = false;
     private float mobExpRate = -1;
     private long lastFightTime = -1;
+    private final Map<Integer, Byte> equipSkillCache = new HashMap<>();
 
     private Character() {
         super.setListener(new AbstractCharacterListener() {
@@ -5971,18 +5975,21 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getSkillLevel(int skill) {
-        SkillEntry ret = skills.get(SkillFactory.getSkill(skill));
+        Skill sk = SkillFactory.getSkill(skill);
+        SkillEntry ret = skills.get(sk);
         if (ret == null) {
             return 0;
         }
-        return ret.skillevel;
+        int equipSkillLv = equipSkillCache.getOrDefault(skill, (byte) 0);
+        return Math.min(ret.skillevel + equipSkillLv, sk.getMaxLevel());
     }
 
     public byte getSkillLevel(Skill skill) {
         if (skills.get(skill) == null) {
             return 0;
         }
-        return skills.get(skill).skillevel;
+        byte equipSkillLv = equipSkillCache.getOrDefault(skill.getId(), (byte) 0);
+        return (byte) (Math.min(skills.get(skill).skillevel + equipSkillLv, skill.getMaxLevel()));
     }
 
     public long getSkillExpiration(int skill) {
@@ -10269,6 +10276,8 @@ public class Character extends AbstractCharacterObject {
         } else if (itemid == ItemId.ITEM_IGNORE) {
             equippedPetItemIgnore = true;
         }
+
+        updateEquipSkill(equip, true);
     }
 
     public void unequippedItem(Equip equip) {
@@ -10282,6 +10291,28 @@ public class Character extends AbstractCharacterObject {
             equippedItemPouch = false;
         } else if (itemid == ItemId.ITEM_IGNORE) {
             equippedPetItemIgnore = false;
+        }
+
+        updateEquipSkill(equip, false);
+    }
+
+    public void updateEquipSkill(Equip equip, boolean add) {
+        if (!equip.getSkill()) return;
+
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        Data skillData = ii.getEquipSkillData(equip.getItemId());
+        if (skillData == null) return;
+
+        Data curLvData = skillData.getChildByPath("1/" + equip.getItemLevel() + "/Skill");
+        if (curLvData == null) return;
+
+        for (Data skill : curLvData.getChildren()) {
+            int id = DataTool.getInt(skill.getChildByPath("id"));
+            byte level = (byte) DataTool.getInt(skill.getChildByPath("level"));
+            byte curLv = equipSkillCache.getOrDefault(id, (byte) 0);
+            byte changedLv = (byte) (add ? curLv + level : curLv - level);
+            if (changedLv < 0) changedLv = 0;
+            equipSkillCache.put(id, changedLv);
         }
     }
 
