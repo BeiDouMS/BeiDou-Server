@@ -8,10 +8,12 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.Location;
 import org.gms.config.YamlConfig;
 import org.gms.database.note.NoteRowMapper;
+import org.gms.manager.ServerManager;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -37,11 +39,12 @@ public class DatabaseConnection {
     private static Jdbi jdbi;
 
     public static Connection getConnection() throws SQLException {
-        if (dataSource == null) {
-            throw new IllegalStateException("数据库连接未初始化，创建连接失败！");
-        }
-
-        return dataSource.getConnection();
+//        if (dataSource == null) {
+//            throw new IllegalStateException("数据库连接未初始化，创建连接失败！");
+//        }
+//
+//        return dataSource.getConnection();
+        return ServerManager.getApplicationContext().getBean(DataSource.class).getConnection();
     }
 
     public static Handle getHandle() {

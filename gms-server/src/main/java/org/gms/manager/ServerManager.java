@@ -1,32 +1,32 @@
 package org.gms.manager;
 
-import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
 import org.gms.net.server.Server;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
-public class ServerManager implements ApplicationContextAware, CommandLineRunner, DisposableBean {
-    private ApplicationContext applicationContext;
-
+public class ServerManager implements ApplicationContextAware, ApplicationRunner, DisposableBean {
+    @Getter
+    private static ApplicationContext applicationContext;
     @Override
-    public void destroy() throws Exception {
-        Server.getInstance().shutdown(false);
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
+        ServerManager.applicationContext = applicationContext;
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(ApplicationArguments args) throws Exception {
         Server.getInstance().init();
     }
 
     @Override
-    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public void destroy() throws Exception {
+        Server.getInstance().shutdown(false);
     }
 }

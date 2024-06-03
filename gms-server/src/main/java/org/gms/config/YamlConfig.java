@@ -1,32 +1,22 @@
 package org.gms.config;
 
-import com.esotericsoftware.yamlbeans.YamlReader;
+import org.gms.manager.ServerManager;
+import org.gms.property.ServerProperty;
+import org.gms.property.WorldProperty;
+import org.springframework.context.ApplicationContext;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 
 public class YamlConfig {
-    public static final String CONFIG_FILE_NAME = "config.yaml";
-    public static final YamlConfig config = loadConfig();
+    public static final YamlConfig config = new YamlConfig();
 
-    public List<WorldConfig> worlds;
-    public ServerConfig server;
+    public List<WorldProperty.WorldsConfig> worlds;
+    public ServerProperty server;
 
-    private static YamlConfig loadConfig() {
-        try {
-            YamlReader reader = new YamlReader(Files.newBufferedReader(Path.of(CONFIG_FILE_NAME), StandardCharsets.UTF_8));
-            YamlConfig config = reader.read(YamlConfig.class);
-            reader.close();
-            return config;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("Could not read config file " + YamlConfig.CONFIG_FILE_NAME + ": " + e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException("Could not successfully parse config file " + YamlConfig.CONFIG_FILE_NAME + ": " + e.getMessage());
-        }
+    private YamlConfig() {
+        ApplicationContext applicationContext = ServerManager.getApplicationContext();
+        this.server = applicationContext.getBean(ServerProperty.class);
+        this.worlds = applicationContext.getBean(WorldProperty.class).getWorlds();
     }
 }

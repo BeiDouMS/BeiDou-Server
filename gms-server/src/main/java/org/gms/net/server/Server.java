@@ -109,6 +109,10 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Server {
+    static {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
+    }
+
     private static final Logger log = LoggerFactory.getLogger(Server.class);
     private static Server instance = null;
 
@@ -867,9 +871,9 @@ public class Server {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
         }
 
-        if (!DatabaseConnection.initializeConnectionPool()) {
-            throw new IllegalStateException("初始化数据库连接失败");
-        }
+//        if (!DatabaseConnection.initializeConnectionPool()) {
+//            throw new IllegalStateException("初始化数据库连接失败");
+//        }
 
         channelDependencies = registerChannelDependencies();
 
@@ -1007,7 +1011,6 @@ public class Server {
     }
 
     public static void main(String[] args) {
-        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
         Server.getInstance().init();
     }
 
