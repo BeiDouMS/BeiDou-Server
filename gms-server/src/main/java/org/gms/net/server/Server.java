@@ -36,7 +36,10 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
+import org.gms.dao.mapper.AccountsMapper;
+import org.gms.dao.mapper.CharactersMapper;
 import org.gms.database.note.NoteDao;
+import org.gms.manager.ServerManager;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
 import org.gms.net.netty.ApiServer;
@@ -877,21 +880,35 @@ public class Server {
 
         channelDependencies = registerChannelDependencies();
 
-        final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
-        // Run slow operations asynchronously to make startup faster
-        final List<Future<?>> futures = new ArrayList<>();
-        futures.add(initExecutor.submit(SkillFactory::loadAllSkills));
-        futures.add(initExecutor.submit(CashItemFactory::loadAllCashItems));
-        futures.add(initExecutor.submit(Quest::loadAllQuests));
-        futures.add(initExecutor.submit(SkillbookInformationProvider::loadAllSkillbookInformation));
-        initExecutor.shutdown();
+        // 利用虚拟线程，减少开销
+        try (ExecutorService initExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+            // Run slow operations asynchronously to make startup faster
+            final List<Future<?>> futures = new ArrayList<>();
+            futures.add(initExecutor.submit(SkillFactory::loadAllSkills));
+            futures.add(initExecutor.submit(CashItemFactory::loadAllCashItems));
+            futures.add(initExecutor.submit(Quest::loadAllQuests));
+            futures.add(initExecutor.submit(SkillbookInformationProvider::loadAllSkillbookInformation));
+            // Wait on all async tasks to complete
+            for (Future<?> future : futures) {
+                future.get();
+            }
+            initExecutor.shutdown();
+        } catch (Exception e) {
+            log.error("加载wz任务执行失败：{}", e.getMessage(), e);
+            throw new IllegalStateException(e);
+        }
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
+        AccountsMapper accountsMapper = ServerManager.getApplicationContext().getBean(AccountsMapper.class);
+        accountsMapper.updateAllLoggedIn(0);
+        CharactersMapper charactersMapper = ServerManager.getApplicationContext().getBean(CharactersMapper.class);
+        charactersMapper.updateAllHasMerchant(0);
+
         try (Connection con = DatabaseConnection.getConnection()) {
-            setAllLoggedOut(con);
-            setAllMerchantsInactive(con);
+//            setAllLoggedOut(con);
+//            setAllMerchantsInactive(con);
             cleanNxcodeCoupons(con);
             loadCouponRates(con);
             updateActiveCoupons(con);
@@ -924,16 +941,6 @@ public class Server {
         } catch (Exception e) {
             log.error("'world.ini'配置错误：{}", e.getMessage(), e); //For those who get errors
             System.exit(0);
-        }
-
-        // Wait on all async tasks to complete
-        for (Future<?> future : futures) {
-            try {
-                future.get();
-            } catch (Exception e) {
-                log.error("加载wz任务执行失败：{}", e.getMessage(), e);
-                throw new IllegalStateException(e);
-            }
         }
 
         loginServer = initLoginServer(8484);
