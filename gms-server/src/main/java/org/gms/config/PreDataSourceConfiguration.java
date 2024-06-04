@@ -33,7 +33,7 @@ public class PreDataSourceConfiguration {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("mysql的版本太低，建议升级到mysql8.0以上");
+            throw new RuntimeException("mysql驱动的版本太低");
         }
         try (Connection connection = DriverManager.getConnection(dbPrefix + "mysql", mysql.get("username"), mysql.get("password"))) {
             PreparedStatement preparedStatement = connection.prepareStatement("SHOW DATABASES LIKE '" + dbName + "'");
@@ -42,7 +42,7 @@ public class PreDataSourceConfiguration {
                 return;
             }
             resultSet.close();
-            preparedStatement = connection.prepareStatement("CREATE DATABASE `napms` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
+            preparedStatement = connection.prepareStatement("CREATE DATABASE " + dbName + " DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (Exception e) {
