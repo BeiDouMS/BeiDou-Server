@@ -64,7 +64,7 @@ import org.gms.server.maps.Kite;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MapleTVEffect;
 import org.gms.server.maps.PlayerShopItem;
-import service.NoteService;
+import org.gms.service.NoteService;
 import org.gms.tools.PacketCreator;
 import org.gms.tools.Pair;
 

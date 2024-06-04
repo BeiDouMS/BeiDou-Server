@@ -19,7 +19,11 @@
 */
 package org.gms.client.newyear;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import org.gms.client.Character;
+import org.gms.dao.entity.NewyearDO;
+import org.gms.dao.mapper.NewyearMapper;
+import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
 import org.gms.tools.DatabaseConnection;
@@ -30,10 +34,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
 import static java.util.concurrent.TimeUnit.HOURS;
+import static org.gms.dao.entity.table.NewyearDOTableDef.NEWYEAR_D_O;
 
 /**
  * @author Ronan - credits to Eric for showing the New Year opcodes and handler layout
@@ -345,17 +351,20 @@ public class NewYearCardRecord {
         }
     }
 
-    public static void startPendingNewYearCardRequests(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM newyear WHERE timereceived = 0 AND senderdiscard = 0")) {
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    NewYearCardRecord newyear = new NewYearCardRecord(rs.getInt("senderid"), rs.getString("sendername"), rs.getInt("receiverid"), rs.getString("receivername"), rs.getString("message"));
-                    newyear.setExtraNewYearCardRecord(rs.getInt("id"), rs.getBoolean("senderdiscard"), rs.getBoolean("receiverdiscard"), rs.getBoolean("received"), rs.getLong("timesent"), rs.getLong("timereceived"));
-
-                    Server.getInstance().setNewYearCard(newyear);
-                    newyear.startNewYearCardTask();
-                }
-            }
+    public static void startPendingNewYearCardRequests() {
+        NewyearMapper newyearMapper = ServerManager.getApplicationContext().getBean(NewyearMapper.class);
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(NEWYEAR_D_O.ALL_COLUMNS).from(NEWYEAR_D_O)
+                .where(NEWYEAR_D_O.TIMERECEIVED.eq(0))
+                .and(NEWYEAR_D_O.SENDERDISCARD.eq(0));
+        List<NewyearDO> newyearDOList = newyearMapper.selectListByQuery(queryWrapper);
+        for (NewyearDO newyearDO : newyearDOList) {
+            NewYearCardRecord newYearCardRecord = new NewYearCardRecord(newyearDO.getSenderid(), newyearDO.getSendername(), newyearDO.getReceiverid(),
+                    newyearDO.getReceivername(), newyearDO.getMessage());
+            newYearCardRecord.setExtraNewYearCardRecord(newyearDO.getId().intValue(), newyearDO.getSenderdiscard(), newyearDO.getReceiverdiscard(),
+                    newyearDO.getReceived(), newyearDO.getTimesent(), newyearDO.getTimereceived());
+            Server.getInstance().setNewYearCard(newYearCardRecord);
+            newYearCardRecord.startNewYearCardTask();
         }
     }
 }

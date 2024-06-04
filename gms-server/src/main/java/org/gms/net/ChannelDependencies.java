@@ -1,7 +1,7 @@
 package org.gms.net;
 
 import org.gms.client.processor.npc.FredrickProcessor;
-import service.NoteService;
+import org.gms.service.NoteService;
 
 import java.util.Objects;
 

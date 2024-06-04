@@ -41,7 +41,7 @@ import org.gms.server.CashShop;
 import org.gms.server.CashShop.CashItem;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.ItemInformationProvider;
-import service.NoteService;
+import org.gms.service.NoteService;
 import org.gms.tools.PacketCreator;
 import org.gms.tools.Pair;
 

@@ -1,4 +1,4 @@
-package service;
+package org.gms.service;
 
 import org.gms.client.Character;
 import org.gms.database.DaoException;

@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.ItemInformationProvider;
-import service.NoteService;
+import org.gms.service.NoteService;
 import org.gms.tools.DatabaseConnection;
 import org.gms.tools.PacketCreator;
 import org.gms.tools.Pair;

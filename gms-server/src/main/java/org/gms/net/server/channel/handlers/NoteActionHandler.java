@@ -27,7 +27,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import service.NoteService;
+import org.gms.service.NoteService;
 import org.gms.tools.PacketCreator;
 
 import java.util.Optional;

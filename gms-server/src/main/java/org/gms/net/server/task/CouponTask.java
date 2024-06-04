@@ -22,10 +22,6 @@ package org.gms.net.server.task;
 import org.gms.net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.DatabaseConnection;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author Ronan
@@ -37,12 +33,10 @@ public class CouponTask implements Runnable {
     @Override
     public void run() {
         try {
-            try (Connection con = DatabaseConnection.getConnection()) {
-                Server.getInstance().updateActiveCoupons(con);
-            }
+            Server.getInstance().updateActiveCoupons();
             Server.getInstance().commitActiveCoupons();
-        } catch (SQLException sqle) {
-            log.error("Error updating coupon effects", sqle);
+        } catch (Exception e) {
+            log.error("Error updating coupon effects", e);
         }
     }
 }

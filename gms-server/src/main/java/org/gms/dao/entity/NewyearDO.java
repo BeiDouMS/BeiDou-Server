@@ -3,14 +3,13 @@ package org.gms.dao.entity;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import java.io.Serializable;
-import java.math.BigInteger;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.io.Serial;
+import java.io.Serializable;
 
 /**
  *  实体类。
@@ -47,8 +46,8 @@ public class NewyearDO implements Serializable {
 
     private Boolean received;
 
-    private BigInteger timesent;
+    private Long timesent;
 
-    private BigInteger timereceived;
+    private Long timereceived;
 
 }

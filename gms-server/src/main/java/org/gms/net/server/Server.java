@@ -36,8 +36,8 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
-import org.gms.dao.mapper.AccountsMapper;
-import org.gms.dao.mapper.CharactersMapper;
+import org.gms.dao.entity.NxcouponsDO;
+import org.gms.dao.mapper.*;
 import org.gms.database.note.NoteDao;
 import org.gms.manager.ServerManager;
 import org.gms.net.ChannelDependencies;
@@ -73,7 +73,7 @@ import org.gms.server.TimerManager;
 import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.quest.Quest;
-import service.NoteService;
+import org.gms.service.NoteService;
 import org.gms.tools.DatabaseConnection;
 import org.gms.tools.Pair;
 
@@ -590,48 +590,6 @@ public class Server {
         return couponRates;
     }
 
-    public static void cleanNxcodeCoupons(Connection con) throws SQLException {
-        if (!YamlConfig.config.server.USE_CLEAR_OUTDATED_COUPONS) {
-            return;
-        }
-
-        long timeClear = System.currentTimeMillis() - DAYS.toMillis(14);
-
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM nxcode WHERE expiration <= ?")) {
-            ps.setLong(1, timeClear);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.isLast()) {
-                    try (PreparedStatement ps2 = con.prepareStatement("DELETE FROM nxcode_items WHERE codeid = ?")) {
-                        while (rs.next()) {
-                            ps2.setInt(1, rs.getInt("id"));
-                            ps2.addBatch();
-                        }
-                        ps2.executeBatch();
-                    }
-
-                    try (PreparedStatement ps2 = con.prepareStatement("DELETE FROM nxcode WHERE expiration <= ?")) {
-                        ps2.setLong(1, timeClear);
-                        ps2.executeUpdate();
-                    }
-                }
-            }
-        }
-    }
-
-    private void loadCouponRates(Connection c) throws SQLException {
-        try (PreparedStatement ps = c.prepareStatement("SELECT couponid, rate FROM nxcoupons");
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                int cid = rs.getInt("couponid");
-                int rate = rs.getInt("rate");
-
-                couponRates.put(cid, rate);
-            }
-        }
-    }
-
     public List<Integer> getActiveCoupons() {
         synchronized (activeCoupons) {
             return activeCoupons;
@@ -664,27 +622,16 @@ public class Server {
         }
     }
 
-    public void updateActiveCoupons(Connection con) throws SQLException {
+    public void updateActiveCoupons() {
         synchronized (activeCoupons) {
+            NxcouponsMapper nxcouponsMapper = ServerManager.getApplicationContext().getBean(NxcouponsMapper.class);
             activeCoupons.clear();
             Calendar c = Calendar.getInstance();
-
             int weekDay = c.get(Calendar.DAY_OF_WEEK);
             int hourDay = c.get(Calendar.HOUR_OF_DAY);
-
             int weekdayMask = (1 << weekDay);
-            PreparedStatement ps = con.prepareStatement("SELECT couponid FROM nxcoupons WHERE (activeday & ?) = ? AND starthour <= ? AND endhour > ?");
-            ps.setInt(1, weekdayMask);
-            ps.setInt(2, weekdayMask);
-            ps.setInt(3, hourDay);
-            ps.setInt(4, hourDay);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    activeCoupons.add(rs.getInt("couponid"));
-                }
-            }
-
+            List<Integer> selectActiveCouponIds = nxcouponsMapper.selectActiveCouponIds(weekdayMask, hourDay);
+            activeCoupons.addAll(selectActiveCouponIds);
         }
     }
 
@@ -906,13 +853,21 @@ public class Server {
         CharactersMapper charactersMapper = ServerManager.getApplicationContext().getBean(CharactersMapper.class);
         charactersMapper.updateAllHasMerchant(0);
 
+        long timeClear = System.currentTimeMillis() - DAYS.toMillis(14);
+        NxcodeItemsMapper nxcodeItemsMapper = ServerManager.getApplicationContext().getBean(NxcodeItemsMapper.class);
+        nxcodeItemsMapper.clearExpirations(timeClear);
+        NxcodeMapper nxcodeMapper = ServerManager.getApplicationContext().getBean(NxcodeMapper.class);
+        nxcodeMapper.clearExpirations(timeClear);
+
+        NxcouponsMapper nxcouponsMapper = ServerManager.getApplicationContext().getBean(NxcouponsMapper.class);
+        List<NxcouponsDO> nxcouponsDOList = nxcouponsMapper.selectAll();
+        couponRates.clear();
+        nxcouponsDOList.forEach(nxcouponsDO -> couponRates.put(nxcouponsDO.getCouponid(), nxcouponsDO.getRate()));
+        updateActiveCoupons();
+        NewYearCardRecord.startPendingNewYearCardRequests();
+
+
         try (Connection con = DatabaseConnection.getConnection()) {
-//            setAllLoggedOut(con);
-//            setAllMerchantsInactive(con);
-            cleanNxcodeCoupons(con);
-            loadCouponRates(con);
-            updateActiveCoupons(con);
-            NewYearCardRecord.startPendingNewYearCardRequests(con);
             CashIdGenerator.loadExistentCashIdsFromDb(con);
             applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
             applyAllWorldTransfers(con);
@@ -980,18 +935,6 @@ public class Server {
         ApiServer apiServer = new ApiServer(port);
         apiServer.start();
         return apiServer;
-    }
-
-    private static void setAllLoggedOut(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("UPDATE accounts SET loggedin = 0")) {
-            ps.executeUpdate();
-        }
-    }
-
-    private static void setAllMerchantsInactive(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = 0")) {
-            ps.executeUpdate();
-        }
     }
 
     private void initializeTimelyTasks(ChannelDependencies channelDependencies) {
