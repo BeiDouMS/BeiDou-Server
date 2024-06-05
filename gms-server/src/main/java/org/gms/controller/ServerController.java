@@ -3,6 +3,7 @@ package org.gms.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.gms.constants.api.ApiConstant;
 import org.gms.net.server.Server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
@@ -16,37 +17,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerController {
     private final ApplicationContext applicationContext;
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "停止所有")
-    @GetMapping("/v1/stop")
+    @GetMapping("/" + ApiConstant.LATEST + "/stop")
     public void stop() {
+        // 这里只能触发destroy，但服务不能正常停止
         SpringApplication.exit(applicationContext);
+        // 这里才能正常的停止
+        System.exit(0);
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "停止服务")
-    @GetMapping("/v1/stopServer")
+    @GetMapping("/" + ApiConstant.LATEST + "/stopServer")
     public void stopServer() {
         Server.getInstance().shutdownInternal(false);
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "启动服务")
-    @GetMapping("/v1/startServer")
+    @GetMapping("/" + ApiConstant.LATEST + "/startServer")
     public void startServer() {
         Server.getInstance().init();
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "重启服务")
-    @GetMapping("/v1/restartServer")
+    @GetMapping("/" + ApiConstant.LATEST + "/restartServer")
     public void restartServer() {
         Server.getInstance().shutdownInternal(true);
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "查询服务状态")
-    @GetMapping("/v1/online")
+    @GetMapping("/" + ApiConstant.LATEST + "/online")
     public boolean online() {
         return Server.getInstance().isOnline();
     }

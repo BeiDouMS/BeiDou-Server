@@ -2,12 +2,10 @@
 
 # gms-server 服务端
 - 已实现自动创建数据库，执行初始化sql脚本，只要保证mysql是启动的即可  
-- 已建立与gms-api的交互，开放端口8585
-
-# gms-api 给web提供api
-- 已实现与gms-server的交互，api服务的端口8686
+- 已开放api端口8686
 - 已引入swagger，swagger地址：http://localhost:8686/swagger-ui/index.html
-- 开发接口需要固定增加版本如：/v1 /v2 /v3，这样新版接口可以不用考虑兼容旧版本接口，只要旧版本接口不删，就可以一直调用旧版本
+- 接口由版本控制，如：v1 v2 v3。默认的swagger标签为name = ApiConstant.LATEST，默认的RequestMapping为："/" + ApiConstant.LATEST + "/xx"
+- 接口如果增加新版本且接口不需要更新，只需要把ApiConstant.LATEST指向新版本即可。如果部分接口不兼容，需要把旧接口的Tag和RequestMapping都改成指定版本，如：ApiConstant.V1。其他的，只需要把ApiConstant.LATEST指向新版本即可。
 
 # gms-ui web端
 
