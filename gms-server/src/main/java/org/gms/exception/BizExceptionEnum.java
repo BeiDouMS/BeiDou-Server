@@ -1,4 +1,6 @@
-package org.gms.springboot.response;
+package org.gms.exception;
+
+import org.gms.exception.BaseErrorInfoInterface;
 
 public enum BizExceptionEnum implements BaseErrorInfoInterface {
 

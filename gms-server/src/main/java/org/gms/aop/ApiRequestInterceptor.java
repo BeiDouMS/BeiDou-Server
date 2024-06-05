@@ -1,4 +1,4 @@
-package org.gms.interceptor;
+package org.gms.aop;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

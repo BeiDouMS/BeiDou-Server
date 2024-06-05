@@ -1,4 +1,4 @@
-package org.gms.springboot.security;
+package org.gms.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

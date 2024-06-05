@@ -1,7 +1,12 @@
-package org.gms.springboot.response;
+package org.gms.exception;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serial;
 
+@Setter
+@Getter
 public class BizException extends RuntimeException {
 
     @Serial
@@ -43,22 +48,6 @@ public class BizException extends RuntimeException {
         this.errorMsg = errorMsg;
     }
 
-
-    public Integer getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(Integer errorCode) {
-        this.errorCode = errorCode;
-    }
-
-    public String getErrorMsg() {
-        return errorMsg;
-    }
-
-    public void setErrorMsg(String errorMsg) {
-        this.errorMsg = errorMsg;
-    }
 
     public String getMessage() {
         return errorMsg;

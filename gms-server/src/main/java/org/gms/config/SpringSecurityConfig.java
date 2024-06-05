@@ -1,5 +1,8 @@
-package org.gms.springboot.security;
+package org.gms.config;
 
+import org.gms.aop.AuthEntryPointJwt;
+import org.gms.aop.AuthTokenFilter;
+import org.gms.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

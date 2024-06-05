@@ -3,7 +3,7 @@ package org.gms.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.gms.constants.api.ApiConstant;
-import org.gms.springboot.response.ResultBody;
+import org.gms.dto.ResultBody;
 import org.gms.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
 

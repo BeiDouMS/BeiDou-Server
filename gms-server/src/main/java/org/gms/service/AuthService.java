@@ -1,6 +1,6 @@
 package org.gms.service;
 
-import org.gms.springboot.security.JwtUtils;
+import org.gms.util.JwtUtils;
 import org.gms.dao.entity.AccountsDO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

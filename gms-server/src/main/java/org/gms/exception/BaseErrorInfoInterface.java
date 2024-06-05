@@ -1,4 +1,4 @@
-package org.gms.springboot.response;
+package org.gms.exception;
 
 public interface BaseErrorInfoInterface {
     Integer getResultCode();

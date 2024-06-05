@@ -15,8 +15,8 @@ import java.util.Map;
  */
 @Configuration
 @DependsOn("dataSource")
-public class PreDataSourceConfiguration {
-    public PreDataSourceConfiguration(MybatisFlexProperties mybatisFlexProperties) {
+public class PreDataSourceConfig {
+    public PreDataSourceConfig(MybatisFlexProperties mybatisFlexProperties) {
         initializeDb(mybatisFlexProperties);
     }
 

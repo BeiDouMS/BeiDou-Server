@@ -1,4 +1,4 @@
-package org.gms.springboot.security;
+package org.gms.util;
 
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;

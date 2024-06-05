@@ -1,4 +1,4 @@
-package org.gms.springboot.security;
+package org.gms.service;
 
 import org.gms.dao.entity.AccountsDO;
 import org.gms.dao.mapper.AccountsMapper;

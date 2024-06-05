@@ -1,4 +1,4 @@
-package org.gms.springboot.security;
+package org.gms.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.gms.dao.entity.AccountsDO;

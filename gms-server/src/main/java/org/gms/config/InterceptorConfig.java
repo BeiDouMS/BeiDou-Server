@@ -2,7 +2,7 @@ package org.gms.config;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
-import org.gms.interceptor.ApiRequestInterceptor;
+import org.gms.aop.ApiRequestInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

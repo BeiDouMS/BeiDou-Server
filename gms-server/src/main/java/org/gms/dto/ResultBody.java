@@ -1,9 +1,13 @@
-package org.gms.springboot.response;
+package org.gms.dto;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.Data;
+import org.gms.exception.BaseErrorInfoInterface;
+import org.gms.exception.BizExceptionEnum;
 
 import java.sql.Timestamp;
 
+@Data
 public class ResultBody {
     private Integer code;
     private String message;
@@ -16,34 +20,6 @@ public class ResultBody {
     public ResultBody(BaseErrorInfoInterface errorInfo) {
         this.code = errorInfo.getResultCode();
         this.message = errorInfo.getResultMsg();
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
-    }
-
-    public Timestamp getTimestamp() {
-        return timestamp;
     }
     
     public static ResultBody success() {
