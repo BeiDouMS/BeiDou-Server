@@ -1,1 +1,9 @@
-加一个文件，规避git不上传
+## 使用
+
+```bash
+yarn install
+
+yarn dev
+
+yarn build
+```
