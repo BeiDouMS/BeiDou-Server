@@ -2,6 +2,7 @@ package org.gms.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gms.constants.api.ApiConstant;
 import org.gms.service.AccountService;
 import org.gms.springboot.response.ResultBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "获取我的信息")
-    @GetMapping("/v1/info")
+    @GetMapping("/" + ApiConstant.LATEST + "/info")
     public ResultBody info() {
         return ResultBody.success(accountService.getCurrentUser());
     }

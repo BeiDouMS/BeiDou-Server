@@ -2,6 +2,7 @@ package org.gms.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.gms.constants.api.ApiConstant;
 import org.gms.springboot.response.ResultBody;
 import org.gms.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +20,16 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "登录")
-    @PostMapping("/v1/login")
+    @PostMapping("/" + ApiConstant.LATEST + "/login")
     public ResultBody login(@RequestBody Map<String, String> data) {
         return ResultBody.success(authService.getToken(data.get("username"), data.get("password")));
     }
 
-    @Tag(name = "v1")
+    @Tag(name = ApiConstant.LATEST)
     @Operation(summary = "登出")
-    @DeleteMapping("/v1/logout")
+    @DeleteMapping("/" + ApiConstant.LATEST + "/logout")
     public ResultBody logout() {
         return ResultBody.success();
     }
