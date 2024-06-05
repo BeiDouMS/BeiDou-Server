@@ -19,13 +19,14 @@
 */
 package org.gms.client.inventory.manipulator;
 
+import org.gms.dao.mapper.PetsMapper;
+import org.gms.dao.mapper.RingsMapper;
+import org.gms.manager.ServerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.tools.DatabaseConnection;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -38,22 +39,20 @@ public class CashIdGenerator {
     private final static Set<Integer> existentCashids = new HashSet<>(10000);
     private static Integer runningCashid = 0;
 
-    private static void loadExistentCashIdsFromQuery(Connection con, String query) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement(query);
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                if (!rs.wasNull()) {
-                    existentCashids.add(id);
-                }
+    public static synchronized void loadExistentCashIdsFromDb() {
+        RingsMapper ringsMapper = ServerManager.getApplicationContext().getBean(RingsMapper.class);
+        existentCashids.clear();
+        ringsMapper.selectAll().forEach(ringsDO -> {
+            if (ringsDO.getId() != null) {
+                existentCashids.add(ringsDO.getId());
             }
-        }
-    }
-
-    public static synchronized void loadExistentCashIdsFromDb(Connection con) throws SQLException {
-        loadExistentCashIdsFromQuery(con, "SELECT id FROM rings");
-        loadExistentCashIdsFromQuery(con, "SELECT petid FROM pets");
+        });
+        PetsMapper petsMapper = ServerManager.getApplicationContext().getBean(PetsMapper.class);
+        petsMapper.selectAll().forEach(petsDO -> {
+            if (petsDO.getPetid() != null) {
+                existentCashids.add(petsDO.getPetid().intValue());
+            }
+        });
 
         runningCashid = 0;
         do {
@@ -64,12 +63,7 @@ public class CashIdGenerator {
     private static void getNextAvailableCashId() {
         runningCashid++;
         if (runningCashid >= 777000000) {
-            existentCashids.clear();
-            try (Connection con = DatabaseConnection.getConnection()) {
-                loadExistentCashIdsFromDb(con);
-            } catch (SQLException e) {
-                log.warn("Failed to reset overflowing cash ids", e);
-            }
+            loadExistentCashIdsFromDb();
         }
     }
 

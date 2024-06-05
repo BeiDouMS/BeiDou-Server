@@ -27,6 +27,6 @@ public class ServerManager implements ApplicationContextAware, ApplicationRunner
 
     @Override
     public void destroy() throws Exception {
-        Server.getInstance().shutdown(false);
+        Server.getInstance().shutdownInternal(false);
     }
 }

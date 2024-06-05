@@ -42,7 +42,6 @@ import org.gms.database.note.NoteDao;
 import org.gms.manager.ServerManager;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
-import org.gms.net.netty.ApiServer;
 import org.gms.net.netty.LoginServer;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.channel.Channel;
@@ -132,7 +131,6 @@ public class Server {
     private static ChannelDependencies channelDependencies;
 
     private LoginServer loginServer;
-    private ApiServer apiServer;
     private final List<Map<Integer, String>> channels = new LinkedList<>();
     private final List<World> worlds = new ArrayList<>();
     private final Properties subnetInfo = new Properties();
@@ -817,14 +815,6 @@ public class Server {
         Instant beforeInit = Instant.now();
         log.info("Cosmic-Nap v{} 正在启动中...", ServerConstants.VERSION);
 
-        if (YamlConfig.config.server.SHUTDOWNHOOK) {
-            Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
-        }
-
-//        if (!DatabaseConnection.initializeConnectionPool()) {
-//            throw new IllegalStateException("初始化数据库连接失败");
-//        }
-
         channelDependencies = registerChannelDependencies();
 
         // 利用虚拟线程，减少开销
@@ -865,10 +855,10 @@ public class Server {
         nxcouponsDOList.forEach(nxcouponsDO -> couponRates.put(nxcouponsDO.getCouponid(), nxcouponsDO.getRate()));
         updateActiveCoupons();
         NewYearCardRecord.startPendingNewYearCardRequests();
+        CashIdGenerator.loadExistentCashIdsFromDb();
 
 
         try (Connection con = DatabaseConnection.getConnection()) {
-            CashIdGenerator.loadExistentCashIdsFromDb(con);
             applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
             applyAllWorldTransfers(con);
             PlayerNPC.loadRunningRankData(con, worldCount);
@@ -900,8 +890,6 @@ public class Server {
 
         loginServer = initLoginServer(8484);
         log.info("已开启登录端口 8484");
-        apiServer = initApiServer(8585);
-        log.info("已开启API端口 8585");
 
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
@@ -929,12 +917,6 @@ public class Server {
         LoginServer loginServer = new LoginServer(port);
         loginServer.start();
         return loginServer;
-    }
-
-    private ApiServer initApiServer(int port) {
-        ApiServer apiServer = new ApiServer(port);
-        apiServer.start();
-        return apiServer;
     }
 
     private void initializeTimelyTasks(ChannelDependencies channelDependencies) {
@@ -1876,7 +1858,7 @@ public class Server {
         return () -> shutdownInternal(restart);
     }
 
-    private synchronized void shutdownInternal(boolean restart) {
+    public synchronized void shutdownInternal(boolean restart) {
         log.info("正在 {} 服务！", restart ? "重启" : "关闭");
         if (getWorlds() == null) {
             return;//already shutdown
@@ -1884,25 +1866,6 @@ public class Server {
         for (World w : getWorlds()) {
             w.shutdown();
         }
-
-        /*for (World w : getWorlds()) {
-            while (w.getPlayerStorage().getAllCharacters().size() > 0) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ie) {
-                    System.err.println("FUCK MY LIFE");
-                }
-            }
-        }
-        for (Channel ch : getAllChannels()) {
-            while (ch.getConnectedClients() > 0) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ie) {
-                    System.err.println("FUCK MY LIFE");
-                }
-            }
-        }*/
 
         List<Channel> allChannels = getAllChannels();
 
@@ -1921,20 +1884,13 @@ public class Server {
         ThreadManager.getInstance().stop();
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
-
-        log.info("所有大区和频道已全部关闭");
         loginServer.stop();
-        apiServer.stop();
-        if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
-            // We disabled log4j's shutdown hook in the config file, so we have to manually shut it down here,
-            // after our last log statement.
-            LogManager.shutdown();
-
-            new Thread(() -> System.exit(0)).start();
-        } else {
+        online = false;
+        log.info("所有大区和频道已全部关闭");
+        if (restart) {
             log.info("重启中...");
             instance = null;
-            getInstance().init();//DID I DO EVERYTHING?! D:
+            getInstance().init();
         }
     }
 }
