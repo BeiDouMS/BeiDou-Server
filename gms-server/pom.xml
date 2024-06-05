@@ -41,7 +41,6 @@
         <graalvm-js.version>23.0.4</graalvm-js.version>
         <graalvm-js-scriptengine.version>24.0.1</graalvm-js-scriptengine.version> <!-- ScriptEngine implementation -->
         <netty.version>4.1.109.Final</netty.version> <!-- Networking -->
-        <yamlbeans.version>1.17</yamlbeans.version> <!-- Config file -->
         <jcip-annotations.version>1.0</jcip-annotations.version> <!-- Annotations for concurrency documentation -->
         <druid.version>1.2.22</druid.version> <!-- Database connection pool -->
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version> <!-- MySQL JDBC driver -->
@@ -90,11 +89,6 @@
 
 
         <!-- Tool -->
-        <dependency>
-            <groupId>com.esotericsoftware.yamlbeans</groupId>
-            <artifactId>yamlbeans</artifactId>
-            <version>${yamlbeans.version}</version>
-        </dependency>
         <dependency>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
