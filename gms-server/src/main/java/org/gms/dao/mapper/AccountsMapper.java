@@ -1,6 +1,7 @@
 package org.gms.dao.mapper;
 
 import com.mybatisflex.core.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.gms.dao.entity.AccountsDO;
 
@@ -13,4 +14,7 @@ import org.gms.dao.entity.AccountsDO;
 public interface AccountsMapper extends BaseMapper<AccountsDO> {
     @Update("UPDATE accounts SET loggedin = #{value}")
     void updateAllLoggedIn(Integer value);
+    
+    @Select("SELECT * from accounts WHERE name = #{name}")
+    AccountsDO selectOneByName(String name);
 }

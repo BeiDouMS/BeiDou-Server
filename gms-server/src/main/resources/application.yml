@@ -1,6 +1,15 @@
 server:
   port: 8686
 
+app:
+  vue: http://localhost:5173
+  
+jwt:
+  # secret 自行生成 UUID
+  secret: "50da066e-6080-40f5-a173-86bd27d4f674"
+  # token 过期时间（毫秒）默认 1天
+  duration: 86400000
+
 mybatis-flex:
   datasource:
     mysql:
