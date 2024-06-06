@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerController {
     private final ApplicationContext applicationContext;
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "停止所有")
     @GetMapping("/" + ApiConstant.LATEST + "/stop")
     public void stop() {
@@ -28,7 +28,7 @@ public class ServerController {
         System.exit(0);
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "停止服务")
     @GetMapping("/" + ApiConstant.LATEST + "/stopServer")
     public ResultBody stopServer() {
@@ -36,7 +36,7 @@ public class ServerController {
         return ResultBody.success();
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "启动服务")
     @GetMapping("/" + ApiConstant.LATEST + "/startServer")
     public ResultBody startServer() {
@@ -44,7 +44,7 @@ public class ServerController {
         return ResultBody.success();
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "重启服务")
     @GetMapping("/" + ApiConstant.LATEST + "/restartServer")
     public ResultBody restartServer() {
@@ -52,7 +52,7 @@ public class ServerController {
         return ResultBody.success();
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "查询服务状态")
     @GetMapping("/" + ApiConstant.LATEST + "/online")
     public ResultBody online() {

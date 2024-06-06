@@ -1,6 +1,6 @@
 package org.gms.dto;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import org.gms.exception.BaseErrorInfoInterface;
 import org.gms.exception.BizExceptionEnum;

@@ -20,14 +20,14 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/auth/" + ApiConstant.LATEST)
     @Operation(summary = "登录")
     @PostMapping("/" + ApiConstant.LATEST + "/login")
     public ResultBody login(@RequestBody Map<String, String> data) {
         return ResultBody.success(authService.getToken(data.get("username"), data.get("password")));
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/auth/" + ApiConstant.LATEST)
     @Operation(summary = "登出")
     @DeleteMapping("/" + ApiConstant.LATEST + "/logout")
     public ResultBody logout() {

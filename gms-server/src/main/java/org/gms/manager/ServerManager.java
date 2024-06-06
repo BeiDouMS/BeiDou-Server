@@ -36,7 +36,7 @@ public class ServerManager implements ApplicationContextAware, ApplicationRunner
         SwaggerUiConfigProperties swaggerUiConfigProperties = applicationContext.getBean(SwaggerUiConfigProperties.class);
         if (springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
             Environment environment = applicationContext.getBean(Environment.class);
-            log.info("接口文档地址：{}", "http://" + InetAddress.getLocalHost().getHostAddress() + ":" + environment.getProperty("server.port") + "/swagger-ui.html");
+            log.info("接口文档地址：{}", "http://" + InetAddress.getLocalHost().getHostAddress() + ":" + environment.getProperty("server.port") + "/swagger-ui/index.html");
         }
     }
 

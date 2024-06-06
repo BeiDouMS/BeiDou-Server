@@ -20,7 +20,7 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @Tag(name = ApiConstant.LATEST)
+    @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "获取我的信息")
     @GetMapping("/" + ApiConstant.LATEST + "/info")
     public ResultBody info() {
