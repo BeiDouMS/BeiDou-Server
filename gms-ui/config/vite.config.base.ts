@@ -12,6 +12,9 @@ export default defineConfig({
     svgLoader({ svgoConfig: {} }),
     configArcoStyleImportPlugin(),
   ],
+  server: {
+    port: 8787
+  },
   resolve: {
     alias: [
       {

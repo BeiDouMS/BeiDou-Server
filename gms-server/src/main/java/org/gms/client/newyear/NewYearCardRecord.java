@@ -354,7 +354,8 @@ public class NewYearCardRecord {
     public static void startPendingNewYearCardRequests() {
         NewyearMapper newyearMapper = ServerManager.getApplicationContext().getBean(NewyearMapper.class);
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(NEWYEAR_D_O.ALL_COLUMNS).from(NEWYEAR_D_O)
+                .select()
+                .from(NEWYEAR_D_O)
                 .where(NEWYEAR_D_O.TIMERECEIVED.eq(0))
                 .and(NEWYEAR_D_O.SENDERDISCARD.eq(0));
         List<NewyearDO> newyearDOList = newyearMapper.selectListByQuery(queryWrapper);

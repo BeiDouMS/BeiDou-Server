@@ -1,26 +1,20 @@
 package org.gms.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
-import java.sql.Timestamp;
-
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.gms.config.YamlConfig;
-import org.gms.tools.BCrypt;
-import org.gms.tools.HexTool;
+import lombok.experimental.SuperBuilder;
 
 import java.io.Serial;
+import java.io.Serializable;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *  实体类。
@@ -29,7 +23,7 @@ import java.io.Serial;
  * @since 2024-05-24
  */
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("accounts")
@@ -52,10 +46,13 @@ public class AccountsDO implements Serializable {
 
     private Integer loggedin;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp lastlogin;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp createdat;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     private Boolean banned;
@@ -77,6 +74,7 @@ public class AccountsDO implements Serializable {
 
     private Integer gender;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp tempban;
 
     private Integer greason;
@@ -102,31 +100,4 @@ public class AccountsDO implements Serializable {
     private String hwid;
 
     private Integer language;
-
-    public void encryptPassword() throws NoSuchAlgorithmException {
-        this.password = YamlConfig.config.server.BCRYPT_MIGRATION ? BCrypt.hashpw(this.password, BCrypt.gensalt(12)) : hashPwSHA512(this.password);
-    }
-
-    public boolean checkPassword(String pwd) {
-        String passHash = this.password;
-        if (passHash.charAt(0) == '$' && passHash.charAt(1) == '2' && BCrypt.checkpw(pwd, passHash)) {
-            return true;
-        } else return pwd.equals(passHash) || checkHash(passHash, "SHA-1", pwd) || checkHash(passHash, "SHA-512", pwd);
-    }
-
-    private static String hashPwSHA512(String pwd) throws NoSuchAlgorithmException {
-        MessageDigest digester = MessageDigest.getInstance("SHA-512");
-        digester.update(pwd.getBytes(StandardCharsets.UTF_8), 0, pwd.length());
-        return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase();
-    }
-
-    private static boolean checkHash(String hash, String type, String password) {
-        try {
-            MessageDigest digester = MessageDigest.getInstance(type);
-            digester.update(password.getBytes(StandardCharsets.UTF_8), 0, password.length());
-            return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Encoding the string failed", e);
-        }
-    }
 }

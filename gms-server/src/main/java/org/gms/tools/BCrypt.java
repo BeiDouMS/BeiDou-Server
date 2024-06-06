@@ -14,6 +14,8 @@
 package org.gms.tools;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
@@ -967,5 +969,11 @@ public class BCrypt {
             ret |= hashed_bytes[i] ^ try_bytes[i];
         }
         return ret == 0;
+    }
+
+    public static String hashpwSHA512(String pwd) throws NoSuchAlgorithmException {
+        MessageDigest digester = MessageDigest.getInstance("SHA-512");
+        digester.update(pwd.getBytes(StandardCharsets.UTF_8), 0, pwd.length());
+        return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase();
     }
 }
