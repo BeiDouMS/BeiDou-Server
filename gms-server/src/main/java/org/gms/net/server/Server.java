@@ -818,6 +818,7 @@ public class Server {
         channelDependencies = registerChannelDependencies();
 
         // 利用虚拟线程，减少开销
+        log.info("正在加载WZ文件");
         try (ExecutorService initExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
             // Run slow operations asynchronously to make startup faster
             final List<Future<?>> futures = new ArrayList<>();
@@ -834,9 +835,11 @@ public class Server {
             log.error("加载wz任务执行失败：{}", e.getMessage(), e);
             throw new IllegalStateException(e);
         }
+        log.info("WZ文件加载完成");
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
+        log.info("正在读取数据库数据");
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
         AccountsMapper accountsMapper = ServerManager.getApplicationContext().getBean(AccountsMapper.class);
         accountsMapper.updateAllLoggedIn(0);
@@ -866,6 +869,7 @@ public class Server {
             log.error("数据库任务执行失败：{}", sqle.getMessage(), sqle);
             throw new IllegalStateException(sqle);
         }
+        log.info("数据读取完成");
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks(channelDependencies);    // aggregated method for timely tasks thanks to lxconan
@@ -891,16 +895,17 @@ public class Server {
         loginServer = initLoginServer(8484);
         log.info("已开启登录端口 8484");
 
-        online = true;
-        Duration initDuration = Duration.between(beforeInit, Instant.now());
-        log.info("Cosmic-Nap 启动完成，耗时：{} s.", initDuration.toMillis() / 1000.0);
-
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
 
+        log.info("正在加载事件脚本");
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
         }
+        log.info("事件脚本加载完成");
+        online = true;
+        Duration initDuration = Duration.between(beforeInit, Instant.now());
+        log.info("Cosmic-Nap 启动完成，耗时：{} s", initDuration.toMillis() / 1000.0);
     }
 
     private ChannelDependencies registerChannelDependencies() {
