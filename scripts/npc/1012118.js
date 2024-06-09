@@ -18,8 +18,8 @@ function action(mode, type, selection) {
         status--;
     }
     if (status === 0) {
-        if (cm.getLevel() >= 20) {
-            cm.sendOk("#r只有低于20级才能进入训练中心。");
+        if (cm.getLevel() >= 30) {
+            cm.sendOk("#r只有低于30级才能进入训练中心。");
             cm.dispose();
 
         } else if (cm.isQuestActive(22515) || cm.isQuestActive(22516) || cm.isQuestActive(22517) || cm.isQuestActive(22518)) {
