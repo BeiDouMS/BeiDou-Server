@@ -231,7 +231,7 @@ public class Storage {
 
     public void sendStorage(Client c, int npcId) {
         if (c.getPlayer().getLevel() < 15) {
-            c.getPlayer().dropMessage(1, "You may only use the storage once you have reached level 15.");
+            c.getPlayer().dropMessage(1, "15级以后才可以使用仓库服务");
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
