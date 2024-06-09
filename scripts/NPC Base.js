@@ -1,28 +1,11 @@
-/*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-/* NPC Base
-	Map Name (Map ID)
-	Extra NPC info.
+/**
+ * @author: lee
+ * @npc: npc
+ * @map: Multiple towns on MapleStory
+ * @func: func
  */
 
-var status;
+let status;
 
 function start() {
     status = -1;
@@ -30,30 +13,32 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode === -1 || (mode === 0 && type > 0)) {
         cm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            cm.sendOk("Sample text.");
-            cm.dispose();
-        }
+        return;
+    }
+    
+    updateStatus(mode);
+    
+    if (status === 0) {
+        cm.sendOk("Sample text.");
+        cm.dispose();
     }
 }
 
-function generateSelectionMenu(array) {     // nice tool for generating a string for the sendSimple functionality
-    var menu = "";
-    for (var i = 0; i < array.length; i++) {
-        menu += "#L" + i + "#" + array[i] + "#l\r\n";
+function updateStatus(mode) {
+    if (mode === 1) {
+        status++;
+    } else {
+        status--;
+    }
+}
+
+function generateMenu(array) {
+    // #fUI/Basic.img/HScr4/enabled/next2#
+    let menu = "";
+    for (let i = 1; i <= array.length; i++) {
+        menu += "#L" + i + "##b" + i + ". " + array[i - 1] + "#k#l\r\n";
     }
     return menu;
 }
