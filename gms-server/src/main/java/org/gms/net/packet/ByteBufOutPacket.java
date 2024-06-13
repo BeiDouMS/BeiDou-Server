@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.jcip.annotations.NotThreadSafe;
 import org.gms.net.opcodes.SendOpcode;
+import org.gms.util.ThreadLocalUtil;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -72,14 +73,14 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public void writeString(String value) {
-        byte[] bytes = value.getBytes(CharsetConstants.CHARSET);
+        byte[] bytes = value.getBytes(CharsetConstants.getCharset(ThreadLocalUtil.getCurrentClient().getLanguage()));
         writeShort(bytes.length);
         writeBytes(bytes);
     }
 
     @Override
     public void writeFixedString(String value) {
-        byte[] bytes = value.getBytes(CharsetConstants.CHARSET);
+        byte[] bytes = value.getBytes(CharsetConstants.getCharset(ThreadLocalUtil.getCurrentClient().getLanguage()));
         if (bytes.length > 13) {
             bytes = Arrays.copyOf(bytes, 13);
         }

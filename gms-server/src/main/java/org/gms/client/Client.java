@@ -49,6 +49,7 @@ import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.util.ThreadLocalUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractPlayerInteraction;
@@ -217,6 +218,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
         if (handler != null && handler.validateState(this)) {
             try {
+                ThreadLocalUtil.setCurrentClient(this);
                 MonitoredChrLogger.logPacketIfMonitored(this, opcode, packet.getBytes());
                 handler.handlePacket(packet, this);
             } catch (final Throwable t) {
@@ -224,6 +226,8 @@ public class Client extends ChannelInboundHandlerAdapter {
                 log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", handler.getClass().getSimpleName(),
                         chrInfo, getAccountName(), packet, t);
                 //client.sendPacket(PacketCreator.enableActions());//bugs sometimes
+            } finally {
+                ThreadLocalUtil.removeCurrentClient();
             }
         }
 

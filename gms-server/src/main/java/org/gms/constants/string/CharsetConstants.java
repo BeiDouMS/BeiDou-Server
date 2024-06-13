@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -26,21 +25,43 @@ public class CharsetConstants {
     private static final Logger log = LoggerFactory.getLogger(CharsetConstants.class);
     public static final Charset CHARSET = loadCharset();
 
-    private enum Language {
-        LANGUAGE_US("US-ASCII"),
-        LANGUAGE_CN("GBK"),
-        LANGUAGE_PT_BR("ISO-8859-1"),
-        LANGUAGE_THAI("TIS620"),
-        LANGUAGE_KOREAN("MS949");
+    public static Charset getCharset(int language) {
+        return Charset.forName(Language.fromLang(language).getCharset());
+    }
 
+    /**
+     * @see LanguageConstants
+     */
+    private enum Language {
+        LANGUAGE_US(2, "US-ASCII"),
+        LANGUAGE_CN(3, "GBK"),
+        LANGUAGE_PT_BR(-1, "ISO-8859-1"),
+        LANGUAGE_THAI(-1, "TIS620"),
+        LANGUAGE_KOREAN(-1, "MS949");
+
+        private final int lang;
         private final String charset;
 
-        Language(String charset) {
+        Language(int lang, String charset) {
+            this.lang = lang;
             this.charset = charset;
+        }
+
+        public int getLang() {
+            return lang;
         }
 
         public String getCharset() {
             return charset;
+        }
+
+        public static Language fromLang(int lang) {
+            for (Language value : values()) {
+                if (value.getLang() == lang) {
+                    return value;
+                }
+            }
+            return LANGUAGE_CN;
         }
 
         public static Language fromCharset(String charset) {
@@ -49,7 +70,7 @@ public class CharsetConstants {
                     .findAny();
             if (language.isEmpty()) {
                 log.warn("Charset {} was not found, defaulting to US-ASCII", charset);
-                return LANGUAGE_US;
+                return LANGUAGE_CN;
             }
 
             return language.get();
@@ -71,7 +92,7 @@ public class CharsetConstants {
             return Charset.forName(language.getCharset());
         }
 
-        return StandardCharsets.US_ASCII;
+        return Charset.forName(Language.LANGUAGE_CN.getCharset());
     }
 
     private static class StrippedYamlConfig {

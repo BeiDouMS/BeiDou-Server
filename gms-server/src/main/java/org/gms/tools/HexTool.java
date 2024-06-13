@@ -22,6 +22,7 @@
 package org.gms.tools;
 
 import org.gms.constants.string.CharsetConstants;
+import org.gms.util.ThreadLocalUtil;
 
 import java.util.HexFormat;
 
@@ -80,7 +81,7 @@ public class HexTool {
             }
         }
 
-        return new String(filteredBytes, CharsetConstants.CHARSET);
+        return new String(filteredBytes, CharsetConstants.getCharset(ThreadLocalUtil.getCurrentClient().getLanguage()));
     }
 
     private static boolean isSpecialCharacter(byte asciiCode) {

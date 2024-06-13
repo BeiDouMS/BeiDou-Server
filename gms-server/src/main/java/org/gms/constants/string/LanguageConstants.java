@@ -10,7 +10,9 @@ public class LanguageConstants {
     enum Language {
         LANG_PRT(0),
         LANG_ESP(1),
-        LANG_ENG(2);
+        LANG_ENG(2),
+        LANG_CN(3),
+        ;
 
         int lang;
 
@@ -86,6 +88,20 @@ public class LanguageConstants {
         LanguageConstants.CPQEntryLobby[lang] = "You will now receive challenges from other groups. If you do not accept a challenge within 3 minutes, you will be taken out.";
         LanguageConstants.CPQEntry[lang] = "You can select \"Summon Monsters\", \"Ability\", or \"Protector\" as your tactic during the Monster Carnival. Use Tab and F1 ~ F12 for quick access!";
 
+        lang = Language.LANG_CN.getValue();
+        LanguageConstants.CPQBlue[lang] = "Maple Blue";
+        LanguageConstants.CPQRed[lang] = "Maple Red";
+        LanguageConstants.CPQPlayerExit[lang] = " left the Carnival of Monsters.";
+        LanguageConstants.CPQExtendTime[lang] = "The time has been extended.";
+        LanguageConstants.CPQLeaderNotFound[lang] = "Could not find the Leader.";
+        LanguageConstants.CPQError[lang] = "There was a problem. Please re-create a room.";
+        LanguageConstants.CPQPickRoom[lang] = "Sign up for the Monster Festival!\r\n";
+        LanguageConstants.CPQChallengeRoomAnswer[lang] = "The group is currently facing a challenge.";
+        LanguageConstants.CPQChallengeRoomSent[lang] = "A challenge has been sent to the group in the room. Please wait a while.";
+        LanguageConstants.CPQChallengeRoomDenied[lang] = "The group in the room canceled your challenge.";
+        LanguageConstants.CPQFindError[lang] = "We could not find a group in this room.\r\nProbably the group was scrapped inside the room!";
+        LanguageConstants.CPQEntryLobby[lang] = "You will now receive challenges from other groups. If you do not accept a challenge within 3 minutes, you will be taken out.";
+        LanguageConstants.CPQEntry[lang] = "You can select \"Summon Monsters\", \"Ability\", or \"Protector\" as your tactic during the Monster Carnival. Use Tab and F1 ~ F12 for quick access!";
 
     }
 

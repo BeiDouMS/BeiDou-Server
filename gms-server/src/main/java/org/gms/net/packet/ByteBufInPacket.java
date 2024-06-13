@@ -3,6 +3,7 @@ package org.gms.net.packet;
 import org.gms.constants.string.CharsetConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
+import org.gms.util.ThreadLocalUtil;
 
 import java.awt.*;
 
@@ -52,7 +53,7 @@ public class ByteBufInPacket implements InPacket {
         short length = readShort();
         byte[] stringBytes = new byte[length];
         byteBuf.readBytes(stringBytes);
-        return new String(stringBytes, CharsetConstants.CHARSET);
+        return new String(stringBytes, CharsetConstants.getCharset(ThreadLocalUtil.getCurrentClient().getLanguage()));
     }
 
     @Override
