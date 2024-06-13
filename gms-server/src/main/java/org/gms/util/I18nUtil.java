@@ -20,4 +20,16 @@ public class I18nUtil {
     public static String getMessage(String code, Object... args) {
         return messageSource.getMessage(code, args, LANGUAGE);
     }
+
+    /**
+     * 根据传入的语言获取message
+     *
+     * @param locale 语言
+     * @param code messageCode
+     * @param args 传参
+     * @return 组合后的message
+     */
+    public static String getMessage(Locale locale, String code, Object... args) {
+        return messageSource.getMessage(code, args, locale);
+    }
 }

@@ -11,7 +11,7 @@ public class CodeGen {
         DruidDataSource dataSource = new DruidDataSource();
         Properties properties = new Properties();
         properties.setProperty("druid.name", "mysql");
-        properties.setProperty("druid.url", "jdbc:mysql://localhost:3306/napms?useInformationSchema=true&characterEncoding=utf-8");
+        properties.setProperty("druid.url", "jdbc:mysql://localhost:3306/beidou?useInformationSchema=true&characterEncoding=utf-8");
         properties.setProperty("druid.username", "root");
         properties.setProperty("druid.password", "root");
         properties.setProperty("druid.testWhileIdle", "true");
