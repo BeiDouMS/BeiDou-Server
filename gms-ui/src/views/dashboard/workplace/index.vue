@@ -1,7 +1,7 @@
 <template>
   <div class="container" :loading="true">
     <Breadcrumb />
-    <a-card class="general-card" title="Cosmic Nap">
+    <a-card class="general-card" title="BeiDou">
       <a-row>
         <a-col>
           Game Server 目前

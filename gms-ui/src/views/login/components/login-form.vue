@@ -1,6 +1,6 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">Cosmic Nap</div>
+    <div class="login-form-title">BeiDou</div>
     <div class="login-form-sub-title">登录系统</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
