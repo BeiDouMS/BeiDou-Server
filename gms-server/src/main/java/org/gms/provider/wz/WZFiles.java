@@ -1,5 +1,8 @@
 package org.gms.provider.wz;
 
+import org.gms.manager.ServerManager;
+import org.gms.property.ServiceProperty;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -40,7 +43,11 @@ public enum WZFiles {
         if (propertyPath != null && Files.isDirectory(Path.of(propertyPath))) {
             return propertyPath;
         }
-
-        return "wz";
+        final String oldWzPath = "wz";
+        if (Files.exists(Path.of(oldWzPath))) {
+            return oldWzPath;
+        }
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        return oldWzPath + "-" + serviceProperty.getLanguage();
     }
 }

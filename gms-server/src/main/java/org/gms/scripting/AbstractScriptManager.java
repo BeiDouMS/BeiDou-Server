@@ -23,6 +23,8 @@ package org.gms.scripting;
 
 import org.gms.client.Client;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+import org.gms.manager.ServerManager;
+import org.gms.property.ServiceProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +47,12 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path) {
-        Path scriptFile = Path.of("scripts", path);
+        String scriptPath = "scripts";
+        if (!Files.exists(Path.of(scriptPath))) {
+            ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+            scriptPath += "-" + serviceProperty.getLanguage();
+        }
+        Path scriptFile = Path.of(scriptPath, path);
         if (!Files.exists(scriptFile)) {
             return null;
         }

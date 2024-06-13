@@ -34,6 +34,7 @@ import org.gms.net.server.services.type.ChannelServices;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.World;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventScriptManager;
@@ -158,9 +159,9 @@ public final class Channel {
 
             services = new ServicesManager(ChannelServices.OVERALL);
 
-            log.info("频道 {}：开放的端口 {}", getId(), port);
+            log.info(I18nUtil.getMessage("channel.log.info1"), getId(), port);
         } catch (Exception e) {
-            log.warn("频道初始化异常：{}", e.getMessage(), e);
+            log.error(I18nUtil.getMessage("channel.log.error1"), e);
         }
     }
 
@@ -186,7 +187,7 @@ public final class Channel {
                 return;
             }
 
-            log.info("正在关闭大区 {}，频道 {}", world, channel);
+            log.info(I18nUtil.getMessage("channel.shutdown.log.info1"), world, channel);
 
             closeAllMerchants();
             disconnectAwayPlayers();
@@ -204,9 +205,9 @@ public final class Channel {
             channelServer.stop();
 
             finishedShutdown = true;
-            log.info("大区 {}，频道 {} 已关闭", world, channel);
+            log.info(I18nUtil.getMessage("channel.shutdown.log.info2"), world, channel);
         } catch (Exception e) {
-            log.info("大区 {}，频道 {} 关闭发生异常：{}", world, channel, e.getMessage(), e);
+            log.info(I18nUtil.getMessage("channel.shutdown.log.error1"), world, channel, e.getMessage(), e);
         }
     }
 

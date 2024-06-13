@@ -59,6 +59,7 @@ import org.gms.net.server.task.ServerMessageTask;
 import org.gms.net.server.task.TimedMapObjectTask;
 import org.gms.net.server.task.TimeoutTask;
 import org.gms.net.server.task.WeddingReservationTask;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
@@ -2214,6 +2215,6 @@ public class World {
         players = null;
 
         clearWorldData();
-        log.info("大区 {} 已关闭", id);
+        log.info(I18nUtil.getMessage("world.shutdown.log.info1"), id);
     }
 }

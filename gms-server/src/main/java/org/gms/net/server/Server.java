@@ -50,21 +50,8 @@ import org.gms.net.server.coordinator.session.SessionCoordinator;
 import org.gms.net.server.guild.Alliance;
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildCharacter;
-import org.gms.net.server.task.BossLogTask;
-import org.gms.net.server.task.CharacterDiseaseTask;
-import org.gms.net.server.task.CouponTask;
-import org.gms.net.server.task.DueyFredrickTask;
-import org.gms.net.server.task.EventRecallCoordinatorTask;
-import org.gms.net.server.task.InvitationTask;
-import org.gms.net.server.task.LoginCoordinatorTask;
-import org.gms.net.server.task.LoginStorageTask;
-import org.gms.net.server.task.RankingCommandTask;
-import org.gms.net.server.task.RankingLoginTask;
-import org.gms.net.server.task.RespawnTask;
+import org.gms.net.server.task.*;
 import org.gms.net.server.world.World;
-import org.apache.logging.log4j.LogManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.SkillbookInformationProvider;
 import org.gms.server.ThreadManager;
@@ -75,6 +62,9 @@ import org.gms.server.quest.Quest;
 import org.gms.service.NoteService;
 import org.gms.tools.DatabaseConnection;
 import org.gms.tools.Pair;
+import org.gms.util.I18nUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -82,20 +72,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TimeZone;
-import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -105,10 +83,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.HOURS;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.*;
 
 public class Server {
     static {
@@ -431,7 +406,7 @@ public class Server {
             wldRLock.unlock();
         }
 
-        log.info("正在启动大区：{}", i);
+        log.info(I18nUtil.getMessage("server.initWorld.log.info1"), i);
 
         int exprate = YamlConfig.config.worlds.get(i).exp_rate;
         int mesorate = YamlConfig.config.worlds.get(i).meso_rate;
@@ -477,10 +452,10 @@ public class Server {
         if (canDeploy) {
             world.setServerMessage(YamlConfig.config.worlds.get(i).server_message);
 
-            log.info("大区 {} 启动完毕！", i);
+            log.info(I18nUtil.getMessage("server.initWorld.log.info2"), i);
             return i;
         } else {
-            log.error("无法获取大区 {}，正在关闭该大区", i);
+            log.error(I18nUtil.getMessage("server.initWorld.log.error1"), i);
             world.shutdown();
             return -2;
         }
@@ -813,12 +788,12 @@ public class Server {
 
     public void init() {
         Instant beforeInit = Instant.now();
-        log.info("Cosmic-Nap v{} 正在启动中...", ServerConstants.VERSION);
+        log.info(I18nUtil.getMessage("server.init.log.info1"), ServerConstants.VERSION);
 
         channelDependencies = registerChannelDependencies();
 
         // 利用虚拟线程，减少开销
-        log.info("正在加载WZ文件");
+        log.info(I18nUtil.getMessage("server.init.log.info2"));
         try (ExecutorService initExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
             // Run slow operations asynchronously to make startup faster
             final List<Future<?>> futures = new ArrayList<>();
@@ -832,14 +807,14 @@ public class Server {
             }
             initExecutor.shutdown();
         } catch (Exception e) {
-            log.error("加载wz任务执行失败：{}", e.getMessage(), e);
+            log.error(I18nUtil.getMessage("server.init.log.error1"), e);
             throw new IllegalStateException(e);
         }
-        log.info("WZ文件加载完成");
+        log.info(I18nUtil.getMessage("server.init.log.info3"));
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
-        log.info("正在读取数据库数据");
+        log.info(I18nUtil.getMessage("server.init.log.info4"));
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
         AccountsMapper accountsMapper = ServerManager.getApplicationContext().getBean(AccountsMapper.class);
         accountsMapper.updateAllLoggedIn(0);
@@ -866,10 +841,10 @@ public class Server {
             applyAllWorldTransfers(con);
             PlayerNPC.loadRunningRankData(con, worldCount);
         } catch (SQLException sqle) {
-            log.error("数据库任务执行失败：{}", sqle.getMessage(), sqle);
+            log.error(I18nUtil.getMessage("server.init.log.error2"), sqle);
             throw new IllegalStateException(sqle);
         }
-        log.info("数据读取完成");
+        log.info(I18nUtil.getMessage("server.init.log.info5"));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks(channelDependencies);    // aggregated method for timely tasks thanks to lxconan
@@ -888,24 +863,24 @@ public class Server {
                 }
             }
         } catch (Exception e) {
-            log.error("'world.ini'配置错误：{}", e.getMessage(), e); //For those who get errors
+            log.error(I18nUtil.getMessage("server.init.log.error3"), e); //For those who get errors
             System.exit(0);
         }
 
         loginServer = initLoginServer(8484);
-        log.info("已开启登录端口 8484");
+        log.info(I18nUtil.getMessage("server.init.log.info6"));
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
 
-        log.info("正在加载事件脚本");
+        log.info(I18nUtil.getMessage("server.init.log.info7"));
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
         }
-        log.info("事件脚本加载完成");
+        log.info(I18nUtil.getMessage("server.init.log.info8"));
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
-        log.info("Cosmic-Nap 启动完成，耗时：{} s", initDuration.toMillis() / 1000.0);
+        log.info(I18nUtil.getMessage("server.init.log.info9"), initDuration.toMillis() / 1000.0);
     }
 
     private ChannelDependencies registerChannelDependencies() {
@@ -1856,7 +1831,7 @@ public class Server {
     }
 
     private void disconnectIdlesOnLoginTask() {
-        TimerManager.getInstance().register(() -> disconnectIdlesOnLoginState(), 300000);
+        TimerManager.getInstance().register(this::disconnectIdlesOnLoginState, 300000);
     }
 
     public final Runnable shutdown(final boolean restart) {//no player should be online when trying to shutdown!
@@ -1864,7 +1839,8 @@ public class Server {
     }
 
     public synchronized void shutdownInternal(boolean restart) {
-        log.info("正在 {} 服务！", restart ? "重启" : "关闭");
+        log.info(I18nUtil.getMessage("server.shutdownInternal.log.info1"), restart ?
+                I18nUtil.getMessage("server.shutdownInternal.log.info2") : I18nUtil.getMessage("server.shutdownInternal.log.info3"));
         if (getWorlds() == null) {
             return;//already shutdown
         }
@@ -1872,14 +1848,12 @@ public class Server {
             w.shutdown();
         }
 
-        List<Channel> allChannels = getAllChannels();
-
-        for (Channel ch : allChannels) {
+        for (Channel ch : getAllChannels()) {
             while (!ch.finishedShutdown()) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ie) {
-                    log.error("Error during shutdown sleep", ie);
+                    log.error(I18nUtil.getMessage("server.shutdownInternal.log.error1"), ie);
                 }
             }
         }
@@ -1891,9 +1865,9 @@ public class Server {
         TimerManager.getInstance().stop();
         loginServer.stop();
         online = false;
-        log.info("所有大区和频道已全部关闭");
+        log.info(I18nUtil.getMessage("server.shutdownInternal.log.info4"));
         if (restart) {
-            log.info("重启中...");
+            log.info(I18nUtil.getMessage("server.shutdownInternal.log.info5"));
             instance = null;
             getInstance().init();
         }

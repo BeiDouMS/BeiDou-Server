@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.BeansException;
@@ -36,7 +37,7 @@ public class ServerManager implements ApplicationContextAware, ApplicationRunner
         SwaggerUiConfigProperties swaggerUiConfigProperties = applicationContext.getBean(SwaggerUiConfigProperties.class);
         if (springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
             Environment environment = applicationContext.getBean(Environment.class);
-            log.info("接口文档地址：http://{}:{}/swagger-ui/index.html", InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port"));
+            log.info(I18nUtil.getMessage("serverManager.run.log.info1"), InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port"));
         }
     }
 
