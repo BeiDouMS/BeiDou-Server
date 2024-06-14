@@ -36,6 +36,7 @@ import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
+import tools.PacketCreator;
 import tools.Pair;
 
 import java.sql.Connection;
@@ -407,6 +408,17 @@ public class CashShop {
         }
     }
 
+    public int getItemsSize() {
+        int size = 0;
+        lock.lock();
+        try {
+            size = inventory.size();
+        } finally {
+            lock.unlock();
+        }
+        return size;
+    }
+
     public List<Integer> getWishList() {
         return wishList;
     }
@@ -544,14 +556,14 @@ public class CashShop {
         Item css = getCashShopItemByItemid(ItemId.CASH_SHOP_SURPRISE);
 
         if (css != null) {
+            if (getItemsSize() >= 100) {
+                return null;
+            }
+
             CashItem cItem = CashItemFactory.getRandomCashItem();
 
             if (cItem != null) {
                 if (css.getQuantity() > 1) {
-                    /* if(NOT ENOUGH SPACE) { looks like we're not dealing with cash inventory limit whatsoever, k then
-                        return null;
-                    } */
-
                     css.setQuantity((short) (css.getQuantity() - 1));
                 } else {
                     removeFromInventory(css);

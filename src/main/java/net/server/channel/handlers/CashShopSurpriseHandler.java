@@ -41,6 +41,7 @@ public class CashShopSurpriseHandler extends AbstractPacketHandler {
             if (cssResult != null) {
                 Item cssItem = cssResult.getLeft(), cssBox = cssResult.getRight();
                 c.sendPacket(PacketCreator.onCashGachaponOpenSuccess(c.getAccID(), cssBox.getSN(), cssBox.getQuantity(), cssItem, cssItem.getItemId(), cssItem.getQuantity(), true));
+                c.sendPacket(PacketCreator.showCashInventory(c));
             } else {
                 c.sendPacket(PacketCreator.onCashItemGachaponOpenFailed());
             }
