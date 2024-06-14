@@ -4,6 +4,15 @@ import { Message } from '@arco-design/web-vue';
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
 
+/* eslint-disable no-bitwise */
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export interface HttpResponse<T = unknown> {
   status: string;
   msg: string;
@@ -27,6 +36,12 @@ axios.interceptors.request.use(
         config.headers = {};
       }
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (config.data) {
+      config.data = {
+        requestId: generateUUID(),
+        data: config.data,
+      };
     }
     return config;
   },
