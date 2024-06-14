@@ -4,18 +4,19 @@ import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import org.gms.dao.entity.AccountsDO;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table("accounts")
-public class AccountsSearchDto extends AccountsDO {
+public class AccountsSearchDTO extends AccountsDO implements Serializable {
     @Column("lastlogin")
     private Timestamp lastloginStart;
     @Column("lastlogin")

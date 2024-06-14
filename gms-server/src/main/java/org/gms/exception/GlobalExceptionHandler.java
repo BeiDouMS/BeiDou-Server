@@ -24,6 +24,15 @@ public class GlobalExceptionHandler {
         return ResultBody.error(e.getErrorCode(), e.getErrorMsg());
     }
 
+    /**
+     * 请求参数错误
+     */
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ResponseBody
+    public ResultBody illegalArgumentExceptionHandler(HttpServletRequest req, IllegalArgumentException e) {
+        logger.error("发生非法参数异常！原因是:", e);
+        return ResultBody.error(BizExceptionEnum.BODY_NOT_MATCH);
+    }
 
     /**
      * 处理空指针的异常  
@@ -42,7 +51,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResultBody exceptionHandler(HttpServletRequest req, HttpRequestMethodNotSupportedException e) {
         logger.error("发生请求方法不支持异常！原因是:", e);
-        return ResultBody.error(BizExceptionEnum.REQUEST_METHOD_SUPPORT_ERROR);
+        return ResultBody.error(BizExceptionEnum.REQUEST_METHOD_SUPPORT);
     }
     /**
      * 处理其他异常  

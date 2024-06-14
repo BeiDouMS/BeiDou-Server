@@ -2215,6 +2215,6 @@ public class World {
         players = null;
 
         clearWorldData();
-        log.info(I18nUtil.getMessage("world.shutdown.log.info1"), id);
+        log.info(I18nUtil.getLogMessage("World.shutdown.info1"), id);
     }
 }

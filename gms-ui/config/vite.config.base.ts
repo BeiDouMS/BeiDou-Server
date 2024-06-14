@@ -13,7 +13,7 @@ export default defineConfig({
     configArcoStyleImportPlugin(),
   ],
   server: {
-    port: 8787
+    port: 8787,
   },
   resolve: {
     alias: [

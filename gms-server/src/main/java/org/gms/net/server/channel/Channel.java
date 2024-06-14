@@ -159,9 +159,9 @@ public final class Channel {
 
             services = new ServicesManager(ChannelServices.OVERALL);
 
-            log.info(I18nUtil.getMessage("channel.log.info1"), getId(), port);
+            log.info(I18nUtil.getLogMessage("Channel.info1"), getId(), port);
         } catch (Exception e) {
-            log.error(I18nUtil.getMessage("channel.log.error1"), e);
+            log.error(I18nUtil.getLogMessage("Channel.error1"), e);
         }
     }
 
@@ -187,7 +187,7 @@ public final class Channel {
                 return;
             }
 
-            log.info(I18nUtil.getMessage("channel.shutdown.log.info1"), world, channel);
+            log.info(I18nUtil.getLogMessage("Channel.shutdown.info1"), world, channel);
 
             closeAllMerchants();
             disconnectAwayPlayers();
@@ -205,9 +205,9 @@ public final class Channel {
             channelServer.stop();
 
             finishedShutdown = true;
-            log.info(I18nUtil.getMessage("channel.shutdown.log.info2"), world, channel);
+            log.info(I18nUtil.getLogMessage("Channel.shutdown.info2"), world, channel);
         } catch (Exception e) {
-            log.info(I18nUtil.getMessage("channel.shutdown.log.error1"), world, channel, e.getMessage(), e);
+            log.info(I18nUtil.getLogMessage("Channel.shutdown.error1"), world, channel, e.getMessage(), e);
         }
     }
 

@@ -406,7 +406,7 @@ public class Server {
             wldRLock.unlock();
         }
 
-        log.info(I18nUtil.getMessage("server.initWorld.log.info1"), i);
+        log.info(I18nUtil.getLogMessage("Server.initWorld.info1"), i);
 
         int exprate = YamlConfig.config.worlds.get(i).exp_rate;
         int mesorate = YamlConfig.config.worlds.get(i).meso_rate;
@@ -452,10 +452,10 @@ public class Server {
         if (canDeploy) {
             world.setServerMessage(YamlConfig.config.worlds.get(i).server_message);
 
-            log.info(I18nUtil.getMessage("server.initWorld.log.info2"), i);
+            log.info(I18nUtil.getLogMessage("Server.initWorld.info2"), i);
             return i;
         } else {
-            log.error(I18nUtil.getMessage("server.initWorld.log.error1"), i);
+            log.error(I18nUtil.getLogMessage("Server.initWorld.error1"), i);
             world.shutdown();
             return -2;
         }
@@ -788,12 +788,12 @@ public class Server {
 
     public void init() {
         Instant beforeInit = Instant.now();
-        log.info(I18nUtil.getMessage("server.init.log.info1"), ServerConstants.VERSION);
+        log.info(I18nUtil.getLogMessage("Server.init.info1"), ServerConstants.VERSION);
 
         channelDependencies = registerChannelDependencies();
 
         // 利用虚拟线程，减少开销
-        log.info(I18nUtil.getMessage("server.init.log.info2"));
+        log.info(I18nUtil.getLogMessage("Server.init.info2"));
         try (ExecutorService initExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
             // Run slow operations asynchronously to make startup faster
             final List<Future<?>> futures = new ArrayList<>();
@@ -807,14 +807,14 @@ public class Server {
             }
             initExecutor.shutdown();
         } catch (Exception e) {
-            log.error(I18nUtil.getMessage("server.init.log.error1"), e);
+            log.error(I18nUtil.getLogMessage("Server.init.error1"), e);
             throw new IllegalStateException(e);
         }
-        log.info(I18nUtil.getMessage("server.init.log.info3"));
+        log.info(I18nUtil.getLogMessage("Server.init.info3"));
 
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
-        log.info(I18nUtil.getMessage("server.init.log.info4"));
+        log.info(I18nUtil.getLogMessage("Server.init.info4"));
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
         AccountsMapper accountsMapper = ServerManager.getApplicationContext().getBean(AccountsMapper.class);
         accountsMapper.updateAllLoggedIn(0);
@@ -841,10 +841,10 @@ public class Server {
             applyAllWorldTransfers(con);
             PlayerNPC.loadRunningRankData(con, worldCount);
         } catch (SQLException sqle) {
-            log.error(I18nUtil.getMessage("server.init.log.error2"), sqle);
+            log.error(I18nUtil.getLogMessage("Server.init.error2"), sqle);
             throw new IllegalStateException(sqle);
         }
-        log.info(I18nUtil.getMessage("server.init.log.info5"));
+        log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();
         initializeTimelyTasks(channelDependencies);    // aggregated method for timely tasks thanks to lxconan
@@ -863,24 +863,24 @@ public class Server {
                 }
             }
         } catch (Exception e) {
-            log.error(I18nUtil.getMessage("server.init.log.error3"), e); //For those who get errors
+            log.error(I18nUtil.getLogMessage("Server.init.error3"), e); //For those who get errors
             System.exit(0);
         }
 
         loginServer = initLoginServer(8484);
-        log.info(I18nUtil.getMessage("server.init.log.info6"));
+        log.info(I18nUtil.getLogMessage("Server.init.info6"));
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
 
-        log.info(I18nUtil.getMessage("server.init.log.info7"));
+        log.info(I18nUtil.getLogMessage("Server.init.info7"));
         for (Channel ch : this.getAllChannels()) {
             ch.reloadEventScriptManager();
         }
-        log.info(I18nUtil.getMessage("server.init.log.info8"));
+        log.info(I18nUtil.getLogMessage("Server.init.info8"));
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
-        log.info(I18nUtil.getMessage("server.init.log.info9"), initDuration.toMillis() / 1000.0);
+        log.info(I18nUtil.getLogMessage("Server.init.info9"), initDuration.toMillis() / 1000.0);
     }
 
     private ChannelDependencies registerChannelDependencies() {
@@ -1839,8 +1839,8 @@ public class Server {
     }
 
     public synchronized void shutdownInternal(boolean restart) {
-        log.info(I18nUtil.getMessage("server.shutdownInternal.log.info1"), restart ?
-                I18nUtil.getMessage("server.shutdownInternal.log.info2") : I18nUtil.getMessage("server.shutdownInternal.log.info3"));
+        log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info1"), restart ?
+                I18nUtil.getLogMessage("Server.shutdownInternal.info2") : I18nUtil.getLogMessage("Server.shutdownInternal.info3"));
         if (getWorlds() == null) {
             return;//already shutdown
         }
@@ -1853,7 +1853,7 @@ public class Server {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ie) {
-                    log.error(I18nUtil.getMessage("server.shutdownInternal.log.error1"), ie);
+                    log.error(I18nUtil.getLogMessage("Server.shutdownInternal.error1"), ie);
                 }
             }
         }
@@ -1865,9 +1865,9 @@ public class Server {
         TimerManager.getInstance().stop();
         loginServer.stop();
         online = false;
-        log.info(I18nUtil.getMessage("server.shutdownInternal.log.info4"));
+        log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info4"));
         if (restart) {
-            log.info(I18nUtil.getMessage("server.shutdownInternal.log.info5"));
+            log.info(I18nUtil.getLogMessage("Server.shutdownInternal.info5"));
             instance = null;
             getInstance().init();
         }

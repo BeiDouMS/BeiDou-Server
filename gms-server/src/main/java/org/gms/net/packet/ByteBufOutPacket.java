@@ -1,5 +1,6 @@
 package org.gms.net.packet;
 
+import org.gms.client.Client;
 import org.gms.constants.string.CharsetConstants;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -10,6 +11,7 @@ import org.gms.util.ThreadLocalUtil;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Optional;
 
 @NotThreadSafe
 public class ByteBufOutPacket implements OutPacket {
@@ -73,7 +75,7 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public void writeString(String value) {
-        byte[] bytes = value.getBytes(CharsetConstants.getCharset(ThreadLocalUtil.getCurrentClient().getLanguage()));
+        byte[] bytes = value.getBytes(CharsetConstants.getCharset(Optional.ofNullable(ThreadLocalUtil.getCurrentClient()).map(Client::getLanguage).orElse(0)));
         writeShort(bytes.length);
         writeBytes(bytes);
     }
