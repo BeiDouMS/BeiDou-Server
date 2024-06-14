@@ -32,7 +32,7 @@ public class DatabaseConnection {
 
     public static Handle getHandle() {
         if (jdbi == null) {
-            throw new IllegalStateException("数据库连接未初始化，创建jdbi失败！");
+            initializeJdbi(ServerManager.getApplicationContext().getBean(DataSource.class));
         }
 
         return jdbi.open();
