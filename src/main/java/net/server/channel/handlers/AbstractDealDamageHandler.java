@@ -689,9 +689,10 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             calcDmgMax = chr.calculateMaxBaseDamage(chr.getTotalWatk());
         }
 
+        StatEffect effect = null;
         if (ret.skill != 0) {
             Skill skill = SkillFactory.getSkill(ret.skill);
-            StatEffect effect = skill.getEffect(ret.skilllevel);
+            effect = skill.getEffect(ret.skilllevel);
 
             if (magic) {
                 // Since the skill is magic based, use the magic formula
@@ -928,6 +929,16 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 if (ret.skill == Marksman.SNIPE || (canCrit && damage > hitDmgMax)) {
                     // If the skill is a crit, inverse the damage to make it show up on clients.
                     damage = -Integer.MAX_VALUE + damage - 1;
+                }
+
+                if(effect != null) {
+                    int maxattack = Math.max(effect.getBulletCount(), effect.getAttackCount());
+                    if (shadowPartner) {
+                        maxattack = maxattack * 2;
+                    }
+                    if (ret.numDamage > maxattack) {
+                        AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutobanManager(), "Too many lines: " + ret.numDamage + " Max lines: " + maxattack + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    }
                 }
 
                 allDamageNumbers.add(damage);
