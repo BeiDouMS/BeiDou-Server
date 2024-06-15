@@ -1,12 +1,16 @@
 <template>
   <div class="container" :loading="true">
     <Breadcrumb />
-    <a-card class="general-card" title="BeiDou">
+    <a-card class="general-card" :title="$t('menu.dashboard.workplace')">
       <a-row>
         <a-col>
-          Game Server 目前
-          <a-tag v-if="serverStatus" color="green" bordered>运行中...</a-tag>
-          <a-tag v-else color="gray" bordered>休息中</a-tag>
+          {{ $t('workplace.gameServer.status') }}
+          <a-tag v-if="serverStatus" color="green" bordered>
+            {{ $t('workplace.running') }}
+          </a-tag>
+          <a-tag v-else color="gray" bordered>
+            {{ $t('workplace.stopped') }}
+          </a-tag>
         </a-col>
       </a-row>
       <a-row>
@@ -19,7 +23,7 @@
               status="success"
               @click="changeServerStatusClick('start')"
             >
-              启动服务
+              {{ $t('workplace.button.start') }}
             </a-button>
             <a-button
               :loading="loading"
@@ -28,7 +32,7 @@
               status="danger"
               @click="changeServerStatusClick('stop')"
             >
-              停止服务
+              {{ $t('workplace.button.stop') }}
             </a-button>
             <a-button
               :loading="loading"
@@ -37,7 +41,7 @@
               status="warning"
               @click="changeServerStatusClick('restart')"
             >
-              重启服务
+              {{ $t('workplace.button.restart') }}
             </a-button>
           </a-space>
         </a-col>

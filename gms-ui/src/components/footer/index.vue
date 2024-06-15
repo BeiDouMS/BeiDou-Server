@@ -1,5 +1,5 @@
 <template>
-  <a-layout-footer class="footer">BeiDou</a-layout-footer>
+  <a-layout-footer class="footer">{{ $t('title') }}</a-layout-footer>
 </template>
 
 <script lang="ts" setup></script>

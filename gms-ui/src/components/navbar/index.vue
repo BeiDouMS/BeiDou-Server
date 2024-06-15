@@ -10,7 +10,7 @@
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
         >
-          BeiDou
+          {{ $t('title') }}
         </a-typography-title>
         <icon-menu-fold
           v-if="!topMenu && appStore.device === 'mobile'"
@@ -24,9 +24,40 @@
     </div>
     <ul class="right-side">
       <li>
+        <a-tooltip :content="$t('settings.language')">
+          <a-button
+            class="nav-btn"
+            type="outline"
+            :shape="'circle'"
+            @click="setDropDownVisible"
+          >
+            <template #icon>
+              <icon-language />
+            </template>
+          </a-button>
+        </a-tooltip>
+        <a-dropdown trigger="click" @select="changeLocale as any">
+          <div ref="triggerBtn" class="trigger-btn"></div>
+          <template #content>
+            <a-doption
+              v-for="item in locales"
+              :key="item.value"
+              :value="item.value"
+            >
+              <template #icon>
+                <icon-check v-show="item.value === currentLocale" />
+              </template>
+              {{ item.label }}
+            </a-doption>
+          </template>
+        </a-dropdown>
+      </li>
+      <li>
         <a-tooltip
           :content="
-            theme === 'light' ? '点击切换为暗黑模式' : '点击切换为亮色模式'
+            theme === 'light'
+              ? $t('settings.switch.toDark')
+              : $t('settings.switch.toLight')
           "
         >
           <a-button
@@ -44,7 +75,11 @@
       </li>
       <li>
         <a-tooltip
-          :content="isFullscreen ? '点击退出全屏模式' : '点击切换全屏模式'"
+          :content="
+            isFullscreen
+              ? $t('settings.screen.toExit')
+              : $t('settings.screen.toFull')
+          "
         >
           <a-button
             class="nav-btn"
@@ -71,19 +106,19 @@
             <a-doption>
               <a-space @click="$router.push({ name: 'Info' })">
                 <icon-user />
-                <span>用户中心</span>
+                <span>{{ $t('settings.userCenter') }}</span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="$router.push({ name: 'Setting' })">
                 <icon-settings />
-                <span>用户设置</span>
+                <span>{{ $t('settings.userSettings') }}</span>
               </a-space>
             </a-doption>
             <a-doption>
               <a-space @click="handleLogout">
                 <icon-export />
-                <span>登出登录</span>
+                <span>{{ $t('settings.logout') }}</span>
               </a-space>
             </a-doption>
           </template>
@@ -94,12 +129,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, inject } from 'vue';
+  import { computed, inject, ref } from 'vue';
   import { useDark, useToggle, useFullscreen } from '@vueuse/core';
   import { useAppStore, useUserStore } from '@/store';
   import useUser from '@/hooks/user';
   import Menu from '@/components/menu/index.vue';
+  import useLocale from '@/hooks/locale';
+  import { LOCALE_OPTIONS } from '@/locale';
 
+  const { changeLocale, currentLocale } = useLocale();
+  const locales = [...LOCALE_OPTIONS];
   const appStore = useAppStore();
   const userStore = useUserStore();
   const { logout } = useUser();
@@ -130,6 +169,16 @@
     logout();
   };
   const toggleDrawerMenu = inject('toggleDrawerMenu') as () => void;
+
+  const triggerBtn = ref();
+  const setDropDownVisible = () => {
+    const event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    triggerBtn.value.dispatchEvent(event);
+  };
 </script>
 
 <style scoped lang="less">

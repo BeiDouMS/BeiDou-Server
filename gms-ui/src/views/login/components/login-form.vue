@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">BeiDou</div>
-    <div class="login-form-sub-title">登录系统</div>
+    <div class="login-form-title">{{ $t('title') }}</div>
+    <div class="login-form-sub-title">{{ $t('form.login.title') }}</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -12,11 +12,14 @@
     >
       <a-form-item
         field="username"
-        :rules="[{ required: true, message: '用户名不能为空' }]"
+        :rules="[{ required: true, message: $t('form.login.user.empty') }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <a-input v-model="userInfo.username" placeholder="用户名：admin">
+        <a-input
+          v-model="userInfo.username"
+          :placeholder="$t('form.login.user.placeholder')"
+        >
           <template #prefix>
             <icon-user />
           </template>
@@ -24,13 +27,13 @@
       </a-form-item>
       <a-form-item
         field="password"
-        :rules="[{ required: true, message: '密码不能为空' }]"
+        :rules="[{ required: true, message: $t('form.login.password.empty') }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
         <a-input-password
           v-model="userInfo.password"
-          placeholder="密码：admin"
+          :placeholder="$t('form.login.password.placeholder')"
           allow-clear
         >
           <template #prefix>
@@ -45,15 +48,17 @@
             :model-value="loginConfig.rememberPassword"
             @change="setRememberPassword as any"
           >
-            记住密码
+            {{ $t('form.login.rememberPassword') }}
           </a-checkbox>
-          <a-link>忘记密码</a-link>
+          <a-link>
+            {{ $t('form.login.forgetPassword') }}
+          </a-link>
         </div>
         <a-button type="primary" html-type="submit" long :loading="loading">
-          登录
+          {{ $t('form.login.login') }}
         </a-button>
         <a-button type="text" long class="login-form-register-btn">
-          注册账号
+          {{ $t('form.login.register') }}
         </a-button>
       </a-space>
     </a-form>
@@ -69,11 +74,13 @@
   import { useUserStore } from '@/store';
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
+  import { useI18n } from 'vue-i18n';
 
   const router = useRouter();
   const errorMessage = ref('');
   const { loading, setLoading } = useLoading();
   const userStore = useUserStore();
+  const { t } = useI18n();
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
@@ -104,7 +111,7 @@
             ...othersQuery,
           },
         });
-        Message.success('欢迎使用');
+        Message.success(t('message.login.success'));
         const { rememberPassword } = loginConfig.value;
         const { username, password } = values;
         // 实际生产环境需要进行加密存储。
