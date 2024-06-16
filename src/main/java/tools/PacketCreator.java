@@ -77,6 +77,7 @@ import net.server.world.Party;
 import net.server.world.PartyCharacter;
 import net.server.world.PartyOperation;
 import net.server.world.World;
+import server.CashShop;
 import server.CashShop.CashItem;
 import server.CashShop.CashItemFactory;
 import server.CashShop.SpecialCashItem;
@@ -5580,8 +5581,8 @@ public class PacketCreator {
 
     public static Packet showMTSCash(Character chr) {
         final OutPacket p = OutPacket.create(SendOpcode.MTS_OPERATION2);
-        p.writeInt(chr.getCashShop().getCash(4));
-        p.writeInt(chr.getCashShop().getCash(2));
+        p.writeInt(chr.getCashShop().getCash(CashShop.NX_PREPAID));
+        p.writeInt(chr.getCashShop().getCash(CashShop.MAPLE_POINT));
         return p;
     }
 
@@ -5689,9 +5690,9 @@ public class PacketCreator {
 
     public static Packet showCash(Character mc) {
         final OutPacket p = OutPacket.create(SendOpcode.QUERY_CASH_RESULT);
-        p.writeInt(mc.getCashShop().getCash(1));
-        p.writeInt(mc.getCashShop().getCash(2));
-        p.writeInt(mc.getCashShop().getCash(4));
+        p.writeInt(mc.getCashShop().getCash(CashShop.NX_CREDIT));
+        p.writeInt(mc.getCashShop().getCash(CashShop.MAPLE_POINT));
+        p.writeInt(mc.getCashShop().getCash(CashShop.NX_PREPAID));
         return p;
     }
 

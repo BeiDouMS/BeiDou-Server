@@ -36,7 +36,6 @@ import provider.DataProviderFactory;
 import provider.DataTool;
 import provider.wz.WZFiles;
 import tools.DatabaseConnection;
-import tools.PacketCreator;
 import tools.Pair;
 
 import java.sql.Connection;
@@ -58,6 +57,71 @@ import static java.util.concurrent.TimeUnit.HOURS;
  * @author Flav
  */
 public class CashShop {
+    public static final int NX_CREDIT = 1;
+    public static final int MAPLE_POINT = 2;
+    public static final int NX_PREPAID = 4;
+
+    private final int accountId;
+    private final int characterId;
+    private int nxCredit;
+    private int maplePoint;
+    private int nxPrepaid;
+    private boolean opened;
+    private ItemFactory factory;
+    private final List<Item> inventory = new ArrayList<>();
+    private final List<Integer> wishList = new ArrayList<>();
+    private int notes = 0;
+    private final Lock lock = new ReentrantLock();
+
+    public CashShop(int accountId, int characterId, int jobType) throws SQLException {
+        this.accountId = accountId;
+        this.characterId = characterId;
+
+        if (!YamlConfig.config.server.USE_JOINT_CASHSHOP_INVENTORY) {
+            switch (jobType) {
+                case 0:
+                    factory = ItemFactory.CASH_EXPLORER;
+                    break;
+                case 1:
+                    factory = ItemFactory.CASH_CYGNUS;
+                    break;
+                case 2:
+                    factory = ItemFactory.CASH_ARAN;
+                    break;
+            }
+        } else {
+            factory = ItemFactory.CASH_OVERALL;
+        }
+
+        try (Connection con = DatabaseConnection.getConnection()) {
+            try (PreparedStatement ps = con.prepareStatement("SELECT `nxCredit`, `maplePoint`, `nxPrepaid` FROM `accounts` WHERE `id` = ?")) {
+                ps.setInt(1, accountId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        this.nxCredit = rs.getInt("nxCredit");
+                        this.maplePoint = rs.getInt("maplePoint");
+                        this.nxPrepaid = rs.getInt("nxPrepaid");
+                    }
+                }
+            }
+
+            for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
+                inventory.add(item.getLeft());
+            }
+
+            try (PreparedStatement ps = con.prepareStatement("SELECT `sn` FROM `wishlists` WHERE `charid` = ?")) {
+                ps.setInt(1, characterId);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        wishList.add(rs.getInt("sn"));
+                    }
+                }
+            }
+        }
+    }
+
     public static class CashItem {
 
         private final int sn;
@@ -259,91 +323,21 @@ public class CashShop {
         }
     }
 
-    private final int accountId;
-    private final int characterId;
-    private int nxCredit;
-    private int maplePoint;
-    private int nxPrepaid;
-    private boolean opened;
-    private ItemFactory factory;
-    private final List<Item> inventory = new ArrayList<>();
-    private final List<Integer> wishList = new ArrayList<>();
-    private int notes = 0;
-    private final Lock lock = new ReentrantLock();
-
-    public CashShop(int accountId, int characterId, int jobType) throws SQLException {
-        this.accountId = accountId;
-        this.characterId = characterId;
-
-        if (!YamlConfig.config.server.USE_JOINT_CASHSHOP_INVENTORY) {
-            switch (jobType) {
-            case 0:
-                factory = ItemFactory.CASH_EXPLORER;
-                break;
-            case 1:
-                factory = ItemFactory.CASH_CYGNUS;
-                break;
-            case 2:
-                factory = ItemFactory.CASH_ARAN;
-                break;
-            }
-        } else {
-            factory = ItemFactory.CASH_OVERALL;
-        }
-
-        try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("SELECT `nxCredit`, `maplePoint`, `nxPrepaid` FROM `accounts` WHERE `id` = ?")) {
-                ps.setInt(1, accountId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        this.nxCredit = rs.getInt("nxCredit");
-                        this.maplePoint = rs.getInt("maplePoint");
-                        this.nxPrepaid = rs.getInt("nxPrepaid");
-                    }
-                }
-            }
-
-            for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
-                inventory.add(item.getLeft());
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT `sn` FROM `wishlists` WHERE `charid` = ?")) {
-                ps.setInt(1, characterId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        wishList.add(rs.getInt("sn"));
-                    }
-                }
-            }
-        }
-    }
-
     public int getCash(int type) {
-        switch (type) {
-            case 1:
-                return nxCredit;
-            case 2:
-                return maplePoint;
-            case 4:
-                return nxPrepaid;
-        }
+        return switch (type) {
+            case NX_CREDIT -> nxCredit;
+            case MAPLE_POINT -> maplePoint;
+            case NX_PREPAID -> nxPrepaid;
+            default -> 0;
+        };
 
-        return 0;
     }
 
     public void gainCash(int type, int cash) {
         switch (type) {
-            case 1:
-                nxCredit += cash;
-                break;
-            case 2:
-                maplePoint += cash;
-                break;
-            case 4:
-                nxPrepaid += cash;
-                break;
+            case NX_CREDIT -> nxCredit += cash;
+            case MAPLE_POINT -> maplePoint += cash;
+            case NX_PREPAID -> nxPrepaid += cash;
         }
     }
 
