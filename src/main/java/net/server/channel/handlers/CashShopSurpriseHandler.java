@@ -42,7 +42,8 @@ public class CashShopSurpriseHandler extends AbstractPacketHandler {
             return;
         }
 
-        Optional<CashShopSurpriseResult> result = cs.openCashShopSurprise();
+        long cashId = p.readLong();
+        Optional<CashShopSurpriseResult> result = cs.openCashShopSurprise(cashId);
         if (result.isEmpty()) {
             c.sendPacket(PacketCreator.onCashItemGachaponOpenFailed());
             return;
