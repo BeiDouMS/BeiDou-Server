@@ -235,4 +235,12 @@ class ByteBufInPacketTest {
 
         assertEquals(initial.length(), afterReadingOpcode.length());
     }
+
+    @Test
+    void equalsShouldCompareBytes() {
+        ByteBufInPacket packet1 = new ByteBufInPacket(Unpooled.wrappedBuffer(new byte[]{ 11, 22, 33, 44 }));
+        ByteBufInPacket packet2 = new ByteBufInPacket(Unpooled.wrappedBuffer(new byte[]{ 11, 22, 33, 44 }));
+
+        assertEquals(packet1, packet2);
+    }
 }

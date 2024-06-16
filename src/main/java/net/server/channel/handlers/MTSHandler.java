@@ -35,6 +35,7 @@ import net.server.Server;
 import net.server.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import server.CashShop;
 import server.ItemInformationProvider;
 import server.MTSItemInfo;
 import tools.DatabaseConnection;
@@ -402,7 +403,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
                         int price = rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1); // taxes
-                        if (c.getPlayer().getCashShop().getCash(4) >= price) { // FIX
+                        if (c.getPlayer().getCashShop().getCash(CashShop.NX_PREPAID) >= price) { // FIX
                             boolean alwaysnull = true;
                             for (Channel cserv : Server.getInstance().getAllChannels()) {
                                 Character victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
@@ -459,11 +460,11 @@ public final class MTSHandler extends AbstractPacketHandler {
                     ResultSet rs = ps.executeQuery();
                     if (rs.next()) {
                         int price = rs.getInt("price") + 100 + (int) (rs.getInt("price") * 0.1);
-                        if (c.getPlayer().getCashShop().getCash(4) >= price) {
+                        if (c.getPlayer().getCashShop().getCash(CashShop.NX_PREPAID) >= price) {
                             for (Channel cserv : Server.getInstance().getAllChannels()) {
                                 Character victim = cserv.getPlayerStorage().getCharacterById(rs.getInt("seller"));
                                 if (victim != null) {
-                                    victim.getCashShop().gainCash(4, rs.getInt("price"));
+                                    victim.getCashShop().gainCash(CashShop.NX_PREPAID, rs.getInt("price"));
                                 } else {
                                     try (PreparedStatement pse = con.prepareStatement("SELECT accountid FROM characters WHERE id = ?")) {
                                         pse.setInt(1, rs.getInt("seller"));

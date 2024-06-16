@@ -83,6 +83,11 @@ public class ByteBufInPacket implements InPacket {
     }
 
     @Override
+    public boolean equals(Object o) {
+        return o instanceof ByteBufInPacket other && byteBuf.equals(other.byteBuf);
+    }
+
+    @Override
     public String toString() {
         final int readerIndex = byteBuf.readerIndex();
         byteBuf.markReaderIndex();
