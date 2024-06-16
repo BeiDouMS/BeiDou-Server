@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -55,6 +56,7 @@ import static java.util.concurrent.TimeUnit.HOURS;
 
 /*
  * @author Flav
+ * @author Ponk
  */
 public class CashShop {
     public static final int NX_CREDIT = 1;
@@ -177,19 +179,20 @@ public class CashShop {
             if (ItemConstants.EXPIRING_ITEMS) {
                 if (period == 1) {
                     switch (itemId) {
-                    case ItemId.DROP_COUPON_2X_4H, ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
-                        item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
+                        case ItemId.DROP_COUPON_2X_4H,
+                             ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
+                            item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
                                     item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));
                             */
-                        break;
-                    case ItemId.EXP_COUPON_3X_2H:
-                        item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
-                        break;
-                    default:
-                        item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
-                        break;
+                            break;
+                        case ItemId.EXP_COUPON_3X_2H:
+                            item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
+                            break;
+                        default:
+                            item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
+                            break;
                     }
                 } else {
                     item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
@@ -321,6 +324,9 @@ public class CashShop {
             }
             CashItemFactory.specialcashitems = loadedSpecialItems;
         }
+    }
+
+    public record CashShopSurpriseResult(Item usedCashShopSurprise, Item reward) {
     }
 
     public int getCash(int type) {
@@ -546,33 +552,31 @@ public class CashShop {
         return null;
     }
 
-    public synchronized Pair<Item, Item> openCashShopSurprise() {
-        Item css = getCashShopItemByItemid(ItemId.CASH_SHOP_SURPRISE);
-
-        if (css != null) {
-            if (getItemsSize() >= 100) {
-                return null;
-            }
-
-            CashItem cItem = CashItemFactory.getRandomCashItem();
-
-            if (cItem != null) {
-                if (css.getQuantity() > 1) {
-                    css.setQuantity((short) (css.getQuantity() - 1));
-                } else {
-                    removeFromInventory(css);
-                }
-
-                Item item = cItem.toItem();
-                addToInventory(item);
-
-                return new Pair<>(item, css);
-            } else {
-                return null;
-            }
-        } else {
-            return null;
+    public synchronized Optional<CashShopSurpriseResult> openCashShopSurprise() {
+        Item cashShopSurprise = getCashShopItemByItemid(ItemId.CASH_SHOP_SURPRISE);
+        if (cashShopSurprise == null || cashShopSurprise.getQuantity() <= 0) {
+            return Optional.empty();
         }
+
+        if (getItemsSize() >= 100) {
+            return Optional.empty();
+        }
+
+        CashItem cashItemReward = CashItemFactory.getRandomCashItem();
+        if (cashItemReward == null) {
+            return Optional.empty();
+        }
+
+        short newQuantity = (short) (cashShopSurprise.getQuantity() - 1);
+        cashShopSurprise.setQuantity(newQuantity);
+        if (newQuantity <= 0) {
+            removeFromInventory(cashShopSurprise);
+        }
+
+        Item itemReward = cashItemReward.toItem();
+        addToInventory(itemReward);
+
+        return Optional.of(new CashShopSurpriseResult(cashShopSurprise, itemReward));
     }
 
     public static Item generateCouponItem(int itemId, short quantity) {
