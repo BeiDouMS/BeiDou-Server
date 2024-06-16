@@ -6480,14 +6480,15 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet onCashGachaponOpenSuccess(int accountid, long sn, int remainingBoxes, Item item, int itemid, int nSelectedItemCount, boolean bJackpot) {
+    public static Packet onCashGachaponOpenSuccess(int accountid, long boxCashId, int remainingBoxes, Item reward,
+                                                   int rewardItemId, int rewardQuantity, boolean bJackpot) {
         OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_CASH_ITEM_GACHAPON_RESULT);
         p.writeByte(0xE5);   // subopcode thanks to Ubaware
-        p.writeLong(sn);// sn of the box used
+        p.writeLong(boxCashId);
         p.writeInt(remainingBoxes);
-        addCashItemInformation(p, item, accountid);
-        p.writeInt(itemid);// the itemid of the liSN?
-        p.writeByte(nSelectedItemCount);// the total count now? o.O
+        addCashItemInformation(p, reward, accountid);
+        p.writeInt(rewardItemId);
+        p.writeByte(rewardQuantity); // nSelectedItemCount
         p.writeBool(bJackpot);// "CashGachaponJackpot"
         return p;
     }

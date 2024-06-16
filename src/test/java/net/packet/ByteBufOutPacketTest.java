@@ -203,4 +203,14 @@ class ByteBufOutPacketTest {
         assertEquals(0, wrapped.readByte());
         assertEquals(secondWrittenByte, wrapped.readByte());
     }
+
+    @Test
+    void equalsShouldCompareBytes() {
+        ByteBufOutPacket packet1 = new ByteBufOutPacket();
+        packet1.writeBytes(new byte[] { 55, 66, 77, 88 });
+        ByteBufOutPacket packet2 = new ByteBufOutPacket();
+        packet2.writeBytes(new byte[] { 55, 66, 77, 88 });
+
+        assertEquals(packet1, packet2);
+    }
 }

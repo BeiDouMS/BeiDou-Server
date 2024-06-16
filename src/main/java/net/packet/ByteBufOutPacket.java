@@ -91,4 +91,9 @@ public class ByteBufOutPacket implements OutPacket {
     public void skip(int numberOfBytes) {
         writeBytes(new byte[numberOfBytes]);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof ByteBufOutPacket other && byteBuf.equals(other.byteBuf);
+    }
 }
