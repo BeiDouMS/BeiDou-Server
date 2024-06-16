@@ -6063,7 +6063,8 @@ public class Character extends AbstractCharacterObject {
             sendPacket(PacketCreator.giveBuff(energybar, 0, stat));
             sendPacket(PacketCreator.showOwnBuffEffect(energycharge.getId(), 2));
             getMap().broadcastPacket(this, PacketCreator.showBuffEffect(id, energycharge.getId(), 2));
-            getMap().broadcastPacket(this, PacketCreator.giveForeignBuff(energybar, stat));
+            getMap().broadcastPacket(this, PacketCreator.giveForeignPirateBuff(id, energycharge.getId(),
+                    ceffect.getDuration(), stat));
         }
         if (energybar >= 10000 && energybar < 11000) {
             energybar = 15000;
