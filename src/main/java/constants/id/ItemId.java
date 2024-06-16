@@ -312,6 +312,10 @@ public class ItemId {
         return itemId == NX_CARD_100 || itemId == NX_CARD_250;
     }
 
+    public static boolean isCashPackage(int itemId) {
+        return itemId / 10000 == 910;
+    }
+
     // Face expression
     private static final int FACE_EXPRESSION_MIN = 5160000;
     private static final int FACE_EXPRESSION_MAX = 5160014;
