@@ -109,6 +109,7 @@ public class AccountService {
                 }
 
             }
+            default -> throw new UnsupportedOperationException();
         }
         return true;
     }

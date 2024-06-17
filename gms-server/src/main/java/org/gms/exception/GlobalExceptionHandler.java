@@ -1,10 +1,10 @@
 package org.gms.exception;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.gms.dto.ResultBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,32 +25,23 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * 请求参数错误
+     * IllegalArgumentException NullPointerException UnsupportedOperationException都是RuntimeException
+     * 这里直接捕获RuntimeException来代替一个一个去捕获
      */
-    @ExceptionHandler(value = IllegalArgumentException.class)
+    @ExceptionHandler(value = RuntimeException.class)
     @ResponseBody
-    public ResultBody illegalArgumentExceptionHandler(HttpServletRequest req, IllegalArgumentException e) {
-        logger.error("发生非法参数异常！原因是:", e);
-        return ResultBody.error(BizExceptionEnum.BODY_NOT_MATCH);
-    }
-
-    /**
-     * 处理空指针的异常  
-     */
-    @ExceptionHandler(value = NullPointerException.class)
-    @ResponseBody
-    public ResultBody exceptionHandler(HttpServletRequest req, NullPointerException e) {
-        logger.error("发生空指针异常！原因是:", e);
+    public ResultBody exceptionHandler(HttpServletRequest req, RuntimeException e) {
+        logger.error("发生运行时异常！原因是:", e);
         return ResultBody.error(BizExceptionEnum.BODY_NOT_MATCH);
     }
 
     /**
      * 处理请求方法不支持的异常  
      */
-    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    @ExceptionHandler(value = ServletException.class)
     @ResponseBody
-    public ResultBody exceptionHandler(HttpServletRequest req, HttpRequestMethodNotSupportedException e) {
-        logger.error("发生请求方法不支持异常！原因是:", e);
+    public ResultBody exceptionHandler(HttpServletRequest req, ServletException e) {
+        logger.error("发生请求时异常！原因是:", e);
         return ResultBody.error(BizExceptionEnum.REQUEST_METHOD_SUPPORT);
     }
     /**
