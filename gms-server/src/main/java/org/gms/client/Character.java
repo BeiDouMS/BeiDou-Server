@@ -2095,10 +2095,10 @@ public class Character extends AbstractCharacterObject {
                             } else if (ItemId.isNxCard(mapitem.getItemId())) {
                                 // Add NX to account, show effect and make item disappear
                                 int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
-                                this.getCashShop().gainCash(1, nxGain);
+                                this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
                                 if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
-                                    showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(1) + " NX)", 300);
+                                    showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                                 }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
@@ -2147,10 +2147,10 @@ public class Character extends AbstractCharacterObject {
                     } else if (ItemId.isNxCard(mapitem.getItemId())) {
                         // Add NX to account, show effect and make item disappear
                         int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
-                        this.getCashShop().gainCash(1, nxGain);
+                        this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
                         if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
-                            showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(1) + " NX)", 300);
+                            showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
@@ -6093,7 +6093,8 @@ public class Character extends AbstractCharacterObject {
             sendPacket(PacketCreator.giveBuff(energybar, 0, stat));
             sendPacket(PacketCreator.showOwnBuffEffect(energycharge.getId(), 2));
             getMap().broadcastPacket(this, PacketCreator.showBuffEffect(id, energycharge.getId(), 2));
-            getMap().broadcastPacket(this, PacketCreator.giveForeignBuff(energybar, stat));
+            getMap().broadcastPacket(this, PacketCreator.giveForeignPirateBuff(id, energycharge.getId(),
+                    ceffect.getDuration(), stat));
         }
         if (energybar >= 10000 && energybar < 11000) {
             energybar = 15000;
