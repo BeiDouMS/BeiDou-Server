@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
+import org.gms.util.I18nUtil;
 
 public class StaffCommand extends Command {
     {
-        setDescription("Show credits. These people made the server possible.");
+        setDescription(I18nUtil.getMessage("StaffCommand.message1"));
     }
 
     @Override
