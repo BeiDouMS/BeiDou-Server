@@ -30,6 +30,17 @@
 - Visual Studio Code：https://code.visualstudio.com/
 - git：https://git-scm.com/downloads
 
+# 客户端
+> **版号** 从1开始每次更新都+1，只为了区分不同版本，没有严格定义是更新功能还是修复bug。
 
+## 客户端下载
+- BeiDou V3： https://mega.nz/file/qXw3iRCA#S8e21nDeomANjPfEUjhGtTzCzXsebU_fXmeEHY9ZXDQ
+完成度：能用，暂未汉化；支持中文输入；使用img资源。
 
+## 补丁下载
+- 暂无更新
 
+## 开发可选
+- ijl15 插件： https://github.com/leevccc/BeiDou-ijl15/tree/BeiDou
+- BeiDou V3 wz： https://mega.nz/file/nbpl1JhT#uPw5eGVJM3tz245WUdCBJIRqkJcoDYzBsTBmEBmeMmM
+仅供需要编辑的人使用
