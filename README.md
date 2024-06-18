@@ -33,12 +33,20 @@
 # 客户端
 > **版号** 从1开始每次更新都+1，只为了区分不同版本，没有严格定义是更新功能还是修复bug。
 
+由于网盘空间有限，原则上客户端看心情打包一次，请自行依次下载补丁更新。
+
 ## 客户端下载
 - BeiDou V3： https://mega.nz/file/qXw3iRCA#S8e21nDeomANjPfEUjhGtTzCzXsebU_fXmeEHY9ZXDQ
 完成度：能用，暂未汉化；支持中文输入；使用img资源。
 
 ## 补丁下载
-- 暂无更新
+使用方法：直接覆盖到客户端内即可；wz补丁仅供开发用。
+
+2024/6/18
+
+更新说明：支持长键盘快捷键
+- V4： https://mega.nz/file/7CwDQTqY#wzY33C2MQ8OS3_FJTjqPe9mFKmoZxPfinTMQ0vyf5cs
+- V4-wz： https://mega.nz/file/vaYSFLwa#-AmaJLzxDpQXzTt09bRpmbknoytTVwCSSkOjqS5hnaA
 
 ## 开发可选
 - ijl15 插件： https://github.com/leevccc/BeiDou-ijl15/tree/BeiDou
