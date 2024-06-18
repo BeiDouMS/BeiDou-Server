@@ -27,6 +27,8 @@ import org.gms.server.CashShop;
 import org.gms.tools.PacketCreator;
 import org.gms.tools.Pair;
 
+import java.util.Optional;
+
 /**
  * @author RonanLana
  * @author Ponk
@@ -41,7 +43,7 @@ public class CashShopSurpriseHandler extends AbstractPacketHandler {
         }
 
         long cashId = p.readLong();
-        Optional<CashShopSurpriseResult> result = cs.openCashShopSurprise(cashId);
+        Optional<CashShop.CashShopSurpriseResult> result = cs.openCashShopSurprise(cashId);
         if (result.isEmpty()) {
             c.sendPacket(PacketCreator.onCashItemGachaponOpenFailed());
             return;
