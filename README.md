@@ -40,13 +40,22 @@
 完成度：能用，暂未汉化；支持中文输入；使用img资源。
 
 ## 补丁下载
-使用方法：直接覆盖到客户端内即可；wz补丁仅供开发用。
+使用方法：按顺序下载补丁，直接覆盖到客户端内即可；wz补丁仅供开发用。
+
+2024/6/19
+
+更新说明：
+1. 汉化，并增加语言包。如需中文，在config.ini中设置SwitchChinese=true，并且将CN包中的资源复制(覆盖)到Data目录下
+2. 商城界面移至左上角不再居中
+3. 任务尚未汉化
+- V5： https://mega.nz/file/iaoAiK4a#1okrn1V_HW_pkxlKNGQZXtGJu3tixY7b2vTtIHv4u18
+- V5-wz： https://mega.nz/file/nH5UzCQT#NHx6y5ZTDDlZllXZBtOHGLdxDkkR8sGHzNBZHC22P1o
 
 2024/6/18
 
 更新说明：支持长键盘快捷键
 - V4： https://mega.nz/file/7CwDQTqY#wzY33C2MQ8OS3_FJTjqPe9mFKmoZxPfinTMQ0vyf5cs
-- V4-wz： https://mega.nz/file/vaYSFLwa#-AmaJLzxDpQXzTt09bRpmbknoytTVwCSSkOjqS5hnaA
+- ~~V4-wz： https://mega.nz/file/vaYSFLwa#-AmaJLzxDpQXzTt09bRpmbknoytTVwCSSkOjqS5hnaA V5-wz可替代~~
 
 ## 开发可选
 - ijl15 插件： https://github.com/leevccc/BeiDou-ijl15/tree/BeiDou
