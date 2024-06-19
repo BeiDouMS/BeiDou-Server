@@ -95,6 +95,7 @@ import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractPlayerInteraction;
@@ -3228,6 +3229,12 @@ public class Character extends AbstractCharacterObject {
             }
             while (exp.get() >= ExpTable.getExpNeededForLevel(level)) {
                 levelUp(true);
+
+                if (YamlConfig.config.server.USE_ANNOUNCE_GLOBAL_LEVEL_UP && !isGM()) {
+                    String msg = String.format(I18nUtil.getMessage("Character.levelUp.globalNotice"),getMap().getMapName(),getName(),getLevel());
+                    getWorldServer().dropMessage(6, msg);
+                    log.info(msg);
+                }
                 if (level == getMaxLevel()) {
                     setExp(0);
                     updateSingleStat(Stat.EXP, 0);
