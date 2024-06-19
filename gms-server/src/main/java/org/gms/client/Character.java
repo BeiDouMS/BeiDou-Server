@@ -3230,9 +3230,15 @@ public class Character extends AbstractCharacterObject {
             while (exp.get() >= ExpTable.getExpNeededForLevel(level)) {
                 levelUp(true);
 
+                String msg = String.format(I18nUtil.getMessage("Character.levelUp.globalNotice"), getName(), getMap().getMapName(), getLevel());
                 if (YamlConfig.config.server.USE_ANNOUNCE_GLOBAL_LEVEL_UP && !isGM()) {
-                    String msg = String.format(I18nUtil.getMessage("Character.levelUp.globalNotice"),getMap().getMapName(),getName(),getLevel());
-                    getWorldServer().dropMessage(6, msg);
+                    for (Character player : getWorldServer().getPlayerStorage().getAllCharacters()) {
+                        // 如果玩家在商城，将会以弹窗的形式发送，一堆弹窗会把玩家逼疯！
+                        if (player.getCashShop().isOpened()) {
+                            continue;
+                        }
+                        player.dropMessage(6, msg);
+                    }
                     log.info(msg);
                 }
                 if (level == getMaxLevel()) {
@@ -3250,12 +3256,12 @@ public class Character extends AbstractCharacterObject {
 
                 if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
                     ExpLogRecord expLogRecord = new ExpLogger.ExpLogRecord(
-                        getWorldServer().getExpRate(),
-                        expCoupon,
-                        totalExpGained,
-                        exp.get(),
-                        new Timestamp(lastExpGainTime),
-                        id
+                            getWorldServer().getExpRate(),
+                            expCoupon,
+                            totalExpGained,
+                            exp.get(),
+                            new Timestamp(lastExpGainTime),
+                            id
                     );
                     ExpLogger.putExpLogRecord(expLogRecord);
                 }
@@ -6587,6 +6593,7 @@ public class Character extends AbstractCharacterObject {
             return false;
         }
     }
+
     public void setPlayerRates() {
         this.expRate *= GameConstants.getPlayerBonusExpRate(this.level / 20);
         this.mesoRate *= GameConstants.getPlayerBonusMesoRate(this.level / 20);
@@ -7380,18 +7387,18 @@ public class Character extends AbstractCharacterObject {
                         }
                     }
                 }
-                
+
                 ret.buddylist.loadFromDb(charid);
                 ret.storage = wserv.getAccountStorage(ret.accountid);
 
                 /* Double-check storage incase player is first time on server
                  * The storage won't exist so nothing to load
                  */
-                if(ret.storage == null) {
+                if (ret.storage == null) {
                     wserv.loadAccountStorage(ret.accountid);
                     ret.storage = wserv.getAccountStorage(ret.accountid);
                 }
-                
+
                 int startHp = ret.hp, startMp = ret.mp;
                 ret.reapplyLocalStats();
                 ret.changeHpMp(startHp, startMp, true);
@@ -8284,7 +8291,7 @@ public class Character extends AbstractCharacterObject {
                         ps.executeBatch();
                     }
                 }
-                
+
                 con.commit();
                 return true;
             } catch (Exception e) {
@@ -10017,7 +10024,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     @Override
-    public void setObjectId(int id) {}
+    public void setObjectId(int id) {
+    }
 
     @Override
     public String toString() {
