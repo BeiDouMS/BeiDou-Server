@@ -21,6 +21,9 @@
 - git：https://git-scm.com/downloads
 - DBeaver：https://dbeaver.io/download/
 
+## 开发进展
+![20240620113952.png](mdimg/20240620113952.png)
+
 # gms-ui web端
 
 ## 开发环境
@@ -29,6 +32,9 @@
 - Yarn：npm i -g yarn
 - Visual Studio Code：https://code.visualstudio.com/
 - git：https://git-scm.com/downloads
+
+## 开发进展
+![20240620114452.png](mdimg/20240620114452.png)
 
 # 客户端
 > **版号** 从1开始每次更新都+1，只为了区分不同版本，没有严格定义是更新功能还是修复bug。
