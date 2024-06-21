@@ -26,6 +26,9 @@ public class WorldProperty {
         public int quest_rate = 1;
         public int travel_rate = 1;
         public int fishing_rate = 1;
+        public float level_exp_rate = 0;
+        public int quick_level = 0;
+        public float quick_level_exp_rate = 0;
     }
 }
 

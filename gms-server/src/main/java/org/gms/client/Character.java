@@ -5025,6 +5025,25 @@ public class Character extends AbstractCharacterObject {
         return expRate;
     }
 
+    public float getLevelExpRate() {
+        if (hasNoviceExpRate()) return 1; // 新手经验保护
+
+        return 1f + YamlConfig.config.worlds.get(getWorld()).level_exp_rate * level;
+    }
+
+    public float getQuickLevelExpRate() {
+        if (hasNoviceExpRate()) return 1; // 新手经验保护
+
+        int quickLv = YamlConfig.config.worlds.get(getWorld()).quick_level;
+        if (level >= quickLv) return 1;
+
+        return 1f + (quickLv - level) * YamlConfig.config.worlds.get(getWorld()).quick_level_exp_rate;
+    }
+
+    public float getMobExpRate() {
+        return getLevelExpRate() * getQuickLevelExpRate();
+    }
+
     public int getCouponExpRate() {
         return expCoupon;
     }

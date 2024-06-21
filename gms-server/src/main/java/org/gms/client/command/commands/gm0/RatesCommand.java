@@ -40,6 +40,9 @@ public class RatesCommand extends Command {
         // travel rates not applicable since it's intrinsically a server/environment rate rather than a character rate
         String showMsg_ = "#eCHARACTER RATES#n" + "\r\n\r\n";
         showMsg_ += "EXP Rate: #e#b" + player.getExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? " - novice rate" : "") + "\r\n";
+        if (player.getMobExpRate() > 1) {
+            showMsg_ += "MobExp Rate: #e#b" + Math.round(player.getMobExpRate() * 100f) / 100f + "x#k#n" + "\r\n";
+        }
         showMsg_ += "MESO Rate: #e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
         showMsg_ += "DROP Rate: #e#b" + player.getDropRate() + "x#k#n" + "\r\n";
         showMsg_ += "BOSS DROP Rate: #e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";

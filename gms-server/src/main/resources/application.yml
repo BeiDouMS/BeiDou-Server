@@ -50,6 +50,11 @@ gms:
         quest_rate: 5                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
         fishing_rate: 10                        #Multiplier for success likelihood on meso thrown during fishing.
         travel_rate: 10                         #Means of transportation rides/departs using 1/N of the default time.
+        #随等级成长的经验加成，仅刷怪有效。刷怪经验 *= (1+额外倍率x等级)
+        level_exp_rate: 0.01                    #每级提供刷怪经验加成 1=100% (0为不启用)
+        #等级冲刺计划，仅刷怪有效，仅比目标等级低时有效。刷怪经验 *= [1+(目标等级-当前等级)*冲刺倍率]；
+        quick_level: 80                         #目标等级 (0为不启用)
+        quick_level_exp_rate: 0.1               #每比目标等级低1级提供的经验加成 1=100%
 
         #Properties for Bera 1
       - flag: 0
