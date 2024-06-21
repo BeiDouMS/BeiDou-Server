@@ -93,6 +93,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
                                     mob.getMap().killMonster(mob, null, false);
                                     InventoryManipulator.removeById(c, InventoryType.USE, itemId, 1, true, true);
                                     InventoryManipulator.addById(c, ItemId.ARPQ_SPIRIT_JEWEL, (short) 1, "", -1);
+                                    chr.updateAriantScore();
                                 } else {
                                     chr.getMap().broadcastMessage(PacketCreator.catchMonster(monsterid, itemId, (byte) 0));
                                 }
