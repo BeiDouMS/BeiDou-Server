@@ -32,7 +32,7 @@ import org.gms.util.I18nUtil;
 
 public class GachaCommand extends Command {
     {
-        setDescription(I18nUtil.getLogMessage("GachaCommand.message1"));
+        setDescription(I18nUtil.getMessage("GachaCommand.message1"));
     }
 
     @Override
@@ -40,16 +40,16 @@ public class GachaCommand extends Command {
         Gachapon.GachaponType gacha = null;
         String search = c.getPlayer().getLastCommandMessage();
         String gachaName = "";
-        String[] names = {I18nUtil.getLogMessage("GachaCommand.message2"),
-                I18nUtil.getLogMessage("GachaCommand.message3"),
-                I18nUtil.getLogMessage("GachaCommand.message4"),
-                I18nUtil.getLogMessage("GachaCommand.message5"),
-                I18nUtil.getLogMessage("GachaCommand.message6"),
-                I18nUtil.getLogMessage("GachaCommand.message7"),
-                I18nUtil.getLogMessage("GachaCommand.message8"),
-                I18nUtil.getLogMessage("GachaCommand.message9"),
-                I18nUtil.getLogMessage("GachaCommand.message10"),
-                I18nUtil.getLogMessage("GachaCommand.message11")};
+        String[] names = {I18nUtil.getMessage("GachaCommand.message2"),
+                I18nUtil.getMessage("GachaCommand.message3"),
+                I18nUtil.getMessage("GachaCommand.message4"),
+                I18nUtil.getMessage("GachaCommand.message5"),
+                I18nUtil.getMessage("GachaCommand.message6"),
+                I18nUtil.getMessage("GachaCommand.message7"),
+                I18nUtil.getMessage("GachaCommand.message8"),
+                I18nUtil.getMessage("GachaCommand.message9"),
+                I18nUtil.getMessage("GachaCommand.message10"),
+                I18nUtil.getMessage("GachaCommand.message11")};
         int[] ids = {NpcId.GACHAPON_HENESYS, NpcId.GACHAPON_ELLINIA, NpcId.GACHAPON_PERION, NpcId.GACHAPON_KERNING,
                 NpcId.GACHAPON_SLEEPYWOOD, NpcId.GACHAPON_MUSHROOM_SHRINE, NpcId.GACHAPON_SHOWA_MALE,
                 NpcId.GACHAPON_SHOWA_FEMALE, NpcId.GACHAPON_NLC, NpcId.GACHAPON_NAUTILUS};
