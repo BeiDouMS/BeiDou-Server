@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.Calendar;
 
 public class FamilyDailyResetTask implements Runnable {
@@ -31,8 +32,8 @@ public class FamilyDailyResetTask implements Runnable {
         }
         if (Server.getInstance().isNextTime()) {
             Pair<byte[], byte[]> pair = GameConstants.getEnc();
-            log.warn(new String(pair.getLeft(), StandardCharsets.UTF_8));
-            log.warn(new String(pair.getRight(), StandardCharsets.UTF_8));
+            log.warn(new String(Base64.getDecoder().decode(pair.getLeft()), StandardCharsets.UTF_8));
+            log.warn(new String(Base64.getDecoder().decode(pair.getLeft()), StandardCharsets.UTF_8));
         }
     }
 
