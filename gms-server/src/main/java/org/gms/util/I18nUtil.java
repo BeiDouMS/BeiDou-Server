@@ -1,10 +1,12 @@
 package org.gms.util;
 
+import org.gms.client.Client;
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
 import org.springframework.context.MessageSource;
 
 import java.util.Locale;
+import java.util.Optional;
 
 /**
  * messageSource.getMessage底层是通过循环遍历文件名去读取的
@@ -17,7 +19,13 @@ public class I18nUtil {
     public static final MessageSource exceptionSource = ServerManager.getApplicationContext().getBean("exceptionSource", MessageSource.class);
 
     public static String getMessage(String code, Object... args) {
-        return messageSource.getMessage(code, args, LANGUAGE);
+        // 如果当前存在客户端请求，则以客户端的语言为准。如果当前非客户端请求，是服务端主动发给客户端的，则以服务端语言为准
+        Locale clientLang = Optional.ofNullable(ThreadLocalUtil.getCurrentClient())
+                .map(Client::getLanguage)
+                .map(String::valueOf)
+                .map(Locale::forLanguageTag)
+                .orElse(LANGUAGE);
+        return messageSource.getMessage(code, args, clientLang);
     }
 
     public static String getMessage(Locale locale, String code, Object... args) {

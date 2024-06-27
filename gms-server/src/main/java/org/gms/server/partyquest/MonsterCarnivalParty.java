@@ -34,10 +34,10 @@ public class MonsterCarnivalParty {
         return leader;
     }
 
-    public void addCP(Character player, int ammount) {
-        totalCP += ammount;
-        availableCP += ammount;
-        player.addCP(ammount);
+    public void addCP(Character player, short num) {
+        totalCP += num;
+        availableCP += num;
+        player.addCP(num);
     }
 
     public int getTotalCP() {
@@ -48,9 +48,9 @@ public class MonsterCarnivalParty {
         return availableCP;
     }
 
-    public void useCP(Character player, int ammount) {
-        availableCP -= ammount;
-        player.useCP(ammount);
+    public void useCP(Character player, short num) {
+        availableCP -= num;
+        player.useCP(num);
     }
 
     public List<Character> getMembers() {

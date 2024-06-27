@@ -49,6 +49,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.constants.net.ServerConstants;
 import org.gms.constants.skills.Aran;
 import org.gms.constants.skills.Beginner;
 import org.gms.constants.skills.Bishop;
@@ -197,10 +198,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
-    private static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
-    private static final String[] BLOCKED_NAMES = {"admin", "owner", "moderator", "intern", "donor", "administrator", "FREDRICK", "help", "helper", "alert", "notice", "maplestory", "fuck", "wizet", "fucking", "negro", "fuk", "fuc", "penis", "pussy", "asshole", "gay",
-            "nigger", "homo", "suck", "cum", "shit", "shitty", "condom", "security", "official", "rape", "nigga", "sex", "tit", "boner", "orgy", "clit", "asshole", "fatass", "bitch", "support", "gamemaster", "cock", "gaay", "gm",
-            "operate", "master", "sysop", "party", "GameMaster", "community", "message", "event", "test", "meso", "Scania", "yata", "AsiaSoft", "henesys"};
 
     private int world;
     private int accountid, id, level;
@@ -363,48 +360,8 @@ public class Character extends AbstractCharacterObject {
     private float mobExpRate = -1;
 
     private Character() {
-        super.setListener(new AbstractCharacterListener() {
-            @Override
-            public void onHpChanged(int oldHp) {
-                hpChangeAction(oldHp);
-            }
-
-            @Override
-            public void onHpmpPoolUpdate() {
-                List<Pair<Stat, Integer>> hpmpupdate = recalcLocalStats();
-                for (Pair<Stat, Integer> p : hpmpupdate) {
-                    statUpdates.put(p.getLeft(), p.getRight());
-                }
-
-                if (hp > localmaxhp) {
-                    setHp(localmaxhp);
-                    statUpdates.put(Stat.HP, hp);
-                }
-
-                if (mp > localmaxmp) {
-                    setMp(localmaxmp);
-                    statUpdates.put(Stat.MP, mp);
-                }
-            }
-
-            @Override
-            public void onStatUpdate() {
-                recalcLocalStats();
-            }
-
-            @Override
-            public void onAnnounceStatPoolUpdate() {
-                List<Pair<Stat, Integer>> statup = new ArrayList<>(8);
-                for (Map.Entry<Stat, Integer> s : statUpdates.entrySet()) {
-                    statup.add(new Pair<>(s.getKey(), s.getValue()));
-                }
-
-                sendPacket(PacketCreator.updatePlayerStats(statup, true, Character.this));
-            }
-        });
-
+        super.setListener(new CharacterListener(this));
         useCS = false;
-
         setStance(0);
         inventory = new Inventory[InventoryType.values().length];
         savedLocations = new SavedLocation[SavedLocationType.values().length];
@@ -483,24 +440,14 @@ public class Character extends AbstractCharacterObject {
         ret.getInventory(InventoryType.ETC).setSlotLimit(24);
 
         // Select a keybinding method
-        int[] selectedKey;
-        int[] selectedType;
-        int[] selectedAction;
-
-        if (YamlConfig.config.server.USE_CUSTOM_KEYSET) {
-            selectedKey = GameConstants.getCustomKey(true);
-            selectedType = GameConstants.getCustomType(true);
-            selectedAction = GameConstants.getCustomAction(true);
-        } else {
-            selectedKey = GameConstants.getCustomKey(false);
-            selectedType = GameConstants.getCustomType(false);
-            selectedAction = GameConstants.getCustomAction(false);
-        }
+        boolean useCustomKeySet = YamlConfig.config.server.USE_CUSTOM_KEYSET;
+        int[] selectedKey = GameConstants.getCustomKey(useCustomKeySet);
+        int[] selectedType = GameConstants.getCustomType(useCustomKeySet);
+        int[] selectedAction = GameConstants.getCustomAction(useCustomKeySet);
 
         for (int i = 0; i < selectedKey.length; i++) {
             ret.keymap.put(selectedKey[i], new KeyBinding(selectedType[i], selectedAction[i]));
         }
-
 
         //to fix the map 0 lol
         for (int i = 0; i < 5; i++) {
@@ -984,7 +931,7 @@ public class Character extends AbstractCharacterObject {
 
     public static boolean canCreateChar(String name) {
         String lname = name.toLowerCase();
-        for (String nameTest : BLOCKED_NAMES) {
+        for (String nameTest : ServerConstants.BLOCKED_NAMES) {
             if (lname.contains(nameTest)) {
                 return false;
             }
@@ -3442,7 +3389,7 @@ public class Character extends AbstractCharacterObject {
             if (mbsvh == null) {
                 return null;
             }
-            return Long.valueOf(mbsvh.startTime);
+            return mbsvh.startTime;
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -3457,7 +3404,7 @@ public class Character extends AbstractCharacterObject {
             if (mbsvh == null) {
                 return null;
             }
-            return Integer.valueOf(mbsvh.value);
+            return mbsvh.value;
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -3613,20 +3560,10 @@ public class Character extends AbstractCharacterObject {
             }
         }
 
-        Collections.sort(ret, new Comparator<Pair<BuffStat, Integer>>() {
-            @Override
-            public int compare(Pair<BuffStat, Integer> p1, Pair<BuffStat, Integer> p2) {
-                return p1.getLeft().compareTo(p2.getLeft());
-            }
-        });
+        ret.sort(Comparator.comparing(Pair::getLeft));
 
         if (!singletonStatups.isEmpty()) {
-            Collections.sort(singletonStatups, new Comparator<Pair<BuffStat, Integer>>() {
-                @Override
-                public int compare(Pair<BuffStat, Integer> p1, Pair<BuffStat, Integer> p2) {
-                    return p1.getLeft().compareTo(p2.getLeft());
-                }
-            });
+            singletonStatups.sort(Comparator.comparing(Pair::getLeft));
 
             ret.addAll(singletonStatups);
         }
@@ -4471,33 +4408,12 @@ public class Character extends AbstractCharacterObject {
     }
 
     private static boolean isSingletonStatup(BuffStat mbs) {
-        switch (mbs) {           //HPREC and MPREC are supposed to be singleton
-            case COUPON_EXP1:
-            case COUPON_EXP2:
-            case COUPON_EXP3:
-            case COUPON_EXP4:
-            case COUPON_DRP1:
-            case COUPON_DRP2:
-            case COUPON_DRP3:
-            case MESO_UP_BY_ITEM:
-            case ITEM_UP_BY_ITEM:
-            case RESPECT_PIMMUNE:
-            case RESPECT_MIMMUNE:
-            case DEFENSE_ATT:
-            case DEFENSE_STATE:
-            case WATK:
-            case WDEF:
-            case MATK:
-            case MDEF:
-            case ACC:
-            case AVOID:
-            case SPEED:
-            case JUMP:
-                return false;
-
-            default:
-                return true;
-        }
+        return switch (mbs) {           //HPREC and MPREC are supposed to be singleton
+            case COUPON_EXP1, COUPON_EXP2, COUPON_EXP3, COUPON_EXP4, COUPON_DRP1, COUPON_DRP2, COUPON_DRP3, MESO_UP_BY_ITEM,
+                    ITEM_UP_BY_ITEM, RESPECT_PIMMUNE, RESPECT_MIMMUNE, DEFENSE_ATT, DEFENSE_STATE, WATK, WDEF, MATK, MDEF,
+                    ACC, AVOID, SPEED, JUMP -> false;
+            default -> true;
+        };
     }
 
     private static boolean isPriorityBuffSourceid(int sourceid) {
@@ -4681,9 +4597,7 @@ public class Character extends AbstractCharacterObject {
 
                 if (!isSilent) {
                     addItemEffectHolder(sourceid, expirationtime, appliedStatups);
-                    for (Entry<BuffStat, BuffStatValueHolder> statup : toDeploy.entrySet()) {
-                        effects.put(statup.getKey(), statup.getValue());
-                    }
+                    effects.putAll(toDeploy);
 
                     if (active) {
                         retrievedEffects.put(sourceid, new Pair<>(effect, starttime));
@@ -4700,9 +4614,7 @@ public class Character extends AbstractCharacterObject {
             }
 
             addItemEffectHolder(sourceid, expirationtime, appliedStatups);
-            for (Entry<BuffStat, BuffStatValueHolder> statup : toDeploy.entrySet()) {
-                effects.put(statup.getKey(), statup.getValue());
-            }
+            effects.putAll(toDeploy);
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -4908,13 +4820,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public Marriage getMarriageInstance() {
-        EventInstanceManager eim = getEventInstance();
-
-        if (eim != null || !(eim instanceof Marriage)) {
-            return (Marriage) eim;
-        } else {
-            return null;
-        }
+        return (Marriage) getEventInstance();
     }
 
     public void resetExcluded(int petId) {
@@ -4963,9 +4869,7 @@ public class Character extends AbstractCharacterObject {
 
                 chrLock.lock();
                 try {
-                    for (Integer itemid : exclItems) {
-                        excludedItems.add(itemid);
-                    }
+                    excludedItems.addAll(exclItems);
                 } finally {
                     chrLock.unlock();
                 }
@@ -5516,23 +5420,17 @@ public class Character extends AbstractCharacterObject {
 
     public int getMiniGamePoints(MiniGameResult type, boolean omok) {
         if (omok) {
-            switch (type) {
-                case WIN:
-                    return omokwins;
-                case LOSS:
-                    return omoklosses;
-                default:
-                    return omokties;
-            }
+            return switch (type) {
+                case WIN -> omokwins;
+                case LOSS -> omoklosses;
+                default -> omokties;
+            };
         } else {
-            switch (type) {
-                case WIN:
-                    return matchcardwins;
-                case LOSS:
-                    return matchcardlosses;
-                default:
-                    return matchcardties;
-            }
+            return switch (type) {
+                case WIN -> matchcardwins;
+                case LOSS -> matchcardlosses;
+                default -> matchcardties;
+            };
         }
     }
 
@@ -6504,7 +6402,7 @@ public class Character extends AbstractCharacterObject {
                     }
 
                     final String names = (getMedalText() + name);
-                    getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, String.format(LEVEL_200, names, maxClassLevel, names)));
+                    getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, String.format(ServerConstants.LEVEL_200, names, maxClassLevel, names)));
                 }
             }
 
@@ -6546,7 +6444,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (level % 20 == 0) {
-            if (YamlConfig.config.server.USE_ADD_SLOTS_BY_LEVEL == true) {
+            if (YamlConfig.config.server.USE_ADD_SLOTS_BY_LEVEL) {
                 if (!isGM()) {
                     for (byte i = 1; i < 5; i++) {
                         gainSlots(i, 4, true);
@@ -6555,7 +6453,7 @@ public class Character extends AbstractCharacterObject {
                     this.yellowMessage("You reached level " + level + ". Congratulations! As a token of your success, your inventory has been expanded a little bit.");
                 }
             }
-            if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL == true) { //For the rate upgrade
+            if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) { //For the rate upgrade
                 revertLastPlayerRates();
                 setPlayerRates();
                 this.yellowMessage("You managed to get level " + level + "! Getting experience and items seems a little easier now, huh?");
@@ -7581,7 +7479,7 @@ public class Character extends AbstractCharacterObject {
         int i;
         for (i = 0; i < charmID.length; i++) {
             int quantity = getItemQuantity(charmID[i], false);
-            if (possesed == 0 && quantity > 0) {
+            if (quantity > 0) {
                 possesed = quantity;
                 break;
             }
@@ -7873,7 +7771,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private List<Pair<Stat, Integer>> recalcLocalStats() {
+    public List<Pair<Stat, Integer>> recalcLocalStats() {
         effLock.lock();
         chrLock.lock();
         statWlock.lock();
@@ -8991,7 +8889,7 @@ public class Character extends AbstractCharacterObject {
         this.hiredMerchant = merchant;
     }
 
-    private void hpChangeAction(int oldHp) {
+    public void hpChangeAction(int oldHp) {
         boolean playerDied = false;
         if (hp <= 0) {
             if (oldHp > hp) {
