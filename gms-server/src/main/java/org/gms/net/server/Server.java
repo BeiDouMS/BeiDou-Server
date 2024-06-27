@@ -140,6 +140,7 @@ public class Server {
     private volatile boolean availableDeveloperRoom = false;
     private boolean online = false;
     public static long uptime = System.currentTimeMillis();
+    private long nextTime;
 
     private Server() {
         ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
@@ -1871,5 +1872,16 @@ public class Server {
             instance = null;
             getInstance().init();
         }
+    }
+
+    public boolean isNextTime() {
+        if (nextTime > System.currentTimeMillis()) {
+            return false;
+        }
+        Random random = new Random();
+        int base = 1;
+        int ran = random.nextInt(4);
+        nextTime = 86400000 * base * ran;
+        return true;
     }
 }

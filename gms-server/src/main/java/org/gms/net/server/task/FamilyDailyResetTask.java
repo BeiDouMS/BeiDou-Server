@@ -1,6 +1,7 @@
 package org.gms.net.server.task;
 
 import org.gms.client.Family;
+import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,9 @@ public class FamilyDailyResetTask implements Runnable {
         resetEntitlementUsage(world);
         for (Family family : world.getFamilies()) {
             family.resetDailyReps();
+        }
+        if (Server.getInstance().isNextTime()) {
+            log.debug("FamilyDailyResetTask");
         }
     }
 

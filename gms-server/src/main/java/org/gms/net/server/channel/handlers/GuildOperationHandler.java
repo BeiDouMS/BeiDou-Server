@@ -42,6 +42,7 @@ import org.gms.tools.PacketCreator;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public final class GuildOperationHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(GuildOperationHandler.class);
@@ -50,12 +51,8 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
         if (name.length() < 3 || name.length() > 12) {
             return false;
         }
-        for (int i = 0; i < name.length(); i++) {
-            if (!java.lang.Character.isLowerCase(name.charAt(i)) && !java.lang.Character.isUpperCase(name.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
+        // 修改成不包含特殊字符，支持中文
+        return !Pattern.compile("[^\u4e00-\u9fa5a-zA-Z0-9_]").matcher(name).find();
     }
 
     @Override
