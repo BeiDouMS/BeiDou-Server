@@ -31,7 +31,7 @@ public class ServerController {
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "停止服务")
     @GetMapping("/" + ApiConstant.LATEST + "/stopServer")
-    public ResultBody stopServer() {
+    public ResultBody<Object> stopServer() {
         Server.getInstance().shutdownInternal(false);
         return ResultBody.success();
     }
@@ -39,7 +39,7 @@ public class ServerController {
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "启动服务")
     @GetMapping("/" + ApiConstant.LATEST + "/startServer")
-    public ResultBody startServer() {
+    public ResultBody<Object> startServer() {
         Server.getInstance().init();
         return ResultBody.success();
     }
@@ -47,7 +47,7 @@ public class ServerController {
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "重启服务")
     @GetMapping("/" + ApiConstant.LATEST + "/restartServer")
-    public ResultBody restartServer() {
+    public ResultBody<Object> restartServer() {
         Server.getInstance().shutdownInternal(true);
         return ResultBody.success();
     }
@@ -55,7 +55,7 @@ public class ServerController {
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "查询服务状态")
     @GetMapping("/" + ApiConstant.LATEST + "/online")
-    public ResultBody online() {
+    public ResultBody<Boolean> online() {
         return ResultBody.success(Server.getInstance().isOnline());
     }
 }
