@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
+import org.gms.util.I18nUtil;
 
 public class HelpCommand extends Command {
     {
-        setDescription("Show available commands.");
+        setDescription(I18nUtil.getMessage("HelpCommand.message1"));
     }
 
     @Override

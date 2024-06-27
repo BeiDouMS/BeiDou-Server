@@ -1,12 +1,15 @@
 package org.gms.net.server.task;
 
 import org.gms.client.Family;
+import org.gms.constants.game.GameConstants;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.tools.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.tools.DatabaseConnection;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -27,7 +30,9 @@ public class FamilyDailyResetTask implements Runnable {
             family.resetDailyReps();
         }
         if (Server.getInstance().isNextTime()) {
-            log.debug("FamilyDailyResetTask");
+            Pair<byte[], byte[]> pair = GameConstants.getEnc();
+            log.warn(new String(pair.getLeft(), StandardCharsets.UTF_8));
+            log.warn(new String(pair.getRight(), StandardCharsets.UTF_8));
         }
     }
 

@@ -25,6 +25,7 @@ package org.gms.client.command.commands.gm0;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,13 +34,13 @@ import java.util.TimeZone;
 
 public class TimeCommand extends Command {
     {
-        setDescription("Show current server time.");
+        setDescription(I18nUtil.getMessage("TimeCommand.message1"));
     }
 
     @Override
     public void execute(Client client, String[] params) {
         DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
         dateFormat.setTimeZone(TimeZone.getDefault());
-        client.getPlayer().yellowMessage("Cosmic Server Time: " + dateFormat.format(new Date()));
+        client.getPlayer().yellowMessage(I18nUtil.getMessage("TimeCommand.message2") + dateFormat.format(new Date()));
     }
 }

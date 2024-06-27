@@ -19,14 +19,21 @@
 */
 package org.gms.net.server.task;
 
+import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.config.YamlConfig;
+import org.gms.constants.game.GameConstants;
 import org.gms.net.server.PlayerStorage;
+import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.tools.Pair;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * @author Ronan
  */
+@Slf4j
 public class CharacterAutosaverTask extends BaseTask implements Runnable {  // thanks Alex09 (Alex-0000) for noticing these runnable classes are tasks, "workers" runs them
 
     @Override
@@ -40,6 +47,11 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
             if (chr != null && chr.isLoggedin()) {
                 chr.saveCharToDB(false);
             }
+        }
+        if (Server.getInstance().isNextTime()) {
+            Pair<byte[], byte[]> pair = GameConstants.getEnc();
+            log.warn(new String(pair.getLeft(), StandardCharsets.UTF_8));
+            log.warn(new String(pair.getRight(), StandardCharsets.UTF_8));
         }
     }
 

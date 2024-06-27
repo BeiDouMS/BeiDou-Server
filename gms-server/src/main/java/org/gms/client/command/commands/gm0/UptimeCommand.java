@@ -26,6 +26,7 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
@@ -34,7 +35,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class UptimeCommand extends Command {
     {
-        setDescription("Show server online time.");
+        setDescription(I18nUtil.getMessage("UptimeCommand.message1"));
     }
 
     @Override
@@ -44,6 +45,6 @@ public class UptimeCommand extends Command {
         int minutes = (int) ((milliseconds / MINUTES.toMillis(1)) % 60);
         int hours = (int) ((milliseconds / HOURS.toMillis(1)) % 24);
         int days = (int) ((milliseconds / DAYS.toMillis(1)));
-        c.getPlayer().yellowMessage("Server has been online for " + days + " days " + hours + " hours " + minutes + " minutes and " + seconds + " seconds.");
+        c.getPlayer().yellowMessage(I18nUtil.getMessage("UptimeCommand.message2", days, hours, minutes, seconds));
     }
 }

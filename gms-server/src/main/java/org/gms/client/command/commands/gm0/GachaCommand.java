@@ -28,10 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.gachapon.Gachapon;
+import org.gms.util.I18nUtil;
 
 public class GachaCommand extends Command {
     {
-        setDescription("Show gachapon rewards.");
+        setDescription(I18nUtil.getLogMessage("GachaCommand.message1"));
     }
 
     @Override
@@ -39,7 +40,16 @@ public class GachaCommand extends Command {
         Gachapon.GachaponType gacha = null;
         String search = c.getPlayer().getLastCommandMessage();
         String gachaName = "";
-        String[] names = {"Henesys", "Ellinia", "Perion", "Kerning City", "Sleepywood", "Mushroom Shrine", "Showa Spa Male", "Showa Spa Female", "New Leaf City", "Nautilus Harbor"};
+        String[] names = {I18nUtil.getLogMessage("GachaCommand.message2"),
+                I18nUtil.getLogMessage("GachaCommand.message3"),
+                I18nUtil.getLogMessage("GachaCommand.message4"),
+                I18nUtil.getLogMessage("GachaCommand.message5"),
+                I18nUtil.getLogMessage("GachaCommand.message6"),
+                I18nUtil.getLogMessage("GachaCommand.message7"),
+                I18nUtil.getLogMessage("GachaCommand.message8"),
+                I18nUtil.getLogMessage("GachaCommand.message9"),
+                I18nUtil.getLogMessage("GachaCommand.message10"),
+                I18nUtil.getLogMessage("GachaCommand.message11")};
         int[] ids = {NpcId.GACHAPON_HENESYS, NpcId.GACHAPON_ELLINIA, NpcId.GACHAPON_PERION, NpcId.GACHAPON_KERNING,
                 NpcId.GACHAPON_SLEEPYWOOD, NpcId.GACHAPON_MUSHROOM_SHRINE, NpcId.GACHAPON_SHOWA_MALE,
                 NpcId.GACHAPON_SHOWA_FEMALE, NpcId.GACHAPON_NLC, NpcId.GACHAPON_NAUTILUS};
@@ -50,19 +60,22 @@ public class GachaCommand extends Command {
             }
         }
         if (gacha == null) {
-            c.getPlayer().yellowMessage("Please use @gacha <name> where name corresponds to one of the below:");
+            c.getPlayer().yellowMessage(I18nUtil.getMessage("GachaCommand.message12"));
             for (String name : names) {
                 c.getPlayer().yellowMessage(name);
             }
             return;
         }
-        String talkStr = "The #b" + gachaName + "#k Gachapon contains the following items.\r\n\r\n";
+        String talkStr = "#b" + gachaName + "#k";
+        talkStr += I18nUtil.getMessage("GachaCommand.message13");
+        talkStr += "\r\n\r\n";
         for (int i = 0; i < 2; i++) {
             for (int id : gacha.getItems(i)) {
                 talkStr += "-" + ItemInformationProvider.getInstance().getName(id) + "\r\n";
             }
         }
-        talkStr += "\r\nPlease keep in mind that there are items that are in all gachapons and are not listed here.";
+        talkStr += "\r\n";
+        talkStr += I18nUtil.getMessage("GachaCommand.message14");
 
         c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, talkStr);
     }

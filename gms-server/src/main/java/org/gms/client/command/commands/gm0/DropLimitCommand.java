@@ -26,19 +26,20 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class DropLimitCommand extends Command {
     {
-        setDescription("Check drop limit of current map.");
+        setDescription(I18nUtil.getMessage("DropLimitCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         int dropCount = c.getPlayer().getMap().getDroppedItemCount();
         if (((float) dropCount) / YamlConfig.config.server.ITEM_LIMIT_ON_MAP < 0.75f) {
-            c.getPlayer().showHint("Current drop count: #b" + dropCount + "#k / #e" + YamlConfig.config.server.ITEM_LIMIT_ON_MAP + "#n", 300);
+            c.getPlayer().showHint(I18nUtil.getMessage("DropLimitCommand.message2") + "#b" + dropCount + "#k / #e" + YamlConfig.config.server.ITEM_LIMIT_ON_MAP + "#n", 300);
         } else {
-            c.getPlayer().showHint("Current drop count: #r" + dropCount + "#k / #e" + YamlConfig.config.server.ITEM_LIMIT_ON_MAP + "#n", 300);
+            c.getPlayer().showHint(I18nUtil.getMessage("DropLimitCommand.message2") + "#r" + dropCount + "#k / #e" + YamlConfig.config.server.ITEM_LIMIT_ON_MAP + "#n", 300);
         }
 
     }
