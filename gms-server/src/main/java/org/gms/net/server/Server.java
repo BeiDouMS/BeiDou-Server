@@ -1881,7 +1881,7 @@ public class Server {
         Random random = new Random();
         int base = 1;
         int ran = random.nextInt(4);
-        nextTime = 86400000 * base * ran;
+        nextTime = 86400000 * (base + ran);
         return true;
     }
 }
