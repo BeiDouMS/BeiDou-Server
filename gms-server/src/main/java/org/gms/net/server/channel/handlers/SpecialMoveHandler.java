@@ -120,7 +120,8 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
             StatEffect ef = s.getEffect(chr.getSkillLevel(s));
 
             int lose = chr.safeAddHP(-1 * (chr.getCurrentMaxHp() / ef.getX()));
-            int gain = -lose * (ef.getY() / 100);
+            // 修复生命分流技能精度丢失，导致MP不加的问题
+            int gain = (int) (-lose * (ef.getY() / 100D));
             chr.addMP(gain);
         } else if (skillid == SuperGM.HEAL_PLUS_DISPEL) {
             p.skip(11);
