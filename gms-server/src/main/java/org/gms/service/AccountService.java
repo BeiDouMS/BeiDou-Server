@@ -89,6 +89,7 @@ public class AccountService {
         RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
 
         AccountsDO newData = new AccountsDO();
+        newData.setId(account.getId());
         if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
             newData.setPassword(encryptPassword(submitData.getNewPwd()));
         }
