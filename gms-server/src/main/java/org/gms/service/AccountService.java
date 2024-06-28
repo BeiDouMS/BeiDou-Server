@@ -210,8 +210,8 @@ public class AccountService {
             String ip = c.getRemoteAddress();
             IpbansDO ipban = IpbansDO.builder().ip(ip).aid(String.valueOf(accountId)).build();
             ipbansMapper.insert(ipban);
-            // 强制离线
-            c.disconnect(true, false);
+            // 强制离线，这个方法只是中断了连接不会造成客户端退出，但是实际跟掉线没什么区别
+            c.disconnect(false, false);
         }
     }
     

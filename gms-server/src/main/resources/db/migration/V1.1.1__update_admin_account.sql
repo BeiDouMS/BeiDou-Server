@@ -1,0 +1,1 @@
+update accounts set language = 3 where id = 1;
