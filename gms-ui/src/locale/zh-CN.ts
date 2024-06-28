@@ -1,4 +1,5 @@
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
+import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
@@ -6,9 +7,12 @@ export default {
   // 左侧菜单
   'menu.dashboard': '仪表盘',
   'menu.dashboard.workplace': '工作台',
+  'menu.account': '账户管理',
+  'menu.account.list': '账户列表',
   'menu.arco': 'Arco Design',
   'menu.faq': '常见问题',
   // 提示信息
+  'message.success': '操作成功',
   'message.switch.success': '切换为中文',
   'message.login.success': '欢迎使用',
   'message.logout.success': '登出成功',
@@ -24,4 +28,5 @@ export default {
   ...baseConfig, // 基本配置（示范如何外部导入）
   ...workplace,
   ...login,
+  ...account,
 };

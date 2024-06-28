@@ -14,10 +14,10 @@
         "
         @click="$router.push({ name: item.name })"
       >
-        {{ item.meta.title }}
+        {{ $t(item.meta.locale) }}
       </a-link>
       <span v-else>
-        {{ item.meta.title }}
+        {{ $t(item.meta.locale) }}
       </span>
     </a-breadcrumb-item>
   </a-breadcrumb>

@@ -1,15 +1,14 @@
 package org.gms.service;
 
-import com.mybatisflex.core.constant.SqlOperator;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.query.SqlOperators;
-import org.gms.constants.api.ModifyType;
+import org.gms.client.DefaultDates;
+import org.gms.config.YamlConfig;
 import org.gms.dao.entity.AccountsDO;
 import org.gms.dao.mapper.AccountsMapper;
-import org.gms.dto.AccountModifyDTO;
-import org.gms.dto.AccountsSearchDTO;
-import org.gms.dto.SubmitBody;
+import org.gms.dto.*;
+import org.gms.tools.BCrypt;
+import org.gms.tools.HexTool;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import static org.gms.dao.entity.table.AccountsDOTableDef.ACCOUNTS_D_O;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.util.Date;
+
+import static org.gms.client.Client.LOGIN_LOGGEDIN;
 
 @Service
 public class AccountService {
@@ -32,85 +37,115 @@ public class AccountService {
         return accountsMapper.selectOneByName(name);
     }
 
+    public AccountsDO findById(int id) {
+        return accountsMapper.selectOneById(id);
+    }
+
     public AccountsDO getCurrentUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return findByName(userDetails.getUsername());
     }
 
-    public Page<AccountsDO> searchUserList(SubmitBody<AccountsSearchDTO> submitBody) {
-        AccountsSearchDTO accountsSearchDto = submitBody.getData();
-        // 依据前端传入的字段查询，这2个时间字段做特殊处理
-        SqlOperators operators = SqlOperators.of()
-                .set(AccountsSearchDTO::getLastloginStart, SqlOperator.GE)
-                .set(AccountsSearchDTO::getLastloginEnd, SqlOperator.LE)
-                .set(AccountsSearchDTO::getCreatedatStart, SqlOperator.GE)
-                .set(AccountsSearchDTO::getCreatedatEnd, SqlOperator.LE);
+    public Page<AccountsDO> getAccountList(Integer page,
+                                           Integer size,
+                                           Integer id,
+                                           String name,
+                                           String lastLoginStart,
+                                           String lastLoginEnd,
+                                           String createdAtStart,
+                                           String createdAtEnd) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (id != null) queryWrapper.eq("id", id);
+        if (name != null) queryWrapper.like("name", name);
+        if (lastLoginStart != null) queryWrapper.ge(AccountsDO::getLastlogin, lastLoginStart);
+        if (lastLoginEnd != null) queryWrapper.le(AccountsDO::getLastlogin, lastLoginEnd);
+        if (createdAtStart != null) queryWrapper.ge(AccountsDO::getCreatedat, createdAtStart);
+        if (createdAtEnd != null) queryWrapper.le(AccountsDO::getCreatedat, createdAtEnd);
 
-        QueryWrapper queryWrapper = QueryWrapper.create(accountsSearchDto, operators);
-        return accountsMapper.paginate(new Page<>(), queryWrapper);
+        if (page == null) page = 1;
+        if (size == null) size = Integer.MAX_VALUE;
+        return accountsMapper.paginateWithRelations(page, size, queryWrapper);
     }
 
-    public boolean modifyAccount(SubmitBody<AccountModifyDTO> submitBody) {
-        AccountModifyDTO accountModifyDTO = submitBody.getData();
-        ModifyType modifyType = ModifyType.getByCode(accountModifyDTO.getModifyType());
-        switch (modifyType) {
-            case ModifyType.INSERT -> {
-                AccountsDO result = accountsMapper.selectOneByName(accountModifyDTO.getName());
-                RequireUtil.requireNull(result, I18nUtil.getExceptionMessage("AccountService.modifyAccount.exception1"));
-                accountModifyDTO.setId(null);
-                accountsMapper.insert(accountModifyDTO);
-            }
-            case ModifyType.UPDATE -> {
-                if (accountModifyDTO.getId() == null) {
-                    RequireUtil.requireNotEmpty(accountModifyDTO.getName(), I18nUtil.getExceptionMessage("AccountService.modifyAccount.exception2"));
-                    AccountsDO accountsDO = AccountsDO.builder()
-                            .password(accountModifyDTO.getPassword())
-                            .pin(accountModifyDTO.getPin())
-                            .pic(accountModifyDTO.getPic())
-                            .loggedin(accountModifyDTO.getLoggedin())
-                            .lastlogin(accountModifyDTO.getLastlogin())
-                            .createdat(accountModifyDTO.getCreatedat())
-                            .birthday(accountModifyDTO.getBirthday())
-                            .banned(accountModifyDTO.getBanned())
-                            .banreason(accountModifyDTO.getBanreason())
-                            .macs(accountModifyDTO.getMacs())
-                            .nxCredit(accountModifyDTO.getNxCredit())
-                            .maplePoint(accountModifyDTO.getMaplePoint())
-                            .nxPrepaid(accountModifyDTO.getNxPrepaid())
-                            .characterslots(accountModifyDTO.getCharacterslots())
-                            .gender(accountModifyDTO.getGender())
-                            .tempban(accountModifyDTO.getTempban())
-                            .greason(accountModifyDTO.getGreason())
-                            .tos(accountModifyDTO.getTos())
-                            .sitelogged(accountModifyDTO.getSitelogged())
-                            .webadmin(accountModifyDTO.getWebadmin())
-                            .nick(accountModifyDTO.getNick())
-                            .mute(accountModifyDTO.getMute())
-                            .email(accountModifyDTO.getEmail())
-                            .ip(accountModifyDTO.getIp())
-                            .rewardpoints(accountModifyDTO.getRewardpoints())
-                            .votepoints(accountModifyDTO.getVotepoints())
-                            .hwid(accountModifyDTO.getHwid())
-                            .language(accountModifyDTO.getLanguage())
-                            .build();
-                    QueryWrapper queryWrapper = QueryWrapper.create().where(ACCOUNTS_D_O.NAME.eq(accountModifyDTO.getName()));
-                    accountsMapper.updateByQuery(accountsDO, queryWrapper);
-                } else {
-                    accountsMapper.update(accountModifyDTO);
-                }
-            }
-            case ModifyType.DELETE -> {
-                if (accountModifyDTO.getId() == null) {
-                    RequireUtil.requireNotEmpty(accountModifyDTO.getName(), I18nUtil.getExceptionMessage("AccountService.modifyAccount.exception2"));
-                    QueryWrapper queryWrapper = QueryWrapper.create().where(ACCOUNTS_D_O.NAME.eq(accountModifyDTO.getName()));
-                    accountsMapper.deleteByQuery(queryWrapper);
-                } else {
-                    accountsMapper.deleteById(accountModifyDTO.getId());
-                }
+    public void addAccount(AddAccountDTO submitData) throws NoSuchAlgorithmException {
+        RequireUtil.requireNull(findByName(submitData.getName()), I18nUtil.getExceptionMessage("AccountService.addAccount.exception1"));
+        AccountsDO account = AccountsDO.builder()
+                .name(submitData.getName())
+                .password(encryptPassword(submitData.getPassword()))
+                .birthday(submitData.getBirthday())
+                .tempban(Timestamp.valueOf(DefaultDates.getTempban()))
+                .language(submitData.getLanguage())
+                .build();
+        accountsMapper.addAccount(account);
+    }
 
-            }
-            default -> throw new UnsupportedOperationException();
+    public void updateAccountByUser(UpdateAccountByUserDTO submitData) throws NoSuchAlgorithmException {
+        AccountsDO account = getCurrentUser();
+        RequireUtil.requireTrue(checkPassword(submitData.getOldPwd(), account), I18nUtil.getExceptionMessage("AccountService.updateAccountByUser.oldPassword"));
+        if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
+            account.setPassword(encryptPassword(submitData.getNewPwd()));
         }
-        return true;
+        account.setPin(submitData.getPin());
+        account.setPic(submitData.getPic());
+        account.setBirthday(submitData.getBirthday());
+        account.setNick(submitData.getNick());
+        account.setEmail(submitData.getEmail());
+        account.setLanguage(submitData.getLanguage());
+
+        accountsMapper.update(account);
+    }
+
+    public void updateAccountByGM(int id, UpdateAccountByGmDTO submitData) throws NoSuchAlgorithmException {
+        AccountsDO account = findById(id);
+        RequireUtil.requireNotNull(account, I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+        RequireUtil.requireFalse(account.getLoggedin() == LOGIN_LOGGEDIN, I18nUtil.getExceptionMessage("AccountService.isOnline"));
+        if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
+            account.setPassword(encryptPassword(submitData.getNewPwd()));
+        }
+        account.setPin(submitData.getPin());
+        account.setPic(submitData.getPic());
+        account.setBirthday(submitData.getBirthday());
+        account.setNxCredit(submitData.getNxCredit());
+        account.setMaplePoint(submitData.getMaplePoint());
+        account.setNxPrepaid(submitData.getNxPrepaid());
+        account.setCharacterslots(submitData.getCharacterslots());
+        account.setGender(submitData.getGender());
+        account.setWebadmin(submitData.getWebadmin());
+        account.setNick(submitData.getNick());
+        account.setMute(submitData.getMute());
+        account.setEmail(submitData.getEmail());
+        account.setRewardpoints(submitData.getRewardpoints());
+        account.setVotepoints(submitData.getVotepoints());
+        account.setLanguage(submitData.getLanguage());
+
+        accountsMapper.update(account);
+    }
+
+    public void deleteAccountByGM(int id) {
+        RequireUtil.requireNotNull(findById(id), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+        accountsMapper.deleteById(id);
+    }
+
+    public String encryptPassword(String password) throws NoSuchAlgorithmException {
+        return YamlConfig.config.server.BCRYPT_MIGRATION ? BCrypt.hashpw(password, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(password);
+    }
+
+    public boolean checkPassword(String pwd, AccountsDO accountsDO) {
+        String passHash = accountsDO.getPassword();
+        if (passHash.charAt(0) == '$' && passHash.charAt(1) == '2' && BCrypt.checkpw(pwd, passHash)) {
+            return true;
+        } else {
+            return pwd.equals(passHash) || checkHash(passHash, "SHA-1", pwd) || checkHash(passHash, "SHA-512", pwd);
+        }
+    }
+
+    private static boolean checkHash(String hash, String type, String password) {
+        try {
+            MessageDigest digester = MessageDigest.getInstance(type);
+            digester.update(password.getBytes(StandardCharsets.UTF_8), 0, password.length());
+            return HexTool.toHexString(digester.digest()).replace(" ", "").toLowerCase().equals(hash);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Encoding the string failed", e);
+        }
     }
 }

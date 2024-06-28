@@ -15,7 +15,7 @@ function generateUUID() {
 
 export interface HttpResponse<T = unknown> {
   status: string;
-  msg: string;
+  message: string;
   code: number;
   data: T;
 }
@@ -57,16 +57,16 @@ axios.interceptors.response.use(
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       Message.error({
-        content: res.msg || 'Error',
+        content: res.message || 'Error',
         duration: 5 * 1000,
       });
-      return Promise.reject(new Error(res.msg || 'Error'));
+      return Promise.reject(new Error(res.message || 'Error'));
     }
     return res;
   },
   (error) => {
     Message.error({
-      content: error.msg || 'Request Error',
+      content: error.message || 'Request Error',
       duration: 5 * 1000,
     });
     if (error.response.status === 401) {

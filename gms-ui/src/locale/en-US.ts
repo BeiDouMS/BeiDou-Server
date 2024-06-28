@@ -1,12 +1,16 @@
 import workplace from '@/views/dashboard/workplace/locale/en-US';
+import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import base from './en-US/base';
 
 export default {
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.workplace': 'Workplace',
+  'menu.account': 'Account',
+  'menu.account.list': 'Account List',
   'menu.arco': 'Arco Design',
   'menu.faq': 'FAQ',
+  'message.success': 'Success',
   'message.switch.success': 'Switch to English',
   'message.login.success': 'Welcome',
   'message.logout.success': 'Logout success',
@@ -21,4 +25,5 @@ export default {
   ...base,
   ...workplace,
   ...login,
+  ...account,
 };

@@ -80,4 +80,12 @@ public class RequireUtil {
             throw new BizException(BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
         }
     }
+
+    public static void requireTrue(boolean b, String msg) {
+        if (!b) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
+    }
+
+    public static void requireFalse(boolean b, String msg) {
+        if (b) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
+    }
 }
