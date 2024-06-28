@@ -83,20 +83,23 @@ public class AccountService {
     }
 
     public void updateAccountByUser(UpdateAccountByUserDTO submitData) throws NoSuchAlgorithmException {
-        // 其实这么写在大数据量下性能很差，因为要更新全字段
         AccountsDO account = getCurrentUser();
         RequireUtil.requireTrue(checkPassword(submitData.getOldPwd(), account), I18nUtil.getExceptionMessage("AccountService.updateAccountByUser.oldPassword"));
-        if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
-            account.setPassword(encryptPassword(submitData.getNewPwd()));
-        }
-        account.setPin(submitData.getPin());
-        account.setPic(submitData.getPic());
-        account.setBirthday(submitData.getBirthday());
-        account.setNick(submitData.getNick());
-        account.setEmail(submitData.getEmail());
-        account.setLanguage(submitData.getLanguage());
+        // 防止swagger调用，后续的语言路由都受影响
+        RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
 
-        accountsMapper.update(account);
+        AccountsDO newData = new AccountsDO();
+        if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
+            newData.setPassword(encryptPassword(submitData.getNewPwd()));
+        }
+        newData.setPin(submitData.getPin());
+        newData.setPic(submitData.getPic());
+        newData.setBirthday(submitData.getBirthday());
+        newData.setNick(submitData.getNick());
+        newData.setEmail(submitData.getEmail());
+        newData.setLanguage(submitData.getLanguage());
+
+        accountsMapper.update(newData);
     }
 
     public void updateAccountByGM(int id, UpdateAccountByGmDTO submitData) throws NoSuchAlgorithmException {
