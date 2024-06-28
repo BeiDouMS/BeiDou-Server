@@ -120,6 +120,8 @@
         loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
+        if ((err as Error).name === 'TypeError')
+          errorMessage.value = '错误的请求';
       } finally {
         setLoading(false);
       }

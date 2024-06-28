@@ -65,8 +65,14 @@ axios.interceptors.response.use(
     return res;
   },
   (error) => {
+    let errorMessage;
+    if (error.message === 'Network Error') {
+      errorMessage = '无法连接到服务器';
+    } else {
+      errorMessage = error.message || 'Request Error';
+    }
     Message.error({
-      content: error.message || 'Request Error',
+      content: errorMessage,
       duration: 5 * 1000,
     });
     if (error.response.status === 401) {

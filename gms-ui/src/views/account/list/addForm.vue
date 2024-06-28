@@ -126,7 +126,7 @@
     setLoading(true);
     try {
       await addAccount(formData);
-      Message.success(t('Message.success'));
+      Message.success(t('message.success'));
       emit('reload');
       return true;
     } finally {

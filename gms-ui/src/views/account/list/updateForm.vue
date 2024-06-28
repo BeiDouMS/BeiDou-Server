@@ -256,7 +256,7 @@
     setLoading(true);
     try {
       await updateAccountByGM(id.value, formData);
-      Message.success(t('Message.success'));
+      Message.success(t('message.success'));
       emit('reload');
       return true;
     } finally {
