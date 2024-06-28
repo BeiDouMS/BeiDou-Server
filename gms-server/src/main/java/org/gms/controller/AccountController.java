@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/account")
@@ -33,13 +34,13 @@ public class AccountController {
     @Operation(summary = "获取账号列表")
     @GetMapping("/" + ApiConstant.LATEST)
     public ResultBody<Page<AccountsDO>> getAccountList(@RequestParam(name = "page", required = false) Integer page,
-                                     @RequestParam(name = "size", required = false) Integer size,
-                                     @RequestParam(name = "id", required = false) Integer id,
-                                     @RequestParam(name = "name", required = false) String name,
-                                     @RequestParam(name = "lastLoginStart", required = false) String lastLoginStart,
-                                     @RequestParam(name = "lastLoginEnd", required = false) String lastLoginEnd,
-                                     @RequestParam(name = "createdAtStart", required = false) String createdAtStart,
-                                     @RequestParam(name = "createdAtEnd", required = false) String createdAtEnd) {
+                                                       @RequestParam(name = "size", required = false) Integer size,
+                                                       @RequestParam(name = "id", required = false) Integer id,
+                                                       @RequestParam(name = "name", required = false) String name,
+                                                       @RequestParam(name = "lastLoginStart", required = false) String lastLoginStart,
+                                                       @RequestParam(name = "lastLoginEnd", required = false) String lastLoginEnd,
+                                                       @RequestParam(name = "createdAtStart", required = false) String createdAtStart,
+                                                       @RequestParam(name = "createdAtEnd", required = false) String createdAtEnd) {
         return ResultBody.success(accountService.getAccountList(page, size, id, name, lastLoginStart, lastLoginEnd, createdAtStart, createdAtEnd));
     }
 
@@ -62,8 +63,8 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "更新账号资料[GM]")
     @PutMapping("/" + ApiConstant.LATEST + "/{id}")
-    public ResultBody<Object> updateByGm(@PathVariable Integer id,
-                                 @RequestBody SubmitBody<UpdateAccountByGmDTO> submitBody) throws NoSuchAlgorithmException {
+    public ResultBody<Object> updateByGm(@PathVariable("id") int id,
+                                         @RequestBody SubmitBody<UpdateAccountByGmDTO> submitBody) throws NoSuchAlgorithmException {
         accountService.updateAccountByGM(id, submitBody.getData());
         return ResultBody.success();
     }
@@ -71,8 +72,33 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "删除账号")
     @DeleteMapping("/" + ApiConstant.LATEST + "/{id}")
-    public ResultBody<Object> delete(@PathVariable int id) {
+    public ResultBody<Object> delete(@PathVariable("id") int id) {
         accountService.deleteAccountByGM(id);
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/account/" + ApiConstant.LATEST)
+    @Operation(summary = "重置在线状态")
+    @PutMapping("/" + ApiConstant.LATEST + "/{id}/reset/logged")
+    public ResultBody<Object> resetLoggedIn(@PathVariable("id") int id) {
+        accountService.resetLoggedIn(id);
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/account/" + ApiConstant.LATEST)
+    @Operation(summary = "封停账号")
+    @PutMapping("/" + ApiConstant.LATEST + "/{id}/ban")
+    public ResultBody<Object> banAccount(@PathVariable("id") int id,
+                                         @RequestBody SubmitBody<Map<String, String>> submitBody) {
+        accountService.banAccount(id, submitBody.getData().get("reason"));
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/account/" + ApiConstant.LATEST)
+    @Operation(summary = "解封账号")
+    @PutMapping("/" + ApiConstant.LATEST + "/{id}/unban")
+    public ResultBody<Object> unbanAccount(@PathVariable("id") int id) {
+        accountService.unbanAccount(id);
         return ResultBody.success();
     }
 }

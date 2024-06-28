@@ -2,11 +2,20 @@ package org.gms.service;
 
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import org.gms.client.Character;
+import org.gms.client.Client;
 import org.gms.client.DefaultDates;
 import org.gms.config.YamlConfig;
 import org.gms.dao.entity.AccountsDO;
+import org.gms.dao.entity.CharactersDO;
+import org.gms.dao.entity.IpbansDO;
+import org.gms.dao.entity.MacbansDO;
 import org.gms.dao.mapper.AccountsMapper;
+import org.gms.dao.mapper.CharactersMapper;
+import org.gms.dao.mapper.IpbansMapper;
+import org.gms.dao.mapper.MacbansMapper;
 import org.gms.dto.*;
+import org.gms.net.server.Server;
 import org.gms.tools.BCrypt;
 import org.gms.tools.HexTool;
 import org.gms.util.I18nUtil;
@@ -20,17 +29,24 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.List;
 
 import static org.gms.client.Client.LOGIN_LOGGEDIN;
+import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
 
 @Service
 public class AccountService {
     private final AccountsMapper accountsMapper;
+    private final CharactersMapper charactersMapper;
+    private final IpbansMapper ipbansMapper;
+    private final MacbansMapper macbansMapper;
 
     @Autowired
-    public AccountService(AccountsMapper accountsMapper) {
+    public AccountService(AccountsMapper accountsMapper, CharactersMapper charactersMapper, IpbansMapper ipbansMapper, MacbansMapper macbansMapper) {
         this.accountsMapper = accountsMapper;
+        this.charactersMapper = charactersMapper;
+        this.ipbansMapper = ipbansMapper;
+        this.macbansMapper = macbansMapper;
     }
 
     public AccountsDO findByName(String name) {
@@ -157,5 +173,59 @@ public class AccountService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Encoding the string failed", e);
         }
+    }
+
+    public void resetLoggedIn(int id) {
+        RequireUtil.requireNotNull(findById(id), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+
+        AccountsDO account = new AccountsDO();
+        account.setId(id);
+        account.setLoggedin(LOGIN_NOTLOGGEDIN);
+        accountsMapper.update(account);
+    }
+
+    public void banAccount(int accountId, String reason) {
+        RequireUtil.requireNotNull(findById(accountId), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+
+        // 封停账号
+        AccountsDO account = new AccountsDO();
+        account.setId(accountId);
+        account.setBanned(true);
+        account.setBanreason(reason);
+        accountsMapper.update(account);
+        // 遍历账号下的角色，如果在线，追封客户端/Mac/IP
+        List<CharactersDO> characterList = charactersMapper.selectIdAndWorldListByAccountId(accountId); // 仅查询角色ID和所在world
+        for (CharactersDO chr : characterList) {
+            Character player = Server.getInstance()
+                    .getWorlds()
+                    .get(chr.getWorld())
+                    .getPlayerStorage()
+                    .getCharacterById(chr.getId());
+            if (player == null) return; // 角色离线
+
+            Client c = player.getClient(); // 角色在线，获取客户端
+            c.banMacs(); // 封禁Mac
+            // c.banHWID(); // 封禁客户端 操作不可逆？
+            // 封禁IP
+            String ip = c.getRemoteAddress();
+            IpbansDO ipban = IpbansDO.builder().ip(ip).aid(String.valueOf(accountId)).build();
+            ipbansMapper.insert(ipban);
+            // 强制离线
+            c.disconnect(true, false);
+        }
+    }
+    
+    public void unbanAccount(int accountId) {
+        RequireUtil.requireNotNull(findById(accountId), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+
+        // 解封账号
+        AccountsDO account = new AccountsDO();
+        account.setId(accountId);
+        account.setBanned(false);
+        accountsMapper.update(account);
+        // 解封Mac
+        macbansMapper.deleteByQuery(new QueryWrapper().eq(MacbansDO::getAid, accountId));
+        // 解封Ip
+        ipbansMapper.deleteByQuery(new QueryWrapper().eq(IpbansDO::getAid, accountId));
     }
 }

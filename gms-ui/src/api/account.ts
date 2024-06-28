@@ -61,3 +61,15 @@ export function updateAccountByGM(id: number, data: GMUpdateForm) {
 export function deleteAccount(id: number) {
   return axios.delete(`/account/v1/${id}`);
 }
+
+export function banAccount(id: number, reason?: string) {
+  return axios.put(`/account/v1/${id}/ban`, { reason });
+}
+
+export function unbanAccount(id: number) {
+  return axios.put(`/account/v1/${id}/unban`);
+}
+
+export function resetLoggedIn(id: number) {
+  return axios.put(`/account/v1/${id}/reset/logged`);
+}

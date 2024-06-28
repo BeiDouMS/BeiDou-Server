@@ -14,12 +14,24 @@ export default {
   'account.list.column.lastLoginAt': 'login',
   'account.list.column.registerAt': 'reg',
   'account.list.column.operate': 'operate',
+  'account.list.column.operate.ban': 'ban',
+  'account.list.column.operate.ban.reason': 'reason',
+  'account.list.column.operate.ban.reason.title': 'ban account',
+  'account.list.column.operate.unban': 'unban',
+  'account.list.column.operate.unban.confirm':
+    'Are you sure to unban this account?',
+  'account.list.column.operate.restLoggedIn': 'restLog',
+  'account.list.column.operate.delete': 'delete',
+  'account.list.column.operate.delete.confirm':
+    'Are you really to delete this account?',
+
   'account.list.filter.id': 'ID',
   'account.list.filter.name': 'Name',
   'account.list.filter.lastLoginStart': 'lastLoginStart',
   'account.list.filter.lastLoginEnd': 'lastLoginEnd',
   'account.list.filter.createdAtStart': 'createdAtStart',
   'account.list.filter.createdAtEnd': 'createdAtEnd',
+
   'account.list.addForm.title': 'Create Account',
   'account.list.addForm.name': 'Account',
   'account.list.addForm.password': 'Password',

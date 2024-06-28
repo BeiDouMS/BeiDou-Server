@@ -126,9 +126,11 @@
             align="center"
           >
             <template #cell="{ record }">
-              <a-tag v-if="record.banned" color="red">
-                {{ $t('account.list.column.banned.true') }}
-              </a-tag>
+              <a-tooltip v-if="record.banned" :content="record.banreason">
+                <a-tag color="red">
+                  {{ $t('account.list.column.banned.true') }}
+                </a-tag>
+              </a-tooltip>
               <a-tag v-else color="green">
                 {{ $t('account.list.column.banned.false') }}
               </a-tag>
@@ -169,6 +171,45 @@
               >
                 {{ $t('button.edit') }}
               </a-button>
+              <a-button
+                type="text"
+                size="mini"
+                @click="restLoggedInClick(record)"
+              >
+                {{ $t('account.list.column.operate.restLoggedIn') }}
+              </a-button>
+              <a-popconfirm
+                type="warning"
+                :content="$t('account.list.column.operate.unban.confirm')"
+                @ok="unbanClick(record)"
+              >
+                <a-button
+                  v-if="record.banned"
+                  type="text"
+                  size="mini"
+                  status="warning"
+                >
+                  {{ $t('account.list.column.operate.unban') }}
+                </a-button>
+              </a-popconfirm>
+              <a-button
+                v-if="!record.banned"
+                type="text"
+                size="mini"
+                status="danger"
+                @click="banClick(record)"
+              >
+                {{ $t('account.list.column.operate.ban') }}
+              </a-button>
+              <a-popconfirm
+                type="error"
+                :content="$t('account.list.column.operate.delete.confirm')"
+                @ok="deleteClick(record)"
+              >
+                <a-button type="text" size="mini" status="danger">
+                  {{ $t('account.list.column.operate.delete') }}
+                </a-button>
+              </a-popconfirm>
             </template>
           </a-table-column>
         </template>
@@ -188,6 +229,24 @@
     </a-card>
     <account-add-form ref="accountAddFormRef" @reload="loadData" />
     <account-update-form ref="accountUpdateFormRef" @reload="loadData" />
+    <a-modal
+      v-model:visible="reasonVisible"
+      :title="reasonTitle"
+      :ok-loading="loading"
+      :mask-closable="false"
+      :esc-to-close="false"
+      :ok-text="$t('account.list.column.operate.ban')"
+      :on-before-ok="submitBanClick"
+    >
+      <a-form :model="{ reason }">
+        <a-form-item
+          :label="$t('account.list.column.operate.ban.reason')"
+          validate-trigger="blur"
+        >
+          <a-input v-model="reason" />
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 </template>
 
@@ -195,10 +254,19 @@
   import useLoading from '@/hooks/loading';
   import { ref } from 'vue';
   import { AccountState } from '@/store/modules/account/types';
-  import { getAccountList } from '@/api/account';
+  import {
+    banAccount,
+    deleteAccount,
+    getAccountList,
+    resetLoggedIn,
+    unbanAccount,
+  } from '@/api/account';
   import AccountAddForm from '@/views/account/list/addForm.vue';
   import AccountUpdateForm from '@/views/account/list/updateForm.vue';
+  import { Message } from '@arco-design/web-vue';
+  import { useI18n } from 'vue-i18n';
 
+  const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const tableData = ref<AccountState[]>([]);
   const total = ref(0);
@@ -219,6 +287,10 @@
     createdAtStart: undefined,
     createdAtEnd: undefined,
   });
+  const reasonVisible = ref(false);
+  const reasonTitle = ref('');
+  const reason = ref('');
+  const banAccountIdReady = ref(0);
 
   const loadData = async () => {
     setLoading(true);
@@ -271,6 +343,59 @@
   const accountUpdateFormRef = ref();
   const editClick = (data: AccountState) => {
     accountUpdateFormRef.value.init(data);
+  };
+
+  const restLoggedInClick = async (data: AccountState) => {
+    setLoading(true);
+    try {
+      await resetLoggedIn(data.id);
+      Message.success(t('message.success'));
+      await loadData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const banClick = async (data: AccountState) => {
+    reasonTitle.value = `${t(
+      'account.list.column.operate.ban.reason.title'
+    )} [${data.id}] ${data.name}`;
+    banAccountIdReady.value = data.id;
+    reasonVisible.value = true;
+    reason.value = undefined;
+  };
+
+  const unbanClick = async (data: AccountState) => {
+    setLoading(true);
+    try {
+      await unbanAccount(data.id);
+      Message.success(t('message.success'));
+      await loadData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitBanClick = async () => {
+    setLoading(true);
+    try {
+      await banAccount(banAccountIdReady.value, reason.value);
+      Message.success(t('message.success'));
+      await loadData();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteClick = async (data: AccountState) => {
+    setLoading(true);
+    try {
+      await deleteAccount(data.id);
+      Message.success(t('message.success'));
+      await loadData();
+    } finally {
+      setLoading(false);
+    }
   };
 </script>
 
