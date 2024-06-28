@@ -33,6 +33,7 @@ export default {
   'account.list.addForm.rules.passwordCheck.require': 'Check Password is empty',
   'account.list.addForm.rules.passwordCheck.same': 'Different twice password',
   'account.list.addForm.rules.birthday.require': 'Please select a birthday',
+  'account.list.addForm.rules.language.require': 'Please select a language',
 
   'account.list.updateForm.title': 'Edit Account',
   'account.list.updateForm.password': 'Password',

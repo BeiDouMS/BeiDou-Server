@@ -68,6 +68,8 @@ public class AccountService {
     }
 
     public void addAccount(AddAccountDTO submitData) throws NoSuchAlgorithmException {
+        // 防止swagger调用，后续的语言路由都受影响
+        RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
         RequireUtil.requireNull(findByName(submitData.getName()), I18nUtil.getExceptionMessage("AccountService.addAccount.exception1"));
         AccountsDO account = AccountsDO.builder()
                 .name(submitData.getName())
@@ -76,10 +78,12 @@ public class AccountService {
                 .tempban(Timestamp.valueOf(DefaultDates.getTempban()))
                 .language(submitData.getLanguage())
                 .build();
-        accountsMapper.addAccount(account);
+        // 可以直接用insertSelective忽略null值
+        accountsMapper.insertSelective(account);
     }
 
     public void updateAccountByUser(UpdateAccountByUserDTO submitData) throws NoSuchAlgorithmException {
+        // 其实这么写在大数据量下性能很差，因为要更新全字段
         AccountsDO account = getCurrentUser();
         RequireUtil.requireTrue(checkPassword(submitData.getOldPwd(), account), I18nUtil.getExceptionMessage("AccountService.updateAccountByUser.oldPassword"));
         if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
@@ -98,6 +102,8 @@ public class AccountService {
     public void updateAccountByGM(int id, UpdateAccountByGmDTO submitData) throws NoSuchAlgorithmException {
         AccountsDO account = findById(id);
         RequireUtil.requireNotNull(account, I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
+        // 防止swagger调用，后续的语言路由都受影响
+        RequireUtil.requireNotNull(account.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));
         RequireUtil.requireFalse(account.getLoggedin() == LOGIN_LOGGEDIN, I18nUtil.getExceptionMessage("AccountService.isOnline"));
         if (submitData.getNewPwd() != null && submitData.getNewPwd().length() >= 6) {
             account.setPassword(encryptPassword(submitData.getNewPwd()));

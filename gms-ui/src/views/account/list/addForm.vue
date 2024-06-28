@@ -98,6 +98,12 @@
         message: t('account.list.addForm.rules.birthday.require'),
       },
     ],
+    language: [
+      {
+        required: true,
+        message: t('account.list.addForm.rules.birthday.require'),
+      },
+    ],
   };
 
   const init = () => {

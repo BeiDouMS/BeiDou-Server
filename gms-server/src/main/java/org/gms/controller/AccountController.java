@@ -4,6 +4,7 @@ import com.mybatisflex.core.paginate.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.gms.constants.api.ApiConstant;
+import org.gms.dao.entity.AccountsDO;
 import org.gms.dto.*;
 import org.gms.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "注册账号")
     @PostMapping("/" + ApiConstant.LATEST)
-    public ResultBody register(@RequestBody SubmitBody<AddAccountDTO> submitBody) throws NoSuchAlgorithmException {
+    public ResultBody<Object> register(@RequestBody SubmitBody<AddAccountDTO> submitBody) throws NoSuchAlgorithmException {
         accountService.addAccount(submitBody.getData());
         return ResultBody.success();
     }
@@ -53,7 +54,7 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "更新账号资料[用户](须校验旧密码,新密码留空则不修改)")
     @PutMapping("/" + ApiConstant.LATEST)
-    public ResultBody updateByUser(@RequestBody SubmitBody<UpdateAccountByUserDTO> submitBody) throws NoSuchAlgorithmException {
+    public ResultBody<Object> updateByUser(@RequestBody SubmitBody<UpdateAccountByUserDTO> submitBody) throws NoSuchAlgorithmException {
         accountService.updateAccountByUser(submitBody.getData());
         return ResultBody.success();
     }
@@ -61,7 +62,7 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "更新账号资料[GM]")
     @PutMapping("/" + ApiConstant.LATEST + "/{id}")
-    public ResultBody updateByGm(@PathVariable Integer id,
+    public ResultBody<Object> updateByGm(@PathVariable Integer id,
                                  @RequestBody SubmitBody<UpdateAccountByGmDTO> submitBody) throws NoSuchAlgorithmException {
         accountService.updateAccountByGM(id, submitBody.getData());
         return ResultBody.success();
@@ -70,7 +71,7 @@ public class AccountController {
     @Tag(name = "/account/" + ApiConstant.LATEST)
     @Operation(summary = "删除账号")
     @DeleteMapping("/" + ApiConstant.LATEST + "/{id}")
-    public ResultBody delete(@PathVariable int id) {
+    public ResultBody<Object> delete(@PathVariable int id) {
         accountService.deleteAccountByGM(id);
         return ResultBody.success();
     }

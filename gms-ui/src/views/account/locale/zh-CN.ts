@@ -33,6 +33,7 @@ export default {
   'account.list.addForm.rules.passwordCheck.require': '确认密码不能为空',
   'account.list.addForm.rules.passwordCheck.same': '两次输入的密码不匹配',
   'account.list.addForm.rules.birthday.require': '请选择一个日期',
+  'account.list.addForm.rules.language.require': '请选择一个语言',
 
   'account.list.updateForm.title': '编辑账号',
   'account.list.updateForm.password': '密码',

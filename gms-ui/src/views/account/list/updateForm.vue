@@ -211,6 +211,12 @@
         },
       },
     ],
+    language: [
+      {
+        required: true,
+        message: t('account.list.addForm.rules.language.require'),
+      },
+    ],
   };
 
   const init = (accountData: AccountState) => {
