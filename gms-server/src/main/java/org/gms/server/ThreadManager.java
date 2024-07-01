@@ -19,14 +19,10 @@
 */
 package org.gms.server;
 
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * @author Ronan
@@ -38,36 +34,25 @@ public class ThreadManager {
         return instance;
     }
 
-    private ThreadPoolExecutor tpe;
+    private ExecutorService executorService;
 
     private ThreadManager() {}
 
-    private class RejectedExecutionHandlerImpl implements RejectedExecutionHandler {
-
-        @Override
-        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-            Thread t = new Thread(r);
-            t.start();
-        }
-
-    }
-
     public void newTask(Runnable r) {
-        tpe.execute(r);
+        executorService.execute(r);
     }
 
     public void start() {
-        RejectedExecutionHandler reh = new RejectedExecutionHandlerImpl();
-        ThreadFactory tf = Executors.defaultThreadFactory();
-
-        tpe = new ThreadPoolExecutor(20, 1000, 77, SECONDS, new ArrayBlockingQueue<>(50), tf, reh);
+        // 注意，虚拟线程不建议池化，所以也不需要拒绝策略
+        executorService = Executors.newVirtualThreadPerTaskExecutor();
     }
 
     public void stop() {
-        tpe.shutdown();
+        executorService.shutdown();
         try {
-            tpe.awaitTermination(5, MINUTES);
-        } catch (InterruptedException ie) {
+            boolean ignore = executorService.awaitTermination(5, MINUTES);
+        } catch (InterruptedException ignore) {
+
         }
     }
 
