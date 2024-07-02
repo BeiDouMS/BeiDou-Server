@@ -987,7 +987,37 @@ public class Character extends AbstractCharacterObject {
                 return false;
             }
         }
-        return getIdByName(name) < 0 && Pattern.compile("[a-zA-Z0-9]{3,12}").matcher(name).matches();
+        return !existName(name) && Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{2,12}").matcher(name).matches(); // 加入对中文编码的检测
+    }
+
+    public static boolean existName(String name) {
+        boolean result = true;
+        // 检查角色名是否已存在
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?")) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) result = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (result) return true;
+
+        result = true;
+        // 检查改名队列是否有申请了
+        try (Connection con = DatabaseConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement("SELECT id FROM namechanges WHERE new = ? AND completionTime IS NULL")) {
+            ps.setString(1, name);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) result = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     public boolean canDoor() {
