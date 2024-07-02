@@ -382,34 +382,8 @@ public class Character extends AbstractCharacterObject {
         setPosition(new Point(0, 0));
     }
 
-    private static Job getJobStyleInternal(int jobid, byte opt) {
-        int jobtype = jobid / 100;
-
-        if (jobtype == Job.WARRIOR.getId() / 100 || jobtype == Job.DAWNWARRIOR1.getId() / 100 || jobtype == Job.ARAN1.getId() / 100) {
-            return (Job.WARRIOR);
-        } else if (jobtype == Job.MAGICIAN.getId() / 100 || jobtype == Job.BLAZEWIZARD1.getId() / 100 || jobtype == Job.EVAN1.getId() / 100) {
-            return (Job.MAGICIAN);
-        } else if (jobtype == Job.BOWMAN.getId() / 100 || jobtype == Job.WINDARCHER1.getId() / 100) {
-            if (jobid / 10 == Job.CROSSBOWMAN.getId() / 10) {
-                return (Job.CROSSBOWMAN);
-            } else {
-                return (Job.BOWMAN);
-            }
-        } else if (jobtype == Job.THIEF.getId() / 100 || jobtype == Job.NIGHTWALKER1.getId() / 100) {
-            return (Job.THIEF);
-        } else if (jobtype == Job.PIRATE.getId() / 100 || jobtype == Job.THUNDERBREAKER1.getId() / 100) {
-            if (opt == (byte) 0x80) {
-                return (Job.BRAWLER);
-            } else {
-                return (Job.GUNSLINGER);
-            }
-        }
-
-        return (Job.BEGINNER);
-    }
-
     public Job getJobStyle(byte opt) {
-        return getJobStyleInternal(this.getJob().getId(), opt);
+        return Job.getJobStyleInternal(this.getJob().getId(), opt);
     }
 
     public Job getJobStyle() {
@@ -567,7 +541,7 @@ public class Character extends AbstractCharacterObject {
         effLock.lock();
         chrLock.lock();
         try {
-            this.coolDowns.put(Integer.valueOf(skillId), new CooldownValueHolder(skillId, startTime, length));
+            this.coolDowns.put(skillId, new CooldownValueHolder(skillId, startTime, length));
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -699,7 +673,7 @@ public class Character extends AbstractCharacterObject {
             ps.setInt(2, accountid);
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            log.error(I18nUtil.getLogMessage("Character.ban.error1"), accountid, e);
         }
     }
 
@@ -737,7 +711,7 @@ public class Character extends AbstractCharacterObject {
             }
             return ret;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            log.error(I18nUtil.getLogMessage("Character.ban.error1"), id, ex);
         }
         return false;
     }
@@ -923,7 +897,7 @@ public class Character extends AbstractCharacterObject {
         if (client.getChannelServer().getPlayerStorage().getCharacterById(getId()) != null) {
             updateLocalStats();
             sendPacket(PacketCreator.cancelBuff(buffstats));
-            if (buffstats.size() > 0) {
+            if (!buffstats.isEmpty()) {
                 getMap().broadcastMessage(this, PacketCreator.cancelForeignBuff(getId(), buffstats), false);
             }
         }
@@ -940,33 +914,28 @@ public class Character extends AbstractCharacterObject {
     }
 
     public static boolean existName(String name) {
-        boolean result = true;
+        boolean result = false;
         // 检查角色名是否已存在
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?")) {
+        try (Connection con = DatabaseConnection.getConnection()) {
+            PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?");
             ps.setString(1, name);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) result = false;
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                result = true;
+            } else {
+                ps = con.prepareStatement("SELECT id FROM namechanges WHERE new = ? AND completionTime IS NULL");
+                ps.setString(1, name);
+                rs = ps.executeQuery();
+                if (rs.next()) {
+                    result = true;
+                }
             }
+            ps.close();
+            rs.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(I18nUtil.getLogMessage("Character.ban.error2"), e);
         }
-
-        if (result) return true;
-
-        result = true;
-        // 检查改名队列是否有申请了
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT id FROM namechanges WHERE new = ? AND completionTime IS NULL")) {
-            ps.setString(1, name);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) result = false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return  result;
     }
 
     public boolean canDoor() {
@@ -992,7 +961,7 @@ public class Character extends AbstractCharacterObject {
                 for (Item item : new ArrayList<>(inv.list())) {
                     if (InventoryManipulator.isSandboxItem(item)) {
                         InventoryManipulator.removeFromSlot(client, invType, item.getPosition(), item.getQuantity(), false);
-                        dropMessage(5, "[" + ii.getName(item.getItemId()) + "] has passed its trial conditions and will be removed from your inventory.");
+                        dropMessage(5, "[" + ii.getName(item.getItemId()) + "] " + I18nUtil.getMessage("Character.removeSandboxItems.message1"));
                     }
                 }
             } finally {
@@ -1003,16 +972,20 @@ public class Character extends AbstractCharacterObject {
         hasSandboxItem = false;
     }
 
-    public FameStatus canGiveFame(Character from) {
-        if (this.isGM()) {
-            return FameStatus.OK;
-        } else if (lastfametime >= System.currentTimeMillis() - 3600000 * 24) {
-            return FameStatus.NOT_TODAY;
-        } else if (lastmonthfameids.contains(Integer.valueOf(from.getId()))) {
-            return FameStatus.NOT_THIS_MONTH;
-        } else {
-            return FameStatus.OK;
-        }
+    public long getLastfametime() {
+        return lastfametime;
+    }
+
+    public void setLastfametime(long lastfametime) {
+        this.lastfametime = lastfametime;
+    }
+
+    public List<Integer> getLastmonthfameids() {
+        return lastmonthfameids;
+    }
+
+    public void setLastmonthfameids(List<Integer> lastmonthfameids) {
+        this.lastmonthfameids = lastmonthfameids;
     }
 
     public void changeCI(int type) {
@@ -1108,15 +1081,13 @@ public class Character extends AbstractCharacterObject {
             }
         }
 
-        TimerManager.getInstance().schedule(new Runnable() {    // need to delay to ensure clientside has finished reloading character data
-            @Override
-            public void run() {
-                Character thisChr = Character.this;
-                MapleMap map = thisChr.getMap();
+        // need to delay to ensure clientside has finished reloading character data
+        TimerManager.getInstance().schedule(() -> {
+            Character thisChr = Character.this;
+            MapleMap map = thisChr.getMap();
 
-                if (map != null) {
-                    map.broadcastMessage(thisChr, PacketCreator.showForeignEffect(thisChr.getId(), 8), false);
-                }
+            if (map != null) {
+                map.broadcastMessage(thisChr, PacketCreator.showForeignEffect(thisChr.getId(), 8), false);
             }
         }, 777);
     }
@@ -3068,11 +3039,6 @@ public class Character extends AbstractCharacterObject {
                 }
             }, 60000);
         }
-    }
-
-    public enum FameStatus {
-
-        OK, NOT_TODAY, NOT_THIS_MONTH
     }
 
     public void forceUpdateItem(Item item) {
@@ -6232,7 +6198,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private int getJobLevelSp(int level, Job job, int jobBranch) {
-        if (getJobStyleInternal(job.getId(), (byte) 0x40) == Job.MAGICIAN) {
+        if (Job.getJobStyleInternal(job.getId(), (byte) 0x40) == Job.MAGICIAN) {
             level += 2;  // starts earlier, level 8
         }
 

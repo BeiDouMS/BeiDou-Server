@@ -83,36 +83,24 @@ public enum Job {
                 return l;
             }
         }
-        return null;
+        return BEGINNER;
     }
 
     public static Job getBy5ByteEncoding(int encoded) {
-        switch (encoded) {
-            case 2:
-                return WARRIOR;
-            case 4:
-                return MAGICIAN;
-            case 8:
-                return BOWMAN;
-            case 16:
-                return THIEF;
-            case 32:
-                return PIRATE;
-            case 1024:
-                return NOBLESSE;
-            case 2048:
-                return DAWNWARRIOR1;
-            case 4096:
-                return BLAZEWIZARD1;
-            case 8192:
-                return WINDARCHER1;
-            case 16384:
-                return NIGHTWALKER1;
-            case 32768:
-                return THUNDERBREAKER1;
-            default:
-                return BEGINNER;
-        }
+        return switch (encoded) {
+            case 2 -> WARRIOR;
+            case 4 -> MAGICIAN;
+            case 8 -> BOWMAN;
+            case 16 -> THIEF;
+            case 32 -> PIRATE;
+            case 1024 -> NOBLESSE;
+            case 2048 -> DAWNWARRIOR1;
+            case 4096 -> BLAZEWIZARD1;
+            case 8192 -> WINDARCHER1;
+            case 16384 -> NIGHTWALKER1;
+            case 32768 -> THUNDERBREAKER1;
+            default -> BEGINNER;
+        };
     }
 
     public boolean isA(Job basejob) {  // thanks Steve (kaito1410) for pointing out an improvement here
@@ -131,5 +119,31 @@ public enum Job {
         case 4: THIEF;
         case 5: PIRATE;
         */
+    }
+
+    public static Job getJobStyleInternal(int jobid, byte opt) {
+        int jobtype = jobid / 100;
+
+        if (jobtype == WARRIOR.getId() / 100 || jobtype == DAWNWARRIOR1.getId() / 100 || jobtype == ARAN1.getId() / 100) {
+            return WARRIOR;
+        } else if (jobtype == MAGICIAN.getId() / 100 || jobtype == BLAZEWIZARD1.getId() / 100 || jobtype == EVAN1.getId() / 100) {
+            return MAGICIAN;
+        } else if (jobtype == BOWMAN.getId() / 100 || jobtype == WINDARCHER1.getId() / 100) {
+            if (jobid / 10 == CROSSBOWMAN.getId() / 10) {
+                return CROSSBOWMAN;
+            } else {
+                return BOWMAN;
+            }
+        } else if (jobtype == THIEF.getId() / 100 || jobtype == NIGHTWALKER1.getId() / 100) {
+            return THIEF;
+        } else if (jobtype == PIRATE.getId() / 100 || jobtype == THUNDERBREAKER1.getId() / 100) {
+            if (opt == (byte) 0x80) {
+                return BRAWLER;
+            } else {
+                return GUNSLINGER;
+            }
+        }
+
+        return BEGINNER;
     }
 }

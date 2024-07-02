@@ -22,14 +22,14 @@
 package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
-import org.gms.client.Character.FameStatus;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.tools.PacketCreator;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.PacketCreator;
 
 public final class GiveFameHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(GiveFameHandler.class);
@@ -44,22 +44,28 @@ public final class GiveFameHandler extends AbstractPacketHandler {
             return;
         } else if (famechange != 1 && famechange != -1) {
             AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit fame.");
-            log.warn("Chr {} tried to fame hack with famechange {}", c.getPlayer().getName(), famechange);
+            log.warn(I18nUtil.getLogMessage("GiveFameHandler.handlePacket.warn1"), c.getPlayer().getName(), famechange);
             c.disconnect(true, false);
             return;
         }
 
-        FameStatus status = player.canGiveFame(target);
-        if (status == FameStatus.OK) {
+        int status = 0;
+        if (player.getLastfametime() >= System.currentTimeMillis() - 86400000) {
+            status = 3;
+        } else if (player.getLastmonthfameids().contains(target.getId())) {
+            status = 4;
+        }
+
+        if (status == 0) {
             if (target.gainFame(famechange, player, mode)) {
                 if (!player.isGM()) {
                     player.hasGivenFame(target);
                 }
             } else {
-                player.message("Could not process the request, since this character currently has the minimum/maximum level of fame.");
+                player.message(I18nUtil.getMessage("GiveFameHandler.handlePacket.message1"));
             }
         } else {
-            c.sendPacket(PacketCreator.giveFameErrorResponse(status == FameStatus.NOT_TODAY ? 3 : 4));
+            c.sendPacket(PacketCreator.giveFameErrorResponse(status));
         }
     }
 }
