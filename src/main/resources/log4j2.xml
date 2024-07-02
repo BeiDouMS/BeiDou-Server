@@ -111,6 +111,15 @@
             <AppenderRef ref="WebFile"/>
         </Logger>
 
+        <Logger name="org.hibernate" level="info"/>
+        <Logger name="org.apache" level="info"/>
+        <Logger name="org.flywaydb" level="error"/>
+        <Logger name="org.mybatis.spring.mapper.ClassPathMapperScanner" level="info"/>
+        <Logger name="org.mybatis.spring.SqlSessionFactoryBean" level="info"/>
+        <Logger name="com.mybatisflex" level="info"/>
+        <Logger name="io.undertow" level="info"/>
+        <Logger name="org.jboss" level="info"/>
+        <Logger name="org.xnio" level="info"/>
         <Logger name="com.zaxxer.hikari" level="info"/>
         <Logger name="io.netty" level="info"/>
     </Loggers>

@@ -865,10 +865,6 @@ public class Server {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
         }
 
-        if (!DatabaseConnection.initializeConnectionPool()) {
-            throw new IllegalStateException("Failed to initiate a connection to the database");
-        }
-
         channelDependencies = registerChannelDependencies();
 
         final ExecutorService initExecutor = Executors.newFixedThreadPool(10);
@@ -1914,7 +1910,7 @@ public class Server {
         return () -> shutdownInternal(restart);
     }
 
-    private synchronized void shutdownInternal(boolean restart) {
+    public synchronized void shutdownInternal(boolean restart) {
         log.info("{} the server!", restart ? "Restarting" : "Shutting down");
         if (getWorlds() == null) {
             return;//already shutdown
