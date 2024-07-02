@@ -2,14 +2,14 @@
 <Configuration status="WARN" name="GMSE" shutdownHook="disable">
     <Properties>
         <Property name="filename">gmse-log</Property>
-        <Property name="standard-pattern">%d{HH:mm:ss.SSS} [%t] %-5level %logger{2} - %msg%n</Property>
-        <Property name="packet-pattern">%d{HH:mm:ss.SSS} %-15logger{1} - %msg%n</Property>
+        <Property name="standard-pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{2} - %msg%n</Property>
+        <Property name="packet-pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %-15logger{1} - %msg%n</Property>
     </Properties>
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout>
-                    <Pattern>${standard-pattern}</Pattern>
+                <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
         </Console>
 
@@ -66,12 +66,18 @@
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
         </File>
+
+        <File name="WebFile" fileName="logs/web.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="File" level="debug"/>
-            <AppenderRef ref="Console" level="trace"/>
+            <AppenderRef ref="Console" level="info"/>
         </Root>
 
         <Logger name="net.packet.logging" level="debug" additivity="false">
@@ -96,6 +102,13 @@
         </Logger>
         <Logger name="server.MapleLeafLogger" level="info" additivity="false">
             <AppenderRef ref="MapleLeafFile"/>
+        </Logger>
+
+        <Logger name="org.springframework" level="info">
+            <AppenderRef ref="WebFile"/>
+        </Logger>
+        <Logger name="api.ApiServer" level="info">
+            <AppenderRef ref="WebFile"/>
         </Logger>
 
         <Logger name="com.zaxxer.hikari" level="info"/>
