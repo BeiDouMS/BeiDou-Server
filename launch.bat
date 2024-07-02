@@ -1,4 +1,4 @@
 @echo off
-@title Cosmic
-java -Xmx2048m -Dwz-path=wz -jar target\Cosmic.jar
+@title Global MapleStory Emulator
+java -Xmx2048m -Dwz-path=wz -jar target\GMSE.jar
 pause

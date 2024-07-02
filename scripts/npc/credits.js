@@ -13,7 +13,7 @@ var name_cursor, role_cursor;
 
 // new server names are to be appended at the start of the name stack, building up the chronology.
 // make sure the server names are lexicograffically equivalent to their correspondent function.
-var servers = ["Cosmic", "HeavenMS", "MapleSolaxia", "MoopleDEV", "BubblesDEV", "MetroMS", "OdinMS", "Contributors"];
+var servers = ["GMSE", "Cosmic", "HeavenMS", "MapleSolaxia", "MoopleDEV", "BubblesDEV", "MetroMS", "OdinMS", "Contributors"];
 var servers_history = [];
 
 function addPerson(name, role) {
@@ -25,13 +25,11 @@ function setHistory(from, to) {
     servers_history.push([from, to]);
 }
 
-/*
-function writeServerStaff_MapleNext() {
-        addPerson("John Doe", "The role");
+function writeServerStaff_GMSE() {
+    addPerson("leevccc", "Developer");
 
-        setHistory(INITIAL_YEAR [, CURRENT_YEAR]);
+    setHistory(2024, 2024);
 }
-*/
 
 function writeServerStaff_Cosmic() {
     addPerson("Ponk", "Developer");

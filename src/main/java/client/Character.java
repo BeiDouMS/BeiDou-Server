@@ -8684,7 +8684,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void sendPolice(int greason, String reason, int duration) {
-        sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for %s.#k", "Cosmic", reason)));
+        sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for %s.#k", "GMSE", reason)));
         this.isbanned = true;
         TimerManager.getInstance().schedule(new Runnable() {
             @Override
@@ -10084,7 +10084,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         this.ban(reason);
-        sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for HACK reason.#k", "Cosmic")));
+        sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for HACK reason.#k", "GMSE")));
         TimerManager.getInstance().schedule(new Runnable() {
             @Override
             public void run() {
