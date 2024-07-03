@@ -25,10 +25,11 @@ package org.gms.client.command.commands.gm0;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class EquipLvCommand extends Command {
     {
-        setDescription("Show levels of all equipped items.");
+        setDescription(I18nUtil.getMessage("EquipLvCommand.message1"));
     }
 
     @Override

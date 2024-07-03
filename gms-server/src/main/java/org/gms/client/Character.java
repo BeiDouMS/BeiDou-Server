@@ -679,7 +679,7 @@ public class Character extends AbstractCharacterObject {
 
     public static boolean ban(String id, String reason, boolean accountId) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            if (id.matches("/[0-9]{1,3}\\..*")) {
+            if (id.matches("[0-9]{1,3}\\..*")) {
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)")) {
                     ps.setString(1, id);
                     ps.executeUpdate();
@@ -935,7 +935,7 @@ public class Character extends AbstractCharacterObject {
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Character.ban.error2"), e);
         }
-        return  result;
+        return result;
     }
 
     public boolean canDoor() {
@@ -3997,7 +3997,7 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        cancelPlayerBuffs(Arrays.asList(stat));
+        cancelPlayerBuffs(Collections.singletonList(stat));
     }
 
     private Map<BuffStat, BuffStatValueHolder> extractCurrentBuffStats(StatEffect effect) {
@@ -4096,12 +4096,7 @@ public class Character extends AbstractCharacterObject {
             }
 
             StatEffect mse = mseStack.peek();
-            Integer count = leafBuffCount.get(mse);
-            if (count == null) {
-                leafBuffCount.put(mse, 1);
-            } else {
-                leafBuffCount.put(mse, count + 1);
-            }
+            leafBuffCount.merge(mse, 1, Integer::sum);
         }
 
         return leafBuffCount;
@@ -4116,10 +4111,7 @@ public class Character extends AbstractCharacterObject {
 
             if (stackedBuffStats.get(mse).size() <= e.getValue()) {
                 clearedStatEffects.add(mse);
-
-                for (BuffStat mbs : stackedBuffStats.get(mse)) {
-                    clearedStats.add(mbs);
-                }
+                clearedStats.addAll(stackedBuffStats.get(mse));
             }
         }
 
@@ -4155,13 +4147,7 @@ public class Character extends AbstractCharacterObject {
             for (Pair<StatEffect, Integer> emse : e.getValue()) {
                 StatEffect mse = emse.getLeft();
                 mbsStack.push(mse);
-
-                Set<BuffStat> mbsStats = stackedBuffStats.get(mse);
-                if (mbsStats == null) {
-                    mbsStats = new LinkedHashSet<>();
-                    stackedBuffStats.put(mse, mbsStats);
-                }
-
+                Set<BuffStat> mbsStats = stackedBuffStats.computeIfAbsent(mse, k -> new LinkedHashSet<>());
                 mbsStats.add(mbs);
             }
         }
@@ -4192,26 +4178,13 @@ public class Character extends AbstractCharacterObject {
 
             for (Pair<BuffStat, Integer> statup : mse.getStatups()) {
                 BuffStat stat = statup.getLeft();
-
-                List<Pair<StatEffect, Integer>> statBuffs = buffEffects.get(stat);
-                if (statBuffs == null) {
-                    statBuffs = new ArrayList<>();
-                    buffEffects.put(stat, statBuffs);
-                }
-
+                List<Pair<StatEffect, Integer>> statBuffs = buffEffects.computeIfAbsent(stat, k -> new ArrayList<>());
                 statBuffs.add(new Pair<>(mse, statup.getRight()));
             }
         }
 
-        Comparator cmp = new Comparator<Pair<StatEffect, Integer>>() {
-            @Override
-            public int compare(Pair<StatEffect, Integer> o1, Pair<StatEffect, Integer> o2) {
-                return o2.getRight().compareTo(o1.getRight());
-            }
-        };
-
         for (Entry<BuffStat, List<Pair<StatEffect, Integer>>> statBuffs : buffEffects.entrySet()) {
-            Collections.sort(statBuffs.getValue(), cmp);
+            statBuffs.getValue().sort((o1, o2) -> o2.getRight().compareTo(o1.getRight()));
         }
 
         return topologicalSortEffects(buffEffects);
@@ -4223,9 +4196,7 @@ public class Character extends AbstractCharacterObject {
 
         // priority buffsources: override buffstats for the client to perceive those as "currently buffed"
         Set<BuffStatValueHolder> mbsvhList = new LinkedHashSet<>();
-        for (BuffStatValueHolder mbsvh : getAllStatups()) {
-            mbsvhList.add(mbsvh);
-        }
+        mbsvhList.addAll(getAllStatups());
 
         for (BuffStatValueHolder mbsvh : mbsvhList) {
             StatEffect mse = mbsvh.effect;
@@ -4334,11 +4305,7 @@ public class Character extends AbstractCharacterObject {
         List<Pair<BuffStat, Integer>> activeStatups = new LinkedList<>();
         for (Pair<Integer, Pair<StatEffect, Long>> lmse : toUpdateEffects) {
             Pair<StatEffect, Long> msel = lmse.getRight();
-
-            for (Pair<BuffStat, Integer> statup : getActiveStatupsFromSourceid(lmse.getLeft())) {
-                activeStatups.add(statup);
-            }
-
+            activeStatups.addAll(getActiveStatupsFromSourceid(lmse.getLeft()));
             msel.getLeft().updateBuffEffect(this, activeStatups, msel.getRight());
             activeStatups.clear();
         }
@@ -4346,11 +4313,7 @@ public class Character extends AbstractCharacterObject {
         List<Pair<Integer, Pair<StatEffect, Long>>> priorityEffects = propagatePriorityBuffEffectUpdates(retrievedStats);
         for (Pair<Integer, Pair<StatEffect, Long>> lmse : priorityEffects) {
             Pair<StatEffect, Long> msel = lmse.getRight();
-
-            for (Pair<BuffStat, Integer> statup : getActiveStatupsFromSourceid(lmse.getLeft())) {
-                activeStatups.add(statup);
-            }
-
+            activeStatups.addAll(getActiveStatupsFromSourceid(lmse.getLeft()));
             msel.getLeft().updateBuffEffect(this, activeStatups, msel.getRight());
             activeStatups.clear();
         }
@@ -4388,7 +4351,6 @@ public class Character extends AbstractCharacterObject {
             case -ItemId.FREESIA_SCENT:
             case -ItemId.LAVENDER_SCENT:
                 return true;
-
             default:
                 return false;
         }
@@ -6229,10 +6191,7 @@ public class Character extends AbstractCharacterObject {
 
     private int getSpGain(int spGain, int curSp, Job job) {
         int maxSp = getJobMaxSp(job);
-
-        spGain = Math.min(spGain, maxSp - curSp);
-        int jobBranch = GameConstants.getJobBranch(job);
-        return spGain;
+        return Math.min(spGain, maxSp - curSp);
     }
 
     private void levelUpGainSp() {
@@ -6325,7 +6284,7 @@ public class Character extends AbstractCharacterObject {
         } else if (job.isA(Job.ARAN1)) {
             addhp += Randomizer.rand(44, 48);
             int aids = Randomizer.rand(4, 8);
-            addmp += aids + Math.floor(aids * 0.1);
+            addmp += aids + (int) Math.floor(aids * 0.1);
         }
         if (improvingMaxHPLevel > 0 && (job.isA(Job.WARRIOR) || job.isA(Job.PIRATE) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.THUNDERBREAKER1))) {
             addhp += improvingMaxHP.getEffect(improvingMaxHPLevel).getX();
@@ -6432,16 +6391,11 @@ public class Character extends AbstractCharacterObject {
                 InventoryManipulator.addById(client, ItemId.PERFECT_PITCH, (short) 1, "", -1);
             }
         } else if (level == 10) {
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    if (leaveParty()) {
-                        showHint("You have reached #blevel 10#k, therefore you must leave your #rstarter party#k.");
-                    }
+            ThreadManager.getInstance().newTask(() -> {
+                if (leaveParty()) {
+                    showHint("You have reached #blevel 10#k, therefore you must leave your #rstarter party#k.");
                 }
-            };
-
-            ThreadManager.getInstance().newTask(r);
+            });
         }
 
         guildUpdate();
@@ -7558,17 +7512,14 @@ public class Character extends AbstractCharacterObject {
         if (dragonBloodSchedule != null) {
             dragonBloodSchedule.cancel(false);
         }
-        dragonBloodSchedule = TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                if (awayFromWorld.get()) {
-                    return;
-                }
-
-                addHP(-bloodEffect.getX());
-                sendPacket(PacketCreator.showOwnBuffEffect(bloodEffect.getSourceId(), 5));
-                getMap().broadcastMessage(Character.this, PacketCreator.showBuffEffect(getId(), bloodEffect.getSourceId(), 5), false);
+        dragonBloodSchedule = TimerManager.getInstance().register(() -> {
+            if (awayFromWorld.get()) {
+                return;
             }
+
+            addHP(-bloodEffect.getX());
+            sendPacket(PacketCreator.showOwnBuffEffect(bloodEffect.getSourceId(), 5));
+            getMap().broadcastMessage(Character.this, PacketCreator.showBuffEffect(getId(), bloodEffect.getSourceId(), 5), false);
         }, 4000, 4000);
     }
 
@@ -7633,11 +7584,11 @@ public class Character extends AbstractCharacterObject {
 
             Integer hbhp = getBuffedValue(BuffStat.HYPERBODYHP);
             if (hbhp != null) {
-                localmaxhp += (hbhp.doubleValue() / 100) * localmaxhp;
+                localmaxhp += ((int) (hbhp.doubleValue() / 100)) * localmaxhp;
             }
             Integer hbmp = getBuffedValue(BuffStat.HYPERBODYMP);
             if (hbmp != null) {
-                localmaxmp += (hbmp.doubleValue() / 100) * localmaxmp;
+                localmaxmp += ((int) (hbmp.doubleValue() / 100)) * localmaxmp;
             }
 
             localmaxhp = Math.min(30000, localmaxhp);
@@ -7678,11 +7629,11 @@ public class Character extends AbstractCharacterObject {
 
             Integer watkbuff = getBuffedValue(BuffStat.WATK);
             if (watkbuff != null) {
-                localwatk += watkbuff.intValue();
+                localwatk += watkbuff;
             }
             Integer matkbuff = getBuffedValue(BuffStat.MATK);
             if (matkbuff != null) {
-                localmagic += matkbuff.intValue();
+                localmagic += matkbuff;
             }
 
             /*
@@ -7696,7 +7647,7 @@ public class Character extends AbstractCharacterObject {
             }
             */
 
-            Integer blessing = getSkillLevel(10000000 * getJobType() + 12);
+            int blessing = getSkillLevel(10000000 * getJobType() + 12);
             if (blessing > 0) {
                 localwatk += blessing;
                 localmagic += blessing * 2;
@@ -8913,22 +8864,20 @@ public class Character extends AbstractCharacterObject {
     }
 
     private int calcHpRatioUpdate(int curpoint, int maxpoint, int diffpoint) {
-        int curMax = maxpoint;
         int nextMax = Math.min(30000, maxpoint + diffpoint);
 
         float temp = curpoint * nextMax;
-        int ret = (int) Math.ceil(temp / curMax);
+        int ret = (int) Math.ceil(temp / maxpoint);
 
         transienthp = (maxpoint > nextMax) ? ((float) curpoint) / maxpoint : ((float) ret) / nextMax;
         return ret;
     }
 
     private int calcMpRatioUpdate(int curpoint, int maxpoint, int diffpoint) {
-        int curMax = maxpoint;
         int nextMax = Math.min(30000, maxpoint + diffpoint);
 
         float temp = curpoint * nextMax;
-        int ret = (int) Math.ceil(temp / curMax);
+        int ret = (int) Math.ceil(temp / maxpoint);
 
         transientmp = (maxpoint > nextMax) ? ((float) curpoint) / maxpoint : ((float) ret) / nextMax;
         return ret;
@@ -9205,7 +9154,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private int standaloneSell(Client c, ItemInformationProvider ii, InventoryType type, short slot, short quantity) {
-        if (quantity == 0xFFFF || quantity == 0) {
+        if (quantity == 0) {
             quantity = 1;
         }
 
@@ -9228,9 +9177,6 @@ public class Character extends AbstractCharacterObject {
                 return (0);
             }
             short iQuant = item.getQuantity();
-            if (iQuant == 0xFFFF) {
-                iQuant = 1;
-            }
 
             if (quantity <= iQuant && iQuant > 0) {
                 InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
@@ -9384,14 +9330,10 @@ public class Character extends AbstractCharacterObject {
             Float newVal = statups.get(s.getKey());
 
             float incVal = s.getValue().floatValue();
-            switch (s.getKey()) {
-                case incPAD:
-                case incMAD:
-                case incPDD:
-                case incMDD:
-                    incVal = (float) Math.log(incVal);
-                    break;
-            }
+            incVal = switch (s.getKey()) {
+                case incPAD, incMAD, incPDD, incMDD -> (float) Math.log(incVal);
+                default -> incVal;
+            };
 
             if (newVal != null) {
                 newVal += incVal;
@@ -9581,12 +9523,7 @@ public class Character extends AbstractCharacterObject {
     public void startMapEffect(String msg, int itemId, int duration) {
         final MapEffect mapEffect = new MapEffect(msg, itemId);
         sendPacket(mapEffect.makeStartData());
-        TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                sendPacket(mapEffect.makeDestroyData());
-            }
-        }, duration);
+        TimerManager.getInstance().schedule(() -> sendPacket(mapEffect.makeDestroyData()), duration);
     }
 
     public void unequipAllPets() {
@@ -10022,12 +9959,7 @@ public class Character extends AbstractCharacterObject {
 
         this.ban(reason);
         sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for HACK reason.#k", "Cosmic")));
-        TimerManager.getInstance().schedule(new Runnable() {
-            @Override
-            public void run() {
-                client.disconnect(false, false);
-            }
-        }, 5000);
+        TimerManager.getInstance().schedule(() -> client.disconnect(false, false), 5000);
 
         Server.getInstance().broadcastGMMessage(this.getWorld(), PacketCreator.serverNotice(6, Character.makeMapleReadable(this.name) + " was autobanned for " + reason));
     }
@@ -10164,15 +10096,12 @@ public class Character extends AbstractCharacterObject {
 
     private void equipPendantOfSpirit() {
         if (pendantOfSpirit == null) {
-            pendantOfSpirit = TimerManager.getInstance().register(new Runnable() {
-                @Override
-                public void run() {
-                    if (pendantExp < 3) {
-                        pendantExp++;
-                        message("Pendant of the Spirit has been equipped for " + pendantExp + " hour(s), you will now receive " + pendantExp + "0% bonus exp.");
-                    } else {
-                        pendantOfSpirit.cancel(false);
-                    }
+            pendantOfSpirit = TimerManager.getInstance().register(() -> {
+                if (pendantExp < 3) {
+                    pendantExp++;
+                    message("Pendant of the Spirit has been equipped for " + pendantExp + " hour(s), you will now receive " + pendantExp + "0% bonus exp.");
+                } else {
+                    pendantOfSpirit.cancel(false);
                 }
             }, 3600000); //1 hour
         }
@@ -10363,19 +10292,16 @@ public class Character extends AbstractCharacterObject {
                 setFamilyEntry(null);
             }
 
-            getWorldServer().registerTimedMapObject(new Runnable() {
-                @Override
-                public void run() {
-                    client = null;  // clients still triggers handlers a few times after disconnecting
-                    map = null;
-                    setListener(null);
+            getWorldServer().registerTimedMapObject(() -> {
+                client = null;  // clients still triggers handlers a few times after disconnecting
+                map = null;
+                setListener(null);
 
-                    // thanks Shavit for noticing a memory leak with inventories holding owner object
-                    for (int i = 0; i < inventory.length; i++) {
-                        inventory[i].dispose();
-                    }
-                    inventory = null;
+                // thanks Shavit for noticing a memory leak with inventories holding owner object
+                for (int i = 0; i < inventory.length; i++) {
+                    inventory[i].dispose();
                 }
+                inventory = null;
             }, MINUTES.toMillis(5));
         }
     }

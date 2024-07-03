@@ -27,54 +27,55 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class ShowRatesCommand extends Command {
     {
-        setDescription("Show all world/character rates.");
+        setDescription(I18nUtil.getMessage("ShowRatesCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        String showMsg = "#eEXP RATE#n" + "\r\n";
-        showMsg += "World EXP Rate: #k" + c.getWorldServer().getExpRate() + "x#k" + "\r\n";
-        showMsg += "Player EXP Rate: #k" + player.getRawExpRate() + "x#k" + "\r\n";
+        String showMsg = "#e" + I18nUtil.getMessage("ShowRatesCommand.message2") + "#n\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message3") + "#k" + c.getWorldServer().getExpRate() + "x#k" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message4") + "#k" + player.getRawExpRate() + "x#k" + "\r\n";
         if (player.getCouponExpRate() != 1) {
-            showMsg += "Coupon EXP Rate: #k" + player.getCouponExpRate() + "x#k" + "\r\n";
+            showMsg += I18nUtil.getMessage("ShowRatesCommand.message5") + "#k" + player.getCouponExpRate() + "x#k" + "\r\n";
         }
-        showMsg += "EXP Rate: #e#b" + player.getExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? " - novice rate" : "") + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? I18nUtil.getMessage("ShowRatesCommand.message7") : "") + "\r\n";
 
-        showMsg += "\r\n" + "#eMESO RATE#n" + "\r\n";
-        showMsg += "World MESO Rate: #k" + c.getWorldServer().getMesoRate() + "x#k" + "\r\n";
-        showMsg += "Player MESO Rate: #k" + player.getRawMesoRate() + "x#k" + "\r\n";
+        showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message8") + "#n\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message9") + "#k" + c.getWorldServer().getMesoRate() + "x#k" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message10") + "#k" + player.getRawMesoRate() + "x#k" + "\r\n";
         if (player.getCouponMesoRate() != 1) {
-            showMsg += "Coupon MESO Rate: #k" + player.getCouponMesoRate() + "x#k" + "\r\n";
+            showMsg += I18nUtil.getMessage("ShowRatesCommand.message11") + "#k" + player.getCouponMesoRate() + "x#k" + "\r\n";
         }
-        showMsg += "MESO Rate: #e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message12") + "#e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
 
-        showMsg += "\r\n" + "#eDROP RATE#n" + "\r\n";
-        showMsg += "World DROP Rate: #k" + c.getWorldServer().getDropRate() + "x#k" + "\r\n";
-        showMsg += "Player DROP Rate: #k" + player.getRawDropRate() + "x#k" + "\r\n";
+        showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message13") + "#n\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message14") + "#k" + c.getWorldServer().getDropRate() + "x#k" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message15") + "#k" + player.getRawDropRate() + "x#k" + "\r\n";
         if (player.getCouponDropRate() != 1) {
-            showMsg += "Coupon DROP Rate: #k" + player.getCouponDropRate() + "x#k" + "\r\n";
+            showMsg += I18nUtil.getMessage("ShowRatesCommand.message16") + "#k" + player.getCouponDropRate() + "x#k" + "\r\n";
         }
-        showMsg += "DROP Rate: #e#b" + player.getDropRate() + "x#k#n" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message17") + "#e#b" + player.getDropRate() + "x#k#n" + "\r\n";
 
-        showMsg += "\r\n" + "#eBOSS DROP RATE#n" + "\r\n";
-        showMsg += "World BOSS DROP Rate: #k" + c.getWorldServer().getBossDropRate() + "x#k" + "\r\n";
-        showMsg += "Player DROP Rate: #k" + player.getRawDropRate() + "x#k" + "\r\n";
+        showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message18") + "#n\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message19") + "#k" + c.getWorldServer().getBossDropRate() + "x#k" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message20") + "#k" + player.getRawDropRate() + "x#k" + "\r\n";
         if (player.getCouponDropRate() != 1) {
-            showMsg += "Coupon DROP Rate: #k" + player.getCouponDropRate() + "x#k" + "\r\n";
+            showMsg += I18nUtil.getMessage("ShowRatesCommand.message21") + "#k" + player.getCouponDropRate() + "x#k" + "\r\n";
         }
-        showMsg += "BOSS DROP Rate: #e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message22") + "#e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
 
         if (YamlConfig.config.server.USE_QUEST_RATE) {
-            showMsg += "\r\n" + "#eQUEST RATE#n" + "\r\n";
-            showMsg += "World QUEST Rate: #e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
+            showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message23") + "#n\r\n";
+            showMsg += I18nUtil.getMessage("ShowRatesCommand.message24") + "#e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
         }
 
         showMsg += "\r\n";
-        showMsg += "World TRAVEL Rate: #e#b" + c.getWorldServer().getTravelRate() + "x#k#n" + "\r\n";
+        showMsg += I18nUtil.getMessage("ShowRatesCommand.message25") + "#e#b" + c.getWorldServer().getTravelRate() + "x#k#n" + "\r\n";
 
         player.showHint(showMsg, 300);
     }

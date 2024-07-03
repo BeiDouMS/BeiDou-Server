@@ -28,10 +28,11 @@ import org.gms.client.command.Command;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.tools.PacketCreator;
+import org.gms.util.I18nUtil;
 
 public class DisposeCommand extends Command {
     {
-        setDescription("Dispose to fix NPC chat.");
+        setDescription(I18nUtil.getMessage("DisposeCommand.message1"));
     }
 
     @Override
@@ -40,6 +41,6 @@ public class DisposeCommand extends Command {
         QuestScriptManager.getInstance().dispose(c);
         c.sendPacket(PacketCreator.enableActions());
         c.removeClickedNPC();
-        c.getPlayer().message("You've been disposed.");
+        c.getPlayer().message(I18nUtil.getMessage("DisposeCommand.message2"));
     }
 }
