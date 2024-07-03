@@ -1,4 +1,4 @@
-package manager;
+package api.manager;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class ServerManager implements ApplicationContextAware, ApplicationRunner, DisposableBean {
+public class ApiManager implements ApplicationContextAware, ApplicationRunner, DisposableBean {
     @Getter
     private static ApplicationContext applicationContext;
 
     @Override
     public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
-        ServerManager.applicationContext = applicationContext;
+        ApiManager.applicationContext = applicationContext;
     }
 
     @Override

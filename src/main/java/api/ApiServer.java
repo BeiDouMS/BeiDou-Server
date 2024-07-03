@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @MapperScan("dao.mapper")
-@ComponentScan(basePackages = {"aop", "api", "dao", "manager", "service", "model", "config", "utils"})
+@ComponentScan(basePackages = {"api", "dao", "service", "model", "config", "utils"})
 @Slf4j
 public class ApiServer {
     public static void main(String[] args) {

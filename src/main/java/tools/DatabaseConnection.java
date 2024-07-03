@@ -4,7 +4,7 @@ import com.alibaba.druid.pool.DruidDataSource;
 import config.YamlConfig;
 import database.note.NoteRowMapper;
 import lombok.extern.slf4j.Slf4j;
-import manager.ServerManager;
+import api.manager.ApiManager;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
@@ -21,12 +21,12 @@ public class DatabaseConnection {
     private static Jdbi jdbi;
 
     public static Connection getConnection() throws SQLException {
-        return ServerManager.getApplicationContext().getBean(DataSource.class).getConnection();
+        return ApiManager.getApplicationContext().getBean(DataSource.class).getConnection();
     }
 
     public static Handle getHandle() {
         if (jdbi == null) {
-            initializeJdbi(ServerManager.getApplicationContext().getBean(DataSource.class));
+            initializeJdbi(ApiManager.getApplicationContext().getBean(DataSource.class));
         }
 
         return jdbi.open();

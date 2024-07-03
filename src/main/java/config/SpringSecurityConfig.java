@@ -1,7 +1,7 @@
 package config;
 
-import aop.AuthEntryPointJwt;
-import aop.AuthTokenFilter;
+import api.aop.AuthEntryPointJwt;
+import api.aop.AuthTokenFilter;
 import service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
