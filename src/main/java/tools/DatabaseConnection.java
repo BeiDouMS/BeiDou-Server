@@ -21,11 +21,7 @@ public class DatabaseConnection {
     private static Jdbi jdbi;
 
     public static Connection getConnection() throws SQLException {
-        if (dataSource == null) {
-            initializeConnectionPool();
-        }
-
-        return dataSource.getConnection();
+        return ServerManager.getApplicationContext().getBean(DataSource.class).getConnection();
     }
 
     public static Handle getHandle() {

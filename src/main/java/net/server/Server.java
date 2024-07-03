@@ -108,6 +108,9 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class Server {
+    static {
+        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false");
+    }
     private static final Logger log = LoggerFactory.getLogger(Server.class);
     private static Server instance = null;
 
