@@ -427,7 +427,7 @@ public class Server {
             wldRLock.unlock();
         }
 
-        log.info("Starting world {}", i);
+        log.info("加载大区 {}", i);
 
         int exprate = YamlConfig.config.worlds.get(i).exp_rate;
         int mesorate = YamlConfig.config.worlds.get(i).meso_rate;
@@ -473,10 +473,10 @@ public class Server {
         if (canDeploy) {
             world.setServerMessage(YamlConfig.config.worlds.get(i).server_message);
 
-            log.info("Finished loading world {}", i);
+            log.info("大区 {} 已就绪", i);
             return i;
         } else {
-            log.error("Could not load world {}...", i);
+            log.error("无法加载大区 {}...", i);
             world.shutdown();
             return -2;
         }
@@ -862,7 +862,7 @@ public class Server {
 
     public void init() {
         Instant beforeInit = Instant.now();
-        log.info("GMSE v{} starting up.", ServerConstants.VERSION);
+        log.info("GMSE v{} 启动中...", ServerConstants.VERSION);
 
         if (YamlConfig.config.server.SHUTDOWNHOOK) {
             Runtime.getRuntime().addShutdownHook(new Thread(shutdown(false)));
@@ -931,11 +931,11 @@ public class Server {
 
         loginServer = initLoginServer(8484);
 
-        log.info("Listening on port 8484");
+        log.info("登录端口 8484 已就绪");
 
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
-        log.info("GMSE is now online after {} ms.", initDuration.toMillis());
+        log.info("GMSE 已就绪，用时 {} ms.", initDuration.toMillis());
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance();
@@ -1914,7 +1914,7 @@ public class Server {
     }
 
     public synchronized void shutdownInternal(boolean restart) {
-        log.info("{} the server!", restart ? "Restarting" : "Shutting down");
+        log.info("正在 {} GMSE!", restart ? "重启" : "结束");
         if (getWorlds() == null) {
             return;//already shutdown
         }
@@ -1959,7 +1959,7 @@ public class Server {
         TimerManager.getInstance().purge();
         TimerManager.getInstance().stop();
 
-        log.info("Worlds and channels are offline.");
+        log.info("所有大区频道已下线");
         loginServer.stop();
         if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
             // We disabled log4j's shutdown hook in the config file, so we have to manually shut it down here,
@@ -1968,7 +1968,7 @@ public class Server {
 
             new Thread(() -> System.exit(0)).start();
         } else {
-            log.info("Restarting the server...");
+            log.info("正在重新启动...");
             instance = null;
             getInstance().init();//DID I DO EVERYTHING?! D:
         }

@@ -16,6 +16,5 @@ public class ApiServer {
         SpringApplication springApplication = new SpringApplication(ApiServer.class);
         springApplication.setBannerMode(Banner.Mode.OFF);
         springApplication.run(args);
-        log.info("启动完毕");
     }
 }

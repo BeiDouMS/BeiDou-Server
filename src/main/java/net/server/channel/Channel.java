@@ -118,7 +118,8 @@ public final class Channel {
     private Set<Integer> ongoingCathedralGuests = null;
     private long ongoingStartTime;
 
-    private final Lock lock = new ReentrantLock(true);;
+    private final Lock lock = new ReentrantLock(true);
+    ;
     private final Lock merchRlock;
     private final Lock merchWlock;
 
@@ -158,9 +159,9 @@ public final class Channel {
 
             services = new ServicesManager(ChannelServices.OVERALL);
 
-            log.info("Channel {}: Listening on port {}", getId(), port);
+            log.info("频道 {}: 端口 {} 已就绪", getId(), port);
         } catch (Exception e) {
-            log.warn("Error during channel initialization", e);
+            log.warn("初始化频道时出错", e);
         }
     }
 
@@ -186,7 +187,7 @@ public final class Channel {
                 return;
             }
 
-            log.info("Shutting down channel {} in world {}", channel, world);
+            log.info("正在关闭大区 {} 频道 {}", world, channel);
 
             closeAllMerchants();
             disconnectAwayPlayers();
@@ -204,9 +205,9 @@ public final class Channel {
             channelServer.stop();
 
             finishedShutdown = true;
-            log.info("Successfully shut down channel {} in world {}", channel, world);
+            log.info("大区 {} 频道 {} 已下线", world, channel);
         } catch (Exception e) {
-            log.error("Error while shutting down channel {} in world {}", channel, world, e);
+            log.error("关闭大区 {} 频道 {} 时出错", world, channel, e);
         }
     }
 
@@ -457,7 +458,7 @@ public final class Channel {
                 events.add(fileName.substring(0, fileName.length() - 3));
             }
         } catch (IOException e) {
-            log.warn("Unable to load events !");
+            log.warn("无法加载事件(event)脚本");
             e.printStackTrace();
         }
         return events.toArray(new String[0]);
