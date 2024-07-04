@@ -25,6 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.QuestStatus;
 import org.gms.client.QuestStatus.Status;
 import org.gms.config.YamlConfig;
+import org.gms.constants.game.DelayedQuestUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.provider.Data;
@@ -345,7 +346,7 @@ public class Quest {
                 a.run(chr, selection);
             }
             if (!this.hasNextQuestAction()) {
-                chr.announceUpdateQuest(Character.DelayedQuestUpdate.INFO, chr.getQuest(this));
+                chr.announceUpdateQuest(DelayedQuestUpdate.INFO, chr.getQuest(this));
             }
         }
     }
@@ -722,5 +723,11 @@ public class Quest {
 
         Quest.quests = loadedQuests;
         Quest.infoNumberQuests = loadedInfoNumberQuests;
+    }
+
+    public void expireQuest(Character chr) {
+        if (forfeit(chr)) {
+            chr.sendPacket(PacketCreator.questExpire(getId()));
+        }
     }
 }

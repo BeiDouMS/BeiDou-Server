@@ -685,7 +685,7 @@ public class Monster extends AbstractLoadedLife {
         }
 
         for (Character mc : underleveled) {
-            mc.showUnderleveledInfo(this);
+            mc.showUnderLeveledInfo(this);
         }
 
     }

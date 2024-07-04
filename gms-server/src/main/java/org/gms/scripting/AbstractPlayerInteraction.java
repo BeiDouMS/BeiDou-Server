@@ -22,16 +22,17 @@
 package org.gms.scripting;
 
 import org.gms.client.Character;
-import org.gms.client.Character.DelayedQuestUpdate;
 import org.gms.client.*;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.YamlConfig;
+import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.model.SkillEntry;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.world.Party;
@@ -930,10 +931,10 @@ public class AbstractPlayerInteraction {
 
     public void teachSkill(int skillid, byte level, byte masterLevel, long expiration, boolean force) {
         Skill skill = SkillFactory.getSkill(skillid);
-        Character.SkillEntry skillEntry = getPlayer().getSkills().get(skill);
+        SkillEntry skillEntry = getPlayer().getSkills().get(skill);
         if (skillEntry != null) {
             if (!force && level > -1) {
-                getPlayer().changeSkillLevel(skill, (byte) Math.max(skillEntry.skillevel, level), Math.max(skillEntry.masterlevel, masterLevel), expiration == -1 ? -1 : Math.max(skillEntry.expiration, expiration));
+                getPlayer().changeSkillLevel(skill, (byte) Math.max(skillEntry.skillLevel, level), Math.max(skillEntry.masterLevel, masterLevel), expiration == -1 ? -1 : Math.max(skillEntry.expiration, expiration));
                 return;
             }
         } else if (GameConstants.isAranSkills(skillid)) {

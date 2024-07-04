@@ -54,7 +54,7 @@ public enum InventoryType {
                 return l;
             }
         }
-        return null;
+        return UNDEFINED;
     }
 
     public static InventoryType getByWZName(String name) {

@@ -428,7 +428,7 @@ public class InventoryManipulator {
                 int petIdx = chr.getPetIndex(petid);
                 if (petIdx > -1) {
                     Pet pet = chr.getPet(petIdx);
-                    chr.unequipPet(pet, true);
+                    chr.unEquipPet(pet, true);
                 }
 
                 inv.removeItem(slot, quantity, allowZero);
@@ -732,7 +732,7 @@ public class InventoryManipulator {
             int petIdx = chr.getPetIndex(petid);
             if (petIdx > -1) {
                 Pet pet = chr.getPet(petIdx);
-                chr.unequipPet(pet, true);
+                chr.unEquipPet(pet, true);
             }
         }
 

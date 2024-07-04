@@ -23,7 +23,6 @@ package org.gms.tools;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
-import org.gms.client.Character.SkillEntry;
 import org.gms.client.Client;
 import org.gms.client.Disease;
 import org.gms.client.FamilyEntitlement;
@@ -58,6 +57,7 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.skills.Buccaneer;
 import org.gms.constants.skills.Corsair;
 import org.gms.constants.skills.ThunderBreaker;
+import org.gms.model.SkillEntry;
 import org.gms.net.encryption.InitializationVector;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.ByteBufOutPacket;
@@ -531,7 +531,7 @@ public class PacketCreator {
 
     private static void addSkillInfo(OutPacket p, Character chr) {
         p.writeByte(0); // start of skills
-        Map<Skill, Character.SkillEntry> skills = chr.getSkills();
+        Map<Skill, SkillEntry> skills = chr.getSkills();
         int skillsSize = skills.size();
         // We don't want to include any hidden skill in this, so subtract them from the size list and ignore them.
         for (Entry<Skill, SkillEntry> skill : skills.entrySet()) {
@@ -545,10 +545,10 @@ public class PacketCreator {
                 continue;
             }
             p.writeInt(skill.getKey().getId());
-            p.writeInt(skill.getValue().skillevel);
+            p.writeInt(skill.getValue().skillLevel);
             addExpirationTime(p, skill.getValue().expiration);
             if (skill.getKey().isFourthJob()) {
-                p.writeInt(skill.getValue().masterlevel);
+                p.writeInt(skill.getValue().masterLevel);
             }
         }
         p.writeShort(chr.getAllCooldowns().size());

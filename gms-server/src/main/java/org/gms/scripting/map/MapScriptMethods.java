@@ -21,9 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.scripting.map;
 
-import org.gms.client.Character.DelayedQuestUpdate;
 import org.gms.client.Client;
 import org.gms.client.QuestStatus;
+import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.id.MapId;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.quest.Quest;

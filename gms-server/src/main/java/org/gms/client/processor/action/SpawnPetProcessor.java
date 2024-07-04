@@ -70,10 +70,10 @@ public class SpawnPetProcessor {
                     }
                 }
                 if (chr.getPetIndex(pet) != -1) {
-                    chr.unequipPet(pet, true);
+                    chr.unEquipPet(pet, true);
                 } else {
                     if (chr.getSkillLevel(SkillFactory.getSkill(8)) == 0 && chr.getPet(0) != null) {
-                        chr.unequipPet(chr.getPet(0), false);
+                        chr.unEquipPet(chr.getPet(0), false);
                     }
                     if (lead) {
                         chr.shiftPetsRight();
