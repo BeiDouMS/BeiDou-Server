@@ -27,6 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.tools.PacketCreator;
@@ -34,7 +35,7 @@ import org.gms.tools.Randomizer;
 
 public class GmCommand extends Command {
     {
-        setDescription("Send a message to the game masters.");
+        setDescription(I18nUtil.getMessage("GmCommand.message1"));
     }
 
     private static final Logger log = LoggerFactory.getLogger(GmCommand.class);
@@ -42,22 +43,22 @@ public class GmCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         String[] tips = {
-                "Please only use @gm in emergencies or to report somebody.",
-                "To report a bug or make a suggestion, use the forum.",
-                "Please do not use @gm to ask if a GM is online.",
-                "Do not ask if you can receive help, just state your issue.",
-                "Do not say 'I have a bug to report', just state it.",
+                I18nUtil.getMessage("GmCommand.message2"),
+                I18nUtil.getMessage("GmCommand.message3"),
+                I18nUtil.getMessage("GmCommand.message4"),
+                I18nUtil.getMessage("GmCommand.message5"),
+                I18nUtil.getMessage("GmCommand.message6"),
         };
         Character player = c.getPlayer();
         if (params.length < 1 || params[0].length() < 3) { // #goodbye 'hi'
-            player.dropMessage(5, "Your message was too short. Please provide as much detail as possible.");
+            player.dropMessage(5, I18nUtil.getMessage("GmCommand.message7"));
             return;
         }
         String message = player.getLastCommandMessage();
-        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[GM Message]:" + Character.makeMapleReadable(player.getName()) + ": " + message));
+        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip(I18nUtil.getMessage("GmCommand.message8") + Character.makeMapleReadable(player.getName()) + ": " + message));
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(1, message));
         log.info("{}: {}", Character.makeMapleReadable(player.getName()), message);
-        player.dropMessage(5, "Your message '" + message + "' was sent to GMs.");
+        player.dropMessage(5, I18nUtil.getMessage("GmCommand.message9", message));
         player.dropMessage(5, tips[Randomizer.nextInt(tips.length)]);
     }
 }

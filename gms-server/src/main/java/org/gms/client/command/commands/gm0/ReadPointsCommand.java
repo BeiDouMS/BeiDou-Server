@@ -3,10 +3,11 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class ReadPointsCommand extends Command {
     {
-        setDescription("Show point total.");
+        setDescription(I18nUtil.getMessage("ReadPointsCommand.message1"));
     }
 
     @Override
@@ -14,24 +15,24 @@ public class ReadPointsCommand extends Command {
 
         Character player = client.getPlayer();
         if (params.length > 2) {
-            player.yellowMessage("Syntax: @points (rp|vp|all)");
+            player.yellowMessage(I18nUtil.getMessage("ReadPointsCommand.message2"));
             return;
         } else if (params.length == 0) {
-            player.yellowMessage("RewardPoints: " + player.getRewardPoints() + " | "
-                    + "VotePoints: " + player.getClient().getVotePoints());
+            player.yellowMessage(I18nUtil.getMessage("ReadPointsCommand.message3") + player.getRewardPoints() + " | "
+                    + I18nUtil.getMessage("ReadPointsCommand.message4") + player.getClient().getVotePoints());
             return;
         }
 
         switch (params[0]) {
             case "rp":
-                player.yellowMessage("RewardPoints: " + player.getRewardPoints());
+                player.yellowMessage(I18nUtil.getMessage("ReadPointsCommand.message3") + player.getRewardPoints());
                 break;
             case "vp":
-                player.yellowMessage("VotePoints: " + player.getClient().getVotePoints());
+                player.yellowMessage(I18nUtil.getMessage("ReadPointsCommand.message4") + player.getClient().getVotePoints());
                 break;
             default:
-                player.yellowMessage("RewardPoints: " + player.getRewardPoints() + " | "
-                        + "VotePoints: " + player.getClient().getVotePoints());
+                player.yellowMessage(I18nUtil.getMessage("ReadPointsCommand.message3") + player.getRewardPoints() + " | "
+                        + I18nUtil.getMessage("ReadPointsCommand.message4") + player.getClient().getVotePoints());
                 break;
         }
     }

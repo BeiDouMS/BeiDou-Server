@@ -28,20 +28,21 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
+import org.gms.util.I18nUtil;
 
 public class OnlineCommand extends Command {
     {
-        setDescription("Show all online players.");
+        setDescription(I18nUtil.getMessage("OnlineCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         for (Channel ch : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
-            player.yellowMessage("Players in Channel " + ch.getId() + ":");
+            player.yellowMessage(I18nUtil.getMessage("OnlineCommand.message2") + ch.getId() + ":");
             for (Character chr : ch.getPlayerStorage().getAllCharacters()) {
                 if (!chr.isGM()) {
-                    player.message(" >> " + Character.makeMapleReadable(chr.getName()) + " is at " + chr.getMap().getMapName() + ".");
+                    player.message(" >> " + Character.makeMapleReadable(chr.getName()) + " " + I18nUtil.getMessage("OnlineCommand.message3") + " " + chr.getMap().getMapName());
                 }
             }
         }

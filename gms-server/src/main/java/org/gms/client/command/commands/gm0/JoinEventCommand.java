@@ -29,10 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.MapId;
 import org.gms.server.events.gm.Event;
 import org.gms.server.maps.FieldLimit;
+import org.gms.util.I18nUtil;
 
 public class JoinEventCommand extends Command {
     {
-        setDescription("Join active event.");
+        setDescription(I18nUtil.getMessage("JoinEventCommand.message1"));
     }
 
     @Override
@@ -54,16 +55,16 @@ public class JoinEventCommand extends Command {
                         player.saveLocationOnWarp();
                         player.changeMap(event.getMapId());
                     } else {
-                        player.dropMessage(5, "The limit of players for the event has already been reached.");
+                        player.dropMessage(5, I18nUtil.getMessage("JoinEventCommand.message2"));
                     }
                 } else {
-                    player.dropMessage(5, "You are already in the event.");
+                    player.dropMessage(5, I18nUtil.getMessage("JoinEventCommand.message3"));
                 }
             } else {
-                player.dropMessage(5, "There is currently no event in progress.");
+                player.dropMessage(5, I18nUtil.getMessage("JoinEventCommand.message4"));
             }
         } else {
-            player.dropMessage(5, "You are currently in a map where you can't join an event.");
+            player.dropMessage(5, I18nUtil.getMessage("JoinEventCommand.message5"));
         }
     }
 }

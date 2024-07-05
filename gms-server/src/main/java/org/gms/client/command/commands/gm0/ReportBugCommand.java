@@ -27,13 +27,14 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.tools.PacketCreator;
 
 public class ReportBugCommand extends Command {
     {
-        setDescription("Send in a bug report.");
+        setDescription(I18nUtil.getMessage("ReportBugCommand.message1"));
     }
 
     private static final Logger log = LoggerFactory.getLogger(ReportBugCommand.class);
@@ -43,14 +44,14 @@ public class ReportBugCommand extends Command {
         Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.dropMessage(5, "Message too short and not sent. Please do @bug <bug>");
+            player.dropMessage(5, I18nUtil.getMessage("ReportBugCommand.message2"));
             return;
         }
         String message = player.getLastCommandMessage();
-        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip("[Bug]:" + Character.makeMapleReadable(player.getName()) + ": " + message));
+        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.sendYellowTip(I18nUtil.getMessage("ReportBugCommand.message3") + Character.makeMapleReadable(player.getName()) + ": " + message));
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(1, message));
         log.info("{}: {}", Character.makeMapleReadable(player.getName()), message);
-        player.dropMessage(5, "Your bug '" + message + "' was submitted successfully to our developers. Thank you!");
+        player.dropMessage(5, I18nUtil.getMessage("ReportBugCommand.message4", message));
 
     }
 }

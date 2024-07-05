@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class LeaveEventCommand extends Command {
     {
-        setDescription("Leave active event.");
+        setDescription(I18nUtil.getMessage("LeaveEventCommand.message1"));
     }
 
     @Override
@@ -52,7 +53,7 @@ public class LeaveEventCommand extends Command {
                 c.getChannelServer().getEvent().addLimit();
             }
         } else {
-            player.dropMessage(5, "You are not currently in an event.");
+            player.dropMessage(5, I18nUtil.getMessage("LeaveEventCommand.message2"));
         }
 
     }
