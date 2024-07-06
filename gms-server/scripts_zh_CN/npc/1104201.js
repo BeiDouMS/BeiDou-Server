@@ -40,15 +40,11 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.isQuestStarted(28177) && !cm.haveItem(4032479)) {
-                if (cm.canHold(4032479)) {
-                    cm.gainItem(4032479, 1);
-                    cm.sendOk("哼，你在找我吗？是Stan长官派你来的，对吧？但是嘿，我不是你要找的嫌疑人。如果我有证据呢？拿着这个，把它还给 #b#p1012003##k。");
-                } else {
-                    cm.sendOk("嘿，在和我交谈之前先腾出一个槽位。");
-                }
+            if (!(cm.isQuestCompleted(20407) || cm.isQuestStarted(20407) && cm.getQuestProgressInt(20407, 9001010) != 0) && cm.getMap().countMonster(9001010) == 0 && cm.getMap().getNPCById(1104002) == null) {
+                cm.sendOk("...嗯... #b#h0##k，是你吗...？#r#p1104002##k...她已经到了... #b#h0##k，我真的很抱歉，我现在无法在这种状态下帮助你，就在一个更大的威胁出现时，我对我的人民束手无策... 请，我请求你，请打败她，#b#h0##k！！....");
+                cm.spawnNpc(1104002, new java.awt.Point(850, 0), cm.getMap());
             } else {
-                cm.sendOk("呼呼呼...");
+                cm.sendOk("抱歉，我无法完成你的要求。");
             }
 
             cm.dispose();

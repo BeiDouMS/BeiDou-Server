@@ -40,17 +40,14 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.isQuestStarted(28177) && !cm.haveItem(4032479)) {
-                if (cm.canHold(4032479)) {
-                    cm.gainItem(4032479, 1);
-                    cm.sendOk("哼，你在找我吗？是Stan长官派你来的，对吧？但是嘿，我不是你要找的嫌疑人。如果我有证据呢？拿着这个，把它还给 #b#p1012003##k。");
-                } else {
-                    cm.sendOk("嘿，在和我交谈之前先腾出一个槽位。");
-                }
+            if (!cm.isQuestStarted(6410)) {
+                cm.sendOk("“嘿，你找我有什么事吗？”");
+                cm.dispose();
             } else {
-                cm.sendOk("呼呼呼...");
+                cm.sendYesNo("让我们去救 #r#p2095000##k 吧？");
             }
-
+        } else if (status == 1) {
+            cm.warp(925010000, 0);
             cm.dispose();
         }
     }

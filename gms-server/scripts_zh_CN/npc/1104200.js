@@ -40,15 +40,14 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.isQuestStarted(28177) && !cm.haveItem(4032479)) {
-                if (cm.canHold(4032479)) {
-                    cm.gainItem(4032479, 1);
-                    cm.sendOk("哼，你在找我吗？是Stan长官派你来的，对吧？但是嘿，我不是你要找的嫌疑人。如果我有证据呢？拿着这个，把它还给 #b#p1012003##k。");
-                } else {
-                    cm.sendOk("嘿，在和我交谈之前先腾出一个槽位。");
-                }
+            cm.sendNext("“#b#p1104002##k...黑魔女...困住了我在这里...现在没时间了，她已经在去#r攻击艾洛斯#k的路上了！”");
+        } else if (status == 1) {
+            cm.sendYesNo("同伴骑士，你必须立刻前往#r埃雷夫#k，#r女皇陛下处于危险之中#k！即使在这种情况下，我仍然可以使用魔法传送你到那里。当你准备好时，和我交谈。#b你准备好面对埃莉诺了吗？#k");
+        } else if (status == 2) {
+            if (cm.getWarpMap(913030000).countPlayers() == 0) {
+                cm.warp(913030000, 0);
             } else {
-                cm.sendOk("呼呼呼...");
+                cm.sendOk("已经有人在挑战她了。请稍等一会儿。");
             }
 
             cm.dispose();

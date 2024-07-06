@@ -18,6 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+var npcid = 1104102;
+var baseJob = 13;
 var status;
 
 function start() {
@@ -40,18 +42,31 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.isQuestStarted(28177) && !cm.haveItem(4032479)) {
-                if (cm.canHold(4032479)) {
-                    cm.gainItem(4032479, 1);
-                    cm.sendOk("哼，你在找我吗？是Stan长官派你来的，对吧？但是嘿，我不是你要找的嫌疑人。如果我有证据呢？拿着这个，把它还给 #b#p1012003##k。");
-                } else {
-                    cm.sendOk("嘿，在和我交谈之前先腾出一个槽位。");
-                }
-            } else {
-                cm.sendOk("呼呼呼...");
+            if (Math.floor(cm.getJobId() / 100) != baseJob) {
+                cm.sendOk("你好，#h0#。你能帮我们找到入侵者吗？他不在这个区域，我已经在这里搜索过了。");
+                cm.dispose();
+                return;
             }
 
+            cm.sendOk("该死，你找到我了！那么，只有一条出路！让我们战斗，就像#r黑之翼#k应该的那样！");
+        } else if (status == 1) {
+            var mapobj = cm.getMap();
+            var npcpos = mapobj.getMapObject(cm.getNpcObjectId()).getPosition();
+
+            spawnMob(npcpos.x, npcpos.y, 9001009, mapobj);
+            mapobj.destroyNPC(npcid);
             cm.dispose();
         }
     }
+}
+
+function spawnMob(x, y, id, map) {
+    if (map.getMonsterById(id) != null) {
+        return;
+    }
+
+    const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
+    const Point = Java.type('java.awt.Point');
+    var mob = LifeFactory.getMonster(id);
+    map.spawnMonsterOnGroundBelow(mob, new Point(x, y));
 }

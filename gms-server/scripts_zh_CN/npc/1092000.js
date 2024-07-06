@@ -1,22 +1,25 @@
 /*
-    This file is part of the HeavenMS MapleStory Server
-    Copyleft (L) 2016 - 2019 RonanLana
-
+	This file is part of the OdinMS Maple Story Server
+    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
+		       Matthias Butz <matze@odinms.de>
+		       Jan Christian Meyer <vimes@odinms.de>
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
     published by the Free Software Foundation version 3 as published by
     the Free Software Foundation. You may not use, modify or distribute
     this program under any other version of the GNU Affero General Public
     License.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Affero General Public License for more details.
-
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+ * @Name         Tangyoon
+ * @Author       xXOsirisXx (BubblesDev)
+ */
 
 var status;
 
@@ -26,13 +29,10 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == -1 || !cm.isQuestStarted(2180)) {
         cm.dispose();
+
     } else {
-        if (mode == 0 && type > 0) {
-            cm.dispose();
-            return;
-        }
         if (mode == 1) {
             status++;
         } else {
@@ -40,17 +40,16 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (cm.isQuestStarted(28177) && !cm.haveItem(4032479)) {
-                if (cm.canHold(4032479)) {
-                    cm.gainItem(4032479, 1);
-                    cm.sendOk("哼，你在找我吗？是Stan长官派你来的，对吧？但是嘿，我不是你要找的嫌疑人。如果我有证据呢？拿着这个，把它还给 #b#p1012003##k。");
-                } else {
-                    cm.sendOk("嘿，在和我交谈之前先腾出一个槽位。");
-                }
+            cm.sendNext("好的，我现在会把你送到我的牛棚去。小心那些喝光所有牛奶的小牛犊。你可不想白费力气。");
+        } else if (status == 1) {
+            cm.sendNextPrev("这不容易一眼就分辨出小牛和母牛。这些小牛可能只有一个月或两个月大，但它们已经长到和它们的母亲一样大了。它们甚至看起来很像……有时候连我自己都会感到困惑！祝你好运！");
+        } else if (status == 2) {
+            if (cm.canHold(4031847)) {
+                cm.gainItem(4031847, 1);
+                cm.warp(912000100, 0);
             } else {
-                cm.sendOk("呼呼呼...");
+                cm.sendOk("我无法给你空瓶，因为你的背包已满。请在杂项窗口中腾出一些空间。");
             }
-
             cm.dispose();
         }
     }
