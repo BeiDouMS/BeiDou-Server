@@ -24,10 +24,7 @@ var status = 0;
 var sel;
 
 function start() {
-    cm.sendSimple("你想做什么？
-#b#L0#创建公会#l
-#L1#解散你的公会#l
-#L2#增加你的公会容量#l#k");
+    cm.sendSimple("你想做什么？\r\n#b#L0#创建公会#l\r\n#L1#解散你的公会#l\r\n#L2#增加你的公会容量#l#k");
 }
 
 function action(mode, type, selection) {

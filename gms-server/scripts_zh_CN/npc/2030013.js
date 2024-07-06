@@ -18,8 +18,9 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
+/*Adobis
  *
+ *@author Alan (SharpAceX)
  *@author Ronan
  */
 
@@ -29,10 +30,11 @@ var expedMembers;
 var player;
 var em;
 const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-const exped = ExpeditionType.BALROG_NORMAL;
-var expedName = "Balrog";
-var expedBoss = "Balrog";
-var expedMap = "Balrog's Tomb";
+const exped = ExpeditionType.ZAKUM;
+var expedName = "Zakum";
+var expedBoss = "Zakum";
+var expedMap = "Zakum's Altar";
+var expedItem = 4001017;
 
 var list = "What would you like to do?#b\r\n\r\n#L1#View current Expedition members#l\r\n#L2#Start the fight!#l\r\n#L3#Stop the expedition.#l";
 
@@ -44,7 +46,7 @@ function action(mode, type, selection) {
 
     player = cm.getPlayer();
     expedition = cm.getExpedition(exped);
-    em = cm.getEventManager("BalrogBattle");
+    em = cm.getEventManager("ZakumBattle");
 
     if (mode == -1) {
         cm.dispose();
@@ -59,10 +61,10 @@ function action(mode, type, selection) {
                 cm.sendOk("您不符合与" + expedBoss + "战斗的条件！");
                 cm.dispose();
             } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l\r\n\#L3#我想了解一下这次远征的信息...#l");
+                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l");
                 status = 1;
             } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
-                if (expedition.isInProgress()) {
+                if (expedition.isInProgress()) {    // thanks Conrad for noticing exped leaders being able to still manage in-progress expeds
                     cm.sendOk("你的探险已经在进行中，对于那些仍在战斗中的人，让我们为那些勇敢的灵魂祈祷吧。");
                     cm.dispose();
                 } else {
@@ -94,6 +96,12 @@ function action(mode, type, selection) {
             }
         } else if (status == 1) {
             if (selection == 1) {
+                if (!cm.haveItem(expedItem)) {
+                    cm.sendOk("作为远征队领袖，你必须携带#b#t" + expedItem + "##k在你的物品栏中，与" + expedBoss + "进行战斗！");
+                    cm.dispose();
+                    return;
+                }
+
                 expedition = cm.getExpedition(exped);
                 if (expedition != null) {
                     cm.sendOk("有人已经主动成为了远征队的领袖。试着加入他们吧！");
@@ -116,12 +124,6 @@ function action(mode, type, selection) {
                 cm.sendOk("当然，并非每个人都能挑战" + expedBoss + "。");
                 cm.dispose();
 
-            } else {
-                cm.sendSimple("Hi there. I am #b#nMu Young#n#k, the temple Keeper. This temple is currently under siege by the Balrog troops. We currently do not know who gave the orders. " +
-                    "For a few weeks now, the #e#b Order of the Altair#n#k has been sending mercenaries, but they were eliminated every time." +
-                    " So, traveler, would you like to try your luck at defeating this unspeakable horror?\r\n  #L1#What is the #eOrder of the Altair?");
-
-                status = 10;
             }
         } else if (status == 2) {
             if (selection == 1) {
@@ -146,6 +148,7 @@ function action(mode, type, selection) {
                 status = 6;
             } else if (selection == 2) {
                 var min = exped.getMinSize();
+
                 var size = expedition.getMemberList().size();
                 if (size < min) {
                     cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
@@ -153,7 +156,7 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                cm.sendOk("探险队即将出发，你现在将被护送到 #b" + expedMap + "#k。");
+                cm.sendOk("探险队将开始，现在将由护送你前往 #b" + expedMap + "#k。");
                 status = 4;
             } else if (selection == 3) {
                 const PacketCreator = Java.type('org.gms.tools.PacketCreator');
@@ -184,15 +187,12 @@ function action(mode, type, selection) {
             if (selection > 0) {
                 var banned = expedMembers.get(selection - 1);
                 expedition.ban(banned);
-                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");
+                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");    // getValue, thanks MedicOP (MicroWilly69) for finding this issue
                 cm.dispose();
             } else {
                 cm.sendSimple(list);
                 status = 2;
             }
-        } else if (status == 10) {
-            cm.sendOk("Altair之序是一群精英雇佣兵，他们监督世界经济和战斗行动。它是在40年前黑魔法师被打败后成立的，希望能预见下一次可能的攻击。");
-            cm.dispose();
         }
     }
 }

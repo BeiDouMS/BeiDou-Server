@@ -18,9 +18,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-/*
- *
- *@author Ronan
+/* The Forgotten Temple Manager
+ * 
+ * Deep Place of Temple - Forgotten Twilight (270050000)
+ * Vs Pink Bean Recruiter NPC
+ * 
+ * @author Ronan
  */
 
 var status = 0;
@@ -29,10 +32,10 @@ var expedMembers;
 var player;
 var em;
 const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-const exped = ExpeditionType.BALROG_NORMAL;
-var expedName = "Balrog";
-var expedBoss = "Balrog";
-var expedMap = "Balrog's Tomb";
+var exped = ExpeditionType.PINKBEAN;
+var expedName = "Twilight of the Gods";
+var expedBoss = "Pink Bean";
+var expedMap = "Twilight of Gods";
 
 var list = "What would you like to do?#b\r\n\r\n#L1#View current Expedition members#l\r\n#L2#Start the fight!#l\r\n#L3#Stop the expedition.#l";
 
@@ -44,7 +47,7 @@ function action(mode, type, selection) {
 
     player = cm.getPlayer();
     expedition = cm.getExpedition(exped);
-    em = cm.getEventManager("BalrogBattle");
+    em = cm.getEventManager("PinkBeanBattle");
 
     if (mode == -1) {
         cm.dispose();
@@ -59,7 +62,7 @@ function action(mode, type, selection) {
                 cm.sendOk("您不符合与" + expedBoss + "战斗的条件！");
                 cm.dispose();
             } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l\r\n\#L3#我想了解一下这次远征的信息...#l");
+                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l");
                 status = 1;
             } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
                 if (expedition.isInProgress()) {
@@ -116,17 +119,11 @@ function action(mode, type, selection) {
                 cm.sendOk("当然，并非每个人都能挑战" + expedBoss + "。");
                 cm.dispose();
 
-            } else {
-                cm.sendSimple("Hi there. I am #b#nMu Young#n#k, the temple Keeper. This temple is currently under siege by the Balrog troops. We currently do not know who gave the orders. " +
-                    "For a few weeks now, the #e#b Order of the Altair#n#k has been sending mercenaries, but they were eliminated every time." +
-                    " So, traveler, would you like to try your luck at defeating this unspeakable horror?\r\n  #L1#What is the #eOrder of the Altair?");
-
-                status = 10;
             }
         } else if (status == 2) {
             if (selection == 1) {
                 if (expedition == null) {
-                    cm.sendOk("无法加载远征。");
+                    cm.sendOk("无法加载远征队。");
                     cm.dispose();
                     return;
                 }
@@ -146,6 +143,7 @@ function action(mode, type, selection) {
                 status = 6;
             } else if (selection == 2) {
                 var min = exped.getMinSize();
+
                 var size = expedition.getMemberList().size();
                 if (size < min) {
                     cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
@@ -153,7 +151,7 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                cm.sendOk("探险队即将出发，你现在将被护送到 #b" + expedMap + "#k。");
+                cm.sendOk("探险队将开始，现在将由护送你前往 #b" + expedMap + "#k。");
                 status = 4;
             } else if (selection == 3) {
                 const PacketCreator = Java.type('org.gms.tools.PacketCreator');
@@ -190,9 +188,6 @@ function action(mode, type, selection) {
                 cm.sendSimple(list);
                 status = 2;
             }
-        } else if (status == 10) {
-            cm.sendOk("Altair之序是一群精英雇佣兵，他们监督世界经济和战斗行动。它是在40年前黑魔法师被打败后成立的，希望能预见下一次可能的攻击。");
-            cm.dispose();
         }
     }
 }
