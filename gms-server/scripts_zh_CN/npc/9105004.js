@@ -168,7 +168,7 @@ function insidePqAction(mode, type, selection) {
             gift = cm.haveItem(4032092, 1);
             if (gift) {
                 var optStr = generateSelectionMenu(generatePrizeString());
-                cm.sendSimple("哦，你带了一个#b#t4032092##k吗？太好了，稍等一下... 这是你的冒险岛圣诞礼物。请选择你想要收到的礼物：\r\n\r\n" + optStr");
+                cm.sendSimple("哦，你带了一个#b#t4032092##k吗？太好了，稍等一下... 这是你的冒险岛圣诞礼物。请选择你想要收到的礼物：\r\n\r\n" + optStr);
             } else if (eim.gridCheck(cm.getPlayer()) == -1) {
                 cm.sendNext("这是你的冒险岛圣诞礼物。享受吧~");
             } else {
