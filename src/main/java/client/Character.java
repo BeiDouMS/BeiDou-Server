@@ -359,6 +359,7 @@ public class Character extends AbstractCharacterObject {
     private boolean pendingNameChange; //only used to change name on logout, not to be relied upon elsewhere
     private long loginTime;
     private boolean chasing = false;
+    private float mobExpRate = -1;
 
     private Character() {
         super.setListener(new AbstractCharacterListener() {
@@ -5011,6 +5012,30 @@ public class Character extends AbstractCharacterObject {
         return expRate;
     }
 
+    public float getLevelExpRate() {
+        if (hasNoviceExpRate()) return 1; // 新手经验保护
+
+        return 1f + YamlConfig.config.worlds.get(world).level_exp_rate * level;
+    }
+
+    public float getQuickLevelExpRate() {
+        if (hasNoviceExpRate()) return 1; // 新手经验保护
+
+        int quickLv = YamlConfig.config.worlds.get(world).quick_level;
+        if (level >= quickLv) return 1;
+
+        return 1f + (quickLv - level) * YamlConfig.config.worlds.get(world).quick_level_exp_rate;
+    }
+
+    public void updateMobExpRate() {
+        mobExpRate = getLevelExpRate() * getQuickLevelExpRate();
+    }
+
+    public float getMobExpRate() {
+        if (mobExpRate <= 0) updateMobExpRate();
+        return mobExpRate;
+    }
+
     public int getCouponExpRate() {
         return expCoupon;
     }
@@ -6554,6 +6579,8 @@ public class Character extends AbstractCharacterObject {
                 }
             }
         }
+
+        updateMobExpRate();
     }
 
     public boolean leaveParty() {

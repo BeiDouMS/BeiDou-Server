@@ -730,7 +730,7 @@ public class Monster extends AbstractLoadedLife {
         if (attacker.isAlive()) {
             if (personalExp != null) {
                 personalExp *= getStatusExpMultiplier(attacker, hasPartySharers);
-                personalExp *= attacker.getExpRate();
+                personalExp *= (attacker.getExpRate() * attacker.getMobExpRate());
             } else {
                 personalExp = 0.0f;
             }
@@ -744,7 +744,7 @@ public class Monster extends AbstractLoadedLife {
 
             if (partyExp != null) {
                 partyExp *= getStatusExpMultiplier(attacker, hasPartySharers);
-                partyExp *= attacker.getExpRate();
+                partyExp *= (attacker.getExpRate() * attacker.getMobExpRate());
                 partyExp *= YamlConfig.config.server.PARTY_BONUS_EXP_RATE;
             } else {
                 partyExp = 0.0f;
