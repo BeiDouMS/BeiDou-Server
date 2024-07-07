@@ -3229,6 +3229,16 @@ public class Character extends AbstractCharacterObject {
             }
             while (exp.get() >= ExpTable.getExpNeededForLevel(level)) {
                 levelUp(true);
+
+                if (YamlConfig.config.server.USE_ANNOUNCE_GLOBAL_LEVEL_UP && !isGM()) {
+                    String msg = "[升级信息] 玩家 " + getName() + " 在 " + getMap().getMapName() + " 升到了" + getLevel() + "级";
+                    for (Character player : getWorldServer().getPlayerStorage().getAllCharacters()) {
+                        if (player.getCashShop().isOpened()) continue;
+                        player.dropMessage(6, msg);
+                    }
+                    log.info(msg);
+                }
+                
                 if (level == getMaxLevel()) {
                     setExp(0);
                     updateSingleStat(Stat.EXP, 0);
