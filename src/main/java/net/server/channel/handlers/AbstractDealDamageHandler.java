@@ -422,16 +422,24 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
                     if (job == 121 || job == 122) {
-                        for (int charge = 1211005; charge < 1211007; charge++) {
+                        for (int charge = 1211003; charge < 1211009; charge++) {
                             Skill chargeSkill = SkillFactory.getSkill(charge);
                             if (player.isBuffFrom(BuffStat.WK_CHARGE, chargeSkill)) {
                                 if (totDamageToOneMonster > 0) {
+                                    // 只有寒冰剑有y属性冻结时间
+                                    int dur = Math.max(1, chargeSkill.getEffect(player.getSkillLevel(chargeSkill)).getY()) * 1000;
                                     if (charge == WhiteKnight.BW_ICE_CHARGE || charge == WhiteKnight.SWORD_ICE_CHARGE) {
-                                        monster.setTempEffectiveness(Element.ICE, ElementalEffectiveness.WEAK, chargeSkill.getEffect(player.getSkillLevel(chargeSkill)).getY() * 1000);
+                                        if (monster.getStats().getEffectiveness(Element.ICE) != ElementalEffectiveness.STRONG) {
+                                            MonsterStatusEffect monsterStatusEffect = new MonsterStatusEffect(Collections.singletonMap(MonsterStatus.FREEZE, 1), chargeSkill, null, false);
+                                            monster.applyStatus(player, monsterStatusEffect, false, dur, false);
+                                        }
+                                        monster.setTempEffectiveness(Element.ICE, ElementalEffectiveness.WEAK, dur);
                                         break;
-                                    }
-                                    if (charge == WhiteKnight.BW_FIRE_CHARGE || charge == WhiteKnight.SWORD_FIRE_CHARGE) {
-                                        monster.setTempEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK, chargeSkill.getEffect(player.getSkillLevel(chargeSkill)).getY() * 1000);
+                                    } else if (charge == WhiteKnight.BW_FIRE_CHARGE || charge == WhiteKnight.SWORD_FIRE_CHARGE) {
+                                        monster.setTempEffectiveness(Element.FIRE, ElementalEffectiveness.WEAK, dur);
+                                        break;
+                                    } else if (charge == WhiteKnight.BW_LIT_CHARGE || charge == WhiteKnight.SWORD_LIT_CHARGE) {
+                                        monster.setTempEffectiveness(Element.LIGHTING, ElementalEffectiveness.WEAK, dur);
                                         break;
                                     }
                                 }
@@ -442,7 +450,9 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                                 Skill chargeSkill = SkillFactory.getSkill(charge);
                                 if (player.isBuffFrom(BuffStat.WK_CHARGE, chargeSkill)) {
                                     if (totDamageToOneMonster > 0) {
-                                        monster.setTempEffectiveness(Element.HOLY, ElementalEffectiveness.WEAK, chargeSkill.getEffect(player.getSkillLevel(chargeSkill)).getY() * 1000);
+                                        // 只有寒冰剑有y属性冻结时间
+                                        int dur = Math.max(1, chargeSkill.getEffect(player.getSkillLevel(chargeSkill)).getY()) * 1000;
+                                        monster.setTempEffectiveness(Element.HOLY, ElementalEffectiveness.WEAK, dur);
                                         break;
                                     }
                                 }
