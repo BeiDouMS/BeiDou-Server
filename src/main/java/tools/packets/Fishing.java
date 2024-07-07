@@ -79,7 +79,7 @@ public class Fishing {
             return;
         }
 
-        if (!MapId.isFishingArea(chr.getMapId()) && !YamlConfig.config.server.FISH_EVERYWHERE) {
+        if (!MapId.isFishingArea(chr.getMapId())) {
             chr.dropMessage("这里不可以钓鱼");
             return;
         }
