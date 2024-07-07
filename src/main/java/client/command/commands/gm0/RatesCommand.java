@@ -40,7 +40,7 @@ public class RatesCommand extends Command {
         // travel rates not applicable since it's intrinsically a server/environment rate rather than a character rate
         String showMsg_ = "#e玩家倍率#n" + "\r\n\r\n";
         showMsg_ += "经验: #e#b" + player.getExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? " - 新手倍率" : "") + "\r\n";
-        showMsg_ += "怪物经验: #e#b" + player.getMobExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? " - 新手倍率" : "") + "\r\n";
+        showMsg_ += "怪物经验: #e#b" + Math.round(player.getMobExpRate() * 100f) / 100f + "x#k#n" + (player.hasNoviceExpRate() ? " - 新手倍率" : "") + "\r\n";
         showMsg_ += "金币: #e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
         showMsg_ += "爆率: #e#b" + player.getDropRate() + "x#k#n" + "\r\n";
         showMsg_ += "BOSS 爆率: #e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
