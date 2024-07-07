@@ -106,7 +106,6 @@ public class ServerConfig {
     public boolean USE_BUFF_EVERLASTING;
     public boolean USE_MULTIPLE_SAME_EQUIP_DROP;
     public boolean USE_BANISHABLE_TOWN_SCROLL;
-    public boolean USE_ENABLE_FULL_RESPAWN;
     public boolean USE_ENABLE_CHAT_LOG;
     public boolean USE_REBIRTH_SYSTEM;
     public boolean USE_MAP_OWNERSHIP_SYSTEM;
@@ -301,6 +300,14 @@ public class ServerConfig {
 
     //Event End Timestamp
     public long EVENT_END_TIMESTAMP;
+
+    // 动态怪物数量
+    public double RESPAWN_BASE_RATE;
+    public double RESPAWN_FIGHTER_RATE;
+    public boolean RESPAWN_FORCE_MAX_FIGHTER;
+    public double RESPAWN_EXTRA_RATE;
+    public boolean RESPAWN_EXCEPT_MOB_TIME;
+    public boolean RESPAWN_CUSTOM_RATE;
 
     //GM Security Configuration
     public int MINIMUM_GM_LEVEL_TO_TRADE;

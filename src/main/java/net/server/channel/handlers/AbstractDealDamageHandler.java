@@ -152,6 +152,8 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
             return;
         }
 
+        player.refreshLastFightTime();
+
         Skill theSkill = null;
         StatEffect attackEffect = null;
         final int job = player.getJob().getId();

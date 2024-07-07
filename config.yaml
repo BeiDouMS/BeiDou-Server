@@ -262,7 +262,6 @@ server:
     USE_BUFF_EVERLASTING: false         #Every applied buff on players holds expiration time so high it'd be considered permanent. Suggestion thanks to Vcoc.
     USE_MULTIPLE_SAME_EQUIP_DROP: true  #Enables multiple drops by mobs of the same equipment, number of possible drops based on the quantities provided at the drop data.
     USE_BANISHABLE_TOWN_SCROLL: false    #Enables town scrolls to act as if it's a "player banish", rendering the antibanish scroll effect available.
-    USE_ENABLE_FULL_RESPAWN: false       #At respawn task, always respawn missing mobs when they're available. Spawn count doesn't depend on how many players are currently there.
     USE_ENABLE_CHAT_LOG: false          #Write in-game chat to log
     USE_REBIRTH_SYSTEM: false           #Flag to enable/disable rebirth system
     USE_MAP_OWNERSHIP_SYSTEM: false      #Flag to enable/disable map ownership system
@@ -457,8 +456,16 @@ server:
 
     #Event End Timestamp
     EVENT_END_TIMESTAMP: 1428897600000
-
-    # GM Security Configuration
+  
+    #动态怪物数量
+    RESPAWN_BASE_RATE: 0.8               #基础怪物比例
+    RESPAWN_FIGHTER_RATE: 0.2            #每名战斗中的玩家追加比例（最多6人）
+    RESPAWN_FORCE_MAX_FIGHTER: false     #强制按6人计算怪物比例
+    RESPAWN_EXTRA_RATE: 0.0              #非彩虹村（ID>99999999）地图额外追加比例
+    RESPAWN_EXCEPT_MOB_TIME: true        #mobtime>0的怪物禁止多次生成
+    RESPAWN_CUSTOM_RATE: true            #允许自定义地图的怪物倍率
+  
+  # GM Security Configuration
     MINIMUM_GM_LEVEL_TO_TRADE: 4
     MINIMUM_GM_LEVEL_TO_USE_STORAGE: 4
     MINIMUM_GM_LEVEL_TO_USE_DUEY: 4

@@ -22,6 +22,7 @@
 package server.life;
 
 import client.Character;
+import config.YamlConfig;
 import net.server.Server;
 
 import java.awt.*;
@@ -67,9 +68,8 @@ public class SpawnPoint {
     }
 
     public boolean shouldSpawn() {
-        if (denySpawn || mobTime < 0 || spawnedMonsters.get() > 0) {
-            return false;
-        }
+        if (YamlConfig.config.server.RESPAWN_EXCEPT_MOB_TIME && mobTime > 0) return false;
+        if (denySpawn || mobTime < 0) return false;
         return nextPossibleSpawn <= Server.getInstance().getCurrentTime();
     }
 

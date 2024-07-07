@@ -360,6 +360,7 @@ public class Character extends AbstractCharacterObject {
     private long loginTime;
     private boolean chasing = false;
     private float mobExpRate = -1;
+    private long lastFightTime = -1;
 
     private Character() {
         super.setListener(new AbstractCharacterListener() {
@@ -11314,5 +11315,14 @@ public class Character extends AbstractCharacterObject {
 
     public void setChasing(boolean chasing) {
         this.chasing = chasing;
+    }
+
+    public void refreshLastFightTime() {
+        lastFightTime = Server.getInstance().getCurrentTime();
+    }
+
+    public boolean isFighting() {
+        long timeNow = Server.getInstance().getCurrentTime();
+        return timeNow - lastFightTime <= 60000;
     }
 }

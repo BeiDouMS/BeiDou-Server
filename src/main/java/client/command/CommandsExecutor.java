@@ -53,6 +53,7 @@ import client.command.commands.gm1.BossHpCommand;
 import client.command.commands.gm1.BuffMeCommand;
 import client.command.commands.gm1.GotoCommand;
 import client.command.commands.gm1.MobHpCommand;
+import client.command.commands.gm1.MobRateCommand;
 import client.command.commands.gm1.WhatDropsFromCommand;
 import client.command.commands.gm1.WhoDropsCommand;
 import client.command.commands.gm2.ApCommand;
@@ -379,6 +380,7 @@ public class CommandsExecutor {
         addCommand("whodrops", 1, WhoDropsCommand.class);
         addCommand("buffme", 1, BuffMeCommand.class);
         addCommand("goto", 1, GotoCommand.class);
+        addCommand("mobrate", 1, MobRateCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }

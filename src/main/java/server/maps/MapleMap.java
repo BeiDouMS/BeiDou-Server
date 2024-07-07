@@ -193,6 +193,8 @@ public class MapleMap {
     // due to the nature of loadMapFromWz (synchronized), sole function that calls 'generateMapDropRangeCache', this lock remains optional.
     private static final Lock bndLock = new ReentrantLock(true);
 
+    private double mobRate = 0;
+
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {
         this.mapid = mapid;
         this.channel = channel;
@@ -3594,26 +3596,30 @@ public class MapleMap {
         return closest;
     }
 
-    private static double getCurrentSpawnRate(int numPlayers) {
-        return 0.70 + (0.05 * Math.min(6, numPlayers));
+    public double getCurrentSpawnRate(int fightingPlayers) {
+        if (YamlConfig.config.server.RESPAWN_CUSTOM_RATE && mobRate > 0) return mobRate;
+
+        if (YamlConfig.config.server.RESPAWN_FORCE_MAX_FIGHTER) fightingPlayers = 6;
+        double baseRate = YamlConfig.config.server.RESPAWN_BASE_RATE;
+        double fighterRate = YamlConfig.config.server.RESPAWN_FIGHTER_RATE;
+        double extraRate = mapid < 100000000 ? 0 :YamlConfig.config.server.RESPAWN_EXTRA_RATE;
+        return baseRate + (fighterRate * Math.min(6, fightingPlayers)) + extraRate;
     }
 
     private int getNumShouldSpawn(int numPlayers) {
-        /*
-        System.out.println("----------------------------------");
-        for (SpawnPoint spawnPoint : getMonsterSpawn()) {
-            System.out.println("sp " + spawnPoint.getPosition().getX() + ", " + spawnPoint.getPosition().getY() + ": " + spawnPoint.getDenySpawn());
-        }
-        System.out.println("try " + monsterSpawn.size() + " - " + spawnedMonstersOnMap.get());
-        System.out.println("----------------------------------");
-        */
-
-        if (YamlConfig.config.server.USE_ENABLE_FULL_RESPAWN) {
-            return (monsterSpawn.size() - spawnedMonstersOnMap.get());
-        }
-
         int maxNumShouldSpawn = (int) Math.ceil(getCurrentSpawnRate(numPlayers) * monsterSpawn.size());
         return maxNumShouldSpawn - spawnedMonstersOnMap.get();
+    }
+
+    public int countFightingPlayer() {
+        chrRLock.lock();
+        int count = 0;
+        for (Character p : characters) {
+            if (p.isFighting()) count++;
+        }
+
+        chrRLock.unlock();
+        return count;
     }
 
     public void respawn() {
@@ -3621,30 +3627,34 @@ public class MapleMap {
             return;
         }
 
-        int numPlayers;
+        int fightingPlayers;
         chrRLock.lock();
         try {
-            numPlayers = characters.size();
+            fightingPlayers = countFightingPlayer();
 
-            if (numPlayers == 0) {
+            if (fightingPlayers == 0) {
                 return;
             }
         } finally {
             chrRLock.unlock();
         }
 
-        int numShouldSpawn = getNumShouldSpawn(numPlayers);
+        int numShouldSpawn = getNumShouldSpawn(fightingPlayers);
         if (numShouldSpawn > 0) {
             List<SpawnPoint> randomSpawn = new ArrayList<>(getMonsterSpawn());
             Collections.shuffle(randomSpawn);
             short spawned = 0;
-            for (SpawnPoint spawnPoint : randomSpawn) {
-                if (spawnPoint.shouldSpawn()) {
-                    spawnMonster(spawnPoint.getMonster());
-                    spawned++;
+            boolean done = false;
+            while (!done) {
+                for (SpawnPoint spawnPoint : randomSpawn) {
+                    if (spawnPoint.shouldSpawn()) {
+                        spawnMonster(spawnPoint.getMonster());
+                        spawned++;
 
-                    if (spawned >= numShouldSpawn) {
-                        break;
+                        if (spawned >= numShouldSpawn) {
+                            done = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -4510,5 +4520,20 @@ public class MapleMap {
     public void setTimeExpand(int timeExpand) {
         this.timeExpand = timeExpand;
     }
+
+    public void setMobRate(double mobRate) {
+        this.mobRate = mobRate;
+    }
+
+    public int countMonsterSpawn() {
+        synchronized (monsterSpawn) {
+            return monsterSpawn.size();
+        }
+    }
+
+    public double getMobRate() {
+        return mobRate;
+    }
+
 
 }
