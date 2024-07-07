@@ -11,10 +11,10 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
-public class ResultBody {
-    private int code;
+public class ResultBody<T> {
+    private Integer code;
     private String message;
-    private Object data;
+    private T data;
     @Setter(AccessLevel.NONE)
     private final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -25,37 +25,37 @@ public class ResultBody {
         this.code = errorInfo.getResultCode();
         this.message = errorInfo.getResultMsg();
     }
-    
-    public static ResultBody success() {
+
+    public static <T> ResultBody<T> success() {
         return success(null);
     }
-    
-    public static ResultBody success(Object data) {
-        ResultBody rb = new ResultBody();
+
+    public static <T> ResultBody<T> success(T data) {
+        ResultBody<T> rb = new ResultBody<>();
         rb.setCode(ExceptionEnum.SUCCESS.getResultCode());
         rb.setMessage(ExceptionEnum.SUCCESS.getResultMsg());
         rb.setData(data);
         return rb;
     }
-    
-    public static ResultBody error(BaseErrorInfoInterface errorInfo) {
-        ResultBody rb = new ResultBody();
+
+    public static <T> ResultBody<T> error(BaseErrorInfoInterface errorInfo) {
+        ResultBody<T> rb = new ResultBody<>();
         rb.setCode(errorInfo.getResultCode());
         rb.setMessage(errorInfo.getResultMsg());
         rb.setData(null);
         return rb;
     }
-    
-    public static ResultBody error(int code, String msg) {
-        ResultBody rb = new ResultBody();
+
+    public static <T> ResultBody<T> error(int code, String msg) {
+        ResultBody<T> rb = new ResultBody<>();
         rb.setCode(code);
         rb.setMessage(msg);
         rb.setData(null);
         return rb;
     }
 
-    public static ResultBody error(String msg) {
-        ResultBody rb = new ResultBody();
+    public static <T> ResultBody<T> error(String msg) {
+        ResultBody<T> rb = new ResultBody<>();
         rb.setCode(-1);
         rb.setMessage(msg);
         rb.setData(null);

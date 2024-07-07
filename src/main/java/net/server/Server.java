@@ -1960,14 +1960,9 @@ public class Server {
         TimerManager.getInstance().stop();
 
         log.info("所有大区频道已下线");
+        online = false;
         loginServer.stop();
-        if (!restart) {  // shutdown hook deadlocks if System.exit() method is used within its body chores, thanks MIKE for pointing that out
-            // We disabled log4j's shutdown hook in the config file, so we have to manually shut it down here,
-            // after our last log statement.
-            LogManager.shutdown();
-
-            new Thread(() -> System.exit(0)).start();
-        } else {
+        if (restart) {
             log.info("正在重新启动...");
             instance = null;
             getInstance().init();//DID I DO EVERYTHING?! D:

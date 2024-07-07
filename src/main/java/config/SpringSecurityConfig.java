@@ -66,7 +66,7 @@ public class SpringSecurityConfig {
                 .exceptionHandling((config) -> config.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement((config) -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((config) -> config
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
