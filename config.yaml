@@ -465,11 +465,16 @@ server:
     RESPAWN_EXCEPT_MOB_TIME: true        #mobtime>0的怪物禁止多次生成
     RESPAWN_CUSTOM_RATE: true            #允许自定义地图的怪物倍率
   
-  # GM Security Configuration
+    # GM Security Configuration
     MINIMUM_GM_LEVEL_TO_TRADE: 4
     MINIMUM_GM_LEVEL_TO_USE_STORAGE: 4
     MINIMUM_GM_LEVEL_TO_USE_DUEY: 4
     MINIMUM_GM_LEVEL_TO_DROP: 4
+  
+    #创建角色
+    ENABLE_ADVENTURERS: true             #允许创建冒险家
+    ENABLE_KNIGHTS_OF_CYGNUS: true       #允许创建骑士团
+    ENABLE_THE_LORD_OF_WAR: true         #允许创建战神
 
     #Any NPC ids that should search for a js override script (useful if they already have wz entries since otherwise they're ignored).
     NPCS_SCRIPTABLE:

@@ -24,6 +24,7 @@ import client.Job;
 import client.creator.CharacterFactory;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.InventoryType;
+import config.YamlConfig;
 import constants.id.ItemId;
 import constants.id.MapId;
 
@@ -43,6 +44,8 @@ public class LegendCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
+        if (!YamlConfig.config.server.ENABLE_THE_LORD_OF_WAR) return -3;
+
         return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.LEGEND, 1, MapId.ARAN_TUTORIAL_START, top, bottom, shoes, weapon));
     }
 }
