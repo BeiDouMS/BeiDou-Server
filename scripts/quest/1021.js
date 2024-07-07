@@ -44,11 +44,11 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Hey, " + (qm.getPlayer().getGender() == 0 ? "Man" : "Miss") + "~ What's up? Haha! I am Roger who can teach you adorable new Maplers lots of information.");
+            qm.sendNext("嘿，" + (qm.getPlayer().getGender() == 0 ? "先生" : "女士") + "~ 我是罗杰，我来教你如何恢复状态");
         } else if (status == 1) {
-            qm.sendNextPrev("You are asking who made me do this? Ahahahaha!\r\nMyself! I wanted to do this and just be kind to you new travellers.");
+            qm.sendNextPrev("你问我为什么这么做？哈哈哈！\r\n教导新来的旅行者是我的职责所在！");
         } else if (status == 2) {
-            qm.sendAcceptDecline("So..... Let me just do this for fun! Abaracadabra~!");
+            qm.sendAcceptDecline("让我们开始吧！");
         } else if (status == 3) {
             if (qm.getPlayer().getHp() >= 50) {
                 qm.getPlayer().updateHp(25);
@@ -59,9 +59,9 @@ function start(mode, type, selection) {
             }
 
             qm.forceStartQuest();
-            qm.sendNext("Surprised? If HP becomes 0, then you are in trouble. Now, I will give you #rRoger's Apple#k. Please take it. You will feel stronger. Open the Item window and double click to consume. Hey, it's very simple to open the Item window. Just press #bI#k on your keyboard.");
+            qm.sendNext("我把你HP减到了25，如果你的HP降到0你就挂了！现在我给你#r罗杰的苹果#k。按#bI#k键打开背包，选择消耗栏双击罗杰的苹果使用掉，你就能恢复HP了。");
         } else if (status == 4) {
-            qm.sendPrev("Please take all Roger's Apples that I gave you. You will be able to see the HP bar increasing. Please talk to me again when you recover your HP 100%.");
+            qm.sendPrev("等你吃完后再来找我。");
         } else if (status == 5) {
             qm.showInfo("UI/tutorial.img/28");
             qm.dispose();
@@ -86,25 +86,25 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (qm.c.getPlayer().getHp() < 50) {
-                qm.sendNext("Hey, your HP is not fully recovered yet. Did you take all the Roger's Apple that I gave you? Are you sure?");
+                qm.sendNext("你的血量还很低，快吃掉我给你的苹果。");
                 qm.dispose();
             } else {
-                qm.sendNext("How easy is it to consume the item? Simple, right? You can set a #bhotkey#k on the right bottom slot. Haha you didn't know that! right? Oh, and if you are a beginner, HP will automatically recover itself as time goes by. Well it takes time but this is one of the strategies for the beginners.");
+                qm.sendNext("很简单对吧！你还可以把消耗栏里的药水放到#b快捷键#k上快速使用！");
             }
         } else if (status == 1) {
-            qm.sendNextPrev("Alright! Now that you have learned alot, I will give you a present. This is a must for your travel in Maple World, so thank me! Please use this under emergency cases!");
+            qm.sendNextPrev("好了，你已经学到很多了，请稍等一下");
         } else if (status == 2) {
-            qm.sendPrev("Okay, this is all I can teach you. I know it's sad but it is time to say good bye. Well take care if yourself and Good luck my friend!\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2010000# 3 #t2010000#\r\n#v2010009# 3 #t2010009#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 10 exp");
+            qm.sendPrev("请收下这些物资，希望对你的旅途有所帮助！\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2010000# 3 #t2010000#\r\n#v2010009# 3 #t2010009#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 10 exp");
         } else if (status == 3) {
             if (qm.isQuestCompleted(1021)) {
-                qm.dropMessage(1, "Unknown Error");
+                qm.dropMessage(1, "未知错误");
             } else if (qm.canHold(2010000) && qm.canHold(2010009)) {
                 qm.gainExp(10);
                 qm.gainItem(2010000, 3);
                 qm.gainItem(2010009, 3);
                 qm.forceCompleteQuest();
             } else {
-                qm.dropMessage(1, "Your inventory is full");
+                qm.dropMessage(1, "背包满了");
             }
             qm.dispose();
         }

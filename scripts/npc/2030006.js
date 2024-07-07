@@ -24,8 +24,8 @@
 
 var questionTree = [
     //Questions Related to CHARACTERS
-    ["In MapleStory, what is the EXP needed to level up from Lv1 to Lv2?", ["20", "15", "4", "12", "16"], 1],
-    ["In 1st job adv. which of the following is WRONG requirement?", ["Magician - Level 8", "Pirate - 20 DEX or more", "Archer - 25 DEX or more", "Thief - 20 LUK or more", "Swordman - 35 STR or more"], 3],
+    ["从1级升到2级需要多少经验？", ["20", "15", "4", "12", "16"], 1],
+    ["一转条件中哪个是错误的？", ["魔法师 - Lv 8", "海盗 - 20 敏捷", "射手 - 25 敏捷", "飞侠 - 20 运气", "战士 - 35 力量"], 3],
     ["When you hit by monster, which of the following is not fully explained?", ["Sealed - skills become disabled", "Undead - turns undead & halved recovery amounts", "Weaken - slow down moving speed", "Cursed - EXP received are decreased", "Stunned - cannot move"], 2],
     ["For the 1st job adv. Which job fully states the job adv. requirement?", ["Pirate - 25 LUK", "Magician - Level 10", "Thief - 25 LUK", "Warrior - 30 STR", "Bowman - 25 DEX"], 4],
 

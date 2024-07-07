@@ -16,7 +16,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("It is said that a old tree gets alive whenever something sinister disturbs this land... We need a hero that fends our village of that creature!");
+            qm.sendNext("据说每当有邪恶的东西扰乱这片土地时，一棵古老的树就会复苏......我们需要一位英雄来保护我们的村庄免受这种生物的侵害！");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

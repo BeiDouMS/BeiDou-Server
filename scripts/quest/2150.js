@@ -16,7 +16,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("The tree has a scarf upon its branches, I tell you.");
+            qm.sendNext("那棵树的树枝上围着一条围巾。");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

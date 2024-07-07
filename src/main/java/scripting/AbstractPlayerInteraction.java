@@ -1175,17 +1175,17 @@ public class AbstractPlayerInteraction {
     public String getFirstJobStatRequirement(int jobType) {
         switch (jobType) {
             case 1:
-                return "STR " + 35;
+                return "力量 " + 35;
 
             case 2:
-                return "INT " + 20;
+                return "智力 " + 20;
 
             case 3:
             case 4:
-                return "DEX " + 25;
+                return "敏捷 " + 25;
 
             case 5:
-                return "DEX " + 20;
+                return "敏捷 " + 20;
         }
 
         return null;

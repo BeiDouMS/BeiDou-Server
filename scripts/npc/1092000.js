@@ -40,15 +40,15 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            cm.sendNext("Okay, I'll now send you to the stable where my cows are. Watch out for the calves that drink all the milk. You don't want your effort to go to waste.");
+            cm.sendNext("我现在就带你去我的牛棚。#r小心那些小牛犊会把你手上的牛奶喝光#k。");
         } else if (status == 1) {
-            cm.sendNextPrev("It won't be easy to tell at a glance between a calf and a cow. Those calves may only be a month or two old, but they have already grown to the size of their mother. They even look alike...even I get confused at times! Good luck!");
+            cm.sendNextPrev("乍一看，很难区分小牛和母牛。这些小牛只有一两个月大，但它们已经长得和妈妈一样大了。有时连我都会搞混！祝你好运！");
         } else if (status == 2) {
             if (cm.canHold(4031847)) {
                 cm.gainItem(4031847, 1);
                 cm.warp(912000100, 0);
             } else {
-                cm.sendOk("I can't give you the empty bottle because your inventory is full. Please make some room in your Etc window.");
+                cm.sendOk("#r其它栏满了");
             }
             cm.dispose();
         }

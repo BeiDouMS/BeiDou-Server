@@ -39,15 +39,15 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("I am to teach you about the basics of the Theory of Science.");
+            qm.sendNext("我会教你们科学理论的基础知识。");
         } else if (status == 1) {
-            qm.sendNextPrev("Science stages where the alchemy doesn't meet the requirements. All items have molecular constitutions. The #rnature of their arrangements and each intrinsic unit of matter#k defines the many properties an item will have.");
+            qm.sendNextPrev("炼金术无法满足要求的科学阶段。所有物品都有分子结构。它们的#b排列方式#k决定了物品将具有的许多属性。");
         } else if (status == 2) {
-            qm.sendNextPrev("This makes true in the scenario of the #rMaker#k as well. One must be able to study the traces of each component that is being used to form the item, to be able to tell if the experiment will utmostly succeed of fail.");
+            qm.sendNextPrev("在#r锻造#k的场景中也是如此。必须研究用于形成物品的每个材料，才能判断这些材料是否有效。");
         } else if (status == 3) {
-            qm.sendNextPrev("Take that in mind: the main perspective of science, that one engine that makes it flows the strongest, whatever scenario it is, is the aspect of #bunderstanding the process#k that generates the results, not simply throwing away tries at will.");
+            qm.sendNextPrev("请记住：科学的主要观点是，无论是哪种情况，#b理解#k过程很重要，不要简单地放弃尝试。");
         } else if (status == 4) {
-            qm.sendNextPrev("That has been made clear, right? Good, then the class is over. Dismissed.");
+            qm.sendNextPrev("已经说清楚了吧？好，那这节课就结束了。下课。");
         } else if (status == 5) {
             qm.gainMeso(-10000);
 

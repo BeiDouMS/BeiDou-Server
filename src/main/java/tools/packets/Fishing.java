@@ -29,7 +29,11 @@ import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import tools.PacketCreator;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * @author FateJiki (RaGeZONE)
@@ -75,19 +79,24 @@ public class Fishing {
             return;
         }
 
-        if (!MapId.isFishingArea(chr.getMapId())) {
-            chr.dropMessage("You are not in a fishing area!");
+        if (!MapId.isFishingArea(chr.getMapId()) && !YamlConfig.config.server.FISH_EVERYWHERE) {
+            chr.dropMessage("这里不可以钓鱼");
             return;
         }
 
         if (chr.getLevel() < 30) {
-            chr.dropMessage(5, "You must be above level 30 to fish!");
+            chr.dropMessage(5, "30级才可以钓鱼");
             return;
         }
+
+        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getDefault());
+        String curTime = dateFormat.format(new Date());
 
         String fishingEffect;
         if (!hitFishingTime(chr, baitLevel, yearLikelihood, timeLikelihood)) {
             fishingEffect = "Effect/BasicEff.img/Catch/Fail";
+            chr.dropMessage(5, "[" + curTime + "] 鱼儿脱钩跑了。。。");
         } else {
             String rewardStr = "";
             fishingEffect = "Effect/BasicEff.img/Catch/Success";
@@ -98,28 +107,28 @@ public class Fishing {
                     int mesoAward = (int) (1400.0 * Math.random() + 1201) * chr.getMesoRate() + (15 * chr.getLevel() / 5);
                     chr.gainMeso(mesoAward, true, true, true);
 
-                    rewardStr = mesoAward + " mesos.";
+                    rewardStr = mesoAward + " 金币";
                     break;
                 case 1:
                     int expAward = (int) (645.0 * Math.random() + 620.0) * chr.getExpRate() + (15 * chr.getLevel() / 4);
                     chr.gainExp(expAward, true, true);
 
-                    rewardStr = expAward + " EXP.";
+                    rewardStr = expAward + " 经验";
                     break;
                 case 2:
                     int itemid = getRandomItem();
-                    rewardStr = "a(n) " + ItemInformationProvider.getInstance().getName(itemid) + ".";
+                    rewardStr = "一个 " + ItemInformationProvider.getInstance().getName(itemid);
 
                     if (chr.canHold(itemid)) {
                         chr.getAbstractPlayerInteraction().gainItem(itemid, true);
                     } else {
-                        chr.showHint("Couldn't catch a(n) #r" + ItemInformationProvider.getInstance().getName(itemid) + "#k due to #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n inventory limit.");
-                        rewardStr += ".. but has goofed up due to full inventory.";
+                        chr.showHint("错失一个 #r" + ItemInformationProvider.getInstance().getName(itemid) + "#k 只因背包 #e#b" + ItemConstants.getInventoryType(itemid) + "#k#n 满了");
+                        rewardStr += "… 由于背包满了，物品消失了";
                     }
                     break;
             }
 
-            chr.getMap().dropMessage(6, chr.getName() + " found " + rewardStr);
+            chr.getMap().dropMessage(6, "[" + curTime + "] " + chr.getName() + " 钓鱼的时候意外获得了 " + rewardStr);
         }
 
         chr.sendPacket(PacketCreator.showInfo(fishingEffect));

@@ -42,10 +42,10 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (!qm.haveItem(4031619, 1)) {
-                qm.sendOk("Please bring me the box with the supplies that lies with #b#p2012019##k...");
+                qm.sendOk("你应该有东西要交给我吧？就是从#m200000000#的#p2012019#那里拿到的东西。");
             } else {
                 qm.gainItem(4031619, -1);
-                qm.sendOk("Oh, you brought #p2012019#'s box! Thank you.");
+                qm.sendOk("这是 #p2012019# 的箱子！谢谢你！");
                 qm.forceCompleteQuest();
             }
         } else if (status == 1) {

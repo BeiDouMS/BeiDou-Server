@@ -24,9 +24,9 @@ status = -1;
 
 function start() {
     if (cm.haveItem(4031847)) {
-        cm.sendNext("The hungry calf is drinking all the milk! The bottle remains empty...");
+        cm.sendNext("饥饿的小牛喝光了所有的牛奶！瓶子现在是空的……");
     } else if (cm.haveItem(4031848) || cm.haveItem(4031849) || cm.haveItem(4031850)) {
-        cm.sendNext("The hungry calf is drinking all the milk! The bottle is now empty.");
+        cm.sendNext("饥饿的小牛喝光了所有的牛奶！瓶子现在是空的……");
         if (cm.haveItem(4031848)) {
             cm.gainItem(4031848, -1);
         } else if (cm.haveItem(4031849)) {
@@ -49,7 +49,7 @@ function action(mode, type, selection) {
         status++;
     }
     if (status == 0) {
-        cm.sendPrev("The hungry calf isn't interested in the empty bottle.");
+        cm.sendPrev("饥饿的小牛对空瓶子不敢兴趣。");
     } else if (status == 1) {
         cm.dispose();
     }

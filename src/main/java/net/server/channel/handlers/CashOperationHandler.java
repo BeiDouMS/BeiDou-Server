@@ -485,7 +485,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
     private static boolean canBuy(Character chr, CashItem item, int cash) {
         if (item != null && item.isOnSale() && item.getPrice() <= cash) {
-            log.debug("Chr {} bought cash item {} (SN {}) for {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSN(), item.getPrice());
+            log.info("玩家 {} 购买了现金道具 {} (SN {}) 花费 {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSN(), item.getPrice());
             return true;
         } else {
             return false;

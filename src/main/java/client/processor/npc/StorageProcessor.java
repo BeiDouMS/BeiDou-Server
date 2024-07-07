@@ -50,12 +50,12 @@ public class StorageProcessor {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         Character chr = c.getPlayer();
         Storage storage = chr.getStorage();
-        String gmBlockedStorageMessage = "You cannot use the storage as a GM of this level.";
+        String gmBlockedStorageMessage = "当前GM级别禁止使用仓库";
 
         byte mode = p.readByte();
 
         if (chr.getLevel() < 15) {
-            chr.dropMessage(1, "You may only use the storage once you have reached level 15.");
+            chr.dropMessage(1, "15级以后才可以使用仓库服务");
             c.sendPacket(PacketCreator.enableActions());
             return;
         }

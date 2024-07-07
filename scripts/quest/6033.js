@@ -40,12 +40,12 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Hm, so you claim to have brought the #b#t4260003##k? Ok, let's take a look into it.");
+            qm.sendNext("你已经制作好了#b#t4260003##k？让我来检查一下。");
         } else if (status == 1) {
             if (qm.getQuestProgressInt(6033) == 1 && qm.haveItem(4260003, 1)) {
-                qm.sendNextPrev("You indeed have crafted a fine piece of Monster Crystal, I see. You passed! Now, I shall teach you the next steps of the Maker skill. Keep the monster crystal with you as well, it's your work.");
+                qm.sendNextPrev("看来你确实制作出了一块精美的#b#t4260003##k。你通过了！现在，我将提升你的#b锻造#k技能。这个材料你自己保留好吧，毕竟是你制作的。");
             } else {
-                qm.sendNext("Hey, what's wrong? I did tell you to make a monster crystal to pass my test, didn't I? Buying one or crafting before the start of the test is NOT part of the deal. Go craft me an #b#t4260003##k.");
+                qm.sendNext("#r你的东西呢？");
                 qm.dispose();
 
             }

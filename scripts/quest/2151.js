@@ -16,7 +16,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("The tree has a strange carving that resembles a scary face.");
+            qm.sendNext("那棵树上有奇怪的雕刻，形似一张可怕的脸。");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

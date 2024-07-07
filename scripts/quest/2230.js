@@ -40,11 +40,11 @@ function start(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            qm.sendNext("I put this small, precious life in your hands...Guard it with your life...");
+            qm.sendNext("我把这珍贵的小生命交到你手中……请用你的生命去守护它……");
         } else if (status == 1) {
-            qm.sendYesNo("Looking after another life...That is the inevitable mission given to you...Follow the force that leads you to me.");
+            qm.sendYesNo("跟随引导，到我身边来。");
         } else if (status == 2) {
-            qm.sendOk("Put your hand in your pocket. I think your friend has already found you.\r\nThe purple bellflower that soaks in the sun in between the skyscraping trees...Follow the path to the unknown that leads you to the bellflower. I will wait for you here.");
+            qm.sendOk("紫色的风铃草在阳光下浸泡在树影婆娑的树林间……沿着通向未知的路走，你就会到达风铃草。我会在这里等你。");
             qm.forceStartQuest();
             qm.gainItem(4032086, 1); // Mysterious Egg * 1
         } else if (status == 3) {
@@ -69,25 +69,26 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendSimple("Hello, traveler... You have finally come to see me. Have you fulfilled your duties? \r\n #b#L0#What duties? Who are you?#l#k");
+            qm.sendSimple("你好，旅行者……你终于来了。你坚守你的职责吗？\r\n #b#L0#什么职责？你是谁？#l#k");
         } else if (selection == 0 && status == 1) {
-            qm.sendNext("Have you found a small egg in your pocket? That egg is your duty, your responsibility. Life is hard when you're all by yourself. In times like this, there's nothing quite like having a friend that will be there for you at all times. Have you heard of a #bpet#k?\r\nPeople raise pets to ease the burden, sorrow, and loneliness, because knowing that you have someone, or something in this matter, on your side will really bring a peace of mind. But everything has consequences, and with it comes responsibility...");
+            qm.sendNext("你在口袋里发现小球了吗？那个小球就是你的职责。当你孤身一人时，没什么能比有一个一直陪在你身边的朋友更让人开心的了。你听说过#b宠物#k 吗？\n" +
+                "人们养宠物是为了减轻负担、悲伤和孤独，因为知道在这件事上有人或有东西站在你这边，真的会让你安心。但凡事都有后果，随之而来的是责任……");
         } else if (status == 2) {
-            qm.sendNextPrev("Raising a pet requires a huge amount of responsibility. Remember a pet is a form of life, as well, so you'll need to feed it, name it, share your thoughts with it, and ultimately form a bond. That's how the owners get attached to these pets.");
+            qm.sendNextPrev("养宠物需要承担巨大的责任。记住，宠物也是一种生命，所以你需要喂养它、给它起名字、与它分享你的想法，并最终建立起一种纽带。这就是主人与这些宠物建立感情的方式。");
         } else if (status == 3) {
-            qm.sendNextPrev("I wanted to instill this in you, and that's why I sent you a baby that I cherish. The egg you have brought is #bRune Snail#k, a creature that is born through the power of Mana. Since you took great care of it as you brought the egg here, the egg will hatch soon.");
+            qm.sendNextPrev("我想把这种思想灌输给你，所以我送了你一个我珍爱的宝宝。你带来的蛋是#b#z5000054##k，一种通过法力诞生的生物。因为你把蛋带到这里时非常小心，所以蛋很快就会孵化出来。");
         } else if (status == 4) {
-            qm.sendNextPrev("Rune Snail is a pet of many skills. It'll pick up items, feed you with potions, and do other things that will astound you. The downside is that since Rune Snail was born out of power of Mana, it's lifespan is very short. Once it turns into a doll, it'll never be able to be revived.");
+            qm.sendNextPrev("#z5000054#诞生于魔法的力量，因此寿命很短。一旦变成娃娃，就再也无法复活。");
         } else if (status == 5) {
-            qm.sendYesNo("Now do you understand? Every action comes with consequences, and pets are no exception. The egg of the snail shall hatch soon.");
+            qm.sendYesNo("现在你明白了吗？任何行为都会有后果。");
         } else if (status == 6) {
             canComplete = qm.canHold(5000054, 1);
             if (!canComplete) {
-                qm.sendNext("Please free a slot in your CASH inventory before you try to receive the pet...");
+                qm.sendNext("#r你的现金栏满了");
                 return;
             }
 
-            qm.sendNext("This snail will only be alive for #b5 hours#k. Shower it with love. Your love will be reciprocated in the end.");
+            qm.sendNext("这只宠物只能存活 #b5 小时#k。请善待它。");
         } else if (status == 7) {
             if (canComplete) {
                 qm.gainItem(4032086, -1); // Mysterious Egg * -1

@@ -81,7 +81,7 @@ public class ItemRequirement extends AbstractQuestRequirement {
                 } else {
                     if (count < countNeeded) {
                         if (chr.getInventory(InventoryType.EQUIPPED).countById(itemId) + count >= countNeeded) {
-                            chr.dropMessage(5, "Unequip the required " + ii.getName(itemId) + " before trying this quest operation.");
+                            chr.dropMessage(5, "开始任务前请先脱下 " + ii.getName(itemId) + "。");
                             return false;
                         }
                     }

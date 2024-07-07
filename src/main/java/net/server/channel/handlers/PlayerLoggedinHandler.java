@@ -384,7 +384,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     }
                     */
                 if (player.isGM()) {
-                    Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.earnTitleMessage((player.gmLevel() < 6 ? "GM " : "Admin ") + player.getName() + " has logged in"));
+                    Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.earnTitleMessage((player.gmLevel() < 6 ? "GM " : "Admin ") + player.getName() + " 登录了游戏"));
                 }
 
                 if (diseases != null) {

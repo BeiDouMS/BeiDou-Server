@@ -22,31 +22,31 @@
 
 function start() {
     if (cm.getQuestProgressInt(2180, 1) == 1) {
-        cm.sendNext("You have taken milk from this cow recently, check another cow.");
+        cm.sendNext("你已从这头奶牛身上取过奶了，请检查另一头奶牛。");
         cm.dispose();
         return;
     }
 
     if (cm.canHold(4031848) && cm.haveItem(4031847)) {
-        cm.sendNext("Now filling up the bottle with milk. The bottle is now 1/3 full of milk.");
+        cm.sendNext("现在将牛奶倒入瓶子中。瓶子里已装有 1/3 的牛奶。");
         cm.gainItem(4031847, -1);
         cm.gainItem(4031848, 1);
 
         cm.setQuestProgress(2180, 1, 1);
     } else if (cm.canHold(4031849, 1) && cm.haveItem(4031848)) {
-        cm.sendNext("Now filling up the bottle with milk. The bottle is now 2/3 full of milk.");
+        cm.sendNext("现在将牛奶倒入瓶子中。瓶子里已装有 2/3 的牛奶。");
         cm.gainItem(4031848, -1);
         cm.gainItem(4031849, 1);
 
         cm.setQuestProgress(2180, 1, 1);
     } else if (cm.canHold(4031850) && cm.haveItem(4031849)) {
-        cm.sendNext("Now filling up the bottle with milk. The bottle is now completely full of milk.");
+        cm.sendNext("现在将牛奶倒入瓶子中。瓶子里已装满牛奶。");
         cm.gainItem(4031849, -1);
         cm.gainItem(4031850, 1);
 
         cm.setQuestProgress(2180, 1, 1);
     } else {
-        cm.sendNext("Your inventory is full, and there's no room for a milk bottle.");
+        cm.sendNext("#r其它栏满了");
     }
     cm.dispose();
 }

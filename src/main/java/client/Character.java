@@ -2105,7 +2105,7 @@ public class Character extends AbstractCharacterObject {
                                 this.getCashShop().gainCash(1, nxGain);
 
                                 if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
-                                    showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
+                                    showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(1) + " NX)", 300);
                                 }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
@@ -2157,7 +2157,7 @@ public class Character extends AbstractCharacterObject {
                         this.getCashShop().gainCash(1, nxGain);
 
                         if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
-                            showHint("You have earned #e#b" + nxGain + " NX#k#n. (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
+                            showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(1) + " NX)", 300);
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
@@ -8364,7 +8364,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         Calendar c = Calendar.getInstance();
-        log.debug("Attempting to {} chr {}", notAutosave ? "save" : "autosave", name);
+        log.info("开始 {} 角色数据 {}", notAutosave ? "保存" : "自动保存", name);
 
         Server.getInstance().updateCharacterEntry(this);
 

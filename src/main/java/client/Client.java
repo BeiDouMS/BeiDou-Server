@@ -240,7 +240,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (player != null) {
-            log.warn("Exception caught by {}", player, cause);
+            log.warn("玩家 {} 客户端返回了异常信息", player, cause);
         }
 
         if (cause instanceof InvalidPacketHeaderException) {
