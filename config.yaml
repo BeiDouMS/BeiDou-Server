@@ -8,13 +8,13 @@ worlds:
     event_message: Scania!
     why_am_i_recommended: Welcome to Scania!
     channels: 3
-    exp_rate: 10
-    meso_rate: 10
-    drop_rate: 10
-    boss_drop_rate: 10                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
+    exp_rate: 1
+    meso_rate: 1
+    drop_rate: 1
+    boss_drop_rate: 1                       #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
     quest_rate: 5                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
-    fishing_rate: 10                        #Multiplier for success likelihood on meso thrown during fishing.
-    travel_rate: 10                         #Means of transportation rides/departs using 1/N of the default time.
+    fishing_rate: 1                         #Multiplier for success likelihood on meso thrown during fishing.
+    travel_rate: 1                          #Means of transportation rides/departs using 1/N of the default time.
     #等级冲刺计划，仅对刷怪生效
     level_exp_rate: 0.01       #每级获得额外经验倍率
     quick_level: 80            #冲刺等级，帮助玩家更快冲刺到这个等级
