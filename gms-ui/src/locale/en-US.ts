@@ -8,6 +8,7 @@ export default {
   'menu.dashboard.workplace': 'Workplace',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
+  'menu.account.player': 'Player',
   'menu.arco': 'UI Doc',
   'menu.beiDou': 'About BeiDou',
   'message.success': 'Success',

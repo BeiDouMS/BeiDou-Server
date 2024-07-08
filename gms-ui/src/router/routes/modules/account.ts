@@ -22,6 +22,16 @@ const ACCOUNT: AppRouteRecordRaw = {
         roles: ['*'],
       },
     },
+    {
+      path: 'player',
+      name: 'PlayerList',
+      component: () => import('@/views/account/player/index.vue'),
+      meta: {
+        locale: 'menu.account.player',
+        requiresAuth: true,
+        roles: ['*'],
+      },
+    },
   ],
 };
 

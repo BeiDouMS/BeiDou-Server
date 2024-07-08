@@ -3,6 +3,7 @@ export default {
   'button.load': '加载',
   'button.reset': '重置',
   'button.create': '创建',
+  'button.refresh': '刷新',
   'button.submit': '保存数据',
   'button.edit': '编辑',
 };
