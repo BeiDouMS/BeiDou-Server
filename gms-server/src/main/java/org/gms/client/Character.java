@@ -80,6 +80,10 @@ import org.gms.constants.skills.Shadower;
 import org.gms.constants.skills.Sniper;
 import org.gms.constants.skills.ThunderBreaker;
 import org.gms.constants.skills.Warrior;
+import org.gms.constants.string.ExtendType;
+import org.gms.dao.entity.ExtendValueDO;
+import org.gms.dao.mapper.ExtendValueMapper;
+import org.gms.manager.ServerManager;
 import org.gms.model.SkillEntry;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerBuffValueHolder;
@@ -6403,9 +6407,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setPlayerRates() {
-        this.expRate *= GameConstants.getPlayerBonusExpRate(this.level / 20);
-        this.mesoRate *= GameConstants.getPlayerBonusMesoRate(this.level / 20);
-        this.dropRate *= GameConstants.getPlayerBonusDropRate(this.level / 20);
+        applySavedRateOrElse("expRate", () -> this.expRate *= GameConstants.getPlayerBonusExpRate(this.level / 20));
+        applySavedRateOrElse("mesoRate", () -> this.mesoRate *= GameConstants.getPlayerBonusMesoRate(this.level / 20));
+        applySavedRateOrElse("dropRate", () -> this.dropRate *= GameConstants.getPlayerBonusDropRate(this.level / 20));
     }
 
     public void revertLastPlayerRates() {
@@ -6422,9 +6426,9 @@ public class Character extends AbstractCharacterObject {
 
     public void setWorldRates() {
         World worldz = getWorldServer();
-        this.expRate *= worldz.getExpRate();
-        this.mesoRate *= worldz.getMesoRate();
-        this.dropRate *= worldz.getDropRate();
+        applySavedRateOrElse("expRate", () -> this.expRate *= worldz.getExpRate());
+        applySavedRateOrElse("mesoRate", () -> this.mesoRate *= worldz.getMesoRate());
+        applySavedRateOrElse("dropRate", () -> this.dropRate *= worldz.getDropRate());
     }
 
     public void revertWorldRates() {
@@ -6434,7 +6438,24 @@ public class Character extends AbstractCharacterObject {
         this.dropRate /= worldz.getDropRate();
     }
 
-    private void setCouponRates() {
+    private void applySavedRateOrElse(String type, Runnable runnable) {
+        ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
+        ExtendValueDO savedRate = extendValueMapper.selectExtend(String.valueOf(id), ExtendType.CHARACTER_EXTEND.getType(), type);
+        if (savedRate == null || savedRate.getExtendValue() == null) {
+            runnable.run();
+            return;
+        }
+        int savedRateValue = Integer.parseInt(savedRate.getExtendValue());
+        if (type.equals("expRate")) {
+            this.expRate = savedRateValue;
+        } else if (type.equals("mesoRate")) {
+            this.mesoRate = savedRateValue;
+        } else if (type.equals("dropRate")) {
+            this.dropRate = savedRateValue;
+        }
+    }
+
+    public void setCouponRates() {
         List<Integer> couponEffects;
 
         Collection<Item> cashItems = this.getInventory(InventoryType.CASH).list();

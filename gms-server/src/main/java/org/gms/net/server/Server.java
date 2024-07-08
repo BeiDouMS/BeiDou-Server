@@ -921,6 +921,7 @@ public class Server {
         timeLeft = getTimeLeftForNextDay();
         ExpeditionBossLog.resetBossLogTable();
         tMan.register(new BossLogTask(), DAYS.toMillis(1), timeLeft);
+        tMan.register(new ExtendValueTask(), DAYS.toMillis(1), timeLeft);
     }
 
     public static void main(String[] args) {
