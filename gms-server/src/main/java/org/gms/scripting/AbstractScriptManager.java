@@ -47,13 +47,19 @@ public abstract class AbstractScriptManager {
     }
 
     protected ScriptEngine getInvocableScriptEngine(String path) {
-        String scriptPath = "scripts";
-        if (!Files.exists(Path.of(scriptPath))) {
-            ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
-            scriptPath += "-" + serviceProperty.getLanguage();
-        }
-        Path scriptFile = Path.of(scriptPath, path);
-        if (!Files.exists(scriptFile)) {
+        // 优先取语言文件夹，没有则取scripts
+        String scriptName = "scripts";
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
+
+        Path scriptPath = Path.of(scriptName, path);
+        Path scriptLangPath = Path.of(scriptLangName, path);
+        Path actualPath;
+        if (Files.exists(scriptLangPath)) {
+            actualPath = scriptLangPath;
+        } else if (Files.exists(scriptPath)){
+            actualPath = scriptPath;
+        } else {
             return null;
         }
 
@@ -64,7 +70,7 @@ public abstract class AbstractScriptManager {
 
         enableScriptHostAccess(graalScriptEngine);
 
-        try (BufferedReader br = Files.newBufferedReader(scriptFile, StandardCharsets.UTF_8)) {
+        try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
             engine.eval(br);
         } catch (final ScriptException | IOException t) {
             log.warn("Exception during script eval for file: {}", path, t);
