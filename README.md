@@ -26,12 +26,35 @@
 
 # gms-ui web端
 
-## 开发环境
-- nvm(可选)：https://github.com/coreybutler/nvm-windows/releases/latest
-- Node.js18：https://nodejs.org/en/download/prebuilt-installer
-- Yarn：npm i -g yarn
-- Visual Studio Code：https://code.visualstudio.com/
-- git：https://git-scm.com/downloads
+## 开发环境部署
+
+请根据自身实际情况选择性跳过已完成的步骤
+
+**1 安装 NodeJS v20.15.0 （LTS 版）**
+
+下载地址：https://nodejs.org/dist/v20.15.0/node-v20.15.0-x64.msi
+
+**2 安装 Yarn**
+
+```shell
+npm install -g yarn
+```
+
+> 如提示npm命令不存在，可能是安装NodeJS时，安装程序配置的环境变量还没有生效，小白请使用重启大法
+
+**3 初始化前端开发环境**
+
+在命令行进入 gms-ui 目录，然后执行命令
+
+```shell
+yarn install
+```
+
+**4 启动开发环境**
+
+```shell
+yarn dev
+```
 
 ## 开发进展
 ![20240620114452.png](mdimg/w1.png)
