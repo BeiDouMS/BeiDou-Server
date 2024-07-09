@@ -32,6 +32,10 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.constants.string.ExtendType;
+import org.gms.dao.entity.ExtendValueDO;
+import org.gms.dao.mapper.ExtendValueMapper;
+import org.gms.manager.ServerManager;
 import org.gms.model.SkillEntry;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.Guild;
@@ -701,10 +705,13 @@ public class AbstractPlayerInteraction {
     public void displayAranIntro() {
         String intro = switch (c.getPlayer().getMapId()) {
             case MapId.ARAN_TUTO_1 -> "Effect/Direction1.img/aranTutorial/Scene0";
-            case MapId.ARAN_TUTO_2 -> "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
-            case MapId.ARAN_TUTO_3 -> "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_TUTO_2 ->
+                    "Effect/Direction1.img/aranTutorial/Scene1" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_TUTO_3 ->
+                    "Effect/Direction1.img/aranTutorial/Scene2" + (c.getPlayer().getGender() == 0 ? "0" : "1");
             case MapId.ARAN_TUTO_4 -> "Effect/Direction1.img/aranTutorial/Scene3";
-            case MapId.ARAN_POLEARM -> "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
+            case MapId.ARAN_POLEARM ->
+                    "Effect/Direction1.img/aranTutorial/HandedPoleArm" + (c.getPlayer().getGender() == 0 ? "0" : "1");
             case MapId.ARAN_MAHA -> "Effect/Direction1.img/aranTutorial/Maha";
             default -> "";
         };
@@ -1224,5 +1231,68 @@ public class AbstractPlayerInteraction {
 
     private void sendBlueNotice(MapleMap map, String message) {
         map.dropMessage(6, message);
+    }
+
+    /**
+     * 获取角色扩展表某字段的值
+     *
+     * @param extendName 扩展字段名
+     * @return 扩展字段值
+     */
+    public String getCharacterExtendValue(String extendName) {
+        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName);
+        return extendValueDO == null ? null : extendValueDO.getExtendValue();
+    }
+
+    /**
+     * 获取每日/每周角色扩展表某字段的值
+     *
+     * @param extendName 扩展字段名
+     * @param isDaily    是否是每日，否则为每周
+     * @return 扩展字段值
+     */
+    public String getCharacterExtendValue(String extendName, boolean isDaily) {
+        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getId()),
+                isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
+                extendName);
+        return extendValueDO == null ? null : extendValueDO.getExtendValue();
+    }
+
+    /**
+     * 获取账号扩展表某字段的值
+     *
+     * @param extendName 扩展字段名
+     * @return 扩展字段值
+     */
+    public String getAccountExtendValue(String extendName) {
+        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName);
+        return extendValueDO == null ? null : extendValueDO.getExtendValue();
+    }
+
+    /**
+     * 获取每日/每周账号扩展表某字段的值
+     *
+     * @param extendName 扩展字段名
+     * @param isDaily    是否是每日，否则为每周
+     * @return 扩展字段值
+     */
+    public String getAccountExtendValue(String extendName, boolean isDaily) {
+        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getAccountID()),
+                isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
+                extendName);
+        return extendValueDO == null ? null : extendValueDO.getExtendValue();
+    }
+
+    /**
+     * 获取扩展表字段
+     *
+     * @param extendId   扩展字段id，对应角色id或账号id
+     * @param extendType 扩展字段类型
+     * @param extendName 扩展字段名
+     * @return 扩展字段
+     */
+    public ExtendValueDO getExtendValue(String extendId, String extendType, String extendName) {
+        ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
+        return extendValueMapper.selectExtend(extendId, extendType, extendName);
     }
 }
