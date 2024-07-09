@@ -81,6 +81,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -194,6 +195,9 @@ public class MapleMap {
     private static final Lock bndLock = new ReentrantLock(true);
 
     private double mobRate = 0;
+    
+    private Map<Character, Long> dmgStaticMap;
+    private boolean dmgStaticSwitch = false;
 
     public MapleMap(int mapid, int world, int channel, int returnMapId, float monsterRate) {
         this.mapid = mapid;
@@ -4534,6 +4538,47 @@ public class MapleMap {
     public double getMobRate() {
         return mobRate;
     }
+    
+    public void initDmgStatic() {
+        dmgStaticMap = new HashMap<>();
+        getAllPlayers().forEach(chr-> dmgStaticMap.put(chr, 0L));
+    }
 
+    public void updateDmgStatic(Character chr, int dmg) {
+        Long damage = dmgStaticMap.get(chr);
+        if (damage == null) {
+            dmgStaticMap.put(chr, (long) dmg);
+        } else {
+            dmgStaticMap.put(chr, damage + dmg);
+        }
+    }
 
+    public void setDmgStaticSwitch(boolean value) {
+        dmgStaticSwitch = value;
+    }
+
+    public boolean getDmgStaticSwitch() {
+        return dmgStaticSwitch;
+    }
+
+    public void broadcastDmgStatic() {
+        // 将Map条目放入一个列表中
+        List<Map.Entry<Character, Long>> entries = new ArrayList<>(dmgStaticMap.entrySet());
+
+        // 对列表进行排序，按值从高到低排序
+        entries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+
+        // 将排序后的条目放入一个新的LinkedHashMap中以保持顺序
+        Map<Character, Long> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<Character, Long> entry : entries) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        // 使用Stream API计算所有Long值的和
+        long sum = sortedMap.values().stream().mapToLong(Long::longValue).sum();
+        
+        for (Entry<Character, Long> e : sortedMap.entrySet()) {
+            e.getKey().broadcastAcquaintances(PacketCreator.dmgStatic(sortedMap, sum));
+        }
+    }
 }

@@ -33,7 +33,12 @@ public class MapMonitor {
     public MapMonitor(final MapleMap map, String portal) {
         this.map = map;
         this.portal = map.getPortal(portal);
+        if (map.getId() == 280030000) {
+            map.initDmgStatic();
+            map.setDmgStaticSwitch(true);
+        }
         this.monitorSchedule = TimerManager.getInstance().register(() -> {
+            map.broadcastDmgStatic();
             if (map.getCharacters().size() < 1) {
                 cancelAction();
             }
@@ -46,6 +51,7 @@ public class MapMonitor {
             monitorSchedule = null;
         }
 
+        if (map.getId() == 280030000) map.setDmgStaticSwitch(false);
         map.killAllMonsters();
         map.clearDrops();
         if (portal != null) {

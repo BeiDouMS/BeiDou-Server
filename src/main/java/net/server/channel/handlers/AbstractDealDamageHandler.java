@@ -956,11 +956,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 allDamageNumbers.add(damage);
+                if (chr.getMap().getDmgStaticSwitch()) chr.getMap().updateDmgStatic(chr, damage);
             }
             if (ret.skill != Corsair.RAPID_FIRE || ret.skill != Aran.HIDDEN_FULL_DOUBLE || ret.skill != Aran.HIDDEN_FULL_TRIPLE || ret.skill != Aran.HIDDEN_OVER_DOUBLE || ret.skill != Aran.HIDDEN_OVER_TRIPLE) {
                 p.skip(4);
             }
             ret.allDamage.put(oid, allDamageNumbers);
+            
         }
         if (ret.skill == NightWalker.POISON_BOMB) { // Poison Bomb
             p.skip(4);

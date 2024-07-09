@@ -353,7 +353,11 @@ public enum SendOpcode {
     MAPLELIFE_RESULT(0x15D),
     MAPLELIFE_ERROR(0x15E),
     VICIOUS_HAMMER(0x162),
-    VEGA_SCROLL(0x166);
+    VEGA_SCROLL(0x166),
+    
+    DMG_STATIC(0x167),
+    SHOW_UI(0x168)
+    ;
     private int code = -2;
 
     SendOpcode(int code) {

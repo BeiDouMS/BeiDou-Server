@@ -44,7 +44,7 @@ public class BeginnerCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
-        if (YamlConfig.config.server.ENABLE_ADVENTURERS) return -3;
+        if (!YamlConfig.config.server.ENABLE_ADVENTURERS) return -3;
 
         return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, MapId.MUSHROOM_TOWN, top, bottom, shoes, weapon));
     }

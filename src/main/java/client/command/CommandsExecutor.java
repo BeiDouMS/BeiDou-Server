@@ -49,6 +49,7 @@ import client.command.commands.gm0.StatLukCommand;
 import client.command.commands.gm0.StatStrCommand;
 import client.command.commands.gm0.TimeCommand;
 import client.command.commands.gm0.ToggleExpCommand;
+import client.command.commands.gm0.UICommand;
 import client.command.commands.gm0.UptimeCommand;
 import client.command.commands.gm1.BossHpCommand;
 import client.command.commands.gm1.BuffMeCommand;
@@ -370,6 +371,7 @@ public class CommandsExecutor {
         addCommand("bosshp", BossHpCommand.class);
         addCommand("mobhp", MobHpCommand.class);
         addCommand("fm", FmCommand.class);
+        addCommand("ui", UICommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }

@@ -7437,4 +7437,17 @@ public class PacketCreator {
         return p;
     }
 
+    public static Packet dmgStatic(Map<Character, Long> data, Long total) {
+        OutPacket p = OutPacket.create(SendOpcode.DMG_STATIC);
+        p.writeByte(data.size());
+        for (Entry<Character, Long> e : data.entrySet()) {
+            String percentage = total == 0 ? "0" : String.format("%.2f", (double) e.getValue() * 100 / total);
+            p.writeString(e.getKey().getName() + ": " + e.getValue() + " (" + percentage + "%)");     
+        }
+        return p;
+    }
+
+    public static Packet showUI() {
+        return OutPacket.create(SendOpcode.SHOW_UI);
+    }
 }
