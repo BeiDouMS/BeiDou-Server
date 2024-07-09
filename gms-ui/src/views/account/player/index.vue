@@ -89,7 +89,7 @@
           />
           <a-table-column
             :title="$t('account.player.map')"
-            data-index="mapid"
+            data-index="map"
             :width="200"
             align="center"
           />
@@ -302,6 +302,7 @@
   const giveFormVisible = ref(false);
   const giveFormTitle = ref('');
   const formData = ref<GiveForm>({
+    worldId: undefined,
     playerId: undefined,
     player: undefined,
     type: 0,
@@ -338,8 +339,8 @@
         filterForm.value.name,
         filterForm.value.map
       );
-      tableData.value = data.records;
-      total.value = data.totalRow;
+      tableData.value = data.data;
+      total.value = data.total;
     } finally {
       setLoading(false);
     }
@@ -381,6 +382,7 @@
       { value: 5, label: t('account.player.item') },
       { value: 6, label: t('account.player.equip') },
     ];
+    formData.value.worldId = undefined;
     formData.value.playerId = 0;
     formData.value.player = undefined;
     giveFormVisible.value = true;
@@ -401,6 +403,7 @@
       { value: 9, label: t('account.player.dropRate') },
       { value: 10, label: t('account.player.bossRate') },
     ];
+    formData.value.worldId = data.world;
     formData.value.playerId = data.id;
     formData.value.player = data.name;
     giveFormVisible.value = true;

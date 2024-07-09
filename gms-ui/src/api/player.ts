@@ -3,6 +3,7 @@ import { isValidString } from '@/utils/stringUtils';
 import { PageState } from '@/store/page';
 
 export interface GiveForm {
+  worldId?: number;
   playerId?: number;
   player?: string;
   type: number;
@@ -33,13 +34,9 @@ export function getPlayerList(
   name?: string,
   map?: number
 ) {
-  let url = `/player/v1?page=${page}&size=${size}`;
-  if (id !== undefined && id > 0) url += `&id=${id}`;
-  if (isValidString(name)) url += `&name=${name}`;
-  if (isValidString(map)) url += `&map=${map}`;
-  return axios.get<PageState>(url);
+  return axios.post('/character/v1/online/list', { page, size, id, name, map });
 }
 
 export function givePlayerSrc(data: GiveForm) {
-  return axios.post(`/player/v1/src`, data);
+  return axios.post(`/give/v1/resource`, data);
 }

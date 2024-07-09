@@ -5,10 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.ExtendValueDO;
+import org.gms.dto.ChrOnlineListReqDTO;
+import org.gms.dto.ChrOnlineListRtnDTO;
 import org.gms.dto.ResultBody;
 import org.gms.dto.SubmitBody;
 import org.gms.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -39,5 +43,12 @@ public class CharacterController {
     public ResultBody<Object> resetRates(@RequestBody SubmitBody<ExtendValueDO> submitBody) {
         characterService.resetRates(submitBody.getData());
         return ResultBody.success();
+    }
+
+    @Tag(name = "/character/" + ApiConstant.LATEST)
+    @Operation(summary = "查询在线玩家列表")
+    @PostMapping("/" + ApiConstant.LATEST + "/online/list")
+    public ResultBody<ChrOnlineListRtnDTO> onlineList(@RequestBody SubmitBody<ChrOnlineListReqDTO> submitBody) {
+        return ResultBody.success(characterService.getChrOnlineList(submitBody.getData()));
     }
 }
