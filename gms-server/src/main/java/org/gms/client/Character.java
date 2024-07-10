@@ -6440,18 +6440,17 @@ public class Character extends AbstractCharacterObject {
 
     private void applySavedRateOrElse(String type, Runnable runnable) {
         ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
-        ExtendValueDO savedRate = extendValueMapper.selectExtend(String.valueOf(id), ExtendType.CHARACTER_EXTEND.getType(), type);
-        if (savedRate == null || savedRate.getExtendValue() == null) {
+        List<ExtendValueDO> list = extendValueMapper.selectExtend(String.valueOf(id), ExtendType.CHARACTER_EXTEND.getType(), type);
+
+        if (list.isEmpty() || list.getFirst().getExtendValue() == null) {
             runnable.run();
             return;
         }
-        int savedRateValue = Integer.parseInt(savedRate.getExtendValue());
-        if (type.equals("expRate")) {
-            this.expRate = savedRateValue;
-        } else if (type.equals("mesoRate")) {
-            this.mesoRate = savedRateValue;
-        } else if (type.equals("dropRate")) {
-            this.dropRate = savedRateValue;
+        int savedRateValue = Integer.parseInt(list.getFirst().getExtendValue());
+        switch (type) {
+            case "expRate" -> this.expRate = savedRateValue;
+            case "mesoRate" -> this.mesoRate = savedRateValue;
+            case "dropRate" -> this.dropRate = savedRateValue;
         }
     }
 

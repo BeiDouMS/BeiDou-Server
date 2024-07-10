@@ -1296,7 +1296,8 @@ public class AbstractPlayerInteraction {
      */
     public ExtendValueDO getExtendValue(String extendId, String extendType, String extendName) {
         ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
-        return extendValueMapper.selectExtend(extendId, extendType, extendName);
+        List<ExtendValueDO> list = extendValueMapper.selectExtend(extendId, extendType, extendName);
+        return list.isEmpty() ? null : list.getFirst();
     }
 
     /**

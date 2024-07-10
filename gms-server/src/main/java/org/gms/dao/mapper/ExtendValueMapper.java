@@ -3,10 +3,10 @@ package org.gms.dao.mapper;
 import com.mybatisflex.core.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
-import org.gms.dao.entity.AccountsDO;
 import org.gms.dao.entity.ExtendValueDO;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * 扩展字段表 映射层。
@@ -19,5 +19,5 @@ public interface ExtendValueMapper extends BaseMapper<ExtendValueDO> {
     void clean(String extendType, Date createTime);
 
     @Select("select * from extend_value where extend_id = #{extendId} and extend_type = #{extendType} and extend_name = #{extendName} limit 1")
-    ExtendValueDO selectExtend(String extendId, String extendType, String extendName);
+    List<ExtendValueDO> selectExtend(String extendId, String extendType, String extendName);
 }
