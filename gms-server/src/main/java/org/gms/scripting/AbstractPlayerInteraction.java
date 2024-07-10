@@ -58,10 +58,13 @@ import org.gms.server.partyquest.Pyramid;
 import org.gms.server.quest.Quest;
 import org.gms.tools.PacketCreator;
 import org.gms.tools.Pair;
+import org.gms.util.I18nUtil;
+import org.gms.util.RequireUtil;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
@@ -1294,5 +1297,88 @@ public class AbstractPlayerInteraction {
     public ExtendValueDO getExtendValue(String extendId, String extendType, String extendName) {
         ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
         return extendValueMapper.selectExtend(extendId, extendType, extendName);
+    }
+
+    /**
+     * 发装备，除id外都可以传null，传null取装备默认属性
+     *
+     * @param itemId 装备id
+     * @param attStr 力量
+     * @param attDex 敏捷
+     * @param attInt 智力
+     * @param attLuk 运气
+     * @param attHp 血量
+     * @param attMp 蓝量
+     * @param pAtk 物理攻击
+     * @param mAtk 魔法攻击
+     * @param pDef 物理防御
+     * @param mDef 魔法防御
+     * @param acc 命中
+     * @param avoid 回避
+     * @param hands 攻击速度
+     * @param speed 移动速度
+     * @param jump 跳跃
+     * @param upgradeSlot 可升级次数
+     * @param expireTime 失效时间，-1为不失效 来自 @leevccc 的建议，传值则为分钟
+     */
+    public void gainEquip(int itemId, Short attStr, Short attDex, Short attInt, Short attLuk, Short attHp, Short attMp,
+                          Short pAtk, Short mAtk, Short pDef, Short mDef, Short acc, Short avoid, Short hands, Short speed,
+                          Short jump, Byte upgradeSlot, Long expireTime) {
+        Equip equip = new Equip(itemId, (short) -1);
+        equip.setStr(attStr);
+        equip.setDex(attDex);
+        equip.setInt(attInt);
+        equip.setLuk(attLuk);
+        equip.setHp(attHp);
+        equip.setMp(attMp);
+        equip.setWatk(pAtk);
+        equip.setMatk(mAtk);
+        equip.setWdef(pDef);
+        equip.setMdef(mDef);
+        equip.setAcc(acc);
+        equip.setAvoid(avoid);
+        equip.setHands(hands);
+        equip.setSpeed(speed);
+        equip.setJump(jump);
+        equip.setUpgradeSlots(upgradeSlot);
+        equip.setExpiration(expireTime);
+        gainEquip(equip);
+    }
+
+    /**
+     * 发装备，其中数量必为1，失效时间不传或者-1为永久
+     * 来自 @leevccc 的建议，传值则为分钟
+     *
+     * @param equip 装备对象
+     */
+    public void gainEquip(Equip equip) {
+        Character player = getPlayer();
+        if (ItemConstants.getInventoryType(equip.getItemId()).equals(InventoryType.EQUIP)) {
+            player.message(I18nUtil.getMessage("AbstractPlayerInteraction.gainEquip.message1"));
+            return;
+        }
+        Equip baseEquip = (Equip) ItemInformationProvider.getInstance().getEquipById(equip.getItemId());
+        baseEquip.setQuantity((short) 1);
+        if (!InventoryManipulator.checkSpace(c, equip.getItemId(), 1, equip.getOwner())) {
+            player.message(I18nUtil.getMessage("AbstractPlayerInteraction.gainEquip.message2", InventoryType.EQUIP.getName()));
+        }
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getStr(), Equip::setStr);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getDex(), Equip::setDex);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getInt(), Equip::setInt);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getLuk(), Equip::setLuk);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getHp(), Equip::setHp);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getMp(), Equip::setMp);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getWatk(), Equip::setWatk);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getMatk(), Equip::setMatk);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getWdef(), Equip::setWdef);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getMdef(), Equip::setMdef);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getAcc(), Equip::setAcc);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getAvoid(), Equip::setAvoid);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getHands(), Equip::setHands);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getSpeed(), Equip::setSpeed);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getJump(), Equip::setJump);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getUpgradeSlots(), Equip::setUpgradeSlots);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getExpiration(), (eq, ep) -> eq.setExpiration(TimeUnit.MINUTES.toMillis(ep)));
+        InventoryManipulator.addFromDrop(c, baseEquip, false);
     }
 }

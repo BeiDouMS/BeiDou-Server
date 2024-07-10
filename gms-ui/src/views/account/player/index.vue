@@ -339,7 +339,7 @@
         filterForm.value.name,
         filterForm.value.map
       );
-      tableData.value = data.data;
+      tableData.value = data.records;
       total.value = data.total;
     } finally {
       setLoading(false);

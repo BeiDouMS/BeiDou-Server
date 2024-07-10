@@ -25,7 +25,7 @@ public class ModifyInventory {
     }
 
     public final int getInventoryType() {
-        return item.getInventoryType().type;
+        return item.getInventoryType().getType();
     }
 
     public final short getPosition() {

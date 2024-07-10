@@ -4,6 +4,7 @@ import org.gms.exception.BizException;
 import org.gms.exception.BizExceptionEnum;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 public class RequireUtil {
     public static void requireNull(Object obj) {
@@ -43,6 +44,27 @@ public class RequireUtil {
     }
 
     public static void requireNotEmpty(Object obj, String msg) {
+        if (!isEmpty(obj)) {
+            return;
+        }
+
+        // 有无错误信息
+        if (msg == null) {
+            throw new IllegalArgumentException();
+        } else {
+            throw new BizException(BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
+        }
+    }
+
+    public static void requireTrue(boolean b, String msg) {
+        if (!b) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
+    }
+
+    public static void requireFalse(boolean b, String msg) {
+        if (b) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
+    }
+
+    public static boolean isEmpty(Object obj) {
         boolean empty = false;
         switch (obj) {
             case null -> empty = true;
@@ -69,23 +91,27 @@ public class RequireUtil {
             default -> {
             }
         }
-        if (!empty) {
+        return empty;
+    }
+
+    public static void requireNotEmptyOrElse(Object obj, Runnable runnable) {
+        if (!isEmpty(obj)) {
             return;
         }
+        runnable.run();
+    }
 
-        // 有无错误信息
-        if (msg == null) {
-            throw new IllegalArgumentException();
-        } else {
-            throw new BizException(BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
+    public static void requireNotEmptyAndThen(Object obj, Runnable runnable) {
+        if (isEmpty(obj)) {
+            return;
         }
+        runnable.run();
     }
 
-    public static void requireTrue(boolean b, String msg) {
-        if (!b) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
-    }
-
-    public static void requireFalse(boolean b, String msg) {
-        if (b) throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
+    public static <T, R> void requireNotEmptyAndThen(T t, R r, BiConsumer<T, R> consumer) {
+        if (isEmpty(t) || isEmpty(r)) {
+            return;
+        }
+        consumer.accept(t, r);
     }
 }

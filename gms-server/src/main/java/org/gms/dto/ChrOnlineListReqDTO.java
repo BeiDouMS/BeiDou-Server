@@ -5,10 +5,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ChrOnlineListReqDTO {
-    private int page;
-    private int size;
-    private int id;
+public class ChrOnlineListReqDTO extends BasePageDTO {
+    private Integer id;
     private String name;
-    private int map;
+    private Integer map;
+    private int world;
 }

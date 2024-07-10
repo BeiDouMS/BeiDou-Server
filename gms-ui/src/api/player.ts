@@ -28,13 +28,19 @@ export interface GiveForm {
 }
 
 export function getPlayerList(
-  page: number,
-  size: number,
+  pageNo: number,
+  pageSize: number,
   id?: number,
   name?: string,
   map?: number
 ) {
-  return axios.post('/character/v1/online/list', { page, size, id, name, map });
+  return axios.post('/character/v1/online/list', {
+    pageNo,
+    pageSize,
+    id,
+    name,
+    map,
+  });
 }
 
 export function givePlayerSrc(data: GiveForm) {

@@ -21,27 +21,30 @@
 */
 package org.gms.client.inventory;
 
+import lombok.Getter;
+import org.gms.util.I18nUtil;
+
 /**
  * @author Matze
  */
 public enum InventoryType {
-    UNDEFINED(0),
-    EQUIP(1),
-    USE(2),
-    SETUP(3),
-    ETC(4),
-    CASH(5),
-    CANHOLD(6),   //Proof-guard for inserting after removal checks
-    EQUIPPED(-1); //Seems nexon screwed something when removing an item T_T
+    UNDEFINED(0, I18nUtil.getMessage("InventoryType.UNDEFINED")),
+    EQUIP(1, I18nUtil.getMessage("InventoryType.EQUIP")),
+    USE(2, I18nUtil.getMessage("InventoryType.USE")),
+    SETUP(3, I18nUtil.getMessage("InventoryType.SETUP")),
+    ETC(4, I18nUtil.getMessage("InventoryType.ETC")),
+    CASH(5, I18nUtil.getMessage("InventoryType.CASH")),
+    CANHOLD(6, I18nUtil.getMessage("InventoryType.CANHOLD")),   //Proof-guard for inserting after removal checks
+    EQUIPPED(-1, I18nUtil.getMessage("InventoryType.EQUIPPED")); //Seems nexon screwed something when removing an item T_T
 
-    final byte type;
+    @Getter
+    private final byte type;
+    @Getter
+    private final String name;
 
-    InventoryType(int type) {
+    InventoryType(int type, String name) {
         this.type = (byte) type;
-    }
-
-    public byte getType() {
-        return type;
+        this.name = name;
     }
 
     public short getBitfieldEncoding() {

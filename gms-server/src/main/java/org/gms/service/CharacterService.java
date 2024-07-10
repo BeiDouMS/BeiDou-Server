@@ -1,5 +1,6 @@
 package org.gms.service;
 
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import org.gms.client.Character;
@@ -10,6 +11,7 @@ import org.gms.dto.ChrOnlineListReqDTO;
 import org.gms.dto.ChrOnlineListRtnDTO;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.BasePageUtil;
 import org.gms.util.I18nUtil;
 import org.springframework.stereotype.Service;
 
@@ -26,34 +28,20 @@ import static org.gms.dao.entity.table.ExtendValueDOTableDef.EXTEND_VALUE_D_O;
 public class CharacterService {
     private final ExtendValueMapper extendValueMapper;
 
-    public ChrOnlineListRtnDTO getChrOnlineList(ChrOnlineListReqDTO searchCondition) {
-        Collection<Character> chrList = Server.getInstance().getWorld(0).getPlayerStorage().getAllCharacters();
-
-        // 过滤符合条件的角色
-        List<ChrOnlineListRtnDTO.Chr> filteredList = chrList.stream()
-                .filter(chr -> (searchCondition.getId() == 0 || chr.getId() == searchCondition.getId()) &&
-                        (searchCondition.getName() == null || searchCondition.getName().equalsIgnoreCase("") || chr.getName().contains(searchCondition.getName())) &&
-                        (searchCondition.getMap() == 0 || chr.getMap().getId() == searchCondition.getMap()))
-                .skip((long) (searchCondition.getPage() - 1) * searchCondition.getSize())
-                .limit(searchCondition.getSize())
-                .map(chr -> {
-                    ChrOnlineListRtnDTO.Chr data = new ChrOnlineListRtnDTO.Chr();
-                    data.setId(chr.getId());
-                    data.setName(chr.getName());
-                    data.setMap(chr.getMap().getId());
-                    data.setJob(chr.getJob().getId());
-                    data.setLevel(chr.getLevel());
-                    data.setGm(chr.gmLevel());
-                    return data;
-                })
-                .collect(Collectors.toList());
-
-        // 构建返回对象
-        ChrOnlineListRtnDTO result = new ChrOnlineListRtnDTO();
-        result.setTotal(filteredList.size());
-        result.setData(filteredList);
-
-        return result;
+    public Page<ChrOnlineListRtnDTO> getChrOnlineList(ChrOnlineListReqDTO request) {
+        Collection<Character> chrList = Server.getInstance().getWorld(request.getWorld()).getPlayerStorage().getAllCharacters();
+        return BasePageUtil.create(chrList, request)
+                .filter(chr -> Objects.equals(chr.getId(), request.getId())
+                        || Objects.equals(chr.getName(), request.getName())
+                        || Objects.equals(chr.getMap().getId(), request.getMap()))
+                .page(chr -> ChrOnlineListRtnDTO.builder()
+                        .id(chr.getId())
+                        .name(chr.getName())
+                        .map(chr.getMap().getId())
+                        .job(chr.getJob().getId())
+                        .level(chr.getLevel())
+                        .gm(chr.gmLevel())
+                        .build());
     }
 
     public void updateRate(ExtendValueDO data) {
