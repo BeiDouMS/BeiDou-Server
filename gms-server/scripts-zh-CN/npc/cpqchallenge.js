@@ -43,9 +43,9 @@ function action(mode, type, selection) {
                 const GameConstants = Java.type('org.gms.constants.game.GameConstants');
                 var snd = "";
                 for (var i = 0; i < party.size(); i++) {
-                    snd += "#bName: " + party.get(i).getName() + " / (Level: " + party.get(i).getLevel() + ") / " + GameConstants.getJobName(party.get(i).getJobId()) + "#k\r\n\r\n";
+                    snd += "#b名称：" + party.get(i).getName() + " / (等级：" + party.get(i).getLevel() + ") / " + GameConstants.getJobName(party.get(i).getJobId()) + "#k\r\n\r\n";
                 }
-                cm.sendAcceptDecline(snd + "Would you like to fight this party at the Monster Carnival?");
+                cm.sendAcceptDecline(snd + "你想在怪物嘉年华上和这个队伍战斗吗？");
             } else {
                 cm.answerCPQChallenge(false);
                 cm.getChar().setChallenged(false);

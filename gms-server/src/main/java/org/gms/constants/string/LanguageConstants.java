@@ -26,19 +26,19 @@ public class LanguageConstants {
 
     }
 
-    public static String[] CPQBlue = new String[3];
-    public static String[] CPQError = new String[3];
-    public static String[] CPQEntry = new String[3];
-    public static String[] CPQFindError = new String[3];
-    public static String[] CPQRed = new String[3];
-    public static String[] CPQPlayerExit = new String[3];
-    public static String[] CPQEntryLobby = new String[3];
-    public static String[] CPQPickRoom = new String[3];
-    public static String[] CPQExtendTime = new String[3];
-    public static String[] CPQLeaderNotFound = new String[3];
-    public static String[] CPQChallengeRoomAnswer = new String[3];
-    public static String[] CPQChallengeRoomSent = new String[3];
-    public static String[] CPQChallengeRoomDenied = new String[3];
+    public static String[] CPQBlue = new String[4];
+    public static String[] CPQError = new String[4];
+    public static String[] CPQEntry = new String[4];
+    public static String[] CPQFindError = new String[4];
+    public static String[] CPQRed = new String[4];
+    public static String[] CPQPlayerExit = new String[4];
+    public static String[] CPQEntryLobby = new String[4];
+    public static String[] CPQPickRoom = new String[4];
+    public static String[] CPQExtendTime = new String[4];
+    public static String[] CPQLeaderNotFound = new String[4];
+    public static String[] CPQChallengeRoomAnswer = new String[4];
+    public static String[] CPQChallengeRoomSent = new String[4];
+    public static String[] CPQChallengeRoomDenied = new String[4];
 
     static {
         int lang;
@@ -93,8 +93,8 @@ public class LanguageConstants {
         LanguageConstants.CPQRed[lang] = "Maple Red";
         LanguageConstants.CPQPlayerExit[lang] = " left the Carnival of Monsters.";
         LanguageConstants.CPQExtendTime[lang] = "The time has been extended.";
-        LanguageConstants.CPQLeaderNotFound[lang] = "Could not find the Leader.";
-        LanguageConstants.CPQError[lang] = "There was a problem. Please re-create a room.";
+        LanguageConstants.CPQLeaderNotFound[lang] = "队长不存在";
+        LanguageConstants.CPQError[lang] = "发生了一些错误，请重新创建一个房间。";
         LanguageConstants.CPQPickRoom[lang] = "Sign up for the Monster Festival!\r\n";
         LanguageConstants.CPQChallengeRoomAnswer[lang] = "The group is currently facing a challenge.";
         LanguageConstants.CPQChallengeRoomSent[lang] = "A challenge has been sent to the group in the room. Please wait a while.";

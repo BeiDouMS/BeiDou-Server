@@ -19,6 +19,7 @@
 */
 package org.gms.net.server.coordinator.matchchecker;
 
+import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ronan
@@ -78,6 +80,8 @@ public class MatchCheckerCoordinator {
         private boolean active = true;
 
         private final String message;
+        @Getter
+        private final long beginTime = System.currentTimeMillis();
 
         private MatchCheckingElement(MatchCheckerType matchType, int leaderCid, int world, AbstractMatchCheckerListener leaderListener, Set<Integer> matchPlayers, String message) {
             this.leaderCid = leaderCid;
@@ -206,8 +210,11 @@ public class MatchCheckerCoordinator {
     }
 
     private boolean isMatchingAvailable(Set<Integer> matchPlayers) {
+        // 人物在嘉年华最多能呆13min，所以将冷却时间设置成13min，避免组队没解散，该人重进导致队友进度重置
+        final long MATCHING_TIMEOUT = TimeUnit.MINUTES.toMillis(13);
         for (Integer cid : matchPlayers) {
-            if (matchEntries.containsKey(cid)) {
+            MatchCheckingElement element = matchEntries.get(cid);
+            if (element != null && System.currentTimeMillis() - element.getBeginTime() > MATCHING_TIMEOUT) {
                 return false;
             }
         }
