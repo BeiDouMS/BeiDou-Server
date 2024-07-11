@@ -4,19 +4,25 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
+import org.gms.dto.ChannelListRtnDTO;
 import org.gms.net.server.Server;
 import org.gms.dto.ResultBody;
+import org.gms.service.ServerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/server")
 public class ServerController {
     private final ApplicationContext applicationContext;
+    private final ServerService serverService;
 
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "停止所有")
@@ -57,5 +63,19 @@ public class ServerController {
     @GetMapping("/" + ApiConstant.LATEST + "/online")
     public ResultBody<Boolean> online() {
         return ResultBody.success(Server.getInstance().isOnline());
+    }
+
+    @Tag(name = "/server/" + ApiConstant.LATEST)
+    @Operation(summary = "大区列表")
+    @GetMapping("/" + ApiConstant.LATEST + "/world/list")
+    public ResultBody<Object> worldList() {
+        return ResultBody.success(serverService.worldList());
+    }
+
+    @Tag(name = "/server/" + ApiConstant.LATEST)
+    @Operation(summary = "频道列表")
+    @GetMapping("/" + ApiConstant.LATEST + "/channel/list")
+    public ResultBody<List<ChannelListRtnDTO>> channelList(@RequestParam int worldId) {
+        return ResultBody.success(serverService.channelList(worldId));
     }
 }
