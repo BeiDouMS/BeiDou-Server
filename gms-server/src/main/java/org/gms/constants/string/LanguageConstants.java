@@ -89,19 +89,20 @@ public class LanguageConstants {
         LanguageConstants.CPQEntry[lang] = "You can select \"Summon Monsters\", \"Ability\", or \"Protector\" as your tactic during the Monster Carnival. Use Tab and F1 ~ F12 for quick access!";
 
         lang = Language.LANG_CN.getValue();
-        LanguageConstants.CPQBlue[lang] = "Maple Blue";
-        LanguageConstants.CPQRed[lang] = "Maple Red";
-        LanguageConstants.CPQPlayerExit[lang] = " left the Carnival of Monsters.";
-        LanguageConstants.CPQExtendTime[lang] = "The time has been extended.";
-        LanguageConstants.CPQLeaderNotFound[lang] = "队长不存在";
+        LanguageConstants.CPQBlue[lang] = "蓝队";
+        LanguageConstants.CPQRed[lang] = "红队";
+        LanguageConstants.CPQPlayerExit[lang] = "离开了怪物嘉年华。";
+        LanguageConstants.CPQExtendTime[lang] = "时间已经延长。";
+        LanguageConstants.CPQLeaderNotFound[lang] = "队长不存在！";
         LanguageConstants.CPQError[lang] = "发生了一些错误，请重新创建一个房间。";
-        LanguageConstants.CPQPickRoom[lang] = "Sign up for the Monster Festival!\r\n";
-        LanguageConstants.CPQChallengeRoomAnswer[lang] = "The group is currently facing a challenge.";
-        LanguageConstants.CPQChallengeRoomSent[lang] = "A challenge has been sent to the group in the room. Please wait a while.";
-        LanguageConstants.CPQChallengeRoomDenied[lang] = "The group in the room canceled your challenge.";
-        LanguageConstants.CPQFindError[lang] = "We could not find a group in this room.\r\nProbably the group was scrapped inside the room!";
-        LanguageConstants.CPQEntryLobby[lang] = "You will now receive challenges from other groups. If you do not accept a challenge within 3 minutes, you will be taken out.";
-        LanguageConstants.CPQEntry[lang] = "You can select \"Summon Monsters\", \"Ability\", or \"Protector\" as your tactic during the Monster Carnival. Use Tab and F1 ~ F12 for quick access!";
+        LanguageConstants.CPQPickRoom[lang] = "已报名怪物嘉年华！\r\n";
+        LanguageConstants.CPQChallengeRoomAnswer[lang] = "该队伍目前正在挑战中";
+        LanguageConstants.CPQChallengeRoomSent[lang] = "已经向房间里的队伍发送了一个挑战，请稍等。";
+        LanguageConstants.CPQChallengeRoomDenied[lang] = "房间里的队伍取消了你的挑战。";
+        LanguageConstants.CPQFindError[lang] = "该房间没有队伍\r\n也许该队伍已经解散了！";
+        LanguageConstants.CPQEntryLobby[lang] = "您现在将收到来自其他队伍的挑战。如果你在3分钟内不接受挑战，你将被淘汰。";
+        // todo Ability是什么？先机翻一下
+        LanguageConstants.CPQEntry[lang] = "在怪物嘉年华期间，你能使用\"召唤怪物\"，\"策略\" 或者 \"防守\"作为您的战术。使用Tab和F1~F12快速访问！";
 
     }
 
