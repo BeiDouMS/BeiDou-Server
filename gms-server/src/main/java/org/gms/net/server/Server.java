@@ -924,10 +924,6 @@ public class Server {
         tMan.register(new ExtendValueTask(), DAYS.toMillis(1), timeLeft);
     }
 
-    public static void main(String[] args) {
-        Server.getInstance().init();
-    }
-
     public Properties getSubnetInfo() {
         return subnetInfo;
     }
