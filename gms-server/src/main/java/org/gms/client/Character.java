@@ -22,19 +22,11 @@
  */
 package org.gms.client;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import org.gms.client.autoban.AutobanManager;
 import org.gms.client.creator.CharacterFactoryRecipe;
-import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.*;
 import org.gms.client.inventory.Equip.StatUpgrade;
-import org.gms.client.inventory.Inventory;
-import org.gms.client.inventory.InventoryProof;
-import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
-import org.gms.client.inventory.ItemFactory;
-import org.gms.client.inventory.ModifyInventory;
-import org.gms.client.inventory.Pet;
-import org.gms.client.inventory.PetDataFactory;
-import org.gms.client.inventory.WeaponType;
 import org.gms.client.inventory.manipulator.CashIdGenerator;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.keybind.KeyBinding;
@@ -51,38 +43,12 @@ import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.ServerConstants;
-import org.gms.constants.skills.Aran;
-import org.gms.constants.skills.Beginner;
-import org.gms.constants.skills.Bishop;
-import org.gms.constants.skills.BlazeWizard;
-import org.gms.constants.skills.Bowmaster;
-import org.gms.constants.skills.Brawler;
-import org.gms.constants.skills.Buccaneer;
-import org.gms.constants.skills.Corsair;
-import org.gms.constants.skills.Crusader;
-import org.gms.constants.skills.DarkKnight;
-import org.gms.constants.skills.DawnWarrior;
-import org.gms.constants.skills.Evan;
-import org.gms.constants.skills.FPArchMage;
-import org.gms.constants.skills.Hermit;
-import org.gms.constants.skills.Hero;
-import org.gms.constants.skills.ILArchMage;
-import org.gms.constants.skills.Legend;
-import org.gms.constants.skills.Magician;
-import org.gms.constants.skills.Marauder;
-import org.gms.constants.skills.Marksman;
-import org.gms.constants.skills.NightLord;
-import org.gms.constants.skills.Noblesse;
-import org.gms.constants.skills.Paladin;
-import org.gms.constants.skills.Priest;
-import org.gms.constants.skills.Ranger;
-import org.gms.constants.skills.Shadower;
-import org.gms.constants.skills.Sniper;
-import org.gms.constants.skills.ThunderBreaker;
-import org.gms.constants.skills.Warrior;
+import org.gms.constants.skills.*;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.ExtendValueDO;
+import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.mapper.ExtendValueMapper;
+import org.gms.dao.mapper.NamechangesMapper;
 import org.gms.manager.ServerManager;
 import org.gms.model.SkillEntry;
 import org.gms.net.packet.Packet;
@@ -96,99 +62,40 @@ import org.gms.net.server.guild.GuildCharacter;
 import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.services.task.world.CharacterSaveService;
 import org.gms.net.server.services.type.WorldServices;
-import org.gms.net.server.world.Messenger;
-import org.gms.net.server.world.MessengerCharacter;
-import org.gms.net.server.world.Party;
-import org.gms.net.server.world.PartyCharacter;
-import org.gms.net.server.world.PartyOperation;
-import org.gms.net.server.world.World;
-import org.gms.util.I18nUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.gms.net.server.world.*;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.scripting.item.ItemScriptManager;
-import org.gms.server.CashShop;
-import org.gms.server.ExpLogger;
+import org.gms.server.*;
 import org.gms.server.ExpLogger.ExpLogRecord;
-import org.gms.server.ItemInformationProvider;
 import org.gms.server.ItemInformationProvider.ScriptedItem;
-import org.gms.server.Marriage;
-import org.gms.server.Shop;
-import org.gms.server.StatEffect;
-import org.gms.server.Storage;
-import org.gms.server.ThreadManager;
-import org.gms.server.TimerManager;
-import org.gms.server.Trade;
 import org.gms.server.events.Events;
 import org.gms.server.events.RescueGaga;
 import org.gms.server.events.gm.Fitness;
 import org.gms.server.events.gm.Ola;
-import org.gms.server.life.MobSkill;
-import org.gms.server.life.MobSkillFactory;
-import org.gms.server.life.MobSkillId;
-import org.gms.server.life.MobSkillType;
-import org.gms.server.life.Monster;
-import org.gms.server.life.PlayerNPC;
-import org.gms.server.maps.AbstractAnimatedMapObject;
-import org.gms.server.maps.Door;
-import org.gms.server.maps.DoorObject;
-import org.gms.server.maps.Dragon;
-import org.gms.server.maps.FieldLimit;
-import org.gms.server.maps.HiredMerchant;
-import org.gms.server.maps.MapEffect;
-import org.gms.server.maps.MapItem;
-import org.gms.server.maps.MapManager;
-import org.gms.server.maps.MapObject;
-import org.gms.server.maps.MapObjectType;
-import org.gms.server.maps.MapleMap;
-import org.gms.server.maps.MiniGame;
+import org.gms.server.life.*;
+import org.gms.server.maps.*;
 import org.gms.server.maps.MiniGame.MiniGameResult;
-import org.gms.server.maps.PlayerShop;
-import org.gms.server.maps.PlayerShopItem;
-import org.gms.server.maps.Portal;
-import org.gms.server.maps.SavedLocation;
-import org.gms.server.maps.SavedLocationType;
-import org.gms.server.maps.Summon;
 import org.gms.server.minigame.RockPaperScissor;
 import org.gms.server.partyquest.AriantColiseum;
 import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.LongTool;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.Randomizer;
+import org.gms.service.CharacterService;
+import org.gms.tools.*;
 import org.gms.tools.exceptions.NotEnabledException;
 import org.gms.tools.packets.WeddingPackets;
+import org.gms.util.I18nUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.sql.*;
 import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -198,9 +105,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
+import static java.util.concurrent.TimeUnit.*;
+import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
@@ -10421,188 +10327,23 @@ public class Character extends AbstractCharacterObject {
         if (!pendingNameChange) {
             return;
         }
-
-        try (Connection con = DatabaseConnection.getConnection()) {
-            int nameChangeId = -1;
-            String newName = null;
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE characterid = ? AND completionTime IS NULL")) {
-                ps.setInt(1, getId());
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) {
-                        return;
-                    }
-                    nameChangeId = rs.getInt("id");
-                    newName = rs.getString("new");
-                }
-            } catch (SQLException e) {
-                log.error("Failed to retrieve pending name changes for chr {}", this.name, e);
-            }
-
-            con.setAutoCommit(false);
-            boolean success = doNameChange(con, getId(), getName(), newName, nameChangeId);
-            if (!success) {
-                con.rollback();
-            } else {
-                log.info("Name change applied: from {} to {}", this.name, newName);
-            }
-            con.setAutoCommit(true);
-        } catch (SQLException e) {
-            log.error("Failed to get DB connection for pending chr name change", e);
-        }
-    }
-
-    public static void doNameChange(int characterId, String oldName, String newName, int nameChangeId) { //Don't do this while player is online
-        try (Connection con = DatabaseConnection.getConnection()) {
-            con.setAutoCommit(false);
-            boolean success = doNameChange(con, characterId, oldName, newName, nameChangeId);
-            if (!success) {
-                con.rollback();
-            }
-            con.setAutoCommit(true);
-        } catch (SQLException e) {
-            log.error("Failed to get DB connection for chr name change", e);
-        }
-    }
-
-    public static boolean doNameChange(Connection con, int characterId, String oldName, String newName, int nameChangeId) {
-        try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET name = ? WHERE id = ?")) {
-            ps.setString(1, newName);
-            ps.setInt(2, characterId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error("Failed to perform chr name change in database for chrId {}", characterId, e);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE rings SET partnername = ? WHERE partnername = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error("Failed to update rings during chr name change for chrId {}", characterId, e);
-            return false;
-        }
-
-        /*try (PreparedStatement ps = con.prepareStatement("UPDATE playernpcs SET name = ? WHERE name = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE gifts SET `from` = ? WHERE `from` = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-        try (PreparedStatement ps = con.prepareStatement("UPDATE dueypackages SET SenderName = ? WHERE SenderName = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE dueypackages SET SenderName = ? WHERE SenderName = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE inventoryitems SET owner = ? WHERE owner = ?")) { //GMS doesn't do this
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE mts_items SET owner = ? WHERE owner = ?")) { //GMS doesn't do this
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE newyear SET sendername = ? WHERE sendername = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE newyear SET receivername = ? WHERE receivername = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE notes SET `to` = ? WHERE `to` = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE notes SET `from` = ? WHERE `from` = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("UPDATE nxcode SET retriever = ? WHERE retriever = ?")) {
-            ps.setString(1, newName);
-            ps.setString(2, oldName);
-            ps.executeUpdate();
-        } catch(SQLException e) { 
-            e.printStackTrace();
-            FilePrinter.printError(FilePrinter.CHANGE_CHARACTER_NAME, e, "Character ID : " + characterId);
-            return false;
-        }*/
-
-        if (nameChangeId != -1) {
-            try (PreparedStatement ps = con.prepareStatement("UPDATE namechanges SET completionTime = ? WHERE id = ?")) {
-                ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-                ps.setInt(2, nameChangeId);
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                log.error("Failed to save chr name change for chrId {}", nameChangeId, e);
-                return false;
+        NamechangesMapper namechangesMapper = ServerManager.getApplicationContext().getBean(NamechangesMapper.class);
+        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create(NAMECHANGES_D_O)
+                .select().where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()).and(NAMECHANGES_D_O.CHARACTERID.eq(getId())));
+        if (!namechangesDOList.isEmpty()) {
+            NamechangesDO namechangesDO = namechangesDOList.getFirst();
+            try {
+                CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+                characterService.doNameChange(NamechangesDO.builder()
+                        .id(namechangesDO.getId())
+                        .characterid(getId())
+                        .older(getName())
+                        .newer(namechangesDO.getNewer())
+                        .build());
+            } catch (Exception e) {
+                log.error("Failed to doNameChange", e);
             }
         }
-        return true;
     }
 
     public int checkWorldTransferEligibility() {
@@ -10619,65 +10360,6 @@ public class Character extends AbstractCharacterObject {
         } else {
             return 0;
         }
-    }
-
-    public static String checkWorldTransferEligibility(Connection con, int characterId, int oldWorld, int newWorld) {
-        if (!YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
-            return "World transfers disabled.";
-        }
-        int accountId = -1;
-        try (PreparedStatement ps = con.prepareStatement("SELECT accountid, level, guildid, guildrank, partnerId, familyId FROM characters WHERE id = ?")) {
-            ps.setInt(1, characterId);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                return "Character does not exist.";
-            }
-            accountId = rs.getInt("accountid");
-            if (rs.getInt("level") < 20) {
-                return "Character is under level 20.";
-            }
-            if (rs.getInt("familyId") != -1) {
-                return "Character is in family.";
-            }
-            if (rs.getInt("partnerId") != 0) {
-                return "Character is married.";
-            }
-            if (rs.getInt("guildid") != 0 && rs.getInt("guildrank") < 2) {
-                return "Character is the leader of a guild.";
-            }
-        } catch (SQLException e) {
-            log.error("Change character name", e);
-            return "SQL Error";
-        }
-        try (PreparedStatement ps = con.prepareStatement("SELECT tempban FROM accounts WHERE id = ?")) {
-            ps.setInt(1, accountId);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                return "Account does not exist.";
-            }
-            LocalDateTime tempban = rs.getTimestamp("tempban").toLocalDateTime();
-            if (!tempban.equals(DefaultDates.getTempban())) {
-                return "Account has been banned.";
-            }
-        } catch (SQLException e) {
-            log.error("Change character name", e);
-            return "SQL Error";
-        }
-        try (PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) AS rowcount FROM characters WHERE accountid = ? AND world = ?")) {
-            ps.setInt(1, accountId);
-            ps.setInt(2, newWorld);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                return "SQL Error";
-            }
-            if (rs.getInt("rowcount") >= 3) {
-                return "Too many characters on destination world.";
-            }
-        } catch (SQLException e) {
-            log.error("Change character name", e);
-            return "SQL Error";
-        }
-        return null;
     }
 
     public boolean registerWorldTransfer(int newWorld) {
@@ -10725,52 +10407,6 @@ public class Character extends AbstractCharacterObject {
             log.error("Failed to cancel pending world transfer for chr {}", getName(), e);
             return false;
         }
-    }
-
-    public static boolean doWorldTransfer(Connection con, int characterId, int oldWorld, int newWorld, int worldTransferId) {
-        int mesos = 0;
-        try (PreparedStatement ps = con.prepareStatement("SELECT meso FROM characters WHERE id = ?")) {
-            ps.setInt(1, characterId);
-            ResultSet rs = ps.executeQuery();
-            if (!rs.next()) {
-                log.warn("Character data invalid for world transfer? chrId {}", characterId);
-                return false;
-            }
-            mesos = rs.getInt("meso");
-        } catch (SQLException e) {
-            log.error("Failed to do world transfer for chrId {}", characterId, e);
-            return false;
-        }
-        try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET world = ?, meso = ?, guildid = ?, guildrank = ? WHERE id = ?")) {
-            ps.setInt(1, newWorld);
-            ps.setInt(2, Math.min(mesos, 1000000)); // might want a limit in "YamlConfig.config.server" for this
-            ps.setInt(3, 0);
-            ps.setInt(4, 5);
-            ps.setInt(5, characterId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error("Failed to update chrId {} during world transfer", characterId, e);
-            return false;
-        }
-        try (PreparedStatement ps = con.prepareStatement("DELETE FROM buddies WHERE characterid = ? OR buddyid = ?")) {
-            ps.setInt(1, characterId);
-            ps.setInt(2, characterId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error("Failed to delete buddies for chrId {} during world transfer", characterId, e);
-            return false;
-        }
-        if (worldTransferId != -1) {
-            try (PreparedStatement ps = con.prepareStatement("UPDATE worldtransfers SET completionTime = ? WHERE id = ?")) {
-                ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-                ps.setInt(2, worldTransferId);
-                ps.executeUpdate();
-            } catch (SQLException e) {
-                log.error("Failed to update world transfer for chrId {}", characterId, e);
-                return false;
-            }
-        }
-        return true;
     }
 
     public String getLastCommandMessage() {

@@ -21,6 +21,7 @@
  */
 package org.gms.net.server;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Family;
@@ -36,7 +37,9 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
+import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.NxcouponsDO;
+import org.gms.dao.entity.WorldtransfersDO;
 import org.gms.dao.mapper.*;
 import org.gms.database.note.NoteDao;
 import org.gms.manager.ServerManager;
@@ -59,6 +62,7 @@ import org.gms.server.TimerManager;
 import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.quest.Quest;
+import org.gms.service.CharacterService;
 import org.gms.service.NoteService;
 import org.gms.tools.DatabaseConnection;
 import org.gms.tools.Pair;
@@ -84,6 +88,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.*;
+import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
+import static org.gms.dao.entity.table.WorldtransfersDOTableDef.WORLDTRANSFERS_D_O;
 
 public class Server {
     static {
@@ -796,7 +802,7 @@ public class Server {
         // 利用虚拟线程，减少开销
         log.info(I18nUtil.getLogMessage("Server.init.info2"));
         try (ExecutorService initExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
-            // Run slow operations asynchronously to make startup faster
+            // 加载wz
             final List<Future<?>> futures = new ArrayList<>();
             futures.add(initExecutor.submit(SkillFactory::loadAllSkills));
             futures.add(initExecutor.submit(CashItemFactory::loadAllCashItems));
@@ -816,18 +822,21 @@ public class Server {
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
         log.info(I18nUtil.getLogMessage("Server.init.info4"));
+        // 重置登录状态和雇佣商店状态
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
         AccountsMapper accountsMapper = ServerManager.getApplicationContext().getBean(AccountsMapper.class);
         accountsMapper.updateAllLoggedIn(0);
         CharactersMapper charactersMapper = ServerManager.getApplicationContext().getBean(CharactersMapper.class);
         charactersMapper.updateAllHasMerchant(0);
 
+        // 清空失效的现金物品
         long timeClear = System.currentTimeMillis() - DAYS.toMillis(14);
         NxcodeItemsMapper nxcodeItemsMapper = ServerManager.getApplicationContext().getBean(NxcodeItemsMapper.class);
         nxcodeItemsMapper.clearExpirations(timeClear);
         NxcodeMapper nxcodeMapper = ServerManager.getApplicationContext().getBean(NxcodeMapper.class);
         nxcodeMapper.clearExpirations(timeClear);
 
+        // 重载倍率卡
         NxcouponsMapper nxcouponsMapper = ServerManager.getApplicationContext().getBean(NxcouponsMapper.class);
         List<NxcouponsDO> nxcouponsDOList = nxcouponsMapper.selectAll();
         couponRates.clear();
@@ -836,10 +845,35 @@ public class Server {
         NewYearCardRecord.startPendingNewYearCardRequests();
         CashIdGenerator.loadExistentCashIdsFromDb();
 
+        // 接受未完成的改名
+        CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+        NamechangesMapper namechangesMapper = ServerManager.getApplicationContext().getBean(NamechangesMapper.class);
+        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create(NAMECHANGES_D_O)
+                .select().where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()));
+        namechangesDOList.forEach(namechangesDO -> {
+            try {
+                characterService.doNameChange(namechangesDO);
+            } catch (Exception e) {
+                log.error(I18nUtil.getLogMessage("Server.init.error4"), e);
+            }
+        });
+
+        // 接受转区
+        WorldtransfersMapper worldtransfersMapper = ServerManager.getApplicationContext().getBean(WorldtransfersMapper.class);
+        List<WorldtransfersDO> worldtransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create(WORLDTRANSFERS_D_O)
+                .select().where(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull()));
+        worldtransfersDOList.forEach(worldtransfersDO -> {
+            try {
+                if (characterService.checkWorldTransferEligibility(worldtransfersDO)) {
+                    characterService.doWorldTransfer(worldtransfersDO);
+                }
+            } catch (Exception e) {
+                log.error(I18nUtil.getLogMessage("Server.init.error5"), e);
+            }
+        });
+
 
         try (Connection con = DatabaseConnection.getConnection()) {
-            applyAllNameChanges(con); // -- name changes can be missed by INSTANT_NAME_CHANGE --
-            applyAllWorldTransfers(con);
             PlayerNPC.loadRunningRankData(con, worldCount);
         } catch (SQLException sqle) {
             log.error(I18nUtil.getLogMessage("Server.init.error2"), sqle);
@@ -1525,99 +1559,6 @@ public class Server {
             return !accountChars.containsKey(accId);
         } finally {
             lgnRLock.unlock();
-        }
-    }
-
-    private static void applyAllNameChanges(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM namechanges WHERE completionTime IS NULL");
-             ResultSet rs = ps.executeQuery()) {
-            List<Pair<String, String>> changedNames = new LinkedList<>(); //logging only
-
-            con.setAutoCommit(false);
-            try {
-                while (rs.next()) {
-                    int nameChangeId = rs.getInt("id");
-                    int characterId = rs.getInt("characterId");
-                    String oldName = rs.getString("old");
-                    String newName = rs.getString("new");
-                    boolean success = Character.doNameChange(con, characterId, oldName, newName, nameChangeId);
-                    if (!success) {
-                        con.rollback(); //discard changes
-                    } else {
-                        con.commit();
-                        changedNames.add(new Pair<>(oldName, newName));
-                    }
-                }
-            } finally {
-                con.setAutoCommit(true);
-            }
-            //log
-            for (Pair<String, String> namePair : changedNames) {
-                log.info("Name change applied - from: \"{}\" to \"{}\"", namePair.getLeft(), namePair.getRight());
-            }
-        } catch (SQLException e) {
-            log.warn("Failed to retrieve list of pending name changes", e);
-            throw e;
-        }
-    }
-
-    private static void applyAllWorldTransfers(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("SELECT * FROM worldtransfers WHERE completionTime IS NULL",
-                ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-             ResultSet rs = ps.executeQuery()) {
-            List<Integer> removedTransfers = new LinkedList<>();
-            while (rs.next()) {
-                int nameChangeId = rs.getInt("id");
-                int characterId = rs.getInt("characterId");
-                int oldWorld = rs.getInt("from");
-                int newWorld = rs.getInt("to");
-                String reason = Character.checkWorldTransferEligibility(con, characterId, oldWorld, newWorld); //check if character is still eligible
-                if (reason != null) {
-                    removedTransfers.add(nameChangeId);
-                    log.info("World transfer canceled: chrId {}, reason {}", characterId, reason);
-                    try (PreparedStatement delPs = con.prepareStatement("DELETE FROM worldtransfers WHERE id = ?")) {
-                        delPs.setInt(1, nameChangeId);
-                        delPs.executeUpdate();
-                    } catch (SQLException e) {
-                        log.error("Failed to delete world transfer for chrId {}", characterId, e);
-                    }
-                }
-            }
-            rs.beforeFirst();
-            List<Pair<Integer, Pair<Integer, Integer>>> worldTransfers = new LinkedList<>(); //logging only <charid, <oldWorld, newWorld>>
-
-            con.setAutoCommit(false);
-            try {
-                while (rs.next()) {
-                    int nameChangeId = rs.getInt("id");
-                    if (removedTransfers.contains(nameChangeId)) {
-                        continue;
-                    }
-                    int characterId = rs.getInt("characterId");
-                    int oldWorld = rs.getInt("from");
-                    int newWorld = rs.getInt("to");
-                    boolean success = Character.doWorldTransfer(con, characterId, oldWorld, newWorld, nameChangeId);
-                    if (!success) {
-                        con.rollback();
-                    } else {
-                        con.commit();
-                        worldTransfers.add(new Pair<>(characterId, new Pair<>(oldWorld, newWorld)));
-                    }
-                }
-            } finally {
-                con.setAutoCommit(true);
-            }
-
-            //log
-            for (Pair<Integer, Pair<Integer, Integer>> worldTransferPair : worldTransfers) {
-                int charId = worldTransferPair.getLeft();
-                int oldWorld = worldTransferPair.getRight().getLeft();
-                int newWorld = worldTransferPair.getRight().getRight();
-                log.info("World transfer applied - character id {} from world {} to world {}", charId, oldWorld, newWorld);
-            }
-        } catch (SQLException e) {
-            log.warn("Failed to retrieve list of pending world transfers", e);
-            throw e;
         }
     }
 
