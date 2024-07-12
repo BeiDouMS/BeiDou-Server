@@ -173,6 +173,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
             c.setPlayer(player);
             c.setAccID(player.getAccountID());
+            
+            // 加载ImGui
+            player.broadcastAcquaintances(PacketCreator.showUI((byte) 0));
 
             boolean allowLogin = true;
 

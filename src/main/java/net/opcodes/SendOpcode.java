@@ -356,7 +356,8 @@ public enum SendOpcode {
     VEGA_SCROLL(0x166),
     
     DMG_STATIC(0x167),
-    SHOW_UI(0x168)
+    SHOW_UI(0x168),
+    OPEN_URL(0x169)
     ;
     private int code = -2;
 

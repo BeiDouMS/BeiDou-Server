@@ -6,11 +6,11 @@ import tools.PacketCreator;
 
 public class UICommand extends Command {
     {
-        setDescription("传送到自由市场");
+        setDescription("显示UI");
     }
 
     @Override
     public void execute(Client c, String[] params) {
-        c.getPlayer().broadcastAcquaintances(PacketCreator.showUI());
+        c.getPlayer().broadcastAcquaintances(PacketCreator.showUI((byte) 1));
     }
 }

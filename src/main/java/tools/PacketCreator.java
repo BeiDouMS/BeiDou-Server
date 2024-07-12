@@ -7440,14 +7440,24 @@ public class PacketCreator {
     public static Packet dmgStatic(Map<Character, Long> data, Long total) {
         OutPacket p = OutPacket.create(SendOpcode.DMG_STATIC);
         p.writeByte(data.size());
+        int rank = 1;
         for (Entry<Character, Long> e : data.entrySet()) {
             String percentage = total == 0 ? "0" : String.format("%.2f", (double) e.getValue() * 100 / total);
-            p.writeString(e.getKey().getName() + ": " + e.getValue() + " (" + percentage + "%)");     
+            p.writeString(rank + ". " + e.getKey().getName() + ": " + e.getValue() + " (" + percentage + "%%)");
+            rank++;
         }
         return p;
     }
 
-    public static Packet showUI() {
-        return OutPacket.create(SendOpcode.SHOW_UI);
+    public static Packet showUI(byte type) {
+        OutPacket p = OutPacket.create(SendOpcode.SHOW_UI);
+        p.writeByte(type);
+        return p;
+    }
+
+    public static Packet openUrl(String url) {
+        OutPacket p = OutPacket.create(SendOpcode.OPEN_URL);
+        p.writeString(url);
+        return p;
     }
 }
