@@ -22,7 +22,7 @@
 - DBeaver：https://dbeaver.io/download/
 
 ## 开发进展
-![20240620113952.png](mdimg/s1.png)
+![s1.jpeg](mdimg/s1.jpeg)
 
 # gms-ui web端
 
@@ -57,7 +57,9 @@ yarn dev
 ```
 
 ## 开发进展
-![20240620114452.png](mdimg/w1.png)
+![w1.jpeg](mdimg/w1.jpeg)
+![w2.jpeg](mdimg/w2.jpeg)
+![w3.jpeg](mdimg/w3.jpeg)
 
 # 客户端
 > **版号** 从1开始每次更新都+1，只为了区分不同版本，没有严格定义是更新功能还是修复bug。
