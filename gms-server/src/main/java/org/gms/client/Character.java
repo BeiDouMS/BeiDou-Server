@@ -10328,8 +10328,8 @@ public class Character extends AbstractCharacterObject {
             return;
         }
         NamechangesMapper namechangesMapper = ServerManager.getApplicationContext().getBean(NamechangesMapper.class);
-        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create(NAMECHANGES_D_O)
-                .select().where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()).and(NAMECHANGES_D_O.CHARACTERID.eq(getId())));
+        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
+                .where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()).and(NAMECHANGES_D_O.CHARACTERID.eq(getId())));
         if (!namechangesDOList.isEmpty()) {
             NamechangesDO namechangesDO = namechangesDOList.getFirst();
             try {

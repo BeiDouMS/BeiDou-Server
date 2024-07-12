@@ -1,8 +1,11 @@
 package org.gms.aop;
 
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.gms.service.UserDetailsServiceImpl;
@@ -19,7 +22,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
+import java.io.*;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
@@ -59,8 +62,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             logger.error("Cannot set user authentication", e);
         }
-
-        filterChain.doFilter(request, response);
+        // 替换成允许多次读取的HttpServletRequest
+        filterChain.doFilter(new CachedHttpServletRequest(request), response);
     }
 
     private String parseJwt(HttpServletRequest request) {
@@ -71,5 +74,65 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
 
         return null;
+    }
+
+    private static class CachedHttpServletRequest extends HttpServletRequestWrapper {
+
+        private byte[] cachedBody;
+
+        public CachedHttpServletRequest(HttpServletRequest request) throws IOException {
+            super(request);
+            cacheRequestBody(request);
+        }
+
+        private void cacheRequestBody(HttpServletRequest request) throws IOException {
+            InputStream requestInputStream = request.getInputStream();
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = requestInputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+            this.cachedBody = byteArrayOutputStream.toByteArray();
+        }
+
+        @Override
+        public BufferedReader getReader() {
+            return new BufferedReader(new InputStreamReader(getInputStream()));
+        }
+
+        @Override
+        public ServletInputStream getInputStream() {
+            return new CachedServletInputStream(this.cachedBody);
+        }
+    }
+
+    private static class CachedServletInputStream extends ServletInputStream {
+
+        private final ByteArrayInputStream byteArrayInputStream;
+
+        public CachedServletInputStream(byte[] cachedBody) {
+            this.byteArrayInputStream = new ByteArrayInputStream(cachedBody);
+        }
+
+        @Override
+        public boolean isFinished() {
+            return byteArrayInputStream.available() == 0;
+        }
+
+        @Override
+        public boolean isReady() {
+            return true;
+        }
+
+        @Override
+        public void setReadListener(ReadListener listener) {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public int read() {
+            return byteArrayInputStream.read();
+        }
     }
 }

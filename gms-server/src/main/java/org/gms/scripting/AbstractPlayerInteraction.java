@@ -62,6 +62,7 @@ import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 
 import java.awt.*;
+import java.sql.Date;
 import java.util.List;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -1286,6 +1287,43 @@ public class AbstractPlayerInteraction {
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
+    public void saveOrUpdateExtendValue(String extendId, String extendType, String extendName, String extendValue) {
+        ExtendValueDO extendValueDO = getExtendValue(extendId, extendType, extendName);
+        ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
+        if (extendValueDO == null) {
+            extendValueMapper.insert(ExtendValueDO.builder()
+                    .extendId(extendId)
+                    .extendType(extendType)
+                    .extendName(extendName)
+                    .extendValue(extendValue)
+                    .createTime(new Date(System.currentTimeMillis()))
+                    .build());
+        } else {
+            extendValueDO.setCreateTime(null);
+            extendValueDO.setUpdateTime(new Date(System.currentTimeMillis()));
+            extendValueDO.setExtendValue(extendValue);
+            extendValueMapper.update(extendValueDO);
+        }
+    }
+
+    public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue) {
+        saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName, extendValue);
+    }
+
+    public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue, boolean isDaily) {
+        saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
+                extendName, extendValue);
+    }
+
+    public void saveOrUpdateAccountExtendValue(String extendName, String extendValue) {
+        saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
+    }
+
+    public void saveOrUpdateAccountExtendValue(String extendName, String extendValue, boolean isDaily) {
+        saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
+                extendName, extendValue);
+    }
+
     /**
      * 获取扩展表字段
      *
@@ -1303,24 +1341,24 @@ public class AbstractPlayerInteraction {
     /**
      * 发装备，除id外都可以传null，传null取装备默认属性
      *
-     * @param itemId 装备id
-     * @param attStr 力量
-     * @param attDex 敏捷
-     * @param attInt 智力
-     * @param attLuk 运气
-     * @param attHp 血量
-     * @param attMp 蓝量
-     * @param pAtk 物理攻击
-     * @param mAtk 魔法攻击
-     * @param pDef 物理防御
-     * @param mDef 魔法防御
-     * @param acc 命中
-     * @param avoid 回避
-     * @param hands 攻击速度
-     * @param speed 移动速度
-     * @param jump 跳跃
+     * @param itemId      装备id
+     * @param attStr      力量
+     * @param attDex      敏捷
+     * @param attInt      智力
+     * @param attLuk      运气
+     * @param attHp       血量
+     * @param attMp       蓝量
+     * @param pAtk        物理攻击
+     * @param mAtk        魔法攻击
+     * @param pDef        物理防御
+     * @param mDef        魔法防御
+     * @param acc         命中
+     * @param avoid       回避
+     * @param hands       攻击速度
+     * @param speed       移动速度
+     * @param jump        跳跃
      * @param upgradeSlot 可升级次数
-     * @param expireTime 失效时间，-1为不失效 来自 @leevccc 的建议，传值则为分钟
+     * @param expireTime  失效时间，-1为不失效 来自 @leevccc 的建议，传值则为分钟
      */
     public void gainEquip(int itemId, Short attStr, Short attDex, Short attInt, Short attLuk, Short attHp, Short attMp,
                           Short pAtk, Short mAtk, Short pDef, Short mDef, Short acc, Short avoid, Short hands, Short speed,

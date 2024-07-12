@@ -19,7 +19,7 @@ public class RequireUtil {
         if (msg == null) {
             throw new IllegalArgumentException();
         } else {
-            throw new BizException(BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
+            throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
         }
     }
 
@@ -35,7 +35,7 @@ public class RequireUtil {
         if (msg == null) {
             throw new IllegalArgumentException();
         } else {
-            throw new BizException(BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
+            throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
         }
     }
 
@@ -52,7 +52,7 @@ public class RequireUtil {
         if (msg == null) {
             throw new IllegalArgumentException();
         } else {
-            throw new BizException(BizExceptionEnum.BODY_NOT_MATCH.getResultCode(), msg);
+            throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), msg);
         }
     }
 

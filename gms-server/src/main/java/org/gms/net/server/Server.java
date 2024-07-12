@@ -848,8 +848,8 @@ public class Server {
         // 接受未完成的改名
         CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
         NamechangesMapper namechangesMapper = ServerManager.getApplicationContext().getBean(NamechangesMapper.class);
-        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create(NAMECHANGES_D_O)
-                .select().where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()));
+        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
+                .where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()));
         namechangesDOList.forEach(namechangesDO -> {
             try {
                 characterService.doNameChange(namechangesDO);
@@ -860,8 +860,8 @@ public class Server {
 
         // 接受转区
         WorldtransfersMapper worldtransfersMapper = ServerManager.getApplicationContext().getBean(WorldtransfersMapper.class);
-        List<WorldtransfersDO> worldtransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create(WORLDTRANSFERS_D_O)
-                .select().where(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull()));
+        List<WorldtransfersDO> worldtransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create()
+                .where(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull()));
         worldtransfersDOList.forEach(worldtransfersDO -> {
             try {
                 if (characterService.checkWorldTransferEligibility(worldtransfersDO)) {

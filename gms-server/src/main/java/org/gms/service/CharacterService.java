@@ -12,6 +12,7 @@ import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
 import org.gms.dto.ChrOnlineListReqDTO;
 import org.gms.dto.ChrOnlineListRtnDTO;
+import org.gms.exception.BizException;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.util.BasePageUtil;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
@@ -60,9 +62,16 @@ public class CharacterService {
     public void updateRate(ExtendValueDO data) {
         checkName(data);
         data.setExtendType(ExtendType.CHARACTER_EXTEND.getType());
-        data.setCreateTime(null);
-        data.setUpdateTime(new Date(System.currentTimeMillis()));
-        extendValueMapper.insertOrUpdateSelective(data);
+        List<ExtendValueDO> extendValueDOList = extendValueMapper.selectExtend(data.getExtendId(), data.getExtendType(), data.getExtendName());
+        if (RequireUtil.isEmpty(extendValueDOList)) {
+            data.setCreateTime(new Date(System.currentTimeMillis()));
+            extendValueMapper.insert(data);
+        } else {
+            data.setCreateTime(null);
+            data.setUpdateTime(new Date(System.currentTimeMillis()));
+            extendValueMapper.update(data);
+        }
+
         Character character = getCharacter(data);
         character.resetPlayerRates();
         character.setWorldRates();
@@ -82,6 +91,7 @@ public class CharacterService {
     }
 
     public void resetRates(ExtendValueDO data) {
+        check(data);
         extendValueMapper.deleteByQuery(QueryWrapper.create()
                 .where(EXTEND_VALUE_D_O.EXTEND_ID.eq(data.getExtendId()))
                 .and(EXTEND_VALUE_D_O.EXTEND_TYPE.eq(ExtendType.CHARACTER_EXTEND.getType()))
@@ -136,8 +146,7 @@ public class CharacterService {
             return false;
         }
         // 判断名字是否被占用
-        long count = charactersMapper.selectCountByQuery(QueryWrapper.create(CHARACTERS_D_O)
-                .select()
+        long count = charactersMapper.selectCountByQuery(QueryWrapper.create()
                 .where(CHARACTERS_D_O.NAME.eq(charactersDO.getName()))
                 .and(CHARACTERS_D_O.WORLD.eq(data.getTo())));
         if (count > 0) {
@@ -171,13 +180,19 @@ public class CharacterService {
     }
 
     private void checkName(ExtendValueDO data) {
+        check(data);
         // 非法请求篡改其他字段
         if ("expRate".equals(data.getExtendName()) || "dropRate".equals(data.getExtendName()) || "mesoRate".equals(data.getExtendName())) {
             return;
         }
-        throw new IllegalArgumentException();
+        throw BizException.illegalArgument();
     }
 
+    private void check(ExtendValueDO data) {
+        RequireUtil.requireNotEmpty(data.getExtendId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "extendId"));
+        RequireUtil.requireNotEmpty(data.getExtendType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "extendType"));
+        RequireUtil.requireNotEmpty(data.getExtendName(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "extendName"));
+    }
 
     private Character getCharacter(ExtendValueDO data) {
         for (World world : Server.getInstance().getWorlds()) {
@@ -191,7 +206,6 @@ public class CharacterService {
                 }
             }
         }
-
-        throw new IllegalArgumentException(I18nUtil.getExceptionMessage("CharacterService.getCharacter.exception1"));
+        throw BizException.illegalArgument(I18nUtil.getExceptionMessage("CharacterService.getCharacter.exception1"));
     }
 }

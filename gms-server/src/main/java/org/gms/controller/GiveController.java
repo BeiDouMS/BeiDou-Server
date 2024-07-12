@@ -19,7 +19,7 @@ public class GiveController {
     @Autowired
     private final GiveService giveService;
 
-    @Tag(name = "/" + ApiConstant.LATEST)
+    @Tag(name = "/give/" + ApiConstant.LATEST)
     @Operation(summary = "给玩家分发资源")
     @PostMapping("/" + ApiConstant.LATEST + "/resource")
     public ResultBody<Object> giveResource(@RequestBody SubmitBody<GiveResourceReqDTO> submitBody) {

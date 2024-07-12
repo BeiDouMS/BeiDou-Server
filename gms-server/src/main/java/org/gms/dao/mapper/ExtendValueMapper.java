@@ -2,6 +2,7 @@ package org.gms.dao.mapper;
 
 import com.mybatisflex.core.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.gms.dao.entity.ExtendValueDO;
 
@@ -16,8 +17,8 @@ import java.util.List;
  */
 public interface ExtendValueMapper extends BaseMapper<ExtendValueDO> {
     @Delete("delete from extend_value where extend_type = #{extendType} and create_time < #{createTime}")
-    void clean(String extendType, Date createTime);
+    void clean(@Param("extendType") String extendType, @Param("createTime") Date createTime);
 
     @Select("select * from extend_value where extend_id = #{extendId} and extend_type = #{extendType} and extend_name = #{extendName} limit 1")
-    List<ExtendValueDO> selectExtend(String extendId, String extendType, String extendName);
+    List<ExtendValueDO> selectExtend(@Param("extendId") String extendId, @Param("extendType") String extendType, @Param("extendName") String extendName);
 }

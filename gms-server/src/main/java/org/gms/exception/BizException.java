@@ -48,6 +48,23 @@ public class BizException extends RuntimeException {
         this.errorMsg = errorMsg;
     }
 
+    public static BizException illegalArgument() {
+        return new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS);
+    }
+
+    public static BizException illegalArgument(String errorMsg) {
+        return new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), errorMsg);
+    }
+
+    public static void throwIllegalArgument() {
+        // 在这里throw堆栈会多一层
+        throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS);
+    }
+
+    public static void throwIllegalArgument(String errorMsg) {
+        // 在这里throw堆栈会多一层
+        throw new BizException(BizExceptionEnum.ILLEGAL_PARAMETERS.getResultCode(), errorMsg);
+    }
 
     public String getMessage() {
         return errorMsg;

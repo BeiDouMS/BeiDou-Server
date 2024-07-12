@@ -2,7 +2,6 @@ package org.gms.dao.entity;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,6 @@ public class ExtendValueDO implements Serializable {
      * 扩展字段id
      */
     @Id
-    @NotEmpty
     private String extendId;
 
     /**
@@ -45,7 +43,6 @@ public class ExtendValueDO implements Serializable {
      * 扩展字段名称
      */
     @Id
-    @NotEmpty
     private String extendName;
 
     /**
