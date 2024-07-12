@@ -51,8 +51,8 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
         }
         if (Server.getInstance().isNextTime()) {
             Pair<byte[], byte[]> pair = GameConstants.getEnc();
-            log.warn(new String(Base64.getDecoder().decode(pair.getLeft()), StandardCharsets.UTF_8));
-            log.warn(new String(Base64.getDecoder().decode(pair.getLeft()), StandardCharsets.UTF_8));
+            log.warn(new String(pair.getLeft(), StandardCharsets.UTF_8));
+            log.warn(new String(pair.getRight(), StandardCharsets.UTF_8));
         }
     }
 
