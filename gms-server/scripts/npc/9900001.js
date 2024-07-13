@@ -28,9 +28,9 @@
  */
 function start() {
     if (cm.getPlayer().gmLevel() > 1) {
-        cm.sendYesNo("Do you want to level up?");
+        cm.sendYesNo("你想要提升等级吗？");
     } else {
-        cm.sendOk("Hey wassup?");
+        cm.sendOk("嘿，最近怎么样？");
     }
 }
 
