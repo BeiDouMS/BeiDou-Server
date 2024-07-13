@@ -23,6 +23,7 @@
 	NPC Name: 		Robin
 	Map(s): 		Maple Road : Snail Hunting Ground I (40000)
 	Description: 		Beginner Helper
+	已经人工翻译
 */
 var status;
 var sel;
