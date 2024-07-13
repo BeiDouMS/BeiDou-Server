@@ -18,7 +18,7 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            cm.sendYesNo("你想要跳过教程，直接前往明珠港吗？");
+            cm.sendYesNo("您想要跳过教程，直接前往明珠港吗？");
         } else if (status == 1) {
             cm.warp(104000000, 0);
             cm.dispose();
