@@ -1291,7 +1291,7 @@ public class AbstractPlayerInteraction {
         ExtendValueDO extendValueDO = getExtendValue(extendId, extendType, extendName);
         ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
         if (extendValueDO == null) {
-            extendValueMapper.insert(ExtendValueDO.builder()
+            extendValueMapper.insertSelective(ExtendValueDO.builder()
                     .extendId(extendId)
                     .extendType(extendType)
                     .extendName(extendName)

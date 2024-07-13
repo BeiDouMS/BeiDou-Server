@@ -23,6 +23,7 @@
 */
 package org.gms.client.command;
 
+import lombok.Getter;
 import org.gms.client.Client;
 import org.gms.client.command.commands.gm0.ChangeLanguageCommand;
 import org.gms.client.command.commands.gm0.DisposeCommand;
@@ -210,6 +211,7 @@ import java.util.List;
 
 public class CommandsExecutor {
     private static final Logger log = LoggerFactory.getLogger(CommandsExecutor.class);
+    @Getter
     private static final CommandsExecutor instance = new CommandsExecutor();
     private static final char USER_HEADING = '@';
     private static final char GM_HEADING = '!';
@@ -217,10 +219,6 @@ public class CommandsExecutor {
     private final HashMap<String, Command> registeredCommands = new HashMap<>();
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
     private Pair<List<String>, List<String>> levelCommandsCursor;
-
-    public static CommandsExecutor getInstance() {
-        return instance;
-    }
 
     public static boolean isCommand(Client client, String content) {
         char heading = content.charAt(0);
@@ -230,7 +228,7 @@ public class CommandsExecutor {
         return heading == USER_HEADING;
     }
 
-    private CommandsExecutor() {
+    public void loadCommandsExecutor() {
         registerLv0Commands();
         registerLv1Commands();
         registerLv2Commands();

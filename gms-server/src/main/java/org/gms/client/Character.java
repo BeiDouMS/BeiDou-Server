@@ -22,16 +22,15 @@
  */
 package org.gms.client;
 
-import com.mybatisflex.core.query.QueryWrapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.gms.client.autoban.AutobanManager;
 import org.gms.client.creator.CharacterFactoryRecipe;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.Equip.StatUpgrade;
-import org.gms.client.inventory.manipulator.CashIdGenerator;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
-import org.gms.client.newyear.NewYearCardRecord;
 import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.YamlConfig;
@@ -46,10 +45,9 @@ import org.gms.constants.net.ServerConstants;
 import org.gms.constants.skills.*;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.ExtendValueDO;
-import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.mapper.ExtendValueMapper;
-import org.gms.dao.mapper.NamechangesMapper;
 import org.gms.manager.ServerManager;
+import org.gms.model.NewYearCardRecord;
 import org.gms.model.SkillEntry;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerBuffValueHolder;
@@ -82,10 +80,11 @@ import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
-import org.gms.service.CharacterService;
+import org.gms.service.NameChangeService;
 import org.gms.tools.*;
 import org.gms.tools.exceptions.NotEnabledException;
 import org.gms.tools.packets.WeddingPackets;
+import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,13 +105,15 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
-import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
 
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
     private int world;
-    private int accountid, id, level;
+    @Getter
+    @Setter
+    private int id;
+    private int accountid, level;
     private int rank, rankMove, jobRank, jobRankMove;
     private int gender, hair, face;
     private int fame, quest_fame;
@@ -148,6 +149,8 @@ public class Character extends AbstractCharacterObject {
     private String linkedName = null;
     private boolean finishedDojoTutorial;
     private boolean usedStorage = false;
+    @Getter
+    @Setter
     private String name;
     private String chalktext;
     private String commandtext;
@@ -4918,9 +4921,6 @@ public class Character extends AbstractCharacterObject {
         return hiredMerchant;
     }
 
-    public int getId() {
-        return id;
-    }
 
     public static int getAccountIdByName(String name) {
         final int id;
@@ -5254,10 +5254,6 @@ public class Character extends AbstractCharacterObject {
 
     public Messenger getMessenger() {
         return messenger;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public int getNextEmptyPetIndex() {
@@ -8893,10 +8889,6 @@ public class Character extends AbstractCharacterObject {
         this.bookCover = bookCover;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setRPS(RockPaperScissor rps) {
         this.rps = rps;
     }
@@ -9732,7 +9724,7 @@ public class Character extends AbstractCharacterObject {
         Set<NewYearCardRecord> received = new LinkedHashSet<>();
 
         for (NewYearCardRecord nyc : newyears) {
-            if (nyc.isReceiverCardReceived()) {
+            if (nyc.isReceiverReceivedCard()) {
                 received.add(nyc);
             }
         }
@@ -10327,23 +10319,8 @@ public class Character extends AbstractCharacterObject {
         if (!pendingNameChange) {
             return;
         }
-        NamechangesMapper namechangesMapper = ServerManager.getApplicationContext().getBean(NamechangesMapper.class);
-        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
-                .where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()).and(NAMECHANGES_D_O.CHARACTERID.eq(getId())));
-        if (!namechangesDOList.isEmpty()) {
-            NamechangesDO namechangesDO = namechangesDOList.getFirst();
-            try {
-                CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
-                characterService.doNameChange(NamechangesDO.builder()
-                        .id(namechangesDO.getId())
-                        .characterid(getId())
-                        .older(getName())
-                        .newer(namechangesDO.getNewer())
-                        .build());
-            } catch (Exception e) {
-                log.error("Failed to doNameChange", e);
-            }
-        }
+        NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+        nameChangeService.applyNameChange(getId(), getName());
     }
 
     public int checkWorldTransferEligibility() {

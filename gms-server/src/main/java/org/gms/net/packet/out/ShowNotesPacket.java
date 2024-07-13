@@ -1,6 +1,6 @@
 package org.gms.net.packet.out;
 
-import org.gms.model.Note;
+import org.gms.dao.entity.NotesDO;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.ByteBufOutPacket;
 import org.gms.tools.PacketCreator;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 public final class ShowNotesPacket extends ByteBufOutPacket {
 
-    public ShowNotesPacket(List<Note> notes) {
+    public ShowNotesPacket(List<NotesDO> notes) {
         super(SendOpcode.MEMO_RESULT);
         Objects.requireNonNull(notes);
 
@@ -19,11 +19,11 @@ public final class ShowNotesPacket extends ByteBufOutPacket {
         notes.forEach(this::writeNote);
     }
 
-    private void writeNote(Note note) {
-        writeInt(note.id());
-        writeString(note.from() + " "); //Stupid nexon forgot space lol
-        writeString(note.message());
-        writeLong(PacketCreator.getTime(note.timestamp()));
-        writeByte(note.fame());
+    private void writeNote(NotesDO note) {
+        writeInt(note.getId());
+        writeString(note.getFrom() + " "); //Stupid nexon forgot space lol
+        writeString(note.getMessage());
+        writeLong(PacketCreator.getTime(note.getTimestamp()));
+        writeByte(note.getFame());
     }
 }

@@ -22,7 +22,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Item;
-import org.gms.client.newyear.NewYearCardRecord;
+import org.gms.model.NewYearCardRecord;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
@@ -93,8 +93,8 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
 
             NewYearCardRecord newyear = NewYearCardRecord.loadNewYearCard(cardid);
 
-            if (newyear != null && newyear.getReceiverId() == player.getId() && !newyear.isReceiverCardReceived()) {
-                if (!newyear.isSenderCardDiscarded()) {
+            if (newyear != null && newyear.getReceiverId() == player.getId() && !newyear.isReceiverReceivedCard()) {
+                if (!newyear.isSenderDiscardCard()) {
                     if (player.canHold(ItemId.NEW_YEARS_CARD_RECEIVED, 1)) {
                         newyear.stopNewYearCardTask();
                         NewYearCardRecord.updateNewYearCard(newyear);

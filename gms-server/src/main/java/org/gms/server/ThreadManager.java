@@ -19,6 +19,8 @@
 */
 package org.gms.server;
 
+import lombok.Getter;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -28,11 +30,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * @author Ronan
  */
 public class ThreadManager {
+    @Getter
     private static final ThreadManager instance = new ThreadManager();
-
-    public static ThreadManager getInstance() {
-        return instance;
-    }
 
     private ExecutorService executorService;
 

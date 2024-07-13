@@ -30,7 +30,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ModifyInventory;
 import org.gms.client.inventory.Pet;
-import org.gms.client.newyear.NewYearCardRecord;
+import org.gms.model.NewYearCardRecord;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;

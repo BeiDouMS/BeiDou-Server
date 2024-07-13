@@ -383,10 +383,12 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         } else if (itemType == 509) {
             String sendTo = p.readString();
             String msg = p.readString();
-            boolean sendSuccess = noteService.sendNormal(msg, player.getName(), sendTo);
-            if (sendSuccess) {
+            try {
+                noteService.sendNormal(msg, player.getName(), sendTo);
                 remove(c, position, itemId);
                 c.sendPacket(new SendNoteSuccessPacket());
+            } catch (Exception e) {
+                log.error("Error sending note", e);
             }
         } else if (itemType == 510) {
             player.getMap().broadcastMessage(PacketCreator.musicChange("Jukebox/Congratulation"));

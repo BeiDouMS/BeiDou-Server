@@ -2,10 +2,7 @@ package org.gms.tools;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.gms.config.YamlConfig;
-import org.gms.database.note.NoteRowMapper;
 import org.gms.manager.ServerManager;
-import org.jdbi.v3.core.Handle;
-import org.jdbi.v3.core.Jdbi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,18 +21,9 @@ import java.util.Properties;
 public class DatabaseConnection {
     private static final Logger log = LoggerFactory.getLogger(DatabaseConnection.class);
     private static DruidDataSource dataSource;
-    private static Jdbi jdbi;
 
     public static Connection getConnection() throws SQLException {
         return ServerManager.getApplicationContext().getBean(DataSource.class).getConnection();
-    }
-
-    public static Handle getHandle() {
-        if (jdbi == null) {
-            initializeJdbi(ServerManager.getApplicationContext().getBean(DataSource.class));
-        }
-
-        return jdbi.open();
     }
 
     private static String getDbUrl() {
@@ -48,12 +36,10 @@ public class DatabaseConnection {
 
     /**
      * Initiate connection to the database
-     *
-     * @return true if connection to the database initiated successfully, false if not successful
      */
-    public static boolean initializeConnectionPool() {
+    public static void initializeConnectionPool() {
         if (dataSource != null) {
-            return true;
+            return;
         }
 
         try {
@@ -70,18 +56,10 @@ public class DatabaseConnection {
             dataSource.configFromPropeties(properties);
             // 测试一次连接，避免后面报错
             dataSource.validateConnection(dataSource.getConnection());
-            initializeJdbi(dataSource);
             long initDuration = Duration.between(initStart, Instant.now()).toMillis();
             log.info("数据库连接池初始化完成，耗时：{} s", initDuration / 1000.0);
-            return true;
         } catch (Exception e) {
             log.error("数据库连接池初始化失败：{}", e.getMessage(), e);
         }
-        return false;
-    }
-
-    private static void initializeJdbi(DataSource dataSource) {
-        jdbi = Jdbi.create(dataSource)
-                .registerRowMapper(new NoteRowMapper());
     }
 }

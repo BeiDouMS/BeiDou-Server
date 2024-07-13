@@ -81,7 +81,7 @@ public class AccountController {
     @Operation(summary = "重置在线状态")
     @PutMapping("/" + ApiConstant.LATEST + "/{id}/reset/logged")
     public ResultBody<Object> resetLoggedIn(@PathVariable("id") int id) {
-        accountService.resetLoggedIn(id);
+        accountService.resetAllLoggedIn(id);
         return ResultBody.success();
     }
 

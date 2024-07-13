@@ -1,61 +1,49 @@
 package org.gms.service;
 
+import com.mybatisflex.core.query.QueryWrapper;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
-import org.gms.database.DaoException;
-import org.gms.database.note.NoteDao;
-import org.gms.model.Note;
+import org.gms.dao.entity.NotesDO;
+import org.gms.dao.mapper.NotesMapper;
 import org.gms.net.packet.out.ShowNotesPacket;
 import org.gms.net.server.Server;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.gms.dao.entity.table.NotesDOTableDef.NOTES_D_O;
+
+@Service
+@AllArgsConstructor
+@Slf4j
 public class NoteService {
-    private static final Logger log = LoggerFactory.getLogger(NoteService.class);
-
-    private final NoteDao noteDao;
-
-    public NoteService(NoteDao noteDao) {
-        this.noteDao = noteDao;
-    }
+    private final NotesMapper notesMapper;
 
     /**
      * Send normal note from one character to another
-     *
-     * @return Send success
      */
-    public boolean sendNormal(String message, String senderName, String receiverName) {
-        Note normalNote = Note.createNormal(message, senderName, receiverName, Server.getInstance().getCurrentTime());
-        return send(normalNote);
+    public void sendNormal(String message, String senderName, String receiverName) {
+        notesMapper.insertSelective(NotesDO.builder()
+                .message(message)
+                .from(senderName)
+                .to(receiverName)
+                .timestamp(Server.getInstance().getCurrentTime())
+                .build());
     }
 
     /**
      * Send note which will increase the receiver's fame by one.
-     *
-     * @return Send success
      */
-    public boolean sendWithFame(String message, String senderName, String receiverName) {
-        Note noteWithFame = Note.createGift(message, senderName, receiverName, Server.getInstance().getCurrentTime());
-        return send(noteWithFame);
-    }
-
-    private boolean send(Note note) {
-        // TODO: handle the following cases (originally listed at PacketCreator#noteError)
-        /*
-         *  0 = Player online, use whisper
-         *  1 = Check player's name
-         *  2 = Receiver inbox full
-         */
-        try {
-            noteDao.save(note);
-            return true;
-        } catch (DaoException e) {
-            log.error("Failed to send note {}", note, e);
-            return false;
-        }
+    public void sendWithFame(String message, String senderName, String receiverName) {
+        notesMapper.insertSelective(NotesDO.builder()
+                .message(message)
+                .from(senderName)
+                .to(receiverName)
+                .timestamp(Server.getInstance().getCurrentTime())
+                .fame(1)
+                .build());
     }
 
     /**
@@ -68,28 +56,13 @@ public class NoteService {
             throw new IllegalArgumentException("Unable to show notes - chr is null");
         }
 
-        List<Note> notes = getNotes(chr.getName());
-        if (notes.isEmpty()) {
-            return;
+        List<NotesDO> notesDOList = notesMapper.selectListByQuery(QueryWrapper.create()
+                .from(NOTES_D_O)
+                .where(NOTES_D_O.DELETED.eq(0))
+                .and(NOTES_D_O.TO.eq(chr.getName())));
+        if (!notesDOList.isEmpty()) {
+            chr.sendPacket(new ShowNotesPacket(notesDOList));
         }
-
-        chr.sendPacket(new ShowNotesPacket(notes));
-    }
-
-    private List<Note> getNotes(String to) {
-        final List<Note> notes;
-        try {
-            notes = noteDao.findAllByTo(to);
-        } catch (DaoException e) {
-            log.error("Failed to find notes sent to chr name {}", to, e);
-            return Collections.emptyList();
-        }
-
-        if (notes == null || notes.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return notes;
     }
 
     /**
@@ -98,10 +71,12 @@ public class NoteService {
      * @param noteId Id of note to discard
      * @return Discarded note. Empty optional if failed to discard.
      */
-    public Optional<Note> delete(int noteId) {
+    public Optional<NotesDO> delete(int noteId) {
         try {
-            return noteDao.delete(noteId);
-        } catch (DaoException e) {
+            NotesDO notesDO = notesMapper.selectOneById(noteId);
+            notesMapper.deleteById(noteId);
+            return Optional.of(notesDO);
+        } catch (Exception e) {
             log.error("Failed to discard note with id {}", noteId, e);
             return Optional.empty();
         }

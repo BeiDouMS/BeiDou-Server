@@ -17,13 +17,13 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-package org.gms.client.newyear;
+package org.gms.model;
 
-import com.mybatisflex.core.query.QueryWrapper;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.gms.client.Character;
-import org.gms.dao.entity.NewyearDO;
-import org.gms.dao.mapper.NewyearMapper;
-import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
 import org.gms.tools.DatabaseConnection;
@@ -34,53 +34,55 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
 import static java.util.concurrent.TimeUnit.HOURS;
-import static org.gms.dao.entity.table.NewyearDOTableDef.NEWYEAR_D_O;
 
 /**
  * @author Ronan - credits to Eric for showing the New Year opcodes and handler layout
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class NewYearCardRecord {
     private int id;
 
-    private final int senderId;
-    private final String senderName;
+    private int senderId;
+    private String senderName;
     private boolean senderDiscardCard;
 
-    private final int receiverId;
-    private final String receiverName;
+    private int receiverId;
+    private String receiverName;
     private boolean receiverDiscardCard;
     private boolean receiverReceivedCard;
 
-    private final String stringContent;
-    private long dateSent = 0;
-    private long dateReceived = 0;
+    private String message;
+    private long dateSent;
+    private long dateReceived;
 
-    private ScheduledFuture<?> sendTask = null;
+    private ScheduledFuture<?> sendTask;
 
-    public NewYearCardRecord(int senderid, String sender, int receiverid, String receiver, String message) {
+    public NewYearCardRecord(int senderId, String senderName, int receiverId, String receiverName, String message) {
         this.id = -1;
 
-        this.senderId = senderid;
-        this.senderName = sender;
+        this.senderId = senderId;
+        this.senderName = senderName;
         this.senderDiscardCard = false;
 
-        this.receiverId = receiverid;
-        this.receiverName = receiver;
+        this.receiverId = receiverId;
+        this.receiverName = receiverName;
         this.receiverDiscardCard = false;
         this.receiverReceivedCard = false;
 
-        this.stringContent = message;
+        this.message = message;
 
         this.dateSent = System.currentTimeMillis();
         this.dateReceived = 0;
     }
 
-    private void setExtraNewYearCardRecord(int id, boolean senderDiscardCard, boolean receiverDiscardCard, boolean receiverReceivedCard, long dateSent, long dateReceived) {
+    public void setExtraNewYearCardRecord(int id, boolean senderDiscardCard, boolean receiverDiscardCard, boolean receiverReceivedCard, long dateSent, long dateReceived) {
         this.id = id;
         this.senderDiscardCard = senderDiscardCard;
         this.receiverDiscardCard = receiverDiscardCard;
@@ -88,54 +90,6 @@ public class NewYearCardRecord {
 
         this.dateSent = dateSent;
         this.dateReceived = dateReceived;
-    }
-
-    public void setId(int cardid) {
-        this.id = cardid;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public int getSenderId() {
-        return senderId;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public boolean isSenderCardDiscarded() {
-        return senderDiscardCard;
-    }
-
-    public int getReceiverId() {
-        return receiverId;
-    }
-
-    public String getReceiverName() {
-        return receiverName;
-    }
-
-    public boolean isReceiverCardDiscarded() {
-        return receiverDiscardCard;
-    }
-
-    public boolean isReceiverCardReceived() {
-        return receiverReceivedCard;
-    }
-
-    public String getMessage() {
-        return stringContent;
-    }
-
-    public long getDateSent() {
-        return dateSent;
-    }
-
-    public long getDateReceived() {
-        return dateReceived;
     }
 
     public static void saveNewYearCard(NewYearCardRecord newyear) {
@@ -146,7 +100,7 @@ public class NewYearCardRecord {
                 ps.setInt(3, newyear.receiverId);
                 ps.setString(4, newyear.receiverName);
 
-                ps.setString(5, newyear.stringContent);
+                ps.setString(5, newyear.message);
 
                 ps.setBoolean(6, newyear.senderDiscardCard);
                 ps.setBoolean(7, newyear.receiverDiscardCard);
@@ -244,7 +198,7 @@ public class NewYearCardRecord {
             chr.dropMessage(5, "Receiver discard: " + nyc.receiverDiscardCard);
             chr.dropMessage(5, "Received: " + nyc.receiverReceivedCard);
 
-            chr.dropMessage(5, "Message: " + nyc.stringContent);
+            chr.dropMessage(5, "Message: " + nyc.message);
             chr.dropMessage(5, "Date sent: " + nyc.dateSent);
             chr.dropMessage(5, "Date recv: " + nyc.dateReceived);
         }
@@ -348,24 +302,6 @@ public class NewYearCardRecord {
                     }
                 }
             }
-        }
-    }
-
-    public static void startPendingNewYearCardRequests() {
-        NewyearMapper newyearMapper = ServerManager.getApplicationContext().getBean(NewyearMapper.class);
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .select()
-                .from(NEWYEAR_D_O)
-                .where(NEWYEAR_D_O.TIMERECEIVED.eq(0))
-                .and(NEWYEAR_D_O.SENDERDISCARD.eq(0));
-        List<NewyearDO> newyearDOList = newyearMapper.selectListByQuery(queryWrapper);
-        for (NewyearDO newyearDO : newyearDOList) {
-            NewYearCardRecord newYearCardRecord = new NewYearCardRecord(newyearDO.getSenderid(), newyearDO.getSendername(), newyearDO.getReceiverid(),
-                    newyearDO.getReceivername(), newyearDO.getMessage());
-            newYearCardRecord.setExtraNewYearCardRecord(newyearDO.getId().intValue(), newyearDO.getSenderdiscard(), newyearDO.getReceiverdiscard(),
-                    newyearDO.getReceived(), newyearDO.getTimesent(), newyearDO.getTimereceived());
-            Server.getInstance().setNewYearCard(newYearCardRecord);
-            newYearCardRecord.startNewYearCardTask();
         }
     }
 }

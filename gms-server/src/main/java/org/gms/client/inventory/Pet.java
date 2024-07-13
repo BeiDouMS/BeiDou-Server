@@ -22,7 +22,7 @@
 package org.gms.client.inventory;
 
 import org.gms.client.Character;
-import org.gms.client.inventory.manipulator.CashIdGenerator;
+import org.gms.util.CashIdGenerator;
 import org.gms.constants.game.ExpTable;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.movement.AbsoluteLifeMovement;

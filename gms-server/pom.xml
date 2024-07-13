@@ -44,7 +44,6 @@
         <jcip-annotations.version>1.0</jcip-annotations.version> <!-- Annotations for concurrency documentation -->
         <druid.version>1.2.22</druid.version> <!-- Database connection pool -->
         <mysql-connector-j.version>8.4.0</mysql-connector-j.version> <!-- MySQL JDBC driver -->
-        <jdbi-version>3.45.1</jdbi-version> <!-- Convenience wrapper around JDBC -->
         <junit.version>5.10.2</junit.version> <!-- Unit test -->
         <mockito.version>5.11.0</mockito.version> <!-- Unit test -->
         <flyway-mysql.version>9.15.2</flyway-mysql.version>
@@ -140,11 +139,6 @@
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql-connector-j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3-core</artifactId>
-            <version>${jdbi-version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>

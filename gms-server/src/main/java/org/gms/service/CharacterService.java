@@ -5,11 +5,10 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
-import org.gms.client.DefaultDates;
-import org.gms.config.YamlConfig;
 import org.gms.constants.string.ExtendType;
-import org.gms.dao.entity.*;
-import org.gms.dao.mapper.*;
+import org.gms.dao.entity.ExtendValueDO;
+import org.gms.dao.mapper.CharactersMapper;
+import org.gms.dao.mapper.ExtendValueMapper;
 import org.gms.dto.ChrOnlineListReqDTO;
 import org.gms.dto.ChrOnlineListRtnDTO;
 import org.gms.exception.BizException;
@@ -19,17 +18,13 @@ import org.gms.util.BasePageUtil;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.ExtendValueDOTableDef.EXTEND_VALUE_D_O;
-import static org.gms.dao.entity.table.RingsDOTableDef.RINGS_D_O;
 
 @Service
 @AllArgsConstructor
@@ -37,11 +32,6 @@ import static org.gms.dao.entity.table.RingsDOTableDef.RINGS_D_O;
 public class CharacterService {
     private final ExtendValueMapper extendValueMapper;
     private final CharactersMapper charactersMapper;
-    private final RingsMapper ringsMapper;
-    private final NamechangesMapper namechangesMapper;
-    private final AccountService accountService;
-    private final BuddiesMapper buddiesMapper;
-    private final WorldtransfersMapper worldtransfersMapper;
 
     public Page<ChrOnlineListRtnDTO> getChrOnlineList(ChrOnlineListReqDTO request) {
         Collection<Character> chrList = Server.getInstance().getWorld(request.getWorld()).getPlayerStorage().getAllCharacters();
@@ -64,8 +54,7 @@ public class CharacterService {
         data.setExtendType(ExtendType.CHARACTER_EXTEND.getType());
         List<ExtendValueDO> extendValueDOList = extendValueMapper.selectExtend(data.getExtendId(), data.getExtendType(), data.getExtendName());
         if (RequireUtil.isEmpty(extendValueDOList)) {
-            data.setCreateTime(new Date(System.currentTimeMillis()));
-            extendValueMapper.insert(data);
+            extendValueMapper.insertSelective(data);
         } else {
             data.setCreateTime(null);
             data.setUpdateTime(new Date(System.currentTimeMillis()));
@@ -102,81 +91,8 @@ public class CharacterService {
         character.setCouponRates();
     }
 
-    /**
-     * 改名
-     *
-     * @param data 改名对象
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void doNameChange(NamechangesDO data) {
-        charactersMapper.update(CharactersDO.builder().id(data.getCharacterid()).name(data.getNewer()).build());
-        ringsMapper.updateByQuery(RingsDO.builder().partnername(data.getNewer()).build(), QueryWrapper.create().where(RINGS_D_O.PARTNERNAME.eq(data.getOlder())));
-        namechangesMapper.update(NamechangesDO.builder().id(data.getId()).completionTime(new Timestamp(System.currentTimeMillis())).build());
-        log.info(I18nUtil.getLogMessage("CharacterService.doNameChange.info1"), data.getOlder(), data.getNewer());
-    }
-
-    /**
-     * 校验能否转区
-     *
-     * @param data 转区对象
-     * @return 能否转区
-     */
-    public boolean checkWorldTransferEligibility(WorldtransfersDO data) {
-        if (!YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
-            return false;
-        }
-        // 获取人物信息
-        CharactersDO charactersDO = charactersMapper.selectOneById(data.getCharacterid());
-        if (charactersDO == null) {
-            return false;
-        }
-        // 判断是否结婚
-        if (charactersDO.getPartnerId() != null) {
-            return false;
-        }
-        // 判断是否被封禁
-        AccountsDO accountsDO = accountService.findById(charactersDO.getAccountid());
-        if (accountsDO == null) {
-            return false;
-        }
-        if (accountsDO.getBanned() != null && accountsDO.getBanned()) {
-            return false;
-        }
-        if (accountsDO.getTempban() != null && !Objects.equals(accountsDO.getTempban().toLocalDateTime(), DefaultDates.getTempban())) {
-            return false;
-        }
-        // 判断名字是否被占用
-        long count = charactersMapper.selectCountByQuery(QueryWrapper.create()
-                .where(CHARACTERS_D_O.NAME.eq(charactersDO.getName()))
-                .and(CHARACTERS_D_O.WORLD.eq(data.getTo())));
-        if (count > 0) {
-            return false;
-        }
-        // 判断大区是否存在，万一被删了
-        return Server.getInstance().getWorld(data.getTo()) != null;
-    }
-
-    /**
-     * 转区
-     *
-     * @param data 转区对象
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void doWorldTransfer(WorldtransfersDO data) {
-        // 获取人物信息
-        CharactersDO charactersDO = charactersMapper.selectOneById(data.getCharacterid());
-        RequireUtil.requireNotNull(charactersDO, I18nUtil.getLogMessage("UNKNOWN_CHARACTER"));
-        charactersMapper.update(CharactersDO.builder()
-                .id(charactersDO.getId())
-                .world(data.getTo())
-                .meso(Math.min(charactersDO.getMeso(), 1000000))
-                .guildid(0L)
-                .guildrank(0L)
-                .build());
-        buddiesMapper.delete(BuddiesDO.builder().characterid(charactersDO.getId()).build());
-        buddiesMapper.delete(BuddiesDO.builder().buddyid(charactersDO.getId()).build());
-        worldtransfersMapper.update(WorldtransfersDO.builder().id(data.getId()).completionTime(new Timestamp(System.currentTimeMillis())).build());
-        log.info(I18nUtil.getLogMessage("CharacterService.doWorldTransfer.info1"), data.getFrom(), data.getTo());
+    public void resetMerchant() {
+        charactersMapper.updateAllHasMerchant(0);
     }
 
     private void checkName(ExtendValueDO data) {

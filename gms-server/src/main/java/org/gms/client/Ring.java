@@ -21,7 +21,7 @@
 */
 package org.gms.client;
 
-import org.gms.client.inventory.manipulator.CashIdGenerator;
+import org.gms.util.CashIdGenerator;
 import org.gms.tools.DatabaseConnection;
 import org.gms.tools.Pair;
 

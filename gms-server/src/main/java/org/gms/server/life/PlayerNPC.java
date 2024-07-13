@@ -21,6 +21,7 @@
 */
 package org.gms.server.life;
 
+import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.InventoryType;
@@ -28,6 +29,9 @@ import org.gms.client.inventory.Item;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.NpcId;
+import org.gms.dao.entity.PlayernpcsDO;
+import org.gms.dao.mapper.PlayernpcsMapper;
+import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
@@ -72,11 +76,32 @@ public class PlayerNPC extends AbstractMapObject {
     private static final List<AtomicInteger> runningWorldRank = new ArrayList<>();
     private static final Map<Pair<Integer, Integer>, AtomicInteger> runningWorldJobRank = new HashMap<>();
 
+    @Getter
     private Map<Short, Integer> equips = new HashMap<>();
-    private int scriptId, face, hair, gender, job;
+    @Getter
+    private int scriptId;
+    @Getter
+    private int face;
+    @Getter
+    private int hair;
+    @Getter
+    private int gender;
+    @Getter
+    private int job;
+    @Getter
     private byte skin;
+    @Getter
     private String name = "";
-    private int dir, FH, RX0, RX1, CY;
+    @Getter
+    private int dir;
+    @Getter
+    private int FH;
+    @Getter
+    private int RX0;
+    @Getter
+    private int RX1;
+    @Getter
+    private int CY;
     private int worldRank, overallRank, worldJobRank, overallJobRank;
 
     public PlayerNPC(String name, int scriptId, int face, int hair, int gender, byte skin, Map<Short, Integer> equips, int dir, int FH, int RX0, int RX1, int CX, int CY, int oid) {
@@ -136,62 +161,28 @@ public class PlayerNPC extends AbstractMapObject {
         }
     }
 
-    public static void loadRunningRankData(Connection con, int worlds) throws SQLException {
-        getRunningOverallRanks(con);
-        getRunningWorldRanks(con, worlds);
-        getRunningWorldJobRanks(con);
-    }
+    public static void loadRunningRankData(int worlds) {
+        PlayernpcsMapper playernpcsMapper = ServerManager.getApplicationContext().getBean(PlayernpcsMapper.class);
+        List<PlayernpcsDO> playernpcsDOList = playernpcsMapper.selectAll();
+        runningOverallRank.set(playernpcsDOList.size() + 1);
 
-    public Map<Short, Integer> getEquips() {
-        return equips;
-    }
+        for (int i = 0; i < worlds; i++) {
+            runningWorldRank.add(new AtomicInteger(1));
+        }
 
-    public int getScriptId() {
-        return scriptId;
-    }
-
-    public int getJob() {
-        return job;
-    }
-
-    public int getDirection() {
-        return dir;
-    }
-
-    public int getFH() {
-        return FH;
-    }
-
-    public int getRX0() {
-        return RX0;
-    }
-
-    public int getRX1() {
-        return RX1;
-    }
-
-    public int getCY() {
-        return CY;
-    }
-
-    public byte getSkin() {
-        return skin;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public int getFace() {
-        return face;
-    }
-
-    public int getHair() {
-        return hair;
-    }
-
-    public int getGender() {
-        return gender;
+        playernpcsDOList.forEach(playernpcsDO -> {
+            if (playernpcsDO.getWorldrank() > runningWorldRank.get(playernpcsDO.getWorld()).get()) {
+                runningWorldRank.get(playernpcsDO.getWorld()).set(playernpcsDO.getWorldrank());
+            }
+            Pair<Integer, Integer> worldJobPair = new Pair<>(playernpcsDO.getWorld(), playernpcsDO.getJob());
+            AtomicInteger worldJobRank = runningWorldJobRank.get(worldJobPair);
+            if (worldJobRank == null) {
+                worldJobRank = new AtomicInteger(1);
+            }
+            if (playernpcsDO.getWorldjobrank() > worldJobRank.get()) {
+                runningWorldJobRank.put(worldJobPair, worldJobRank);
+            }
+        });
     }
 
     public int getWorldRank() {
@@ -227,51 +218,8 @@ public class PlayerNPC extends AbstractMapObject {
         client.sendPacket(PacketCreator.removePlayerNPC(this.getObjectId()));
     }
 
-    private static void getRunningOverallRanks(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("SELECT max(overallrank) FROM playernpcs");
-             ResultSet rs = ps.executeQuery()) {
-
-            if (rs.next()) {
-                runningOverallRank.set(rs.getInt(1) + 1);
-            } else {
-                runningOverallRank.set(1);
-            }
-        }
-    }
-
-    private static void getRunningWorldRanks(Connection con, int worlds) throws SQLException {
-        for (int i = 0; i < worlds; i++) {
-            runningWorldRank.add(new AtomicInteger(1));
-        }
-
-        try (PreparedStatement ps = con.prepareStatement("SELECT world, max(worldrank) FROM playernpcs GROUP BY world ORDER BY world");
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                int wid = rs.getInt(1);
-                if (wid < worlds) {
-                    runningWorldRank.get(wid).set(rs.getInt(2) + 1);
-                }
-            }
-        }
-    }
-
-    private static void getRunningWorldJobRanks(Connection con) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement("SELECT world, job, max(worldjobrank) FROM playernpcs GROUP BY world, job ORDER BY world, job");
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                runningWorldJobRank.put(new Pair<>(rs.getInt(1), rs.getInt(2)), new AtomicInteger(rs.getInt(3) + 1));
-            }
-        }
-    }
-
     private static int getAndIncrementRunningWorldJobRanks(int world, int job) {
-        AtomicInteger wjr = runningWorldJobRank.get(new Pair<>(world, job));
-        if (wjr == null) {
-            wjr = new AtomicInteger(1);
-            runningWorldJobRank.put(new Pair<>(world, job), wjr);
-        }
-
+        AtomicInteger wjr = runningWorldJobRank.computeIfAbsent(new Pair<>(world, job), k -> new AtomicInteger(1));
         return wjr.getAndIncrement();
     }
 
@@ -361,12 +309,7 @@ public class PlayerNPC extends AbstractMapObject {
     }
 
     private static int getNextScriptId(byte branch) {
-        List<Integer> availablesBranch = availablePlayerNpcScriptIds.get(branch);
-
-        if (availablesBranch == null) {
-            availablesBranch = new ArrayList<>(20);
-            availablePlayerNpcScriptIds.put(branch, availablesBranch);
-        }
+        List<Integer> availablesBranch = availablePlayerNpcScriptIds.computeIfAbsent(branch, k -> new ArrayList<>(20));
 
         if (availablesBranch.isEmpty()) {
             fetchAvailableScriptIdsFromDb(branch, availablesBranch);
@@ -376,7 +319,7 @@ public class PlayerNPC extends AbstractMapObject {
             }
         }
 
-        return availablesBranch.remove(availablesBranch.size() - 1);
+        return availablesBranch.removeLast();
     }
 
     private static PlayerNPC createPlayerNPCInternal(MapleMap map, Point pos, Character chr) {
@@ -577,7 +520,7 @@ public class PlayerNPC extends AbstractMapObject {
         }
 
         List<Integer> updateMapids = processPlayerNPCInternal(null, null, chr, false).getRight();
-        int worldid = updateMapids.remove(0);
+        int worldid = updateMapids.removeFirst();
 
         for (Integer mapid : updateMapids) {
             PlayerNPC pn = getPlayerNPCFromWorldMap(chr.getName(), worldid, mapid);

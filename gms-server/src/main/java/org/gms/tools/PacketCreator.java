@@ -44,7 +44,7 @@ import org.gms.client.inventory.ModifyInventory;
 import org.gms.client.inventory.Pet;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
-import org.gms.client.newyear.NewYearCardRecord;
+import org.gms.model.NewYearCardRecord;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
 import org.gms.config.YamlConfig;
@@ -1135,7 +1135,6 @@ public class PacketCreator {
      * Gets a packet to spawn a special map object.
      *
      * @param summon
-     * @param skillLevel The level of the skill used.
      * @param animated   Animated spawn?
      * @return The spawn packet for the map object.
      */
@@ -1236,7 +1235,6 @@ public class PacketCreator {
      * 5: Pink Text<br> 6: Lightblue Text
      *
      * @param type    The type of the notice.
-     * @param channel The channel this notice was sent on.
      * @param message The message to convey.
      * @return The server notice packet.
      */
@@ -1648,7 +1646,6 @@ public class PacketCreator {
      *
      * @param cidfrom The character ID who sent the chat.
      * @param text    The text of the chat.
-     * @param whiteBG
      * @param show
      * @return The general chat packet.
      */
@@ -2113,12 +2110,12 @@ public class PacketCreator {
         p.writeInt(newyear.getId());
         p.writeInt(newyear.getSenderId());
         p.writeString(newyear.getSenderName());
-        p.writeBool(newyear.isSenderCardDiscarded());
+        p.writeBool(newyear.isSenderDiscardCard());
         p.writeLong(newyear.getDateSent());
         p.writeInt(newyear.getReceiverId());
         p.writeString(newyear.getReceiverName());
-        p.writeBool(newyear.isReceiverCardDiscarded());
-        p.writeBool(newyear.isReceiverCardReceived());
+        p.writeBool(newyear.isReceiverDiscardCard());
+        p.writeBool(newyear.isReceiverReceivedCard());
         p.writeLong(newyear.getDateReceived());
         p.writeString(newyear.getMessage());
     }
@@ -2711,7 +2708,6 @@ public class PacketCreator {
 
     /**
      * @param chr
-     * @param isSelf
      * @return
      */
     public static Packet charInfo(Character chr) {
@@ -2831,7 +2827,6 @@ public class PacketCreator {
 
     /**
      * @param cid
-     * @param statups
      * @param mount
      * @return
      */
@@ -2861,7 +2856,6 @@ public class PacketCreator {
              p.writeByte(0);*/
 
     /**
-     * @param c
      * @param quest
      * @return
      */
@@ -2874,7 +2868,6 @@ public class PacketCreator {
     }
 
     /**
-     * @param c
      * @param quest
      * @return
      */
@@ -2888,10 +2881,8 @@ public class PacketCreator {
     }
 
     /**
-     * @param c
      * @param quest
      * @param npc
-     * @param progress
      * @return
      */
 
@@ -3232,7 +3223,6 @@ public class PacketCreator {
     }
 
     /**
-     * @param c
      * @param shop
      * @param owner
      * @return
@@ -5312,7 +5302,7 @@ public class PacketCreator {
         p.writeInt(npc.getScriptId());
         p.writeShort(npc.getPosition().x);
         p.writeShort(npc.getCY());
-        p.writeByte(npc.getDirection());
+        p.writeByte(npc.getDir());
         p.writeShort(npc.getFH());
         p.writeShort(npc.getRX0());
         p.writeShort(npc.getRX1());
@@ -7334,7 +7324,7 @@ public class PacketCreator {
     /**
      * Sends a request to remove Mir<br>
      *
-     * @param charid - Needs the specific Character ID
+     * @param chrId - Needs the specific Character ID
      * @return The packet
      */
     public static Packet removeDragon(int chrId) {

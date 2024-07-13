@@ -21,7 +21,8 @@
  */
 package org.gms.net.server;
 
-import com.mybatisflex.core.query.QueryWrapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Family;
@@ -29,19 +30,16 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
-import org.gms.client.inventory.manipulator.CashIdGenerator;
-import org.gms.client.newyear.NewYearCardRecord;
+import org.gms.util.CashIdGenerator;
+import org.gms.model.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
-import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.NxcouponsDO;
-import org.gms.dao.entity.WorldtransfersDO;
 import org.gms.dao.mapper.*;
-import org.gms.database.note.NoteDao;
 import org.gms.manager.ServerManager;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
@@ -62,8 +60,7 @@ import org.gms.server.TimerManager;
 import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.quest.Quest;
-import org.gms.service.CharacterService;
-import org.gms.service.NoteService;
+import org.gms.service.*;
 import org.gms.tools.DatabaseConnection;
 import org.gms.tools.Pair;
 import org.gms.util.I18nUtil;
@@ -88,8 +85,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static java.util.concurrent.TimeUnit.*;
-import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
-import static org.gms.dao.entity.table.WorldtransfersDOTableDef.WORLDTRANSFERS_D_O;
 
 public class Server {
     static {
@@ -109,11 +104,12 @@ public class Server {
     private static final Set<Integer> activeFly = new HashSet<>();
     private static final Map<Integer, Integer> couponRates = new HashMap<>(30);
     private static final List<Integer> activeCoupons = new LinkedList<>();
-    private static ChannelDependencies channelDependencies;
+    private ChannelDependencies channelDependencies;
 
     private LoginServer loginServer;
     private final List<Map<Integer, String>> channels = new LinkedList<>();
     private final List<World> worlds = new ArrayList<>();
+    @Getter
     private final Properties subnetInfo = new Properties();
     private final Map<Integer, Set<Integer>> accountChars = new HashMap<>();
     private final Map<Integer, Short> accountCharacterCount = new HashMap<>();
@@ -144,6 +140,8 @@ public class Server {
     private long serverCurrentTime = 0;
 
     private volatile boolean availableDeveloperRoom = false;
+    @Getter
+    @Setter
     private boolean online = false;
     public static long uptime = System.currentTimeMillis();
     private long nextTime;
@@ -176,10 +174,6 @@ public class Server {
         currentTime.set(timeNow);
 
         return timeNow;
-    }
-
-    public boolean isOnline() {
-        return online;
     }
 
     public List<Pair<Integer, String>> worldRecommendedList() {
@@ -435,11 +429,10 @@ public class Server {
         Map<Integer, String> channelInfo = new HashMap<>();
         long bootTime = getCurrentTime();
         for (int j = 1; j <= YamlConfig.config.worlds.get(i).channels; j++) {
-            int channelid = j;
-            Channel channel = new Channel(i, channelid, bootTime);
+            Channel channel = new Channel(i, j, bootTime);
 
             world.addChannel(channel);
-            channelInfo.put(channelid, channel.getIP());
+            channelInfo.put(j, channel.getIP());
         }
 
         boolean canDeploy;
@@ -604,14 +597,13 @@ public class Server {
 
     public void updateActiveCoupons() {
         synchronized (activeCoupons) {
-            NxcouponsMapper nxcouponsMapper = ServerManager.getApplicationContext().getBean(NxcouponsMapper.class);
             activeCoupons.clear();
             Calendar c = Calendar.getInstance();
             int weekDay = c.get(Calendar.DAY_OF_WEEK);
             int hourDay = c.get(Calendar.HOUR_OF_DAY);
             int weekdayMask = (1 << weekDay);
-            List<Integer> selectActiveCouponIds = nxcouponsMapper.selectActiveCouponIds(weekdayMask, hourDay);
-            activeCoupons.addAll(selectActiveCouponIds);
+            NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
+            activeCoupons.addAll(nxCouponService.selectActiveCouponIds(weekdayMask, hourDay));
         }
     }
 
@@ -717,7 +709,7 @@ public class Server {
         wldWLock.lock();
         try {
             if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                for (int i = playerRanking.size(); i <= rankUpdates.get(rankUpdates.size() - 1).getLeft(); i++) {
+                for (int i = playerRanking.size(); i <= rankUpdates.getLast().getLeft(); i++) {
                     playerRanking.add(new ArrayList<>(0));
                 }
 
@@ -725,7 +717,7 @@ public class Server {
                     playerRanking.set(wranks.getLeft(), wranks.getRight());
                 }
             } else {
-                playerRanking.set(0, rankUpdates.get(0).getRight());
+                playerRanking.set(0, rankUpdates.getFirst().getRight());
             }
         } finally {
             wldWLock.unlock();
@@ -797,7 +789,8 @@ public class Server {
         Instant beforeInit = Instant.now();
         log.info(I18nUtil.getLogMessage("Server.init.info1"), ServerConstants.VERSION);
 
-        channelDependencies = registerChannelDependencies();
+        // 发送信件
+        registerChannelDependencies();
 
         // 利用虚拟线程，减少开销
         log.info(I18nUtil.getLogMessage("Server.init.info2"));
@@ -822,19 +815,20 @@ public class Server {
         TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
 
         log.info(I18nUtil.getLogMessage("Server.init.info4"));
-        // 重置登录状态和雇佣商店状态
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
-        AccountsMapper accountsMapper = ServerManager.getApplicationContext().getBean(AccountsMapper.class);
-        accountsMapper.updateAllLoggedIn(0);
-        CharactersMapper charactersMapper = ServerManager.getApplicationContext().getBean(CharactersMapper.class);
-        charactersMapper.updateAllHasMerchant(0);
+        AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+        CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+        NxCodeService nxCodeService = ServerManager.getApplicationContext().getBean(NxCodeService.class);
+        NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
+        NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+        WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
+
+        // 重置登录状态和雇佣商店状态
+        accountService.resetAllLoggedIn();
+        characterService.resetMerchant();
 
         // 清空失效的现金物品
-        long timeClear = System.currentTimeMillis() - DAYS.toMillis(14);
-        NxcodeItemsMapper nxcodeItemsMapper = ServerManager.getApplicationContext().getBean(NxcodeItemsMapper.class);
-        nxcodeItemsMapper.clearExpirations(timeClear);
-        NxcodeMapper nxcodeMapper = ServerManager.getApplicationContext().getBean(NxcodeMapper.class);
-        nxcodeMapper.clearExpirations(timeClear);
+        nxCodeService.clearExpirations();
 
         // 重载倍率卡
         NxcouponsMapper nxcouponsMapper = ServerManager.getApplicationContext().getBean(NxcouponsMapper.class);
@@ -842,47 +836,21 @@ public class Server {
         couponRates.clear();
         nxcouponsDOList.forEach(nxcouponsDO -> couponRates.put(nxcouponsDO.getCouponid(), nxcouponsDO.getRate()));
         updateActiveCoupons();
-        NewYearCardRecord.startPendingNewYearCardRequests();
+        newYearCardService.startPendingNewYearCardRequests();
         CashIdGenerator.loadExistentCashIdsFromDb();
 
         // 接受未完成的改名
-        CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
-        NamechangesMapper namechangesMapper = ServerManager.getApplicationContext().getBean(NamechangesMapper.class);
-        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
-                .where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()));
-        namechangesDOList.forEach(namechangesDO -> {
-            try {
-                characterService.doNameChange(namechangesDO);
-            } catch (Exception e) {
-                log.error(I18nUtil.getLogMessage("Server.init.error4"), e);
-            }
-        });
+        nameChangeService.applyAllNameChange();
 
         // 接受转区
-        WorldtransfersMapper worldtransfersMapper = ServerManager.getApplicationContext().getBean(WorldtransfersMapper.class);
-        List<WorldtransfersDO> worldtransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create()
-                .where(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull()));
-        worldtransfersDOList.forEach(worldtransfersDO -> {
-            try {
-                if (characterService.checkWorldTransferEligibility(worldtransfersDO)) {
-                    characterService.doWorldTransfer(worldtransfersDO);
-                }
-            } catch (Exception e) {
-                log.error(I18nUtil.getLogMessage("Server.init.error5"), e);
-            }
-        });
+        worldTransferService.applyAllWorldTransfer();
 
-
-        try (Connection con = DatabaseConnection.getConnection()) {
-            PlayerNPC.loadRunningRankData(con, worldCount);
-        } catch (SQLException sqle) {
-            log.error(I18nUtil.getLogMessage("Server.init.error2"), sqle);
-            throw new IllegalStateException(sqle);
-        }
+        // 加载玩家排名
+        PlayerNPC.loadRunningRankData(worldCount);
         log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();
-        initializeTimelyTasks(channelDependencies);    // aggregated method for timely tasks thanks to lxconan
+        initializeTimelyTasks();    // aggregated method for timely tasks thanks to lxconan
 
         try {
             for (int i = 0; i < worldCount; i++) {
@@ -906,7 +874,7 @@ public class Server {
         log.info(I18nUtil.getLogMessage("Server.init.info6"));
 
         OpcodeConstants.generateOpcodeNames();
-        CommandsExecutor.getInstance();
+        CommandsExecutor.getInstance().loadCommandsExecutor();
 
         log.info(I18nUtil.getLogMessage("Server.init.info7"));
         for (Channel ch : this.getAllChannels()) {
@@ -918,14 +886,12 @@ public class Server {
         log.info(I18nUtil.getLogMessage("Server.init.info9"), initDuration.toMillis() / 1000.0);
     }
 
-    private ChannelDependencies registerChannelDependencies() {
-        NoteService noteService = new NoteService(new NoteDao());
+    private void registerChannelDependencies() {
+        NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
         FredrickProcessor fredrickProcessor = new FredrickProcessor(noteService);
         ChannelDependencies channelDependencies = new ChannelDependencies(noteService, fredrickProcessor);
-
         PacketProcessor.registerGameHandlerDependencies(channelDependencies);
-
-        return channelDependencies;
+        this.channelDependencies = channelDependencies;
     }
 
     private LoginServer initLoginServer(int port) {
@@ -934,7 +900,7 @@ public class Server {
         return loginServer;
     }
 
-    private void initializeTimelyTasks(ChannelDependencies channelDependencies) {
+    private void initializeTimelyTasks() {
         TimerManager tMan = TimerManager.getInstance();
         tMan.start();
         tMan.register(tMan.purge(), YamlConfig.config.server.PURGING_INTERVAL);//Purging ftw...
@@ -956,10 +922,6 @@ public class Server {
         ExpeditionBossLog.resetBossLogTable();
         tMan.register(new BossLogTask(), DAYS.toMillis(1), timeLeft);
         tMan.register(new ExtendValueTask(), DAYS.toMillis(1), timeLeft);
-    }
-
-    public Properties getSubnetInfo() {
-        return subnetInfo;
     }
 
     public Alliance getAlliance(int id) {

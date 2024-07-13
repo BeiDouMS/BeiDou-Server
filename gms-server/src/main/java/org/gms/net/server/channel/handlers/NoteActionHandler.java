@@ -22,13 +22,13 @@
 package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
-import org.gms.model.Note;
+import org.gms.dao.entity.NotesDO;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.service.NoteService;
 import org.gms.tools.PacketCreator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
@@ -50,10 +50,11 @@ public final class NoteActionHandler extends AbstractPacketHandler {
             if (c.getPlayer().getCashShop().isOpened()) {
                 c.sendPacket(PacketCreator.showCashInventory(c));
             }
-
-            boolean sendNoteSuccess = noteService.sendWithFame(message, c.getPlayer().getName(), charname);
-            if (sendNoteSuccess) {
+            try {
+                noteService.sendWithFame(message, c.getPlayer().getName(), charname);
                 c.getPlayer().getCashShop().decreaseNotes();
+            } catch (Exception e) {
+                log.error("Failed to send note", e);
             }
         } else if (action == 1) { // Discard notes in game
             int num = p.readByte();
@@ -64,13 +65,13 @@ public final class NoteActionHandler extends AbstractPacketHandler {
                 int id = p.readInt();
                 p.readByte(); //Fame, but we read it from the database :)
 
-                Optional<Note> discardedNote = noteService.delete(id);
+                Optional<NotesDO> discardedNote = noteService.delete(id);
                 if (discardedNote.isEmpty()) {
                     log.warn("Note with id {} not able to be discarded. Already discarded?", id);
                     continue;
                 }
 
-                fame += discardedNote.get().fame();
+                fame += discardedNote.get().getFame();
             }
             if (fame > 0) {
                 c.getPlayer().gainFame(fame);

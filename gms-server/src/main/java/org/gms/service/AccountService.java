@@ -175,7 +175,7 @@ public class AccountService {
         }
     }
 
-    public void resetLoggedIn(int id) {
+    public void resetAllLoggedIn(int id) {
         RequireUtil.requireNotNull(findById(id), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
 
         AccountsDO account = new AccountsDO();
@@ -209,7 +209,7 @@ public class AccountService {
             // 封禁IP
             String ip = c.getRemoteAddress();
             IpbansDO ipban = IpbansDO.builder().ip(ip).aid(String.valueOf(accountId)).build();
-            ipbansMapper.insert(ipban);
+            ipbansMapper.insertSelective(ipban);
             // 强制离线，这个方法只是中断了连接不会造成客户端退出，但是实际跟掉线没什么区别
             c.disconnect(false, false);
         }
@@ -227,5 +227,9 @@ public class AccountService {
         macbansMapper.deleteByQuery(new QueryWrapper().eq(MacbansDO::getAid, accountId));
         // 解封Ip
         ipbansMapper.deleteByQuery(new QueryWrapper().eq(IpbansDO::getAid, accountId));
+    }
+
+    public void resetAllLoggedIn() {
+        accountsMapper.updateAllLoggedIn(0);
     }
 }
