@@ -62,4 +62,37 @@ yarn dev
 ![w3.jpeg](mdimg/w3.jpeg)
 
 # 客户端
-[北斗客户端发布](CLIENT-UPDATE.md)
+## 客户端下载
+默认为英文客户端，如需汉化
+1. 编辑config.ini将SwitchChinese的值改为true；
+2. 将CN包里的文件复制（覆盖）到Data目录下，即可。
+
+**客户端本体**
+- BeiDou V7： https://mega.nz/file/2aRjCDIb#FwzR04lyfE-6bdSXLYwY3YxSRVwJaXCjbOvbe3hysW8
+- ~~BeiDou V6： https://mega.nz/file/DLQAxJCD#Au-hzXWSVywpeXetTZKx6_rNihXdbOfyDsRa9Ohmazg
+  基本已汉化，尚未汉化部分可提issue或者其他方式告知。~~
+- ~~BeiDou V3： https://mega.nz/file/qXw3iRCA#S8e21nDeomANjPfEUjhGtTzCzXsebU_fXmeEHY9ZXDQ
+  完成度：能用，暂未汉化；支持中文输入；使用img资源。~~
+
+## 更新记录及补丁下载
+使用方法：按顺序下载补丁，直接覆盖到客户端内即可；**wz补丁仅供开发用**。
+
+汉化需重新覆盖 CN 包
+
+### 2024/7/12 V8
+更新说明：
+1. 新增 命中/回避 上限解除
+2. 修复 魔攻伤害计算没有破攻的问题
+3. 新增 Boss 血条下方增加百分比
+- v8：https://mega.nz/file/LTBGGKrL#DjQuTAywtCOFjz0Xn_3dFvxI33a9PsER6-GFXMTuGa4
+
+### 2024/7/12 V7
+更新说明：
+1. 新增 文字汉化
+2. 新增 任务汉化 (感谢 Tokyo 379008856)
+3. 修复 输入法卡门
+4. 新增 魔法攻击面板上限配置
+- v7：https://mega.nz/file/ueZnyKjK#GDkljCd_xo3MJMK6T8TsT-H2COx0hVcLNm52BMDdEeA
+- v7-wz：https://mega.nz/file/mDYjTBAQ#3rI9oVJV2a7W7u26zjqlPGdntujpfjqiD4mgIUWq4RM
+
+[了解更多](CLIENT-UPDATE.md)
