@@ -21,7 +21,7 @@
 */
 var status = 0;
 var zones = 0;
-var names = Array("Deep Forest of Patience 1", "Deep Forest of Patience 2", "Deep Forest of Patience 3");
+var names = Array("沉睡森林1", "沉睡森林2", "沉睡森林3");
 var maps = Array(105040310, 105040312, 105040314);
 var selectedMap = -1;
 
@@ -56,7 +56,7 @@ function action(mode, type, selection) {
             if (zones == 0) {
                 cm.dispose();
             } else {
-                var selStr = "Its power allows you to will yourself deep inside the forest.#b";
+                var selStr = "它的力量让你能够深入森林深处。";
                 for (var i = 0; i < zones; i++) {
                     selStr += "\r\n#L" + i + "#" + names[i] + "#l";
                 }
