@@ -53,7 +53,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         int oid = p.readInt();
         MapObject obj = c.getPlayer().getMap().getMapObject(oid);
         if (obj instanceof NPC npc) {
-            if (YamlConfig.config.server.USE_DEBUG) {
+            if (YamlConfig.config.server.USE_DEBUG && c.getPlayer().isGM()) {
                 c.getPlayer().dropMessage(5, "Talking to NPC " + npc.getId());
             }
 

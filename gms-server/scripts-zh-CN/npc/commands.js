@@ -40,12 +40,12 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            var sendStr = "There are all available commands for you:\r\n\r\n#b";
+            var sendStr = "可使用的指令：\r\n\r\n#b";
             for (var i = 0; i <= cm.getPlayer().gmLevel(); i++) {
                 sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
             }
 
-            cm.sendSimple("发送字符串");
+            cm.sendSimple(sendStr);
         } else if (status == 1) {
             var lvComm, lvDesc, lvHead = (selection < 2) ? common_heading : staff_heading;
 
@@ -58,7 +58,7 @@ function action(mode, type, selection) {
             lvComm = commands.get(selection).getLeft();
             lvDesc = commands.get(selection).getRight();
 
-            var sendStr = "The following commands are available for #b" + levels[selection] + "#k:\r\n\r\n";
+            var sendStr = "该选项可用指令 #b" + levels[selection] + "#k:\r\n\r\n";
             for (var i = 0; i < lvComm.size(); i++) {
                 sendStr += "  #L" + i + "# " + lvHead + lvComm.get(i) + " - " + lvDesc.get(i);
                 sendStr += "#l\r\n";
