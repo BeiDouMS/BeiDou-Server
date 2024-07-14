@@ -30,7 +30,7 @@ function action(mode, type, selection) {
 
     }
     if (status == 1) {
-        cm.sendSimple("如果这是你第一次来到这个地方，可能会对这里感到困惑是可以理解的。如果你对这个地方有任何问题，尽管问吧。\r\n#L0##b维多利亚岛上有哪些类型的城镇？#l\r\n#L1#请带我去别的地方。#k#l");
+        cm.sendSimple("如果这是你第一次来到这个地方，可能会对这里感到困惑是可以理解的。如果你对这个地方有任何问题，尽管问吧。\r\n#L0##b金银岛上有哪些类型的城镇？#l\r\n#L1#请带我去别的地方。#k#l");
     } else if (status == 2) {
         if (selection == 0) {
             town = true;

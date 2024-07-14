@@ -63,7 +63,7 @@ function action(mode, type, selection) {
         } else if (status == 1) {
             selectedOption = selection;
             if (selectedOption == 0) {
-                cm.sendNext("莎莲尼亚是过去一个有控制维多利亚岛每个地区的文明。魔像神殿，地牢深处的神殿，以及其他无人知晓建造者的古老建筑都是在莎莲尼亚时期建造的。");
+                cm.sendNext("莎莲尼亚是过去一个有控制金银岛每个地区的文明。魔像神殿，地牢深处的神殿，以及其他无人知晓建造者的古老建筑都是在莎莲尼亚时期建造的。");
             } else if (selectedOption == 1) {
                 cm.sendNext("#t4001024# 是一颗传奇宝石，拥有它的人将获得永恒的青春。讽刺的是，似乎每个拥有 #t4001024# 的人最终都沦为了落魄之人，这或许可以解释夏雷尼安的衰落。");
                 status = -1;

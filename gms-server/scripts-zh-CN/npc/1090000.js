@@ -87,7 +87,7 @@ function start() {
             }
         } else if (actionx["3thJobI"] || (cm.getPlayer().gotPartyQuestItem("JB3") && cm.getLevel() >= 70 && cm.getJobId() % 10 == 0 && parseInt(cm.getJobId() / 100) == 5 && !cm.getPlayer().gotPartyQuestItem("JBP"))) {
             actionx["3thJobI"] = true;
-            cm.sendNext("你来了。几天前，奥西里亚的#b#p2020013##k跟我谈到了你。我看到你对于成为海盗职业的第三次转职很感兴趣。为了实现这个目标，我需要测试一下你的实力，看看你是否配得上这个晋升。维多利亚岛上有一个洞穴中的开口，会通往一个秘密通道。一旦进入，你将面对我的分身。你的任务是打败他，并带着#b#t4031059##k回来。");
+            cm.sendNext("你来了。几天前，奥西里亚的#b#p2020013##k跟我谈到了你。我看到你对于成为海盗职业的第三次转职很感兴趣。为了实现这个目标，我需要测试一下你的实力，看看你是否配得上这个晋升。金银岛上有一个洞穴中的开口，会通往一个秘密通道。一旦进入，你将面对我的分身。你的任务是打败他，并带着#b#t4031059##k回来。");
         } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)) {
             cm.sendNext("请把#b#t4031059##k带给我。");
             cm.dispose();

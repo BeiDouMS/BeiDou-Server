@@ -47,7 +47,7 @@ function start() {
     } else {
         if (cm.getJobId() == 0) {
             actionx["1stJob"] = true;
-            cm.sendNext("想成为一个#r小偷#k吗？有一些标准要达到，因为我们不能接受每个人……#b你的等级至少应该是10级，至少有你的" + cm.getFirstJobStatRequirement(jobType) + "#k。让我们看看。");   // thanks Vcoc for noticing a need to state and check requirements on first job adv starting message
+            cm.sendNext("想成为一个#r飞侠#k吗？有一些标准要达到，毕竟我们不是谁都可以接纳的……#b所以你的等级至少10级，至少" + cm.getFirstJobStatRequirement(jobType) + "#k。让我看看。");   // thanks Vcoc for noticing a need to state and check requirements on first job adv starting message
         } else if (cm.getLevel() >= 30 && cm.getJobId() == 400) {
             actionx["2ndJob"] = true;
             if (cm.haveItem(4031012)) {
@@ -60,7 +60,7 @@ function start() {
             }
         } else if (actionx["3thJobI"] || (cm.getPlayer().gotPartyQuestItem("JB3") && cm.getLevel() >= 70 && cm.getJobId() % 10 == 0 && parseInt(cm.getJobId() / 100) == 4 && !cm.getPlayer().gotPartyQuestItem("JBP"))) {
             actionx["3thJobI"] = true;
-            cm.sendNext("你来了。几天前，奥西里亚的#b#p2020011##k跟我谈到了你。我看到你对于成为盗贼职业的第三次转职很感兴趣。为了实现这个目标，我需要测试一下你的实力，看看你是否配得上这个晋升。在维多利亚岛的一个深水沼泽中有一个洞口，会带你通往一个秘密通道。一旦进入，你将面对我的分身。你的任务是打败他，并带着#b#t4031059##k回来。");
+            cm.sendNext("你来了。几天前，奥西里亚的#b#p2020011##k跟我谈到了你。我看到你对于成为盗贼职业的第三次转职很感兴趣。为了实现这个目标，我需要测试一下你的实力，看看你是否配得上这个晋升。在金银岛的一个深水沼泽中有一个洞口，会带你通往一个秘密通道。一旦进入，你将面对我的分身。你的任务是打败他，并带着#b#t4031059##k回来。");
         } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)) {
             cm.sendNext("请把#b#t4031059##k带给我。");
             cm.dispose();
@@ -125,7 +125,7 @@ function action(mode, type, selection) {
     if (actionx["1stJob"]) {
         if (status == 0) {
             if (cm.getLevel() >= 10 && cm.canGetFirstJob(jobType)) {
-                cm.sendYesNo("哦...！你看起来就像是我们团队的一员... 你只需要一点邪恶的心思，然后... 是的... 你觉得怎么样？想成为游侠吗？");
+                cm.sendYesNo("哦...！你看起来就很鸡贼，确实像是我们团队的一员... 你需要再多一点邪恶的心思，你觉得怎么样？想成为飞侠吗？ ");
             } else {
                 cm.sendOk("再多训练一会儿，直到达到基本要求，我就可以教你成为#r盗贼#k的方法。");
                 cm.dispose();
@@ -139,7 +139,7 @@ function action(mode, type, selection) {
                     cm.gainItem(1332063, 1);
                     cm.resetStats();
                 }
-                cm.sendNext("好的，从现在开始，你就是我们的一员了！你将在...过着流浪者的生活，但要耐心等待，很快你就会过上富裕的生活。好了，虽然不多，但我会传授给你一些我的能力... 哈啊啊啊！！");
+                cm.sendNext("好的，从现在开始，你就是我们的一员了！你将在冒险岛过着流浪者的生活，但只要有耐心，很快你就会过上富裕的生活。好了，虽然不多，但我会传授给你一些我的能力... 哈啊啊啊！！");
             } else {
                 cm.sendNext("清理一下你的背包，然后回来找我说话。");
                 cm.dispose();
@@ -147,7 +147,7 @@ function action(mode, type, selection) {
         } else if (status == 2) {
             cm.sendNextPrev("你现在变得更强大了。而且你的每一个物品栏都增加了槽位。确切地说，是一整行。自己去看看吧。我刚给了你一点#bSP#k。当你在屏幕左下角打开#b技能#k菜单时，可以使用SP学习技能。不过要注意一点：你不能一次性全部提升。在学习了一些技能之后，你还可以获得一些特定的技能。");
         } else if (status == 3) {
-            cm.sendNextPrev("现在提醒一下。一旦你做出选择，就不能改变主意，试图选择另一条道路。现在去吧，做一个骄傲的盗贼。");
+            cm.sendNextPrev("现在提醒一下。一旦你做出选择，就不能改变主意，试图选择另一条道路。现在去吧，做一个骄傲的飞侠。");
         } else {
             cm.dispose();
         }

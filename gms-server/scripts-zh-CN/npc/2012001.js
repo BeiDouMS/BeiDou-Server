@@ -8,7 +8,7 @@ function start() {
             cm.dispose();
         }
     } else {
-        cm.sendOk("确保你有一张艾利尼亚船票才能乘坐这艘船。检查你的背包。");
+        cm.sendOk("确保你有一张魔法密林船票才能乘坐这艘船。检查你的背包。");
         cm.dispose();
     }
 }

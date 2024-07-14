@@ -60,7 +60,7 @@ function start() {
             }
         } else if (actionx["3thJobI"] || (cm.getPlayer().gotPartyQuestItem("JB3") && cm.getLevel() >= 70 && cm.getJobId() % 10 == 0 && parseInt(cm.getJobId() / 100) == 3 && !cm.getPlayer().gotPartyQuestItem("JBP"))) {
             actionx["3thJobI"] = true;
-            cm.sendNext("你来了。几天前，奥西里亚的#b#p2020010##k跟我谈到了你。我看到你对成为弓箭手职业的第三次转职很感兴趣。为了实现这个目标，我需要测试你的实力，看看你是否配得上这个晋升。在维多利亚岛的深林中有一个开口，会带你通往一个秘密通道。一旦进入，你将面对我的分身。你的任务是打败她，并带着#b#t4031059##k回来。");
+            cm.sendNext("你来了。几天前，奥西里亚的#b#p2020010##k跟我谈到了你。我看到你对成为弓箭手职业的第三次转职很感兴趣。为了实现这个目标，我需要测试你的实力，看看你是否配得上这个晋升。在金银岛的深林中有一个开口，会带你通往一个秘密通道。一旦进入，你将面对我的分身。你的任务是打败她，并带着#b#t4031059##k回来。");
         } else if (cm.getPlayer().gotPartyQuestItem("JBP") && !cm.haveItem(4031059)) {
             cm.sendNext("请把#b#t4031059##k带给我。");
             cm.dispose();
@@ -164,7 +164,7 @@ function action(mode, type, selection) {
                     if (!cm.haveItem(4031010)) {
                         cm.gainItem(4031010, 1);
                     }
-                    cm.sendNextPrev("请将这封信交给亨尼西斯附近的#b#p1072002##k。她正在代替我担任教练的工作。把信交给她，她会代替我测试你。祝你好运。");
+                    cm.sendNextPrev("请将这封信交给射手村附近的#b#p1072002##k。她正在代替我担任教练的工作。把信交给她，她会代替我测试你。祝你好运。");
                     cm.dispose();
                 } else {
                     cm.sendNext("请在你的背包中腾出一些空间。");

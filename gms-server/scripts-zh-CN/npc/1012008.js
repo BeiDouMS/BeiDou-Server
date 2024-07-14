@@ -9,8 +9,8 @@ var current;
 var omok = [4080000, 4080001, 4080002, 4080003, 4080004, 4080005];
 var omok1piece = [4030000, 4030000, 4030000, 4030010, 4030011, 4030011];
 var omok2piece = [4030001, 4030010, 4030011, 4030001, 4030010, 4030001];
-var omokamount = 99;
-var text = "The set also differs based on what kind of pieces you want to use for the game. Which set would you like to make?"
+var omokamount = 5; //制作五子棋需要的五目石数量
+var text = "棋具的选择也取决于你想要使用哪种棋子。你想制作哪种棋具呢？"
 
 function start() {
     current = 0;

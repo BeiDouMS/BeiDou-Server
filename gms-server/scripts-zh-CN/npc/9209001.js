@@ -60,7 +60,7 @@ function action(mode, type, selection) {
             cm.warp(680100000 + parseInt(Math.random() * 3));
             cm.dispose();
         } else if (selection == 0) {
-            cm.sendNext("枫叶七日市场只在星期天开放。你可以在任何城镇找到我，比如Henysys、新叶城、利弗雷、废都、废都市，我几乎无处不在！");
+            cm.sendNext("枫叶七日市场只在星期天开放。你可以在任何城镇找到我，比如Henysys、新叶城、利弗雷、废都、废弃都市，我几乎无处不在！");
             status -= 2;
         } else if (selection == 1) {
             cm.sendSimple("您可以在冒险岛第七天市场找到其他地方难以找到的稀有物品。#b\r\n#L0#购买特殊物品\r\n#L1#帮助家禽农场主");

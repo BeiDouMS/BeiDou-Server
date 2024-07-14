@@ -53,7 +53,7 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            cm.sendSimple("嗨，你好！欢迎来到亨尼西斯整形外科！你想把你的脸变成全新的样子吗？使用 #b#t5152001##k，你可以让我们来照顾剩下的事情，拥有你一直想要的脸~！\r\n#L2#整形外科：#i5152001##t5152001##l");
+            cm.sendSimple("嗨，你好！欢迎来到射手村整形外科！你想把你的脸变成全新的样子吗？使用 #b#t5152001##k，你可以让我们来照顾剩下的事情，拥有你一直想要的脸~！\r\n#L2#整形外科：#i5152001##t5152001##l");
         } else if (status == 1) {
             if (selection == 2) {
                 facenew = Array();
