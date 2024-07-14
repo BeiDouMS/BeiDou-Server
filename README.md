@@ -19,7 +19,7 @@
 - MySQL8：https://github.com/SleepNap/NapMysqlTool/releases/latest 或者 https://downloads.mysql.com/archives/community/
 - Maven：https://maven.apache.org/download.cgi
 - git：https://git-scm.com/downloads
-- DBeaver：https://dbeaver.io/download/
+- DBeaver：https://dbeaver.io/download/ 或者 Navicat：https://www.navicat.com/en/download/navicat-premium-lite
 
 ## 开发进展
 ![s1.jpeg](mdimg/s1.jpeg)

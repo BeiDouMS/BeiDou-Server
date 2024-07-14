@@ -47,9 +47,9 @@ gms:
         meso_rate: 10
         drop_rate: 10
         boss_drop_rate: 10                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
-        quest_rate: 5                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
-        fishing_rate: 10                        #Multiplier for success likelihood on meso thrown during fishing.
-        travel_rate: 10                         #Means of transportation rides/departs using 1/N of the default time.
+        quest_rate: 5                           #完成任务时获得的经验和金币的倍数。仅在USE_QUEST_RATE为true时可用。与服务器经验和金币倍数叠加.
+        fishing_rate: 10                        #钓鱼时投掷金币的成功率倍数.
+        travel_rate: 10                         #交通工具使用1/N的默认时间进行骑行/出发.
         #随等级成长的经验加成，仅刷怪有效。刷怪经验 *= (1+额外倍率x等级)
         level_exp_rate: 0.01                    #每级提供刷怪经验加成 1=100% (0为不启用)
         #等级冲刺计划，仅刷怪有效，仅比目标等级低时有效。刷怪经验 *= [1+(目标等级-当前等级)*冲刺倍率]；
@@ -204,11 +204,11 @@ gms:
     INIT_CONNECTION_POOL_TIMEOUT: 90    # Seconds
 
     #Login Configuration
-    WORLDS: 1                           #Initial number of worlds on the server.
-    WLDLIST_SIZE: 21                    #Max possible worlds on the server.
-    CHANNEL_SIZE: 20                    #Max possible channels per world (which is 20, based on the channel list on login phase).
-    CHANNEL_LOAD: 100                   #Max players per channel (limit actually used to calculate the World server capacity).
-    CHANNEL_LOCKS: 20                   #Total number of structure management locks each channel has.
+    WORLDS: 1                           #初始世界数量。
+    WLDLIST_SIZE: 21                    #服务器最大可能的世界数量。
+    CHANNEL_SIZE: 20                    #每个世界最大可能的频道数量（基于登录阶段的频道列表）。
+    CHANNEL_LOAD: 100                   #每个频道的最大玩家数量（实际用于计算世界服务器容量的限制）。
+    CHANNEL_LOCKS: 20                   #每个频道拥有的结构管理锁总数。
 
     RESPAWN_INTERVAL: 10000             #10 seconds, 10000.
     PURGING_INTERVAL: 300000            #5 minutes, 300000.
@@ -222,16 +222,16 @@ gms:
     BYPASS_PIC_EXPIRATION: 20           #Enables PIC bypass, which will remain active for that account by that client machine for N minutes. Set 0 to disable.
     BYPASS_PIN_EXPIRATION: 15           #Enables PIN bypass, which will remain active for that account by that client machine for N minutes. Set 0 to disable.
 
-    AUTOMATIC_REGISTER: true        #Automatically register players when they login with a nonexistent username.
-    BCRYPT_MIGRATION: true          #Performs a migration from old SHA-1 and SHA-512 password to bcrypt.
-    COLLECTIVE_CHARSLOT: false      #Available character slots are contabilized globally rather than per world server.
-    DETERRED_MULTICLIENT: false     #Enables detection of multi-client and suspicious remote IP on the login system.
-    #Besides blocking logging in with several client sessions on the same machine, this also blocks suspicious login attempts for players that tries to login on an account using several diferent remote addresses.
+    AUTOMATIC_REGISTER: true        #当玩家使用不存在的用户名登录时自动注册。
+    BCRYPT_MIGRATION: true          #从旧的SHA-1和SHA-512密码迁移到bcrypt。
+    COLLECTIVE_CHARSLOT: false      #可用角色槽位在全球范围内统计，而不是每个世界服务器。
+    DETERRED_MULTICLIENT: false     #在登录系统中启用多客户端和可疑远程IP的检测。
+    #除了阻止在同一台机器上使用多个客户端会话登录外，这还阻止了玩家尝试使用多个不同的远程地址登录账户的可疑登录尝试。
 
     #Multiclient Coordinator Configuration
-    MAX_ALLOWED_ACCOUNT_HWID: 10        #Allows up to N concurrent HWID's for an account. HWID's remains linked to an account longer the more times it's used to login.
-    MAX_ACCOUNT_LOGIN_ATTEMPT: 15       #After N tries on an account, login on that account gets disabled for a short period.
-    LOGIN_ATTEMPT_DURATION: 120         #Period in seconds the login attempt remains registered on the system.
+    MAX_ALLOWED_ACCOUNT_HWID: 10        #允许一个账户最多有N个并发HWID。HWID与账户的关联时间越长，登录次数越多。
+    MAX_ACCOUNT_LOGIN_ATTEMPT: 15       #在N次尝试后，该账户的登录被禁用一段时间。
+    LOGIN_ATTEMPT_DURATION: 120         #登录尝试在系统中注册的持续时间（以秒为单位）。
 
     #Ip Configuration
     HOST: 127.0.0.1                 #WAN IPv4 address
@@ -243,17 +243,17 @@ gms:
     SHUTDOWNHOOK: true
 
     #Server Flags
-    USE_CUSTOM_KEYSET: false             #Enables auto-setup of the HeavenMS's custom keybindings when creating characters.
-    USE_DEBUG: false                    #Will enable some text prints on the client, oriented for debugging purposes.
-    USE_DEBUG_SHOW_INFO_EQPEXP: false   #Prints on the cmd all equip exp gain info.
-    USE_DEBUG_SHOW_RCVD_PACKET: false   #Prints on the cmd all received packet ids.
-    USE_DEBUG_SHOW_RCVD_MVLIFE: false   #Prints on the cmd all received move life content.
+    USE_CUSTOM_KEYSET: false             #在创建角色时启用HeavenMS的自定义键绑定自动设置。
+    USE_DEBUG: false                    #将在客户端上启用一些面向调试的文本打印。
+    USE_DEBUG_SHOW_INFO_EQPEXP: false   #在cmd上打印所有装备经验增益信息。
+    USE_DEBUG_SHOW_RCVD_PACKET: false   #在cmd上打印所有接收到的数据包ID。
+    USE_DEBUG_SHOW_RCVD_MVLIFE: false   #在cmd上打印所有接收到的移动生命内容。
     USE_DEBUG_SHOW_PACKET: false
-    USE_SUPPLY_RATE_COUPONS: true       #Allows rate coupons to be sold through the Cash Shop.
-    USE_IP_VALIDATION: false             #Enables IP checking when logging in.
-    USE_CHARACTER_ACCOUNT_CHECK: false  #Enables one-character-per-account check when logging in. This might be resource intensive.
+    USE_SUPPLY_RATE_COUPONS: true       #允许通过现金商店出售速率优惠券。
+    USE_IP_VALIDATION: false             #在登录时启用IP检查。
+    USE_CHARACTER_ACCOUNT_CHECK: false  #在登录时启用单角色-账户检查。这可能是资源密集型的。
 
-    USE_MAXRANGE: true                  #Will send and receive packets from all events on a map, rather than those of only view range.
+    USE_MAXRANGE: true                  #将从地图上的所有事件发送和接收数据包，而不仅仅是视图范围内的那些。.
     USE_MAXRANGE_ECHO_OF_HERO: true
     USE_MTS: false
     USE_CPQ: true                       #Renders the CPQ available or not.
@@ -261,244 +261,241 @@ gms:
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
     USE_DUEY: true
-    USE_RANDOMIZE_HPMP_GAIN: true       #Enables randomizing on MaxHP/MaxMP gains and INT accounting for the MaxMP gain on level up.
-    USE_STORAGE_ITEM_SORT: true         #Enables storage "Arrange Items" feature.
-    USE_ITEM_SORT: true                 #Enables inventory "Item Sort/Merge" feature.
-    USE_ITEM_SORT_BY_NAME: false        #Item sorting based on name rather than id.
-    USE_PARTY_FOR_STARTERS: false        #Players level 10 or below can create/invite other players on the given level range.
-    USE_AUTOASSIGN_STARTERS_AP: true   #Beginners level 10 or below have their AP autoassigned (they can't choose to levelup a stat). Set true ONLY if the localhost doesn't support AP assigning for beginners level 10 or below.
-    USE_AUTOASSIGN_SECONDARY_CAP: true  #Prevents AP autoassign from spending on secondary stats after the player class' cap (defined on the autoassign handler) has been reached.
-    USE_STARTING_AP_4: false             #Use early-GMS 4/4/4/4 starting stats. To overcome AP shortage, this gives 4AP/5AP at 1st/2nd job advancements.
-    USE_AUTOBAN: false                  #Commands the server to detect infractors automatically.
-    USE_AUTOBAN_LOG: true               #Log autoban related messages. Still logs even with USE_AUTOBAN disabled.
-    USE_EXP_GAIN_LOG: false #Logs characters exp gains; logs world rate & coupon exp, total gained exp, and current exp, level can be calculated from "ExpTable".
-    USE_AUTOSAVE: true                  #Enables server autosaving feature (saves characters to DB each 1 hour).
-    USE_SERVER_AUTOASSIGNER: false       #HeavenMS-builtin autoassigner, uses algorithm based on distributing AP accordingly with required secondary stat on equipments.
+    USE_RANDOMIZE_HPMP_GAIN: true       #在升级时启用MaxHP/MaxMP增益和INT对MaxMP增益的随机化。
+    USE_STORAGE_ITEM_SORT: true         #启用存储“整理物品”功能。
+    USE_ITEM_SORT: true                 #启用库存“物品排序/合并”功能。
+    USE_ITEM_SORT_BY_NAME: false        #基于名称而不是ID进行物品排序。
+    USE_PARTY_FOR_STARTERS: false        #10级或以下的玩家可以创建/邀请给定等级范围内的其他玩家。
+    USE_AUTOASSIGN_STARTERS_AP: true   #10级或以下的初学者自动分配AP（他们不能选择升级属性）。仅在本地主机不支持10级或以下初学者的AP分配时设置为true。
+    USE_AUTOASSIGN_SECONDARY_CAP: true  #防止AP自动分配在达到玩家职业上限（在自动分配处理程序中定义）后花费在次要属性上。
+    USE_STARTING_AP_4: false             #使用早期GMS 4/4/4/4起始属性。为了克服AP短缺，这在1st/2nd职业进阶时给予4AP/5AP。
+    USE_AUTOBAN: false                  #命令服务器自动检测违规者。
+    USE_AUTOBAN_LOG: true               #记录与自动封禁相关的消息。即使用USE_AUTOBAN禁用，仍然记录。
+    USE_EXP_GAIN_LOG: false #记录角色经验增益；记录世界速率和优惠券经验，总获得经验，当前经验，等级可以从“ExpTable”计算。
+    USE_AUTOSAVE: true                  #启用服务器自动保存功能（每1小时将角色保存到数据库）。
+    USE_SERVER_AUTOASSIGNER: false       #HeavenMS内置的自动分配器，使用基于根据装备所需次要属性分配AP的算法。
     USE_REFRESH_RANK_MOVE: true
-    USE_ENFORCE_ADMIN_ACCOUNT: false    #Forces accounts having GM characters to be treated as a "GM account" by the client (localhost). Some of the GM account perks is the ability to FLY, but unable to TRADE.
-    USE_ENFORCE_NOVICE_EXPRATE: false    #Hardsets experience rate 1x for beginners level 10 or under. Ideal for roaming on novice areas without caring too much about losing some stats.
-    USE_ENFORCE_HPMP_SWAP: false        #Forces players to reuse stats (via AP Resetting) located on HP/MP pool only inside the HP/MP stats.
-    USE_ENFORCE_MOB_LEVEL_RANGE: true   #Players N levels below the killed mob will gain no experience from defeating it.
-    USE_ENFORCE_JOB_LEVEL_RANGE: false  #Caps the player level on the minimum required to advance their current jobs.
-    USE_ENFORCE_JOB_SP_RANGE: false     #Caps the player SP level on the total obtainable by their current jobs. After changing jobs, missing SP will be retrieved.
-    USE_ENFORCE_ITEM_SUGGESTION: false  #Forces the Owl of Minerva and the Cash Shop to always display the defined item array instead of those featured by the players.
-    USE_ENFORCE_UNMERCHABLE_CASH: true  #Forces players to not sell CASH items via merchants, drops of it disappears.
-    USE_ENFORCE_UNMERCHABLE_PET: true   #Forces players to not sell pets via merchants, drops of it disappears. (since non-named pets gets dirty name and other possible DB-related issues)
-    USE_ENFORCE_MERCHANT_SAVE: true     #Forces automatic DB save on merchant owners, at every item movement on shop.
-    USE_ENFORCE_MDOOR_POSITION: false   #Forces mystic door to be spawned near spawnpoints.
-    USE_SPAWN_CLEAN_MDOOR: false         #Makes mystic doors to be spawned without deploy animation. This clears disconnecting issues that may happen when trying to cancel doors a couple seconds after deployment.
-    USE_SPAWN_LOOT_ON_ANIMATION: false  #Makes loot appear some time after the mob has been killed (following the mob death animation, instead of instantly).
-    USE_SPAWN_RELEVANT_LOOT: true       #Forces to only spawn loots that are collectable by the player or any of their party members.
-    USE_ERASE_PERMIT_ON_OPENSHOP: true  #Forces "shop permit" item to be consumed when player deploy his/her player shop.
-    USE_ERASE_UNTRADEABLE_DROP: true    #Forces flagged untradeable items to disappear when dropped.
-    USE_ERASE_PET_ON_EXPIRATION: false  #Forces pets to be removed from inventory when expire time comes, rather than converting it to a doll.
-    USE_BUFF_MOST_SIGNIFICANT: true     #When applying buffs, the player will stick with the highest stat boost among the listed, rather than overwriting stats.
-    USE_BUFF_EVERLASTING: false         #Every applied buff on players holds expiration time so high it'd be considered permanent. Suggestion thanks to Vcoc.
-    USE_MULTIPLE_SAME_EQUIP_DROP: true  #Enables multiple drops by mobs of the same equipment, number of possible drops based on the quantities provided at the drop data.
-    USE_BANISHABLE_TOWN_SCROLL: false    #Enables town scrolls to act as if it's a "player banish", rendering the antibanish scroll effect available.
-    USE_ENABLE_FULL_RESPAWN: false       #At respawn task, always respawn missing mobs when they're available. Spawn count doesn't depend on how many players are currently there.
-    USE_ENABLE_CHAT_LOG: false          #Write in-game chat to log
-    USE_REBIRTH_SYSTEM: false           #Flag to enable/disable rebirth system
-    USE_MAP_OWNERSHIP_SYSTEM: false      #Flag to enable/disable map ownership system
-    USE_FISHING_SYSTEM: false            #Flag to enable/disable custom fishing system
-    USE_NPCS_SCRIPTABLE: true           #Flag to enable/disable serverside predefined script NPCs.
+    USE_ENFORCE_ADMIN_ACCOUNT: false    #强制具有GM角色的账户被客户端（localhost）视为“GM账户”。GM账户的一些特权是能够飞行，但不能交易。
+    USE_ENFORCE_NOVICE_EXPRATE: true    #为10级或以下的初学者硬设置1倍经验率。适合在不关心失去一些属性的情况下在初学者区域漫游。
+    USE_ENFORCE_HPMP_SWAP: false        #强制玩家通过AP重置重新使用位于HP/MP池内的属性。
+    USE_ENFORCE_MOB_LEVEL_RANGE: true   #低于被杀怪物N级的玩家将不会从击败它中获得经验。
+    USE_ENFORCE_JOB_LEVEL_RANGE: false  #将玩家等级限制在当前职业进阶所需的最小等级。
+    USE_ENFORCE_JOB_SP_RANGE: false     #将玩家SP等级限制在当前职业可获得的总SP。改变职业后，将检索缺失的SP。
+    USE_ENFORCE_ITEM_SUGGESTION: false  #强制猫头鹰和现金商店始终显示定义的物品数组，而不是玩家展示的物品。
+    USE_ENFORCE_UNMERCHABLE_CASH: true  #强制玩家不能通过商人出售CASH物品，掉落的物品消失。
+    USE_ENFORCE_UNMERCHABLE_PET: true   #强制玩家不能通过商人出售宠物，掉落的物品消失。（因为非命名宠物会得到脏名字和其他可能的数据库相关问题）
+    USE_ENFORCE_MERCHANT_SAVE: true     #强制商人所有者在商店内每次物品移动时自动保存到数据库。
+    USE_ENFORCE_MDOOR_POSITION: false   #强制传送门在出生点附近生成。
+    USE_SPAWN_CLEAN_MDOOR: false         #使传送门在没有部署动画的情况下生成。这解决了在部署几秒钟后尝试取消门时可能发生的断开连接问题。
+    USE_SPAWN_LOOT_ON_ANIMATION: false  #使战利品在怪物被杀后一段时间出现（跟随怪物死亡动画，而不是立即）。
+    USE_SPAWN_RELEVANT_LOOT: true       #强制只生成玩家或其任何队伍成员可收集的战利品。
+    USE_ERASE_PERMIT_ON_OPENSHOP: true  #强制在玩家部署他的/她的玩家商店时消耗“商店许可证”物品。
+    USE_ERASE_UNTRADEABLE_DROP: true    #强制标记为不可交易的物品在掉落时消失。
+    USE_ERASE_PET_ON_EXPIRATION: false  #强制宠物在到期时间到来时从库存中移除，而不是转换为玩偶。
+    USE_BUFF_MOST_SIGNIFICANT: true     #在应用增益时，玩家将坚持列表中最高的属性提升，而不是覆盖属性。
+    USE_BUFF_EVERLASTING: false         #玩家上应用的每个增益都有极高的到期时间，以至于被认为是永久的。感谢Vcoc的建议。
+    USE_MULTIPLE_SAME_EQUIP_DROP: true  #启用怪物掉落相同装备的多个物品，可能的掉落数量基于掉落数据中提供的数量。
+    USE_BANISHABLE_TOWN_SCROLL: false    #启用城镇卷轴作为“玩家放逐”，使反放逐卷轴效果可用。
+    USE_ENABLE_FULL_RESPAWN: false       #在重生任务中，总是重生缺失的怪物，当它们可用时。生成数量不取决于当前有多少玩家在那里。
+    USE_ENABLE_CHAT_LOG: false          #将游戏内聊天写入日志
+    USE_REBIRTH_SYSTEM: false           #标志以启用/禁用转生系统
+    USE_MAP_OWNERSHIP_SYSTEM: false      #标志以启用/禁用地图所有权系统
+    USE_FISHING_SYSTEM: false            #标志以启用/禁用自定义钓鱼系统
+    USE_NPCS_SCRIPTABLE: true           #标志以启用/禁用服务器端预定义脚本NPCs。
 
     #Events/PQs Configuration
-    USE_OLD_GMS_STYLED_PQ_NPCS: true     #Enables PQ NPCs with similar behaviour to old GMS style, that skips info about the PQs and immediately tries to register the party in.
-    USE_ENABLE_SOLO_EXPEDITIONS: false    #Enables start expeditions with any number of players. This will also bypass all the Zakum prequest.
-    USE_ENABLE_DAILY_EXPEDITIONS: false  #Enables daily entry limitations in expeditions.
-    USE_ENABLE_RECALL_EVENT: false        #Enables a disconnected player to reaccess the last event instance they were in before logging out. Recall only works if the event isn't cleared or disposed yet. Suggestion thanks to Alisson (Goukken).
+    USE_OLD_GMS_STYLED_PQ_NPCS: true     #启用与旧GMS风格相似的PQ NPCs，跳过关于PQs的信息并立即尝试注册队伍。
+    USE_ENABLE_SOLO_EXPEDITIONS: false    #启用任何数量的玩家开始远征。这也将绕过所有Zakum的前置任务。
+    USE_ENABLE_DAILY_EXPEDITIONS: false  #启用在远征中的每日入场限制。
+    USE_ENABLE_RECALL_EVENT: false        #启用断开连接的玩家重新访问他们上次登录前所在的事件实例。召回仅在事件未清除或处置之前有效。感谢Alisson (Goukken)的建议。
 
     #Announcement Configuration
-    USE_ANNOUNCE_SHOPITEMSOLD: false    #Automatic message sent to owner when an item from the Player Shop or Hired Merchant is sold.
-    USE_ANNOUNCE_CHANGEJOB: false       #Automatic message sent to acquantainces when changing jobs.
-    USE_ANNOUNCE_NX_COUPON_LOOT: false    #Enables or disables the floating text when a player loots a NX card
+    USE_ANNOUNCE_SHOPITEMSOLD: false    #当玩家商店或雇佣商人中的物品被售出时，自动向所有者发送消息。
+    USE_ANNOUNCE_CHANGEJOB: false       #当改变职业时，自动向熟人发送消息。
+    USE_ANNOUNCE_NX_COUPON_LOOT: false    #启用或禁用玩家获得NX卡时的浮动文本
     USE_ANNOUNCE_GLOBAL_LEVEL_UP: false #玩家升级时全服通知，使用命令升级的或者GM账户除外
 
     #Cash Shop Configuration
-    USE_JOINT_CASHSHOP_INVENTORY: false  #Enables usage of a same cash shop inventory for explorers, cygnus and legends. Items from exclusive cash shop inventories won't show up on the shared inventory, though.
-    USE_CLEAR_OUTDATED_COUPONS: true    #Enables deletion of older code coupon registry from the DB, freeing so-long irrelevant data.
-    ALLOW_CASHSHOP_NAME_CHANGE: true    #Allows players to buy name changes in the cash shop.
-    ALLOW_CASHSHOP_WORLD_TRANSFER: true  #Allows players to buy world transfers in the cash shop.
+    USE_JOINT_CASHSHOP_INVENTORY: false  #启用探险者、希格诺斯和传奇的相同现金商店库存。专属现金商店库存中的物品不会出现在共享库存中。
+    USE_CLEAR_OUTDATED_COUPONS: true    #启用从数据库中删除旧代码优惠券注册表，释放长期不相关的数据。
+    ALLOW_CASHSHOP_NAME_CHANGE: true    #允许玩家在现金商店购买改名。
+    ALLOW_CASHSHOP_WORLD_TRANSFER: true  #允许玩家在现金商店购买世界转移。
 
     #Maker Configuration
-    USE_MAKER_PERMISSIVE_ATKUP: false    #Allows players to use attack-based strengthening gems on non-weapon items.
-    USE_MAKER_FEE_HEURISTICS: true      #Apply compiled values for stimulants and reagents into the Maker fee calculations (max error revolves around 50k mesos). Set false to use basic constant values instead (results are never higher than requested by the client-side).
-
-    #Custom Configuration
-    USE_ENABLE_CUSTOM_NPC_SCRIPT: false  #Enables usage of custom HeavenMS NPC scripts (Agent E, Coco, etc). Will not disable Abdula (it's actually useful for the gameplay) or quests.
-    USE_STARTER_MERGE: false            #Allows any players to use the Equipment Merge custom mechanic (as opposed to the high-level, Maker lv3 requisites).
+    USE_MAKER_PERMISSIVE_ATKUP: false    #允许玩家在非武器物品上使用基于攻击的强化宝石。
+    USE_MAKER_FEE_HEURISTICS: true      #将编译的刺激剂和试剂值应用于Maker费用计算（最大误差约为5万金币）。设置为false则使用基本常量值（结果永远不会高于客户端请求的值）。
 
     #Commands Configuration
-    BLOCK_GENERATE_CASH_ITEM: false     #Prevents creation of cash items with the item/drop command.
-    USE_WHOLE_SERVER_RANKING: false     #Enables a ranking pool made from every character registered on the server for the "ranks" command, instead of separated by worlds.
+    BLOCK_GENERATE_CASH_ITEM: false     #防止使用item/drop命令创建现金物品。
+    USE_WHOLE_SERVER_RANKING: false     #为“ranks”命令启用从服务器上注册的每个角色创建的排名池，而不是按世界分开。
 
-    EQUIP_EXP_RATE: 1.0                  #Rate for equipment exp gain, grows linearly. Set 1.0 for default (about 100~200 same-level range mobs killed to pass equip from level 1 to 2).
-    PQ_BONUS_EXP_RATE: 0.5               #Rate for the PQ exp reward.
+    EQUIP_EXP_RATE: 1.0                  #装备经验增益率，线性增长。设置为1.0为默认值（大约杀死100~200个同等级范围内的怪物，使装备从1级升到2级）。
+    PQ_BONUS_EXP_RATE: 0.5               #PQ经验奖励率。
 
-    EXP_SPLIT_LEVEL_INTERVAL: 5            #Non-contributing players must be within N level between the mob to receive EXP.
-    EXP_SPLIT_LEECH_INTERVAL: 5            #Non-contributing players must be within N level between any contributing party member to receive EXP.
+    EXP_SPLIT_LEVEL_INTERVAL: 5            #非贡献玩家必须在怪物N级范围内才能获得经验。
+    EXP_SPLIT_LEECH_INTERVAL: 5            #非贡献玩家必须在任何贡献队伍成员N级范围内才能获得经验。
     EXP_SPLIT_MVP_MOD: 0.2
     EXP_SPLIT_COMMON_MOD: 0.8
-    PARTY_BONUS_EXP_RATE: 1.0            #Rate for the party exp bonus reward.
+    PARTY_BONUS_EXP_RATE: 1.0            #队伍经验奖励率。
+
 
     #Miscellaneous Configuration
     TIMEZONE: GMT
-    CHARSET: GBK                          # Is loaded first, so applies to the rest of this config. Defaults to US-ASCII if invalid or not set.
-    USE_DISPLAY_NUMBERS_WITH_COMMA: true          #Enforce comma on displayed strings (use this when USE_UNITPRICE_WITH_COMMA is active and you still want to display comma-separated values).
-    USE_UNITPRICE_WITH_COMMA: true                #Set this accordingly with the layout of the unitPrices on Item.wz XML's, whether it's using commas or dots to represent fractions.
-    MAX_MONITORED_BUFFSTATS: 5                 #Limits accounting for "dormant" buff effects, that should take place when stronger stat buffs expires.
-    MAX_AP: 32767                               #Max AP allotted on the auto-assigner.
-    MAX_EVENT_LEVELS: 8                         #Event has different levels of rewarding system.
-    BLOCK_NPC_RACE_CONDT: 500   # (0.5 * 1000) Time the player client must wait before reopening a conversation with an NPC.
-    TOT_MOB_QUEST_REQUIREMENT: 0               #Overwrites old 999-mobs requirement for the ToT questline with new requirement value, set 0 for default.
-    MOB_REACTOR_REFRESH_TIME: 0         # (30 * 1000) Overwrites refresh time for those reactors oriented to inflict damage to bosses (Ice Queen, Riche), set 0 for default.
-    PARTY_SEARCH_REENTRY_LIMIT: 10              #Max amount of times a party leader is allowed to persist on the Party Search before entry expiration (thus needing to manually restart the Party Search to be able to search for members).
-    NAME_CHANGE_COOLDOWN: 2592000000      # (30*24*60*60*1000) Cooldown for name changes, default (GMS) is 30 days.
-    WORLD_TRANSFER_COOLDOWN: 2592000000  # (30*24*60*60*1000) Cooldown for world tranfers, default is same as name change (30 days).
-    INSTANT_NAME_CHANGE: false              #Whether or not to wait for server restart to apply name changes. Does on reconnect otherwise (requires queries on every login).
-    REBIRTH_NPC_ID: 9010021                 #ID of the NPC that should be replaced with the rebirth mechanic, if enabled.
+    CHARSET: GBK                          #首先加载，因此适用于此配置的其余部分。默认情况下，如果无效或未设置，则为US-ASCII。
+    USE_DISPLAY_NUMBERS_WITH_COMMA: true          #强制显示字符串中的逗号（当USE_UNITPRICE_WITH_COMMA处于活动状态时，仍希望显示逗号分隔的值时使用此选项）。
+    USE_UNITPRICE_WITH_COMMA: true                #根据Item.wz XML中的unitPrices布局设置此选项，无论是使用逗号还是点来表示小数。
+    MAX_MONITORED_BUFFSTATS: 5                 #限制对“休眠”增益效果的计数，这些效果应在更强的属性增益到期时生效。
+    MAX_AP: 32767                               #自动分配器上分配的最大AP。
+    MAX_EVENT_LEVELS: 8                         #事件有不同的奖励系统级别。
+    BLOCK_NPC_RACE_CONDT: 500   #（0.5 * 1000）玩家客户端在重新打开与NPC的对话之前必须等待的时间。
+    TOT_MOB_QUEST_REQUIREMENT: 0               #用新要求值覆盖ToT任务线的旧999怪物要求，设置0为默认值。
+    MOB_REACTOR_REFRESH_TIME: 0         #（30 * 1000）覆盖那些旨在对Boss造成伤害的反应堆的刷新时间（如冰女王，Riche），设置0为默认值。
+    PARTY_SEARCH_REENTRY_LIMIT: 10              #队伍领导者在队伍搜索前允许持续的最大次数，然后需要手动重新启动队伍搜索以能够搜索成员。
+    NAME_CHANGE_COOLDOWN: 2592000000      #（30*24*60*60*1000）改名冷却时间，默认（GMS）为30天。
+    WORLD_TRANSFER_COOLDOWN: 2592000000  #（30*24*60*60*1000）世界转移冷却时间，默认与改名相同（30天）。
+    INSTANT_NAME_CHANGE: false              #是否等待服务器重启以应用改名。否则在重新连接时进行（每次登录都需要查询）。
+    REBIRTH_NPC_ID: 9010021                 #如果启用，应替换为转生机制的NPC ID。
 
-    #Dangling Items/Locks Configuration
-    ITEM_EXPIRE_TIME: 180000    # (3 * 60 * 1000) Time before items start disappearing. Recommended to be set up to 3 minutes.
-    KITE_EXPIRE_TIME: 3600000   # (60 * 60 * 1000) Time before kites (cash item) disappears.
-    ITEM_MONITOR_TIME: 300000    # (5 * 60 * 1000) Interval between item monitoring tasks on maps, which checks for dangling (null) item objects on the map item history.
-    LOCK_MONITOR_TIME: 30000        # (30 * 1000) Waiting time for a lock to be released. If it reaches timeout, a critical server deadlock has made present.
+    #悬挂物品/锁配置
+    ITEM_EXPIRE_TIME: 180000    #（3 * 60 * 1000）物品开始消失前的时间。建议设置为3分钟。
+    KITE_EXPIRE_TIME: 3600000   #（60 * 60 * 1000）风筝（现金物品）消失前的时间。
+    ITEM_MONITOR_TIME: 300000    #（5 * 60 * 1000）地图上物品监控任务之间的间隔，检查地图物品历史中的悬挂（空）物品对象。
+    LOCK_MONITOR_TIME: 30000        #（30 * 1000）释放锁的等待时间。如果达到超时，则存在关键服务器死锁。
 
-    #Map Monitor Configuration
-    ITEM_EXPIRE_CHECK: 10000        # (10 * 10000) Interval between item expiring tasks on maps, which checks and makes disappear expired items.
-    ITEM_LIMIT_ON_MAP: 200              #Max number of items allowed on a map.
-    MAP_VISITED_SIZE: 5                 #Max length for last mapids visited by a player. This is used to recover and update drops on these maps accordingly with player actions.
-    MAP_DAMAGE_OVERTIME_INTERVAL: 2500  #Interval in milliseconds between map environment damage (e.g. El Nath and Aqua Road surrondings).
+    #地图监控配置
+    ITEM_EXPIRE_CHECK: 10000        #（10 * 10000）地图上物品过期任务之间的间隔，检查并使过期物品消失。
+    ITEM_LIMIT_ON_MAP: 200              #地图上允许的最大物品数量。
+    MAP_VISITED_SIZE: 5                 #玩家访问的最后地图ID的最大长度。这用于根据玩家操作恢复和更新这些地图上的掉落物。
+    MAP_DAMAGE_OVERTIME_INTERVAL: 2500  #地图环境伤害之间的间隔（例如El Nath和Aqua Road周围）。
     MAP_DAMAGE_OVERTIME_COUNT: 2
 
-    #Channel Mob Disease Monitor Configuration
-    MOB_STATUS_MONITOR_PROC: 200        #Frequency in milliseconds between each proc on the mob disease monitor schedule.
-    MOB_STATUS_MONITOR_LIFE: 84         #Idle proc count the mob disease monitor is allowed to be there before closing it due to inactivity.
-    MOB_STATUS_AGGRO_PERSISTENCE: 2     #Idle proc count on aggro update for a mob to keep following the current controller, given him/her is the leading damage dealer.
-    MOB_STATUS_AGGRO_INTERVAL: 5000     #Interval in milliseconds between aggro logistics update.
-    USE_AUTOAGGRO_NEARBY: false         #Mobs start following the player when approached.
+    #频道怪物疾病监控配置
+    MOB_STATUS_MONITOR_PROC: 200        #怪物疾病监控计划中每个进程之间的频率（以毫秒为单位）。
+    MOB_STATUS_MONITOR_LIFE: 84         #由于不活动而关闭之前，怪物疾病监控允许的空闲进程计数。
+    MOB_STATUS_AGGRO_PERSISTENCE: 2     #在aggro更新时，怪物保持跟随当前控制者的空闲进程计数，假设他/她是主要伤害输出者。
+    MOB_STATUS_AGGRO_INTERVAL: 5000     #aggro物流更新之间的间隔（以毫秒为单位）。
+    USE_AUTOAGGRO_NEARBY: false         #怪物在接近时开始跟随玩家。
 
-    #Some Gameplay Enhancing Configurations
-    #Scroll Configuration
-    USE_PERFECT_GM_SCROLL: true     #Scrolls from GMs never uses up slots nor fails.
-    USE_PERFECT_SCROLLING: false     #Scrolls doesn't use slots upon failure.
-    USE_ENHANCED_CHSCROLL: false     #Equips even more powerful with chaos upgrade.
-    USE_ENHANCED_CRAFTING: false     #Apply chaos scroll on every equip crafted.
-    SCROLL_CHANCE_ROLLS: 1         #Number of rolls for success on a scroll, set 1 for default.
-    CHSCROLL_STAT_RATE: 1               #Number of rolls of stat upgrade on a successfully applied chaos scroll, set 1 for default.
-    CHSCROLL_STAT_RANGE: 6              #Stat upgrade range (-N, N) on chaos scrolls.
+    #一些游戏玩法增强配置
+    #卷轴配置
+    USE_PERFECT_GM_SCROLL: true     #GM的卷轴永远不会用完槽位也不会失败。
+    USE_PERFECT_SCROLLING: false     #卷轴在失败时不会使用槽位。
+    USE_ENHANCED_CHSCROLL: false     #装备通过混沌升级更加强大。
+    USE_ENHANCED_CRAFTING: false     #在每个装备制作时应用混沌卷轴。
+    SCROLL_CHANCE_ROLLS: 1         #卷轴成功的滚动次数，设置为1为默认值。
+    CHSCROLL_STAT_RATE: 1               #成功应用的混沌卷轴上的属性升级滚动次数，设置为1为默认值。
+    CHSCROLL_STAT_RANGE: 6              #混沌卷轴上的属性升级范围（-N，N）。
 
-    #Beginner Skills Configuration
-    USE_ULTRA_NIMBLE_FEET: false     #Massive speed & jump upgrade.
-    USE_ULTRA_RECOVERY: false        #Massive recovery amounts overtime.
-    USE_ULTRA_THREE_SNAILS: false    #Massive damage on shell toss.
+    #新手技能配置
+    USE_ULTRA_NIMBLE_FEET: false     #巨大的速度和跳跃升级。
+    USE_ULTRA_RECOVERY: false        #随时间推移的巨大恢复量。
+    USE_ULTRA_THREE_SNAILS: false    #壳投掷的巨大伤害。
 
-    #Other Skills Configuration
-    USE_FULL_ARAN_SKILLSET: false   #Enables starter availability to all Aran job skills. Suggestion thanks to Masterrulax.
-    USE_FAST_REUSE_HERO_WILL: false  #Greatly reduce cooldown on Hero's Will.
-    USE_ANTI_IMMUNITY_CRASH: false   #Crash skills additionally removes the mob's invincibility buffs. Suggestion thanks to Celestial.
-    USE_UNDISPEL_HOLY_SHIELD: false  #Holy shield buff also prevents players from suffering dispel from mobs.
-    USE_FULL_HOLY_SYMBOL: false      #Holy symbol doesn't require EXP sharers to work in full.
+    #其他技能配置
+    USE_FULL_ARAN_SKILLSET: false   #启用所有Aran职业技能的入门可用性。感谢Masterrulax的建议。
+    USE_FAST_REUSE_HERO_WILL: false  #大幅减少英雄意志的冷却时间。
+    USE_ANTI_IMMUNITY_CRASH: false   #崩溃技能额外移除怪物的无敌buff。感谢Celestial的建议。
+    USE_UNDISPEL_HOLY_SHIELD: false  #神圣护盾buff还防止玩家受到怪物的驱散。
+    USE_FULL_HOLY_SYMBOL: false      #神圣符号不需要经验分享者就能完全工作。
 
-    #Character Configuration
-    USE_ADD_SLOTS_BY_LEVEL: false    #Slots are added each 20 levels.
-    USE_ADD_RATES_BY_LEVEL: false    #Rates are added each 20 levels.
-    USE_STACK_COUPON_RATES: false   #Multiple coupons effects builds up together.
-    USE_PERFECT_PITCH: false         #For lvl 30 or above, each lvlup grants player 1 perfect pitch.
+    #角色配置
+    USE_ADD_SLOTS_BY_LEVEL: false    #每20级增加槽位。
+    USE_ADD_RATES_BY_LEVEL: false    #每20级增加速率。
+    USE_STACK_COUPON_RATES: false   #多个优惠券效果叠加在一起。
+    USE_PERFECT_PITCH: false         #对于30级或以上的玩家，每次升级授予1个完美音高。
     USE_LEVEL_UP_PROTECT: true       #升级保护，避免连续升级
 
-    #Quest Configuration
-    USE_QUEST_RATE: false           #Exp/Meso gained by quests uses fixed server exp/meso rate times quest rate as multiplier, instead of player rates.
+    #任务配置
+    USE_QUEST_RATE: false           #任务获得的经验/金币使用固定的服务器经验/金币率乘以任务率作为乘数，而不是玩家率。
 
-    #Quest Points Configuration
-    QUEST_POINT_REPEATABLE_INTERVAL: 25  #Minimum interval between repeatable quest completions for quest points to be awarded.
-    QUEST_POINT_REQUIREMENT: 0          #Exchange factor between N quest points to +1 fame, set 0 to disable the entire quest point mechanism.
-    QUEST_POINT_PER_QUEST_COMPLETE: 0    #Each completed quest awards N quest points, set 0 to disable.
-    QUEST_POINT_PER_EVENT_CLEAR: 0       #Each completed event instance awards N quest points, set 0 to disable.
+    #任务点配置
+    QUEST_POINT_REPEATABLE_INTERVAL: 25  #可重复任务完成之间授予任务点的最小间隔。
+    QUEST_POINT_REQUIREMENT: 0          #N个任务点兑换+1名声的交换因子，设置为0禁用整个任务点机制。
+    QUEST_POINT_PER_QUEST_COMPLETE: 0    #每个完成的任务授予N个任务点，设置为0禁用。
+    QUEST_POINT_PER_EVENT_CLEAR: 0       #每个完成的事件实例授予N个任务点，设置为0禁用。
 
-    #Guild Configuration
-    CREATE_GUILD_MIN_PARTNERS: 6         #Minimum number of members on Guild Headquarters to establish a new guild.
+    #公会配置
+    CREATE_GUILD_MIN_PARTNERS: 6         #在公会总部建立新公会的最小成员数量。
     CREATE_GUILD_COST: 1500000
     CHANGE_EMBLEM_COST: 5000000
     EXPAND_GUILD_BASE_COST: 500000
     EXPAND_GUILD_TIER_COST: 1000000
     EXPAND_GUILD_MAX_COST: 5000000
 
-    #Family Configuration
-    FAMILY_REP_PER_KILL: 4               #Amount of rep gained per monster kill.
-    FAMILY_REP_PER_BOSS_KILL: 20         #Amount of rep gained per boss kill.
-    FAMILY_REP_PER_LEVELUP: 200          #Amount of rep gained upon leveling up.
-    FAMILY_MAX_GENERATIONS: 1000         #Maximum depth of family tree. (Distance from leader to farthest junior)
+    #家族配置
+    FAMILY_REP_PER_KILL: 4               #每次怪物击杀获得的声望量。
+    FAMILY_REP_PER_BOSS_KILL: 20         #每次Boss击杀获得的声望量。
+    FAMILY_REP_PER_LEVELUP: 200          #升级时获得的声望量。
+    FAMILY_MAX_GENERATIONS: 1000         #家族树的最大深度（从领导者到最远的晚辈的距离）。
 
-    #Equipment Configuration
-    USE_EQUIPMNT_LVLUP_SLOTS: false  #Equips can upgrade slots at level up.
-    USE_EQUIPMNT_LVLUP_POWER: false  #Enable more powerful stat upgrades at equip level up.
-    USE_EQUIPMNT_LVLUP_CASH: false   #Enable equip leveling up on cash equipments as well.
-    USE_SPIKES_AVOID_BANISH: false   #Shoes equipped with spikes prevents mobs from banishing wearer.
-    MAX_EQUIPMNT_LVLUP_STAT_UP: 10000   #Max stat upgrade an equipment can have on a levelup.
-    MAX_EQUIPMNT_STAT: 32767            #Max stat on an equipment by leveling up.
-    USE_EQUIPMNT_LVLUP: 1               #All equips lvlup at max level of N, set 1 to disable.
+    #装备配置
+    USE_EQUIPMNT_LVLUP_SLOTS: false  #装备可以在升级时升级槽位。
+    USE_EQUIPMNT_LVLUP_POWER: false  #在装备升级时启用更强大的属性升级。
+    USE_EQUIPMNT_LVLUP_CASH: false   #在现金装备上启用装备升级。
+    USE_SPIKES_AVOID_BANISH: false   #装备有刺的鞋子防止怪物放逐穿戴者。
+    MAX_EQUIPMNT_LVLUP_STAT_UP: 10000   #装备在升级时可以拥有的最大属性升级。
+    MAX_EQUIPMNT_STAT: 32767            #装备通过升级可以拥有的最大属性。
+    USE_EQUIPMNT_LVLUP: 1               #所有装备在最大等级N时升级，设置为1禁用。
 
-    #Map-Chair Configuration
-    USE_CHAIR_EXTRAHEAL: false       #Enable map chairs to further recover player's HP and MP (player must have the Chair Mastery skill).
-    CHAIR_EXTRA_HEAL_MULTIPLIER: 10    #Due to only being able to be send up-to-255 heal values, values being actually updated is the one displayed times this.
-    CHAIR_EXTRA_HEAL_MAX_DELAY: 21      #Players are expected to recover fully after using this skill for N seconds.
+    #地图椅子配置
+    USE_CHAIR_EXTRAHEAL: false       #启用地图椅子进一步恢复玩家的HP和MP（玩家必须拥有椅子精通技能）。
+    CHAIR_EXTRA_HEAL_MULTIPLIER: 10    #由于只能发送最多255的治愈值，实际更新的值是显示值乘以这个。
+    CHAIR_EXTRA_HEAL_MAX_DELAY: 21      #玩家在使用此技能N秒后预计完全恢复。
 
-    #Player NPC Configuration
-    PLAYERNPC_INITIAL_X: 262            #Map frame width for putting PlayerNPCs.
-    PLAYERNPC_INITIAL_Y: 262            #Map frame height for putting PlayerNPCs.
-    PLAYERNPC_AREA_X: 320               #Initial width gap between PlayerNPCs.
-    PLAYERNPC_AREA_Y: 160               #Initial height gap between PlayerNPCs.
-    PLAYERNPC_AREA_STEPS: 4             #Max number of times gap is shortened to comport PlayerNPCs.
-    PLAYERNPC_ORGANIZE_AREA: true   #Automatically rearranges PlayerNPCs on the map if there is no space set the new NPC. Current distance gap between NPCs is decreased to solve this issue.
-    PLAYERNPC_AUTODEPLOY: true      #Makes PlayerNPC automatically deployed on the Hall of Fame at the instant one reaches max level. If false, eligible players must talk to 1st job instructor to deploy a NPC.
+    #玩家NPC配置
+    PLAYERNPC_INITIAL_X: 262            #放置玩家NPC的地图框架宽度。
+    PLAYERNPC_INITIAL_Y: 262            #放置玩家NPC的地图框架高度。
+    PLAYERNPC_AREA_X: 320               #玩家NPC之间的初始宽度间隙。
+    PLAYERNPC_AREA_Y: 160               #玩家NPC之间的初始高度间隙。
+    PLAYERNPC_AREA_STEPS: 4             #缩短间隙以容纳玩家NPC的最大次数。
+    PLAYERNPC_ORGANIZE_AREA: true   #如果在地图上没有设置新NPC的空间，自动重新排列玩家NPC。当前NPC之间的距离间隙减小以解决此问题。
+    PLAYERNPC_AUTODEPLOY: true      #在达到最大等级时，玩家NPC自动部署在名人堂。如果为false，符合条件的玩家必须与1st职业导师对话以部署NPC。
 
-    #Pet Auto-Pot Configuration
-    USE_COMPULSORY_AUTOPOT: true    #Pets will consume as many potions as needed to fulfill the AUTOHP/MP ratio threshold.
-    USE_EQUIPS_ON_AUTOPOT: true     #Player MaxHP and MaxMP check values on autopot handler will be updated by the HP/MP bonuses on equipped items.
-    PET_AUTOHP_RATIO: 0.99          #Will automatically consume potions until given ratio of the MaxHP/MaxMP is reached.
+    #宠物自动药水配置
+    USE_COMPULSORY_AUTOPOT: true    #宠物将消耗尽可能多的药水以满足AUTOHP/MP比率阈值。
+    USE_EQUIPS_ON_AUTOPOT: true     #自动药水处理程序上的玩家MaxHP和MaxMP检查值将通过装备的HP/MP加成进行更新。
+    PET_AUTOHP_RATIO: 0.99          #将自动消耗药水，直到达到MaxHP/MaxMP的给定比率。
     PET_AUTOMP_RATIO: 0.99
 
-    #Pet & Mount Configuration
-    PET_EXHAUST_COUNT: 3               #Number of proc counts (1 per minute) on the exhaust schedule for fullness.
-    MOUNT_EXHAUST_COUNT: 1             #Number of proc counts (1 per minute) on the exhaust schedule for tiredness.
+    #宠物和坐骑配置
+    PET_EXHAUST_COUNT: 3               #在饱食度排空计划中每分钟的进程计数。
+    MOUNT_EXHAUST_COUNT: 1             #在疲劳度排空计划中每分钟的进程计数。
 
-    #Pet Hunger Configuration
-    PETS_NEVER_HUNGRY: false        #If true, pets and mounts will never grow hungry.
-    GM_PETS_NEVER_HUNGRY: true      #If true, pets and mounts owned by GMs will never grow hungry.
+    #宠物饥饿配置
+    PETS_NEVER_HUNGRY: false        #如果为true，宠物和坐骑永远不会饿。
+    GM_PETS_NEVER_HUNGRY: true      #如果为true，GM拥有的宠物和坐骑永远不会饿。
 
-    #Event Configuration
-    EVENT_MAX_GUILD_QUEUE: 10           #Max number of guilds in queue for GPQ.
-    EVENT_LOBBY_DELAY: 10              #Cooldown duration in seconds before reopening an event lobby.
+    #事件配置
+    EVENT_MAX_GUILD_QUEUE: 10           #GPQ队列中的最大公会数量。
+    EVENT_LOBBY_DELAY: 10              #重新开放事件大厅前的冷却时间（以秒为单位）。
 
-    #Dojo Configuration
-    USE_FAST_DOJO_UPGRADE: false     #Reduced Dojo training points amount required for a belt upgrade.
-    USE_DEADLY_DOJO: true          #Should bosses really use 1HP,1MP attacks in dojo?
-    DOJO_ENERGY_ATK: 100                #Dojo energy gain when deal attack
-    DOJO_ENERGY_DMG: 20                #Dojo energy gain when recv attack
+    #道场配置
+    USE_FAST_DOJO_UPGRADE: false     #减少道场训练点数所需的腰带升级量。
+    USE_DEADLY_DOJO: true          #Boss是否真的在道场使用1HP,1MP攻击？
+    DOJO_ENERGY_ATK: 100                #攻击时获得的道场能量。
+    DOJO_ENERGY_DMG: 20                #受到攻击时获得的道场能量。
 
-    #Wedding Configuration
-    WEDDING_RESERVATION_DELAY: 3        #Minimum idle slots before processing a wedding reservation.
-    WEDDING_RESERVATION_TIMEOUT: 10     #Limit time in minutes for the couple to show up before cancelling the wedding reservation.
-    WEDDING_RESERVATION_INTERVAL: 60    #Time between wedding starts in minutes.
-    WEDDING_BLESS_EXP: 30000            #Exp gained per bless count.
-    WEDDING_GIFT_LIMIT: 1               #Max number of gifts per person to same wishlist on marriage instances.
-    WEDDING_BLESSER_SHOWFX: true    #Pops bubble sprite effect on players blessing the couple. Setting this false shows the blessing effect on the couple instead.
+    #婚礼配置
+    WEDDING_RESERVATION_DELAY: 3        #处理婚礼预订前的最小空闲槽位。
+    WEDDING_RESERVATION_TIMEOUT: 10     #情侣出现前的限制时间（以分钟为单位），否则取消婚礼预订。
+    WEDDING_RESERVATION_INTERVAL: 60    #婚礼开始之间的间隔时间（以分钟为单位）。
+    WEDDING_BLESS_EXP: 30000            #每次祝福获得的EXP。
+    WEDDING_GIFT_LIMIT: 1               #在婚姻实例中，每个人对同一愿望清单的最大礼物数量。
+    WEDDING_BLESSER_SHOWFX: true    #在祝福情侣的玩家上弹出气泡精灵效果。设置为false则在情侣上显示祝福效果。
 
-    # Login timeout by shavit
-    TIMEOUT_DURATION: 3600000               # Kicks clients who don't send any packet to the game server in due time (in millisseconds).
+    #登录超时 by shavit
+    TIMEOUT_DURATION: 3600000               #在规定时间内未向游戏服务器发送任何数据包的客户端将被踢出（以毫秒为单位）。
 
-    #Event End Timestamp
+    #事件结束时间戳
     EVENT_END_TIMESTAMP: 1428897600000
 
-    # GM Security Configuration
+    #GM安全配置
     MINIMUM_GM_LEVEL_TO_TRADE: 4
     MINIMUM_GM_LEVEL_TO_USE_STORAGE: 4
     MINIMUM_GM_LEVEL_TO_USE_DUEY: 4
     MINIMUM_GM_LEVEL_TO_DROP: 4
 
-    #Any NPC ids that should search for a js override script (useful if they already have wz entries since otherwise they're ignored).
+    #应搜索js覆盖脚本的任何NPC ID（如果它们已经有wz条目，否则它们会被忽略）。
     NPCS_SCRIPTABLE:
       #9200000: Talk to Cody # Cody
       9001105: Rescue Gaga!  # Grandpa moon bunny
