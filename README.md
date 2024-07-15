@@ -12,14 +12,15 @@
 - 接口由版本控制，如：v1 v2 v3。默认的swagger标签为name = ApiConstant.LATEST，默认的RequestMapping为："/" + ApiConstant.LATEST + "/xx"
 - 接口如果增加新版本且接口不需要更新，只需要把ApiConstant.LATEST指向新版本即可。如果部分接口不兼容，需要把旧接口的Tag和RequestMapping都改成指定版本，如：ApiConstant.V1。其他的，只需要把ApiConstant.LATEST指向新版本即可。
 - 支持多语言，脚本和wz针对多语言会读取不同的路径：wz-zh-CN，wz-en-US，script-zh-CN，script-en-US
+- 不支持MySQL8以下的版本
 
 ## 开发环境
 - OpenJDK 21：https://jdk.java.net/archive/
-- Intellij IDEA：https://www.jetbrains.com/idea/
+- Intellij IDEA 2023.3及以上：https://www.jetbrains.com/idea/
 - MySQL8：https://github.com/SleepNap/NapMysqlTool/releases/latest 或者 https://downloads.mysql.com/archives/community/
 - Maven：https://maven.apache.org/download.cgi
 - git：https://git-scm.com/downloads
-- DBeaver：https://dbeaver.io/download/ 或者 Navicat：https://www.navicat.com/en/download/navicat-premium-lite
+- DBeaver：https://dbeaver.io/download/ 或者 Navicat Lite：https://www.navicat.com/en/download/navicat-premium-lite
 
 ## 开发进展
 ![s1.jpeg](mdimg/s1.jpeg)
