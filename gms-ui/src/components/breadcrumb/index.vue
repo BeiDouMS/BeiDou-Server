@@ -14,16 +14,17 @@
         "
         @click="$router.push({ name: item.name })"
       >
-        {{ $t(item.meta.locale) }}
+        {{ $t(item.meta.locale || '') }}
       </a-link>
       <span v-else>
-        {{ $t(item.meta.locale) }}
+        {{ $t(item.meta.locale || '') }}
       </span>
     </a-breadcrumb-item>
   </a-breadcrumb>
 </template>
 
 <script lang="ts" setup>
+  // @ts-check
   import { PropType } from 'vue';
   import router from '@/router';
 

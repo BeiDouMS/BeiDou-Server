@@ -362,7 +362,7 @@
     )} [${data.id}] ${data.name}`;
     banAccountIdReady.value = data.id;
     reasonVisible.value = true;
-    reason.value = undefined;
+    reason.value = '';
   };
 
   const unbanClick = async (data: AccountState) => {
