@@ -27,7 +27,9 @@ public class GiveResourceReqDTO {
     private Short mDef;
     private Short acc;
     private Short avoid;
+    private Short hands;
     private Short speed;
     private Short jump;
+    private Byte upgradeSlot;
     private Long expire;
 }

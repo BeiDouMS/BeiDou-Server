@@ -113,8 +113,10 @@ export default {
   'account.player.form.mDef': '魔防',
   'account.player.form.acc': '命中',
   'account.player.form.avoid': '回避',
+  'account.player.form.hands': '手技',
   'account.player.form.speed': '移速',
   'account.player.form.jump': '跳跃',
+  'account.player.form.upgradeSlot': '升级次数',
   'account.player.form.expire': '有效期',
   'account.player.form.expire.placeholder': '单位分钟',
 
