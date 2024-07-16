@@ -340,7 +340,7 @@ gms:
 
 
     #Miscellaneous Configuration
-    TIMEZONE: GMT
+    TIMEZONE: GMT+8
     CHARSET: GBK                          #首先加载，因此适用于此配置的其余部分。默认情况下，如果无效或未设置，则为US-ASCII。
     USE_DISPLAY_NUMBERS_WITH_COMMA: true          #强制显示字符串中的逗号（当USE_UNITPRICE_WITH_COMMA处于活动状态时，仍希望显示逗号分隔的值时使用此选项）。
     USE_UNITPRICE_WITH_COMMA: true                #根据Item.wz XML中的unitPrices布局设置此选项，无论是使用逗号还是点来表示小数。

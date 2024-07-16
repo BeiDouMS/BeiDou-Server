@@ -62,7 +62,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                 }
             } else {
-                cm.sendOk("I only entertain newcomers!");
+                cm.sendOk("抱歉，我只招待新手！");
                 cm.dispose();
             }
         } else if (status == 1) {
