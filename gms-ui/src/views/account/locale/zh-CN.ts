@@ -95,6 +95,8 @@ export default {
   'account.player.mesosRate': '金币倍率',
   'account.player.dropRate': '爆率',
   'account.player.bossRate': 'Boss爆率',
+  'account.player.gm': 'GM等级',
+  'account.player.fame': '人气',
 
   'account.player.form.player': '玩家',
   'account.player.form.type': '类型',

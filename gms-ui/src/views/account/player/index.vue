@@ -167,7 +167,9 @@
           <a-input-number v-model="formData.id" />
         </a-form-item>
         <a-form-item
-          v-if="formData.type < 6"
+          v-if="
+            formData.type < 6 || formData.type === 11 || formData.type === 12
+          "
           :label="$t('account.player.form.quantity')"
         >
           <a-input-number v-model="formData.quantity" />
@@ -416,6 +418,8 @@
       { value: 8, label: t('account.player.mesosRate') },
       { value: 9, label: t('account.player.dropRate') },
       { value: 10, label: t('account.player.bossRate') },
+      { value: 11, label: t('account.player.gm') },
+      { value: 12, label: t('account.player.fame') },
     ];
     formData.value.worldId = data.world;
     formData.value.playerId = data.id;
