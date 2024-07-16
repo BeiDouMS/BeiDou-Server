@@ -98,6 +98,8 @@ export default {
   'account.player.mesosRate': 'Mesos Rate',
   'account.player.dropRate': 'Drop Rate',
   'account.player.bossRate': 'Boss Rate',
+  'account.player.gm': 'GM Lv',
+  'account.player.fame': 'Fame',
 
   'account.player.form.player': 'Player',
   'account.player.form.type': 'Type',

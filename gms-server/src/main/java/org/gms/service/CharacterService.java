@@ -5,7 +5,9 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
+import org.gms.config.YamlConfig;
 import org.gms.constants.string.ExtendType;
+import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.ExtendValueDO;
 import org.gms.dao.mapper.CharactersMapper;
 import org.gms.dao.mapper.ExtendValueMapper;
@@ -20,10 +22,10 @@ import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+import static org.gms.dao.entity.table.AccountsDOTableDef.ACCOUNTS_D_O;
+import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.ExtendValueDOTableDef.EXTEND_VALUE_D_O;
 
 @Service
@@ -93,6 +95,45 @@ public class CharacterService {
 
     public void resetMerchant() {
         charactersMapper.updateAllHasMerchant(0);
+    }
+
+    public List<List<CharactersDO>> getWorldsRankPlayers(int worldSize) {
+        boolean wholeServerRanking = YamlConfig.config.server.USE_WHOLE_SERVER_RANKING;
+        List<List<CharactersDO>> worldsRankingList = new ArrayList<>();
+        if (wholeServerRanking) {
+            // 全服前50
+            QueryWrapper queryWrapper = QueryWrapper.create()
+                    .select(CHARACTERS_D_O.NAME, CHARACTERS_D_O.LEVEL, CHARACTERS_D_O.WORLD)
+                    .from(CHARACTERS_D_O)
+                    .leftJoin(ACCOUNTS_D_O).on(CHARACTERS_D_O.ACCOUNTID.eq(ACCOUNTS_D_O.ID))
+                    .where(CHARACTERS_D_O.GM.lt(2))
+                    .and(ACCOUNTS_D_O.BANNED.eq(0).or(ACCOUNTS_D_O.TEMPBAN.isNull()))
+                    .and(CHARACTERS_D_O.WORLD.between(0, worldSize - 1))
+                    .orderBy(CHARACTERS_D_O.WORLD.asc(), CHARACTERS_D_O.LEVEL.desc(), CHARACTERS_D_O.EXP.desc(), CHARACTERS_D_O.LAST_EXP_GAIN_TIME.asc())
+                    .limit(50);
+            List<CharactersDO> charactersDOList = charactersMapper.selectListByQuery(queryWrapper);
+            worldsRankingList.add(charactersDOList);
+        } else {
+            for (int i = 0; i < worldSize; i++) {
+                // 每个区前50
+                List<CharactersDO> charactersDOList = getWorldRankPlayers(i);
+                worldsRankingList.add(charactersDOList);
+            }
+        }
+        return worldsRankingList;
+    }
+
+    public List<CharactersDO> getWorldRankPlayers(int worldId) {
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(CHARACTERS_D_O.NAME, CHARACTERS_D_O.LEVEL, CHARACTERS_D_O.WORLD)
+                .from(CHARACTERS_D_O)
+                .leftJoin(ACCOUNTS_D_O).on(CHARACTERS_D_O.ACCOUNTID.eq(ACCOUNTS_D_O.ID))
+                .where(CHARACTERS_D_O.GM.lt(2))
+                .and(ACCOUNTS_D_O.BANNED.eq(0).or(ACCOUNTS_D_O.TEMPBAN.isNull()))
+                .and(CHARACTERS_D_O.WORLD.eq(worldId))
+                .orderBy(CHARACTERS_D_O.LEVEL.desc(), CHARACTERS_D_O.EXP.desc(), CHARACTERS_D_O.LAST_EXP_GAIN_TIME.asc())
+                .limit(50);
+           return charactersMapper.selectListByQuery(queryWrapper);
     }
 
     private void checkName(ExtendValueDO data) {

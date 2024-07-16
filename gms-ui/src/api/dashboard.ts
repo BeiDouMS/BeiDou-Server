@@ -15,3 +15,7 @@ export function stopServer() {
 export function restartServer() {
   return axios.get('/server/v1/restartServer');
 }
+
+export function shutdown() {
+  return axios.get('/server/v1/shutdown');
+}
