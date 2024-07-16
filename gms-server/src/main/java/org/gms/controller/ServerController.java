@@ -26,8 +26,8 @@ public class ServerController {
 
     @Tag(name = "/server/" + ApiConstant.LATEST)
     @Operation(summary = "停止所有")
-    @GetMapping("/" + ApiConstant.LATEST + "/stop")
-    public void stop() {
+    @GetMapping("/" + ApiConstant.LATEST + "/shutdown")
+    public void shutdown() {
         // 这里只能触发destroy，但服务不能正常停止
         SpringApplication.exit(applicationContext);
         // 这里才能正常的停止

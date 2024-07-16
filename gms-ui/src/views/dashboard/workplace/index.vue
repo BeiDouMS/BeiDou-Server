@@ -43,6 +43,20 @@
             >
               {{ $t('workplace.button.restart') }}
             </a-button>
+            <a-button
+                :loading="loading"
+                type="primary"
+                status="danger"
+                @click="changeServerStatusClick('shutdown')"
+            >
+              {{ $t('workplace.button.shutdown') }}
+            </a-button>
+            <a-modal v-model:visible="visible" @ok="handleOk">
+              <template #title>
+                {{$t('workplace.button.shutdown')}}
+              </template>
+              <div>{{$t('workplace.button.shutdown.text')}}</div>
+            </a-modal>
           </a-space>
         </a-col>
       </a-row>
@@ -54,15 +68,18 @@
   import { ref } from 'vue';
   import {
     getServerStatus,
-    restartServer,
+    restartServer, shutdown,
     startServer,
     stopServer,
   } from '@/api/dashboard';
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
+  import { useRouter } from 'vue-router';
 
   const { loading, setLoading } = useLoading(false);
   const serverStatus = ref<boolean>(false);
+  const visible = ref(false);
+  const router  = useRouter();
 
   const loadSeverStatus = async () => {
     setLoading(true);
@@ -76,8 +93,19 @@
 
   loadSeverStatus();
 
+  const handleOk = async () => {
+    shutdown();
+    await router.push({
+      name: 'login',
+      query: {
+        ...router.currentRoute.value.query,
+        redirect: router.currentRoute.value.path,
+      },
+    });
+  }
+
   const changeServerStatusClick = async (
-    type: 'start' | 'restart' | 'stop'
+    type: 'start' | 'restart' | 'stop' | 'shutdown'
   ) => {
     setLoading(true);
     try {
@@ -91,6 +119,9 @@
         case 'restart':
           await restartServer();
           break;
+        case "shutdown":
+          visible.value = true;
+          return;
         default:
           break;
       }
