@@ -116,8 +116,10 @@ export default {
   'account.player.form.mDef': 'MDD',
   'account.player.form.acc': 'ACC',
   'account.player.form.avoid': 'AVD',
+  'account.player.form.hands': 'Hands',
   'account.player.form.speed': 'Speed',
   'account.player.form.jump': 'Jump',
+  'account.player.form.upgradeSlot': 'Upgrade Slot',
   'account.player.form.expire': 'Expire',
   'account.player.form.expire.placeholder': 'minute',
 

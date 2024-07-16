@@ -1,4 +1,5 @@
 <script lang="tsx">
+  // @ts-nocheck
   import { defineComponent, ref, h, compile, computed } from 'vue';
   import { useRoute, useRouter, RouteRecordRaw } from 'vue-router';
   import type { RouteMeta } from 'vue-router';

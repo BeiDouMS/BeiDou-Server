@@ -22,8 +22,10 @@ export interface GiveForm {
   mDef?: number;
   acc?: number;
   avoid?: number;
+  hands?: number;
   speed?: number;
   jump?: number;
+  upgradeSlot?: number;
   expire?: number;
 }
 

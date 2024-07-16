@@ -5,11 +5,13 @@ import org.gms.client.Character;
 import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.dao.entity.ExtendValueDO;
 import org.gms.dto.GiveResourceReqDTO;
 import org.gms.exception.BizException;
 import org.gms.net.server.Server;
 import org.gms.server.CashShop;
 import org.gms.server.ItemInformationProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -17,6 +19,9 @@ import static java.util.concurrent.TimeUnit.DAYS;
 @Service
 @Slf4j
 public class GiveService {
+    @Autowired
+    CharacterService characterService;
+
     public void give(GiveResourceReqDTO submitData) {
         if (submitData.getPlayerId() == 0) {
             giveAllOnlineChr(submitData);
@@ -49,19 +54,20 @@ public class GiveService {
             case 6: // equip
                 giveEquipAllOnlineChr(submitData);
                 break;
-            case 7: // expRate
-            case 8: // mesosRate
-            case 9: // dropRate
-            case 10: // bossRate
-                String rateType = switch (submitData.getType()) {
-                    case 7 -> "Exp";
-                    case 8 -> "Mesos";
-                    case 9 -> "Drop";
-                    case 10 -> "Boss";
-                    default -> "None";
-                };
-                giveRateAllOnlineChr(rateType, submitData.getRate());
-                break;
+            // 全服没有设置倍率的操作
+            // case 7: // expRate
+            // case 8: // mesosRate
+            // case 9: // dropRate
+            // case 10: // bossRate
+            //     String rateType = switch (submitData.getType()) {
+            //         case 7 -> "Exp";
+            //         case 8 -> "Mesos";
+            //         case 9 -> "Drop";
+            //         case 10 -> "Boss";
+            //         default -> "None";
+            //     };
+            //     giveRateAllOnlineChr(rateType, submitData.getRate());
+            //     break;
         }
     }
 
@@ -100,10 +106,10 @@ public class GiveService {
             case 9: // dropRate
             case 10: // bossRate
                 String rateType = switch (submitData.getType()) {
-                    case 7 -> "Exp";
-                    case 8 -> "Mesos";
-                    case 9 -> "Drop";
-                    case 10 -> "Boss";
+                    case 7 -> "expRate";
+                    case 8 -> "mesoRate";
+                    case 9 -> "dropRate";
+                    case 10 -> "bossRate";
                     default -> "None";
                 };
                 giveRateChr(wId, cId, rateType, submitData.getRate());
@@ -257,31 +263,126 @@ public class GiveService {
     }
 
     private void giveEquipAllOnlineChr(GiveResourceReqDTO submitData) {
-        // 可用字段如下 （注意 quantity 不可用，前端没设置编写）
-        // id 物品ID
-        // str
-        // dex
-        // _int
-        // luk
-        // hp
-        // mp
-        // pAtk
-        // mAtk
-        // pDef
-        // mDef
-        // acc
-        // avoid
-        // speed
-        // jump
-        // expire
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+
+        String itemName = ii.getName(submitData.getId());
+        if (ii.getEquipById(submitData.getId()) == null || itemName == null) {
+            throw new BizException("装备不存在");
+        }
+        Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
+            chr.gainEquip(
+                    submitData.getId(),
+                    submitData.getStr(),
+                    submitData.getDex(),
+                    submitData.get_int(),
+                    submitData.getLuk(),
+                    submitData.getHp(),
+                    submitData.getMp(),
+                    submitData.getPAtk(),
+                    submitData.getMAtk(),
+                    submitData.getPDef(),
+                    submitData.getMDef(),
+                    submitData.getAcc(),
+                    submitData.getAvoid(),
+                    submitData.getHands(),
+                    submitData.getSpeed(),
+                    submitData.getJump(),
+                    submitData.getUpgradeSlot(),
+                    submitData.getExpire()
+            );
+            chr.message("管理员给全服发放了自定义装备 [" + submitData.getId().toString() + "] " + itemName);
+        }));
+        log.info("管理员在后台给全服发放了自定义装备 [{}] {} 力量：{} 敏捷：{} 智力：{} 运气：{} HP：{} MP：{} 物攻：{} 魔攻：{} 物防：{} 魔防：{} 命中：{} 回避：{} 手技：{} 移速：{} 跳跃：{} 升级次数：{} 有效期：{} 分钟",
+                submitData.getId(),
+                itemName,
+                submitData.getStr(),
+                submitData.getDex(),
+                submitData.get_int(),
+                submitData.getLuk(),
+                submitData.getHp(),
+                submitData.getMp(),
+                submitData.getPAtk(),
+                submitData.getMAtk(),
+                submitData.getPDef(),
+                submitData.getMDef(),
+                submitData.getAcc(),
+                submitData.getAvoid(),
+                submitData.getHands(),
+                submitData.getSpeed(),
+                submitData.getJump(),
+                submitData.getUpgradeSlot(),
+                submitData.getExpire()
+        );
     }
 
     private void giveEquipChr(int wId, int cId, GiveResourceReqDTO submitData) {
-    }
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
-    private void giveRateAllOnlineChr(String type, float rate) {
+        String itemName = ii.getName(submitData.getId());
+        if (ii.getEquipById(submitData.getId()) == null || itemName == null) {
+            throw new BizException("装备不存在");
+        }
+        Character chr = Server.getInstance().getWorld(wId).getPlayerStorage().getCharacterById(cId);
+        if (chr == null) throw new BizException("玩家已离线");
+        chr.gainEquip(
+                submitData.getId(),
+                submitData.getStr(),
+                submitData.getDex(),
+                submitData.get_int(),
+                submitData.getLuk(),
+                submitData.getHp(),
+                submitData.getMp(),
+                submitData.getPAtk(),
+                submitData.getMAtk(),
+                submitData.getPDef(),
+                submitData.getMDef(),
+                submitData.getAcc(),
+                submitData.getAvoid(),
+                submitData.getHands(),
+                submitData.getSpeed(),
+                submitData.getJump(),
+                submitData.getUpgradeSlot(),
+                submitData.getExpire()
+        );
+        chr.message("管理员给玩家 [" + cId + "] " + chr.getName() + " 发放了自定义装备 [" + submitData.getId().toString() + "] " + itemName);
+        log.info("管理员在后台给玩家 [{}] {} 发放了自定义装备 [{}] {} 力量：{} 敏捷：{} 智力：{} 运气：{} HP：{} MP：{} 物攻：{} 魔攻：{} 物防：{} 魔防：{} 命中：{} 回避：{} 手技：{} 移速：{} 跳跃：{} 升级次数：{} 有效期：{} 分钟",
+                cId,
+                chr.getName(),
+                submitData.getId(),
+                itemName,
+                submitData.getStr(),
+                submitData.getDex(),
+                submitData.get_int(),
+                submitData.getLuk(),
+                submitData.getHp(),
+                submitData.getMp(),
+                submitData.getPAtk(),
+                submitData.getMAtk(),
+                submitData.getPDef(),
+                submitData.getMDef(),
+                submitData.getAcc(),
+                submitData.getAvoid(),
+                submitData.getHands(),
+                submitData.getSpeed(),
+                submitData.getJump(),
+                submitData.getUpgradeSlot(),
+                submitData.getExpire()
+        );
     }
 
     private void giveRateChr(int wId, int cId, String type, float rate) {
+        Character chr = Server.getInstance().getWorld(wId).getPlayerStorage().getCharacterById(cId);
+        if (chr == null) throw new BizException("玩家已离线");
+
+        ExtendValueDO data = ExtendValueDO.builder()
+                .extendId(String.valueOf(chr.getId()))
+                .extendType("21")
+                .extendName(type)
+                .extendValue(String.valueOf(rate))
+                .build();
+        characterService.updateRate(data);
+        
+        chr.message("管理员将你的 " + type + " 调整为：" + rate);
+        log.info("管理员在后台将玩家 [{}] {} 的 {} 调整为：{}", chr.getId(), chr.getName(), type, rate);
     }
 }

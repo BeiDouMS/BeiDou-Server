@@ -252,6 +252,12 @@
         </a-form-item>
         <a-form-item
           v-if="formData.type === 6"
+          :label="$t('account.player.form.hands')"
+        >
+          <a-input-number v-model="formData.hands" />
+        </a-form-item>
+        <a-form-item
+          v-if="formData.type === 6"
           :label="$t('account.player.form.speed')"
         >
           <a-input-number v-model="formData.speed" />
@@ -261,6 +267,12 @@
           :label="$t('account.player.form.jump')"
         >
           <a-input-number v-model="formData.jump" />
+        </a-form-item>
+        <a-form-item
+          v-if="formData.type === 6"
+          :label="$t('account.player.form.upgradeSlot')"
+        >
+          <a-input-number v-model="formData.upgradeSlot" />
         </a-form-item>
         <a-form-item
           v-if="formData.type === 6"
@@ -321,8 +333,10 @@
     mDef: undefined,
     acc: undefined,
     avoid: undefined,
+    hands: undefined,
     speed: undefined,
     jump: undefined,
+    upgradeSlot: undefined,
     expire: undefined,
   });
 
