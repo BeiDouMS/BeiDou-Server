@@ -58,7 +58,7 @@ function action(mode, type, selection) {
     }
     if (status == 0 && mode == 1) {
         var selStr = "嘘……如果你有合适的货物，我可以把它变成一些好东西……#b"
-        var options = ["制作手套"，"升级手套"，"制作拳套"，"升级拳套"，"制作材料"];
+        var options = ["制作手套","升级手套","制作拳套","升级拳套","制作材料"];
         for (var i = 0; i < options.length; i++) {
             selStr += "\r\n#L" + i + "# " + options[i] + "#l";
         }
@@ -67,8 +67,8 @@ function action(mode, type, selection) {
         selectedType = selection;
         if (selectedType == 0) { //glove refine
             var selStr = "那么，你希望我制作哪种手套呢？?#b";
-            var gloves = ["工地手套#k - 全职 Lv. 10#b", "Brown Duo#k - Thief Lv. 15#b", "Blue Duo#k - Thief Lv. 15#b", "Black Duo#k - Thief Lv. 15#b", "Bronze Mischief#k - Thief Lv. 20#b", "Bronze Wolfskin#k - Thief Lv. 25#b", "Steel Sylvia#k - Thief Lv. 30#b",
-                "Steel Arbion#k - Thief Lv. 35#b", "Red Cleave#k - Thief Lv. 40#b", "Blue Moon Glove#k - Thief Lv. 50#b", "Bronze Pow#k - Thief Lv. 60#b"];
+            var gloves = ["#i1082002##t1082002##k - 全职 Lv. 10#b", "#i1082029##t1082029##k - 飞侠 Lv. 15#b", "#i1082030##t1082030##k - 飞侠 Lv. 15#b", "#i1082031##t1082031##k - 飞侠 Lv. 15#b", "#i1082032##t1082032##k - 飞侠 Lv. 20#b", "#i1082037##t1082037##k - 飞侠 Lv. 25#b", "#i1082042##t1082042##k - 飞侠 Lv. 30#b",
+                          "#i1082046##t1082046##k - 飞侠 Lv. 35#b", "#i1082075##t1082075##k - 飞侠 Lv. 40#b", "#i1082065##t1082065##k - 飞侠 Lv. 50#b", "#i1082092##t1082092##k - 飞侠 Lv. 60#b"];
             for (var i = 0; i < gloves.length; i++) {
                 selStr += "\r\n#L" + i + "# " + gloves[i] + "#l";
             }
@@ -76,9 +76,9 @@ function action(mode, type, selection) {
             cm.sendSimple(selStr);
         } else if (selectedType == 1) { //glove upgrade
             var selStr = "升级手套？没问题，但请注意，升级不会转移到新物品上...#b";
-            var gloves = ["Mithril Mischief#k - Thief Lv. 20#b", "Dark Mischief#k - Thief Lv. 20#b", "Mithril Wolfskin#k - Thief Lv. 25#b",
-                "Dark Wolfskin#k - Thief Lv. 25#b", "Silver Sylvia#k - Thief Lv. 30#b", "Gold Sylvia#k - Thief Lv. 30#b", "Orihalcon Arbion#k - Thief Lv. 35#b", "Gold Arbion#k - Thief Lv. 35#b", "Gold Cleave#k - Thief Lv. 40#b",
-                "Dark Cleave#k - Thief Lv. 40#b", "Red Moon Glove#k - Thief Lv. 50#b", "Brown Moon Glove#k - Thief Lv. 50#b", "Silver Pow#k - Thief Lv. 60#b", "Gold Pow#k - Thief Lv. 60#b"];
+            var gloves = ["#i1082033##t1082033##k - 飞侠 Lv. 20#b", "#i1082034##t1082034##k - 飞侠 Lv. 20#b", "#i1082038##t1082038##k - 飞侠 Lv. 25#b", "#i1082039##t1082039##k - 飞侠 Lv. 25#b", "#i1082043##t1082043##k - 飞侠 Lv. 30#b",
+                          "#i1082044##t1082044##k - 飞侠 Lv. 30#b", "#i1082047##t1082047##k - 飞侠 Lv. 35#b", "#i1082045##t1082045##k - 飞侠 Lv. 35#b", "#i1082076##t1082076##k - 飞侠 Lv. 40#b", "#i1082074##t1082074##k - 飞侠 Lv. 40#b",
+                          "#i1082067##t1082067##k - 飞侠 Lv. 50#b", "#i1082066##t1082066##k - 飞侠 Lv. 50#b", "#i1082093##t1082093##k - 飞侠 Lv. 60#b", "#i1082094##t1082094##k - 飞侠 Lv. 60#b"];
             for (var i = 0; i < gloves.length; i++) {
                 selStr += "\r\n#L" + i + "# " + gloves[i] + "#l";
             }
@@ -86,7 +86,8 @@ function action(mode, type, selection) {
             cm.sendSimple(selStr);
         } else if (selectedType == 2) { //claw refine
             var selStr = "那么，你想让我制作哪种拳套呢？#b";
-            var claws = ["Steel Titans#k - Thief Lv. 15#b", "Bronze Igor#k - Thief Lv. 20#b", "Meba#k - Thief Lv. 25#b", "Steel Guards#k - Thief Lv. 30#b", "Bronze Guardian#k - Thief Lv. 35#b", "Steel Avarice#k - Thief Lv. 40#b", "Steel Slain#k - Thief Lv. 50#b"];
+            var claws = ["#i1472001##t1472001##k - 飞侠 Lv. 15#b", "#i1472004##t1472004##k - 飞侠 Lv. 20#b", "#i1472007##t1472007##k - 飞侠 Lv. 25#b", "#i1472008##t1472008##k - 飞侠 Lv. 30#b", "#i1472011##t1472011##k - 飞侠 Lv. 35#b", "#i1472014##t1472014##k - 飞侠 Lv. 40#b", "#i1472018##t1472018##k - 飞侠 Lv. 50#b""
+];
             for (var i = 0; i < claws.length; i++) {
                 selStr += "\r\n#L" + i + "# " + claws[i] + "#l";
             }
@@ -94,8 +95,9 @@ function action(mode, type, selection) {
             cm.sendSimple(selStr);
         } else if (selectedType == 3) { //claw upgrade
             var selStr = "升级拳套？当然可以，但请注意，升级不会转移到新物品上……#b";
-            var claws = ["Mithril Titans#k - Thief Lv. 15#b", "Gold Titans#k - Thief Lv. 15#b", "Steel Igor#k - Thief Lv. 20#b", "Adamantium Igor#k - Thief Lv. 20#b", "Mithril Guards#k - Thief Lv. 30#b", "Adamantium Guards#k - Thief Lv. 30#b",
-                "Silver Guardian#k - Thief Lv. 35#b", "Dark Guardian#k - Thief Lv. 35#b", "Blood Avarice#k - Thief Lv. 40#b", "Adamantium Avarice#k - Thief Lv. 40#b", "Dark Avarice#k - Thief Lv. 40#b", "Blood Slain#k - Thief Lv. 50#b", "Sapphire Slain#k - Thief Lv. 50#b"];
+            var claws = ["#i1472002##t1472002##k - 飞侠 Lv. 15#b", "#i1472003##t1472003##k - 飞侠 Lv. 15#b", "#i1472005##t1472005##k - 飞侠 Lv. 20#b", "#i1472006##t1472006##k - 飞侠 Lv. 20#b", "#i1472009##t1472009##k - 飞侠 Lv. 30#b",
+                         "#i1472010##t1472010##k - 飞侠 Lv. 30#b", "#i1472012##t1472012##k - 飞侠 Lv. 35#b", "#i1472013##t1472013##k - 飞侠 Lv. 35#b", "#i1472015##t1472015##k - 飞侠 Lv. 40#b", "#i1472016##t1472016##k - 飞侠 Lv. 40#b",
+                         "#i1472017##t1472017##k - 飞侠 Lv. 40#b", "#i1472019##t1472019##k - 飞侠 Lv. 50#b", "#i1472020##t1472020##k - 飞侠 Lv. 50#b"];
             for (var i = 0; i < claws.length; i++) {
                 selStr += "\r\n#L" + i + "# " + claws[i] + "#l";
             }
@@ -103,7 +105,7 @@ function action(mode, type, selection) {
             cm.sendSimple(selStr);
         } else if (selectedType == 4) { //material refine
             var selStr = "材料吗？我有几种材料可以为你制作……#b";
-            var materials = ["使用树枝制作加工木材，使用木块制作加工木材，制作螺丝（15个一包）。"];
+            var materials = ["使用树枝制作加工木材","使用木块制作加工木材","制作螺丝（15个）"];
             for (var i = 0; i < materials.length; i++) {
                 selStr += "\r\n#L" + i + "# " + materials[i] + "#l";
             }
@@ -126,7 +128,7 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "那么，你想让我制作一些#t" + item + "#s吗？你希望我制作多少？";
+        var prompt = "那么，你想让我制作一些#i" + item + "##t" + item + "#吗？你希望我制作多少？";
 
         cm.sendGetNumber(prompt, 1, 1, 100)
     } else if (status == 3 && mode == 1) {
@@ -177,7 +179,7 @@ function action(mode, type, selection) {
 
         var prompt = "你想让我制作多少 ";
         if (qty == 1) {
-            prompt += "a #t" + item + "#?";
+            prompt += " #t" + item + "#?";
         } else {
             prompt += qty + " #t" + item + "#?";
         }
