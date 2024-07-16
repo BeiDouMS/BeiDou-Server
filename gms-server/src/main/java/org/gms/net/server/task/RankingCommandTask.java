@@ -28,6 +28,6 @@ public class RankingCommandTask implements Runnable {
 
     @Override
     public void run() {
-        Server.getInstance().updateWorldPlayerRanking();
+        Server.getInstance().reloadWorldsPlayerRanking();
     }
 }

@@ -30,6 +30,7 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
+import org.gms.dao.entity.CharactersDO;
 import org.gms.util.CashIdGenerator;
 import org.gms.model.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
@@ -83,6 +84,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.*;
 
@@ -375,7 +377,7 @@ public class Server {
     public int addWorld() {
         int newWorld = initWorld();
         if (newWorld > -1) {
-            installWorldPlayerRanking(newWorld);
+            reloadWorldsPlayerRanking();
 
             Set<Integer> accounts;
             lgnRLock.lock();
@@ -512,7 +514,6 @@ public class Server {
             return false;
         }
 
-        removeWorldPlayerRanking();
         w.shutdown();
 
         wldWLock.lock();
@@ -522,6 +523,7 @@ public class Server {
                 channels.remove(worldid);
                 worldRecommendedList.remove(worldid);
             }
+            reloadWorldsPlayerRanking();
         } finally {
             wldWLock.unlock();
         }
@@ -656,86 +658,19 @@ public class Server {
         }
     }
 
-    private void installWorldPlayerRanking(int worldid) {
-        List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(worldid);
-        if (!ranking.isEmpty()) {
-            wldWLock.lock();
-            try {
-                if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                    for (int i = playerRanking.size(); i <= worldid; i++) {
-                        playerRanking.add(new ArrayList<>(0));
-                    }
-
-                    playerRanking.add(worldid, ranking.get(0).getRight());
-                } else {
-                    playerRanking.add(0, ranking.get(0).getRight());
-                }
-            } finally {
-                wldWLock.unlock();
-            }
-        }
-    }
-
-    private void removeWorldPlayerRanking() {
-        if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-            wldWLock.lock();
-            try {
-                if (playerRanking.size() < worlds.size()) {
-                    return;
-                }
-
-                playerRanking.remove(playerRanking.size() - 1);
-            } finally {
-                wldWLock.unlock();
-            }
-        } else {
-            List<Pair<Integer, List<Pair<String, Integer>>>> ranking = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 2));  // update ranking list
-
-            wldWLock.lock();
-            try {
-                playerRanking.add(0, ranking.get(0).getRight());
-            } finally {
-                wldWLock.unlock();
-            }
-        }
-    }
-
-    public void updateWorldPlayerRanking() {
-        List<Pair<Integer, List<Pair<String, Integer>>>> rankUpdates = loadPlayerRankingFromDB(-1 * (this.getWorldsSize() - 1));
-        if (rankUpdates.isEmpty()) {
+    public void reloadWorldsPlayerRanking() {
+        CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+        List<List<CharactersDO>> rankPlayers = characterService.getWorldsRankPlayers(getWorldsSize());
+        if (rankPlayers.isEmpty()) {
             return;
         }
-
         wldWLock.lock();
         try {
-            if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                for (int i = playerRanking.size(); i <= rankUpdates.getLast().getLeft(); i++) {
-                    playerRanking.add(new ArrayList<>(0));
-                }
-
-                for (Pair<Integer, List<Pair<String, Integer>>> wranks : rankUpdates) {
-                    playerRanking.set(wranks.getLeft(), wranks.getRight());
-                }
-            } else {
-                playerRanking.set(0, rankUpdates.getFirst().getRight());
-            }
+            playerRanking.clear();
+            rankPlayers.forEach(rankPlayer -> playerRanking.add(rankPlayer.stream().map(c -> new Pair<>(c.getName(), c.getLevel())).collect(Collectors.toList())));
         } finally {
             wldWLock.unlock();
         }
-
-    }
-
-    private void initWorldPlayerRanking() {
-        if (YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-            wldWLock.lock();
-            try {
-                playerRanking.add(new ArrayList<>(0));
-            } finally {
-                wldWLock.unlock();
-            }
-        }
-
-        updateWorldPlayerRanking();
     }
 
     private static List<Pair<Integer, List<Pair<String, Integer>>>> loadPlayerRankingFromDB(int worldid) {
@@ -856,7 +791,7 @@ public class Server {
             for (int i = 0; i < worldCount; i++) {
                 initWorld();
             }
-            initWorldPlayerRanking();
+            reloadWorldsPlayerRanking();
 
             loadPlayerNpcMapStepFromDb();
 
