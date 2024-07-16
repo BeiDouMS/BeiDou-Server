@@ -21,12 +21,14 @@
 */
 package org.gms.net.server.channel.handlers;
 
+import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.YamlConfig;
 import org.gms.net.packet.InPacket;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.gms.server.life.MobSkill;
 import org.gms.server.life.MobSkillFactory;
 import org.gms.server.life.MobSkillId;
@@ -38,10 +40,8 @@ import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.tools.PacketCreator;
 import org.gms.tools.exceptions.EmptyMovementException;
-
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Danny (Leifde)
@@ -77,12 +77,8 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
         short pOption = p.readShort();
         p.skip(8);
 
-        if (rawActivity >= 0) {
-            rawActivity = (byte) (rawActivity & 0xFF >> 1);
-        }
-
         boolean isAttack = inRangeInclusive(rawActivity, 24, 41);
-        boolean isSkill = inRangeInclusive(rawActivity, 42, 59);
+        boolean isSkill = inRangeInclusive(rawActivity, 42, 75);
 
         int useSkillId = 0;
         int useSkillLevel = 0;
@@ -105,7 +101,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
                     }
                 }
             }
-        } else {
+        } else if (isAttack) {
             int castPos = (rawActivity - 24) / 2;
             int atkStatus = monster.canUseAttack(castPos, isSkill);
             if (atkStatus < 1) {
