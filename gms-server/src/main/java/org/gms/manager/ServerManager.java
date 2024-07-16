@@ -3,6 +3,7 @@ package org.gms.manager;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.gms.ServerApplication;
 import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 import org.springdoc.core.properties.SpringDocConfigProperties;
@@ -16,6 +17,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
 import java.net.InetAddress;
 
 @Component
@@ -35,9 +37,15 @@ public class ServerManager implements ApplicationContextAware, ApplicationRunner
 
         SpringDocConfigProperties springDocConfigProperties = applicationContext.getBean(SpringDocConfigProperties.class);
         SwaggerUiConfigProperties swaggerUiConfigProperties = applicationContext.getBean(SwaggerUiConfigProperties.class);
+        Environment environment = applicationContext.getBean(Environment.class);
         if (springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
-            Environment environment = applicationContext.getBean(Environment.class);
             log.info(I18nUtil.getLogMessage("ServerManager.run.info1"), InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port"));
+        }
+        // 判断是否集成前端，集成则提示前端地址
+        try(InputStream resource = ServerApplication.class.getClassLoader().getResourceAsStream("static/index.html")) {
+            if (resource != null) {
+                log.info(I18nUtil.getLogMessage("ServerManager.run.info2"), InetAddress.getLocalHost().getHostAddress(), environment.getProperty("server.port"));
+            }
         }
     }
 

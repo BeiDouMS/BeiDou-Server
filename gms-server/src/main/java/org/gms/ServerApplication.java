@@ -7,8 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.FileInputStream;
-import java.net.URL;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -30,13 +29,13 @@ public class ServerApplication {
      * 无法解决在获取MybatisFlexProperties之后，在以上自动配置之前执行，进而手动解析yml来自动创建库
      */
     private static void initDb() {
-        URL resource = ServerApplication.class.getClassLoader().getResource("application.yml");
+        InputStream resource = ServerApplication.class.getClassLoader().getResourceAsStream("application.yml");
         if (resource == null) {
             return;
         }
         Yaml yaml = new Yaml();
         try {
-            LinkedHashMap<String, Object> property = yaml.load(new FileInputStream(resource.getPath()));
+            LinkedHashMap<String, Object> property = yaml.load(resource);
             JSONObject mybatisFlex = JSONObject.parse(JSONObject.toJSONString(property.get("mybatis-flex")));
             JSONObject datasource = mybatisFlex.getJSONObject("datasource").getJSONObject("mysql");
             String dbUrl = datasource.getString("url");
