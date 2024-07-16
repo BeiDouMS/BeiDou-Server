@@ -23,7 +23,7 @@
 	Victoria Road: Perion (102000000)
 	
 	Refining NPC: 
-	* Warrior Gloves - 10-60 + upgrades
+	* 战士 Gloves - 10-60 + upgrades
 	* Processed Wood/Screws
 */
 
@@ -50,8 +50,8 @@ function action(mode, type, selection) {
         cm.dispose();
     }
     if (status == 0 && mode == 1) {
-        var selStr = "Um... Hi, I'm Mr. Thunder's apprentice. He's getting up there in age, so he handles most of the heavy-duty work while I handle some of the lighter jobs. What can I do for you?#b"
-        var options = ["Make a glove", "Upgrade a glove", "Create materials"];
+        var selStr = "嗯……你好 #b#h ##k ，我是 #p1022003# 先生的学徒。他年纪大了，所以他主要负责一些繁重的工作，而我处理一些较轻的任务。我能为你做些什么呢？#b"
+        var options = ["制作手套", "升级手套", "制作材料"];
         for (var i = 0; i < options.length; i++) {
             selStr += "\r\n#L" + i + "# " + options[i] + "#l";
         }
@@ -60,27 +60,27 @@ function action(mode, type, selection) {
     } else if (status == 1 && mode == 1) {
         selectedType = selection;
         if (selectedType == 0) { //glove refine
-            var selStr = "Okay, so which glove do you want me to make?#b";
-            var items = ["Juno#k - Warrior Lv. 10#b", "Steel Fingerless Gloves#k - Warrior Lv. 15#b", "Venon#k - Warrior Lv. 20#b", "White Fingerless Gloves#k - Warrior Lv. 25#b",
-                "Bronze Missel#k - Warrior Lv. 30#b", "Steel Briggon#k - Warrior Lv. 35#b", "Iron Knuckle#k - Warrior Lv. 40#b", "Steel Brist#k - Warrior Lv. 50#b", "Bronze Clench#k - Warrior Lv. 60#b"];
+            var selStr = "好的，那么你想让我制作哪种手套呢？#b";
+            var items = ["#i1082003##t1082003##k - 战士 Lv. 10#b", "#i1082000##t1082000##k - 战士 Lv. 15#b", "#i1082004##t1082004##k - 战士 Lv. 20#b", "#i1082001##t1082001##k - 战士 Lv. 25#b",
+                         "#i1082007##t1082007##k - 战士 Lv. 30#b", "#i1082008##t1082008##k - 战士 Lv. 35#b", "#i1082023##t1082023##k - 战士 Lv. 40#b", "#i1082009##t1082009##k - 战士 Lv. 50#b", "#i1082059##t1082059##k - 战士 Lv. 60#b"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
             cm.sendSimple(selStr);
             equip = true;
         } else if (selectedType == 1) { //glove upgrade
-            var selStr = "Upgrade a glove? That shouldn't be too difficult. Which did you have in mind?#b";
-            var crystals = ["Steel Missel#k - Warrior Lv. 30#b", "Orihalcon Missel#k - Warrior Lv. 30#b", "Yellow Briggon#k - Warrior Lv. 35#b", "Dark Briggon#k - Warrior Lv. 35#b",
-                "Adamantium Knuckle#k - Warrior Lv. 40#b", "Dark Knuckle#k - Warrior Lv. 40#b", "Mithril Brist#k - Warrior Lv. 50#b", "Gold Brist#k - Warrior Lv. 50#b",
-                "Sapphire Clench#k - Warrior Lv. 60#b", "Dark Clench#k - Warrior Lv. 60#b"];
+            var selStr = "升级手套？那应该不太难。你具体想要升级哪种手套呢？#b";
+            var crystals = ["#i1082005##t1082005##k - 战士 Lv. 30#b", "#i1082006##t1082006##k - 战士 Lv. 30#b", "#i1082035##t1082035##k - 战士 Lv. 35#b", "#i1082036##t1082036##k - 战士 Lv. 35#b",
+                            "#i1082024##t1082024##k - 战士 Lv. 40#b", "#i1082025##t1082025##k - 战士 Lv. 40#b", "#i1082010##t1082010##k - 战士 Lv. 50#b", "#i1082011##t1082011##k - 战士 Lv. 50#b",
+                            "#i1082060##t1082060##k - 战士 Lv. 60#b", "#i1082061##t1082061##k - 战士 Lv. 60#b"];
             for (var i = 0; i < crystals.length; i++) {
                 selStr += "\r\n#L" + i + "# " + crystals[i] + "#l";
             }
             cm.sendSimple(selStr);
             equip = true;
         } else if (selectedType == 2) { //material refine
-            var selStr = "Materials? I know of a few materials that I can make for you...#b";
-            var materials = ["Make Processed Wood with Tree Branch", "Make Processed Wood with Firewood", "Make Screws (packs of 15)"];
+            var selStr = "材料？我知道一些可以为你制作的材料……#b";
+            var materials = ["使用树枝制作加工木材","使用木块制作加工木材","制作螺丝（15个）"];
             for (var i = 0; i < materials.length; i++) {
                 selStr += "\r\n#L" + i + "# " + materials[i] + "#l";
             }
@@ -103,7 +103,7 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "So, you want me to make some #t" + item + "#s? In that case, how many do you want me to make?";
+        var prompt = "那么，你想让我制作一些#t" + item + "#吗？你希望我制作多少？";
 
         cm.sendGetNumber(prompt, 1, 1, 100)
     } else if (status == 3 && mode == 1) {
@@ -136,14 +136,14 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "You want me to make ";
+        var prompt = "你想让我制作多少 ";
         if (qty == 1) {
-            prompt += "a #t" + item + "#?";
+            prompt += "一个 #i" + item + "##t" + item + "#?";
         } else {
             prompt += qty + " #t" + item + "#?";
         }
 
-        prompt += " In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+        prompt += "在这种情况下，我需要从你这儿得到一些特定的物品来进行制作。不过，请确保你的背包有足够的空间！#b";
 
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
@@ -174,7 +174,7 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         } else if (cm.getMeso() < cost * qty) {
-            cm.sendOk("我可能还是一个学徒，但我确实需要谋生。");
+            cm.sendOk("我虽然还是一个学徒，但我还是需要谋生的啊。");
             cm.dispose();
             return;
         } else {
@@ -190,7 +190,7 @@ function action(mode, type, selection) {
         }
 
         if (!complete) {
-            cm.sendOk("我还是一个学徒，我不知道我是否已经可以替换其他物品... 你能帮忙带来食谱所需的东西吗？");
+            cm.sendOk("我还是一个学徒，我不知道有什么东西可以代替这些材料... 你还是找特定的材料来吧。");
         } else {
             if (mats instanceof Array) {
                 for (var i = 0; i < mats.length; i++) {
@@ -205,7 +205,7 @@ function action(mode, type, selection) {
             }
 
             cm.gainItem(recvItem, recvQty);
-            cm.sendOk("这样翻译对吗？如果你有任何东西让我练习，再来找我。");
+            cm.sendOk("很棒对吧？如果你有任何东西让我练习，再来找我。");
         }
         cm.dispose();
     }
