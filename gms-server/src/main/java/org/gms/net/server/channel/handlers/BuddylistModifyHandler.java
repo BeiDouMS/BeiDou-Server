@@ -85,7 +85,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
         if (mode == 1) { // add
             String addName = p.readString();
             String group = p.readString();
-            if (group.length() > 16 || addName.length() < 4 || addName.length() > 13) {
+            if (group.length() > 16 || addName.length() < 2 || addName.length() > 13) {
                 return; //hax.
             }
             BuddylistEntry ble = buddylist.get(addName);
