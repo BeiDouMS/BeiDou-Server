@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 public class MapOwnerClaimCommand extends Command {
     {
-        setDescription("Claim ownership of the current map.");
+        setDescription(I18nUtil.getMessage("MapOwnerClaimCommand.message1"));
     }
 
     @Override
@@ -49,24 +50,24 @@ public class MapOwnerClaimCommand extends Command {
                                 ownedMap.unclaimOwnership(chr);
 
                                 if (map == ownedMap) {
-                                    chr.dropMessage(5, "This lawn is now free real estate.");
+                                    chr.dropMessage(5, I18nUtil.getMessage("MapOwnerClaimCommand.message2"));
                                     return;
                                 }
                             }
 
                             if (map.claimOwnership(chr)) {
-                                chr.dropMessage(5, "You have leased this lawn for a while, until you leave here or after 1 minute of inactivity.");
+                                chr.dropMessage(5, I18nUtil.getMessage("MapOwnerClaimCommand.message3"));
                             } else {
-                                chr.dropMessage(5, "This lawn has already been leased by a player.");
+                                chr.dropMessage(5, I18nUtil.getMessage("MapOwnerClaimCommand.message4"));
                             }
                         } else {
-                            chr.dropMessage(5, "This lawn is currently under a boss siege.");
+                            chr.dropMessage(5, I18nUtil.getMessage("MapOwnerClaimCommand.message5"));
                         }
                     } else {
-                        chr.dropMessage(5, "This lawn cannot be leased.");
+                        chr.dropMessage(5, I18nUtil.getMessage("MapOwnerClaimCommand.message6"));
                     }
                 } else {
-                    chr.dropMessage(5, "Feature unavailable.");
+                    chr.dropMessage(5, I18nUtil.getMessage("MapOwnerClaimCommand.message7"));
                 }
             } finally {
                 c.releaseClient();

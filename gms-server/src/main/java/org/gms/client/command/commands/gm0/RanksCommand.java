@@ -29,13 +29,14 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.GuildPackets;
+import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
 import java.util.List;
 
 public class RanksCommand extends Command {
     {
-        setDescription("Show player rankings.");
+        setDescription(I18nUtil.getMessage("RanksCommand.message1"));
     }
 
     @Override

@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.coordinator.login.LoginBypassCoordinator;
+import org.gms.util.I18nUtil;
 
 public class EnableAuthCommand extends Command {
     {
-        setDescription("Enable PIC code by resetting the cooldown.");
+        setDescription(I18nUtil.getMessage("EnableAuthCommand.message1"));
     }
 
     @Override

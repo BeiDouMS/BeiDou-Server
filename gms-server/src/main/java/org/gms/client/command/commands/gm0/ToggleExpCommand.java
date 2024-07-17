@@ -25,10 +25,11 @@ package org.gms.client.command.commands.gm0;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class ToggleExpCommand extends Command {
     {
-        setDescription("Toggle enable/disable all exp gain.");
+        setDescription(I18nUtil.getMessage("ToggleExpCommand.message1"));
     }
 
     @Override

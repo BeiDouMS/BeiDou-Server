@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.Monster;
+import org.gms.util.I18nUtil;
 
 public class BossHpCommand extends Command {
     {
-        setDescription("Show HP of bosses on current map.");
+        setDescription(I18nUtil.getMessage("BossHpCommand.message1"));
     }
 
     @Override
@@ -39,13 +40,13 @@ public class BossHpCommand extends Command {
         for (Monster monster : player.getMap().getAllMonsters()) {
             if (monster != null && monster.isBoss() && monster.getHp() > 0) {
                 long percent = monster.getHp() * 100L / monster.getMaxHp();
-                String bar = "[";
+                StringBuilder bar = new StringBuilder("[");
                 for (int i = 0; i < 100; i++) {
-                    bar += i < percent ? "|" : ".";
+                    bar.append(i < percent ? "|" : ".");
                 }
-                bar += "]";
-                player.yellowMessage(monster.getName() + " (" + monster.getId() + ") has " + percent + "% HP left.");
-                player.yellowMessage("HP: " + bar);
+                bar.append("]");
+                player.yellowMessage(I18nUtil.getMessage("BossHpCommand.message2", monster.getName(), monster.getId(), percent));
+                player.yellowMessage(I18nUtil.getMessage("BossHpCommand.message3", bar));
             }
         }
     }

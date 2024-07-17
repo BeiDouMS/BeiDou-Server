@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.Monster;
+import org.gms.util.I18nUtil;
 
 public class MobHpCommand extends Command {
     {
-        setDescription("Show HP of mobs on current map.");
+        setDescription(I18nUtil.getMessage("MobHpCommand.message1"));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class MobHpCommand extends Command {
         Character player = c.getPlayer();
         for (Monster monster : player.getMap().getAllMonsters()) {
             if (monster != null && monster.getHp() > 0) {
-                player.yellowMessage(monster.getName() + " (" + monster.getId() + ") has " + monster.getHp() + " / " + monster.getMaxHp() + " HP.");
+                player.yellowMessage(I18nUtil.getMessage("MobHpCommand.message2", monster.getName(), monster.getId(), monster.getHp(), monster.getMaxHp()));
 
             }
         }

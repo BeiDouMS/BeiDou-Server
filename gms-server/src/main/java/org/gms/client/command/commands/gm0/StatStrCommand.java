@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class StatStrCommand extends Command {
     {
-        setDescription("Assign AP into STR.");
+        setDescription(I18nUtil.getMessage("StatStrCommand.message1"));
     }
 
     @Override
@@ -42,7 +43,7 @@ public class StatStrCommand extends Command {
             try {
                 amount = Math.min(Integer.parseInt(params[0]), remainingAp);
             } catch (NumberFormatException e) {
-                player.dropMessage("That is not a valid number!");
+                player.dropMessage(I18nUtil.getMessage("StatStrCommand.message2"));
                 return;
             }
         } else {
@@ -50,7 +51,7 @@ public class StatStrCommand extends Command {
         }
 
         if (!player.assignStr(Math.max(amount, 0))) {
-            player.dropMessage("Please make sure your AP is not over " + YamlConfig.config.server.MAX_AP + " and you have enough to distribute.");
+            player.dropMessage(I18nUtil.getMessage("StatStrCommand.message3",  YamlConfig.config.server.MAX_AP));
         }
     }
 }
