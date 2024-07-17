@@ -73,7 +73,7 @@ public abstract class AbstractScriptManager {
         try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
             engine.eval(br);
         } catch (final ScriptException | IOException t) {
-            log.warn("Exception during script eval for file: {}", path, t);
+            log.warn("脚本中存在语法错误", path, t);
             return null;
         }
 

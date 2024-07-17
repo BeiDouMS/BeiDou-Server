@@ -47,8 +47,9 @@ function action(mode, type, selection) {
         text += "#L0#每日签到#l \t #L1#在线奖励#l \t #L2#传送自由#l\r\n";
         if (cm.getPlayer().isGM()) {
             text += "\r\n\r\n";
-            text += "\t\t\t\t=====以下内容仅GM可见=====\r\n";
-            text += "#61#超级传送#l \t #62#超级商店#l \t #63#整容集合#l\r\n\r\n"
+            text += "\t\t\t\t#r=====以下内容仅GM可见=====\r\n";
+            text += "#L61#超级传送#l \t #L62#超级商店#l \t #L63#整容集合#l\r\n\r\n";
+			text += "#L64#UI查询#l";
         }
         cm.sendSimple(text);
     } else if (status === 1) {
@@ -86,8 +87,11 @@ function doSelect(selection) {
             cm.dispose();
             break;
         case 63:
-            openNpc("Salon")
+            openNpc("Salon");
             break;
+        case 64:
+            openNpc("UI查询");
+            break;			
         default:
             cm.sendOk("该功能暂不支持，敬请期待！");
             cm.dispose();
@@ -96,5 +100,5 @@ function doSelect(selection) {
 
 function openNpc(scriptName) {
     cm.dispose();
-    cm.openNpc(9900001, scriptName);
+    cm.openNpc(1022101, scriptName);
 }

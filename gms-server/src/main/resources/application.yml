@@ -244,7 +244,7 @@ gms:
 
     #Server Flags
     USE_CUSTOM_KEYSET: false             #在创建角色时启用HeavenMS的自定义键绑定自动设置。
-    USE_DEBUG: false                    #将在客户端上启用一些面向调试的文本打印。
+    USE_DEBUG: true                    #将在客户端上启用一些面向调试的文本打印。
     USE_DEBUG_SHOW_INFO_EQPEXP: false   #在cmd上打印所有装备经验增益信息。
     USE_DEBUG_SHOW_RCVD_PACKET: false   #在cmd上打印所有接收到的数据包ID。
     USE_DEBUG_SHOW_RCVD_MVLIFE: false   #在cmd上打印所有接收到的移动生命内容。
@@ -257,7 +257,7 @@ gms:
     USE_MAXRANGE_ECHO_OF_HERO: true
     USE_MTS: false
     USE_CPQ: true                       #Renders the CPQ available or not.
-    USE_AUTOHIDE_GM: true              #When enabled, GMs are automatically hidden when joining. Thanks to Steven Deblois (steven1152).
+    USE_AUTOHIDE_GM: false              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
     USE_DUEY: true

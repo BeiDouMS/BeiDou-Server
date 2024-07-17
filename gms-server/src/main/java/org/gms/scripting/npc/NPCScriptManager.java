@@ -123,6 +123,10 @@ public class NPCScriptManager extends AbstractScriptManager {
                 if (!itemScript) {
                     if (fileName != null) {
                         engine = getInvocableScriptEngine("npc/" + fileName + ".js", c);
+                        if (engine == null)
+                        {
+                            engine = getInvocableScriptEngine("BeiDouSpecial/" + fileName + ".js", c);
+                        }
                     }
                 } else {
                     if (fileName != null) {     // thanks MiLin for drafting NPC-based item scripts
@@ -133,6 +137,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                     engine = getInvocableScriptEngine("npc/" + npc + ".js", c);
                     cm.resetItemScript();
                 }
+
                 if (engine == null) {
                     dispose(c);
                     return false;
