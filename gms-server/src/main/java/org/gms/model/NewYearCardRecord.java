@@ -26,8 +26,8 @@ import lombok.NoArgsConstructor;
 import org.gms.client.Character;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

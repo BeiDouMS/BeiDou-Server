@@ -51,7 +51,7 @@ function start() {
 
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
 
     var boss = LifeFactory.getMonster(bossMobid);
     var bossPos = new Point(461, 61);

@@ -24,8 +24,8 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.event.EventInstanceManager;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.packets.WeddingPackets;
+import org.gms.util.PacketCreator;
+import org.gms.util.packets.WeddingPackets;
 
 /**
  * @author Ronan

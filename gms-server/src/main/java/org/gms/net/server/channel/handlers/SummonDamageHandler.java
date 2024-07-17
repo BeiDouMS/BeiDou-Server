@@ -39,7 +39,7 @@ import org.gms.server.StatEffect;
 import org.gms.server.life.Monster;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.Summon;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.ArrayList;
 import java.util.List;

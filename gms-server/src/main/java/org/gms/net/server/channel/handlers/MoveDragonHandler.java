@@ -25,8 +25,8 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.net.packet.InPacket;
 import org.gms.server.maps.Dragon;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.exceptions.EmptyMovementException;
+import org.gms.util.PacketCreator;
+import org.gms.exception.EmptyMovementException;
 
 import java.awt.*;
 

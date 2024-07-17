@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.net.server.world;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import org.gms.client.BuddyList;
 import org.gms.client.BuddyList.BuddyAddResult;
 import org.gms.client.BuddyList.BuddyOperation;
@@ -29,6 +30,9 @@ import org.gms.client.Character;
 import org.gms.client.Family;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
+import org.gms.dao.entity.PlayernpcsFieldDO;
+import org.gms.dao.mapper.PlayernpcsFieldMapper;
+import org.gms.manager.ServerManager;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
@@ -60,6 +64,7 @@ import org.gms.net.server.task.TimedMapObjectTask;
 import org.gms.net.server.task.TimeoutTask;
 import org.gms.net.server.task.WeddingReservationTask;
 import org.gms.util.I18nUtil;
+import org.gms.util.packets.Fishing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
@@ -72,10 +77,9 @@ import org.gms.server.maps.MiniDungeon;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.server.maps.PlayerShop;
 import org.gms.server.maps.PlayerShopItem;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.packets.Fishing;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -110,6 +114,7 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
+import static org.gms.dao.entity.table.PlayernpcsFieldDOTableDef.PLAYERNPCS_FIELD_D_O;
 
 /**
  * @author kevintjuh93
@@ -1764,22 +1769,22 @@ public class World {
             r.run();
         }
     }
-    
+
     public void addPlayerHpDecrease(Character chr) {
         playerHpDec.putIfAbsent(chr, 0);
     }
-    
+
     public void removePlayerHpDecrease(Character chr) {
         playerHpDec.remove(chr);
     }
-    
+
     public void runPlayerHpDecreaseSchedule() {
         Map<Character, Integer> m = new HashMap<>();
         m.putAll(playerHpDec);
-        
+
         for (Entry<Character, Integer> e : m.entrySet()) {
             Character chr = e.getKey();
-            
+
             if (!chr.isAwayFromWorld()) {
                 int c = e.getValue();
                 c = (c + 1) % YamlConfig.config.server.MAP_DAMAGE_OVERTIME_COUNT;
@@ -1866,42 +1871,42 @@ public class World {
         setPlayerNpcMapData(mapid, step, podium, true);
     }
 
-    private static void executePlayerNpcMapDataUpdate(Connection con, boolean isPodium, Map<Integer, ?> pnpcData, int value, int worldid, int mapid) throws SQLException {
-        final String query;
-        if (pnpcData.containsKey(mapid)) {
-            query = "UPDATE playernpcs_field SET " + (isPodium ? "podium" : "step") + " = ? WHERE world = ? AND map = ?";
+    private static void executePlayerNpcMapDataUpdate(boolean isPodium, Map<Integer, ?> pnpcData, int value, int worldId, int mapId) {
+        PlayernpcsFieldMapper playernpcsFieldMapper = ServerManager.getApplicationContext().getBean(PlayernpcsFieldMapper.class);
+        PlayernpcsFieldDO playernpcsFieldDO = new PlayernpcsFieldDO();
+        if (isPodium) {
+            playernpcsFieldDO.setPodium(value);
         } else {
-            query = "INSERT INTO playernpcs_field (" + (isPodium ? "podium" : "step") + ", world, map) VALUES (?, ?, ?)";
+            playernpcsFieldDO.setStep(value);
+            playernpcsFieldDO.setWorld(worldId);
+            playernpcsFieldDO.setMap(mapId);
         }
-
-        try (PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, value);
-            ps.setInt(2, worldid);
-            ps.setInt(3, mapid);
-            ps.executeUpdate();
+        if (pnpcData.containsKey(mapId)) {
+            QueryWrapper queryWrapper = QueryWrapper.create()
+                    .from(PLAYERNPCS_FIELD_D_O)
+                    .where(PLAYERNPCS_FIELD_D_O.WORLD.eq(worldId))
+                    .and(PLAYERNPCS_FIELD_D_O.MAP.eq(mapId));
+            playernpcsFieldMapper.updateByQuery(playernpcsFieldDO, queryWrapper);
+        } else {
+            playernpcsFieldMapper.insert(playernpcsFieldDO);
         }
     }
 
-    private void setPlayerNpcMapData(int mapid, int step, int podium, boolean silent) {
+    private void setPlayerNpcMapData(int mapId, int step, int podium, boolean silent) {
         if (!silent) {
-            try (Connection con = DatabaseConnection.getConnection()) {
-                if (step != -1) {
-                    executePlayerNpcMapDataUpdate(con, false, pnpcStep, step, id, mapid);
-                }
-
-                if (podium != -1) {
-                    executePlayerNpcMapDataUpdate(con, true, pnpcPodium, podium, id, mapid);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if (step != -1) {
+                executePlayerNpcMapDataUpdate(false, pnpcStep, step, id, mapId);
+            }
+            if (podium != -1) {
+                executePlayerNpcMapDataUpdate(true, pnpcPodium, podium, id, mapId);
             }
         }
 
         if (step != -1) {
-            pnpcStep.put(mapid, (byte) step);
+            pnpcStep.put(mapId, (byte) step);
         }
         if (podium != -1) {
-            pnpcPodium.put(mapid, (short) podium);
+            pnpcPodium.put(mapId, (short) podium);
         }
     }
 
@@ -2205,8 +2210,8 @@ public class World {
             timeoutSchedule.cancel(false);
             timeoutSchedule = null;
         }
-        
-        if(hpDecSchedule != null) {
+
+        if (hpDecSchedule != null) {
             hpDecSchedule.cancel(false);
             hpDecSchedule = null;
         }

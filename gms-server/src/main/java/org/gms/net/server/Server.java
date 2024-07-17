@@ -31,6 +31,7 @@ import org.gms.client.command.CommandsExecutor;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.dao.entity.CharactersDO;
+import org.gms.dao.entity.PlayernpcsFieldDO;
 import org.gms.util.CashIdGenerator;
 import org.gms.model.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
@@ -62,8 +63,8 @@ import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.quest.Quest;
 import org.gms.service.*;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.Pair;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -203,26 +204,12 @@ public class Server {
     }
 
     private void loadPlayerNpcMapStepFromDb() {
-        final List<World> wlist = this.getWorlds();
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs_field");
-             ResultSet rs = ps.executeQuery()) {
-
-            while (rs.next()) {
-                int world = rs.getInt("world");
-                int map = rs.getInt("map");
-                int step = rs.getInt("step");
-                int podium = rs.getInt("podium");
-
-                World w = wlist.get(world);
-                if (w != null) {
-                    w.setPlayerNpcMapData(map, step, podium);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        PlayernpcsFieldMapper playernpcsFieldMapper = ServerManager.getApplicationContext().getBean(PlayernpcsFieldMapper.class);
+        List<PlayernpcsFieldDO> playernpcsFieldDOList = playernpcsFieldMapper.selectAll();
+        playernpcsFieldDOList.forEach(playernpcsFieldDO -> {
+            World world = getWorld(playernpcsFieldDO.getWorld());
+            if (world != null) world.setPlayerNpcMapData(playernpcsFieldDO.getMap(), playernpcsFieldDO.getStep(), playernpcsFieldDO.getPodium());
+        });
     }
 
     public World getWorld(int id) {
@@ -673,53 +660,6 @@ public class Server {
         }
     }
 
-    private static List<Pair<Integer, List<Pair<String, Integer>>>> loadPlayerRankingFromDB(int worldid) {
-        List<Pair<Integer, List<Pair<String, Integer>>>> rankSystem = new ArrayList<>();
-
-        try (Connection con = DatabaseConnection.getConnection()) {
-            String worldQuery;
-            if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                if (worldid >= 0) {
-                    worldQuery = (" AND `characters`.`world` = " + worldid);
-                } else {
-                    worldQuery = (" AND `characters`.`world` >= 0 AND `characters`.`world` <= " + -worldid);
-                }
-            } else {
-                worldQuery = (" AND `characters`.`world` >= 0 AND `characters`.`world` <= " + Math.abs(worldid));
-            }
-
-            List<Pair<String, Integer>> rankUpdate = new ArrayList<>(0);
-            try (PreparedStatement ps = con.prepareStatement("SELECT `characters`.`name`, `characters`.`level`, `characters`.`world` FROM `characters` LEFT JOIN accounts ON accounts.id = characters.accountid WHERE `characters`.`gm` < 2 AND `accounts`.`banned` = '0'" + worldQuery + " ORDER BY " + (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING ? "world, " : "") + "level DESC, exp DESC, lastExpGainTime ASC LIMIT 50");
-                 ResultSet rs = ps.executeQuery()) {
-
-                if (!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING) {
-                    int currentWorld = -1;
-                    while (rs.next()) {
-                        int rsWorld = rs.getInt("world");
-                        if (currentWorld < rsWorld) {
-                            currentWorld = rsWorld;
-                            rankUpdate = new ArrayList<>(50);
-                            rankSystem.add(new Pair<>(rsWorld, rankUpdate));
-                        }
-
-                        rankUpdate.add(new Pair<>(rs.getString("name"), rs.getInt("level")));
-                    }
-                } else {
-                    rankUpdate = new ArrayList<>(50);
-                    rankSystem.add(new Pair<>(0, rankUpdate));
-
-                    while (rs.next()) {
-                        rankUpdate.add(new Pair<>(rs.getString("name"), rs.getInt("level")));
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return rankSystem;
-    }
-
     public void init() {
         Instant beforeInit = Instant.now();
         log.info(I18nUtil.getLogMessage("Server.init.info1"), ServerConstants.VERSION);
@@ -791,21 +731,19 @@ public class Server {
             for (int i = 0; i < worldCount; i++) {
                 initWorld();
             }
+            // world初始化后需要加载的
             reloadWorldsPlayerRanking();
-
             loadPlayerNpcMapStepFromDb();
-
             if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-                try (Connection con = DatabaseConnection.getConnection()) {
-                    Family.loadAllFamilies(con);
-                }
+                FamilyService familyService = ServerManager.getApplicationContext().getBean(FamilyService.class);
+                familyService.loadAllFamilies();
             }
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Server.init.error3"), e); //For those who get errors
             System.exit(0);
         }
 
-        loginServer = initLoginServer(8484);
+        loginServer = initLoginServer(YamlConfig.config.server.LOGIN_PORT);
         log.info(I18nUtil.getLogMessage("Server.init.info6"));
 
         OpcodeConstants.generateOpcodeNames();

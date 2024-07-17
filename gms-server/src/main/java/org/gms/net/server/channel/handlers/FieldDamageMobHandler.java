@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class FieldDamageMobHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(FieldDamageMobHandler.class);

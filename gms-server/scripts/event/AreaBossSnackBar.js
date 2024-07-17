@@ -53,7 +53,7 @@ function start() {
 
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
 
     var snackBar = LifeFactory.getMonster(8220008);
     snackBarMap.spawnMonsterOnGroundBelow(snackBar, new Point(rndPos[0], rndPos[1]));

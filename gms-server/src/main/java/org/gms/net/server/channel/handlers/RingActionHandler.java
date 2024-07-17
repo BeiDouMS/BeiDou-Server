@@ -39,10 +39,10 @@ import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.ItemInformationProvider;
 import org.gms.service.NoteService;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.packets.WeddingPackets;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
+import org.gms.util.packets.WeddingPackets;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

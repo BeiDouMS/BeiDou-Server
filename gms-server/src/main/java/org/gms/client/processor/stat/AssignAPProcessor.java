@@ -41,8 +41,8 @@ import org.gms.constants.skills.Magician;
 import org.gms.constants.skills.ThunderBreaker;
 import org.gms.constants.skills.Warrior;
 import org.gms.net.packet.InPacket;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.Collection;

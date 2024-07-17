@@ -22,7 +22,7 @@ package org.gms.net.server.services;
 import org.gms.config.YamlConfig;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.Collections;
 import java.util.HashMap;

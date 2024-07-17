@@ -30,7 +30,7 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.YamlConfig;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.StatEffect;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.List;
 

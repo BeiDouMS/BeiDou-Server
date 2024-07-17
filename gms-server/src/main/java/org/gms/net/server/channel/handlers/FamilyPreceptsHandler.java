@@ -4,7 +4,7 @@ import org.gms.client.Client;
 import org.gms.client.Family;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class FamilyPreceptsHandler extends AbstractPacketHandler {
 

@@ -28,7 +28,7 @@ import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ChatLogger;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class PetChatHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(PetChatHandler.class);

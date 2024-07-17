@@ -28,7 +28,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.NpcId;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class MusicCommand extends Command {
     {

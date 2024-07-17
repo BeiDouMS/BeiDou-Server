@@ -31,9 +31,9 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.ItemInformationProvider.RewardItem;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
+import org.gms.util.Randomizer;
 
 import java.util.List;
 

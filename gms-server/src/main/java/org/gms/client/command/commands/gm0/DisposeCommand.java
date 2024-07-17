@@ -27,7 +27,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.scripting.quest.QuestScriptManager;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 import org.gms.util.I18nUtil;
 
 public class DisposeCommand extends Command {

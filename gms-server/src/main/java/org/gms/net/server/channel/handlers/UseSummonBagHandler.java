@@ -29,8 +29,8 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.LifeFactory;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 /**
  * @author AngelSL

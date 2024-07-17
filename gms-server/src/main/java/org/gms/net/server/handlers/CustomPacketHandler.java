@@ -24,7 +24,7 @@ package org.gms.net.server.handlers;
 import org.gms.client.Client;
 import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class CustomPacketHandler implements PacketHandler {
     @Override

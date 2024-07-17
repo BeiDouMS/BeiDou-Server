@@ -11,7 +11,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.ItemInformationProvider.QuestConsItem;
 import org.gms.server.quest.Quest;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.Map;
 

@@ -1,7 +1,7 @@
 package org.gms.client;
 
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

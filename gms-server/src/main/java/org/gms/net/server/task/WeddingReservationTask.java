@@ -21,7 +21,7 @@ package org.gms.net.server.task;
 
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.Set;
 

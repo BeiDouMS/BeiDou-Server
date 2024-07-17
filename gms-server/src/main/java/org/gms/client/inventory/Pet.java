@@ -28,9 +28,9 @@ import org.gms.server.ItemInformationProvider;
 import org.gms.server.movement.AbsoluteLifeMovement;
 import org.gms.server.movement.LifeMovement;
 import org.gms.server.movement.LifeMovementFragment;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.sql.Connection;

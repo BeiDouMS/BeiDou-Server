@@ -26,10 +26,9 @@ import org.gms.constants.game.GameConstants;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 /**
  * @author Ronan

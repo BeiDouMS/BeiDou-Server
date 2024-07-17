@@ -50,7 +50,7 @@ function start() {
 
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
 
     var deo = LifeFactory.getMonster(3220001);
     royalCatthusDesert.spawnMonsterOnGroundBelow(deo, new Point(645, 275));

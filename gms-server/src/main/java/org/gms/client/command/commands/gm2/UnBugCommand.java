@@ -25,7 +25,7 @@ package org.gms.client.command.commands.gm2;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class UnBugCommand extends Command {
     {

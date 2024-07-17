@@ -34,9 +34,9 @@ import org.gms.provider.DataTool;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
+import org.gms.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.Collections;

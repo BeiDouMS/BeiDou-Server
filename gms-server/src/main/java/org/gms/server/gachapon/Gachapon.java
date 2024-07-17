@@ -26,7 +26,7 @@ import org.gms.constants.id.NpcId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
-import org.gms.tools.Randomizer;
+import org.gms.util.Randomizer;
 
 /**
  * @author Alan (SharpAceX)

@@ -21,8 +21,8 @@ import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.Marriage;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.packets.WeddingPackets;
+import org.gms.util.PacketCreator;
+import org.gms.util.packets.WeddingPackets;
 
 import java.util.Collections;
 import java.util.List;

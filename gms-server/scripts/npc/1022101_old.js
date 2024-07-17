@@ -139,7 +139,7 @@ function action(mode, type, selection) {
                 }
 
                 cm.getPlayer().getCashShop().gainCash(1, nxAmount);
-                const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+                const PacketCreator = Java.type('org.gms.util.PacketCreator');
                 cm.getPlayer().sendPacket(PacketCreator.earnTitleMessage("You have earned " + nxAmount + " NX"));
                 cm.logLeaf(nxAmount + " NX");
                 cm.dispose();

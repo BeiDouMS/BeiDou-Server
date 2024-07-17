@@ -28,7 +28,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.server.events.gm.Event;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class StartEventCommand extends Command {
     {

@@ -26,7 +26,7 @@ import org.gms.constants.id.MobId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.life.Monster;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class MonsterBombHandler extends AbstractPacketHandler {
     @Override

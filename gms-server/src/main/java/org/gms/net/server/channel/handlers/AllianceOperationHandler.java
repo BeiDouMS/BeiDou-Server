@@ -30,7 +30,7 @@ import org.gms.net.server.guild.Alliance;
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildCharacter;
 import org.gms.net.server.guild.GuildPackets;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 /**
  * @author XoticStory, Ronan

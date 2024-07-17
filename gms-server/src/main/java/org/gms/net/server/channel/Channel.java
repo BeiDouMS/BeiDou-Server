@@ -47,8 +47,8 @@ import org.gms.server.maps.MapManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeon;
 import org.gms.server.maps.MiniDungeonInfo;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

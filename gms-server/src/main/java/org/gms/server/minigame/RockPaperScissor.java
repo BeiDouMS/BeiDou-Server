@@ -4,8 +4,8 @@ import org.gms.client.Client;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.id.ItemId;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 /**
  * @Author Arnah

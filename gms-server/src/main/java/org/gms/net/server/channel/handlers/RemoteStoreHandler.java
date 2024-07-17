@@ -27,7 +27,7 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.maps.HiredMerchant;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 /**
  * @author kevintjuh93 - :3

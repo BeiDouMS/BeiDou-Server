@@ -28,7 +28,7 @@ import org.gms.constants.id.MapId;
 import org.gms.net.server.world.Party;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.TimerManager;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
 

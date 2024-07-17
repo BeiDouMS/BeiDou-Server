@@ -29,7 +29,7 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.GuildPackets;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.List;
 

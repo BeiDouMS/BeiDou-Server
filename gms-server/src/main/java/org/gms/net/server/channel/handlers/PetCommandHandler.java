@@ -28,8 +28,8 @@ import org.gms.client.inventory.PetCommand;
 import org.gms.client.inventory.PetDataFactory;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 public final class PetCommandHandler extends AbstractPacketHandler {
 

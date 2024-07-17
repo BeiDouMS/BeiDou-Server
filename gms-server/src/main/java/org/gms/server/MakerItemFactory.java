@@ -23,7 +23,7 @@ package org.gms.server;
 
 import org.gms.config.YamlConfig;
 import org.gms.constants.inventory.EquipType;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

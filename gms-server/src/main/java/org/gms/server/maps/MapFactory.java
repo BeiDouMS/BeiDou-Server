@@ -33,8 +33,8 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.partyquest.GuardianSpawnPoint;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.StringUtil;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.StringUtil;
 
 import java.awt.*;
 import java.sql.Connection;

@@ -34,7 +34,7 @@ import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.quest.Quest;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 public class SearchCommand extends Command {
     private static Data npcStringData;

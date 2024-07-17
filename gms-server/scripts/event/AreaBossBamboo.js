@@ -51,7 +51,7 @@ function start() {
     }
 
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
     mapObj.spawnMonsterOnGroundBelow(mobObj, new Point(560, 50));
     mapObj.broadcastMessage(PacketCreator.serverNotice(6, "From amongst the ruins shrouded by the mists, Bamboo Warrior appears."));
     em.schedule("start", 3 * 60 * 60 * 1000);

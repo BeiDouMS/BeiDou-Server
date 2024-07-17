@@ -27,7 +27,7 @@ function action(mode, type, selection) {
                 return;
             }
 
-            const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+            const PacketCreator = Java.type('org.gms.util.PacketCreator');
             cm.getClient().sendPacket(PacketCreator.openRPSNPC());
             cm.dispose();
         }

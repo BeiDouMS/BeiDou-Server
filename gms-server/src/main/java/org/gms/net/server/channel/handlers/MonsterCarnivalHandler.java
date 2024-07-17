@@ -34,8 +34,8 @@ import org.gms.server.life.Monster;
 import org.gms.server.partyquest.CarnivalFactory;
 import org.gms.server.partyquest.CarnivalFactory.MCSkill;
 import org.gms.server.partyquest.MonsterCarnival;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.util.List;

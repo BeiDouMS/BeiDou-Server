@@ -31,7 +31,7 @@ import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.PlayerShop;
 import org.gms.server.maps.Portal;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 import java.sql.SQLException;

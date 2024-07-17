@@ -30,7 +30,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResult;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
-import org.gms.tools.DatabaseConnection;
+import org.gms.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

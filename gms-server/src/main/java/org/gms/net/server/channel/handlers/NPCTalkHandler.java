@@ -33,7 +33,7 @@ import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.server.life.NPC;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.maps.MapObject;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class NPCTalkHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(NPCTalkHandler.class);

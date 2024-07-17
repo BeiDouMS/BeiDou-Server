@@ -3,7 +3,7 @@ package org.gms.server.maps;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.net.packet.Packet;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 

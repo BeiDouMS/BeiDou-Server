@@ -202,7 +202,7 @@ import org.gms.client.command.commands.gm6.WarpWorldCommand;
 import org.gms.constants.id.MapId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;

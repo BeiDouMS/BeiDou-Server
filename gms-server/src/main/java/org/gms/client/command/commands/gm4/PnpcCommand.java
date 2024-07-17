@@ -30,8 +30,8 @@ import org.gms.net.server.channel.Channel;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.NPC;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 import java.sql.Connection;

@@ -49,7 +49,7 @@ function start() {
     }
 
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
     const Point = Java.type('java.awt.Point');
 
     var faust1 = LifeFactory.getMonster(5220002);

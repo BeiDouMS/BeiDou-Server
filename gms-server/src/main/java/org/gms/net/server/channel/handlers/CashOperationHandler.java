@@ -42,8 +42,8 @@ import org.gms.server.CashShop.CashItem;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.service.NoteService;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.util.Calendar;
 import java.util.List;

@@ -22,7 +22,10 @@ import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 import static org.gms.dao.entity.table.AccountsDOTableDef.ACCOUNTS_D_O;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
@@ -34,6 +37,10 @@ import static org.gms.dao.entity.table.ExtendValueDOTableDef.EXTEND_VALUE_D_O;
 public class CharacterService {
     private final ExtendValueMapper extendValueMapper;
     private final CharactersMapper charactersMapper;
+
+    public CharactersDO findById(int id) {
+        return charactersMapper.selectOneById(id);
+    }
 
     public Page<ChrOnlineListRtnDTO> getChrOnlineList(ChrOnlineListReqDTO request) {
         Collection<Character> chrList = Server.getInstance().getWorld(request.getWorld()).getPlayerStorage().getAllCharacters();

@@ -57,7 +57,7 @@ function start() {
     const spawnpoint = new Point(posX, posY);
     whirlpoolOfTime.spawnMonsterOnGroundBelow(timer1, spawnpoint);
 
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
     whirlpoolOfTime.broadcastMessage(PacketCreator.serverNotice(6, "Tick-Tock Tick-Tock! Timer makes it's presence known."));
     em.schedule("start", 3 * 60 * 60 * 1000);
 }

@@ -30,8 +30,8 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

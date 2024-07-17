@@ -50,7 +50,7 @@ function start() {
     }
 
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
 
     var boss = LifeFactory.getMonster(bossMobid);

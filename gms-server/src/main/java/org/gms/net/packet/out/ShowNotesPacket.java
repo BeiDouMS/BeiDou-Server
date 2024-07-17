@@ -3,7 +3,7 @@ package org.gms.net.packet.out;
 import org.gms.dao.entity.NotesDO;
 import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.ByteBufOutPacket;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.List;
 import java.util.Objects;

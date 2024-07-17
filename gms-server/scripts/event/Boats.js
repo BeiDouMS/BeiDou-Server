@@ -86,7 +86,7 @@ function approach() {
         em.setProperty("haveBalrog", "true");
         Boat_to_Orbis.broadcastEnemyShip(true);
         Boat_to_Ellinia.broadcastEnemyShip(true);
-        const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+        const PacketCreator = Java.type('org.gms.util.PacketCreator');
         Boat_to_Orbis.broadcastMessage(PacketCreator.musicChange("Bgm04/ArabPirate"));
         Boat_to_Ellinia.broadcastMessage(PacketCreator.musicChange("Bgm04/ArabPirate"));
 

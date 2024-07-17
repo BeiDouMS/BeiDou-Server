@@ -26,7 +26,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class ServerStatusRequestHandler extends AbstractPacketHandler {
 

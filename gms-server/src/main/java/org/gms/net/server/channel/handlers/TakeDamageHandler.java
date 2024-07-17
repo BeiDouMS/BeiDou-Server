@@ -50,8 +50,8 @@ import org.gms.server.life.MobSkillType;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 import java.awt.*;
 import java.util.ArrayList;

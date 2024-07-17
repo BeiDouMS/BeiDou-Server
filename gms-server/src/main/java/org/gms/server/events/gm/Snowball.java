@@ -25,7 +25,7 @@ import org.gms.client.Character;
 import org.gms.constants.id.MapId;
 import org.gms.server.TimerManager;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.LinkedList;
 import java.util.List;

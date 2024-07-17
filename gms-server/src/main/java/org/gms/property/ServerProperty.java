@@ -53,7 +53,7 @@ public class ServerProperty {
     public String HOST;
     public String LANHOST;
     public String LOCALHOST;
-    public boolean GMSERVER;
+    public int LOGIN_PORT;
 
     //Other configuration
     public boolean SHUTDOWNHOOK;

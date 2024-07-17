@@ -23,7 +23,7 @@ package org.gms.server.maps;
 
 import org.gms.client.Client;
 import org.gms.net.packet.Packet;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class MapEffect {
     private final String msg;

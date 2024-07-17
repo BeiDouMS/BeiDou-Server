@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
 import org.gms.server.maps.Reactor;
 import org.gms.server.maps.ReactorDropEntry;
-import org.gms.tools.DatabaseConnection;
+import org.gms.util.DatabaseConnection;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;

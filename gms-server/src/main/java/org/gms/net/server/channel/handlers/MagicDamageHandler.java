@@ -35,7 +35,7 @@ import org.gms.constants.skills.ILArchMage;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
 import org.gms.server.StatEffect;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 

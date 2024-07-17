@@ -31,8 +31,8 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.world.World;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

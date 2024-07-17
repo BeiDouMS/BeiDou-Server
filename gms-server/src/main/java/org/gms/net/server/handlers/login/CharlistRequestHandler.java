@@ -27,7 +27,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class CharlistRequestHandler extends AbstractPacketHandler {
 

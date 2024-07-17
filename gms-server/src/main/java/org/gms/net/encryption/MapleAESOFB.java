@@ -23,7 +23,7 @@ package org.gms.net.encryption;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.HexTool;
+import org.gms.util.HexTool;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

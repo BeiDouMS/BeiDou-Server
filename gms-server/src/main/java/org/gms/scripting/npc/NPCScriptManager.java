@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
 import org.gms.server.ItemInformationProvider.ScriptedItem;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;

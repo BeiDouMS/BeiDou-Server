@@ -26,7 +26,7 @@ import org.gms.dao.entity.NotesDO;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.service.NoteService;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

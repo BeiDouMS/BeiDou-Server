@@ -34,9 +34,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
 import org.gms.server.ItemInformationProvider;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

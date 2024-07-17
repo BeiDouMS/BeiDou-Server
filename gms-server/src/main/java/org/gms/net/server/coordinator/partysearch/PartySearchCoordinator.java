@@ -30,8 +30,8 @@ import org.gms.provider.Data;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.util.Collections;
 import java.util.HashMap;

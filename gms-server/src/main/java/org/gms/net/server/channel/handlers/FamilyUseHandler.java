@@ -33,7 +33,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 /**
  * @author Moogra

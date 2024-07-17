@@ -30,7 +30,7 @@ import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.maps.Door;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.partyquest.MonsterCarnival;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.Collection;
 import java.util.Collections;

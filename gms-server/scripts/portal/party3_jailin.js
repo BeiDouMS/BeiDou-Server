@@ -30,7 +30,7 @@ function enterLeverSequence(pi) {
             }
         }
 
-        const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+        const PacketCreator = Java.type('org.gms.util.PacketCreator');
         if (countMiss > 0) {
             map.broadcastMessage(PacketCreator.showEffect("quest/party/wrong_kor"));
             map.broadcastMessage(PacketCreator.playSound("Party1/Failed"));

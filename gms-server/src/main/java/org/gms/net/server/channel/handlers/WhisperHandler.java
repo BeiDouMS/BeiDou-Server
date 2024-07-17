@@ -29,8 +29,8 @@ import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ChatLogger;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.PacketCreator.WhisperFlag;
+import org.gms.util.PacketCreator;
+import org.gms.util.PacketCreator.WhisperFlag;
 
 /**
  * @author Chronos

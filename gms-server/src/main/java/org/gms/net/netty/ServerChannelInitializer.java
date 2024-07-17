@@ -17,7 +17,7 @@ import org.gms.net.packet.logging.InPacketLogger;
 import org.gms.net.packet.logging.OutPacketLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicLong;

@@ -28,8 +28,8 @@ import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.scripting.event.EventManager;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.SQLException;

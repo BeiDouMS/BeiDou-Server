@@ -24,8 +24,7 @@ import org.gms.client.inventory.Item;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.CashShop;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
 
 import java.util.Optional;
 

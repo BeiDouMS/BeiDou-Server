@@ -28,8 +28,8 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 /**
  * @author Xotic (XoticStory) & BubblesDev

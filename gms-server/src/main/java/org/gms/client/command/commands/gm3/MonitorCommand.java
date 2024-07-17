@@ -28,7 +28,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.packet.logging.MonitoredChrLogger;
 import org.gms.net.server.Server;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class MonitorCommand extends Command {
     {

@@ -24,7 +24,7 @@ package org.gms.net.server.task;
 import org.gms.client.Job;
 import org.gms.config.YamlConfig;
 import org.gms.net.server.Server;
-import org.gms.tools.DatabaseConnection;
+import org.gms.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

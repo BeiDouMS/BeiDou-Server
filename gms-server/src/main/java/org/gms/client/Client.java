@@ -66,10 +66,10 @@ import org.gms.server.life.Monster;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeonInfo;
-import org.gms.tools.BCrypt;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.HexTool;
-import org.gms.tools.PacketCreator;
+import org.gms.util.BCrypt;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.HexTool;
+import org.gms.util.PacketCreator;
 
 import javax.script.ScriptEngine;
 import java.io.IOException;

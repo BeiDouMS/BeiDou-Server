@@ -25,7 +25,7 @@ import org.gms.client.Character;
 import org.gms.config.YamlConfig;
 import org.gms.net.server.services.task.channel.OverallService;
 import org.gms.net.server.services.type.ChannelServices;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.util.Collection;

@@ -12,7 +12,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResult;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class FamilySummonResponseHandler extends AbstractPacketHandler {
 

@@ -32,7 +32,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
 import org.gms.net.server.world.Messenger;
 import org.gms.net.server.world.MessengerCharacter;
 import org.gms.net.server.world.World;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class MessengerHandler extends AbstractPacketHandler {
     @Override

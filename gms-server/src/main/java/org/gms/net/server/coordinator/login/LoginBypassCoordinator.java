@@ -25,7 +25,7 @@ import org.gms.config.YamlConfig;
 import org.gms.net.server.Server;
 import org.gms.net.server.coordinator.session.Hwid;
 import org.gms.net.server.world.World;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.HashSet;
 import java.util.LinkedList;

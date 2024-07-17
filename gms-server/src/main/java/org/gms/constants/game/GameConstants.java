@@ -10,7 +10,7 @@ import org.gms.provider.wz.WZFiles;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.Quest;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

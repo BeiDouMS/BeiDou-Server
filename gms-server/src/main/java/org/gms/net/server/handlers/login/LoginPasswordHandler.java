@@ -28,10 +28,10 @@ import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.net.server.coordinator.session.Hwid;
-import org.gms.tools.BCrypt;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.HexTool;
-import org.gms.tools.PacketCreator;
+import org.gms.util.BCrypt;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.HexTool;
+import org.gms.util.PacketCreator;
 
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;

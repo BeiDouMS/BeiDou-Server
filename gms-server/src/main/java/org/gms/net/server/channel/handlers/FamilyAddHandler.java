@@ -28,7 +28,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 /**
  * @author Jay Estrella

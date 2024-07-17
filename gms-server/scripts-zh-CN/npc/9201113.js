@@ -141,7 +141,7 @@ function action(mode, type, selection) {
                 cm.sendOk("探险队即将出发，你现在将被护送至#b神木村彩虹组队任务祭坛入口#k。");
                 status = 4;
             } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+                const PacketCreator = Java.type('org.gms.util.PacketCreator');
                 player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");

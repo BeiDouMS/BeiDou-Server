@@ -40,7 +40,7 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.quest.Quest;
-import org.gms.tools.exceptions.EventInstanceInProgressException;
+import org.gms.exception.EventInstanceInProgressException;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;

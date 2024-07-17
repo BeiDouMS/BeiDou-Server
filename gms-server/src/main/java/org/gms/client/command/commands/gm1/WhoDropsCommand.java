@@ -29,8 +29,8 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.MonsterInformationProvider;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

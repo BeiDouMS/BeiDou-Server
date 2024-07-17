@@ -25,9 +25,9 @@ package org.gms.client.autoban;
 import org.gms.client.Character;
 import org.gms.config.YamlConfig;
 import org.gms.net.server.Server;
+import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.PacketCreator;
 
 import java.util.Collection;
 import java.util.HashSet;

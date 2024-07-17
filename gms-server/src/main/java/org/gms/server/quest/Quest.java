@@ -67,8 +67,8 @@ import org.gms.server.quest.requirements.NpcRequirement;
 import org.gms.server.quest.requirements.PetRequirement;
 import org.gms.server.quest.requirements.QuestRequirement;
 import org.gms.server.quest.requirements.ScriptRequirement;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.StringUtil;
+import org.gms.util.PacketCreator;
+import org.gms.util.StringUtil;
 
 import java.util.Collection;
 import java.util.EnumMap;

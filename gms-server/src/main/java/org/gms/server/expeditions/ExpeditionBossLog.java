@@ -20,8 +20,8 @@
 package org.gms.server.expeditions;
 
 import org.gms.config.YamlConfig;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

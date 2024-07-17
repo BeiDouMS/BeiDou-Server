@@ -25,8 +25,8 @@ import org.gms.client.Client;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.scripting.map.MapScriptManager;
 import org.gms.server.maps.Portal;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

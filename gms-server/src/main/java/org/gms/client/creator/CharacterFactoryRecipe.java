@@ -24,7 +24,7 @@ import org.gms.client.Skill;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.config.YamlConfig;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;

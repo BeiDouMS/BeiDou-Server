@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.Trade;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Portal;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 import java.net.InetAddress;

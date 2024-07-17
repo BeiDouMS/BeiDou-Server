@@ -32,7 +32,7 @@ import org.gms.constants.game.GameConstants;
 import org.gms.constants.skills.Aran;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 /**
  * @author RonanLana - synchronization of SP transaction modules

@@ -24,7 +24,7 @@ package org.gms.server.life;
 import org.gms.server.life.LifeFactory.BanishInfo;
 import org.gms.server.life.LifeFactory.loseItem;
 import org.gms.server.life.LifeFactory.selfDestruction;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.lang.reflect.Field;
 import java.util.Collections;

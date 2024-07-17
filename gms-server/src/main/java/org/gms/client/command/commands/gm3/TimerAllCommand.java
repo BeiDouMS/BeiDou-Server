@@ -26,7 +26,7 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class TimerAllCommand extends Command {
     {

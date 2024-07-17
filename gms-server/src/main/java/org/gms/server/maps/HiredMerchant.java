@@ -35,9 +35,9 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Trade;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

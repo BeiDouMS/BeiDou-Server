@@ -25,7 +25,7 @@ import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;

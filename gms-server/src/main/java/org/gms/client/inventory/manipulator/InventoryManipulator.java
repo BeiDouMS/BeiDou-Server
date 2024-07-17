@@ -38,7 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 import java.util.ArrayList;

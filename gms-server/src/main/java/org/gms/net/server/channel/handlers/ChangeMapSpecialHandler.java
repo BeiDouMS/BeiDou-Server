@@ -27,7 +27,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.Trade;
 import org.gms.server.Trade.TradeResult;
 import org.gms.server.maps.Portal;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
     @Override

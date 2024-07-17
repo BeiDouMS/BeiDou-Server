@@ -22,8 +22,8 @@
 package org.gms.client;
 
 import org.gms.util.CashIdGenerator;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

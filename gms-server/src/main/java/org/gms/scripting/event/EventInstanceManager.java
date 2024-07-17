@@ -45,8 +45,8 @@ import org.gms.server.maps.MapManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Portal;
 import org.gms.server.maps.Reactor;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import javax.script.ScriptException;
 import java.awt.*;

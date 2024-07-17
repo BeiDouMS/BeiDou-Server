@@ -62,10 +62,10 @@ import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
-import org.gms.tools.IntervalBuilder;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.Randomizer;
+import org.gms.util.IntervalBuilder;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
+import org.gms.util.Randomizer;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;

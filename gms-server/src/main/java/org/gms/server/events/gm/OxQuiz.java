@@ -28,8 +28,8 @@ import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
 import org.gms.server.TimerManager;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Randomizer;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package org.gms.server;
 
 import org.gms.config.YamlConfig;
-import org.gms.tools.DatabaseConnection;
+import org.gms.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,7 +45,7 @@ public class ExpLogger {
         @Override
         public void run() {
             try (Connection con = DatabaseConnection.getConnection();
-                    PreparedStatement ps = con.prepareStatement("INSERT INTO characterexplogs (world_exp_rate, exp_coupon, gained_exp, current_exp, exp_gain_time, charid) VALUES (?, ?, ?, ?, ?, ?)")) {
+                 PreparedStatement ps = con.prepareStatement("INSERT INTO characterexplogs (world_exp_rate, exp_coupon, gained_exp, current_exp, exp_gain_time, charid) VALUES (?, ?, ?, ?, ?, ?)")) {
 
                 List<ExpLogRecord> drainedExpLogs = new ArrayList<>();
                 expLoggerQueue.drainTo(drainedExpLogs);

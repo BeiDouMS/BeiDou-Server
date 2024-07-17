@@ -22,7 +22,7 @@
 package org.gms.client;
 
 import org.gms.server.quest.Quest;
-import org.gms.tools.StringUtil;
+import org.gms.util.StringUtil;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

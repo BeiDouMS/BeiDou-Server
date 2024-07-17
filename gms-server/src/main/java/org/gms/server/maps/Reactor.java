@@ -29,8 +29,8 @@ import org.gms.net.server.services.type.ChannelServices;
 import org.gms.scripting.reactor.ReactorScriptManager;
 import org.gms.server.TimerManager;
 import org.gms.server.partyquest.GuardianSpawnPoint;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.util.List;

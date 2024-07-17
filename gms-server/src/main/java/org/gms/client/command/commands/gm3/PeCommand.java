@@ -33,7 +33,7 @@ import org.gms.net.packet.ByteBufInPacket;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.HexTool;
+import org.gms.util.HexTool;
 
 import java.io.BufferedReader;
 import java.io.IOException;

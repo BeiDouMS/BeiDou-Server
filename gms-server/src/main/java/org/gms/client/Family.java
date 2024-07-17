@@ -26,9 +26,9 @@ import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -186,99 +186,6 @@ public class Family {
             entry.setTodaysRep(0);
             entry.setRepsToSenior(0);
             entry.resetEntitlementUsages();
-        }
-    }
-
-    public static void loadAllFamilies(Connection con) {
-        List<Pair<Pair<Integer, Integer>, FamilyEntry>> unmatchedJuniors = new ArrayList<>(200); // <<world, seniorid> familyEntry>
-        try (PreparedStatement psEntries = con.prepareStatement("SELECT * FROM family_character")) {
-            ResultSet rsEntries = psEntries.executeQuery();
-            while (rsEntries.next()) { // can be optimized
-                int cid = rsEntries.getInt("cid");
-                String name = null;
-                int level = -1;
-                int jobID = -1;
-                int world = -1;
-                try (PreparedStatement ps = con.prepareStatement("SELECT world, name, level, job FROM characters WHERE id = ?")) {
-                    ps.setInt(1, cid);
-                    ResultSet rs = ps.executeQuery();
-                    if (rs.next()) {
-                        world = rs.getInt("world");
-                        name = rs.getString("name");
-                        level = rs.getInt("level");
-                        jobID = rs.getInt("job");
-                    } else {
-                        log.error("Could not load character information of chrId {} in loadAllFamilies(). (RECORD DOES NOT EXIST)", cid);
-                        continue;
-                    }
-                } catch (SQLException e) {
-                    log.error("Could not load character information of chrId {} in loadAllFamilies(). (SQL ERROR)", cid, e);
-                    continue;
-                }
-                int familyid = rsEntries.getInt("familyid");
-                int seniorid = rsEntries.getInt("seniorid");
-                int reputation = rsEntries.getInt("reputation");
-                int todaysRep = rsEntries.getInt("todaysrep");
-                int totalRep = rsEntries.getInt("totalreputation");
-                int repsToSenior = rsEntries.getInt("reptosenior");
-                String precepts = rsEntries.getString("precepts");
-                //Timestamp lastResetTime = rsEntries.getTimestamp("lastresettime"); //taken care of by FamilyDailyResetTask
-                World wserv = Server.getInstance().getWorld(world);
-                if (wserv == null) {
-                    continue;
-                }
-                Family family = wserv.getFamily(familyid);
-                if (family == null) {
-                    family = new Family(familyid, world);
-                    Server.getInstance().getWorld(world).addFamily(familyid, family);
-                }
-                FamilyEntry familyEntry = new FamilyEntry(family, cid, name, level, Job.getById(jobID));
-                family.addEntry(familyEntry);
-                if (seniorid <= 0) {
-                    family.setLeader(familyEntry);
-                    family.setMessage(precepts, false);
-                }
-                FamilyEntry senior = family.getEntryByID(seniorid);
-                if (senior != null) {
-                    familyEntry.setSenior(family.getEntryByID(seniorid), false);
-                } else {
-                    if (seniorid > 0) {
-                        unmatchedJuniors.add(new Pair<>(new Pair<>(world, seniorid), familyEntry));
-                    }
-                }
-                familyEntry.setReputation(reputation);
-                familyEntry.setTodaysRep(todaysRep);
-                familyEntry.setTotalReputation(totalRep);
-                familyEntry.setRepsToSenior(repsToSenior);
-                //load used entitlements
-                try (PreparedStatement ps = con.prepareStatement("SELECT entitlementid FROM family_entitlement WHERE charid = ?")) {
-                    ps.setInt(1, familyEntry.getChrId());
-                    ResultSet rs = ps.executeQuery();
-                    while (rs.next()) {
-                        familyEntry.setEntitlementUsed(rs.getInt("entitlementid"));
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            log.error("Could not get family_character entries", e);
-        }
-        // link missing ones (out of order)
-        for (Pair<Pair<Integer, Integer>, FamilyEntry> unmatchedJunior : unmatchedJuniors) {
-            int world = unmatchedJunior.getLeft().getLeft();
-            int seniorid = unmatchedJunior.getLeft().getRight();
-            FamilyEntry junior = unmatchedJunior.getRight();
-            FamilyEntry senior = Server.getInstance().getWorld(world).getFamily(junior.getFamily().getID()).getEntryByID(seniorid);
-            if (senior != null) {
-                junior.setSenior(senior, false);
-            } else {
-                log.error("Missing senior for chr {} in world {}", junior.getName(), world);
-            }
-        }
-
-        for (World world : Server.getInstance().getWorlds()) {
-            for (Family family : world.getFamilies()) {
-                family.getLeader().doFullCount();
-            }
         }
     }
 

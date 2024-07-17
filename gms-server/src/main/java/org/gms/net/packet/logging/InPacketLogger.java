@@ -8,7 +8,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.net.packet.Packet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.HexTool;
+import org.gms.util.HexTool;
 
 @Sharable
 public class InPacketLogger extends ChannelInboundHandlerAdapter implements PacketLogger {

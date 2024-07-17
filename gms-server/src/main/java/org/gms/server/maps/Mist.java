@@ -34,7 +34,7 @@ import org.gms.net.packet.Packet;
 import org.gms.server.StatEffect;
 import org.gms.server.life.MobSkill;
 import org.gms.server.life.Monster;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 

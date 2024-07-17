@@ -6,9 +6,9 @@ import org.gms.net.opcodes.SendOpcode;
 import org.gms.net.packet.OutPacket;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.StringUtil;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
+import org.gms.util.StringUtil;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

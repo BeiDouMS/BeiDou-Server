@@ -29,8 +29,8 @@ import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.DataType;
 import org.gms.provider.wz.WZFiles;
-import org.gms.tools.Pair;
-import org.gms.tools.StringUtil;
+import org.gms.util.Pair;
+import org.gms.util.StringUtil;
 
 import java.awt.*;
 import java.util.HashMap;

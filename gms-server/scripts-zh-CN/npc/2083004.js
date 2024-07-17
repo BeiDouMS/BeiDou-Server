@@ -151,7 +151,7 @@ function action(mode, type, selection) {
                 cm.sendOk("祝你好运！整个里弗尔都指望你了。");
                 status = 4;
             } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+                const PacketCreator = Java.type('org.gms.util.PacketCreator');
                 player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");

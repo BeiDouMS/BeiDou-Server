@@ -312,7 +312,7 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
     if (mode == -1) {
         cm.getPlayer().sendPacket(PacketCreator.musicChange(ambientSong));
         cm.dispose();

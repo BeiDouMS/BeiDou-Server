@@ -25,12 +25,12 @@ import org.gms.client.Client;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.util.PacketCreator;
+import org.gms.util.Randomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
-import org.gms.tools.Randomizer;
+import org.gms.util.Pair;
 
 import java.util.HashMap;
 import java.util.LinkedList;

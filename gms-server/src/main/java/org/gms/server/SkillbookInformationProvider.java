@@ -27,7 +27,7 @@ import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
-import org.gms.tools.DatabaseConnection;
+import org.gms.util.DatabaseConnection;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;

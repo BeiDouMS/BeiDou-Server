@@ -32,7 +32,7 @@ import org.gms.server.movement.JumpDownMovement;
 import org.gms.server.movement.LifeMovementFragment;
 import org.gms.server.movement.RelativeLifeMovement;
 import org.gms.server.movement.TeleportMovement;
-import org.gms.tools.exceptions.EmptyMovementException;
+import org.gms.exception.EmptyMovementException;
 
 import java.awt.*;
 import java.util.ArrayList;

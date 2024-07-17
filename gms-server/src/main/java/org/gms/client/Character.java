@@ -81,12 +81,13 @@ import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.NameChangeService;
-import org.gms.tools.*;
-import org.gms.tools.exceptions.NotEnabledException;
-import org.gms.tools.packets.WeddingPackets;
+import org.gms.util.*;
+import org.gms.exception.NotEnabledException;
 import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
+import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
+import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

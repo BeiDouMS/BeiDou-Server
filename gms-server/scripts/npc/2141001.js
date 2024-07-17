@@ -154,7 +154,7 @@ function action(mode, type, selection) {
                 cm.sendOk("The expedition will begin and you will now be escorted to the #b" + expedMap + "#k.");
                 status = 4;
             } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+                const PacketCreator = Java.type('org.gms.util.PacketCreator');
                 player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
                 cm.endExpedition(expedition);
                 cm.sendOk("The expedition has now ended. Sometimes the best strategy is to run away.");

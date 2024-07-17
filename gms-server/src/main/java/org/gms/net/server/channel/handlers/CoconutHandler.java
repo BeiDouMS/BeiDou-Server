@@ -28,7 +28,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.server.events.gm.Coconut;
 import org.gms.server.events.gm.Coconuts;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 /**
  * @author kevintjuh93

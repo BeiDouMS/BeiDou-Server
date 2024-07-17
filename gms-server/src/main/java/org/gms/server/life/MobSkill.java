@@ -35,7 +35,7 @@ import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Mist;
-import org.gms.tools.Randomizer;
+import org.gms.util.Randomizer;
 
 import java.awt.*;
 import java.util.ArrayList;

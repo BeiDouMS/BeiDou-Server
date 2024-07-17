@@ -48,7 +48,7 @@ import org.gms.server.maps.MiniGame.MiniGameType;
 import org.gms.server.maps.PlayerShop;
 import org.gms.server.maps.PlayerShopItem;
 import org.gms.server.maps.Portal;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 import java.sql.SQLException;

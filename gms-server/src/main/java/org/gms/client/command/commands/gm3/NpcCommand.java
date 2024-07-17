@@ -28,7 +28,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.NPC;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class NpcCommand extends Command {
     {

@@ -23,8 +23,8 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
 import org.gms.net.packet.InPacket;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.exceptions.EmptyMovementException;
+import org.gms.util.PacketCreator;
+import org.gms.exception.EmptyMovementException;
 
 public final class MovePlayerHandler extends AbstractMovementPacketHandler {
     @Override

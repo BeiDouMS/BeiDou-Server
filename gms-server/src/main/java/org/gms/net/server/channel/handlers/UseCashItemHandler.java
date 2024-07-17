@@ -65,8 +65,8 @@ import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MapleTVEffect;
 import org.gms.server.maps.PlayerShopItem;
 import org.gms.service.NoteService;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

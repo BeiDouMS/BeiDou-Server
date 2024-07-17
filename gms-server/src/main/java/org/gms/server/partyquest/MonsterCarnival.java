@@ -10,7 +10,7 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.server.TimerManager;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Reactor;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.concurrent.ScheduledFuture;
 

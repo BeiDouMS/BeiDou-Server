@@ -27,7 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

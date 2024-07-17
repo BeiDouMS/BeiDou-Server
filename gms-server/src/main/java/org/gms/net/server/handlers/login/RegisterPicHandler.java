@@ -10,7 +10,7 @@ import org.gms.net.server.coordinator.session.SessionCoordinator.AntiMulticlient
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

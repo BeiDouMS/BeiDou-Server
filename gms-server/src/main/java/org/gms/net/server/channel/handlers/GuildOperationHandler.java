@@ -38,7 +38,7 @@ import org.gms.net.server.world.Party;
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.util.HashSet;
 import java.util.Set;

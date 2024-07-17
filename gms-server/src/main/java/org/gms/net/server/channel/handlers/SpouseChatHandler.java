@@ -26,7 +26,7 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ChatLogger;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class SpouseChatHandler extends AbstractPacketHandler {
     @Override

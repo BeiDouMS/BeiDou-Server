@@ -24,7 +24,7 @@ package org.gms.server.life;
 import org.gms.client.Client;
 import org.gms.server.ShopFactory;
 import org.gms.server.maps.MapObjectType;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class NPC extends AbstractLoadedLife {
     private final NPCStats stats;

@@ -20,7 +20,7 @@
 package org.gms.net.server.coordinator.partysearch;
 
 import org.gms.client.Character;
-import org.gms.tools.IntervalBuilder;
+import org.gms.util.IntervalBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;

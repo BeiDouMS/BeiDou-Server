@@ -27,7 +27,7 @@ import org.gms.net.server.Server;
 import org.gms.net.server.coordinator.login.LoginStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.DatabaseConnection;
+import org.gms.util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;

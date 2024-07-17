@@ -36,8 +36,8 @@ import org.gms.server.life.MonsterInformationProvider;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.exceptions.EmptyMovementException;
+import org.gms.util.PacketCreator;
+import org.gms.exception.EmptyMovementException;
 
 import java.awt.*;
 import java.util.LinkedList;

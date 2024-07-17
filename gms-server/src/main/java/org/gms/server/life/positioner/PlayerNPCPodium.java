@@ -28,7 +28,7 @@ import org.gms.server.life.PlayerNPC;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.awt.*;
 import java.util.ArrayList;

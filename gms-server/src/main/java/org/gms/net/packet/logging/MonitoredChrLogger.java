@@ -26,7 +26,7 @@ import net.jcip.annotations.NotThreadSafe;
 import org.gms.net.opcodes.RecvOpcode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.tools.HexTool;
+import org.gms.util.HexTool;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.ThreadManager;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;

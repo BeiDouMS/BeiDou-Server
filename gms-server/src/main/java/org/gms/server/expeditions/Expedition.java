@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.TimerManager;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

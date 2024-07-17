@@ -28,8 +28,8 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.channel.Channel;
 import org.gms.server.maps.MapleMap;
-import org.gms.tools.DatabaseConnection;
-import org.gms.tools.Pair;
+import org.gms.util.DatabaseConnection;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.sql.Connection;

@@ -32,7 +32,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.gms.server.ItemInformationProvider;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public final class InventoryMergeHandler extends AbstractPacketHandler {
 

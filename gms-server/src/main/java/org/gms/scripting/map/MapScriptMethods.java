@@ -27,7 +27,7 @@ import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.id.MapId;
 import org.gms.scripting.AbstractPlayerInteraction;
 import org.gms.server.quest.Quest;
-import org.gms.tools.PacketCreator;
+import org.gms.util.PacketCreator;
 
 public class MapScriptMethods extends AbstractPlayerInteraction {
 

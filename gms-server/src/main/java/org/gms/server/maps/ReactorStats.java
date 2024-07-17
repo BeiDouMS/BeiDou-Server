@@ -21,7 +21,7 @@
 */
 package org.gms.server.maps;
 
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.awt.*;
 import java.util.ArrayList;

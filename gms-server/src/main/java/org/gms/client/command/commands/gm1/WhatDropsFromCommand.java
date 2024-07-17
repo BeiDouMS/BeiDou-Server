@@ -30,7 +30,7 @@ import org.gms.constants.id.NpcId;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
-import org.gms.tools.Pair;
+import org.gms.util.Pair;
 
 import java.util.Iterator;
 

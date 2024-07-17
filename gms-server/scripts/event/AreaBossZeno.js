@@ -50,7 +50,7 @@ function start() {
 
     const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
     const Point = Java.type('java.awt.Point');
-    const PacketCreator = Java.type('org.gms.tools.PacketCreator');
+    const PacketCreator = Java.type('org.gms.util.PacketCreator');
 
     var zeno = LifeFactory.getMonster(6220001);
     graysPrairie.spawnMonsterOnGroundBelow(zeno, new Point(-4224, 776));

@@ -6,7 +6,7 @@ import org.gms.client.command.Command;
 import org.gms.constants.game.NpcChat;
 import org.gms.constants.id.NpcId;
 import org.gms.server.ThreadManager;
-import org.gms.tools.exceptions.IdTypeNotSupportedException;
+import org.gms.exception.IdTypeNotSupportedException;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -35,8 +35,8 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.MakerItemFactory;
 import org.gms.server.MakerItemFactory.MakerItemCreateEntry;
-import org.gms.tools.PacketCreator;
-import org.gms.tools.Pair;
+import org.gms.util.PacketCreator;
+import org.gms.util.Pair;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
