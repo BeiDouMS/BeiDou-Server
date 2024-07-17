@@ -29,6 +29,7 @@ import org.gms.config.YamlConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.server.MTSItemInfo;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MiniDungeonInfo;
@@ -50,7 +51,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
         Character chr = c.getPlayer();
 
         if (!YamlConfig.config.server.USE_MTS) {
-            c.sendPacket(PacketCreator.enableActions());
+            openCenterScript(c);
             return;
         }
 
@@ -270,5 +271,14 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
             e.printStackTrace();
         }
         return items;
+    }
+
+    /**
+     * 打开拍卖行脚本菜单中心
+     *
+     * @param c 客户端
+     */
+    private void openCenterScript(Client c) {
+        NPCScriptManager.getInstance().start(c, 9900001, null);
     }
 }

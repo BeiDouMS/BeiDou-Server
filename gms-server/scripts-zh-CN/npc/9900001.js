@@ -20,23 +20,81 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*
- * @Name         KIN
- * @Author:      Signalize
- * @NPC:         9900001
- * @Purpose:     Levels people up.
+/**
+ * @description 拍卖行中心脚本
  */
+var status = -1;
 function start() {
-    if (cm.getPlayer().gmLevel() > 1) {
-        cm.sendYesNo("你想升级吗？");
+    action(1, 0, 0)
+}
+
+function action(mode, type, selection) {
+    if (mode === 1) {
+        status++;
+    } else if (mode === -1) {
+        status--;
     } else {
-        cm.sendOk("嘿，怎么了？");
+        cm.dispose();
+        return;
+    }
+
+    if (status === 0) {
+        let text = " \t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\r\n\r\n";
+        text += "当前点券：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
+        text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
+        text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
+        text += " \r\n\r\n";
+        text += "#L0#每日签到#l \t #L1#在线奖励#l \t #L2#传送自由#l\r\n";
+        if (cm.getPlayer().isGM()) {
+            text += "\r\n\r\n";
+            text += "\t\t\t\t=====以下内容仅GM可见=====\r\n";
+            text += "#61#超级传送#l \t #62#超级商店#l \t #63#整容集合#l\r\n\r\n"
+        }
+        cm.sendSimple(text);
+    } else if (status === 1) {
+        doSelect(selection);
+    } else {
+        cm.dispose();
     }
 }
 
-function action(i, am, pro) {
-    if (i > 0 && cm.getPlayer().gmLevel() > 1) {
-        cm.getPlayer().levelUp(true);
+function doSelect(selection) {
+    switch (selection) {
+        // 非GM功能
+        case 0:
+            // openNpc("DailySign");
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
+            break;
+        case 1:
+            // openNpc("OnlineReward");
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
+            break;
+        case 2:
+            cm.warp(910000000);
+            break;
+        // GM功能
+        case 61:
+            // openNpc("SuperTeleport");
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
+            break;
+        case 62:
+            // openNpc("SuperShop");
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
+            break;
+        case 63:
+            openNpc("Salon")
+            break;
+        default:
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
     }
+}
+
+function openNpc(scriptName) {
     cm.dispose();
+    cm.openNpc(9900001, scriptName);
 }
