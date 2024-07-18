@@ -53,8 +53,8 @@ function action(mode, type, selection) {
         cm.dispose();
     }
     if (status == 0 && mode == 1) {
-        var selStr = "Hm? Who might you be? Oh, you've heard about my forging skills? In that case, I'd be glad to process some of your ores... for a fee.#b"
-        var options = ["Refine a mineral ore", "Refine a jewel ore", "Refine a rare jewel", "Refine a crystal ore", "Create materials", "Create Arrows"];
+        var selStr = "嗯？你是谁？哦，你听说过我的锻造技术？如果是这样的话，我会很乐意帮你加工一些矿石……不过需要收费。#b"
+        var options = ["精炼矿石", "精炼宝石", "精炼稀有宝石", "精炼水晶矿石", "制作材料", "制作箭矢"];
         for (var i = 0; i < options.length; i++) {
             selStr += "\r\n#L" + i + "# " + options[i] + "#l";
         }
@@ -63,48 +63,48 @@ function action(mode, type, selection) {
     } else if (status == 1 && mode == 1) {
         selectedType = selection;
         if (selectedType == 0) { //mineral refine
-            var selStr = "So, what kind of mineral ore would you like to refine?#b";
-            var minerals = ["Bronze", "Steel", "Mithril", "Adamantium", "Silver", "Orihalcon", "Gold"];
+            var selStr = "那么，你想要精炼哪种矿石呢？#b";
+            var minerals = ["#i4011000##t4011000#", "#i4011001##t4011001#", "#i4011002##t4011002#", "#i4011003##t4011003#", "#i4011004##t4011004#", "#i4011005##t4011005#", "#i4011006##t4011006#"];
             for (var i = 0; i < minerals.length; i++) {
                 selStr += "\r\n#L" + i + "# " + minerals[i] + "#l";
             }
             equip = false;
             cm.sendSimple(selStr);
         } else if (selectedType == 1) { //jewel refine
-            var selStr = "So, what kind of jewel ore would you like to refine?#b";
-            var jewels = ["Garnet", "Amethyst", "Aquamarine", "Emerald", "Opal", "Sapphire", "Topaz", "Diamond", "Black Crystal"];
+            var selStr = "那么，你想要精炼哪种宝石呢？#b";
+            var jewels = ["#i4021000##t4021000#", "#i4021001##t4021001#", "#i4021002##t4021002#", "#i4021003##t4021003#", "#i4021004##t4021004#", "#i4021005##t4021005#", "#i4021006##t4021006#", "#i4021007##t4021007#", "#i4021008##t4021008#"];
             for (var i = 0; i < jewels.length; i++) {
                 selStr += "\r\n#L" + i + "# " + jewels[i] + "#l";
             }
             equip = false;
             cm.sendSimple(selStr);
         } else if (selectedType == 2) { //rock refine
-            var selStr = "A rare jewel? Which one were you thinking of?#b";
-            var items = ["Moon Rock", "Star Rock"];
+            var selStr = "想制作稀有宝石吗？你想制作哪一种呢？#b";
+            var items = ["#i4011007##t4011007#", "#i4021009##t4021009#"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
             equip = false;
             cm.sendSimple(selStr);
         } else if (selectedType == 3) { //crystal refine
-            var selStr = "Crystal ore? It's hard to find those around here...#b";
-            var crystals = ["Power Crystal", "Wisdom Crystal", "DEX Crystal", "LUK Crystal", "Dark Crystal"];
+            var selStr = "水晶矿石吗？在这里很难找到啊...#b";
+            var crystals = ["#i4005000##t4005000#", "#i4005001##t4005001#", "#i4005002##t4005002#", "#i4005003##t4005003#", "#i4005004##t4005004#"];
             for (var i = 0; i < crystals.length; i++) {
                 selStr += "\r\n#L" + i + "# " + crystals[i] + "#l";
             }
             equip = false;
             cm.sendSimple(selStr);
         } else if (selectedType == 4) { //material refine
-            var selStr = "Materials? I know of a few materials that I can make for you...#b";
-            var materials = ["Make Processed Wood with Tree Branch", "Make Processed Wood with Firewood", "Make Screws (packs of 15)"];
+            var selStr = "材料吗？我有几种可以为你制作的材料……#b";
+            var materials = ["使用树枝制作加工木材","使用木块制作加工木材","制作螺丝（15个）"];
             for (var i = 0; i < materials.length; i++) {
                 selStr += "\r\n#L" + i + "# " + materials[i] + "#l";
             }
             equip = false;
             cm.sendSimple(selStr);
         } else if (selectedType == 5) { //arrow refine
-            var selStr = "Arrows? Not a problem at all.#b";
-            var arrows = ["Arrow for Bow", "Arrow for Crossbow", "Bronze Arrow for Bow", "Bronze Arrow for Crossbow", "Steel Arrow for Bow", "Steel Arrow for Crossbow"];
+            var selStr = "箭矢吗？包在我身上！#b";
+            var arrows = ["#i2060000##t2060000#", "#i2061000##t2061000#", "#i2060001##t2060001#", "#i2061001##t2061001#", "#i2060002##t2060002#", "#i2061002##t2061002#"];
             for (var i = 0; i < arrows.length; i++) {
                 selStr += "\r\n#L" + i + "# " + arrows[i] + "#l";
             }
@@ -163,7 +163,7 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "So, you want me to make some #t" + item + "#s? In that case, how many do you want me to make?";
+        var prompt = "那么，你想让我制作一些#i" + item + "##t" + item + "#吗？你希望我制作多少？";
 
         cm.sendGetNumber(prompt, 1, 1, 100)
     } else if (status == 3 && mode == 1) {
@@ -186,14 +186,14 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "You want me to make ";
+        var prompt = "你想让我制作多少 ";
         if (qty == 1) {
-            prompt += "a #t" + item + "#?";
+            prompt += "一个 #i" + item + "##t" + item + "#?";
         } else {
             prompt += qty + " #t" + item + "#?";
         }
 
-        prompt += " In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+        prompt += " 既然如此，我需要你提供一些特定的物品来制作箭矢。不过，确保你的库存空间足够哦！#b";
 
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
