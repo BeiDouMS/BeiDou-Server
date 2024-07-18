@@ -8,7 +8,7 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.ExtendValueDO;
-import org.gms.dto.GiveResourceReqDTO;
+import org.gms.model.dto.GiveResourceReqDTO;
 import org.gms.exception.BizException;
 import org.gms.net.server.Server;
 import org.gms.server.CashShop;

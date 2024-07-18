@@ -1,4 +1,4 @@
-package org.gms.model;
+package org.gms.model.pojo;
 
 public class SkillEntry {
     public int masterLevel;

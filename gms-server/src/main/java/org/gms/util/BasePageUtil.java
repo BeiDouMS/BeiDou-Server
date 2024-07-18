@@ -1,7 +1,7 @@
 package org.gms.util;
 
 import com.mybatisflex.core.paginate.Page;
-import org.gms.dto.BasePageDTO;
+import org.gms.model.dto.BasePageDTO;
 
 import java.util.Collection;
 import java.util.List;

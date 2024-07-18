@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.AccountsDO;
-import org.gms.dto.*;
+import org.gms.model.dto.*;
 import org.gms.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

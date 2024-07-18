@@ -6,10 +6,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.ExtendValueDO;
-import org.gms.dto.ChrOnlineListReqDTO;
-import org.gms.dto.ChrOnlineListRtnDTO;
-import org.gms.dto.ResultBody;
-import org.gms.dto.SubmitBody;
+import org.gms.model.dto.ChrOnlineListReqDTO;
+import org.gms.model.dto.ChrOnlineListRtnDTO;
+import org.gms.model.dto.ResultBody;
+import org.gms.model.dto.SubmitBody;
 import org.gms.service.CharacterService;
 import org.springframework.web.bind.annotation.*;
 

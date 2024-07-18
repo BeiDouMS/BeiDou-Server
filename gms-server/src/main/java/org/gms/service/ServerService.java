@@ -1,7 +1,7 @@
 package org.gms.service;
 
-import org.gms.dto.ChannelListRtnDTO;
-import org.gms.dto.WorldListRtnDTO;
+import org.gms.model.dto.ChannelListRtnDTO;
+import org.gms.model.dto.WorldListRtnDTO;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;

@@ -1,4 +1,4 @@
-package org.gms.dto;
+package org.gms.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

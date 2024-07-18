@@ -22,7 +22,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Item;
-import org.gms.model.NewYearCardRecord;
+import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;

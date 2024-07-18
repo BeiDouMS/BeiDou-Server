@@ -36,7 +36,7 @@ import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.ExtendValueDO;
 import org.gms.dao.mapper.ExtendValueMapper;
 import org.gms.manager.ServerManager;
-import org.gms.model.SkillEntry;
+import org.gms.model.pojo.SkillEntry;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.Guild;
 import org.gms.net.server.world.Party;

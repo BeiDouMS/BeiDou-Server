@@ -2,7 +2,7 @@ package org.gms.exception;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import org.gms.dto.ResultBody;
+import org.gms.model.dto.ResultBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
