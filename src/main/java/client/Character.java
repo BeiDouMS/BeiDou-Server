@@ -417,7 +417,7 @@ public class Character extends AbstractCharacterObject {
         for (InventoryType type : InventoryType.values()) {
             byte b = 24;
             if (type == InventoryType.CASH) {
-                b = 96;
+                b = 127; // 现金栏固定96格
             }
             inventory[type.ordinal()] = new Inventory(this, type, b);
         }
@@ -9269,12 +9269,12 @@ public class Character extends AbstractCharacterObject {
     }
 
     public byte getSlots(int type) {
-        return type == InventoryType.CASH.getType() ? 96 : inventory[type].getSlotLimit();
+        return type == InventoryType.CASH.getType() ? 127 : inventory[type].getSlotLimit(); // 现金栏固定96个格子
     }
 
     public boolean canGainSlots(int type, int slots) {
         slots += inventory[type].getSlotLimit();
-        return slots <= 96;
+        return slots <= 127; // 后端控制格子上限
     }
 
     public boolean gainSlots(int type, int slots) {
@@ -9298,7 +9298,7 @@ public class Character extends AbstractCharacterObject {
         inventory[type].lockInventory();
         try {
             if (canGainSlots(type, slots)) {
-                int newLimit = inventory[type].getSlotLimit() + slots;
+                int newLimit = Math.min(inventory[type].getSlotLimit() + slots, 127);
                 inventory[type].setSlotLimit(newLimit);
                 return newLimit;
             } else {

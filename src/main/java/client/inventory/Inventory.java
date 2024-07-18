@@ -81,6 +81,7 @@ public class Inventory implements Iterable<Item> {
     }
 
     public void setSlotLimit(int newLimit) {
+        newLimit = Math.min(newLimit, 127);
         lock.lock();
         try {
             if (newLimit < slotLimit) {
