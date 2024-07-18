@@ -800,12 +800,13 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
         boolean canCrit = chr.getJob().isA((Job.BOWMAN)) || chr.getJob().isA(Job.THIEF) || chr.getJob().isA(Job.NIGHTWALKER1) || chr.getJob().isA(Job.WINDARCHER1) || chr.getJob() == Job.ARAN3 || chr.getJob() == Job.ARAN4 || chr.getJob() == Job.MARAUDER || chr.getJob() == Job.BUCCANEER;
 
-        if (chr.getBuffEffect(BuffStat.SHARP_EYES) != null) {
+        StatEffect sharpEyesEffect = chr.getBuffEffect(BuffStat.SHARP_EYES);
+        if (sharpEyesEffect != null) {
             // Any class that has sharp eyes can crit. Also, since it stacks with normal crit go ahead
             // and calc it in.
-
             canCrit = true;
-            calcDmgMax *= 1.4;
+            // 精确火眼按照当前等级计算伤害，而不是直接粗暴的取满级1.4，如果技改了wz，也能完全适配
+            calcDmgMax = (long) Math.ceil(sharpEyesEffect.getY() / 100.0 * calcDmgMax);
         }
 
         boolean shadowPartner = chr.getBuffEffect(BuffStat.SHADOWPARTNER) != null;
