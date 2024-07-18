@@ -37,4 +37,6 @@ public class NpcId {
 
     public static final int PLAYER_NPC_BASE = 9900000;
 
+    public static final int BEI_DOU_NPC_BASE = 9900001;
+
 }

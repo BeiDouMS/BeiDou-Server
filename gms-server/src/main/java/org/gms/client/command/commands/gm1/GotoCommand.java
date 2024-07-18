@@ -33,17 +33,15 @@ import org.gms.server.maps.MapFactory;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.server.maps.Portal;
+import org.gms.util.I18nUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class GotoCommand extends Command {
 
     {
-        setDescription("Warp to a predefined map.");
+        setDescription(I18nUtil.getMessage("GotoCommand.message1"));
 
         List<Entry<String, Integer>> towns = new ArrayList<>(GameConstants.GOTO_TOWNS.entrySet());
         sortGotoEntries(towns);
@@ -73,16 +71,16 @@ public class GotoCommand extends Command {
     public static String GOTO_AREAS_INFO = "";
 
     private static void sortGotoEntries(List<Entry<String, Integer>> listEntries) {
-        listEntries.sort((e1, e2) -> e1.getValue().compareTo(e2.getValue()));
+        listEntries.sort(Entry.comparingByValue());
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            String sendStr = "Syntax: #b@goto <map name>#k. Available areas:\r\n\r\n#rTowns:#k\r\n" + GOTO_TOWNS_INFO;
+            String sendStr = I18nUtil.getMessage("GotoCommand.message2") + "\r\n\r\n" + I18nUtil.getMessage("GotoCommand.message3") + "\r\n" + GOTO_TOWNS_INFO;
             if (player.isGM()) {
-                sendStr += ("\r\n#rAreas:#k\r\n" + GOTO_AREAS_INFO);
+                sendStr += ("\r\n" + I18nUtil.getMessage("GotoCommand.message4") + "\r\n" + GOTO_AREAS_INFO);
             }
 
             player.getAbstractPlayerInteraction().npcTalk(NpcId.SPINEL, sendStr);
@@ -90,13 +88,13 @@ public class GotoCommand extends Command {
         }
 
         if (!player.isAlive()) {
-            player.dropMessage(1, "This command cannot be used when you're dead.");
+            player.dropMessage(1, I18nUtil.getMessage("GotoCommand.message5"));
             return;
         }
 
         if (!player.isGM()) {
             if (player.getEventInstance() != null || MiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
-                player.dropMessage(1, "This command can not be used in this map.");
+                player.dropMessage(1, I18nUtil.getMessage("GotoCommand.message6"));
                 return;
             }
         }
@@ -118,9 +116,9 @@ public class GotoCommand extends Command {
             player.changeMap(target, targetPortal);
         } else {
             // detailed info on goto available areas suggested thanks to Vcoc
-            String sendStr = "Area '#r" + params[0] + "#k' is not available. Available areas:\r\n\r\n#rTowns:#k" + GOTO_TOWNS_INFO;
+            String sendStr = I18nUtil.getMessage("GotoCommand.message7", params[0]) + "\r\n\r\n" + I18nUtil.getMessage("GotoCommand.message3") + GOTO_TOWNS_INFO;
             if (player.isGM()) {
-                sendStr += ("\r\n#rAreas:#k\r\n" + GOTO_AREAS_INFO);
+                sendStr += ("\r\n" + I18nUtil.getMessage("GotoCommand.message4") + "\r\n" + GOTO_AREAS_INFO);
             }
 
             player.getAbstractPlayerInteraction().npcTalk(NpcId.SPINEL, sendStr);

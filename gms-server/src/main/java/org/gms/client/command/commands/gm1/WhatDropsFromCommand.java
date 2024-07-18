@@ -30,24 +30,25 @@ import org.gms.constants.id.NpcId;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.MonsterDropEntry;
 import org.gms.server.life.MonsterInformationProvider;
+import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
 import java.util.Iterator;
 
 public class WhatDropsFromCommand extends Command {
     {
-        setDescription("Show what items drop from a mob.");
+        setDescription(I18nUtil.getMessage("WhatDropsFromCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.dropMessage(5, "Please do @whatdropsfrom <monster name>");
+            player.dropMessage(5, I18nUtil.getMessage("WhatDropsFromCommand.message2"));
             return;
         }
         String monsterName = player.getLastCommandMessage();
-        String output = "";
+        StringBuilder output = new StringBuilder();
         int limit = 3;
         Iterator<Pair<Integer, String>> listIterator = MonsterInformationProvider.getMobsIDsFromName(monsterName).iterator();
         for (int i = 0; i < limit; i++) {
@@ -55,7 +56,7 @@ public class WhatDropsFromCommand extends Command {
                 Pair<Integer, String> data = listIterator.next();
                 int mobId = data.getLeft();
                 String mobName = data.getRight();
-                output += mobName + " drops the following items:\r\n\r\n";
+                output.append(mobName).append(" ").append(I18nUtil.getMessage("WhatDropsFromCommand.message3")).append("\r\n\r\n");
                 for (MonsterDropEntry drop : MonsterInformationProvider.getInstance().retrieveDrop(mobId)) {
                     try {
                         String name = ItemInformationProvider.getInstance().getName(drop.itemId);
@@ -63,16 +64,15 @@ public class WhatDropsFromCommand extends Command {
                             continue;
                         }
                         float chance = Math.max(1000000 / drop.chance / (!MonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
-                        output += "- " + name + " (1/" + (int) chance + ")\r\n";
+                        output.append("- ").append(name).append(" (1/").append((int) chance).append(")\r\n");
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        continue;
                     }
                 }
-                output += "\r\n";
+                output.append("\r\n");
             }
         }
 
-        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, output);
+        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, output.toString());
     }
 }

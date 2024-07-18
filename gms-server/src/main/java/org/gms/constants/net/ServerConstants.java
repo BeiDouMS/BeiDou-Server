@@ -14,5 +14,5 @@ public class ServerConstants {
     public static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
 
     public static final String BEI_DOU_VERSION = "Beta-0.5";
-    public static final String BEI_DOU_BUILD_TIME = "2024-7-17 19:42:28";
+    public static final String BEI_DOU_BUILD_TIME = "2024-7-18 11:00:37";
 }

@@ -200,6 +200,7 @@ import org.gms.client.command.commands.gm6.SpawnAllPNpcsCommand;
 import org.gms.client.command.commands.gm6.SupplyRateCouponCommand;
 import org.gms.client.command.commands.gm6.WarpWorldCommand;
 import org.gms.constants.id.MapId;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.Pair;
@@ -250,13 +251,13 @@ public class CommandsExecutor {
                 client.releaseClient();
             }
         } else {
-            client.getPlayer().dropMessage(5, "Try again in a while... Latest commands are currently being processed.");
+            client.getPlayer().dropMessage(5, I18nUtil.getMessage("CommandsExecutor.handle.message1"));
         }
     }
 
     private void handleInternal(Client client, String message) {
         if (client.getPlayer().getMapId() == MapId.JAIL) {
-            client.getPlayer().yellowMessage("You do not have permission to use commands while in jail.");
+            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message1"));
             return;
         }
         final String splitRegex = "[ ]";
@@ -271,11 +272,11 @@ public class CommandsExecutor {
 
         final Command command = registeredCommands.get(commandName);
         if (command == null) {
-            client.getPlayer().yellowMessage("Command '" + commandName + "' is not available. See @commands for a list of available commands.");
+            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message2", commandName));
             return;
         }
         if (client.getPlayer().gmLevel() < command.getRank()) {
-            client.getPlayer().yellowMessage("You do not have permission to use this command.");
+            client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message3"));
             return;
         }
         String[] params;
@@ -286,7 +287,7 @@ public class CommandsExecutor {
         }
 
         command.execute(client, params);
-        log.info("玩家 {} 使用命令 {}", client.getPlayer().getName(), command.getClass().getSimpleName());
+        log.info(I18nUtil.getLogMessage("CommandsExecutor.handleInternal.info1"), client.getPlayer().getName(), command.getClass().getSimpleName());
     }
 
     private void addCommandInfo(String name, Class<? extends Command> commandClass) {
@@ -318,7 +319,7 @@ public class CommandsExecutor {
 
     private void addCommand(String syntax, int rank, Class<? extends Command> commandClass) {
         if (registeredCommands.containsKey(syntax.toLowerCase())) {
-            log.warn("Error on register command with name: {}. Already exists.", syntax);
+            log.warn(I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn1"), syntax);
             return;
         }
 
@@ -331,7 +332,7 @@ public class CommandsExecutor {
 
             registeredCommands.put(commandName, commandInstance);
         } catch (Exception e) {
-            log.warn("Failed to create command instance", e);
+            log.warn(I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn2"), e);
         }
     }
 

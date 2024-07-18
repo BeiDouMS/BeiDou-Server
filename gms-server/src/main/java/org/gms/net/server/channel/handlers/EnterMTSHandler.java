@@ -26,6 +26,7 @@ import org.gms.client.Client;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Item;
 import org.gms.config.YamlConfig;
+import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -279,6 +280,6 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
      * @param c 客户端
      */
     private void openCenterScript(Client c) {
-        NPCScriptManager.getInstance().start(c, 9900001, null);
+        NPCScriptManager.getInstance().start(c, NpcId.BEI_DOU_NPC_BASE, null);
     }
 }

@@ -30,6 +30,7 @@ import org.gms.constants.id.NpcId;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.life.MonsterInformationProvider;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
 import java.sql.Connection;
@@ -39,27 +40,27 @@ import java.util.Iterator;
 
 public class WhoDropsCommand extends Command {
     {
-        setDescription("Show what drops an item.");
+        setDescription(I18nUtil.getMessage("WhoDropsCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.dropMessage(5, "Please do @whodrops <item name>");
+            player.dropMessage(5, I18nUtil.getMessage("WhoDropsCommand.message2"));
             return;
         }
 
         if (c.tryacquireClient()) {
             try {
                 String searchString = player.getLastCommandMessage();
-                String output = "";
+                StringBuilder output = new StringBuilder();
                 Iterator<Pair<Integer, String>> listIterator = ItemInformationProvider.getInstance().getItemDataByName(searchString).iterator();
                 if (listIterator.hasNext()) {
                     int count = 1;
                     while (listIterator.hasNext() && count <= 3) {
                         Pair<Integer, String> data = listIterator.next();
-                        output += "#b" + data.getRight() + "#k is dropped by:\r\n";
+                        output.append("#b").append(data.getRight()).append("#k ").append(I18nUtil.getMessage("WhoDropsCommand.message3")).append("\r\n");
                         try (Connection con = DatabaseConnection.getConnection();
                              PreparedStatement ps = con.prepareStatement("SELECT dropperid FROM drop_data WHERE itemid = ? LIMIT 50")) {
                             ps.setInt(1, data.getLeft());
@@ -68,29 +69,29 @@ public class WhoDropsCommand extends Command {
                                 while (rs.next()) {
                                     String resultName = MonsterInformationProvider.getInstance().getMobNameFromId(rs.getInt("dropperid"));
                                     if (resultName != null) {
-                                        output += resultName + ", ";
+                                        output.append(resultName).append(", ");
                                     }
                                 }
                             }
                         } catch (Exception e) {
-                            player.dropMessage(6, "There was a problem retrieving the required data. Please try again.");
+                            player.dropMessage(6, I18nUtil.getMessage("WhoDropsCommand.message4"));
                             e.printStackTrace();
                             return;
                         }
-                        output += "\r\n\r\n";
+                        output.append("\r\n\r\n");
                         count++;
                     }
                 } else {
-                    player.dropMessage(5, "The item you searched for doesn't exist.");
+                    player.dropMessage(5, I18nUtil.getMessage("WhoDropsCommand.message5"));
                     return;
                 }
 
-                c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, output);
+                c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, output.toString());
             } finally {
                 c.releaseClient();
             }
         } else {
-            player.dropMessage(5, "Please wait a while for your request to be processed.");
+            player.dropMessage(5, I18nUtil.getMessage("WhoDropsCommand.message6"));
         }
     }
 }
