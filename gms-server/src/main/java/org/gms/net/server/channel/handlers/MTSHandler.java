@@ -217,7 +217,7 @@ public final class MTSHandler extends AbstractPacketHandler {
                 if (tab == 4 && type == 0) {
                     c.sendPacket(getCart(c.getPlayer().getId()));
                 } else if (tab == c.getPlayer().getCurrentTab() && type == c.getPlayer().getCurrentType() && c.getPlayer().getSearch() != null) {
-                    c.sendPacket(getMTSSearch(tab, type, c.getPlayer().getCurrentCI(), c.getPlayer().getSearch(), page));
+                    c.sendPacket(getMTSSearch(tab, type, c.getPlayer().getCi(), c.getPlayer().getSearch(), page));
                 } else {
                     c.getPlayer().setSearch(null);
                     c.sendPacket(getMTS(tab, type, page));

@@ -19,19 +19,19 @@ public class CharacterListener implements AbstractCharacterListener {
     }
 
     @Override
-    public void onHpmpPoolUpdate() {
+    public void onHpMpPoolUpdate() {
         List<Pair<Stat, Integer>> hpmpupdate = character.recalcLocalStats();
         for (Pair<Stat, Integer> p : hpmpupdate) {
             character.statUpdates.put(p.getLeft(), p.getRight());
         }
 
-        if (character.hp > character.localmaxhp) {
-            character.setHp(character.localmaxhp);
+        if (character.hp > character.localMaxHp) {
+            character.setHp(character.localMaxHp);
             character.statUpdates.put(Stat.HP, character.hp);
         }
 
-        if (character.mp > character.localmaxmp) {
-            character.setMp(character.localmaxmp);
+        if (character.mp > character.localMaxMp) {
+            character.setMp(character.localMaxMp);
             character.statUpdates.put(Stat.MP, character.mp);
         }
     }

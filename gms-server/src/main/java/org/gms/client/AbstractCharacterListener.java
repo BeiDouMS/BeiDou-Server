@@ -24,7 +24,7 @@ package org.gms.client;
  */
 public interface AbstractCharacterListener {
     void onHpChanged(int oldHp);
-    void onHpmpPoolUpdate();
+    void onHpMpPoolUpdate();
     void onStatUpdate();
     void onAnnounceStatPoolUpdate();
 }
