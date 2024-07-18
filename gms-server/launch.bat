@@ -1,4 +1,6 @@
 @echo off
-@title Cosmic-Nap
-java -Xmx2048m -Dwz-path=wz -jar target\Cosmic.jar
+@title BeiDou
+chcp 65001
+
+.\jdk-21.0.2\bin\java.exe  -Dspring.config.location=application.yml -jar BeiDou.jar
 pause
