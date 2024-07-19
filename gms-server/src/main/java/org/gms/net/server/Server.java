@@ -743,7 +743,7 @@ public class Server {
         }
 
         loginServer = initLoginServer(YamlConfig.config.server.LOGIN_PORT);
-        log.info(I18nUtil.getLogMessage("Server.init.info6"));
+        log.info(I18nUtil.getLogMessage("Server.init.info6"), YamlConfig.config.server.LOGIN_PORT);
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance().loadCommandsExecutor();

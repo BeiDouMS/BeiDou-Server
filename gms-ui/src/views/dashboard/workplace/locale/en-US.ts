@@ -6,6 +6,5 @@ export default {
   'workplace.button.stop': 'Stop',
   'workplace.button.restart': 'Restart',
   'workplace.button.shutdown': 'Shutdown',
-  'workplace.button.shutdown.text':
-    'This operation will shut down the entire server side, requiring manual restart. Are you sure you want to continue?',
+  'workplace.button.shutdown.text': 'This operation will shut down the entire server side, requiring manual restart. Are you sure you want to continue?',
 };

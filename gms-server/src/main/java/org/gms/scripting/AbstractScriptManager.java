@@ -25,6 +25,7 @@ import org.gms.client.Client;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +66,7 @@ public abstract class AbstractScriptManager {
 
         ScriptEngine engine = sef.getScriptEngine();
         if (!(engine instanceof GraalJSScriptEngine graalScriptEngine)) {
-            throw new IllegalStateException("ScriptEngineFactory did not provide a GraalJSScriptEngine");
+            throw new IllegalStateException(I18nUtil.getExceptionMessage("AbstractScriptManager.getInvocableScriptEngine.exception1"));
         }
 
         enableScriptHostAccess(graalScriptEngine);
@@ -73,7 +74,7 @@ public abstract class AbstractScriptManager {
         try (BufferedReader br = Files.newBufferedReader(actualPath, StandardCharsets.UTF_8)) {
             engine.eval(br);
         } catch (final ScriptException | IOException t) {
-            log.warn("脚本中存在语法错误", path, t);
+            log.warn(I18nUtil.getLogMessage("AbstractScriptManager.getInvocableScriptEngine.warn1"), path, t);
             return null;
         }
 

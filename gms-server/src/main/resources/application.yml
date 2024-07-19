@@ -234,17 +234,17 @@ gms:
     LOGIN_ATTEMPT_DURATION: 120         #登录尝试在系统中注册的持续时间（以秒为单位）。
 
     #Ip Configuration
-    HOST: 127.0.0.1                 #WAN IPv4 address
-    LANHOST: 127.0.0.1              #LAN IPv4 address
-    LOCALHOST: 127.0.0.1            #Loopback IPv4 address
-    LOGIN_PORT: 8484                     #Login Server Port
+    HOST: 127.0.0.1                 #外网IP
+    LANHOST: 127.0.0.1              #局域网IP
+    LOCALHOST: 127.0.0.1            #本地IP
+    LOGIN_PORT: 8484                     #登录端口
 
     #Other configuration
     SHUTDOWNHOOK: true
 
     #Server Flags
     USE_CUSTOM_KEYSET: false             #在创建角色时启用HeavenMS的自定义键绑定自动设置。
-    USE_DEBUG: true                    #将在客户端上启用一些面向调试的文本打印。
+    USE_DEBUG: false                    #将在客户端上启用一些面向调试的文本打印。
     USE_DEBUG_SHOW_INFO_EQPEXP: false   #在cmd上打印所有装备经验增益信息。
     USE_DEBUG_SHOW_RCVD_PACKET: false   #在cmd上打印所有接收到的数据包ID。
     USE_DEBUG_SHOW_RCVD_MVLIFE: false   #在cmd上打印所有接收到的移动生命内容。
