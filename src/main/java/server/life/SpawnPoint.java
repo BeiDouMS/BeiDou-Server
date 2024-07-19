@@ -68,7 +68,7 @@ public class SpawnPoint {
     }
 
     public boolean shouldSpawn() {
-        if (YamlConfig.config.server.RESPAWN_EXCEPT_MOB_TIME && mobTime > 0) return false;
+        if (YamlConfig.config.server.RESPAWN_EXCEPT_MOB_TIME && mobTime > 60) return false;
         if (denySpawn || mobTime < 0) return false;
         return nextPossibleSpawn <= Server.getInstance().getCurrentTime();
     }

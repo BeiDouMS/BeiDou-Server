@@ -3636,12 +3636,14 @@ public class MapleMap {
         try {
             fightingPlayers = countFightingPlayer();
 
-            if (fightingPlayers == 0) {
+            if (fightingPlayers == 0 && !getAllMonsters().isEmpty()) {
                 return;
             }
         } finally {
             chrRLock.unlock();
         }
+
+        fightingPlayers = fightingPlayers == 0 ? 1 : fightingPlayers;
 
         int numShouldSpawn = getNumShouldSpawn(fightingPlayers);
         if (numShouldSpawn > 0) {
