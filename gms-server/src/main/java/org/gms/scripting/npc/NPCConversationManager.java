@@ -410,7 +410,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         GachaponItem item = Gachapon.getInstance().process(npc);
         Item itemGained = gainItem(item.getId(), (short) (item.getId() / 10000 == 200 ? 100 : 1), true, true); // For normal potions, make it give 100.
 
-        sendNext("You have obtained a #b#t" + item.getId() + "##k.");
+        sendNext("你获得了一个 #b#t" + item.getId() + "##k ！");
 
         int[] maps = {MapId.HENESYS, MapId.ELLINIA, MapId.PERION, MapId.KERNING_CITY, MapId.SLEEPYWOOD, MapId.MUSHROOM_SHRINE,
                 MapId.SHOWA_SPA_M, MapId.SHOWA_SPA_F, MapId.NEW_LEAF_CITY, MapId.NAUTILUS_HARBOR};
