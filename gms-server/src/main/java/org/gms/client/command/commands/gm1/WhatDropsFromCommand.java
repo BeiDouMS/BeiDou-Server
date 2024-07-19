@@ -63,7 +63,8 @@ public class WhatDropsFromCommand extends Command {
                         if (name == null || name.equals("null") || drop.chance == 0) {
                             continue;
                         }
-                        float chance = Math.max(1000000 / drop.chance / (!MonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
+                        // 计算精度丢失的问题
+                        float chance = Math.max(1000000F / drop.chance / (!MonsterInformationProvider.getInstance().isBoss(mobId) ? player.getDropRate() : player.getBossDropRate()), 1);
                         output.append("- ").append(name).append(" (1/").append((int) chance).append(")\r\n");
                     } catch (Exception ex) {
                         ex.printStackTrace();
