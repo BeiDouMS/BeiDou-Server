@@ -252,6 +252,7 @@ gms:
     USE_SUPPLY_RATE_COUPONS: true       #允许通过现金商店出售速率优惠券。
     USE_IP_VALIDATION: false             #在登录时启用IP检查。
     USE_CHARACTER_ACCOUNT_CHECK: false  #在登录时启用单角色-账户检查。这可能是资源密集型的。
+    NO_PASSWORD: false                  #跳过密码验证直接凭账号登录，必须先开启debug模式
 
     USE_MAXRANGE: true                  #将从地图上的所有事件发送和接收数据包，而不仅仅是视图范围内的那些。.
     USE_MAXRANGE_ECHO_OF_HERO: true
