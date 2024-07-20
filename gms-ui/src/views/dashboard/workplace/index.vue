@@ -55,7 +55,7 @@
               <template #title>
                 {{ $t('workplace.button.shutdown') }}
               </template>
-              <div>{{ $t('workplace.button.shutdown.text') }}</div>
+              <div>{{ $t('workplace.button.shutdown.confirm') }}</div>
             </a-modal>
           </a-space>
         </a-col>
