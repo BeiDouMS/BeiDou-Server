@@ -68,6 +68,7 @@ public class ServerProperty {
     public boolean USE_SUPPLY_RATE_COUPONS;
     public boolean USE_IP_VALIDATION;
     public boolean USE_CHARACTER_ACCOUNT_CHECK;
+    public boolean NO_PASSWORD;
 
     public boolean USE_MAXRANGE;
     public boolean USE_MAXRANGE_ECHO_OF_HERO;
