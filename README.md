@@ -79,6 +79,17 @@ yarn dev
 使用方法：按顺序下载补丁，直接覆盖到客户端内即可；**wz补丁仅供开发用**。
 
 汉化需重新覆盖 CN 包
+### 2024/7/20 V9
+更新说明：
+1. 新增 突破跳跃上限
+2. 新增 免密模式（须服务端支持） 
+3. 更新 重新实现输入法IME的支持方案，解决老方案win11下不生效的问题（测试） 
+4. 更新 聊天框文字位置 
+5. 修复 部分NPC对话内容含中文时，内容被截断的问题 
+6. 更新 玩家名片卡中职业信息字体
+7. 补充 V7 打包打漏的 List.wz 文件
+- v9：https://mega.nz/file/THxxEDQR#oFHvCc708PLxwQCFDRCNktp0Yhhg0vaRCFpkr0HYhiw
+- v9-wz：https://mega.nz/file/WeBCiL6D#CpGxfBKeC0EGFtYKY5-toeBkR4yuPgomZIcUAJf-m48
 
 ### 2024/7/12 V8
 更新说明：
@@ -86,14 +97,5 @@ yarn dev
 2. 修复 魔攻伤害计算没有破攻的问题
 3. 新增 Boss 血条下方增加百分比
 - v8：https://mega.nz/file/LTBGGKrL#DjQuTAywtCOFjz0Xn_3dFvxI33a9PsER6-GFXMTuGa4
-
-### 2024/7/12 V7
-更新说明：
-1. 新增 文字汉化
-2. 新增 任务汉化 (感谢 Tokyo 379008856)
-3. 修复 输入法卡门
-4. 新增 魔法攻击面板上限配置
-- v7：https://mega.nz/file/ueZnyKjK#GDkljCd_xo3MJMK6T8TsT-H2COx0hVcLNm52BMDdEeA
-- v7-wz：https://mega.nz/file/mDYjTBAQ#3rI9oVJV2a7W7u26zjqlPGdntujpfjqiD4mgIUWq4RM
 
 [了解更多](CLIENT-UPDATE.md)

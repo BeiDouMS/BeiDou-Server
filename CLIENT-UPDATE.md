@@ -20,6 +20,18 @@
 
 汉化需重新覆盖 CN 包
 
+### 2024/7/20 V9
+更新说明：
+1. 新增 突破跳跃上限
+2. 新增 免密模式（须服务端支持）
+3. 更新 重新实现输入法IME的支持方案，解决老方案win11下不生效的问题（测试）
+4. 更新 聊天框文字位置
+5. 修复 部分NPC对话内容含中文时，内容被截断的问题
+6. 更新 玩家名片卡中职业信息字体
+7. 补充 V7 打包打漏的 List.wz 文件
+- v9：https://mega.nz/file/THxxEDQR#oFHvCc708PLxwQCFDRCNktp0Yhhg0vaRCFpkr0HYhiw
+- v9-wz：https://mega.nz/file/WeBCiL6D#CpGxfBKeC0EGFtYKY5-toeBkR4yuPgomZIcUAJf-m48
+
 ### 2024/7/12 V8
 更新说明：
 1. 新增 命中/回避 上限解除 
