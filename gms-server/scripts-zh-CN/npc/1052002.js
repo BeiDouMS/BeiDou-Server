@@ -86,8 +86,7 @@ function action(mode, type, selection) {
             cm.sendSimple(selStr);
         } else if (selectedType == 2) { //claw refine
             var selStr = "那么，你想让我制作哪种拳套呢？#b";
-            var claws = ["#i1472001##t1472001##k - 飞侠 Lv. 15#b", "#i1472004##t1472004##k - 飞侠 Lv. 20#b", "#i1472007##t1472007##k - 飞侠 Lv. 25#b", "#i1472008##t1472008##k - 飞侠 Lv. 30#b", "#i1472011##t1472011##k - 飞侠 Lv. 35#b", "#i1472014##t1472014##k - 飞侠 Lv. 40#b", "#i1472018##t1472018##k - 飞侠 Lv. 50#b""
-];
+            var claws = ["#i1472001##t1472001##k - 飞侠 Lv. 15#b", "#i1472004##t1472004##k - 飞侠 Lv. 20#b", "#i1472007##t1472007##k - 飞侠 Lv. 25#b", "#i1472008##t1472008##k - 飞侠 Lv. 30#b", "#i1472011##t1472011##k - 飞侠 Lv. 35#b", "#i1472014##t1472014##k - 飞侠 Lv. 40#b", "#i1472018##t1472018##k - 飞侠 Lv. 50#b"];
             for (var i = 0; i < claws.length; i++) {
                 selStr += "\r\n#L" + i + "# " + claws[i] + "#l";
             }

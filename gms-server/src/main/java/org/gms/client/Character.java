@@ -9192,7 +9192,7 @@ public class Character extends AbstractCharacterObject {
         if (nextWarningTime < curTime) {
             nextWarningTime = curTime + MINUTES.toMillis(1);   // show underlevel info again after 1 minute
 
-            showHint("You have gained #rno experience#k from defeating #e#b" + mob.getName() + "#k#n (lv. #b" + mob.getLevel() + "#k)! Take note you must have around the same level as the mob to start earning EXP from it.");
+            showHint("你从#e#b\" + mob.getName() + \"#k#n (lv. #b\" + mob.getLevel() + \"#k) 上 #r没有获得经验#k  ! 你必须与怪物的等级相近才能开始从中获得经验。");
         }
     }
 
@@ -9264,7 +9264,7 @@ public class Character extends AbstractCharacterObject {
             pet.setFullness(15);
             pet.saveToDb();
             unEquipPet(pet, true);
-            dropMessage(6, "Your pet grew hungry! Treat it some pet food to keep it healthy!");
+            dropMessage(6, "你的宠物饿了！给它一些宠物食物以保持它的健康！");
         } else {
             pet.setFullness(newFullness);
             pet.saveToDb();
