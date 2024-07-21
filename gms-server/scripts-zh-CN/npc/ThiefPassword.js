@@ -17,13 +17,13 @@ function action(mode, type, selection) {
 
 
     if (status == 0) {
-        cm.sendGetText("A suspicious voice pierces through the silence. #bPassword#k!");
+        cm.sendGetText("一个可疑的声音打破了沉默。 #b暗号#k ！");
     } else if (status == 1) {
-        if (cm.getText() == "Open Sesame") {
+        if (cm.getText() == "芝麻开门") {
             if (cm.isQuestCompleted(3925)) {
                 cm.warp(260010402, 1);
             } else {
-                cm.playerMessage(5, "Although you said the right answer, the door will not budge.");
+                cm.playerMessage(5, "尽管你说出了正确的答案，但门依然没有动静！");
             }
 
             cm.dispose();
