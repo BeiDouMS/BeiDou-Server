@@ -515,19 +515,16 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
         for (byte b = 0; b < 5; b++) {//They cannot warp to the next map before the timer ends (:
             map = mapManager.getMap(mapid + b);
-            if (map.getCharacters().size() > 0) {
-                continue;
-            } else {
-                break;
+            if (map.getCharacters().isEmpty()) {
+                return false;
             }
         }
 
-        if (map == null) {
-            return false;
-        }
-
         if (!party) {
-            partyz = new Party(-1, new PartyCharacter(getPlayer()));
+            // 修复单人组队金字塔空指针的问题
+            PartyCharacter single = new PartyCharacter(getPlayer());
+            partyz = new Party(-1, single);
+            partyz.addMember(single);
         }
         Pyramid py = new Pyramid(partyz, mod, map.getId());
         getPlayer().setPartyQuest(py);
