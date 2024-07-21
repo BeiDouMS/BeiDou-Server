@@ -24,15 +24,15 @@ function action(mode, type, selection) {
             return;
         }
 
-        cm.sendGetText("A suspicious voice pierces through the silence. #bPassword#k!");
+        cm.sendGetText("一个可疑的声音打破了沉默。 #b暗号#k ！");
     } else if (status == 1) {
-        if (cm.getText() == "Francis is a genius Puppeteer!") {
+        if (cm.getText() == "弗朗西斯是个天才的傀儡师！") {
             if (cm.isQuestStarted(20730) && cm.getQuestProgressInt(20730, 9300285) == 0) {
                 cm.warp(910510001, 1);
             } else if (cm.isQuestStarted(21731) && cm.getQuestProgressInt(21731, 9300346) == 0) {
                 cm.warp(910510001, 1);
             } else {
-                cm.playerMessage(5, "Although you said the right answer, some mysterious forces are blocking the way in.");
+                cm.playerMessage(5, "尽管你说出了正确的答案，但一些神秘的力量正在阻挡进入的道路。");
             }
 
             cm.dispose();

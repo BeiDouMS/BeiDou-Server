@@ -126,7 +126,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
 
         if (itemType == 504) { // vip teleport rock
-            String error1 = "Either the player could not be found or you were trying to teleport to an illegal location.";
+            String error1 = "找不到玩家 或者 你试图传送到一个非法的位置。";
             boolean vip = p.readByte() == 1 && itemId / 1000 >= 5041;
             remove(c, position, itemId);
             boolean success = false;
@@ -141,7 +141,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                         player.dropMessage(1, error1);
                     }
                 } else {
-                    player.dropMessage(1, "You cannot teleport between continents with this teleport rock.");
+                    player.dropMessage(1, "你无法通过这个传送石在大陆之间传送。");
                 }
             } else {
                 String name = p.readString();
@@ -157,10 +157,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                             player.dropMessage(1, error1);
                         }
                     } else {
-                        player.dropMessage(1, "You cannot teleport to this map.");
+                        player.dropMessage(1, "你无法传送到这个地图。");
                     }
                 } else {
-                    player.dropMessage(1, "Player could not be found in this channel.");
+                    player.dropMessage(1, "在这个频道中找不到玩家。");
                 }
             }
 
@@ -294,7 +294,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     if (player.getLevel() > 9) {
                         player.getClient().getChannelServer().broadcastPacket(PacketCreator.serverNotice(2, medal + player.getName() + " : " + p.readString()));
                     } else {
-                        player.dropMessage(1, "You may not use this until you're level 10.");
+                        player.dropMessage(1, "在你达到10级之前，你不能使用这个。");
                         return;
                     }
                     break;
