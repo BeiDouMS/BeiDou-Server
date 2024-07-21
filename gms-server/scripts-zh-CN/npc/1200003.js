@@ -33,7 +33,7 @@ function action(mode, type, selection) {
 	if (cm.haveItem(4032338)) {
 	    cm.sendNextPrev("既然你有推荐信，我不会收你任何的费用。收起來，我们前往金银岛，坐好，旅途中可能会有点动荡！");
 	} else {
-	    if (cm.getPlayerStat("LVL") >= 8) {
+	    if (cm.getLevel() >= 8) {
 		if (cm.getMeso() < 80) {
 		    cm.sendOk("什么？你说你想搭免费的船？ 你真是个怪人！");
 		    cm.dispose();
