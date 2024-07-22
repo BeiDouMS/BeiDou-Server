@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class UnHideCommand extends Command {
     {
-        setDescription("Toggle Hide.");
+        setDescription(I18nUtil.getMessage("UnHideCommand.message1"));
     }
 
     @Override

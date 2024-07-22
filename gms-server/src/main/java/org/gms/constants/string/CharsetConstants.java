@@ -13,21 +13,27 @@ package org.gms.constants.string;
  * CharsetConstants
  */
 
-import org.gms.config.YamlConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.gms.manager.ServerManager;
+import org.gms.property.ServiceProperty;
 
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Optional;
 
 public class CharsetConstants {
-    private static final Logger log = LoggerFactory.getLogger(CharsetConstants.class);
-    public static final Charset CHARSET = loadCharset();
+    // 保证只加载一次
+    private static final Language SERViCE_LANGUAGE = loadServiceLanguage();
 
     public static Charset getCharset(int language) {
         return Charset.forName(Language.fromLang(language).getCharset());
+    }
+
+    private static Language loadServiceLanguage() {
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        String language = serviceProperty.getLanguage();
+        if (language.equals("zh-CN")) {
+            return Language.LANGUAGE_CN;
+        } else {
+            return Language.LANGUAGE_US;
+        }
     }
 
     /**
@@ -62,45 +68,7 @@ public class CharsetConstants {
                     return value;
                 }
             }
-            return LANGUAGE_US;
-        }
-
-        public static Language fromCharset(String charset) {
-            Optional<Language> language = Arrays.stream(values())
-                    .filter(l -> l.charset.equals(charset))
-                    .findAny();
-            if (language.isEmpty()) {
-                log.warn("Charset {} was not found, defaulting to US-ASCII", charset);
-                return LANGUAGE_US;
-            }
-
-            return language.get();
-        }
-    }
-
-    private static String loadCharsetFromConfig() {
-        try {
-            return YamlConfig.config.server.CHARSET;
-        } catch (Exception e) {
-            throw new RuntimeException("Could not successfully parse charset from config file: " + e.getMessage());
-        }
-    }
-
-    private static Charset loadCharset() {
-        String configCharset = loadCharsetFromConfig();
-        if (configCharset != null) {
-            Language language = Language.fromCharset(configCharset);
-            return Charset.forName(language.getCharset());
-        }
-
-        return StandardCharsets.US_ASCII;
-    }
-
-    private static class StrippedYamlConfig {
-        public StrippedServerConfig server;
-
-        private static class StrippedServerConfig {
-            public String CHARSET;
+            return SERViCE_LANGUAGE;
         }
     }
 }

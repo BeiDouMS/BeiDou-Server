@@ -196,13 +196,6 @@ gms:
         why_am_i_recommended: Welcome to Medere!
         channels: 3
   server:
-    #Database Configuration
-    DB_URL_FORMAT: "jdbc:mysql://%s:3306/napms?useInformationSchema=true&characterEncoding=utf-8" # If the docker ENV for DB_HOST is anything but "db", this string format should be changed from 3306 to 3307 (or whichever port it was changed to in docker)
-    DB_HOST: "localhost"
-    DB_USER: "root"
-    DB_PASS: "root"
-    INIT_CONNECTION_POOL_TIMEOUT: 90    # Seconds
-
     #Login Configuration
     WORLDS: 1                           #初始世界数量。
     WLDLIST_SIZE: 21                    #服务器最大可能的世界数量。
@@ -342,7 +335,6 @@ gms:
 
     #Miscellaneous Configuration
     TIMEZONE: GMT+8
-    CHARSET: GBK                          #首先加载，因此适用于此配置的其余部分。默认情况下，如果无效或未设置，则为US-ASCII。
     USE_DISPLAY_NUMBERS_WITH_COMMA: true          #强制显示字符串中的逗号（当USE_UNITPRICE_WITH_COMMA处于活动状态时，仍希望显示逗号分隔的值时使用此选项）。
     USE_UNITPRICE_WITH_COMMA: true                #根据Item.wz XML中的unitPrices布局设置此选项，无论是使用逗号还是点来表示小数。
     MAX_MONITORED_BUFFSTATS: 5                 #限制对“休眠”增益效果的计数，这些效果应在更强的属性增益到期时生效。

@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class HideCommand extends Command {
     {
-        setDescription("Hide from players.");
+        setDescription(I18nUtil.getMessage("HideCommand.message1"));
     }
 
     @Override

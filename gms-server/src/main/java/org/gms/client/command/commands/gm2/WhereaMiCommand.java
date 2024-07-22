@@ -30,12 +30,13 @@ import org.gms.server.life.Monster;
 import org.gms.server.life.NPC;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.maps.MapObject;
+import org.gms.util.I18nUtil;
 
 import java.util.HashSet;
 
 public class WhereaMiCommand extends Command {
     {
-        setDescription("Show info about objects on current map.");
+        setDescription(I18nUtil.getMessage("WhereaMiCommand.message1"));
     }
 
     @Override
@@ -61,32 +62,32 @@ public class WhereaMiCommand extends Command {
             }
         }
 
-        player.yellowMessage("Map ID: " + player.getMap().getId());
+        player.yellowMessage(I18nUtil.getMessage("WhereaMiCommand.message2") + player.getMap().getId());
 
-        player.yellowMessage("Players on this map:");
+        player.yellowMessage(I18nUtil.getMessage("WhereaMiCommand.message3"));
         for (Character chr : chars) {
-            player.dropMessage(5, ">> " + chr.getName() + " - " + chr.getId() + " - Oid: " + chr.getObjectId());
+            player.dropMessage(5, ">> " + chr.getName() + " - " + chr.getId() + " - " + I18nUtil.getMessage("WhereaMiCommand.message8") + chr.getObjectId());
         }
 
         if (!playernpcs.isEmpty()) {
-            player.yellowMessage("PlayerNPCs on this map:");
+            player.yellowMessage(I18nUtil.getMessage("WhereaMiCommand.message4"));
             for (PlayerNPC pnpc : playernpcs) {
-                player.dropMessage(5, ">> " + pnpc.getName() + " - Scriptid: " + pnpc.getScriptId() + " - Oid: " + pnpc.getObjectId());
+                player.dropMessage(5, ">> " + pnpc.getName() + I18nUtil.getMessage("WhereaMiCommand.message7") + pnpc.getScriptId() + " - " + I18nUtil.getMessage("WhereaMiCommand.message8") + pnpc.getObjectId());
             }
         }
 
         if (!npcs.isEmpty()) {
-            player.yellowMessage("NPCs on this map:");
+            player.yellowMessage(I18nUtil.getMessage("WhereaMiCommand.message5"));
             for (NPC npc : npcs) {
-                player.dropMessage(5, ">> " + npc.getName() + " - " + npc.getId() + " - Oid: " + npc.getObjectId());
+                player.dropMessage(5, ">> " + npc.getName() + " - " + npc.getId() + " - " + I18nUtil.getMessage("WhereaMiCommand.message8") + npc.getObjectId());
             }
         }
 
         if (!mobs.isEmpty()) {
-            player.yellowMessage("Monsters on this map:");
+            player.yellowMessage(I18nUtil.getMessage("WhereaMiCommand.message6"));
             for (Monster mob : mobs) {
                 if (mob.isAlive()) {
-                    player.dropMessage(5, ">> " + mob.getName() + " - " + mob.getId() + " - Oid: " + mob.getObjectId());
+                    player.dropMessage(5, ">> " + mob.getName() + " - " + mob.getId() + " - " + I18nUtil.getMessage("WhereaMiCommand.message8") + mob.getObjectId());
                 }
             }
         }

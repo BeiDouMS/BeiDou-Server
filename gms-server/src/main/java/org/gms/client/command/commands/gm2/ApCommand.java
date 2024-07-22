@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class ApCommand extends Command {
     {
-        setDescription("Set available AP.");
+        setDescription(I18nUtil.getMessage("ApCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !ap [<playername>] <newap>");
+            player.yellowMessage(I18nUtil.getMessage("ApCommand.message2"));
             return;
         }
 
@@ -61,8 +62,9 @@ public class ApCommand extends Command {
                 }
 
                 victim.changeRemainingAp(newAp, false);
+                player.dropMessage(5, I18nUtil.getMessage("ApCommand.message3"));
             } else {
-                player.message("Player '" + params[0] + "' could not be found.");
+                player.message(I18nUtil.getMessage("SpCommand.message4", params[0]));
             }
         }
     }

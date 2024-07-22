@@ -30,10 +30,11 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 
 public class RechargeCommand extends Command {
     {
-        setDescription("Recharge and refill all USE items.");
+        setDescription(I18nUtil.getMessage("RechargeCommand.message1"));
     }
 
     @Override
@@ -55,6 +56,6 @@ public class RechargeCommand extends Command {
                 c.getPlayer().forceUpdateItem(torecharge);
             }
         }
-        player.dropMessage(5, "USE Recharged.");
+        player.dropMessage(5, I18nUtil.getMessage("RechargeCommand.message2"));
     }
 }

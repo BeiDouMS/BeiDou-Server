@@ -36,7 +36,7 @@ public class OutPacketLogger extends ChannelOutboundHandlerAdapter implements Pa
             String opcodeName = getSendOpcodeName(opcode);
             String prefix = opcodeName == null ? "<UnknownPacket> " : "";
             log.debug("{}ServerSend:{} [{}] ({}) <HEX> {} <TEXT> {}", prefix, opcodeName, opcodeHex, packetLength,
-                    HexTool.toHexString(content), HexTool.toStringFromAscii(content));
+                    HexTool.toHexString(content), HexTool.toStringFromCharset(content));
         } else {
             log.debug(HexTool.toHexString(new byte[]{content[0], content[1]}) + " ...");
         }

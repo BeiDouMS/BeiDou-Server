@@ -11,12 +11,6 @@ import java.util.Map;
 @Component
 @Data
 public class ServerProperty {
-    //Database Configuration
-    public String DB_URL_FORMAT;
-    public String DB_HOST;
-    public String DB_USER;
-    public String DB_PASS;
-    public int INIT_CONNECTION_POOL_TIMEOUT;
 
     //Login Configuration
     public int WORLDS;
@@ -161,7 +155,6 @@ public class ServerProperty {
 
     //Miscellaneous Configuration
     public String TIMEZONE;
-    public String CHARSET;
     public boolean USE_DISPLAY_NUMBERS_WITH_COMMA;
     public boolean USE_UNITPRICE_WITH_COMMA;
     public byte MAX_MONITORED_BUFFSTATS;

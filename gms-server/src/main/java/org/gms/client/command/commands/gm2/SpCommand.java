@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class SpCommand extends Command {
     {
-        setDescription("Set available SP.");
+        setDescription(I18nUtil.getMessage("SpCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !sp [<playername>] <newsp>");
+            player.yellowMessage(I18nUtil.getMessage("SpCommand.message2"));
             return;
         }
 
@@ -62,9 +63,9 @@ public class SpCommand extends Command {
 
                 victim.updateRemainingSp(newSp);
 
-                player.dropMessage(5, "SP given.");
+                player.dropMessage(5, I18nUtil.getMessage("SpCommand.message3"));
             } else {
-                player.message("Player '" + params[0] + "' could not be found.");
+                player.message(I18nUtil.getMessage("SpCommand.message4", params[0]));
             }
         }
     }

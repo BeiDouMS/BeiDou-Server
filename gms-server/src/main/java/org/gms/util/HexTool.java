@@ -22,7 +22,6 @@
 package org.gms.util;
 
 import org.gms.constants.string.CharsetConstants;
-import org.gms.util.ThreadLocalUtil;
 
 import java.util.HexFormat;
 
@@ -71,7 +70,7 @@ public class HexTool {
         return input.replaceAll("\\s", "");
     }
 
-    public static String toStringFromAscii(final byte[] bytes) {
+    public static String toStringFromCharset(final byte[] bytes) {
         byte[] filteredBytes = new byte[bytes.length];
         for (int i = 0; i < bytes.length; i++) {
             if (isSpecialCharacter(bytes[i])) {
@@ -81,7 +80,7 @@ public class HexTool {
             }
         }
 
-        return new String(filteredBytes, CharsetConstants.getCharset(ThreadLocalUtil.getCurrentClient().getLanguage()));
+        return new String(filteredBytes, CharsetConstants.getCharset(ThreadLocalUtil.getClientLang()));
     }
 
     private static boolean isSpecialCharacter(byte asciiCode) {
