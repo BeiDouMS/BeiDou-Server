@@ -6197,13 +6197,13 @@ public class Character extends AbstractCharacterObject {
                         gainSlots(i, 4, true);
                     }
 
-                    this.yellowMessage("You reached level " + level + ". Congratulations! As a token of your success, your inventory has been expanded a little bit.");
+                    this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_SLOTS_BY_LEVEL"));
                 }
             }
             if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) { //For the rate upgrade
                 revertLastPlayerRates();
                 setPlayerRates();
-                this.yellowMessage("You managed to get level " + level + "! Getting experience and items seems a little easier now, huh?");
+                this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_RATES_BY_LEVEL"));
             }
         }
 
@@ -9192,7 +9192,7 @@ public class Character extends AbstractCharacterObject {
         if (nextWarningTime < curTime) {
             nextWarningTime = curTime + MINUTES.toMillis(1);   // show underlevel info again after 1 minute
 
-            showHint("你从#e#b\" + mob.getName() + \"#k#n (lv. #b\" + mob.getLevel() + \"#k) 上 #r没有获得经验#k  ! 你必须与怪物的等级相近才能开始从中获得经验。");
+            showHint(I18nUtil.getMessage("Character.showUnderLeveledInfo"));
         }
     }
 
@@ -9264,7 +9264,7 @@ public class Character extends AbstractCharacterObject {
             pet.setFullness(15);
             pet.saveToDb();
             unEquipPet(pet, true);
-            dropMessage(6, "你的宠物饿了！给它一些宠物食物以保持它的健康！");
+            dropMessage(6, I18nUtil.getMessage("Character.runFullnessSchedule"));
         } else {
             pet.setFullness(newFullness);
             pet.saveToDb();
@@ -9283,7 +9283,7 @@ public class Character extends AbstractCharacterObject {
             if (tiredness > 99) {
                 maplemount.setTiredness(99);
                 this.dispelSkill(this.getJobType() * 10000000 + 1004);
-                this.dropMessage(6, "Your mount grew tired! Treat it some revitalizer before riding it again!");
+                this.dropMessage(6, I18nUtil.getMessage("Character.runTirednessSchedule"));
                 return false;
             }
         }

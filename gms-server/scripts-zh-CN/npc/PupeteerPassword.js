@@ -26,7 +26,7 @@ function action(mode, type, selection) {
 
         cm.sendGetText("一个可疑的声音打破了沉默。 #b暗号#k ！");
     } else if (status == 1) {
-        if (cm.getText() == "弗朗西斯是个天才的傀儡师！") {
+        if (cm.getText() == "弗朗西斯是天才傀儡师！") {
             if (cm.isQuestStarted(20730) && cm.getQuestProgressInt(20730, 9300285) == 0) {
                 cm.warp(910510001, 1);
             } else if (cm.isQuestStarted(21731) && cm.getQuestProgressInt(21731, 9300346) == 0) {
