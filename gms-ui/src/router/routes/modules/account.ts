@@ -19,7 +19,7 @@ const ACCOUNT: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.account.list',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['admin'],
       },
     },
     {
@@ -29,7 +29,7 @@ const ACCOUNT: AppRouteRecordRaw = {
       meta: {
         locale: 'menu.account.player',
         requiresAuth: true,
-        roles: ['*'],
+        roles: ['admin'],
       },
     },
   ],
