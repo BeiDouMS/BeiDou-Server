@@ -117,7 +117,7 @@ function action(mode, type, selection) {
                 var pqparty = cm.getPlayer().getParty();
                 if (party == 1) {
                     if (pqparty == null) {
-                        cm.sendOk("Create a fucking party faggot.");//BE NICE
+                        cm.sendOk("Create a party first.");//BE NICE
                         cm.dispose();
                         return;
                     } else {

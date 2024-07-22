@@ -95,6 +95,7 @@ public class AccountService {
                 .birthday(submitData.getBirthday())
                 .tempban(Timestamp.valueOf(DefaultDates.getTempban()))
                 .language(submitData.getLanguage())
+                .lastlogin(Timestamp.valueOf(DefaultDates.getTempban()))
                 .build();
         // 可以直接用insertSelective忽略null值
         accountsMapper.insertSelective(account);

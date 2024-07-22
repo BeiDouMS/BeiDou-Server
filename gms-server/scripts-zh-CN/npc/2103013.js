@@ -117,7 +117,7 @@ function action(mode, type, selection) {
                 var pqparty = cm.getPlayer().getParty();
                 if (party == 1) {
                     if (pqparty == null) {
-                        cm.sendOk("Create a party faggot.");//BE NICE
+                        cm.sendOk("请先创建队伍");
                         cm.dispose();
                         return;
                     } else {
