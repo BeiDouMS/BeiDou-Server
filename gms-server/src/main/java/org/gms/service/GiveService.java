@@ -13,6 +13,7 @@ import org.gms.exception.BizException;
 import org.gms.net.server.Server;
 import org.gms.server.CashShop;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -77,13 +78,13 @@ public class GiveService {
         Integer wId = submitData.getWorldId();
         Integer cId = submitData.getPlayerId();
         if (wId == null || wId < 0 || cId == null || cId < 1) {
-            throw new BizException("大区 ID 或者 玩家 ID 不正确");
+            throw new BizException(I18nUtil.getExceptionMessage("CHR_OR_WORLD_ID_ERROR"));
         }
         Character chr = Server.getInstance()
                 .getWorlds().get(wId)
                 .getPlayerStorage().getCharacterById(cId);
-        if (chr == null) throw new BizException("玩家已离线");
-        
+        if (chr == null) throw new BizException(I18nUtil.getExceptionMessage("CHR_OFFLINE"));
+
         switch (submitData.getType()) {
             case 0: // nxCredit 点券
             case 1: // nxPrepaid 信用点券
@@ -132,51 +133,51 @@ public class GiveService {
     private void giveNxAllOnlineChr(int quantity, int type) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             chr.getCashShop().gainCash(type, quantity);
-            chr.message("管理员给全服发放了 " + quantity + " " + getCashTypeName(type));
+            chr.message(I18nUtil.getMessage("Give.Nx.All", quantity, getCashTypeName(type)));
         }));
-        log.info("管理员在后台给全服发放了 {} {}", quantity, getCashTypeName(type));
+        log.info(I18nUtil.getLogMessage("Give.Nx.All", quantity, getCashTypeName(type)));
     }
 
     private void giveNxChr(Character chr, int quantity, int type) {
         chr.getCashShop().gainCash(type, quantity);
-        chr.message("管理员给您发放了 " + quantity + " " + getCashTypeName(type));
-        log.info("管理员在后台给玩家 [{}] {} 发放了 {} {}", chr.getId(), chr.getName(), quantity, getCashTypeName(type));
+        chr.message(I18nUtil.getMessage("Give.Nx.Chr", quantity, getCashTypeName(type)));
+        log.info(I18nUtil.getLogMessage("Give.Nx.Chr", chr.getId(), chr.getName(), quantity, getCashTypeName(type)));
     }
 
     private String getCashTypeName(int type) {
         return switch (type) {
-            case 1 -> "点券";
-            case 2 -> "抵用券";
-            default -> "信用点券";
+            case 1 -> I18nUtil.getMessage("Give.Nx.Type.1");
+            case 2 -> I18nUtil.getMessage("Give.Nx.Type.2");
+            default -> I18nUtil.getMessage("Give.Nx.Type.default");
         };
     }
 
     private void giveMesosAllOnlineChr(int quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             chr.gainMeso(quantity);
-            chr.message("管理员给全服发放了 " + quantity + " 金币");
+            chr.message(I18nUtil.getMessage("Give.Mesos.All", quantity));
         }));
-        log.info("管理员在后台给全服发放了 {} 金币", quantity);
+        log.info(I18nUtil.getLogMessage("Give.Mesos.All", quantity));
     }
 
     private void giveMesosChr(Character chr, int quantity) {
         chr.gainMeso(quantity);
-        chr.message("管理员给您发放了 " + quantity + " 金币");
-        log.info("管理员在后台给玩家 [{}] {} 发放了 {} 金币", chr.getId(), chr.getName(), quantity);
+        chr.message(I18nUtil.getMessage("Give.Mesos.Chr", quantity));
+        log.info(I18nUtil.getLogMessage("Give.Mesos.Chr", chr.getId(), chr.getName(), quantity));
     }
 
     private void giveExpAllOnlineChr(int quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             chr.gainExp(quantity);
-            chr.message("管理员给全服发放了 " + quantity + " 经验");
+            chr.message(I18nUtil.getMessage("Give.Exp.All", quantity));
         }));
-        log.info("管理员在后台给全服发放了 {} 经验", quantity);
+        log.info(I18nUtil.getLogMessage("Give.Exp.All", quantity));
     }
 
     private void giveExpChr(Character chr, int quantity) {
         chr.gainExp(quantity);
-        chr.message("管理员给您发放了 " + quantity + " 经验");
-        log.info("管理员在后台给玩家 [{}] {} 发放了 {} 经验", chr.getId(), chr.getName(), quantity);
+        chr.message(I18nUtil.getMessage("Give.Exp.Chr", quantity));
+        log.info(I18nUtil.getLogMessage("Give.Exp.Chr", chr.getId(), chr.getName(), quantity));
     }
 
     private void giveItemAllOnlineChr(int itemId, short quantity) {
@@ -184,7 +185,7 @@ public class GiveService {
 
         String itemName = ii.getName(itemId);
         if (itemName == null) {
-            throw new BizException("物品不存在");
+            throw new BizException(I18nUtil.getExceptionMessage("ITEM_NOT_FOUND"));
         }
 
         boolean isPet = ItemConstants.isPet(itemId);
@@ -203,17 +204,17 @@ public class GiveService {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             if (isPet) {
                 InventoryManipulator.addById(chr.getClient(), itemId, quantity, "WAdmin", petId, expiration);
-                chr.message("管理员给全服发放了 " + quantity + " 天 " + itemName);
+                chr.message(I18nUtil.getMessage("Give.Pet.All", quantity, itemName));
             } else {
                 InventoryManipulator.addById(chr.getClient(), itemId, quantity, "WAdmin", -1, (short) 0, -1);
-                chr.message("管理员给全服发放了 " + quantity + " 个 " + itemName);
+                chr.message(I18nUtil.getMessage("Give.Item.All", quantity, itemName));
             }
         }));
 
         if (isPet) {
-            log.info("管理员在后台给全服发放了 {} 天 [{}]{}", quantity, itemId, itemName);
+            log.info(I18nUtil.getLogMessage("Give.Pet.All", quantity, itemId, itemName));
         } else {
-            log.info("管理员在后台给全服发放了 {} 个 [{}]{}", quantity, itemId, itemName);
+            log.info(I18nUtil.getLogMessage("Give.Item.All", quantity, itemId, itemName));
         }
 
     }
@@ -223,7 +224,7 @@ public class GiveService {
 
         String itemName = ii.getName(itemId);
         if (itemName == null) {
-            throw new BizException("物品不存在");
+            throw new BizException(I18nUtil.getExceptionMessage("ITEM_NOT_FOUND"));
         }
 
         boolean isPet = ItemConstants.isPet(itemId);
@@ -238,16 +239,16 @@ public class GiveService {
 
         if (isPet) {
             InventoryManipulator.addById(chr.getClient(), itemId, quantity, "WAdmin", petId, expiration);
-            chr.message("管理员给您发放了 " + quantity + " 天 " + itemName);
+            chr.message(I18nUtil.getMessage("Give.Pet.Chr", quantity, itemName));
         } else {
             InventoryManipulator.addById(chr.getClient(), itemId, quantity, "WAdmin", -1, (short) 0, -1);
-            chr.message("管理员给您发放了 " + quantity + " 个 " + itemName);
+            chr.message(I18nUtil.getMessage("Give.Item.Chr", quantity, itemName));
         }
 
         if (isPet) {
-            log.info("管理员在后台给玩家 [{}] {} 发放了 {} 天 [{}] {}}", chr.getId(), chr.getName(), quantity, itemId, itemName);
+            log.info(I18nUtil.getLogMessage("Give.Pet.Chr", chr.getId(), chr.getName(), quantity, itemId, itemName));
         } else {
-            log.info("管理员在后台给玩家 [{}] {} 发放了 {} 个 [{}] {}}", chr.getId(), chr.getName(), quantity, itemId, itemName);
+            log.info(I18nUtil.getLogMessage("Give.Item.Chr", chr.getId(), chr.getName(), quantity, itemId, itemName));
         }
     }
 
@@ -256,7 +257,7 @@ public class GiveService {
 
         String itemName = ii.getName(submitData.getId());
         if (ii.getEquipById(submitData.getId()) == null || itemName == null) {
-            throw new BizException("装备不存在");
+            throw new BizException(I18nUtil.getExceptionMessage("EQUIP_NOT_FOUND"));
         }
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             chr.gainEquip(
@@ -279,9 +280,9 @@ public class GiveService {
                     submitData.getUpgradeSlot(),
                     submitData.getExpire()
             );
-            chr.message("管理员给全服发放了自定义装备 [" + submitData.getId().toString() + "] " + itemName);
+            chr.message(I18nUtil.getMessage("Give.Equip.All", submitData.getId().toString(), itemName));
         }));
-        log.info("管理员在后台给全服发放了自定义装备 [{}] {} 力量：{} 敏捷：{} 智力：{} 运气：{} HP：{} MP：{} 物攻：{} 魔攻：{} 物防：{} 魔防：{} 命中：{} 回避：{} 手技：{} 移速：{} 跳跃：{} 升级次数：{} 有效期：{} 分钟",
+        log.info(I18nUtil.getLogMessage("Give.Equip.All",
                 submitData.getId(),
                 itemName,
                 submitData.getStr(),
@@ -301,7 +302,7 @@ public class GiveService {
                 submitData.getJump(),
                 submitData.getUpgradeSlot(),
                 submitData.getExpire()
-        );
+        ));
     }
 
     private void giveEquipChr(Character chr, GiveResourceReqDTO submitData) {
@@ -309,7 +310,7 @@ public class GiveService {
 
         String itemName = ii.getName(submitData.getId());
         if (ii.getEquipById(submitData.getId()) == null || itemName == null) {
-            throw new BizException("装备不存在");
+            throw new BizException(I18nUtil.getExceptionMessage("EQUIP_NOT_FOUND"));
         }
         chr.gainEquip(
                 submitData.getId(),
@@ -331,10 +332,8 @@ public class GiveService {
                 submitData.getUpgradeSlot(),
                 submitData.getExpire()
         );
-        chr.message("管理员给玩家 [" + chr.getId() + "] " + chr.getName() + " 发放了自定义装备 [" + submitData.getId().toString() + "] " + itemName);
-        log.info("管理员在后台给玩家 [{}] {} 发放了自定义装备 [{}] {} 力量：{} 敏捷：{} 智力：{} 运气：{} HP：{} MP：{} 物攻：{} 魔攻：{} 物防：{} 魔防：{} 命中：{} 回避：{} 手技：{} 移速：{} 跳跃：{} 升级次数：{} 有效期：{} 分钟",
-                chr.getId(),
-                chr.getName(),
+        chr.message(I18nUtil.getMessage("Give.Equip.Chr", submitData.getId().toString(), itemName));
+        log.info(I18nUtil.getLogMessage("Give.Equip.Chr",
                 submitData.getId(),
                 itemName,
                 submitData.getStr(),
@@ -353,8 +352,10 @@ public class GiveService {
                 submitData.getSpeed(),
                 submitData.getJump(),
                 submitData.getUpgradeSlot(),
-                submitData.getExpire()
-        );
+                submitData.getExpire(),
+                chr.getId(),
+                chr.getName()
+        ));
     }
 
     private void giveRateChr(Character chr, String type, float rate) {
@@ -365,9 +366,9 @@ public class GiveService {
                 .extendValue(String.valueOf(rate))
                 .build();
         characterService.updateRate(data);
-        
-        chr.message("管理员将您的 " + type + " 调整为：" + rate);
-        log.info("管理员在后台将玩家 [{}] {} 的 {} 调整为：{}", chr.getId(), chr.getName(), type, rate);
+
+        chr.message(I18nUtil.getMessage("Give.Rate.Chr", type, rate));
+        log.info(I18nUtil.getLogMessage("Give.Rate.Chr", chr.getId(), chr.getName(), type, rate));
     }
 
     private void giveGMChr(Character chr, Integer level) {
@@ -379,14 +380,14 @@ public class GiveService {
             chr.setGMLevel(level);
             chr.Hide(true);
         }
-        chr.message("管理员将您的 GM等级 调整为：" + level);
-        log.info("管理员在后台将玩家 [{}] {} 的 GM等级 调整为：{}", chr.getId(), chr.getName(), level);
+        chr.message(I18nUtil.getMessage("Give.GM.Chr", level));
+        log.info(I18nUtil.getLogMessage("Give.GM.Chr", chr.getId(), chr.getName(), level));
     }
-    
+
     private void giveFameChr(Character chr, Integer fame) {
         chr.setFame(fame);
         chr.updateSingleStat(Stat.FAME, fame);
-        chr.message("管理员将您的 人气 调整为：" + fame);
-        log.info("管理员在后台将玩家 [{}] {} 的 人气 调整为：{}", chr.getId(), chr.getName(), fame);
+        chr.message(I18nUtil.getMessage("Give.Fame.Chr", fame));
+        log.info(I18nUtil.getLogMessage("Give.Fame.Chr", chr.getId(), chr.getName(), fame));
     }
 }

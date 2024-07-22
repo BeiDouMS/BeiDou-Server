@@ -12,21 +12,35 @@ import useAppStore from '../app';
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
+    id: undefined,
     name: undefined,
-    avatar: undefined,
-    job: undefined,
-    organization: undefined,
-    location: undefined,
+    pin: undefined,
+    pic: undefined,
+    loggedin: undefined,
+    lastlogin: undefined,
+    createdat: undefined,
+    birthday: undefined,
+    banned: undefined,
+    banreason: undefined,
+    macs: undefined,
+    nxCredit: undefined,
+    maplePoint: undefined,
+    nxPrepaid: undefined,
+    characterslots: undefined,
+    gender: undefined,
+    tempban: undefined,
+    greason: undefined,
+    tos: undefined,
+    sitelogged: undefined,
+    webadmin: undefined,
+    nick: undefined,
+    mute: undefined,
     email: undefined,
-    introduction: undefined,
-    personalWebsite: undefined,
-    jobName: undefined,
-    organizationName: undefined,
-    locationName: undefined,
-    phone: undefined,
-    registrationDate: undefined,
-    accountId: undefined,
-    certification: undefined,
+    ip: undefined,
+    rewardpoints: undefined,
+    votepoints: undefined,
+    hwid: undefined,
+    language: undefined,
     role: '',
   }),
 
@@ -45,6 +59,7 @@ const useUserStore = defineStore('user', {
     },
     // Set user's information
     setInfo(partial: Partial<UserState>) {
+      partial.role = partial.webadmin ? 'admin' : 'user';
       this.$patch(partial);
     },
 
