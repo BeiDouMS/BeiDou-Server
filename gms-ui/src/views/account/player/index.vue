@@ -356,7 +356,7 @@
         filterForm.value.map
       );
       tableData.value = data.records;
-      total.value = data.total;
+      total.value = data.totalRow;
     } finally {
       setLoading(false);
     }
