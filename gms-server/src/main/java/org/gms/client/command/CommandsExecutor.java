@@ -230,6 +230,8 @@ public class CommandsExecutor {
     }
 
     public void loadCommandsExecutor() {
+        registeredCommands.clear();
+        commandsNameDesc.clear();
         registerLv0Commands();
         registerLv1Commands();
         registerLv2Commands();
