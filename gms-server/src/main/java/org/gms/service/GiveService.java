@@ -135,13 +135,13 @@ public class GiveService {
             chr.getCashShop().gainCash(type, quantity);
             chr.message(I18nUtil.getMessage("Give.Nx.All", quantity, getCashTypeName(type)));
         }));
-        log.info(I18nUtil.getLogMessage("Give.Nx.All", quantity, getCashTypeName(type)));
+        log.info(I18nUtil.getLogMessage("Give.Nx.All.info1", quantity, getCashTypeName(type)));
     }
 
     private void giveNxChr(Character chr, int quantity, int type) {
         chr.getCashShop().gainCash(type, quantity);
         chr.message(I18nUtil.getMessage("Give.Nx.Chr", quantity, getCashTypeName(type)));
-        log.info(I18nUtil.getLogMessage("Give.Nx.Chr", chr.getId(), chr.getName(), quantity, getCashTypeName(type)));
+        log.info(I18nUtil.getLogMessage("Give.Nx.Chr.info1", chr.getId(), chr.getName(), quantity, getCashTypeName(type)));
     }
 
     private String getCashTypeName(int type) {
@@ -157,13 +157,13 @@ public class GiveService {
             chr.gainMeso(quantity);
             chr.message(I18nUtil.getMessage("Give.Mesos.All", quantity));
         }));
-        log.info(I18nUtil.getLogMessage("Give.Mesos.All", quantity));
+        log.info(I18nUtil.getLogMessage("Give.Mesos.All.info1", quantity));
     }
 
     private void giveMesosChr(Character chr, int quantity) {
         chr.gainMeso(quantity);
         chr.message(I18nUtil.getMessage("Give.Mesos.Chr", quantity));
-        log.info(I18nUtil.getLogMessage("Give.Mesos.Chr", chr.getId(), chr.getName(), quantity));
+        log.info(I18nUtil.getLogMessage("Give.Mesos.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
 
     private void giveExpAllOnlineChr(int quantity) {
@@ -171,13 +171,13 @@ public class GiveService {
             chr.gainExp(quantity);
             chr.message(I18nUtil.getMessage("Give.Exp.All", quantity));
         }));
-        log.info(I18nUtil.getLogMessage("Give.Exp.All", quantity));
+        log.info(I18nUtil.getLogMessage("Give.Exp.All.info1", quantity));
     }
 
     private void giveExpChr(Character chr, int quantity) {
         chr.gainExp(quantity);
         chr.message(I18nUtil.getMessage("Give.Exp.Chr", quantity));
-        log.info(I18nUtil.getLogMessage("Give.Exp.Chr", chr.getId(), chr.getName(), quantity));
+        log.info(I18nUtil.getLogMessage("Give.Exp.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
 
     private void giveItemAllOnlineChr(int itemId, short quantity) {
@@ -212,9 +212,9 @@ public class GiveService {
         }));
 
         if (isPet) {
-            log.info(I18nUtil.getLogMessage("Give.Pet.All", quantity, itemId, itemName));
+            log.info(I18nUtil.getLogMessage("Give.Pet.All.info1", quantity, itemId, itemName));
         } else {
-            log.info(I18nUtil.getLogMessage("Give.Item.All", quantity, itemId, itemName));
+            log.info(I18nUtil.getLogMessage("Give.Item.All.info1", quantity, itemId, itemName));
         }
 
     }
@@ -246,9 +246,9 @@ public class GiveService {
         }
 
         if (isPet) {
-            log.info(I18nUtil.getLogMessage("Give.Pet.Chr", chr.getId(), chr.getName(), quantity, itemId, itemName));
+            log.info(I18nUtil.getLogMessage("Give.Pet.Chr.info1", chr.getId(), chr.getName(), quantity, itemId, itemName));
         } else {
-            log.info(I18nUtil.getLogMessage("Give.Item.Chr", chr.getId(), chr.getName(), quantity, itemId, itemName));
+            log.info(I18nUtil.getLogMessage("Give.Item.Chr.info1", chr.getId(), chr.getName(), quantity, itemId, itemName));
         }
     }
 
@@ -282,7 +282,7 @@ public class GiveService {
             );
             chr.message(I18nUtil.getMessage("Give.Equip.All", submitData.getId().toString(), itemName));
         }));
-        log.info(I18nUtil.getLogMessage("Give.Equip.All",
+        log.info(I18nUtil.getLogMessage("Give.Equip.All.info1",
                 submitData.getId(),
                 itemName,
                 submitData.getStr(),
@@ -333,7 +333,7 @@ public class GiveService {
                 submitData.getExpire()
         );
         chr.message(I18nUtil.getMessage("Give.Equip.Chr", submitData.getId().toString(), itemName));
-        log.info(I18nUtil.getLogMessage("Give.Equip.Chr",
+        log.info(I18nUtil.getLogMessage("Give.Equip.Chr.info1",
                 submitData.getId(),
                 itemName,
                 submitData.getStr(),
@@ -368,7 +368,7 @@ public class GiveService {
         characterService.updateRate(data);
 
         chr.message(I18nUtil.getMessage("Give.Rate.Chr", type, rate));
-        log.info(I18nUtil.getLogMessage("Give.Rate.Chr", chr.getId(), chr.getName(), type, rate));
+        log.info(I18nUtil.getLogMessage("Give.Rate.Chr.info1", chr.getId(), chr.getName(), type, rate));
     }
 
     private void giveGMChr(Character chr, Integer level) {
@@ -381,13 +381,13 @@ public class GiveService {
             chr.Hide(true);
         }
         chr.message(I18nUtil.getMessage("Give.GM.Chr", level));
-        log.info(I18nUtil.getLogMessage("Give.GM.Chr", chr.getId(), chr.getName(), level));
+        log.info(I18nUtil.getLogMessage("Give.GM.Chr.info1", chr.getId(), chr.getName(), level));
     }
 
     private void giveFameChr(Character chr, Integer fame) {
         chr.setFame(fame);
         chr.updateSingleStat(Stat.FAME, fame);
         chr.message(I18nUtil.getMessage("Give.Fame.Chr", fame));
-        log.info(I18nUtil.getLogMessage("Give.Fame.Chr", chr.getId(), chr.getName(), fame));
+        log.info(I18nUtil.getLogMessage("Give.Fame.Chr.info1", chr.getId(), chr.getName(), fame));
     }
 }

@@ -3107,7 +3107,7 @@ public class Character extends AbstractCharacterObject {
             while (exp.get() >= ExpTable.getExpNeededForLevel(level)) {
                 levelUp(true);
 
-                String msg = String.format(I18nUtil.getMessage("Character.levelUp.globalNotice"), getName(), getMap().getMapName(), getLevel());
+                String msg = I18nUtil.getMessage("Character.levelUp.globalNotice", getName(), getMap().getMapName(), getLevel());
                 if (YamlConfig.config.server.USE_ANNOUNCE_GLOBAL_LEVEL_UP && !isGM()) {
                     for (Character player : getWorldServer().getPlayerStorage().getAllCharacters()) {
                         // 如果玩家在商城，将会以弹窗的形式发送，一堆弹窗会把玩家逼疯！
@@ -6197,13 +6197,13 @@ public class Character extends AbstractCharacterObject {
                         gainSlots(i, 4, true);
                     }
 
-                    this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_SLOTS_BY_LEVEL"));
+                    this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_SLOTS_BY_LEVEL", level));
                 }
             }
             if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) { //For the rate upgrade
                 revertLastPlayerRates();
                 setPlayerRates();
-                this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_RATES_BY_LEVEL"));
+                this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_RATES_BY_LEVEL", level));
             }
         }
 
