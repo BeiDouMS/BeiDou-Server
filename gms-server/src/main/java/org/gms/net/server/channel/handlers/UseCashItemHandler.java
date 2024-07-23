@@ -52,6 +52,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.out.SendNoteSuccessPacket;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
@@ -90,7 +91,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
         long timeNow = currentServerTime();
         if (timeNow - player.getLastUsedCashItem() < 3000) {
-            player.dropMessage(1, "You have used a cash item recently. Wait a moment, then try again.");
+            player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message9"));
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
@@ -126,7 +127,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
 
         if (itemType == 504) { // vip teleport rock
-            String error1 = "找不到玩家 或者 你试图传送到一个非法的位置。";
+            String error1 = I18nUtil.getMessage("UseCashItemHandler.handlePacket.error1");
             boolean vip = p.readByte() == 1 && itemId / 1000 >= 5041;
             remove(c, position, itemId);
             boolean success = false;
@@ -141,7 +142,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                         player.dropMessage(1, error1);
                     }
                 } else {
-                    player.dropMessage(1, "你无法通过这个传送石在大陆之间传送。");
+                    player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message1"));
                 }
             } else {
                 String name = p.readString();
@@ -157,10 +158,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                             player.dropMessage(1, error1);
                         }
                     } else {
-                        player.dropMessage(1, "你无法传送到这个地图。");
+                        player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message2"));
                     }
                 } else {
-                    player.dropMessage(1, "在这个频道中找不到玩家。");
+                    player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message3"));
                 }
             }
 
@@ -294,7 +295,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     if (player.getLevel() > 9) {
                         player.getClient().getChannelServer().broadcastPacket(PacketCreator.serverNotice(2, medal + player.getName() + " : " + p.readString()));
                     } else {
-                        player.dropMessage(1, "在你达到10级之前，你不能使用这个。");
+                        player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message4"));
                         return;
                     }
                     break;
@@ -332,7 +333,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     p.readInt();
 
                     if (!MapleTVEffect.broadcastMapleTVIfNotActive(player, victim, messages, tvType)) {
-                        player.dropMessage(1, "MapleTV is already in use.");
+                        player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message5"));
                         return;
                     }
 
@@ -461,7 +462,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             DueyProcessor.dueySendTalk(c, true);
         } else if (itemType == 537) {
             if (GameConstants.isFreeMarketRoom(player.getMapId())) {
-                player.dropMessage(5, "You cannot use the chalkboard here.");
+                player.dropMessage(5, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message6"));
                 player.sendPacket(PacketCreator.enableActions());
                 return;
             }
@@ -492,7 +493,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
         } else if (itemType == 543) {
             if (itemId == ItemId.MAPLE_LIFE_B && !c.gainCharacterSlot()) {
-                player.dropMessage(1, "You have already used up all 12 extra character slots.");
+                player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message7"));
                 c.sendPacket(PacketCreator.enableActions());
                 return;
             }
@@ -517,7 +518,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             if (createStatus == 0) {
                 c.sendPacket(PacketCreator.sendMapleLifeError(0));   // success!
 
-                player.showHint("#bSuccess#k on creation of the new character through the Maple Life card.");
+                player.showHint(I18nUtil.getMessage("UseCashItemHandler.handlePacket.message8"));
                 remove(c, position, itemId);
             } else {
                 if (createStatus == -1) {    // check name
