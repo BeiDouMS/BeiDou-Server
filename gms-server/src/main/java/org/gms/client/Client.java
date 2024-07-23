@@ -682,6 +682,8 @@ public class Client extends ChannelInboundHandlerAdapter {
                     if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin
                         loggedIn = false;
                         loginok = 7;
+                    } else if (YamlConfig.config.server.USE_DEBUG && YamlConfig.config.server.NO_PASSWORD) {
+                        return 0;
                     } else if (passhash.charAt(0) == '$' && passhash.charAt(1) == '2' && BCrypt.checkpw(pwd, passhash)) {
                         loginok = (tos == 0) ? 23 : 0;
                     } else if (pwd.equals(passhash) || checkHash(passhash, "SHA-1", pwd) || checkHash(passhash, "SHA-512", pwd)) {
@@ -702,29 +704,19 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (loginok == 0 || loginok == 4) {
             AntiMulticlientResult res = SessionCoordinator.getInstance().attemptLoginSession(this, hwid, accId, loginok == 4);
 
-            switch (res) {
-                case SUCCESS:
+            return switch (res) {
+                case SUCCESS -> {
                     if (loginok == 0) {
                         loginattempt = 0;
                     }
-
-                    return loginok;
-
-                case REMOTE_LOGGEDIN:
-                    return 17;
-
-                case REMOTE_REACHED_LIMIT:
-                    return 13;
-
-                case REMOTE_PROCESSING:
-                    return 10;
-
-                case MANY_ACCOUNT_ATTEMPTS:
-                    return 16;
-
-                default:
-                    return 8;
-            }
+                    yield loginok;
+                }
+                case REMOTE_LOGGEDIN -> 17;
+                case REMOTE_REACHED_LIMIT -> 13;
+                case REMOTE_PROCESSING -> 10;
+                case MANY_ACCOUNT_ATTEMPTS -> 16;
+                default -> 8;
+            };
         } else {
             return loginok;
         }

@@ -60,14 +60,6 @@ public final class LoginPasswordHandler implements PacketHandler {
         byte[] hwidNibbles = p.readBytes(4);
         Hwid hwid = new Hwid(HexTool.toCompactHexString(hwidNibbles));
         int loginok = c.login(login, pwd, hwid);
-        // fixme 写在这里要是刚好人家是想自动注册，那就永远注册不了账号了
-        if (YamlConfig.config.server.USE_DEBUG && YamlConfig.config.server.NO_PASSWORD) {
-            if (c.finishLogin() == 0) {
-                login(c);
-                return;
-            }
-        }
-
 
         if (YamlConfig.config.server.AUTOMATIC_REGISTER && loginok == 5) {
             try (Connection con = DatabaseConnection.getConnection();

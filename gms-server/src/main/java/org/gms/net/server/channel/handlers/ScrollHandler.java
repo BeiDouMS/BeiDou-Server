@@ -179,17 +179,16 @@ public final class ScrollHandler extends AbstractPacketHandler {
     }
 
     private static void announceCannotScroll(Client c, boolean legendarySpirit) {
+        c.sendPacket(PacketCreator.getInventoryFull());
+
         if (legendarySpirit) {
             // c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), Equip.ScrollResult.FAIL, false, false));
             // 上面是原来的，下面三行是新加的，具体原理我也不懂，纯属瞎猫碰到死耗子。
             // 不更新Inventory的话，客户端会假死；legendarySpirit 不改成 true 的话，客户端匠人之魂就不会播放动画，取消和关闭按钮也不能恢复成可点击状态
             // 修复思路及推测结论：直接给身上的装备砸卷，当砸卷次数为0时服务端会发送else里的Inventory封包，而匠人之魂在次数为0时没发这个包（>0时有），所以由此推测 ->
             // 砸卷操作无论装备剩余次数是否为0，客户端都会向服务器发起砸卷请求，在这个过程中客户端会给背包加锁，客户端收到Inventory封包才会解除这个锁，所以原来没有这个封包的时候客户端的锁就解不了，导致假死。
-            c.sendPacket(PacketCreator.getInventoryFull());
             c.sendPacket(PacketCreator.getScrollEffect(c.getPlayer().getId(), ScrollResult.FAIL, true, false));
             c.getPlayer().message("由于砸卷次数不足或其他原因导致的砸卷失败，本次不消耗卷轴。");
-        } else {
-            c.sendPacket(PacketCreator.getInventoryFull());
         }
     }
 
