@@ -26,17 +26,18 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class DcCommand extends Command {
     {
-        setDescription("Disconnect a player.");
+        setDescription(I18nUtil.getMessage("DcCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !dc <playername>");
+            player.yellowMessage(I18nUtil.getMessage("DcCommand.message2"));
             return;
         }
 

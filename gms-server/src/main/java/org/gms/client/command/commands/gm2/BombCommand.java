@@ -29,26 +29,32 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.MobId;
 import org.gms.net.server.Server;
 import org.gms.server.life.LifeFactory;
+import org.gms.server.life.Monster;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class BombCommand extends Command {
     {
-        setDescription("Bomb a player, dealing damage.");
+        setDescription(I18nUtil.getMessage("BombCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
+        Monster monster = LifeFactory.getMonster(MobId.ARPQ_BOMB);
+        if (monster == null) {
+            return;
+        }
         if (params.length > 0) {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim != null) {
-                victim.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(MobId.ARPQ_BOMB), victim.getPosition());
-                Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, player.getName() + " used !bomb on " + victim.getName()));
+                victim.getMap().spawnMonsterOnGroundBelow(monster, victim.getPosition());
+                Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("BombCommand.message2", player.getName(), victim.getName())));
             } else {
-                player.message("Player '" + params[0] + "' could not be found on this world.");
+                player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             }
         } else {
-            player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(MobId.ARPQ_BOMB), player.getPosition());
+            player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
         }
     }
 }

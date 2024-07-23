@@ -26,16 +26,17 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class ClearDropsCommand extends Command {
     {
-        setDescription("Clear drops by player.");
+        setDescription(I18nUtil.getMessage("ClearDropsCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         player.getMap().clearDrops(player);
-        player.dropMessage(5, "Cleared dropped items");
+        player.dropMessage(5, I18nUtil.getMessage("ClearDropsCommand.message2"));
     }
 }

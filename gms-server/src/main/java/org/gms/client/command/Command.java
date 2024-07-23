@@ -23,30 +23,16 @@
 */
 package org.gms.client.command;
 
+import lombok.Data;
 import org.gms.client.Client;
 
+@Data
 public abstract class Command {
 
     protected int rank;
     protected String description;
 
     public abstract void execute(Client client, String[] params);
-
-    public String getDescription() {
-        return description;
-    }
-
-    protected void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getRank() {
-        return rank;
-    }
-
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
 
     protected String joinStringFrom(String[] arr, int start) {
         StringBuilder builder = new StringBuilder();

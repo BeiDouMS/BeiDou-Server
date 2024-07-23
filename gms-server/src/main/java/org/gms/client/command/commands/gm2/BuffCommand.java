@@ -28,17 +28,18 @@ import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class BuffCommand extends Command {
     {
-        setDescription("Activate a buff.");
+        setDescription(I18nUtil.getMessage("BuffCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !buff <buffid>");
+            player.yellowMessage(I18nUtil.getMessage("BuffCommand.message2"));
             return;
         }
         int skillid = Integer.parseInt(params[0]);

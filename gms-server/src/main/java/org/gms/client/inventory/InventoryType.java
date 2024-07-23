@@ -27,6 +27,7 @@ import org.gms.util.I18nUtil;
 /**
  * @author Matze
  */
+@Getter
 public enum InventoryType {
     UNDEFINED(0, I18nUtil.getMessage("InventoryType.UNDEFINED")),
     EQUIP(1, I18nUtil.getMessage("InventoryType.EQUIP")),
@@ -37,9 +38,7 @@ public enum InventoryType {
     CANHOLD(6, I18nUtil.getMessage("InventoryType.CANHOLD")),   //Proof-guard for inserting after removal checks
     EQUIPPED(-1, I18nUtil.getMessage("InventoryType.EQUIPPED")); //Seems nexon screwed something when removing an item T_T
 
-    @Getter
     private final byte type;
-    @Getter
     private final String name;
 
     InventoryType(int type, String name) {

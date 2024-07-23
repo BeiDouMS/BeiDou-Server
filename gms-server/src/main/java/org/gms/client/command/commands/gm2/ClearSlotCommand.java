@@ -29,112 +29,80 @@ import org.gms.client.command.Command;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
+import org.gms.constants.game.GameConstants;
+import org.gms.util.I18nUtil;
 
 public class ClearSlotCommand extends Command {
     {
-        setDescription("Clear all items in an inventory tab.");
+        setDescription(I18nUtil.getMessage("ClearSlotCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !clearslot <all, equip, use, setup, etc or cash.>");
+            player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message2"));
             return;
         }
         String type = params[0];
         switch (type) {
             case "all":
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
+            case "全部":
+                for (int i = 0; i < GameConstants.MAX_CLEAN_PACK_SIZE; i++) {
+                    removeSlot(c, InventoryType.EQUIP, i);
+                    removeSlot(c, InventoryType.USE, i);
+                    removeSlot(c, InventoryType.ETC, i);
+                    removeSlot(c, InventoryType.SETUP, i);
+                    removeSlot(c, InventoryType.CASH, i);
                 }
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
-                }
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
-                }
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
-                }
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
-                }
-                player.yellowMessage("All Slots Cleared.");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message3"));
                 break;
             case "equip":
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.EQUIP).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.EQUIP, (byte) i, tempItem.getQuantity(), false, false);
+            case "装备":
+                for (int i = 0; i < GameConstants.MAX_CLEAN_PACK_SIZE; i++) {
+                    removeSlot(c, InventoryType.EQUIP, i);
                 }
-                player.yellowMessage("Equipment Slot Cleared.");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message4"));
                 break;
             case "use":
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.USE).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, (byte) i, tempItem.getQuantity(), false, false);
+            case "消耗":
+                for (int i = 0; i < GameConstants.MAX_CLEAN_PACK_SIZE; i++) {
+                    removeSlot(c, InventoryType.USE, i);
                 }
-                player.yellowMessage("Use Slot Cleared.");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message5"));
                 break;
             case "setup":
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.SETUP).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.SETUP, (byte) i, tempItem.getQuantity(), false, false);
+            case "设置":
+                for (int i = 0; i < GameConstants.MAX_CLEAN_PACK_SIZE; i++) {
+                    removeSlot(c, InventoryType.SETUP, i);
                 }
-                player.yellowMessage("Set-Up Slot Cleared.");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message6"));
                 break;
             case "etc":
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.ETC).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.ETC, (byte) i, tempItem.getQuantity(), false, false);
+            case "其他":
+                for (int i = 0; i < GameConstants.MAX_CLEAN_PACK_SIZE; i++) {
+                    removeSlot(c, InventoryType.ETC, i);
                 }
-                player.yellowMessage("ETC Slot Cleared.");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message7"));
                 break;
             case "cash":
-                for (int i = 0; i < 101; i++) {
-                    Item tempItem = c.getPlayer().getInventory(InventoryType.CASH).getItem((byte) i);
-                    if (tempItem == null) {
-                        continue;
-                    }
-                    InventoryManipulator.removeFromSlot(c, InventoryType.CASH, (byte) i, tempItem.getQuantity(), false, false);
+            case "现金":
+                for (int i = 0; i < GameConstants.MAX_CLEAN_PACK_SIZE; i++) {
+                    removeSlot(c, InventoryType.CASH, i);
                 }
-                player.yellowMessage("Cash Slot Cleared.");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message8"));
                 break;
             default:
-                player.yellowMessage("Slot" + type + " does not exist!");
+                player.yellowMessage(I18nUtil.getMessage("ClearSlotCommand.message9", type));
                 break;
         }
+    }
+
+    private void removeSlot(Client c, InventoryType type, int slot) {
+        Item tempItem = c.getPlayer().getInventory(type).getItem((byte) slot);
+        if (tempItem == null) {
+            return;
+        }
+        InventoryManipulator.removeFromSlot(c, type, (byte) slot, tempItem.getQuantity(), false, false);
     }
 }

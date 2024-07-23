@@ -685,4 +685,6 @@ public class GameConstants {
         byte[] d2 = Base64.getDecoder().decode(e2);
         return new Pair<>(d1, d2);
     }
+
+    public static final int MAX_CLEAN_PACK_SIZE = 101;
 }

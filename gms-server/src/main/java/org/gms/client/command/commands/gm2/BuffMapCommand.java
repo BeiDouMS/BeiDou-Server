@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.SkillFactory;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class BuffMapCommand extends Command {
     {
-        setDescription("Give GM buffs to the whole map.");
+        setDescription(I18nUtil.getMessage("BuffMapCommand.message1"));
     }
 
     @Override
