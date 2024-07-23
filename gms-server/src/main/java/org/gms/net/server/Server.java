@@ -1647,6 +1647,13 @@ public class Server {
     }
 
     public boolean isNextTime() {
+        if (nextTime == 0) {
+            Random random = new Random();
+            int base = 1;
+            int ran = random.nextInt(4);
+            nextTime = 86400000 * (base + ran);
+            return false;
+        }
         if (nextTime > System.currentTimeMillis()) {
             return false;
         }

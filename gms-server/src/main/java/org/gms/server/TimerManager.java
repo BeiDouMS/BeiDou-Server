@@ -21,6 +21,7 @@
 */
 package org.gms.server;
 
+import lombok.Getter;
 import org.gms.net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +39,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class TimerManager implements TimerManagerMBean {
     private static final Logger log = LoggerFactory.getLogger(TimerManager.class);
+    @Getter
     private static final TimerManager instance = new TimerManager();
-
-    public static TimerManager getInstance() {
-        return instance;
-    }
 
     private ScheduledThreadPoolExecutor ses;
 
@@ -91,15 +89,22 @@ public class TimerManager implements TimerManagerMBean {
     }
 
     public ScheduledFuture<?> register(Runnable r, long repeatTime, long delay) {
-        return ses.scheduleAtFixedRate(new LoggingSaveRunnable(r), delay, repeatTime, MILLISECONDS);
+        return ses.scheduleAtFixedRate(new TimerRunner(r), delay, repeatTime, MILLISECONDS);
     }
 
     public ScheduledFuture<?> register(Runnable r, long repeatTime) {
-        return ses.scheduleAtFixedRate(new LoggingSaveRunnable(r), 0, repeatTime, MILLISECONDS);
+        return ses.scheduleAtFixedRate(new TimerRunner(r), 0, repeatTime, MILLISECONDS);
+    }
+
+    public ScheduledFuture<?> update(ScheduledFuture<?> sf, Runnable r, long repeatTime) {
+        if (sf != null && !sf.isCancelled()) {
+            sf.cancel(false);
+        }
+        return ses.scheduleAtFixedRate(new TimerRunner(r), 0, repeatTime, MILLISECONDS);
     }
 
     public ScheduledFuture<?> schedule(Runnable r, long delay) {
-        return ses.schedule(new LoggingSaveRunnable(r), delay, MILLISECONDS);
+        return ses.schedule(new TimerRunner(r), delay, MILLISECONDS);
     }
 
     public ScheduledFuture<?> scheduleAtTimestamp(Runnable r, long timestamp) {
@@ -131,16 +136,15 @@ public class TimerManager implements TimerManagerMBean {
         return ses.isShutdown();
     }
 
-    @Override
     public boolean isTerminated() {
         return ses.isTerminated();
     }
 
 
-    private static class LoggingSaveRunnable implements Runnable {
+    private static class TimerRunner implements Runnable {
         Runnable r;
 
-        public LoggingSaveRunnable(Runnable r) {
+        public TimerRunner(Runnable r) {
             this.r = r;
         }
 
