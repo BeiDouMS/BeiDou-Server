@@ -422,9 +422,9 @@ public class CommandsExecutor {
         addCommand("job", 2, JobCommand.class);
         addCommand("unbug", 2, UnBugCommand.class);
         addCommand("id", 2, IdCommand.class);
-        addCommand("gachalist", GachaListCommand.class);
-        addCommand("loot", LootCommand.class);
-        addCommand("mobskill", MobSkillCommand.class);
+        addCommand("gachalist", 2, GachaListCommand.class);
+        addCommand("loot", 2, LootCommand.class);
+        addCommand("mobskill", 2, MobSkillCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
