@@ -33,6 +33,7 @@ import client.command.commands.gm0.FmCommand;
 import client.command.commands.gm0.GachaCommand;
 import client.command.commands.gm0.GmCommand;
 import client.command.commands.gm0.HelpCommand;
+import client.command.commands.gm0.InfoCommand;
 import client.command.commands.gm0.JoinEventCommand;
 import client.command.commands.gm0.LeaveEventCommand;
 import client.command.commands.gm0.MapOwnerClaimCommand;
@@ -372,6 +373,7 @@ public class CommandsExecutor {
         addCommand("mobhp", MobHpCommand.class);
         addCommand("fm", FmCommand.class);
         addCommand("ui", UICommand.class);
+        addCommand("info", InfoCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
