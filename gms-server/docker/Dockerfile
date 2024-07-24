@@ -19,7 +19,7 @@ ENV LC_ALL=zh_CN.UTF-8
 WORKDIR /opt/server
 
 # Any changes to the pom will affect the entire build, so it should be copied first.
-COPY ./pom.xml ./pom.xml
+COPY ../pom.xml ./pom.xml
 
 # Grab all the dependencies listed in the pom early, since it prevents changes to source code from requiring a complete re-download.
 # Skip compiling tests since we don't want all the dependencies to be downloaded.

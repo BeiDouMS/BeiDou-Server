@@ -2,8 +2,8 @@ version: '3'
 services:
   maplestory:
     build:
-      context: .
-      dockerfile: gms-server/Dockerfile
+      context: ./
+      dockerfile: ./Dockerfile
     depends_on:
       - db
     ports:
