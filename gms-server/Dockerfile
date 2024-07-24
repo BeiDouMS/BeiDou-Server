@@ -19,7 +19,7 @@ ENV LC_ALL=zh_CN.UTF-8
 WORKDIR /opt/server
 
 # Any changes to the pom will affect the entire build, so it should be copied first.
-COPY ../pom.xml ./pom.xml
+COPY ./pom.xml ./pom.xml
 
 # Grab all the dependencies listed in the pom early, since it prevents changes to source code from requiring a complete re-download.
 # Skip compiling tests since we don't want all the dependencies to be downloaded.
@@ -30,9 +30,12 @@ COPY ../pom.xml ./pom.xml
 
 # Source code changes may not change dependencies, so it can go last.
 # Skip compiling tests since we don't want all the dependecies to be downloaded for plugins.
-COPY ../src ./src
+# COPY ../src ./src
+COPY ./gms-server/src ./gms-server/src
+COPY ./gms-server/pom.xml ./gms-server/pom.xml
 
-RUN mvn clean package
+RUN mvn clean package -U
+# RUN mvn clean install -U
 
 #########################
 # Server creation stage #
@@ -44,6 +47,6 @@ RUN mvn clean package
 # Default exposure, although not required if using docker compose.
 # This exposes the login server, and channels.
 # Format for channels: WWCC, where WW is 75 plus the world number and CC is 75 plus the channel number (both zero indexed).
-EXPOSE 8484 7575 7576 7577
+EXPOSE 8686 8484 7575 7576 7577
 
-ENTRYPOINT ["java", "-jar", "./target/BeiDou.jar"]
+ENTRYPOINT ["java", "-jar", "./gms-server/target/BeiDou.jar", "--spring.config.location=./application.yml"]
