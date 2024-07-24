@@ -53,7 +53,7 @@ public final class MonsterBook {
         }
     }
 
-    public void addCard(final Client c, final int cardid) {
+    public boolean addCard(final Client c, final int cardid) {
         c.getPlayer().getMap().broadcastMessage(c.getPlayer(), PacketCreator.showForeignCardEffect(c.getPlayer().getId()), false);
 
         Integer qty;
@@ -86,8 +86,10 @@ public final class MonsterBook {
 
             c.sendPacket(PacketCreator.addCard(false, cardid, qty + 1));
             c.sendPacket(PacketCreator.showGainCard());
+            return true;
         } else {
             c.sendPacket(PacketCreator.addCard(true, cardid, 5));
+            return false;
         }
     }
 

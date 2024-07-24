@@ -92,6 +92,11 @@ public final class UseItemHandler extends AbstractPacketHandler {
                     chr.dropMessage(5, "You cannot recover from a banish state at the moment.");
                 }
                 return;
+            } else if (ItemId.isMonsterCard(itemId)) {
+                if (!chr.getMonsterBook().addCard(c, itemId)) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    return;
+                }
             }
 
             remove(c, slot);
