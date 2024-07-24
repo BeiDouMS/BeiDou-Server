@@ -19,7 +19,7 @@ public class MapId {
     public static final int FM_ENTRANCE = 910000000;
 
     // Beginner
-    public static final int MUSHROOM_TOWN = 10000;
+    public static final int MUSHROOM_TOWN = 0;
 
     // Town
     public static final int SOUTHPERRY = 2000000;
