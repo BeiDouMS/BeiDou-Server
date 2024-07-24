@@ -2,9 +2,8 @@ version: '3'
 services:
   maplestory:
     build:
-      context: ..
-      dockerfile: docker/Dockerfile
-    network_mode: "host"
+      context: .
+      dockerfile: gms-server/Dockerfile
     depends_on:
       - db
     ports:
@@ -18,10 +17,14 @@ services:
     volumes:
       # Config changes can be reloaded without rebuilding the image.
       # Still requires a redeployment as they're sourced on startup.
-      - ../scripts:/opt/server/scripts
-      - ../scripts-zh-CN:/opt/server/scripts-zh-CN
-      - ../wz:/opt/server/wz
-      - ../wz-zh-CN:/opt/server/wz-zh-CN
+      - ./gms-server/scripts:/opt/server/scripts
+      - ./gms-server/scripts-zh-CN:/opt/server/scripts-zh-CN
+      - ./gms-server/wz:/opt/server/wz
+      - ./gms-server/wz-zh-CN:/opt/server/wz-zh-CN
+      - ./gms-server/docker/application.yml:/opt/server/application.yml
+    environment:
+      MYSQL_HOST: "db"
+      MYSQL_PORT: "3306"
 
   db:
     image: mysql:8.4.0
@@ -29,3 +32,5 @@ services:
       MYSQL_ROOT_PASSWORD: "root"
     ports:
       - "3306:3306"
+    volumes:
+      - ./gms-server/docker/docker-db-data:/var/lib/mysql
