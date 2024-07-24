@@ -32,10 +32,11 @@ import org.gms.client.command.Command;
 import org.gms.provider.Data;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
+import org.gms.util.I18nUtil;
 
 public class MaxSkillCommand extends Command {
     {
-        setDescription("Max out all job skills.");
+        setDescription(I18nUtil.getMessage("MaxSkillCommand.message1"));
     }
 
     @Override
@@ -60,6 +61,6 @@ public class MaxSkillCommand extends Command {
             player.changeSkillLevel(skill, (byte) -1, -1, -1);
         }
 
-        player.yellowMessage("Skills maxed out.");
+        player.yellowMessage(I18nUtil.getMessage("MaxSkillCommand.message2"));
     }
 }

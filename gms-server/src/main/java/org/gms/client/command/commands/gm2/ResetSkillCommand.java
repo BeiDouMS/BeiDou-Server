@@ -32,10 +32,11 @@ import org.gms.client.command.Command;
 import org.gms.provider.Data;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.wz.WZFiles;
+import org.gms.util.I18nUtil;
 
 public class ResetSkillCommand extends Command {
     {
-        setDescription("Set all skill levels to 0.");
+        setDescription(I18nUtil.getMessage("ResetSkillCommand.message1"));
     }
 
     @Override
@@ -60,6 +61,6 @@ public class ResetSkillCommand extends Command {
             player.changeSkillLevel(skill, (byte) -1, -1, -1);
         }
 
-        player.yellowMessage("Skills reseted.");
+        player.yellowMessage(I18nUtil.getMessage("ResetSkillCommand.message2"));
     }
 }

@@ -32,12 +32,13 @@ import org.gms.client.inventory.Pet;
 import org.gms.config.YamlConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
 public class ItemDropCommand extends Command {
     {
-        setDescription("Spawn an item onto the ground.");
+        setDescription(I18nUtil.getMessage("ItemDropCommand.message1"));
     }
 
     @Override
@@ -45,7 +46,7 @@ public class ItemDropCommand extends Command {
         Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !drop <itemid> <quantity>");
+            player.yellowMessage(I18nUtil.getMessage("ItemDropCommand.message2"));
             return;
         }
 
@@ -53,7 +54,7 @@ public class ItemDropCommand extends Command {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         if (ii.getName(itemId) == null) {
-            player.yellowMessage("Item id '" + params[0] + "' does not exist.");
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
 
@@ -63,7 +64,7 @@ public class ItemDropCommand extends Command {
         }
 
         if (YamlConfig.config.server.BLOCK_GENERATE_CASH_ITEM && ii.isCash(itemId)) {
-            player.yellowMessage("You cannot create a cash item with this command.");
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message4"));
             return;
         }
 
@@ -92,7 +93,7 @@ public class ItemDropCommand extends Command {
 
                 return;
             } else {
-                player.yellowMessage("Pet Syntax: !drop <itemid> <expiration>");
+                player.yellowMessage(I18nUtil.getMessage("ItemDropCommand.message3"));
                 return;
             }
         }

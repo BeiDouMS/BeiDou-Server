@@ -26,17 +26,18 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class SetSlotCommand extends Command {
     {
-        setDescription("Set amount of inventory slots in all tabs.");
+        setDescription(I18nUtil.getMessage("SetSlotCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !setslot <newlevel>");
+            player.yellowMessage(I18nUtil.getMessage("SetSlotCommand.message2"));
             return;
         }
 
@@ -50,6 +51,6 @@ public class SetSlotCommand extends Command {
             player.gainSlots(i, slots - curSlots, true);
         }
 
-        player.yellowMessage("Slots updated.");
+        player.yellowMessage(I18nUtil.getMessage("SetSlotCommand.message3"));
     }
 }

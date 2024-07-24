@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.maps.SavedLocationType;
+import org.gms.util.I18nUtil;
 
 public class ClearSavedLocationsCommand extends Command {
     {
-        setDescription("Clear saved locations for a player.");
+        setDescription(I18nUtil.getMessage("ClearSavedLocationsCommand.message1"));
     }
 
     @Override
@@ -40,7 +41,7 @@ public class ClearSavedLocationsCommand extends Command {
         if (params.length > 0) {
             victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
             if (victim == null) {
-                player.message("Player '" + params[0] + "' could not be found.");
+                player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
                 return;
             }
         } else {
@@ -51,6 +52,6 @@ public class ClearSavedLocationsCommand extends Command {
             victim.clearSavedLocation(type);
         }
 
-        player.message("Cleared " + params[0] + "'s saved locations.");
+        player.message(I18nUtil.getMessage("ClearSavedLocationsCommand.message2", params[0]));
     }
 }

@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class HealCommand extends Command {
     {
-        setDescription("Fully heal your HP/MP.");
+        setDescription(I18nUtil.getMessage("HealCommand.message1"));
     }
 
     @Override

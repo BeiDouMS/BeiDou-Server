@@ -34,6 +34,7 @@ import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.quest.Quest;
+import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
 public class SearchCommand extends Command {
@@ -43,7 +44,7 @@ public class SearchCommand extends Command {
     private static Data mapStringData;
 
     {
-        setDescription("Search String.wz.");
+        setDescription(I18nUtil.getMessage("SearchCommand.message1"));
 
         DataProvider dataProvider = DataProviderFactory.getDataProvider(WZFiles.STRING);
         npcStringData = dataProvider.getData("Npc.img");
@@ -56,7 +57,7 @@ public class SearchCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 2) {
-            player.yellowMessage("Syntax: !search <type> <name>");
+            player.yellowMessage(I18nUtil.getMessage("SearchCommand.message2"));
             return;
         }
         StringBuilder sb = new StringBuilder();
@@ -64,75 +65,89 @@ public class SearchCommand extends Command {
         String search = joinStringFrom(params, 1);
         long start = System.currentTimeMillis();//for the lulz
         Data data = null;
-        if (!params[0].equalsIgnoreCase("ITEM")) {
-            int searchType = 0;
+        int searchType = 0;
 
-            if (params[0].equalsIgnoreCase("NPC")) {
+        switch (params[0].toUpperCase()) {
+            case "ITEM":
+            case "物品":
+                searchType = -1;
+                break;
+            case "NPC":
                 data = npcStringData;
-            } else if (params[0].equalsIgnoreCase("MOB") || params[0].equalsIgnoreCase("MONSTER")) {
+                break;
+            case "MOB":
+            case "MONSTER":
+            case "怪物":
                 data = mobStringData;
-            } else if (params[0].equalsIgnoreCase("SKILL")) {
+                break;
+            case "SKILL":
+            case "技能":
                 data = skillStringData;
-            } else if (params[0].equalsIgnoreCase("MAP")) {
+                break;
+            case "MAP":
+            case "地图":
                 data = mapStringData;
                 searchType = 1;
-            } else if (params[0].equalsIgnoreCase("QUEST")) {
+                break;
+            case "QUEST":
+            case "任务":
                 data = mapStringData;
                 searchType = 2;
-            } else {
-                sb.append("#bInvalid search.\r\nSyntax: '!search [type] [name]', where [type] is MAP, QUEST, NPC, ITEM, MOB, or SKILL.");
-            }
-            if (data != null) {
-                String name;
+                break;
+            default:
+                sb.append("#b").append(I18nUtil.getMessage("SearchCommand.message3")).append("\r\n").append(I18nUtil.getMessage("SearchCommand.message4"));
+                break;
+        }
 
-                if (searchType == 0) {
-                    for (Data searchData : data.getChildren()) {
-                        name = DataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
-                        if (name.toLowerCase().contains(search.toLowerCase())) {
-                            sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(name).append("\r\n");
-                        }
-                    }
-                } else if (searchType == 1) {
-                    String mapName, streetName;
-
-                    for (Data searchDataDir : data.getChildren()) {
-                        for (Data searchData : searchDataDir.getChildren()) {
-                            mapName = DataTool.getString(searchData.getChildByPath("mapName"), "NO-NAME");
-                            streetName = DataTool.getString(searchData.getChildByPath("streetName"), "NO-NAME");
-
-                            if (mapName.toLowerCase().contains(search.toLowerCase()) || streetName.toLowerCase().contains(search.toLowerCase())) {
-                                sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(streetName).append(" - ").append(mapName).append("\r\n");
-                            }
-                        }
-                    }
-                } else {
-                    for (Quest mq : Quest.getMatchedQuests(search)) {
-                        sb.append("#b").append(mq.getId()).append("#k - #r");
-
-                        String parentName = mq.getParentName();
-                        if (!parentName.isEmpty()) {
-                            sb.append(parentName).append(" - ");
-                        }
-                        sb.append(mq.getName()).append("\r\n");
+        if (data != null) {
+            String name;
+            if (searchType == 0) {
+                for (Data searchData : data.getChildren()) {
+                    name = DataTool.getString(searchData.getChildByPath("name"), "NO-NAME");
+                    if (name.toLowerCase().contains(search.toLowerCase())) {
+                        sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(name).append("\r\n");
                     }
                 }
+            } else if (searchType == 1) {
+                String mapName, streetName;
+
+                for (Data searchDataDir : data.getChildren()) {
+                    for (Data searchData : searchDataDir.getChildren()) {
+                        mapName = DataTool.getString(searchData.getChildByPath("mapName"), "NO-NAME");
+                        streetName = DataTool.getString(searchData.getChildByPath("streetName"), "NO-NAME");
+
+                        if (mapName.toLowerCase().contains(search.toLowerCase()) || streetName.toLowerCase().contains(search.toLowerCase())) {
+                            sb.append("#b").append(Integer.parseInt(searchData.getName())).append("#k - #r").append(streetName).append(" - ").append(mapName).append("\r\n");
+                        }
+                    }
+                }
+            } else {
+                for (Quest mq : Quest.getMatchedQuests(search)) {
+                    sb.append("#b").append(mq.getId()).append("#k - #r");
+
+                    String parentName = mq.getParentName();
+                    if (!parentName.isEmpty()) {
+                        sb.append(parentName).append(" - ");
+                    }
+                    sb.append(mq.getName()).append("\r\n");
+                }
             }
-        } else {
+        } else if (searchType == -1) {
             for (Pair<Integer, String> itemPair : ItemInformationProvider.getInstance().getAllItems()) {
                 if (sb.length() < 32654) {//ohlol
                     if (itemPair.getRight().toLowerCase().contains(search.toLowerCase())) {
                         sb.append("#b").append(itemPair.getLeft()).append("#k - #r").append(itemPair.getRight()).append("\r\n");
                     }
                 } else {
-                    sb.append("#bCouldn't load all items, there are too many results.\r\n");
+                    sb.append("#b").append(I18nUtil.getMessage("SearchCommand.message5")).append("\r\n");
                     break;
                 }
             }
         }
-        if (sb.length() == 0) {
-            sb.append("#bNo ").append(params[0].toLowerCase()).append("s found.\r\n");
+        if (sb.isEmpty()) {
+            sb.append("#b").append(I18nUtil.getMessage("SearchCommand.message6", params[0])).append("\r\n");
         }
-        sb.append("\r\n#kLoaded within ").append((double) (System.currentTimeMillis() - start) / 1000).append(" seconds.");//because I can, and it's free
+        sb.append("\r\n#k").append(I18nUtil.getMessage("SearchCommand.message7", (System.currentTimeMillis() - start) / 1000D));//because I can, and it's free
 
         c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, sb.toString());
     }

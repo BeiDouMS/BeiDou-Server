@@ -34,9 +34,7 @@
         <mainClass>org.gms.ServerApplication</mainClass>
 
         <!-- Maven plugins -->
-        <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version> <!-- For running unit tests -->
-        <maven-jar-plugin.version>3.4.1</maven-jar-plugin.version> <!-- Disabled. (for building thin jar) -->
-        <maven-assembly-plugin.version>3.7.1</maven-assembly-plugin.version> <!-- For packaging the executable fat jar -->
+        <spring-boot-maven-plugin>3.3.1</spring-boot-maven-plugin> <!-- Disabled. (for building thin jar) -->
 
         <!-- Dependencies -->
         <graalvm-js.version>23.0.4</graalvm-js.version>
@@ -232,11 +230,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-maven-plugin}</version>
                 <executions>
                     <execution>
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                        <configuration>
+                            <mainClass>${mainClass}</mainClass>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

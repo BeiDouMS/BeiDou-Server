@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.Stat;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class MaxStatCommand extends Command {
     {
-        setDescription("Max out all character stats.");
+        setDescription(I18nUtil.getMessage("MaxStatCommand.message1"));
     }
 
     @Override
@@ -49,6 +50,6 @@ public class MaxStatCommand extends Command {
         player.updateMaxHpMaxMp(30000, 30000);
         player.updateSingleStat(Stat.LEVEL, 255);
         player.updateSingleStat(Stat.FAME, 13337);
-        player.yellowMessage("Stats maxed out.");
+        player.yellowMessage(I18nUtil.getMessage("MaxStatCommand.message2"));
     }
 }

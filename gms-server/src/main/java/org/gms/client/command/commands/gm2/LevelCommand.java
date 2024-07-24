@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class LevelCommand extends Command {
     {
-        setDescription("Set your level.");
+        setDescription(I18nUtil.getMessage("LevelCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !level <newlevel>");
+            player.yellowMessage(I18nUtil.getMessage("LevelCommand.message2"));
             return;
         }
 

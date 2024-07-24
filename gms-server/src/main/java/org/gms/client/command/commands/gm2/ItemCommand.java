@@ -31,12 +31,13 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.YamlConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
 public class ItemCommand extends Command {
     {
-        setDescription("Spawn an item into your inventory.");
+        setDescription(I18nUtil.getMessage("ItemCommand.message1"));
     }
 
     @Override
@@ -44,7 +45,7 @@ public class ItemCommand extends Command {
         Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !item <itemid> <quantity>");
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message2"));
             return;
         }
 
@@ -52,7 +53,7 @@ public class ItemCommand extends Command {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         if (ii.getName(itemId) == null) {
-            player.yellowMessage("Item id '" + params[0] + "' does not exist.");
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message3", params[0]));
             return;
         }
 
@@ -62,7 +63,7 @@ public class ItemCommand extends Command {
         }
 
         if (YamlConfig.config.server.BLOCK_GENERATE_CASH_ITEM && ii.isCash(itemId)) {
-            player.yellowMessage("You cannot create a cash item with this command.");
+            player.yellowMessage(I18nUtil.getMessage("ItemCommand.message4"));
             return;
         }
 
@@ -76,7 +77,7 @@ public class ItemCommand extends Command {
                 InventoryManipulator.addById(c, itemId, quantity, player.getName(), petid, expiration);
                 return;
             } else {
-                player.yellowMessage("Pet Syntax: !item <itemid> <expiration>");
+                player.yellowMessage(I18nUtil.getMessage("ItemCommand.message5"));
                 return;
             }
         }

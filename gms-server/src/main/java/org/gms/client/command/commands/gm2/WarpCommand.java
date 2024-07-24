@@ -29,35 +29,36 @@ import org.gms.client.command.Command;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeonInfo;
+import org.gms.util.I18nUtil;
 
 public class WarpCommand extends Command {
     {
-        setDescription("Warp to a map.");
+        setDescription(I18nUtil.getMessage("WarpCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !warp <mapid>");
+            player.yellowMessage(I18nUtil.getMessage("WarpCommand.message2"));
             return;
         }
 
         try {
             MapleMap target = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(params[0]));
             if (target == null) {
-                player.yellowMessage("Map ID " + params[0] + " is invalid.");
+                player.yellowMessage(I18nUtil.getMessage("WarpCommand.message3", params[0]));
                 return;
             }
 
             if (!player.isAlive()) {
-                player.dropMessage(1, "This command cannot be used when you're dead.");
+                player.dropMessage(1, I18nUtil.getMessage("WarpCommand.message4"));
                 return;
             }
 
             if (!player.isGM()) {
                 if (player.getEventInstance() != null || MiniDungeonInfo.isDungeonMap(player.getMapId()) || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
-                    player.dropMessage(1, "This command cannot be used in this map.");
+                    player.dropMessage(1, I18nUtil.getMessage("WarpCommand.message5"));
                     return;
                 }
             }
@@ -66,7 +67,7 @@ public class WarpCommand extends Command {
             player.saveLocationOnWarp();
             player.changeMap(target, target.getRandomPlayerSpawnpoint());
         } catch (Exception ex) {
-            player.yellowMessage("Map ID " + params[0] + " is invalid.");
+            player.yellowMessage(I18nUtil.getMessage("WarpCommand.message3", params[0]));
         }
     }
 }

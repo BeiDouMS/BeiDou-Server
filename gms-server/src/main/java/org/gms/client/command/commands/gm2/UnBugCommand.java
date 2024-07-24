@@ -25,11 +25,12 @@ package org.gms.client.command.commands.gm2;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class UnBugCommand extends Command {
     {
-        setDescription("Unbug self.");
+        setDescription(I18nUtil.getMessage("UnBugCommand.message1"));
     }
 
     @Override

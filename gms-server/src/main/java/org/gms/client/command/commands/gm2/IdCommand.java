@@ -7,6 +7,7 @@ import org.gms.constants.game.NpcChat;
 import org.gms.constants.id.NpcId;
 import org.gms.server.ThreadManager;
 import org.gms.exception.IdTypeNotSupportedException;
+import org.gms.util.I18nUtil;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 
 public class IdCommand extends Command {
     {
-        setDescription("Search in handbook.");
+        setDescription(I18nUtil.getMessage("IdCommand.message1"));
     }
     private final static int MAX_SEARCH_HITS = 100;
     private final Map<String, String> handbookDirectory = typeFilePaths();
@@ -89,13 +90,13 @@ public class IdCommand extends Command {
     public void execute(Client client, final String[] params) {
         final Character chr = client.getPlayer();
         if (params.length < 2) {
-            chr.yellowMessage("Syntax: !id <type> <query>");
+            chr.yellowMessage(I18nUtil.getMessage("IdCommand.message2"));
             return;
         }
         final String type = params[0].toLowerCase();
         final String[] queryItems = Arrays.copyOfRange(params, 1, params.length);
         final String query = String.join(" ", queryItems);
-        chr.yellowMessage("Querying for entry... May take some time... Please try to refine your search.");
+        chr.yellowMessage(I18nUtil.getMessage("IdCommand.message3"));
         Runnable queryRunnable = () -> {
             try {
                 populateIdMap(type);
@@ -109,19 +110,19 @@ public class IdCommand extends Command {
                 if (!searchHits.isEmpty()) {
                     String searchHitsText = searchHits.stream()
                             .limit(MAX_SEARCH_HITS)
-                            .map(item -> "Id for %s is: #b%s#k".formatted(item.name, item.id))
+                            .map(item -> I18nUtil.getMessage("IdCommand.message4", item.id, item.name))
                             .collect(Collectors.joining(NpcChat.NEW_LINE));
                     int hitsCount = Math.min(searchHits.size(), MAX_SEARCH_HITS);
-                    String summaryText = "Results found: #r%d#k | Returned: #b%d#k/100 | Refine search query to improve time.".formatted(searchHits.size(), hitsCount);
+                    String summaryText = I18nUtil.getMessage("IdCommand.message5", searchHits.size(), hitsCount);
                     String fullText = searchHitsText + NpcChat.NEW_LINE + summaryText;
                     chr.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, fullText);
                 } else {
-                    chr.yellowMessage(String.format("Id not found for item: %s, of type: %s.", query, type));
+                    chr.yellowMessage(I18nUtil.getMessage("IdCommand.message6", query, type));
                 }
             } catch (IdTypeNotSupportedException e) {
-                chr.yellowMessage("Your query type is not supported.");
+                chr.yellowMessage(I18nUtil.getMessage("IdCommand.message7"));
             } catch (IOException e) {
-                chr.yellowMessage("Error reading file, please contact your administrator.");
+                chr.yellowMessage(I18nUtil.getMessage("IdCommand.message8"));
             }
         };
 

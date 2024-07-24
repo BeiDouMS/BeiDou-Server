@@ -6,19 +6,22 @@ import org.gms.client.command.Command;
 import org.gms.server.life.MobSkill;
 import org.gms.server.life.MobSkillFactory;
 import org.gms.server.life.MobSkillType;
+import org.gms.util.I18nUtil;
 
 import java.util.Collections;
 import java.util.Optional;
 
 public class MobSkillCommand extends Command {
     {
-        setDescription("Apply a mob skill to all mobs on the map. Args: <mob skill id> <skill level>");
+        setDescription(I18nUtil.getMessage("MobSkillCommand.message1"));
     }
 
     @Override
     public void execute(Client client, String[] params) {
+        Character chr = client.getPlayer();
         if (params.length < 2) {
-            throw new IllegalArgumentException("Mob skill command requires two args: mob skill id and level");
+            chr.message(I18nUtil.getMessage("MobSkillCommand.message2"));
+            return;
         }
 
         String skillId = params[0];
@@ -31,7 +34,6 @@ public class MobSkillCommand extends Command {
             return;
         }
 
-        Character chr = client.getPlayer();
         MobSkill mobSkill = possibleSkill.get();
         chr.getMap().getAllMonsters().forEach(
                 monster -> mobSkill.applyEffect(chr, monster, false, Collections.emptyList())

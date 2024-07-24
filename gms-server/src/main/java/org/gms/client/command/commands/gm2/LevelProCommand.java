@@ -26,17 +26,18 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class LevelProCommand extends Command {
     {
-        setDescription("Set your level, one by one.");
+        setDescription(I18nUtil.getMessage("LevelProCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !levelpro <newlevel>");
+            player.yellowMessage(I18nUtil.getMessage("LevelProCommand.message2"));
             return;
         }
         while (player.getLevel() < Math.min(player.getMaxClassLevel(), Integer.parseInt(params[0]))) {

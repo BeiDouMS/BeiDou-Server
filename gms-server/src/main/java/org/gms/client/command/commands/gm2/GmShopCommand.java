@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.ShopFactory;
+import org.gms.util.I18nUtil;
 
 public class GmShopCommand extends Command {
     {
-        setDescription("Open the GM shop.");
+        setDescription(I18nUtil.getMessage("GmShopCommand.message1"));
     }
 
     @Override

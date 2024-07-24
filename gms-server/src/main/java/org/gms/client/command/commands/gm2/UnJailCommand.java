@@ -26,31 +26,32 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class UnJailCommand extends Command {
     {
-        setDescription("Free a player from jail.");
+        setDescription(I18nUtil.getMessage("UnJailCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !unjail <playername>");
+            player.yellowMessage(I18nUtil.getMessage("UnJailCommand.message2"));
             return;
         }
 
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             if (victim.getJailExpirationTimeLeft() <= 0) {
-                player.message("This player is already free.");
+                player.message(I18nUtil.getMessage("UnJailCommand.message3"));
                 return;
             }
             victim.removeJailExpirationTime();
-            victim.message("By lack of concrete proof you are now unjailed. Enjoy freedom!");
-            player.message(victim.getName() + " was unjailed.");
+            victim.message(I18nUtil.getMessage("UnJailCommand.message4"));
+            player.message(I18nUtil.getMessage("UnJailCommand.message5", victim.getName()));
         } else {
-            player.message("Player '" + params[0] + "' could not be found.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

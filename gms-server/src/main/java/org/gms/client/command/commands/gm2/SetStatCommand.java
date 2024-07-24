@@ -26,17 +26,18 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class SetStatCommand extends Command {
     {
-        setDescription("Set all primary stats to new value.");
+        setDescription(I18nUtil.getMessage("SetStatCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !setstat <newstat>");
+            player.yellowMessage(I18nUtil.getMessage("SetStatCommand.message2"));
             return;
         }
 

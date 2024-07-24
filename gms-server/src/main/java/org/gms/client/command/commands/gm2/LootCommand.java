@@ -28,6 +28,7 @@ import org.gms.client.command.Command;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
+import org.gms.util.I18nUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
 public class LootCommand extends Command {
 
     {
-        setDescription("Loots all items that belong to you.");
+        setDescription(I18nUtil.getMessage("LootCommand.message1"));
     }
 
     @Override

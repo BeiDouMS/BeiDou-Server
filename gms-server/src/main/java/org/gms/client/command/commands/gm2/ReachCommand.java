@@ -27,31 +27,32 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 public class ReachCommand extends Command {
     {
-        setDescription("Warp to a player.");
+        setDescription(I18nUtil.getMessage("ReachCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !reach <playername>");
+            player.yellowMessage(I18nUtil.getMessage("ReachCommand.message2"));
             return;
         }
 
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null && victim.isLoggedin()) {
             if (player.getClient().getChannel() != victim.getClient().getChannel()) {
-                player.dropMessage(5, "Player '" + victim.getName() + "' is at channel " + victim.getClient().getChannel() + ".");
+                player.dropMessage(5, I18nUtil.getMessage("ReachCommand.message3"));
             } else {
                 MapleMap map = victim.getMap();
                 player.saveLocationOnWarp();
                 player.forceChangeMap(map, map.findClosestPortal(victim.getPosition()));
             }
         } else {
-            player.dropMessage(6, "Unknown player.");
+            player.dropMessage(6, I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

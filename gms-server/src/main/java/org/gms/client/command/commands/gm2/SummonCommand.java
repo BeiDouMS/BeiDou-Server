@@ -29,17 +29,18 @@ import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 public class SummonCommand extends Command {
     {
-        setDescription("Move a player to your location.");
+        setDescription(I18nUtil.getMessage("SummonCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !warphere <playername>");
+            player.yellowMessage(I18nUtil.getMessage("SummonCommand.message2"));
             return;
         }
 
@@ -56,12 +57,12 @@ public class SummonCommand extends Command {
         }
         if (victim != null) {
             if (!victim.isLoggedinWorld()) {
-                player.dropMessage(6, "Player currently not logged in or unreachable.");
+                player.dropMessage(6, I18nUtil.getMessage("SummonCommand.message3"));
                 return;
             }
 
             if (player.getClient().getChannel() != victim.getClient().getChannel()) {//And then change channel if needed.
-                victim.dropMessage("Changing channel, please wait a moment.");
+                victim.dropMessage(I18nUtil.getMessage("SummonCommand.message4"));
                 victim.getClient().changeChannel(player.getClient().getChannel());
             }
 
@@ -79,7 +80,7 @@ public class SummonCommand extends Command {
             victim.saveLocationOnWarp();
             victim.forceChangeMap(map, map.findClosestPortal(player.getPosition()));
         } else {
-            player.dropMessage(6, "Unknown player.");
+            player.dropMessage(6, I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Job;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class JobCommand extends Command {
     {
-        setDescription("Change job of a player.");
+        setDescription(I18nUtil.getMessage("JobCommand.message1"));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class JobCommand extends Command {
         if (params.length == 1) {
             int jobid = Integer.parseInt(params[0]);
             if (jobid < 0 || jobid >= 2200) {
-                player.message("Jobid " + jobid + " is not available.");
+                player.message(I18nUtil.getMessage("JobCommand.message2", jobid));
                 return;
             }
 
@@ -51,17 +52,17 @@ public class JobCommand extends Command {
             if (victim != null) {
                 int jobid = Integer.parseInt(params[1]);
                 if (jobid < 0 || jobid >= 2200) {
-                    player.message("Jobid " + jobid + " is not available.");
+                    player.message(I18nUtil.getMessage("JobCommand.message2", jobid));
                     return;
                 }
 
                 victim.changeJob(Job.getById(jobid));
                 player.equipChanged();
             } else {
-                player.message("Player '" + params[0] + "' could not be found.");
+                player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             }
         } else {
-            player.message("Syntax: !job <job id> <opt: IGN of another person>");
+            player.message(I18nUtil.getMessage("JobCommand.message3"));
         }
     }
 }

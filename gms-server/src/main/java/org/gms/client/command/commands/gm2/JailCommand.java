@@ -29,19 +29,20 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.MapId;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Portal;
+import org.gms.util.I18nUtil;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 public class JailCommand extends Command {
     {
-        setDescription("Move a player to the jail.");
+        setDescription(I18nUtil.getMessage("JailCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !jail <playername> [<minutes>]");
+            player.yellowMessage(I18nUtil.getMessage("JailCommand.message2"));
             return;
         }
 
@@ -49,7 +50,7 @@ public class JailCommand extends Command {
         if (params.length >= 2) {
             minutesJailed = Integer.parseInt(params[1]);
             if (minutesJailed <= 0) {
-                player.yellowMessage("Syntax: !jail <playername> [<minutes>]");
+                player.yellowMessage(I18nUtil.getMessage("JailCommand.message2"));
                 return;
             }
         }
@@ -63,13 +64,13 @@ public class JailCommand extends Command {
                 Portal targetPortal = target.getPortal(0);
                 victim.saveLocation("JAIL");
                 victim.changeMap(target, targetPortal);
-                player.message(victim.getName() + " was jailed for " + minutesJailed + " minutes.");
+                player.message(I18nUtil.getMessage("JailCommand.message3", victim.getName(), minutesJailed));
             } else {
-                player.message(victim.getName() + "'s time in jail has been extended for " + minutesJailed + " minutes.");
+                player.message(I18nUtil.getMessage("JailCommand.message4", victim.getName(), minutesJailed));
             }
 
         } else {
-            player.message("Player '" + params[0] + "' could not be found.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

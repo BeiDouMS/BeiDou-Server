@@ -21,13 +21,14 @@ package org.gms.client.command.commands.gm2;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 /**
  * @author Ronan
  */
 public class GachaListCommand extends Command {
     {
-        setDescription("Show gachapon rewards.");
+        setDescription(I18nUtil.getMessage("GachaListCommand.message1"));
     }
 
     @Override
