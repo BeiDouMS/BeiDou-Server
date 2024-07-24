@@ -1,4 +1,4 @@
-﻿var status;
+var status;
 var text;
 var column = new Array("装备", "消耗", "设置", "其他", "商城");
 var sel;
