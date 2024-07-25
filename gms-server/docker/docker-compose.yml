@@ -14,11 +14,11 @@ services:
       # Channels.
       - "7575-7577:7575-7577"
     volumes:
-      - ./gms-server/scripts:/opt/server/scripts
-      - ./gms-server/scripts-zh-CN:/opt/server/scripts-zh-CN
-      - ./gms-server/wz:/opt/server/wz
-      - ./gms-server/wz-zh-CN:/opt/server/wz-zh-CN
-      - ./gms-server/docker/application.yml:/opt/server/application.yml
+      - ../scripts:/opt/server/scripts
+      - ../scripts-zh-CN:/opt/server/scripts-zh-CN
+      - ../wz:/opt/server/wz
+      - ../wz-zh-CN:/opt/server/wz-zh-CN
+      - ./application.yml:/opt/server/application.yml
 
   db:
     image: mysql:8.4.0
@@ -27,4 +27,4 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./gms-server/docker/docker-db-data:/var/lib/mysql
+      - ./docker-db-data:/var/lib/mysql

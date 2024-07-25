@@ -28,4 +28,7 @@ docker compose start
 // wz位置
 // BeiDou/gms-server/wz-zh-CN
 // BeiDou/gms-server/wz
+
+// 数据库文件位置
+// BeiDou/gms-server/docker/docker-db-data/
 ```
