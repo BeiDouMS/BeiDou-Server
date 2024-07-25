@@ -56,6 +56,7 @@ import org.gms.server.maps.MapleMap;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.partyquest.Pyramid;
 import org.gms.server.quest.Quest;
+import org.gms.util.ExtendUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -1241,7 +1242,7 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getCharacterExtendValue(String extendName) {
-        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName);
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
@@ -1253,7 +1254,7 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getCharacterExtendValue(String extendName, boolean isDaily) {
-        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getId()),
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getId()),
                 isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
                 extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
@@ -1266,7 +1267,7 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getAccountExtendValue(String extendName) {
-        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName);
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
@@ -1278,60 +1279,27 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getAccountExtendValue(String extendName, boolean isDaily) {
-        ExtendValueDO extendValueDO = getExtendValue(String.valueOf(getPlayer().getAccountID()),
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountID()),
                 isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
                 extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
-    public void saveOrUpdateExtendValue(String extendId, String extendType, String extendName, String extendValue) {
-        ExtendValueDO extendValueDO = getExtendValue(extendId, extendType, extendName);
-        ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
-        if (extendValueDO == null) {
-            extendValueMapper.insertSelective(ExtendValueDO.builder()
-                    .extendId(extendId)
-                    .extendType(extendType)
-                    .extendName(extendName)
-                    .extendValue(extendValue)
-                    .createTime(new Date(System.currentTimeMillis()))
-                    .build());
-        } else {
-            extendValueDO.setCreateTime(null);
-            extendValueDO.setUpdateTime(new Date(System.currentTimeMillis()));
-            extendValueDO.setExtendValue(extendValue);
-            extendValueMapper.update(extendValueDO);
-        }
-    }
-
     public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue) {
-        saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName, extendValue);
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName, extendValue);
     }
 
     public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue, boolean isDaily) {
-        saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
     }
 
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue) {
-        saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
     }
 
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue, boolean isDaily) {
-        saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
-    }
-
-    /**
-     * 获取扩展表字段
-     *
-     * @param extendId   扩展字段id，对应角色id或账号id
-     * @param extendType 扩展字段类型
-     * @param extendName 扩展字段名
-     * @return 扩展字段
-     */
-    public ExtendValueDO getExtendValue(String extendId, String extendType, String extendName) {
-        ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
-        List<ExtendValueDO> list = extendValueMapper.selectExtend(extendId, extendType, extendName);
-        return list.isEmpty() ? null : list.getFirst();
     }
 }

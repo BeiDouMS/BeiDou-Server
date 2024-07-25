@@ -17,6 +17,7 @@ import org.gms.exception.BizException;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.util.BasePageUtil;
+import org.gms.util.ExtendUtil;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
@@ -61,8 +62,8 @@ public class CharacterService {
     public void updateRate(ExtendValueDO data) {
         checkName(data);
         data.setExtendType(ExtendType.CHARACTER_EXTEND.getType());
-        List<ExtendValueDO> extendValueDOList = extendValueMapper.selectExtend(data.getExtendId(), data.getExtendType(), data.getExtendName());
-        if (RequireUtil.isEmpty(extendValueDOList)) {
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(data.getExtendId(), data.getExtendType(), data.getExtendName());
+        if (extendValueDO == null) {
             extendValueMapper.insertSelective(data);
         } else {
             data.setCreateTime(null);

@@ -18,7 +18,4 @@ import java.util.List;
 public interface ExtendValueMapper extends BaseMapper<ExtendValueDO> {
     @Delete("delete from extend_value where extend_type = #{extendType} and create_time < #{createTime}")
     void clean(@Param("extendType") String extendType, @Param("createTime") Date createTime);
-
-    @Select("select * from extend_value where extend_id = #{extendId} and extend_type = #{extendType} and extend_name = #{extendName} limit 1")
-    List<ExtendValueDO> selectExtend(@Param("extendId") String extendId, @Param("extendType") String extendType, @Param("extendName") String extendName);
 }

@@ -6294,14 +6294,13 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void applySavedRateOrElse(String type, Runnable runnable) {
-        ExtendValueMapper extendValueMapper = ServerManager.getApplicationContext().getBean(ExtendValueMapper.class);
-        List<ExtendValueDO> list = extendValueMapper.selectExtend(String.valueOf(id), ExtendType.CHARACTER_EXTEND.getType(), type);
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(id), ExtendType.CHARACTER_EXTEND.getType(), type);
 
-        if (list.isEmpty() || list.getFirst().getExtendValue() == null) {
+        if (extendValueDO == null) {
             runnable.run();
             return;
         }
-        int savedRateValue = Integer.parseInt(list.getFirst().getExtendValue());
+        int savedRateValue = Integer.parseInt(extendValueDO.getExtendValue());
         switch (type) {
             case "expRate" -> this.expRate = savedRateValue;
             case "mesoRate" -> this.mesoRate = savedRateValue;
