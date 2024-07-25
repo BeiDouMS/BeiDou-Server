@@ -32,20 +32,21 @@ import org.gms.server.life.MobSkillFactory;
 import org.gms.server.life.MobSkillType;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
+import org.gms.util.I18nUtil;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 public class DebuffCommand extends Command {
     {
-        setDescription("Put a debuff on all nearby players.");
+        setDescription(I18nUtil.getMessage("DebuffCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !debuff SLOW|SEDUCE|ZOMBIFY|CONFUSE|STUN|POISON|SEAL|DARKNESS|WEAKEN|CURSE");
+            player.yellowMessage(I18nUtil.getMessage("DebuffCommand.message2"));
             return;
         }
 
@@ -96,7 +97,7 @@ public class DebuffCommand extends Command {
         }
 
         if (disease == null || skill.isEmpty()) {
-            player.yellowMessage("Syntax: !debuff SLOW|SEDUCE|ZOMBIFY|CONFUSE|STUN|POISON|SEAL|DARKNESS|WEAKEN|CURSE");
+            player.yellowMessage(I18nUtil.getMessage("DebuffCommand.message2"));
             return;
         }
 

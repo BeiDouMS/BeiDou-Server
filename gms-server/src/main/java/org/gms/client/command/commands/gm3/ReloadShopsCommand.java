@@ -26,11 +26,12 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.ShopFactory;
+import org.gms.util.I18nUtil;
 
 
 public class ReloadShopsCommand extends Command {
     {
-        setDescription("Reload popup shops and NPC shops.");
+        setDescription(I18nUtil.getMessage("ReloadShopsCommand.message1"));
     }
 
     @Override

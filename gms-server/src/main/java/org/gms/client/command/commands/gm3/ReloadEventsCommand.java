@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
+import org.gms.util.I18nUtil;
 
 public class ReloadEventsCommand extends Command {
     {
-        setDescription("Reload all event data.");
+        setDescription(I18nUtil.getMessage("ReloadEventsCommand.message1"));
     }
 
     @Override
@@ -40,6 +41,6 @@ public class ReloadEventsCommand extends Command {
         for (Channel ch : Server.getInstance().getAllChannels()) {
             ch.reloadEventScriptManager();
         }
-        player.dropMessage(5, "Reloaded Events");
+        player.dropMessage(5, I18nUtil.getMessage("ReloadEventsCommand.message2"));
     }
 }

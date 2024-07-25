@@ -27,10 +27,11 @@ import org.gms.client.BuffStat;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class CheckDmgCommand extends Command {
     {
-        setDescription("Show stats and damage of a player.");
+        setDescription(I18nUtil.getMessage("CheckDmgCommand.message1"));
     }
 
     @Override
@@ -49,12 +50,12 @@ public class CheckDmgCommand extends Command {
                 matkBuff = 0;
             }
 
-            player.dropMessage(5, "Cur Str: " + victim.getTotalStr() + " Cur Dex: " + victim.getTotalDex() + " Cur Int: " + victim.getTotalInt() + " Cur Luk: " + victim.getTotalLuk());
-            player.dropMessage(5, "Cur WATK: " + victim.getTotalWatk() + " Cur MATK: " + victim.getTotalMagic());
-            player.dropMessage(5, "Cur WATK Buff: " + watkBuff + " Cur MATK Buff: " + matkBuff + " Cur Blessing Level: " + blessing);
-            player.dropMessage(5, victim.getName() + "'s maximum base damage (before skills) is " + maxBase);
+            player.dropMessage(5, I18nUtil.getMessage("CheckDmgCommand.message2", victim.getTotalStr(), victim.getTotalDex(), victim.getTotalInt(), victim.getTotalLuk()));
+            player.dropMessage(5, I18nUtil.getMessage("CheckDmgCommand.message3", victim.getTotalWatk(), victim.getTotalMagic()));
+            player.dropMessage(5, I18nUtil.getMessage("CheckDmgCommand.message4", watkBuff, matkBuff, blessing));
+            player.dropMessage(5, I18nUtil.getMessage("CheckDmgCommand.message5", victim.getName(), maxBase));
         } else {
-            player.message("Player '" + params[0] + "' could not be found on this world.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

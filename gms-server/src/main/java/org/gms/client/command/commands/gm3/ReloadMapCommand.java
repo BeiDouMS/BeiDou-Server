@@ -27,12 +27,13 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 import java.util.Collection;
 
 public class ReloadMapCommand extends Command {
     {
-        setDescription("Reload the map.");
+        setDescription(I18nUtil.getMessage("ReloadMapCommand.message1"));
     }
 
     @Override
@@ -43,11 +44,12 @@ public class ReloadMapCommand extends Command {
 
         Collection<Character> characters = player.getMap().getAllPlayers();
 
+        String message = I18nUtil.getMessage("ReloadMapCommand.message2");
         for (Character chr : characters) {
             chr.saveLocationOnWarp();
             chr.changeMap(newMap);
             if (chr.getId() != callerid) {
-                chr.dropMessage("You have been relocated due to map reloading. Sorry for the inconvenience.");
+                chr.dropMessage(message);
             }
         }
         newMap.respawn();

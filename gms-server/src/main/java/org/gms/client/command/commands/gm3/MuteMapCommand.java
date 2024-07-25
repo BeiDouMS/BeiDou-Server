@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class MuteMapCommand extends Command {
     {
-        setDescription("Toggle mute players in the map.");
+        setDescription(I18nUtil.getMessage("MuteMapCommand.message1"));
     }
 
     @Override
@@ -37,10 +38,10 @@ public class MuteMapCommand extends Command {
         Character player = c.getPlayer();
         if (player.getMap().isMuted()) {
             player.getMap().setMuted(false);
-            player.dropMessage(5, "The map you are in has been un-muted.");
+            player.dropMessage(5, I18nUtil.getMessage("MuteMapCommand.message2"));
         } else {
             player.getMap().setMuted(true);
-            player.dropMessage(5, "The map you are in has been muted.");
+            player.dropMessage(5, I18nUtil.getMessage("MuteMapCommand.message3"));
         }
     }
 }

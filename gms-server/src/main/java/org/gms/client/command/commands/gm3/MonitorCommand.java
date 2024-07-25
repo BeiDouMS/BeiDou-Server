@@ -28,28 +28,29 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.packet.logging.MonitoredChrLogger;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class MonitorCommand extends Command {
     {
-        setDescription("Toggle monitored packet logging of a character.");
+        setDescription(I18nUtil.getMessage("MonitorCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !monitor <ign>");
+            player.yellowMessage(I18nUtil.getMessage("MonitorCommand.message2"));
             return;
         }
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim == null) {
-            player.message("Player '" + params[0] + "' could not be found on this world.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             return;
         }
         boolean monitored = MonitoredChrLogger.toggleMonitored(victim.getId());
-        player.yellowMessage(victim.getId() + " is " + (monitored ? "now being monitored." : "no longer being monitored."));
-        String message = player.getName() + (monitored ? " has started monitoring " : " has stopped monitoring ") + victim.getId() + ".";
+        player.yellowMessage(monitored ? I18nUtil.getMessage("MonitorCommand.message3", victim.getId()) : I18nUtil.getMessage("MonitorCommand.message4", victim.getId()));
+        String message = monitored ? I18nUtil.getMessage("MonitorCommand.message5", player.getName(), victim.getId()) : I18nUtil.getMessage("MonitorCommand.message6", player.getName(), victim.getId());
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message));
 
     }

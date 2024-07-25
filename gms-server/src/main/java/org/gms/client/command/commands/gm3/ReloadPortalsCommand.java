@@ -27,16 +27,17 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.scripting.portal.PortalScriptManager;
+import org.gms.util.I18nUtil;
 
 public class ReloadPortalsCommand extends Command {
     {
-        setDescription("Reload all portal scripts.");
+        setDescription(I18nUtil.getMessage("ReloadPortalsCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         PortalScriptManager.getInstance().reloadPortalScripts();
-        player.dropMessage(5, "Reloaded Portals");
+        player.dropMessage(5, I18nUtil.getMessage("ReloadPortalsCommand.message2"));
     }
 }

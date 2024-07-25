@@ -27,34 +27,35 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 
 public class FlyCommand extends Command {
     {
-        setDescription("Enable/disable fly feature.");
+        setDescription(I18nUtil.getMessage("FlyCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) { // fly option will become available for any character of that account
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !fly <on/off>");
+            player.yellowMessage(I18nUtil.getMessage("FlyCommand.message2"));
             return;
         }
 
         Integer accid = c.getAccID();
         Server srv = Server.getInstance();
         String sendStr = "";
-        if (params[0].equalsIgnoreCase("on")) {
-            sendStr += "Enabled Fly feature (F1). With fly active, you cannot attack.";
+        if (params[0].equalsIgnoreCase("on") || params[0].equalsIgnoreCase("开启")) {
+            sendStr += I18nUtil.getMessage("FlyCommand.message3");
             if (!srv.canFly(accid)) {
-                sendStr += " Re-login to take effect.";
+                sendStr += I18nUtil.getMessage("FlyCommand.message4");
             }
 
             srv.changeFly(c.getAccID(), true);
         } else {
-            sendStr += "Disabled Fly feature. You can now attack.";
+            sendStr += I18nUtil.getMessage("FlyCommand.message5");
             if (srv.canFly(accid)) {
-                sendStr += " Re-login to take effect.";
+                sendStr += I18nUtil.getMessage("FlyCommand.message4");
             }
 
             srv.changeFly(c.getAccID(), false);

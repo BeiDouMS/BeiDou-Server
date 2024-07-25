@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.packet.logging.MonitoredChrLogger;
+import org.gms.util.I18nUtil;
 
 public class MonitorsCommand extends Command {
     {
-        setDescription("Show all characters being monitored for packet logging");
+        setDescription(I18nUtil.getMessage("MonitorsCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         for (int chrId : MonitoredChrLogger.getMonitoredChrIds()) {
-            player.yellowMessage(Character.getNameById(chrId) + " is being monitored.");
+            player.yellowMessage(I18nUtil.getMessage("MonitorsCommand.message2", Character.getNameById(chrId)));
         }
     }
 }

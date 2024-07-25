@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class HpMpCommand extends Command {
     {
-        setDescription("Set HP/MP of a player.");
+        setDescription(I18nUtil.getMessage("HpMpCommand.message1"));
     }
 
     @Override
@@ -44,13 +45,13 @@ public class HpMpCommand extends Command {
         } else if (params.length == 1) {
             statUpdate = Integer.parseInt(params[0]);
         } else {
-            player.yellowMessage("Syntax: !hpmp [<playername>] <value>");
+            player.yellowMessage(I18nUtil.getMessage("HpMpCommand.message2"));
         }
 
         if (victim != null) {
             victim.updateHpMp(statUpdate);
-        } else {
-            player.message("Player '" + params[0] + "' could not be found on this world.");
+        } else if (player != null) {
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

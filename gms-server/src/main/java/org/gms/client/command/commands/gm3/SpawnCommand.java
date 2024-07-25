@@ -28,17 +28,18 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
+import org.gms.util.I18nUtil;
 
 public class SpawnCommand extends Command {
     {
-        setDescription("Spawn mob(s) on your location.");
+        setDescription(I18nUtil.getMessage("SpawnCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !spawn <mobid> [<mobqty>]");
+            player.yellowMessage(I18nUtil.getMessage("SpawnCommand.message2"));
             return;
         }
 
@@ -48,10 +49,10 @@ public class SpawnCommand extends Command {
         }
         if (params.length == 2) {
             for (int i = 0; i < Integer.parseInt(params[1]); i++) {
-                player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(Integer.parseInt(params[0])), player.getPosition());
+                player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
             }
         } else {
-            player.getMap().spawnMonsterOnGroundBelow(LifeFactory.getMonster(Integer.parseInt(params[0])), player.getPosition());
+            player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
         }
     }
 }

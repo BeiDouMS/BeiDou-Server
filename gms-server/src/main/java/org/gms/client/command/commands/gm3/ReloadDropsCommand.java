@@ -27,16 +27,17 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.MonsterInformationProvider;
+import org.gms.util.I18nUtil;
 
 public class ReloadDropsCommand extends Command {
     {
-        setDescription("Reload all drop data.");
+        setDescription(I18nUtil.getMessage("ReloadDropsCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         MonsterInformationProvider.getInstance().clearDrops();
-        player.dropMessage(5, "Reloaded Drops");
+        player.dropMessage(5, I18nUtil.getMessage("ReloadDropsCommand.message2"));
     }
 }

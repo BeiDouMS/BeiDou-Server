@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class MaxHpMpCommand extends Command {
     {
-        setDescription("Set base HP/MP of a player.");
+        setDescription(I18nUtil.getMessage("MaxHpMpCommand.message1"));
     }
 
     @Override
@@ -44,7 +45,7 @@ public class MaxHpMpCommand extends Command {
         } else if (params.length == 1) {
             statUpdate = Integer.parseInt(params[0]);
         } else {
-            player.yellowMessage("Syntax: !maxhpmp [<playername>] <value>");
+            player.yellowMessage(I18nUtil.getMessage("MaxHpMpCommand.message2"));
         }
 
         if (victim != null) {
@@ -55,8 +56,8 @@ public class MaxHpMpCommand extends Command {
             int maxhpUpdate = statUpdate - extraHp;
             int maxmpUpdate = statUpdate - extraMp;
             victim.updateMaxHpMaxMp(maxhpUpdate, maxmpUpdate);
-        } else {
-            player.message("Player '" + params[0] + "' could not be found on this world.");
+        } else if (player != null) {
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

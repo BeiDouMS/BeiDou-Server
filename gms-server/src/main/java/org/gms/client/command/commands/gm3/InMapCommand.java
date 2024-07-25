@@ -26,20 +26,21 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class InMapCommand extends Command {
     {
-        setDescription("Show all players in the map.");
+        setDescription(I18nUtil.getMessage("InMapCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        String st = "";
+        StringBuilder st = new StringBuilder();
         for (Character chr : player.getMap().getCharacters()) {
-            st += chr.getName() + " ";
+            st.append(chr.getName()).append(" ");
         }
-        player.message(st);
+        player.message(st.toString());
 
     }
 }

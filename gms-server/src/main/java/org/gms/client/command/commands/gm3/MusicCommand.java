@@ -28,20 +28,21 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.NpcId;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class MusicCommand extends Command {
     {
-        setDescription("Play a song.");
+        setDescription(I18nUtil.getMessage("MusicCommand.message1"));
     }
 
     private static String getSongList() {
-        String songList = "Song:\r\n";
+        StringBuilder songList = new StringBuilder(I18nUtil.getMessage("MusicCommand.message2")).append("\r\n");
         for (String s : GameConstants.GAME_SONGS) {
-            songList += ("  " + s + "\r\n");
+            songList.append("  ").append(s).append("\r\n");
         }
 
-        return songList;
+        return songList.toString();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class MusicCommand extends Command {
         if (params.length < 1) {
             String sendMsg = "";
 
-            sendMsg += "Syntax: #r!music <song>#k\r\n\r\n";
+            sendMsg += I18nUtil.getMessage("MusicCommand.message3") + "\r\n\r\n";
             sendMsg += getSongList();
 
             c.sendPacket(PacketCreator.getNPCTalk(NpcId.BILLY, (byte) 0, sendMsg, "00 00", (byte) 0));
@@ -62,13 +63,13 @@ public class MusicCommand extends Command {
         for (String s : GameConstants.GAME_SONGS) {
             if (s.equalsIgnoreCase(song)) {    // thanks Masterrulax for finding an issue here
                 player.getMap().broadcastMessage(PacketCreator.musicChange(s));
-                player.yellowMessage("Now playing song " + s + ".");
+                player.yellowMessage(I18nUtil.getMessage("MusicCommand.message4", s));
                 return;
             }
         }
 
         String sendMsg = "";
-        sendMsg += "Song not found, please enter a song below.\r\n\r\n";
+        sendMsg += I18nUtil.getMessage("MusicCommand.message5") + "\r\n\r\n";
         sendMsg += getSongList();
 
         c.sendPacket(PacketCreator.getNPCTalk(NpcId.BILLY, (byte) 0, sendMsg, "00 00", (byte) 0));
