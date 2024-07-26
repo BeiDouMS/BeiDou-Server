@@ -75,9 +75,9 @@ function doSelect(selection) {
     switch (selection) {
         // 非GM功能
         case 0:
-            //openNpc("每日签到");
-            cm.sendOk("该功能暂不支持，敬请期待！");
-            cm.dispose();
+            openNpc("每日签到");
+            //cm.sendOk("该功能暂不支持，敬请期待！");
+            //cm.dispose();
             break;
         case 1:
             //openNpc("在线奖励");
