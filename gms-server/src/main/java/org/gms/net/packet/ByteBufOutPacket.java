@@ -82,11 +82,7 @@ public class ByteBufOutPacket implements OutPacket {
 
     @Override
     public void writeFixedString(String value) {
-        byte[] bytes = value.getBytes(CharsetConstants.getCharset(ThreadLocalUtil.getClientLang()));
-        if (bytes.length > 13) {
-            bytes = Arrays.copyOf(bytes, 13);
-        }
-        writeBytes(bytes);
+        writeBytes(Arrays.copyOf(value.getBytes(CharsetConstants.getCharset(ThreadLocalUtil.getClientLang())), 13));
     }
 
     @Override
