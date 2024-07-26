@@ -721,6 +721,10 @@ public class Server {
 
         // 加载玩家排名
         PlayerNPC.loadRunningRankData(worldCount);
+
+        // 主动清理每日零点需要清理的数据
+        new BossLogTask().run();
+        new ExtendValueTask().run();
         log.info(I18nUtil.getLogMessage("Server.init.info5"));
 
         ThreadManager.getInstance().start();
