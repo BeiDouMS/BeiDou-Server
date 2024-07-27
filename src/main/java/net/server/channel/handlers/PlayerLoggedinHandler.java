@@ -41,7 +41,6 @@ import config.YamlConfig;
 import constants.game.GameConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
-import net.server.PlayerBuffValueHolder;
 import net.server.Server;
 import net.server.channel.Channel;
 import net.server.channel.CharacterIdChannelPair;
@@ -68,7 +67,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -76,6 +74,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(PlayerLoggedinHandler.class);
@@ -231,12 +230,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             cserv.addPlayer(player);
             wserv.addPlayer(player);
             player.setEnteredChannelWorld();
-
-            List<PlayerBuffValueHolder> buffs = server.getPlayerBuffStorage().getBuffsFromStorage(cid);
-            if (buffs != null) {
-                List<Pair<Long, PlayerBuffValueHolder>> timedBuffs = getLocalStartTimes(buffs);
-                player.silentGiveBuffs(timedBuffs);
-            }
 
             Map<Disease, Pair<Long, MobSkill>> diseases = server.getPlayerBuffStorage().getDiseasesFromStorage(cid);
             if (diseases != null) {
@@ -462,6 +455,9 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (newcomer) {
                 player.setLoginTime(System.currentTimeMillis());
             }
+
+            // 取回 buff
+            player.retrieveBuff();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -487,18 +483,5 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private static List<Pair<Long, PlayerBuffValueHolder>> getLocalStartTimes(List<PlayerBuffValueHolder> lpbvl) {
-        List<Pair<Long, PlayerBuffValueHolder>> timedBuffs = new ArrayList<>();
-        long curtime = currentServerTime();
-
-        for (PlayerBuffValueHolder pb : lpbvl) {
-            timedBuffs.add(new Pair<>(curtime - pb.usedTime, pb));
-        }
-
-        timedBuffs.sort((p1, p2) -> p1.getLeft().compareTo(p2.getLeft()));
-
-        return timedBuffs;
     }
 }

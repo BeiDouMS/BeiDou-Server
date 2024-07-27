@@ -922,6 +922,9 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     private void removePlayer(World wserv, boolean serverTransition) {
         try {
+            // 保存 buff
+            Server.getInstance().getPlayerBuffStorage().addBuffsToStorage(player.getId(), player.getAllBuffs());
+            
             player.setDisconnectedFromChannelWorld();
             player.notifyMapTransferToPartner(-1);
             player.removeIncomingInvites();

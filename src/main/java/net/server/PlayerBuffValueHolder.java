@@ -28,10 +28,12 @@ import server.StatEffect;
  */
 public class PlayerBuffValueHolder {
     public int usedTime;
+    public long startTime;
     public StatEffect effect;
 
-    public PlayerBuffValueHolder(int usedTime, StatEffect effect) {
+    public PlayerBuffValueHolder(int usedTime, long startTime, StatEffect effect) {
         this.usedTime = usedTime;
+        this.startTime = startTime;
         this.effect = effect;
     }
 }

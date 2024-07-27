@@ -1491,7 +1491,7 @@ public class StatEffect {
         return mpchange;
     }
 
-    private int alchemistModifyVal(Character chr, int val, boolean withX) {
+    public int alchemistModifyVal(Character chr, int val, boolean withX) {
         if (!skill && (chr.getJob().isA(Job.HERMIT) || chr.getJob().isA(Job.NIGHTWALKER3))) {
             StatEffect alchemistEffect = getAlchemistEffect(chr);
             if (alchemistEffect != null) {
