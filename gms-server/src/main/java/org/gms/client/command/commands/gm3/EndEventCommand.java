@@ -26,16 +26,17 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class EndEventCommand extends Command {
     {
-        setDescription("Close entry for ongoing event.");
+        setDescription(I18nUtil.getMessage("EndEventCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         c.getChannelServer().setEvent(null);
-        player.dropMessage(5, "You have ended the event. No more players may join.");
+        player.dropMessage(5, I18nUtil.getMessage("EndEventCommand.message2"));
     }
 }

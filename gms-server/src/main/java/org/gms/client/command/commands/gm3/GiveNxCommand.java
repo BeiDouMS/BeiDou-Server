@@ -26,44 +26,41 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class GiveNxCommand extends Command {
     {
-        setDescription("Give NX to a player.");
+        setDescription(I18nUtil.getMessage("GiveNxCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !givenx [nx, mp, np] [<playername>] <gainnx>");
+            player.yellowMessage(I18nUtil.getMessage("GiveNxCommand.message2"));
             return;
         }
 
         String recv, typeStr = "nx";
-        int value, type = 1;
+        int value, type = -1;
         if (params.length > 1) {
-            if (params[0].length() == 2) {
-                switch (params[0]) {
-                    case "mp":  // maplePoint
-                        type = 2;
-                        break;
-                    case "np":  // nxPrepaid
-                        type = 4;
-                        break;
-                    default:
-                        type = 1;
-                }
-                typeStr = params[0];
+            type = switch (params[0]) {
+                case "mp", "抵用券" -> 2;
+                case "np", "信用点" -> 4;
+                case "nx", "点券" -> 1;
+                default -> type;
+            };
+            typeStr = params[0];
 
-                if (params.length > 2) {
-                    recv = params[1];
-                    value = Integer.parseInt(params[2]);
-                } else {
-                    recv = c.getPlayer().getName();
-                    value = Integer.parseInt(params[1]);
-                }
+            if (params.length > 2) {
+                recv = params[1];
+                value = Integer.parseInt(params[2]);
             } else {
+                recv = c.getPlayer().getName();
+                value = Integer.parseInt(params[1]);
+            }
+            if (type == -1) {
+                type = 1;
                 recv = params[0];
                 value = Integer.parseInt(params[1]);
             }
@@ -75,9 +72,9 @@ public class GiveNxCommand extends Command {
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(recv);
         if (victim != null) {
             victim.getCashShop().gainCash(type, value);
-            player.message(typeStr.toUpperCase() + " given.");
+            player.message(I18nUtil.getMessage("GiveNxCommand.message3", typeStr.toUpperCase()));
         } else {
-            player.message("Player '" + recv + "' could not be found.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", recv));
         }
     }
 }

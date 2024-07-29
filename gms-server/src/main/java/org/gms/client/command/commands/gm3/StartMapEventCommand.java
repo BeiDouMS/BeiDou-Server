@@ -25,10 +25,11 @@ package org.gms.client.command.commands.gm3;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class StartMapEventCommand extends Command {
     {
-        setDescription("Start a \"classic\" event on current map.");
+        setDescription(I18nUtil.getMessage("StartMapEventCommand.message1"));
     }
 
     @Override

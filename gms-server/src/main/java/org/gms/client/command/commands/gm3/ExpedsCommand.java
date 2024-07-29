@@ -29,13 +29,14 @@ import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.server.expeditions.Expedition;
+import org.gms.util.I18nUtil;
 
 import java.util.List;
 import java.util.Map.Entry;
 
 public class ExpedsCommand extends Command {
     {
-        setDescription("Show all ongoing boss expeditions.");
+        setDescription(I18nUtil.getMessage("ExpedsCommand.message1"));
     }
 
     @Override
@@ -44,24 +45,24 @@ public class ExpedsCommand extends Command {
         for (Channel ch : Server.getInstance().getChannelsFromWorld(c.getWorld())) {
             List<Expedition> expeds = ch.getExpeditions();
             if (expeds.isEmpty()) {
-                player.yellowMessage("No Expeditions in Channel " + ch.getId());
+                player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message2", ch.getId()));
                 continue;
             }
-            player.yellowMessage("Expeditions in Channel " + ch.getId());
+            player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message3", ch.getId()));
             int id = 0;
             for (Expedition exped : expeds) {
                 id++;
-                player.yellowMessage("> Expedition " + id);
-                player.yellowMessage(">> Type: " + exped.getType().toString());
-                player.yellowMessage(">> Status: " + (exped.isRegistering() ? "REGISTERING" : "UNDERWAY"));
-                player.yellowMessage(">> Size: " + exped.getMembers().size());
-                player.yellowMessage(">> Leader: " + exped.getLeader().getName());
+                player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message4", id));
+                player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message5", exped.getType().toString()));
+                player.yellowMessage(exped.isRegistering() ? I18nUtil.getMessage("ExpedsCommand.message6") : I18nUtil.getMessage("ExpedsCommand.message7"));
+                player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message8", exped.getMembers().size()));
+                player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message9", exped.getLeader().getName()));
                 int memId = 2;
                 for (Entry<Integer, String> e : exped.getMembers().entrySet()) {
                     if (exped.isLeader(e.getKey())) {
                         continue;
                     }
-                    player.yellowMessage(">>> Member " + memId + ": " + e.getValue());
+                    player.yellowMessage(I18nUtil.getMessage("ExpedsCommand.message10", memId, e.getValue()));
                     memId++;
                 }
             }

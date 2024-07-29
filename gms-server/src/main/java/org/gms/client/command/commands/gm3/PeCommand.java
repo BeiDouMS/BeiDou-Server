@@ -31,6 +31,7 @@ import org.gms.net.PacketHandler;
 import org.gms.net.PacketProcessor;
 import org.gms.net.packet.ByteBufInPacket;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.HexTool;
@@ -43,7 +44,7 @@ import java.util.Properties;
 
 public class PeCommand extends Command {
     {
-        setDescription("Handle synthesized packets from file, and handle them as if sent from a client");
+        setDescription(I18nUtil.getMessage("PeCommand.message1"));
     }
 
     private static final Logger log = LoggerFactory.getLogger(PeCommand.class);
@@ -58,7 +59,7 @@ public class PeCommand extends Command {
             packet = packetProps.getProperty("pe");
         } catch (IOException ex) {
             ex.printStackTrace();
-            player.yellowMessage("Failed to load pe.txt");
+            player.yellowMessage(I18nUtil.getMessage("PeCommand.message2"));
             return;
 
         }
@@ -69,11 +70,11 @@ public class PeCommand extends Command {
         final PacketHandler packetHandler = PacketProcessor.getProcessor(0, c.getChannel()).getHandler(packetId);
         if (packetHandler != null && packetHandler.validateState(c)) {
             try {
-                player.yellowMessage("Receiving: " + packet);
+                player.yellowMessage(I18nUtil.getMessage("PeCommand.message3", packet));
                 packetHandler.handlePacket(inPacket, c);
             } catch (final Throwable t) {
-                final String chrInfo = player != null ? player.getName() + " on map " + player.getMapId() : "?";
-                log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", packetHandler.getClass().getSimpleName(),
+                final String chrInfo = player != null ? player.getName() : "?";
+                log.warn(I18nUtil.getLogMessage("PeCommand.execute.warn1"), packetHandler.getClass().getSimpleName(),
                         chrInfo, c.getAccountName(), packet, t);
             }
         }

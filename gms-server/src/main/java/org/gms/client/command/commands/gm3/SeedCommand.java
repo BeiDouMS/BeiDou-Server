@@ -29,19 +29,20 @@ import org.gms.client.command.Command;
 import org.gms.client.inventory.Item;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
+import org.gms.util.I18nUtil;
 
 import java.awt.*;
 
 public class SeedCommand extends Command {
     {
-        setDescription("Drop all seeds inside Henesys PQ.");
+        setDescription(I18nUtil.getMessage("SeedCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (player.getMapId() != MapId.HENESYS_PQ) {
-            player.yellowMessage("This command can only be used in HPQ.");
+            player.yellowMessage(I18nUtil.getMessage("SeedCommand.message2"));
             return;
         }
         Point[] pos = {new Point(7, -207), new Point(179, -447), new Point(-3, -687), new Point(-357, -687), new Point(-538, -447), new Point(-359, -207)};

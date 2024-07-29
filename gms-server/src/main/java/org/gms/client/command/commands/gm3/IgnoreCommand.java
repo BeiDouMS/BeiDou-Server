@@ -28,29 +28,30 @@ import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class IgnoreCommand extends Command {
     {
-        setDescription("Toggle ignore a character from auto-ban alerts.");
+        setDescription(I18nUtil.getMessage("IgnoreCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !ignore <ign>");
+            player.yellowMessage(I18nUtil.getMessage("IgnoreCommand.message2"));
             return;
         }
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim == null) {
-            player.message("Player '" + params[0] + "' could not be found on this world.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             return;
         }
 
         boolean ignored = AutobanFactory.toggleIgnored(victim.getId());
-        player.yellowMessage(victim.getName() + " is " + (ignored ? "now being ignored." : "no longer being ignored."));
-        String message_ = player.getName() + (ignored ? " has started ignoring " : " has stopped ignoring ") + victim.getName() + ".";
+        player.yellowMessage(ignored ? I18nUtil.getMessage("IgnoreCommand.message3", victim.getName()) : I18nUtil.getMessage("IgnoreCommand.message4", victim.getName()));
+        String message_ = (ignored ? I18nUtil.getMessage("IgnoreCommand.message5", player.getName(), victim.getName()) : I18nUtil.getMessage("IgnoreCommand.message6", player.getName(), victim.getName()));
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message_));
 
     }

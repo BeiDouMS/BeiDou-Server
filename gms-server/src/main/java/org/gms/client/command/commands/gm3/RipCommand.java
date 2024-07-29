@@ -27,16 +27,17 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class RipCommand extends Command {
     {
-        setDescription("Send a RIP notice.");
+        setDescription(I18nUtil.getMessage("RipCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, "[RIP]: " + joinStringFrom(params, 1)));
+        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, I18nUtil.getMessage("RipCommand.message2", joinStringFrom(params, 1))));
     }
 }

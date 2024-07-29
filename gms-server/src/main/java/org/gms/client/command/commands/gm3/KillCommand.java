@@ -27,27 +27,28 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class KillCommand extends Command {
     {
-        setDescription("Kill a player.");
+        setDescription(I18nUtil.getMessage("KillCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !kill <playername>");
+            player.yellowMessage(I18nUtil.getMessage("KillCommand.message2"));
             return;
         }
 
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
             victim.updateHpMp(0);
-            Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, player.getName() + " used !kill on " + victim.getName()));
+            Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("KillCommand.message3", player.getName(), victim.getName())));
         } else {
-            player.message("Player '" + params[0] + "' could not be found.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

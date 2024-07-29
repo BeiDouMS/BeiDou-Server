@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
+import org.gms.util.I18nUtil;
 
 public class OnlineTwoCommand extends Command {
     {
-        setDescription("Show all online players.");
+        setDescription(I18nUtil.getMessage("OnlineTwoCommand.message1"));
     }
 
     @Override
@@ -41,16 +42,16 @@ public class OnlineTwoCommand extends Command {
         for (Channel ch : Server.getInstance().getChannelsFromWorld(player.getWorld())) {
             int size = ch.getPlayerStorage().getAllCharacters().size();
             total += size;
-            String s = "(Channel " + ch.getId() + " Online: " + size + ") : ";
+            StringBuilder s = new StringBuilder(I18nUtil.getMessage("OnlineTwoCommand.message2", ch.getId(), size)).append("\r\n");
             if (ch.getPlayerStorage().getAllCharacters().size() < 50) {
                 for (Character chr : ch.getPlayerStorage().getAllCharacters()) {
-                    s += Character.makeMapleReadable(chr.getName()) + ", ";
+                    s.append(Character.makeMapleReadable(chr.getName())).append(", ");
                 }
                 player.dropMessage(6, s.substring(0, s.length() - 2));
             }
         }
 
         //player.dropMessage(6, "There are a total of " + total + " players online.");
-        player.showHint("Players online: #e#r" + total + "#k#n.", 300);
+        player.showHint(I18nUtil.getMessage("OnlineTwoCommand.message3", total), 300);
     }
 }

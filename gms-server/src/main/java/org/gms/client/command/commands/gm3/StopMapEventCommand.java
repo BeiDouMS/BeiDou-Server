@@ -25,10 +25,11 @@ package org.gms.client.command.commands.gm3;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class StopMapEventCommand extends Command {
     {
-        setDescription("Stop ongoing \"classic\" event.");
+        setDescription(I18nUtil.getMessage("StopMapEventCommand.message1"));
     }
 
     @Override

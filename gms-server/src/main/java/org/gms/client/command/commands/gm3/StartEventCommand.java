@@ -28,11 +28,12 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.server.events.gm.Event;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class StartEventCommand extends Command {
     {
-        setDescription("Start an event on current map.");
+        setDescription(I18nUtil.getMessage("StartEventCommand.message1"));
     }
 
     @Override
@@ -43,17 +44,8 @@ public class StartEventCommand extends Command {
             players = Integer.parseInt(params[0]);
         }
         c.getChannelServer().setEvent(new Event(player.getMapId(), players));
-        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.earnTitleMessage(
-                "[Event] An event has started on "
-                        + player.getMap().getMapName()
-                        + " and will allow "
-                        + players
-                        + " players to join. Type @joinevent to participate."));
-        Server.getInstance().broadcastMessage(c.getWorld(),
-                PacketCreator.serverNotice(6, "[Event] An event has started on "
-                        + player.getMap().getMapName()
-                        + " and will allow "
-                        + players
-                        + " players to join. Type @joinevent to participate."));
+        String msg = I18nUtil.getMessage("StartEventCommand.message2", player.getMap().getMapName(), players);
+        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.earnTitleMessage(msg));
+        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, msg));
     }
 }

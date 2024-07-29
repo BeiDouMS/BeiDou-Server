@@ -26,11 +26,12 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class MaxEnergyCommand extends Command {
     {
-        setDescription("Set dojo energy to max value.");
+        setDescription(I18nUtil.getMessage("MaxEnergyCommand.message1"));
     }
 
     @Override

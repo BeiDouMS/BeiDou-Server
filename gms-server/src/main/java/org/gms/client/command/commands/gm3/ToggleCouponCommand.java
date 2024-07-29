@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 
 public class ToggleCouponCommand extends Command {
     {
-        setDescription("Toggle enable/disable a coupon.");
+        setDescription(I18nUtil.getMessage("ToggleCouponCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !togglecoupon <itemid>");
+            player.yellowMessage(I18nUtil.getMessage("ToggleCouponCommand.message2"));
             return;
         }
         Server.getInstance().toggleCoupon(Integer.parseInt(params[0]));

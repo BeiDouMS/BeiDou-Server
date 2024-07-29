@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class IgnoredCommand extends Command {
     {
-        setDescription("Show all characters being ignored in auto-ban alerts.");
+        setDescription(I18nUtil.getMessage("IgnoredCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         for (int chrId : AutobanFactory.getIgnoredChrIds()) {
-            player.yellowMessage(Character.getNameById(chrId) + " is being ignored.");
+            player.yellowMessage(I18nUtil.getMessage("IgnoredCommand.message2", Character.getNameById(chrId)));
         }
     }
 }

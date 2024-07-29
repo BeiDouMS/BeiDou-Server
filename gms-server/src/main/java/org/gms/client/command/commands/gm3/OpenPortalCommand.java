@@ -26,17 +26,18 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class OpenPortalCommand extends Command {
     {
-        setDescription("Open a portal on the map.");
+        setDescription(I18nUtil.getMessage("OpenPortalCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !openportal <portalid>");
+            player.yellowMessage(I18nUtil.getMessage("OpenPortalCommand.message2"));
             return;
         }
         player.getMap().getPortal(params[0]).setPortalState(true);

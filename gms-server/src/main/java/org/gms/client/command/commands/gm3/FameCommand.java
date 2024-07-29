@@ -27,27 +27,34 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Stat;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class FameCommand extends Command {
     {
-        setDescription("Set new fame value of a player.");
+        setDescription(I18nUtil.getMessage("FameCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        if (params.length < 2) {
-            player.yellowMessage("Syntax: !fame <playername> <gainfame>");
+        if (params.length == 0) {
+            player.yellowMessage(I18nUtil.getMessage("FameCommand.message2"));
             return;
         }
 
-        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
-        if (victim != null) {
-            victim.setFame(Integer.parseInt(params[1]));
-            victim.updateSingleStat(Stat.FAME, victim.getFame());
-            player.message("FAME given.");
+        if (params.length == 1) {
+            player.setFame(Integer.parseInt(params[0]));
+            player.updateSingleStat(Stat.FAME, player.getFame());
+            player.message(I18nUtil.getMessage("FameCommand.message3"));
         } else {
-            player.message("Player '" + params[0] + "' could not be found.");
+            Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            if (victim == null) {
+                player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
+            } else {
+                victim.setFame(Integer.parseInt(params[1]));
+                victim.updateSingleStat(Stat.FAME, victim.getFame());
+                player.message(I18nUtil.getMessage("FameCommand.message3"));
+            }
         }
     }
 }

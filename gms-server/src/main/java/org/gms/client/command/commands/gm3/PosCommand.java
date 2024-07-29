@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class PosCommand extends Command {
     {
-        setDescription("Show current position and foothold.");
+        setDescription(I18nUtil.getMessage("PosCommand.message1"));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class PosCommand extends Command {
         float xpos = player.getPosition().x;
         float ypos = player.getPosition().y;
         float fh = player.getMap().getFootholds().findBelow(player.getPosition()).getId();
-        player.dropMessage(6, "Position: (" + xpos + ", " + ypos + ")");
-        player.dropMessage(6, "Foothold ID: " + fh);
+        player.dropMessage(6, I18nUtil.getMessage("PosCommand.message2", xpos, ypos));
+        player.dropMessage(6, I18nUtil.getMessage("PosCommand.message3", fh));
     }
 }

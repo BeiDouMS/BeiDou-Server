@@ -36,7 +36,7 @@ public class GiveService {
     private void giveAllOnlineChr(GiveResourceReqDTO submitData) {
         switch (submitData.getType()) {
             case 0: // nxCredit 点券
-            case 1: // nxPrepaid 信用点券
+            case 1: // nxPrepaid 信用点
             case 2: // maplePoint 抵用券
                 int cashType = switch (submitData.getType()) {
                     case 1 -> CashShop.NX_PREPAID;
@@ -87,7 +87,7 @@ public class GiveService {
 
         switch (submitData.getType()) {
             case 0: // nxCredit 点券
-            case 1: // nxPrepaid 信用点券
+            case 1: // nxPrepaid 信用点
             case 2: // maplePoint 抵用券
                 int cashType = switch (submitData.getType()) {
                     case 1 -> CashShop.NX_PREPAID;

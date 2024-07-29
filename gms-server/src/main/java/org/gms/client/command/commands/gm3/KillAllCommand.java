@@ -31,13 +31,14 @@ import org.gms.server.life.Monster;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class KillAllCommand extends Command {
     {
-        setDescription("Kill all mobs in the map.");
+        setDescription(I18nUtil.getMessage("KillAllCommand.message1"));
     }
 
     @Override
@@ -53,6 +54,6 @@ public class KillAllCommand extends Command {
                 count++;
             }
         }
-        player.dropMessage(5, "Killed " + count + " monsters.");
+        player.dropMessage(5, I18nUtil.getMessage("KillAllCommand.message2", count));
     }
 }
