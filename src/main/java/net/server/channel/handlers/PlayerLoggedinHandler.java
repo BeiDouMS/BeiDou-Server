@@ -175,6 +175,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             
             // 加载ImGui
             player.broadcastAcquaintances(PacketCreator.showUI((byte) 0));
+            player.broadcastAcquaintances(PacketCreator.staticData((byte) 0, 0));
 
             boolean allowLogin = true;
 

@@ -11,6 +11,14 @@ public class UICommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        c.getPlayer().broadcastAcquaintances(PacketCreator.showUI((byte) 1));
+        if (params.length == 0) {
+            c.getPlayer().dropMessage(5, "请输入参数：");
+            c.getPlayer().dropMessage(5, "统计");
+            c.getPlayer().dropMessage(5, "boss统计");
+        } else if (params[0].equals("boss统计")) {
+            c.getPlayer().sendPacket(PacketCreator.showUI((byte) 1));
+        } else if (params[0].equals("统计")) {
+            c.getPlayer().sendPacket(PacketCreator.showUI((byte) 2));
+        }
     }
 }

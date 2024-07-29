@@ -957,6 +957,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                 allDamageNumbers.add(damage);
                 if (chr.getMap().getDmgStaticSwitch()) chr.getMap().updateDmgStatic(chr, damage);
+                chr.sendPacket(PacketCreator.staticData((byte) 3, damage));
             }
             if (ret.skill != Corsair.RAPID_FIRE || ret.skill != Aran.HIDDEN_FULL_DOUBLE || ret.skill != Aran.HIDDEN_FULL_TRIPLE || ret.skill != Aran.HIDDEN_OVER_DOUBLE || ret.skill != Aran.HIDDEN_OVER_TRIPLE) {
                 p.skip(4);

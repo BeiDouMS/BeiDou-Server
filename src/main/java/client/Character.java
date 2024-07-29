@@ -3229,6 +3229,7 @@ public class Character extends AbstractCharacterObject {
                 leftover = nextExp - Integer.MAX_VALUE;
             }
             updateSingleStat(Stat.EXP, exp.addAndGet((int) total));
+            sendPacket(PacketCreator.staticData((byte) 2, (int) total));
             totalExpGained += total;
             if (show) {
                 announceExpGain(gain, equip, party, inChat, white);
@@ -3346,6 +3347,9 @@ public class Character extends AbstractCharacterObject {
 
         if (gain != 0) {
             updateSingleStat(Stat.MESO, (int) nextMeso, enableActions);
+            if (gain > 0) {
+                sendPacket(PacketCreator.staticData((byte) 1, gain));
+            }
             if (show) {
                 sendPacket(PacketCreator.getShowMesoGain(gain, inChat));
             }

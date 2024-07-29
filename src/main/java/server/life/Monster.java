@@ -777,6 +777,7 @@ public class Monster extends AbstractLoadedLife {
     }
 
     public Character killBy(final Character killer) {
+        killer.sendPacket(PacketCreator.staticData((byte) 4, 1));
         distributeExperience(killer != null ? killer.getId() : 0);
 
         final Pair<Character, Boolean> lastController = aggroRemoveController();

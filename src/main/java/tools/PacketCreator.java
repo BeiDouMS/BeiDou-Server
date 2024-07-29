@@ -7460,4 +7460,17 @@ public class PacketCreator {
         p.writeString(url);
         return p;
     }
+
+    /**
+     * 发送数据
+     * @param type 0:重置 1:金币 2:经验 3:伤害 4:怪物
+     * @param quantity 数量
+     * @return OutPacket
+     */
+    public static Packet staticData(byte type, int quantity) {
+        OutPacket p = OutPacket.create(SendOpcode.STATIC_DATA);
+        p.writeByte(type);
+        p.writeInt(quantity);
+        return p;
+    }
 }

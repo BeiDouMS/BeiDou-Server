@@ -357,7 +357,8 @@ public enum SendOpcode {
     
     DMG_STATIC(0x167),
     SHOW_UI(0x168),
-    OPEN_URL(0x169)
+    OPEN_URL(0x169),
+    STATIC_DATA(0x170),
     ;
     private int code = -2;
 
