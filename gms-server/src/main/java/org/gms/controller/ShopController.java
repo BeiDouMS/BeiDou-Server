@@ -60,8 +60,8 @@ public class ShopController {
 
     @Tag(name = "/shop/" + ApiConstant.LATEST)
     @Operation(summary = "根据id删除商品信息")
-    @DeleteMapping("/" + ApiConstant.LATEST + "/deleteShopItem")
-    public ResultBody<Object> deleteShopItem(@RequestParam("id") Long id) {
+    @DeleteMapping("/" + ApiConstant.LATEST + "/deleteShopItem/{id}")
+    public ResultBody<Object> deleteShopItem(@PathVariable("id") Long id) {
         shopService.modifyShopItem(ShopItemSearchRtnDTO.builder().id(id).build(), true);
         return ResultBody.success(null);
     }
