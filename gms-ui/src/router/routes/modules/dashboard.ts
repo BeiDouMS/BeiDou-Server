@@ -22,6 +22,16 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'npcShop',
+      name: 'NpcShop',
+      component: () => import('@/views/dashboard/npcShop/index.vue'),
+      meta: {
+        locale: 'menu.dashboard.npcShop',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

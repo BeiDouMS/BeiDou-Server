@@ -1,3 +1,4 @@
+import npcShop from '@/views/dashboard/npcShop/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
@@ -7,6 +8,7 @@ export default {
   // 左侧菜单
   'menu.dashboard': '仪表盘',
   'menu.dashboard.workplace': '工作台',
+  'menu.dashboard.npcShop': 'NPC商店',
   'menu.account': '账户管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -30,4 +32,5 @@ export default {
   ...workplace,
   ...login,
   ...account,
+  ...npcShop,
 };
