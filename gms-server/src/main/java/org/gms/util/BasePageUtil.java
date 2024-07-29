@@ -4,6 +4,7 @@ import com.mybatisflex.core.paginate.Page;
 import org.gms.model.dto.BasePageDTO;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -76,6 +77,11 @@ public class BasePageUtil<T> {
         return this;
     }
 
+    public BasePageUtil<T> sorted(Comparator<? super T> comparator) {
+        this.data = this.data.sorted(comparator);
+        return this;
+    }
+
     /**
      * 构建分页对象
      *
@@ -92,10 +98,12 @@ public class BasePageUtil<T> {
             page.setTotalRow(this.data.toList().size());
             return page;
         } else {
-            List<T> list = this.data.skip((long) (this.basePageDTO.getPageNo() - 1) * this.basePageDTO.getPageSize())
+            List<T> totalList = this.data.toList();
+            List<T> list = totalList.stream()
+                    .skip((long) (this.basePageDTO.getPageNo() - 1) * this.basePageDTO.getPageSize())
                     .limit(this.basePageDTO.getPageSize())
                     .toList();
-            return new Page<>(list, this.basePageDTO.getPageNo(), this.basePageDTO.getPageSize(), list.size());
+            return new Page<>(list, this.basePageDTO.getPageNo(), this.basePageDTO.getPageSize(), totalList.size());
         }
     }
 
@@ -115,11 +123,13 @@ public class BasePageUtil<T> {
             page.setTotalRow(this.data.toList().size());
             return page;
         } else {
-            List<R> list = this.data.skip((long) (this.basePageDTO.getPageNo() - 1) * this.basePageDTO.getPageSize())
+            List<T> totalList = this.data.toList();
+            List<R> list = totalList.stream()
+                    .skip((long) (this.basePageDTO.getPageNo() - 1) * this.basePageDTO.getPageSize())
                     .limit(this.basePageDTO.getPageSize())
                     .map(mapper)
                     .toList();
-            return new Page<>(list, this.basePageDTO.getPageNo(), this.basePageDTO.getPageSize(), list.size());
+            return new Page<>(list, this.basePageDTO.getPageNo(), this.basePageDTO.getPageSize(), totalList.size());
         }
     }
 }

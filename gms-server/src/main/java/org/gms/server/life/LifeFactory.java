@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.server.life;
 
+import org.gms.util.RequireUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.provider.Data;
@@ -48,6 +49,7 @@ public class LifeFactory {
     private static final Data npcStringData = stringDataWZ.getData("Npc.img");
     private static final Map<Integer, MonsterStats> monsterStats = new HashMap<>();
     private static final Set<Integer> hpbarBosses = getHpBarBosses();
+    private static final Map<Integer, String> npcNames = new HashMap<>();
 
     private static Set<Integer> getHpBarBosses() {
         Set<Integer> ret = new HashSet<>();
@@ -289,7 +291,16 @@ public class LifeFactory {
     }
 
     public static NPC getNPC(int nid) {
-        return new NPC(nid, new NPCStats(DataTool.getString(nid + "/name", npcStringData, "MISSINGNO")));
+        String name = npcNames.get(nid);
+        if (RequireUtil.isEmpty(name)) {
+            name = DataTool.getString(nid + "/name", npcStringData, "MISSINGNO");
+            npcNames.put(nid, name);
+        }
+        return new NPC(nid, new NPCStats(name));
+    }
+
+    public static String getNPCName(int nid) {
+        return getNPC(nid).getName();
     }
 
     public static String getNPCDefaultTalk(int nid) {

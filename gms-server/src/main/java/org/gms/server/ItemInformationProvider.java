@@ -101,8 +101,7 @@ public class ItemInformationProvider {
     protected Map<Integer, Integer> wholePriceCache = new HashMap<>();
     protected Map<Integer, Double> unitPriceCache = new HashMap<>();
     protected Map<Integer, Integer> projectileWatkCache = new HashMap<>();
-    protected Map<Integer, String> nameCache = new HashMap<>();
-    protected Map<Integer, String> descCache = new HashMap<>();
+    protected Map<Integer, Pair<String, String>> nameDescCache = new HashMap<>();
     protected Map<Integer, String> msgCache = new HashMap<>();
     protected Map<Integer, Boolean> accountItemRestrictionCache = new HashMap<>();
     protected Map<Integer, Boolean> dropRestrictionCache = new HashMap<>();
@@ -1328,15 +1327,27 @@ public class ItemInformationProvider {
     }
 
     public String getName(int itemId) {
-        if (nameCache.containsKey(itemId)) {
-            return nameCache.get(itemId);
+        Pair<String, String> nameDesc = getNameDesc(itemId);
+        return null == nameDesc ? null : nameDesc.left;
+    }
+
+    public Pair<String, String> getNameDesc(int itemId) {
+        if (nameDescCache.containsKey(itemId)) {
+            return nameDescCache.get(itemId);
         }
         Data strings = getStringData(itemId);
         if (strings == null) {
             return null;
         }
-        String ret = DataTool.getString("name", strings, null);
-        nameCache.put(itemId, ret);
+        List<Data> children = strings.getChildren();
+        if (children == null) {
+            return null;
+        }
+        Pair<String, String> ret = new Pair<>(
+                DataTool.getString(children.get(0)),
+                children.size() > 1 ? DataTool.getString(children.get(1)) : null
+        );
+        nameDescCache.put(itemId, ret);
         return ret;
     }
 
