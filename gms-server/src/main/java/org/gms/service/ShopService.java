@@ -11,6 +11,7 @@ import org.gms.model.dto.ShopItemSearchRtnDTO;
 import org.gms.model.dto.ShopSearchReqDTO;
 import org.gms.model.dto.ShopSearchRtnDTO;
 import org.gms.server.ItemInformationProvider;
+import org.gms.server.ShopFactory;
 import org.gms.server.life.LifeFactory;
 import org.gms.util.BasePageUtil;
 import org.gms.util.Pair;
@@ -87,9 +88,10 @@ public class ShopService {
     }
 
     public Long modifyShopItem(ShopItemSearchRtnDTO data, boolean isDelete) {
+        Long shopItemId;
         if (isDelete) {
             shopitemsMapper.deleteById(data.getId());
-            return data.getId();
+            shopItemId = data.getId();
         } else {
             ShopitemsDO shopitemsDO = ShopitemsDO.builder()
                     .shopitemid(data.getId())
@@ -100,8 +102,10 @@ public class ShopService {
                     .position(data.getPosition())
                     .build();
             shopitemsMapper.insertOrUpdate(shopitemsDO, true);
-            return shopitemsDO.getShopitemid();
+            shopItemId = shopitemsDO.getShopitemid();
         }
+        ShopFactory.getInstance().reloadShops();
+        return shopItemId;
     }
 
     private ShopItemSearchRtnDTO fromShopItemDO(ShopitemsDO shopitemsDO) {

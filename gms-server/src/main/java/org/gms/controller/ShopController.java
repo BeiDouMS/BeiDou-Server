@@ -36,8 +36,8 @@ public class ShopController {
 
     @Tag(name = "/shop/" + ApiConstant.LATEST)
     @Operation(summary = "根据id查询商品信息")
-    @GetMapping("/" + ApiConstant.LATEST + "/getShopItem")
-    public ResultBody<ShopItemSearchRtnDTO> getShopItem(@RequestParam("id") Long id) {
+    @GetMapping("/" + ApiConstant.LATEST + "/getShopItem/{id}")
+    public ResultBody<ShopItemSearchRtnDTO> getShopItem(@PathVariable("id") Long id) {
         return ResultBody.success(shopService.getShopItem(id));
     }
 

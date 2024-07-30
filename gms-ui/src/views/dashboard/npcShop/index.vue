@@ -53,6 +53,22 @@
             :width="200"
             align="center"
           />
+          <a-table-column
+            title="NPC图片"
+            data-index="npcId"
+            :width="100"
+            align="center"
+          >
+            <template #cell="{ record }">
+              <img
+                :src="
+                  'https://maplestory.io/api/GMS/83/npc/' +
+                  record.npcId +
+                  '/icon'
+                "
+              />
+            </template>
+          </a-table-column>
           <a-table-column title="操作">
             <template #cell="{ record }">
               <a-button
@@ -88,7 +104,7 @@
             :width="100"
             align="center"
           />
-          <a-table-column title="物品" align="center" :width="80">
+          <a-table-column title="物品图片" align="center" :width="100">
             <template #cell="{ record }">
               <img
                 :src="
@@ -172,7 +188,7 @@
                 type="text"
                 size="mini"
                 status="normal"
-                @click="editMode = -1"
+                @click="rollbackClick(record)"
               >
                 返回
               </a-button>
@@ -302,7 +318,7 @@
 
   const insertItemClick = () => {
     shopItemList.value?.unshift({
-      id: undefined,
+      id: -1,
       shopId: shopId.value,
       itemId: undefined,
       price: 0,
@@ -339,6 +355,18 @@
       setLoading(false);
       await loadShopItemList();
     }
+  };
+
+  const rollbackClick = async (record: NpcShopItemState) => {
+    setLoading(true);
+    if (record.id === -1) {
+      const index = shopItemList.value?.findIndex((item) => item === record);
+      if (index != null && index > -1) {
+        shopItemList.value?.splice(index, 1);
+      }
+    }
+    editMode.value = -1;
+    setLoading(false);
   };
 </script>
 
