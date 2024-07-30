@@ -61,6 +61,10 @@ yarn dev
 ![w1.jpeg](mdimg/w1.jpeg)
 ![w2.jpeg](mdimg/w2.jpeg)
 ![w3.jpeg](mdimg/w3.jpeg)
+![w4.jpeg](mdimg/w4.jpeg)
+
+## 备注
+web中所有的图片均需要联网获取，感谢https://maplestory.io提供给的图片接口！  
 
 # 客户端
 ## 客户端下载

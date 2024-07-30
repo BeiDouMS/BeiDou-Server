@@ -4,7 +4,7 @@
       <a-space>
         <img
           alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
+          src="https://maplestory.io/api/GMS/83/mob/130101/render/hit1"
         />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
@@ -99,9 +99,8 @@
           <a-avatar
             :size="32"
             :style="{ marginRight: '8px', cursor: 'pointer' }"
-          >
-            <img alt="avatar" :src="avatar" />
-          </a-avatar>
+            :src="avatar"
+          />
           <template #content>
             <a-doption>
               <a-space @click="$router.push({ name: 'Info' })">
@@ -144,6 +143,7 @@
   const { logout } = useUser();
   const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
   const avatar = computed(() => {
+    // fixme 不存在的type
     return userStore.avatar;
   });
   const theme = computed(() => {
