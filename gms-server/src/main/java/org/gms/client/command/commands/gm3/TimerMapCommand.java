@@ -26,22 +26,23 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class TimerMapCommand extends Command {
     {
-        setDescription("Set timer on all players in current map.");
+        setDescription(I18nUtil.getMessage("TimerMapCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !timermap <seconds>|remove");
+            player.yellowMessage(I18nUtil.getMessage("TimerMapCommand.message2"));
             return;
         }
 
-        if (params[0].equalsIgnoreCase("remove")) {
+        if (params[0].equalsIgnoreCase("remove") || "移除".equals(params[0])) {
             for (Character victim : player.getMap().getCharacters()) {
                 victim.sendPacket(PacketCreator.removeClock());
             }
@@ -52,7 +53,7 @@ public class TimerMapCommand extends Command {
                     victim.sendPacket(PacketCreator.getClock(seconds));
                 }
             } catch (NumberFormatException e) {
-                player.yellowMessage("Syntax: !timermap <seconds>|remove");
+                player.yellowMessage(I18nUtil.getMessage("TimerMapCommand.message2"));
             }
         }
     }

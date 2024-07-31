@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.quest.Quest;
+import org.gms.util.I18nUtil;
 
 public class QuestResetCommand extends Command {
     {
-        setDescription("Reset a completed quest.");
+        setDescription(I18nUtil.getMessage("QuestResetCommand.message1"));
     }
 
     @Override
@@ -38,19 +39,19 @@ public class QuestResetCommand extends Command {
         Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !resetquest <questid>");
+            player.yellowMessage(I18nUtil.getMessage("QuestResetCommand.message2"));
             return;
         }
 
-        int questid_ = Integer.parseInt(params[0]);
+        int questId = Integer.parseInt(params[0]);
 
-        if (player.getQuestStatus(questid_) != 0) {
-            Quest quest = Quest.getInstance(questid_);
+        if (player.getQuestStatus(questId) != 0) {
+            Quest quest = Quest.getInstance(questId);
             if (quest != null) {
                 quest.reset(player);
-                player.dropMessage(5, "QUEST " + questid_ + " reseted.");
+                player.dropMessage(5, I18nUtil.getMessage("QuestResetCommand.message3", questId));
             } else {    // should not occur
-                player.dropMessage(5, "QUESTID " + questid_ + " is invalid.");
+                player.dropMessage(5, I18nUtil.getMessage("QuestResetCommand.message4", questId));
             }
         }
     }

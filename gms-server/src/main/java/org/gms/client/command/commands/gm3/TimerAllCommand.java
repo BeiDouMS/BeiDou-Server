@@ -26,22 +26,23 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class TimerAllCommand extends Command {
     {
-        setDescription("Set a server wide timer.");
+        setDescription(I18nUtil.getMessage("TimerAllCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !timerall <seconds>|remove");
+            player.yellowMessage(I18nUtil.getMessage("TimerAllCommand.message2"));
             return;
         }
 
-        if (params[0].equalsIgnoreCase("remove")) {
+        if (params[0].equalsIgnoreCase("remove") || "移除".equals(params[0])) {
             for (Character victim : player.getWorldServer().getPlayerStorage().getAllCharacters()) {
                 victim.sendPacket(PacketCreator.removeClock());
             }
@@ -52,7 +53,7 @@ public class TimerAllCommand extends Command {
                     victim.sendPacket(PacketCreator.getClock(seconds));
                 }
             } catch (NumberFormatException e) {
-                player.yellowMessage("Syntax: !timerall <seconds>|remove");
+                player.yellowMessage(I18nUtil.getMessage("TimerAllCommand.message2"));
             }
         }
     }

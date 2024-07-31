@@ -29,6 +29,7 @@ import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.sql.Connection;
@@ -37,14 +38,14 @@ import java.sql.SQLException;
 
 public class BanCommand extends Command {
     {
-        setDescription("Ban a player.");
+        setDescription(I18nUtil.getMessage("BanCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 2) {
-            player.yellowMessage("Syntax: !ban <IGN> <Reason> (Please be descriptive)");
+            player.yellowMessage(I18nUtil.getMessage("BanCommand.message2"));
             return;
         }
         String ign = params[0];
@@ -65,21 +66,21 @@ public class BanCommand extends Command {
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                c.getPlayer().message("Error occured while banning IP address");
-                c.getPlayer().message(target.getName() + "'s IP was not banned: " + ip);
+                c.getPlayer().message(I18nUtil.getMessage("BanCommand.message3"));
+                c.getPlayer().message(I18nUtil.getMessage("BanCommand.message4", target.getName(), ip));
             }
             target.getClient().banMacs();
-            reason = c.getPlayer().getName() + " banned " + readableTargetName + " for " + reason + " (IP: " + ip + ") " + "(MAC: " + c.getMacs() + ")";
+            reason = I18nUtil.getMessage("BanCommand.message5", c.getPlayer().getName(), readableTargetName, reason, ip, c.getMacs());
             target.ban(reason);
-            target.yellowMessage("You have been banned by #b" + c.getPlayer().getName() + " #k.");
-            target.yellowMessage("Reason: " + reason);
+            target.yellowMessage(I18nUtil.getMessage("BanCommand.message6", c.getPlayer().getName()));
+            target.yellowMessage(I18nUtil.getMessage("BanCommand.message7", reason));
             c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
             final Character rip = target;
             TimerManager.getInstance().schedule(() -> rip.getClient().disconnect(false, false), 5000); //5 Seconds
-            Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, "[RIP]: " + ign + " has been banned."));
+            Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, I18nUtil.getMessage("BanCommand.message8", ign)));
         } else if (Character.ban(ign, reason, false)) {
             c.sendPacket(PacketCreator.getGMEffect(4, (byte) 0));
-            Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, "[RIP]: " + ign + " has been banned."));
+            Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(6, I18nUtil.getMessage("BanCommand.message8", ign)));
         } else {
             c.sendPacket(PacketCreator.getGMEffect(6, (byte) 1));
         }

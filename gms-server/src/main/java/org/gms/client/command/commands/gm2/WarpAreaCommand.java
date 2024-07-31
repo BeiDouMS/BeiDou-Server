@@ -27,27 +27,28 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 import java.awt.*;
 import java.util.Collection;
 
 public class WarpAreaCommand extends Command {
     {
-        setDescription("Warp all nearby players to a new map.");
+        setDescription(I18nUtil.getMessage("WarpAreaCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !warparea <mapid>");
+            player.yellowMessage(I18nUtil.getMessage("WarpAreaCommand.message2"));
             return;
         }
 
         try {
             MapleMap target = c.getChannelServer().getMapFactory().getMap(Integer.parseInt(params[0]));
             if (target == null) {
-                player.yellowMessage("Map ID " + params[0] + " is invalid.");
+                player.yellowMessage(I18nUtil.getMessage("WarpMapCommand.message3", params[0]));
                 return;
             }
 
@@ -62,7 +63,7 @@ public class WarpAreaCommand extends Command {
                 }
             }
         } catch (Exception ex) {
-            player.yellowMessage("Map ID " + params[0] + " is invalid.");
+            player.yellowMessage(I18nUtil.getMessage("WarpMapCommand.message3", params[0]));
         }
     }
 }

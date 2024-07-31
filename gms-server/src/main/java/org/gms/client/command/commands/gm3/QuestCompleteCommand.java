@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.quest.Quest;
+import org.gms.util.I18nUtil;
 
 public class QuestCompleteCommand extends Command {
     {
-        setDescription("Complete an active quest.");
+        setDescription(I18nUtil.getMessage("QuestCompleteCommand.message1"));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class QuestCompleteCommand extends Command {
         Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !completequest <questid>");
+            player.yellowMessage(I18nUtil.getMessage("QuestCompleteCommand.message2"));
             return;
         }
 
@@ -52,9 +53,9 @@ public class QuestCompleteCommand extends Command {
                 c.getAbstractPlayerInteraction().forceCompleteQuest(questId);
             }
 
-            player.dropMessage(5, "QUEST " + questId + " completed.");
+            player.dropMessage(5, I18nUtil.getMessage("QuestCompleteCommand.message3", questId));
         } else {
-            player.dropMessage(5, "QUESTID " + questId + " not started or already completed.");
+            player.dropMessage(5, I18nUtil.getMessage("QuestCompleteCommand.message4", questId));
         }
     }
 }

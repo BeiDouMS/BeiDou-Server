@@ -28,18 +28,19 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.NPC;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class NpcCommand extends Command {
     {
-        setDescription("Spawn an NPC on your location.");
+        setDescription(I18nUtil.getMessage("NpcCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !npc <npcid>");
+            player.yellowMessage(I18nUtil.getMessage("NpcCommand.message2"));
             return;
         }
         NPC npc = LifeFactory.getNPC(Integer.parseInt(params[0]));

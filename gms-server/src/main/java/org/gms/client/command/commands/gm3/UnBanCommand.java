@@ -27,20 +27,21 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 public class UnBanCommand extends Command {
     {
-        setDescription("Unban a player.");
+        setDescription(I18nUtil.getMessage("UnBanCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !unban <playername>");
+            player.yellowMessage(I18nUtil.getMessage("UnBanCommand.message2"));
             return;
         }
 
@@ -60,9 +61,9 @@ public class UnBanCommand extends Command {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            player.message("Failed to unban " + params[0]);
+            player.message(I18nUtil.getMessage("UnBanCommand.message3", params[0]));
             return;
         }
-        player.message("Unbanned " + params[0]);
+        player.message(I18nUtil.getMessage("UnBanCommand.message4", params[0]));
     }
 }

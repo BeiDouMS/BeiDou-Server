@@ -26,16 +26,17 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class NightCommand extends Command {
     {
-        setDescription("Set sky background to black.");
+        setDescription(I18nUtil.getMessage("NightCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         player.getMap().broadcastNightEffect();
-        player.yellowMessage("Done.");
+        player.yellowMessage(I18nUtil.getMessage("NightCommand.message2"));
     }
 }

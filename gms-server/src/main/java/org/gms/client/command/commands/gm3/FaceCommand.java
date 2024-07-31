@@ -29,17 +29,18 @@ import org.gms.client.Stat;
 import org.gms.client.command.Command;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 
 public class FaceCommand extends Command {
     {
-        setDescription("Change face of a player.");
+        setDescription(I18nUtil.getMessage("FaceCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !face [<playername>] <faceid>");
+            player.yellowMessage(I18nUtil.getMessage("FaceCommand.message2"));
             return;
         }
 
@@ -47,7 +48,7 @@ public class FaceCommand extends Command {
             if (params.length == 1) {
                 int itemId = Integer.parseInt(params[0]);
                 if (!ItemConstants.isFace(itemId) || ItemInformationProvider.getInstance().getName(itemId) == null) {
-                    player.yellowMessage("Face id '" + params[0] + "' does not exist.");
+                    player.yellowMessage(I18nUtil.getMessage("FaceCommand.message3", params[0]));
                     return;
                 }
 
@@ -57,19 +58,20 @@ public class FaceCommand extends Command {
             } else {
                 int itemId = Integer.parseInt(params[1]);
                 if (!ItemConstants.isFace(itemId) || ItemInformationProvider.getInstance().getName(itemId) == null) {
-                    player.yellowMessage("Face id '" + params[1] + "' does not exist.");
+                    player.yellowMessage(I18nUtil.getMessage("FaceCommand.message3", params[1]));
                 }
 
-                Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
+                Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
                 if (victim != null) {
                     victim.setFace(itemId);
                     victim.updateSingleStat(Stat.FACE, itemId);
                     victim.equipChanged();
                 } else {
-                    player.yellowMessage("Player '" + params[0] + "' has not been found on this channel.");
+                    player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

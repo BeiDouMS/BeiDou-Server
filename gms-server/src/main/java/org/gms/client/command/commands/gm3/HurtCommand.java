@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class HurtCommand extends Command {
     {
-        setDescription("Nearly kill a player.");
+        setDescription(I18nUtil.getMessage("HurtCommand.message1"));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class HurtCommand extends Command {
         if (victim != null) {
             victim.updateHp(1);
         } else {
-            player.message("Player '" + params[0] + "' could not be found.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

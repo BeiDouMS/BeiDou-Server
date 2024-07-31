@@ -9191,7 +9191,7 @@ public class Character extends AbstractCharacterObject {
         if (nextWarningTime < curTime) {
             nextWarningTime = curTime + MINUTES.toMillis(1);   // show underlevel info again after 1 minute
 
-            showHint(I18nUtil.getMessage("Character.showUnderLeveledInfo"));
+            showHint(I18nUtil.getMessage("Character.showUnderLeveledInfo", mob.getName(), mob.getLevel()));
         }
     }
 

@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class KillMapCommand extends Command {
     {
-        setDescription("Kill all players in the map.");
+        setDescription(I18nUtil.getMessage("KillMapCommand.message1"));
     }
 
     @Override

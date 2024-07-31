@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class HealMapCommand extends Command {
     {
-        setDescription("Heal all HP/MP of all players in the map.");
+        setDescription(I18nUtil.getMessage("HealMapCommand.message1"));
     }
 
     @Override

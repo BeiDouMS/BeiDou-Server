@@ -26,34 +26,35 @@ package org.gms.client.command.commands.gm3;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class TimerCommand extends Command {
     {
-        setDescription("Set timer on a player in current map.");
+        setDescription(I18nUtil.getMessage("TimerCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 2) {
-            player.yellowMessage("Syntax: !timer <playername> <seconds>|remove");
+            player.yellowMessage(I18nUtil.getMessage("TimerCommand.message2"));
             return;
         }
 
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
-            if (params[1].equalsIgnoreCase("remove")) {
+            if (params[1].equalsIgnoreCase("remove") || "移除".equals(params[1])) {
                 victim.sendPacket(PacketCreator.removeClock());
             } else {
                 try {
                     victim.sendPacket(PacketCreator.getClock(Integer.parseInt(params[1])));
                 } catch (NumberFormatException e) {
-                    player.yellowMessage("Syntax: !timer <playername> <seconds>|remove");
+                    player.yellowMessage(I18nUtil.getMessage("TimerCommand.message2"));
                 }
             }
         } else {
-            player.message("Player '" + params[0] + "' could not be found.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }
