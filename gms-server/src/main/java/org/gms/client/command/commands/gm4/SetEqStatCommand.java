@@ -30,17 +30,18 @@ import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.util.I18nUtil;
 
 public class SetEqStatCommand extends Command {
     {
-        setDescription("Set stats of all equips in inventory.");
+        setDescription(I18nUtil.getMessage("SetEqStatCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !seteqstat <stat value> [<spdjmp value>]");
+            player.yellowMessage(I18nUtil.getMessage("SetEqStatCommand.message2"));
             return;
         }
 

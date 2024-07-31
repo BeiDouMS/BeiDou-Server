@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.id.MobId;
 import org.gms.server.life.LifeFactory;
+import org.gms.util.I18nUtil;
 
 public class ZakumCommand extends Command {
     {
-        setDescription("Spawn Zakum on your location.");
+        setDescription(I18nUtil.getMessage("ZakumCommand.message1"));
     }
 
     @Override

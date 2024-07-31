@@ -28,13 +28,14 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
+import org.gms.util.I18nUtil;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class ItemVacCommand extends Command {
     {
-        setDescription("Loot all drops on the map.");
+        setDescription(I18nUtil.getMessage("ItemVacCommand.message1"));
     }
 
     @Override

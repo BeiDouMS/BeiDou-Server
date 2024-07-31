@@ -26,23 +26,24 @@ package org.gms.client.command.commands.gm4;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class ExpRateCommand extends Command {
     {
-        setDescription("Set world exp rate.");
+        setDescription(I18nUtil.getMessage("ExpRateCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !exprate <newrate>");
+            player.yellowMessage(I18nUtil.getMessage("ExpRateCommand.message2"));
             return;
         }
 
         int exprate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setExpRate(exprate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Exp Rate has been changed to " + exprate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("ExpRateCommand.message3", exprate)));
     }
 }

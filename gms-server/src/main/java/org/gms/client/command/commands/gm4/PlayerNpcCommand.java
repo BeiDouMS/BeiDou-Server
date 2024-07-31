@@ -27,22 +27,23 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.PlayerNPC;
+import org.gms.util.I18nUtil;
 
 public class PlayerNpcCommand extends Command {
     {
-        setDescription("Spawn a player NPC of an online player.");
+        setDescription(I18nUtil.getMessage("PlayerNpcCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !playernpc <playername>");
+            player.yellowMessage(I18nUtil.getMessage("PlayerNpcCommand.message2"));
             return;
         }
 
         if (!PlayerNPC.spawnPlayerNPC(player.getMapId(), player.getPosition(), c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]))) {
-            player.dropMessage(5, "Could not deploy PlayerNPC. Either there's no room available here or depleted out scriptids to use.");
+            player.dropMessage(5, I18nUtil.getMessage("PlayerNpcCommand.message3"));
         }
     }
 }

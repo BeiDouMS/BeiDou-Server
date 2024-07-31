@@ -31,6 +31,7 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 
 import java.awt.*;
 import java.sql.Connection;
@@ -39,14 +40,14 @@ import java.sql.SQLException;
 
 public class PmobCommand extends Command {
     {
-        setDescription("Spawn a permanent mob on your location.");
+        setDescription(I18nUtil.getMessage("PmobCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !pmob <mobid> [<mobtime>]");
+            player.yellowMessage(I18nUtil.getMessage("PmobCommand.message2"));
             return;
         }
 
@@ -90,13 +91,13 @@ public class PmobCommand extends Command {
                     map.addAllMonsterSpawn(mob, mobTime, -1);
                 }
 
-                player.yellowMessage("Pmob created.");
+                player.yellowMessage(I18nUtil.getMessage("PmobCommand.message3"));
             } catch (SQLException e) {
                 e.printStackTrace();
-                player.dropMessage(5, "Failed to store pmob in the database.");
+                player.dropMessage(5, I18nUtil.getMessage("PmobCommand.message4"));
             }
         } else {
-            player.dropMessage(5, "You have entered an invalid mob id.");
+            player.dropMessage(5, I18nUtil.getMessage("PmobCommand.message5"));
         }
     }
 }

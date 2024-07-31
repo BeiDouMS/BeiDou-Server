@@ -27,17 +27,18 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.PlayerNPC;
+import org.gms.util.I18nUtil;
 
 public class PlayerNpcRemoveCommand extends Command {
     {
-        setDescription("Remove a \"lv 200\" player NPC.");
+        setDescription(I18nUtil.getMessage("PlayerNpcRemoveCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !playernpcremove <playername>");
+            player.yellowMessage(I18nUtil.getMessage("PlayerNpcRemoveCommand.message2"));
             return;
         }
         PlayerNPC.removePlayerNPC(c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]));

@@ -31,6 +31,7 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.NPC;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.awt.*;
@@ -40,14 +41,14 @@ import java.sql.SQLException;
 
 public class PnpcCommand extends Command {
     {
-        setDescription("Spawn a permanent NPC on your location.");
+        setDescription(I18nUtil.getMessage("PnpcCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !pnpc <npcid>");
+            player.yellowMessage(I18nUtil.getMessage("PnpcCommand.message2"));
             return;
         }
 
@@ -55,7 +56,7 @@ public class PnpcCommand extends Command {
         int mapId = player.getMapId();
         int npcId = Integer.parseInt(params[0]);
         if (player.getMap().containsNPC(npcId)) {
-            player.dropMessage(5, "This map already contains the specified NPC.");
+            player.dropMessage(5, I18nUtil.getMessage("PnpcCommand.message3"));
             return;
         }
 
@@ -97,13 +98,13 @@ public class PnpcCommand extends Command {
                     map.broadcastMessage(PacketCreator.spawnNPC(npc));
                 }
 
-                player.yellowMessage("Pnpc created.");
+                player.yellowMessage(I18nUtil.getMessage("PnpcCommand.message4"));
             } catch (SQLException e) {
                 e.printStackTrace();
-                player.dropMessage(5, "Failed to store pNPC in the database.");
+                player.dropMessage(5, I18nUtil.getMessage("PnpcCommand.message5"));
             }
         } else {
-            player.dropMessage(5, "You have entered an invalid NPC id.");
+            player.dropMessage(5, I18nUtil.getMessage("PnpcCommand.message6"));
         }
     }
 }

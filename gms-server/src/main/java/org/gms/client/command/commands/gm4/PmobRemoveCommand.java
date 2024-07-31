@@ -29,6 +29,7 @@ import org.gms.client.command.Command;
 import org.gms.net.server.channel.Channel;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 
 import java.awt.*;
@@ -41,7 +42,7 @@ import java.util.List;
 
 public class PmobRemoveCommand extends Command {
     {
-        setDescription("Remove all permanent mobs of the same type on the map.");
+        setDescription(I18nUtil.getMessage("PmobRemoveCommand.message1"));
     }
 
     @Override
@@ -91,7 +92,7 @@ public class PmobRemoveCommand extends Command {
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
-            player.dropMessage(5, "Failed to remove pmob from the database.");
+            player.dropMessage(5, I18nUtil.getMessage("PmobRemoveCommand.message2"));
         }
 
         if (!toRemove.isEmpty()) {
@@ -105,6 +106,6 @@ public class PmobRemoveCommand extends Command {
             }
         }
 
-        player.yellowMessage("Cleared " + toRemove.size() + " pmob placements.");
+        player.yellowMessage(I18nUtil.getMessage("PmobRemoveCommand.message3", toRemove.size()));
     }
 }

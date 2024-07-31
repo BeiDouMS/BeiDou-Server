@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.id.MobId;
 import org.gms.server.life.LifeFactory;
+import org.gms.util.I18nUtil;
 
 public class PinkbeanCommand extends Command {
     {
-        setDescription("Spawn Pink Bean on your location.");
+        setDescription(I18nUtil.getMessage("PinkbeanCommand.message1"));
     }
 
     @Override

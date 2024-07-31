@@ -29,10 +29,11 @@ import org.gms.client.command.Command;
 import org.gms.constants.id.MobId;
 import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
+import org.gms.util.I18nUtil;
 
 public class CakeCommand extends Command {
     {
-        setDescription("Spawn Cake boss with specified HP.");
+        setDescription(I18nUtil.getMessage("CakeCommand.message1"));
     }
 
     @Override

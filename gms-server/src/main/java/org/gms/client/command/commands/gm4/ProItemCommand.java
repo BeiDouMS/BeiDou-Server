@@ -32,17 +32,18 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
+import org.gms.util.I18nUtil;
 
 public class ProItemCommand extends Command {
     {
-        setDescription("Spawn an item with custom stats.");
+        setDescription(I18nUtil.getMessage("ProItemCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 2) {
-            player.yellowMessage("Syntax: !proitem <itemid> <stat value> [<spdjmp value>]");
+            player.yellowMessage(I18nUtil.getMessage("ProItemCommand.message2"));
             return;
         }
 
@@ -50,7 +51,7 @@ public class ProItemCommand extends Command {
         int itemid = Integer.parseInt(params[0]);
 
         if (ii.getName(itemid) == null) {
-            player.yellowMessage("Item id '" + params[0] + "' does not exist.");
+            player.yellowMessage(I18nUtil.getMessage("ProItemCommand.message3", params[0]));
             return;
         }
 
@@ -65,7 +66,7 @@ public class ProItemCommand extends Command {
             hardsetItemStats((Equip) it, stat, spdjmp);
             InventoryManipulator.addFromDrop(c, it);
         } else {
-            player.dropMessage(6, "Make sure it's an equippable item.");
+            player.dropMessage(6, I18nUtil.getMessage("ProItemCommand.message4"));
         }
     }
 

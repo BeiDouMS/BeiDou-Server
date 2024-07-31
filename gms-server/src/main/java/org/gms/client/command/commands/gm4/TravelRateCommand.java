@@ -26,23 +26,24 @@ package org.gms.client.command.commands.gm4;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class TravelRateCommand extends Command {
     {
-        setDescription("Set world travel rate.");
+        setDescription(I18nUtil.getMessage("TravelRateCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !travelrate <newrate>");
+            player.yellowMessage(I18nUtil.getMessage("TravelRateCommand.message2"));
             return;
         }
 
         int travelrate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setTravelRate(travelrate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Travel Rate has been changed to " + travelrate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("TravelRateCommand.message3", travelrate)));
     }
 }

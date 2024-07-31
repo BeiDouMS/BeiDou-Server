@@ -22,6 +22,7 @@ package org.gms.client.command.commands.gm4;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -29,19 +30,19 @@ import org.gms.util.PacketCreator;
  */
 public class BossDropRateCommand extends Command {
     {
-        setDescription("Set world boss drop rate.");
+        setDescription(I18nUtil.getMessage("BossDropRateCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !bossdroprate <newrate>");
+            player.yellowMessage(I18nUtil.getMessage("BossDropRateCommand.message2"));
             return;
         }
 
         int bossdroprate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setBossDropRate(bossdroprate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Boss Drop Rate has been changed to " + bossdroprate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("BossDropRateCommand.message3", bossdroprate)));
     }
 }

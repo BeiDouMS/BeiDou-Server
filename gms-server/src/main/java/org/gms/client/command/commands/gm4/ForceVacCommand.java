@@ -32,6 +32,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.server.maps.MapItem;
 import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.util.Arrays;
@@ -39,13 +40,13 @@ import java.util.List;
 
 public class ForceVacCommand extends Command {
     {
-        setDescription("Loot all drops on the map.");
+        setDescription(I18nUtil.getMessage("ForceVacCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        List<MapObject> items = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, Arrays.asList(MapObjectType.ITEM));
+        List<MapObject> items = player.getMap().getMapObjectsInRange(player.getPosition(), Double.POSITIVE_INFINITY, List.of(MapObjectType.ITEM));
         for (MapObject item : items) {
             MapItem mapItem = (MapItem) item;
 

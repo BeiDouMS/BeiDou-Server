@@ -27,12 +27,13 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.maps.MapleMap;
+import org.gms.util.I18nUtil;
 
 import java.awt.*;
 
 public class HorntailCommand extends Command {
     {
-        setDescription("Spawn Horntail on your location.");
+        setDescription(I18nUtil.getMessage("HorntailCommand.message1"));
     }
 
     @Override

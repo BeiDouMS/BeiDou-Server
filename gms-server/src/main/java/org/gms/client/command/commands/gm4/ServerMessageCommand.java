@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm4;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class ServerMessageCommand extends Command {
     {
-        setDescription("Set scrolling server message.");
+        setDescription(I18nUtil.getMessage("ServerMessageCommand.message1"));
     }
 
     @Override

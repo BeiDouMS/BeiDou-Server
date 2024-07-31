@@ -26,23 +26,24 @@ package org.gms.client.command.commands.gm4;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class FishingRateCommand extends Command {
     {
-        setDescription("Set fishing rate.");
+        setDescription(I18nUtil.getMessage("FishingRateCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !fishrate <newrate>");
+            player.yellowMessage(I18nUtil.getMessage("FishingRateCommand.message2"));
             return;
         }
 
         int fishrate = Math.max(Integer.parseInt(params[0]), 1);
         c.getWorldServer().setFishingRate(fishrate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, "[Rate] Fishing Rate has been changed to " + fishrate + "x."));
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("FishingRateCommand.message3", fishrate)));
     }
 }
