@@ -2105,7 +2105,8 @@ public class Character extends AbstractCharacterObject {
                                 this.getCashShop().gainCash(1, nxGain);
 
                                 if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
-                                    showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(1) + " NX)", 300);
+                                    // message("你捡到了 " + nxGain + " 点券, 余额: " + getCashShop().getCash(1) +".");
+                                    sendPacket(PacketCreator.gMessage((byte) 0, "你捡到了 " + nxGain + " 点券, 余额: " + getCashShop().getCash(1) + "."));
                                 }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
@@ -2157,7 +2158,8 @@ public class Character extends AbstractCharacterObject {
                         this.getCashShop().gainCash(1, nxGain);
 
                         if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
-                            showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(1) + " NX)", 300);
+                            // message("你捡到了 " + nxGain + " 点券, 余额: " + getCashShop().getCash(1) +".");
+                            sendPacket(PacketCreator.gMessage((byte) 0, "你捡到了 " + nxGain + " 点券, 余额: " + getCashShop().getCash(1) + "."));
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {

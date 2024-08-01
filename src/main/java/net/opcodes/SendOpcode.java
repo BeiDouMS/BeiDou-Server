@@ -359,6 +359,7 @@ public enum SendOpcode {
     SHOW_UI(0x168),
     OPEN_URL(0x169),
     STATIC_DATA(0x170),
+    G_MESSAGE(0x171),
     ;
     private int code = -2;
 

@@ -180,6 +180,7 @@ import client.command.commands.gm4.SetEqStatCommand;
 import client.command.commands.gm4.TravelRateCommand;
 import client.command.commands.gm4.ZakumCommand;
 import client.command.commands.gm5.DebugCommand;
+import client.command.commands.gm5.GMessageCommand;
 import client.command.commands.gm5.IpListCommand;
 import client.command.commands.gm5.SetCommand;
 import client.command.commands.gm5.ShowMoveLifeCommand;
@@ -542,6 +543,7 @@ public class CommandsExecutor {
         addCommand("showmovelife", 5, ShowMoveLifeCommand.class);
         addCommand("showsessions", 5, ShowSessionsCommand.class);
         addCommand("iplist", 5, IpListCommand.class);
+        addCommand("gmsg", 5, GMessageCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }

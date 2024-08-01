@@ -7473,4 +7473,28 @@ public class PacketCreator {
         p.writeInt(quantity);
         return p;
     }
+
+    /**
+     * 发送右下角信息, 停留 8 秒
+     * @param type 0 红色; 1 绿; 2: 蓝
+     * @param msg 发送的消息
+     * @return OutPacket
+     */
+    public static Packet gMessage(byte type, String msg) {
+        return gMessage(type, msg, (byte) 8);
+    }
+    /**
+     * 发送右下角信息
+     * @param type 0 红色; 1 绿; 2: 蓝
+     * @param msg 发送的消息
+     * @param seconds 停留时间(秒), 0常驻，可被用户主动关闭或者用户消息满时被清除.
+     * @return OutPacket
+     */
+    public static Packet gMessage(byte type, String msg, byte seconds) {
+        OutPacket p = OutPacket.create(SendOpcode.G_MESSAGE);
+        p.writeByte(type);
+        p.writeString(msg);
+        p.writeByte(seconds);
+        return p;
+    }
 }
