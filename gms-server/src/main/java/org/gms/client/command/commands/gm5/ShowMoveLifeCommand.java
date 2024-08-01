@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm5;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class ShowMoveLifeCommand extends Command {
     {
-        setDescription("Toggle show move life in console.");
+        setDescription(I18nUtil.getMessage("ShowMoveLifeCommand.message1"));
     }
 
     @Override

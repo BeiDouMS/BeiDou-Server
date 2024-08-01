@@ -22,13 +22,14 @@ package org.gms.client.command.commands.gm5;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
+import org.gms.util.I18nUtil;
 
 /**
  * @author Ronan
  */
 public class ShowSessionsCommand extends Command {
     {
-        setDescription("Show online sessions.");
+        setDescription(I18nUtil.getMessage("ShowSessionsCommand.message1"));
     }
 
     @Override

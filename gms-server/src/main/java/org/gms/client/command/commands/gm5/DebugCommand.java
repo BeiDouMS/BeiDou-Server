@@ -35,6 +35,7 @@ import org.gms.server.maps.MapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.Portal;
 import org.gms.server.maps.Reactor;
+import org.gms.util.I18nUtil;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -44,7 +45,7 @@ public class DebugCommand extends Command {
     private final static String[] debugTypes = {"monster", "packet", "portal", "spawnpoint", "pos", "map", "mobsp", "event", "areas", "reactors", "servercoupons", "playercoupons", "timer", "marriage", "buff", ""};
 
     {
-        setDescription("Show a debug message.");
+        setDescription(I18nUtil.getMessage("DebugCommand.message1"));
     }
 
     @Override
@@ -52,14 +53,14 @@ public class DebugCommand extends Command {
         Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !debug <type>");
+            player.yellowMessage(I18nUtil.getMessage("DebugCommand.message2"));
             return;
         }
 
         switch (params[0]) {
             case "type":
             case "help":
-                String msgTypes = "Available #bdebug types#k:\r\n\r\n";
+                String msgTypes = I18nUtil.getMessage("DebugCommand.message3") + "\r\n\r\n";
                 for (int i = 0; i < debugTypes.length; i++) {
                     msgTypes += ("#L" + i + "#" + debugTypes[i] + "#l\r\n");
                 }
@@ -72,7 +73,7 @@ public class DebugCommand extends Command {
                 for (MapObject monstermo : monsters) {
                     Monster monster = (Monster) monstermo;
                     Character controller = monster.getController();
-                    player.message("Monster ID: " + monster.getId() + " Aggro target: " + ((controller != null) ? controller.getName() + " Has aggro: " + monster.isControllerHasAggro() + " Knowns aggro: " + monster.isControllerKnowsAboutAggro() : "<none>"));
+                    player.message(I18nUtil.getMessage("DebugCommand.message4", monster.getId(), controller != null ? I18nUtil.getMessage("DebugCommand.message5", controller.getName(), monster.isControllerHasAggro(), monster.isControllerKnowsAboutAggro()) : "<none>"));
                 }
                 break;
 
@@ -83,27 +84,27 @@ public class DebugCommand extends Command {
             case "portal":
                 Portal portal = player.getMap().findClosestPortal(player.getPosition());
                 if (portal != null) {
-                    player.dropMessage(6, "Closest portal: " + portal.getId() + " '" + portal.getName() + "' Type: " + portal.getType() + " --> toMap: " + portal.getTargetMapId() + " scriptname: '" + portal.getScriptName() + "' state: " + (portal.getPortalState() ? 1 : 0) + ".");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message6", portal.getId(), portal.getName(), portal.getType(), portal.getTargetMapId(), portal.getScriptName(), portal.getPortalState() ? 1 : 0));
                 } else {
-                    player.dropMessage(6, "There is no portal on this map.");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message7"));
                 }
                 break;
 
             case "spawnpoint":
                 SpawnPoint sp = player.getMap().findClosestSpawnpoint(player.getPosition());
                 if (sp != null) {
-                    player.dropMessage(6, "Closest mob spawn point: " + " Position: x " + sp.getPosition().getX() + " y " + sp.getPosition().getY() + " Spawns mobid: '" + sp.getMonsterId() + "' --> canSpawn: " + !sp.getDenySpawn() + " canSpawnRightNow: " + sp.shouldSpawn() + ".");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message8", sp.getPosition().getX(), sp.getPosition().getY(), sp.getMonsterId(), !sp.getDenySpawn(), sp.shouldSpawn()));
                 } else {
-                    player.dropMessage(6, "There is no mob spawn point on this map.");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message9"));
                 }
                 break;
 
             case "pos":
-                player.dropMessage(6, "Current map position: (" + player.getPosition().getX() + ", " + player.getPosition().getY() + ").");
+                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message10", player.getPosition().getX(), player.getPosition().getY()));
                 break;
 
             case "map":
-                player.dropMessage(6, "Current map id " + player.getMap().getId() + ", event: '" + ((player.getMap().getEventInstance() != null) ? player.getMap().getEventInstance().getName() : "null") + "'; Players: " + player.getMap().getAllPlayers().size() + ", Mobs: " + player.getMap().countMonsters() + ", Reactors: " + player.getMap().countReactors() + ", Items: " + player.getMap().countItems() + ", Objects: " + player.getMap().getMapObjects().size() + ".");
+                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message11", player.getMap().getId(), player.getMap().getEventInstance() != null ? player.getMap().getEventInstance().getName() : "null", player.getMap().getAllPlayers().size(), player.getMap().countMonsters(), player.getMap().countReactors(), player.getMap().countItems(), player.getMap().getMapObjects().size()));
                 break;
 
             case "mobsp":
@@ -112,34 +113,34 @@ public class DebugCommand extends Command {
 
             case "event":
                 if (player.getEventInstance() == null) {
-                    player.dropMessage(6, "Player currently not in an event.");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message12"));
                 } else {
-                    player.dropMessage(6, "Current event name: " + player.getEventInstance().getName() + ".");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message13", player.getEventInstance().getName()));
                 }
                 break;
 
             case "areas":
-                player.dropMessage(6, "Configured areas on map " + player.getMapId() + ":");
+                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message14", player.getMapId()));
 
                 byte index = 0;
                 for (Rectangle rect : player.getMap().getAreas()) {
-                    player.dropMessage(6, "Id: " + index + " -> posX: " + rect.getX() + " posY: '" + rect.getY() + "' dX: " + rect.getWidth() + " dY: " + rect.getHeight() + ".");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message15", index, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight()));
                     index++;
                 }
                 break;
 
             case "reactors":
-                player.dropMessage(6, "Current reactor states on map " + player.getMapId() + ":");
+                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message16", player.getMapId()));
 
                 for (MapObject mmo : player.getMap().getReactors()) {
                     Reactor mr = (Reactor) mmo;
-                    player.dropMessage(6, "Id: " + mr.getId() + " Oid: " + mr.getObjectId() + " name: '" + mr.getName() + "' -> Type: " + mr.getReactorType() + " State: " + mr.getState() + " Event State: " + mr.getEventState() + " Position: x " + mr.getPosition().getX() + " y " + mr.getPosition().getY() + ".");
+                    player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message17", mr.getId(), mr.getObjectId(), mr.getName(), mr.getReactorType(), mr.getState(), mr.getEventState(), mr.getPosition().getX(), mr.getPosition().getY()));
                 }
                 break;
 
             case "servercoupons":
             case "coupons":
-                String s = "Currently active SERVER coupons: ";
+                String s = I18nUtil.getMessage("DebugCommand.message18");
                 for (Integer i : Server.getInstance().getActiveCoupons()) {
                     s += (i + " ");
                 }
@@ -148,7 +149,7 @@ public class DebugCommand extends Command {
                 break;
 
             case "playercoupons":
-                String st = "Currently active PLAYER coupons: ";
+                String st = I18nUtil.getMessage("DebugCommand.message19");
                 for (Integer i : player.getActiveCoupons()) {
                     st += (i + " ");
                 }
@@ -158,7 +159,7 @@ public class DebugCommand extends Command {
 
             case "timer":
                 TimerManager tMan = TimerManager.getInstance();
-                player.dropMessage(6, "Total Task: " + tMan.getTaskCount() + " Current Task: " + tMan.getQueuedTasks() + " Active Task: " + tMan.getActiveCount() + " Completed Task: " + tMan.getCompletedTaskCount());
+                player.dropMessage(6, I18nUtil.getMessage("DebugCommand.message20", tMan.getTaskCount(), tMan.getQueuedTasks(), tMan.getActiveCount(), tMan.getCompletedTaskCount()));
                 break;
 
             case "marriage":

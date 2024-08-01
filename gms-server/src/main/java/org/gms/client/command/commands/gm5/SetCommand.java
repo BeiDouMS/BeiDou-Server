@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm5;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.net.ServerConstants;
+import org.gms.util.I18nUtil;
 
 public class SetCommand extends Command {
     {
-        setDescription("Store value in an array, for testing.");
+        setDescription(I18nUtil.getMessage("SetCommand.message1"));
     }
 
     @Override

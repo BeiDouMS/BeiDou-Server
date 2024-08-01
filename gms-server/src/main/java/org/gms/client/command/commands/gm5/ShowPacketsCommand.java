@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm5;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class ShowPacketsCommand extends Command {
     {
-        setDescription("Toggle show received packets in console.");
+        setDescription(I18nUtil.getMessage("ShowPacketsCommand.message1"));
     }
 
     @Override

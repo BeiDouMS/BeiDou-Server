@@ -25,6 +25,7 @@ import org.gms.client.command.Command;
 import org.gms.constants.game.GameConstants;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.I18nUtil;
 
 import java.util.Collection;
 
@@ -35,26 +36,26 @@ import java.util.Collection;
  */
 public class IpListCommand extends Command {
     {
-        setDescription("Show IP of all players.");
+        setDescription(I18nUtil.getMessage("IpListCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
-        String str = "Player-IP relation:";
+        StringBuilder str = new StringBuilder(I18nUtil.getMessage("IpListCommand.message2"));
 
         for (World w : Server.getInstance().getWorlds()) {
             Collection<Character> chars = w.getPlayerStorage().getAllCharacters();
 
             if (!chars.isEmpty()) {
-                str += "\r\n" + GameConstants.WORLD_NAMES[w.getId()] + "\r\n";
+                str.append("\r\n").append(GameConstants.WORLD_NAMES[w.getId()]).append("\r\n");
 
                 for (Character chr : chars) {
-                    str += "  " + chr.getName() + " - " + chr.getClient().getRemoteAddress() + "\r\n";
+                    str.append("  ").append(chr.getName()).append(" - ").append(chr.getClient().getRemoteAddress()).append("\r\n");
                 }
             }
         }
 
-        c.getAbstractPlayerInteraction().npcTalk(22000, str);
+        c.getAbstractPlayerInteraction().npcTalk(22000, str.toString());
     }
 
 }
