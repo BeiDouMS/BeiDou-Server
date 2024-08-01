@@ -28,11 +28,12 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 public class SaveAllCommand extends Command {
     {
-        setDescription("Save all characters.");
+        setDescription(I18nUtil.getMessage("SaveAllCommand.message1"));
     }
 
     @Override
@@ -43,8 +44,7 @@ public class SaveAllCommand extends Command {
                 chr.saveCharToDB();
             }
         }
-        String message = player.getName() + " used !saveall.";
-        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message));
-        player.message("All players saved successfully.");
+        Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("SaveAllCommand.message2", player.getName())));
+        player.message(I18nUtil.getMessage("SaveAllCommand.message3"));
     }
 }

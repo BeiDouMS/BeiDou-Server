@@ -27,16 +27,17 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.quest.Quest;
+import org.gms.util.I18nUtil;
 
 public class ClearQuestCacheCommand extends Command {
     {
-        setDescription("Clear all quest cache.");
+        setDescription(I18nUtil.getMessage("ClearQuestCacheCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         Quest.clearCache();
-        player.dropMessage(5, "Quest Cache Cleared.");
+        player.dropMessage(5, I18nUtil.getMessage("ClearQuestCacheCommand.message2"));
     }
 }

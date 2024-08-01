@@ -23,21 +23,22 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.config.YamlConfig;
+import org.gms.util.I18nUtil;
 
 public class SupplyRateCouponCommand extends Command {
     {
-        setDescription("Set availability of coupons in Cash Shop.");
+        setDescription(I18nUtil.getMessage("SupplyRateCouponCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.dropMessage(5, "Syntax: !supplyratecoupon <yes|no>");
+            player.dropMessage(5, I18nUtil.getMessage("SupplyRateCouponCommand.message2"));
             return;
         }
 
-        YamlConfig.config.server.USE_SUPPLY_RATE_COUPONS = params[0].compareToIgnoreCase("no") != 0;
-        player.dropMessage(5, "Rate coupons are now " + (YamlConfig.config.server.USE_SUPPLY_RATE_COUPONS ? "enabled" : "disabled") + " for purchase at the Cash Shop.");
+        YamlConfig.config.server.USE_SUPPLY_RATE_COUPONS = params[0].compareToIgnoreCase("enabled") != 0 || params[0].compareToIgnoreCase("开启") != 0;
+        player.dropMessage(5, I18nUtil.getMessage("SupplyRateCouponCommand.message3", params[0]));
     }
 }

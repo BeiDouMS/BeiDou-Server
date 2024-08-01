@@ -26,17 +26,18 @@ package org.gms.client.command.commands.gm6;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class SetGmLevelCommand extends Command {
     {
-        setDescription("Set GM level of a player.");
+        setDescription(I18nUtil.getMessage("SetGmLevelCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 2) {
-            player.yellowMessage("Syntax: !setgmlevel <playername> <newlevel>");
+            player.yellowMessage(I18nUtil.getMessage("SetGmLevelCommand.message2"));
             return;
         }
 
@@ -46,10 +47,10 @@ public class SetGmLevelCommand extends Command {
             target.setGMLevel(newLevel);
             target.getClient().setGMLevel(newLevel);
 
-            target.dropMessage("You are now a level " + newLevel + " GM. See @commands for a list of available commands.");
-            player.dropMessage(target + " is now a level " + newLevel + " GM.");
+            target.dropMessage(I18nUtil.getMessage("SetGmLevelCommand.message3", newLevel));
+            player.dropMessage(I18nUtil.getMessage("SetGmLevelCommand.message4", target, newLevel));
         } else {
-            player.dropMessage("Player '" + params[0] + "' was not found on this channel.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

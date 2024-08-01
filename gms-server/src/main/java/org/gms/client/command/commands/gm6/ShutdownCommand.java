@@ -29,6 +29,7 @@ import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.server.TimerManager;
+import org.gms.util.I18nUtil;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.HOURS;
@@ -37,14 +38,14 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class ShutdownCommand extends Command {
     {
-        setDescription("Shut down the server.");
+        setDescription(I18nUtil.getMessage("ShutdownCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !shutdown [<time>|NOW]");
+            player.yellowMessage(I18nUtil.getMessage("ShutdownCommand.message2"));
             return;
         }
 
@@ -63,17 +64,17 @@ public class ShutdownCommand extends Command {
 
             String strTime = "";
             if (days > 0) {
-                strTime += days + " days, ";
+                strTime += days + I18nUtil.getMessage("ShutdownCommand.message3");
             }
             if (hours > 0) {
-                strTime += hours + " hours, ";
+                strTime += hours + I18nUtil.getMessage("ShutdownCommand.message4");
             }
-            strTime += minutes + " minutes, ";
-            strTime += seconds + " seconds";
+            strTime += minutes + I18nUtil.getMessage("ShutdownCommand.message5");
+            strTime += seconds + I18nUtil.getMessage("ShutdownCommand.message6");
 
             for (World w : Server.getInstance().getWorlds()) {
                 for (Character chr : w.getPlayerStorage().getAllCharacters()) {
-                    chr.dropMessage("Server is undergoing maintenance process, and will be shutdown in " + strTime + ". Prepare yourself to quit safely in the mean time.");
+                    chr.dropMessage(I18nUtil.getMessage("ShutdownCommand.message7", strTime));
                 }
             }
         }

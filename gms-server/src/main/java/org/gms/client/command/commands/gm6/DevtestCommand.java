@@ -2,6 +2,7 @@ package org.gms.client.command.commands.gm6;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractScriptManager;
@@ -12,7 +13,7 @@ import javax.script.ScriptException;
 
 public class DevtestCommand extends Command {
     {
-        setDescription("Runs devtest.js. Developer utility - test stuff without restarting the server.");
+        setDescription(I18nUtil.getMessage("DevtestCommand.message1"));
     }
 
     private static final Logger log = LoggerFactory.getLogger(DevtestCommand.class);
@@ -34,7 +35,7 @@ public class DevtestCommand extends Command {
             Invocable invocable = (Invocable) scriptEngine;
             invocable.invokeFunction("run", client.getPlayer());
         } catch (ScriptException | NoSuchMethodException e) {
-            log.info("devtest.js run() threw an exception", e);
+            log.info(I18nUtil.getMessage("DevtestCommand.message2"), e);
         }
     }
 }

@@ -26,10 +26,11 @@ package org.gms.client.command.commands.gm6;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.PlayerNPC;
+import org.gms.util.I18nUtil;
 
 public class EraseAllPNpcsCommand extends Command {
     {
-        setDescription("Remove all player NPCs.");
+        setDescription(I18nUtil.getMessage("EraseAllPNpcsCommand.message1"));
     }
 
     @Override

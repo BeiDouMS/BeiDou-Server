@@ -27,6 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 import java.net.InetAddress;
@@ -34,14 +35,14 @@ import java.net.UnknownHostException;
 
 public class WarpWorldCommand extends Command {
     {
-        setDescription("Warp to a different world.");
+        setDescription(I18nUtil.getMessage("WarpWorldCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !warpworld <worldid>");
+            player.yellowMessage(I18nUtil.getMessage("WarpWorldCommand.message2"));
             return;
         }
 
@@ -58,11 +59,11 @@ public class WarpWorldCommand extends Command {
                 c.sendPacket(PacketCreator.getChannelChange(InetAddress.getByName(socket[0]), Integer.parseInt(socket[1])));
             } catch (UnknownHostException | NumberFormatException ex) {
                 ex.printStackTrace();
-                player.message("Unexpected error when changing worlds, are you sure the world you are trying to warp to has the same amount of channels?");
+                player.message(I18nUtil.getMessage("WarpWorldCommand.message3"));
             }
 
         } else {
-            player.message("Invalid world; highest number available: " + (server.getWorldsSize() - 1));
+            player.message(I18nUtil.getMessage("WarpWorldCommand.message4", server.getWorldsSize() - 1));
         }
     }
 }

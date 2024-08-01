@@ -27,10 +27,11 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.server.life.PlayerNPC;
+import org.gms.util.I18nUtil;
 
 public class SpawnAllPNpcsCommand extends Command {
     {
-        setDescription("Spawn player NPCs of all existing players.");
+        setDescription(I18nUtil.getMessage("SpawnAllPNpcsCommand.message1"));
     }
 
     @Override

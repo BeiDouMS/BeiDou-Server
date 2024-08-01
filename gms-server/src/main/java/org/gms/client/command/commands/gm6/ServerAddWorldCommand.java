@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.server.ThreadManager;
+import org.gms.util.I18nUtil;
 
 public class ServerAddWorldCommand extends Command {
     {
-        setDescription("Add a new world.");
+        setDescription(I18nUtil.getMessage("ServerAddWorldCommand.message1"));
     }
 
     @Override
@@ -43,12 +44,12 @@ public class ServerAddWorldCommand extends Command {
 
             if (player.isLoggedinWorld()) {
                 if (wid >= 0) {
-                    player.dropMessage(5, "NEW World " + wid + " successfully deployed.");
+                    player.dropMessage(5, I18nUtil.getMessage("ServerAddWorldCommand.message2", wid));
                 } else {
                     if (wid == -2) {
-                        player.dropMessage(5, "Error detected when loading the 'world.ini' file. World creation aborted.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerAddWorldCommand.message3"));
                     } else {
-                        player.dropMessage(5, "NEW World failed to be deployed. Check if needed ports are already in use or maximum world count has been reached.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerAddWorldCommand.message4"));
                     }
                 }
             }

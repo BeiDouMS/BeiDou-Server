@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.server.ThreadManager;
+import org.gms.util.I18nUtil;
 
 public class ServerAddChannelCommand extends Command {
     {
-        setDescription("Add a new channel to a world.");
+        setDescription(I18nUtil.getMessage("ServerAddChannelCommand.message1"));
     }
 
     @Override
@@ -39,7 +40,7 @@ public class ServerAddChannelCommand extends Command {
         final Character player = c.getPlayer();
 
         if (params.length < 1) {
-            player.dropMessage(5, "Syntax: @addchannel <worldid>");
+            player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message2"));
             return;
         }
 
@@ -49,16 +50,16 @@ public class ServerAddChannelCommand extends Command {
             int chid = Server.getInstance().addChannel(worldid);
             if (player.isLoggedinWorld()) {
                 if (chid >= 0) {
-                    player.dropMessage(5, "NEW Channel " + chid + " successfully deployed on world " + worldid + ".");
+                    player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message3", chid, worldid));
                 } else {
                     if (chid == -3) {
-                        player.dropMessage(5, "Invalid worldid detected. Channel creation aborted.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message4"));
                     } else if (chid == -2) {
-                        player.dropMessage(5, "Reached channel limit on worldid " + worldid + ". Channel creation aborted.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message5", worldid));
                     } else if (chid == -1) {
-                        player.dropMessage(5, "Error detected when loading the 'world.ini' file. Channel creation aborted.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message6"));
                     } else {
-                        player.dropMessage(5, "NEW Channel failed to be deployed. Check if the needed port is already in use or other limitations are taking place.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message7"));
                     }
                 }
             }

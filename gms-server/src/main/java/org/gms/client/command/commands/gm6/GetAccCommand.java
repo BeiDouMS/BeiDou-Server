@@ -26,24 +26,25 @@ package org.gms.client.command.commands.gm6;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.util.I18nUtil;
 
 public class GetAccCommand extends Command {
     {
-        setDescription("Show account name of an online player.");
+        setDescription(I18nUtil.getMessage("GetAccCommand.message1"));
     }
 
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
         if (params.length < 1) {
-            player.yellowMessage("Syntax: !getacc <playername>");
+            player.yellowMessage(I18nUtil.getMessage("GetAccCommand.message2"));
             return;
         }
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null) {
-            player.message(victim.getName() + "'s account name is " + victim.getClient().getAccountName() + ".");
+            player.message(I18nUtil.getMessage("GetAccCommand.message3", victim.getName(), victim.getClient().getAccountName()));
         } else {
-            player.message("Player '" + params[0] + "' could not be found on this world.");
+            player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
         }
     }
 }

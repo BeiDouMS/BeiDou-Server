@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.I18nUtil;
 
 public class DCAllCommand extends Command {
     {
-        setDescription("Disconnect all players (online or logged in).");
+        setDescription(I18nUtil.getMessage("DCAllCommand.message1"));
     }
 
     @Override
@@ -44,6 +45,6 @@ public class DCAllCommand extends Command {
                 }
             }
         }
-        player.message("All players successfully disconnected.");
+        player.message(I18nUtil.getMessage("DCAllCommand.message2"));
     }
 }

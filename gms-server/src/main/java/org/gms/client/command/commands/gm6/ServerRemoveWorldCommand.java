@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.server.ThreadManager;
+import org.gms.util.I18nUtil;
 
 public class ServerRemoveWorldCommand extends Command {
     {
-        setDescription("Remove a world.");
+        setDescription(I18nUtil.getMessage("ServerRemoveWorldCommand.message1"));
     }
 
     @Override
@@ -40,21 +41,21 @@ public class ServerRemoveWorldCommand extends Command {
 
         final int rwid = Server.getInstance().getWorldsSize() - 1;
         if (rwid <= 0) {
-            player.dropMessage(5, "Unable to remove world 0.");
+            player.dropMessage(5, I18nUtil.getMessage("ServerRemoveWorldCommand.message2"));
             return;
         }
 
         ThreadManager.getInstance().newTask(() -> {
             if (Server.getInstance().removeWorld()) {
                 if (player.isLoggedinWorld()) {
-                    player.dropMessage(5, "Successfully removed a world. Current world count: " + Server.getInstance().getWorldsSize() + ".");
+                    player.dropMessage(5, I18nUtil.getMessage("ServerRemoveWorldCommand.message3", Server.getInstance().getWorldsSize()));
                 }
             } else {
                 if (player.isLoggedinWorld()) {
                     if (rwid < 0) {
-                        player.dropMessage(5, "No registered worlds to remove.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerRemoveWorldCommand.message4"));
                     } else {
-                        player.dropMessage(5, "Failed to remove world " + rwid + ". Check if there are people currently playing there.");
+                        player.dropMessage(5, I18nUtil.getMessage("ServerRemoveWorldCommand.message5", rwid));
                     }
                 }
             }

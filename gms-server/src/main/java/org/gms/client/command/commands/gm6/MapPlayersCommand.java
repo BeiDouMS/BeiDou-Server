@@ -28,10 +28,11 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.I18nUtil;
 
 public class MapPlayersCommand extends Command {
     {
-        setDescription("Show all players on the map.");
+        setDescription(I18nUtil.getMessage("MapPlayersCommand.message1"));
     }
 
     @Override
@@ -46,10 +47,10 @@ public class MapPlayersCommand extends Command {
                 String maxhp = Integer.toString(chr.getCurrentMaxHp());
                 String name = chr.getName() + ": " + hp + "/" + maxhp;
                 if (map == curMap) {
-                    names = names.equals("") ? name : (names + ", " + name);
+                    names = names.isEmpty() ? name : (names + ", " + name);
                 }
             }
         }
-        player.message("Players on mapid " + map + ": " + names);
+        player.message(I18nUtil.getMessage("MapPlayersCommand.message2", map, names));
     }
 }
