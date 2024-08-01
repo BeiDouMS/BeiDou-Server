@@ -42,6 +42,7 @@ const useUserStore = defineStore('user', {
     hwid: undefined,
     language: undefined,
     role: '',
+    avatar: undefined,
   }),
 
   getters: {

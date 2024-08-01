@@ -56,7 +56,8 @@ function action(mode, type, selection) {
         text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
         text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
         text += " \r\n\r\n";
-        text += "#L0#每日签到#l \t #L1#在线奖励#l \t #L2#传送自由#l\r\n";
+        text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l\r\n";
+        text += "#L3#传送自由#l\r\n";
         if (cm.getPlayer().isGM()) {
             text += "\r\n\r\n";
             text += "\t\t\t\t#r=====以下内容仅GM可见=====\r\n";
@@ -75,16 +76,19 @@ function doSelect(selection) {
     switch (selection) {
         // 非GM功能
         case 0:
-            openNpc("每日签到");
-            //cm.sendOk("该功能暂不支持，敬请期待！");
-            //cm.dispose();
+            //openNpc("StarterGift");
+            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
             break;
         case 1:
+            openNpc("每日签到");
+            break;
+        case 2:
             //openNpc("在线奖励");
             cm.sendOk("该功能暂不支持，敬请期待！");
             cm.dispose();
             break;
-        case 2:
+        case 3:
             cm.warp(910000000);
             break;
         // GM功能

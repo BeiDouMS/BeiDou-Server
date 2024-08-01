@@ -30,4 +30,5 @@ export interface UserState {
   hwid?: string;
   language?: number;
   role: RoleType;
+  avatar: undefined,
 }
