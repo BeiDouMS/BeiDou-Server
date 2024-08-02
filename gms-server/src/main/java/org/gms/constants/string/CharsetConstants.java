@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class CharsetConstants {
     // 保证只加载一次
-    private static final Language SERViCE_LANGUAGE = loadServiceLanguage();
+    private static final Language SERVICE_LANGUAGE = loadServiceLanguage();
 
     public static Charset getCharset(int language) {
         return Charset.forName(Language.fromLang(language).getCharset());
@@ -77,7 +77,7 @@ public class CharsetConstants {
                     return value;
                 }
             }
-            return SERViCE_LANGUAGE;
+            return SERVICE_LANGUAGE;
         }
     }
 }

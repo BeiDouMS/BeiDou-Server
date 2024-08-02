@@ -21,10 +21,7 @@ public class I18nUtil {
 
     public static String getMessage(String code, Object... args) {
         // 如果当前存在客户端请求，则以客户端的语言为准。如果当前非客户端请求，是服务端主动发给客户端的，则以服务端语言为准
-        Locale clientLang = Optional.ofNullable(ThreadLocalUtil.getCurrentClient())
-                .map(Client::getLanguage)
-                .map(CharsetConstants::getLanguageLocale)
-                .orElse(LANGUAGE);
+        Locale clientLang = CharsetConstants.getLanguageLocale(ThreadLocalUtil.getClientLang());
         return messageSource.getMessage(code, args, clientLang);
     }
 
