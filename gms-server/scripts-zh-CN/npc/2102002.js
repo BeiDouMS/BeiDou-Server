@@ -39,7 +39,7 @@ function action(mode, type, selection) {
             return;
         }
         if (status == 0) {
-            cm.sendYesNo("你好，我负责出售前往奥西里亚奥比斯站的船票。前往奥比斯的船每10分钟出发一次，从整点开始，票价为#b" + cost + "金币#k。你确定要购买#b#t4031045##k吗？");
+            cm.sendYesNo("你好，我负责出售前往天空之城的船票。前往天空之城的船每10分钟出发一次，从整点开始，票价为#b" + cost + "金币#k。你确定要购买#b#t4031045##k吗？");
         } else if (status == 1) {
             if (cm.getMeso() >= cost && cm.canHold(4031045)) {
                 cm.gainItem(4031045, 1);
