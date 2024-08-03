@@ -332,7 +332,7 @@
   const saveClick = async (data: NpcShopItemState) => {
     setLoading(true);
     try {
-      if (data.id === undefined) {
+      if (data.id === -1) {
         await addShopItem(data);
         Message.success('新增商品成功');
       } else {
