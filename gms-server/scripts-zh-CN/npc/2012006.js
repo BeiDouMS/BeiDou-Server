@@ -1,13 +1,13 @@
 var status = -1;
 var sel;
 
-var destinations = ["Ellinia", "Ludibrium", "Leafre", "Mu Lung", "Ariant", "Ereve"];
+var destinations = ["魔法密林","玩具城","神木村","武陵","阿里安特","圣地"];
 var boatType = ["the ship", "the train", "the bird", "Hak", "Genie", "the ship"];
 
 function start() {
-    var message = "Orbis Station has lots of platforms available to choose from. You need to choose the one that'll take you to the destination of your choice. Which platform will you take?\r\n";
+    var message = "该站有很多地方可供选择。你需要选择一个你想到达的地方。你会去那个地方？\r\n";
     for (var i = 0; i < destinations.length; i++) {
-        message += "\r\n#L" + i + "##bThe platform to " + boatType[i] + " that heads to " + destinations[i] + ".#l";
+        message += "\r\n#L" + i + "##b前往" + destinations[i] + "的月台.#l";
     }
     cm.sendSimple(message);
 }
@@ -20,7 +20,7 @@ function action(mode, type, selection) {
     status++;
     if (status == 0) {
         sel = selection;
-        cm.sendNext("好的 #h#，我会把你送到 #b#m" + (200000110 + (sel * 10)) + "##k 的平台上。");
+        cm.sendNext("好的，我会把你送到 #b#m" + (200000110 + (sel * 10)) + "##k 的平台上。");
     } else if (status == 1) {
         cm.warp(200000110 + (sel * 10), "west00");
         cm.dispose();

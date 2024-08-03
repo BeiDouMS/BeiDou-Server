@@ -34,7 +34,7 @@ function action(mode, type, selection) {
             for (var i = 0; i < menu.length; i++) {
                 display += "\r\n#L" + i + "##b Orbis (1000 mesos)#k";
             }
-            cm.sendSimple("嗯...风势正好。你是不是想离开艾尔里夫去别的地方？这艘渡船开往奥西里亚大陆的奥比斯。你在艾尔里夫需要办的事情都处理好了吗？如果你正好要去#b奥比斯#k，我可以带你去那里。你怎么样？要去奥比斯吗？\r\n" + 显示);
+            cm.sendNext("嗯...风势正好。你是不是想离开圣地去别的地方？这艘渡船开往神秘岛的天空之城。你在圣地需要办的事情都处理好了吗？如果你正好要去#b天空之城#k，我可以带你去那里。你怎么样？要去天空之城吗？\r\n");
 
         } else if (status == 1) {
             if (cm.getMeso() < 1000) {

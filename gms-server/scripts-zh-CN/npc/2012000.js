@@ -1,12 +1,12 @@
 var ticket = [4031047, 4031074, 4031331, 4031576];
 var cost = [5000, 6000, 30000, 6000];
-var mapNames = ["Ellinia of Victoria Island", "Ludibrium", "Leafre", "Ariant"];
-var mapName2 = ["Ellinia of Victoria Island", "Ludibrium", "Leafre of Minar Forest", "Nihal Desert"];
+var mapNames = new Array("魔法密林", "玩具城", "神木村", "阿里安特");
+var mapName2 = new Array("魔法密林", "玩具城", "神木村", "阿里安特");
 var select;
 var status = 0;
 
 function start() {
-    var where = "Hello, I'm in charge of selling tickets for the ship ride for every destination. Which ticket would you like to purchase?";
+    var where = "您好，我是天空之城售票员，我负责销售开往各地船票。你想购买去那里的船票呢？";
     for (var i = 0; i < ticket.length; i++) {
         where += "\r\n#L" + i + "##b" + mapNames[i] + "#k#l";
     }

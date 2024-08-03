@@ -2,7 +2,7 @@ var cost = 6000;
 var status = 0;
 
 function start() {
-    cm.sendYesNo("你好，我负责出售前往奥西里亚奥比斯站的船票。前往奥比斯的船每10分钟出发一次，从整点开始，票价为#b" + cost + "金币#k。你确定要购买#b#t4031045##k吗？");
+    cm.sendYesNo("你好，我负责出售前往天空之城的船票。前往天空之城的船每10分钟出发一次，从整点开始，票价为#b" + cost + "金币#k。你确定要购买#b#t4031045##k吗？");
 }
 
 function action(mode, type, selection) {
@@ -22,7 +22,7 @@ function action(mode, type, selection) {
                 cm.gainItem(4031045, 1);
                 cm.gainMeso(-cost);
             } else {
-                cm.sendOk("你确定你有 #b" + cost + " 冒险币#k 吗？如果是的话，我建议你检查一下你的杂项物品栏，看看是不是已经满了。");
+                cm.sendOk("你确定你有 #b" + cost + " 冒险币#k 吗？如果是的话，我建议你检查一下你的其它物品栏，看看是不是已经满了。");
             }
             cm.dispose();
         }

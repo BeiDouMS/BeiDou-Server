@@ -9,8 +9,8 @@
  ---------------------------------------------------------------------------------------------------
  **/
 
-var menu = ["Mu Lung", "Orbis", "Herb Town", "Mu Lung"];
-var cost = [1500, 1500, 500, 1500];
+var menu = new Array("桃花仙境", "天空之城", "灵药幻境", "桃花仙境");
+var cost = new Array(1500, 1500, 1500, 1500);
 var hak;
 var slct;
 var display = "";
@@ -33,7 +33,7 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         } else if (mode == 0) {
-            cm.sendNext("好的。如果你改变主意了，请告诉我。");
+            cm.sendNext("改变想法随时跟我搭话吧。");
             cm.dispose();
             return;
         }
@@ -47,22 +47,21 @@ function action(mode, type, selection) {
                 }
             }
             if (cm.getPlayer().getMapId() == 200000141 || cm.getPlayer().getMapId() == 251000000) {
-                btwmsg = "#bOrbis#k to #bMu Lung#k";
+                btwmsg = "#b天空之城#k 到 #b桃花仙境#k";
             } else if (cm.getPlayer().getMapId() == 250000100) {
-                btwmsg = "#bMu Lung#k to #bOrbis#k";
+                btwmsg = "#b桃花仙境#k 到 #b天空之城#k";
             }
             if (cm.getPlayer().getMapId() == 251000000) {
-                cm.sendYesNo("你好。旅行进行得怎么样？我一直在像你这样的旅行者运送到#b" + menu[3] + "#k，而且……你有兴趣吗？这种方式没有船稳定，所以你得紧紧抓住，但我可以比船快得多地到达那里。只要你支付#b" + cost[2] + "金币#k，我就会带你去那里。");
+                cm.sendYesNo("你好。旅行进行得怎么样？我一直在像你这样的旅行者运送到#b" + menu[3] + "#k，而且……你有兴趣吗？这种方式没有船稳定，所以你得紧紧抓住，但我可以比船快得多地到达那里。只要你支付#b" + cost[3] + "金币#k，我就会带你去那里。");
                 status++;
             } else if (cm.getPlayer().getMapId() == 250000100) {
-                cm.sendSimple("你好。旅行进行得如何？我知道用两条腿走路比我这样可以在天空中航行的人要困难得多。我一直在短时间内将像你这样的旅行者运送到其他地区，你有兴趣吗？如果是的话，请选择你想前往的城镇。");
+                cm.sendSimple("怎么样？我从 " + btwmsg + "再到现在。我的速度很快的吧，如果你想返回 #b" + menu[1] + "#k，那么我们就立刻出发，不过还是得给我一些辛苦钱，价格是 #b" + cost[3] + " 金币#k。" + display);
             } else {
-                cm.sendSimple("你好。旅行进行得怎么样？我一直在将像你这样的旅行者迅速运送到其他地区，你有兴趣吗？如果是的话，请选择你想前往的城镇。");
+                cm.sendSimple("如果想从 " + btwmsg + "去的话。给我些辛苦钱就送你。我送你比起你走着去快多了。怎么样？\r\n" + display);
             }
         } else if (status == 1) {
             slct = selection;
             cm.sendYesNo("你现在要移动到 #b" + menu[selection] + "#k 吗？如果你有 #b" + cost[selection] + " 金币#k，我现在就带你过去。");
-
         } else if (status == 2) {
             if (slct == 2) {
                 if (cm.getMeso() < cost[2]) {
@@ -97,4 +96,4 @@ function action(mode, type, selection) {
             }
         }
     }
-}  
+}
