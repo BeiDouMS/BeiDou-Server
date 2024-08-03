@@ -7491,11 +7491,11 @@ public class Character extends AbstractCharacterObject {
 
             Integer hbhp = getBuffedValue(BuffStat.HYPERBODYHP);
             if (hbhp != null) {
-                localMaxHp += ((int) (hbhp.doubleValue() / 100)) * localMaxHp;
+                localMaxHp += (hbhp.doubleValue() / 100) * localMaxHp;
             }
             Integer hbmp = getBuffedValue(BuffStat.HYPERBODYMP);
             if (hbmp != null) {
-                localMaxMp += ((int) (hbmp.doubleValue() / 100)) * localMaxMp;
+                localMaxMp += (hbmp.doubleValue() / 100) * localMaxMp;
             }
 
             localMaxHp = Math.min(30000, localMaxHp);
