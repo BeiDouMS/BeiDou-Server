@@ -5,6 +5,9 @@
 北斗卫星导航系统由空间段、地面段和用户段三部分组成，可在全球范围内全天候、全天时为各类用户提供高精度、高可靠定位、导航、授时服务，并且具备短报文通信能力。经过多年发展，北斗系统已成为面向全球用户提供全天候、全天时、高精度定位、导航与授时服务的重要新型基础设施。北斗系统定位导航授时服务，通过30颗卫星，免费向全球用户提供服务，全球范围水平定位精度优于9米、垂直定位精度优于10米，测速精度优于0.2米/秒、授时精度优于20纳秒。  
 北斗这一词对于中国来说，有着特殊的意义。北斗，是中国的一个卫星导航系统，也是中国自主研制的第一个卫星导航系统。既然小伙伴说这个项目也要整个天体的名字，想了半天，就叫北斗好了！这也意味着我们要做的比HeavenMS和Cosmic更加优秀和强大！  
 
+# 开发进展
+[开发进展](https://github.com/BeiDouMS/BeiDou-Server/wiki/%E5%BC%80%E5%8F%91%E8%BF%9B%E5%BA%A6)
+
 # gms-server 服务端
 - 已实现自动创建数据库，执行初始化sql脚本，只要保证mysql是启动的即可  
 - 已开放api端口8686
@@ -21,9 +24,6 @@
 - Maven：https://maven.apache.org/download.cgi
 - git：https://git-scm.com/downloads
 - DBeaver：https://dbeaver.io/download/ 或者 Navicat Lite：https://www.navicat.com/en/download/navicat-premium-lite
-
-## 开发进展
-![s1.jpeg](mdimg/s1.jpeg)
 
 # gms-ui web端
 
@@ -57,49 +57,8 @@ yarn install
 yarn dev
 ```
 
-## 开发进展
-![w1.jpeg](mdimg/w1.jpeg)
-![w2.jpeg](mdimg/w2.jpeg)
-![w3.jpeg](mdimg/w3.jpeg)
-![w4.jpeg](mdimg/w4.jpeg)
-
 ## 备注
 web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供给的图片接口！  
 
 # 客户端
-## 客户端下载
-默认为英文客户端，如需汉化
-1. 编辑config.ini将SwitchChinese的值改为true；
-2. 将CN包里的文件复制（覆盖）到Data目录下，即可。
-
-**客户端本体**
-- BeiDou V7： https://mega.nz/file/2aRjCDIb#FwzR04lyfE-6bdSXLYwY3YxSRVwJaXCjbOvbe3hysW8
-- ~~BeiDou V6： https://mega.nz/file/DLQAxJCD#Au-hzXWSVywpeXetTZKx6_rNihXdbOfyDsRa9Ohmazg
-  基本已汉化，尚未汉化部分可提issue或者其他方式告知。~~
-- ~~BeiDou V3： https://mega.nz/file/qXw3iRCA#S8e21nDeomANjPfEUjhGtTzCzXsebU_fXmeEHY9ZXDQ
-  完成度：能用，暂未汉化；支持中文输入；使用img资源。~~
-
-## 更新记录及补丁下载
-使用方法：按顺序下载补丁，直接覆盖到客户端内即可；**wz补丁仅供开发用**。
-
-汉化需重新覆盖 CN 包
-### 2024/7/20 V9
-更新说明：
-1. 新增 突破跳跃上限
-2. 新增 免密模式（须服务端支持） 
-3. 更新 重新实现输入法IME的支持方案，解决老方案win11下不生效的问题（测试） 
-4. 更新 聊天框文字位置 
-5. 修复 部分NPC对话内容含中文时，内容被截断的问题 
-6. 更新 玩家名片卡中职业信息字体
-7. 补充 V7 打包打漏的 List.wz 文件
-- v9：https://mega.nz/file/THxxEDQR#oFHvCc708PLxwQCFDRCNktp0Yhhg0vaRCFpkr0HYhiw
-- v9-wz：https://mega.nz/file/WeBCiL6D#CpGxfBKeC0EGFtYKY5-toeBkR4yuPgomZIcUAJf-m48
-
-### 2024/7/12 V8
-更新说明：
-1. 新增 命中/回避 上限解除
-2. 修复 魔攻伤害计算没有破攻的问题
-3. 新增 Boss 血条下方增加百分比
-- v8：https://mega.nz/file/LTBGGKrL#DjQuTAywtCOFjz0Xn_3dFvxI33a9PsER6-GFXMTuGa4
-
-[了解更多](CLIENT-UPDATE.md)
+[了解更多](https://github.com/BeiDouMS/BeiDou-Server/wiki/%E5%8C%97%E6%96%97%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E5%B8%83)
