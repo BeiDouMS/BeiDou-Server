@@ -13,7 +13,7 @@ public class GiveResourceReqDTO {
     private Byte type;
     private Integer id;
     private Integer quantity;
-    private Float rate;
+    private Integer rate;
     private Short str;
     private Short dex;
     @JsonProperty("int")

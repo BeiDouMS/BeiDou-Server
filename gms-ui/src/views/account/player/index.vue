@@ -177,6 +177,18 @@
         <a-form-item
           v-if="formData.type > 6 && formData.type < 11"
           :label="$t('account.player.form.rate')"
+          :rules="[
+            {
+              required: true,
+              message: $t('account.player.form.rate.required'),
+            },
+            {
+              type: 'number',
+              min: 0,
+              message: $t('account.player.form.rate.type'),
+            },
+          ]"
+          :validate-trigger="['change', 'input']"
         >
           <a-input-number v-model="formData.rate" />
         </a-form-item>

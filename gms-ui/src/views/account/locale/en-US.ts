@@ -124,6 +124,8 @@ export default {
   'account.player.form.upgradeSlot': 'Upgrade Slot',
   'account.player.form.expire': 'Expire',
   'account.player.form.expire.placeholder': 'minute',
+  'account.player.form.rate.required': 'The rate cannot be empty.',
+  'account.player.form.rate.type': 'The rate must be an integer.',
 
-  'account.player.give': '发放',
+  'account.player.give': 'give',
 };

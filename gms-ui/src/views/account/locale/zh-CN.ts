@@ -121,6 +121,8 @@ export default {
   'account.player.form.upgradeSlot': '升级次数',
   'account.player.form.expire': '有效期',
   'account.player.form.expire.placeholder': '单位分钟',
+  'account.player.form.rate.required': '倍率不能为空',
+  'account.player.form.rate.type': '倍率只能是正整数',
 
   'account.player.give': '发放',
 };
