@@ -10502,7 +10502,7 @@ public class Character extends AbstractCharacterObject {
      * @param equip 装备对象
      */
     public void gainEquip(Equip equip) {
-        if (ItemConstants.getInventoryType(equip.getItemId()).equals(InventoryType.EQUIP)) {
+        if (!ItemConstants.getInventoryType(equip.getItemId()).equals(InventoryType.EQUIP)) {
             message(I18nUtil.getMessage("AbstractPlayerInteraction.gainEquip.message1"));
             return;
         }

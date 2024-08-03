@@ -3,6 +3,7 @@ package org.gms.service;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.client.Stat;
+import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
@@ -187,6 +188,9 @@ public class GiveService {
         if (itemName == null) {
             throw new BizException(I18nUtil.getExceptionMessage("ITEM_NOT_FOUND"));
         }
+        if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
+            throw new BizException(I18nUtil.getExceptionMessage("ONLY_SUPPORT_GIVE_ITEM"));
+        }
 
         boolean isPet = ItemConstants.isPet(itemId);
 
@@ -226,6 +230,9 @@ public class GiveService {
         if (itemName == null) {
             throw new BizException(I18nUtil.getExceptionMessage("ITEM_NOT_FOUND"));
         }
+        if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
+            throw new BizException(I18nUtil.getExceptionMessage("ONLY_SUPPORT_GIVE_ITEM"));
+        }
 
         boolean isPet = ItemConstants.isPet(itemId);
 
@@ -258,6 +265,9 @@ public class GiveService {
         String itemName = ii.getName(submitData.getId());
         if (ii.getEquipById(submitData.getId()) == null || itemName == null) {
             throw new BizException(I18nUtil.getExceptionMessage("EQUIP_NOT_FOUND"));
+        }
+        if (!ItemConstants.getInventoryType(submitData.getId()).equals(InventoryType.EQUIP)) {
+            throw new BizException(I18nUtil.getExceptionMessage("ONLY_SUPPORT_GIVE_EQUIP"));
         }
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
             chr.gainEquip(
@@ -309,8 +319,12 @@ public class GiveService {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         String itemName = ii.getName(submitData.getId());
-        if (ii.getEquipById(submitData.getId()) == null || itemName == null) {
+        if (itemName == null) {
             throw new BizException(I18nUtil.getExceptionMessage("EQUIP_NOT_FOUND"));
+        }
+
+        if (!ItemConstants.getInventoryType(submitData.getId()).equals(InventoryType.EQUIP)) {
+            throw new BizException(I18nUtil.getExceptionMessage("ONLY_SUPPORT_GIVE_EQUIP"));
         }
         chr.gainEquip(
                 submitData.getId(),
