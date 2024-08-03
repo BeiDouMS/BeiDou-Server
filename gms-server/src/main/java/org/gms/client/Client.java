@@ -862,7 +862,9 @@ public class Client extends ChannelInboundHandlerAdapter {
 
                     state = rs.getInt("loggedin");
                     if (state == LOGIN_SERVER_TRANSITION) {
-                        if (rs.getTimestamp("lastlogin").getTime() + 30000 < Server.getInstance().getCurrentTime()) {
+                        Timestamp lastlogin = rs.getTimestamp("lastlogin");
+                        // 兼容历史已经创建的账号，和自动注册但未登录的账号
+                        if (lastlogin == null || lastlogin.getTime() + 30000 < Server.getInstance().getCurrentTime()) {
                             int accountId = accId;
                             state = LOGIN_NOTLOGGEDIN;
                             updateLoginState(Client.LOGIN_NOTLOGGEDIN);   // ACCID = 0, issue found thanks to Tochi & K u ssss o & Thora & Omo Oppa

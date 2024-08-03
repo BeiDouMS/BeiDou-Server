@@ -26,10 +26,7 @@ import org.gms.config.YamlConfig;
 import org.gms.net.server.Server;
 import org.gms.util.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * @author Matze
@@ -68,9 +65,9 @@ public class RankingLoginTask implements Runnable {
                 while (rs.next()) {
                     int rankMove = 0;
                     rank++;
-
-                    final long lastlogin = rs.getTimestamp("lastlogin").getTime();
-                    if (lastlogin < lastUpdate || rs.getInt("loggedin") > 0) {
+                    final Timestamp lastlogin = rs.getTimestamp("lastlogin");
+                    // 兼容历史已经创建的账号，和自动注册但未登录的账号
+                    if (lastlogin == null || lastlogin.getTime() < lastUpdate || rs.getInt("loggedin") > 0) {
                         rankMove = rs.getInt((job != -1 ? "jobRankMove" : "rankMove"));
                     }
                     rankMove += rs.getInt((job != -1 ? "jobRank" : "rank")) - rank;
