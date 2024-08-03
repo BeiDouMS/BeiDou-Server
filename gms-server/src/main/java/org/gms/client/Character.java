@@ -46,7 +46,6 @@ import org.gms.constants.skills.*;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.ExtendValueDO;
-import org.gms.dao.mapper.ExtendValueMapper;
 import org.gms.manager.ServerManager;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.model.pojo.SkillEntry;
@@ -332,8 +331,6 @@ public class Character extends AbstractCharacterObject {
     private final Map<Integer, Set<Integer>> excluded = new LinkedHashMap<>();
     private final Set<Integer> excludedItems = new LinkedHashSet<>();
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
-    private static final String[] ariantroomleader = new String[3];
-    private static final int[] ariantroomslot = new int[3];
     private long portaldelay = 0, lastcombo = 0;
     private short combocounter = 0;
     @Getter
@@ -343,7 +340,7 @@ public class Character extends AbstractCharacterObject {
     private boolean isbanned = false;
     private boolean blockCashShop = false;
     private boolean allowExpGain = true;
-    private byte pendantExp = 0, lastmobcount = 0, doorSlot = -1;
+    private byte pendantExp = 0, doorSlot = -1;
     private final List<Integer> trockmaps = new ArrayList<>();
     private final List<Integer> viptrockmaps = new ArrayList<>();
     @Getter
@@ -634,10 +631,6 @@ public class Character extends AbstractCharacterObject {
         return pts;
     }
 
-    public void addFame(int famechange) {
-        this.fame += famechange;
-    }
-
     public void addFriendshipRing(Ring r) {
         friendshipRings.add(r);
     }
@@ -809,14 +802,6 @@ public class Character extends AbstractCharacterObject {
         return lastcombo;
     }
 
-    public int getLastMobCount() { //Used for skills that have mobCount at 1. (a/b)
-        return lastmobcount;
-    }
-
-    public void setLastMobCount(byte count) {
-        lastmobcount = count;
-    }
-
     public boolean cannotEnterCashShop() {
         return blockCashShop;
     }
@@ -851,7 +836,7 @@ public class Character extends AbstractCharacterObject {
         return medal;
     }
 
-    public void Hide(boolean hide, boolean login) {
+    public void hide(boolean hide, boolean login) {
         if (isGM() && hide != this.hidden) {
             if (!hide) {
                 this.hidden = false;
@@ -882,12 +867,12 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void Hide(boolean hide) {
-        Hide(hide, false);
+    public void hide(boolean hide) {
+        hide(hide, false);
     }
 
     public void toggleHide(boolean login) {
-        Hide(!hidden);
+        hide(!hidden);
     }
 
     public void cancelMagicDoor() {
@@ -3250,14 +3235,6 @@ public class Character extends AbstractCharacterObject {
         }
 
         return ret;
-    }
-
-    public static String getAriantRoomLeaderName(int room) {
-        return ariantroomleader[room];
-    }
-
-    public static int getAriantSlotsRoom(int room) {
-        return ariantroomslot[room];
     }
 
     public void updateAriantScore() {
@@ -7695,11 +7672,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public static void removeAriantRoom(int room) {
-        ariantroomleader[room] = "";
-        ariantroomslot[room] = 0;
-    }
-
     public void removeCooldown(int skillId) {
         effLock.lock();
         chrLock.lock();
@@ -8525,14 +8497,6 @@ public class Character extends AbstractCharacterObject {
         return skillMacros;
     }
 
-    public static void setAriantRoomLeader(int room, String charname) {
-        ariantroomleader[room] = charname;
-    }
-
-    public static void setAriantSlotRoom(int room, int slot) {
-        ariantroomslot[room] = slot;
-    }
-
     public void setBuddyCapacity(int capacity) {
         buddylist.setCapacity(capacity);
         sendPacket(PacketCreator.updateBuddyCapacity(capacity));
@@ -8573,10 +8537,6 @@ public class Character extends AbstractCharacterObject {
 
     public void setExp(int amount) {
         this.exp.set(amount);
-    }
-
-    public void setGachaExp(int amount) {
-        this.gachaexp.set(amount);
     }
 
     public void setFinishedDojoTutorial() {

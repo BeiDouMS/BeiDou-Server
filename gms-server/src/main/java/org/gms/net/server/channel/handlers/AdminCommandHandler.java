@@ -105,7 +105,7 @@ public final class AdminCommandHandler extends AbstractPacketHandler {
                 }
                 break;
             case 0x10: // /h, information added by vana -- <and tele mode f1> ... hide ofcourse
-                c.getPlayer().Hide(p.readByte() == 1);
+                c.getPlayer().hide(p.readByte() == 1);
                 break;
             case 0x11: // Entering a map
                 switch (p.readByte()) {

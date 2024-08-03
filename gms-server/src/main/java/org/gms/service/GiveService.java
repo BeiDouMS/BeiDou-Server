@@ -391,11 +391,11 @@ public class GiveService {
     private void giveGMChr(Character chr, Integer level) {
         // 按照以下顺序hide，否则因为没有GM权限而无法hide或unhide
         if (level < 3) {
-            chr.Hide(false);
+            chr.hide(false);
             chr.setGMLevel(level);
         } else {
             chr.setGMLevel(level);
-            chr.Hide(true);
+            chr.hide(true);
         }
         chr.message(I18nUtil.getMessage("Give.GM.Chr", level));
         log.info(I18nUtil.getLogMessage("Give.GM.Chr.info1", chr.getId(), chr.getName(), level));
