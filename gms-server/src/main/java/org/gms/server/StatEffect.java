@@ -575,6 +575,7 @@ public class StatEffect {
                 case BlazeWizard.MAGIC_GUARD:
                 case Evan.MAGIC_GUARD:
                     statups.add(new Pair<>(BuffStat.MAGIC_GUARD, x));
+                      statups.add(new Pair<>(BuffStat.STANCE, 50));//一个简单的技改，魔法盾添加泰山效果。 50%
                     break;
                 case Cleric.INVINCIBLE:
                     statups.add(new Pair<>(BuffStat.INVINCIBLE, x));
