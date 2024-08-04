@@ -296,7 +296,7 @@ public class GiveService {
             chr.message(I18nUtil.getMessage("Give.Item.All", quantity, itemName));
 
         }));
-
+        log.info(I18nUtil.getLogMessage("Give.Item.All.info1", quantity, itemId, itemName));
     }
 
     private void giveEquipAllOnlineChr(GiveResourceReqDTO submitData) {
