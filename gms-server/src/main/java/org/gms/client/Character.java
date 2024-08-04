@@ -9656,10 +9656,6 @@ public class Character extends AbstractCharacterObject {
         sendPacket(PacketCreator.updateAreaInfo(area, info));
     }
 
-    public String getAreaInfo(int area) {
-        return area_info.get((short) area);
-    }
-
     public Map<Short, String> getAreaInfos() {
         return area_info;
     }
