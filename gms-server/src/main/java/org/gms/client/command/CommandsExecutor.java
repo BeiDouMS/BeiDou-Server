@@ -258,7 +258,7 @@ public class CommandsExecutor {
     }
 
     private void handleInternal(Client client, String message) {
-        if (client.getPlayer().getMapId() == MapId.JAIL) {
+        if (client.getPlayer().getMapId() == MapId.JAIL && !client.getPlayer().isGM()) {
             client.getPlayer().yellowMessage(I18nUtil.getMessage("CommandsExecutor.handleInternal.message1"));
             return;
         }

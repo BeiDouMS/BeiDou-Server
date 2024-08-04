@@ -11,8 +11,7 @@ var name_tree = [];
 var role_tree = [];
 var name_cursor, role_cursor;
 
-// new server names are to be appended at the start of the name stack, building up the chronology.
-// make sure the server names are lexicograffically equivalent to their correspondent function.
+// 请将新的服务器名称将被添加到在servers数组里，按照构建的时间顺序。
 var servers = ["BeiDou", "Cosmic", "HeavenMS", "MapleSolaxia", "MoopleDEV", "BubblesDEV", "MetroMS", "OdinMS", "Contributors"];
 var servers_history = [];
 
@@ -34,95 +33,95 @@ function writeServerStaff_MapleNext() {
 */
 
 function writeServerStaff_BeiDou() {
-    addPerson("昨日小睡", "Developer");
-    addPerson("leevccc", "Developer");
+    addPerson("昨日小睡", "开发者");
+    addPerson("leevccc", "开发者");
 
     setHistory(2024, 2024);
 }
 
 function writeServerStaff_Cosmic() {
-    addPerson("Ponk", "Developer");
+    addPerson("Ponk", "开发者");
 
     setHistory(2021, 2024);
 }
 
 function writeServerStaff_HeavenMS() {
-    addPerson("Ronan", "Developer");
-    addPerson("Vcoc", "Freelance Developer");
-    addPerson("Thora", "Contributor");
-    addPerson("GabrielSin", "Contributor");
-    addPerson("Masterrulax", "Contributor");
-    addPerson("MedicOP", "Adjunct Developer");
+    addPerson("Ronan", "开发者");
+    addPerson("Vcoc", "自由开发者");
+    addPerson("Thora", "贡献者");
+    addPerson("GabrielSin", "贡献者");
+    addPerson("Masterrulax", "贡献者");
+    addPerson("MedicOP", "兼职开发人员");
 
     setHistory(2015, 2019);
 }
 
 function writeServerStaff_MapleSolaxia() {
-    addPerson("Aria", "Administrator");
-    addPerson("Twdtwd", "Administrator");
-    addPerson("Exorcist", "Developer");
-    addPerson("SharpAceX", "Developer");
-    addPerson("Zygon", "Freelance Developer");
-    addPerson("SourMjolk", "Game Master");
-    addPerson("Kanade", "Game Master");
-    addPerson("Kitsune", "Game Master");
+    addPerson("Aria", "管理员");
+    addPerson("Twdtwd", "管理员");
+    addPerson("Exorcist", "开发者");
+    addPerson("SharpAceX", "开发者");
+    addPerson("Zygon", "自由开发者");
+    addPerson("SourMjolk", "游戏GM");
+    addPerson("Kanade", "游戏GM");
+    addPerson("Kitsune", "游戏GM");
 
     setHistory(2014, 2015);
 }
 
 function writeServerStaff_MoopleDEV() {
-    addPerson("kevintjuh93", "Developer");
-    addPerson("hindie93", "Contributor");
-    addPerson("JuniarZ-", "Contributor");
+    addPerson("kevintjuh93", "开发者");
+    addPerson("hindie93", "贡献者");
+    addPerson("JuniarZ-", "贡献者");
 
     setHistory(2010, 2012);
 }
 
 function writeServerStaff_BubblesDEV() {
-    addPerson("David!", "Developer");
-    addPerson("Moogra", "Developer");
-    addPerson("XxOsirisxX", "Contributor");
-    addPerson("MrMysterious", "Contributor");
+    addPerson("David!", "开发者");
+    addPerson("Moogra", "开发者");
+    addPerson("XxOsirisxX", "贡献者");
+    addPerson("MrMysterious", "贡献者");
 
     setHistory(2009, 2010);
 }
 
 function writeServerStaff_MetroMS() {
-    addPerson("David!", "Developer");
-    addPerson("XxOsirisxX", "Contributor");
-    addPerson("Generic", "Contributor");
+    addPerson("David!", "开发者");
+    addPerson("XxOsirisxX", "贡献者");
+    addPerson("Generic", "贡献者");
 
     setHistory(2009, 2009);
 }
 
 function writeServerStaff_OdinMS() {
-    addPerson("Serpendiem", "Administrator");
-    addPerson("Frz", "Developer");
-    addPerson("Patrick", "Developer");
-    addPerson("Matze", "Developer");
-    addPerson("Vimes", "Developer");
+    addPerson("Serpendiem", "管理员");
+    addPerson("Frz", "开发者");
+    addPerson("Patrick", "开发者");
+    addPerson("Matze", "开发者");
+    addPerson("Vimes", "开发者");
 
     setHistory(2007, 2008);
 }
 
 function writeServerStaff_Contributors() {
-    addPerson("IxianMace", "Contributor");
-    addPerson("Conrad", "Contributor");
-    addPerson("inhyuk", "Contributor");
-    addPerson("Jayd", "Contributor");
-    addPerson("Dragohe4rt", "Contributor");
-    addPerson("Jvlaple", "Contributor");
-    addPerson("Stereo", "Contributor");
-    addPerson("AngelSL", "Contributor");
-    addPerson("Lerk", "Contributor");
-    addPerson("Leifde", "Contributor");
-    addPerson("ThreeStep", "Contributor");
-    addPerson("RMZero213", "Contributor");
-    addPerson("ExtremeDevilz", "Contributor");
-    addPerson("aaroncsn", "Contributor");
-    addPerson("xQuasar", "Contributor");
-    addPerson("Xterminator", "Contributor");
-    addPerson("XoticStory", "Contributor");
+    addPerson("IxianMace", "贡献者");
+    addPerson("Conrad", "贡献者");
+    addPerson("inhyuk", "贡献者");
+    addPerson("Jayd", "贡献者");
+    addPerson("Dragohe4rt", "贡献者");
+    addPerson("Jvlaple", "贡献者");
+    addPerson("Stereo", "贡献者");
+    addPerson("AngelSL", "贡献者");
+    addPerson("Lerk", "贡献者");
+    addPerson("Leifde", "贡献者");
+    addPerson("ThreeStep", "贡献者");
+    addPerson("RMZero213", "贡献者");
+    addPerson("ExtremeDevilz", "贡献者");
+    addPerson("aaroncsn", "贡献者");
+    addPerson("xQuasar", "贡献者");
+    addPerson("Xterminator", "贡献者");
+    addPerson("XoticStory", "贡献者");
 }
 
 function writeAllServerStaffs() {
@@ -159,7 +158,7 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            var sendStr = "There is the history tree of all participating parties on the build of this server:\r\n\r\n";
+            var sendStr = "以下是关于所有参与了本服务器建设的开发者的历史:\r\n\r\n"
             for (var i = 0; i < servers.length; i++) {
                 var hist = servers_history[i];
 
@@ -170,7 +169,7 @@ function action(mode, type, selection) {
                 }
             }
 
-            cm.sendSimple("发送字符串");
+            cm.sendSimple(sendStr);
         } else if (status == 1) {
             var lvName, lvRole;
 
@@ -182,7 +181,7 @@ function action(mode, type, selection) {
                 }
             }
 
-            var sendStr = "The staff of #b" + servers[selection] + "#k:\r\n\r\n";
+            var sendStr = "以下是 #b" + servers[selection] + "#k 的主要人员:\r\n\r\n";
             for (var i = 0; i < lvName.length; i++) {
                 sendStr += "  #L" + i + "# " + lvName[i] + " - " + lvRole[i];
                 sendStr += "#l\r\n";
