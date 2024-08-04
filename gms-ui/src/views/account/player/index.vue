@@ -161,7 +161,9 @@
           />
         </a-form-item>
         <a-form-item
-          v-if="formData.type === 5 || formData.type === 6"
+          v-if="
+            formData.type === 5 || formData.type === 6 || formData.type === 13
+          "
           :label="$t('account.player.form.id')"
         >
           <a-input-number v-model="formData.id" />
@@ -408,7 +410,8 @@
       { value: 3, label: t('account.player.mesos') },
       { value: 4, label: t('account.player.exp') },
       { value: 5, label: t('account.player.item') },
-      { value: 6, label: t('account.player.equip') },
+      { value: 13, label: t('account.player.equip') },
+      { value: 6, label: t('account.player.diyequip') },
     ];
     formData.value.worldId = undefined;
     formData.value.playerId = 0;
@@ -425,7 +428,8 @@
       { value: 3, label: t('account.player.mesos') },
       { value: 4, label: t('account.player.exp') },
       { value: 5, label: t('account.player.item') },
-      { value: 6, label: t('account.player.equip') },
+      { value: 13, label: t('account.player.equip') },
+      { value: 6, label: t('account.player.diyequip') },
       { value: 7, label: t('account.player.expRate') },
       { value: 8, label: t('account.player.mesosRate') },
       { value: 9, label: t('account.player.dropRate') },

@@ -58,22 +58,26 @@ public class GiveService {
             case 6: // equip
                 giveEquipAllOnlineChr(submitData);
                 break;
-            // 全服没有设置倍率的操作
-            // case 7: // expRate
-            // case 8: // mesosRate
-            // case 9: // dropRate
-            // case 10: // bossRate
-            //     String rateType = switch (submitData.getType()) {
-            //         case 7 -> "Exp";
-            //         case 8 -> "Mesos";
-            //         case 9 -> "Drop";
-            //         case 10 -> "Boss";
-            //         default -> "None";
-            //     };
-            //     giveRateAllOnlineChr(rateType, submitData.getRate());
-            //     break;
+            case 13: // 普通装备发放equip，为什么是13呢，因为前端那边传的13
+                giveEquipAllOnline2Chr(submitData.getId(), (short) 1);
+                break;
+                // 全服没有设置倍率的操作
+                // case 7: // expRate
+                // case 8: // mesosRate
+                // case 9: // dropRate
+                // case 10: // bossRate
+                //     String rateType = switch (submitData.getType()) {
+                //         case 7 -> "Exp";
+                //         case 8 -> "Mesos";
+                //         case 9 -> "Drop";
+                //         case 10 -> "Boss";
+                //         default -> "None";
+                //     };
+                //     giveRateAllOnlineChr(rateType, submitData.getRate());
+                //     break;
         }
     }
+
 
     private void giveChr(GiveResourceReqDTO submitData) {
         Integer wId = submitData.getWorldId();
@@ -127,6 +131,9 @@ public class GiveService {
                 break;
             case 12:
                 giveFameChr(chr, submitData.getQuantity());
+                break;
+            case 13:
+                giveEquip2Chr(chr, submitData.getId(), (short) 1);
                 break;
         }
     }
@@ -257,6 +264,39 @@ public class GiveService {
         } else {
             log.info(I18nUtil.getLogMessage("Give.Item.Chr.info1", chr.getId(), chr.getName(), quantity, itemId, itemName));
         }
+    }
+
+    private void giveEquip2Chr(Character chr, int itemId, short quantity) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+
+        String itemName = ii.getName(itemId);
+        if (itemName == null) {
+            throw new BizException(I18nUtil.getExceptionMessage("ITEM_NOT_FOUND"));
+        }
+
+        InventoryManipulator.addById(chr.getClient(), itemId, quantity, "WAdmin", -1, (short) 0, -1);
+        chr.message(I18nUtil.getMessage("Give.Item.Chr", quantity, itemName));
+
+        log.info(I18nUtil.getLogMessage("Give.Item.Chr.info1", chr.getId(), chr.getName(), quantity, itemId, itemName));
+    }
+
+    private void giveEquipAllOnline2Chr(int itemId, short quantity) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+
+        String itemName = ii.getName(itemId);
+        if (itemName == null) {
+            throw new BizException(I18nUtil.getExceptionMessage("ITEM_NOT_FOUND"));
+        }
+        if (!ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
+            throw new BizException(I18nUtil.getExceptionMessage("ONLY_SUPPORT_GIVE_EQUIP"));
+        }
+        Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
+
+            InventoryManipulator.addById(chr.getClient(), itemId, quantity, "WAdmin", -1, (short) 0, -1);
+            chr.message(I18nUtil.getMessage("Give.Item.All", quantity, itemName));
+
+        }));
+
     }
 
     private void giveEquipAllOnlineChr(GiveResourceReqDTO submitData) {
