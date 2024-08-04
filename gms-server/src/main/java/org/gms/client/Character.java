@@ -3336,17 +3336,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public Set<Integer> getAvailableBuffs() {
-        effLock.lock();
-        chrLock.lock();
-        try {
-            return new LinkedHashSet<>(buffEffects.keySet());
-        } finally {
-            chrLock.unlock();
-            effLock.unlock();
-        }
-    }
-
     private List<BuffStatValueHolder> getAllStatups() {
         effLock.lock();
         chrLock.lock();
