@@ -25,7 +25,7 @@ var status = 0;
 var sel;
 
 function start() {
-    cm.sendSimple("你想做什么？\r\n#b#L0#创建/更改你的公会徽章#l#k");
+    cm.sendSimple("你想做什么？\r\n#b#L0#创建/更改你的家族徽标#l#k");
 }
 
 function action(mode, type, selection) {
@@ -37,9 +37,9 @@ function action(mode, type, selection) {
             sel = selection;
             if (sel == 0) {
                 if (cm.getPlayer().getGuildRank() == 1) {
-                    cm.sendYesNo("创建或更改公会徽章需要 #b 5000000 金币#k，您确定要继续吗？");
+                    cm.sendYesNo("创建或更改家族徽标需要 #b 5000000 金币#k，您确定要继续吗？");
                 } else {
-                    cm.sendOk("你必须是公会领袖才能更改徽章。请告诉你的领袖与我交谈。");
+                    cm.sendOk("你必须是家族族长才能更改徽标。请告诉你的族长与我交谈。");
                 }
             }
         } else if (status == 2 && sel == 0) {

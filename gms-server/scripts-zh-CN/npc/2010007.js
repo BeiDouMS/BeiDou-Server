@@ -24,7 +24,7 @@ var status = 0;
 var sel;
 
 function start() {
-    cm.sendSimple("你想做什么？\r\n#b#L0#创建公会#l\r\n#L1#解散你的公会#l\r\n#L2#增加你的公会容量#l#k");
+    cm.sendSimple("欢迎来到家族公馆，你现在想做什么呢?\r\n#b#L0#创建家族#l\r\n#L1#解散家族#l\r\n#L2#增加家族成员人数上限#l#k");
 }
 
 function action(mode, type, selection) {
@@ -44,25 +44,25 @@ function action(mode, type, selection) {
             sel = selection;
             if (selection == 0) {
                 if (cm.getPlayer().getGuildId() > 0) {
-                    cm.sendOk("在你已经加入一个公会的情况下，你无法创建新的公会。");
+                    cm.sendOk("你已经拥有家族了，不能再创建家族。");
                     cm.dispose();
                 } else {
-                    cm.sendYesNo("创建公会需要 #b 1500000 金币#k，你确定要继续吗？");
+                    cm.sendYesNo("创建一个新的家族需要 #b 1500000 金币#k，你确定继续创建一个新的家族吗？");
                 }
             } else if (selection == 1) {
                 if (cm.getPlayer().getGuildId() < 1 || cm.getPlayer().getGuildRank() != 1) {
-                    cm.sendOk("你只能解散公会，如果你是该公会的会长。");
+                    cm.sendOk("你还没有家族！或者\r 你不是族长，因此你不能解散该家族.");
                     cm.dispose();
                 } else {
-                    cm.sendYesNo("你确定要解散你的公会吗？之后将无法恢复，并且你所有的GP都将消失。");
+                    cm.sendYesNo("你确定真的要解散你的家族？当解散后你将不能恢复所有家族相关资料以及GP的数值，是否继续？");
                 }
             } else if (selection == 2) {
                 if (cm.getPlayer().getGuildId() < 1 || cm.getPlayer().getGuildRank() != 1) {
-                    cm.sendOk("只有公会领袖才能增加公会的容量。");
+                    cm.sendOk("你不是族长，因此你将不能增加家族成员的人数上限.");
                     cm.dispose();
                 } else {
                     var Guild = Java.type("net.server.guild.Guild");  // thanks Conrad for noticing an issue due to call on a static method here
-                    cm.sendYesNo("通过#b5#k增加公会容量需要花费#b " + Guild.getIncreaseGuildCost(cm.getPlayer().getGuild().getCapacity()) + "金币#k，你确定要继续吗？");
+                    cm.sendYesNo("家族成员人数每增加 #b5#k 位需要支付#b " + Guild.getIncreaseGuildCost(cm.getPlayer().getGuild().getCapacity()) + "金币#k，你确定要继续吗？");
                 }
             }
         } else if (status == 2) {
