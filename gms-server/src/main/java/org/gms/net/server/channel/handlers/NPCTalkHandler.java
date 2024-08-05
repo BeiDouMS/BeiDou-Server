@@ -27,6 +27,7 @@ import org.gms.config.YamlConfig;
 import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.npc.NPCScriptManager;
@@ -54,7 +55,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         MapObject obj = c.getPlayer().getMap().getMapObject(oid);
         if (obj instanceof NPC npc) {
             if (YamlConfig.config.server.USE_DEBUG && c.getPlayer().isGM()) {
-                c.getPlayer().dropMessage(5, "Talking to NPC " + npc.getId());
+                c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message1") + npc.getId());
             }
 
             if (npc.getId() == NpcId.DUEY) {

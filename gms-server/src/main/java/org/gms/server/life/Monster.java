@@ -51,6 +51,7 @@ import org.gms.net.server.services.task.channel.OverallService;
 import org.gms.net.server.services.type.ChannelServices;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
+import org.gms.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
@@ -62,10 +63,6 @@ import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapObjectType;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.Summon;
-import org.gms.util.IntervalBuilder;
-import org.gms.util.PacketCreator;
-import org.gms.util.Pair;
-import org.gms.util.Randomizer;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -461,7 +458,7 @@ public class Monster extends AbstractLoadedLife {
         }
 
         if (YamlConfig.config.server.USE_DEBUG) {
-            from.dropMessage(5, "Hitted MOB " + this.getId() + ", OID " + this.getObjectId());
+            from.dropMessage(5, I18nUtil.getMessage("Monster.handlePacket.message1") + this.getId() + ", OID " + this.getObjectId());
         }
 
         if (!fake) {

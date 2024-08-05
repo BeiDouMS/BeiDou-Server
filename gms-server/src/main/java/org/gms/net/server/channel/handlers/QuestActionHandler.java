@@ -28,6 +28,7 @@ import org.gms.net.packet.InPacket;
 import org.gms.scripting.quest.QuestScriptManager;
 import org.gms.server.life.NPC;
 import org.gms.server.quest.Quest;
+import org.gms.util.I18nUtil;
 
 import java.awt.*;
 
@@ -58,7 +59,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
 
             Point npcP = npc.getPosition();
             if (Math.abs(npcP.getX() - playerP.getX()) > 1200 || Math.abs(npcP.getY() - playerP.getY()) > 800) {
-                player.dropMessage(5, "Approach the NPC to fulfill this quest operation.");
+                player.dropMessage(5, I18nUtil.getMessage("QuestActionHandler.handlePacket.message1"));
                 return false;
             }
         }
