@@ -248,7 +248,7 @@ gms:
     USE_MAXRANGE_ECHO_OF_HERO: true
     USE_MTS: false
     USE_CPQ: true                       #Renders the CPQ available or not.
-    USE_AUTOHIDE_GM: false              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
+    USE_AUTOHIDE_GM: true              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
     USE_DUEY: false                     # 客户端外挂可以通过该指令刷东西，这也是复制外挂入口
@@ -489,3 +489,6 @@ gms:
     NPCS_SCRIPTABLE:
       #9200000: Talk to Cody # Cody
       9001105: Rescue Gaga!  # Grandpa moon bunny
+
+    # 切换频道是否回到强制返回地图
+    CHANGE_CHANNEL_FORCE_RETURN: false
