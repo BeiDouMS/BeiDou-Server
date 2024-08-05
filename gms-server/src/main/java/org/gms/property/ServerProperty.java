@@ -49,9 +49,6 @@ public class ServerProperty {
     public String LOCALHOST;
     public int LOGIN_PORT;
 
-    //Other configuration
-    public boolean SHUTDOWNHOOK;
-
     //Server Flags
     public boolean USE_CUSTOM_KEYSET;
     public boolean USE_DEBUG;

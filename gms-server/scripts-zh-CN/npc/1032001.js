@@ -194,7 +194,7 @@ function action(mode, type, selection) {
                 return;
             }
             job += selection * 10;
-            cm.sendYesNo("所以你想要选择第二次职业转职成为" + (job == 210 ? "#b法师（火/毒）#k" : job == 220 ? "#b法师（冰/雷）#k" : "#b牧师#k") + "？你知道一旦在这里做出选择，就无法在第二次职业转职时选择不同的职业，对吧？");
+            cm.sendYesNo("所以你想要选择第二次职业转职成为" + getJobName() + "？你知道一旦在这里做出选择，就无法在第二次职业转职时选择不同的职业，对吧？");
         } else if (status == 3) {
             if (cm.haveItem(4031012)) {
                 cm.gainItem(4031012, -1);
@@ -205,11 +205,11 @@ function action(mode, type, selection) {
                 cm.changeJobById(job);
             }
         } else if (status == 4) {
-            cm.sendNextPrev("我刚刚给了你一本书，上面列出了你作为一名#b法师（火/毒）#k或#b法师（冰/雷）#k或#b牧师#k可以获得的技能清单。此外，你的杂项物品栏也扩展了一行。你的最大生命值和魔法值也增加了。去检查一下，看看吧。");
+            cm.sendNextPrev("我刚刚给了你一本书，上面列出了你作为一名" + getJobName() + "可以获得的技能清单。此外，你的杂项物品栏也扩展了一行。你的最大生命值和魔法值也增加了。去检查一下，看看吧。");
         } else if (status == 5) {
             cm.sendNextPrev("我也给了你一点#bSP#k。打开左下角的#b技能菜单#k。你可以提升新获得的二级技能。不过要注意，你不能一次性提升它们。有些技能只有在学会其他技能后才能使用。记得要记住这一点。");
         } else if (status == 6) {
-            cm.sendNextPrev((job == 210 ? "Wizard (Fire / Poison)" : job == 220 ? "Wizard (Ice / Lighting)" : "Cleric") + " need to be strong. But remember that you can't abuse that power and use it on a weakling. Please use your enormous power the right way, because... for you to use that the right way, that is much harden than just getting stronger. Please find me after you have advanced much further. I'll be waiting for you.");
+            cm.sendNextPrev(getJobName() + "需要继续变强！但若将自身的力量发泄在弱者身上，这并不是正确的方法。将自己所拥有的力量用在正确的事情上，这是比变得更强更为重要的课题。好了！相信你不断自我修炼，过不久就会再与我相见的，我期待那天的到来。");
         }
     } else if (actionx["3thJobI"]) {
         if (status == 0) {
@@ -226,4 +226,8 @@ function action(mode, type, selection) {
         cm.gainItem(4031057, 1);
         cm.dispose();
     }
+}
+
+function getJobName() {
+    return job == 210 ? "#b法师（火/毒）#k" : (job == 220 ? "#b法师（冰/雷）#k" : "#b牧师#k");
 }

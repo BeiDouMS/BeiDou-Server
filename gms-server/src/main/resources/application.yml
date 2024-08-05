@@ -232,9 +232,6 @@ gms:
     LOCALHOST: 127.0.0.1            #本地IP
     LOGIN_PORT: 8484                     #登录端口
 
-    #Other configuration
-    SHUTDOWNHOOK: true
-
     #Server Flags
     USE_CUSTOM_KEYSET: false             #在创建角色时启用HeavenMS的自定义键绑定自动设置。
     USE_DEBUG: false                    #将在客户端上启用一些面向调试的文本打印。
@@ -254,7 +251,7 @@ gms:
     USE_AUTOHIDE_GM: false              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
-    USE_DUEY: true
+    USE_DUEY: false                     # 客户端外挂可以通过该指令刷东西，这也是复制外挂入口
     USE_RANDOMIZE_HPMP_GAIN: true       #在升级时启用MaxHP/MaxMP增益和INT对MaxMP增益的随机化。
     USE_STORAGE_ITEM_SORT: true         #启用存储“整理物品”功能。
     USE_ITEM_SORT: true                 #启用库存“物品排序/合并”功能。
@@ -445,7 +442,7 @@ gms:
     PLAYERNPC_AUTODEPLOY: true      #在达到最大等级时，玩家NPC自动部署在名人堂。如果为false，符合条件的玩家必须与1st职业导师对话以部署NPC。
 
     #宠物自动药水配置
-    USE_COMPULSORY_AUTOPOT: true    #宠物将消耗尽可能多的药水以满足AUTOHP/MP比率阈值。
+    USE_COMPULSORY_AUTOPOT: false    #宠物将消耗尽可能多的药水以满足AUTOHP/MP比率阈值。
     USE_EQUIPS_ON_AUTOPOT: true     #自动药水处理程序上的玩家MaxHP和MaxMP检查值将通过装备的HP/MP加成进行更新。
     PET_AUTOHP_RATIO: 0.99          #将自动消耗药水，直到达到MaxHP/MaxMP的给定比率。
     PET_AUTOMP_RATIO: 0.99
