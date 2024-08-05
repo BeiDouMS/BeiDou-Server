@@ -1,17 +1,19 @@
 package org.gms.client;
 
+import org.gms.util.I18nUtil;
+
 public enum FamilyEntitlement {
-    FAMILY_REUINION(1, 300, "Family Reunion", "[Target] Me\\n[Effect] Teleport directly to the Family member of your choice."),
-    SUMMON_FAMILY(1, 500, "Summon Family", "[Target] 1 Family member\\n[Effect] Summon a Family member of choice to the map you're in."),
-    SELF_DROP_1_5(1, 700, "My Drop Rate 1.5x (15 min)", "[Target] Me\\n[Time] 15 min.\\n[Effect] Monster drop rate will be increased #c1.5x#.\\n*  If the Drop Rate event is in progress, this will be nullified."),
-    SELF_EXP_1_5(1, 800, "My EXP 1.5x (15 min)", "[Target] Me\\n[Time] 15 min.\\n[Effect] EXP earned from hunting will be increased #c1.5x#.\\n* If the EXP event is in progress, this will be nullified."),
-    FAMILY_BONDING(1, 1000, "Family Bonding (30 min)", "[Target] At least 6 Family members online that are below me in the Pedigree\\n[Time] 30 min.\\n[Effect] Monster drop rate and EXP earned will be increased #c2x#. \\n* If the EXP event is in progress, this will be nullified."),
-    SELF_DROP_2(1, 1200, "My Drop Rate 2x (15 min)", "[Target] Me\\n[Time] 15 min.\\n[Effect] Monster drop rate will be increased #c2x#.\\n* If the Drop Rate event is in progress, this will be nullified."),
-    SELF_EXP_2(1, 1500, "My EXP 2x (15 min)", "[Target] Me\\n[Time] 15 min.\\n[Effect] EXP earned from hunting will be increased #c2x#.\\n* If the EXP event is in progress, this will be nullified."),
-    SELF_DROP_2_30MIN(1, 2000, "My Drop Rate 2x (30 min)", "[Target] Me\\n[Time] 30 min.\\n[Effect] Monster drop rate will be increased #c2x#.\\n* If the Drop Rate event is in progress, this will be nullified."),
-    SELF_EXP_2_30MIN(1, 2500, "My EXP 2x (30 min)", "[Target] Me\\n[Time] 30 min.\\n[Effect] EXP earned from hunting will be increased #c2x#. \\n* If the EXP event is in progress, this will be nullified."),
-    PARTY_DROP_2_30MIN(1, 4000, "My Party Drop Rate 2x (30 min)", "[Target] My party\\n[Time] 30 min.\\n[Effect] Monster drop rate will be increased #c2x#.\\n* If the Drop Rate event is in progress, this will be nullified."),
-    PARTY_EXP_2_30MIN(1, 5000, "My Party EXP 2x (30 min)", "[Target] My party\\n[Time] 30 min.\\n[Effect] EXP earned from hunting will be increased #c2x#.\\n* If the EXP event is in progress, this will be nullified.");
+    FAMILY_REUINION(1, 300, I18nUtil.getMessage("FamilyEntitlement.message1"), I18nUtil.getMessage("FamilyEntitlement.message2")),
+    SUMMON_FAMILY(1, 500, I18nUtil.getMessage("FamilyEntitlement.message3"), I18nUtil.getMessage("FamilyEntitlement.message4")),
+    SELF_DROP_1_5(1, 700, I18nUtil.getMessage("FamilyEntitlement.message5"), I18nUtil.getMessage("FamilyEntitlement.message6")),
+    SELF_EXP_1_5(1, 800, I18nUtil.getMessage("FamilyEntitlement.message7"), I18nUtil.getMessage("FamilyEntitlement.message8")),
+    FAMILY_BONDING(1, 1000, I18nUtil.getMessage("FamilyEntitlement.message9"), I18nUtil.getMessage("FamilyEntitlement.message10")),
+    SELF_DROP_2(1, 1200, I18nUtil.getMessage("FamilyEntitlement.message11"), I18nUtil.getMessage("FamilyEntitlement.message12")),
+    SELF_EXP_2(1, 1500, I18nUtil.getMessage("FamilyEntitlement.message13"), I18nUtil.getMessage("FamilyEntitlement.message14")),
+    SELF_DROP_2_30MIN(1, 2000, I18nUtil.getMessage("FamilyEntitlement.message15"), I18nUtil.getMessage("FamilyEntitlement.message16")),
+    SELF_EXP_2_30MIN(1, 2500, I18nUtil.getMessage("FamilyEntitlement.message17"), I18nUtil.getMessage("FamilyEntitlement.message18")),
+    PARTY_DROP_2_30MIN(1, 4000, I18nUtil.getMessage("FamilyEntitlement.message19"), I18nUtil.getMessage("FamilyEntitlement.message20")),
+    PARTY_EXP_2_30MIN(1, 5000, I18nUtil.getMessage("FamilyEntitlement.message21"), I18nUtil.getMessage("FamilyEntitlement.message22"));
 
     private final int usageLimit, repCost;
     private final String name, description;

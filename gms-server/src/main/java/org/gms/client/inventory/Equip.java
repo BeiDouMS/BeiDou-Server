@@ -581,7 +581,7 @@ public class Equip extends Item {
 
         itemLevel++;
 
-        String lvupStr = I18nUtil.getMessage("Equip.gainStats.message18") + ItemInformationProvider.getInstance().getName(this.getItemId()) + I18nUtil.getMessage("Equip.gainStats.message15") + itemLevel + I18nUtil.getMessage("Equip.handlePacket.message17");
+        String lvupStr = I18nUtil.getMessage("Equip.gainStats.message21", ItemInformationProvider.getInstance().getName(this.getItemId()), itemLevel);
         String showStr = "#e'" + ItemInformationProvider.getInstance().getName(this.getItemId()) + I18nUtil.getMessage("Equip.gainStats.message16") + itemLevel + "#k#b!";
 
         Pair<String, Pair<Boolean, Boolean>> res = this.gainStats(stats);
