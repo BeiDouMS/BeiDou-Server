@@ -95,6 +95,12 @@ public class PetAutopotProcessor {
             curHp = chr.getHp();
             curMp = chr.getMp();
 
+            // 吃满就不要吃了
+            if (curHp >= maxHp && curMp >= maxMp) {
+                c.sendPacket(PacketCreator.enableActions());
+                return;
+            }
+
             Inventory useInv = chr.getInventory(InventoryType.USE);
             useInv.lockInventory();
             try {
@@ -155,8 +161,8 @@ public class PetAutopotProcessor {
                         short qtyToUse = (short) Math.min(qtyCount, toUse.getQuantity());
                         InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, qtyToUse, false);
 
-                        curHp += (incHp * qtyToUse);
-                        curMp += (incMp * qtyToUse);
+                        curHp += (int) (incHp * qtyToUse);
+                        curMp += (int) (incMp * qtyToUse);
 
                         useCount += qtyToUse;
                         qtyCount -= qtyToUse;

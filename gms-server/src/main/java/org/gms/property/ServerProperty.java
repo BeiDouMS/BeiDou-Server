@@ -49,9 +49,6 @@ public class ServerProperty {
     public String LOCALHOST;
     public int LOGIN_PORT;
 
-    //Other configuration
-    public boolean SHUTDOWNHOOK;
-
     //Server Flags
     public boolean USE_CUSTOM_KEYSET;
     public boolean USE_DEBUG;
@@ -310,4 +307,6 @@ public class ServerProperty {
 
     //Custom NPC overrides. List of NPC IDs.
     public Map<String, String> NPCS_SCRIPTABLE = new HashMap<>();
+
+    public boolean CHANGE_CHANNEL_FORCE_RETURN;
 }

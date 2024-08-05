@@ -213,7 +213,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
-            log.debug("Received packet id {}", opcode);
+            log.info("Received packet id {}", String.format("0x%02X", opcode));
         }
 
         if (handler != null && handler.validateState(this)) {
@@ -1520,6 +1520,22 @@ public class Client extends ChannelInboundHandlerAdapter {
         player.getClient().getChannelServer().removePlayer(player);
 
         player.saveCharToDB();
+
+        /*
+         saveCharToDB后，数据库中的地图已经保存为ForcedReturnId，如果在当前地图下线，再上线，就会传送到ForcedReturnId对应的地图
+         因为玩家登录时会优先取内存中的数据，没有才加载数据库，所以玩家切换频道取的是内存中的数据，而导致没有切换到ForcedReturnId对应的地图
+         玩家反馈切换频道不传送ForcedReturnId对应的地图反而比较友好，所以该参数默认为false，想贴近官方可以设置为true
+         */
+        if (YamlConfig.config.server.CHANGE_CHANNEL_FORCE_RETURN) {
+            int returnedMapId;
+            MapleMap map = player.getMap();
+            if (map.getForcedReturnId() != MapId.NONE) {
+                returnedMapId = player.getMap().getForcedReturnId();
+            } else {
+                returnedMapId = player.getHp() < 1 ? map.getReturnMapId() : map.getId();
+            }
+            player.setMap(getChannelServer((byte) channel).getMapFactory().getMap(returnedMapId));
+        }
 
         player.setSessionTransitionState();
         try {
