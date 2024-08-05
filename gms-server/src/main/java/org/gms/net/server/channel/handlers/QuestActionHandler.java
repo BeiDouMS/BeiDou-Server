@@ -59,7 +59,7 @@ public final class QuestActionHandler extends AbstractPacketHandler {
 
             Point npcP = npc.getPosition();
             if (Math.abs(npcP.getX() - playerP.getX()) > 1200 || Math.abs(npcP.getY() - playerP.getY()) > 800) {
-                player.dropMessage(5, I18nUtil.getMessage("QuestActionHandler.handlePacket.message1"));
+                player.dropMessage(5, I18nUtil.getMessage("QuestActionHandler.isNpcNearby.message1"));
                 return false;
             }
         }
