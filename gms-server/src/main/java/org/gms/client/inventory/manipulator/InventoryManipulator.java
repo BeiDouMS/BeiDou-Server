@@ -34,6 +34,7 @@ import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
@@ -518,6 +519,11 @@ public class InventoryManipulator {
             mods.add(new ModifyInventory(2, source, src));
         }
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
+        // 添加物品代码提示
+        if (c.getPlayer().isGM()) { // 假设isGM()是检查玩家是否是管理员的方法
+            int itemID = source.getItemId();
+            c.getPlayer().dropMessage(5, I18nUtil.getMessage("InventoryManipulator.handlePacket.message1")  + itemID);
+        }
     }
 
     public static void equip(Client c, short src, short dst) {
