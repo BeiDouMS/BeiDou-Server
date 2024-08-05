@@ -38,9 +38,10 @@ public class RatesCommand extends Command {
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
 
-        // travel rates not applicable since it's intrinsically a server/environment rate rather than a character rate
+        // travel rates 不在这里进行展示 因为它是全局的 与角色无关
+        String noviceMsg = player.hasNoviceExpRate() ? I18nUtil.getMessage("ShowRatesCommand.message7") : "";
         String showMsg_ = "#e" + I18nUtil.getMessage("RatesCommand.message2") + "#n\r\n\r\n";
-        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() + "x#k#n" + (player.hasNoviceExpRate() ? " - novice rate" : "") + "\r\n";
+        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() + "x#k#n " + noviceMsg + "\r\n";
         if (player.getMobExpRate() > 1) {
             showMsg_ += I18nUtil.getMessage("RatesCommand.message4") + "#e#b" + Math.round(player.getMobExpRate() * 100f) / 100f + "x#k#n" + "\r\n";
         }
