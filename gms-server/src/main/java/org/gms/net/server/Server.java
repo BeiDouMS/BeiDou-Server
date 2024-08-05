@@ -1655,7 +1655,7 @@ public class Server {
             Random random = new Random();
             int base = 1;
             int ran = random.nextInt(4);
-            nextTime = 86400000 * (base + ran);
+            nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
             return false;
         }
         if (nextTime > System.currentTimeMillis()) {
@@ -1664,7 +1664,7 @@ public class Server {
         Random random = new Random();
         int base = 1;
         int ran = random.nextInt(4);
-        nextTime = 86400000 * (base + ran);
+        nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
         return true;
     }
 }
