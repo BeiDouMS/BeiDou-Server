@@ -1132,8 +1132,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void sendSelectLevel(String text) {
+        sendSelectLevel("", text);
+    }
+
+    public void sendSelectLevel(String prefix, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_SELECT);
+        nextLevelContext.setPrefix(prefix);
         sendSimple(text);
     }
 

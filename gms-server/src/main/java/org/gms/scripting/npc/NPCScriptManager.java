@@ -188,21 +188,36 @@ public class NPCScriptManager extends AbstractScriptManager {
         Invocable iv = scripts.get(c);
         if (iv != null) {
             try {
-                if (mode == 0) {
-                    dispose(c);
-                    return;
-                }
                 c.setClickedNPC();
                 NextLevelContext nextLevelContext = c.getCM().getNextLevelContext();
                 switch (nextLevelContext.getLevelType()) {
-                    case NextLevelType.SEND_SELECT -> iv.invokeFunction("level" + selection);
-                    case NextLevelType.GET_INPUT_NUMBER ->
-                            iv.invokeFunction("level" + nextLevelContext.getNextLevel(), selection);
-                    case NextLevelType.GET_INPUT_TEXT ->
-                            iv.invokeFunction("level" + nextLevelContext.getNextLevel(), c.getCM().getText());
+                    case NextLevelType.SEND_SELECT -> {
+                        if (mode == 0) {
+                            dispose(c);
+                        }
+                        iv.invokeFunction("level" + nextLevelContext.getPrefix() + selection);
+                    }
+                    case NextLevelType.GET_INPUT_NUMBER -> {
+                        if (mode == 0) {
+                            dispose(c);
+                            return;
+                        }
+                        iv.invokeFunction("level" + nextLevelContext.getNextLevel(), selection);
+                    }
+                    case NextLevelType.GET_INPUT_TEXT -> {
+                        if (mode == 0) {
+                            dispose(c);
+                            return;
+                        }
+                        iv.invokeFunction("level" + nextLevelContext.getNextLevel(), c.getCM().getText());
+                    }
                     case NextLevelType.SEND_LAST_NEXT, NextLevelType.SEND_NEXT, NextLevelType.SEND_LAST,
                          NextLevelType.SEND_OK, NextLevelType.SEND_ACCEPT_DECLINE, NextLevelType.SEND_YES_NO -> {
                         if (mode == -1) {
+                            dispose(c);
+                            return;
+                        }
+                        if (mode == 0) {
                             iv.invokeFunction("level" + nextLevelContext.getLastLevel());
                         } else {
                             iv.invokeFunction("level" + nextLevelContext.getNextLevel());

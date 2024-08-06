@@ -39,16 +39,16 @@ function start() {
     if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
 
-        var sendStr = "You have walked a long way to reach the power, wisdom and courage you hold today, haven't you? What do you say about having right now #ra NPC on the Hall of Fame holding the current image of your character#k? Do you like it?";
+        var sendStr = "你已经走了很长的路才获得你今天所拥有的力量、智慧和勇气，不是吗？你觉得在#r冒险岛荣耀大厅，持有你当前角色的图像#k怎么样？";
         if (spawnPnpcFee > 0) {
-            sendStr += " I can do it for you, for the fee of #b " + cm.numberWithCommas(spawnPnpcFee) + " mesos.#k";
+            sendStr += "只需要支付 #b " + cm.numberWithCommas(spawnPnpcFee) + " 金币#k，我就可以帮你实现~";
         }
 
         cm.sendYesNo(sendStr);
     } else {
         if (cm.getJobId() == 0) {
             actionx["1stJob"] = true;
-            cm.sendNext("想成为一个#rmagician#k吗？有一些标准需要满足，因为我们不能接受每个人... #b你的等级至少应该是8#k，首要目标是获得" + cm.getFirstJobStatRequirement(jobType) + "。让我们看看。");   // thanks Vcoc for noticing a need to state and check requirements on first job adv starting message
+            cm.sendNext("想成为一个#r魔法师#k吗？有一些标准需要满足，因为我们不能接受每个人... #b你的等级至少应该是8#k，首要目标是获得" + cm.getFirstJobStatRequirement(jobType) + "。让我们看看。");   // thanks Vcoc for noticing a need to state and check requirements on first job adv starting message
         } else if (cm.getLevel() >= 30 && cm.getJobId() == 200) {
             actionx["2ndJob"] = true;
             if (cm.haveItem(4031012)) {
