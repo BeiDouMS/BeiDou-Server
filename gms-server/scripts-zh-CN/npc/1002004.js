@@ -33,7 +33,7 @@ var status = 0;
 var cost = 10000;
 
 function start() {
-    cm.sendNext("嗨！这辆出租车只对VIP客户开放。与普通出租车只能带你去不同的城镇不同，我们提供更好的服务，值得VIP级别的待遇。价格有点高，但是……只需10,000金币，我们就会安全地带你去#b蚁穴#k。");
+    cm.sendNext("你好！这辆出租车只对VIP客户开放。与普通出租车只能带你去不同的城镇不同，我们提供更好的服务，值得VIP级别的待遇。价格有点高，但是……只需10,000金币，我们就会安全地带你去#b蚁穴#k。");
 }
 
 function action(mode, type, selection) {
@@ -42,16 +42,16 @@ function action(mode, type, selection) {
         cm.dispose();
         return;
     } else if (mode == 0) {
-        cm.sendOk("这个城镇也有很多值得一看的地方。如果你觉得有必要去蚁穴隧道公园，就来找我们吧。");
+        cm.sendOk("这个城镇也有很多值得一看的地方。如果你觉得有必要去蚂蚁广场，就来找我们吧。");
         cm.dispose();
         return;
     }
     if (status == 1) {
-        cm.sendYesNo(cm.getJobId() == 0 ? "We have a special 90% discount for beginners. The Ant Tunnel is located deep inside in the dungeon that's placed at the center of the Victoria Island, where the 24 Hr Mobile Store is. Would you like to go there for #b1,000 mesos#k?" : "The regular fee applies for all non-beginners. The Ant Tunnel is located deep inside in the dungeon that's placed at the center of the Victoria Island, where 24 Hr Mobile Store is. Would you like to go there for #b10,000 mesos#k?");
+        cm.sendYesNo(cm.getJobId() == 0 ? "我们为新手提供 90% 的特别折扣。 蚂蚁广场位于维多利亚大陆中心的地穴深处, 那里是24小时移动商店的所在地。 你想去那里并花费 #b1,000 mesos#k 吗?" : "正常费用适用于所有非初学者。 蚂蚁广场位于维多利亚大陆中心的地穴深处, 那里是24小时移动商店的所在地。 你想去那里并花费 #b10,000 mesos#k 吗?");
         cost /= ((cm.getJobId() == 0) ? 10 : 1);
     } else if (status == 2) {
         if (cm.getMeso() < cost) {
-            cm.sendNext("It looks like you don't have enough mesos. Sorry but you won't be able to use this without it.")
+            cm.sendNext("看来你没有足够的金币. 抱歉，没有它你将无法使用它。")
         } else {
             cm.gainMeso(-cost);
             cm.warp(105070001);
