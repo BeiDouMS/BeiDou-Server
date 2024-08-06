@@ -35,6 +35,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         byte lastMsg = p.readByte(); // 00 (last msg type I think)
         byte action = p.readByte(); // 00 = end chat, 01 == follow
+        // lastMsg等于2有returnText，不等于则没有
         if (lastMsg == 2) {
             if (action != 0) {
                 String returnText = p.readString();
@@ -47,7 +48,7 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
                     }
                 } else {
                     c.getCM().setGetText(returnText);
-                    NPCScriptManager.getInstance().action(c, action, lastMsg, -1);
+                    cmRouting(c, action, lastMsg, -1);
                 }
             } else if (c.getQM() != null) {
                 c.getQM().dispose();
@@ -68,8 +69,16 @@ public final class NPCMoreTalkHandler extends AbstractPacketHandler {
                     QuestScriptManager.getInstance().end(c, action, lastMsg, selection);
                 }
             } else if (c.getCM() != null) {
-                NPCScriptManager.getInstance().action(c, action, lastMsg, selection);
+                cmRouting(c, action, lastMsg, selection);
             }
+        }
+    }
+
+    private void cmRouting(Client c, byte action, byte lastMsg, int selection) {
+        if (c.getCM().getNextLevelContext().getLevelType() == null) {
+            NPCScriptManager.getInstance().action(c, action, lastMsg, selection);
+        } else {
+            NPCScriptManager.getInstance().nextLevel(c, action, lastMsg, selection);
         }
     }
 }

@@ -23,6 +23,8 @@ package org.gms.scripting.npc;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.constants.game.NextLevelType;
+import org.gms.model.pojo.NextLevelContext;
 import org.gms.net.server.world.PartyCharacter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,8 +125,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 if (!itemScript) {
                     if (fileName != null) {
                         engine = getInvocableScriptEngine("npc/" + fileName + ".js", c);
-                        if (engine == null)
-                        {
+                        if (engine == null) {
                             engine = getInvocableScriptEngine("BeiDouSpecial/" + fileName + ".js", c);
                         }
                     }
@@ -174,6 +175,44 @@ public class NPCScriptManager extends AbstractScriptManager {
             try {
                 c.setClickedNPC();
                 iv.invokeFunction("action", mode, type, selection);
+            } catch (ScriptException | NoSuchMethodException t) {
+                if (getCM(c) != null) {
+                    log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
+                }
+                dispose(c);
+            }
+        }
+    }
+
+    public void nextLevel(Client c, byte mode, byte type, int selection) {
+        Invocable iv = scripts.get(c);
+        if (iv != null) {
+            try {
+                if (mode == 0) {
+                    dispose(c);
+                    return;
+                }
+                c.setClickedNPC();
+                NextLevelContext nextLevelContext = c.getCM().getNextLevelContext();
+                switch (nextLevelContext.getLevelType()) {
+                    case NextLevelType.SEND_SELECT -> iv.invokeFunction("level" + selection);
+                    case NextLevelType.GET_INPUT_NUMBER ->
+                            iv.invokeFunction("level" + nextLevelContext.getNextLevel(), selection);
+                    case NextLevelType.GET_INPUT_TEXT ->
+                            iv.invokeFunction("level" + nextLevelContext.getNextLevel(), c.getCM().getText());
+                    case NextLevelType.SEND_LAST_NEXT, NextLevelType.SEND_NEXT, NextLevelType.SEND_LAST,
+                         NextLevelType.SEND_OK, NextLevelType.SEND_ACCEPT_DECLINE, NextLevelType.SEND_YES_NO -> {
+                        if (mode == -1) {
+                            iv.invokeFunction("level" + nextLevelContext.getLastLevel());
+                        } else {
+                            iv.invokeFunction("level" + nextLevelContext.getNextLevel());
+                        }
+                    }
+                    default -> {
+                        log.error("Unsupported level type: {}", nextLevelContext.getLevelType());
+                        dispose(c);
+                    }
+                }
             } catch (ScriptException | NoSuchMethodException t) {
                 if (getCM(c) != null) {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);

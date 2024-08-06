@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.scripting.npc;
 
+import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.client.*;
 import org.gms.client.inventory.Item;
@@ -28,10 +29,12 @@ import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.Pet;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
+import org.gms.constants.game.NextLevelType;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.string.LanguageConstants;
+import org.gms.model.pojo.NextLevelContext;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
@@ -87,6 +90,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     private List<PartyCharacter> otherParty;
 
     private final Map<Integer, String> npcDefaultTalks = new HashMap<>();
+    @Getter
+    private final NextLevelContext nextLevelContext = new NextLevelContext();
 
     private String getDefaultTalk(int npcid) {
         String talk = npcDefaultTalks.get(npcid);
@@ -1095,5 +1100,70 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         }
 
         return false;
+    }
+
+    public void sendNextLevel(String nextLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_NEXT);
+        nextLevelContext.setNextLevel(nextLevel);
+        sendNext(text);
+    }
+
+    public void sendLastLevel(String lastLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_LAST);
+        nextLevelContext.setLastLevel(lastLevel);
+        sendPrev(text);
+    }
+
+    public void sendLastNextLevel(String lastLevel, String nextLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_LAST_NEXT);
+        nextLevelContext.setLastLevel(lastLevel);
+        nextLevelContext.setNextLevel(nextLevel);
+        sendNextPrev(text);
+    }
+
+    public void sendOkLevel(String nextLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_OK);
+        nextLevelContext.setNextLevel(nextLevel);
+        sendOk(text);
+    }
+
+    public void sendSelectLevel(String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_SELECT);
+        sendSimple(text);
+    }
+
+    public void getInputNumberLevel(String nextLevel, String text, int def, int min, int max) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.GET_INPUT_NUMBER);
+        nextLevelContext.setNextLevel(nextLevel);
+        sendGetNumber(text, def, min, max);
+    }
+
+    public void getInputTextLevel(String nextLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.GET_INPUT_TEXT);
+        nextLevelContext.setNextLevel(nextLevel);
+        sendGetText(text);
+    }
+
+    public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_ACCEPT_DECLINE);
+        nextLevelContext.setLastLevel(decLineLevel);
+        nextLevelContext.setNextLevel(acceptLevel);
+        sendAcceptDecline(text);
+    }
+
+    public void sendYesNoLevel(String noLevel, String yesLevel, String text) {
+        nextLevelContext.clear();
+        nextLevelContext.setLevelType(NextLevelType.SEND_YES_NO);
+        nextLevelContext.setLastLevel(noLevel);
+        nextLevelContext.setNextLevel(yesLevel);
+        sendYesNo(text);
     }
 }
