@@ -8,7 +8,6 @@ const BEI_DOU_SATELLITE_MANUAL = 2430033;
 const MAPLE_LEAF = 4001126;
 
 function start() {
-    status = -1;
     levelStart();
 }
 
