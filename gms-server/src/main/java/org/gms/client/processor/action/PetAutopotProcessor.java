@@ -95,15 +95,14 @@ public class PetAutopotProcessor {
             curHp = chr.getHp();
             curMp = chr.getMp();
 
-            // 吃满就不要吃了
-            if (curHp >= maxHp && curMp >= maxMp) {
-                c.sendPacket(PacketCreator.enableActions());
-                return;
-            }
-
             Inventory useInv = chr.getInventory(InventoryType.USE);
             useInv.lockInventory();
             try {
+                // 吃满就不要吃了，放到锁内判断，避免已排队的数据跳过限制
+                if (curHp >= maxHp && curMp >= maxMp) {
+                    c.sendPacket(PacketCreator.enableActions());
+                    return;
+                }
                 toUse = useInv.getItem(slot);
                 if (toUse != null) {
                     if (toUse.getItemId() != itemId) {
