@@ -46,7 +46,7 @@ function action(mode, type, selection) {
             cm.sendSimple("嗨，你好！欢迎来到明斯皮肤护理中心！你想要像我一样拥有紧致健康的皮肤吗？使用 #b#t5153000##k，你可以让我们来照顾剩下的事情，拥有你一直想要的肌肤~！\r\n#L1#皮肤护理：#i5153000##t5153000##l");
         } else if (status == 1) {
             if (cm.haveItem(5153000)) {
-                cm.sendStyle("With our specialized machine, you can see yourself after the treatment in advance. What kind of skin-treatment would you like to do? Choose the style of your liking.", skin);
+                cm.sendStyle("使用我们的专业机器，您可以提前看到治疗后的自己。您想做什么样的皮肤护理？选择您喜欢的风格。", skin);
             } else {
                 cm.sendOk("嗯...你没有你需要接受治疗的护肤券。抱歉，恐怕我们不能为你做这个...");
                 cm.dispose();

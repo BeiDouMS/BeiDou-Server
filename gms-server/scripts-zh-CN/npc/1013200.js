@@ -4,7 +4,7 @@ function start() {
     } else {
         cm.gainItem(4032449, true);
         cm.forceCompleteQuest(22015);
-        cm.playerMessage(5, "You have rescued the Piglet.");
+        cm.playerMessage(5, "你救了小猪。");
     }
     cm.dispose();
 }

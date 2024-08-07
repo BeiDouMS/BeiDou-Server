@@ -41,7 +41,7 @@ function action(mode, type, selection) {
                 cm.sendNext("你好！我是汤米。我们站的附近有一个猪镇。那里的猪很吵闹，无法控制，甚至偷了许多旅行者的武器。它们被赶出了自己的城镇，目前躲藏在猪镇里。");
             } else if (status == 1) {
                 if (cm.isEventLeader()) {
-"What do you think about making your way there with your party members and teach those rowdy pigs a lesson?"
+                    cm.sendNext("你觉得和你的队员一起去那里，给那些吵闹的猪一个教训怎么样？");
                 } else {
                     cm.sendOk("感兴趣吗？告诉你的队长和我联系，前往那里！");
                     cm.dispose();

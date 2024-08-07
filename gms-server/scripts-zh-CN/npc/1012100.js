@@ -38,9 +38,9 @@ function start() {
     if (parseInt(cm.getJobId() / 100) == jobType && cm.canSpawnPlayerNpc(GameConstants.getHallOfFameMapid(cm.getJob()))) {
         spawnPnpc = true;
 
-        var sendStr = "You have walked a long way to reach the power, wisdom and courage you hold today, haven't you? What do you say about having right now #ra NPC on the Hall of Fame holding the current image of your character#k? Do you like it?";
+        var sendStr = "你已经走了很长的路，才能达到你今天所拥有的权力、智慧和勇气，不是吗？ 你觉得现在#r名人堂上哪一个NPC形象适合你#k? 你确定要这么做吗?";
         if (spawnPnpcFee > 0) {
-            sendStr += " I can do it for you, for the fee of #b " + cm.numberWithCommas(spawnPnpcFee) + " mesos.#k";
+            sendStr += " 我可以为你做，费用是 #b " + cm.numberWithCommas(spawnPnpcFee) + " 金币。#k";
         }
 
         cm.sendYesNo(sendStr);
@@ -151,7 +151,7 @@ function action(mode, type, selection) {
     } else if (actionx["2ndJob"]) {
         if (status == 0) {
             if (cm.haveItem(4031012)) {
-                cm.sendSimple("好的，当你做出决定后，点击底部的[I'll choose my occupation]。#b\r\n#L0#请解释一下成为猎人的意义。\r\n#L1#请解释一下成为弩手的意义。\r\n#L3#我会选择我的职业！");
+                cm.sendSimple("好的，当你做出决定后，点击底部的[我会选择我的职业]。#b\r\n#L0#请解释一下成为猎人的意义。\r\n#L1#请解释一下成为弩弓手的意义。\r\n#L3#我会选择我的职业！");
             } else {
                 cm.sendNext("做得好。你看起来很强壮，但我需要看看你是否真的足够强大来通过测试，这不是一个困难的测试，所以你会做得很好。拿着我的信先……确保你不要丢了它！");
                 if (!cm.isQuestStarted(100000)) {
@@ -173,9 +173,9 @@ function action(mode, type, selection) {
             } else {
                 if (selection < 3) {
                     if (selection == 0) {    //hunter
-                        cm.sendNext("精通弓箭的弓箭手。\r\n\r\n在早期级别中，#b猎人#k的每分钟伤害输出更高，攻击速度更快，但略弱于弩箭手。#b猎人#k可以使用#r箭炸弹#k，这是一个略微较弱的攻击，可以使最多6个敌人被眩晕。");
-                    } else if (selection == 1) {    //crossbowman
-                        cm.sendNext("精通弓弩的弓箭手。\r\n\r\n与猎人相比，弓箭手的攻击力随等级提高而增加。弓箭手可以使用更强大的攻击技能#r铁箭#k，该技能不会自动追踪敌人，但可以穿墙。");
+                        cm.sendNext("精通弓箭的弓箭手。\r\n\r\n在早期级别中，#b猎人#k的每分钟伤害输出更高，攻击速度更快，但略弱于弩弓手。#b猎人#k可以使用#r箭炸弹#k，这是一个略微较弱的攻击，可以使最多6个敌人被眩晕。");
+                    } else if (selection == 1) {    //crossbowman 弩弓手
+                        cm.sendNext("精通弓弩的弩弓手。\r\n\r\n与猎人相比，弩弓手的攻击力随等级提高而增加。弩弓手可以使用更强大的攻击技能#r铁箭#k，该技能不会自动追踪敌人，但可以穿墙。");
                     }
 
                     status -= 2;
@@ -185,7 +185,7 @@ function action(mode, type, selection) {
             }
         } else if (status == 2) {
             job += selection * 10;
-            cm.sendYesNo("所以你想要选择成为" + (job == 310 ? "#b猎人#k" : "#b弓箭手#k") + "进行第二次转职吗？你知道一旦在这里做出选择，就无法在第二次转职时选择其他职业了，对吧？");
+            cm.sendYesNo("所以你想要选择成为" + (job == 310 ? "#b猎人#k" : "#b弩弓手#k") + "进行第二次转职吗？你知道一旦在这里做出选择，就无法在第二次转职时选择其他职业了，对吧？");
         } else if (status == 3) {
             if (cm.haveItem(4031012)) {
                 cm.gainItem(4031012, -1);
@@ -200,7 +200,7 @@ function action(mode, type, selection) {
         } else if (status == 5) {
             cm.sendNextPrev("我也给了你一点 #bSP#k。打开左下角的 #b技能菜单#k。你可以提升新获得的二级技能。不过要注意，你不能一次性提升它们。有些技能只有在学会其他技能后才能使用。记得要记住这一点。");
         } else if (status == 6) {
-            cm.sendNextPrev((job == 310 ? "Hunter" : "Crossbowman") + " need to be strong. But remember that you can't abuse that power and use it on a weakling. Please use your enormous power the right way, because... for you to use that the right way, that is much harden than just getting stronger. Please find me after you have advanced much further. I'll be waiting for you.");
+            cm.sendNextPrev((job == 310 ? "Hunter" : "Crossbowman") + " 你需要坚强。但请记住，你不能滥用这种权力，把它用在弱者身上。请正确地使用你的巨大力量，因为……为了让你正确地使用这种力量，这比仅仅变得更强要困难得多。在你更进一步之后，请找到我。我等着你。");
         }
     } else if (actionx["3thJobI"]) {
         if (status == 0) {
