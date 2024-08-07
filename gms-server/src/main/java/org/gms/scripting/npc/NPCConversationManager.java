@@ -143,23 +143,28 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void dispose() {
+        nextLevelContext.clear();
         NPCScriptManager.getInstance().dispose(this);
         getClient().sendPacket(PacketCreator.enableActions());
     }
 
     public void sendNext(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", (byte) 0));
     }
 
     public void sendPrev(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", (byte) 0));
     }
 
     public void sendNextPrev(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", (byte) 0));
     }
 
     public void sendOk(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", (byte) 0));
     }
 
@@ -168,47 +173,58 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void sendYesNo(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", (byte) 0));
     }
 
     public void sendAcceptDecline(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", (byte) 0));
     }
 
     public void sendSimple(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", (byte) 0));
     }
 
     public void sendNext(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", speaker));
     }
 
     public void sendPrev(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", speaker));
     }
 
     public void sendNextPrev(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", speaker));
     }
 
     public void sendOk(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", speaker));
     }
 
     public void sendYesNo(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 1, text, "", speaker));
     }
 
     public void sendAcceptDecline(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0x0C, text, "", speaker));
     }
 
     public void sendSimple(String text, byte speaker) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", speaker));
     }
 
     public void sendStyle(String text, int[] styles) {
         if (styles.length > 0) {
+            nextLevelContext.clear();
             getClient().sendPacket(PacketCreator.getNPCTalkStyle(npc, text, styles));
         } else {    // thanks Conrad for noticing empty styles crashing players
             sendOk("Sorry, there are no options of cosmetics available for you here at the moment.");
@@ -217,10 +233,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public void sendGetNumber(String text, int def, int min, int max) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max));
     }
 
     public void sendGetText(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, ""));
     }
 
@@ -234,6 +252,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 6 = Kerning Subway
      */
     public void sendDimensionalMirror(String text) {
+        nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getDimensionalMirror(text));
     }
 
@@ -1102,6 +1121,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         return false;
     }
 
+    /**
+     * 只有下一步的对话
+     * 对应sendNext
+     *
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     */
     public void sendNextLevel(String nextLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_NEXT);
@@ -1109,6 +1135,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendNext(text);
     }
 
+    /**
+     * 只有上一步的对话
+     * 对应sendPrev
+     *
+     * @param lastLevel 上一步方法
+     * @param text      对话内容
+     */
     public void sendLastLevel(String lastLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_LAST);
@@ -1116,6 +1149,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendPrev(text);
     }
 
+    /**
+     * 有上一步和下一步的对话
+     * 对应sendNextPrev
+     *
+     * @param lastLevel 上一步方法
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     */
     public void sendLastNextLevel(String lastLevel, String nextLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_LAST_NEXT);
@@ -1124,6 +1165,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendNextPrev(text);
     }
 
+    /**
+     * 只有ok按钮的对话
+     * 对应sendOk
+     *
+     * @param nextLevel 点击ok的下一步方法
+     * @param text      对话内容
+     */
     public void sendOkLevel(String nextLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_OK);
@@ -1131,12 +1179,40 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendOk(text);
     }
 
+    /**
+     * 多个选项的对话，选择后自动路由到level + selection对应的方法
+     * 对应sendSimple
+     *
+     * @param text 对话内容
+     */
     public void sendSelectLevel(String text) {
+        sendSelectLevel("", text);
+    }
+
+    /**
+     * 多个选项的对话，选择后自动路由到level + prefix + selection对应的方法
+     * 对应sendSimple
+     *
+     * @param prefix 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
+     * @param text   对话内容
+     */
+    public void sendSelectLevel(String prefix, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_SELECT);
+        nextLevelContext.setPrefix(prefix);
         sendSimple(text);
     }
 
+    /**
+     * 获取玩家输入数字的对话
+     * 对应sendGetNumber
+     *
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     * @param def       默认值
+     * @param min       最小值
+     * @param max       最大值
+     */
     public void getInputNumberLevel(String nextLevel, String text, int def, int min, int max) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_NUMBER);
@@ -1144,6 +1220,13 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendGetNumber(text, def, min, max);
     }
 
+    /**
+     * 获取玩家输入字符串的对话
+     * 对应sendGetText
+     *
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     */
     public void getInputTextLevel(String nextLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_TEXT);
@@ -1151,6 +1234,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendGetText(text);
     }
 
+    /**
+     * 有接受和拒绝的对话
+     * 对应sendAcceptDecline
+     *
+     * @param decLineLevel 拒绝方法
+     * @param acceptLevel  接受方法
+     * @param text         对话内容
+     */
     public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_ACCEPT_DECLINE);
@@ -1159,6 +1250,14 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         sendAcceptDecline(text);
     }
 
+    /**
+     * 有是和否的对话
+     * 对应sendYesNo
+     *
+     * @param noLevel  否方法
+     * @param yesLevel 是方法
+     * @param text     对话内容
+     */
     public void sendYesNoLevel(String noLevel, String yesLevel, String text) {
         nextLevelContext.clear();
         nextLevelContext.setLevelType(NextLevelType.SEND_YES_NO);

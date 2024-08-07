@@ -78,7 +78,7 @@ function level21(inputNum) {
         cm.dispose();
     } else {
         cm.gainItem(MAPLE_LEAF, -cost);
-        successGain(selection);
+        successGain(inputNum);
     }
 }
 

@@ -16,11 +16,8 @@ function start() {
 function action(mode, type, selection) {
     if (mode === 1) {
         status++;
-    } else if (status === -1) {
-        status--;
     } else {
-        cm.dispose();
-        return;
+        status--;
     }
 
     if (status === 0) {
