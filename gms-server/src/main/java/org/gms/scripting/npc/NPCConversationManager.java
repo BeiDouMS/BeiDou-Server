@@ -1129,10 +1129,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text      对话内容
      */
     public void sendNextLevel(String nextLevel, String text) {
-        nextLevelContext.clear();
+        sendNext(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_NEXT);
         nextLevelContext.setNextLevel(nextLevel);
-        sendNext(text);
     }
 
     /**
@@ -1143,10 +1142,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text      对话内容
      */
     public void sendLastLevel(String lastLevel, String text) {
-        nextLevelContext.clear();
+        sendPrev(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_LAST);
         nextLevelContext.setLastLevel(lastLevel);
-        sendPrev(text);
     }
 
     /**
@@ -1158,11 +1156,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text      对话内容
      */
     public void sendLastNextLevel(String lastLevel, String nextLevel, String text) {
-        nextLevelContext.clear();
+        sendNextPrev(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_LAST_NEXT);
         nextLevelContext.setLastLevel(lastLevel);
         nextLevelContext.setNextLevel(nextLevel);
-        sendNextPrev(text);
     }
 
     /**
@@ -1173,10 +1170,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text      对话内容
      */
     public void sendOkLevel(String nextLevel, String text) {
-        nextLevelContext.clear();
+        sendOk(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_OK);
         nextLevelContext.setNextLevel(nextLevel);
-        sendOk(text);
     }
 
     /**
@@ -1197,10 +1193,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text   对话内容
      */
     public void sendSelectLevel(String prefix, String text) {
-        nextLevelContext.clear();
+        sendSimple(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_SELECT);
         nextLevelContext.setPrefix(prefix);
-        sendSimple(text);
     }
 
     /**
@@ -1214,10 +1209,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param max       最大值
      */
     public void getInputNumberLevel(String nextLevel, String text, int def, int min, int max) {
-        nextLevelContext.clear();
+        sendGetNumber(text, def, min, max);
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_NUMBER);
         nextLevelContext.setNextLevel(nextLevel);
-        sendGetNumber(text, def, min, max);
     }
 
     /**
@@ -1228,10 +1222,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text      对话内容
      */
     public void getInputTextLevel(String nextLevel, String text) {
-        nextLevelContext.clear();
+        sendGetText(text);
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_TEXT);
         nextLevelContext.setNextLevel(nextLevel);
-        sendGetText(text);
     }
 
     /**
@@ -1243,11 +1236,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text         对话内容
      */
     public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text) {
-        nextLevelContext.clear();
+        sendAcceptDecline(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_ACCEPT_DECLINE);
         nextLevelContext.setLastLevel(decLineLevel);
         nextLevelContext.setNextLevel(acceptLevel);
-        sendAcceptDecline(text);
     }
 
     /**
@@ -1259,10 +1251,9 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param text     对话内容
      */
     public void sendYesNoLevel(String noLevel, String yesLevel, String text) {
-        nextLevelContext.clear();
+        sendYesNo(text);
         nextLevelContext.setLevelType(NextLevelType.SEND_YES_NO);
         nextLevelContext.setLastLevel(noLevel);
         nextLevelContext.setNextLevel(yesLevel);
-        sendYesNo(text);
     }
 }
