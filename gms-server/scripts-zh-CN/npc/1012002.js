@@ -43,8 +43,8 @@ var equip;
 
 function start() {
     cm.getPlayer().setCS(true);
-    var selStr = "Hello. I am Vicious, retired Sniper. However, I used to be the top student of Athena Pierce. Though I no longer hunt, I can make some archer items that will be useful for you...#b"
-    var options = ["Create a bow", "Create a crossbow", "Make a glove", "Upgrade a glove", "Create materials", "Create Arrows"];
+    var selStr = "你好. 我是比休斯，退休的射手，但我曾经是雅典娜皮尔斯顶尖的学生，我不再打猎了，但我可以帮你制作一些对你有帮助的物品...#b"
+    var options = ["制作一把弓", "制作一把弩", "制作一双手套", "升级一双手套", "材料制作", "制作箭矢"];
     for (var i = 0; i < options.length; i++) {
         selStr += "\r\n#L" + i + "# " + options[i] + "#l";
     }
@@ -59,37 +59,37 @@ function action(mode, type, selection) {
     }
     if (status == 0) {
         if (selection == 0) { //bow refine
-            var selStr = "I may have been a Sniper, but bows and crossbows aren't too much different. Anyway, which would you like to make?#b";
+            var selStr = "好眼光,弓的攻击速度快,也比弩灵敏许多,但是攻击比弩低一点点哦，但箭矢和弩没有太大区别。 总之, 你想做哪一种?#b";
             items = [1452002, 1452003, 1452001, 1452000, 1452005, 1452006, 1452007];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (10 + (i * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
             }
         } else if (selection == 1) { //xbow refine
-            var selStr = "I was a Sniper. Crossbows are my specialty. Which would you like me to make for you?#b";
+            var selStr = "弩是我的专长~它的攻击速度比弓要慢一点，但是伤害却比弓要来的高哦， 你想让我为你做哪一个?#b";
             items = [1462001, 1462002, 1462003, 1462000, 1462004, 1462005, 1462006, 1462007];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (10 + (i * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
             }
         } else if (selection == 2) { //glove refine
-            var selStr = "Okay, so which glove do you want me to make?#b";
+            var selStr = "好的,你想要製作哪一种手套呢?#b";
             items = [1082012, 1082013, 1082016, 1082048, 1082068, 1082071, 1082084, 1082089];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - Bowman Lv. " + (15 + (i * 5) > 40 ? ((i - 1) * 10) : 15 + (i * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (15 + (i * 5) > 40 ? ((i - 1) * 10) : 15 + (i * 5)) + "#l#b";
             }
         } else if (selection == 3) { //glove upgrade
-            var selStr = "Upgrade a glove? That shouldn't be too difficult. Which did you have in mind?#b";
+            var selStr = "升级手套？这应该不会太难。你想过要升级哪一个？#b";
             items = [1082015, 1082014, 1082017, 1082018, 1082049, 1082050, 1082069, 1082070, 1082072, 1082073, 1082085, 1082083, 1082090, 1082091];
             for (var i = 0, x = 0; i < items.length; i++, x += (i + 1) % 2 == 0 ? 1 : 0) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k" + "##k - Bowman Lv. " + (20 + (x * 5) > 40 ? ((x - 1) * 10) : 20 + (x * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "##t" + items[i] + "##k" + "##k - 需要弓箭手等级 Lv. " + (20 + (x * 5) > 40 ? ((x - 1) * 10) : 20 + (x * 5)) + "#l#b";
             }
         } else if (selection == 4) { //material refine
-            var selStr = "Materials? I know of a few materials that I can make for you...#b";
-            var materials = ["Make Processed Wood with Tree Branch", "Make Processed Wood with Firewood", "Make Screws (packs of 15)"];
+            var selStr = "材料？我知道有几种材料我可以给你做...#b";
+            var materials = ["用10个树枝制作1个木材", "用5个木柴制作1个木材", "制作螺丝钉(1次15个)"];
             for (var i = 0; i < materials.length; i++) {
                 selStr += "\r\n#L" + i + "# " + materials[i] + "#l";
             }
         } else if (selection == 5) { //arrow refine
-            var selStr = "Arrows? Not a problem at all.#b";
+            var selStr = "箭矢?没问题的。#b";
             items = [2060000, 2061000, 2060001, 2061001, 2060002, 2061002];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "##t" + items[i] + "##l";
@@ -109,7 +109,7 @@ function action(mode, type, selection) {
         mats = matSet[selection];
         matQty = matQtySet[selection];
         cost = 0;
-        cm.sendGetNumber("So, you want me to make some #t" + item + "#s? In that case, how many do you want me to make?", 1, 1, 100)
+        cm.sendGetNumber("所以，你需要我帮你做一些 #t" + item + "#s? 那你想要我帮你做多少个呢?", 1, 1, 100)
     } else if (status == 2) {
         if (selectedType != 4) {
             selectedItem = selection;
@@ -143,13 +143,13 @@ function action(mode, type, selection) {
             matQty = matQtySet[selectedItem];
             cost = costSet[selectedItem];
         }
-        var prompt = "You want me to make ";
+        var prompt = "你需要我帮你做 ";
         if (qty == 1) {
             prompt += "a #t" + item + "#?";
         } else {
             prompt += qty + " #t" + item + "#?";
         }
-        prompt += " In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+        prompt += " 如果是那样的话，我需要你提供一些特定的物品才能完成任务。不过，请确保你的背包中有足够的空间！#b";
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
                 prompt += "\r\n#i" + mats[i] + "# " + (matQty[i] * qty) + " #t" + mats[i] + "#";
@@ -158,7 +158,7 @@ function action(mode, type, selection) {
             prompt += "\r\n#i" + mats + "# " + (matQty * qty) + " #t" + mats + "#";
         }
         if (cost > 0) {
-            prompt += "\r\n#i4031138# " + (cost * qty) + " meso";
+            prompt += "\r\n#i4031138# " + (cost * qty) + " 金币";
         }
         cm.sendYesNo(prompt);
     } else if (status == 3) {

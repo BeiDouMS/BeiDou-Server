@@ -51,8 +51,8 @@ function action(mode, type, selection) {
         cm.dispose();
     }
     if (status == 0 && mode == 1) {
-        var selStr = "Welcome to my eco-safe refining operation! What would you like today?#b"
-        var options = ["Make a glove", "Upgrade a glove", "Upgrade a hat", "Make a wand", "Make a staff"];
+        var selStr = "欢迎来到我的生态安全精炼工厂！今天你想要什么？#b"
+        var options = ["制作手套", "升级手套", "升级帽子", "制作魔杖", "制作法杖"];
         for (var i = 0; i < options.length; i++) {
             selStr += "\r\n#L" + i + "# " + options[i] + "#l";
         }
@@ -61,41 +61,41 @@ function action(mode, type, selection) {
     } else if (status == 1 && mode == 1) {
         selectedType = selection;
         if (selectedType == 0) { //glove refine
-            var selStr = "So, what kind of glove would you like me to make?#b";
-            var items = ["Lemona#k - Magician Lv. 15#b", "Blue Morrican#k - Magician Lv. 20#b", "Ocean Mesana#k - Magician Lv. 25#b", "Red Lutia#k - Magician Lv. 30#b", "Red Noel#k - Magician Lv. 35#b", "Red Arten#k - Magician Lv. 40#b",
-                "Red Pennance#k - Magician Lv. 50#b", "Steel Manute#k - Magician Lv. 60#b"];
+            var selStr = "那么，你希望我做什么样的手套？#b";
+            var items = ["#i1082019##t1082019##k - 魔法师 Lv. 15#b", "#i1082020##t1082020##k - 魔法师 Lv. 20#b", "#i1082026##t1082026##k - 魔法师 Lv. 25#b", "#i1082051##t1082051##k - 魔法师 Lv. 30#b", "#i1082054##t1082054##k - 魔法师 Lv. 35#b", "#i1082062##t1082062##k - 魔法师 Lv. 40#b",
+                "#i1082081##t1082081##k - 魔法师 Lv. 50#b", "#i1082086##t1082086##k - 魔法师 Lv. 60#b"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 1) { //glove upgrade
-            var selStr = "So, what kind of glove are you looking to upgrade to?#b";
-            var items = ["Green Morrican#k - Magician Lv. 20#b", "Purple Morrican#k - Magician Lv. 20#b", "Blood Mesana#k - Magician Lv. 25#b", "Dark Mesana#k - Magician Lv. 25#b", "Blue Lutia#k - Magician Lv. 30#b", "Black Lutia#k - Magician Lv. 30#b",
-                "Blue Noel#k - Magician Lv. 35#b", "Dark Noel#k - Magician Lv. 35#b", "Blue Arten#k - Magician Lv. 40#b", "Dark Arten#k - Magician Lv. 40#b", "Blue Pennance#k - Magician Lv. 50#b", "Dark Pennance#k - Magician Lv. 50#b",
-                "Gold Manute#k - Magician Lv. 60#b", "Dark Manute#k - Magician Lv. 60#b"];
+            var selStr = "那么，你打算升级到什么样的手套呢？#b";
+            var items = ["#i1082021##t1082021##k - 魔法师 Lv. 20#b", "#i1082022##t1082022##k - 魔法师 Lv. 20#b", "#i1082027##t1082027##k - 魔法师 Lv. 25#b", "#i1082028##t1082028##k - 魔法师 Lv. 25#b", "#i1082052##t1082052##k - 魔法师 Lv. 30#b", "#i1082053##t1082053##k - 魔法师 Lv. 30#b",
+                "#i1082055##t1082055##k - 魔法师 Lv. 35#b", "#i1082056##t1082056##k - 魔法师 Lv. 35#b", "#i1082063##t1082063##k - 魔法师 Lv. 40#b", "#i1082064##t1082064##k - 魔法师 Lv. 40#b", "#i1082082##t1082082##k - 魔法师 Lv. 50#b", "#i1082080##t1082080##k - 魔法师 Lv. 50#b",
+                "#i1082087##t1082087##k - 魔法师 Lv. 60#b", "#i1082088##t1082088##k - 魔法师 Lv. 60#b"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 2) { //hat upgrade
-            var selStr = "A hat? Which one were you thinking of?#b";
-            var items = ["Steel Pride#k - Magician Lv. 30#b", "Golden Pride#k - Magician Lv. 30#b"];
+            var selStr = "一顶帽子？你在想哪顶？#b";
+            var items = ["#i1002065##t1002065##k - 魔法师 Lv. 30#b", "#i1002013##t1002013##k - 魔法师 Lv. 30#b"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 3) { //wand refine
-            var selStr = "A wand, huh? Prefer the smaller weapon that fits in your pocket? Which type are you seeking?#b";
-            var items = ["Wooden Wand#k - Common Lv. 8#b", "Hardwood Wand#k - Common Lv. 13#b", "Metal Wand#k - Common Lv. 18#b", "Ice Wand#k - Magician Lv. 23#b", "Mithril Wand#k - Magician Lv. 28#b",
-                "Wizard Wand#k - Magician Lv. 33#b", "Fairy Wand#k - Magician Lv. 38#b", "Cromi#k - Magician Lv. 48#b"];
+            var selStr = "魔杖，是吗？更喜欢口袋里的小武器？你想要哪种类型的武器？#b";
+            var items = ["#i1372005##t1372005##k - 全职 Lv. 8#b", "#i1372006##t1372006##k - 全职 Lv. 13#b", "#i1372002##t1372002##k - 全职 Lv. 18#b", "#i1372004##t1372004##k - 魔法师 Lv. 23#b", "#i1372003##t1372003##k - 魔法师 Lv. 28#b",
+                "#i1372001##t1372001##k - 魔法师 Lv. 33#b", "#i1372000##t1372000##k - 魔法师 Lv. 38#b", "#i1372007##t1372007##k - 魔法师 Lv. 48#b"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
             cm.sendSimple(selStr);
         } else if (selectedType == 4) { //staff refine
-            var selStr = "Ah, a staff, a great symbol of one's power! Which are you looking to make?#b";
-            var items = ["Wooden Staff#k - Magician Lv. 10#b", "Sapphire Staff#k - Magician Lv. 15#b", "Emerald Staff#k - Magician Lv. 15#b", "Old Wooden Staff#k - Magician Lv. 20#b", "Wizard Staff#k - Magician Lv. 25#b",
-                "Arc Staff#k - Magician Lv. 45#b"];
+            var selStr = "啊，一把法杖，一个人权力的伟大象征！你想做哪一把呢？#b";
+            var items = ["#i1382000##t1382000##k - 魔法师 Lv. 10#b", "#i1382003##t1382003##k - 魔法师 Lv. 15#b", "#i1382005##t1382005##k - 魔法师 Lv. 15#b", "#i1382004##t1382004##k - 魔法师 Lv. 20#b", "#i1382002##t1382002##k - 魔法师 Lv. 25#b",
+                "#i1382001##t1382001##k - 魔法师 Lv. 45#b"];
             for (var i = 0; i < items.length; i++) {
                 selStr += "\r\n#L" + i + "# " + items[i] + "#l";
             }
@@ -157,7 +157,7 @@ function action(mode, type, selection) {
             cost = costSet[selectedItem];
         }
 
-        var prompt = "You want me to make a #t" + item + "#? In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+        var prompt = "你想让我做一个 #t" + item + "#? 如果是那样的话，我需要你提供一些特定的物品才能完成任务。不过，请确保你的背包中有足够的空间！#b";
 
         if (mats instanceof Array) {
             for (var i = 0; i < mats.length; i++) {
@@ -168,7 +168,7 @@ function action(mode, type, selection) {
         }
 
         if (cost > 0) {
-            prompt += "\r\n#i4031138# " + cost + " meso";
+            prompt += "\r\n#i4031138# " + cost + " 金币";
         }
 
         cm.sendYesNo(prompt);
@@ -180,7 +180,7 @@ function action(mode, type, selection) {
             cm.dispose();
             return;
         } else if (cm.getMeso() < cost) {
-            cm.sendOk("Sorry, but all of us need money to live. Come back when you can pay my fees, yes?")
+            cm.sendOk("对不起，但我们都需要钱来生活，等你能付我学费的时候再来，好吗？")
             cm.dispose();
             return;
         } else {

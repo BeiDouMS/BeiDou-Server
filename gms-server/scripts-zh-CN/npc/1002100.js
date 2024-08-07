@@ -48,28 +48,28 @@ function action(mode, type, selection) {
         return;
     }
     if (status == 0) {
-        var selStr = "Which item would you like to buy?#b";
+        var selStr = "你想购买哪些药水?#b";
         for (var i = 0; i < items.length; i++) {
-            selStr += "\r\n#L" + i + "##i" + items[i][0] + "# (Price : " + items[i][1] + " mesos)#l";
+            selStr += "\r\n#L" + i + "##i" + items[i][0] + "# (价格 : " + items[i][1] + " 金币)#l";
         }
         cm.sendSimple(selStr);
     } else if (status == 1) {
         item = items[selection];
         var recHpMp = ["300 HP.", "1000 HP.", "800 MP", "1000 HP and MP."];
-        cm.sendGetNumber("You want #b#t" + item[0] + "##k? #t" + item[0] + "# allows you to recover " + recHpMp[selection] + " How many would you like to buy?", 1, 1, 100);
+        cm.sendGetNumber("你想买 #b#t" + item[0] + "##k? #t" + item[0] + "# 允许您恢复 " + recHpMp[selection] + " 你想买多少个?", 1, 1, 100);
     } else if (status == 2) {
-        cm.sendYesNo("你会购买 #r" + selection + "#k #b#t" + item[0] + "#(s)#k 吗？#t" + item[0] + "# 一个需要 " + item[1] + " 冒险币，所以总共需要 #r" + (item[1] * selection) + "#k 冒险币。");
+        cm.sendYesNo("你将购买这些 #r" + selection + "#k #b#t" + item[0] + "#(s)#k 吗？#t" + item[0] + "# 一个需要 " + item[1] + " 冒险币，所以总共需要 #r" + (item[1] * selection) + "#k 冒险币。");
         amount = selection;
     } else if (status == 3) {
         if (cm.getMeso() < item[1] * amount) {
-            cm.sendNext("你是否缺少冒险币？请检查一下你的杂项物品栏中是否有空位，并且你是否携带了至少 #r" + (item[1] * selectedItem) + "#k 冒险币。");
+            cm.sendNext("你是否缺少冒险币？请检查一下你的消耗物品栏中是否有空位，并且你是否携带了至少 #r" + (item[1] * selectedItem) + "#k 冒险币。");
         } else {
             if (cm.canHold(item[0])) {
                 cm.gainMeso(-item[1] * amount);
                 cm.gainItem(item[0], amount);
-                cm.sendNext("谢谢你的光临。这里的东西总是可以制作的，如果你需要什么，请再来。");
+                cm.sendNext("谢谢你的光临。这里的东西总是可以购买，如果你需要什么，请再来。");
             } else {
-                cm.sendNext("请检查并查看您的杂项物品栏中是否有空的槽位可用。");
+                cm.sendNext("请检查并查看您的消耗物品栏中是否有空的槽位可用。");
             }
         }
         cm.dispose();

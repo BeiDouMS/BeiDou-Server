@@ -89,7 +89,7 @@ function action(mode, type, selection) {
                 cm.gainItem(omok[selection], 1);
                 cm.dispose();
             } else {
-                cm.sendNext("#bYou want to make #t" + omok[selection] + "##k? 嗯...给我材料，我就可以那么做。仔细听，你需要的材料将会是： #r" + omokamount + " #t" + omok1piece[selection] + "#, " + omokamount + " #t" + omok2piece[selection] + "#, 1 #t" + 4030009 + "##k. 怪物们可能会时不时地掉落那些东西……");
+                cm.sendNext("#b你准备好 #t" + omok[selection] + "##k了嘛? 嗯...给我材料，我就可以那么做。仔细听，你需要的材料将会是： #r" + omokamount + " #t" + omok1piece[selection] + "#, " + omokamount + " #t" + omok2piece[selection] + "#, 1 #t" + 4030009 + "##k. 怪物们可能会时不时地掉落那些东西……");
 
                 cm.dispose();
             }

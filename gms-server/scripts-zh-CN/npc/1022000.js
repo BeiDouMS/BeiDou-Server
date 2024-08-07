@@ -69,7 +69,7 @@ function start() {
             actionx["3thJobC"] = true;
             cm.sendNext("你成功击败了我的分身并带回了#b#t4031059##k！看来你已经准备好第三次转职了，把#b#t4031057##k带给#b#p2020008##k，他会帮助你进行第三次转职的，祝你好运！");
         } else {
-            cm.sendOk("Your choice is very wise!");
+            cm.sendOk("你的选择很明智！");
             cm.dispose();
         }
     }
