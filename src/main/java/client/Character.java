@@ -78,6 +78,8 @@ import constants.skills.Shadower;
 import constants.skills.Sniper;
 import constants.skills.ThunderBreaker;
 import constants.skills.Warrior;
+import lombok.Getter;
+import lombok.Setter;
 import net.packet.Packet;
 import net.server.PlayerBuffValueHolder;
 import net.server.PlayerCoolDownValueHolder;
@@ -11431,4 +11433,8 @@ public class Character extends AbstractCharacterObject {
 
         return timedBuffs;
     }
+    
+    @Getter
+    @Setter
+    public int damageSkin = 0;
 }

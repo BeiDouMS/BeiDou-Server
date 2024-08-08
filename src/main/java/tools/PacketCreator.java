@@ -7497,4 +7497,11 @@ public class PacketCreator {
         p.writeByte(seconds);
         return p;
     }
+    
+    public static Packet damageSkin(int charId, int skinId) {
+        OutPacket p = OutPacket.create(SendOpcode.DAMAGE_SKIN);
+        p.writeInt(charId);
+        p.writeInt(skinId);
+        return p;
+    }
 }

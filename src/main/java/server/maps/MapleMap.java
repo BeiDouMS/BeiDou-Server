@@ -81,7 +81,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -2540,6 +2539,11 @@ public class MapleMap {
         } else {
             broadcastSpawnPlayerMapObjectMessage(chr, chr, true);
         }
+        
+        // 向地图广播自己的伤害皮肤
+        broadcastDamageSkin(chr.getId(),chr.getDamageSkin());
+        // 地图玩家给自己广播伤害皮肤
+        broadcastDamageSkinToNewer(chr);
 
         sendObjectPlacement(chr.getClient());
 
@@ -2932,6 +2936,28 @@ public class MapleMap {
                 if (chr != source) {
                     chr.sendPacket(PacketCreator.updateCharLook(chr.getClient(), player));
                 }
+            }
+        } finally {
+            chrRLock.unlock();
+        }
+    }
+
+    public void broadcastDamageSkin(int charId, int skinId) {
+        chrRLock.lock();
+        try {
+            for (Character chr : characters) {
+                chr.sendPacket(PacketCreator.damageSkin(charId, skinId));
+            }
+        } finally {
+            chrRLock.unlock();
+        }
+    }
+
+    public void broadcastDamageSkinToNewer(Character player) {
+        chrRLock.lock();
+        try {
+            for (Character chr : characters) {
+                player.sendPacket(PacketCreator.damageSkin(chr.getId(), chr.getDamageSkin()));
             }
         } finally {
             chrRLock.unlock();

@@ -360,6 +360,7 @@ public enum SendOpcode {
     OPEN_URL(0x169),
     STATIC_DATA(0x170),
     G_MESSAGE(0x171),
+    DAMAGE_SKIN(0x172),
     ;
     private int code = -2;
 

@@ -43,6 +43,7 @@ import client.command.commands.gm0.RatesCommand;
 import client.command.commands.gm0.ReadPointsCommand;
 import client.command.commands.gm0.ReportBugCommand;
 import client.command.commands.gm0.ShowRatesCommand;
+import client.command.commands.gm0.SkinCommand;
 import client.command.commands.gm0.StaffCommand;
 import client.command.commands.gm0.StatDexCommand;
 import client.command.commands.gm0.StatIntCommand;
@@ -544,6 +545,7 @@ public class CommandsExecutor {
         addCommand("showsessions", 5, ShowSessionsCommand.class);
         addCommand("iplist", 5, IpListCommand.class);
         addCommand("gmsg", 5, GMessageCommand.class);
+        addCommand("skin", 5, SkinCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
