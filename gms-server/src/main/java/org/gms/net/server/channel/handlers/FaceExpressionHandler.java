@@ -45,7 +45,7 @@ public final class FaceExpressionHandler extends AbstractPacketHandler {
 
         if (c.tryacquireClient()) {
             try {   // expecting players never intends to wear the emote 0 (default face, that changes back after 5sec timeout)
-                if (chr.isLoggedinWorld()) {
+                if (chr.isLoggedInWorld()) {
                     chr.changeFaceExpression(emote);
                 }
             } finally {

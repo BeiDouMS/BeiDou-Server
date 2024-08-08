@@ -334,7 +334,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 c.sendPacket(PacketCreator.showBoughtCashItem(eqp, c.getAccID()));
                                 cs.gainCash(toCharge, itemRing, chr.getWorld());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
-                                chr.addCrushRing(Ring.loadFromDb(rings.getLeft()));
+                                chr.getCrushRings().add(Ring.loadFromDb(rings.getLeft()));
                                 noteService.sendWithFame(text, chr.getName(), partner.getName());
                                 noteService.show(partner);
                             }
@@ -393,7 +393,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                                 c.sendPacket(PacketCreator.showBoughtCashRing(eqp, partner.getName(), c.getAccID()));
                                 cs.gainCash(payment, -itemRing.getPrice());
                                 cs.gift(partner.getId(), chr.getName(), text, eqp.getSN(), rings.getRight());
-                                chr.addFriendshipRing(Ring.loadFromDb(rings.getLeft()));
+                                chr.getFriendshipRings().add(Ring.loadFromDb(rings.getLeft()));
                                 noteService.sendWithFame(text, chr.getName(), partner.getName());
                                 noteService.show(partner);
                             }

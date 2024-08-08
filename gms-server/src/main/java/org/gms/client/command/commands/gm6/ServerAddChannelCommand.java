@@ -48,7 +48,7 @@ public class ServerAddChannelCommand extends Command {
 
         ThreadManager.getInstance().newTask(() -> {
             int chid = Server.getInstance().addChannel(worldid);
-            if (player.isLoggedinWorld()) {
+            if (player.isLoggedInWorld()) {
                 if (chid >= 0) {
                     player.dropMessage(5, I18nUtil.getMessage("ServerAddChannelCommand.message3", chid, worldid));
                 } else {

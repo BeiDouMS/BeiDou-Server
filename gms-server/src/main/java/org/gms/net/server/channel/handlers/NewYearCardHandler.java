@@ -110,7 +110,7 @@ public final class NewYearCardHandler extends AbstractPacketHandler {
                         player.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(player, newyear, 0xD, 0));
 
                         Character sender = c.getWorldServer().getPlayerStorage().getCharacterById(newyear.getSenderId());
-                        if (sender != null && sender.isLoggedinWorld()) {
+                        if (sender != null && sender.isLoggedInWorld()) {
                             sender.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(sender, newyear, 0xD, 0));
                             sender.dropMessage(6, "[New Year] Your addressee successfully received the New Year card.");
                         }

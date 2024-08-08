@@ -71,7 +71,7 @@ public class Fishing {
     public static void doFishing(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
         // thanks Fadi, Vcoc for suggesting a custom fishing system
 
-        if (!chr.isLoggedinWorld() || !chr.isAlive()) {
+        if (!chr.isLoggedInWorld() || !chr.isAlive()) {
             return;
         }
 

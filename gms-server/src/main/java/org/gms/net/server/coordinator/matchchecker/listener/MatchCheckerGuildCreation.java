@@ -41,7 +41,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
 
     private static void broadcastGuildCreationDismiss(Set<Character> nonLeaderMatchPlayers) {
         for (Character chr : nonLeaderMatchPlayers) {
-            if (chr.isLoggedinWorld()) {
+            if (chr.isLoggedInWorld()) {
                 chr.sendPacket(GuildPackets.genericGuildMessage((byte) 0x26));
             }
         }
@@ -60,7 +60,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                 Packet createGuildPacket = GuildPackets.createGuildMessage(leader.getName(), message);
 
                 for (Character chr : nonLeaderMatchPlayers) {
-                    if (chr.isLoggedinWorld()) {
+                    if (chr.isLoggedInWorld()) {
                         chr.sendPacket(createGuildPacket);
                     }
                 }
@@ -76,7 +76,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                     }
                 }
 
-                if (leader == null || !leader.isLoggedinWorld()) {
+                if (leader == null || !leader.isLoggedInWorld()) {
                     broadcastGuildCreationDismiss(matchPlayers);
                     return;
                 }
@@ -136,7 +136,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
 
                     Server.getInstance().addGuildMember(mgc, chr);
 
-                    if (chr.isLoggedinWorld()) {
+                    if (chr.isLoggedInWorld()) {
                         chr.sendPacket(GuildPackets.showGuildInfo(chr));
 
                         if (cofounder) {
@@ -160,7 +160,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                         Party.leaveParty(chr.getParty(), chr.getClient());
                     }
 
-                    if (chr.isLoggedinWorld()) {
+                    if (chr.isLoggedInWorld()) {
                         chr.sendPacket(GuildPackets.genericGuildMessage((byte) 0x26));
                     }
                 }
@@ -189,7 +189,7 @@ public class MatchCheckerGuildCreation implements MatchCheckerListenerRecipe {
                         Party.leaveParty(chr.getParty(), chr.getClient());
                     }
 
-                    if (chr.isLoggedinWorld()) {
+                    if (chr.isLoggedInWorld()) {
                         chr.message(msg);
                         chr.sendPacket(GuildPackets.genericGuildMessage((byte) 0x26));
                     }

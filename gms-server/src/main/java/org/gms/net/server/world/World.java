@@ -758,7 +758,7 @@ public class World {
             mc.saveGuildStatus();
         }
         if (bDifferentGuild) {
-            if (mc.isLoggedinWorld()) {
+            if (mc.isLoggedInWorld()) {
                 Guild guild = Server.getInstance().getGuild(guildid);
                 if (guild != null) {
                     mc.getMap().broadcastPacket(mc, GuildPackets.guildNameChanged(cid, guild.getName()));
@@ -1532,7 +1532,7 @@ public class World {
 
         for (Map.Entry<Integer, Integer> dp : deployedPets.entrySet()) {
             Character chr = this.getPlayerStorage().getCharacterById(dp.getKey() / 4);
-            if (chr == null || !chr.isLoggedinWorld()) {
+            if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 
@@ -1595,7 +1595,7 @@ public class World {
 
         for (Map.Entry<Integer, Integer> dp : deployedMounts.entrySet()) {
             Character chr = this.getPlayerStorage().getCharacterById(dp.getKey());
-            if (chr == null || !chr.isLoggedinWorld()) {
+            if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 
@@ -1852,7 +1852,7 @@ public class World {
             for (Integer chrid : toRemove) {
                 Character chr = players.getCharacterById(chrid);
 
-                if (chr != null && chr.isLoggedinWorld()) {
+                if (chr != null && chr.isLoggedInWorld()) {
                     chr.sendPacket(PacketCreator.serverMessage(chr.getClient().getChannelServer().getServerMessage()));
                 }
             }
