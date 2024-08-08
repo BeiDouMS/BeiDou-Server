@@ -765,7 +765,7 @@ public class Monster extends AbstractLoadedLife {
         List<Character> lootChars = new LinkedList<>();
         for (Integer cid : takenDamage.keySet()) {
             Character chr = pchars.get(cid);
-            if (chr != null && chr.isLoggedinWorld()) {
+            if (chr != null && chr.isLoggedInWorld()) {
                 lootChars.add(chr);
             }
         }
@@ -884,7 +884,7 @@ public class Monster extends AbstractLoadedLife {
                 for (Integer chrid : attackerChrids) {
                     Character chr = mapChars.get(chrid);
 
-                    if (chr != null && chr.isLoggedinWorld()) {
+                    if (chr != null && chr.isLoggedInWorld()) {
                         chr.raiseQuestMobCount(mobid);
                     }
                 }
@@ -1104,7 +1104,7 @@ public class Monster extends AbstractLoadedLife {
     private Character getActiveController() {
         Character chr = getController();
 
-        if (chr != null && chr.isLoggedinWorld() && chr.getMap() == this.getMap()) {
+        if (chr != null && chr.isLoggedInWorld() && chr.getMap() == this.getMap()) {
             return chr;
         } else {
             return null;
@@ -1910,7 +1910,7 @@ public class Monster extends AbstractLoadedLife {
                 }
 
                 aggroRemoveController();
-                if (!(newController != null && newController.isLoggedinWorld() && newController.getMap() == this.getMap())) {
+                if (!(newController != null && newController.isLoggedInWorld() && newController.getMap() == this.getMap())) {
                     return;
                 }
 

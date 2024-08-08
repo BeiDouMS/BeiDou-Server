@@ -34,8 +34,6 @@ import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.ExtendValueDO;
-import org.gms.dao.mapper.ExtendValueMapper;
-import org.gms.manager.ServerManager;
 import org.gms.model.pojo.SkillEntry;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.Guild;
@@ -61,7 +59,6 @@ import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
 import java.awt.*;
-import java.sql.Date;
 import java.util.List;
 import java.util.*;
 
@@ -163,7 +160,7 @@ public class AbstractPlayerInteraction {
 
     public void warpParty(int id, int portalId, int fromMinId, int fromMaxId) {
         for (Character mc : this.getPlayer().getPartyMembersOnline()) {
-            if (mc.isLoggedinWorld()) {
+            if (mc.isLoggedInWorld()) {
                 if (mc.getMapId() >= fromMinId && mc.getMapId() <= fromMaxId) {
                     mc.changeMap(id, portalId);
                 }
@@ -633,7 +630,7 @@ public class AbstractPlayerInteraction {
                         it.setUpgradeSlots(3);
                     }
 
-                    if (YamlConfig.config.server.USE_ENHANCED_CRAFTING == true && c.getPlayer().getCS() == true) {
+                    if (YamlConfig.config.server.USE_ENHANCED_CRAFTING && c.getPlayer().isUseCS()) {
                         Equip eqp = (Equip) item;
                         if (!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
                             eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));

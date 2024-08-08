@@ -237,7 +237,7 @@ public class EventInstanceManager {
     }
 
     public synchronized void registerPlayer(final Character chr, boolean runEntryScript) {
-        if (chr == null || !chr.isLoggedinWorld() || disposed) {
+        if (chr == null || !chr.isLoggedInWorld() || disposed) {
             return;
         }
 
@@ -884,7 +884,7 @@ public class EventInstanceManager {
             for (Character evChr : eventMembers) {
                 Character chr = mapChars.get(evChr.getId());
 
-                if (chr != null && chr.isLoggedinWorld()) {
+                if (chr != null && chr.isLoggedInWorld()) {
                     chr.raiseQuestMobCount(mobid);
                 }
             }

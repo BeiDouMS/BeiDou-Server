@@ -284,7 +284,7 @@ public class Guild {
 
         for (GuildCharacter mgc : getMembers()) {
             Character chr = ps.getCharacterById(mgc.getId());
-            if (chr == null || !chr.isLoggedinWorld()) {
+            if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 
@@ -298,7 +298,7 @@ public class Guild {
 
         for (GuildCharacter mgc : getMembers()) {
             Character chr = ps.getCharacterById(mgc.getId());
-            if (chr == null || !chr.isLoggedinWorld()) {
+            if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 
@@ -312,7 +312,7 @@ public class Guild {
 
         for (GuildCharacter mgc : getMembers()) {
             Character chr = ps.getCharacterById(mgc.getId());
-            if (chr == null || !chr.isLoggedinWorld()) {
+            if (chr == null || !chr.isLoggedInWorld()) {
                 continue;
             }
 

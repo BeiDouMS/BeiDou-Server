@@ -137,7 +137,7 @@ public class BuddyList {
         for (int bid : getBuddyIds()) {
             Character chr = pstorage.getCharacterById(bid);
 
-            if (chr != null && chr.isLoggedinWorld()) {
+            if (chr != null && chr.isLoggedInWorld()) {
                 chr.sendPacket(packet);
             }
         }

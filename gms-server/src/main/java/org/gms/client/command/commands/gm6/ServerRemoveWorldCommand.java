@@ -47,11 +47,11 @@ public class ServerRemoveWorldCommand extends Command {
 
         ThreadManager.getInstance().newTask(() -> {
             if (Server.getInstance().removeWorld()) {
-                if (player.isLoggedinWorld()) {
+                if (player.isLoggedInWorld()) {
                     player.dropMessage(5, I18nUtil.getMessage("ServerRemoveWorldCommand.message3", Server.getInstance().getWorldsSize()));
                 }
             } else {
-                if (player.isLoggedinWorld()) {
+                if (player.isLoggedInWorld()) {
                     if (rwid < 0) {
                         player.dropMessage(5, I18nUtil.getMessage("ServerRemoveWorldCommand.message4"));
                     } else {

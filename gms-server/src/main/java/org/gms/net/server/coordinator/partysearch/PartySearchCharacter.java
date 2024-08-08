@@ -50,12 +50,12 @@ public class PartySearchCharacter {
             return null;
         }
 
-        if (chr.hasDisabledPartySearchInvite(leaderid)) {
+        if (chr.getDisabledPartySearchInvites().contains(leaderid)) {
             return null;
         }
 
         queued = false;
-        if (chr.isLoggedinWorld() && chr.getParty() == null) {
+        if (chr.isLoggedInWorld() && chr.getParty() == null) {
             return chr;
         } else {
             return null;
