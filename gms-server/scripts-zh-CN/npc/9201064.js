@@ -66,7 +66,7 @@ function action(mode, type, selection) {
                         pushIfItemExists(hairnew, fhair_v[i] + parseInt(cm.getPlayer().getHair() % 10));
                     }
                 }
-                cm.sendStyle("I can totally change up your hairstyle and make it look so good. Why don't you change it up a bit? With #b#t5150031##k, I'll take care of the rest for you. Choose the style of your liking!", hairnew);
+                cm.sendStyle("我完全可以改变你的发型，让它看起来好极了。你为什么不改一下呢？只需 #b#t5150031##k，剩下的事我来帮你处理，选你喜欢的风格吧！", hairnew);
             } else if (selection == 2) {
                 beauty = 2;
                 haircolor = Array();
@@ -74,7 +74,7 @@ function action(mode, type, selection) {
                 for (var i = 0; i < 8; i++) {
                     pushIfItemExists(haircolor, current + i);
                 }
-                cm.sendStyle("I can totally change your haircolor and make it look so good. Why don't you change it up a bit? With #b#t5151026##k, I'll take care of the rest. Choose the color of your liking!", haircolor);
+                cm.sendStyle("我完全可以改变你的发色，让它看起来那么好。你为什么不改一下呢？只需要 #b#t5151026##k，剩下的我来负责，选你喜欢的颜色吧！", haircolor);
             }
         } else if (status == 2) {
             cm.dispose();

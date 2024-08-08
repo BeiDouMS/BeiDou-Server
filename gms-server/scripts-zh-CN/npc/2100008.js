@@ -64,7 +64,7 @@ function action(mode, type, selection) {
                                 % 100));
                     }
                 }
-                cm.sendStyle("Hmmm... Face of beauty glows even under cover and burning desert. Choose the face you want, and I will pull out my outstanding skill for the great make over.", facenew);
+                cm.sendStyle("嗯......即使在遮蔽和燃烧的沙漠下，美丽的面孔也会发光。选择你想要的面孔，我会拿出我杰出的技艺来进行美化。", facenew);
             } else if (selection == 2) {
                 beauty = 1;
 
@@ -78,7 +78,7 @@ function action(mode, type, selection) {
                 }
                 colors = Array();
                 pushIfItemsExists(colors, [current, current + 100, current + 300, current + 600, current + 700]);
-                cm.sendStyle("With the utmost finesse matching that of the sparkling sands of the desert that gleefully embraces the rooftop of the Palace, we will make your eyes shine even brighter with the new lenses. Select the one you want to use...", colors);
+                cm.sendStyle("我们将用新的镜头使您的眼睛更加明亮，与沙漠中闪闪发光的沙子相匹配，沙漠高兴地拥抱着宫殿的屋顶。选择您想要使用的...", colors);
             } else if (selection == 3) {
                 beauty = 3;
                 if (cm.getPlayer().getGender() == 0) {
@@ -103,7 +103,7 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                cm.sendStyle("What kind of lens would you like to wear? Please choose the style of your liking.", colors);
+                cm.sendStyle("你想戴什么样的眼镜？请选择您喜欢的风格。", colors);
             }
         } else if (status == 2) {
             cm.dispose();

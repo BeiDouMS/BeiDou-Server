@@ -41,7 +41,7 @@ function action(mode, type, selection) {
         }
         if (status == 1) {
             if (selection == 2) {
-                cm.sendStyle("With our specialized machine, you can see the way you'll look after the treatment PRIOR to the procedure. What kind of a look are you looking for? Go ahead and choose the style of your liking~!", skin);
+                cm.sendStyle("通过我们的专业机器，你可以在手术前看到自己在治疗后的样子。你想要什么样的表情？快来选择你喜欢的风格吧～！", skin);
             }
         } else if (status == 2) {
             cm.dispose();
