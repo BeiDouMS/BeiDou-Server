@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.server;
 
+import lombok.Getter;
 import net.jcip.annotations.GuardedBy;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
@@ -30,12 +31,15 @@ import org.gms.client.inventory.Pet;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.dao.entity.ModifiedCashItemDO;
+import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.provider.Data;
 import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
+import org.gms.service.CashShopService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.Pair;
 
@@ -206,34 +210,11 @@ public class CashShop {
         }
     }
 
-    public static class SpecialCashItem {
-        private final int sn;
-        private final int modifier;
-        private final byte info; //?
-
-        public SpecialCashItem(int sn, int modifier, byte info) {
-            this.sn = sn;
-            this.modifier = modifier;
-            this.info = info;
-        }
-
-        public int getSN() {
-            return sn;
-        }
-
-        public int getModifier() {
-            return modifier;
-        }
-
-        public byte getInfo() {
-            return info;
-        }
-    }
-
     public static class CashItemFactory {
         private static volatile Map<Integer, CashItem> items = new HashMap<>();
         private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
-        private static volatile List<SpecialCashItem> specialcashitems = new ArrayList<>();
+        @Getter
+        private static final List<ModifiedCashItemDO> modifiedCashItems = new ArrayList<>();
 
         public static void loadAllCashItems() {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
@@ -262,17 +243,8 @@ public class CashShop {
             }
             CashItemFactory.packages = loadedPackages;
 
-            List<SpecialCashItem> loadedSpecialItems = new ArrayList<>();
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("SELECT * FROM specialcashitems");
-                 ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    loadedSpecialItems.add(new SpecialCashItem(rs.getInt("sn"), rs.getInt("modifier"), rs.getByte("info")));
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            CashItemFactory.specialcashitems = loadedSpecialItems;
+            CashShopService cashShopService = ServerManager.getApplicationContext().getBean(CashShopService.class);
+            modifiedCashItems.addAll(cashShopService.loadAllModifiedCashItems());
         }
 
         public static Optional<CashItem> getRandomCashItem() {
@@ -309,9 +281,6 @@ public class CashShop {
             return packages.containsKey(itemId);
         }
 
-        public static List<SpecialCashItem> getSpecialCashItems() {
-            return specialcashitems;
-        }
     }
 
     public record CashShopSurpriseResult(Item usedCashShopSurprise, Item reward) {

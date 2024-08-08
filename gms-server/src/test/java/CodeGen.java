@@ -23,7 +23,7 @@ public class CodeGen {
         globalConfig.setBasePackage("org.gms.dao");
         //设置表前缀和只生成哪些表
 //        globalConfig.setTablePrefix("tb_");
-        globalConfig.setGenerateTable("extend_value");
+        globalConfig.setGenerateTable("modified_cash_item");
 
         //设置生成 entity 并启用 Lombok
         globalConfig.setEntityGenerateEnable(true);
