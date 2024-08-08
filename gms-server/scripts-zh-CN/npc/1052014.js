@@ -86,33 +86,33 @@ function action(mode, type, selection) {
             currentTier = getRewardTier();
 
             if (currentTier >= 0) {
-                sendStr = "With the items you have currently placed, you can retrieve a #r" + levels[currentTier] + "#k prize. Place erasers:";
+                sendStr = "使用您当前放置的物品，您可以检索#r" + levels[currentTier] + "#k 奖品。放置橡皮擦:";
             } else {
-                sendStr = "You have placed no erasers yet. Place erasers:";
+                sendStr = "您还没有放置橡皮擦。放置橡皮擦:";
             }
 
             var listStr = "";
             for (var i = 0; i < tickets.length; i++) {
                 listStr += "#b#L" + i + "##t" + (4001009 + i) + "##k";
                 if (tickets[i] > 0) {
-                    listStr += " - " + tickets[i] + " erasers";
+                    listStr += " - " + tickets[i] + " 橡皮擦";
                 }
                 listStr += "#l\r\n";
             }
             if (hasCoin) {
                 listStr += "#b#L" + tickets.length + "##t" + coinId + "##k";
                 if (coins > 0) {
-                    listStr += " - " + coins + " feathers";
+                    listStr += " - " + coins + " 羽毛";
                 }
                 listStr += "#l\r\n";
             }
 
-            cm.sendSimple(sendStr + "\r\n\r\n" + listStr + "#r#L" + getRewardIndex(hasCoin) + "#Retrieve a prize!#l#k\r\n");
+            cm.sendSimple(sendStr + "\r\n\r\n" + listStr + "#r#L" + getRewardIndex(hasCoin) + "#找回奖品！#l#k\r\n");
 
         } else if (status == 2) {
             if (selection == getRewardIndex(hasCoin)) {
                 if (currentTier < 0) {
-                    cm.sendPrev("You have set no erasers. Insert at least one to claim a prize.");
+                    cm.sendPrev("您没有提交橡皮擦。提交至少一个橡皮擦即可领取奖品。");
                     advance = false;
                 } else {
                     givePrize();
@@ -130,9 +130,9 @@ function action(mode, type, selection) {
                 curItemSel = selection;
 
                 if (curItemQty > 0) {
-                    cm.sendGetText("How many of #b#t" + tickSel + "##k do you want to insert on the machine? (#r" + curItemQty + "#k available)#k");
+                    cm.sendGetText("要将提交多少个 #b#t" + tickSel + "##k 提交到机器上? (剩余#r" + curItemQty + "#k 可用)#k");
                 } else {
-                    cm.sendPrev("You have got #rnone#k of #b#t" + tickSel + "##k to insert on the machine. Click '#rBack#k' to return to the main interface.");
+                    cm.sendPrev(" #r你没有可用的 #k #b#t" + tickSel + "##k 提交到机器上。 点击 '#r返回#k' 返回主界面。");
                     advance = false;
                 }
             }
@@ -146,7 +146,7 @@ function action(mode, type, selection) {
                 }
 
                 if (placedQty > curItemQty) {
-                    cm.sendPrev("You cannot insert the given amount of erasers (#r" + curItemQty + "#k available). Click '#rBack#k' to return to the main interface.");
+                    cm.sendPrev("你没有足够的橡皮可提交 (剩余#r" + curItemQty + "#k 可用). 点击 '#r返回#k' 返回主界面。");
                     advance = false;
                 } else {
                     if (curItemSel < tickets.length) {
@@ -155,11 +155,11 @@ function action(mode, type, selection) {
                         coins = placedQty;
                     }
 
-                    cm.sendPrev("Operation succeeded. Click '#rBack#k' to return to the main interface.");
+                    cm.sendPrev("操作成功。 点击 '#r返回#k' 返回主界面。");
                     advance = false;
                 }
             } catch (err) {
-                cm.sendPrev("You must enter a positive number of erasers to insert. Click '#rBack#k' to return to the main interface.");
+                cm.sendPrev("你必须提交正确橡皮擦数量。 点击 '#r返回#k' 返回主界面。");
                 advance = false;
             }
 

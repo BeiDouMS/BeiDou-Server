@@ -70,7 +70,7 @@ function action(mode, type, selection) {
                                 % 100));
                     }
                 }
-                cm.sendStyle("I can totally transform your face into something new... how about giving us a try? For #b#t5152005##k, you can get the face of your liking...take your time in choosing the face of your preference.", facenew);
+                cm.sendStyle("我完全可以把你的脸改造成新的东西...我们试试看怎么样？只需 #b#t5152005##k，你可以得到你喜欢的脸......花点时间选择你喜欢的脸。", facenew);
             }
         } else if (status == 2) {
             cm.dispose();
