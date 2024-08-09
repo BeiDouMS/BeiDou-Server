@@ -49,7 +49,7 @@ function action(mode, type, selection) {
             if (cm.haveItem(ticketId)) {
                 cm.sendYesNo("你可以使用" + curMapName + "扭蛋机。你想要使用你的扭蛋券吗？");
             } else {
-                cm.sendSimple("欢迎来到“ + curMapName + ”扭蛋机。我可以为您做些什么呢？\r\n\r\n#L0#什么是扭蛋机？#l\r\n#L1#在哪里可以购买扭蛋机券？#l");
+                cm.sendSimple("欢迎来到" + curMapName + "扭蛋机。我可以为您做些什么呢？\r\n\r\n#L0#什么是扭蛋机？#l\r\n#L1#在哪里可以购买扭蛋机券？#l");
             }
         } else if (status == 1 && cm.haveItem(ticketId)) {
             if (cm.canHold(1302000) && cm.canHold(2000000) && cm.canHold(3010001) && cm.canHold(4000000)) { // One free slot in every inventory.
@@ -66,7 +66,7 @@ function action(mode, type, selection) {
                 cm.sendNext("“Gachapon Tickets可以在#r现金商店#k购买，可以使用NX或枫叶点购买。点击屏幕右下角的红色商店图标访问#r现金商店#k，您可以购买门票。”");
             }
         } else if (status == 2) {
-            cm.sendNextPrev("你会在“ + curMapName + ”的扭蛋机中找到各种物品，但最有可能找到与“ + curMapName + ”相关的物品和卷轴。");
+            cm.sendNextPrev("你会在" + curMapName + "的扭蛋机中找到各种物品，但最有可能找到与" + curMapName + "相关的物品和卷轴。");
         } else {
             cm.dispose();
         }
