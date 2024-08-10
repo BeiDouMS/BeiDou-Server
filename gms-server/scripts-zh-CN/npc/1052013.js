@@ -83,7 +83,7 @@ function action(mode, type, selection) {
         } else {
             var levels = ["#m190000000#", "#m191000000#", "#m192000000#", "#m195000000#", "#m196000000#", "#m197000000#"];
             if (status == 0) {
-                var sendStr = "Premium Road is a place of multiple areas with monsters of most various types gathered together, an ideal place for grinding EXP and erasers for the #p1052014#. Select the area you are willing to face:\r\n\r\n#b";
+                var sendStr = "高级道路是一个聚集了各种类型怪物，刷经验、刷装备的理想场所。 #p1052014# 选择您想要面对的区域：\r\n\r\n#b";
                 for (var i = 0; i < 6; i++) {
                     sendStr += "#L" + i + "#" + levels[i] + "#l\r\n";
                 }

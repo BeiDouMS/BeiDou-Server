@@ -205,7 +205,7 @@ public class AccountService {
                     .getPlayerStorage()
                     .getCharacterById(chr.getId());
             if (player == null) return; // 角色离线
-
+            player.setBanned(true);
             Client c = player.getClient(); // 角色在线，获取客户端
             c.banMacs(); // 封禁Mac
             // c.banHWID(); // 封禁客户端 操作不可逆？
@@ -234,5 +234,11 @@ public class AccountService {
 
     public void resetAllLoggedIn() {
         accountsMapper.updateAllLoggedIn(0);
+    }
+
+    public void ban(Character chr, String reason) {
+        accountsMapper.update(AccountsDO.builder().banned(true).id(chr.getAccountID()).banreason(reason).build());
+        // 更新在线的ban状态
+        chr.setBanned(true);
     }
 }

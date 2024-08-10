@@ -52,7 +52,7 @@ function action(mode, type, selection) {
                 successGain(1);
             }
         } else if (selection === 2) {
-            let itemQuantity = cm.getItemQuantity(4001126);
+            let itemQuantity = cm.getItemQuantity(MAPLE_LEAF);
             if (itemQuantity >= 10000) {
                 cm.sendGetNumber("请输入兑换数量", 1, 1, 999);
             } else {

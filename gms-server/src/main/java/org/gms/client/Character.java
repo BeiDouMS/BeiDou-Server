@@ -80,6 +80,7 @@ import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
+import org.gms.service.AccountService;
 import org.gms.service.NameChangeService;
 import org.gms.util.*;
 import org.gms.exception.NotEnabledException;
@@ -330,6 +331,7 @@ public class Character extends AbstractCharacterObject {
     private final Lock cpnLock = new ReentrantLock();
     private final Map<Integer, Set<Integer>> excluded = new LinkedHashMap<>();
     private final Set<Integer> excludedItems = new LinkedHashSet<>();
+    @Getter
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
     private long portaldelay = 0, lastcombo = 0;
     private short combocounter = 0;
@@ -337,7 +339,9 @@ public class Character extends AbstractCharacterObject {
     private final List<String> blockedPortals = new ArrayList<>();
     private final Map<Short, String> area_info = new LinkedHashMap<>();
     private AutobanManager autoban;
-    private boolean isbanned = false;
+    @Getter
+    @Setter
+    private boolean banned = false;
     private boolean blockCashShop = false;
     private boolean allowExpGain = true;
     private byte pendantExp = 0, doorSlot = -1;
@@ -352,14 +356,18 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private Dragon dragon = null;
+    @Setter
     private Ring marriageRing;
-    private int marriageItemid = -1;
+    @Setter
+    @Getter
+    private int marriageItemId = -1;
     @Setter
     @Getter
     private int partnerId = -1;
     private final List<Ring> crushRings = new ArrayList<>();
     private final List<Ring> friendshipRings = new ArrayList<>();
     private boolean loggedIn = false;
+    @Getter
     private boolean useCS;  //chaos scroll upon crafting item.
     private long npcCd;
     private int newWarpMap = -1;
@@ -458,7 +466,7 @@ public class Character extends AbstractCharacterObject {
         return ret;
     }
 
-    public boolean isLoggedinWorld() {
+    public boolean isLoggedInWorld() {
         return this.isLoggedin() && !this.isAwayFromWorld();
     }
 
@@ -493,8 +501,8 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void updatePartySearchAvailability(boolean psearchAvailable) {
-        if (psearchAvailable) {
+    public void updatePartySearchAvailability(boolean pSearchAvailable) {
+        if (pSearchAvailable) {
             if (canRecvPartySearchInvite && getParty() == null) {
                 this.getWorldServer().getPartySearchCoordinator().attachPlayer(this);
             }
@@ -521,24 +529,8 @@ public class Character extends AbstractCharacterObject {
         return canRecvPartySearchInvite;
     }
 
-    public void resetPartySearchInvite(int fromLeaderid) {
-        disabledPartySearchInvites.remove(fromLeaderid);
-    }
-
-    public void disablePartySearchInvite(int fromLeaderid) {
-        disabledPartySearchInvites.add(fromLeaderid);
-    }
-
-    public boolean hasDisabledPartySearchInvite(int fromLeaderid) {
-        return disabledPartySearchInvites.contains(fromLeaderid);
-    }
-
     public void setSessionTransitionState() {
         client.setCharacterOnSessionTransitionState(this.getId());
-    }
-
-    public boolean getCS() {
-        return useCS;
     }
 
     public void setCS(boolean cs) {
@@ -564,37 +556,19 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void addCrushRing(Ring r) {
-        crushRings.add(r);
-    }
-
     public Ring getRingById(int id) {
-        for (Ring ring : getCrushRings()) {
-            if (ring.getRingId() == id) {
-                return ring;
-            }
+        Optional<Ring> ringOptional = getCrushRings().stream().filter(ring -> ring.getRingId() == id).findFirst();
+        if (ringOptional.isPresent()) {
+            return ringOptional.get();
         }
-        for (Ring ring : getFriendshipRings()) {
-            if (ring.getRingId() == id) {
-                return ring;
-            }
+        ringOptional = getFriendshipRings().stream().filter(ring -> ring.getRingId() == id).findFirst();
+        if (ringOptional.isPresent()) {
+            return ringOptional.get();
         }
-
-        if (marriageRing != null) {
-            if (marriageRing.getRingId() == id) {
-                return marriageRing;
-            }
+        if (marriageRing != null && marriageRing.getRingId() == id) {
+            return marriageRing;
         }
-
         return null;
-    }
-
-    public int getMarriageItemId() {
-        return marriageItemid;
-    }
-
-    public void setMarriageItemId(int itemid) {
-        marriageItemid = itemid;
     }
 
     public int getRelationshipId() {
@@ -619,24 +593,16 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public int addDojoPointsByMap(int mapid) {
+    public int addDojoPointsByMap(int mapId) {
         int pts = 0;
         if (dojoPoints < 17000) {
-            pts = 1 + ((mapid - 1) / 100 % 100) / 6;
+            pts = 1 + ((mapId - 1) / 100 % 100) / 6;
             if (!MapId.isPartyDojo(this.getMapId())) {
                 pts++;
             }
             this.dojoPoints += pts;
         }
         return pts;
-    }
-
-    public void addFriendshipRing(Ring r) {
-        friendshipRings.add(r);
-    }
-
-    public void addMarriageRing(Ring r) {
-        marriageRing = r;
     }
 
     public void addMesosTraded(int gain) {
@@ -670,15 +636,8 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void ban(String reason) {
-        this.isbanned = true;
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?")) {
-            ps.setString(1, reason);
-            ps.setInt(2, accountid);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            log.error(I18nUtil.getLogMessage("Character.ban.error1"), accountid, e);
-        }
+        AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+        accountService.ban(this, reason);
     }
 
     public static boolean ban(String id, String reason, boolean accountId) {
@@ -1519,7 +1478,7 @@ public class Character extends AbstractCharacterObject {
 
         List<Character> partyMembers = new LinkedList<>();
         for (Character mc : (exPartyMembers != null) ? exPartyMembers : this.getPartyMembersOnline()) {
-            if (mc.isLoggedinWorld()) {
+            if (mc.isLoggedInWorld()) {
                 partyMembers.add(mc);
             }
         }
@@ -1975,7 +1934,7 @@ public class Character extends AbstractCharacterObject {
                                 if (!mpcs.isEmpty()) {
                                     int mesosamm = mapitem.getMeso() / mpcs.size();
                                     for (Character partymem : mpcs) {
-                                        if (partymem.isLoggedinWorld()) {
+                                        if (partymem.isLoggedInWorld()) {
                                             partymem.gainMeso(mesosamm, true, true, false);
                                         }
                                     }
@@ -2019,7 +1978,7 @@ public class Character extends AbstractCharacterObject {
                         if (!mpcs.isEmpty()) {
                             int mesosamm = mapitem.getMeso() / mpcs.size();
                             for (Character partymem : mpcs) {
-                                if (partymem.isLoggedinWorld()) {
+                                if (partymem.isLoggedInWorld()) {
                                     partymem.gainMeso(mesosamm, true, true, false);
                                 }
                             }
@@ -2621,7 +2580,7 @@ public class Character extends AbstractCharacterObject {
         chrLock.lock();
         try {
             // Poison damage visibility and diseases status visibility, extended through map transitions thanks to Ronan
-            if (!this.isLoggedinWorld()) {
+            if (!this.isLoggedInWorld()) {
                 return;
             }
 
@@ -2756,8 +2715,7 @@ public class Character extends AbstractCharacterObject {
     private static boolean dispelSkills(int skillid) {
         return switch (skillid) {
             case DarkKnight.BEHOLDER, FPArchMage.ELQUINES, ILArchMage.IFRIT, Priest.SUMMON_DRAGON, Bishop.BAHAMUT,
-                    Ranger.PUPPET, Ranger.SILVER_HAWK, Sniper.PUPPET, Sniper.GOLDEN_EAGLE, Hermit.SHADOW_PARTNER ->
-                    true;
+                 Ranger.PUPPET, Ranger.SILVER_HAWK, Sniper.PUPPET, Sniper.GOLDEN_EAGLE, Hermit.SHADOW_PARTNER -> true;
             default -> false;
         };
     }
@@ -4252,9 +4210,10 @@ public class Character extends AbstractCharacterObject {
 
     private static boolean isSingletonStatup(BuffStat mbs) {
         return switch (mbs) {           //HPREC and MPREC are supposed to be singleton
-            case COUPON_EXP1, COUPON_EXP2, COUPON_EXP3, COUPON_EXP4, COUPON_DRP1, COUPON_DRP2, COUPON_DRP3, MESO_UP_BY_ITEM,
-                    ITEM_UP_BY_ITEM, RESPECT_PIMMUNE, RESPECT_MIMMUNE, DEFENSE_ATT, DEFENSE_STATE, WATK, WDEF, MATK, MDEF,
-                    ACC, AVOID, SPEED, JUMP -> false;
+            case COUPON_EXP1, COUPON_EXP2, COUPON_EXP3, COUPON_EXP4, COUPON_DRP1, COUPON_DRP2, COUPON_DRP3,
+                 MESO_UP_BY_ITEM,
+                 ITEM_UP_BY_ITEM, RESPECT_PIMMUNE, RESPECT_MIMMUNE, DEFENSE_ATT, DEFENSE_STATE, WATK, WDEF, MATK, MDEF,
+                 ACC, AVOID, SPEED, JUMP -> false;
             default -> true;
         };
     }
@@ -5253,7 +5212,7 @@ public class Character extends AbstractCharacterObject {
                     Character chr = mpc.getPlayer();
                     if (chr != null) {
                         MapleMap chrMap = chr.getMap();
-                        if (chrMap != null && chrMap.hashCode() == thisMapHash && chr.isLoggedinWorld()) {
+                        if (chrMap != null && chrMap.hashCode() == thisMapHash && chr.isLoggedInWorld()) {
                             list.add(chr);
                         }
                     }
@@ -6456,11 +6415,11 @@ public class Character extends AbstractCharacterObject {
     public void addPlayerRing(Ring ring) {
         int ringItemId = ring.getItemId();
         if (ItemId.isWeddingRing(ringItemId)) {
-            this.addMarriageRing(ring);
+            this.marriageRing = ring;
         } else if (ring.getItemId() > 1112012) {
-            this.addFriendshipRing(ring);
+            this.friendshipRings.add(ring);
         } else {
-            this.addCrushRing(ring);
+            this.crushRings.add(ring);
         }
     }
 
@@ -6770,11 +6729,11 @@ public class Character extends AbstractCharacterObject {
                     }
 
                     ret.partnerId = rs.getInt("partnerId");
-                    ret.marriageItemid = rs.getInt("marriageItemId");
-                    if (ret.marriageItemid > 0 && ret.partnerId <= 0) {
-                        ret.marriageItemid = -1;
+                    ret.marriageItemId = rs.getInt("marriageItemId");
+                    if (ret.marriageItemId > 0 && ret.partnerId <= 0) {
+                        ret.marriageItemId = -1;
                     } else if (ret.partnerId > 0 && wserv.getRelationshipId(ret.id) <= 0) {
-                        ret.marriageItemid = -1;
+                        ret.marriageItemId = -1;
                         ret.partnerId = -1;
                     }
 
@@ -7335,7 +7294,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void sitChair(int itemId) {
-        if (this.isLoggedinWorld()) {
+        if (this.isLoggedInWorld()) {
             if (itemId >= 1000000) {    // sit on item chair
                 if (chair.get() < 0) {
                     setChair(itemId);
@@ -7457,11 +7416,11 @@ public class Character extends AbstractCharacterObject {
 
             Integer hbhp = getBuffedValue(BuffStat.HYPERBODYHP);
             if (hbhp != null) {
-                localMaxHp += (int)((hbhp.doubleValue() / 100) * localMaxHp);
+                localMaxHp += (int) ((hbhp.doubleValue() / 100) * localMaxHp);
             }
             Integer hbmp = getBuffedValue(BuffStat.HYPERBODYMP);
             if (hbmp != null) {
-                localMaxMp += (int)((hbmp.doubleValue() / 100) * localMaxMp);
+                localMaxMp += (int) ((hbmp.doubleValue() / 100) * localMaxMp);
             }
 
             localMaxHp = Math.min(30000, localMaxHp);
@@ -8159,7 +8118,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(49, questFame);
                     ps.setLong(50, jailExpiration);
                     ps.setInt(51, partnerId);
-                    ps.setInt(52, marriageItemid);
+                    ps.setInt(52, marriageItemId);
                     ps.setTimestamp(53, new Timestamp(lastExpGainTime));
                     ps.setInt(54, ariantPoints);
                     ps.setBoolean(55, canRecvPartySearchInvite);
@@ -8439,7 +8398,7 @@ public class Character extends AbstractCharacterObject {
 
     public void sendPolice(int greason, String reason, int duration) {
         sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for %s.#k", "Cosmic", reason)));
-        this.isbanned = true;
+        this.banned = true;
         TimerManager.getInstance().schedule(() -> client.disconnect(false, false), duration);
     }
 
@@ -9676,10 +9635,6 @@ public class Character extends AbstractCharacterObject {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isBanned() {
-        return isbanned;
     }
 
     public List<Integer> getTrockMaps() {

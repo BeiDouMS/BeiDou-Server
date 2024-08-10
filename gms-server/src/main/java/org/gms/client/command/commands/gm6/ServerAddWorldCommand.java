@@ -42,7 +42,7 @@ public class ServerAddWorldCommand extends Command {
         ThreadManager.getInstance().newTask(() -> {
             int wid = Server.getInstance().addWorld();
 
-            if (player.isLoggedinWorld()) {
+            if (player.isLoggedInWorld()) {
                 if (wid >= 0) {
                     player.dropMessage(5, I18nUtil.getMessage("ServerAddWorldCommand.message2", wid));
                 } else {

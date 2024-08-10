@@ -56,7 +56,7 @@ public class SummonCommand extends Command {
             }
         }
         if (victim != null) {
-            if (!victim.isLoggedinWorld()) {
+            if (!victim.isLoggedInWorld()) {
                 player.dropMessage(6, I18nUtil.getMessage("SummonCommand.message3"));
                 return;
             }
@@ -68,7 +68,7 @@ public class SummonCommand extends Command {
 
             try {
                 for (int i = 0; i < 7; i++) {   // poll for a while until the player reconnects
-                    if (victim.isLoggedinWorld()) {
+                    if (victim.isLoggedInWorld()) {
                         break;
                     }
                     Thread.sleep(1777);

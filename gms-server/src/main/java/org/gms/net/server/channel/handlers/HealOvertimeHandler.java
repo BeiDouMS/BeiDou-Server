@@ -35,7 +35,7 @@ public final class HealOvertimeHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        if (!chr.isLoggedinWorld()) {
+        if (!chr.isLoggedInWorld()) {
             return;
         }
 

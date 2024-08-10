@@ -285,7 +285,7 @@ public class Expedition {
             }
 
             Character player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
-            if (player != null && player.isLoggedinWorld()) {
+            if (player != null && player.isLoggedInWorld()) {
                 player.sendPacket(PacketCreator.removeClock());
                 if (!silent) {
                     player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
@@ -335,7 +335,7 @@ public class Expedition {
         List<Character> activeMembers = new LinkedList<>();
         for (Integer chrid : getMembers().keySet()) {
             Character chr = ps.getCharacterById(chrid);
-            if (chr != null && chr.isLoggedinWorld()) {
+            if (chr != null && chr.isLoggedInWorld()) {
                 activeMembers.add(chr);
             }
         }

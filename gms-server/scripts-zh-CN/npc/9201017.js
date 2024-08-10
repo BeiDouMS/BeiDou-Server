@@ -82,7 +82,7 @@ function action(mode, type, selection) {
                 }
                 colors = Array();
                 pushIfItemsExists(colors, [current, current + 100, current + 300, current + 400, current + 500, current + 700]);
-                cm.sendStyle("With our specialized machine, you can see yourself after the treatment in advance. What kind of lens would you like to wear? Choose the style of your liking.", colors);
+                cm.sendStyle("用我们的专业机器，您可以提前看到治疗后的自己，您想戴什么样的镜片呢？选择自己喜欢的款式吧。", colors);
             } else if (selection == 3) {
                 beauty = 3;
                 if (cm.getPlayer().getGender() == 0) {
@@ -107,7 +107,7 @@ function action(mode, type, selection) {
                     return;
                 }
 
-                cm.sendStyle("What kind of lens would you like to wear? Please choose the style of your liking.", colors);
+                cm.sendStyle("你想戴什么样的眼镜？请选择您喜欢的风格。", colors);
             }
         } else if (status == 2) {
             if (beauty == 1) {

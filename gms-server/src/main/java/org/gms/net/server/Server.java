@@ -608,7 +608,7 @@ public class Server {
         while (!processDiseaseAnnounceClients.isEmpty()) {
             Client c = processDiseaseAnnounceClients.remove(0);
             Character player = c.getPlayer();
-            if (player != null && player.isLoggedinWorld()) {
+            if (player != null && player.isLoggedInWorld()) {
                 player.announceDiseases();
                 player.collectDiseases();
             }

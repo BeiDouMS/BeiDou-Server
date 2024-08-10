@@ -301,7 +301,7 @@ public class PartySearchCoordinator {
         }
 
         if (InviteCoordinator.createInvite(InviteType.PARTY, leader, partyid, chr.getId())) {
-            chr.disablePartySearchInvite(leader.getId());
+            chr.getDisabledPartySearchInvites().add(leader.getId());
             chr.sendPacket(PacketCreator.partySearchInvite(leader));
             return true;
         } else {
@@ -403,7 +403,7 @@ public class PartySearchCoordinator {
             if (party != null && party.getMembers().size() < 6) {
                 addQueueLeader(leader);
             } else {
-                if (leader.isLoggedinWorld()) {
+                if (leader.isLoggedInWorld()) {
                     leader.dropMessage(5, "Your Party Search token session has finished as your party reached full capacity.");
                 }
                 searchLeaders.remove(leader.getId());
@@ -416,7 +416,7 @@ public class PartySearchCoordinator {
             searchLeaders.remove(leader.getId());
             LeaderSearchMetadata settings = searchSettings.remove(leader.getId());
 
-            if (leader.isLoggedinWorld()) {
+            if (leader.isLoggedInWorld()) {
                 if (settings != null) {
                     recycledLeaders.add(new Pair<>(leader, settings));
                     if (YamlConfig.config.server.USE_DEBUG && leader.isGM()) {

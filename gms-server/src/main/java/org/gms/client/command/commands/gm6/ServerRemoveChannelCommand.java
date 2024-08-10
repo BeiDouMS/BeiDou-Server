@@ -47,11 +47,11 @@ public class ServerRemoveChannelCommand extends Command {
         final int worldId = Integer.parseInt(params[0]);
         ThreadManager.getInstance().newTask(() -> {
             if (Server.getInstance().removeChannel(worldId)) {
-                if (player.isLoggedinWorld()) {
+                if (player.isLoggedInWorld()) {
                     player.dropMessage(5, I18nUtil.getMessage("ServerRemoveChannelCommand.message3", worldId, Server.getInstance().getWorld(worldId).getChannelsSize()));
                 }
             } else {
-                if (player.isLoggedinWorld()) {
+                if (player.isLoggedInWorld()) {
                     player.dropMessage(5, I18nUtil.getMessage("ServerRemoveChannelCommand.message4", worldId));
                 }
             }
