@@ -24,10 +24,10 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (!qm.haveItem(4032399, 20)) {
-                qm.sendOk("Please bring me 20 #b#t4032399##k...  #i4032399#");
+                qm.sendOk("请带20个#b#t4032399##k给我...#b#t4032399##k...  #i4032399#");
             } else {
                 qm.gainItem(4032399, -20);
-                qm.sendOk("Oh, you brought 20 #b#t4032399##k! Thank you.");
+                qm.sendOk("噢！你带来了20个#b#t4032399##k!谢谢你.");
                 qm.gainExp(8000);
                 qm.forceCompleteQuest();
             }

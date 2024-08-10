@@ -20,9 +20,9 @@ function start(mode, type, selection) {
     }
 
     if (status == 0) {
-        qm.sendNext("Hey! Thank you for bringing me a #b#t4001317##k.");
+        qm.sendNext("嘿！谢谢你给我带来了#b#t4001317##k.");
     } else if (status == 1) {
-        qm.sendNextPrev("I plan to escape from here wearing the #b#t4001317##k. Give me a minute to put it on. Talk to you soon...");
+        qm.sendNextPrev("我打算穿着#b#t4001317##k回去.给我一分钟穿上它。然后再跟你聊。。。");
     } else if (status == 2) {
         qm.forceStartQuest();
         qm.dispose();

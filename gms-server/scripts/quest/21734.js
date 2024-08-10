@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Hello there, Aran. We received a report that the Puppeteer, one of the members of the Black Wing, is currently based #bsomewhere on the deep forest of Sleepywood#k. Your mission is to enter the place and defeat him there, once for all.");
+            qm.sendNext("很忙吗，英雄大人？前不久我使尽各种手段在金银岛上四处探查，终于找到了一个有意思的情报。是关于人偶师的......");
         } else {
             qm.forceStartQuest();
             qm.dispose();
@@ -60,11 +60,11 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("You made it, Aran! The Puppeteer now will not disturb the peace at Victoria Island any longer. Furthermore, now we could clearly investigate the doings of the Black Wing here, at Victoria.");
+            qm.sendNext("看样子，你应该已经打败人偶师了......怎么不高兴的样子？发生什么事了？");
         } else if (status == 1) {
-            qm.sendNext("They were after the #bcrystal seal of Victoria#k. These seals are what repels the Black Mage to further taking the continents into his grasp at once. Each continent has one, Victoria's now is safe and sound.");
+	qm.sendNextPrev("没发现任何有关金银岛封印石的情报。", 2);
         } else if (status == 2) {
-            qm.sendNext("For your bravery inputted on these series of missions, I will now reward you properly. Behold, the #rCombo Drain#k Skill: that let's you heal back a portion of damage dealt to the monsters.");
+            qm.sendNext("啊哈！原来事为这事。呵呵呵......完全不用担心。");
         } else if (status == 3) {
             qm.forceCompleteQuest();
 

@@ -39,20 +39,21 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("I am to teach you about the fundamentals of Alchemy.");
+            qm.sendNext("我将教你有关炼金术的基础知识。");
         } else if (status == 1) {
-            qm.sendNextPrev("While science is good to take a look on the thoughtful side of the elements that compounds the items, it alone is not nearly enough to devise an item.");
+            qm.sendNextPrev("虽然科学很好地展示了构成物品的元素的思考方面，但单凭科学远远不足以设计出一个物品。");
         } else if (status == 2) {
-            qm.sendNextPrev("In fact, to be able to 'tell the pieces' to become a whole, how should it be done? The rustic ways of the blacksmithing winds up dumbing down some latent potentials of the items.");
+            qm.sendNextPrev("事实上，要能够让‘碎片’变成一个整体，应该如何做？铁匠的古老方法往往会使物品的潜在潜能减弱。");
         } else if (status == 3) {
-            qm.sendNextPrev("Alchemy can be employed for this task. Cleanly and swiftly, #rit merges the parts that forms an item with almost no drawbacks#k, making out the most of the process with almost no scrapover, if done right. It takes a while to master it, but once it is done, everything will run out neatly.");
+            qm.sendNextPrev("炼金术可以胜任这项任务。干净而迅速，#r它将形成物品的部分合并起来，几乎没有任何副作用#k，如果做得正确，几乎不会有任何废料，最大程度地利用了这个过程。要掌握它需要一段时间，但一旦掌握，一切都会井井有条。");
         } else if (status == 4) {
-            qm.sendNextPrev("And remember this: the maxima of #bExchange#k, the area of the fundamentals of Alchemy where the total amount of the material does not change, is that no item can be created from nothing. Understood?");
+            qm.sendNextPrev("还要记住：#b交换#k的极限，即炼金术基础领域，材料的总量不会改变，没有任何物品可以从虚无中创造出来。明白了吗？");
         } else if (status == 5) {
             qm.gainMeso(-10000);
 
             qm.forceCompleteQuest();
             qm.dispose();
         }
+
     }
 }

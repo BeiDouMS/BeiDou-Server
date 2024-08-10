@@ -16,20 +16,20 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendNext("Really? Is there another way you can penetrate the castle? If you don't know of one, then just come see me.");
+            qm.sendNext("是吗？你有什么妙招吗？如果不是的话请你回头再来。");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendYesNo("Like I told you, just breaking the barrier cannot be a cause for celebration. That's because our castle for the Kingdom of Mushroom completely denies entry of anyone outside our kingdom, so it'll be hard for you to do that. Hmmm... to figure out a way to enter, can you...investigate the outer walls of the castle first?");
+        qm.sendYesNo("即使穿越了结界，也不能完全放心。我们蘑菇王国的城墙经过特殊设计，绝对无法从外部侵入，想要进去会很困难。嗯……你能先去城墙外部调查一下吗？");
     } else if (status == 1) {
-        qm.sendNext("Walk past the Mushroom Forest and when you reach the #bSplit Road of Choice#k, just walk towards the castle. Good luck.");
+        qm.sendNext("经过蘑菇森林往#b#m106020400##k的西面去，就能找到#b#m106020500##k。请你去做调查。");
     } else if (status == 2) {
         //qm.forceStartQuest();
         //qm.forceStartQuest(2322, "1");
         qm.gainExp(11000);
-        qm.sendOk("Good job navigating through the area.");
+        qm.sendOk("你做出了正确的选择。"); //你好像还没有完成对城墙的调查。请你快去调查城墙。
         qm.forceCompleteQuest();
     } else if (status == 3) {
         qm.dispose();
@@ -47,11 +47,11 @@ function end(mode, type, selection) {
         }
     }
     if (status == 0) {
-        qm.sendOk("Hmmm I see... so they have completely shut off the entrance and everything.");
+        qm.sendOk("嗯，果然如此。入口被彻底封了起来。");
     } else if (status == 1) {
         qm.forceCompleteQuest();
         qm.gainExp(11000);
-        qm.sendOk("Good job navigating through the area.");
+        qm.sendOk("真是辛苦你了。");
     } else if (status == 2) {
         qm.dispose();
     }

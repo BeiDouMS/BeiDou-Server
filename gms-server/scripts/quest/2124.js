@@ -42,10 +42,10 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (!qm.haveItem(4031619, 1)) {
-                qm.sendOk("Please bring me the box with the supplies that lies with #b#p2012019##k...");
+                qm.sendOk("请把#b#p2012019##k...带给我");
             } else {
                 qm.gainItem(4031619, -1);
-                qm.sendOk("Oh, you brought #p2012019#'s box! Thank you.");
+                qm.sendOk("噢，你居然带来了#p2012019#k，谢谢。");
                 qm.forceCompleteQuest();
             }
         } else if (status == 1) {

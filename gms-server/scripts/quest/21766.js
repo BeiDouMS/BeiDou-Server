@@ -1,19 +1,19 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    status++;
-    if (status == 0) {
-        qm.sendNext("Hey! Can you do me a favor? #p20000# seems a bit strange these days...");
-    } else if (status == 1) {
-        qm.sendNext("He used to scowl and whine about his arthritis until just recently, but he''s suddenly become all happy and smiley!!");
-    } else if (status == 2) {
-        qm.sendNext("I have a feeling there is a secret behind that wooden box. Could you stealthily look into the wooden box next to #p20000#?");
-    } else if (status == 3) {
-        qm.sendNext("You know where #p20000# is, right? He's to the right. Just keep going until you see where Vikin is, then head down past the hanging shark and octopus, and you''ll see John. The box should be right next to him.");
-    } else if (status == 4) {
-        qm.forceStartQuest();
-        qm.dispose();
-    }
+	status++;
+	if (status == 0) {
+		qm.sendNext("嘿！你能帮我个忙吗？最近 #p20000# 有点奇怪。。。");
+	} else if (status == 1) {
+		qm.sendNext("就在最近，他还常常愁眉苦脸地抱怨自己的关节炎，但他突然变得满面笑容!!");
+	} else if (status == 2) {
+		qm.sendNext("我觉得那个木箱后面有个秘密。你能偷偷地看一下旁边的木箱吗 #p20000#?");
+	} else if (status == 3) {
+		qm.sendNext("你知道 #p20000# 在哪, 是吗？他在右边。一直往前走，直到你看到维京在哪里，然后穿过那条悬挂的鲨鱼和章鱼，你就会看到约翰。盒子应该就在他旁边.");
+	} else if (status == 4) {
+                qm.forceStartQuest();
+		qm.dispose();
+        }
 }
 
 function end(mode, type, selection) {

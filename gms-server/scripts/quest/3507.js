@@ -18,9 +18,9 @@ function end(mode, type, selection) {
         if (status == 0) {
             if (qm.isQuestCompleted(3523) || qm.isQuestCompleted(3524) || qm.isQuestCompleted(3525) || qm.isQuestCompleted(3526) || qm.isQuestCompleted(3527) || qm.isQuestCompleted(3529) || qm.isQuestCompleted(3539)) {
                 qm.completeQuest();
-                qm.sendOk("You are now filled with all of your memories again.. You are now allowed to go to #m270020000#.");
+                qm.sendOk("你现在已经重新拥有所有的记忆了。你现在可以前往 #m270020000#.");
             } else {
-                qm.sendOk("You have not yet checked with your first teacher about your memories?");
+                qm.sendOk("你还没有与你的第一位老师确认你的记忆吗？");
             }
         } else if (status == 1) {
             qm.dispose();

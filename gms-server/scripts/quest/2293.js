@@ -33,7 +33,7 @@ function start(mode, type, selection) {
     }
 
     if (status == 0) {
-        qm.sendNext("Do you remember the last song that the Spirit of Rock played? I can think of a few songs that he may be imitating, so listen carefully and tell me which song it is. #bYou only get one chance,#k so please choose wisely.");
+        qm.sendNext("你还记得摇滚精神演奏的最后一首歌吗？我能想到他的几首歌，接下来模仿给你，仔细听完后告诉我是哪首歌。#b你只有一次机会#k，所以请谨慎做出选择。");
         qm.forceStartQuest();
     } else if (status == 1) {
         qm.dispose();
@@ -57,35 +57,30 @@ function end(mode, type, selection) {
     // Currently, the best hypothesis is that one of the map scripts registers some form of "mob spawn" action/script that runs once the invisible mob spawns.
     // The script would randomly pick one of the 10 riffs and then register it with all chrs on the map (to later be used by this quest 2293) and play it.
     if (status == 0) {
-        qm.sendSimple("Here, I'll give you some samples. Please listen to them and choose one. Please listen carefully before making your choice.\r\n\
-            \t#b#L1# Listen to song No. 1#l \r\n\
-            \t#L2# Listen to Song No. 2#l \r\n\
-            \t#L3# Listen to Song No. 3#l \r\n\
-            \r\n\
-            \t#e#L4# Enter the correct song.#l");
+        qm.sendSimple("我给你一些样品试听。请选一个。在做你的选择之前请仔细听。\r\n\\t#b#L1#听第一首歌#l \r\n\\t#L2#听第二首歌#l \r\n\\t#L3#听第三首歌#l \r\n\\r\n\\t#e#L4#输入正确的歌曲。#l");
     } else if (status == 1) {
         if (selection == 1) {
             qm.playSound("Party1/Failed");
-            qm.sendOk("Awkwardly familiar...");
+            qm.sendOk("令人尴尬的熟悉。。。");
             status = -1;
         } else if (selection == 2) {
             qm.playSound("Coconut/Failed");
-            qm.sendOk("Was it this?");
+            qm.sendOk("是这个吗？");
             status = -1;
         } else if (selection == 3) {
             qm.playSound("quest2288/6");
-            qm.sendOk("You heard that?");
+            qm.sendOk("你听到了吗?");
             status = -1;
         } else if (selection == 4) {
-            qm.sendGetNumber("Now, please tell me the answer. You only get #bone chance#k, so please choose wisely. Please enter #b1, 2, or 3#k in the window below.\r\n", 1, 1, 3);
+            qm.sendGetNumber("现在，请告诉我答案。你只有#b一次机会#k，所以请明智地选择。请在聊天窗口输入#b1，2，或者3#k。\r\n", 1, 1, 3);
         }
     } else if (status == 2) {
         if (selection == 1) {
-            qm.sendOk("Obviously you don't enjoy music.");
+            qm.sendOk("显然你不喜欢音乐。");
         } else if (selection == 2) {
-            qm.sendOk("I suppose you could get #b#eone#n#k more chance.");
+            qm.sendOk("我想你可以再试一次。");
         } else if (selection == 3) {
-            qm.sendOk("So that was the song he was playing... Well, it wasn't my song after all, but I'm glad I can know that now with certainty. Thank you so much.");
+            qm.sendOk("所以这就是他演奏的那首歌。。。好吧，这毕竟不是我的歌，但我很高兴我现在可以肯定地知道。非常感谢。");
             qm.forceCompleteQuest();
             qm.gainExp(32500);
         } else {

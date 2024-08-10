@@ -37,16 +37,16 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (!qm.haveItem(4032521, 10)) {
-                qm.sendNext("Hey, you didn't get #b10 #t4032521##k yet, did you?");
+                qm.sendNext("嘿，你还没有得到#b10张#t4032521##k吗？");
                 qm.dispose();
                 return;
             }
 
-            qm.sendNext("You got the #b#i4032521##k with you, great. Let me show you the way.");
+            qm.sendNext("你身上有#b#i4032521##k，很好，让我给你带路。");
         } else if (status == 1) {
             var em = qm.getEventManager("RockSpiritVIP");
             if (!em.startInstance(qm.getPlayer())) {
-                qm.sendOk("Uh... It looks like the rooms ahead are a bit crowded right now. Please wait around here for a bit, ok?");
+                qm.sendOk("嗯...看起来前面的房间现在有点拥挤。请在这儿等一会，好吗？");
                 qm.dispose();
                 return;
             }

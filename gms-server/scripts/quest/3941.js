@@ -22,7 +22,7 @@
  */
 
 function isTigunMorphed(ch) {
-    const BuffStat = Java.type('org.gms.client.BuffStat');
+    const BuffStat = Java.type('client.BuffStat');
     return ch.getBuffSource(BuffStat.MORPH) == 2210005;
 }
 
@@ -45,19 +45,19 @@ function start(mode, type, selection) {
 
         if (status == 0) {
             if (!isTigunMorphed(qm.getPlayer())) {
-                qm.sendNext("What's this? I can't simply give the Queen's silk to anyone, claiming they will hand it at once to the queen. Get out of my sights.");
+                qm.sendNext("这是什么？我不能简单地把女王的丝绸交给任何人，声称他们会立刻交给女王。离开我的视线。");
                 status = 1;
                 return;
             }
 
-            qm.sendNext("Tigun, what are you doing here?");
+            qm.sendNext("提古，你在这里做什么？");
         } else if (status == 1) {
             if (!isTigunMorphed(qm.getPlayer())) {
-                qm.sendNext("What's this? I can't simply give the Queen's silk to anyone, claiming they will hand it at once to the queen. Get out of my sights.");
+                qm.sendNext("这是什么？我不能简单地把女王的丝绸交给任何人，声称他们会立刻交给女王。离开我的视线。");
                 return;
             }
 
-            qm.sendNext("The Queen wants her silk right now? Alright, I have them here. Hold on a moment.");
+            qm.sendNext("女王现在就想要她的丝绸？好的，我这就拿出来。等一会儿。");
             qm.forceStartQuest();
         } else if (status == 2) {
             qm.dispose();
@@ -82,21 +82,22 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (!isTigunMorphed(qm.getPlayer())) {
-                qm.sendNext("What's this? I can't simply give the Queen's silk to anyone, claiming they will hand it at once to the queen. Get out of my sights.");
+                qm.sendNext("这是什么？我不能简单地把女王的丝绸交给任何人，声称他们会立刻交给女王。离开我的视线。");
                 qm.dispose();
                 return;
             }
 
-            if (qm.canHold(4031571, 1)) {
+            if (qm.canHold(4031571,1)) {
                 qm.gainItem(4031571);
 
-                qm.sendNext("There you go. Please deliver to the queen as soon as possible, Tigun, she gets really mad if things get delayed.");
+                qm.sendNext("拿去吧。请尽快交给女王，提古，如果事情延误她会很生气的。");
                 qm.forceCompleteQuest();
             } else {
-                qm.sendNext("Hey, you're lacking space to hold this, man. I will stay with it while you arrange your backpack...");
+                qm.sendNext("嘿，你的背包空间不足。我会帮你留着，你整理好背包再来取...");
             }
         } else if (status == 1) {
             qm.dispose();
         }
     }
 }
+

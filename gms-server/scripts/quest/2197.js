@@ -16,7 +16,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("你已经有怪物手册了，按#bB#k查看，在旅行途中收集怪物卡片记录到手册里吧。");
+            qm.sendNext("哦，你已经有怪物书了。祝你旅途好运~!");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.dispose();
@@ -40,7 +40,7 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("你已经有怪物手册了，按#bB#k查看，在旅行途中收集怪物卡片记录到手册里吧。");
+            qm.sendNext("哦，你已经有怪物书了。祝你旅途好运~!");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.dispose();

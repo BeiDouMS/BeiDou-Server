@@ -39,18 +39,20 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("So you've come to attend my class, huh? Right, I'll make it fast.");
+            qm.sendNext("所以你来参加我的课程了，是吧？好的，我会快点。");
         } else if (status == 1) {
-            qm.sendNextPrev("I will teach you the actual application of the #bMaker#k method. All you need to do is have an item in mind to make, gather all the ingredients from the receipt and mix them in a #rscientifically alchemisty way#k. Easy, isn't it?");
+            qm.sendNextPrev("我将教你#b制造者#k方法的实际应用。你只需要想好要制作的物品，收集所有配方中的原料，并以#r科学炼金术的方式#k混合它们。简单，不是吗？");
         } else if (status == 2) {
-            qm.sendNextPrev("Let's take producing the #bWeight Earrings#k as an example. There is a rather specific #rductility theory#k to generate it, as any other 'unique' items have, the name going around the #rmain physical force#k acting over the thing we are working on: on that case, the #bDuctility Theory of Gravity#k (as it is a 'Weighted Earrings', got it?).");
+            qm.sendNextPrev("以制作#b重量耳环#k为例。有一个相当特定的#r延展性理论#k来生成它，就像其他'独特'物品一样，名字围绕着我们正在处理的东西的#r主要物理力量#k：在这种情况下，是#b重量耳环的延展性引力理论#k（因为它是'重量耳环'，明白了吗？）");
         } else if (status == 3) {
-            qm.sendNextPrev("Ok, now you need to hand me a fee, 10,000 mesos that is, for that information. The collected fee shall be used for acquiring the needed materials for your learning of the fine art of the #bMaker#k.");
+            qm.sendNextPrev("好的，现在你需要交给我一笔费用，就是10,000金币，作为这些信息的费用。收取的费用将用于获取你学习#b制造者#k这门艺术所需的材料。");
         } else if (status == 4) {
             qm.gainMeso(-10000);
 
             qm.forceCompleteQuest();
             qm.dispose();
         }
+
+        }
     }
-}
+

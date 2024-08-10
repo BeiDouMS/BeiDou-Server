@@ -31,7 +31,7 @@ function end(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 0 && mode == 0) {
-            qm.sendNext("I guess you are not ready to tackle on the responsibilities of an official knight.");
+            qm.sendNext("我想你还没准备好成为正式骑士.");
             qm.dispose();
             return;
         }
@@ -41,30 +41,30 @@ function end(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            qm.sendYesNo("So you brought all of #t4032096#... Okay, I believe that your are now qualified to become an official knight. Do you want to become one?");
+            qm.sendYesNo("所以，你准备好二转了?");
         } else if (status == 1) {
             if (qm.getPlayer().getJob().getId() == 1100 && qm.getPlayer().getRemainingSp() > ((qm.getPlayer().getLevel() - 30) * 3)) {
-                qm.sendNext("You have too much #bSP#k with you. Use some more on the 1st-level skill.");
+                qm.sendNext("你还有技能点没有使用完，所以你还不能成为正式的骑士！在一转技能上使用更多的SP.");
                 qm.dispose();
             } else {
                 if (qm.getPlayer().getJob().getId() != 1110) {
-                    if (!qm.canHold(1142067)) {
-                        qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
-                        qm.dispose();
-                        return;
-                    }
+					if (!qm.canHold(1142067)) {
+						qm.sendNext("请确认装备栏是否足够.");
+						qm.dispose();
+						return;
+					}
                     qm.gainItem(4032096, -30);
                     qm.gainItem(1142067, 1);
-                    const Job = Java.type('org.gms.client.Job');
+                    const Job = Java.type('client.Job');
                     qm.getPlayer().changeJob(Job.DAWNWARRIOR2);
                     qm.completeQuest();
                 }
-                qm.sendNext("You are a Knight-in-Training no more. You are now an official knight of the Cygnus Knights.");
+                qm.sendNext("训练已经结束。你现在皇家骑士团的骑士官员.");
             }
         } else if (status == 2) {
-            qm.sendNextPrev("I have given you some #bSP#k. I have also given you a number of skills for a Dawn Warrior that's only available to knights, so I want you to work on it and hopefully cultivate it as much as your soul.");
+            qm.sendNextPrev("我也给了你一些 #b技能点#k 和霹雳的辅助技能，只有正式的骑士才能使用。这些技能是基于闪电的，所以要明智地使用它们.");
         } else if (status == 3) {
-            qm.sendPrev("Now that you are officially a Cygnus Knight, act like one so you will keep the Empress's name up high.");
+            qm.sendPrev("好吧，就我个人而言，我希望你在成为天鹅骑士后也不要失去热情。即使你在一大堆负面的东西中，也要寻找积极的一面.");
         } else if (status == 4) {
             qm.dispose();
         }

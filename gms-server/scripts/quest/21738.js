@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {  // thanks ZERO傑洛 for noticing this quest shouldn't need a pw -- GMS-like string data thanks to skycombat
-            qm.sendNext("What is it? I usually don't welcome uninvited guests, but you have a mysterious aura that makes me curious about what you have to say.", 9);
+            qm.sendGetText("嗯，你有什么事？");
         } else if (status == 1) {
             qm.sendNext("(You tell her about Giant Nependeath.)", 3);
         } else if (status == 2) {

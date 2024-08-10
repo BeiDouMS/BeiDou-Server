@@ -27,37 +27,37 @@ var status = -1;
 function start(mode, type, selection) {
     status++;
     if (mode != 1) {
-        if (type == 2 && mode == 0) {
-            qm.sendOk("Hm... You don't think that would help? Think about it. It could help, you know...");
-            qm.dispose();
-            return;
-        } else {
-            qm.dispose();
-            return;
-        }
-    }
-    if (status == 0) {
-        qm.sendNext("Welcome, hero! What's that? You want to know how I knew who you were? That's easy. I eavesdropped on some people talking loudly next to me. I'm sure the rumor has spread through the entire island already. Everyone knows that you've returned!")
-    } else if (status == 1) {
-        qm.sendNextPrev("Hm, how about trying out that sword? Wouldn't that bring back some memories? How about #bfighthing some monsters#k?");
+	if(type == 2 && mode == 0) {
+		qm.sendOk("你不觉得这有帮助吗？好好想想。它可以帮助，你知道...");
+		qm.dispose();
+		return;
+ 	}else{
+		qm.dispose();
+		return;
+	}  
+	}
+    if (status == 0) 
+	qm.sendNext("欢迎，英雄！那是什么？你想知道我是怎么知道你是谁的吗？这很容易。我偷听一些人在我旁边大声说话。我相信谣言已经传遍全岛了。大家都知道你回来了")		
+    else if (status == 1) {
+	qm.sendNextPrev("嗯，试试那把剑怎么样？不会让你想起什么吗？不如打一些怪物？");
     } else if (status == 2) {
-        qm.sendAcceptDecline("Ah, I'm so sorry. I was so happy to have finally met you that I guess I got a little carried away. Whew, deep breaths. Deep breaths. Okay, I feel better now. But um...can I ask you a favor? Please?");
+	qm.sendAcceptDecline("啊，我很抱歉。我很高兴终于见到你了，我想我有点忘乎所以了。喔，深呼吸。深呼吸。好吧，我现在感觉好多了。但我可以请你帮个忙吗？求你了");
     } else if (status == 3) {
-        qm.forceStartQuest();
-        qm.sendNext("It just so happens that there are a lot of #rTutorial Murus #knear here. How about defeating just #r3 #kof them? It could help you remember a thing or two.");
-    } else if (status == 4) {
-        qm.sendNextPrev("Ah, you've also forgotten how to use your skills? #bPlace skills in the quick slots for easy access. #kYou can also place consumable items in the slots, so use the slots to your advantage.");
-    } else if (status == 5) {
-        qm.guideHint(17);
-        qm.dispose();
+	qm.forceStartQuest();
+	qm.sendNext("正好这附近有很多 #r#o9300383#s#k 请您去击退 #r3只#k。	搞不好会想起些什么。");
+    } else if (status == 4) { 
+	qm.sendNextPrev("啊，该不会连技能使用方法都忘光了吧？ #b将技能放入快捷栏就可以轻松使用#k。 不只是技能，连消耗道具也可以放进去，请多加利用。") ;  
+    } else if (status == 5) { 
+	qm.guideHint(17); 
+	qm.dispose();
     }
 }
 
 function end(mode, type, selection) {
     status++;
     if (mode != 1) {
-        if (type == 1 && mode == 0) {
-            qm.sendNext("What? You don't want the potion?");
+        if(type == 1 && mode == 0) {
+            qm.sendNext("什么？你不喜欢药水？");
             qm.dispose();
             return;
         } else {
@@ -66,7 +66,7 @@ function end(mode, type, selection) {
         }
     }
     if (status == 0) {
-        qm.sendOk("Hm... Your expression tells me that the exercise didn't jog any memories. But don't you worry. They'll come back, eventually. Here, drink this potion and power up!\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2000022# 10 #t2000022#\r\n#v2000023# 10 #t2000023#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 57 exp");
+	qm.sendOk("嗯...看您的表情，似乎什么都没有想起来...可是请不要担心。总有一天会好起来的。来，请您喝下这些药水打起精神来!\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2000022# 10 #t2000022#\r\n#v2000023# 10 #t2000023#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 57 exp");
     } else if (status == 1) {
         if (qm.isQuestCompleted(21012)) {
             qm.dropMessage(1, "Unknown Error");
@@ -75,9 +75,9 @@ function end(mode, type, selection) {
             qm.gainExp(57);
             qm.gainItem(2000022, 10);
             qm.gainItem(2000023, 10);
-            qm.sendOk("#b(Even if you're really the hero everyone says you are... What good are you without any skills?)", 3);
+	    qm.sendOk("#b(就算我是真正的英雄...可是什么能力都没有的英雄还有用处吗?)", 3);
         } else {
-            qm.dropMessage(1, "Your inventory is full");
+            qm.dropMessage(1,"背包满了");  
             qm.dispose();
         }
     } else if (status == 2) {

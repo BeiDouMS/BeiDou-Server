@@ -36,9 +36,9 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Aran, I've discovered some disturbing news... You said you've come from the eastern forest section, right? We traced and studied the magic being used to support the portal over there. It turns out that's of a #rtemporal#k-type. The garments you're using... They were never seen around before. That must mean, #ryou must have come from the future#k.");
+            qm.sendNext("战神，我发现了一些令人不安的消息。。。你说你来自东部森林区，对吗？我们追踪并研究了用来支撑进入未来之门的魔法。结果发现那是一种#r时间之门#k。你用的衣服。。。以前从没有人见过。那一定意味着，你一定来自未来。");
         } else if (status == 1) {
-            qm.sendNext("Now about the problem: the Seal Stone that seems to have been missing in your timeline... It is a powerful artifact, that prevents the army of the #rBlack Mage#k from laying siege on our world. If that stone goes away, nothing more can prevent him. As this is a matter of great importance, find the #rself of mine#k from the future. I'm actually a #rfairy#k with a great life expectancy, I must be alive even on your timeline. Got it, #rfetch the me from the future#k!");
+            qm.sendNext("现在关于这个问题：在你的时间轴上似乎丢失了封印石。。。它是一个强大的神器，可以阻止黑魔法师的军队围攻我们的世界。。如果那个封印石消失了，再没有什么能阻止他了。因为这是一件非常重要的事情，所以要从未来找到我的自我。明白了，把我从未来带走吧！");
         } else if (status == 2) {
             qm.forceStartQuest();
             qm.dispose();
