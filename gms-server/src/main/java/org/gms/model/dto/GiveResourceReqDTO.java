@@ -21,9 +21,13 @@ public class GiveResourceReqDTO {
     private Short luk;
     private Short hp;
     private Short mp;
+    @JsonProperty("pAtk")
     private Short pAtk;
+    @JsonProperty("mAtk")
     private Short mAtk;
+    @JsonProperty("pDef")
     private Short pDef;
+    @JsonProperty("mDef")
     private Short mDef;
     private Short acc;
     private Short avoid;

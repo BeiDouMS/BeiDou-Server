@@ -95,6 +95,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
 import java.util.Map.Entry;
@@ -10427,7 +10428,7 @@ public class Character extends AbstractCharacterObject {
         RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getSpeed(), Equip::setSpeed);
         RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getJump(), Equip::setJump);
         RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getUpgradeSlots(), Equip::setUpgradeSlots);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getExpiration(), (eq, ep) -> eq.setExpiration(TimeUnit.MINUTES.toMillis(ep)));
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getExpiration(), (eq, ep) -> eq.setExpiration(TimeUnit.MINUTES.toMillis(ep)+System.currentTimeMillis()));
         InventoryManipulator.addFromDrop(getClient(), baseEquip, false);
     }
 }
