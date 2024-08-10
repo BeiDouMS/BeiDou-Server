@@ -366,7 +366,7 @@ public class Party {
                     player.receivePartyMemberHP();
                     player.updatePartyMemberHP();
 
-                    player.resetPartySearchInvite(party.getLeaderId());
+                    player.getDisabledPartySearchInvites().remove(party.getLeaderId());
                     player.updatePartySearchAvailability(false);
                     player.partyOperationUpdate(party, null);
                     return true;

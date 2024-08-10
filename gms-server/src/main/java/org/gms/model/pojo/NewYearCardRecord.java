@@ -221,7 +221,7 @@ public class NewYearCardRecord {
             }
 
             Character target = server.getWorld(world).getPlayerStorage().getCharacterById(receiverId);
-            if (target != null && target.isLoggedinWorld()) {
+            if (target != null && target.isLoggedInWorld()) {
                 target.sendPacket(PacketCreator.onNewYearCardRes(target, NewYearCardRecord.this, 0xC, 0));
             }
         }, HOURS.toMillis(1));
@@ -276,7 +276,7 @@ public class NewYearCardRecord {
                     chr.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(chr, nyc, 0xE, 0));
 
                     Character other = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(nyc.getReceiverId());
-                    if (other != null && other.isLoggedinWorld()) {
+                    if (other != null && other.isLoggedInWorld()) {
                         other.removeNewYearRecord(nyc);
                         other.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(other, nyc, 0xE, 0));
 
@@ -294,7 +294,7 @@ public class NewYearCardRecord {
                     chr.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(chr, nyc, 0xE, 0));
 
                     Character other = chr.getClient().getWorldServer().getPlayerStorage().getCharacterById(nyc.getSenderId());
-                    if (other != null && other.isLoggedinWorld()) {
+                    if (other != null && other.isLoggedInWorld()) {
                         other.removeNewYearRecord(nyc);
                         other.getMap().broadcastMessage(PacketCreator.onNewYearCardRes(other, nyc, 0xE, 0));
 

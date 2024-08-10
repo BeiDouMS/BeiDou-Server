@@ -364,7 +364,7 @@ public class HiredMerchant extends AbstractMapObject {
         String qtyStr = (item.getQuantity() > 1) ? " x " + item.getQuantity() : "";
 
         Character player = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(ownerId);
-        if (player != null && player.isLoggedinWorld()) {
+        if (player != null && player.isLoggedInWorld()) {
             player.dropMessage(6, "[Hired Merchant] Item '" + ItemInformationProvider.getInstance().getName(item.getItemId()) + "'" + qtyStr + " has been sold for " + mesos + " mesos. (" + inStore + " left)");
         }
     }
@@ -381,7 +381,7 @@ public class HiredMerchant extends AbstractMapObject {
             setOpen(false);
             removeAllVisitors();
 
-            if (owner != null && owner.isLoggedinWorld() && this == owner.getHiredMerchant()) {
+            if (owner != null && owner.isLoggedInWorld() && this == owner.getHiredMerchant()) {
                 closeOwnerMerchant(owner);
             }
         } finally {

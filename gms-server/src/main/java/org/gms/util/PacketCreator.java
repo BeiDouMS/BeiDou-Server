@@ -44,6 +44,8 @@ import org.gms.client.inventory.ModifyInventory;
 import org.gms.client.inventory.Pet;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
+import org.gms.constants.game.CommodityFlag;
+import org.gms.dao.entity.ModifiedCashItemDO;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
@@ -80,7 +82,6 @@ import org.gms.net.server.world.World;
 import org.gms.server.*;
 import org.gms.server.CashShop.CashItem;
 import org.gms.server.CashShop.CashItemFactory;
-import org.gms.server.CashShop.SpecialCashItem;
 import org.gms.server.events.gm.Snowball;
 import org.gms.server.life.MobSkill;
 import org.gms.server.life.MobSkillId;
@@ -104,6 +105,7 @@ import org.gms.server.maps.Summon;
 import org.gms.server.movement.LifeMovementFragment;
 
 import java.awt.*;
+import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7164,12 +7166,10 @@ public class PacketCreator {
                     (byte) 0x4E, (byte) 0xC1, (byte) 0xCA, 1});
         } else {
             p.writeInt(0);
-            List<SpecialCashItem> lsci = CashItemFactory.getSpecialCashItems();
-            p.writeShort(lsci.size());//Guess what
-            for (SpecialCashItem sci : lsci) {
-                p.writeInt(sci.getSN());
-                p.writeInt(sci.getModifier());
-                p.writeByte(sci.getInfo());
+            List<ModifiedCashItemDO> items = CashItemFactory.getModifiedCashItems();
+            p.writeShort(items.size());//Guess what
+            for (ModifiedCashItemDO item : items) {
+                writeModifiedCashItem(p, item);
             }
             p.skip(121);
 
@@ -7192,6 +7192,10 @@ public class PacketCreator {
             p.writeInt(75);
         }
         return p;
+    }
+
+    private static void writeModifiedCashItem(OutPacket p, ModifiedCashItemDO item) {
+        // todo 根据字段映射和CommodityFlag的关系
     }
 
     public static Packet sendVegaScroll(int op) {

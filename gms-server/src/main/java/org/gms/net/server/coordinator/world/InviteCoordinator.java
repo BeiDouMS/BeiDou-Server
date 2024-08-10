@@ -114,7 +114,7 @@ public class InviteCoordinator {
         if (referenceFrom.equals(reference)) {
             inviteInfo = type.removeRequest(targetCid);
             from = inviteInfo.getLeft();
-            if (from != null && !from.isLoggedinWorld()) {
+            if (from != null && !from.isLoggedInWorld()) {
                 from = null;
             }
 

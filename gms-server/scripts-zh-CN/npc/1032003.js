@@ -40,7 +40,7 @@ function start() {
         cm.dispose();
         check = 1;
     } else {
-        cm.sendYesNo("嗨，我是谢恩。我可以让你进入耐心森林，只需要支付一小笔费用。你想用 #b5000#k 冒险币进入吗？");
+        cm.sendYesNo("嗨，我是谢恩。我可以让你进入耐心森林，只需要支付一小笔费用。你想用 #b5000#k 金币进入吗？");
     }
 }
 
@@ -61,7 +61,7 @@ function action(mode, type, selection) {
         if (status == 1) {
             if (check != 1) {
                 if (cm.getPlayer().getMeso() < 5000) {
-                    cm.sendOk("Sorry but it doesn't like you have enough mesos!")
+                    cm.sendOk("抱歉，你好像没有足够的金币!")
                     cm.dispose();
                 } else {
                     if (cm.isQuestStarted(2050)) {

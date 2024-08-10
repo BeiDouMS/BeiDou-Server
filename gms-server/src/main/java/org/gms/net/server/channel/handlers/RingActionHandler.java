@@ -209,7 +209,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
             resetRingId(partner);
             partner.setPartnerId(-1);
             partner.setMarriageItemId(-1);
-            partner.addMarriageRing(null);
+            partner.setMarriageRing(null);
         }
 
         chr.dropMessage(5, "You have successfully break the marriage with " + Character.getNameById(partnerid) + ".");
@@ -219,7 +219,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
         resetRingId(chr);
         chr.setPartnerId(-1);
         chr.setMarriageItemId(-1);
-        chr.addMarriageRing(null);
+        chr.setMarriageRing(null);
     }
 
     private static void resetRingId(Character player) {
@@ -298,14 +298,14 @@ public final class RingActionHandler extends AbstractPacketHandler {
         Item ringObj = ii.getEquipById(marriageRingId);
         Equip ringEqp = (Equip) ringObj;
         ringEqp.setRingId(rings.getLeft());
-        player.addMarriageRing(Ring.loadFromDb(rings.getLeft()));
+        player.setMarriageRing(Ring.loadFromDb(rings.getLeft()));
         InventoryManipulator.addFromDrop(player.getClient(), ringEqp, false, -1);
         player.broadcastMarriageMessage();
 
         ringObj = ii.getEquipById(marriageRingId);
         ringEqp = (Equip) ringObj;
         ringEqp.setRingId(rings.getRight());
-        partner.addMarriageRing(Ring.loadFromDb(rings.getRight()));
+        partner.setMarriageRing(Ring.loadFromDb(rings.getRight()));
         InventoryManipulator.addFromDrop(partner.getClient(), ringEqp, false, -1);
         partner.broadcastMarriageMessage();
     }
@@ -431,7 +431,7 @@ public final class RingActionHandler extends AbstractPacketHandler {
                                     guestChr.dropMessage(6, "[Wedding] %s".formatted(baseMessage));
                                 } else {
                                     String dueyMessage = baseMessage + " Receive your invitation from Duey!";
-                                    if (guestChr != null && guestChr.isLoggedinWorld()) {
+                                    if (guestChr != null && guestChr.isLoggedInWorld()) {
                                         guestChr.dropMessage(6, "[Wedding] %s".formatted(dueyMessage));
                                     } else {
                                         noteService.sendNormal(dueyMessage, groom, name);
