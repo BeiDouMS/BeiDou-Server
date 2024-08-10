@@ -41,7 +41,7 @@ public class ModifiedCashItemDO implements Serializable {
     /**
      * 数量
      */
-    private Integer count;
+    private Short count;
 
     /**
      * 价格

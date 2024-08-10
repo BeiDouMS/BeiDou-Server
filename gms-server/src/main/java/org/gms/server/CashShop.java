@@ -33,6 +33,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.dao.entity.ModifiedCashItemDO;
 import org.gms.manager.ServerManager;
+import org.gms.model.pojo.CashCategory;
 import org.gms.net.server.Server;
 import org.gms.provider.Data;
 import org.gms.provider.DataProvider;
@@ -130,6 +131,7 @@ public class CashShop {
         }
     }
 
+    @Getter
     public static class CashItem {
 
         private final int sn;
@@ -138,34 +140,16 @@ public class CashShop {
         private final long period;
         private final short count;
         private final boolean onSale;
+        private final int priority;
 
-        private CashItem(int sn, int itemId, int price, long period, short count, boolean onSale) {
+        public CashItem(int sn, int itemId, int price, long period, short count, boolean onSale, int priority) {
             this.sn = sn;
             this.itemId = itemId;
             this.price = price;
             this.period = (period == 0 ? 90 : period);
             this.count = count;
             this.onSale = onSale;
-        }
-
-        public int getSN() {
-            return sn;
-        }
-
-        public int getItemId() {
-            return itemId;
-        }
-
-        public int getPrice() {
-            return price;
-        }
-
-        public short getCount() {
-            return count;
-        }
-
-        public boolean isOnSale() {
-            return onSale;
+            this.priority = priority;
         }
 
         public Item toItem() {
@@ -211,8 +195,11 @@ public class CashShop {
     }
 
     public static class CashItemFactory {
+        @Getter
         private static volatile Map<Integer, CashItem> items = new HashMap<>();
         private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
+        @Getter
+        private static final List<CashCategory> cashCategories = new ArrayList<>();
         @Getter
         private static final List<ModifiedCashItemDO> modifiedCashItems = new ArrayList<>();
 
@@ -227,7 +214,8 @@ public class CashShop {
                 long period = DataTool.getIntConvert("Period", item, 1);
                 short count = (short) DataTool.getIntConvert("Count", item, 1);
                 boolean onSale = DataTool.getIntConvert("OnSale", item, 0) == 1;
-                loadedItems.put(sn, new CashItem(sn, itemId, price, period, count, onSale));
+                int priority = DataTool.getIntConvert("Priority", item, 0);
+                loadedItems.put(sn, new CashItem(sn, itemId, price, period, count, onSale, priority));
             }
             CashItemFactory.items = loadedItems;
 
@@ -243,8 +231,20 @@ public class CashShop {
             }
             CashItemFactory.packages = loadedPackages;
 
+            loadCashCategories();
+            loadAllModifiedCashItems();
+        }
+
+        public static void loadAllModifiedCashItems() {
+            modifiedCashItems.clear();
             CashShopService cashShopService = ServerManager.getApplicationContext().getBean(CashShopService.class);
             modifiedCashItems.addAll(cashShopService.loadAllModifiedCashItems());
+        }
+
+        private static void loadCashCategories() {
+            modifiedCashItems.clear();
+            CashShopService cashShopService = ServerManager.getApplicationContext().getBean(CashShopService.class);
+            cashCategories.addAll(cashShopService.getAllCategoryList());
         }
 
         public static Optional<CashItem> getRandomCashItem() {
@@ -307,7 +307,7 @@ public class CashShop {
     public void gainCash(int type, CashItem buyItem, int world) {
         gainCash(type, -buyItem.getPrice());
         if (!YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
-            Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSN());
+            Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSn());
         }
     }
 
@@ -538,7 +538,7 @@ public class CashShop {
     }
 
     public static Item generateCouponItem(int itemId, short quantity) {
-        CashItem it = new CashItem(77777777, itemId, 7777, ItemConstants.isPet(itemId) ? 30 : 0, quantity, true);
+        CashItem it = new CashItem(77777777, itemId, 7777, ItemConstants.isPet(itemId) ? 30 : 0, quantity, true, 0);
         return it.toItem();
     }
 }

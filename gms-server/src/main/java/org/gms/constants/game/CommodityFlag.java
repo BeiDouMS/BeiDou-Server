@@ -1,61 +1,77 @@
 package org.gms.constants.game;
 
 import lombok.Getter;
+import org.gms.client.inventory.Item;
+import org.gms.net.packet.OutPacket;
+import org.gms.server.CashShop;
+
+import java.util.List;
+import java.util.function.BiConsumer;
 
 /**
- * ’‚∏ˆ√∂æŸ¿‡≤ª”√∫∫ªØ£¨◊÷∂Œ√˚æÕ «”¢Œƒµƒ
+ * Ëøô‰∏™Êûö‰∏æÁ±ªÊó†ÈúÄÂ§öËØ≠Ë®ÄÔºåÂ≠óÊÆµÂêçÂ∞±ÊòØËã±ÊñáÁöÑÔºådescÂè™ÊòØ‰Ωú‰∏∫ÂèÇËÄÉ
  */
 @Getter
 public enum CommodityFlag {
-    // πÃ”–≤ø∑÷
-    SN(0, 0, "SN"),
-    FLAG(0, 1, "FLAG"),
+    // Âõ∫ÊúâÈÉ®ÂàÜ
+    SN(0, 0, "SN", (p, n)-> p.writeInt(n.intValue())),
+    FLAG(0, 1, "FLAG", (p, n)-> p.writeInt(n.intValue())),
 
-    // ◊‘∂®“Â≤ø∑÷
-    ITEM_ID(1, 2, "ŒÔ∆∑ID"),
-    COUNT(1 << 1, 3, " ˝¡ø"),
-    PRICE(1 << 2, 5, "º€∏Ò"),
-    BONUS(1 << 3, 6, " Ù–‘Ω±¿¯"),
-    PRIORITY(1 << 4, 4, "”≈œ»º∂"),
-    PERIOD(1 << 5, 7, "”––ß∆⁄"),
-    MAPLE_POINT(1 << 6, 10, "µ÷”√»Ø"),
-    MESO(1 << 7, 11, "Ω±“"),
-    FOR_PREMIUM_USER(1 << 8, 12, "∏ﬂº∂”√ªß"),
-    COMMODITY_GENDER(1 << 9, 13, "–‘±"),
-    ON_SALE(1 << 10, 14, " «∑Òœ˙ €"),
-    CLASS(1 << 11, 15, "Unknown"),
-    LIMIT(1 << 12, 16, "Unknown"),
-    PB_CASH(1 << 13, 17, "Unknown"),
-    PB_POINT(1 << 14, 18, "Unknown"),
-    PB_GIFT(1 << 15, 19, "Unknown"),
-    PACKAGE_SN(1 << 16, 20, "¿Ò∞¸SN"),
+    // Ëá™ÂÆö‰πâÈÉ®ÂàÜ
+    ITEM_ID(1, 2, "Áâ©ÂìÅID", (p, n)-> p.writeInt(n.intValue())),
+    COUNT(1 << 1, 3, "Êï∞Èáè", (p, n)-> p.writeShort(n.intValue())),
+    PRICE(1 << 2, 5, "‰ª∑Ê†º", (p, n)-> p.writeInt(n.intValue())),
+    BONUS(1 << 3, 6, "Â±ûÊÄßÂ•ñÂä±", (p, n)-> p.writeByte(n.intValue() - 1)),
+    PRIORITY(1 << 4, 4, "‰ºòÂÖàÁ∫ß", (p, n)-> p.writeByte(n.intValue())),
+    PERIOD(1 << 5, 7, "ÊúâÊïàÊúü", (p, n)-> p.writeShort(n.intValue())),
+    MAPLE_POINT(1 << 6, 10, "ÊäµÁî®Âà∏", (p, n)-> p.writeInt(n.intValue())),
+    MESO(1 << 7, 11, "ÈáëÂ∏Å", (p, n)-> p.writeInt(n.intValue())),
+    FOR_PREMIUM_USER(1 << 8, 12, "È´òÁ∫ßÁî®Êà∑", (p, n)-> p.writeInt(n.intValue() - 1)),
+    COMMODITY_GENDER(1 << 9, 13, "ÊÄßÂà´", (p, n)-> p.writeByte(n.intValue())),
+    ON_SALE(1 << 10, 14, "ÊòØÂê¶ÈîÄÂîÆ", (p, n)-> p.writeByte(n.intValue())),
+    CLASS(1 << 11, 15, "Unknown", (p, n)-> p.writeByte(n.intValue())),
+    LIMIT(1 << 12, 16, "Unknown", (p, n)-> p.writeByte(n.intValue())),
+    PB_CASH(1 << 13, 17, "Unknown", (p, n)-> p.writeShort(n.intValue())),
+    PB_POINT(1 << 14, 18, "Unknown", (p, n)-> p.writeShort(n.intValue())),
+    PB_GIFT(1 << 15, 19, "Unknown", (p, n)-> p.writeShort(n.intValue())),
+    PACKAGE_SN(1 << 16, 20, "Á§ºÂåÖSN", (p, n)-> {
+        List<Item> itemList = CashShop.CashItemFactory.getPackage(n.intValue());
+        if (itemList.isEmpty()) {
+            p.writeByte(0);
+        } else {
+            p.writeByte(itemList.size());
+            itemList.forEach(item -> p.writeInt(item.getSN()));
+        }
+    }),
 
-    // “‘œ¬83≤ª÷ß≥÷
-    REQ_POP(1 << 17, 8, "Unknown83"),
-    REQ_LEVEL(1 << 18, 9, "Unknown83"),
-    TERM_START(1 << 19, -1, "Unknown83"),
-    TERM_END(1 << 20, -1, "Unknown83"),
-    REFUNDABLE(1 << 21, -1, "Unknown83"),
-    BOMB_SALE(1 << 22, -1, "Unknown83"),
-    FORCED_CATEGORY(1 << 23, -1, "Unknown83"),
-    GAME_WORLD(1 << 24, -1, "Unknown83"),
-    TOKEN(1 << 25, -1, "Unknown83"),
-    LIMIT_MAX(1 << 26, -1, "Unknown83"),
-    LIMIT_QUEST_ID(1 << 27, -1, "Unknown83"),
-    ORIGINAL_PRICE(1 << 28, -1, "Unknown83"),
-    DISCOUNT(1 << 29, -1, "Unknown83"),
-    DISCOUNT_RATE(1 << 30, -1, "Unknown83"),
-    MILEAGE_RATE(1 << 31, -1, "Unknown83"),
-    ALL(-1, -1, "Unknown83");
+    // ‰ª•‰∏ã83‰∏çÊîØÊåÅ
+    REQ_POP(1 << 17, 8, "Unknown83", (p, n)-> p.writeByte(0)),
+    REQ_LEVEL(1 << 18, 9, "Unknown83", (p, n)-> p.writeByte(0)),
+    TERM_START(1 << 19, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    TERM_END(1 << 20, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    REFUNDABLE(1 << 21, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    BOMB_SALE(1 << 22, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    FORCED_CATEGORY(1 << 23, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    GAME_WORLD(1 << 24, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    TOKEN(1 << 25, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    LIMIT_MAX(1 << 26, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    LIMIT_QUEST_ID(1 << 27, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    ORIGINAL_PRICE(1 << 28, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    DISCOUNT(1 << 29, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    DISCOUNT_RATE(1 << 30, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    MILEAGE_RATE(1 << 31, -1, "Unknown83", (p, n)-> p.writeByte(0)),
+    ALL(-1, -1, "Unknown83", (p, n)-> p.writeByte(0));
 
     private final long flag;
     private final int sort;
     private final String desc;
+    private final BiConsumer<OutPacket, Number> writeMapper;
 
-    CommodityFlag(int flag, int sort, String desc) {
+    CommodityFlag(int flag, int sort, String desc, BiConsumer<OutPacket, Number> writeMapper) {
         this.flag = flag;
         this.sort = sort;
         this.desc = desc;
+        this.writeMapper = writeMapper;
     }
 
 
