@@ -12,7 +12,7 @@ function start(mode, type, selection) {
         qm.dispose();
         return;
     } else if (mode == 0 && status == 0) {
-		qm.sendOk("什么？你拒绝了任务吗？好吧，就这样做。我就直接报告给 #p1101002#.");
+        qm.sendOk("What? Are you declining the mission? Fine, do it like that. I'll just report it straight to #p1101002#.");
         qm.dispose();
         return;
     } else if (mode == 0) {
@@ -23,7 +23,7 @@ function start(mode, type, selection) {
 
 
     if (status == 0) {
-		qm.sendAcceptDecline("你不是真的给我灌输信心，但既然你是天鹅座骑士。。。既然现在没有其他人可以搜索。。。好吧，让我向你解释这次任务的目的.");
+        qm.sendAcceptDecline("You don't really instill confidence in me, but since you're a Cygnus Knight and all... and since no one else can go on a search right now... Okay, let me explain to you what this mission is about.");
     } else if (status == 1) {
         qm.forceStartQuest();
         qm.dispose();

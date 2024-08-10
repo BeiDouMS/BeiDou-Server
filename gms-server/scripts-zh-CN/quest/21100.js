@@ -10,25 +10,25 @@ function start(mode, type, selection) {
         status++;
     }
     if (status == 0) {
-        qm.sendNext("与黑魔法师战斗的英雄们……有关他们的信息几乎什么都没有留下。即使在预言书中也只有记载5位英雄，也没有任何有关他们外貌的描述。你还能记起来些什么吗？", 8);
+	qm.sendNext("和黑魔法师决斗的英雄...几乎没有任何相关的资讯保存下来。预言书上也只记录有五名英雄，没有任何和外貌有关的资料。你难道什么都想不起来吗？", 8);
     } else if (status == 1) {
-        qm.sendNextPrev("一点都想不起来了……", 2);
+	qm.sendNext("什么都想不起来...", 2);
     } else if (status == 2) {
-        qm.sendNextPrev("果然，黑魔法师的诅咒果然很厉害。不过，作为英雄的你肯定和过去应该还会存在某个联系点。会是什么呢？武器和衣服是不是在战斗中都遗弃了呢……啊，对了，应该是#b武器#k！", 8);
+	qm.sendNext("原来如此。黑魔法师的诅咒不会那么容易就被解除。可是就算如此，英雄您和过去之间应该有什么连结。到底有什么武器呢？因为决斗的关系，武器或衣服都不见了...啊！对了！ #b武器#k！", 8);
     } else if (status == 3) {
-        qm.sendNextPrev("武器？", 2);
+	qm.sendNext("武器？", 2);
     } else if (status == 4) {
-        qm.sendNextPrev("以前，我们在冰窖中挖掘英雄的时候，发现过一个巨大的武器。我们猜测可能是英雄使用的武器，所以就放在村子的中央。你来来去去的时候没看到吗？ #b#p1201001##k…… \r\r#i4032372#\r\r大概是这个样子……", 8);
+	qm.sendNext("之前在冰雪中挖掘英雄时曾经找到一些厉害的武器。当时推测应该是英雄使用过的东西，因此保存在村庄中央。您经过时没看到吗？ #b#p1201001##k... \r\r#i4032372#\r\r长成这样...", 8);
     } else if (status == 5) {
-        qm.sendNextPrev("确实，那个巨大的战斧在村子里，看起来是有些奇怪。", 2);
+	qm.sendNext("难怪我觉得很奇怪，有把 #p1201001# 就在村庄里面...", 2);
     } else if (status == 6) {
-        qm.sendAcceptDecline("没错，就是那个东西，据说英雄的武器是会挑选主人的，如果你就是使用巨大的战斧的英雄，那么在抓住巨大的战斧的刹那，武器应该会有反映的。快去点击#b巨大的战斧试试#k。");
+	qm.sendYesNo("是，就是那个。根据纪录英雄的武器会认主人。假如您是使用 #p1201001#的英雄，抓住 #p1201001#时应该会有什么反应。快点去按#b#p1201001#吧。#k");
     } else if (status == 7) {
         if (mode == 0 && type == 15) {
-            qm.sendNext("你有什么顾虑吗?即使#p1201001#对你没有反应，我也不会失望。快点过去，拿到#p1201001#。只需#b点击#k它。", 8);
+            qm.sendNext("What's stopping you? I promise, I won't be disappointed even if the #p1201001# shows no reaction to you. Please, rush over there and grab the #p1201001#. Just #bclick#k on it.", 8);
         } else {
             qm.forceCompleteQuest();
-            qm.sendOk("如果#p1201001#有反映，就说明你是使用过巨大战斧的英雄，是#b战神#k。", 8);
+            qm.sendOk("假如 #p1201001#有反应的话，您就使用#p1201001#的英雄 #b狂狼勇士#k.", 8);
             qm.showIntro("Effect/Direction1.img/aranTutorial/ClickPoleArm");
         }
     } else if (status == 8) {

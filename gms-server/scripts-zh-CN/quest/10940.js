@@ -12,9 +12,9 @@ function start(mode, type, selection) {
             qm.dispose();
         }
         if (status == 0) {
-            qm.sendAcceptDecline("Hello, #h0#. Welcome to Maple World. It's currently event season, and we're welcome new characters with a gift. Would you like your gift now?");
+            qm.sendAcceptDecline("你好, #h0#. 欢迎来到枫树世界。现在是活动季，我们欢迎有礼物的新角色。你现在想要你的礼物吗?");
         } else if (status == 1) {
-            qm.sendOk("Open your inventory and double-click on it! These gifts will make you look stylish. Oh, one more thing! You'll get another gift at level 30. Good luck!");
+            qm.sendOk("打开你的库存打开它！这些礼物会让你看起来很时髦。哦，还有一件事！你会在30级得到另一份礼物。祝你好运!");
             qm.forceStartQuest();
             qm.forceCompleteQuest();
             qm.gainItem(2430191, 1, true);

@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Thank you for defeating #rFaust#k. That will finally settle my spirit to rest.");
+            qm.sendNext("谢谢你战胜了#r浮士德#k。我的灵魂终于能安息了。");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.gainFame(8);

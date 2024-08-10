@@ -1,28 +1,28 @@
 var status = -1;
 
 function start(mode, type, selection) {
-	if (mode == 0 && type == 0) {
-		status--;
-	} else if (mode == -1) {
-		qm.dispose();
-		return;
-	} else {
-		status++;
-	}
-	if (status == 0) {
-		qm.sendNext("不，不，不。这不是我需要的。我需要一些更有营养的东西，主人!");
-	} else if (status == 1) {
-		qm.sendNextPrev("#b嗯。。。所以你不是草食动物。你可能是食肉动物。你毕竟是条龙. 弄一些 #t4032453# 怎么样?", 2);
-	} else if (status == 2) {
-		qm.sendAcceptDecline("什么是...#t4032453#? 从没听说过，但如果好吃，我接受！给我点好吃的。除了植物！!");
-	} else if (status == 3) {
-		if (mode == 0) {
-			qm.sendNext("你怎么能这样，要饿死我啊。我还只是个宝宝。这是不对的!");
-		} else {
-			qm.forceStartQuest();
-			qm.sendNext("#b#b(尝试是给 #p1013000# 一些 #t4032453#. 你得去农场弄一些 #o1210100#s. 十个就够了...)");
-		}
-	} else if (status == 4) {
-                qm.dispose();
+    if (mode == 0 && type == 0) {
+        status--;
+    } else if (mode == -1) {
+        qm.dispose();
+        return;
+    } else {
+        status++;
+    }
+    if (status == 0) {
+        qm.sendNext("No, no, no. This isn't what I need. I need something more nutritious, master!");
+    } else if (status == 1) {
+        qm.sendNextPrev("#bHm... So you're not a herbivore. You might be a carnivore. You're a Dragon, after all. How does some #t4032453# sound?", 2);
+    } else if (status == 2) {
+        qm.sendAcceptDecline("What's a...#t4032453#? Never heard of it, but if it's yummy, I accept! Just feed me something tasty. Anything but plants!");
+    } else if (status == 3) {
+        if (mode == 0) {
+            qm.sendNext("How can you starve me like this. I'm just a baby. This is wrong!");
+        } else {
+            qm.forceStartQuest();
+            qm.sendNext("#b#b(Try giving #p1013000# some #t4032453#. You have to hunt a few #o1210100#s at the farm. Ten should be plenty...)");
         }
+    } else if (status == 4) {
+        qm.dispose();
+    }
 }

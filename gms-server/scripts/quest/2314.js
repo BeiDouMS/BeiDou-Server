@@ -16,20 +16,20 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendNext("请不要抛弃我们蘑菇王国。");
+            qm.sendNext("Please do not lose faith in our Kingdom of Mushroom.");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendAcceptDecline("要想救出公主，必须对蘑菇森林进行调查。不知道企鹅王用了什么手段，在蘑菇森林设下了强力的结界，阻止外人进入蘑菇城。请你马上去进行调查。");
+        qm.sendAcceptDecline("In order to rescue the princess, you must first navigate the Mushroom Forest. King Pepe set up a powerful barrier forbidding anyone from entering the castle. Please investigate this matter for us.");
     } else if (status == 1) {
-        qm.sendNext("从这里往东一直走，就可以碰到蘑菇森林的结界。请你小心。听说整个森林已被凶恶的怪物所占据。");
+        qm.sendNext("You'll run into the barrier at the Mushroom Forest by heading east of where you are standing right now. Please be careful. I hear that the area is infested with crazy, fear-inducing monsters.");
     } else if (status == 2) {
         //qm.forceStartQuest();
         //qm.forceStartQuest(2314,"1");
         qm.gainExp(8300);
-        qm.sendOk("我明白了，所以无论如何它都不是一个常规的障碍。干得好。如果没有你的帮助，我们根本不知道这是怎么回事。");
+        qm.sendOk("I see, so it was indeed not a regular barrier by any means. Great work there. If not for you help, we wouldn't have had a clue as to what that was all about.");
         qm.forceCompleteQuest();
     } else if (status == 3) {
         qm.dispose();
@@ -47,11 +47,11 @@ function end(mode, type, selection) {
         }
     }
     if (status == 0) {
-        qm.sendOk("你对蘑菇森林的结界进行调查了吗？结果怎么样？");
+        qm.sendOk("I see that you have thoroughly investigated the barrier at the Mushroom Forest. What was it like?");
     } else if (status == 1) {
         qm.forceCompleteQuest();
         qm.gainExp(8300);
-        qm.sendOk("是吗？果然不是普通的结界。辛苦你了。如果没有你的话，我们就不可能知道这一情况。");
+        qm.sendOk("I see, so it was indeed not a regular barrier by any means. Great work there. If not for you help, we wouldn't have had a clue as to what that was all about.");
     } else if (status == 2) {
         qm.dispose();
     }

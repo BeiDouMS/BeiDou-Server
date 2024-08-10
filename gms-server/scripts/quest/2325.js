@@ -1,7 +1,7 @@
 /*
-QUEST: Jame's Whereabouts (1)
-NPC: James
- */
+	QUEST: Jame's Whereabouts (1)
+	NPC: James
+*/
 
 var status = -1;
 
@@ -16,13 +16,13 @@ function end(mode, type, selection) {
     }
 
     if (status == 0) {
-        qm.sendNext("我好……好害怕……请你一定要救救我……");
+        qm.sendNext("I... I am scared... Please... please help me...");
     } else if (status == 1) {
-        qm.sendNextPrev("别害怕，是#b#p1300005##k让我来找你的。", 2);
+        qm.sendNextPrev("Don't be afriad, #b#p1300005##k sent me here.", 2);
     } else if (status == 2) {
         qm.forceCompleteQuest();
         qm.gainExp(6000);
-        qm.sendOk("嗯？是哥哥让你来找我的？啊……终于得救了。真是谢谢你。");
+        qm.sendOk("What? My brother sent you here? Ahhh... I am safe now. Thank you so much...");
     } else if (status == 3) {
         qm.dispose();
     }

@@ -36,20 +36,20 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("We're a pack of wolves looking for our lost child. I hear you are taking care of our baby. We appreciate your kindness, but it's time to return our baby to us.", 9);
+            qm.sendNext("我们是一群狼在寻找我们丢失的孩子。我听说你在照顾我们的孩子。我们很感激你的好意，但现在是时候把孩子还给我们了.", 9);
         } else if (status == 1) {
-            qm.sendNextPrev("Werewolf is my friend, I can't just hand over a friend.", 3);
+            qm.sendNextPrev("狼人也是我的朋友，我不能只认识人类朋友.", 3);
         } else if (status == 2) {
-            qm.sendAcceptDecline("We understand, but we won't leave without our pup. Tell you what, we'll test you to see if you are worthy of raising a wolf. #rGet ready to be tested by wolves.#k");
+            qm.sendAcceptDecline("我们明白，但我们不会离开我们的小狗。告诉你吧，我们会测试你是否值得养狼。#准备被狼测试的小目标.#k");
         } else if (status == 3) {
             var em = qm.getEventManager("Aran_3rdmount");
             if (em == null) {
-                qm.sendOk("Sorry, but the 3rd mount quest (Wolves) is closed.");
+                qm.sendOk("抱歉，第三个登山任务（狼群）已经关闭.");
 
             } else {
                 var em = qm.getEventManager("Aran_3rdmount");
                 if (!em.startInstance(qm.getPlayer())) {
-                    qm.sendOk("There is currently someone in this map, come back later.");
+                    qm.sendOk("地图里已经有人了，请稍后再来.");
                 } else {
                     qm.forceStartQuest();
                 }

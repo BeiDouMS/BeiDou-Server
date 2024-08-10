@@ -41,7 +41,7 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendOk("I see you're ready for the task. Now, pay heed to the details of your mission...");
+            qm.sendOk("我看你已经准备好接受任务了。那么，请注意任务的细节。。。");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

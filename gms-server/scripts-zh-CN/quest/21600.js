@@ -36,12 +36,12 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Hey, Aran. You seem pretty strong, since that time from when you got freed from the glacier. Suitable enough to #bride a wolf#k, if you ask me.");
+            qm.sendNext("嘿，战神。你看起来很强壮，从你从冰川中解脱出来的那一刻起。现在我将送给你一只坐骑。。");
         } else if (status == 1) {
-            qm.sendAcceptDecline("Picked your interest, huh? Very well, first you must make your way to #bAqua#k, there is a person there who makes #rfood for wolf cubs#k. Bring one portion to me, and I shall deem you able to tame and take care of one. What do you say, will you try for it?");
+            qm.sendAcceptDecline("选择了你的兴趣，嗯？很好，首先你必须去巴夸，那里有一个人给狼崽做食物，给我带一份来，我相信你能驯服和照顾一份。你说什么，你能试试吗?");
         } else if (status == 2) {
             qm.forceStartQuest();
-            qm.sendNext("Alright. The one you must meet is #bNanuke#k, she is on top of a #rsnowy whale#k, somewhere in the ocean. Good luck!");
+            qm.sendNext("好吧。你一定要遇见的是一头蓝鲸，她在海底世界的某个地方，一头蓝鲸的顶上。祝你好运！");
         } else if (status == 3) {
             qm.dispose();
         }

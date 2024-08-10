@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Ok, meet me at #b#m260020700##k for your information. To reach there, follow #reast#k from here until you reach #rMagatia#k, I will be there. Now go.");
+            qm.sendNext("好的，我们在#b#m260020700##k等你消息。要到达那里，请搭乘#r骆驼中巴#k前往#r玛加提亚#k，我会在那里等你，现在出发吧。");
         } else {
             qm.forceStartQuest();
             qm.dispose();
@@ -61,11 +61,11 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (qm.getMapId() == 260020000) {
-                qm.sendNext("Eh you're still here? To reach #b#m260020700##k, follow #reast#k from here until you reach #rMagatia#k, I will be there. Now go.");
+                qm.sendNext("呃，你还在这里？想要到达#b#m260020700###k，可以搭乘#r骆驼中巴#k前往#r玛加提亚#k，我会在那里等你。现在出发吧。");
                 return;
             }
 
-            qm.sendNext("Oh there you are. There're no Meerkat's nearby, so there probably is no eavesdropping around here. Very well, you must be fit to go to the #rMushroom Castle#k. Talk to me once you've got #blevel 30#k.");
+            qm.sendNext("哦，你来了。这附近很安全，没有猫鼬在这里窃听。你一定很适合去#r蘑菇城堡#k。等你到了再跟我谈谈。");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

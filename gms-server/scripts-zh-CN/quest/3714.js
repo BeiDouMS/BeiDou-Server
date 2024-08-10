@@ -37,30 +37,31 @@ function start(mode, type, selection) {
 
         if (status == 0) {
             if (!qm.haveItem(4001094, 1)) {
-                qm.sendNext("You don't have a #b#t4001094##k...");
+                qm.sendNext("你没有 #b#t4001094##k...");
                 qm.dispose();
                 return;
             }
 
             if (qm.haveItem(2041200, 1)) {
-                qm.sendOk("(The #b#t2041200##k in my bag has grown brighter since reaching this place... Noticing again, the young dragon over there seems to be glaring bitterly towards it.)");
+                qm.sendOk("（自从到达这个地方后，我包里的 #b#t2041200##k 变得更加明亮了... 再次注意到，那边的小龙似乎对它怒视着。）");
                 qm.dispose();
                 return;
             }
 
-            qm.sendNext("You have brought a #b#t4001094##k, thank you for retrieving one more of my kin to the nest! Please have this...\r\n\r\n....... (bleuuhnuhgh) (blahrgngnhhng) ...\r\n\r\nehh, #b#t2041200##k as a token of my kin's gratitude. And do a favor for us, please, get that thing out of here...");
+            qm.sendNext("你带来了一个 #b#t4001094##k，感谢你为我们的巢穴带回了一个同类！请接受这个...\r\n\r\n....... (bleuuhnuhgh) (blahrgngnhhng) ...\r\n\r\n呃，#b#t2041200##k 作为我们同类的感激之情。还有一个请求，请把那个东西带走...");
         } else if (status == 1) {
             if (!qm.canHold(2041200, 1)) {
-                qm.sendOk("Please make a room on your USE inventory to receive the reward.");
+                qm.sendOk("请在消耗栏中腾出空位来领取奖励。");
                 qm.dispose();
                 return;
             }
 
             qm.forceCompleteQuest();
             qm.gainItem(4001094, -1);
-            qm.gainItem(2041200, 1);    // quest not rewarding properly found thanks to MedicOP & Thora
+            qm.gainItem(2041200, 1);    // 任务奖励问题找到并修复感谢 MedicOP & Thora
             qm.gainExp(42000);
             qm.dispose();
         }
     }
 }
+

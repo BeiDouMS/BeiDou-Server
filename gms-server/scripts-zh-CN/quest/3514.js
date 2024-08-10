@@ -34,10 +34,10 @@ function start(mode, type, selection) {
             //qm.sendOk("Nice doing business with you~~.");
             qm.startQuest(3514);
         } else {
-            qm.sendOk("Check out for a slot on your USE inventory first.");
+            qm.sendOk("保你的消耗栏有空位.");
         }
     } else {
-        qm.sendOk("Oy, you don't have the money. I charge #r1,000,000 mesos#k for the emotion potion. No money, no deal.");
+        qm.sendOk("喂，你没有足够的钱。我出售情感药剂需要 #r1,000,000金币#k。没钱就算了.");
     }
 
     qm.dispose();
@@ -61,20 +61,20 @@ function end(mode, type, selection) {
     if (status == 0) {
         if (!usedPotion(qm.getPlayer())) {
             if (qm.haveItem(2022337)) {
-                qm.sendOk("Are you scared to drink the potion? I can assure you it has only a minor #rside effect#k.");
+                qm.sendOk("你害怕喝这个药剂吗？我可以向你保证它只有轻微的 #r副作用#k.");
             } else {
                 if (qm.canHold(2022337)) {
                     qm.gainItem(2022337, 1);
-                    qm.sendOk("Lost it? Luckily for you I managed to recover it back. Take it.");
+                    qm.sendOk("丢了吗？幸运的是我成功找回了。拿去吧.");
                 } else {
-                    qm.sendOk("Lost it? Luckily for you I managed to recover it back. Make a room to get it.");
+                    qm.sendOk("丢了吗？幸运的是我成功找回了。请腾出空间来获取它.");
                 }
             }
 
             qm.dispose();
 
         } else {
-            qm.sendOk("It seems the potion worked and your emotions are no longer frozen. And, oh, my... You're ailing bad, #bpurge#k that out quickly.");
+            qm.sendOk("你的情绪不再冻结了。哦，天啊... 你身体状况不佳，#b快速排毒#k.");
         }
     } else if (status == 1) {
         qm.gainExp(891500);

@@ -16,16 +16,16 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("I understand it's not an easy task, but I can't make #bKiller Mushroom Spores#k without them. Please reconsider.");
+            qm.sendOk("我知道这很不容易，但没有这种材料的话，就无法制作#b奇拉蘑菇孢子#k。你再好好考虑一下。");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendAcceptDecline("Hmmm... I looked into the making of the Spores while you were gathering up the Poison Mushroom Caps, and realised that we'll need more materials for it. I want you to gather up one more set of items. Can you do it?");
+        qm.sendAcceptDecline("嗯……在你搜集紫色毒蘑菇盖的时间里，我查了一下，我还需要另外的材料。请你再去帮我搜集一种材料。");
     } else if (status == 1) {
         qm.forceStartQuest();
-        qm.sendOk("Okay, I want you to defeat the Regenade Spores and bring back #b50 Mutated Spores#k in return.");
+        qm.sendOk("很好。请你帮我去打猎得意的蘑菇仔，搜集#b50个#t4000499##k。");
     } else if (status == 2) {
         qm.dispose();
     }
@@ -42,17 +42,17 @@ function end(mode, type, selection) {
         }
     }
     if (status == 0) {
-        qm.sendOk("Did you gather up all the necessary ingredients for it?")
+        qm.sendOk("需要的材料全部搜集到了吗？")
     } else if (status == 1) {
         if (!qm.haveItem(4000499, 50)) {
-            qm.sendOk("Please gather all the ingredients first.");
+            qm.sendOk("嗯？你好像还没搜集到#b50个#t4000499##k啊。我需要#b50个#t4000499##k。");
             status = 2;
             return;
         }
 
-        qm.sendNext("These should be enough for me to make the #bKiller Mushroom Spores.#k Please hold on for a bit.");
+        qm.sendNext("好的！有了它的话，我就能制作#b奇拉蘑菇孢子#k了。请稍等一下。");
     } else if (status == 2) {
-        qm.sendOk("Okay, here are the Killer Mushroom Spores. Hopefully this will be enough for you to save our princess and help regain our kingdom. Good luck!");
+        qm.sendOk("给，奇拉蘑菇孢子做好了。希望它能对你起到一点帮助，帮助你救出公主，夺回王宫。加油，勇士！");
     } else if (status == 3) {
         qm.forceCompleteQuest();
         qm.gainExp(11500);

@@ -16,16 +16,16 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("嗯……看来你是没有自信啊。如果你有了挑战的勇气，可以随时来找我。");
+            qm.sendOk("Hmmm... you must be unsure of your combat skills. We'll be here waiting for you, so come see us when you're ready.");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendAcceptDecline("勇士，现在我们王国正面临建国以来最大的危机，所以我们需要强壮的勇士。你是得到推荐之后过来的吧？但是我们需要判断一下你是否是我们王国需要的勇士。不好意思，我能请你完成一件事吗？");
+        qm.sendAcceptDecline("We need your help, noble explorer. Our kingdom is currently facing a big threat, and we are in desperate need of a courageous explorer willing to fight for us, and that's how you ended up here. Please understand, though, that since we need place our faith in you, we'll have to test your skills first before we can stand firmly behind you. Will it be okay for you to do this for us?");
     } else if (status == 1) {
         qm.forceStartQuest();
-        qm.sendOk("从这里往前走，可以看到很多背叛了蘑菇王国的#b得意的蘑菇仔#k。他们是背叛了我们王国，投降了敌人的人。请你去教训教训他们，并搜集#b50个#k#b变种孢子#k作为证据。");
+        qm.sendOk("Keep moving forward, and you'll see #bRenegade Spores#k, the Spores that turned their backs on the Kingdom of Mushroom. We'd appreciate it if you can teach them a lesson or two, and bring back #b50 Mutated Spores#k in return.");
     } else if (status == 2) {
         qm.dispose();
     }
@@ -42,12 +42,12 @@ function end(mode, type, selection) {
         }
     }
     if (status == 0) {
-        qm.sendOk("你帮我教训了得意的蘑菇仔了吗？");
+        qm.sendOk("Did you teach those Renegade Spores a lesson?");
     } else if (status == 1) {
         qm.forceCompleteQuest();
         qm.gainExp(11500);
         qm.gainItem(4000499, -50);
-        qm.sendOk("真了不起。不好意思，我不该怀疑你的能力。请你务必把我们蘑菇王国从危机中拯救出来。");
+        qm.sendOk("That was amazing. I apologize for doubting your abilities. Please save our Kingdom of Mushroom from this crisis!");
     } else if (status == 2) {
         qm.dispose();
     }

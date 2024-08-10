@@ -37,39 +37,37 @@ function start(mode, type, selection) {
             status++;
         } else {
             status--;
-        }
-        if (status == 0) {
-            qm.sendNext("Hello, #h #. I formally welcome you to the Cygnus Knights. My name is Neinheart Von Rubistein, the Head Tactician for the young Empress. I will be seeing you often from here on out, so I suggest you remember my name. Haha...");
-        } else if (status == 1) {
-            qm.sendNextPrev("I understand that you didn't have enough time and exposure to figure out what you really need to do as a Cygnus Knight. I will eplain it to you in detail, one by one. I will explain where you are, who the young Empress is, and what our duties are...");
-        } else if (status == 2) {
-            qm.sendNextPrev("You're standing on an island called Ereve, the only land that's governed by the young Empress that also happens to float in the air. Yes, we're floating in the air as we speak. We stay here out of necessity, but it usually works as a ship that floats all over Maple World, for the sake of the young Empress...");
-        } else if (status == 3) {
-            qm.sendNextPrev("The young Empress is indeed the ruler of Maple World, the one and only governer of this world. What? You've never heard of such a thing? Ahhh, that's understandable. The young Empress may govern this world, but she's not a dictator that looms over everyone. She uses Ereve as a way for her to oversee the world as an observer without having to be too hands-on. That's how it usually is, anyway...");
-        } else if (status == 4) {
-            qm.sendNextPrev("But situations arise every now and then where she'll have to take control. The evil Black Mage has been showing signs of resurrection all over the world. The very king of destruction that threatened to destroy the world as we know it is trying to reappear into our lives.");
-        } else if (status == 5) {
-            qm.sendNextPrev("The problem is, no one is aware of it. It's been so long since the Black Mage disappeared, that people have become used to peace in the world, not necessarily knowing what to do if a crisis like this reaches. If this keeps up, our world will be in grave danger in no time.");
-        } else if (status == 6) {
-            qm.sendNextPrev("That's when the young Empress decided to step forward and take control of this potential crisis before it revealed itself. She decided to create a group of Knights that will prevent the Black Mage from being fully resurrected. I'm sure you know of what happens afterwards since you volunteered to become a Knight yourself.");
-        } else if (status == 7) {
-            qm.sendNextPrev("Our duties are simple. We need to make ourselves more powerful; much more powerful than the state we're in right now, so that when the Black Mage returns, we'll battle him and eliminate him once and for all before he puts the whole world in grave danger. That is our goal, our mission, and therefore yours as well");
-        } else if (status == 8) {
-            qm.sendAcceptDecline("This is the basic overview of this situation. Understood?");
-        } else if (status == 9) {
+        if (status == 0)
+            qm.sendNext("你好, #h #. 我正式欢迎你加入天鹅座骑士团。我叫内哈特·冯·鲁比斯汀，年轻皇后的首席战术师。从现在起我会经常和你见面，所以我建议你记住我的名字。哈哈。。。");
+        else if (status == 1)
+            qm.sendNextPrev("我知道你没有足够的时间弄清楚作为天鹅座骑士你真正需要做什么。我会一个接一个地详细地告诉你。我会解释你在哪里，年轻的皇后是谁，我们的职责是什么。。。");
+        else if (status == 2)
+            qm.sendNextPrev("你正站在一个叫做埃雷夫的岛上，这是唯一一个由年轻的皇后统治的陆地，也碰巧漂浮在空中。是的，我们说话的时候漂浮在空中。我们住在这里是不必要的，但为了年轻的皇后，它通常像一艘船，在枫树的世界里漂流...");
+        else if (status == 3)
+            qm.sendNextPrev("年轻的皇后的确是枫树世界的统治者，是这个世界唯一的统治者。什么？你从没听说过这样的事？啊，这是可以理解的。年轻的皇后也许会统治这个世界，但她不是一个笼罩在每个人面前的独裁者。她用埃雷夫作为一种方式，让她以观察员的身份监督世界，而不必太亲力亲为。不管怎样，通常都是这样...");
+        else if (status == 4)
+            qm.sendNextPrev("但时不时会出现她必须控制的情况。邪恶的黑魔法师在全世界都有复活的迹象。正是毁灭之王威胁要毁灭我们所知的世界，它正试图重新出现在我们的生活中.");
+        else if (status == 5)
+            qm.sendNextPrev("问题是，没人知道。黑魔法师失踪已经很久了，人们已经习惯了世界的和平，不一定知道如果这样的危机来临该怎么办。如果这种情况继续下去，我们的世界将很快面临严重的危险.");
+        else if (status == 6)
+            qm.sendNextPrev("就在那时，年轻的皇后决定在这场潜在的危机暴露出来之前挺身而出，控制住它。她决定建立一个骑士团，以防止黑魔法师被完全复活。我相信你知道自从你自愿成为骑士之后会发生什么.");
+        else if (status == 7)
+            qm.sendNextPrev("我们的职责很简单。我们需要让自己变得更强大；比我们现在的状态强大得多，这样当黑魔法师回来时，我们将与他战斗，并在他把整个世界置于严重危险之前彻底消灭他。这是我们的目标，我们的使命，因此也是你的");
+        else if (status == 8)
+            qm.sendAcceptDecline("这是对这种情况的基本概述. 明白?");
+        else if (status == 9) {
             if (qm.isQuestCompleted(20001)) {
                 qm.gainExp(40);
                 qm.gainItem(1052177, 1); // fancy noblesse robe
             }
             qm.forceStartQuest();
             qm.forceCompleteQuest();
-            qm.sendNext("I'm glad you understand what I've told you but... did you know? Based on your current level, you won't be able to face the Black Mage. Heck you won't be able to face off his disciple's slave's monster's pet's dummy! Are you sure you are ready to protect Maple World like that?");
-        } else if (status == 10) {
-            qm.sendNextPrev("You may be a member of the Cygnus Knights, but that doesn't mean you're a knight. Forget being the official knight. You're not even a Knight-in-Training, yet. A lot of time will pass where you will just sit around here, doing paperwork for the Cygnus Knights, but...");
-        } else if (status == 11) {
-            qm.sendNextPrev("But then again, no one is born strong, anyway. The Empress also prefers that she creates an enviroment where a string of powerful knights can be nurtured and created, as opposed to finding a supernaturally-gifted knight. For now, you'll have to become a Knight-in-Training, and make yourself much more powerful so you'll become useful later on. We'll talk about the duties of being a Cygnus Knight once you reach that level of competency.");
-        } else if (status == 12) {
-            qm.sendPrev("Take the portal on the left side and go straight, and you'll head towards #b Training Forest I # . There, you'll find the training instructor for the Knights, Kiku. The next time I see you, I'd like for you to be atleast at level 10.");
-        }
+            qm.sendNext("我很高兴你明白我告诉你的，但是。。。你知道吗？根据你现在的等级，你将无法面对黑法师。见鬼，你不能面对他的徒弟的奴隶怪物的宠物的假人！你确定你准备好保护枫树世界了吗?");
+        } else if (status == 10)
+            qm.sendNextPrev("你可能是天鹅座骑士的一员，但这并不意味着你是骑士。忘了做个骑士吧。你还不是一个训练中的骑士。很多时候你会坐在这里为天鹅座的骑士们做文书工作，但是...");
+        else if (status == 11)
+            qm.sendNextPrev("但话又说回来，没有人天生强壮。皇后也更喜欢创造一个环境，在那里可以培养和创造一系列强大的骑士，而不是寻找一个超自然的天才骑士。现在，你必须在训练中成为一名骑士，让自己变得更加强大，这样你以后会变得有用。我们将讨论当天鹅骑士的职责，一旦你达到这样的能力水平.");
+        else if (status == 12)
+            qm.sendPrev("从左边的入口一直走，然后朝前走 #b 训练林1 # . 在那里，你会找到骑士队的训练教练，基库。下次见到你，我希望你至少等级达到10级.");
     }
 }

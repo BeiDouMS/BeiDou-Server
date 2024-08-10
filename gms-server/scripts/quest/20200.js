@@ -31,7 +31,7 @@ function start(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 0 && mode == 0) {
-            qm.sendNext("你觉得作为一个实习生你还有任务要做吗？我赞扬你的耐心，但这太过分了。天鹅座骑士迫切需要新的，更强大的骑士。");
+            qm.sendNext("Hmmm... do you feel like you still have missions to take care of as a trainee? I commend your level of patience, but this has gone too far. Cygnus Knights is in dire need of new, more powerful knights.");
             qm.dispose();
             return;
         }
@@ -41,12 +41,12 @@ function start(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            qm.sendAcceptDecline("#h0#? 哇，自从我上次见到你以来，你的水平已经飞涨了。你看起来也完成了很多任务。。。你现在似乎比我上次见到你时更愿意继续前进。你怎么认为？你有兴趣参加夜校考试吗？是时候让你从骑士的训练中成长为一个真正的骑士了，对吧？");
+            qm.sendAcceptDecline("#h0#? Wow, your level has sky-rocketed since the last time I saw you. You also look like you've taken care of a number of missions as well... You seem much more ready to move on now than the last time I saw you. What do you think? Are you interested in taking the #bKnighthood Exam#k? It's time for you to grow out of the Knight-in-Training and become a bonafide Knight, right?");
         } else if (status == 1) {
             qm.startQuest();
             qm.completeQuest();
-            
-            qm.sendOk("如果你想参加骑士考试，请来参加。每个首席骑士都会测试你的能力，如果你达到他们的标准，那么你将正式成为一名骑士。");
+
+            qm.sendOk("If you wish to take the Knighthood Exam, please come to Ereve. Each Chief Knight will test your abilities, and if you meet their standards, then you will officially become a Knight.");
         } else if (status == 2) {
             qm.dispose();
         }

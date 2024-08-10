@@ -36,13 +36,13 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Aaaargh... Yeti's #b#t4032339##k has just been stolen! How frustrating, Yeti worked hard to get it, just to have it stolen by that #rThief Crow#k...", 9);
+            qm.sendNext("啊额... 雪人 #b#t4032339##k 刚刚被偷了! 多么令人沮丧, 雪人为了得到它而努力工作, 就为了让那只乌鸦偷走它。。。", 9);
         } else if (status == 1) {
-            qm.sendNextPrev("Hey, I was just passing by and could not refrain from hearing you just now. I can lend you my strength, where did the thief go?", 3);
+            qm.sendNext("嘿，我只是路过，不能不听到你刚才。我可以借给你我的力量，小偷去哪了?", 3);
         } else if (status == 2) {
-            qm.sendNextPrev("Oh, how nice of you... Thief has passed #rthrough the gate at west#k. Bring back the #b#t4032339##k, Yeti needs it to give to beloved one.", 9);
+            qm.sendNext("哦，你真好。。。小偷从西边的门前走过，把#i4032339##k 拿回来，雪人需要它送给心爱的人.", 9);
         } else if (status == 3) {
-            qm.sendNextPrev("Ok, wait there. I will return it back to you in no time!", 3);
+            qm.sendNext("好的，在那儿等着。我马上还给你!", 3);
         } else if (status == 4) {
             qm.forceStartQuest();
             qm.dispose();

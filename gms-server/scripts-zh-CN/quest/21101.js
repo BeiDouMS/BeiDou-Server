@@ -28,17 +28,17 @@ function start(mode, type, selection) {
         status -= 2;
     } else if (mode != 1) {
         if (mode == 0) {
-            qm.sendNext("#b(这你也需要考虑一下……？)#k");
+            qm.sendNext("#b(“你需要考虑一下这个...”)#k");
         }
         qm.dispose();
         return;
     }
     if (status == 0) {
-        qm.sendYesNo("#b(让我确认自己是不是使用#p1201001#的英雄？使劲抓住#p1201001#试试，肯定会有什么反映的。)#k");
+        qm.sendYesNo("#b(“你确定你就是那个挥舞#p1201001#的英雄吗？是的，你确定。你最好紧紧握住#p1201001#。它肯定会对你有所反应。”)#k");
     } else if (status == 1) {
         if (qm.getPlayer().getJob().getId() == 2000) {
             if (!qm.canHold(1142129)) {
-                qm.sendOk("哇，你的#bequip#k背包已经满了。你需要至少腾出一个空位才能完成这个任务。");
+                qm.sendOk("“哇，你的#b装备栏#k已满。你需要腾出至少一个空位来完成这个任务。”.");
                 qm.dispose();
                 return;
             }
@@ -58,7 +58,7 @@ function start(mode, type, selection) {
             //qm.getPlayer().changeSkillLevel(SkillFactory.getSkill(20009000), 0, -1);
             //qm.getPlayer().changeSkillLevel(SkillFactory.getSkill(20009000), 1, 0);
             //qm.showInfo("You have acquired the Pig's Weakness skill.");
-            qm.sendNextPrev("#b(你可能开始记起一些事情了……)#k", 3);
+            qm.sendNextPrev("#b(你可能开始记起某些事了……)#k", 3);
         }
     } else if (status == 2) {
         //qm.warp(914090100, 0);

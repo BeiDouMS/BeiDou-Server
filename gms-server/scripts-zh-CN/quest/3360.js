@@ -38,18 +38,18 @@ function start(mode, type, selection) {
         if (mode == 1) {
             status++;
         } else {
-            qm.sendNext("Come on, hurry up. Get your pen and paper out if you're not that smart!");
+            qm.sendNext("快点，快点。如果你不够聪明，就拿出笔和纸来吧！");
             qm.dispose();
             return;
         }
 
         if (status == 0) {
-            qm.sendNext("Oh! Finally you have come! I'm glad you are here in time. I have the master key for you to open the secret passage! Hahahaha! Isn't it amazing? Say it amazing!");
+            qm.sendNext("哦！终于来了！很高兴你来得及时。我有给你打开秘密通道的主钥匙！哈哈哈哈！是不是很惊奇？说出来很惊奇吧！");
         } else if (status == 1) {
-            qm.sendAcceptDecline("All right, now, this key is very long and complex. I need you to memorize it very well. I won't say again, so you'd better write it down somewhere. Are you ready?");
+            qm.sendAcceptDecline("好了，现在，这个钥匙非常长且复杂。我需要你牢牢记住它。我不会再重复，所以最好把它写在某个地方。你准备好了吗？");
         } else if (status == 2) {
             pass = generateString();
-            qm.sendOk("The key code is #b" + pass + "#k. Got that? Put the key into the door of the secret passage, and you will be able to walk around the passage freely.");
+            qm.sendOk("钥匙代码是 #b" + pass + "#k。记住了吗？把钥匙插入秘密通道的门上，你就可以自由地走进通道了。");
         } else if (status == 3) {
             qm.forceStartQuest();
             qm.setQuestProgress(3360, pass);
@@ -57,6 +57,7 @@ function start(mode, type, selection) {
         }
     }
 }
+
 
 function generateString() {
     var thestring = "";

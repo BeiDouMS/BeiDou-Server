@@ -51,9 +51,9 @@ function end(mode, type, selection) {
                     qm.gainItem(4001160, -25);
                     qm.gainItem(1122010, 1);
 
-                    qm.sendOk("Thank you for retrieving the marbles. Accept this pendant as a token of my appreciation.");
+                    qm.sendOk("感谢你找回了这些弹珠。接受这个吊坠作为我的感激之情。");
                 } else {
-                    qm.sendNext("Free a slot on your EQUIP tab before claiming a prize.");
+                    qm.sendNext("在领取奖励之前，请在你的装备栏中腾出一个空位。");
                     return;
                 }
             } else if (qm.haveItem(4001159, 10) && qm.haveItem(4001160, 10)) {
@@ -62,13 +62,13 @@ function end(mode, type, selection) {
                     qm.gainItem(4001160, -10);
                     qm.gainItem(2041212, 1);
 
-                    qm.sendOk("Thank you for retrieving the marbles. This rock, that I am giving to you, can be used to improve the stats on the #b#t1122010##k. Take it as a token of my appreciation and use it wisely.");
+                    qm.sendOk("感谢你找回了这些弹珠。这块石头，我给你的，可以用来提升 #b#t1122010##k 的属性。拿着它作为我的感激之情，并明智地使用它。");
                 } else {
-                    qm.sendNext("Free a slot on your USE tab before claiming a prize.");
+                    qm.sendNext("在领取奖励之前，请在你的消耗栏中腾出一个空位。");
                     return;
                 }
             } else {
-                qm.sendNext("I need at least #b10 of both #t4001159# and #t4001160##k to reward you appropriately. If you happen to come with #b25 of these#k instead, I can reward you with a valuable gear. Fare well.");
+                qm.sendNext("我至少需要 #b10个#t4001159# 和 #t4001160##k 才能适当地奖励你。如果你带来了 #b25个#k，我可以用一件有价值的装备来奖励你。祝你一路顺风。");
                 return;
             }
 
@@ -78,3 +78,4 @@ function end(mode, type, selection) {
         }
     }
 }
+

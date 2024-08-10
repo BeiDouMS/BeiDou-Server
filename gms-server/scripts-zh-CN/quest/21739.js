@@ -36,7 +36,7 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("So, have you defeated the giant? Oh, a Black Wing agent undercover? And he GOT THE SEAL STONE OF ORBIS?! Oh, no. That's horrible! We need to develop countermeasures as soon as possible! Tell the informant on Lith about the situation.");
+            qm.sendNext("那么，你打败巨人了吗？哦，黑色之翼卧底？他抢走了天空之城的封印石？！哦，不。太可怕了！我们需要尽快想个对策！把情况告诉明珠港的特鲁。");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.gainExp(29500);

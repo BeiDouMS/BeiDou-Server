@@ -38,12 +38,12 @@ function end(mode, type, selection) {
         }
         if (status == 0) {
             if (qm.getMeso() < 10000) {
-                qm.sendOk("Hey! I need #b10,000 mesos#k to do your pet's re-evolution!");
+                qm.sendOk("嗨！我需要 #b10,000 金币#k 来进行您的宠物再进化！");
                 qm.dispose();
                 return;
             }
 
-            qm.sendYesNo("Alright then, let's do this again, shall we? As usual, it's going to be random, and I'm going to take away one of your Rock of Evolutions. \r\n\r #r#eReady?#n#k");
+            qm.sendYesNo("好的，那么，让我们再来一次吧，好吗？和往常一样，这将是随机的，我将拿走你的一个进化之石。\r\n\r #r#e准备好了吗？#n#k");
         } else if (status == 1) {
             qm.sendNextPrev("Then here we go...! #rHYAHH!#k");
         } else if (status == 2) {
@@ -66,7 +66,7 @@ function end(mode, type, selection) {
             }
 
             if (petidx == -1) {
-                qm.sendOk("Something wrong, try again.");
+                qm.sendOk("出现了一些问题 请重试.");
                 qm.dispose();
                 return;
             }
@@ -97,7 +97,7 @@ function end(mode, type, selection) {
             qm.evolvePet(petidx, after);
             qm.completeQuest();
 
-            qm.sendOk("Woo! It worked again! #rYou may find your new pet under your 'CASH' inventory.\r #kIt used to be a #b#i" + id + "##t" + id + "##k, and now it's \r a#b #i" + after + "##t" + after + "##k! \r\n Come back with 10,000 mesos and another Rock of Evolution if you don't like it!\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v" + after + "# #t" + after + "#");
+            qm.sendOk("哇！又成功了！#r你可以在'现金'物品栏下找到你的新宠物。\r #k它曾经是一个#b#i" + id + "##t" + id + "##k，现在它是一个#b#i" + after + "##t" + after + "##k！\r\n 如果你不喜欢，带着1万枚金币和另一个进化之石回来吧！\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v" + after + "# #t" + after + "#");
         } else if (status == 3) {
             qm.dispose();
         }

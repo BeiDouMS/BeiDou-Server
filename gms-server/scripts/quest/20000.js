@@ -37,13 +37,14 @@ function start(mode, type, selection) {
             status++;
         } else {
             status--;
-        if (status == 0)
-            qm.sendNext("啊，你来了。。。这真令人兴奋。我很感激你成为天鹅骑士的决定。我等你这样的人等了很久了。有勇气面对黑魔法师而不退缩的人...");
-        else if (status == 1)
-            qm.sendNext("对抗想吞没整个枫叶世界的黑魔法师的邪恶本性，他的弟子的狡猾本性，以及对抗疯狂怪物的身体战等着你。总有一天，你甚至可以把自己变成仇敌，折磨你 ...");
-        else if (status == 2)
-            qm.sendOk("但我不担心这些。我相信你一定能战胜这一切，保护枫树世界免受黑魔法师的伤害。当然，你必须变得比现在强一点，对吧?");
-        else if (status == 3) {
+        }
+        if (status == 0) {
+            qm.sendNext("Ah, you've come... this is exhilarating. I am grateful for your decision to become a Cygnus Knight. I have been waiting a long time for someone like you. Someone that is courageous enough to face the Black Mage and not flinch...");
+        } else if (status == 1) {
+            qm.sendNext("The battle against the evil nature of the Black Mage who wants to swallow up Maple World as a whole, the cunning nature of his disciples, and the physical battle against the crazy monsters will await you. There will also come a time where even you may turn against yourself into an enemy and torment you ...");
+        } else if (status == 2) {
+            qm.sendOk("But I won't worry about that. I am confident that you will be able to fight through all that and protect Maple World from the Black Mage. Of course, you'll have to become a bit stronger than you are right now, right?");
+        } else if (status == 3) {
             qm.gainItem(1142065, 1); // Noblesse Medal * 1
             qm.gainExp(20); //gain 20 exp!!
             qm.forceStartQuest();

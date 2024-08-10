@@ -21,7 +21,7 @@
 var status = -1;
 
 function isPillUsed(ch) {
-    const BuffStat = Java.type('client.BuffStat');
+    const BuffStat = Java.type('org.gms.client.BuffStat');
     return ch.getBuffSource(BuffStat.HPREC) == 2022198;
 }
 
@@ -43,7 +43,7 @@ function end(mode, type, selection) {
         if (status == 0) {
             if (isPillUsed(qm.getPlayer())) {
                 if (qm.canHoldAll([2050004, 2022224], [10, 20])) {
-                    qm.sendNext("呼呼呼呼.... 看你面色苍白看来真的很有效果啊．这次的实验成功了！呃哈哈哈哈！果然可以用在能打倒洛伊德的坚强的人身上！......很惊讶的表情嘛？不用太担心．不是很危险的药…不，虽然是危险的药但是有解毒药…呼呼呼呼...如此一来，任意改变人体的状态会变得更为容易…这样...搞不好可以帮那家伙达成愿望...");
+                    qm.sendNext("You did take my experiments. Hmm, so THAT is the result of it, hehehehe... Ok, take that as compensation will you? And oh, you can #rspew that#k right away (#bright-click on the pill icon at the top-right corner of the screen#k), no worries.");
 
                     qm.gainExp(12500);
                     qm.gainItem(2050004, 10);
@@ -53,10 +53,10 @@ function end(mode, type, selection) {
 
                     qm.forceCompleteQuest();
                 } else {
-                    qm.sendNext("你的背包满了，清理背包后再来试试。");
+                    qm.sendNext("Huh, your inventory is full. Free some spaces on your USE first.");
                 }
             } else {
-                qm.sendNext("你看起来很正常，不是吗？我的实验对你没有任何可能的影响。去吃我给你的药水，给我看看效果，好吗？");
+                qm.sendNext("You seem pretty normal, don't you? I can't detect any possible effect from my experiment on you. Go take the pill I asked you to take and show me the effects, will you?");
             }
         } else if (status == 1) {
             qm.dispose();

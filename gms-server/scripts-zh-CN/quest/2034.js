@@ -10,11 +10,11 @@ function end(mode, type, selection) {
     status++;
 
     if (status == 0) {
-        qm.sendNext("I knew it ... I knew you could get it done with, quickly! You did your job well last time, and here you are again, taking care of business!! Alright, since you have done it so well, I should reward you well. #b#p1051000##k is giving you a pair of shoes in hopes of helping you out on your future traveling.");
+        qm.sendNext("果然是你。我早就知道你很快可以完成~ 上次也是做得不错~ 真是了不起阿！作为谢礼题，我应该送你礼物。#b#p1051000##k送了你一双鞋，希望对的你冒险之旅有帮助，赶快收下吧。");
     } else if (status == 1) {
         const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
         if (qm.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 1) {
-            qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
+            qm.sendOk("请清理一下装备栏以获得奖励。");
             qm.dispose();
             return;
         }
@@ -41,7 +41,7 @@ function end(mode, type, selection) {
         qm.gainExp(2200);
         qm.completeQuest();
 
-        qm.sendOk("Alright, if you need work sometime down the road, feel free to come back and see me. This town sure can use a person like you for help~");
+        qm.sendOk("那么如果有一天你想帮助别人的话，就来找我吧。这里有很多人需要帮助啊~~");
     } else if (status == 2) {
         qm.dispose();
     }

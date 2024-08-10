@@ -27,57 +27,57 @@ var status = -1;
 
 function start(mode, type, selection) {
     status++;
-    if (mode != 1) {
-        if (type == 15 && mode == 0) {
-            qm.sendNext("啊！战神大人拒绝了！");
-            qm.dispose();
-            return;
-        } else {
-            qm.dispose();
-            return;
-        }
-    }
-    if (status == 0) {
-        qm.sendAcceptDecline("呃呃……吓死我了……快，快带到赫丽娜那边去！");
-    } else if (status == 1) {
-        qm.gainItem(4001271, 1);
-        qm.forceStartQuest();
-        qm.warp(914000300, 0);
-        qm.dispose();
-    }
+	if (mode != 1) {
+	    if(type == 15 && mode == 0) {
+		qm.sendNext("勇士拒绝了我的请求!");
+		    qm.dispose();
+			return;
+		}else{
+		    qm.dispose();
+			return;
+		}
+	}
+		if (status == 0) {
+			qm.sendAcceptDecline("我好害怕,请带我去妈妈那.");
+		} else if (status == 1) {
+			qm.gainItem(4001271, 1);
+			qm.forceStartQuest();
+			qm.warp(914000300, 0);
+			qm.dispose();
+		}	
 }
 
 function end(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-        if (type == 1 && mode == 0) {
-            qm.sendNext("孩子呢？孩子救出来了的话，就赶紧让我们看看。");
+        status++;
+        if (mode != 1) {
+                if (type == 1 && mode == 0) {
+                        qm.sendNext("孩子怎么办？请把孩子给我!");
+                }
+                
+                qm.dispose();
+                return;
         }
-
-        qm.dispose();
-        return;
-    }
-
-    if (status == 0) {
-        qm.sendYesNo("你平安回来了？孩子呢？孩子也带回来了吗？");
-    } else if (status == 1) {
-        qm.sendNext("太好了……真是太好了。", 9);
-    } else if (status == 2) {
-        qm.sendNextPrev("赶快上船！已经没时间了！", 3);
-    } else if (status == 3) {
-        qm.sendNextPrev("啊，没错。现在不是感伤的时候。黑魔法师的气息越来越近！似乎他们已经察觉方舟的位置，得赶紧启航，不然就来不及了！", 9);
-    } else if (status == 4) {
-        qm.sendNextPrev("立刻出发！", 3);
-    } else if (status == 5) {
-        qm.sendNextPrev("战神！请你也上船吧！我们理解你渴望战斗的心情……不过，现在已经晚了！战斗就交给你的那些同伴吧，和我们一起去金银岛吧！", 9);
-    } else if (status == 6) {
-        qm.sendNextPrev("不行！", 3);
-    } else if (status == 7) {
-        qm.sendNextPrev("赫丽娜，你先出发去金银岛。一定要活着，我们一定会再见的。我要和同伴们一起同黑魔法师战斗！", 3);
-    } else if (status == 8) {
-        qm.gainItem(4001271, -1);
-        qm.removeEquipFromSlot(-11);
-        qm.forceCompleteQuest();
+        
+        if (status == 0)
+                qm.sendYesNo("你安全回来了！孩子怎么办？！你带孩子来了吗？！");
+        else if (status == 1) {
+                qm.sendNext("哦，真是松了一口气。我太高兴了...", 9);
+        } else if (status == 2)
+                qm.sendNextPrev("快点上船！我们时间不多了！", 3);
+        else if (status == 3)
+                qm.sendNextPrev("我们没时间浪费了。黑法师的力量越来越近了！如果我们现在不马上离开，我们就完了！", 9);
+        else if (status == 4)
+                qm.sendNextPrev("现在就走!", 3);
+        else if (status == 5)
+                qm.sendNextPrev("勇士，求你了！我知道你想留下来和黑魔法师战斗，但太晚了！把它留给其他人，和我们一起去维多利亚岛！", 9);
+        else if (status == 6)
+                qm.sendNextPrev("不，我不能！", 3);
+        else if (status == 7) {
+                qm.sendNextPrev("你为什么不先去维多利亚岛？我答应你，我以后会来找你。我不会有事的我要和其他英雄一起对抗黑法师！", 3);
+        } else if (status == 8) {
+                qm.gainItem(4001271, -1);
+                qm.removeEquipFromSlot(-11);
+                qm.forceCompleteQuest();
 
         qm.warp(914090010, 0); // Initialize Aran Tutorial Scenes
         qm.dispose();

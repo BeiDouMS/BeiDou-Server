@@ -24,20 +24,21 @@ var status = -1;
 
 function end(mode, type, selection) {
     status++;
-    if (mode != 1){
-        if (mode == 0 && type == 1)
-            qm.sendNext("嘿！至少你试过了!");
+    if (mode != 1) {
+        if (mode == 0 && type == 1) {
+            qm.sendNext("Hey! At least say you tried!");
+        }
         qm.dispose();
         return;
     }
     if (status == 0) {
-        qm.sendNext("等待。。是不是。。你记得怎么做红玉吗？\r\n如何。。。你可能很愚蠢，容易健忘症，但这就是为什么我不能抛弃你。现在把玉给我!"); //Giant Polearm
+        qm.sendNext("Wait.. Isn't that.. Did you remember how to make Red Jade?\r\nWow... you may be stupid and prone to amnesia, but this is why I can't abandon you. Now give me the jade!"); //Giant Polearm
     } else if (status == 1) {
-        qm.sendNextPrev("好吧，现在我又戴上了红玉，让我重新唤醒你更多的能力。我是说，自从我们上次见面以来，你的水平提高了很多，所以我相信这次我可以发挥我的魔力!");
+        qm.sendNextPrev("Okay, now that I have the Red Jade back on, let me work on reawakening more of your abilities. I mean, your level's gone much higher since the last time we met, so I am sure I can work my magic a bit more this time!");
     } else if (status == 2) {
-        if(!qm.isQuestCompleted(21302)) {
-            if(!qm.canHold(1142131)) {
-                qm.sendOk("哇，您的 #b装备#k 库存已满。 我需要您至少腾出1个空位才能完成此任务.");
+        if (!qm.isQuestCompleted(21302)) {
+            if (!qm.canHold(1142131)) {
+                qm.sendOk("Wow, your #bequip#k inventory is full. I need you to make at least 1 empty slot to complete this quest.");
                 qm.dispose();
                 return;
             }
@@ -49,15 +50,15 @@ function end(mode, type, selection) {
             qm.gainItem(1142131, true);
             qm.changeJobById(2111);
 
-            const YamlConfig = Java.type('config.YamlConfig');
+            const YamlConfig = Java.type('org.gms.config.YamlConfig');
             if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
                 qm.teachSkill(21110002, 0, 20, -1);   //full swing
             }
 
             qm.completeQuest();
         }
-        
-        qm.sendNext("来吧，继续训练，这样您就可以恢复自己的全部能力，这样我们就可以再次一起探索!");    
+
+        qm.sendNext("Come on, keep training so you can get all your abilities back, and that way we can explore together once more!");
     } else if (status == 3) {
         qm.dispose();
     }

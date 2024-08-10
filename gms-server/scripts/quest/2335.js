@@ -1,6 +1,6 @@
 /*
-	QUEST: 消灭余党
-	NPC: 维奥莉塔
+	QUEST: Eliminating the Rest
+	NPC: Violetta
 */
 
 var status = -1;
@@ -17,15 +17,15 @@ function start(mode, type, selection) {
 
 
     if (status == 0) {
-        qm.sendNext("这还不是结束，#b#h ##k。 #b首相#k 的手下仍然散布在城堡中。");
+        qm.sendNext("This is not the end, #b#h ##k. Minions of the #bPrime Minister#k can still be found scattered throughout the castle.");
     } else if (status == 1) {
-        qm.sendAcceptDecline("据我所知，靠近#b天空高楼 3#k附近有一群首相的手下。前几天我捡到了首相掉落的一把钥匙。拿去吧，用这把钥匙。");
+        qm.sendAcceptDecline("From what I've heard, there is a place near #bSkyscraper 3#k where a group of Prime Minister's minions can be found. I've picked up a key that the Prime Minister dropped the other day. Here, use this key.");
     } else if (status == 2) {
         if (qm.canHold(4032405)) {
             qm.gainItem(4032405, 1);
-            qm.sendNext("最后一次，祝你好运。");
+            qm.sendNext("For one last time, good luck.");
         } else {
-            qm.sendOk("请确保你的其他栏有空位。");
+            qm.sendOk("Please have a free space in your ETC inventory.");
             qm.dispose();
         }
     } else if (status == 3) {

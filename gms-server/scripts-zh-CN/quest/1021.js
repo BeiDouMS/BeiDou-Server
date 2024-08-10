@@ -44,11 +44,11 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("嘿，" + (qm.getPlayer().getGender() == 0 ? "先生" : "女士") + "~ 我是罗杰，我来教你如何恢复状态");
+            qm.sendNext("嗨，我是罗杰，可以教你一些有用的知识。");
         } else if (status == 1) {
-            qm.sendNextPrev("你问我为什么这么做？哈哈哈！\r\n教导新来的旅行者是我的职责所在！");
+            qm.sendNextPrev("你问我为什么在这吗？呵呵！我想要帮助那些来到这里的冒险家们。");
         } else if (status == 2) {
-            qm.sendAcceptDecline("让我们开始吧！");
+            qm.sendAcceptDecline("来。。。开个小玩笑怎么样？咦！");
         } else if (status == 3) {
             if (qm.getPlayer().getHp() >= 50) {
                 qm.getPlayer().updateHp(25);
@@ -59,9 +59,9 @@ function start(mode, type, selection) {
             }
 
             qm.forceStartQuest();
-            qm.sendNext("我把你HP减到了25，如果你的HP降到0你就挂了！现在我给你#r罗杰的苹果#k。按#bI#k键打开背包，选择消耗栏双击罗杰的苹果使用掉，你就能恢复HP了。");
+            qm.sendNext("是不是吓了一跳？HP跌到0就坏了。来，给你#r#t2010007##k，把它吃掉就会恢复了。你打开道具窗看看");
         } else if (status == 4) {
-            qm.sendPrev("等你吃完后再来找我。");
+            qm.sendPrev("你要把我给你的#t2010007#全部吃掉，停滞在一个地方什么都不做HP也会恢复的。。。你恢复了全部的HP在跟我聊聊吧。");
         } else if (status == 5) {
             qm.showInfo("UI/tutorial.img/28");
             qm.dispose();
@@ -86,15 +86,15 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (qm.c.getPlayer().getHp() < 50) {
-                qm.sendNext("你的血量还很低，快吃掉我给你的苹果。");
+                qm.sendNext("嗨，你的HP还没有完全恢复，使用我给你的苹果来补充吧！快去试试！");
                 qm.dispose();
             } else {
-                qm.sendNext("很简单对吧！你还可以把消耗栏里的药水放到#b快捷键#k上快速使用！");
+                qm.sendNext("消耗道具。。。怎么样？很简单吧？可以在右下角设定#b快捷键#k，你还不知道吧？哈哈~");
             }
         } else if (status == 1) {
-            qm.sendNextPrev("好了，你已经学到很多了，请稍等一下");
+            qm.sendNextPrev("不错！学得很好应该给你礼物。这些都是在旅途中必需的，谢谢我吧！危机的时候好好使用。");
         } else if (status == 2) {
-            qm.sendPrev("请收下这些物资，希望对你的旅途有所帮助！\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2010000# 3 #t2010000#\r\n#v2010009# 3 #t2010009#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 10 exp");
+            qm.sendPrev("我能教你的只有这些了。有点儿舍不得也没办法，到了要离别的时候。路上小心，一路顺风啊！！！\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v2010000# 3 #t2010000#\r\n#v2010009# 3 #t2010009#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 10 exp");
         } else if (status == 3) {
             if (qm.isQuestCompleted(1021)) {
                 qm.dropMessage(1, "未知错误");
@@ -104,7 +104,7 @@ function end(mode, type, selection) {
                 qm.gainItem(2010009, 3);
                 qm.forceCompleteQuest();
             } else {
-                qm.dropMessage(1, "背包满了");
+                qm.dropMessage(1, "你的背包已经满了。");
             }
             qm.dispose();
         }
