@@ -10,16 +10,16 @@ function start(mode, type, selection) {
         status++;
     }
     if (status == 0) {
-        qm.sendNext("Now, you will undergo a test that will determine whether you're fit or not. All you have to do is take on the most powerful monster on this island, #o0100134#s. About #r50#k of them would suffice, but...");
+        qm.sendNext("现在，你将接受一个测试，以确定你是否合格。你要做的就是挑战这个岛上最强大的怪物，#o0100134#s。大约#r50#k只就可以了，但是...");
     } else if (status == 1) {
-        qm.sendAcceptDecline("We can't have you wipe out the entire population of #o0100134#s, since they aren't many of them out there. How about 5 of them? You're here to train, not to destroy the ecosystem.");
+        qm.sendAcceptDecline("“我们不能让你消灭所有#o0100134#s，因为它们数量不多。消灭5个怎么样？你是来训练的，不是来破坏生态系统的。”");
     } else if (status == 2) {
         if (mode == 0 && type == 15) {
-            qm.sendNext("Oh, is 5 not enough? If you feel the need to train further, please feel free to slay more than that. If you slay all of them, I'll just have to look the other way even if it breaks my heart, since they will have been sacrificed for a good cause...");
+            qm.sendNext("“哦，五只还不够吗？如果你觉得需要进一步训练，请随意多杀几只。如果你杀掉全部，我只能忍痛不看，因为他们是为了一个好的目的而被牺牲的……”");
             qm.dispose();
         } else {
             qm.forceStartQuest();
-            qm.sendNext("#o0100134#s can be found in deeper parts of the island. Continue going left until you reach #b#m140010200##k, and defeat #r5 #o0100134#s#k.");
+            qm.sendNext("#o0100134#s 可以在岛屿的更深处找到。继续向左走，直到到达#b#m140010200##k，并击败#r5 #o0100134#s#k.");
         }
     } else if (status == 3) {
         qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");

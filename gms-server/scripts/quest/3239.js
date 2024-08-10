@@ -17,16 +17,16 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (qm.haveItem(4031092, 10)) {
-                const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
+                const InventoryType = Java.type('client.inventory.InventoryType');
                 if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() >= 1) {
-                    qm.sendOk("Well done! You brought back all the #t4031092# that were missing. Here, take this scroll as a token of my gratitude...");
+                    qm.sendOk("干得好！你带回了所有丢失的#t4031092#。在这里，拿着这卷轴作为我的谢意……");
                 } else {
-                    qm.sendOk("Free a space on your USE inventory before receiving your prize.");
+                    qm.sendOk("在领取奖品之前，请确保消耗栏有一个空位.");
                     qm.dispose();
 
                 }
             } else {
-                qm.sendOk("Please return me 10 #t4031092# that went missing on this room.");
+                qm.sendOk("请归还我丢失在这个房间的10个#t4031092#.");
                 qm.dispose();
 
             }

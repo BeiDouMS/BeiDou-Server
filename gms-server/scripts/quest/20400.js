@@ -40,7 +40,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Not long ago, we received a distress signal of #bAdvanced Knight #p1103000##k, currently stationed somewhere in #rEl Nath#k. His Your job is to find him, first go talk to #b#p1101002##k and receive further instructions on your mission.");
+            qm.sendNext("不久前，我们收到了#b高级骑士#p1103000##k的求救信号, 目前驻扎在#r圣地#k. 你的工作是找到他,首先去和#b#p1101002##k联系，接受关于你任务的进一步指示.");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.dispose();

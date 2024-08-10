@@ -15,17 +15,17 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("Okay, then. See you around.");
+            qm.sendOk("好吧，那么。回头见.");
             qm.dispose();
             return;
         }
     }
-    if (status == 0) {
-        var target = "is the Bigfoot";
-        qm.sendAcceptDecline("Hey, traveler! I need your help. A new threat has appeared to the citizens of the New Leaf City. I'm currently recruiting anyone, and this time's target #r" + target + "#k. Are you in?");
+    if (status == 0) { //斯库亚斯防御战怪物召唤
+        var target = "大脚怪";
+        qm.sendAcceptDecline("嘿，旅行者！我需要你的帮助。新叶城的市民们受到了新的威胁。我现在正在招募任何人，这次的目标是 #r" + target + "#k. 你要加入吗？");
     } else if (status == 1) {
         var reqs = "#r1 #t4032013##k";
-        qm.sendOk("Very well. Get me #r" + reqs + "#k, asap. The NLC is counting on you.");
+        qm.sendOk("很好。尽快拿到#r" + reqs + "#k，新叶城市民委员会需要你.");
         qm.forceStartQuest();
     } else if (status == 2) {
         qm.dispose();

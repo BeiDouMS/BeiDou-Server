@@ -28,35 +28,35 @@ var status = -1;
 function start(mode, type, selection) {
     status++;
     if (mode != 1) {
-        if (type == 15 && mode == 0) {
-            qm.sendNext("Oh, no need to decline my offer. It's no big deal. It's just a potion. Well, let me know if you change your mind.");
-            qm.dispose();
-            return;
-        }
-        //status -= 2;
-    }
+		if(type == 15 && mode == 0) {
+			qm.sendNext("哦，不需要拒绝我的提议。这没什么大不了的。只是一种药水。好吧,如果你改变主意了就告诉我.");
+			qm.dispose();
+			return;
+		}
+		//status -= 2;
+	}
 
     if (status == 0) {
-        qm.sendNext("Hm, what's a human doing on this island? Wait, it's #p1201000#. What are you doing here, #p1201000#? And who's that beside you? Is it someone you know, #p1201000#? What? The hero, you say?");
+	qm.sendNext("咦？ 这个岛上的什么人？ 喔， 您认识 #p1201000#吗？ #p1201000#到这里有什么事情...啊，这位是不是#p1201000#大人认识的人呢？神么？你说这位是英雄吗？");
     } else if (status == 1) {
-        qm.sendNextPrev("     #i4001170#");//gms like
+	qm.sendNextPrev("     #i4001170#");//gms like
     } else if (status == 2) {
-        qm.sendNextPrev("Ah, this must be the hero you and your clan have been waiting for. Am I right, #p1201000#? Ah, I knew you weren't just accompanying an average passerby...");
-    } else if (status == 3) {
-        qm.sendAcceptDecline("Oh, but it seems our hero has become very weak since the Black Mage's curse. It's only makes sense, considering that the hero has been asleep for hundreds of years. #bHere, I'll give you a HP Recovery Potion.#k");//nexon probably forgot to remove the '.' before '#k', lol
+	qm.sendNextPrev("这位正是 #p1201000#家族数百年等待的英雄！喔喔！难怪看起来不是什么平凡的人物...");
+    } else if (status == 3) { 
+	qm.sendAcceptDecline("但是，因为黑魔法师的诅咒而在巨冰里沉睡着，所以，好像英雄的体力都消耗掉了的样子。#b我给你一个恢复体力用的药水，赶紧喝喝看#k");//nexon probably forgot to remove the '.' before '#k', lol	
     } else if (status == 4) {
-        if (qm.getPlayer().getHp() >= 50) {
-            qm.getPlayer().updateHp(25);
-        }
-        if (!qm.isQuestStarted(21010) && !qm.isQuestCompleted(21010)) {
-            qm.gainItem(2000022, 1);
-            qm.forceStartQuest();
-        }
-        qm.sendNext("Drink it first. Then we'll talk.", 9);
+       	if (qm.getPlayer().getHp() >= 50) {
+            	qm.getPlayer().updateHp(25);
+        } 
+	if (!qm.isQuestStarted(21010) && !qm.isQuestCompleted(21010)) {
+        	qm.gainItem(2000022, 1);
+			qm.forceStartQuest();
+	}
+	qm.sendNext("先喝了它。然后我们再谈.", 9);
     } else if (status == 5) {
-        qm.sendNextPrev("#b(How do I drink the potion? I don't remember..)", 3);
-    } else if (status == 6) {
-        qm.guideHint(14);
+	qm.sendNextPrev("#b(我怎么喝药水？我不记得了..)", 3);
+    } else if (status == 6) {	
+	qm.guideHint(14);
         qm.dispose();
     }
 }
@@ -73,24 +73,24 @@ function end(mode, type, selection) {
     }
     if (status == 0) {
         if (qm.c.getPlayer().getHp() < 50) {
-            qm.sendNext("You have't drank the potion yet.");
+            qm.sendNext("你还没喝那药水呢.");
             qm.dispose();
         } else {
-            qm.sendNext("We've been digging and digging inside the Ice Cave in the hope of finding a hero, but I never thought I'd actually see the day... The prophecy was true! You were right, #p1201000#! Now that one of the legendary heroes has returned, we have no reason to fear the Black Mage!");
+            qm.sendNext("我们一直在冰洞里挖啊挖希望能找到英雄但我从没想过我真的看到了那一天预言是真的! 你说得对, #p1201000#! 现在，一个传奇英雄回来了，我们没有理由害怕黑法师！");
         }
     } else if (status == 1) {
-        qm.sendOk("Oh, I've kept you too long. I'm sorry, I got a little carried away. I'm sure the other Penguins feel the same way. I know you're busy, but could you #bstop and talk to the other Penguins#k on your way to town? They would be so honored.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0# \r\n#i2000022# 5 #t2000022#\r\n#i2000023# 5 #t2000023#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 16 exp");
+        qm.sendOk("我让你等太久了对不起，我有点忘乎所以了。我相信其他企鹅也是这么想的。我知道你很忙，但是你能#b停下来和其他企鹅谈谈#k 在去镇上的路上？他们会很荣幸的.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0# \r\n#i2000022# 5 #t2000022#\r\n#i2000023# 5 #t2000023#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 16 exp");
     } else if (status == 2) {
-        if (qm.isQuestStarted(21010) && !qm.isQuestCompleted(21010)) {
+        if(qm.isQuestStarted(21010) && !qm.isQuestCompleted(21010)) {
             qm.gainExp(16);
             qm.gainItem(2000022, 3);
             qm.gainItem(2000023, 3);
             qm.forceCompleteQuest();
         }
-
-        qm.sendNext("Oh, you've leveled up! You may have even received some skill points. In Maple World, you can acquire 3 skill points every time you level up. Press the #bK key #kto view the Skill window.", 9);
+        
+        qm.sendNext("哦，你的水平！你甚至可能已经得到了一些技能点数。在枫树世界里，你每次都能获得3个技能点。按下 #bK 键 #k去查看技能窗口", 9);
     } else if (status == 3) {
-        qm.sendNextPrev("#b(Everyone's been so nice to me, but I just can't remember anything. Am I really a hero? I should check my skills and see. But how do I check them?)", 3);
+	qm.sendNextPrev("#b(所有人都对我很好，但我什么都不记得了。我真的是英雄吗？我应该检查一下我的技能。但是我怎么检查呢?)", 3);
     } else if (status == 4) {
         qm.guideHint(15);
         qm.dispose();

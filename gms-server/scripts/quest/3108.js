@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("(As you peek into the shattered statue, you might have found a clue about what happened. Better talk to #rScadur#k about this.)");
+            qm.sendNext("(雕像散发出耀眼的美丽。像冰块儿一样透明，但好像又不是冰块儿。我到雕像周围仔细看了一下。)");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

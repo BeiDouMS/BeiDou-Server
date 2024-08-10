@@ -45,9 +45,9 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
+            const InventoryType = Java.type('client.inventory.InventoryType');
             if (qm.getPlayer().getInventory(InventoryType.ETC).getNumFreeSlot() < 1) {
-                qm.sendOk("Make room on your ETC inventory first.");
+                qm.sendOk("请先在你的其他栏腾出空位.");
                 qm.dispose();
                 return;
             }
@@ -64,7 +64,7 @@ function end(mode, type, selection) {
                 qm.gainItem(4031927, 1);
             }
 
-            qm.sendOk("Now, go meet Alien Gray and use this undercover to read through their plans. If this fails, we will need to gather some materials once again.");
+            qm.sendOk("现在，去见灰色外星人，使用这个卧底装备来阅读他们的计划。如果失败，我们将需要重新收集一些材料.");
             qm.forceCompleteQuest();
         } else if (status == 1) {
             qm.dispose();

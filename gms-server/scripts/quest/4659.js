@@ -43,14 +43,14 @@ function end(mode, type, selection) {
     }
     if (status == 0) {
         if (qm.getMeso() < 10000) {
-            qm.sendOk("Hey! I need #b10,000 mesos#k to do your pet's evolution!");
+            qm.sendOk("嘿！我需要 #b10,000金币#k 来进行宠物进化！");
             qm.dispose();
             return;
         }
-        qm.sendNext("Great job on finding your evolution materials. I will now give you a robot.");
+        qm.sendNext("找到进化材料做得很好。现在我会给你一个机器人");
     } else if (status == 1) {
         if (qm.isQuestCompleted(4659)) {
-            qm.dropMessage(1, "how did this get here?");
+            qm.dropMessage(1, "这是怎么回事?");
             qm.dispose();
         } else if (qm.canHold(5000048)) {
             var pet = 0;
@@ -64,14 +64,14 @@ function end(mode, type, selection) {
                 }
             }
             if (i == 3) {
-                qm.getPlayer().message("Pet could not be evolved.");
+                qm.getPlayer().message("宠物无法进化.");
                 qm.dispose();
                 return;
             }
 
             var tameness = pet.getTameness();
             if (tameness < 1642) {
-                qm.sendOk("It looks like your pet is not grown enough to be evolved yet. Train it a bit more, util it reaches #blevel 15#k.");
+                qm.sendOk("看来你的宠物还没有成长到可以进化的程度。再训练它一段时间，直到它达到 #b15级#k.");
                 qm.dispose();
                 return;
             }
@@ -93,7 +93,7 @@ function end(mode, type, selection) {
             } else if (rand == 9) {
                 after = 5000053;
             } else {
-                qm.sendOk("Something wrong. Try again.");
+                qm.sendOk("出了点问题。请重试.");
                 qm.dispose();
                 return;
             }
@@ -109,7 +109,7 @@ function end(mode, type, selection) {
 //            InventoryManipulator.addById(qm.getClient(), rand+5000049, 1, "", petId);
             qm.dispose();
         } else {
-            qm.dropMessage(1, "Your inventory is full");
+            qm.dropMessage(1, "你的背包已满");
             qm.dispose();
         }
     }

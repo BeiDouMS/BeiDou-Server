@@ -10,14 +10,14 @@ function start(mode, type, selection) {
         status++;
     }
     if (status == 0) {
-        qm.sendAcceptDecline("Shall we continue with your Basic Training? Before accepting, please make sure you have properly equipped your sword and your skills and potions are readily accessible.");
+        qm.sendAcceptDecline("“我们继续你的基础训练吗？在接受之前，请确保你已经正确装备好你的剑，并且你的技能和药水触手可及。”");
     } else if (status == 1) {
         if (mode == 0) {
-            qm.sendNext("Are you not ready to hunt the #o0100132#s yet? Always proceed if and only if you are fully ready. There's nothing worse than engaging in battles without sufficient preparation.");
+            qm.sendNext("“你还没准备好猎取#o0100132#s吗？只有在完全准备好的情况下才能继续。未经充分准备就投入战斗是最糟糕的事情。”");
             qm.dispose();
         } else {
             qm.forceStartQuest();
-            qm.sendNext("Alright. This time, let's have you defeat #r#o0100132#s#k, which are slightly more powerful than #o0100131#s. Head over to #b#m140020100##k and defeat #r15#k of them. That should help you build your strength. Alright! Let's do this!", 1);
+            qm.sendNext("“好的。这次，让你打败#r#o0100132#s#k，它们比#o0100131#s稍微强大一些。前往#b#m140020100##k并打败#r15#k只它们。那应该能帮助你增强力量。好的！我们开始吧！”", 1);
         }
     } else if (status == 2) {
         qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");

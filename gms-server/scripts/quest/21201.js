@@ -24,11 +24,11 @@ var status = -1;
 
 function end(mode, type, selection) {
     if (mode == -1) {
-        qm.sendNext("Hey! At least say you tried!");
+        qm.sendNext("“嘿！至少说你试过了”!");
         qm.dispose();
     } else {
         if (mode == 0 && type > 0) {
-            qm.sendNext("Hey! At least say you tried!");
+            qm.sendNext("“嘿！至少说你试过了！”");
             qm.dispose();
             return;
         }
@@ -40,33 +40,33 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("First you promise to defeat the Black Mage and make me a famous weapon, then you abandon me for hundreds of years, and now you're telling me you don't remember who I am? What the...?! Do you think I will let you get away with that? You're the one who begged and pined for me!");
+            qm.sendNext("“首先你承诺打败黑魔法师并为我制造一件著名的武器，然后你抛弃我几百年，现在你告诉我你不记得我是谁了？什么？！你以为我会让你逃脱惩罚吗？你是那个乞求并渴望我的人！”");
         }//Giant Polearm
         else if (status == 1) {
-            qm.sendNextPrev("I did tell #p1203000# to make a pole arm for me if I could prove my worth.", 2);
+            qm.sendNextPrev("“我确实告诉#p1203000#如果我能证明自己的价值，他就为我制作一把长柄武器。”", 2);
         } else if (status == 2) {
-            qm.sendNextPrev("After all that begging, shouldn't you treat me with a little more love and respect? Ya know, a weapon like me's a rare and wonderful thing. I am the ultimate #p1201001# that can help you defeat the Black Mage. How could you ditch me for hundreds of years?");
+            qm.sendNextPrev("经过了那么多的乞求，你难道不应该对我多一点爱和尊重吗？你知道，像我这样的武器是罕见而美妙的东西。我是终极的#p1201001#，可以帮助你打败黑法师。你怎么能把我抛弃好几百年呢?");
         } else if (status == 3) {
-            qm.sendNextPrev("Hey, I never begged for you.", 2);
+            qm.sendNextPrev("“嘿，我从没求过你。”", 2);
         } else if (status == 4) {
-            qm.sendNextPrev("What? You never begged for me? Ha! #p1203000# told me you got on your knees, begged for me in tears, and... Wait a sec. Aran! Did you just remember who I am?");
+            qm.sendNextPrev("“什么？你从来没为我乞求过？哈哈！ #p1203000# 告诉我你曾经跪下，流着泪为我乞求，而且……等一下。阿伦！你刚刚想起我是谁了吗？”?");
         } else if (status == 5) {
-            qm.sendNextPrev("Maybe a little bit...", 2);
+            qm.sendNextPrev("“也许有一点...”", 2);
         } else if (status == 6) {
-            qm.sendNextPrev("Aran, it is you! *Sniff sniff* Wait, *ahem* I didn't get emotional, it's just allergies. I know the Black Mage has stripped you of your abilities so you probably don't even have the strength to lift me... but at least you remember me! I'm glad that your memory's starting to return.");
+            qm.sendNextPrev("“阿兰，是你！*嗅嗅* 等等，*咳* 我没有变得情绪化，只是过敏。我知道黑魔法师夺走了你的能力，所以你可能连把我抱起来的力气都没有……但至少你还记得我！我很高兴你的记忆开始恢复。”");
         } else if (status == 7) {
-            qm.sendAcceptDecline("Even though you've lost your memory, you're still my master. You endured some very tough training in the past, and I'm sure your body still remembers the skills you got through those hard times. Alright, I'll restore your abilities!");
+            qm.sendAcceptDecline("“即使你失去了记忆，你仍然是我的主人。你过去经历了一些非常艰苦的训练，我相信你的身体仍然记得那些艰难时光中学到的技能。好吧，我会恢复你的能力。”!");
         } else if (status == 8) {
             if (!qm.isQuestCompleted(21201)) {
                 if (!qm.canHold(1142130)) {
-                    qm.sendOk("Wow, your #bequip#k inventory is full. I need you to make at least 1 empty slot to complete this quest.");   // thanks MedicOP for finding an issue here
+                    qm.sendOk("“哇，你的#b装备栏#k已满。我需要你至少腾出一个空位来完成这个任务”.");   // thanks MedicOP for finding an issue here
                     return;
                 }
 
                 qm.gainItem(1142130, true);
                 qm.changeJobById(2110);
 
-                const YamlConfig = Java.type('org.gms.config.YamlConfig');
+                const YamlConfig = Java.type('config.YamlConfig');
                 if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
                     qm.teachSkill(21100000, 0, 20, -1);   //polearm mastery
                     qm.teachSkill(21100002, 0, 30, -1);   //final charge
@@ -77,7 +77,7 @@ function end(mode, type, selection) {
                 qm.completeQuest();
             }
 
-            qm.sendNext("Your level isn't what it used to be back in your glory days, so I can't restore all of your old abilities. But the few I can restore should help you level up faster. Now hurry up and train so you can return to the old you.");
+            qm.sendNext("“你的水平已经不再像往日的辉煌时期了，所以我无法恢复你所有的旧能力。不过，我能恢复的几种能力应该能帮助你更快升级。现在赶紧去训练吧，这样你才能恢复成以前的自己。”");
         } else if (status == 9) {
             qm.dispose();
         }

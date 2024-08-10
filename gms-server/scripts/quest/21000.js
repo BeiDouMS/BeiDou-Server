@@ -34,20 +34,20 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendNext("No, Aran... We can't leave a kid behind. I know it's a lot to ask, but please reconsider. Please!");
+			qm.sendNext("不，勇士...我们不能丢下一个孩子我知道这要求很过分，但请重新考虑。求你了!");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        qm.sendAcceptDecline("Oh, no! I think there's still a child in the forest! Aran, I'm very sorry, but could you rescue the child? I know you're injured, but I don't have anyone else to ask!");
+			qm.sendAcceptDecline("哦，不！我想森林里还有个孩子！勇士，我很抱歉，但你可以救孩子吗？我知道你受伤了，但我没有其他人要问!");
     } else if (status == 1) {
         qm.forceStartQuest();
-        qm.sendNext("#bThe child is probably lost deep inside the forest!#k We have to escape before the Black Mage finds us. You must rush into the forest and bring the child back with you!");
+			qm.sendNext("#那孩子可能在森林深处迷路了！我们必须在黑魔法师找到我们之前逃走你必须冲进森林把孩子带回来!");
     } else if (status == 2) {
-        qm.sendNextPrev("Don't panic, Aran. If you wish to check the status of the \r\nquest, press #bQ#k and view the Quest window.");
+			qm.sendNextPrev("别慌，勇士。如果您想要检查 \r\任务，按 #bQ#k 再看看任务之窗");
     } else if (status == 3) {
-        qm.sendNextPrev("Please, Aran! I'm begging you. I can't bear to lose another person to the Black Mage!");
+			qm.sendNextPrev("求你了，勇士！我求你了。我不能忍受再有人被黑法师杀死！");
     } else if (status == 4) {
         qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
         qm.dispose();

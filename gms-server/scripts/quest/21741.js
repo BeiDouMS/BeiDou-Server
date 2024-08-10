@@ -36,11 +36,11 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Have you been advancing your levels? I found an interesting piece of information about the Black Wings. This time, you'll have to travel quite a bit. Do you know a town called #bMu Lung#k? You'll have to head there.");
+            qm.sendNext("这段时间升级很快嘛，英雄大人？我终于又发现了和黑色之翼有关的有趣事情了。这一次咱们早点......#b武陵#k这个村子你知道吗？看来你得去一趟那里。");
         } else if (status == 1) {
-            qm.sendAcceptDecline("Apparently, #bMr. Do#k in Mu Lung somehow met with the Black Wings. I don't know the details. Please go and find out why the Black Wings contacted Mr. Do and what exactly happened between them.");
+            qm.sendAcceptDecline("武陵的#b陈道人#k好像已经和黑色之翼相接触。虽然不知道事情是怎么变成这样的，但信息应该准确无误。");
         } else if (status == 2) {
-            qm.sendNext("Mr. Do is known to be curt, so you are going to have to remain patient while talking to him. Talk to him with the #bI heard you met the Shadow Knight of the Black Wings#k keyword.");
+            qm.sendNext("你如果准备好的话，#b就请马上去武陵。#k你去查出黑色之翼为什么会和陈道人接触，以及它们之间到底有着怎样的交易。");
         } else if (status == 3) {
             qm.forceStartQuest();
             qm.dispose();

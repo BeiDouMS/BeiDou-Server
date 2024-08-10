@@ -16,11 +16,11 @@ function start(mode, type, selection) {
         status--;
     }
     if (status == 0) {
-        qm.sendNext("How did the training go? The Penguin Teacher #p1202006# likes to exaggerate and it worried me knowing that he has bouts of Alzheimer's, but I'm sure he helped you. He's been studying the skills of heroes for a very long time.");
+    	qm.sendNext("修炼进行的不错吧？#p1202006#个性很强……他对战神的技能确实很有研究，对你应该能帮上不少忙。");
     } else if (status == 1) {
-        qm.sendNextPrev("#b(You tell her that you were able to remember the Combo Ability skill.)#k", 2);
+    	qm.sendNextPrev("#b（告诉他自己回想起来连击能力这个技能。）#k", 2);
     } else if (status == 2) {
-        qm.sendNextPrev("That's great! Honestly, though, I think it has less to do with the method of #p1202006#'s training and more to do with your body remembering its old abilities. #bI'm sure your body will remember more skills as you continue to train#k!  \r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 500 exp");
+    	qm.sendNextPrev("是吗！看来除了#p1202006#的训练方式之外，你自己仍然记的从前的那些技能也很关键啊……看来只是在这里冰冻的太久，需要时间恢复而已。#b继续加油训练吧，争取早日恢复所有的技能！ \r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 500 exp");
     } else if (status == 3) {
         qm.forceCompleteQuest();
         qm.gainExp(500);

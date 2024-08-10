@@ -9,31 +9,31 @@ function start(mode, type, selection) {
     if (mode == 1) {
         status++;
     } else {
-        if (status == 4) {
-            qm.sendNext("No? Are you saying you can train on your own? I'm just letting you know that you'll get better results if you train with an instructor. You can't live in this world alone. You must learn to get along with other people.");
-            qm.dispose();
-            return;
-        }
-        status--;
+	if (status == 4) {
+	    qm.sendNext("不？你是说你可以自己训练吗？我只是想告诉你，如果你和教练一起训练，你会得到更好的成绩。你不能一个人生活在这个世界上。你必须学会和别人相处.");
+	    qm.dispose();
+	    return;
+	}
+	status--;
     }
     if (status == 0) {
-        qm.sendNext("It seems like you've started to remember things. Your Polearm must have recognized you. This means you are surely #bAran, the wielder of Polearms#k. Is there anything else you remember? Skills you used with the Polearm perhaps? Anything?");
+    	qm.sendNext("你似乎在回想什么。这个长矛果然认出了你。那么你肯定就是#b使用长矛的英雄，战神#k了。你想起什么其他的了吗？有关长矛的技能之类......");
     } else if (status == 1) {
-        qm.sendNextPrev("#b(You tell her that you remember a few skills.)#k", 2);
+    	qm.sendNextPrev("#b（说技能倒是想起来了几个。）#k", 2);
     } else if (status == 2) {
-        qm.sendNextPrev("That's not a lot, but it's progress. Our focus, then, should be to get you back to the state before you were frozen. You may have lost your memory, but I'm sure it won't take long for you to recover the abilities that your body remembers.");
+    	qm.sendNextPrev("虽然数量不多，不过也已经很不容易了。现在让我们集中精力来恢复过去的技能吧。虽然你失忆了，但毕竟是以前曾经烂熟于心的东西，要恢复起来应该很快。");
     } else if (status == 3) {
-        qm.sendNextPrev('How do I recover my abilities?', 2);
+    	qm.sendNextPrev('怎么恢复过去的技能？', 2);
     } else if (status == 4) {
-        qm.sendAcceptDecline("There is only one way to do that. Train! Train! Train! Train! If you continue to train, your body will instinctively remember its abilities. To help you through the process, I'll introduce you to an instructor.");
+    	qm.sendAcceptDecline("那个......办法只有一个。就是修炼！修炼！修炼！只有不停地修炼才能找回曾经忘却的身体感觉！");
     } else if (status == 5) {
-        qm.sendNext("I gave you a #bPolearm#k because I figured it would be best for you to use a weapon you're familiar with. It will be useful in your training.");
-        if (!qm.isQuestStarted(21700) && !qm.isQuestCompleted(21700)) {
-            qm.gainItem(1442000, 1);
-            qm.forceStartQuest();
-        }
+		qm.sendNext("武器要是能使得更熟练就好了。送你一支#b长矛#k，希望你在修炼的时候能够进步得更快。带着这支长矛......");
+		if (!qm.isQuestStarted(21700) && !qm.isQuestCompleted(21700)) {
+			qm.gainItem(1442000,1);
+			qm.forceStartQuest();
+		}
     } else if (status == 6) {
-        qm.sendPrev("You'll find a Training Center if you exit to the #bleft#k. There, you'll meet #b#p1202006##k. I'm a bit worried because I think he may be struggling with bouts of Alzheimer's, but he spent a long time researching skills to help you. I'm sure you'll learn a thing or two from him.");
+            qm.sendPrev("如果你离开这里，从村子的左边出去，在里恩修炼场入口可以见到长期研究英雄技能的#b#p1202006##k，让他来帮助你。");
     } else if (status == 7) {
         qm.dispose();
     }

@@ -16,11 +16,11 @@ function start(mode, type, selection) {
         status--;
     }
     if (status == 0) {
-        qm.sendNext("Aren't you the one that used to be in #m101000000# until not too long ago? I finally found you! Do you know how long it took for me to finally find you?", 8);
+    	qm.sendNext("莫非你是前不久在#m101000000#的那个人？终于找到你了！我找你找得好辛苦，知道吗？", 8);
     } else if (status == 1) {
-        qm.sendNextPrev("Who are you?", 2);
+    	qm.sendNextPrev("你是谁？", 2);
     } else if (status == 2) {
-        qm.sendAcceptDecline("Me? If you want to know, stop by my cave. I'll even send you an invitation. You'll be directly sent to my cave as soon as you accept. Look forward to seeing you there.");
+    	qm.sendAcceptDecline("我？你想知道的话就来我的洞窟吧。我想好好招待你一番。点击接受按钮就能立刻移动到我家。我在那里等你。");
     } else if (status == 3) {
         qm.forceCompleteQuest();
         qm.warp(910510200, 0);

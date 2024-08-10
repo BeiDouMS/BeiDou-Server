@@ -40,7 +40,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Last time #bAdvanced Knight #p1103000##k was seen, he was investigating the surging increase on #rzombies#k lately on the #rhigh-grounds of El Nath#k. You should get yourself there to see if you can find any clue of what could have happened.");
+            qm.sendNext("上一次看到#b高级骑士#p1103000##k时,他正在调查最近在废矿区僵尸激增的原因。你应该亲自去看看是否能找到任何可能发生的线索.");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.dispose();

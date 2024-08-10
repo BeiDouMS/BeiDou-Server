@@ -37,15 +37,15 @@ function start(mode, type, selection) {
 
         if (status == 0) {
             if (qm.haveItem(2430014, 1)) {
-                qm.sendNext("It looks like you already have one #b#t2430014##k on your inventory.");
+                qm.sendNext("这是好不容易制作出来的东西，希望你能小心一些。");
                 status = 1;
                 return;
             }
 
-            qm.sendNext("You've used the #b#t2430014##k? Oh well, good thing I have a spare one right here.");
+            qm.sendNext("你把#b#t2430014##k弄丢了？");
         } else if (status == 1) {
             if (!qm.canHold(2430014, 1)) {
-                qm.sendNext("Please make a USE slot available to get it, alright?");
+                qm.sendNext("请在消耗栏留至少一个空位，好吗？");
             } else {
                 qm.gainItem(2430014, 1);
                 qm.forceCompleteQuest();

@@ -32,7 +32,7 @@ function start(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 1 && mode == 0) {
-            qm.sendNext("Come back when you are ready.");
+            qm.sendNext("我猜你还没准备好.");
             qm.dispose();
             return;
         }
@@ -42,22 +42,22 @@ function start(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            qm.sendNext("The jewel you brought back from the Master of Disguise is Shinsoo's Teardrop. It is the crystalization of Shinsoo's powers. If the Black Mage gets his hands on this, then this spells doom for all of us.");
+            qm.sendNext("你所带回来的宝石是神兽的眼泪，它拥有非常强大的力量。如果被黑磨法师给得手了，那我们全部都可能要倒大楣了...");
         } else if (status == 1) {
-            qm.sendYesNo("The Empress thought highly of your accomplishment and granted you a new title. Would you like to receive it?");
+            qm.sendYesNo("女皇为了报答你的努力，将任命你为皇家骑士团的上级骑士，你准备好了嘛?");
         } else if (status == 2) {
             nPSP = (qm.getPlayer().getLevel() - 70) * 3;
             if (qm.getPlayer().getRemainingSp() > nPSP) {
-                qm.sendNext("You still have way too much #bSP#k with you. You can't earn a new title like that, I strongly urge you to use more SP on your 1st and 2nd level skills.");
+                qm.sendNext("请确认你的技能点数点完没.");
             } else {
                 if (!qm.canHold(1142068)) {
-                    qm.sendNext("If you wish to receive the medal befitting the title, you may want to make some room in your equipment inventory.");
+                    qm.sendNext("因为这一刻，你现在的骑士警长。从这一刻起，你应随身携带自己以尊严和尊重你的相称新标题天鹅骑士的骑士警长.");
                 } else {
                     qm.gainItem(1142068, 1);
-                    const Job = Java.type('org.gms.client.Job');
+                    const Job = Java.type('client.Job');
                     qm.getPlayer().changeJob(Job.NIGHTWALKER3);
                     qm.completeQuest();
-                    qm.sendOk("#h #, from here on out, you are an Advanced Knight of Cygnus Knights. The title comes with a newfound broad view on everything. You may encounter temptations here and there, but I want you to keep your faith and beliefs intact and do not succumb to the darkness.");
+                    qm.sendOk("请先把道具栏空出一些空间哦.");
                 }
             }
         } else if (status == 3) {

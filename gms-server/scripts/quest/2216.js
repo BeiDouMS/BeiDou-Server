@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("I've just gathered an interesting information, #rDyle looks just like regular Ligators#k, but bigger.");
+            qm.sendNext("我刚刚收到一个有趣的信息，#r多尔看起来就像是正常的鳄鱼#k，但是它块头大而且会使用魔法.…但它竟然还会讲国语？");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.gainExp(7000);

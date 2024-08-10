@@ -10,29 +10,29 @@ function start(mode, type, selection) {
         status++;
     }
     if (status == 0) {
-        qm.sendNext("It seems like you're warmed up now. This is when rigorous training can really help you build a strong foundation. Let's proceed with the Basic Training, shall we?", 8);
+        qm.sendNext("“看来你现在已经热身了。这时候严格的训练真的能帮助你打下坚实的基础。我们开始基础训练吧，好吗？”", 8);
     } else if (status == 1) {
-        qm.sendNextPrev("Go defeat some #r#o0100133#s#k in #b#m140020200##k this time. I think about  #r20#k should do it. Go on ahead and... Hm? Do you have something you'd like to say?", 8);
+        qm.sendNextPrev("这次去#b#m140020200##k打败一些 #r#o0100133#s#k。我想大约#r20#k就行了。继续前进……嗯？你有什么想说的吗？?", 8);
     } else if (status == 2) {
-        qm.sendNextPrev("Isn't the number getting bigger and bigger?", 2);
+        qm.sendNextPrev("“数字不是越来越大了吗”?", 2);
     } else if (status == 3) {
-        qm.sendNextPrev("Of course it is. What, are you not happy with 20? Would you like to defeat 100 of them instead? Oh, how about 999 of them? Someone in Sleepywood would be able to do it easily. After all, we are training...", 8);
+        qm.sendNextPrev("“当然是这样。怎么，你对20不满意吗？你想打败100个吗？哦，那999个怎么样？沉睡森林里有人能轻松做到。毕竟，我们正在训练……”", 8);
     } else if (status == 4) {
-        qm.sendNextPrev("Oh no, no, no. Twenty is plenty.", 2);
+        qm.sendNextPrev("“哦不，不，不。二十已经足够了”.", 2);
     } else if (status == 5) {
-        qm.sendAcceptDecline("You don't have to be so modest. I understand your desire to quickly become the hero you once were. This sort of attitude is what makes you a hero.");
+        qm.sendAcceptDecline("“你不必如此谦虚。我理解你想要快速成为曾经的英雄的愿望。这种态度正是你成为英雄的原因。”.");
     } else if (status == 6) {
         if (mode == 0 && type == 15) {
-            qm.sendNext("#b(You declined out of fear, but it's not like you can run away like this. Take a big breath, calm down, and try again.)#k", 2);
+            qm.sendNext("#b(“你因为害怕而拒绝了，但你不能就这样逃避。深呼吸，冷静下来，然后再试一次。”)#k", 2);
             qm.dispose();
         } else {
             if (!qm.isQuestStarted(21017)) {
                 qm.forceStartQuest();
             }
-            qm.sendNext("#b(You accepted, thinking you might end up having to 999 of them if you let her keep talking.)#k", 2);
+            qm.sendNext("#b(“你接受了，想着如果让她继续说下去，你可能最终要处理999个这样的请求。”)#k", 2);
         }
     } else if (status == 7) {
-        qm.sendNextPrev("Please go ahead and slay 20 #o0100133#s.", 8);
+        qm.sendNextPrev("请继续击杀20个 #o0100133#s.", 8);
     } else if (status == 8) {
         qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
         qm.dispose();

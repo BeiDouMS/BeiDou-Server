@@ -11,19 +11,19 @@ function end(mode, type, selection) {
     status++;
 
     if (status == 0) {
-        qm.sendNext("THIS is the deed to the land that my son lost! And you even brought all the necessary materials to build the house! Thank you so much ... my relatives can all move in and live in #m102000000#! As a sign of appreciation ...");
+        qm.sendNext("这...就是我儿子丢失的那张地契呀！而且你给我收集了盖房子需要的材料！ 真是太感谢你呀。这样我可以和我的亲戚一起住在#m102000000#了…!对了，这是我的一点心意…");
     } else if (status == 1) {
-        const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
+        const InventoryType = Java.type('client.inventory.InventoryType');
         if (qm.getPlayer().getInventory(InventoryType.USE).getNumFreeSlot() < 1) {
-            qm.getPlayer().dropMessage(1, "USE inventory full.");
+            qm.getPlayer().dropMessage(1, "背包已满！");
             qm.dispose();
             return;
         }
 
-        var talkStr = "Okay, now choose the scroll of your liking ... The odds of winning are 10% each. \r\n\r\n#rSELECT A ITEM\r\n#b";
+        var talkStr = "好...你选择你需要的卷轴。成功比率都是10%的。\r\n\r\n#r选择物品\r\n#b";
         stance = qm.getPlayer().getJobStyle();
 
-        const Job = Java.type('org.gms.client.Job');
+        const Job = Java.type('client.Job');
         if (stance == Job.WARRIOR || stance == Job.BEGINNER) {
             vecItem = [2043002, 2043102, 2043202, 2044002, 2044102, 2044202, 2044402, 2044302];
         } else if (stance == Job.MAGICIAN) {

@@ -39,14 +39,14 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("I didn't think you would be this strong. I feel like you have what it takes to become a member of the Sand Bandits. The most important aspect of being a member is power, and I think you have that. I also... want to test you one more time, just to make sure you're the right one. What do you think? Can you handle it?");
+            qm.sendNext("没想到你会这么的强…以你的水平也许可以成为沙子图团的团员也说不定。对沙子图团员来说，最重要的就是力量的强大，而你…看来已经具备了足够的实力！但我还是要再进行一次测试…如何？可以接受吗？");
         } else if (status == 1) {
-            qm.sendAcceptDecline("To truly see your strength, I'll have to face you myself. Don't worry, I'll summon my other self to face off against you. Are you ready?");
+            qm.sendAcceptDecline("若想要实际测试你的力量，应该需要亲自去体验吧？我想和你进行一场对战！别担心，我也不想伤害你…就用我的分身来对付你好了！可以马上进行对战吗？");
         } else if (status == 2) {
-            qm.sendNext("Good, I like your confidence.");
+            qm.sendNext("很好，我喜欢你的自信。");
         } else if (status == 3) {
             if (qm.getWarpMap(926000000).getCharacters().size() > 0) {
-                qm.sendOk("There is someone currently in this map, come back later.");
+                qm.sendOk("此地图中当前有人，请稍后再试。");
                 qm.dispose();
             } else {
                 qm.warp(926000000, "st00");

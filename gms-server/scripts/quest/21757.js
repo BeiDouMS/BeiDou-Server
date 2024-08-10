@@ -36,7 +36,7 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Oh, a letter for the #rempress#k? From the #bheroes#k?!");
+            qm.sendNext("哦，一封写给伦普雷斯的信？贝洛斯家？！");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.gainExp(1000);

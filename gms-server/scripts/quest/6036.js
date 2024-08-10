@@ -40,12 +40,12 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Bothering me again? What's it?");
+            qm.sendNext("又来烦我了？有什么事？");
         } else if (status == 1) {
             if (qm.haveItem(4031980, 1)) {
-                qm.sendNext("You crafted a #b#t4031980##k?! How comes, how did you do it?? ... Well, that can't be helped, I guess. The student surpassed the teacher! Youth sure do wonders to one's perception capabilities.\r\n\r\nYou are now ready to take the last step on mastering the Maker skill, contemplate it at it's finest form!");
+                qm.sendNext("你制作了一件#b#t4031980##k？！怎么可能，你是怎么做到的？？...好吧，我猜没办法了。学生超越了老师！年轻人确实能让人的感知能力发生奇迹。\r\n\r\n你现在已经准备好迈向制造者技能的最后一步，将其完美地体现出来！");
             } else {
-                qm.sendNext("... Please step aside, I can't finish this work if I'm being distracted at every moment.");
+                qm.sendNext("...请让开，如果我每时每刻都被打扰，我无法完成这项工作。");
                 qm.dispose();
 
             }
