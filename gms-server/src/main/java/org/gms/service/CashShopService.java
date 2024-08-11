@@ -57,7 +57,7 @@ public class CashShopService {
         List<CashShopSearchRtnDTO> wzCashItems = CashShop.CashItemFactory.getItems().values().stream()
                 // 可以只查正在销售，也可以只查未在销售，也可以全查
                 .filter(cashItem -> {
-                    boolean matchedOnSale = false;
+                    boolean matchedOnSale = true;
                     if (data.getOnSale() != null) {
                         matchedOnSale = Objects.equals(data.getOnSale(), cashItem.isOnSale());
                     }
@@ -135,13 +135,14 @@ public class CashShopService {
     public void changeOnSale(ModifiedCashItemDO data) {
         RequireUtil.requireNotNull(data.getSn(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
         CashShop.CashItem cashItem = CashShop.CashItemFactory.getItem(data.getSn());
+        modifiedCashItemMapper.deleteById(data.getSn());
+
         // 如果是下架，直接插入或更新除状态外所有值为null
         if (data.getOnSale() != null && data.getOnSale() != 1) {
-            if (!cashItem.isOnSale()) {
-                modifiedCashItemMapper.deleteById(data.getSn());
-            } else {
-                modifiedCashItemMapper.insertOrUpdate(ModifiedCashItemDO.builder().sn(data.getSn()).onSale(0).build());
+            if (cashItem.isOnSale()) {
+                modifiedCashItemMapper.insertSelective(ModifiedCashItemDO.builder().sn(data.getSn()).onSale(0).build());
             }
+            CashShop.CashItemFactory.loadAllModifiedCashItems();
             return;
         }
         if (Objects.equals(cashItem.getItemId(), data.getItemId())) {
@@ -162,7 +163,8 @@ public class CashShopService {
         if (Objects.equals(cashItem.isOnSale(), Optional.ofNullable(data.getOnSale()).map(i -> i == 1).orElse(null))) {
             data.setCount(null);
         }
-        modifiedCashItemMapper.insertOrUpdateSelective(data);
+        modifiedCashItemMapper.insertSelective(data);
+        CashShop.CashItemFactory.loadAllModifiedCashItems();
     }
 
     private CashCategory getCategory(Integer id, Integer subId) {

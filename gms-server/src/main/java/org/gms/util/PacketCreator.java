@@ -112,6 +112,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -7190,16 +7191,16 @@ public class PacketCreator {
     }
 
     private static void writeModifiedCashItem(OutPacket p, ModifiedCashItemDO item) {
-        for (CommodityFlag commodityFlag : CommodityFlag.values()) {
+        List<Pair<CommodityFlag, Number>> writeList = new ArrayList<>();
+        for (CommodityFlag commodityFlag : CommodityFlag.getAvailableSortedValues()) {
             for (Field field : item.getClass().getDeclaredFields()) {
                 // 获取有没有@Column注解，有的话以@Column为准，没有则驼峰转下划线
                 Column column = field.getAnnotation(Column.class);
-                String value = column.value();
                 String columnName;
-                if (RequireUtil.isEmpty(value)) {
+                if (column == null || RequireUtil.isEmpty(column.value())) {
                     columnName = com.mybatisflex.core.util.StringUtil.camelToUnderline(field.getName());
                 } else {
-                    columnName = value;
+                    columnName = column.value();
                 }
 
                 if (!Objects.equals(commodityFlag.name(), columnName.toUpperCase())) {
@@ -7207,17 +7208,26 @@ public class PacketCreator {
                 }
                 Number fieldVal = null;
                 try {
+                    field.setAccessible(true);
                     fieldVal = (Number) field.get(item);
                 } catch (IllegalAccessException ignore) {
 
                 }
                 if (fieldVal != null) {
-                    commodityFlag.getWriteMapper().accept(p, fieldVal);
+                    writeList.add(new Pair<>(commodityFlag, fieldVal));
                 }
                 break;
             }
         }
-
+        if (writeList.isEmpty()) {
+            return;
+        }
+        writeList.add(CommodityFlag.FLAG.getSort(), new Pair<>(CommodityFlag.FLAG, writeList.stream().mapToLong(pair -> pair.getLeft().getFlag()).sum()));
+        writeList.forEach(w -> {
+            CommodityFlag commodityFlag = w.getLeft();
+            Number fieldVal = w.getRight();
+            commodityFlag.getWriteMapper().accept(p, fieldVal);
+        });
     }
 
     public static Packet sendVegaScroll(int op) {
