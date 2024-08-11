@@ -59,14 +59,14 @@ public class CashShopService {
                 .filter(cashItem -> {
                     boolean matchedOnSale = true;
                     if (data.getOnSale() != null) {
-                        matchedOnSale = Objects.equals(data.getOnSale(), cashItem.isOnSale());
+                        matchedOnSale = Objects.equals(data.getOnSale(), cashItem.isSelling());
                     }
                     return matchedOnSale && String.valueOf(cashItem.getSn()).startsWith(prefix);
                 })
                 .map(cashItem -> fromCashItem(cashCategory, cashItem))
                 .toList();
         // 数据库中的物品
-        List<CashShopSearchRtnDTO> dbCashItems = CashShop.CashItemFactory.getModifiedCashItems().stream()
+        List<CashShopSearchRtnDTO> dbCashItems = CashShop.CashItemFactory.getModifiedCashItems().values().stream()
                 // 可以只查正在销售，也可以只查未在销售，也可以全查
                 .filter(modifiedCashItemDO -> {
                     boolean matchedOnSale = true;
@@ -114,10 +114,10 @@ public class CashShopService {
         int id = Integer.parseInt(snStr.substring(0, 1));
         int subId = Integer.parseInt(snStr.substring(1, 3));
         CashCategory cashCategory = getCategory(id, subId);
-        CashShop.CashItem cashItem = CashShop.CashItemFactory.getItem(sn);
+        ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getItem(sn);
         RequireUtil.requireNotNull(cashItem, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "sn", sn));
         CashShopSearchRtnDTO rtnDTO = fromCashItem(cashCategory, cashItem);
-        CashShop.CashItemFactory.getModifiedCashItems().stream()
+        CashShop.CashItemFactory.getModifiedCashItems().values().stream()
                 .filter(dbCashItem -> Objects.equals(dbCashItem.getSn(), sn))
                 .findFirst()
                 .ifPresent(dbCashItem -> {
@@ -134,12 +134,12 @@ public class CashShopService {
     @Transactional(rollbackFor = Exception.class)
     public void changeOnSale(ModifiedCashItemDO data) {
         RequireUtil.requireNotNull(data.getSn(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
-        CashShop.CashItem cashItem = CashShop.CashItemFactory.getItem(data.getSn());
+        ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getItem(data.getSn());
         modifiedCashItemMapper.deleteById(data.getSn());
 
         // 如果是下架，直接插入或更新除状态外所有值为null
         if (data.getOnSale() != null && data.getOnSale() != 1) {
-            if (cashItem.isOnSale()) {
+            if (cashItem.isSelling()) {
                 modifiedCashItemMapper.insertSelective(ModifiedCashItemDO.builder().sn(data.getSn()).onSale(0).build());
             }
             CashShop.CashItemFactory.loadAllModifiedCashItems();
@@ -160,8 +160,8 @@ public class CashShopService {
         if (Objects.equals(cashItem.getCount(), data.getCount())) {
             data.setCount(null);
         }
-        if (Objects.equals(cashItem.isOnSale(), Optional.ofNullable(data.getOnSale()).map(i -> i == 1).orElse(null))) {
-            data.setCount(null);
+        if (Objects.equals(cashItem.isSelling(), Optional.ofNullable(data.getOnSale()).map(i -> i == 1).orElse(null))) {
+            data.setOnSale(null);
         }
         modifiedCashItemMapper.insertSelective(data);
         CashShop.CashItemFactory.loadAllModifiedCashItems();
@@ -174,7 +174,7 @@ public class CashShopService {
                 .orElseThrow(() -> new BizException(I18nUtil.getExceptionMessage("CashShopService.getByCategory.exception1")));
     }
 
-    private CashShopSearchRtnDTO fromCashItem(CashCategory cashCategory, CashShop.CashItem cashItem) {
+    private CashShopSearchRtnDTO fromCashItem(CashCategory cashCategory, ModifiedCashItemDO cashItem) {
         return CashShopSearchRtnDTO.builder()
                 .categoryId(cashCategory.getId())
                 .categoryName(cashCategory.getName())
@@ -190,8 +190,8 @@ public class CashShopService {
                 .defaultPriority(cashItem.getPriority())
                 .count(cashItem.getCount())
                 .defaultCount(cashItem.getCount())
-                .onSale(cashItem.isOnSale())
-                .defaultOnSale(cashItem.isOnSale())
+                .onSale(cashItem.isSelling())
+                .defaultOnSale(cashItem.isSelling())
                 .build();
     }
 }

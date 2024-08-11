@@ -81,7 +81,6 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
 import org.gms.server.*;
-import org.gms.server.CashShop.CashItem;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.events.gm.Snowball;
 import org.gms.server.life.MobSkill;
@@ -7068,7 +7067,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showGiftSucceed(String to, CashItem item) {
+    public static Packet showGiftSucceed(String to, ModifiedCashItemDO item) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
         p.writeByte(0x5E); //0x5D, Couldn't be sent
@@ -7162,7 +7161,7 @@ public class PacketCreator {
                     (byte) 0x4E, (byte) 0xC1, (byte) 0xCA, 1});
         } else {
             p.writeInt(0);
-            List<ModifiedCashItemDO> items = CashItemFactory.getModifiedCashItems();
+            Collection<ModifiedCashItemDO> items = CashItemFactory.getModifiedCashItems().values();
             p.writeShort(items.size());//Guess what
             for (ModifiedCashItemDO item : items) {
                 writeModifiedCashItem(p, item);
