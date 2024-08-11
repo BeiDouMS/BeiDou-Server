@@ -160,6 +160,7 @@ public class CashShop {
                 Integer pbCash = DataTool.getInteger("PbCash", item);
                 Integer pbPoint = DataTool.getInteger("PbPoint", item);
                 Integer pbGift = DataTool.getInteger("PbGift", item);
+                Integer packageSN = DataTool.getInteger("PackageSN", item);
                 loadedItems.put(sn, ModifiedCashItemDO.builder()
                         .sn(sn)
                         .itemId(itemId)
@@ -178,6 +179,7 @@ public class CashShop {
                         .pbCash(pbCash)
                         .pbPoint(pbPoint)
                         .pbGift(pbGift)
+                        .packageSn(packageSN)
                         .build());
             }
             CashItemFactory.items = loadedItems;
@@ -233,6 +235,10 @@ public class CashShop {
             } else {
                 return itemDO;
             }
+        }
+
+        public static ModifiedCashItemDO getWzItem(int sn) {
+            return items.get(sn);
         }
 
         public static List<Item> getPackage(int itemId) {

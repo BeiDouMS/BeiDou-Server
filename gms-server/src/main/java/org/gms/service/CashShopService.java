@@ -66,7 +66,7 @@ public class CashShopService {
                 .map(cashItem -> fromCashItem(cashCategory, cashItem))
                 .toList();
         // 数据库中的物品
-        List<CashShopSearchRtnDTO> dbCashItems = CashShop.CashItemFactory.getModifiedCashItems().values().stream()
+        List<ModifiedCashItemDO> dbCashItems = CashShop.CashItemFactory.getModifiedCashItems().values().stream()
                 // 可以只查正在销售，也可以只查未在销售，也可以全查
                 .filter(modifiedCashItemDO -> {
                     boolean matchedOnSale = true;
@@ -75,32 +75,12 @@ public class CashShopService {
                     }
                     return matchedOnSale && String.valueOf(modifiedCashItemDO.getSn()).startsWith(prefix);
                 })
-                .map(modifiedCashItemDO -> CashShopSearchRtnDTO.builder()
-                        .categoryId(cashCategory.getId())
-                        .categoryName(cashCategory.getName())
-                        .subcategoryId(cashCategory.getSubId())
-                        .subcategoryName(cashCategory.getSubName())
-                        .sn(modifiedCashItemDO.getSn())
-                        .itemId(modifiedCashItemDO.getItemId())
-                        .price(modifiedCashItemDO.getPrice())
-                        .period(modifiedCashItemDO.getPeriod())
-                        .priority(modifiedCashItemDO.getPriority())
-                        .count(modifiedCashItemDO.getCount())
-                        .onSale(modifiedCashItemDO.getOnSale() == null ? null : modifiedCashItemDO.getOnSale() == 1)
-                        .build())
                 .toList();
         // 以数据库为准更新可能更新的字段
         wzCashItems.forEach(wzCashItem -> dbCashItems.stream()
                 .filter(dbCashItem -> Objects.equals(wzCashItem.getSn(), dbCashItem.getSn()))
                 .findFirst()
-                .ifPresent(dbCashItem -> {
-                    wzCashItem.setItemId(Optional.ofNullable(dbCashItem.getItemId()).orElse(wzCashItem.getItemId()));
-                    wzCashItem.setPrice(Optional.ofNullable(dbCashItem.getPrice()).orElse(wzCashItem.getPrice()));
-                    wzCashItem.setPeriod(Optional.ofNullable(dbCashItem.getPeriod()).orElse(wzCashItem.getPeriod()));
-                    wzCashItem.setPriority(Optional.ofNullable(dbCashItem.getPriority()).orElse(wzCashItem.getPriority()));
-                    wzCashItem.setCount(Optional.ofNullable(dbCashItem.getCount()).orElse(wzCashItem.getCount()));
-                    wzCashItem.setOnSale(Optional.ofNullable(dbCashItem.getOnSale()).orElse(wzCashItem.getOnSale()));
-                }));
+                .ifPresent(dbCashItem -> setDbItemValue(wzCashItem, dbCashItem)));
 
         // 排序是否正确？ 猜测按照Priority降序 ItemId升序排列
         return BasePageUtil.create(wzCashItems, data)
@@ -114,27 +94,20 @@ public class CashShopService {
         int id = Integer.parseInt(snStr.substring(0, 1));
         int subId = Integer.parseInt(snStr.substring(1, 3));
         CashCategory cashCategory = getCategory(id, subId);
-        ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getItem(sn);
+        ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getWzItem(sn);
         RequireUtil.requireNotNull(cashItem, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "sn", sn));
         CashShopSearchRtnDTO rtnDTO = fromCashItem(cashCategory, cashItem);
         CashShop.CashItemFactory.getModifiedCashItems().values().stream()
                 .filter(dbCashItem -> Objects.equals(dbCashItem.getSn(), sn))
                 .findFirst()
-                .ifPresent(dbCashItem -> {
-                    rtnDTO.setItemId(Optional.ofNullable(dbCashItem.getItemId()).orElse(rtnDTO.getItemId()));
-                    rtnDTO.setPrice(Optional.ofNullable(dbCashItem.getPrice()).orElse(rtnDTO.getPrice()));
-                    rtnDTO.setPeriod(Optional.ofNullable(dbCashItem.getPeriod()).orElse(rtnDTO.getPeriod()));
-                    rtnDTO.setPriority(Optional.ofNullable(dbCashItem.getPriority()).orElse(rtnDTO.getPriority()));
-                    rtnDTO.setCount(Optional.ofNullable(dbCashItem.getCount()).orElse(rtnDTO.getCount()));
-                    rtnDTO.setOnSale(Optional.ofNullable(dbCashItem.getOnSale()).map(i -> i == 1).orElse(rtnDTO.getOnSale()));
-                });
+                .ifPresent(dbCashItem -> setDbItemValue(rtnDTO, dbCashItem));
         return rtnDTO;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void changeOnSale(ModifiedCashItemDO data) {
         RequireUtil.requireNotNull(data.getSn(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "sn"));
-        ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getItem(data.getSn());
+        ModifiedCashItemDO cashItem = CashShop.CashItemFactory.getWzItem(data.getSn());
         modifiedCashItemMapper.deleteById(data.getSn());
 
         // 如果是下架，直接插入或更新除状态外所有值为null
@@ -190,8 +163,47 @@ public class CashShopService {
                 .defaultPriority(cashItem.getPriority())
                 .count(cashItem.getCount())
                 .defaultCount(cashItem.getCount())
-                .onSale(cashItem.isSelling())
-                .defaultOnSale(cashItem.isSelling())
+                .onSale(cashItem.getOnSale())
+                .defaultOnSale(cashItem.getOnSale())
+                .bonus(cashItem.getBonus())
+                .defaultBonus(cashItem.getBonus())
+                .maplePoint(cashItem.getMaplePoint())
+                .defaultMaplePoint(cashItem.getMaplePoint())
+                .meso(cashItem.getMeso())
+                .defaultMeso(cashItem.getMeso())
+                .forPremiumUser(cashItem.getForPremiumUser())
+                .defaultForPremiumUser(cashItem.getForPremiumUser())
+                .gender(cashItem.getCommodityGender())
+                .defaultGender(cashItem.getCommodityGender())
+                .clz(cashItem.getClz())
+                .defaultClz(cashItem.getClz())
+                .limit(cashItem.getLimit())
+                .defaultLimit(cashItem.getLimit())
+                .pbCash(cashItem.getPbCash())
+                .defaultPBCash(cashItem.getPbCash())
+                .pbPoint(cashItem.getPbPoint())
+                .defaultPBPoint(cashItem.getPbPoint())
+                .pbGift(cashItem.getPbGift())
+                .defaultPBGift(cashItem.getPbGift())
                 .build();
+    }
+
+    private void setDbItemValue(CashShopSearchRtnDTO rtnDTO, ModifiedCashItemDO dbCashItem) {
+        rtnDTO.setItemId(Optional.ofNullable(dbCashItem.getItemId()).orElse(rtnDTO.getItemId()));
+        rtnDTO.setPrice(Optional.ofNullable(dbCashItem.getPrice()).orElse(rtnDTO.getPrice()));
+        rtnDTO.setPeriod(Optional.ofNullable(dbCashItem.getPeriod()).orElse(rtnDTO.getPeriod()));
+        rtnDTO.setPriority(Optional.ofNullable(dbCashItem.getPriority()).orElse(rtnDTO.getPriority()));
+        rtnDTO.setCount(Optional.ofNullable(dbCashItem.getCount()).orElse(rtnDTO.getCount()));
+        rtnDTO.setOnSale(Optional.ofNullable(dbCashItem.getOnSale()).orElse(rtnDTO.getOnSale()));
+        rtnDTO.setBonus(Optional.ofNullable(dbCashItem.getBonus()).orElse(rtnDTO.getBonus()));
+        rtnDTO.setMaplePoint(Optional.ofNullable(dbCashItem.getMaplePoint()).orElse(rtnDTO.getMaplePoint()));
+        rtnDTO.setMeso(Optional.ofNullable(dbCashItem.getMeso()).orElse(rtnDTO.getMeso()));
+        rtnDTO.setForPremiumUser(Optional.ofNullable(dbCashItem.getForPremiumUser()).orElse(rtnDTO.getForPremiumUser()));
+        rtnDTO.setGender(Optional.ofNullable(dbCashItem.getCommodityGender()).orElse(rtnDTO.getGender()));
+        rtnDTO.setClz(Optional.ofNullable(dbCashItem.getClz()).orElse(rtnDTO.getClz()));
+        rtnDTO.setLimit(Optional.ofNullable(dbCashItem.getLimit()).orElse(rtnDTO.getLimit()));
+        rtnDTO.setPbCash(Optional.ofNullable(dbCashItem.getPbCash()).orElse(rtnDTO.getPbCash()));
+        rtnDTO.setPbPoint(Optional.ofNullable(dbCashItem.getPbPoint()).orElse(rtnDTO.getPbPoint()));
+        rtnDTO.setPbGift(Optional.ofNullable(dbCashItem.getPbGift()).orElse(rtnDTO.getPbGift()));
     }
 }
