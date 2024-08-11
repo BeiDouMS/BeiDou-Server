@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendAcceptDecline("I may have an idea of the whereabouts of Dr. De Lang. Are you ready to be transported to the area?");
+            qm.sendAcceptDecline("我可能知道德朗博士的下落。你准备好被传送到那个地区了吗？");
         } else if (status == 1) {
             qm.forceStartQuest();
             qm.warp(926120200, 1);

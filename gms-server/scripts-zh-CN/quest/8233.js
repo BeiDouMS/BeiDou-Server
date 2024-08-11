@@ -15,17 +15,17 @@ function start(mode, type, selection) {
         if (type == 1 && mode == 0) {
             status -= 2;
         } else {
-            qm.sendOk("Okay, then. See you around.");
+            qm.sendOk("好的，再见。");
             qm.dispose();
             return;
         }
     }
     if (status == 0) {
-        var target = "are Elderwraiths";
-        qm.sendAcceptDecline("Hey, traveler! I need your help. A new threat has appeared to the citizens of the New Leaf City. I'm currently recruiting anyone, and this time's target #r" + target + "#k. Are you in?");
+        var target = "长者幽灵";
+        qm.sendAcceptDecline("嘿，游客！我需要你的帮助。新叶城的居民出现了新的威胁。我正在招募任何人，这次的目标是 #r" + target + "#k。你愿意加入吗？");
     } else if (status == 1) {
         var reqs = "#r30 #t4032011##k";
-        qm.sendOk("Very well. Get me #r" + reqs + "#k, asap. The NLC is counting on you.");
+        qm.sendOk("非常好。尽快给我带来 #r" + reqs + "#k，新叶城正在指望你。");
         qm.forceStartQuest();
     } else if (status == 2) {
         qm.dispose();

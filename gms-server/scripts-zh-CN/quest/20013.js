@@ -15,22 +15,22 @@ function start(mode, type, selection) {
         status++;
     } else {
         if (status == 2) {
-            qm.sendNext("Hmm, was that too much to ask? Is it because you don't know how to break Boxes? I'll tell you how if you accept my Quest. Let me know if you change your mind.");
+	    qm.sendNext("嗯，是不是要求太多了？是因为你不知道如何打破盒子吗？如果你接受我的请求，我会告诉你。如果你改变主意了就告诉我。");
             qm.dispose();
             return;
         }
         status--;
     }
     if (status == 0) {
-        qm.sendNext("#b(*clang clang*)#k");
+    	qm.sendNext("#b(*当当*)#k");
     } else if (status == 1) {
-        qm.sendNextPrev("Whoa! Hey! You scared me. I didn't know I had a visitor. You must be the Noblesse #p1102006# was talking about. Welcome! I'm #p1102007#, and my hobby is making #bChairs#k. I'm thinking about making you one as a welcome present.");
+    	qm.sendNextPrev("嘿！你吓到我了！. 我不知道我有一个访客. 你是贵族 #p1102006# 在谈论着. 欢迎! 我是 #p1102007#, 我的兴趣是制作 #b椅子#k. 我正在考虑让一个作为欢迎你的礼物。");
     } else if (status == 2) {
-        qm.sendNextPrev("But wait, I can't make you one because I don't have enough materials. Could you find me the materials I need? Around this area, you will find a lot of Boxes with items inside. Could you bring me back a #t4032267# and a #t4032268# found inside those Boxes?");
+    	qm.sendNextPrev("别急，我不能给你一个椅子，因为我没有足够的材料。你能找到我需要的材料？在这个区域附近，你会发现很多箱子里面的物品。你能不能给我带回 一个 #t4032267# 和一个  #t4032268# 在那些箱子里面。");
     } else if (status == 3) {
-        qm.sendNextPrev("Do you know how to get items from boxes? All you have to do is break the Boxes like you're attacking a monster. The difference is that you can attack monsters using your Skills, but you can #bonly use Regular Attacks to break Boxes#k.");
+    	qm.sendNextPrev("你知道怎么从箱子里拿东西吗？你所要做的就是像攻击怪物一样打破盒子。不同的是，你可以用你的技能攻击怪物，但是你可以#只使用常规的攻击来打破盒子#K。");
     } else if (status == 4) {
-        qm.sendAcceptDecline("Please bring me 1 #b#t4032267##k and 1 #b#t4032268##k found inside those Boxes. I'll make you an awesome Chair as soon as I have what I need. I'll wait here!");
+    	qm.sendAcceptDecline("请给我 1个 #b#t4032267##k 和 1个 #b#t4032268##k 在那些箱子里面. 然后我就会做一个最棒的椅子给你， 我会在这里等着你！");
     } else if (status == 5) {
         qm.forceStartQuest();
         qm.guideHint(9);
@@ -50,9 +50,9 @@ function end(mode, type, selection) {
         status--;
     }
     if (status == 0) {
-        qm.sendNext("Did you bring me a Building Stone and a Drape? Let's see. Ah, these are just what I need! They indeed are a #t4032267# and a #t4032268#! I'll make you a Chair right away.");
+    	qm.sendNext("你给我带了一块石头和窗帘吗？让我们来看看。啊，这些正是我需要的！他们确实是一个#t 4032267#和一个#t 4032268#！我马上给你做个椅子。");
     } else if (status == 1) {
-        qm.sendPrev("Here it is, a #t3010060#. What do you think? Nifty, huh? You can #bquickly recover your HP by sitting in this Chair#k. It will be stored in the #bSet-up#k window in your Inventory, so confirm that you've received the chair and head over to #b#p1102008##k. You'll see him if you keep following the arrow to the left. \r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0# \r\n#i3010060# 1 #t3010060# \r\n#fUI/UIWindow.img/QuestIcon/8/0# 95 exp");
+    	qm.sendPrev("来这是给你的 #t3010060#. 你怎么看?? 漂亮吧呵呵^^ 你可以 #b把椅子放到快捷键上面并使用它让HP恢复更快。#k. 椅子在 #b装饰栏里面#k 打开你的道具栏, 所以请确认是不是收到椅子了 #b#p1102008##k. 好了，请按照箭头指示走你会看到另一个人。 \r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0# \r\n#i3010060# 1 #t3010060# \r\n#fUI/UIWindow.img/QuestIcon/8/0# 95 经验值");
     } else if (status == 2) {
         qm.gainItem(4032267, -1);
         qm.gainItem(4032268, -1);

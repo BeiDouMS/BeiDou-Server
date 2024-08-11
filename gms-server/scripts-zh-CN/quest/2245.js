@@ -38,13 +38,13 @@ function start(mode, type, selection) {
         if (status == 0) {
             em = qm.getEventManager("BalrogQuest");
             if (em == null) {
-                qm.sendOk("Sorry, but the BalrogQuest is closed.");
+                qm.sendOk("很抱歉，崔斯坦的坟墓已关闭了。");
                 return;
             }
 
             var em = qm.getEventManager("BalrogQuest");
             if (!em.startInstance(qm.getPlayer())) {
-                qm.sendOk("There is currently someone in this map, come back later.");
+                qm.sendOk("地图上有人，请稍后再来。");
             } else {
                 qm.forceStartQuest();
                 qm.dispose();

@@ -44,7 +44,7 @@ function start(mode, type, selection) {
             qm.startQuest();
             qm.setQuestProgress(3507, 7081, 1);
             qm.completeQuest();
-            qm.sendOk("You have regained your memories, talk to #b#p2140001##k to get the pass.");
+            qm.sendOk("啊，原来是你。没想到很久之后还能看到你。我很高兴看到曾经是青涩的新手的你成为了出色的战士。看到很久不见但还记得我的你，我的心里充满了温暖。你是在寻找遗忘的记忆吗？想起来那已经是很久很久以前的事了，事隔多年，真是让人怀念啊。这样吧。你再去找#b#p2140001##k吧。相信他会帮助你。那么再见……");
         } else if (status == 1) {
             qm.dispose();
         }

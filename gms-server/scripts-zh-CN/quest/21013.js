@@ -27,23 +27,23 @@ var status = -1;
 function start(mode, type, selection) {
     status++;
     if (mode != 1) {
-        if (type == 1 && mode == 0) {
-            qm.sendNext("对于英雄大人而言肯定是有帮助的。请你一定收下。");
-            qm.dispose();
-            return;
-        } else {
-            qm.dispose();
-            return;
-        }
+	if(type == 1 && mode == 0) {
+		qm.sendNext("我相信在你的旅途中它会派上用场的。拜托，别拒绝我的提议。");
+		qm.dispose();
+		return;
+ 	}else{
+		qm.dispose();
+		return;
+	}
     }
 
     if (status == 0) {
-        qm.sendSimple("英、英雄大人……我一直都很想见你。 \r\n#b#L0#（做腼腆状。）#l");
+	qm.sendSimple("啊，你是英雄。我一直很想见你. \r\n#b#L0#(好像有点害羞...)#l");		
     } else if (status == 1) {
-        qm.sendAcceptDecline("我从很久以前就想送英雄大人一件礼物……既然今天遇见了英雄，不知英雄能否赏脸收下我这份薄礼？");
+	qm.sendAcceptDecline("我有一件东西我一直想送给你作为礼物很长一段时间...我知道你很忙，尤其是当你在你的城市的路上，但你会接受我的礼物吗？");
     } else if (status == 2) {
         qm.forceStartQuest();
-        qm.sendNext("制作礼物的材料放在这附近的箱子里了。劳烦英雄大人找到这个箱子，把#b#t4032309##k和#b#t4032310##k带来给我。然后我就能立刻把礼物做好。", 9);
+	qm.sendNext("礼物的各个部分都装在附近的一个盒子里。对不起，麻烦你了，你能不能把盒子弄坏，给我拿个 #b#t4032309##k 和 #b#t4032310##k? 我马上给你组装好.", 9);
     } else if (status == 3) {
         qm.guideHint(18);
         qm.dispose();
@@ -53,8 +53,8 @@ function start(mode, type, selection) {
 function end(mode, type, selection) {
     status++;
     if (mode != 1) {
-        if (type == 1 && mode == 0) {
-            qm.sendNext("什么？你不想要这个药水？");
+        if(type == 1 && mode == 0) {
+			qm.sendNext("什么？你不想要？");
             qm.dispose();
             return;
         } else {
@@ -63,7 +63,7 @@ function end(mode, type, selection) {
         }
     }
     if (status == 0) {
-        qm.sendYesNo("材料都拿来了吗？请稍等。这么混合一样……\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v3010062# 1 #t3010062#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 95 exp");
+	qm.sendYesNo("啊，你把所有的部件都带来了。给我几秒钟把它们组装起来..像这样。..就像那样。..还有...\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v3010062# 1 #t3010062#\r\n\r\n#fUI/UIWindow.img/QuestIcon/8/0# 95 exp");
     } else if (status == 1) {
         if (qm.isQuestCompleted(21013)) {
             qm.dropMessage(1, "Unknown Error");
@@ -73,9 +73,9 @@ function end(mode, type, selection) {
         qm.gainItem(4032309, -1);
         qm.gainItem(4032310, -1);
         qm.gainItem(3010062, 1);
-        qm.sendNext("好了，椅子做好了！嘿嘿！就算是英雄肯定也会有需要歇歇的时候，所以我一直想送你一把椅子。", 9);
+	    qm.sendNext("给你一把整装好的椅子我一直想送给你一把椅子作为礼物，因为我知道英雄偶尔也可以好好休息一下。", 9);	
     } else if (status == 2) {
-        qm.sendNext("我想就算是英雄也不能永远活力充沛，肯定也有疲劳、困倦的时候。但真正的英雄是能够克服万难取得最后胜利的。", 9);
+	qm.sendNext("英雄不是不可战胜的。英雄是人。我相信你有时会面对挑战甚至犹豫不决。但你是英雄，因为你有能力克服你可能遇到的任何障碍。", 9);
     } else if (status == 3) {
         qm.guideHint(19);
         qm.dispose();

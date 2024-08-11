@@ -29,7 +29,7 @@ var status = -1;
 
 function start(mode, type, selection) {
     if (qm.forceStartQuest()) {
-        qm.showInfoText("You have earned the <Veteran Adventurer> title. You can receive a Medal from NPC Dalair.");
+        qm.showInfoText("您已经获得了<老兵冒险家>头衔. 您可以从达赖尔获得勋章.");
     }
     qm.dispose();
 }
@@ -41,14 +41,14 @@ function end(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 0) {
-            qm.sendNext("Congratulations on earning your honorable #b<Veteran Adventurer>#k title. I wish you the best of luck in your future endeavors! Keep up the good work.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n #v1142109:# #t1142109# 1");
+            qm.sendNext("恭喜你获得了 #b<老兵冒险家>#k 头衔. 祝您在未来的工作中一切顺利！ 继续加油吧勇士.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n #v1142109:# #t1142109# 1");
         } else if (status == 1) {
             if (qm.canHold(1142109)) {
                 qm.gainItem(1142109);
                 qm.forceCompleteQuest();
                 qm.dispose();
             } else {
-                qm.sendNext("Please make room in your inventory");//NOT GMS LIKE
+                        qm.sendNext("请给背包留出空位。");//NOT GMS LIKE
             }
         } else if (status == 2) {
             qm.dispose();

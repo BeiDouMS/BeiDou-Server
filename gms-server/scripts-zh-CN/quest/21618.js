@@ -38,11 +38,11 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Oh, this befriended wolf of yours... I sense some hidden powers hidden behind his furs, you see. Wat'cha say, master, if I awaken it's hidden power?", 9);
+            qm.sendNext("哦，这只你的狼朋友。。。你看，我感觉到他皮毛背后隐藏着某种力量。等等，主人，如果我醒来，那是隐藏的力量?", 9);
         } else if (status == 1) {
-            qm.sendNextPrev("Wait, can you do that?", 3);
+            qm.sendNextPrev("等等，你能做到吗?", 3);
         } else if (status == 2) {
-            qm.sendAcceptDecline("Astonished, huh? Does all that time frozen in the glacier hindered your senses as well? Why, of course! Tell me when you're ready!", 9);
+            qm.sendAcceptDecline("很惊讶吧？冰河中冰冻的时间是否也妨碍了你的感官？当然，为什么！准备好了告诉我!", 9);
         } else {
             qm.forceStartQuest();
             qm.dispose();
@@ -66,13 +66,13 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            if (!qm.haveItemWithId(1902017, false)) {
-                qm.sendNext("You will have to unequip the wolf first before going for the evolution.");
+            if(!qm.haveItemWithId(1902017, false)) {
+                qm.sendNext("在开始进化之前，你必须先解开狼的尾巴.");
                 qm.dispose();
                 return;
             }
-
-            qm.sendNext("Step aside, behold the mighty prowess of Maha!!");
+            
+            qm.sendNext("让开，瞧瞧，玛哈的威力!!");
         } else if (status == 1) {
             qm.forceCompleteQuest();
 

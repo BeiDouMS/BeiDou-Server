@@ -5,9 +5,9 @@ function start(mode, type, selection) {
     if (familyEntry != null && familyEntry.getJuniorCount() > 0) {
         qm.forceCompleteQuest();
         qm.gainExp(3000);
-        qm.sendNext("做得很好！");
+        qm.sendNext("Good job!");
     } else {
-        qm.sendNext("你还没有找到一个同学吗？");
+        qm.sendNext("I see that you have not successfully find a Junior, ok?");
     }
     qm.dispose();
 }
@@ -17,9 +17,9 @@ function end(mode, type, selection) {
     if (familyEntry != null && familyEntry.getJuniorCount() > 0) {  // script found thanks to kvmba
         qm.forceCompleteQuest();
         qm.gainExp(3000);
-        qm.sendNext("做得很好！");
+        qm.sendNext("Good job!");
     } else {
-        qm.sendNext("你还没有找到一个同学吗？");
+        qm.sendNext("I see that you have not successfully find a Junior, ok?");
     }
     qm.dispose();
 }

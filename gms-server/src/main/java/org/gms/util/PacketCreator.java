@@ -20,6 +20,7 @@
  */
 package org.gms.util;
 
+import com.mybatisflex.annotation.Column;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
@@ -108,15 +109,9 @@ import java.awt.*;
 import java.lang.reflect.Field;
 import java.net.InetAddress;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 /**
@@ -1137,7 +1132,7 @@ public class PacketCreator {
      * Gets a packet to spawn a special map object.
      *
      * @param summon
-     * @param animated   Animated spawn?
+     * @param animated Animated spawn?
      * @return The spawn packet for the map object.
      */
     public static Packet spawnSummon(Summon summon, boolean animated) {
@@ -7195,7 +7190,34 @@ public class PacketCreator {
     }
 
     private static void writeModifiedCashItem(OutPacket p, ModifiedCashItemDO item) {
-        // todo 根据字段映射和CommodityFlag的关系
+        for (CommodityFlag commodityFlag : CommodityFlag.values()) {
+            for (Field field : item.getClass().getDeclaredFields()) {
+                // 获取有没有@Column注解，有的话以@Column为准，没有则驼峰转下划线
+                Column column = field.getAnnotation(Column.class);
+                String value = column.value();
+                String columnName;
+                if (RequireUtil.isEmpty(value)) {
+                    columnName = com.mybatisflex.core.util.StringUtil.camelToUnderline(field.getName());
+                } else {
+                    columnName = value;
+                }
+
+                if (!Objects.equals(commodityFlag.name(), columnName.toUpperCase())) {
+                    continue;
+                }
+                Number fieldVal = null;
+                try {
+                    fieldVal = (Number) field.get(item);
+                } catch (IllegalAccessException ignore) {
+
+                }
+                if (fieldVal != null) {
+                    commodityFlag.getWriteMapper().accept(p, fieldVal);
+                }
+                break;
+            }
+        }
+
     }
 
     public static Packet sendVegaScroll(int op) {

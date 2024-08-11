@@ -16,7 +16,7 @@ function end(mode, type, selection) {
         var talkStr = "Here, please select the scroll of your choice. All success rates are at 10%. \r\n\r\n#rSELECT A ITEM\r\n#b"
         stance = qm.getPlayer().getJobStyle();
 
-        const Job = Java.type('client.Job');
+        const Job = Java.type('org.gms.client.Job');
         if (stance == Job.WARRIOR || stance == Job.BEGINNER) {
             vecItem = [2043002, 2043102, 2043202, 2044002, 2044102, 2044202, 2044402, 2044302];
         } else if (stance == Job.MAGICIAN) {

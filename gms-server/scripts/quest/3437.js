@@ -11,19 +11,19 @@ function end(mode, type, selection) {
     status++;
 
     if (status == 0) {
-        qm.sendNext("什么？你是在告诉我你已经消灭了150只 #o4230120#？而且这些... 是的，这确实是120个 #t4000122#。我一直在想你是怎么一个人完成这个任务的，但你做得很好。好吧，这是一个对我来说非常重要的物品，但请收下它。");
+        qm.sendNext("What the? Are you telling me you've already taken out 150 #o4230120#s? And these ... yes, these really are 120 #t4000122#s. I was wondering how you were going to complete this mission all by yourself, but you took care of it just fine. Alright, here ... this is a very important item for me, but please take it.");
     } else if (status == 1) {
-        const InventoryType = Java.type('client.inventory.InventoryType');
+        const InventoryType = Java.type('org.gms.client.inventory.InventoryType');
         if (qm.getPlayer().getInventory(InventoryType.EQUIP).getNumFreeSlot() < 1) {
-            qm.sendOk("请在装备栏中腾出一个空位来领取奖励。");
+            qm.sendOk("Please free a EQUIP inventory slot to receive the reward.");
             qm.dispose();
             return;
         }
 
-        var talkStr = "你喜欢这个手套吗？我已经保存了一段时间，本来打算有一天用它，但看起来你戴起来更好看。请好好利用它；此外，我从部门那里得到了很多东西，我不再需要它了。";
+        var talkStr = "Do you like the glove? I've kept this for a while, and I was planning on using it someday, but it looks much better on you. Please put it to good use; besides, I got so much stuff from the Sector, that I don't need it anymore.";
         stance = qm.getPlayer().getJobStyle();
 
-        const Job = Java.type('client.Job');
+        const Job = Java.type('org.gms.client.Job');
         if (stance == Job.WARRIOR) {
             item = 1082024;
         } else if (stance == Job.MAGICIAN) {
@@ -44,9 +44,8 @@ function end(mode, type, selection) {
         qm.gainItem(item, 1);
         qm.gainItem(4000122, -120);
         qm.gainExp(6100);
-        qm.sendOk("非常感谢你作为Mesorangers之一完成任务。我已经告诉部门你成功的故事，部门似乎对你也很满意。希望你继续和我们合作。再见~");
+        qm.sendOk("Thank you so much for fulfilling your missions as one of the Mesorangers. I've told the Sector about your successful story, and the Sector seems to be very pleased with you, too. Hopefully you'll keep working with us. Bye~");
     } else if (status == 3) {
         qm.dispose();
     }
 }
-

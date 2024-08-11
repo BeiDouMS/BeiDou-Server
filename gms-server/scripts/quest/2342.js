@@ -26,9 +26,9 @@ function start(mode, type, selection) {
                     qm.forceStartQuest();
                     qm.gainItem(4001318, 1);
                     qm.forceCompleteQuest();
-                    qm.sendOk("看起来你在与蘑菇大臣战斗时忘记拿起#b#t4001318##k了。这对我们王国非常重要，请尽快把它交给我的父亲。.");
+                    qm.sendOk("Looks like you forgot to pick up the #b#t4001318##k when you fought with the #bPrime Minister#k. This is very important to our kingdom, so please deliver this to my father as soon as possible.");
                 } else {
-                    qm.sendOk("请确保你的其他栏有一个空位");
+                    qm.sendOk("Please free up one spot in your ETC inventory");
                 }
             } else {
                 qm.dispose();

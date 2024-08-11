@@ -36,7 +36,7 @@ function end(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("Hey there, do you want a ride to #r#m261000000##k? Oh a request from #b#p2101013##k?");
+            qm.sendNext("嘿，你想搭便车去#r#m261000000##k吗？哦，来自#b#p2101013##k？");
         } else if (status == 1) {
             qm.forceCompleteQuest();
             qm.dispose();

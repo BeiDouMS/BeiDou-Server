@@ -21,11 +21,11 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("So you have lost the #bAlcadno cape#k. I can make another one for you but I'll need some materials");
+            qm.sendNext("你把#bAlcadno cape#k披风弄丢了，我可以再给你做一个，但我需要一些材料。");
         } else if (status == 1) {
-            qm.sendAcceptDecline("To make the new cape, I need you to bring me #b5 #t4021006##k, #b10 #t4000021##k and #b10000 mesos#k");
+            qm.sendAcceptDecline("要制作新披风，我需要你给我带来#b5 #t4021006##k, #b10 #t4000021##k和#b10000 金币#k。");
         } else if (status == 2) {
-            qm.sendOk("Come back to me when you have all of the items");
+            qm.sendOk("等你收集到了所有材料再回来找我。");
             qm.forceStartQuest();
         } else if (status == 3) {
             qm.dispose();

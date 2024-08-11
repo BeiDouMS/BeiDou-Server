@@ -1,6 +1,6 @@
 /*
-	QUEST: 公主的身份
-	NPC: 维奥莉塔
+	QUEST: The Identity of the Princess
+	NPC: Violetta
 */
 
 var status = -1;
@@ -18,17 +18,17 @@ function start(mode, type, selection) {
 
     if (status == 0) {
         qm.forceStartQuest();
-        qm.sendNext("非常感谢你，#b#h ##k。你就是拯救我们帝国免于危险的英雄。我对你所做的一切感激不尽。我不知道该如何感谢你。请理解我为什么不能让你看到我的面孔。");
+        qm.sendNext("Thank you so much, #b#h ##k. You are the hero that has saved our empire from danger. I'm so grateful for what you've done. I dont know how to thank you. And please understand why I can't show you my face.");
     } else if (status == 1) {
-        qm.sendNextPrev("说出来真是难为情，但自从我还是个婴儿的时候，我的家人就把我的面容遮掩起来，不让世人看见。他们害怕有人会无法自拔地爱上我。我已经习惯了这种生活，甚至对女性也感到害羞。我知道，把背对着救世主是很失礼的，但在我能够鼓起勇气与你面对面相见之前，我还需要一些时间。");
+        qm.sendNextPrev("It's humiliating to say this, but ever since I was a baby, my family has kept my face veiled from the world. They feared of men falling hopelessly in love with me. I've grown so accustomed to it that I even shy away from women. I know, it's rude of me to have my back turned against the hero, but I'll need some time to muster my courage before I can greet you face to face.");
     } else if (status == 2) {
-        qm.sendNextPrev("我明白了...\r\n#b（哇，她究竟有多美？）", 2);
+        qm.sendNextPrev("I see...\r\n#b(Wow, how pretty could she be?)", 2);
     } else if (status == 3) {
-        qm.sendNextPrev("#b（这是什么意思？）", 2);
+        qm.sendNextPrev("#b(What the--)", 2);
     } else if (status == 4) {
-        qm.sendNextPrev("#b（在蘑菇世界里这也算是漂亮吗？！）", 2);
+        qm.sendNextPrev("#b(Is that what's considered pretty in the world of mushrooms?!)", 2);
     } else if (status == 5) {
-        qm.sendNextPrev("我好害羞，都脸红了。总之，谢谢你，#b#h ##k。");
+        qm.sendNextPrev("I'm so shy, I'm blushing. Anyways, thank you, #b#h ##k.");
     } else if (status == 6) {
         qm.forceStartQuest();
         qm.gainExp(1000);

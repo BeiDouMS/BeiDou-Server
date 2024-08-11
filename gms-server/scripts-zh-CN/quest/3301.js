@@ -45,21 +45,21 @@ function end(mode, type, selection) {
         if (status == 0) {
             oreArray = getOreArray();
             if (oreArray.length > 0) {
-                qm.sendSimple("Oh, looks like someone's ready to make a deal. You want to join Zenumist so badly, huh? I really don't understand you, but that's just fine. What will you give me in return?\r\n" + getOreString(oreArray));
+                qm.sendSimple("“哦，看起来有人准备做交易了。你这么想加入蒙特鸠协会吗？我真的不理解你，但没关系。你会给我什么回报？”\r\n" + getOreString(oreArray));
             } else {
-                qm.sendOk("What is this, you don't have the #rjewel ores#k with you. No ore, no deal.");
+                qm.sendOk("这是什么，你没有#r宝石矿石#k。没有矿石，就没有交易。.");
                 qm.dispose();
 
             }
         } else if (status == 1) {
             if (!qm.haveItem(oreArray[selection], 2)) {
-                qm.sendNext("What's this, you haven't got the #rjewel ores#k. No ores no deal!");
+                qm.sendNext("这是怎么回事，你没有#c#k。没有矿石就没交易。!");
                 qm.dispose();
                 return;
             }
 
             qm.gainItem(oreArray[selection], -2); // Take 2 ores
-            qm.sendNext("Then wait for awhile. I'll go and get the stuff to help you pass the test of Chief Zenumist.");
+            qm.sendNext("请等一下我去拿个东西，以帮助您更容易通过蒙特鸠协会长的考验。");
             qm.forceCompleteQuest();
         } else if (status == 2) {
             qm.dispose();

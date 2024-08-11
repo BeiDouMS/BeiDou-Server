@@ -16,13 +16,13 @@ function start(mode, type, selection) {
     } else {
         if (mode == 0 && type > 0) {
             if (status != 3) {
-                qm.sendOk("Really? It's an urgent matter, so if you have some time, please see me.");
+                qm.sendOk("我有个请求，你愿意听我说说吗？");
                 qm.dispose();
             } else {
                 if (qm.canHold(4032375, 1)) {
-                    qm.sendNext("Okay. In that case, I'll just give you the routes to the Kingdom of Mushroom. #bNear the west entrance of Henesys,#k you'll find an #bempty house#k. Enter the house, and turn left to enter#b<Themed Dungeon : Mushroom Castle>#k. That's the entrance to the Kingdom of Mushroom. There's not much time!");
+                    qm.sendNext("你是谁？看你好像是冒险岛世界的冒险家。我们王国目前正面临巨大的危机，需要一位勇士来拯救我们。如果你没什么事的话，希望你能帮助我们。");
                 } else {
-                    qm.sendOk("Please have a slot available in your Etc inventory.");
+                    qm.sendOk("请在其他栏中留至少一个位置。");
                     qm.dispose();
                 }
             }
@@ -36,13 +36,13 @@ function start(mode, type, selection) {
             }
 
             if (status == 0) {
-                qm.sendAcceptDecline("Now that you have made the job advancement, you look like you're ready for this. I have something I'd like to ask you for help. Are you willing to listen?");
+                qm.sendAcceptDecline("现在你的强大了许多，我有一件事情想找你帮忙，你是否愿意听听？");
             } else if (status == 1) {
-                qm.sendNext("What happened is that the #bKingdom of Mushroom#k is currently in disarray. Kingdom of Mushroom is located near Henesys, featuring the peace-loving, intelligent King Mush. Recently, he began to feel ill, so he decided to appoint his only daughter #bPrincess Violetta#k. Something must have happened since then for the kingdom to be in its current state.");
+                qm.sendNext("故事发生在蘑菇王国，具体的事情我也不太清楚。但是好像很紧急。");
             } else if (status == 2) {
-                qm.sendNext("I am not aware of the exact details, but it's obvious something terrible had taken place, so I think it'll be better if you go there and assess the damage yourself. An explorer like you seem more than capable of saving Kingdom of Mushroom. I have just written you a #brecommendation letter#k, so I suggest you head over to Kingdom of Mushroom immediately and look for the #bHead Patrol Officer#k.\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v4032375# #t4032375#");
+                qm.sendNext("我不知道事情的细节，所以想找你帮帮忙，你可能会需要更多的时间帮助蘑菇王国，我送你一封信，请你把它交给#b警卫队长#k。\r\n\r\n#fUI/UIWindow.img/QuestIcon/4/0#\r\n#v4032375# #t4032375#");
             } else if (status == 3) {
-                qm.sendYesNo("By the way, do you know where Kingdom of Mushroom is located? It'll be okay if you can find your way there, but if you don't mind, I can take you straight to the entrance.");
+                qm.sendYesNo("如果你现在想去蘑菇城堡的话，我可以送你去。你确定要去吗？");
             } else if (status == 4) {
                 if (qm.canHold(4032375, 1)) {
                     if (!qm.haveItem(4032375, 1)) {
@@ -52,7 +52,7 @@ function start(mode, type, selection) {
                     qm.warp(106020000, 0);
                     qm.forceStartQuest();
                 } else {
-                    qm.sendOk("Please have a slot available in your Etc inventory.");
+                    qm.sendOk("请在其他栏中留至少一个位置。");
                 }
 
                 qm.dispose();
@@ -87,14 +87,14 @@ function end(mode, type, selection) {
 
         if (status == 0) {
             if (!qm.haveItem(4032375, 1)) {
-                qm.sendNext("What do you want, hmmm?");
+                qm.sendNext("你想做什么？");
                 qm.dispose();
                 return;
             }
 
-            qm.sendNext("Hmmm? Is that a #brecommendation letter from the job instructor#k??! What is this, are you the one that came to save us, the Kingdom of Mushroom?");
+            qm.sendNext("嗯？那是#b转职官的推荐书#k吗？你是来拯救我们蘑菇王国的人吗？");
         } else if (status == 1) {
-            qm.sendNextPrev("Hmmm... okay. Since the letter is from the job instructor, I suppose you are really the one. I apologize for not introducing myself to you earlier. I'm the #bHead Security Officer#k in charge of protecting King Mush. As you can see, this temporary hideout is protected by the team of security and soldiers. Our situation may be dire, but nevertheless, welcome to Kingdom of Mushroom.");
+            qm.sendNextPrev("好吧，既然你有转职教官的推荐信，我想你是一个很棒的人，很抱歉我没有自我介绍，我是包围蘑菇城堡的卫兵，正如你所看到的，这里是我们暂时的藏身之地，我们的情况很糟糕，尽管如此，欢迎你来到蘑菇王国！");
         } else if (status == 2) {
             qm.gainItem(4032375, -1);
             qm.gainExp(6000);

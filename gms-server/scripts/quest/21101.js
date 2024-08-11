@@ -28,17 +28,17 @@ function start(mode, type, selection) {
         status -= 2;
     } else if (mode != 1) {
         if (mode == 0) {
-            qm.sendNext("#b(“你需要考虑一下这个...”)#k");
+            qm.sendNext("#b(You need to think about this for a second...)#k");
         }
         qm.dispose();
         return;
     }
     if (status == 0) {
-        qm.sendYesNo("#b(“你确定你就是那个挥舞#p1201001#的英雄吗？是的，你确定。你最好紧紧握住#p1201001#。它肯定会对你有所反应。”)#k");
+        qm.sendYesNo("#b(Are you certain that you were the hero that wielded the #p1201001#? Yes, you're sure. You better grab the #p1201001# really tightly. Surely it will react to you.)#k");
     } else if (status == 1) {
         if (qm.getPlayer().getJob().getId() == 2000) {
             if (!qm.canHold(1142129)) {
-                qm.sendOk("“哇，你的#b装备栏#k已满。你需要腾出至少一个空位来完成这个任务。”.");
+                qm.sendOk("Wow, your #bequip#k inventory is full. You need to make at least 1 empty slot to complete this quest.");
                 qm.dispose();
                 return;
             }
@@ -47,7 +47,7 @@ function start(mode, type, selection) {
             qm.changeJobById(2100);
             qm.resetStats();
 
-            const YamlConfig = Java.type('config.YamlConfig');
+            const YamlConfig = Java.type('org.gms.config.YamlConfig');
             if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
                 qm.teachSkill(21000000, 0, 10, -1);   //combo ability
                 qm.teachSkill(21001003, 0, 20, -1);   //polearm booster
@@ -58,7 +58,7 @@ function start(mode, type, selection) {
             //qm.getPlayer().changeSkillLevel(SkillFactory.getSkill(20009000), 0, -1);
             //qm.getPlayer().changeSkillLevel(SkillFactory.getSkill(20009000), 1, 0);
             //qm.showInfo("You have acquired the Pig's Weakness skill.");
-            qm.sendNextPrev("#b(你可能开始记起某些事了……)#k", 3);
+            qm.sendNextPrev("#b(You might be starting to remember something...)#k", 3);
         }
     } else if (status == 2) {
         //qm.warp(914090100, 0);

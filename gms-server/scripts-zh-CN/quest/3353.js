@@ -36,9 +36,9 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            qm.sendNext("I see. De Lang wants to stop the Huroids from causing more destruction, but the societies would like to get him on jail at once. So that's why he hid himself there.");
+            qm.sendNext("“我明白了。德朗想阻止胡洛伊德造成更多的破坏，但社会希望立即将他关进监狱。所以他才躲在那里。”.");
         } else if (status == 1) {
-            qm.sendAcceptDecline("In that case, go there again and hear more details from De Lang, will you?");
+            qm.sendAcceptDecline("那样的话，再去那里听德朗说更多细节，可以吗？");
         } else if (status == 2) {
             qm.warp(926120200, 1);
 

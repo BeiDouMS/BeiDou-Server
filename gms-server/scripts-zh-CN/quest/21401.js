@@ -6,29 +6,29 @@ function start(mode, type, selection) {
         status -= 2;
     } else if (mode != 1) {
         //if (mode == 0)
-        qm.sendNext("#b(You need to think about this for a second...)#k");
+            qm.sendNext("#b(你需要考虑一下。。。)#k");
         qm.dispose();
         return;
     }
-
-    if (status == 0) {
-        qm.sendNext("Why do I look like this, you ask? I don't want to talk about it, but I suppose I can't hide from you since you're my master.");
+	
+	if (status == 0) {
+        qm.sendNext("你问我，为什么我看起来像这样？我不想谈这个，但我想我不能对你隐瞒，因为你是我的主人.");
     } else if (status == 1) {
-        qm.sendNextPrev("While you were trapped inside ice for hundreds of years, I, too, was frozen. It was a long time to be away from you. That's when the seed of darkness was planted in my heart.");
-    } else if (status == 2) {
-        qm.sendNextPrev("But since you awoke, I thought the darkness had gone away. I thought things would return to the way they were. But I was mistaken...");
-    } else if (status == 3) {
-        qm.sendAcceptDecline("Please, Aran. Please stop me from becoming enraged. Only you can control me. It's getting out of my hands now. Please do whatever it takes to #rstop me from going berserk#k!");
-    } else if (status == 4) {
-        var em = qm.getEventManager("MahaBattle");
-        if (!em.startInstance(qm.getPlayer())) {
-            qm.sendOk("There is currently someone in this map, come back later.");
-        } else {
-            qm.startQuest();
-        }
-
-        qm.dispose();
-    }
+		qm.sendNextPrev("当你被困在冰里几百年的时候，我也被冻住了。离开你很久了。就在那时，黑暗的种子种在了我的心里.");
+	} else if (status == 2) {
+		qm.sendNextPrev("但自从你醒来，我以为黑暗已经消失了。我以为事情会回到原来的样子。但我错了。。。");
+	} else if (status == 3) {
+		qm.sendAcceptDecline("拜托，战神。请阻止我发火。只有你能控制我。它现在从我手中消失了。请不惜一切代价#r别让我发疯#k!");
+	} else if (status == 4) {
+		var em = qm.getEventManager("MahaBattle");
+                if (!em.startInstance(qm.getPlayer())) {
+                    qm.sendOk("地图上有人，请稍后再来.");
+                } else {
+                    qm.startQuest();
+                }
+                
+		qm.dispose();
+	}
 }
 
 function end(mode, type, selection) {
@@ -37,38 +37,38 @@ function end(mode, type, selection) {
         status -= 2;
     } else if (mode != 1) {
         //if (mode == 0)
-        qm.sendNext("#b(You need to think about this for a second...)#k");
+            qm.sendNext("#b(你需要考虑一下……)#k");
         qm.dispose();
         return;
     }
-
-    if (status == 0) {
-        qm.sendNext("Thank you, Aran. If it weren't for you, I would have become enraged and who knows what could have happened. Thank you, NOT! It's only your duty as my master...");
-    } else if (status == 1) {
-        qm.sendYesNo("Anyway, I just noticed how high of a level you've reached. If you were able to control me in my state of rage, I think you're ready to handle more abilities.");
-    } else if (status == 2) {
-        if (!qm.isQuestCompleted(21401)) {
-            if (!qm.canHold(1142132)) {
-                qm.sendOk("Wow, your #bequip#k inventory is full. I need you to make at least 1 empty slot to complete this quest.");
+	
+	if (status == 0) {
+		qm.sendNext("谢谢你，战神。如果不是你，我会很生气，谁知道会发生什么。谢谢你，不要！这只是你作为我主人的职责。。。");
+	} else if(status == 1) {
+		qm.sendYesNo("不管怎样，我只是注意到你达到了一个多么高的水平。如果你能控制我的愤怒，我想你已经准备好处理更多的能力了.");
+	} else if(status == 2) {
+		if(!qm.isQuestCompleted(21401)) {
+			if(!qm.canHold(1142132)) {
+				qm.sendOk("哇，你的#b装备栏#k已满. 请留出多余的空间来获取物品.");
+				qm.dispose();
+				return;
+			}
+                        if (!qm.canHold(2280003, 1)) {
+                                qm.sendOk("你的#b物品栏#k已满. 请留出多余的空间来获取物品.");
+				qm.dispose();
+				return;
+                        }
+			
+			qm.gainItem(1142132, true);
+                        qm.gainItem(2280003, 1);
+			qm.changeJobById(2112);
+			
+			qm.completeQuest();
+		}
+		qm.sendNext("你的技能已经恢复。这些技能已经沉睡了很长时间，你必须重新训练自己，但一旦你完成训练，你就会和以前一样.");
+	} else if(status == 3) {
                 qm.dispose();
-                return;
-            }
-            if (!qm.canHold(2280003, 1)) {
-                qm.sendOk("Hey, your #buse#k inventory is full. I need you to make at least 1 empty slot to complete this quest.");
-                qm.dispose();
-                return;
-            }
-
-            qm.gainItem(1142132, true);
-            qm.gainItem(2280003, 1);
-            qm.changeJobById(2112);
-
-            qm.completeQuest();
         }
-        qm.sendNext("Your skills have been restored. Those skills have been dormant for so long that you'll have to re-train yourself, but you'll be as good as new once you complete your training.");
-    } else if (status == 3) {
-        qm.dispose();
-    }
 }
 
 function spawnMob(x, y, id, map) {
