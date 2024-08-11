@@ -10375,63 +10375,32 @@ public class Character extends AbstractCharacterObject {
     public void gainEquip(int itemId, Short attStr, Short attDex, Short attInt, Short attLuk, Short attHp, Short attMp,
                           Short pAtk, Short mAtk, Short pDef, Short mDef, Short acc, Short avoid, Short hands, Short speed,
                           Short jump, Byte upgradeSlot, Long expireTime) {
-        Equip equip = new Equip(itemId, (short) -1);
-        equip.setStr(Optional.ofNullable(attStr).orElse((short) 0));
-        equip.setDex(Optional.ofNullable(attDex).orElse((short) 0));
-        equip.setInt(Optional.ofNullable(attInt).orElse((short) 0));
-        equip.setLuk(Optional.ofNullable(attLuk).orElse((short) 0));
-        equip.setHp(Optional.ofNullable(attHp).orElse((short) 0));
-        equip.setMp(Optional.ofNullable(attMp).orElse((short) 0));
-        equip.setWatk(Optional.ofNullable(pAtk).orElse((short) 0));
-        equip.setMatk(Optional.ofNullable(mAtk).orElse((short) 0));
-        equip.setWdef(Optional.ofNullable(pDef).orElse((short) 0));
-        equip.setMdef(Optional.ofNullable(mDef).orElse((short) 0));
-        equip.setAcc(Optional.ofNullable(acc).orElse((short) 0));
-        equip.setAvoid(Optional.ofNullable(avoid).orElse((short) 0));
-        equip.setHands(Optional.ofNullable(hands).orElse((short) 0));
-        equip.setSpeed(Optional.ofNullable(speed).orElse((short) 0));
-        equip.setJump(Optional.ofNullable(jump).orElse((short) 0));
-        equip.setUpgradeSlots(Optional.ofNullable(upgradeSlot).orElse((byte) 0));
-        if (expireTime > 0) {
-            expireTime = TimeUnit.MINUTES.toMillis(expireTime) + System.currentTimeMillis();
-        }
-        equip.setExpiration(expireTime);
-        gainEquip(equip);
-    }
-
-    /**
-     * 发装备，其中数量必为1，失效时间不传或者-1为永久
-     * 来自 @leevccc 的建议，传值则为分钟
-     *
-     * @param equip 装备对象
-     */
-    public void gainEquip(Equip equip) {
-        if (!ItemConstants.getInventoryType(equip.getItemId()).equals(InventoryType.EQUIP)) {
+        if (!ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
             message(I18nUtil.getMessage("AbstractPlayerInteraction.gainEquip.message1"));
             return;
         }
-        Equip baseEquip = (Equip) ItemInformationProvider.getInstance().getEquipById(equip.getItemId());
+        Equip baseEquip = (Equip) ItemInformationProvider.getInstance().getEquipById(itemId);
         baseEquip.setQuantity((short) 1);
-        if (!InventoryManipulator.checkSpace(getClient(), equip.getItemId(), 1, equip.getOwner())) {
+        if (!InventoryManipulator.checkSpace(getClient(), itemId, 1, baseEquip.getOwner())) {
             message(I18nUtil.getMessage("AbstractPlayerInteraction.gainEquip.message2", InventoryType.EQUIP.getName()));
         }
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getStr(), Equip::setStr);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getDex(), Equip::setDex);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getInt(), Equip::setInt);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getLuk(), Equip::setLuk);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getHp(), Equip::setHp);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getMp(), Equip::setMp);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getWatk(), Equip::setWatk);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getMatk(), Equip::setMatk);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getWdef(), Equip::setWdef);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getMdef(), Equip::setMdef);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getAcc(), Equip::setAcc);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getAvoid(), Equip::setAvoid);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getHands(), Equip::setHands);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getSpeed(), Equip::setSpeed);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getJump(), Equip::setJump);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getUpgradeSlots(), Equip::setUpgradeSlots);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getExpiration(), Equip::setExpiration);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, attStr, Equip::setStr);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, attDex, Equip::setDex);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, attInt, Equip::setInt);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, attLuk, Equip::setLuk);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, attHp, Equip::setHp);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, attMp, Equip::setMp);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, pAtk, Equip::setWatk);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, mAtk, Equip::setMatk);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, pDef, Equip::setWdef);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, mDef, Equip::setMdef);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, acc, Equip::setAcc);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, avoid, Equip::setAvoid);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, hands, Equip::setHands);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, speed, Equip::setSpeed);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, jump, Equip::setJump);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, upgradeSlot, Equip::setUpgradeSlots);
+        RequireUtil.requireNotEmptyAndThen(baseEquip, expireTime, (eq, ep) -> eq.setExpiration(TimeUnit.MINUTES.toMillis(ep) + System.currentTimeMillis()));
         InventoryManipulator.addFromDrop(getClient(), baseEquip, false);
     }
 }
