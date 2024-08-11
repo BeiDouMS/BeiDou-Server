@@ -10400,7 +10400,13 @@ public class Character extends AbstractCharacterObject {
         RequireUtil.requireNotEmptyAndThen(baseEquip, speed, Equip::setSpeed);
         RequireUtil.requireNotEmptyAndThen(baseEquip, jump, Equip::setJump);
         RequireUtil.requireNotEmptyAndThen(baseEquip, upgradeSlot, Equip::setUpgradeSlots);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, expireTime, (eq, ep) -> eq.setExpiration(TimeUnit.MINUTES.toMillis(ep) + System.currentTimeMillis()));
+        RequireUtil.requireNotEmptyAndThen(baseEquip, expireTime, (eq, ep) -> {
+            if (ep > 0) {
+                eq.setExpiration(TimeUnit.MINUTES.toMillis(ep) + System.currentTimeMillis());
+            } else {
+                eq.setExpiration(-1);
+            }
+        });
         InventoryManipulator.addFromDrop(getClient(), baseEquip, false);
     }
 }

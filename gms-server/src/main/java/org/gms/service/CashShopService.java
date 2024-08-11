@@ -133,7 +133,7 @@ public class CashShopService {
         if (Objects.equals(cashItem.getCount(), data.getCount())) {
             data.setCount(null);
         }
-        if (Objects.equals(cashItem.isSelling(), Optional.ofNullable(data.getOnSale()).map(i -> i == 1).orElse(null))) {
+        if (Objects.equals(cashItem.getOnSale(), data.getOnSale())) {
             data.setOnSale(null);
         }
         modifiedCashItemMapper.insertSelective(data);
@@ -185,6 +185,8 @@ public class CashShopService {
                 .defaultPBPoint(cashItem.getPbPoint())
                 .pbGift(cashItem.getPbGift())
                 .defaultPBGift(cashItem.getPbGift())
+                .packageSn(cashItem.getPackageSn())
+                .defaultPackageSn(cashItem.getPackageSn())
                 .build();
     }
 
@@ -205,5 +207,6 @@ public class CashShopService {
         rtnDTO.setPbCash(Optional.ofNullable(dbCashItem.getPbCash()).orElse(rtnDTO.getPbCash()));
         rtnDTO.setPbPoint(Optional.ofNullable(dbCashItem.getPbPoint()).orElse(rtnDTO.getPbPoint()));
         rtnDTO.setPbGift(Optional.ofNullable(dbCashItem.getPbGift()).orElse(rtnDTO.getPbGift()));
+        rtnDTO.setPackageSn(Optional.ofNullable(dbCashItem.getPackageSn()).orElse(rtnDTO.getPackageSn()));
     }
 }

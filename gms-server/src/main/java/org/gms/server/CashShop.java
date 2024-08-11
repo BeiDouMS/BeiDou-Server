@@ -229,12 +229,28 @@ public class CashShop {
         }
 
         public static ModifiedCashItemDO getItem(int sn) {
-            ModifiedCashItemDO itemDO = modifiedCashItems.get(sn);
-            if (itemDO == null) {
-                return items.get(sn);
-            } else {
-                return itemDO;
+            ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
+            ModifiedCashItemDO cashItemDO = items.get(sn);
+            if (dbItemDO != null) {
+                cashItemDO.setItemId(dbItemDO.getItemId());
+                cashItemDO.setPrice(dbItemDO.getPrice());
+                cashItemDO.setPeriod(dbItemDO.getPeriod());
+                cashItemDO.setPriority(dbItemDO.getPriority());
+                cashItemDO.setCount(dbItemDO.getCount());
+                cashItemDO.setBonus(dbItemDO.getBonus());
+                cashItemDO.setMaplePoint(dbItemDO.getMaplePoint());
+                cashItemDO.setMeso(dbItemDO.getMeso());
+                cashItemDO.setForPremiumUser(dbItemDO.getForPremiumUser());
+                cashItemDO.setCommodityGender(dbItemDO.getCommodityGender());
+                cashItemDO.setLimit(dbItemDO.getLimit());
+                cashItemDO.setOnSale(dbItemDO.getOnSale());
+                cashItemDO.setClz(dbItemDO.getClz());
+                cashItemDO.setPbCash(dbItemDO.getPbCash());
+                cashItemDO.setPbPoint(dbItemDO.getPbPoint());
+                cashItemDO.setPbGift(dbItemDO.getPbGift());
+                cashItemDO.setPackageSn(dbItemDO.getPackageSn());
             }
+            return cashItemDO;
         }
 
         public static ModifiedCashItemDO getWzItem(int sn) {
