@@ -36,6 +36,7 @@
       column-resizable
       :pagination="false"
       :bordered="{ cell: true }"
+      :scroll="{ x: 2000 }"
     >
       <template #columns>
         <a-table-column
@@ -43,10 +44,14 @@
           data-index="sn"
           align="center"
           :width="140"
+          fixed="left"
         />
-        <a-table-column title="物品" align="center" :width="100">
+        <a-table-column title="物品" align="center" :width="100" fixed="left">
           <template #cell="{ record }">
-            <img :src="getIconUrl('item', record.itemId)" />
+            <img
+              :src="getIconUrl('item', record.itemId)"
+              :alt="record.itemId"
+            />
           </template>
         </a-table-column>
         <a-table-column
@@ -54,6 +59,7 @@
           data-index="itemId"
           align="center"
           :width="140"
+          fixed="left"
         />
         <a-table-column
           title="数量"
@@ -73,7 +79,7 @@
           align="center"
           :width="120"
         />
-        <!--        <a-table-column title="折扣" data-index="bonus" align="center" />-->
+        <a-table-column title="Bonus" data-index="bonus" align="center" />
         <a-table-column
           title="有效期"
           data-index="period"
@@ -82,18 +88,20 @@
         >
           <template #cell="{ record }"> {{ record.period }} 天 </template>
         </a-table-column>
-        <!--        <a-table-column title="抵用券" data-index="maplePoint" align="center" />-->
-        <!--        <a-table-column title="金币" data-index="meso" align="center" />-->
-        <!--        <a-table-column-->
-        <!--          title="会员专属"-->
-        <!--          data-index="ForPremiumUser"-->
-        <!--          align="center"-->
-        <!--        />-->
-        <!--        <a-table-column-->
-        <!--          title="性别"-->
-        <!--          data-index="CommodityGender"-->
-        <!--          align="center"-->
-        <!--        />-->
+        <a-table-column title="抵用券" data-index="maplePoint" align="center" />
+        <a-table-column title="金币" data-index="meso" align="center" />
+        <a-table-column
+          title="会员专属"
+          data-index="forPremiumUser"
+          align="center"
+        />
+        <a-table-column title="性别" align="center">
+          <template #cell="{ record }">
+            <a-tag v-if="record.gender === 0" color="blue"> 男 </a-tag>
+            <a-tag v-else-if="record.gender === 1" color="red"> 女 </a-tag>
+            <a-tag v-else-if="record.gender === 2" color="green"> 通用 </a-tag>
+          </template>
+        </a-table-column>
         <a-table-column
           title="上架"
           data-index="onSale"
@@ -105,12 +113,23 @@
             <a-tag v-else color="red">待售</a-tag>
           </template>
         </a-table-column>
-        <!--        <a-table-column title="标签" data-index="class" align="center" />-->
-        <!--        <a-table-column title="limit" data-index="limit" align="center" />-->
-        <!--        <a-table-column title="PbCash" data-index="PbCash" align="center" />-->
-        <!--        <a-table-column title="PbPoint" data-index="PbPoint" align="center" />-->
-        <!--        <a-table-column title="PbGift" data-index="PbGift" align="center" />-->
-        <!--        <a-table-column title="礼包合集" data-index="package" align="center" />-->
+        <a-table-column title="标签" align="center">
+          <template #cell="{ record }">
+            <a-tag v-if="record.clz === 0" color="gold">NEW</a-tag>
+            <a-tag v-else-if="record.clz === 1" color="green">SALE</a-tag>
+            <a-tag v-else-if="record.clz === 2" color="orangered">HOT</a-tag>
+            <a-tag v-else-if="record.clz === 3" color="blue">EVENT</a-tag>
+          </template>
+        </a-table-column>
+        <a-table-column title="Limit" data-index="limit" align="center" />
+        <a-table-column title="PbCash" data-index="pbCash" align="center" />
+        <a-table-column title="PbPoint" data-index="pbPoint" align="center" />
+        <a-table-column title="PbGift" data-index="pbGift" align="center" />
+        <a-table-column
+          title="礼包合集"
+          data-index="packageSn"
+          align="center"
+        />
         <a-table-column title="操作" fixed="right">
           <template #cell="{ record }">
             <a-button type="text" size="mini" @click="editClick(record)">
@@ -146,7 +165,7 @@
     topId: string | number;
     subId?: string | number;
   }>();
-  const tableData = ref<cashShopState>([]);
+  const tableData = ref<cashShopState[]>([]);
   const total = ref<number>(0);
   const condition = ref<conditionState>({
     id: 1,
