@@ -27,4 +27,26 @@ export interface cashShopState {
   defaultCount?: number;
   onSale?: number;
   defaultOnSale?: number;
+  bonus?: number;
+  defaultBonus?: number;
+  maplePoint?: number;
+  defaultMaplePoint?: number;
+  meso?: number;
+  defaultMeso?: number;
+  forPremiumUser?: number;
+  defaultForPremiumUser?: number;
+  gender?: number;
+  defaultGender?: number;
+  clz?: number;
+  defaultClz?: number;
+  limit?: number;
+  defaultLimit?: number;
+  pbCash?: number;
+  defaultPBCash?: number;
+  pbPoint?: number;
+  defaultPBPoint?: number;
+  pbGift?: number;
+  defaultPBGift?: number;
+  packageSn?: number;
+  defaultPackageSn?: number;
 }
