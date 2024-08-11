@@ -1,3 +1,4 @@
+import cashShop from '@/views/dashboard/cashShop/locale/zh-CN';
 import npcShop from '@/views/dashboard/npcShop/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
@@ -9,6 +10,7 @@ export default {
   'menu.dashboard': '仪表盘',
   'menu.dashboard.workplace': '工作台',
   'menu.dashboard.npcShop': 'NPC商店',
+  'menu.dashboard.cashShop': '商城管理',
   'menu.account': '账户管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -33,4 +35,5 @@ export default {
   ...login,
   ...account,
   ...npcShop,
+  ...cashShop,
 };

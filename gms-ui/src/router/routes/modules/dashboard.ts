@@ -23,6 +23,16 @@ const DASHBOARD: AppRouteRecordRaw = {
       },
     },
     {
+      path: 'cashShop',
+      name: 'CashShop',
+      component: () => import('@/views/dashboard/cashShop/index.vue'),
+      meta: {
+        locale: 'menu.dashboard.cashShop',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
       path: 'npcShop',
       name: 'NpcShop',
       component: () => import('@/views/dashboard/npcShop/index.vue'),
