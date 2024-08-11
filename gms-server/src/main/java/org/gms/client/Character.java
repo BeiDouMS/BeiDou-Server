@@ -10376,22 +10376,25 @@ public class Character extends AbstractCharacterObject {
                           Short pAtk, Short mAtk, Short pDef, Short mDef, Short acc, Short avoid, Short hands, Short speed,
                           Short jump, Byte upgradeSlot, Long expireTime) {
         Equip equip = new Equip(itemId, (short) -1);
-        equip.setStr(attStr);
-        equip.setDex(attDex);
-        equip.setInt(attInt);
-        equip.setLuk(attLuk);
-        equip.setHp(attHp);
-        equip.setMp(attMp);
-        equip.setWatk(pAtk);
-        equip.setMatk(mAtk);
-        equip.setWdef(pDef);
-        equip.setMdef(mDef);
-        equip.setAcc(acc);
-        equip.setAvoid(avoid);
-        equip.setHands(hands);
-        equip.setSpeed(speed);
-        equip.setJump(jump);
-        equip.setUpgradeSlots(upgradeSlot);
+        equip.setStr(Optional.ofNullable(attStr).orElse((short) 0));
+        equip.setDex(Optional.ofNullable(attDex).orElse((short) 0));
+        equip.setInt(Optional.ofNullable(attInt).orElse((short) 0));
+        equip.setLuk(Optional.ofNullable(attLuk).orElse((short) 0));
+        equip.setHp(Optional.ofNullable(attHp).orElse((short) 0));
+        equip.setMp(Optional.ofNullable(attMp).orElse((short) 0));
+        equip.setWatk(Optional.ofNullable(pAtk).orElse((short) 0));
+        equip.setMatk(Optional.ofNullable(mAtk).orElse((short) 0));
+        equip.setWdef(Optional.ofNullable(pDef).orElse((short) 0));
+        equip.setMdef(Optional.ofNullable(mDef).orElse((short) 0));
+        equip.setAcc(Optional.ofNullable(acc).orElse((short) 0));
+        equip.setAvoid(Optional.ofNullable(avoid).orElse((short) 0));
+        equip.setHands(Optional.ofNullable(hands).orElse((short) 0));
+        equip.setSpeed(Optional.ofNullable(speed).orElse((short) 0));
+        equip.setJump(Optional.ofNullable(jump).orElse((short) 0));
+        equip.setUpgradeSlots(Optional.ofNullable(upgradeSlot).orElse((byte) 0));
+        if (expireTime > 0) {
+            expireTime = TimeUnit.MINUTES.toMillis(expireTime) + System.currentTimeMillis();
+        }
         equip.setExpiration(expireTime);
         gainEquip(equip);
     }
@@ -10428,7 +10431,7 @@ public class Character extends AbstractCharacterObject {
         RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getSpeed(), Equip::setSpeed);
         RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getJump(), Equip::setJump);
         RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getUpgradeSlots(), Equip::setUpgradeSlots);
-        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getExpiration(), (eq, ep) -> eq.setExpiration(TimeUnit.MINUTES.toMillis(ep)+System.currentTimeMillis()));
+        RequireUtil.requireNotEmptyAndThen(baseEquip, equip.getExpiration(), Equip::setExpiration);
         InventoryManipulator.addFromDrop(getClient(), baseEquip, false);
     }
 }

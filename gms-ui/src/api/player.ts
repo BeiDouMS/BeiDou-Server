@@ -48,3 +48,7 @@ export function getPlayerList(
 export function givePlayerSrc(data: GiveForm) {
   return axios.post(`/give/v1/resource`, data);
 }
+
+export function getEquInitialInfo(id: number) {
+  return axios.post(`/search/v1/getEquInitialInfo`, { id });
+}
