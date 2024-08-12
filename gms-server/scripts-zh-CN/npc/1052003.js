@@ -41,7 +41,7 @@ function action(mode, type, selection) {
 
         if (status == 0) {
             var selStr = "是的，我确实拥有这个锻炉。如果你愿意付钱，我可以为你提供一些服务。#b"
-            var options = ["精炼矿石", "精炼宝石", "钢铁猪猪的铁蹄兑换中心...", "升級拳套"];
+            var options = ["精炼矿石", "精炼宝石", "我有铁甲猪蹄...", "升級拳套"];
             for (var i = 0; i < options.length; i++) {
                 selStr += "\r\n#L" + i + "# " + options[i] + "#l";
             }
@@ -67,7 +67,7 @@ function action(mode, type, selection) {
                 equip = false;
                 cm.sendSimple(selStr);
             } else if (selectedType == 2) { //foot refine
-                var selStr = "你知道嘛? 很多人不知道钢铁猪猪铁蹄的潜力... 我可以使它成为一些特别的东西, 如果你要我做的话...";
+                var selStr = "你知道嘛? 很多人不知道铁甲猪蹄的潜力... 我可以使它成为一些特别的东西, 如果你要我做的话...";
                 equip = false;
                 cm.sendYesNo(selStr);
             } else if (selectedType == 3) { //claw refine
