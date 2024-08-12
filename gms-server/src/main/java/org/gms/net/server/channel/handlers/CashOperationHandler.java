@@ -32,13 +32,13 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.dao.entity.ModifiedCashItemDO;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
-import org.gms.server.CashShop.CashItem;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.service.NoteService;
@@ -77,7 +77,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     p.readByte();
                     final int useNX = p.readInt();
                     final int snCS = p.readInt();
-                    CashItem cItem = CashItemFactory.getItem(snCS);
+                    ModifiedCashItemDO cItem = CashItemFactory.getItem(snCS);
                     if (!canBuy(chr, cItem, cs.getCash(useNX))) {
                         log.error("Denied to sell cash item with SN {}", snCS); // preventing NPE here thanks to MedicOP
                         c.enableCSActions();
@@ -113,7 +113,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.showCash(chr));
                 } else if (action == 0x04) {//TODO check for gender
                     int birthday = p.readInt();
-                    CashItem cItem = CashItemFactory.getItem(p.readInt());
+                    ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                     Map<String, String> recipient = Character.getCharacterFromDatabase(p.readString());
                     String message = p.readString();
                     if (!canBuy(chr, cItem, cs.getCash(CashShop.NX_PREPAID)) || message.isEmpty() || message.length() > 73) {
@@ -146,8 +146,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     cs.clearWishList();
                     for (byte i = 0; i < 10; i++) {
                         int sn = p.readInt();
-                        CashItem cItem = CashItemFactory.getItem(sn);
-                        if (cItem != null && cItem.isOnSale() && sn != 0) {
+                        ModifiedCashItemDO cItem = CashItemFactory.getItem(sn);
+                        if (cItem != null && cItem.isSelling() && sn != 0) {
                             cs.addToWishList(sn);
                         }
                     }
@@ -175,7 +175,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             log.warn("Could not add {} slots of type {} for chr {}", qty, type, Character.makeMapleReadable(chr.getName()));
                         }
                     } else {
-                        CashItem cItem = CashItemFactory.getItem(p.readInt());
+                        ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                         int type = (cItem.getItemId() - 9110000) / 1000;
                         if (!canBuy(chr, cItem, cs.getCash(cash))) {
                             c.enableCSActions();
@@ -219,7 +219,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                             log.warn("Could not add {} slots to {}'s account.", qty, Character.makeMapleReadable(chr.getName()));
                         }
                     } else {
-                        CashItem cItem = CashItemFactory.getItem(p.readInt());
+                        ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
 
                         if (!canBuy(chr, cItem, cs.getCash(cash))) {
                             c.enableCSActions();
@@ -244,7 +244,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                 } else if (action == 0x08) { // Increase Character Slots
                     p.skip(1);
                     int cash = p.readInt();
-                    CashItem cItem = CashItemFactory.getItem(p.readInt());
+                    ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
 
                     if (!canBuy(chr, cItem, cs.getCash(cash))) {
                         c.enableCSActions();
@@ -315,7 +315,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         int SN = p.readInt();
                         String recipientName = p.readString();
                         String text = p.readString();
-                        CashItem itemRing = CashItemFactory.getItem(SN);
+                        ModifiedCashItemDO itemRing = CashItemFactory.getItem(SN);
                         Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(recipientName);
                         if (partner == null) {
                             chr.sendPacket(PacketCreator.serverNotice(1, "The partner you specified cannot be found.\r\nPlease make sure your partner is online and in the same channel."));
@@ -351,8 +351,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         return;
                     }
 
-                    CashItem item = CashItemFactory.getItem(serialNumber);
-                    if (item == null || !item.isOnSale()) {
+                    ModifiedCashItemDO item = CashItemFactory.getItem(serialNumber);
+                    if (item == null || !item.isSelling()) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC0));
                         return;
                     }
@@ -378,7 +378,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         int payment = p.readByte();
                         p.skip(3); //0s
                         int snID = p.readInt();
-                        CashItem itemRing = CashItemFactory.getItem(snID);
+                        ModifiedCashItemDO itemRing = CashItemFactory.getItem(snID);
                         String sentTo = p.readString();
                         String text = p.readString();
                         Character partner = c.getChannelServer().getPlayerStorage().getCharacterByName(sentTo);
@@ -404,7 +404,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
 
                     c.sendPacket(PacketCreator.showCash(c.getPlayer()));
                 } else if (action == 0x2E) { //name change
-                    CashItem cItem = CashItemFactory.getItem(p.readInt());
+                    ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                     if (cItem == null || !canBuy(chr, cItem, cs.getCash(CashShop.NX_PREPAID))) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                         c.enableCSActions();
@@ -433,7 +433,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     }
                     c.enableCSActions();
                 } else if (action == 0x31) { //world transfer
-                    CashItem cItem = CashItemFactory.getItem(p.readInt());
+                    ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                     if (cItem == null || !canBuy(chr, cItem, cs.getCash(CashShop.NX_PREPAID))) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0));
                         c.enableCSActions();
@@ -483,8 +483,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         return c.checkBirthDate(cal);
     }
 
-    private static boolean canBuy(Character chr, CashItem item, int cash) {
-        if (item != null && item.isOnSale() && item.getPrice() <= cash) {
+    private static boolean canBuy(Character chr, ModifiedCashItemDO item, int cash) {
+        if (item != null && item.isSelling() && item.getPrice() <= cash) {
             log.info("玩家 {} 购买了现金道具 {} (SN {}) 花费 {}", chr, ItemInformationProvider.getInstance().getName(item.getItemId()), item.getSn(), item.getPrice());
             return true;
         } else {

@@ -1,3 +1,4 @@
+import cashShop from '@/views/dashboard/cashShop/locale/en-US';
 import npcShop from '@/views/dashboard/npcShop/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
 import account from '@/views/account/locale/en-US';
@@ -8,6 +9,7 @@ export default {
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.workplace': 'Workplace',
   'menu.dashboard.npcShop': 'NPC Shop',
+  'menu.dashboard.cashShop': 'Cash Shop',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -30,4 +32,5 @@ export default {
   ...login,
   ...account,
   ...npcShop,
+  ...cashShop,
 };

@@ -27,7 +27,6 @@ import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
-import org.gms.client.inventory.Pet;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
@@ -57,9 +56,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import static java.util.concurrent.TimeUnit.DAYS;
-import static java.util.concurrent.TimeUnit.HOURS;
 
 /*
  * @author Flav
@@ -131,91 +127,60 @@ public class CashShop {
         }
     }
 
-    @Getter
-    public static class CashItem {
-
-        private final int sn;
-        private final int itemId;
-        private final int price;
-        private final long period;
-        private final short count;
-        private final boolean onSale;
-        private final int priority;
-
-        public CashItem(int sn, int itemId, int price, long period, short count, boolean onSale, int priority) {
-            this.sn = sn;
-            this.itemId = itemId;
-            this.price = price;
-            this.period = (period == 0 ? 90 : period);
-            this.count = count;
-            this.onSale = onSale;
-            this.priority = priority;
-        }
-
-        public Item toItem() {
-            Item item;
-
-            int petid = -1;
-            if (ItemConstants.isPet(itemId)) {
-                petid = Pet.createPet(itemId);
-            }
-
-            if (ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
-                item = ItemInformationProvider.getInstance().getEquipById(itemId);
-            } else {
-                item = new Item(itemId, (byte) 0, count, petid);
-            }
-
-            if (ItemConstants.EXPIRING_ITEMS) {
-                if (period == 1) {
-                    switch (itemId) {
-                        case ItemId.DROP_COUPON_2X_4H,
-                             ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
-                            item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
-                            /*
-                            } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
-                                    item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));
-                            */
-                            break;
-                        case ItemId.EXP_COUPON_3X_2H:
-                            item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
-                            break;
-                        default:
-                            item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
-                            break;
-                    }
-                } else {
-                    item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
-                }
-            }
-
-            item.setSN(sn);
-            return item;
-        }
-    }
-
     public static class CashItemFactory {
         @Getter
-        private static volatile Map<Integer, CashItem> items = new HashMap<>();
+        private static volatile Map<Integer, ModifiedCashItemDO> items = new HashMap<>();
         private static volatile Map<Integer, List<Integer>> packages = new HashMap<>();
         @Getter
         private static final List<CashCategory> cashCategories = new ArrayList<>();
         @Getter
-        private static final List<ModifiedCashItemDO> modifiedCashItems = new ArrayList<>();
+        private static final Map<Integer, ModifiedCashItemDO> modifiedCashItems = new HashMap<>();
 
         public static void loadAllCashItems() {
             DataProvider etc = DataProviderFactory.getDataProvider(WZFiles.ETC);
 
-            Map<Integer, CashItem> loadedItems = new HashMap<>();
+            Map<Integer, ModifiedCashItemDO> loadedItems = new HashMap<>();
             for (Data item : etc.getData("Commodity.img").getChildren()) {
                 int sn = DataTool.getIntConvert("SN", item);
                 int itemId = DataTool.getIntConvert("ItemId", item);
                 int price = DataTool.getIntConvert("Price", item, 0);
                 long period = DataTool.getIntConvert("Period", item, 1);
                 short count = (short) DataTool.getIntConvert("Count", item, 1);
-                boolean onSale = DataTool.getIntConvert("OnSale", item, 0) == 1;
-                int priority = DataTool.getIntConvert("Priority", item, 0);
-                loadedItems.put(sn, new CashItem(sn, itemId, price, period, count, onSale, priority));
+                int onSale = DataTool.getIntConvert("OnSale", item, 0);
+                Integer priority = DataTool.getInteger("Priority", item);
+                // 我猜的
+                Integer bonus = DataTool.getInteger("Bonus", item);
+                Integer maplePoint = DataTool.getInteger("MaplePoint", item);
+                Integer meso = DataTool.getInteger("Meso", item);
+                Integer forPremiumUser = DataTool.getInteger("ForPremiumUser", item);
+                Integer gender = DataTool.getInteger("Gender", item);
+                Integer clz = DataTool.getInteger("Class", item);
+                // limit一堆问号，是有问题还是就是这样？暂不解析这个字段
+//                Integer limit = DataTool.getInteger("Limit", item);
+                Integer pbCash = DataTool.getInteger("PbCash", item);
+                Integer pbPoint = DataTool.getInteger("PbPoint", item);
+                Integer pbGift = DataTool.getInteger("PbGift", item);
+                Integer packageSN = DataTool.getInteger("PackageSN", item);
+                loadedItems.put(sn, ModifiedCashItemDO.builder()
+                        .sn(sn)
+                        .itemId(itemId)
+                        .count(count)
+                        .price(price)
+                        .bonus(bonus)
+                        .priority(priority)
+                        .period(period)
+                        .maplePoint(maplePoint)
+                        .meso(meso)
+                        .forPremiumUser(forPremiumUser)
+                        .commodityGender(gender)
+                        .onSale(onSale)
+                        .clz(clz)
+//                        .limit(limit)
+                        .pbCash(pbCash)
+                        .pbPoint(pbPoint)
+                        .pbGift(pbGift)
+                        .packageSn(packageSN)
+                        .build());
             }
             CashItemFactory.items = loadedItems;
 
@@ -238,7 +203,7 @@ public class CashShop {
         public static void loadAllModifiedCashItems() {
             modifiedCashItems.clear();
             CashShopService cashShopService = ServerManager.getApplicationContext().getBean(CashShopService.class);
-            modifiedCashItems.addAll(cashShopService.loadAllModifiedCashItems());
+            cashShopService.loadAllModifiedCashItems().forEach(modifiedCashItemDO -> modifiedCashItems.put(modifiedCashItemDO.getSn(), modifiedCashItemDO));
         }
 
         private static void loadCashCategories() {
@@ -247,23 +212,48 @@ public class CashShop {
             cashCategories.addAll(cashShopService.getAllCategoryList());
         }
 
-        public static Optional<CashItem> getRandomCashItem() {
+        public static Optional<ModifiedCashItemDO> getRandomCashItem() {
             if (items.isEmpty()) {
                 return Optional.empty();
             }
 
-            List<CashItem> itemPool = items.values().stream()
-                    .filter(CashItem::isOnSale)
-                    .filter(cashItem -> !ItemId.isCashPackage(cashItem.itemId))
+            List<ModifiedCashItemDO> itemPool = items.values().stream()
+                    .filter(ModifiedCashItemDO::isSelling)
+                    .filter(cashItem -> !ItemId.isCashPackage(cashItem.getItemId()))
                     .toList();
             return Optional.of(getRandomItem(itemPool));
         }
 
-        private static CashItem getRandomItem(List<CashItem> items) {
+        private static ModifiedCashItemDO getRandomItem(List<ModifiedCashItemDO> items) {
             return items.get(new Random().nextInt(items.size()));
         }
 
-        public static CashItem getItem(int sn) {
+        public static ModifiedCashItemDO getItem(int sn) {
+            ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
+            ModifiedCashItemDO cashItemDO = items.get(sn);
+            if (dbItemDO != null) {
+                cashItemDO.setItemId(dbItemDO.getItemId());
+                cashItemDO.setPrice(dbItemDO.getPrice());
+                cashItemDO.setPeriod(dbItemDO.getPeriod());
+                cashItemDO.setPriority(dbItemDO.getPriority());
+                cashItemDO.setCount(dbItemDO.getCount());
+                cashItemDO.setBonus(dbItemDO.getBonus());
+                cashItemDO.setMaplePoint(dbItemDO.getMaplePoint());
+                cashItemDO.setMeso(dbItemDO.getMeso());
+                cashItemDO.setForPremiumUser(dbItemDO.getForPremiumUser());
+                cashItemDO.setCommodityGender(dbItemDO.getCommodityGender());
+                cashItemDO.setLimit(dbItemDO.getLimit());
+                cashItemDO.setOnSale(dbItemDO.getOnSale());
+                cashItemDO.setClz(dbItemDO.getClz());
+                cashItemDO.setPbCash(dbItemDO.getPbCash());
+                cashItemDO.setPbPoint(dbItemDO.getPbPoint());
+                cashItemDO.setPbGift(dbItemDO.getPbGift());
+                cashItemDO.setPackageSn(dbItemDO.getPackageSn());
+            }
+            return cashItemDO;
+        }
+
+        public static ModifiedCashItemDO getWzItem(int sn) {
             return items.get(sn);
         }
 
@@ -304,7 +294,7 @@ public class CashShop {
         }
     }
 
-    public void gainCash(int type, CashItem buyItem, int world) {
+    public void gainCash(int type, ModifiedCashItemDO buyItem, int world) {
         gainCash(type, -buyItem.getPrice());
         if (!YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
             Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSn());
@@ -406,7 +396,7 @@ public class CashShop {
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         notes++;
-                        CashItem cItem = CashItemFactory.getItem(rs.getInt("sn"));
+                        ModifiedCashItemDO cItem = CashItemFactory.getItem(rs.getInt("sn"));
                         Item item = cItem.toItem();
                         Equip equip = null;
                         item.setGiftFrom(rs.getString("from"));
@@ -501,7 +491,7 @@ public class CashShop {
                 return Optional.empty();
             }
 
-            Optional<CashItem> cashItemReward = CashItemFactory.getRandomCashItem();
+            Optional<ModifiedCashItemDO> cashItemReward = CashItemFactory.getRandomCashItem();
             if (cashItemReward.isEmpty()) {
                 return Optional.empty();
             }
@@ -538,7 +528,15 @@ public class CashShop {
     }
 
     public static Item generateCouponItem(int itemId, short quantity) {
-        CashItem it = new CashItem(77777777, itemId, 7777, ItemConstants.isPet(itemId) ? 30 : 0, quantity, true, 0);
-        return it.toItem();
+        return ModifiedCashItemDO.builder()
+                .sn(77777777)
+                .itemId(itemId)
+                .price(777)
+                .period(ItemConstants.isPet(itemId) ? 30L : 0L)
+                .count(quantity)
+                .onSale(1)
+                .priority(0)
+                .build()
+                .toItem();
     }
 }

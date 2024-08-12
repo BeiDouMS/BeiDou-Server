@@ -10,19 +10,19 @@ function start() {
 
     if (cm.haveItem(4031242)) {
         if (atHerbTown) {
-            menu = "#L0##bI will use #t4031242##k to move to #b#m230030200##k.#l\r\n#L1#Go to #b#m230000000##k after paying #b10000mesos#k.#l";
+            menu = "#L0##b我想用 #t4031242##k 移动到 #b#m230030200##k.#l\r\n#L1#去 #b#m230000000##k 需支付 #b10000金币#k.#l";
         } else {
-            menu = "#L0##bI will use #t4031242##k to move to #b#m230030200##k.#l\r\n#L1#Go to #b#m251000000##k after paying #b10000mesos#k.#l";
+            menu = "#L0##b我想用 #t4031242##k 移动到 #b#m230030200##k.#l\r\n#L1#去 #b#m251000000##k 需支付 #b10000金币#k.#l";
         }
     } else {
         if (atHerbTown) {
-            menu = "#L0#Go to #b#m230030200##k after paying #b1000mesos#k.#l\r\n#L1#Go to #b#m230000000##k after paying #b10000mesos#k.#l";
+            menu = "#L0#前往 #b#m230030200##k 需支付#b1000金币#k.#l\r\n#L1#前往 #b#m230000000##k 需支付#b10000金币#k.#l";
         } else {
-            menu = "#L0#Go to #b#m230030200##k after paying #b1000mesos#k.#l\r\n#L1#Go to #b#m251000000##k after paying #b10000mesos#k.#l";
+            menu = "#L0#前往 #b#m230030200##k 需支付#b1000金币#k.#l\r\n#L1#前往 #b#m251000000##k 需支付#b10000金币#k.#l";
         }
         payment = true;
     }
-    cm.sendSimple("海洋之间都是相互连接的。无法步行到达的地方可以很容易地通过海路到达。今天和我们一起乘坐 #b海豚出租车#k，怎么样？");
+    cm.sendSimple("海洋之间都是相互连接的。无法步行到达的地方可以很容易地通过海路到达。今天和我们一起乘坐 #b海豚出租车#k，怎么样？"+menu);
 }
 
 function action(mode, type, selection) {

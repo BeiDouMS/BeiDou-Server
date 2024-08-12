@@ -137,6 +137,57 @@ public class DataTool {
         }
     }
 
+    public static Integer getInteger(String path, Data data) {
+        Data child = data.getChildByPath(path);
+        if (child == null || child.getData() == null) {
+            return null;
+        } else if (child.getType() == DataType.STRING) {
+            return Integer.parseInt(getString(child));
+        } else {
+            Object numData = child.getData();
+            return ((Number) numData).intValue();
+        }
+    }
+
+    public static int getInteger(String path, Data data, int def) {
+        Integer val = getInteger(path, data);
+        return val == null ? def : val;
+    }
+
+    public static Short getShort(String path, Data data) {
+        Data child = data.getChildByPath(path);
+        if (child == null || child.getData() == null) {
+            return null;
+        } else if (child.getType() == DataType.STRING) {
+            return Short.parseShort(getString(child));
+        } else {
+            Object numData = child.getData();
+            return ((Number) numData).shortValue();
+        }
+    }
+
+    public static short getShort(String path, Data data, short def) {
+        Short val = getShort(path, data);
+        return val == null ? def : val;
+    }
+
+    public static Long getLong(String path, Data data) {
+        Data child = data.getChildByPath(path);
+        if (child == null || child.getData() == null) {
+            return null;
+        } else if (child.getType() == DataType.STRING) {
+            return Long.parseLong(getString(child));
+        } else {
+            Object numData = child.getData();
+            return ((Number) numData).longValue();
+        }
+    }
+
+    public static long getLong(String path, Data data, long def) {
+        Long val = getLong(path, data);
+        return val == null ? def : val;
+    }
+
     public static Point getPoint(Data data) {
         return ((Point) data.getData());
     }

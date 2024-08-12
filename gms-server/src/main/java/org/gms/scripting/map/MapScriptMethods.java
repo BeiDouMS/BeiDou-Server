@@ -150,7 +150,7 @@ public class MapScriptMethods extends AbstractPlayerInteraction {
             return;
         }
         String status = Integer.toString(qs.getMedalProgress());
-        getPlayer().announceUpdateQuest(DelayedQuestUpdate.UPDATE, qs, true);
+        getPlayer().setQuestProgress(quest.getId(), (int)quest.getInfoNumber(qs.getStatus()), status);
         getPlayer().sendPacket(PacketCreator.earnTitleMessage(status + "/5 已完成"));
         getPlayer().sendPacket(PacketCreator.earnTitleMessage("站在巅峰的人 勋章挑战正在进行中"));
         if (Integer.toString(qs.getMedalProgress()).equals(qs.getInfoEx(0))) {
