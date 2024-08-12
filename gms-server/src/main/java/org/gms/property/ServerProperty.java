@@ -309,4 +309,5 @@ public class ServerProperty {
     public Map<String, String> NPCS_SCRIPTABLE = new HashMap<>();
 
     public boolean CHANGE_CHANNEL_FORCE_RETURN;
+    public int MOB_RESPAWN_RATE;
 }
