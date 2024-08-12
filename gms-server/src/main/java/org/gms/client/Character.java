@@ -5785,14 +5785,14 @@ public class Character extends AbstractCharacterObject {
         int cost = Guild.getIncreaseGuildCost(getGuild().getCapacity());
 
         if (getMeso() < cost) {
-            dropMessage(1, "You don't have enough mesos.");
+            dropMessage(1, I18nUtil.getMessage("Character.increaseGuildCapacity.message1"));
             return;
         }
 
         if (Server.getInstance().increaseGuildCapacity(guildid)) {
             gainMeso(-cost, true, false, true);
         } else {
-            dropMessage(1, "Your guild already reached the maximum capacity of players.");
+            dropMessage(1, I18nUtil.getMessage("Character.increaseGuildCapacity.message2"));
         }
     }
 
