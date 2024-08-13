@@ -60,7 +60,7 @@ public class ShopService {
                     continue;
                 }
                 String itemName = ItemInformationProvider.getInstance().getName(itemId);
-                if (!RequireUtil.isEmpty(data.getItemName()) && !Objects.equals(itemName, data.getItemName())) {
+                if (!RequireUtil.isEmpty(data.getItemName()) && !RequireUtil.isEmpty(itemName) && !itemName.contains(data.getItemName())) {
                     continue;
                 }
             }

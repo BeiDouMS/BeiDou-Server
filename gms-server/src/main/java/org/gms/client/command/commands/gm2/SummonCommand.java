@@ -30,6 +30,7 @@ import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.I18nUtil;
+import org.gms.util.StringUtil;
 
 public class SummonCommand extends Command {
     {
@@ -44,16 +45,9 @@ public class SummonCommand extends Command {
             return;
         }
 
-        Character victim = c.getChannelServer().getPlayerStorage().getCharacterByName(params[0]);
-        if (victim == null) {
-            //If victim isn't on current channel, loop all channels on current world.
-
-            for (Channel ch : Server.getInstance().getChannelsFromWorld(c.getWorld())) {
-                victim = ch.getPlayerStorage().getCharacterByName(params[0]);
-                if (victim != null) {
-                    break;//We found the person, no need to continue the loop.
-                }
-            }
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        if (victim == null && StringUtil.isNumeric(params[0])) {
+            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
         }
         if (victim != null) {
             if (!victim.isLoggedInWorld()) {
@@ -73,7 +67,7 @@ public class SummonCommand extends Command {
                     }
                     Thread.sleep(1777);
                 }
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignore) {
             }
 
             MapleMap map = player.getMap();
