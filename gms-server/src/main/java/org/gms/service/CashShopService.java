@@ -70,11 +70,12 @@ public class CashShopService {
                 .findFirst()
                 .ifPresent(dbCashItem -> setDbItemValue(wzCashItem, dbCashItem)));
         
-        // 按上架状态过滤
-        wzCashItems = wzCashItems.stream().filter(item-> 
-                data.getOnSale() == null
-                || (Boolean.TRUE.equals(data.getOnSale()) && item.getOnSale() == 1)
-                || (Boolean.FALSE.equals(data.getOnSale()) && item.getOnSale() == 0)
+        // 按其他条件过滤
+        wzCashItems = wzCashItems.stream().filter(item ->
+                // 上架状态
+                (data.getOnSale() == null || Objects.equals(data.getOnSale(), item.getOnSale() != null && item.getOnSale() == 1))
+                        // 物品id
+                        && (data.getItemId() == null || data.getItemId().equals(item.getItemId()))
         ).toList();
 
         // 排序是否正确？ 猜测按照Priority降序 ItemId升序排列

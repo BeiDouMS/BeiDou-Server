@@ -26,6 +26,8 @@
           >
             全部
           </a-button>
+          <a-input-number v-model="condition.itemId" placeholder="物品ID" />
+          <a-button @click="loadData">搜索</a-button>
         </a-space>
       </a-col>
     </a-row>
@@ -172,6 +174,7 @@
     subId: 0,
     onSale: 1,
     pageNo: 1,
+    itemId: undefined,
   });
 
   const pageChange = (data: number) => {

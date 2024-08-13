@@ -5,6 +5,7 @@ export interface conditionState {
   subId: number;
   onSale?: number;
   pageNo: number;
+  itemId?: number;
 }
 
 export interface cashShopFormState {
