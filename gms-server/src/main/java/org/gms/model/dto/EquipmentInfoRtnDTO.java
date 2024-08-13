@@ -7,13 +7,13 @@ import lombok.Setter;
 @Setter
 @Getter
 public class EquipmentInfoRtnDTO {
-    private Integer worldId;
-    private Integer playerId;
-    private String player;
-    private Byte type;
-    private Integer id;
-    private Integer quantity;
-    private Integer rate;
+//    private Integer worldId;
+//    private Integer playerId;
+//    private String player;
+//    private Byte type;
+//    private Integer id;
+//    private Integer quantity;
+//    private Integer rate;
     private Short str;
     private Short dex;
     @JsonProperty("int")

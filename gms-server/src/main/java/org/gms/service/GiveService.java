@@ -9,11 +9,10 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.ExtendValueDO;
-import org.gms.model.dto.EquipmentInfoReqDTO;
-import org.gms.model.dto.EquipmentInfoRtnDTO;
+
 import org.gms.model.dto.GiveResourceReqDTO;
 import org.gms.exception.BizException;
-import org.gms.model.dto.ResultBody;
+
 
 import org.gms.net.server.Server;
 import org.gms.server.CashShop;
@@ -416,35 +415,5 @@ public class GiveService {
     }
 
 
-    public ResultBody<Object> getEquipmentInfoById(EquipmentInfoReqDTO data) {
-        ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        Equip equip = null;
-        Item item = ii.getEquipById(data.getId());
-        equip = (Equip) item;
-        EquipmentInfoRtnDTO rtn = new EquipmentInfoRtnDTO();
-
-        rtn.setId(equip.getItemId());
-        rtn.setStr(equip.getStr());
-        rtn.setDex(equip.getDex());
-        rtn.set_int(equip.getInt());
-        rtn.setLuk(equip.getLuk());
-        rtn.setHp(equip.getHp());
-        rtn.setMp(equip.getMp());
-        rtn.setPAtk(equip.getWatk());
-        rtn.setMAtk(equip.getMatk());
-        rtn.setPDef(equip.getWdef());
-        rtn.setMDef(equip.getMdef());
-        rtn.setAcc(equip.getAcc());
-        rtn.setAvoid(equip.getAvoid());
-        rtn.setHands(equip.getHands());
-        rtn.setSpeed(equip.getSpeed());
-        rtn.setJump(equip.getJump());
-        rtn.setUpgradeSlot(equip.getUpgradeSlots());
-        rtn.setExpire(equip.getExpiration());
-
-        return ResultBody.success(rtn);
-
-
-    }
 
 }
