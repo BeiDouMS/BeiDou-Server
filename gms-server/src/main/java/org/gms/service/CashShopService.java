@@ -55,32 +55,27 @@ public class CashShopService {
         final String prefix = data.getId() + String.format("%02d", data.getSubId());
         // wz中的物品
         List<CashShopSearchRtnDTO> wzCashItems = CashShop.CashItemFactory.getItems().values().stream()
-                // 可以只查正在销售，也可以只查未在销售，也可以全查
-                .filter(cashItem -> {
-                    boolean matchedOnSale = true;
-                    if (data.getOnSale() != null) {
-                        matchedOnSale = Objects.equals(data.getOnSale(), cashItem.isSelling());
-                    }
-                    return matchedOnSale && String.valueOf(cashItem.getSn()).startsWith(prefix);
-                })
+                // 按分类过滤
+                .filter(cashItem -> String.valueOf(cashItem.getSn()).startsWith(prefix))
                 .map(cashItem -> fromCashItem(cashCategory, cashItem))
                 .toList();
         // 数据库中的物品
         List<ModifiedCashItemDO> dbCashItems = CashShop.CashItemFactory.getModifiedCashItems().values().stream()
-                // 可以只查正在销售，也可以只查未在销售，也可以全查
-                .filter(modifiedCashItemDO -> {
-                    boolean matchedOnSale = true;
-                    if (data.getOnSale() != null && modifiedCashItemDO.getOnSale() != null) {
-                        matchedOnSale = Objects.equals(data.getOnSale(), modifiedCashItemDO.getOnSale() == 1);
-                    }
-                    return matchedOnSale && String.valueOf(modifiedCashItemDO.getSn()).startsWith(prefix);
-                })
+                // 按分类过滤
+                .filter(modifiedCashItemDO -> String.valueOf(modifiedCashItemDO.getSn()).startsWith(prefix))
                 .toList();
         // 以数据库为准更新可能更新的字段
         wzCashItems.forEach(wzCashItem -> dbCashItems.stream()
                 .filter(dbCashItem -> Objects.equals(wzCashItem.getSn(), dbCashItem.getSn()))
                 .findFirst()
                 .ifPresent(dbCashItem -> setDbItemValue(wzCashItem, dbCashItem)));
+        
+        // 按上架状态过滤
+        wzCashItems = wzCashItems.stream().filter(item-> 
+                data.getOnSale() == null
+                || (Boolean.TRUE.equals(data.getOnSale()) && item.getOnSale() == 1)
+                || (Boolean.FALSE.equals(data.getOnSale()) && item.getOnSale() == 0)
+        ).toList();
 
         // 排序是否正确？ 猜测按照Priority降序 ItemId升序排列
         return BasePageUtil.create(wzCashItems, data)
