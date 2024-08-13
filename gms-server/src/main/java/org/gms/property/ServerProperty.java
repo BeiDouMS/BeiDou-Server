@@ -110,6 +110,7 @@ public class ServerProperty {
     public boolean USE_MAP_OWNERSHIP_SYSTEM;
     public boolean USE_FISHING_SYSTEM;
     public boolean USE_NPCS_SCRIPTABLE;
+    public boolean USE_BEIDOU_BEGINNERMAP;
 
     //Events/PQs Configuration
     public boolean USE_OLD_GMS_STYLED_PQ_NPCS;
