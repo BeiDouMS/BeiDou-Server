@@ -1,5 +1,5 @@
 export default {
-  path: 'https://github.com/SleepNap/BeiDou',
+  path: 'https://github.com/BeiDouMS/BeiDou-Server',
   name: 'beiDou',
   meta: {
     locale: 'menu.beiDou',

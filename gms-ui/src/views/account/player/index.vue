@@ -164,7 +164,7 @@
           v-if="formData.type === 5 || formData.type === 6"
           :label="$t('account.player.form.id')"
         >
-          <a-input-number v-model="formData.id" />
+          <a-input-number v-model="formData.id" @change="itemChanged" />
         </a-form-item>
         <a-form-item
           v-if="
@@ -308,7 +308,12 @@
   import { AccountState } from '@/store/modules/account/types';
   import { Message } from '@arco-design/web-vue';
   import { useI18n } from 'vue-i18n';
-  import { getPlayerList, GiveForm, givePlayerSrc } from '@/api/player';
+  import {
+    getEquInitialInfo,
+    getPlayerList,
+    GiveForm,
+    givePlayerSrc,
+  } from '@/api/player';
 
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
@@ -433,9 +438,33 @@
       { value: 11, label: t('account.player.gm') },
       { value: 12, label: t('account.player.fame') },
     ];
-    formData.value.worldId = data.world;
-    formData.value.playerId = data.id;
-    formData.value.player = data.name;
+
+    formData.value = {
+      worldId: data.world,
+      playerId: data.id,
+      player: data.name,
+      type: 0,
+      id: undefined,
+      quantity: undefined,
+      rate: undefined,
+      str: undefined,
+      dex: undefined,
+      int: undefined,
+      luk: undefined,
+      hp: undefined,
+      mp: undefined,
+      pAtk: undefined,
+      mAtk: undefined,
+      pDef: undefined,
+      mDef: undefined,
+      acc: undefined,
+      avoid: undefined,
+      hands: undefined,
+      speed: undefined,
+      jump: undefined,
+      upgradeSlot: undefined,
+      expire: undefined,
+    };
     giveFormVisible.value = true;
   };
 
@@ -444,6 +473,34 @@
     try {
       await givePlayerSrc(formData.value);
       Message.success(t('message.success'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const itemChanged = async () => {
+    if (formData.value.type !== 6) return;
+
+    setLoading(true);
+    try {
+      const { data } = await getEquInitialInfo(formData.value.id as number);
+      formData.value.str = data.str;
+      formData.value.dex = data.dex;
+      formData.value.int = data.int;
+      formData.value.luk = data.luk;
+      formData.value.hp = data.hp;
+      formData.value.mp = data.mp;
+      formData.value.pAtk = data.patk;
+      formData.value.mAtk = data.matk;
+      formData.value.pDef = data.pdef;
+      formData.value.mDef = data.mdef;
+      formData.value.acc = data.acc;
+      formData.value.avoid = data.avoid;
+      formData.value.hands = data.hands;
+      formData.value.speed = data.speed;
+      formData.value.jump = data.jump;
+      formData.value.upgradeSlot = data.upgradeSlot;
+      formData.value.expire = data.expire;
     } finally {
       setLoading(false);
     }

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.gms.dao.entity.table.ShopitemsDOTableDef.SHOPITEMS_D_O;
 import static org.gms.dao.entity.table.ShopsDOTableDef.SHOPS_D_O;
@@ -54,12 +55,14 @@ public class ShopService {
                 continue;
             }
             Integer itemId = row.getInt("itemid");
-            String itemName = ItemInformationProvider.getInstance().getName(itemId);
-            if (itemName == null) {
-                continue;
-            }
-            if (!RequireUtil.isEmpty(data.getItemName()) && !itemName.contains(data.getItemName())) {
-                continue;
+            if (itemId != null) {
+                if (data.getItemId() != null && !Objects.equals(itemId, data.getItemId())) {
+                    continue;
+                }
+                String itemName = ItemInformationProvider.getInstance().getName(itemId);
+                if (!RequireUtil.isEmpty(data.getItemName()) && !RequireUtil.isEmpty(itemName) && !itemName.contains(data.getItemName())) {
+                    continue;
+                }
             }
             matchedShopsDOList.add(ShopSearchRtnDTO.builder()
                     .shopId(row.getLong("shopid"))

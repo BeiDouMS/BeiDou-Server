@@ -81,7 +81,6 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
 import org.gms.server.*;
-import org.gms.server.CashShop.CashItem;
 import org.gms.server.CashShop.CashItemFactory;
 import org.gms.server.events.gm.Snowball;
 import org.gms.server.life.MobSkill;
@@ -112,6 +111,7 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -7067,7 +7067,7 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showGiftSucceed(String to, CashItem item) {
+    public static Packet showGiftSucceed(String to, ModifiedCashItemDO item) {
         final OutPacket p = OutPacket.create(SendOpcode.CASHSHOP_OPERATION);
 
         p.writeByte(0x5E); //0x5D, Couldn't be sent
@@ -7161,7 +7161,7 @@ public class PacketCreator {
                     (byte) 0x4E, (byte) 0xC1, (byte) 0xCA, 1});
         } else {
             p.writeInt(0);
-            List<ModifiedCashItemDO> items = CashItemFactory.getModifiedCashItems();
+            Collection<ModifiedCashItemDO> items = CashItemFactory.getModifiedCashItems().values();
             p.writeShort(items.size());//Guess what
             for (ModifiedCashItemDO item : items) {
                 writeModifiedCashItem(p, item);
@@ -7190,16 +7190,16 @@ public class PacketCreator {
     }
 
     private static void writeModifiedCashItem(OutPacket p, ModifiedCashItemDO item) {
-        for (CommodityFlag commodityFlag : CommodityFlag.values()) {
+        List<Pair<CommodityFlag, Number>> writeList = new ArrayList<>();
+        for (CommodityFlag commodityFlag : CommodityFlag.getAvailableSortedValues()) {
             for (Field field : item.getClass().getDeclaredFields()) {
                 // 获取有没有@Column注解，有的话以@Column为准，没有则驼峰转下划线
                 Column column = field.getAnnotation(Column.class);
-                String value = column.value();
                 String columnName;
-                if (RequireUtil.isEmpty(value)) {
+                if (column == null || RequireUtil.isEmpty(column.value())) {
                     columnName = com.mybatisflex.core.util.StringUtil.camelToUnderline(field.getName());
                 } else {
-                    columnName = value;
+                    columnName = column.value();
                 }
 
                 if (!Objects.equals(commodityFlag.name(), columnName.toUpperCase())) {
@@ -7207,17 +7207,26 @@ public class PacketCreator {
                 }
                 Number fieldVal = null;
                 try {
+                    field.setAccessible(true);
                     fieldVal = (Number) field.get(item);
                 } catch (IllegalAccessException ignore) {
 
                 }
                 if (fieldVal != null) {
-                    commodityFlag.getWriteMapper().accept(p, fieldVal);
+                    writeList.add(new Pair<>(commodityFlag, fieldVal));
                 }
                 break;
             }
         }
-
+        if (writeList.isEmpty()) {
+            return;
+        }
+        writeList.add(CommodityFlag.FLAG.getSort(), new Pair<>(CommodityFlag.FLAG, writeList.stream().mapToLong(pair -> pair.getLeft().getFlag()).sum()));
+        writeList.forEach(w -> {
+            CommodityFlag commodityFlag = w.getLeft();
+            Number fieldVal = w.getRight();
+            commodityFlag.getWriteMapper().accept(p, fieldVal);
+        });
     }
 
     public static Packet sendVegaScroll(int op) {

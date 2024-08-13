@@ -60,13 +60,7 @@
             align="center"
           >
             <template #cell="{ record }">
-              <img
-                :src="
-                  'https://maplestory.io/api/GMS/83/npc/' +
-                  record.npcId +
-                  '/icon'
-                "
-              />
+              <img :src="getIconUrl('npc', record.npcId)" />
             </template>
           </a-table-column>
           <a-table-column title="操作">
@@ -106,13 +100,7 @@
           />
           <a-table-column title="物品图片" align="center" :width="100">
             <template #cell="{ record }">
-              <img
-                :src="
-                  'https://maplestory.io/api/GMS/83/item/' +
-                  record.itemId +
-                  '/icon'
-                "
-              />
+              <img :src="getIconUrl('item', record.itemId)" />
             </template>
           </a-table-column>
           <a-table-column title="物品ID" :width="140" align="center">
@@ -225,6 +213,7 @@
   } from '@/api/npcShop';
   import { NpcShopItemState, NpcShopState } from '@/store/modules/npcShop/type';
   import { Message } from '@arco-design/web-vue';
+  import { getIconUrl } from '@/utils/mapleStoryAPI';
 
   const { loading, setLoading } = useLoading(false);
 

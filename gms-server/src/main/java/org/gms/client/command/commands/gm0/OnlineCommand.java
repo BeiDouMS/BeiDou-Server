@@ -42,7 +42,7 @@ public class OnlineCommand extends Command {
             player.yellowMessage(I18nUtil.getMessage("OnlineCommand.message2") + ch.getId() + ":");
             for (Character chr : ch.getPlayerStorage().getAllCharacters()) {
                 if (!chr.isGM()) {
-                    player.message(" >> " + Character.makeMapleReadable(chr.getName()) + " " + I18nUtil.getMessage("OnlineCommand.message3") + " " + chr.getMap().getMapName());
+                    player.message(" >> " + chr.getId() + "[" + Character.makeMapleReadable(chr.getName()) + "] " + I18nUtil.getMessage("OnlineCommand.message3") + " " + chr.getMap().getMapName());
                 }
             }
         }
