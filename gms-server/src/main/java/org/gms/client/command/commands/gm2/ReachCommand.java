@@ -45,7 +45,7 @@ public class ReachCommand extends Command {
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
         if (victim != null && victim.isLoggedin()) {
             if (player.getClient().getChannel() != victim.getClient().getChannel()) {
-                player.dropMessage(5, I18nUtil.getMessage("ReachCommand.message3"));
+                player.dropMessage(5, I18nUtil.getMessage("ReachCommand.message3", victim.getName() ,victim.getClient().getChannel()));
             } else {
                 MapleMap map = victim.getMap();
                 player.saveLocationOnWarp();
