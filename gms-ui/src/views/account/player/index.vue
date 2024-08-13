@@ -490,10 +490,10 @@
       formData.value.luk = data.luk;
       formData.value.hp = data.hp;
       formData.value.mp = data.mp;
-      formData.value.pAtk = data.pAtk;
-      formData.value.mAtk = data.mAtk;
-      formData.value.pDef = data.pDef;
-      formData.value.mDef = data.mDef;
+      formData.value.pAtk = data.patk;
+      formData.value.mAtk = data.matk;
+      formData.value.pDef = data.pdef;
+      formData.value.mDef = data.mdef;
       formData.value.acc = data.acc;
       formData.value.avoid = data.avoid;
       formData.value.hands = data.hands;
