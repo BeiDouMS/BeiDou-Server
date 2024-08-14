@@ -2,10 +2,7 @@
   <div class="navbar">
     <div class="left-side">
       <a-space>
-        <img
-          alt="logo"
-          src="https://maplestory.io/api/GMS/83/mob/130101/render/hit1"
-        />
+        <img alt="logo" src="/src/assets/logo.png" width="64" height="64" />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
