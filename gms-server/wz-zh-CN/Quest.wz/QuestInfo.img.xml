@@ -9580,6 +9580,27 @@
         <int name="medalCategory" value="2"/>
         <int name="viewMedalItem" value="1142002"/>
     </imgdir>
+    <imgdir name="29002">
+        <string name="name" value="挑战勋章-超人气王勋章!"/>
+        <string name="0" value="#b#e挑战勋章-超人气王勋章#n\n#k在限定的30天内将人气度提高1000，就能获得这个荣誉。去找勋章老人挑战#e#b超人气王勋章#n#k吧。"/>
+        <string name="1" value="#b#e挑战勋章-超人气王勋章#n\n#k - 剩余时间: #Qdaylimit#天 #Qhourlimit#小时 #Qminlimit#分\n - 人气度增加量: #b#jpopgap##k / #jpopG#\n               #jgaugePop# #jperPop# %"/>
+        <string name="2" value="#b#e挑战勋章-超人气王勋章#n\n#k - 剩余时间: #Qdaylimit#天 #Qhourlimit#小时 #Qminlimit#分\n - 人气度增加量 : #b#jpopgap##k / #jpopG#\n               #jgaugePop# #jperPop# %\n\n成功在30天内将人气度提高了1000！连勋章老人也对我刮目相看，终于从名誉神官的手中获得了&apos;#b超人气王勋章#k&apos;。呼，再来挑战&apos;#b冒险岛偶像明星勋章(特级)#k&apos;试试？"/>
+        <int name="timeLimit2" value="2592000"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142003"/>
+    </imgdir>
+    <imgdir name="29003">
+        <string name="name" value="挑战勋章-诚实的冒险家"/>
+        <string name="0" value="#b#e挑战勋章-诚实的冒险家#n\n#k在30天的限制时间内，如果成功地达到27天在线3小时以上，就可以获得#e#b诚实的冒险家#k#n称号。去见见名誉之神官达利尔吧。"/>
+        <string name="1" value="#b#e挑战勋章-诚实的冒险家#n\n#k - 剩余时间：#Qdaylimit#天#Qhourlimit#小时#Qminlimit#分#Qseclimit#秒\n -今天游戏时间：#Dhour#小时#Dmin#分#Dsec#秒/ #Dminhour#小时\n - 成功日/目标日：#Dcount#天/ #Ddaylimit#天\n                             #jgaugeDays#  #jperDays#%"/>
+        <string name="2" value="#b#e挑战勋章-诚实的冒险家#n\n#k - 剩余时间：#Qdaylimit#天#Qhourlimit#小时#Qminlimit#分#Qseclimit#秒\n - 今天游戏时间：#Dhour#小时#Dmin#分#Dsec#秒/ #Dminhour#小时\n - 成功日/目标日#Dcount#天/ #Ddaylimit#天\n                             #jgaugeDays#  #jperDays#%\n\n名誉之神官达利尔称赞了我，说诚实才是冒险家的首要条件，并给成功完成挑战的我颁发了”#b诚实的冒险家#k“称号。"/>
+        <int name="timeLimit2" value="2592000"/>
+        <int name="dailyPlayTime" value="10800"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142000"/>
+    </imgdir>
     <imgdir name="29004">
         <string name="name" value="站在巅峰的人"/>
         <int name="area" value="30"/>
@@ -9744,6 +9765,17 @@
         <string name="demandSummary" value="#t2386000# 1\r\n#t2386004# 1\r\n#t2386010# 1\r\n#t2387001# 1\r\n#t2387002# 1\r\n#t2387003# 1\r\n#o8140600# #a290191#\r\n#o8142000# #a290192#\r\n#o8143000# #a290193#\r\n#o8170000# #a290194#\r\n#o8190003# #a290195#\r\n#o8190004# #a290196#\r\n"/>
         <string name="rewardSummary" value="#Wbasic#\r\n#i1142140:# #t1142140:# 1 \r\n"/>
     </imgdir>
+    <imgdir name="29020">
+        <string name="name" value="Title - Dynamic Hair"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142122"/>
+        <string name="0" value="If you change your hairstyle more than 50 times, the Maple Hair Association will offer you the title of #b&lt;Dynamic Hair&gt;#k..."/>
+        <string name="1" value="#b#eTitle - Dynamic Hair#k#n\r\nUse Hair Salon\n(Change hairstyles, whether it be regular, special, or random. Hair color not included.)\r\n#b- Current Progress\nHair Changes #R29020# / 50 completed."/>
+        <string name="2" value="You changed your hairstyle 50 times and received the title #b&lt;Dynamic Hair&gt;#k."/>
+        <int name="autoComplete" value="1"/>
+        <string name="rewardSummary" value="#Wbasic#\r\n#i1142122:# #t1142122:# 1 \r\n"/>
+    </imgdir>
     <imgdir name="29300">
         <string name="name" value="达到顶点的战士"/>
         <string name="0" value="#b#e挑战勋章 - 达到顶点的战士#n\n#k荣誉神冠勋章老人说会给予达到顶点的人相应的称号。战士是#e#b战神#k#n，魔法师是#e#b贤者#k#n，弓箭手是#e#b狙击之王#k#n，飞侠是#e#b传说的飞侠#k#n，海盗是#e#b海盗王#k#n。如果有资格被荣誉之神选择，就去勋章老人那里去接受考验吧。"/>
@@ -9784,6 +9816,25 @@
         <int name="area" value="30"/>
         <int name="viewMedalItem" value="1142013"/>
     </imgdir>
+    <imgdir name="29400">
+        <string name="name" value="挑战勋章-勤奋冒险家勋章"/>
+        <string name="0" value="#b#e挑战勋章-勤奋冒险家勋章#n\n#k在30天内狩猎高于自己等级的#r100000只#k怪物！勋章老人正在寻找最聪明伶俐，韧劲十足的值得拥有勤奋冒险家勋章的勇士。取得这一成就的勇士将被授予#e#b勤奋冒险家勋章#k#n，其中实力最为出众的勇士将获得#e#b传说中的猎人勋章(特级)#n#k……"/>
+        <string name="1" value="#b#e挑战勋章-勤奋冒险家勋章#b#n\n\n#k - 剩余时间: #Qdaylimit#天 #Qhourlimit#小时 #Qminlimit#分 #Qseclimit#秒\n - 狩猎的怪物数: #r#jmon##k 只 / #jmg# 只#k\n                             #jgaugeHunt# #jperHunt# %\n\n※ 必须为高于自身等级的怪物\n   (120级以上的角色必须狩猎120级以上的\n   怪物)\n\n#b#e挑战勋章- 传说中的猎人勋章#n(特级)#k\n\n - 狩猎的怪物数第1位\n"/>
+        <string name="2" value="#b#e挑战勋章-勤奋冒险家勋章#b#n\n\n#k - 剩余时间: #Qdaylimit#天 #Qhourlimit#时间 #Qminlimit#分 #Qseclimit#秒\n - 狩猎的怪物数: #r#jmon##k 只 / #jmg# 只#k\n                             #jgaugeHunt# #jperHunt# %\n\n※ 必须为高于自身等级的怪物\n   (120级以上的角色必须狩猎120级以上的\n   怪物)\n\n#b#e挑战勋章- 传说中的猎人勋章#n(特级)#k\n\n - 狩猎的怪物数第1位\n\n挑战在限定时间内最大限度地狩猎高于自身等级的怪物的勤奋冒险家勋章。勋章老人提醒那些有志于成为&apos;#b传说中的猎人#k&apos;的勇士们千万不要错过每月月初狩猎记录被初始化的机会。啊，一般勋章遗失了的情况，必须重新达到所需任务要求后才能再次获得该勋章。所以请妥善保管好自己的勋章。"/>
+        <int name="timeLimit2" value="2592000"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142004"/>
+    </imgdir>
+    <imgdir name="29500">
+        <string name="name" value="挑战勋章-冒险岛偶像明星勋章(特级)"/>
+        <string name="0" value="#b#e挑战勋章-冒险岛偶像明星勋章#n(特级)\n#k最受大家追捧的冒险家是谁呢？勋章老人将授予其#e#b冒险岛偶像明星勋章(特级)#k#n。"/>
+        <string name="1" value="#b#e挑战勋章-冒险岛偶像明星勋章#n(特级)\n\n#k - 人气度: #b#jpop##k"/>
+        <string name="2" value="#b#e挑战勋章-冒险岛偶像明星勋章#n(特级)\n\n#k - 人气度: #b#jpop##k \n\n只有世界人气度最高的人才有资格获得&apos;#b冒险岛偶像明星勋章(特级)#k&apos;的荣誉。勋章老人提醒大家只有制定好相应策略，该荣誉每月仅有一次机会挑战。"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142006"/>
+    </imgdir>
     <imgdir name="29501">
         <string name="name" value="暗黑龙王杀手勋章(特级)"/>
         <string name="0" value="#b#e挑战勋章 - 暗黑龙王杀手勋章#n(特级)\n#k只有打猎暗黑龙王数量最多的冒险家才有资格获得#e#b暗黑龙王杀手勋章(特级)#k#n！勋章老人表示对于打猎了暗黑龙王却未向自己报告的一律不予承认。"/>
@@ -9801,6 +9852,34 @@
         <int name="medalCategory" value="2"/>
         <int name="viewMedalItem" value="1142008"/>
     </imgdir>
+    <imgdir name="29503">
+        <string name="name" value="挑战勋章-爱心使者"/>
+        <string name="0" value="#b#e挑战勋章-爱心使者#n(特级称号)\n#k挑战只有1人可以拥有的财力和名誉的象征——#e#b爱心使者#k#n称号吧！听说现在正在选拔代表各个村庄的爱心使者。去见见名誉之神官#b#p9000040##k吧。"/>
+        <string name="1" value="#b#e挑战勋章-爱心使者#n(特级称号)\n#k\n - 剩余时间：#Qminlimit#分#Qseclimit#秒\n - 捐献数额：#b#jmoney##k金币\n\n每月初所有村庄的捐献记录初始化。达利尔叮嘱说并不单纯由捐献的金额决定称号的主人，让我发挥自己的智慧。"/>
+        <string name="2" value="#b#e挑战勋章-爱心使者#n(特级称号)\n#k\n - 剩余时间：#Qminlimit#分#Qseclimit#秒\n - 捐献村庄：#b#jm##k\n - 捐献数额：#b#jmoney##k金币\n\n达利尔叮嘱说并不单纯由捐献的金额决定称号的主人，让我发挥自己的智慧。"/>
+        <int name="timeLimit2" value="3600"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142014"/>
+    </imgdir>
+    <imgdir name="29505">
+        <string name="name" value="The Carnivalian of Absolute Victory"/>
+        <int name="area" value="10"/>
+        <string name="0" value="If you think you have the most wins under your belt in the 2nd Monster Carnival, acquire the #bAbsolute Victory Carnivalian Medal#k from Spiegelmann!"/>
+        <string name="1" value="If you think you have the most wins under your belt in the 2nd Monster Carnival, acquire the #bAbsolute Victory Carnivalian Medal#k from Spiegelmann!"/>
+        <string name="2" value="You have acquired the #bAbsolute Victory Carnivalian Medal#k for having the most wins in the 2nd Monster Carnival."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142077"/>
+    </imgdir>
+    <imgdir name="29506">
+        <string name="name" value="The Gifted Carnivalian"/>
+        <int name="area" value="10"/>
+        <string name="0" value="If you think you have the highest victory rate in the 2nd Monster Carnival, acquire the #bGifted Carnivalian Medal#k from Spiegelmann!"/>
+        <string name="1" value="If you think you have the highest victory rate in the 2nd Monster Carnival, acquire the #bGifted Carnivalian Medal#k from Spiegelmann!"/>
+        <string name="2" value="You have acquired the #Gifted Carnivalian Medal#k for having the highest victory rate in the 2nd Monster Carnival."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142078"/>
+    </imgdir>
     <imgdir name="29507">
         <string name="name" value="可爱宠物主人"/>
         <int name="area" value="30"/>
@@ -9811,6 +9890,17 @@
         <string name="rewardSummary" value="#Wbasic# \n#v1142082:##t1142082:# 1 个"/>
         <int name="medalCategory" value="2"/>
         <int name="viewMedalItem" value="1142082"/>
+    </imgdir>
+    <imgdir name="29508">
+        <string name="name" value="挑战勋章-最佳公民勋章"/>
+        <int name="area" value="51"/>
+        <string name="0" value="#b#eTitle Challenge - Outstanding Citizen#n\nParticipate in #k#bMarriage, Guild, and Family#k activities! Dalair, on behalf of the God of Honor, is looking for active citizens. He says anyone who participates in a #bMarriage#k and a #bGuild#k, and #bhas at least 1 Junior#k, will receive the #e#bOutstanding Citizen#k#n title."/>
+        <string name="1" value="#b#eTitle Challenge - Outstanding Citizen#n#k\n Actively participate in Marriage, Guild, and Family activities."/>
+        <string name="2" value="#b#eTitle Challenge - Outstanding Citizen#n#k\n\nYou have acquired the #bOutstanding Citizen#k title and the associated medal."/>
+        <string name="demandSummary" value="Be part of a Marriage and a Guild, and register at least 1 Junior."/>
+        <string name="rewardSummary" value="#Wbasic# #v1142081:##t1142081:# 1"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142081"/>
     </imgdir>
     <imgdir name="29509">
         <string name="name" value="无尽的挑战者"/>
@@ -9824,11 +9914,361 @@
         <int name="viewMedalItem" value="1142084"/>
     </imgdir>
     <imgdir name="29510">
-        <string name="name" value="无尽的冒险勋章"/>
-        <int name="area" value="30"/>
-        <string name="0" value="让我们去找卡珊德拉。"/>
-        <string name="1" value="准备好！冒险家为您带来了另一个惊喜！有机会获得热爱冒险岛勋章！连续15天每天登录冒险岛一小时，领取15天梦想者勋章！"/>
-        <string name="2" value="准备好！冒险家为您带来了另一个惊喜！有机会获得热爱冒险岛勋章！连续15天每天登录冒险岛一小时，领取15天梦想者勋章！"/>
+        <string name="name" value="Foxwit&apos;s Research"/>
+        <int name="area" value="45"/>
+        <string name="0" value="Let&apos;s go find Foxwit."/>
+        <string name="1" value="Foxwit needs the drops of some raid bosses to research the cause of the recent upheavals. Guess it&apos;s time to join some expeditions.\n\n#i4021010##t4021010#  #b#c4021010##k / 1\n#i4032133##t4032133#  #b#c4032133##k / 1"/>
+        <string name="2" value="I have returned the items Foxwit asked for. The rewards were esplendid."/>
+    </imgdir>
+    <imgdir name="29512">
+        <string name="name" value="挑战勋章-怪物博士勋章"/>
+        <int name="area" value="51"/>
+        <string name="0" value="#b#eTitle Challenge - Monster Expert#n\nCollect #k#b30 Monster Cards#k. Dalair, on behalf of the God of Honor, is looking for explorers who know everything there is to know about the monsters in Maple World. He says anyone who collects more than 30 Monster Cards will receive the #bMonster Expert#k#n title."/>
+        <string name="1" value="Collect the Monster Cards, which will help you understand the tendencies, habitats, and dropped items of various monsters. Some cards have special powers that will help you in your adventures."/>
+        <string name="2" value="#b#eTitle Challenge - Monster Expert#n#k\n\nYou have received the #bMonster Expert#k title and the associated medal."/>
+        <string name="demandSummary" value="Acquire at least 30 Monster Cards."/>
+        <string name="rewardSummary" value="#Wbasic# #v1142083:##t1142083:# 1"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142083"/>
+    </imgdir>
+    <imgdir name="29900">
+        <string name="name" value="新手冒险家"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can earn the #b&lt;Beginner Adventurer&gt;#k title by completing your 1st Job Advancement as an Adventurer."/>
+        <string name="1" value="Adventurers who complete the 1st Job Advancement will receive the #b&lt;Beginner Adventurer&gt;#k title. Go find NPC #p9000040#, who can be found in every town."/>
+        <string name="2" value="You have earned the #b&lt;Beginner Adventurer&gt;#k title by completing the 2nd Job Advancement as an Adventurer."/>
+        <string name="demandSummary" value="Report to NPC #b#p900040##k and receive the honorable #t1142107# Medal."/>
+        <string name="rewardSummary" value="#Wbasic#"/>
+        <int name="autoAccept" value="1"/>
+        <int name="viewMedalItem" value="1142107"/>
+    </imgdir>
+    <imgdir name="29901">
+        <string name="name" value="中级冒险家"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="Adventurers who complete the 2nd Job Advancement will receive the #b&lt;Junior Adventurer&gt;#k title."/>
+        <string name="1" value="Adventurers who complete the 2nd Job Advancement will receive the #b&lt;Junior Adventurer&gt;#k title. Go find NPC #p9000040#, who can be found in every town."/>
+        <string name="2" value="You have earned the #b&lt;Junior Adventurer&gt;#k title by completing the 2nd Job Advancement as an Adventurer."/>
+        <string name="demandSummary" value="Report to NPC #b#p900040##k and receive the honorable #t1142108# Medal."/>
+        <string name="rewardSummary" value="#Wbasic#"/>
+        <int name="autoAccept" value="1"/>
+        <int name="viewMedalItem" value="1142108"/>
+    </imgdir>
+    <imgdir name="29902">
+        <string name="name" value="高级冒险家"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can earn the #b&lt;Veteran Adventurer&gt;#k title by completing your 3rd Job Advancement as an Adventurer."/>
+        <string name="1" value="Adventurers who complete the 3rd Job Advancement will receive the #b&lt;Veteran Adventurer&gt;#k title. Go find NPC #p9000040#, who can be found in every town."/>
+        <string name="2" value="You have earned the #b&lt;Junior Adventurer&gt;#k title by completing your 3rd Job Advancement as an Adventurer."/>
+        <string name="demandSummary" value="Report to NPC #b#p900040##k and receive the honorable #t1142109# Medal."/>
+        <string name="rewardSummary" value="#Wbasic#"/>
+        <int name="autoAccept" value="1"/>
+        <int name="viewMedalItem" value="1142109"/>
+    </imgdir>
+    <imgdir name="29903">
+        <string name="name" value="大师冒险家"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can earn the #b&lt;Master Adventurer&gt;#k title by completing your 4th Job Advancement as an Adventurer."/>
+        <string name="1" value="Adventurers who complete the 4th Job Advancement will receive the #b&lt;Master Adventurer&gt;#k title. Go find NPC #p9000040#, who can be found in every town."/>
+        <string name="2" value="You have earned the #b&lt;Master Adventurer&gt;#k title by completing your 4th Job Advancement as an Adventurer."/>
+        <string name="demandSummary" value="Report to NPC #b#p900040##k and receive the honorable #t1142110# Medal."/>
+        <string name="rewardSummary" value="#Wbasic#"/>
+        <int name="autoAccept" value="1"/>
+        <int name="viewMedalItem" value="1142110"/>
+    </imgdir>
+    <imgdir name="29904">
+        <string name="name" value="Noblesse"/>
+        <int name="area" value="51"/>
+        <string name="1" value="Prove that you&apos;re one of the Cygnus Knights and receive the #b&lt;Noblesse&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <string name="2" value="As a member of the honorable knighthood, you have received your first title, the #b&lt;Noblesse&gt;#k, upon pledging your loyalty to the Empress."/>
+        <string name="demandSummary" value="20000 Greetings from the Young Empress Chain Quest"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="Prove that you&apos;re one of the Cygnus Knights and receive the #b&lt;Noblesse&gt;#k title."/>
+        <int name="viewMedalItem" value="1142065"/>
+    </imgdir>
+    <imgdir name="29905">
+        <string name="name" value="Noblesse"/>
+        <int name="area" value="51"/>
+        <string name="1" value="Prove that you&apos;re one of the Cygnus Knights and receive the #b&lt;Noblesse&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <string name="2" value="As a member of the honorable knighthood, you have received your first title, the #b&lt;Noblesse&gt;#k, upon pledging your loyalty to the Empress."/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="Prove that you&apos;re one of the Cygnus Knights and receive the #b&lt;Noblesse&gt;#k title."/>
+        <int name="viewMedalItem" value="1142065"/>
+    </imgdir>
+    <imgdir name="29906">
+        <string name="name" value="Knight-in-Training"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can acquire the #b&lt;Knight-in-Training&gt;#k title by completing the 1st Job Advancement as a Knight."/>
+        <string name="2" value="You have earned the #b&lt;Knight-in-Training&gt;#k title, which is given to those who are determined to follow the honorable path of the Knight."/>
+        <string name="demandSummary" value="Acquire the #b&lt;Knight-in-Training&gt;#k title by completing the 1st Job Advancement as a Knight."/>
+        <int name="autoAccept" value="1"/>
+        <string name="1" value="You can earn the #b&lt;Knight-in-Training&gt;#k title by completing the 1st Job Advancement as a Knight."/>
+        <int name="viewMedalItem" value="1142066"/>
+    </imgdir>
+    <imgdir name="29907">
+        <string name="name" value="Official Knight"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can acquire the #b&lt;Official Knight&gt;#k title by completing the 2nd Job Advancement as a Knight."/>
+        <string name="2" value="Your prowess has been recognized! You have earned the #b&lt;Official Knight&gt;#k title."/>
+        <int name="autoAccept" value="1"/>
+        <string name="1" value="You can acquire the #b&lt;Official Knight&gt;#k title by completing the 2nd Job Advancement as a Knight."/>
+        <int name="viewMedalItem" value="1142067"/>
+    </imgdir>
+    <imgdir name="29908">
+        <string name="name" value="Advanced Knight"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can acquire the #b&lt;Advanced Knight&gt;#k title by completing the 3rd Job Advancement as a Knight."/>
+        <string name="2" value="You have been given the #b&lt;Advanced Knight&gt;#k title for guarding Shinsoo&apos;s Teardrop."/>
+        <int name="autoAccept" value="1"/>
+        <string name="1" value="You can acquire the #b&lt;Advanced Knight&gt;#k title by completing the 3rd Job Advancement as a Knight."/>
+        <int name="viewMedalItem" value="1142068"/>
+    </imgdir>
+    <imgdir name="29909">
+        <string name="name" value="Chief Knight"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <string name="0" value="You can acquire the #b&lt;Chief Knight&gt;#k title by blocking the curse of the Black Witch."/>
+        <string name="2" value="You have saved the Empress from danger by blocking the curse of the Black Witch. For your tremendous accomplishment, you have received the#b&lt;Chief Knight&gt;#k title, the highest position in the Cygnus Knights."/>
+        <int name="autoAccept" value="1"/>
+        <string name="1" value="You can acquire the #&lt;Chief Knight&gt;#k title by blocking the curse of the Black Witch."/>
+        <int name="viewMedalItem" value="1142069"/>
+    </imgdir>
+    <imgdir name="29910">
+        <string name="name" value="Gallant Warrior"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142009"/>
+        <string name="0" value="#b#eTitle - Gallant Warrior#n#\r\n#kChallenge yourself to the  #b&lt;Gallant Warrior&gt;#k title, given only to powerful Warriors over Lv. 200.\r\n●Requirement(s) : Complete #b&lt;#y29300#&gt;#k "/>
+        <string name="1" value=".."/>
+        <string name="2" value="You have accomplished something incredible. You&apos;ve reached Lv. 200! You have earned the #b&lt;Gallant Warrior&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29911">
+        <string name="name" value="Wiseman"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142010"/>
+        <string name="0" value="#b#eTitle - Wiseman#n#\r\n#kChallenge yourself to the #b&lt;Wiseman&gt;#k title, given only to powerful Magicians over Lv. 200.\r\n●Requirement(s) : Complete #b&lt;#y29301#&gt;#k"/>
+        <string name="1" value=".."/>
+        <string name="2" value="You have accomplished something incredible. You&apos;ve reached Lv. 200! You have earned the #b&lt;Wiseman&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="autoComplete" value="1"/>
+    </imgdir>
+    <imgdir name="29912">
+        <string name="name" value="Lord Sniper"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142011"/>
+        <string name="0" value="#b#eTitle - Lord Sniper#n#\r\n#kChallenge yourself to the #b&lt;Lord Sniper&gt;#k title, given only to powerful Bowmen over Lv. 200.\r\n●Requirement(s) : Complete #b&lt;#y29302#&gt;#k"/>
+        <string name="1" value=".."/>
+        <string name="2" value="You have accomplished something incredible. You&apos;ve reached Lv. 200! You have earned the #b&lt;Lord Sniper&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29913">
+        <string name="name" value="Legendary Thief"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142012"/>
+        <string name="0" value="#b#eTitle - Legendary Thief#n#\r\n#kChallenge yourself to the #b&lt;Legendary Thief&gt;#k title, given only to the powerful Thieves over Lv. 200.\r\n●Requirement(s) : Complete #b&lt;#y29303#&gt;#k"/>
+        <string name="1" value=".."/>
+        <string name="2" value="You have accomplished something incredible. You&apos;ve reached Lv. 200! You have earned the #b&lt;Legendary Thief&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29914">
+        <string name="name" value="King Pirate"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142013"/>
+        <string name="0" value="#b#eTitle - King Pirate#n#\r\n#kChallenge yourself to the #b&lt;King Pirate&gt;#k title, given only to powerful Pirates over Lv. 200. \r\n●Requirement(s) : Complete #b&lt;#y29304#&gt;#k"/>
+        <string name="1" value=".."/>
+        <string name="2" value="You have accomplished something incredible. You&apos;ve reached Lv. 200! You have earned the #b&lt;King Pirate&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29915">
+        <string name="name" value="Mu Lung Dojo Vanquisher"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="1"/>
+        <int name="viewMedalItem" value="1142064"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="#b#eTitle - Mu Lung Dojo Vanquisher#n#\r\n#k#b&lt;Mu Lung Dojo Vanquisher&gt;#k, a coveted title given only to Mu Lung Dojo experts. \r\n●Requirement(s) : Acquire the #bMu Lung Dojo Vanquisher Medal#k from #bMu Lung Dojo#k."/>
+        <string name="2" value="You have earned the #b&lt;Mu Lung Dojo Vanquisher&gt;#k title by defeating all of the master monsters in Mu Lung Dojo."/>
+    </imgdir>
+    <imgdir name="29916">
+        <string name="name" value="Henesys Donor Medal"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="2" value="Donations are a quick way to give back to the community. You have earned the #b&lt;Henesys Donor&gt;#k title."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142014"/>
+    </imgdir>
+    <imgdir name="29917">
+        <string name="name" value="Ellinia Donor Medal"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="2" value="Donations are a quick way to give back to the community. You have earned the #b&lt;Ellinia Donor&gt;#k title."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142015"/>
+    </imgdir>
+    <imgdir name="29918">
+        <string name="name" value="Perion Donor Medal"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="2" value="Donations are a quick way to give back to the community. You have earned the #b&lt;Perion Donor&gt;#k title."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142016"/>
+    </imgdir>
+    <imgdir name="29919">
+        <string name="name" value="Kerning City Donor Medal"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="2" value="Donations are a quick way to give back to the community. You have earned the #b&lt;Kerning City Donor&gt;#k title."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142017"/>
+    </imgdir>
+    <imgdir name="29920">
+        <string name="name" value="Sleepywood Donor Medal"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="2" value="Donations are a quick way to give back to the community. You have earned the #b&lt;Sleepywood Donor&gt;#k title."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142018"/>
+    </imgdir>
+    <imgdir name="29921">
+        <string name="name" value="Nautilus Donor Medal"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="2" value="Donations are a quick way to give back to the community. You have earned the #b&lt;Nautilus Donor&gt;#k title."/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142019"/>
+    </imgdir>
+    <imgdir name="29922">
+        <string name="name" value="Veteran Hunter"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142004"/>
+        <string name="2" value="You have earned the #b&lt;Veteran Hunter&gt;#k title by hunting 100,000 monsters that are above you in level within 30 days."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29923">
+        <string name="name" value="Legendary Hunter"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142005"/>
+        <string name="2" value="No one can trump your hunting skills! You have earned the #b&lt;Legendary Hunter&gt;#k title."/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29924">
+        <string name="name" value="The Revived Aran"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142129"/>
+        <string name="0" value="You still don&apos;t remember anything…"/>
+        <string name="1" value="You still don&apos;t remember anything…"/>
+        <string name="2" value="You still don&apos;t remember anything…"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29925">
+        <string name="name" value="Aran and Memory"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="1"/>
+        <int name="viewMedalItem" value="1142130"/>
+        <string name="0" value="Maha…was your weapon…? You&apos;re beginning to remember...little by little…"/>
+        <string name="1" value="Maha…was your weapon…? You&apos;re beginning to remember...little by little…"/>
+        <string name="2" value="Maha…was your weapon…? You&apos;re beginning to remember...little by little…"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+    </imgdir>
+    <imgdir name="29926">
+        <string name="name" value="Aran in Agony"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142131"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="You made a Red Jade for Maha. This should help him relax for a bit, right?"/>
+        <string name="1" value="You made a Red Jade for Maha. This should help him relax for a bit, right?"/>
+        <string name="2" value="You made a Red Jade for Maha. This should help him relax for a bit, right?"/>
+    </imgdir>
+    <imgdir name="29927">
+        <string name="name" value="Aran of Hope"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142132"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="You finally managed to put the enraged Maha to sleep."/>
+        <string name="1" value="You finally managed to put the enraged Maha to sleep."/>
+        <string name="2" value="You finally managed to put the enraged Maha to sleep."/>
+    </imgdir>
+    <imgdir name="29928">
+        <string name="name" value="Aran the Hero"/>
+        <int name="area" value="51"/>
+        <int name="viewMedalItem" value="1142133"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <string name="0" value="You feel like you&apos;ve restored most of your past memories as well as your abilities."/>
+        <string name="1" value="You feel like you&apos;ve restored most of your past memories as well as your abilities."/>
+        <string name="2" value="You feel like you&apos;ve restored most of your past memories as well as your abilities."/>
+    </imgdir>
+    <imgdir name="29929">
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="3"/>
+        <int name="viewMedalItem" value="1140001"/>
+        <string name="name" value="2010 Winter King"/>
+        <string name="0" value="With the chilly winter once again here, a special title has been prepared for everyone. Visit #b#p9010010##k, located in every town! \r\n#b*Note: You are only eligible for the 2010 Winter King or 2010 Winter Queen title that matches your gender."/>
+        <string name="1" value="#e#bChallenge yourself to the 2010 Winter King title#k#n\r\n* Requirements : #bAcquire at least 20 #t1140000:#s#kduring the event period\r\n* Event: #b20/1/2010 16/2/2010#k\r\n"/>
+        <string name="2" value="Acquired the title #b2010 Winter King#."/>
+    </imgdir>
+    <imgdir name="29930">
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="3"/>
+        <int name="viewMedalItem" value="1141001"/>
+        <string name="name" value="2010 Winter Queen"/>
+        <string name="0" value="With the chilly winter once again here, a special title has been prepared for everyone. Visit #b#p9010010##k, located in every town! \r\n#b*Note: You are only eligible for the 2010 Winter King or 2010 Winter Queen title that matches your gender."/>
+        <string name="1" value="#e#bChallenge yourself to the 2010 Winter Queen title#k#n\r\n* Requirements : #bAcquire at least 20 #t1140000:#s#kduring the event period\r\n* Event: #b20/1/2010 16/2/2010#k"/>
+        <string name="2" value="Acquired the title #b2010 Winter Queen#."/>
+    </imgdir>
+    <imgdir name="29931">
+        <string name="name" value="Honorary Subway Worker"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="1"/>
+        <int name="viewMedalItem" value="1142141"/>
+        <string name="0" value="The subway lines in the northern part of Kerning City is about to shut down construction because of monsters. Rescue #e#bMr. Lim#k#n from the abandoned subway station and acquire the title #b&lt;Honorary Subway Worker&gt;#k."/>
+        <string name="2" value="Acquired the title #bHonorary Subway Worker#k."/>
+        <string name="1" value="#e#bHonorary Subway Worker title#k#n\r\n* Requirements: Eliminate at least #b10,000 monsters#k on the Abandoned Subway Platform\r\n* Current count: #b#R7762##k\r\nAfter completing the requirements, see #bMr. Lim#k to receive your medal.\r\n"/>
+    </imgdir>
+    <imgdir name="29932">
+        <string name="name" value="Protector of Pharaoh"/>
+        <int name="area" value="51"/>
+        <int name="medalCategory" value="1"/>
+        <int name="viewMedalItem" value="1142142"/>
+        <string name="0" value="Visit the mysterious pyramid in Ariant. You may be able to acquire the #b&lt;Protector of Pharaoh&gt;#k title."/>
+        <string name="2" value="Acquired the #bProtector of Pharaoh#k title."/>
+        <string name="1" value="#e#bChallenge yourself to earn the Protector of Pharaoh title!#k#n\r\n* Requirements: Eliminate #b50,000 monsters#k in Nett&apos;s Pyramid \r\n* Current Count: #b#R7760##k\r\nAfter completing the requirements, see #bDuarte#k to receive your medal.\r\n"/>
+    </imgdir>
+    <imgdir name="29933">
+        <string name="name" value="Lith Harbor Donor"/>
+        <int name="area" value="51"/>
+        <int name="autoStart" value="1"/>
+        <int name="autoAccept" value="1"/>
+        <int name="medalCategory" value="2"/>
+        <int name="viewMedalItem" value="1142030"/>
+        <string name="2" value="Charity is key to a prosperous life. Acquired the title #b&lt;Lith Harbor Donor&gt;#k.\r\n"/>
     </imgdir>
     <imgdir name="3000">
         <string name="name" value="查里中士"/>
@@ -10081,9 +10521,9 @@
     <imgdir name="3023">
         <string name="name" value="魔法密林的贤者"/>
         <string name="parent" value="寻找《上古魔书》"/>
-        <string name="0" value=""/>
+        <string name="0" value="要去冰封雪域找阿尔卡斯特"/>
         <string name="1" value="给武术教练2个力量水晶后才得到了#b老旧的地图片#k。听说这个地图分为四张。各地图分别由四名贤者保管着。而且他拜托我收集四张地图片后找《上古魔书》封印它。那么这次我要去#b魔法密林#k找贤者吧！"/>
-        <string name="2" value=""/>
+        <string name="2" value="把戒指交给了阿尔卡斯特."/>
         <int name="order" value="20"/>
         <int name="area" value="33"/>
     </imgdir>
@@ -10098,18 +10538,18 @@
     <imgdir name="3025">
         <string name="name" value="射手村的贤者"/>
         <string name="parent" value="寻找《上古魔书》"/>
-        <string name="0" value=""/>
+        <string name="0" value="要去冰封雪域找阿尔卡斯特"/>
         <string name="1" value="给汉斯2个智慧水晶后收到了#b第二个地图片#k。那么我要去找#b射手村#k的贤者了。"/>
-        <string name="2" value=""/>
+        <string name="2" value="把戒指交给了阿尔卡斯特."/>
         <int name="order" value="22"/>
         <int name="area" value="33"/>
     </imgdir>
     <imgdir name="3026">
         <string name="name" value="赫丽娜的拜托"/>
         <string name="parent" value="寻找《上古魔书》"/>
-        <string name="0" value=""/>
+        <string name="0" value="要去冰封雪域找阿尔卡斯特"/>
         <string name="1" value="射手村的贤者#b赫丽娜#k跟我约好了要是我给他#b2个敏捷水晶#k，他就给我地图的碎片。"/>
-        <string name="2" value=""/>
+        <string name="2" value="把戒指交给了阿尔卡斯特."/>
         <int name="order" value="23"/>
         <int name="area" value="33"/>
     </imgdir>
@@ -10125,9 +10565,9 @@
     <imgdir name="3028">
         <string name="name" value="达克鲁的拜托"/>
         <string name="parent" value="寻找《上古魔书》"/>
-        <string name="0" value=""/>
+        <string name="0" value="要去冰封雪域找阿尔卡斯特"/>
         <string name="1" value="废弃都市的贤者#b达克鲁#k跟我约好了我给他#b2个幸运水晶#k就给我地图的碎片。"/>
-        <string name="2" value=""/>
+        <string name="2" value="把戒指交给了阿尔卡斯特."/>
         <int name="order" value="25"/>
         <int name="area" value="33"/>
     </imgdir>
@@ -22395,5 +22835,39 @@
         <string name="1" value="泡菜需要石头。 重一点石头...\r\n这么说，听说怪物#b#o6400100##k收集石头...\n\n#t04000131##b#c04000131##k / 80"/>
         <string name="2" value="由美的泡菜，下次去尝尝~！"/>
         <int name="area" value="48"/>
+    </imgdir>
+    <imgdir name="2230">
+        <string name="0" value="好像有人在喊我的名字。梦幻般的眼睛...甜美的紫色头发...你是谁？"/>
+        <string name="1" value="有着梦幻般的眼睛的妖精...和甜美的紫色头发聊了几句，但完全无法理解。妖精消失后，我在物品栏中发现了一颗#b神秘的小蛋#k。她不是说是我的朋友吗...不管怎样，还是去#b魔法密林#k拜访妖精吧。\r\n#b&lt;来自妖精的消息&gt;\n在高耸入云的森林之间沐浴在阳光下...沿着通往未知的道路前进，通往风铃草。我会在这里等你。"/>
+        <string name="2" value="有着梦幻般的眼睛的妖精...和甜美的紫色头发聊了几句，但完全无法理解。妖精消失后，我在物品栏中发现了一颗神秘的小蛋。重温了妖精留给我的信息，我去了该地区，发现妖精玛丽躲在一朵巨大的风铃草后面。妖精玛丽提到了一些关于照顾生命的责任，然后给了我一只宠物作为礼物。神秘的小蛋竟然是蜗牛的卵。\r\n还有一条消息，这只小蜗牛只能陪我5个小时。"/>
+        <int name="area" value="30"/>
+        <int name="autoStart" value="1"/>
+        <string name="name" value="一颗神秘的小蛋"/>
+    </imgdir>
+    <imgdir name="29016">
+        <string name="0" value="听说消灭不死怪物，让它们升天，就可以获得#b&lt;安灵师&gt;#k称号..."/>
+        <string name="1" value="#b#e挑战勋章 - 安灵师#k#n\r\n让不死族怪物安息。\r\n&lt;击退怪物&gt;\n#b#t2382040#\n#t2382049#\n#t2383002#\n#t2383005#\n#t2383008##k\n\n&lt;消灭怪物&gt;\n#o4230101# #r#a290161##k\n#o4230114##r#a290162##k\n#o4230115# #r#a290163##k\n#o4230126# #r#a290164##k\n#o4230102# #r#a290165#\r\n"/>
+        <string name="2" value="让不死怪物升天，获得了#b&lt;安灵师&gt;#k称号。"/>
+        <int name="area" value="51"/>
+        <int name="autoComplete" value="1"/>
+        <string name="demandSummary" value="#t2382040# 1\r\n#t2382049# 1\r\n#t2383002# 1\r\n#t2382063# 1\r\n#t2383005# 1\r\n#t2383008# 1\r\n#o4230101# #a290161#\r\n#o4230114# #a290162#\r\n#o4230115# #a290163#\r\n#o4230125# #a290164#\r\n#o4230126# #a290165#\r\n#o4230102# #a290166#\r\n"/>
+        <int name="medalCategory" value="2"/>
+        <string name="name" value="安灵师"/>
+        <string name="rewardSummary" value="#Wbasic#\r\n#i1142137:# #t1142137:# 1 \r\n继续“标题-安灵师”任务\r\n"/>
+        <int name="viewMedalItem" value="1142137"/>
+    </imgdir>
+    <imgdir name="8050">
+        <string name="0" value="我认为魔法密林的巴缇陷入困境。我需要就此事与她谈谈。"/>
+        <string name="1" value="巴缇通常严格按照时间表工作，并且按照自己的生活规律生活。嗯，我知道了，因此如果没有手表让她知道时间，她将无法严格遵循时间表工作。据她说，#b#o3230306##k 有 #b#t04000115#"/>
+        <string name="2" value="巴缇把表修好，又按原计划工作了，就好像她正在努力弥补所浪费的时间一样。如果手表永远不修的话，也许她会更加放松...不..."/>
+        <int name="area" value="30"/>
+        <string name="name" value="今天的日程安排"/>
+    </imgdir>
+    <imgdir name="8075">
+        <string name="0" value="林中城的萨比特拉玛显然因为某些事情而失眠。那是什么事呢?"/>
+        <string name="1" value="委员会成员?什么……\n我觉得好像是被萨比特拉玛骗进去的，但我觉得解开古代档案的谜题会很有趣。档案馆是这样说的。 \n\n关于第一草：\n黑白之灵告别大地，出现在我面前。在两个沉默的精灵身上做标记，精灵就会融合成第一草。\n\n关于第二草：\n你怎么看待那个在摇篮里扼杀孤独和黑暗，而灵魂却从身体里解放出来的人无法回归的灵魂必须找到一个可以共度永恒的灵魂伴侣。你是玩偶，在里面，你会发现第二草药。\n\n嗯…我从哪里开始?"/>
+        <string name="2" value="被称为委员会成员很臭，但我得到了丰厚的报酬，而且很有趣。第三草药的线索仍然找不到，但是。。。我真的想再帮他一次。\n过一会儿我会来的。"/>
+        <int name="area" value="30"/>
+        <string name="name" value="萨比特拉玛的毕生作品"/>
     </imgdir>
 </imgdir>
