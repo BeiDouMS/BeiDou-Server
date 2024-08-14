@@ -16,6 +16,7 @@ public class CashShopSearchRtnDTO {
     private String subcategoryName;
     private Integer sn;
     private Integer itemId;
+    private String itemName;
     private Integer price;
     private Integer defaultPrice;
     private Long period;

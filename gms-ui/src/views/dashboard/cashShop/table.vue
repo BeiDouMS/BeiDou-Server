@@ -48,7 +48,12 @@
           :width="140"
           fixed="left"
         />
-        <a-table-column title="物品" align="center" :width="100" fixed="left">
+        <a-table-column
+          title="物品图标"
+          align="center"
+          :width="100"
+          fixed="left"
+        >
           <template #cell="{ record }">
             <img
               :src="getIconUrl('item', record.itemId)"
@@ -59,6 +64,13 @@
         <a-table-column
           title="物品ID"
           data-index="itemId"
+          align="center"
+          :width="140"
+          fixed="left"
+        />
+        <a-table-column
+          title="物品名称"
+          data-index="itemName"
           align="center"
           :width="140"
           fixed="left"
