@@ -45,7 +45,7 @@ var itemQty_lv2 = [1, 1, 1, 1, 1, 40, 40, 40, 40, 60, 60, 60, 60, 1, 1, 1, 1, 1,
 var itemSet_lv1 = [1302021, 1302024, 1302033, 1082150, 1002419, 2022053, 2022054, 2020032, 2022057, 2022096, 2022097, 2022192, 2020030, 2010005, 2022041, 2030000, 2040100, 2040004, 2040207, 2048004, 4031203, 4000021, 4003005, 4003000, 4003001, 4010000, 4010001, 4010002, 4010005, 4020004];
 var itemQty_lv1 = [1, 1, 1, 1, 1, 20, 20, 20, 20, 20, 25, 25, 25, 50, 50, 12, 1, 1, 1, 1, 3, 4, 2, 2, 1, 2, 2, 2, 2, 2];
 
-var levels = ["Tier 1", "Tier 2", "Tier 3", "Tier 4", "Tier 5", "Tier 6"];
+var levels = ["第1层", "第2层", "第3层", "第4层", "第5层", "第6层"];
 
 var tickets = [0, 0, 0, 0, 0, 0];
 var coinId = 4001158;
@@ -132,7 +132,7 @@ function action(mode, type, selection) {
                 if (curItemQty > 0) {
                     cm.sendGetText("要将提交多少个 #b#t" + tickSel + "##k 提交到机器上? (剩余#r" + curItemQty + "#k 可用)#k");
                 } else {
-                    cm.sendPrev(" #r你没有可用的 #k #b#t" + tickSel + "##k 提交到机器上。 点击 '#r返回#k' 返回主界面。");
+                    cm.sendPrev(" #r你没有可用的 #k #b#t" + tickSel + "##k 提交到机器上。 点击 '#r上项#k' 返回主界面。");
                     advance = false;
                 }
             }
@@ -146,7 +146,7 @@ function action(mode, type, selection) {
                 }
 
                 if (placedQty > curItemQty) {
-                    cm.sendPrev("你没有足够的橡皮可提交 (剩余#r" + curItemQty + "#k 可用). 点击 '#r返回#k' 返回主界面。");
+                    cm.sendPrev("你没有足够的橡皮可提交 (剩余#r" + curItemQty + "#k 可用). 点击 '#r上项#k' 返回主界面。");
                     advance = false;
                 } else {
                     if (curItemSel < tickets.length) {
@@ -155,11 +155,11 @@ function action(mode, type, selection) {
                         coins = placedQty;
                     }
 
-                    cm.sendPrev("操作成功。 点击 '#r返回#k' 返回主界面。");
+                    cm.sendPrev("操作成功。 点击 '#r上项#k' 返回主界面 #r找回奖品！#k");
                     advance = false;
                 }
             } catch (err) {
-                cm.sendPrev("你必须提交正确橡皮擦数量。 点击 '#r返回#k' 返回主界面。");
+                cm.sendPrev("你必须提交正确橡皮擦数量。 点击 '#r上项#k' 返回主界面。");
                 advance = false;
             }
 
@@ -243,9 +243,14 @@ function givePrize() {
         var rnd = Math.floor(Math.random() * lvTarget.length);
 
         for (var i = 0; i < tickets.length; i++) {
-            cm.gainItem(4001009 + i, -1 * tickets[i]);
+            if(tickets[i]&&tickets[i]>0){
+                cm.gainItem(4001009 + i, -1 * tickets[i]);
+            }
         }
-        cm.gainItem(coinId, -1 * coins);
+        if(hasCoin){
+            cm.gainItem(coinId, -1 * coins);
+        }
+
 
         cm.gainItem(lvTarget[rnd], lvQty[rnd]);
     }

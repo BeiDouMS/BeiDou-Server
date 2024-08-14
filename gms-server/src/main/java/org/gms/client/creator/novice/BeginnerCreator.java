@@ -24,6 +24,7 @@ import org.gms.client.Job;
 import org.gms.client.creator.CharacterFactory;
 import org.gms.client.creator.CharacterFactoryRecipe;
 import org.gms.client.inventory.InventoryType;
+import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 
@@ -43,6 +44,12 @@ public class BeginnerCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
-        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, MapId.MUSHROOM_TOWN, top, bottom, shoes, weapon));
+        int iMapID = MapId.MUSHROOM_TOWN;
+        if (YamlConfig.config.server.USE_BEIDOU_BEGINNERMAP)
+        {
+            iMapID = MapId.BEIDOU_BEGINNER;
+        }
+
+        return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.BEGINNER, 1, iMapID, top, bottom, shoes, weapon));
     }
 }
