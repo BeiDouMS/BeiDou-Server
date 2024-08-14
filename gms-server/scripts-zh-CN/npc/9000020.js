@@ -26,16 +26,16 @@ var travelFrom = [777777777, 541000000];
 var travelFee = [3000, 10000];
 
 var travelMap = [800000000, 550000000];
-var travelPlace = ["Mushroom Shrine of Japan", "Trend Zone of Malaysia"];
-var travelPlaceShort = ["Mushroom Shrine", "Metropolis"];
-var travelPlaceCountry = ["Japan", "Malaysia"];
+var travelPlace = ["日本蘑菇神社", "马来西亚特区"];
+var travelPlaceShort = ["蘑菇神社", "大都市"];
+var travelPlaceCountry = ["日本", "马来西亚"];
 var travelAgent = ["I", "#r#p9201135##k"];
 
-var travelDescription = ["If you desire to feel the essence of Japan, there's nothing like visiting the Shrine, a Japanese cultural melting pot. Mushroom Shrine is a mythical place that serves the incomparable Mushroom God from ancient times.",
-    "If you desire to feel the heat of the tropics on an upbeat environment, the residents of Malaysia are eager to welcome you. Also, the metropolis itself is the heart of the local economy, that place is known to always offer something to do or to visit around."];
+var travelDescription = ["如果你想感受日本的精髓，没有什么比参观日本文化大熔炉更好的了。蘑菇神社是一个神话般的地方，供奉着古代无与伦比的蘑菇神。",
+    "如果你想在乐观的环境中感受热带的炎热，马来西亚的居民非常欢迎你。此外，大都市本身就是当地经济的核心，众所周知，这个地方总是有事情可做或参观。"];
 
-var travelDescription2 = ["Check out the female shaman serving the Mushroom God, and I strongly recommend trying Takoyaki, Yakisoba, and other delocious food sold in the streets of Japan. Now, let's head over to #bMushroom Shrine#k, a mythical place if there ever was one.",
-    "Once there, I strongly suggest you to schedule a visit to Kampung Village. Why? Surely you've come to know about the fantasy theme park Spooky World? No? It's simply put the greatest theme park around there, it's worth a visit! Now, let's head over to the #bTrend Zone of Malaysia#k."];
+var travelDescription2 = ["看看为蘑菇神服务的女巫，我强烈建议尝试日本街头出售的章鱼烧、烤肉和其他美味的食物。现在，让我们前往#b蘑菇神社#k，这是一个神话般的地方。",
+    "一到那里，我强烈建议你安排一次去甘榜村的旅行。为什么？你肯定已经知道奇幻主题公园《幽灵世界》了吧？不它只是把最好的主题公园放在那里，值得一游！现在，让我们前往#b马来西亚特区#k。"];
 
 var travelType;
 var travelStatus;
@@ -98,7 +98,7 @@ function action(mode, type, selection) {
     } else {
         if (status == 0) {
             travelType = getTravelType(cm.getPlayer().getMapId());
-            cm.sendNext("如果你厌倦了单调的日常生活，不如出去换换心情？没有什么比沉浸在新文化中，每分钟学到新东西更令人愉悦的了！是时候让你出去旅行了。我们枫叶旅行社建议你去进行一次#b世界之旅#k！你担心旅行费用吗？不用担心！我们枫叶旅行社精心制定了一项计划，让你仅需#b" + cm.numberWithCommas(travelFee[travelType]) + " 枫币#k就可以旅行！");
+            cm.sendNext("如果你厌倦了单调的日常生活，不如出去换换心情？没有什么比沉浸在新文化中，每分钟学到新东西更令人愉悦的了！是时候让你出去旅行了。我们枫叶旅行社建议你去进行一次#b世界之旅#k！你担心旅行费用吗？不用担心！我们枫叶旅行社精心制定了一项计划，让你仅需#b" + cm.numberWithCommas(travelFee[travelType]) + " 金币#k就可以旅行！");
         } else if (status == 1) {
             cm.sendSimple("我们目前为您提供这个旅行地点：#b" + travelPlace[travelType] + "#k。" + travelAgent[travelType] + "将在那里作为您的旅行向导为您服务。请放心，目的地数量将会随着时间的推移而增加。现在，您想前往" + travelPlaceShort[travelType] + "吗？#b\r\n#L0#是的，带我去" + travelPlaceShort[travelType] + "（" + travelPlaceCountry[travelType] + ")");
         } else if (status == 2) {
