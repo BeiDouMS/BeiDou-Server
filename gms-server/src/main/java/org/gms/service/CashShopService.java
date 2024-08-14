@@ -14,6 +14,7 @@ import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
 import org.gms.server.CashShop;
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.BasePageUtil;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
@@ -77,6 +78,14 @@ public class CashShopService {
                         // 物品id
                         && (data.getItemId() == null || data.getItemId().equals(item.getItemId()))
         ).toList();
+
+        //现在需要批量去set wzCashItems中的itemName值
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        wzCashItems.forEach(wzCashItem -> {
+            wzCashItem.setItemName(ii.getName(wzCashItem.getItemId()));
+        });
+
+
 
         // 排序是否正确？ 猜测按照Priority降序 ItemId升序排列
         return BasePageUtil.create(wzCashItems, data)
