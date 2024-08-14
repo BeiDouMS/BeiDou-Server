@@ -311,4 +311,5 @@ public class ServerProperty {
 
     public boolean CHANGE_CHANNEL_FORCE_RETURN;
     public int MOB_RESPAWN_RATE;
+    public short ITEM_SLOT_MAX;
 }

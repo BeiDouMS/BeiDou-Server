@@ -365,14 +365,18 @@ public class ItemInformationProvider {
         Data item = getItemData(itemId);
         if (item != null) {
             Data smEntry = item.getChildByPath("info/slotMax");
+            short itemSlotMax = YamlConfig.config.server.ITEM_SLOT_MAX;
+            InventoryType inventoryType = ItemConstants.getInventoryType(itemId);
             if (smEntry == null) {
-                if (ItemConstants.getInventoryType(itemId).getType() == InventoryType.EQUIP.getType()) {
+                if (inventoryType.getType() == InventoryType.EQUIP.getType()) {
                     ret = 1;
+                } else if (inventoryType.canChangeSlotMax() && itemSlotMax > 0) {
+                    ret = itemSlotMax;
                 } else {
                     ret = 100;
                 }
             } else {
-                ret = (short) DataTool.getInt(smEntry);
+                ret = inventoryType.canChangeSlotMax() && itemSlotMax > 0 ? itemSlotMax : (short) DataTool.getInt(smEntry);
             }
         }
 
@@ -1046,7 +1050,7 @@ public class ItemInformationProvider {
     */
     public boolean canUseCleanSlate(Equip equip) {
         Map<String, Integer> eqStats = getEquipStats(equip.getItemId());
-        if (eqStats == null || eqStats.get("tuc") == 0 ) {
+        if (eqStats == null || eqStats.get("tuc") == 0) {
             return false;
         }
         int totalUpgradeCount = eqStats.get("tuc");

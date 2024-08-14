@@ -69,4 +69,9 @@ public enum InventoryType {
             default -> UNDEFINED;
         };
     }
+
+    public boolean canChangeSlotMax() {
+        // 如果需要支持更改现金的最大堆叠，可以修改这里
+        return this == USE || this == ETC;
+    }
 }
