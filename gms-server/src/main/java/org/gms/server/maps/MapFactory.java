@@ -23,10 +23,7 @@ package org.gms.server.maps;
 
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.MapId;
-import org.gms.provider.Data;
-import org.gms.provider.DataProvider;
-import org.gms.provider.DataProviderFactory;
-import org.gms.provider.DataTool;
+import org.gms.provider.*;
 import org.gms.provider.wz.WZFiles;
 import org.gms.scripting.event.EventInstanceManager;
 import org.gms.server.life.AbstractLoadedLife;
@@ -437,4 +434,68 @@ public class MapFactory {
         }
     }
 
+    public static String getMapIdByLifeId(int lifeId) {
+        return resolveDir(mapSource.getRoot(), lifeId);
+    }
+
+    private static String resolveDir(DataEntry dataEntry, int lifeId) {
+        String mapId = null;
+        if (dataEntry instanceof DataFileEntry) {
+            mapId = resolveFile(dataEntry, lifeId);
+        } else if (dataEntry instanceof DataDirectoryEntry) {
+            List<DataFileEntry> fileEntries = ((DataDirectoryEntry) dataEntry).getFiles();
+            for (DataFileEntry fileEntry : fileEntries) {
+                mapId = resolveFile(fileEntry, lifeId);
+                if (mapId != null) {
+                    break;
+                }
+            }
+            List<DataDirectoryEntry> subdirectories = ((DataDirectoryEntry) dataEntry).getSubdirectories();
+            for (DataDirectoryEntry subdirectory : subdirectories) {
+                if (!subdirectory.getName().startsWith("Map")) {
+                    continue;
+                }
+                mapId = resolveDir(subdirectory, lifeId);
+                if (mapId != null) {
+                    break;
+                }
+            }
+        }
+        return mapId;
+    }
+
+    private static String resolveFile(DataEntity dataEntry, int lifeId) {
+        String mapId = null;
+        if (dataEntry instanceof DataFileEntry) {
+            StringBuilder pathBuilder = new StringBuilder();
+            resolvePath(dataEntry, pathBuilder);
+            pathBuilder.append(dataEntry.getName());
+            Data data = mapSource.getData(pathBuilder.toString());
+            String wzLifeId = resolveFile(data, lifeId);
+            if (wzLifeId != null) {
+                mapId = dataEntry.getName().substring(0, dataEntry.getName().length() - 4);
+            }
+        } else if (dataEntry instanceof Data) {
+            Data life = ((Data) dataEntry).getChildByPath("life");
+            if (life == null) {
+                return null;
+            }
+            List<Data> children = life.getChildren();
+            for (Data child : children) {
+                String wzLifeId = DataTool.getString("id", child);
+                if (wzLifeId != null && Integer.parseInt(wzLifeId) == lifeId) {
+                    return wzLifeId;
+                }
+            }
+        }
+        return mapId;
+    }
+
+    private static void resolvePath(DataEntity dataEntry, StringBuilder pathBuilder) {
+        DataEntity parent = dataEntry.getParent();
+        if (parent != null && parent != mapSource.getRoot()) {
+            pathBuilder.insert(0, parent.getName() + "/");
+            resolvePath(parent, pathBuilder);
+        }
+    }
 }
