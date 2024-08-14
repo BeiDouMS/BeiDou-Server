@@ -50,5 +50,5 @@ export function givePlayerSrc(data: GiveForm) {
 }
 
 export function getEquInitialInfo(id: number) {
-  return axios.post(`/search/v1/getEquInitialInfo`, { id });
+  return axios.post(`/common/v1/getEquipmentInfoByItemId`, { id });
 }
