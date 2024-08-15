@@ -499,7 +499,7 @@ public class CommandsExecutor {
         addCommand("pnpcremove", 4, PnpcRemoveCommand.class);
         addCommand("pmob", 4, PmobCommand.class);
         addCommand("pmobremove", 4, PmobRemoveCommand.class);
-        addCommand("warptolife", 4, WrapToLifeCommand.class);
+        addCommand("wraptolife", 4, WrapToLifeCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }

@@ -62,8 +62,8 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            options = ["I want to make a ring.", "I want to discard the ring box I have."];
-            cm.sendSimple("我是#p9201000#，订婚戒指制造商。我能为您做些什么？\r\n\r\n#b" + 生成选择菜单(options));
+            options = ["我想做个戒指。", "我想扔掉我的戒指盒。"];
+            cm.sendSimple("我是#p9201000#，订婚戒指制造商。我能为您做些什么？\r\n\r\n#b" + generateSelectionMenu(options));
         } else if (status == 1) {
             if (selection == 0) {
                 if (!cm.isQuestCompleted(100400)) {
@@ -71,12 +71,12 @@ function action(mode, type, selection) {
                         state = 0;
                         cm.sendNext("所以你想要制作订婚戒指，是吗？好的，当你从#b#p9201003##k那里得到#rblessings#k后，我可以提供一个。");
                     } else {
-                        cm.sendOk("在尝试制作订婚戒指之前，先从#b#p9201003#k那里得到祝福。他们一定在你家等着你，就在#rHenesys狩猎场#k的那边。");
+                        cm.sendOk("在尝试制作订婚戒指之前，先从#b#p9201003#k那里得到祝福。他们一定在你家等着你，就在#r射手村狩猎场#k的那边。");
                         cm.dispose();
                     }
                 } else {
                     if (hasEngagementBox(cm.getPlayer())) {
-                        cm.sendOk("抱歉，您已经有一个约会盒了。我一次不能为您提供多个盒子。");
+                        cm.sendOk("抱歉，您已经有一个戒指盒了。我一次不能为您提供多个盒子。");
                         cm.dispose();
                         return;
                     }
@@ -87,8 +87,8 @@ function action(mode, type, selection) {
                     }
 
                     state = 1;
-                    options = ["Moonstone", "Star Gem", "Golden Heart", "Silver Swan"];
-                    var selStr = "So, what kind of engagement ring you want me to craft?\r\n\r\n#b" + generateSelectionMenu(options);
+                    options = ["月光石", "星星宝石", "金心", "银天鹅"];
+                    var selStr = "那么，你想让我制作什么样的订婚戒指？\r\n\r\n#b" + generateSelectionMenu(options);
                     cm.sendSimple(selStr);
                 }
             } else {
@@ -120,8 +120,8 @@ function action(mode, type, selection) {
                 matQty = matQtySet[selection];
                 cost = costSet[selection];
 
-                var prompt = "Then I'm going to craft you a #b#t" + item + "##k, is that right?";
-                prompt += " In that case, I'm going to need specific items from you in order to make it. Make sure you have room in your inventory, though!#b";
+                var prompt = "然后我会给你做一个 #b#t" + item + "##k, 那样对吗?";
+                prompt += " 在这种情况下，我需要你提供特定的物品才能完成。不过，请确保你的库存中有足够的空间！#b";
 
                 if (mats instanceof Array) {
                     for (var i = 0; i < mats.length; i++) {

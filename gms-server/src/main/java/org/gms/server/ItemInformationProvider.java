@@ -1343,14 +1343,12 @@ public class ItemInformationProvider {
         if (strings == null) {
             return null;
         }
-        List<Data> children = strings.getChildren();
-        if (children == null) {
+        String name = DataTool.getString("name", strings, null);
+        String desc = DataTool.getString("desc", strings, null);
+        if (name == null) {
             return null;
         }
-        Pair<String, String> ret = new Pair<>(
-                DataTool.getString(children.get(0)),
-                children.size() > 1 ? DataTool.getString(children.get(1)) : null
-        );
+        Pair<String, String> ret = new Pair<>(name, desc);
         nameDescCache.put(itemId, ret);
         return ret;
     }
