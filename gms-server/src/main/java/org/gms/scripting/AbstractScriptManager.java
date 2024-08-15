@@ -52,14 +52,19 @@ public abstract class AbstractScriptManager {
         String scriptName = "scripts";
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
         String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
+        String scriptQuestName = scriptLangName + "/BeiDouSpecial/";
 
         Path scriptPath = Path.of(scriptName, path);
         Path scriptLangPath = Path.of(scriptLangName, path);
+        Path scriptQuestPath = Path.of(scriptQuestName, path);
+
         Path actualPath;
         if (Files.exists(scriptLangPath)) {
             actualPath = scriptLangPath;
         } else if (Files.exists(scriptPath)){
             actualPath = scriptPath;
+        } else if (Files.exists(scriptQuestPath)){
+            actualPath = scriptQuestPath;
         } else {
             return null;
         }
