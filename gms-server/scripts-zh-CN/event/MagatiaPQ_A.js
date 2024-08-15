@@ -56,7 +56,7 @@ function setEventRequirements() {
         reqStr += minPlayers;
     }
 
-    reqStr += "\r\n    等级要求: ";
+    reqStr += "\r\n   等级要求: ";
     if (maxLevel - minLevel >= 1) {
         reqStr += minLevel + " ~ " + maxLevel;
     } else {
