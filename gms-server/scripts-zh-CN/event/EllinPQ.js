@@ -49,14 +49,14 @@ function getMaxLobbies() {
 function setEventRequirements() {
     var reqStr = "";
 
-    reqStr += "\r\n    Number of players: ";
+    reqStr += "\r\n   组队人数: ";
     if (maxPlayers - minPlayers >= 1) {
         reqStr += minPlayers + " ~ " + maxPlayers;
     } else {
         reqStr += minPlayers;
     }
 
-    reqStr += "\r\n    Level range: ";
+    reqStr += "\r\n   等级要求: ";
     if (maxLevel - minLevel >= 1) {
         reqStr += minLevel + " ~ " + maxLevel;
     } else {
@@ -65,8 +65,8 @@ function setEventRequirements() {
 
     reqStr += "\r\n    For #radventurers only#k.";
 
-    reqStr += "\r\n    Time limit: ";
-    reqStr += eventTime + " minutes";
+    reqStr += "\r\n   时间限制: ";
+    reqStr += eventTime + " 分钟";
 
     em.setProperty("party", reqStr);
 }

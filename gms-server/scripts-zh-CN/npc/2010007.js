@@ -61,7 +61,7 @@ function action(mode, type, selection) {
                     cm.sendOk("你不是族长，因此你将不能增加家族成员的人数上限.");
                     cm.dispose();
                 } else {
-                    var Guild = Java.type("net.server.guild.Guild");  // thanks Conrad for noticing an issue due to call on a static method here
+                    var Guild = Java.type("org.gms.net.server.guild.Guild");  // thanks Conrad for noticing an issue due to call on a static method here
                     cm.sendYesNo("家族成员人数每增加 #b5#k 位需要支付#b " + Guild.getIncreaseGuildCost(cm.getPlayer().getGuild().getCapacity()) + "金币#k，你确定要继续吗？");
                 }
             }
