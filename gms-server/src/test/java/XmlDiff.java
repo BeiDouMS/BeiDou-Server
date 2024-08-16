@@ -3,9 +3,18 @@ import org.w3c.dom.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.StringWriter;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class XmlDiff {
     @Test
@@ -14,6 +23,8 @@ public class XmlDiff {
         final String comparerPath1 = "wz/String.wz/Eqp.img.xml";
         // Comparer2
         final String comparerPath2 = "wz-zh-CN/String.wz/Eqp.img.xml";
+        // Writer
+        final String writeName = "Eqp.img.xml";
 
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document parsed1 = builder.parse(new File(comparerPath1));
@@ -32,6 +43,13 @@ public class XmlDiff {
         System.out.println();
         System.out.println(comparerPath2 + "存在，" + comparerPath1 + "不存在：");
         compare(new StringBuilder(), result2, result1);
+
+        TreeMap<String, Object> treeMap = new TreeMap<>(nameDescComparator);
+        merge(result1, result2, treeMap);
+//        System.out.println();
+//        System.out.println(result1);
+
+        writeToXml(treeMap, builder, writeName);
     }
 
     private void resolveElement(Map<String, Object> inMap, Node root) throws Exception {
@@ -64,9 +82,9 @@ public class XmlDiff {
                 Node item = attributes.item(i);
                 if (item.getNodeType() == Node.ATTRIBUTE_NODE) {
                     if ("name".equals(item.getNodeName())) {
-                        key = item.getNodeValue();;
+                        key = item.getNodeValue();
                     } else if ("value".equals(item.getNodeName())) {
-                        value = item.getNodeValue();;
+                        value = item.getNodeValue();
                     }
                 }
             }
@@ -93,4 +111,91 @@ public class XmlDiff {
             }
         });
     }
+
+    private void merge(Map<String, Object> base, Map<String, Object> append, TreeMap<String, Object> treeMap) {
+        for (Map.Entry<String, Object> entry : base.entrySet()) {
+            String key = entry.getKey();
+            Object val = entry.getValue();
+            Object appendVal = append.get(key);
+            if (appendVal == null) {
+                treeMap.put(key, val);
+                continue;
+            }
+            if (appendVal instanceof Map) {
+                TreeMap<String, Object> childMap = new TreeMap<>(nameDescComparator);
+                treeMap.put(key, childMap);
+                merge((Map<String, Object>) val, (Map<String, Object>) appendVal, childMap);
+            } else {
+                treeMap.put(key, appendVal);
+            }
+        }
+    }
+
+    private void writeToXml(Map<String, Object> base, DocumentBuilder builder, String writeName) throws Exception {
+        Document doc = builder.newDocument();
+        Element root = doc.createElement("imgdir");
+        String rootKey = base.keySet().iterator().next();
+        root.setAttribute("name", rootKey);
+        doc.appendChild(root);
+
+        addMapToElement(doc, root, base.get(rootKey));
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        transformerFactory.setAttribute("indent-number", 4);
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        // 这么写不知道为什么写不进去？
+        transformer.setOutputProperty(OutputKeys.STANDALONE, "yes");
+
+        StringWriter sw = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(sw));
+        String xmlContent = sw.toString();
+
+        // 手动添加 XML 声明，确保 standalone="yes"
+        String xmlHeader = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
+        xmlContent = xmlHeader + xmlContent.substring(xmlContent.indexOf("?>") + 2);
+
+        String dest = System.getProperty("user.home") + "/Desktop/" + writeName;
+        try (FileWriter fw = new FileWriter(dest)) {
+            fw.write(xmlContent);
+        }
+    }
+
+    private static void addMapToElement(Document document, Element parent, Object data) {
+        if (data instanceof Map) {
+            Map<String, Object> map = (Map<String, Object>) data;
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                Element child;
+                if (entry.getValue() instanceof Map) {
+                    child = document.createElement("imgdir");
+                    child.setAttribute("name", entry.getKey());
+                } else {
+                    child = document.createElement("string");
+                    child.setAttribute("name", entry.getKey());
+                    child.setAttribute("value", entry.getValue().toString());
+                }
+                parent.appendChild(child);
+                addMapToElement(document, child, entry.getValue());
+            }
+        }
+    }
+
+    private static String toSafeStr(String str) {
+        // 转义特殊字符
+        return str.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&apos;");
+    }
+
+    Comparator<String> nameDescComparator = (key1, key2) -> {
+        // 定义特定的排序规则
+        if ("name".equals(key1)) return -1; // "name" 排在前面
+        if ("name".equals(key2)) return 1;
+        if ("desc".equals(key1)) return 1;  // "desc" 排在后面
+        if ("desc".equals(key2)) return -1;
+        return key1.compareTo(key2);       // 其他键按照自然顺序排序
+    };
 }
