@@ -73,7 +73,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
         if (c.tryacquireClient()) {     // thanks Thora for finding out an exploit within cash operations
             try {
                 final int action = p.readByte();
-                if (action == 0x03 || action == 0x1E) {
+                if (action == 0x03 || action == 0x1E) { // buy
                     p.readByte();
                     final int useNX = p.readInt();
                     final int snCS = p.readInt();
@@ -111,7 +111,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.showBoughtCashPackage(cashPackage, c.getAccID()));
                     }
                     c.sendPacket(PacketCreator.showCash(chr));
-                } else if (action == 0x04) {//TODO check for gender
+                } else if (action == 0x04) {//TODO check for gender with gift
                     int birthday = p.readInt();
                     ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
                     Map<String, String> recipient = Character.getCharacterFromDatabase(p.readString());
