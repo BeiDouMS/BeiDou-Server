@@ -90,7 +90,8 @@ function doSelect(selection) {
             cm.dispose();
             break;
         case 3:
-            cm.warp(910000000);
+            cm.getPlayer().saveLocation("FREE_MARKET");
+            cm.warp(910000000, "out00");
             break;
         // GM功能
         case 61:
