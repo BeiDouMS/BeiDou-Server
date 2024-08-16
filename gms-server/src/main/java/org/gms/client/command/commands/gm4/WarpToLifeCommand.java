@@ -8,7 +8,7 @@ import org.gms.server.maps.Portal;
 import org.gms.util.I18nUtil;
 import org.gms.util.StringUtil;
 
-public class WrapToLifeCommand extends Command {
+public class WarpToLifeCommand extends Command {
     {
         setDescription(I18nUtil.getMessage("GotoNPCCommand.message1"));
     }
