@@ -673,7 +673,7 @@ public class MapleMap {
             float cardRate = chr.getCardRate(de.itemId);
             int dropChance = (int) Math.min((float) de.chance * chRate * cardRate, Integer.MAX_VALUE);
 
-            if (Randomizer.nextInt(999999) < dropChance) {
+            if (Randomizer.nextInt(1000000) < dropChance) {
                 if (droptype == 3) {
                     pos.x = mobpos + ((d % 2 == 0) ? (40 * ((d + 1) / 2)) : -(40 * (d / 2)));
                 } else {
@@ -715,7 +715,7 @@ public class MapleMap {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
         for (final MonsterGlobalDropEntry de : globalEntry) {
-            if (Randomizer.nextInt(999999) < de.chance) {
+            if (Randomizer.nextInt(1000000) < de.chance) {
                 if (droptype == 3) {
                     pos.x = mobpos + (d % 2 == 0 ? (40 * (d + 1) / 2) : -(40 * (d / 2)));
                 } else {
