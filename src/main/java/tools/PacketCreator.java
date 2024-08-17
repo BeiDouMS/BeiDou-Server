@@ -409,10 +409,18 @@ public class PacketCreator {
         }
         if (!zeroPosition) {
             if (equip != null) {
-                if (pos < 0) {
+                if (pos > 0) {
+                    p.writeShort(pos);
+                } else {
                     pos *= -1;
+                    if (pos >= 1000 && pos < 1004) {
+                        p.writeShort(pos);
+                    } else if (pos > 100) {
+                        p.writeShort(pos - 100);
+                    } else {
+                        p.writeShort(pos);
+                    }
                 }
-                p.writeShort(pos > 100 ? pos - 100 : pos);
             } else {
                 p.writeByte(pos);
             }
@@ -498,8 +506,11 @@ public class PacketCreator {
         Collection<Item> equippedC = iv.list();
         List<Item> equipped = new ArrayList<>(equippedC.size());
         List<Item> equippedCash = new ArrayList<>(equippedC.size());
+        List<Item> equippedDragon = new ArrayList<>(1);
         for (Item item : equippedC) {
-            if (item.getPosition() <= -100) {
+            if (item.getPosition() <= -1000 && item.getPosition() > -1004) {
+                equippedDragon.add(item);
+            } else if (item.getPosition() <= -100) {
                 equippedCash.add(item);
             } else {
                 equipped.add(item);
@@ -508,15 +519,19 @@ public class PacketCreator {
         for (Item item : equipped) {    // equipped doesn't actually need sorting, thanks Pllsz
             addItemInfo(p, item);
         }
-        p.writeShort(0); // start of equip cash
+        p.writeShort(0); // 结束标志
         for (Item item : equippedCash) {
             addItemInfo(p, item);
         }
-        p.writeShort(0); // start of equip inventory
+        p.writeShort(0);
         for (Item item : chr.getInventory(InventoryType.EQUIP).list()) {
             addItemInfo(p, item);
         }
-        p.writeInt(0);
+        p.writeShort(0);
+        for (Item item : equippedDragon) {
+            addItemInfo(p, item);
+        }
+        p.writeShort(0);
         for (Item item : chr.getInventory(InventoryType.USE).list()) {
             addItemInfo(p, item);
         }
