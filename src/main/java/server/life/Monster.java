@@ -596,7 +596,7 @@ public class Monster extends AbstractLoadedLife {
 
         for (Character mc : expMembers) {
             distributePlayerExperience(mc, participationExp, partyBonusMod, totalPartyLevel, mc == participationMvp, isWhiteExpGain(mc, personalRatio, sdevRatio), hasPartySharers);
-            giveFamilyRep(mc.getFamilyEntry());
+            // giveFamilyRep(mc.getFamilyEntry());
         }
     }
 
