@@ -133,7 +133,7 @@ public class StatEffect {
     private short mhpRRate, mmpRRate, mobSkill, mobSkillLevel;
     private byte mhpR, mmpR;
     private short mpCon, hpCon;
-    private int duration, target, barrier, mob;
+    private int duration, target, barrier, mob,expBuff;
     private boolean overTime, repeatEffect;
     private int sourceid;
     private int moveTo;
@@ -309,13 +309,11 @@ public class StatEffect {
         ret.mdef = (short) DataTool.getInt("mdd", source, 0);
         ret.acc = (short) DataTool.getIntConvert("acc", source, 0);
         ret.avoid = (short) DataTool.getInt("eva", source, 0);
-
         ret.speed = (short) DataTool.getInt("speed", source, 0);
         ret.jump = (short) DataTool.getInt("jump", source, 0);
-
         ret.barrier = DataTool.getInt("barrier", source, 0);
+        ret.expBuff = DataTool.getInt("expBuff", source, 0);
         addBuffStatPairToListIfNotZero(statups, BuffStat.AURA, ret.barrier);
-
         ret.mapProtection = mapProtection(sourceid);
         addBuffStatPairToListIfNotZero(statups, BuffStat.MAP_PROTECTION, (int) ret.mapProtection);
 
@@ -459,6 +457,7 @@ public class StatEffect {
             addBuffStatPairToListIfNotZero(statups, BuffStat.AVOID, (int) ret.avoid);
             addBuffStatPairToListIfNotZero(statups, BuffStat.SPEED, (int) ret.speed);
             addBuffStatPairToListIfNotZero(statups, BuffStat.JUMP, (int) ret.jump);
+            addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_BUFF, Integer.valueOf(ret.expBuff));
         }
 
         Data ltd = source.getChildByPath("lt");

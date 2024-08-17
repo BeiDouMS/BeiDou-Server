@@ -193,7 +193,7 @@ public class Character extends AbstractCharacterObject {
     private int dojoEnergy;
     @Setter
     private int vanquisherKills;
-    private int expRate = 1;
+    private int expRate = 1,expBuff = 1;
     @Getter
     private int mesoRate = 1;
     @Getter
@@ -6247,7 +6247,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         for (Integer couponId : couponEffects) {
-            commitBuffCoupon(couponId);
+            //commitBuffCoupon(couponId);
         }
     }
 
