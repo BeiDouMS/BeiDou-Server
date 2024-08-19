@@ -36,6 +36,8 @@ function writeServerStaff_MapleNext() {
 function writeServerStaff_BeiDou() {
     addPerson("昨日小睡", "Developer");
     addPerson("leevccc", "Developer");
+    addPerson("TokyoEric", "Contributor");
+    addPerson("刘波波", "Contributor");
 
     setHistory(2024, 2024);
 }
