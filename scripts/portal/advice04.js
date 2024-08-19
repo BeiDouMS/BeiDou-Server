@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("Click \r\\#b<Sera>", 100, 5);
+    pi.showInstruction("点击 \r\\#b<#p2100#>", 100, 5);
     return true;
 }

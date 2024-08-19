@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("Press #e#b[Down]#k on the arrow key#n and#e#b[Alt]#k#n at the same time to jump downwards.", 450, 6);
+    pi.showInstruction("按方向键中的 #e#b[下]#k#n 再按 #e#b[Alt]#k#n 向下跳", 450, 6);
     return true;
 }

@@ -26,6 +26,7 @@ import client.Client;
 import client.inventory.Equip;
 import client.inventory.Item;
 import config.YamlConfig;
+import constants.id.NpcId;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -51,6 +52,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
 
         if (!YamlConfig.config.server.USE_MTS) {
             c.sendPacket(PacketCreator.enableActions());
+            c.getAbstractPlayerInteraction().openNpc(NpcId.MAPLE_ADMINISTRATOR, "info");
             return;
         }
 

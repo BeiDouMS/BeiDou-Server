@@ -190,7 +190,7 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
                         otherName = otherChar.getName();
                     }
                     if (otherName != null) {
-                        buddylist.put(new BuddylistEntry(otherName, "Default Group", otherCid, channel, true));
+                        buddylist.put(new BuddylistEntry(otherName, "默认分组", otherCid, channel, true));
                         c.sendPacket(PacketCreator.updateBuddylist(buddylist.getBuddies()));
                         notifyRemoteChannel(c, channel, otherCid, ADDED);
                     }

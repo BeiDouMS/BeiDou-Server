@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("You can view the World Map by pressing the #e#b[W]#k#nkey.", 350, 5);
+    pi.showInstruction("按 #e#b[W]#k#n 键查看世界地图", 350, 5);
     return true;
 }

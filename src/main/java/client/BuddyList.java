@@ -172,7 +172,7 @@ public class BuddyList {
     }
 
     public void addBuddyRequest(Client c, int cidFrom, String nameFrom, int channelFrom) {
-        put(new BuddylistEntry(nameFrom, "Default Group", cidFrom, channelFrom, false));
+        put(new BuddylistEntry(nameFrom, "默认分组", cidFrom, channelFrom, false));
         if (pendingRequests.isEmpty()) {
             c.sendPacket(PacketCreator.requestBuddylistAdd(cidFrom, c.getPlayer().getId(), nameFrom));
         } else {
