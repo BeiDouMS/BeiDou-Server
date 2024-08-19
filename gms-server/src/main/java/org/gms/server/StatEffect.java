@@ -340,11 +340,11 @@ public class StatEffect {
                 } else if (ItemId.isRateCoupon(sourceid)) {
                     switch (DataTool.getInt("expR", source, 0)) {
                         case 1:
-                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
+                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP1, 1);
                             break;
 
                         case 2:
-                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
+                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP2, 1);
                             break;
 
                         case 3:
@@ -352,7 +352,7 @@ public class StatEffect {
                             break;
 
                         case 4:
-                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
+                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP4, 1);
                             break;
                     }
 
