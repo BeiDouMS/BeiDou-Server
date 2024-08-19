@@ -76607,4 +76607,64 @@
             <int name="npc" value="2104"/>
         </imgdir>
     </imgdir>
+    <imgdir name="30001">
+        <imgdir name="0">
+            <string name="startscript" value="q30001s"/>
+            <int name="npc" value="2100"/>
+            <int name="lvmin" value="0"/>
+            <int name="lvmax" value="10"/>
+        </imgdir>
+        <imgdir name="1">
+            <string name="endscript" value="q30001e"/>
+            <int name="npc" value="2000"/>
+        </imgdir>
+    </imgdir>
+    <imgdir name="30002">
+        <imgdir name="0">
+            <string name="startscript" value="q30002s"/>
+            <int name="npc" value="9101002"/>
+            <int name="lvmin" value="0"/>
+            <int name="lvmax" value="10"/>
+        </imgdir>
+        <imgdir name="1">
+            <string name="endscript" value="q30002e"/>
+            <int name="npc" value="9101002"/>
+            <imgdir name="mob">
+                <imgdir name="0">
+                    <int name="count" value="5"/>
+                    <int name="id" value="9409001"/>
+                </imgdir>
+            </imgdir>			
+        </imgdir>
+    </imgdir>
+    <imgdir name="30003">
+        <imgdir name="0">
+            <string name="startscript" value="q30003s"/>
+            <int name="npc" value="9101003"/>
+            <int name="lvmin" value="0"/>
+            <int name="lvmax" value="10"/>
+        </imgdir>
+        <imgdir name="1">
+            <string name="endscript" value="q30003e"/>
+            <int name="npc" value="9101003"/>
+            <imgdir name="mob">
+                <imgdir name="0">
+                    <int name="count" value="5"/>
+                    <int name="id" value="9409000"/>
+                </imgdir>
+            </imgdir>			
+        </imgdir>
+    </imgdir>
+    <imgdir name="30004">
+        <imgdir name="0">
+            <string name="startscript" value="q30004s"/>
+            <int name="npc" value="2101"/>
+            <int name="lvmin" value="0"/>
+            <int name="lvmax" value="10"/>
+        </imgdir>
+        <imgdir name="1">
+            <string name="endscript" value="q30004e"/>
+            <int name="npc" value="2101"/>			
+        </imgdir>
+    </imgdir>	
 </imgdir>

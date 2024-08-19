@@ -15,7 +15,7 @@ function action(mode, type, selection)
 	    if (status == 0)
 	    {
 			//第一层对话
-		    cm.sendOk("好的，那么我们出发吧。冒险旅途开始了！");			
+		    cm.sendNext("好的，那么我们出发吧。冒险旅途开始了！");			
 	    }
 		else
 		{
