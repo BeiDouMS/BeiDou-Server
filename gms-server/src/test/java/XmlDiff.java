@@ -20,11 +20,11 @@ public class XmlDiff {
     @Test
     public void stringDiff() throws Exception {
         // Comparer1
-        final String comparerPath1 = "wz/String.wz/Eqp.img.xml";
+        final String comparerPath1 = "wz/String.wz/ToolTipHelp.img.xml";
         // Comparer2
-        final String comparerPath2 = "wz-zh-CN/String.wz/Eqp.img.xml";
+        final String comparerPath2 = "wz-zh-CN/String.wz/ToolTipHelp.img.xml";
         // Writer
-        final String writeName = "Eqp.img.xml";
+        final String writeName = "ToolTipHelp.img.xml";
 
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         Document parsed1 = builder.parse(new File(comparerPath1));
