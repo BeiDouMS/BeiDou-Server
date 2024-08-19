@@ -123,7 +123,6 @@ public class GiveService {
                     case 7 -> "expRate";
                     case 8 -> "mesoRate";
                     case 9 -> "dropRate";
-                    case 10 -> "bossRate";
                     default -> "None";
                 };
                 giveRateChr(chr, rateType, submitData.getRate());
