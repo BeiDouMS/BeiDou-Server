@@ -6247,7 +6247,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         for (Integer couponId : couponEffects) {
-            commitBuffCoupon(couponId);
+            //commitBuffCoupon(couponId);
         }
     }
 
