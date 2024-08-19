@@ -37,21 +37,19 @@ public class SpawnCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        final int mid = Integer.parseInt(params[0]);
         Character player = c.getPlayer();
         if (params.length < 1) {
             player.yellowMessage(I18nUtil.getMessage("SpawnCommand.message2"));
             return;
         }
 
-        Monster monster = LifeFactory.getMonster(mid);
+        Monster monster = LifeFactory.getMonster(Integer.parseInt(params[0]));
         if (monster == null) {
             return;
         }
         if (params.length == 2) {
             for (int i = 0; i < Integer.parseInt(params[1]); i++) {
-                Monster mob = LifeFactory.getMonster(mid);
-                player.getMap().spawnMonsterOnGroundBelow(mob, player.getPosition());
+                player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
             }
         } else {
             player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
