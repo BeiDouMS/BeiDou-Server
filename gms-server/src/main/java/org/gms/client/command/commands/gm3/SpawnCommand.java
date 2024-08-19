@@ -49,7 +49,7 @@ public class SpawnCommand extends Command {
         }
         if (params.length == 2) {
             for (int i = 0; i < Integer.parseInt(params[1]); i++) {
-                player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
+                player.getMap().spawnMonsterOnGroundBelow(new Monster(monster.getId(), monster.getStats()), player.getPosition());
             }
         } else {
             player.getMap().spawnMonsterOnGroundBelow(monster, player.getPosition());
