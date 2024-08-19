@@ -23,6 +23,7 @@
 */
 package org.gms.client.command.commands.gm0;
 
+import org.gms.client.BuffStat;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
@@ -37,11 +38,15 @@ public class RatesCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-
+        Integer exp_buff = 1;
         // travel rates 不在这里进行展示 因为它是全局的 与角色无关
         String noviceMsg = player.hasNoviceExpRate() ? I18nUtil.getMessage("ShowRatesCommand.message7") : "";
         String showMsg_ = "#e" + I18nUtil.getMessage("RatesCommand.message2") + "#n\r\n\r\n";
-        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() + "x#k#n " + noviceMsg + "\r\n";
+        Integer expBuff = player.getBuffedValue(BuffStat.EXP_BUFF);
+        if (expBuff != null) {
+            exp_buff = 2;
+        }
+        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() * exp_buff + "x#k#n " + noviceMsg + "\r\n";
         if (player.getMobExpRate() > 1) {
             showMsg_ += I18nUtil.getMessage("RatesCommand.message4") + "#e#b" + Math.round(player.getMobExpRate() * 100f) / 100f + "x#k#n" + "\r\n";
         }

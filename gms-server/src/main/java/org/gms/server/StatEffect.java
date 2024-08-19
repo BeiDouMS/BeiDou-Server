@@ -135,7 +135,7 @@ public class StatEffect {
     private short mpCon, hpCon;
     private int duration, target, barrier, mob;
     private boolean overTime, repeatEffect;
-    private int sourceid;
+    private int sourceid,expbuff;
     private int moveTo;
     private int cp, nuffSkill;
     private List<Disease> cureDebuffs;
@@ -309,7 +309,7 @@ public class StatEffect {
         ret.mdef = (short) DataTool.getInt("mdd", source, 0);
         ret.acc = (short) DataTool.getIntConvert("acc", source, 0);
         ret.avoid = (short) DataTool.getInt("eva", source, 0);
-
+        ret.expbuff = DataTool.getInt("expBuff", source, 0);
         ret.speed = (short) DataTool.getInt("speed", source, 0);
         ret.jump = (short) DataTool.getInt("jump", source, 0);
 
@@ -340,11 +340,11 @@ public class StatEffect {
                 } else if (ItemId.isRateCoupon(sourceid)) {
                     switch (DataTool.getInt("expR", source, 0)) {
                         case 1:
-                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP1, 1);
+                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
                             break;
 
                         case 2:
-                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP2, 1);
+                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
                             break;
 
                         case 3:
@@ -352,7 +352,7 @@ public class StatEffect {
                             break;
 
                         case 4:
-                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP4, 1);
+                            addBuffStatPairToListIfNotZero(statups, BuffStat.COUPON_EXP3, 1);
                             break;
                     }
 
@@ -459,6 +459,7 @@ public class StatEffect {
             addBuffStatPairToListIfNotZero(statups, BuffStat.AVOID, (int) ret.avoid);
             addBuffStatPairToListIfNotZero(statups, BuffStat.SPEED, (int) ret.speed);
             addBuffStatPairToListIfNotZero(statups, BuffStat.JUMP, (int) ret.jump);
+            addBuffStatPairToListIfNotZero(statups, BuffStat.EXP_BUFF, Integer.valueOf(ret.expbuff));
         }
 
         Data ltd = source.getChildByPath("lt");
