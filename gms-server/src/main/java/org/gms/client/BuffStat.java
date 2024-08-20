@@ -45,6 +45,7 @@ public enum BuffStat {
 
     // ------ COUPON feature ------
     COUPON_EXP1(0x100000L),
+    EXP_BUFF(0x40000000L),
     COUPON_EXP2(0x200000L),
     COUPON_EXP3(0x400000L), COUPON_EXP4(0x400000L),
     COUPON_DRP1(0x800000L),
