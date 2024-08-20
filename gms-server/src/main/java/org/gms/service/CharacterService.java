@@ -144,6 +144,10 @@ public class CharacterService {
            return charactersMapper.selectListByQuery(queryWrapper);
     }
 
+    public List<CharactersDO> findByName(String name) {
+        return charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(name)));
+    }
+
     private void checkName(ExtendValueDO data) {
         check(data);
         // 非法请求篡改其他字段

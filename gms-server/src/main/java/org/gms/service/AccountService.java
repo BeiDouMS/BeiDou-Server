@@ -2,6 +2,7 @@ package org.gms.service;
 
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.DefaultDates;
@@ -22,7 +23,6 @@ import org.gms.util.BCrypt;
 import org.gms.util.HexTool;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -32,24 +32,19 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.gms.client.Client.LOGIN_LOGGEDIN;
 import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
 
 @Service
+@AllArgsConstructor
 public class AccountService {
     private final AccountsMapper accountsMapper;
     private final CharactersMapper charactersMapper;
     private final IpbansMapper ipbansMapper;
     private final MacbansMapper macbansMapper;
-
-    @Autowired
-    public AccountService(AccountsMapper accountsMapper, CharactersMapper charactersMapper, IpbansMapper ipbansMapper, MacbansMapper macbansMapper) {
-        this.accountsMapper = accountsMapper;
-        this.charactersMapper = charactersMapper;
-        this.ipbansMapper = ipbansMapper;
-        this.macbansMapper = macbansMapper;
-    }
+    private final CharacterService characterService;
 
     public AccountsDO findByName(String name) {
         return accountsMapper.selectOneByName(name);
@@ -217,7 +212,7 @@ public class AccountService {
             c.disconnect(false, false);
         }
     }
-    
+
     public void unbanAccount(int accountId) {
         RequireUtil.requireNotNull(findById(accountId), I18nUtil.getExceptionMessage("AccountService.id.NotExist"));
 
@@ -240,5 +235,32 @@ public class AccountService {
         accountsMapper.update(AccountsDO.builder().banned(true).id(chr.getAccountID()).banreason(reason).build());
         // 更新在线的ban状态
         chr.setBanned(true);
+    }
+
+    public void ban(String str, String reason, boolean isAccount) {
+        if (str.matches("[0-9]{1,3}\\..*")) {
+            ipbansMapper.insertSelective(IpbansDO.builder().ip(str).build());
+            return;
+        }
+        Integer accountId = null;
+        if (isAccount) {
+            AccountsDO accountsDO = findByName(str);
+            if (accountsDO != null) {
+                accountId = accountsDO.getId();
+            }
+        } else {
+            List<CharactersDO> charactersDOS = characterService.findByName(str);
+            if (!charactersDOS.isEmpty()) {
+                accountId = charactersDOS.getFirst().getAccountid();
+            }
+        }
+        if (accountId == null) {
+            throw new NoSuchElementException();
+        }
+        accountsMapper.update(AccountsDO.builder()
+                .id(accountId)
+                .banreason(reason)
+                .banned(true)
+                .build());
     }
 }

@@ -29,8 +29,7 @@ public class NameChangeService {
     private final RingsMapper ringsMapper;
 
     public void applyAllNameChange() {
-        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
-                .where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()));
+        List<NamechangesDO> namechangesDOList = getAllNameChanges();
         namechangesDOList.forEach(namechangesDO -> {
             try {
                 // 事物隔离
@@ -57,6 +56,10 @@ public class NameChangeService {
                 log.error(I18nUtil.getLogMessage("Server.init.error4"), e);
             }
         }
+    }
+
+    public List<NamechangesDO> getAllNameChanges() {
+        return namechangesMapper.selectListByQuery(QueryWrapper.create().where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()));
     }
 
     /**
