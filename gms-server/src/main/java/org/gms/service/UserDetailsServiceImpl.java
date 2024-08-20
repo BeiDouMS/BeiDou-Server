@@ -34,6 +34,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (user.getWebadmin() == 1) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
+        
+        // 一刀切临时禁止非管理员用户访问
+        if (user.getWebadmin() == 0) {
+            return null;
+        }
         return UserDetailsImpl.build(user, authorities);
     }
 
