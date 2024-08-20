@@ -35,16 +35,16 @@ function start(mode, type, selection) {
             status--;
         
         if (status == 0) {
-            qm.sendNext("嗨~旅行者，时隔多年您又回到了记忆中的冒险岛呢，还记得吗？这是您刚踏入旅程时的第一站。");
+            qm.sendNext("嗨~冒险者，时隔多年您又回到了记忆中的冒险岛呢，还记得吗？这是您刚踏入旅程时的第一站。");
         } 
 		else if (status == 1) 
 		{
 			
-			qm.sendAcceptDecline("也许职业，村子您早已烂熟于心，但我还是要向您介绍一下4个职业，因为这是我的职责，希望您能接受。");
+			qm.sendAcceptDecline("也许关于职业和村子您早已烂熟于心，但我还是要向您介绍一下4个职业，因为这是我的职责，希望您能接受。");
         }
 		else if (status == 2 && mode == 1)
 		{
-			qm.sendOk("非常感谢您，您按下#bALT#k键跳上履带，可以回忆大局变以前的角色，在您参观完毕后，跟我的好友罗杰对话吧。")
+			qm.sendOk("非常感谢您，您按下#bALT#k键跳上履带，可以回忆大巨变以前的角色，在您参观完毕后，跟我的好友罗杰对话吧。")
             qm.forceStartQuest();
             qm.dispose();			
 		}
