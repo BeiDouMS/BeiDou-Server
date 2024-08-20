@@ -30,7 +30,7 @@ public class DropDataGlobalDO implements Serializable {
     @Id(keyType = KeyType.Auto)
     private Long id;
 
-    private Boolean continent;
+    private Integer continent;
 
     private Integer itemid;
 
