@@ -38,6 +38,15 @@ function writeServerStaff_BeiDou() {
     addPerson("香辣汉堡", "开发者");
     addPerson("TokyoEric", "贡献者");
     addPerson("刘波波", "贡献者");
+    addPerson("huash", "贡献者");
+    addPerson("Tomddlee", "贡献者");
+    addPerson("Datas", "贡献者");
+    addPerson("stanx5", "贡献者");
+    addPerson("jarecl", "贡献者");
+    addPerson("g9502995", "贡献者");
+    addPerson("kengwon", "贡献者");
+    addPerson("小蜗", "贡献者");
+    addPerson("r09er", "贡献者");
 
     setHistory(2024, 2024);
 }
