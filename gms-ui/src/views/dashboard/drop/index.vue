@@ -242,11 +242,11 @@
     loadData();
   };
 
-  const editId = ref<number>(undefined);
+  const editId = ref<number>(0);
 
   const tableData = ref<DropState[]>([]);
   const loadData = async () => {
-    editId.value = undefined;
+    editId.value = 0;
     setLoading(true);
     try {
       const { data } = await getDrop(condition.value);
@@ -286,7 +286,7 @@
   };
 
   const cancelEditClick = () => {
-    editId.value = undefined;
+    editId.value = 0;
   };
 
   const saveClick = async (data: DropState) => {
