@@ -30,11 +30,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         AccountsDO user = userDao.selectOneByName(username);
         if (user == null) {return null;}
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        if (user.getWebadmin() == 1) {
+        if (user.getWebadmin() != null && user.getWebadmin() == 1) {
+            List<GrantedAuthority> authorities = new ArrayList<>();
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            return UserDetailsImpl.build(user, authorities);
         }
-        return UserDetailsImpl.build(user, authorities);
+        return null;
     }
 
 }

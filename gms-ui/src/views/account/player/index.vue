@@ -434,7 +434,7 @@
       { value: 7, label: t('account.player.expRate') },
       { value: 8, label: t('account.player.mesosRate') },
       { value: 9, label: t('account.player.dropRate') },
-      { value: 10, label: t('account.player.bossRate') },
+      // { value: 10, label: t('account.player.bossRate') },
       { value: 11, label: t('account.player.gm') },
       { value: 12, label: t('account.player.fame') },
     ];

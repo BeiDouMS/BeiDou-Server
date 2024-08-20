@@ -42,6 +42,26 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'drop',
+      name: 'drop',
+      component: () => import('@/views/dashboard/drop/index.vue'),
+      meta: {
+        locale: 'menu.dashboard.drop',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
+      path: 'drop/global',
+      name: 'globalDrop',
+      component: () => import('@/views/dashboard/drop/global.vue'),
+      meta: {
+        locale: 'menu.dashboard.drop.global',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

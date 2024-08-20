@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :loading="true">
+  <div class="container">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.dashboard.cashShop')">
       <a-tabs

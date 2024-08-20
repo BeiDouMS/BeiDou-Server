@@ -123,7 +123,6 @@ public class GiveService {
                     case 7 -> "expRate";
                     case 8 -> "mesoRate";
                     case 9 -> "dropRate";
-                    case 10 -> "bossRate";
                     default -> "None";
                 };
                 giveRateChr(chr, rateType, submitData.getRate());
@@ -139,14 +138,14 @@ public class GiveService {
 
     private void giveNxAllOnlineChr(int quantity, int type) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
-            chr.getCashShop().gainCash(type, quantity);
+            doGainCash(chr, type, quantity);
             chr.message(I18nUtil.getMessage("Give.Nx.All", quantity, getCashTypeName(type)));
         }));
         log.info(I18nUtil.getLogMessage("Give.Nx.All.info1", quantity, getCashTypeName(type)));
     }
 
     private void giveNxChr(Character chr, int quantity, int type) {
-        chr.getCashShop().gainCash(type, quantity);
+        doGainCash(chr, type, quantity);
         chr.message(I18nUtil.getMessage("Give.Nx.Chr", quantity, getCashTypeName(type)));
         log.info(I18nUtil.getLogMessage("Give.Nx.Chr.info1", chr.getId(), chr.getName(), quantity, getCashTypeName(type)));
     }
@@ -161,28 +160,28 @@ public class GiveService {
 
     private void giveMesosAllOnlineChr(int quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
-            chr.gainMeso(quantity);
+            doGainMeso(chr, quantity);
             chr.message(I18nUtil.getMessage("Give.Mesos.All", quantity));
         }));
         log.info(I18nUtil.getLogMessage("Give.Mesos.All.info1", quantity));
     }
 
     private void giveMesosChr(Character chr, int quantity) {
-        chr.gainMeso(quantity);
+        doGainMeso(chr, quantity);
         chr.message(I18nUtil.getMessage("Give.Mesos.Chr", quantity));
         log.info(I18nUtil.getLogMessage("Give.Mesos.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
 
     private void giveExpAllOnlineChr(int quantity) {
         Server.getInstance().getWorlds().forEach(world -> world.getPlayerStorage().getAllCharacters().forEach(chr -> {
-            chr.gainExp(quantity);
+            doGainExp(chr, quantity);
             chr.message(I18nUtil.getMessage("Give.Exp.All", quantity));
         }));
         log.info(I18nUtil.getLogMessage("Give.Exp.All.info1", quantity));
     }
 
     private void giveExpChr(Character chr, int quantity) {
-        chr.gainExp(quantity);
+        doGainExp(chr, quantity);
         chr.message(I18nUtil.getMessage("Give.Exp.Chr", quantity));
         log.info(I18nUtil.getLogMessage("Give.Exp.Chr.info1", chr.getId(), chr.getName(), quantity));
     }
@@ -414,6 +413,41 @@ public class GiveService {
         log.info(I18nUtil.getLogMessage("Give.Fame.Chr.info1", chr.getId(), chr.getName(), fame));
     }
 
+    private void doGainCash(Character chr, int type, int quantity) {
+        int cash = chr.getCashShop().getCash(type);
+        long sum = (long) cash + (long) quantity;
+        // 禁止点券小于0导致商城错误
+        if (sum < 0) {
+            sum = -cash;
+        }
+        // 禁止点券大于最大值
+        if (sum > Integer.MAX_VALUE) {
+            sum = Integer.MAX_VALUE - cash;
+        }
+        chr.getCashShop().gainCash(type, (int) sum);
+    }
 
+    private void doGainExp(Character chr, int quantity) {
+        int exp = chr.getExp();
+        long sum = (long) exp + (long) quantity;
+        // 最低只能把经验清0
+        if (sum < 0) {
+            sum = -exp;
+        } else {
+            sum = quantity;
+        }
+        chr.gainExp((int) sum);
+    }
 
+    private void doGainMeso(Character chr, int quantity) {
+        int meso = chr.getMeso();
+        long sum = (long) meso + (long) quantity;
+        if (sum < 0) {
+            sum = -meso;
+        }
+        if (sum > Integer.MAX_VALUE) {
+            sum = Integer.MAX_VALUE - meso;
+        }
+        chr.gainMeso((int) sum);
+    }
 }
