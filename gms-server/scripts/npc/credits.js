@@ -34,8 +34,20 @@ function writeServerStaff_MapleNext() {
 */
 
 function writeServerStaff_BeiDou() {
-    addPerson("昨日小睡", "Developer");
+    addPerson("SleepNap", "Developer");
     addPerson("leevccc", "Developer");
+    addPerson("BurgerKing", "Developer");
+    addPerson("TokyoEric", "Contributor");
+    addPerson("yainse", "Contributor");
+    addPerson("huash", "Contributor");
+    addPerson("Tomddlee", "Contributor");
+    addPerson("Datas", "Contributor");
+    addPerson("stanx5", "Contributor");
+    addPerson("jarecl", "Contributor");
+    addPerson("g9502995", "Contributor");
+    addPerson("kengwon", "Contributor");
+    addPerson("snail", "Contributor");
+    addPerson("r09er", "Contributor");
 
     setHistory(2024, 2024);
 }

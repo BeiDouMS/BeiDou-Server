@@ -81,6 +81,7 @@ import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
 import org.gms.service.AccountService;
+import org.gms.service.CharacterService;
 import org.gms.service.NameChangeService;
 import org.gms.util.*;
 import org.gms.exception.NotEnabledException;
@@ -95,7 +96,6 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.lang.ref.WeakReference;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.*;
 import java.util.Map.Entry;
@@ -336,7 +336,10 @@ public class Character extends AbstractCharacterObject {
     private final Set<Integer> excludedItems = new LinkedHashSet<>();
     @Getter
     private final Set<Integer> disabledPartySearchInvites = new LinkedHashSet<>();
-    private long portaldelay = 0, lastcombo = 0;
+    private long portaldelay = 0;
+    @Getter
+    @Setter
+    private long lastCombo = 0;
     private short combocounter = 0;
     @Getter
     private final List<String> blockedPortals = new ArrayList<>();
@@ -648,39 +651,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public static boolean ban(String id, String reason, boolean accountId) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            if (id.matches("[0-9]{1,3}\\..*")) {
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)")) {
-                    ps.setString(1, id);
-                    ps.executeUpdate();
-                    return true;
-                }
-            }
-
-            final String query;
-            if (accountId) {
-                query = "SELECT id FROM accounts WHERE name = ?";
-            } else {
-                query = "SELECT accountid FROM characters WHERE name = ?";
-            }
-
-            boolean ret = false;
-            try (PreparedStatement ps = con.prepareStatement(query)) {
-                ps.setString(1, id);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        try (PreparedStatement ps2 = con.prepareStatement("UPDATE accounts SET banned = 1, banreason = ? WHERE id = ?")) {
-                            ps2.setString(1, reason);
-                            ps2.setInt(2, rs.getInt(1));
-                            ps2.executeUpdate();
-                        }
-                        ret = true;
-                    }
-                }
-            }
-            return ret;
-        } catch (SQLException ex) {
+        try  {
+            AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+            accountService.ban(id, reason, accountId);
+            return true;
+        } catch (Exception ex) {
             log.error(I18nUtil.getLogMessage("Character.ban.error1"), id, ex);
         }
         return false;
@@ -756,16 +731,8 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setLastCombo(long time) {
-        lastcombo = time;
-    }
-
     public short getCombo() {
         return combocounter;
-    }
-
-    public long getLastCombo() {
-        return lastcombo;
     }
 
     public boolean cannotEnterCashShop() {
@@ -838,7 +805,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void toggleHide(boolean login) {
-        hide(!hidden);
+        hide(!hidden, login);
     }
 
     public void cancelMagicDoor() {
@@ -872,28 +839,19 @@ public class Character extends AbstractCharacterObject {
     }
 
     public static boolean existName(String name) {
-        boolean result = false;
-        // 检查角色名是否已存在
-        try (Connection con = DatabaseConnection.getConnection()) {
-            PreparedStatement ps = con.prepareStatement("SELECT id FROM characters WHERE name = ?");
-            ps.setString(1, name);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                result = true;
-            } else {
-                ps = con.prepareStatement("SELECT id FROM namechanges WHERE new = ? AND completionTime IS NULL");
-                ps.setString(1, name);
-                rs = ps.executeQuery();
-                if (rs.next()) {
-                    result = true;
-                }
+        try {
+            CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+            if (!characterService.findByName(name).isEmpty()) {
+                return true;
             }
-            ps.close();
-            rs.close();
+            NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+            if (!nameChangeService.getAllNameChanges().isEmpty()) {
+                return true;
+            }
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Character.ban.error2"), e);
         }
-        return result;
+        return false;
     }
 
     public boolean canDoor() {
@@ -10219,12 +10177,6 @@ public class Character extends AbstractCharacterObject {
             e.printStackTrace();
         }
         throw new RuntimeException();
-    }
-
-    public void executeReborn() {
-        // default to beginner: job id = 0
-        // this prevents a breaking change
-        executeRebornAs(Job.BEGINNER);
     }
 
     public void executeRebornAsId(int jobId) {
