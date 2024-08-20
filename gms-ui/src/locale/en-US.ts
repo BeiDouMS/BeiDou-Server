@@ -1,3 +1,4 @@
+import drop from '@/views/dashboard/drop/locale/en-US';
 import cashShop from '@/views/dashboard/cashShop/locale/en-US';
 import npcShop from '@/views/dashboard/npcShop/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
@@ -10,6 +11,8 @@ export default {
   'menu.dashboard.workplace': 'Workplace',
   'menu.dashboard.npcShop': 'NPC Shop',
   'menu.dashboard.cashShop': 'Cash Shop',
+  'menu.dashboard.drop': 'Mob Drop',
+  'menu.dashboard.drop.global': 'Global Drop',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -33,4 +36,5 @@ export default {
   ...account,
   ...npcShop,
   ...cashShop,
+  ...drop,
 };
