@@ -40,8 +40,7 @@ function action(mode, type, selection) {
                 cm.dispose();
             }
         } else if (status == 1) {
-            cm.gainItem(2030019, 1);
-            cm.warp(100000006, 0);
+            cm.warp(912000000, 0);
             cm.dispose();
         }
     }
