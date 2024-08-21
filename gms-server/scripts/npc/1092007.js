@@ -32,7 +32,7 @@ function action(mode, type, selection) {
             if (mode == 1) { // Player chose "Yes"
                 cm.warp(912000000, 0);
             } else { // Player chose "No"
-                cm.sendOk("The Black Magician and his followers. Kyrin and the Nautilus crew. They will pursue each other until one of them is gone, that's for sure.");
+                cm.sendOk("The Black Magician and his followers. Kyrin and the Crew of Nautilus. \n They'll be chasing one another until one of them doesn't exist, that's for sure.");
             }
             cm.dispose();
         }
