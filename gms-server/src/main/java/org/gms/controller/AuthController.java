@@ -34,4 +34,11 @@ public class AuthController {
     public ResultBody<Object> logout() {
         return ResultBody.success();
     }
+
+    @Tag(name = "/auth/" + ApiConstant.LATEST)
+    @Operation(summary = "刷新token")
+    @GetMapping("/" + ApiConstant.LATEST + "/refreshToken")
+    public ResultBody<Map<String, String>> refreshToken(@RequestHeader("Authorization") String token) {
+        return ResultBody.success(authService.refreshToken(token));
+    }
 }

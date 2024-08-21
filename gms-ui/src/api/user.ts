@@ -30,3 +30,7 @@ export function getUserInfo() {
 export function getMenuList() {
   return axios.get<RouteRecordNormalized[]>('/account/v1/menu');
 }
+
+export function refreshToken() {
+  return axios.get<LoginRes>('/auth/v1/refreshToken');
+}

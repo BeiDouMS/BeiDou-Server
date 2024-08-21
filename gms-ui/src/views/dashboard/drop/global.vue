@@ -138,7 +138,12 @@
             :width="180"
             data-index="comments"
             align="center"
-          />
+          >
+            <template #cell="{ record }">
+              <a-input v-if="editId === record.id" v-model="record.comments" />
+              <span v-else>{{ record.comments }}</span>
+            </template>
+          </a-table-column>
           <a-table-column title="操作" :width="200" fixed="right">
             <template #cell="{ record }">
               <a-button
