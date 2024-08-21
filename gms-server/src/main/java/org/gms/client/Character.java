@@ -325,6 +325,8 @@ public class Character extends AbstractCharacterObject {
     private ScheduledFuture<?> chairRecoveryTask = null;
     private ScheduledFuture<?> pendantOfSpirit = null; //1122017
     private ScheduledFuture<?> cpqSchedule = null;
+
+    private ScheduledFuture<?> FamilyBuffTimer = null;
     private final Lock chrLock = new ReentrantLock(true);
     private final Lock evtLock = new ReentrantLock(true);
     private final Lock petLock = new ReentrantLock(true);
@@ -394,6 +396,10 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private boolean chasing = false;
     private float mobExpRate = -1;
+
+    private boolean familybuff = false,familyparty = false;
+
+    private float familyexp = 1 ,familydrop = 1;
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -10361,4 +10367,49 @@ public class Character extends AbstractCharacterObject {
         });
         InventoryManipulator.addFromDrop(getClient(), baseEquip, false);
     }
+
+    public void setFamilybuff(boolean type,float exp,float drop) {
+        this.familybuff = type;
+        this.familyexp = exp;
+        this.familydrop = drop;
+    }
+
+    public boolean isFamilybuff() {
+        return familybuff;
+    }
+
+    // 获取 FamilyExp 的值
+    public float getFamilyexp() {
+        return familyexp;
+    }
+
+    // 获取 FamilyDrop 的值
+    public float getFamilydrop() {
+        return familydrop;
+    }
+
+    public void startFamilyBuffTimer(int delay) {
+        if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
+            FamilyBuffTimer.cancel(false);
+        }
+        FamilyBuffTimer = TimerManager.getInstance().schedule(() -> {
+            try {
+                sendPacket(PacketCreator.cancelFamilyBuff());
+            } finally {
+
+                if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
+                    FamilyBuffTimer.cancel(false);
+                    setFamilybuff(false,1,1);
+                }
+            }
+        }, delay);
+    }
+
+    public void cancelFamilyBuffTimer() {
+        if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
+            FamilyBuffTimer.cancel(false);
+            setFamilybuff(false,1,1);
+        }
+    }
+
 }

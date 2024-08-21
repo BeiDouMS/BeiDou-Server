@@ -7457,4 +7457,23 @@ public class PacketCreator {
         return p;
     }
 
+    public static Packet familyBuff(int type, int buffnr, int amount, int time) {
+        OutPacket p = OutPacket.create(SendOpcode.FAMILY_SET_PRIVILEGE);
+        p.writeByte(type);
+        if (type >= 2 && type <= 4) {
+            p.writeInt(buffnr);
+            p.writeInt(type == 3 ? 0 : amount);
+            p.writeInt(type == 2 ? 0 : amount);
+            p.writeByte(0);
+            p.writeInt(time);
+        }
+        return p;
+    }
+
+
+
+    public static Packet cancelFamilyBuff() {
+        return familyBuff(0, 0, 0, 0);
+    }
+
 }
