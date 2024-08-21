@@ -76634,7 +76634,7 @@
                     <int name="count" value="5"/>
                     <int name="id" value="9409001"/>
                 </imgdir>
-            </imgdir>			
+            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="30003">
@@ -76652,7 +76652,7 @@
                     <int name="count" value="5"/>
                     <int name="id" value="9409000"/>
                 </imgdir>
-            </imgdir>			
+            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="30004">
@@ -76664,7 +76664,27 @@
         </imgdir>
         <imgdir name="1">
             <string name="endscript" value="q30004e"/>
-            <int name="npc" value="2101"/>			
+            <int name="npc" value="2101"/>
         </imgdir>
-    </imgdir>	
+    </imgdir>
+    <imgdir name="30005">
+        <imgdir name="0">
+            <string name="startscript" value="q30005s"/>
+            <int name="npc" value="9900000"/>
+            <int name="lvmin" value="0"/>
+            <int name="lvmax" value="250"/>
+            <int name="interval" value="1440"/>
+            <int name="normalAutoStart" value="1"/>
+        </imgdir>
+        <imgdir name="1">
+            <string name="endscript" value="q30005e"/>
+            <int name="npc" value="9900000"/>
+            <imgdir name="mob">
+                <imgdir name="0">
+                    <int name="id" value="4230101"/>
+                    <int name="count" value="200"/>
+                </imgdir>
+            </imgdir>
+        </imgdir>
+    </imgdir>
 </imgdir>
