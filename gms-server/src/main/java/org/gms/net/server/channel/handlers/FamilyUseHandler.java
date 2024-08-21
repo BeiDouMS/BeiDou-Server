@@ -140,7 +140,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                         break;
 
                     case SELF_EXP_2_30MIN:
-                        duration = 1;
+                        duration = 30;
                         rate = 2;
                         c.sendPacket(PacketCreator.familyBuff(2, 8, 1, duration * 60000));
                         c.getPlayer().setFamilybuff(true,rate,1);
