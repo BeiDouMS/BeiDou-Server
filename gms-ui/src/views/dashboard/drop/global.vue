@@ -52,7 +52,7 @@
               <span v-else>{{ record.continent }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="物品ID" :width="160" align="center">
+          <a-table-column title="物品ID" :width="140" align="center">
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -86,7 +86,7 @@
               </a-popover>
             </template>
           </a-table-column>
-          <a-table-column title="最少" :width="120" align="center">
+          <a-table-column title="最少" :width="100" align="center">
             <template #cell="{ record }">
               <a-input-number
                 v-if="editId === record.id"
@@ -98,7 +98,7 @@
           <a-table-column
             title="最多"
             data-index="maximumQuantity"
-            :width="120"
+            :width="100"
             align="center"
           >
             <template #cell="{ record }">
@@ -127,9 +127,19 @@
               <span v-else> {{ record.questId }}</span>
             </template>
           </a-table-column>
-          <a-table-column title="任务" data-index="questName" align="center" />
-          <a-table-column title="备注" data-index="comments" align="center" />
-          <a-table-column title="操作" :width="200">
+          <a-table-column
+            title="任务"
+            :width="120"
+            data-index="questName"
+            align="center"
+          />
+          <a-table-column
+            title="备注"
+            :width="180"
+            data-index="comments"
+            align="center"
+          />
+          <a-table-column title="操作" :width="200" fixed="right">
             <template #cell="{ record }">
               <a-button
                 v-if="editId !== record.id"
