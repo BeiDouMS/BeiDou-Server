@@ -46,12 +46,12 @@ public class RatesCommand extends Command {
         if (expBuff != null) {
             exp_buff = 2;
         }
-        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() * exp_buff + "x#k#n " + noviceMsg + "\r\n";
+        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message6") + "#e#b" + player.getExpRate() * exp_buff * player.getFamilyexp() + "x#k#n " + noviceMsg + "\r\n";
         if (player.getMobExpRate() > 1) {
             showMsg_ += I18nUtil.getMessage("RatesCommand.message4") + "#e#b" + Math.round(player.getMobExpRate() * 100f) / 100f + "x#k#n" + "\r\n";
         }
         showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message12") + "#e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
-        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message17") + "#e#b" + player.getDropRate() + "x#k#n" + "\r\n";
+        showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message17") + "#e#b" + player.getDropRate() *  player.getFamilydrop() + "x#k#n" + "\r\n";
         showMsg_ += I18nUtil.getMessage("ShowRatesCommand.message22") + "#e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
         if (YamlConfig.config.server.USE_QUEST_RATE) {
             showMsg_ += I18nUtil.getMessage("RatesCommand.message3") + "#e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";

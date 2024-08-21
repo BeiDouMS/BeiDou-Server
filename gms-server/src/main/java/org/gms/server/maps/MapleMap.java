@@ -751,6 +751,10 @@ public class MapleMap {
             chRate = 1;
         }
 
+        if(chr.isFamilybuff()){
+            chRate *= chr.getFamilydrop();
+        }
+
         final MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
         final List<MonsterGlobalDropEntry> globalEntry = mi.getRelevantGlobalDrops(this.getId());
 
