@@ -49,7 +49,7 @@ function action(mode, type, selection) {
 
                     im.forceCompleteQuest(2324);
                     im.removeAll(2430015);
-                    im.playerMessage(5, "You have used the Thorn Remover to clear the path.");
+                    im.playerMessage(5, "你已经使用尖刺消除剂清除道路上的荆棘。");
                 }
             }
 
