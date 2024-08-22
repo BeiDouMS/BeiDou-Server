@@ -1,11 +1,13 @@
 version: '3'
 services:
   maplestory:
+    container_name: beidou-client
     build:
       context: ../../
       dockerfile: ./gms-server/docker/Dockerfile
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     ports:
       # Web
       - "8686:8686"
@@ -21,6 +23,7 @@ services:
       - ./application.yml:/opt/server/application.yml
 
   db:
+    container_name: database
     image: mysql:8.4.0
     environment:
       MYSQL_ROOT_PASSWORD: "root"
@@ -28,3 +31,8 @@ services:
       - "3306:3306"
     volumes:
       - ./docker-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
