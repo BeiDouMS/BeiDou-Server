@@ -1,7 +1,7 @@
 version: '3'
 services:
   maplestory:
-    container_name: beidou-client
+    container_name: beidou-server
     build:
       context: ../../
       dockerfile: ./gms-server/docker/Dockerfile
@@ -32,7 +32,7 @@ services:
     volumes:
       - ./docker-db-data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "uroot", "proot"]
       interval: 10s
       timeout: 5s
       retries: 10
