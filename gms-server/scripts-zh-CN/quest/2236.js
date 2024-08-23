@@ -46,7 +46,7 @@ function end(mode, type, selection) {
             }
             qm.gainItem(4032263, 6);
 
-            qm.sendOk("哦，不好。我仍然感受到来自内部的不祥预兆。拿着这些护身符，将它们封印在巫师岩石上。我们指望你了。" +qm.getQuestProgress(2236,1));
+            qm.sendOk("哦，不好。我仍然感受到来自内部的不祥预兆。拿着这些护身符，将它们封印在巫师岩石上。我们指望你了。");
             qm.setQuestProgress(2236, 1,"000000");
         }
         qm.dispose();
