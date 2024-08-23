@@ -35,7 +35,7 @@ function start() {
         var nextProgress = progress.substring(0, slot) + '1' + progress.substring(slot + 1);
         cm.gainItem(4032263, -1);
         cm.setQuestProgress(2236, 1 , nextProgress);
-        cm.sendOk("由于灵符的法力，封印了该地区的邪恶势力。当前任务进度: " + progress + slot);
+        cm.sendOk("由于灵符的法力，封印了该地区的邪恶势力。");
         cm.dispose();
     }
 
