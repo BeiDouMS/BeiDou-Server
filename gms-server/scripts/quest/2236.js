@@ -27,19 +27,20 @@ function end(mode, type, selection) {
 	status++;
 
 	if(status == 0) {
-	       qm.sendOk("I," + qm.getQuestProgress(2236));
-		if(qm.getQuestProgress(2236) == 63) {	//111111
+		if(qm.getQuestProgress(2236,1) == "111111") {	//111111
 
 			qm.sendOk("I, too, felt it. The force of the Shaman Rocks began to overpower the forces of evil. I think Sleepywood is safe now. The evil has been eliminated.");
 			qm.gainExp(60000 * qm.getPlayer().getExpRate());
 			qm.forceCompleteQuest();
 		}
 		else {
-			if(qm.haveItem(4032263)) qm.gainItem(4032263, -6);
+			if(qm.haveItem(4032263))｛
+			  qm.gainItem(4032263, -6);
+			｝
 			qm.gainItem(4032263, 6);
 
 			qm.sendOk("Oh, not good. I still sense bad omens coming from the interior. Here, take these charms and seal them at the Shaman Rocks. We are counting on you.");
-			qm.resetQuestProgress(2236, 0);
+			qm.setQuestProgress(2236, 1,"000000");
 		}
 	
 		qm.dispose();
