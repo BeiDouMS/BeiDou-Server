@@ -95,7 +95,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
             c.getPlayer().message("暂时关闭");
             //not implemented
         } else {
-            if (c.getPlayer().isFamilybuff()) {
+            if (c.getPlayer().isFamilyBuff()) {
                 c.getPlayer().message("你已经有BUFF");
                 return;
             }
@@ -105,9 +105,6 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
             do {
                 switch (type) {
                     case PARTY_EXP_2_30MIN:
-                        c.getPlayer().message("暂时关闭");
-                        break;
-
                     case PARTY_DROP_2_30MIN:
                         c.getPlayer().message("暂时关闭");
                         break;
@@ -116,25 +113,22 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                         duration = 30;
                         rate = 2;
                         c.sendPacket(PacketCreator.familyBuff(3, 7, 1, duration  * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
+                        c.getPlayer().setFamilyBuff(true,rate,1);
                         c.getPlayer().startFamilyBuffTimer(duration  * 60000);
                         useEntitlement(entry,FamilyEntitlement.SELF_DROP_2_30MIN);
                         break;
 
                     case SELF_DROP_2:
-                        duration = 15;
                         rate = 2;
                         c.sendPacket(PacketCreator.familyBuff(3, 5, 1, duration  * 60000));
-                        c.getPlayer().setFamilybuff(true,1,rate);
+                        c.getPlayer().setFamilyBuff(true,1,rate);
                         c.getPlayer().startFamilyBuffTimer(duration  * 60000);
                         useEntitlement(entry,FamilyEntitlement.SELF_DROP_2);
                         break;
 
                     case SELF_DROP_1_5:
-                        duration = 15;
-                        rate = 1.5f;
                         c.sendPacket(PacketCreator.familyBuff(3, 2, 1,duration  * 60000));
-                        c.getPlayer().setFamilybuff(true,1,rate);
+                        c.getPlayer().setFamilyBuff(true,1,rate);
                         c.getPlayer().startFamilyBuffTimer(duration  * 60000);
                         useEntitlement(entry,FamilyEntitlement.SELF_DROP_1_5);
                         break;
@@ -143,25 +137,22 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                         duration = 30;
                         rate = 2;
                         c.sendPacket(PacketCreator.familyBuff(2, 8, 1, duration * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
+                        c.getPlayer().setFamilyBuff(true,rate,1);
                         c.getPlayer().startFamilyBuffTimer(duration  * 60000);
                         useEntitlement(entry,FamilyEntitlement.SELF_EXP_2_30MIN);
                         break;
 
                     case SELF_EXP_2:
-                        duration = 15;
                         rate = 2;
                         c.sendPacket(PacketCreator.familyBuff(2, 6, 1, duration * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
+                        c.getPlayer().setFamilyBuff(true,rate,1);
                         c.getPlayer().startFamilyBuffTimer(duration  * 60000);
                         useEntitlement(entry,FamilyEntitlement.SELF_EXP_2);
                         break;
 
                     case SELF_EXP_1_5:
-                        duration = 15;
-                        rate = 1.5f;
                         c.sendPacket(PacketCreator.familyBuff(2, 3, 1, duration * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
+                        c.getPlayer().setFamilyBuff(true,rate,1);
                         c.getPlayer().startFamilyBuffTimer(duration  * 60000);
                         useEntitlement(entry,FamilyEntitlement.SELF_EXP_1_5);
                         break;
