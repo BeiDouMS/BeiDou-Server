@@ -78,7 +78,9 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 
-        chr.getMap().broadcastMessage(chr, PacketCreator.closeRangeAttack(chr, attack.skill, attack.skilllevel, attack.stance, attack.numAttackedAndDamage, attack.allDamage, attack.speed, attack.direction, attack.display), false, true);
+        chr.getMap().broadcastMessage(chr, PacketCreator.closeRangeAttack(chr, attack.skill, attack.skilllevel,
+                attack.stance, attack.numAttackedAndDamage, attack.targets, attack.speed, attack.direction,
+                attack.display), false, true);
         int numFinisherOrbs = 0;
         Integer comboBuff = chr.getBuffedValue(BuffStat.COMBO);
         if (GameConstants.isFinisherSkill(attack.skill)) {
@@ -139,9 +141,9 @@ public final class CloseRangeDamageHandler extends AbstractDealDamageHandler {
         }
         if (attack.numAttacked > 0 && attack.skill == DragonKnight.SACRIFICE) {
             int totDamageToOneMonster = 0; // sacrifice attacks only 1 mob with 1 attack
-            final Iterator<List<Integer>> dmgIt = attack.allDamage.values().iterator();
+            final Iterator<AttackTarget> dmgIt = attack.targets.values().iterator();
             if (dmgIt.hasNext()) {
-                totDamageToOneMonster = dmgIt.next().get(0);
+                totDamageToOneMonster = dmgIt.next().damageLines().getFirst();
             }
 
             chr.safeAddHP(-1 * totDamageToOneMonster * attack.getAttackEffect(chr, null).getX() / 100);

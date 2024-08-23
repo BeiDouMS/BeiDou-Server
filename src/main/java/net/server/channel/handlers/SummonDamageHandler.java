@@ -41,31 +41,14 @@ import server.life.MonsterInformationProvider;
 import server.maps.Summon;
 import tools.PacketCreator;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class SummonDamageHandler extends AbstractDealDamageHandler {
     private static final Logger log = LoggerFactory.getLogger(SummonDamageHandler.class);
 
-    public final class SummonAttackEntry {
-
-        private final int monsterOid;
-        private final int damage;
-
-        public SummonAttackEntry(int monsterOid, int damage) {
-            this.monsterOid = monsterOid;
-            this.damage = damage;
-        }
-
-        public int getMonsterOid() {
-            return monsterOid;
-        }
-
-        public int getDamage() {
-            return damage;
-        }
-
-    }
+    public record SummonAttackTarget(int monsterOid, int damage, short delay) {}
 
     @Override
     public void handlePacket(InPacket p, Client c) {
@@ -86,17 +69,21 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
         Skill summonSkill = SkillFactory.getSkill(summon.getSkill());
         StatEffect summonEffect = summonSkill.getEffect(summon.getSkillLevel());
         p.skip(4);
-        List<SummonAttackEntry> allDamage = new ArrayList<>();
+        List<SummonAttackTarget> targets = new ArrayList<>();
         byte direction = p.readByte();
         int numAttacked = p.readByte();
         p.skip(8); // I failed lol (mob x,y and summon x,y), Thanks Gerald
         for (int x = 0; x < numAttacked; x++) {
             int monsterOid = p.readInt(); // attacked oid
-            p.skip(18);
+            p.skip(8);
+            Point curPos = p.readPos();
+            Point nextPos = p.readPos();
+            short delay = p.readShort();
             int damage = p.readInt();
-            allDamage.add(new SummonAttackEntry(monsterOid, damage));
+            targets.add(new SummonAttackTarget(monsterOid, damage, delay));
         }
-        player.getMap().broadcastMessage(player, PacketCreator.summonAttack(player.getId(), summon.getObjectId(), direction, allDamage), summon.getPosition());
+        player.getMap().broadcastMessage(player, PacketCreator.summonAttack(player.getId(), summon.getObjectId(),
+                direction, targets), summon.getPosition());
 
         if (player.getMap().isOwnershipRestricted(player)) {
             return;
@@ -104,25 +91,28 @@ public final class SummonDamageHandler extends AbstractDealDamageHandler {
 
         boolean magic = summonEffect.getWatk() == 0;
         int maxDmg = calcMaxDamage(summonEffect, player, magic);    // thanks Darter (YungMoozi) for reporting unchecked max dmg
-        for (SummonAttackEntry attackEntry : allDamage) {
-            int damage = attackEntry.getDamage();
-            Monster target = player.getMap().getMonsterByOid(attackEntry.getMonsterOid());
-            if (target != null) {
-                if (damage > maxDmg) {
-                    AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
-                    final String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(target.getId());
-                    log.info("Possible exploit - chr {} used a summon of skillId {} to attack {} with damage {} (max: {})",
-                            c.getPlayer().getName(), summon.getSkill(), mobName, damage, maxDmg);
-                    damage = maxDmg;
-                }
-
-                if (damage > 0 && summonEffect.getMonsterStati().size() > 0) {
-                    if (summonEffect.makeChanceResult()) {
-                        target.applyStatus(player, new MonsterStatusEffect(summonEffect.getMonsterStati(), summonSkill, null, false), summonEffect.isPoison(), 4000);
-                    }
-                }
-                player.getMap().damageMonster(player, target, damage);
+        for (SummonAttackTarget target : targets) {
+            int damage = target.damage();
+            Monster mob = player.getMap().getMonsterByOid(target.monsterOid());
+            if (mob == null) {
+                continue;
             }
+
+            if (damage > maxDmg) {
+                AutobanFactory.DAMAGE_HACK.alert(c.getPlayer(), "Possible packet editing summon damage exploit.");
+                final String mobName = MonsterInformationProvider.getInstance().getMobNameFromId(mob.getId());
+                log.info("Possible exploit - chr {} used a summon of skillId {} to attack {} with damage {} (max: {})",
+                        c.getPlayer().getName(), summon.getSkill(), mobName, damage, maxDmg);
+                damage = maxDmg;
+            }
+
+            if (damage > 0 && summonEffect.getMonsterStati().size() > 0) {
+                if (summonEffect.makeChanceResult()) {
+                    mob.applyStatus(player, new MonsterStatusEffect(summonEffect.getMonsterStati(), summonSkill, null, false), summonEffect.isPoison(), 4000);
+                }
+            }
+            player.getMap().damageMonster(player, mob, damage, target.delay());
+
         }
 
         if (summon.getSkill() == Outlaw.GAVIOTA) {  // thanks Periwinks for noticing Gaviota not cancelling after grenade toss

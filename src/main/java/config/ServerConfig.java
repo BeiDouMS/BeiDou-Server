@@ -98,7 +98,6 @@ public class ServerConfig {
     public boolean USE_ENFORCE_MERCHANT_SAVE;
     public boolean USE_ENFORCE_MDOOR_POSITION;
     public boolean USE_SPAWN_CLEAN_MDOOR;
-    public boolean USE_SPAWN_LOOT_ON_ANIMATION;
     public boolean USE_SPAWN_RELEVANT_LOOT;
     public boolean USE_ERASE_PERMIT_ON_OPENSHOP;
     public boolean USE_ERASE_UNTRADEABLE_DROP;
@@ -106,9 +105,8 @@ public class ServerConfig {
     public boolean USE_BUFF_MOST_SIGNIFICANT;
     public boolean USE_BUFF_EVERLASTING;
     public boolean USE_MULTIPLE_SAME_EQUIP_DROP;
-    public boolean USE_BANISHABLE_TOWN_SCROLL;
+    public boolean USE_ENABLE_FULL_RESPAWN;
     public boolean USE_ENABLE_CHAT_LOG;
-    public boolean USE_REBIRTH_SYSTEM;
     public boolean USE_MAP_OWNERSHIP_SYSTEM;
     public boolean USE_FISHING_SYSTEM;
     public boolean USE_NPCS_SCRIPTABLE;
@@ -167,7 +165,6 @@ public class ServerConfig {
     public long NAME_CHANGE_COOLDOWN;
     public long WORLD_TRANSFER_COOLDOWN = NAME_CHANGE_COOLDOWN;//Cooldown for world tranfers, default is same as name change (30 days).
     public boolean INSTANT_NAME_CHANGE;
-    public int REBIRTH_NPC_ID;
 
     //Dangling Items/Locks Configuration
     public int ITEM_EXPIRE_TIME;
@@ -245,7 +242,6 @@ public class ServerConfig {
     public boolean USE_EQUIPMNT_LVLUP_SLOTS;
     public boolean USE_EQUIPMNT_LVLUP_POWER;
     public boolean USE_EQUIPMNT_LVLUP_CASH;
-    public boolean USE_SPIKES_AVOID_BANISH;
     public int MAX_EQUIPMNT_LVLUP_STAT_UP;
     public int MAX_EQUIPMNT_STAT;
     public int USE_EQUIPMNT_LVLUP;

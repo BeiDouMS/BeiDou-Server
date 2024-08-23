@@ -977,18 +977,8 @@ public class StatEffect {
                 Portal pt;
 
                 if (moveTo == MapId.NONE) {
-                    if (sourceid != ItemId.ANTI_BANISH_SCROLL) {
-                        target = applyto.getMap().getReturnMap();
-                        pt = target.getRandomPlayerSpawnpoint();
-                    } else {
-                        if (!applyto.canRecoverLastBanish()) {
-                            return false;
-                        }
-
-                        Pair<Integer, Integer> lastBanishInfo = applyto.getLastBanishData();
-                        target = applyto.getWarpMap(lastBanishInfo.getLeft());
-                        pt = target.getPortal(lastBanishInfo.getRight());
-                    }
+                    target = applyto.getMap().getReturnMap();
+                    pt = target.getRandomPlayerSpawnpoint();
                 } else {
                     target = applyto.getClient().getWorldServer().getChannel(applyto.getClient().getChannel()).getMapFactory().getMap(moveTo);
                     int targetid = target.getId() / 10000000;

@@ -289,7 +289,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         for (Character player : banishPlayers) {  // chill, if this list ever gets non-empty an attacker does exist, trust me :)
-            player.changeMapBanish(attacker.getBanish().getMap(), attacker.getBanish().getPortal(), attacker.getBanish().getMsg());
+            player.changeMapBanish(attacker.getBanish());
         }
     }
 }

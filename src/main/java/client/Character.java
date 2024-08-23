@@ -120,6 +120,7 @@ import server.events.Events;
 import server.events.RescueGaga;
 import server.events.gm.Fitness;
 import server.events.gm.Ola;
+import server.life.BanishInfo;
 import server.life.MobSkill;
 import server.life.MobSkillFactory;
 import server.life.MobSkillId;
@@ -157,7 +158,6 @@ import tools.LongTool;
 import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
-import tools.exceptions.NotEnabledException;
 import tools.packets.WeddingPackets;
 
 import java.awt.*;
@@ -358,9 +358,6 @@ public class Character extends AbstractCharacterObject {
     private int targetHpBarHash = 0;
     private long targetHpBarTime = 0;
     private long nextWarningTime = 0;
-    private int banishMap = -1;
-    private int banishSp = -1;
-    private long banishTime = 0;
     private long lastExpGainTime;
     private boolean pendingNameChange; //only used to change name on logout, not to be relied upon elsewhere
     private long loginTime;
@@ -1395,48 +1392,14 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public boolean canRecoverLastBanish() {
-        return System.currentTimeMillis() - this.banishTime < MINUTES.toMillis(5);
-    }
-
-    public Pair<Integer, Integer> getLastBanishData() {
-        return new Pair<>(this.banishMap, this.banishSp);
-    }
-
-    public void clearBanishPlayerData() {
-        this.banishMap = -1;
-        this.banishSp = -1;
-        this.banishTime = 0;
-    }
-
-    public void setBanishPlayerData(int banishMap, int banishSp, long banishTime) {
-        this.banishMap = banishMap;
-        this.banishSp = banishSp;
-        this.banishTime = banishTime;
-    }
-
-    public void changeMapBanish(int mapid, String portal, String msg) {
-        if (YamlConfig.config.server.USE_SPIKES_AVOID_BANISH) {
-            for (Item it : this.getInventory(InventoryType.EQUIPPED).list()) {
-                if ((it.getFlag() & ItemConstants.SPIKES) == ItemConstants.SPIKES) {
-                    return;
-                }
-            }
-        }
-
-        int banMap = this.getMapId();
-        int banSp = this.getMap().findClosestPlayerSpawnpoint(this.getPosition()).getId();
-        long banTime = System.currentTimeMillis();
-
-        if (msg != null) {
-            dropMessage(5, msg);
+    public void changeMapBanish(BanishInfo banishInfo) {
+        if (banishInfo.msg() != null) {
+            dropMessage(5, banishInfo.msg());
         }
 
         MapleMap map_ = getWarpMap(mapid);
-        Portal portal_ = map_.getPortal(portal);
+        Portal portal_ = map_.getPortal(banishInfo.portal());
         changeMap(map_, portal_ != null ? portal_ : map_.getRandomPlayerSpawnpoint());
-
-        setBanishPlayerData(banMap, banSp, banTime);
     }
 
     public void changeMap(int map) {
@@ -1819,7 +1782,6 @@ public class Character extends AbstractCharacterObject {
         this.mapTransitioning.set(true);
 
         this.unregisterChairBuff();
-        this.clearBanishPlayerData();
         Trade.cancelTrade(this, Trade.TradeResult.UNSUCCESSFUL_ANOTHER_MAP);
         this.closePlayerInteractions();
 
@@ -11111,70 +11073,6 @@ public class Character extends AbstractCharacterObject {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public void setReborns(int value) {
-        if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-            yellowMessage("Rebirth system is not enabled!");
-            throw new NotEnabledException();
-        }
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET reborns=? WHERE id=?;")) {
-            ps.setInt(1, value);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addReborns() {
-        setReborns(getReborns() + 1);
-    }
-
-    public int getReborns() {
-        if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-            yellowMessage("Rebirth system is not enabled!");
-            throw new NotEnabledException();
-        }
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT reborns FROM characters WHERE id=?;")) {
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                rs.next();
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException();
-    }
-
-    public void executeReborn() {
-        // default to beginner: job id = 0
-        // this prevents a breaking change
-        executeRebornAs(Job.BEGINNER);
-    }
-
-    public void executeRebornAsId(int jobId) {
-        executeRebornAs(Job.getById(jobId));
-    }
-
-    public void executeRebornAs(Job job) {
-        if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-            yellowMessage("Rebirth system is not enabled!");
-            throw new NotEnabledException();
-        }
-        if (getLevel() != getMaxClassLevel()) {
-            return;
-        }
-        addReborns();
-        changeJob(job);
-        setLevel(0);
-        levelUp(true);
     }
 
     //EVENTS

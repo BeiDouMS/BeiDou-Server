@@ -231,7 +231,10 @@ public class LifeFactory {
 
         Data banishData = monsterInfoData.getChildByPath("ban");
         if (banishData != null) {
-            stats.setBanishInfo(new BanishInfo(DataTool.getString("banMsg", banishData), DataTool.getInt("banMap/0/field", banishData, -1), DataTool.getString("banMap/0/portal", banishData, "sp")));
+            int map = DataTool.getInt("banMap/0/field", banishData, -1);
+            String portal = DataTool.getString("banMap/0/portal", banishData, "sp");
+            String msg = DataTool.getString("banMsg", banishData);
+            stats.setBanishInfo(new BanishInfo(map, portal, msg));
         }
 
         int noFlip = DataTool.getInt("noFlip", monsterInfoData, 0);
@@ -294,31 +297,6 @@ public class LifeFactory {
 
     public static String getNPCDefaultTalk(int nid) {
         return DataTool.getString(nid + "/d0", npcStringData, "(...)");
-    }
-
-    public static class BanishInfo {
-
-        private final int map;
-        private final String portal;
-        private final String msg;
-
-        public BanishInfo(String msg, int map, String portal) {
-            this.msg = msg;
-            this.map = map;
-            this.portal = portal;
-        }
-
-        public int getMap() {
-            return map;
-        }
-
-        public String getPortal() {
-            return portal;
-        }
-
-        public String getMsg() {
-            return msg;
-        }
     }
 
     public static class loseItem {

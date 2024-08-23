@@ -134,11 +134,7 @@ public final class ItemConstants {
     }
 
     public static boolean isTownScroll(int itemId) {
-        return itemId >= 2030000 && itemId < ItemId.ANTI_BANISH_SCROLL;
-    }
-
-    public static boolean isAntibanishScroll(int itemId) {
-        return itemId == ItemId.ANTI_BANISH_SCROLL;
+        return itemId >= 2030000;
     }
 
     public static boolean isCleanSlate(int scrollId) {

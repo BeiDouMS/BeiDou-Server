@@ -56,7 +56,6 @@ import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.StatEffect;
 import server.TimerManager;
-import server.life.LifeFactory.BanishInfo;
 import server.loot.LootManager;
 import server.maps.AbstractAnimatedMapObject;
 import server.maps.MapObjectType;
@@ -827,12 +826,12 @@ public class Monster extends AbstractLoadedLife {
                                 }
 
                                 if (htKilled) {
-                                    reviveMap.killMonster(ht, killer, true);
+                                    reviveMap.killMonster(ht, killer, true, (short) 0);
                                 }
                             }
 
                             for (int i = MobId.DEAD_HORNTAIL_MAX; i >= MobId.DEAD_HORNTAIL_MIN; i--) {
-                                reviveMap.killMonster(reviveMap.getMonsterById(i), killer, true);
+                                reviveMap.killMonster(reviveMap.getMonsterById(i), killer, true, (short) 0);
                             }
                         } else if (controller != null) {
                             mob.aggroSwitchController(controller, aggro);

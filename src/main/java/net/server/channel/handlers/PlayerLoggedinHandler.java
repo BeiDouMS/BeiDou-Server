@@ -445,11 +445,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                                 Entry::getValue
                         ));
 
-                // Any npc be specified as the rebirth npc. Allow the npc to use custom scripts explicitly.
-                if (YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-                    npcsIds.put(YamlConfig.config.server.REBIRTH_NPC_ID, "Rebirth");
-                }
-
                 c.sendPacket(PacketCreator.setNPCScriptable(npcsIds));
             }
 

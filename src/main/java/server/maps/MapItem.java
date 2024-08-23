@@ -208,7 +208,8 @@ public class MapItem extends AbstractMapObject {
         if (chr.needQuestItem(questid, getItemId())) {
             this.lockItem();
             try {
-                client.sendPacket(PacketCreator.dropItemFromMapObject(chr, this, null, getPosition(), (byte) 2));
+                client.sendPacket(PacketCreator.dropItemFromMapObject(chr, this, null, getPosition(),
+                        (byte) 2, (short) 0));
             } finally {
                 this.unlockItem();
             }

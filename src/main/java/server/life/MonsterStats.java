@@ -21,7 +21,6 @@
 */
 package server.life;
 
-import server.life.LifeFactory.BanishInfo;
 import server.life.LifeFactory.loseItem;
 import server.life.LifeFactory.selfDestruction;
 import tools.Pair;

@@ -56,6 +56,7 @@ import constants.id.MapId;
 import constants.id.NpcId;
 import constants.inventory.ItemConstants;
 import constants.skills.Buccaneer;
+import constants.skills.ChiefBandit;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
 import net.encryption.InitializationVector;
@@ -67,8 +68,9 @@ import net.packet.Packet;
 import net.server.PlayerCoolDownValueHolder;
 import net.server.Server;
 import net.server.channel.Channel;
+import net.server.channel.handlers.AbstractDealDamageHandler.AttackTarget;
 import net.server.channel.handlers.PlayerInteractionHandler;
-import net.server.channel.handlers.SummonDamageHandler.SummonAttackEntry;
+import net.server.channel.handlers.SummonDamageHandler.SummonAttackTarget;
 import net.server.channel.handlers.WhisperHandler;
 import net.server.guild.Alliance;
 import net.server.guild.Guild;
@@ -1829,7 +1831,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet dropItemFromMapObject(Character player, MapItem drop, Point dropfrom, Point dropto, byte mod) {
+    public static Packet dropItemFromMapObject(Character player, MapItem drop, Point dropfrom, Point dropto, byte mod,
+                                               short delay) {
         int dropType = drop.getDropType();
         if (drop.hasClientsideOwnership(player) && dropType < 3) {
             dropType = 2;
@@ -1847,7 +1850,7 @@ public class PacketCreator {
 
         if (mod != 2) {
             p.writePos(dropfrom);
-            p.writeShort(0);//Fh?
+            p.writeShort(delay);
         }
         if (drop.getMeso() == 0) {
             addExpirationTime(p, drop.getItem().getExpiration());
@@ -2317,18 +2320,18 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet summonAttack(int cid, int summonOid, byte direction, List<SummonAttackEntry> allDamage) {
+    public static Packet summonAttack(int cid, int summonOid, byte direction, List<SummonAttackTarget> targets) {
         OutPacket p = OutPacket.create(SendOpcode.SUMMON_ATTACK);
         //b2 00 29 f7 00 00 9a a3 04 00 c8 04 01 94 a3 04 00 06 ff 2b 00
         p.writeInt(cid);
         p.writeInt(summonOid);
         p.writeByte(0);     // char level
         p.writeByte(direction);
-        p.writeByte(allDamage.size());
-        for (SummonAttackEntry attackEntry : allDamage) {
-            p.writeInt(attackEntry.getMonsterOid()); // oid
+        p.writeByte(targets.size());
+        for (SummonAttackTarget target : targets) {
+            p.writeInt(target.monsterOid()); // oid
             p.writeByte(6); // who knows
-            p.writeInt(attackEntry.getDamage()); // damage
+            p.writeInt(target.damage()); // damage
         }
 
         return p;
@@ -2353,29 +2356,40 @@ public class PacketCreator {
         }
         */
 
-    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet closeRangeAttack(Character chr, int skill, int skilllevel, int stance,
+                                          int numAttackedAndDamage, Map<Integer, AttackTarget> targets, int speed,
+                                          int direction, int display) {
         final OutPacket p = OutPacket.create(SendOpcode.CLOSE_RANGE_ATTACK);
-        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
+        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, targets, speed, direction,
+                display);
         return p;
     }
 
-    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    public static Packet rangedAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage,
+                                      int projectile, Map<Integer, AttackTarget> targets, int speed, int direction,
+                                      int display) {
         final OutPacket p = OutPacket.create(SendOpcode.RANGED_ATTACK);
-        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, damage, speed, direction, display);
+        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, projectile, targets, speed, direction,
+                display);
         p.writeInt(0);
         return p;
     }
 
-    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, Map<Integer, List<Integer>> damage, int charge, int speed, int direction, int display) {
+    public static Packet magicAttack(Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage,
+                                     Map<Integer, AttackTarget> targets, int charge, int speed, int direction,
+                                     int display) {
         final OutPacket p = OutPacket.create(SendOpcode.MAGIC_ATTACK);
-        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, damage, speed, direction, display);
+        addAttackBody(p, chr, skill, skilllevel, stance, numAttackedAndDamage, 0, targets, speed, direction,
+                display);
         if (charge != -1) {
             p.writeInt(charge);
         }
         return p;
     }
 
-    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance, int numAttackedAndDamage, int projectile, Map<Integer, List<Integer>> damage, int speed, int direction, int display) {
+    private static void addAttackBody(OutPacket p, Character chr, int skill, int skilllevel, int stance,
+                                      int numAttackedAndDamage, int projectile, Map<Integer, AttackTarget> targets,
+                                      int speed, int direction, int display) {
         p.writeInt(chr.getId());
         p.writeByte(numAttackedAndDamage);
         p.writeByte(0x5B);//?
@@ -2389,16 +2403,16 @@ public class PacketCreator {
         p.writeByte(speed);
         p.writeByte(0x0A);
         p.writeInt(projectile);
-        for (Integer oned : damage.keySet()) {
-            List<Integer> onedList = damage.get(oned);
-            if (onedList != null) {
-                p.writeInt(oned);
+        for (Map.Entry<Integer, AttackTarget> target : targets.entrySet()) {
+            AttackTarget value = target.getValue();
+            if (value != null) {
+                p.writeInt(target.getKey());
                 p.writeByte(0x0);
-                if (skill == 4211006) {
-                    p.writeByte(onedList.size());
+                if (skill == ChiefBandit.MESO_EXPLOSION) {
+                    p.writeByte(value.damageLines().size());
                 }
-                for (Integer eachd : onedList) {
-                    p.writeInt(eachd);
+                for (Integer damageLine : value.damageLines()) {
+                    p.writeInt(damageLine);
                 }
             }
         }
@@ -2606,6 +2620,14 @@ public class PacketCreator {
                 p.writeByte(slot);
             }
         }
+        return p;
+    }
+
+    public static Packet removeExplodedMesoFromMap(int mapObjectId, short delay) {
+        OutPacket p = OutPacket.create(SendOpcode.REMOVE_ITEM_FROM_MAP);
+        p.writeByte(4);
+        p.writeInt(mapObjectId);
+        p.writeShort(delay);
         return p;
     }
 
