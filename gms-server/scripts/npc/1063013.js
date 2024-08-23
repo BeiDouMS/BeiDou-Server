@@ -35,7 +35,7 @@ function start() {
         var nextProgress = progress.substring(0, slot) + '1' + progress.substring(slot + 1);
         cm.gainItem(4032263, -1);
         cm.setQuestProgress(2236, 1, nextProgress);
-        cm.sendOk("Due to the power of the talisman, the evil forces in this area have been sealed. Current quest progress: " + progress + " Slot: " + slot);
+        cm.sendOk("Due to the power of the talisman, the evil forces in this area have been sealed. ");
     }
 
     cm.dispose();
