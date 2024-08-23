@@ -23,7 +23,7 @@ import java.io.Serial;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("inventoryequipment")
-public class InventoryequipmentDO implements Serializable {
+public class InventoryequipmentDO implements Serializable  {
 
     @Serial
     private static final long serialVersionUID = 1L;

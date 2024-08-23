@@ -2,14 +2,14 @@ package org.gms.model.dto;
 
 import com.mybatisflex.annotation.Column;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.gms.dao.entity.InventoryequipmentDO;
 
-@EqualsAndHashCode(callSuper = true)
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InventoryequipmentDTO extends BasePageDTO   {
+@Builder
+public class InventoryequipmentRtnDTO {
 
     private Long inventoryequipmentid;
 
@@ -59,7 +59,7 @@ public class InventoryequipmentDTO extends BasePageDTO   {
     private Long itemexp;
 
 
-        public InventoryequipmentDTO(InventoryequipmentDO inventoryequipmentDO) {
+        public InventoryequipmentRtnDTO(InventoryequipmentDO inventoryequipmentDO) {
 
             this.inventoryequipmentid = inventoryequipmentDO.getInventoryequipmentid();
             this.inventoryitemid = inventoryequipmentDO.getInventoryitemid();
