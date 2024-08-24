@@ -28,14 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
-import org.gms.util.Pair;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -168,6 +163,17 @@ public class Family {
                     continue;
                 }
                 chr.sendPacket(packet);
+            }
+        }
+    }
+
+    public void Familybuff(int duration) {
+        for (FamilyEntry entry : members.values()) {
+            Character chr = entry.getChr();
+            if (chr != null) {
+                chr.sendPacket(PacketCreator.familyBuff(4, 4, 1, duration  * 60000));
+                chr.setFamilyBuff(true,2,2);
+                chr.startFamilyBuffTimer(duration  * 60000);
             }
         }
     }
