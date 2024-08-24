@@ -47,6 +47,7 @@ function writeServerStaff_BeiDou() {
     addPerson("kengwon", "贡献者");
     addPerson("小蜗", "贡献者");
     addPerson("r09er", "贡献者");
+    addPerson("li-coder-313", "贡献者");
 
     setHistory(2024, 2024);
 }

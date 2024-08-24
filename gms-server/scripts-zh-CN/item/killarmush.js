@@ -48,7 +48,7 @@ function action(mode, type, selection) {
                     }
                     im.removeAll(2430014);
 
-                    im.message("You have used the Killer Mushroom Spore to open the way.");
+                    im.message("你已经使用奇拉蘑菇孢子开路。");
                 }
             }
 

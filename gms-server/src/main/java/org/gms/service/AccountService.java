@@ -249,9 +249,9 @@ public class AccountService {
                 accountId = accountsDO.getId();
             }
         } else {
-            List<CharactersDO> charactersDOS = characterService.findByName(str);
-            if (!charactersDOS.isEmpty()) {
-                accountId = charactersDOS.getFirst().getAccountid();
+            CharactersDO charactersDO = characterService.findByName(str);
+            if (charactersDO != null) {
+                accountId = charactersDO.getAccountid();
             }
         }
         if (accountId == null) {

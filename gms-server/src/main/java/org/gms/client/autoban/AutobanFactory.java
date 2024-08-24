@@ -107,7 +107,7 @@ public enum AutobanFactory {
 
     public void autoban(Character chr, String value) {
         if (YamlConfig.config.server.USE_AUTOBAN) {
-            chr.autoban("Autobanned for (" + this.name() + ": " + value + ")");
+            chr.autoBan("Autobanned for (" + this.name() + ": " + value + ")");
             //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");
         }
     }

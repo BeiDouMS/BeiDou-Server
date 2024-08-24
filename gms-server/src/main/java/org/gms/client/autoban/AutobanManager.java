@@ -57,7 +57,7 @@ public class AutobanManager {
             }
 
             if (points.get(fac) >= fac.getMaximum()) {
-                chr.autoban(reason);
+                chr.autoBan(reason);
             }
         }
         if (YamlConfig.config.server.USE_AUTOBAN_LOG) {

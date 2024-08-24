@@ -32,10 +32,13 @@ import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.ModifiedCashItemDO;
+import org.gms.manager.ServerManager;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.service.CharacterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.CashShop;
@@ -48,6 +51,7 @@ import org.gms.util.Pair;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
@@ -114,7 +118,8 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                 } else if (action == 0x04) {//TODO check for gender with gift
                     int birthday = p.readInt();
                     ModifiedCashItemDO cItem = CashItemFactory.getItem(p.readInt());
-                    Map<String, String> recipient = Character.getCharacterFromDatabase(p.readString());
+                    CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+                    CharactersDO charactersDO = characterService.findByName(p.readString());
                     String message = p.readString();
                     if (!canBuy(chr, cItem, cs.getCash(CashShop.NX_PREPAID)) || message.isEmpty() || message.length() > 73) {
                         c.enableCSActions();
@@ -123,22 +128,22 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                     if (!checkBirthday(c, birthday)) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xC4));
                         return;
-                    } else if (recipient == null) {
+                    } else if (charactersDO == null) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xA9));
                         return;
-                    } else if (recipient.get("accountid").equals(String.valueOf(c.getAccID()))) {
+                    } else if (Objects.equals(charactersDO.getAccountid(), c.getAccID())) {
                         c.sendPacket(PacketCreator.showCashShopMessage((byte) 0xA8));
                         return;
                     }
                     cs.gainCash(4, cItem, chr.getWorld());
-                    cs.gift(Integer.parseInt(recipient.get("id")), chr.getName(), message, cItem.getSn());
-                    c.sendPacket(PacketCreator.showGiftSucceed(recipient.get("name"), cItem));
+                    cs.gift(charactersDO.getId(), chr.getName(), message, cItem.getSn());
+                    c.sendPacket(PacketCreator.showGiftSucceed(charactersDO.getName(), cItem));
                     c.sendPacket(PacketCreator.showCash(chr));
 
                     String noteMessage = chr.getName() + " has sent you a gift! Go check out the Cash Shop.";
-                    noteService.sendNormal(noteMessage, chr.getName(), recipient.get("name"));
+                    noteService.sendNormal(noteMessage, chr.getName(), charactersDO.getName());
 
-                    Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(recipient.get("name"));
+                    Character receiver = c.getChannelServer().getPlayerStorage().getCharacterByName(charactersDO.getName());
                     if (receiver != null) {
                         noteService.show(receiver);
                     }

@@ -747,8 +747,8 @@ public class MapleMap {
             chRate *= (stati.getStati().get(MonsterStatus.SHOWDOWN).doubleValue() / 100.0 + 1.0);
         }
 
-        if(chr.isFamilybuff()){
-            chRate *= chr.getFamilydrop();
+        if(chr.isFamilyBuff()){
+            chRate *= chr.getFamilyDrop();
         }
 
         if (useBaseRate) {

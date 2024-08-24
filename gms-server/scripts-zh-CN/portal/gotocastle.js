@@ -4,7 +4,7 @@ function enter(pi) {
         pi.warp(106020501, 0);
         return true;
     } else {
-        pi.playerMessage(5, "The path ahead is covered with sprawling vine thorns, only a Thorn Remover to clear this out...");
+        pi.playerMessage(5, "前路布满荆棘，需要尖刺消除剂清理……");
         return false;
     }
 }

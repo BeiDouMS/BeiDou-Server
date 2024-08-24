@@ -18,7 +18,7 @@ public final class RPSActionHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        RockPaperScissor rps = chr.getRPS();
+        RockPaperScissor rps = chr.getRps();
 
         if (c.tryacquireClient()) {
             try {
