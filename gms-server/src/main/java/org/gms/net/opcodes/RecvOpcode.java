@@ -120,6 +120,7 @@ public enum RecvOpcode {
     SKILL_MACRO(0x6E),
     USE_ITEM_REWARD(0x70),
     MAKER_SKILL(0x71),
+    USE_TREASUER_CHEST(0x73),
     USE_REMOTE(0x74),
     WATER_OF_LIFE(0x75),
     ADMIN_CHAT(0x76),
