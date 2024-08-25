@@ -234,11 +234,11 @@ gms:
 
     #Server Flags
     USE_CUSTOM_KEYSET: false             #在创建角色时启用HeavenMS的自定义键绑定自动设置。
-    USE_DEBUG: true                    #将在客户端上启用一些面向调试的文本打印。
+    USE_DEBUG: false                    #将在客户端上启用一些面向调试的文本打印。
     USE_DEBUG_SHOW_INFO_EQPEXP: false   #在cmd上打印所有装备经验增益信息。
-    USE_DEBUG_SHOW_RCVD_PACKET: true   #在cmd上打印所有接收到的数据包ID。
+    USE_DEBUG_SHOW_RCVD_PACKET: false   #在cmd上打印所有接收到的数据包ID。
     USE_DEBUG_SHOW_RCVD_MVLIFE: false   #在cmd上打印所有接收到的移动生命内容。
-    USE_DEBUG_SHOW_PACKET: true
+    USE_DEBUG_SHOW_PACKET: false
     USE_SUPPLY_RATE_COUPONS: true       #允许通过现金商店出售速率优惠券。
     USE_IP_VALIDATION: false             #在登录时启用IP检查。
     USE_CHARACTER_ACCOUNT_CHECK: false  #在登录时启用单角色-账户检查。这可能是资源密集型的。
