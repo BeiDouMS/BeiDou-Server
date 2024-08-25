@@ -168,7 +168,8 @@ public class CashShop {
                         .price(price)
                         .bonus(bonus)
                         .priority(priority)
-                        .period(period == 0 ? 90 : period)
+                        //.period(period == 0 ? 90 : period)
+                        .period(period)//这里写客户端实际的有效期，若为0，setExpiration设为-1即可将商品设为永久物品
                         .maplePoint(maplePoint)
                         .meso(meso)
                         .forPremiumUser(forPremiumUser)
