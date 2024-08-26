@@ -687,4 +687,74 @@ public class GameConstants {
     }
 
     public static final int MAX_CLEAN_PACK_SIZE = 101;
+
+    public final static int[] goldrewards = {
+            1302059, 3,
+            1402037, 1,
+            1092049, 1,
+            1102041, 1,
+            1432018, 3,
+            1022047, 3,
+            1432011, 3,
+            1442020, 3,
+            1382035, 3,
+            1372010, 3,
+            1332027, 3,
+            1302056, 3,
+            1402005, 3,
+            1472053, 3,
+            1462018, 3,
+            1452017, 3,
+            1422013, 3,
+            1322029, 3,
+            1412010, 3,
+            1472051, 1,
+            1482013, 1,
+            1492013, 1,
+            1382050, 1,
+            1382045, 1,
+            1382047, 1,
+            1382048, 1,
+            1382046, 1,
+            1442018, 3,
+            1332032, 4,
+            1482025, 3,
+            2290096, 1,
+            2290049, 1,
+            2290041, 1,
+            2290047, 1,
+            2290095, 1,
+            2290017, 1,
+            2290075, 1,
+            2290085, 1,
+            2290116, 1,
+            2049100, 1,
+            2040914, 1,
+            2040900, 4,
+            2030008, 5,
+            2000005, 10,
+            2000004, 10,
+            3010051, 1,
+            3010020, 1,
+            4001011, 4,
+            4001010, 4,
+            4001009, 4,
+            4280000, 4};
+
+    public static int selectRandomReward(int[] rewards) {
+        List<Integer> weightedRewards = new ArrayList<>();
+        for (int i = 0; i < rewards.length; i += 2) {
+            int itemId = rewards[i];
+            int weight = rewards[i + 1];
+            for (int j = 0; j < weight; j++) {
+                weightedRewards.add(itemId);
+            }
+        }
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(weightedRewards.size());
+        return weightedRewards.get(randomIndex);
+    }
+
+
 }

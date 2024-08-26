@@ -7476,4 +7476,10 @@ public class PacketCreator {
         return familyBuff(0, 0, 0, 0);
     }
 
+    public static Packet UseTreasureBox(int type){
+        OutPacket p = OutPacket.create(SendOpcode.SUCCESS_IN_USE_GACHAPON_BOX);
+        p.writeInt(type);
+        return p;
+    }
+
 }
