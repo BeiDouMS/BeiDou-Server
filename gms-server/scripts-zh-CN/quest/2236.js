@@ -24,9 +24,9 @@ function start(mode, type, selection) {
                 qm.gainItem(4032263, -6);
             }
             qm.gainItem(4032263, 6);
-
             qm.sendOk("拿着这些护身符，把它们放在地牢里的巫师岩石上。我给你总共6个护身符。");
             qm.forceStartQuest();
+            qm.setQuestProgress(2236, 1,"000000");
             qm.dispose();
         }
     }
