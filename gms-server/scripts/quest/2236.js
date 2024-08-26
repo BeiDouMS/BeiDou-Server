@@ -16,9 +16,9 @@ function start(mode, type, selection) {
 	if (status == 1){
 		if(qm.haveItem(4032263)) qm.gainItem(4032263, -6);
 		qm.gainItem(4032263, 6);
-
 		qm.sendOk("Take these Charms and place them on the Shaman Rocks in the dungeon. I'm giving you a total of 6 Charms.");
 		qm.forceStartQuest();
+		qm.setQuestProgress(2236, 1,"000000");
 		qm.dispose();
 	}
 }
