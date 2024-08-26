@@ -134,33 +134,32 @@ public class ModifiedCashItemDO implements Serializable {
             item = new Item(itemId, (byte) 0, count, petid);
         }
 
-        if (ItemConstants.EXPIRING_ITEMS) {
-            if (period == 1) {
-                switch (itemId) {
-                    case ItemId.DROP_COUPON_2X_4H,
-                         ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
-                        item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
+        if (period == 1) {
+            switch (itemId) {
+                case ItemId.DROP_COUPON_2X_4H,
+                     ItemId.EXP_COUPON_2X_4H: // 4 Hour 2X coupons, the period is 1, but we don't want them to last a day.
+                    item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(4));
                             /*
                             } else if(itemId == 5211047 || itemId == 5360014) { // 3 Hour 2X coupons, unused as of now
                                     item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(3));
                             */
-                        break;
-                    case ItemId.EXP_COUPON_3X_2H:
-                        item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
-                        break;
-                    default:
-                        item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
-                        break;
-                }
-            } else {
-                item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
+                    break;
+                case ItemId.EXP_COUPON_3X_2H:
+                    item.setExpiration(Server.getInstance().getCurrentTime() + HOURS.toMillis(2));
+                    break;
+                default:
+                    item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(1));
+                    break;
             }
+        } else if (period == -1) {
+            item.setExpiration(-1);
+        } else {
+            item.setExpiration(Server.getInstance().getCurrentTime() + DAYS.toMillis(period));
         }
 
         item.setSN(sn);
 
-        if (period == 0)
-        {
+        if (period == 0) {
             item.setExpiration(-1);//无视所有的保质期，将道具视为永久
         }
 

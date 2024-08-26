@@ -351,7 +351,7 @@ public final class Channel {
         World wserv = getWorldServer();
         for (Integer cid : playersAway) {
             Character chr = wserv.getPlayerStorage().getCharacterById(cid);
-            if (chr != null && chr.isLoggedin()) {
+            if (chr != null && chr.isLoggedIn()) {
                 chr.getClient().forceDisconnect();
             }
         }

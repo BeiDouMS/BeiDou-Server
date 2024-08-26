@@ -148,7 +148,8 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private int questFame;
     private int initialSpawnPoint;
-    private int mapid;
+    @Setter
+    private int mapId;
     @Getter
     private int currentPage;
     @Getter
@@ -393,6 +394,7 @@ public class Character extends AbstractCharacterObject {
     private int partnerId = -1;
     private final List<Ring> crushRings = new ArrayList<>();
     private final List<Ring> friendshipRings = new ArrayList<>();
+    @Getter
     private boolean loggedIn = false;
     @Getter
     private boolean useCS;  //chaos scroll upon crafting item.
@@ -508,7 +510,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean isLoggedInWorld() {
-        return this.isLoggedin() && !this.isAwayFromWorld();
+        return this.isLoggedIn() && !this.isAwayFromWorld();
     }
 
     public boolean isAwayFromWorld() {
@@ -627,7 +629,7 @@ public class Character extends AbstractCharacterObject {
 
             if (prop != null) {
                 return (Integer.parseInt(prop) == id || eim.getIntProperty("brideId") == id) &&
-                        (mapid == MapId.CHAPEL_WEDDING_ALTAR || mapid == MapId.CATHEDRAL_WEDDING_ALTAR);
+                        (mapId == MapId.CHAPEL_WEDDING_ALTAR || mapId == MapId.CATHEDRAL_WEDDING_ALTAR);
             }
         }
 
@@ -1380,7 +1382,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private boolean buffMapProtection() {
-        int thisMapid = mapid;
+        int thisMapid = mapId;
         int returnMapid = client.getChannelServer().getMapFactory().getMap(thisMapid).getReturnMapId();
 
         effLock.lock();
@@ -4648,12 +4650,12 @@ public class Character extends AbstractCharacterObject {
         if (itemid == 0) {
             StatEffect mseMeso = getBuffEffect(BuffStat.MESO_UP_BY_ITEM);
             if (mseMeso != null) {
-                rate += mseMeso.getCardRate(mapid, itemid);
+                rate += mseMeso.getCardRate(mapId, itemid);
             }
         } else {
             StatEffect mseItem = getBuffEffect(BuffStat.ITEM_UP_BY_ITEM);
             if (mseItem != null) {
-                rate += mseItem.getCardRate(mapid, itemid);
+                rate += mseItem.getCardRate(mapId, itemid);
             }
         }
 
@@ -4836,7 +4838,7 @@ public class Character extends AbstractCharacterObject {
         if (map != null) {
             return map.getId();
         }
-        return mapid;
+        return mapId;
     }
 
     public Ring getMarriageRing() {
@@ -5627,7 +5629,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean attemptCatchFish(int baitLevel) {
-        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapid) &&
+        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapId) &&
                 this.getPosition().getY() > 0 &&
                 ItemConstants.isFishingChair(chair.get()) &&
                 this.getWorldServer().registerFisherPlayer(this, baitLevel);
@@ -6145,7 +6147,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void commitBuffCoupon(int couponid) {
-        if (!isLoggedin() || getCashShop().isOpened()) {
+        if (!isLoggedIn() || getCashShop().isOpened()) {
             return;
         }
 
@@ -6213,7 +6215,7 @@ public class Character extends AbstractCharacterObject {
             ret.exp.set(rs.getInt("exp"));
             ret.fame = rs.getInt("fame");
             ret.gachaexp.set(rs.getInt("gachaexp"));
-            ret.mapid = rs.getInt("map");
+            ret.mapId = rs.getInt("map");
             ret.initialSpawnPoint = rs.getInt("spawnpoint");
             ret.setGMLevel(rs.getInt("gm"));
             ret.world = rs.getByte("world");
@@ -6263,7 +6265,7 @@ public class Character extends AbstractCharacterObject {
         ret.exp.set(this.getExp());
         ret.fame = this.getFame();
         ret.gachaexp.set(this.getGachaExp());
-        ret.mapid = this.getMapId();
+        ret.mapId = this.getMapId();
         ret.initialSpawnPoint = this.getInitialSpawnpoint();
 
         ret.inventory[InventoryType.EQUIPPED.ordinal()] = this.getInventory(InventoryType.EQUIPPED);
@@ -6422,7 +6424,7 @@ public class Character extends AbstractCharacterObject {
                     ret.hair = rs.getInt("hair");
                     ret.face = rs.getInt("face");
                     ret.accountid = rs.getInt("accountid");
-                    ret.mapid = rs.getInt("map");
+                    ret.mapId = rs.getInt("map");
                     ret.jailExpiration = rs.getLong("jailexpire");
                     ret.initialSpawnPoint = rs.getInt("spawnpoint");
                     ret.world = rs.getByte("world");
@@ -6531,7 +6533,7 @@ public class Character extends AbstractCharacterObject {
 
                     if (channelserver) {
                         MapManager mapManager = client.getChannelServer().getMapFactory();
-                        ret.map = mapManager.getMap(ret.mapid);
+                        ret.map = mapManager.getMap(ret.mapId);
 
                         if (ret.map == null) {
                             ret.map = mapManager.getMap(MapId.HENESYS);
@@ -7590,7 +7592,7 @@ public class Character extends AbstractCharacterObject {
         level = recipe.getLevel();
         remainingAp = recipe.getRemainingAp();
         remainingSp[GameConstants.getSkillBook(job.getId())] = recipe.getRemainingSp();
-        mapid = recipe.getMap();
+        mapId = recipe.getMap();
         meso.set(recipe.getMeso());
 
         List<Pair<Skill, Integer>> startingSkills = recipe.getStartingSkillLevel();
@@ -7624,7 +7626,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(8, getJob().getId());
                     ps.setInt(9, hair);
                     ps.setInt(10, face);
-                    ps.setInt(11, mapid);
+                    ps.setInt(11, mapId);
                     ps.setInt(12, Math.abs(meso.get()));
                     ps.setInt(13, 0);
                     ps.setInt(14, accountid);
@@ -7806,7 +7808,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(19, hair);
                     ps.setInt(20, face);
                     if (map == null || (cashshop != null && cashshop.isOpened())) {
-                        ps.setInt(21, mapid);
+                        ps.setInt(21, mapId);
                     } else {
                         if (map.getForcedReturnId() != MapId.NONE) {
                             ps.setInt(21, map.getForcedReturnId());
@@ -8462,7 +8464,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setMap(int PmapId) {
-        this.mapid = PmapId;
+        this.mapId = PmapId;
     }
 
     public void setMessengerPosition(int position) {
@@ -9157,12 +9159,7 @@ public class Character extends AbstractCharacterObject {
         try {
             if (!questExpirations.isEmpty()) {
                 if (questExpireTask == null) {
-                    questExpireTask = TimerManager.getInstance().register(new Runnable() {
-                        @Override
-                        public void run() {
-                            runQuestExpireTask();
-                        }
-                    }, SECONDS.toMillis(10));
+                    questExpireTask = TimerManager.getInstance().register(this::runQuestExpireTask, SECONDS.toMillis(10));
                 }
             }
         } finally {
@@ -9698,25 +9695,12 @@ public class Character extends AbstractCharacterObject {
         return System.currentTimeMillis() - loginTime;
     }
 
-    public boolean isLoggedin() {
-        return loggedIn;
-    }
-
-    public void setMapId(int mapid) {
-        this.mapid = mapid;
-    }
-
     public boolean getWhiteChat() {
         return isGM() && whiteChat;
     }
 
     public void toggleWhiteChat() {
         whiteChat = !whiteChat;
-    }
-
-    // These need to be renamed, but I am too lazy right now to go through the scripts and rename them...
-    public String getPartyQuestItems() {
-        return dataString;
     }
 
     public boolean gotPartyQuestItem(String partyquestchar) {
@@ -9762,54 +9746,25 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean registerNameChange(String newName) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            //check for pending name change
-            long currentTimeMillis = System.currentTimeMillis();
-            try (PreparedStatement ps = con.prepareStatement("SELECT completionTime FROM namechanges WHERE characterid=?")) { //double check, just in case
-                ps.setInt(1, getId());
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Timestamp completedTimestamp = rs.getTimestamp("completionTime");
-                        if (completedTimestamp == null) {
-                            return false; //pending
-                        } else if (completedTimestamp.getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > currentTimeMillis) {
-                            return false;
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                log.error("Failed to register name change for chr {}", getName(), e);
-                return false;
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO namechanges (characterid, old, new) VALUES (?, ?, ?)")) {
-                ps.setInt(1, getId());
-                ps.setString(2, getName());
-                ps.setString(3, newName);
-                ps.executeUpdate();
-                this.pendingNameChange = true;
+        try {
+           NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+            if (nameChangeService.registerNameChange(this, newName)) {
+                pendingNameChange = true;
                 return true;
-            } catch (SQLException e) {
-                log.error("Failed to register name change for chr {}", getName(), e);
             }
-        } catch (SQLException e) {
-            log.error("Failed to get DB connection while registering name change", e);
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.registerNameChange.error1"), getName(), newName, e);
         }
         return false;
     }
 
     public boolean cancelPendingNameChange() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM namechanges WHERE characterid=? AND completionTime IS NULL")) {
-            ps.setInt(1, getId());
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows > 0) {
-                pendingNameChange = false;
-            }
-            return affectedRows > 0; //rows affected
-        } catch (SQLException e) {
-            log.error("Failed to cancel name change for chr {}", getName(), e);
+        try {
+            NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+            nameChangeService.cancelPendingNameChange(this);
+            return true;
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.cancelPendingNameChange.error1"), getName(), e);
             return false;
         }
     }
@@ -9873,7 +9828,7 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public boolean cancelPendingWorldTranfer() {
+    public boolean cancelPendingWorldTransfer() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM worldtransfers WHERE characterid=? AND completionTime IS NULL")) {
             ps.setInt(1, getId());
@@ -10031,13 +9986,13 @@ public class Character extends AbstractCharacterObject {
         return cp;
     }
 
-    public void addCP(int ammount) {
-        totalCP += ammount;
-        availableCP += ammount;
+    public void addCP(int amount) {
+        totalCP += amount;
+        availableCP += amount;
     }
 
-    public void useCP(int ammount) {
-        availableCP -= ammount;
+    public void useCP(int amount) {
+        availableCP -= amount;
     }
 
     public void gainCP(int gain) {

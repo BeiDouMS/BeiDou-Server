@@ -487,7 +487,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             if (itemId == ItemId.NAME_CHANGE) {
                 c.sendPacket(PacketCreator.showNameChangeCancel(player.cancelPendingNameChange()));
             } else if (itemId == ItemId.WORLD_TRANSFER) {
-                c.sendPacket(PacketCreator.showWorldTransferCancel(player.cancelPendingWorldTranfer()));
+                c.sendPacket(PacketCreator.showWorldTransferCancel(player.cancelPendingWorldTransfer()));
             }
             remove(c, position, itemId);
             c.sendPacket(PacketCreator.enableActions());
@@ -611,7 +611,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
             final Client client = c;
             TimerManager.getInstance().schedule(() -> {
-                if (!player.isLoggedin()) {
+                if (!player.isLoggedIn()) {
                     return;
                 }
 

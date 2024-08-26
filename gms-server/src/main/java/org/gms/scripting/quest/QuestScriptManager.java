@@ -213,40 +213,25 @@ public class QuestScriptManager extends AbstractScriptManager {
 
     public boolean checkFunctionExists(Client c, short questid, int npc, String functionName) {
         ScriptEngine engine = getQuestScriptEngine(c, questid);
-        if(engine == null){
+        if (engine == null) {
             return false;
         }
         try {
             QuestActionManager qm = new QuestActionManager(c, questid, npc, false);
             engine.put("qm", qm);
-
-
             String script = "function checkFunction(funcName) { return typeof this[funcName] === 'function'; }";
             engine.eval(script);
 
             Invocable invocable = (Invocable) engine;
+            boolean exists = (Boolean) invocable.invokeFunction("checkFunction", functionName);
 
-
-            Boolean exists = (Boolean) invocable.invokeFunction("checkFunction", functionName);
-
-
-            if (exists) {
-
-                qm.dispose();
-                return true;
-            } else {
-
-                System.out.println("Function " + functionName + " not found in the script.");
-                qm.dispose();
-                return false;
-            }
-
+            qm.dispose();
+            return exists;
         } catch (ScriptException | NoSuchMethodException e) {
-
             e.printStackTrace();
             dispose(c);
-            return false;
         }
+        return false;
     }
 
 
