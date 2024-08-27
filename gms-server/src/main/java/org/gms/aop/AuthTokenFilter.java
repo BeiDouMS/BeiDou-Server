@@ -8,8 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import org.gms.exception.BizException;
+import org.gms.service.AccountService;
 import org.gms.service.UserDetailsServiceImpl;
 import org.gms.util.JwtUtils;
+import org.gms.util.RateLimitUtil;
+import org.gms.util.RequireUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springdoc.core.properties.SpringDocConfigProperties;
@@ -24,6 +29,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.*;
 
+@Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
@@ -33,6 +39,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private SpringDocConfigProperties springDocConfigProperties;
     @Autowired
     private SwaggerUiConfigProperties swaggerUiConfigProperties;
+    @Autowired
+    private AccountService accountService;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
@@ -40,6 +48,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         try {
+            String forwardedIp = request.getHeader("X-Forwarded-For");
+            String realIp = request.getHeader("X-Real-IP");
+            String remoteAddr = request.getRemoteAddr();
+            if (RequireUtil.isEmpty(remoteAddr)) remoteAddr = forwardedIp;
+            if (RequireUtil.isEmpty(remoteAddr)) remoteAddr = realIp;
+            RequireUtil.requireNotEmpty(remoteAddr, "Unknown remote address");
+
+            // 封禁ip禁止请求
+            if (accountService.isBanned(remoteAddr)) {
+                request.getInputStream().close();
+                throw new BizException("Banned ip is requesting, forwardedIp: " + forwardedIp + ",realIp: " + realIp + ", remoteAddr: " + remoteAddr);
+            }
+
+            // 限流
+            if (!RateLimitUtil.getInstance().check(remoteAddr)) {
+                throw new BizException("Rate limit");
+            }
+
             String jwt = parseJwt(request);
             // 测试token，所以生产环境一定要把swagger关掉，否则裸奔
             if ("swagger".equals(jwt) && springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
@@ -60,7 +86,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication", e);
+            logger.error("Filter error", e);
+            // 释放流，否则可能内存泄漏
+            request.getInputStream().close();
+            response.getOutputStream().close();
+            return;
         }
         // 替换成允许多次读取的HttpServletRequest
         filterChain.doFilter(new CachedHttpServletRequest(request), response);

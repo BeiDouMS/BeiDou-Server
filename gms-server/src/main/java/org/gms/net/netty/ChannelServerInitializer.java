@@ -5,6 +5,8 @@ import io.netty.channel.socket.SocketChannel;
 import org.gms.net.PacketProcessor;
 import org.gms.net.server.Server;
 import org.gms.net.server.coordinator.session.SessionCoordinator;
+import org.gms.util.I18nUtil;
+import org.gms.util.RateLimitUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,11 +24,15 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
     @Override
     public void initChannel(SocketChannel socketChannel) {
         final String clientIp = socketChannel.remoteAddress().getHostString();
-        log.info("客户端 {} 连接到了大区 {}, 频道 {}", clientIp, world, channel);
+        log.warn(I18nUtil.getLogMessage("ChannelServerInitializer.initChannel.info1"), clientIp);
 
         PacketProcessor packetProcessor = PacketProcessor.getChannelServerProcessor(world, channel);
         final long clientSessionId = sessionId.getAndIncrement();
         final String remoteAddress = getRemoteAddress(socketChannel);
+        if (!RateLimitUtil.getInstance().check(remoteAddress)) {
+            log.warn(I18nUtil.getLogMessage("LoginServerInitializer.initChannel.warn1"), remoteAddress);
+            socketChannel.close();
+        }
         final Client client = Client.createChannelClient(clientSessionId, remoteAddress, packetProcessor, world, channel);
 
         if (Server.getInstance().getChannel(world, channel) == null) {
