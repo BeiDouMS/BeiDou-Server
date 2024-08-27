@@ -158,11 +158,6 @@ public class ModifiedCashItemDO implements Serializable {
         }
 
         item.setSN(sn);
-
-        if (period == -1) {
-            item.setExpiration(-1);//无视所有的保质期，将道具视为永久(针对商城物品，设定为-1时)
-        }
-
         return item;
     }
 }
