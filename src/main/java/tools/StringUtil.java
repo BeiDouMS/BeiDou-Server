@@ -125,4 +125,23 @@ public class StringUtil {
         }
         return ret;
     }
+
+    /**
+     * 转义 String 中的 html 符号
+     */
+    public static String covertHtml(String text) {
+        if (text == null) return null;
+        StringBuilder result = new StringBuilder();
+        for (char c : text.toCharArray()) {
+            switch (c) {
+                case '<' -> result.append("&lt;");
+                case '>' -> result.append("&gt;");
+                case '&' -> result.append("&amp;");
+                case '"' -> result.append("&quot;");
+                case '\'' -> result.append("&#39;");
+                default -> result.append(c);
+            }
+        }
+        return result.toString();
+    }
 }
