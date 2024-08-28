@@ -1,0 +1,1 @@
+UPDATE drop_data SET chance = 1000000 WHERE itemid = 4001007;
