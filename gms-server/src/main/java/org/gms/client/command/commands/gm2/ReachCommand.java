@@ -47,7 +47,7 @@ public class ReachCommand extends Command {
         if (victim == null && StringUtil.isNumeric(params[0])) {
             victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
         }
-        if (victim != null && victim.isLoggedin()) {
+        if (victim != null && victim.isLoggedIn()) {
             if (player.getClient().getChannel() != victim.getClient().getChannel()) {
                 player.dropMessage(5, I18nUtil.getMessage("ReachCommand.message3", victim.getName() ,victim.getClient().getChannel()));
             } else {

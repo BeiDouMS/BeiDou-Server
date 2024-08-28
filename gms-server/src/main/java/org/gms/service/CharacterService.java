@@ -144,8 +144,9 @@ public class CharacterService {
            return charactersMapper.selectListByQuery(queryWrapper);
     }
 
-    public List<CharactersDO> findByName(String name) {
-        return charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(name)));
+    public CharactersDO findByName(String name) {
+        List<CharactersDO> charactersDOS = charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(name)));
+        return charactersDOS.isEmpty() ? null : charactersDOS.getFirst();
     }
 
     private void checkName(ExtendValueDO data) {

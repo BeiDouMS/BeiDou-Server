@@ -9,4 +9,13 @@ import org.springframework.stereotype.Component;
 @Data
 public class ServiceProperty {
     private String language;
+    private RateLimitProperty rateLimit;
+
+    @Data
+    public static class RateLimitProperty {
+        private boolean enabled;
+        private int limit;
+        private long duration;
+        private boolean autoBan;
+    }
 }

@@ -35,6 +35,15 @@ gms:
   service:
     # zh-CN en-US
     language: zh-CN
+    rate-limit:
+      # 是否开启限流
+      enabled: false
+      # 每ip多少时间内最大请求数
+      limit: 10
+      # 每ip最大请求数多少时间重置，单位ms
+      duration: 10000
+      # 是否自动封禁
+      auto-ban: false
   world:
     worlds:
       #Properties for Scania 0

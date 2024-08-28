@@ -21,16 +21,15 @@
 */
 package org.gms.net.server.channel.handlers;
 
+import org.gms.client.*;
 import org.gms.client.Character;
-import org.gms.client.Client;
-import org.gms.client.FamilyEntitlement;
-import org.gms.client.FamilyEntry;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
+import org.gms.net.server.world.PartyCharacter;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
@@ -68,7 +67,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                                 useEntitlement(entry, type);
                             } else {
                                 c.sendPacket(PacketCreator.sendFamilyMessage(75, 0)); // wrong message, but close enough. (client should check this first anyway)
-                                return;
+
                             }
                         } else {
                             if (!FieldLimit.CANNOTMIGRATE.check(targetMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(ownMap.getFieldLimit())
@@ -83,7 +82,7 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                                 useEntitlement(entry, type);
                             } else {
                                 c.sendPacket(PacketCreator.sendFamilyMessage(75, 0));
-                                return;
+
                             }
                         }
                     }
@@ -91,88 +90,49 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.sendFamilyMessage(67, 0));
                 }
             }
-        } else if (type == FamilyEntitlement.FAMILY_BONDING) {
-            c.getPlayer().message("暂时关闭");
-            //not implemented
+
         } else {
-            if (c.getPlayer().isFamilybuff()) {
+            if (c.getPlayer().isFamilyBuff()) {
                 c.getPlayer().message("你已经有BUFF");
                 return;
             }
-            float rate = 1.5f;
-            int duration = 15;
 
-            do {
-                switch (type) {
-                    case PARTY_EXP_2_30MIN:
-                        c.getPlayer().message("暂时关闭");
-                        break;
+            switch (type) {
+                case PARTY_EXP_2_30MIN:
+                    applyPartyBuff(c, 2, 10, 30, FamilyEntitlement.PARTY_EXP_2_30MIN);
+                    break;
+                case PARTY_DROP_2_30MIN:
+                    applyPartyBuff(c, 3, 9, 30, FamilyEntitlement.PARTY_DROP_2_30MIN);
+                    break;
+                case SELF_DROP_2_30MIN:
+                    applySelfBuff(c, 3, 7, 30, 2, FamilyEntitlement.SELF_DROP_2_30MIN);
+                    break;
+                case SELF_DROP_2:
+                    applySelfBuff(c, 3, 5, 15, 2, FamilyEntitlement.SELF_DROP_2);
+                    break;
+                case SELF_DROP_1_5:
+                    applySelfBuff(c, 3, 2, 15, 1.5f, FamilyEntitlement.SELF_DROP_1_5);
+                    break;
+                case SELF_EXP_2_30MIN:
+                    applySelfBuff(c, 2, 8, 30, 2, FamilyEntitlement.SELF_EXP_2_30MIN);
+                    break;
+                case SELF_EXP_2:
+                    applySelfBuff(c, 2, 6, 15, 2, FamilyEntitlement.SELF_EXP_2);
+                    break;
+                case SELF_EXP_1_5:
+                    applySelfBuff(c, 2, 3, 15, 1.5f, FamilyEntitlement.SELF_EXP_1_5);
+                    break;
+                case FAMILY_BONDING:
+                    Family family = c.getPlayer().getFamily();
+                    family.Familybuff(30);
+                    useEntitlement(entry, FamilyEntitlement.FAMILY_BONDING);
+                    break;
+                default:
+                    // Handle unknown entitlement type
+                    break;
+            }
 
-                    case PARTY_DROP_2_30MIN:
-                        c.getPlayer().message("暂时关闭");
-                        break;
 
-                    case SELF_DROP_2_30MIN:
-                        duration = 30;
-                        rate = 2;
-                        c.sendPacket(PacketCreator.familyBuff(3, 7, 1, duration  * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
-                        c.getPlayer().startFamilyBuffTimer(duration  * 60000);
-                        useEntitlement(entry,FamilyEntitlement.SELF_DROP_2_30MIN);
-                        break;
-
-                    case SELF_DROP_2:
-                        duration = 15;
-                        rate = 2;
-                        c.sendPacket(PacketCreator.familyBuff(3, 5, 1, duration  * 60000));
-                        c.getPlayer().setFamilybuff(true,1,rate);
-                        c.getPlayer().startFamilyBuffTimer(duration  * 60000);
-                        useEntitlement(entry,FamilyEntitlement.SELF_DROP_2);
-                        break;
-
-                    case SELF_DROP_1_5:
-                        duration = 15;
-                        rate = 1.5f;
-                        c.sendPacket(PacketCreator.familyBuff(3, 2, 1,duration  * 60000));
-                        c.getPlayer().setFamilybuff(true,1,rate);
-                        c.getPlayer().startFamilyBuffTimer(duration  * 60000);
-                        useEntitlement(entry,FamilyEntitlement.SELF_DROP_1_5);
-                        break;
-
-                    case SELF_EXP_2_30MIN:
-                        duration = 30;
-                        rate = 2;
-                        c.sendPacket(PacketCreator.familyBuff(2, 8, 1, duration * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
-                        c.getPlayer().startFamilyBuffTimer(duration  * 60000);
-                        useEntitlement(entry,FamilyEntitlement.SELF_EXP_2_30MIN);
-                        break;
-
-                    case SELF_EXP_2:
-                        duration = 15;
-                        rate = 2;
-                        c.sendPacket(PacketCreator.familyBuff(2, 6, 1, duration * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
-                        c.getPlayer().startFamilyBuffTimer(duration  * 60000);
-                        useEntitlement(entry,FamilyEntitlement.SELF_EXP_2);
-                        break;
-
-                    case SELF_EXP_1_5:
-                        duration = 15;
-                        rate = 1.5f;
-                        c.sendPacket(PacketCreator.familyBuff(2, 3, 1, duration * 60000));
-                        c.getPlayer().setFamilybuff(true,rate,1);
-                        c.getPlayer().startFamilyBuffTimer(duration  * 60000);
-                        useEntitlement(entry,FamilyEntitlement.SELF_EXP_1_5);
-                        break;
-
-                    default:
-                        // 默认处理逻辑
-                        break;
-                }
-                break;
-            } while (true);
-            //not implemented
         }
     }
 
@@ -183,5 +143,31 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
             return true;
         }
         return false;
+    }
+
+    private void applyPartyBuff(Client c, int type, int effect, int duration, FamilyEntitlement entitlement) {
+        if (c.getPlayer().getParty() != null) {
+            for (PartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
+                mpc.getPlayer().sendPacket(PacketCreator.familyBuff(type, effect, 1, duration * 60000));
+                if(type == 2) {
+                    mpc.getPlayer().setFamilyBuff(true, 2, 1);
+                }else{
+                    mpc.getPlayer().setFamilyBuff(true, 1, 2);
+                }
+                mpc.getPlayer().startFamilyBuffTimer(duration * 60000);
+                useEntitlement(mpc.getPlayer().getFamilyEntry(), entitlement);
+            }
+        }
+    }
+
+    private void applySelfBuff(Client c, int type, int effect, int duration, float rate, FamilyEntitlement entitlement) {
+        c.sendPacket(PacketCreator.familyBuff(type, effect, 1, duration * 60000));
+        if(type == 2) {
+            c.getPlayer().setFamilyBuff(true, rate, 1);
+        }else{
+            c.getPlayer().setFamilyBuff(true, 1,  rate);
+        }
+        c.getPlayer().startFamilyBuffTimer(duration * 60000);
+        useEntitlement(c.getPlayer().getFamilyEntry(), entitlement);
     }
 }

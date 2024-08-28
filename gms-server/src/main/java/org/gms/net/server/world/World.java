@@ -370,14 +370,14 @@ public class World {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
         for (Character chr : list) {
-            if (!chr.isLoggedin()) {
+            if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.revertWorldRates();
         }
         this.exprate = exp;
         for (Character chr : list) {
-            if (!chr.isLoggedin()) {
+            if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.setWorldRates();
@@ -392,14 +392,14 @@ public class World {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
         for (Character chr : list) {
-            if (!chr.isLoggedin()) {
+            if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.revertWorldRates();
         }
         this.droprate = drop;
         for (Character chr : list) {
-            if (!chr.isLoggedin()) {
+            if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.setWorldRates();
@@ -422,14 +422,14 @@ public class World {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
         for (Character chr : list) {
-            if (!chr.isLoggedin()) {
+            if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.revertWorldRates();
         }
         this.mesorate = meso;
         for (Character chr : list) {
-            if (!chr.isLoggedin()) {
+            if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.setWorldRates();

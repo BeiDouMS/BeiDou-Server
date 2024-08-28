@@ -263,7 +263,7 @@ public class EventInstanceManager {
     }
 
     public void exitPlayer(final Character chr) {
-        if (chr == null || !chr.isLoggedin()) {
+        if (chr == null || !chr.isLoggedIn()) {
             return;
         }
 

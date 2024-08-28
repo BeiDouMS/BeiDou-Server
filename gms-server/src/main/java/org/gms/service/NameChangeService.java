@@ -3,6 +3,7 @@ package org.gms.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.gms.client.Character;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.RingsDO;
@@ -73,5 +74,20 @@ public class NameChangeService {
         ringsMapper.updateByQuery(RingsDO.builder().partnername(data.getNewer()).build(), QueryWrapper.create().where(RINGS_D_O.PARTNERNAME.eq(data.getOlder())));
         namechangesMapper.update(NamechangesDO.builder().id(data.getId()).completionTime(new Timestamp(System.currentTimeMillis())).build());
         log.info(I18nUtil.getLogMessage("CharacterService.doNameChange.info1"), data.getOlder(), data.getNewer());
+    }
+
+    public boolean registerNameChange(Character chr, String newName) {
+        // 已有改名未生效
+        List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
+                .where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId())));
+        if (!namechangesDOList.isEmpty()) {
+            return false;
+        }
+        namechangesMapper.insert(NamechangesDO.builder().characterid(chr.getId()).older(chr.getName()).newer(newName).build());
+        return true;
+    }
+
+    public void cancelPendingNameChange(Character chr) {
+        namechangesMapper.deleteByQuery(QueryWrapper.create().where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId())));
     }
 }

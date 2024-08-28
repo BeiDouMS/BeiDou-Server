@@ -114,15 +114,20 @@ import static java.util.concurrent.TimeUnit.*;
 public class Character extends AbstractCharacterObject {
     private static final Logger log = LoggerFactory.getLogger(Character.class);
 
+    @Getter
     @Setter
     private int world;
     @Getter
     @Setter
     private int id;
     private int accountid;
+    @Getter
     @Setter
     private int level;
-    private int rank, rankMove;
+    @Getter
+    private int rank;
+    @Getter
+    private int rankMove;
     @Getter
     private int jobRank;
     @Getter
@@ -143,7 +148,8 @@ public class Character extends AbstractCharacterObject {
     @Setter
     private int questFame;
     private int initialSpawnPoint;
-    private int mapid;
+    @Setter
+    private int mapId;
     @Getter
     private int currentPage;
     @Getter
@@ -177,13 +183,16 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int battleshipHp = 0;
+    @Getter
     private int mesosTraded = 0;
+    @Getter
     private int possibleReports = 10;
     @Getter
     private int ariantPoints;
     @Setter
     @Getter
     private int dojoPoints;
+    @Getter
     @Setter
     private int vanquisherStage;
     @Setter
@@ -191,6 +200,7 @@ public class Character extends AbstractCharacterObject {
     private int dojoStage;
     @Getter
     private int dojoEnergy;
+    @Getter
     @Setter
     private int vanquisherKills;
     private int expRate = 1;
@@ -214,7 +224,9 @@ public class Character extends AbstractCharacterObject {
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
     private int localchairrate;
-    private boolean hidden, equipchanged = true, berserk, hasMerchant, hasSandboxItem = false, whiteChat = false, canRecvPartySearchInvite = true;
+    @Getter
+    private boolean hidden;
+    private boolean equipchanged = true, berserk, hasMerchant, hasSandboxItem = false, whiteChat = false, canRecvPartySearchInvite = true;
     @Getter
     private boolean equippedMesoMagnet = false;
     @Getter
@@ -240,6 +252,7 @@ public class Character extends AbstractCharacterObject {
     private String chalktext;
     private String commandtext;
     private String dataString;
+    @Getter
     @Setter
     private String search = null;
     private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map
@@ -253,6 +266,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
+    @Setter
     @Getter
     private HiredMerchant hiredMerchant = null;
     @Getter
@@ -264,21 +278,29 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private Job job = Job.BEGINNER;
+    @Getter
     @Setter
     private Messenger messenger = null;
+    @Getter
     @Setter
     private MiniGame miniGame;
+    @Getter
     private RockPaperScissor rps;
     private Mount maplemount;
     private Party party;
     private final Pet[] pets = new Pet[3];
+    @Getter
     @Setter
     private PlayerShop playerShop = null;
+    @Getter
     @Setter
     private Shop shop = null;
+    @Getter
     @Setter
     private SkinColor skinColor = SkinColor.NORMAL;
+    @Getter
     private Storage storage = null;
+    @Getter
     @Setter
     private Trade trade = null;
     private MonsterBook monsterbook;
@@ -372,6 +394,7 @@ public class Character extends AbstractCharacterObject {
     private int partnerId = -1;
     private final List<Ring> crushRings = new ArrayList<>();
     private final List<Ring> friendshipRings = new ArrayList<>();
+    @Getter
     private boolean loggedIn = false;
     @Getter
     private boolean useCS;  //chaos scroll upon crafting item.
@@ -381,7 +404,11 @@ public class Character extends AbstractCharacterObject {
     private int canWarpCounter = 0;     //counts how many times "inner warps" have been called.
     private byte extraHpRec = 0, extraMpRec = 0;
     private short extraRecInterval;
+    @Setter
+    @Getter
     private int targetHpBarHash = 0;
+    @Setter
+    @Getter
     private long targetHpBarTime = 0;
     private long nextWarningTime = 0;
     private int banishMap = -1;
@@ -397,9 +424,15 @@ public class Character extends AbstractCharacterObject {
     private boolean chasing = false;
     private float mobExpRate = -1;
 
-    private boolean familybuff = false,familyparty = false;
+    @Getter
+    private boolean familyBuff = false;
+    private boolean familyParty = false;
 
-    private float familyexp = 1 ,familydrop = 1;
+    // 获取 FamilyExp 的值
+    @Getter
+    private float familyExp = 1;
+    @Getter
+    private float familyDrop = 1;
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -477,7 +510,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean isLoggedInWorld() {
-        return this.isLoggedin() && !this.isAwayFromWorld();
+        return this.isLoggedIn() && !this.isAwayFromWorld();
     }
 
     public boolean isAwayFromWorld() {
@@ -596,7 +629,7 @@ public class Character extends AbstractCharacterObject {
 
             if (prop != null) {
                 return (Integer.parseInt(prop) == id || eim.getIntProperty("brideId") == id) &&
-                        (mapid == MapId.CHAPEL_WEDDING_ALTAR || mapid == MapId.CATHEDRAL_WEDDING_ALTAR);
+                        (mapId == MapId.CHAPEL_WEDDING_ALTAR || mapId == MapId.CATHEDRAL_WEDDING_ALTAR);
             }
         }
 
@@ -651,7 +684,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public static boolean ban(String id, String reason, boolean accountId) {
-        try  {
+        try {
             AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
             accountService.ban(id, reason, accountId);
             return true;
@@ -841,7 +874,7 @@ public class Character extends AbstractCharacterObject {
     public static boolean existName(String name) {
         try {
             CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
-            if (!characterService.findByName(name).isEmpty()) {
+            if (characterService.findByName(name) != null) {
                 return true;
             }
             NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
@@ -1248,19 +1281,10 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void changeMap(int map) {
-        MapleMap warpMap;
-        EventInstanceManager eim = getEventInstance();
-
-        if (eim != null) {
-            warpMap = eim.getMapInstance(map);
-        } else {
-            warpMap = client.getChannelServer().getMapFactory().getMap(map);
-        }
-
-        changeMap(warpMap, warpMap.getRandomPlayerSpawnpoint());
+        changeMap(map, null);
     }
 
-    public void changeMap(int map, int portal) {
+    public void changeMap(int map, Object pt) {
         MapleMap warpMap;
         EventInstanceManager eim = getEventInstance();
 
@@ -1270,32 +1294,13 @@ public class Character extends AbstractCharacterObject {
             warpMap = client.getChannelServer().getMapFactory().getMap(map);
         }
 
-        changeMap(warpMap, warpMap.getPortal(portal));
-    }
-
-    public void changeMap(int map, String portal) {
-        MapleMap warpMap;
-        EventInstanceManager eim = getEventInstance();
-
-        if (eim != null) {
-            warpMap = eim.getMapInstance(map);
-        } else {
-            warpMap = client.getChannelServer().getMapFactory().getMap(map);
-        }
-
-        changeMap(warpMap, warpMap.getPortal(portal));
-    }
-
-    public void changeMap(int map, Portal portal) {
-        MapleMap warpMap;
-        EventInstanceManager eim = getEventInstance();
-
-        if (eim != null) {
-            warpMap = eim.getMapInstance(map);
-        } else {
-            warpMap = client.getChannelServer().getMapFactory().getMap(map);
-        }
-
+        Portal portal = switch (pt) {
+            case null -> warpMap.getRandomPlayerSpawnpoint();
+            case Integer i -> warpMap.getPortal(i);
+            case String s -> warpMap.getPortal(s);
+            case Portal p -> p;
+            default -> warpMap.getPortal(0);
+        };
         changeMap(warpMap, portal);
     }
 
@@ -1362,11 +1367,10 @@ public class Character extends AbstractCharacterObject {
             mapEim.registerPlayer(this, false);
         }
 
-        MapleMap to = target; // warps directly to the target intead of the target's map id, this allows GMs to patrol players inside instances.
         if (pto == null) {
-            pto = to.getPortal(0);
+            pto = target.getPortal(0);
         }
-        changeMapInternal(to, pto.getPosition(), PacketCreator.getWarpToMap(to, pto.getId(), this));
+        changeMapInternal(target, pto.getPosition(), PacketCreator.getWarpToMap(target, pto.getId(), this));
         canWarpMap = false;
 
         canWarpCounter--;
@@ -1378,7 +1382,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private boolean buffMapProtection() {
-        int thisMapid = mapid;
+        int thisMapid = mapId;
         int returnMapid = client.getChannelServer().getMapFactory().getMap(thisMapid).getReturnMapId();
 
         effLock.lock();
@@ -1817,42 +1821,43 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean applyConsumeOnPickup(final int itemId) {
-        if (itemId / 1000000 == 2) {
-            ItemInformationProvider ii = ItemInformationProvider.getInstance();
-            if (ii.isConsumeOnPickup(itemId)) {
-                if (ItemConstants.isPartyItem(itemId)) {
-                    List<Character> partyMembers = this.getPartyMembersOnSameMap();
-                    if (!ItemId.isPartyAllCure(itemId)) {
-                        StatEffect mse = ii.getItemEffect(itemId);
-                        if (!partyMembers.isEmpty()) {
-                            for (Character mc : partyMembers) {
-                                if (mc.isAlive()) {
-                                    mse.applyTo(mc);
-                                }
-                            }
-                        } else if (this.isAlive()) {
-                            mse.applyTo(this);
-                        }
-                    } else {
-                        if (!partyMembers.isEmpty()) {
-                            for (Character mc : partyMembers) {
-                                mc.dispelDebuffs();
-                            }
-                        } else {
-                            this.dispelDebuffs();
+        if (itemId / 1000000 != 2) {
+            return false;
+        }
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        if (!ii.isConsumeOnPickup(itemId)) {
+            return false;
+        }
+        if (ItemConstants.isPartyItem(itemId)) {
+            List<Character> partyMembers = this.getPartyMembersOnSameMap();
+            if (!ItemId.isPartyAllCure(itemId)) {
+                StatEffect mse = ii.getItemEffect(itemId);
+                if (!partyMembers.isEmpty()) {
+                    for (Character mc : partyMembers) {
+                        if (mc.isAlive()) {
+                            mse.applyTo(mc);
                         }
                     }
+                } else if (this.isAlive()) {
+                    mse.applyTo(this);
+                }
+            } else {
+                if (!partyMembers.isEmpty()) {
+                    for (Character mc : partyMembers) {
+                        mc.dispelDebuffs();
+                    }
                 } else {
-                    ii.getItemEffect(itemId).applyTo(this);
+                    this.dispelDebuffs();
                 }
-
-                if (itemId / 10000 == 238) {
-                    this.getMonsterBook().addCard(client, itemId);
-                }
-                return true;
             }
+        } else {
+            ii.getItemEffect(itemId).applyTo(this);
         }
-        return false;
+
+        if (itemId / 10000 == 238) {
+            this.getMonsterBook().addCard(client, itemId);
+        }
+        return true;
     }
 
     public final void pickupItem(MapObject ob) {
@@ -3175,29 +3180,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public static Map<String, String> getCharacterFromDatabase(String name) {
-        Map<String, String> character = new LinkedHashMap<>();
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT `id`, `accountid`, `name` FROM `characters` WHERE `name` = ?")) {
-            ps.setString(1, name);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) {
-                    return null;
-                }
-
-                for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    character.put(rs.getMetaData().getColumnLabel(i), rs.getString(i));
-                }
-            }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
-        }
-
-        return character;
-    }
-
     public Long getBuffedStarttime(BuffStat effect) {
         effLock.lock();
         chrLock.lock();
@@ -3290,22 +3272,6 @@ public class Character extends AbstractCharacterObject {
                 }
             }
             return new ArrayList<>(ret.values());
-        } finally {
-            chrLock.unlock();
-            effLock.unlock();
-        }
-    }
-
-    public List<Pair<BuffStat, Integer>> getAllActiveStatups() {
-        effLock.lock();
-        chrLock.lock();
-        try {
-            List<Pair<BuffStat, Integer>> ret = new ArrayList<>();
-            for (BuffStat mbs : effects.keySet()) {
-                BuffStatValueHolder mbsvh = effects.get(mbs);
-                ret.add(new Pair<>(mbs, mbsvh.value));
-            }
-            return ret;
         } finally {
             chrLock.unlock();
             effLock.unlock();
@@ -3408,22 +3374,6 @@ public class Character extends AbstractCharacterObject {
         buffExpires.remove(sourceid);
     }
 
-    private void dropWorstEffectFromItemEffectHolder(BuffStat mbs) {
-        int min = Integer.MAX_VALUE;
-        Integer srcid = -1;
-        for (Entry<Integer, Map<BuffStat, BuffStatValueHolder>> bpl : buffEffects.entrySet()) {
-            BuffStatValueHolder mbsvh = bpl.getValue().get(mbs);
-            if (mbsvh != null) {
-                if (mbsvh.value < min) {
-                    min = mbsvh.value;
-                    srcid = bpl.getKey();
-                }
-            }
-        }
-
-        removeEffectFromItemEffectHolder(srcid, mbs);
-    }
-
     private BuffStatValueHolder fetchBestEffectFromItemEffectHolder(BuffStat mbs) {
         Pair<Integer, Integer> max = new Pair<>(Integer.MIN_VALUE, 0);
         BuffStatValueHolder mbsvh = null;
@@ -3480,20 +3430,6 @@ public class Character extends AbstractCharacterObject {
             log.debug("-------------------");
             log.debug("IN ACTION: {}", effects.entrySet().stream()
                     .map(entry -> entry.getKey().name() + " -> " + ItemInformationProvider.getInstance().getName(entry.getValue().effect.getSourceId()))
-                    .collect(Collectors.joining(", "))
-            );
-        } finally {
-            chrLock.unlock();
-            effLock.unlock();
-        }
-    }
-
-    public void debugListAllBuffsCount() {
-        effLock.lock();
-        chrLock.lock();
-        try {
-            log.debug("ALL BUFFS COUNT: {}", buffEffectsCount.entrySet().stream()
-                    .map(entry -> entry.getKey().name() + " -> " + entry.getValue())
                     .collect(Collectors.joining(", "))
             );
         } finally {
@@ -4216,36 +4152,30 @@ public class Character extends AbstractCharacterObject {
             if (bHealingLvl > 0) {
                 final StatEffect healEffect = bHealing.getEffect(bHealingLvl);
                 int healInterval = (int) SECONDS.toMillis(healEffect.getX());
-                beholderHealingSchedule = TimerManager.getInstance().register(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (awayFromWorld.get()) {
-                            return;
-                        }
-
-                        addHP(healEffect.getHp());
-                        sendPacket(PacketCreator.showOwnBuffEffect(beholder, 2));
-                        getMap().broadcastMessage(Character.this, PacketCreator.summonSkill(getId(), beholder, 5), true);
-                        getMap().broadcastMessage(Character.this, PacketCreator.showOwnBuffEffect(beholder, 2), false);
+                beholderHealingSchedule = TimerManager.getInstance().register(() -> {
+                    if (awayFromWorld.get()) {
+                        return;
                     }
+
+                    addHP(healEffect.getHp());
+                    sendPacket(PacketCreator.showOwnBuffEffect(beholder, 2));
+                    getMap().broadcastMessage(Character.this, PacketCreator.summonSkill(getId(), beholder, 5), true);
+                    getMap().broadcastMessage(Character.this, PacketCreator.showOwnBuffEffect(beholder, 2), false);
                 }, healInterval, healInterval);
             }
             Skill bBuff = SkillFactory.getSkill(DarkKnight.HEX_OF_BEHOLDER);
             if (getSkillLevel(bBuff) > 0) {
                 final StatEffect buffEffect = bBuff.getEffect(getSkillLevel(bBuff));
                 int buffInterval = (int) SECONDS.toMillis(buffEffect.getX());
-                beholderBuffSchedule = TimerManager.getInstance().register(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (awayFromWorld.get()) {
-                            return;
-                        }
-
-                        buffEffect.applyTo(Character.this);
-                        sendPacket(PacketCreator.showOwnBuffEffect(beholder, 2));
-                        getMap().broadcastMessage(Character.this, PacketCreator.summonSkill(getId(), beholder, (int) (Math.random() * 3) + 6), true);
-                        getMap().broadcastMessage(Character.this, PacketCreator.showBuffEffect(getId(), beholder, 2), false);
+                beholderBuffSchedule = TimerManager.getInstance().register(() -> {
+                    if (awayFromWorld.get()) {
+                        return;
                     }
+
+                    buffEffect.applyTo(Character.this);
+                    sendPacket(PacketCreator.showOwnBuffEffect(beholder, 2));
+                    getMap().broadcastMessage(Character.this, PacketCreator.summonSkill(getId(), beholder, (int) (Math.random() * 3) + 6), true);
+                    getMap().broadcastMessage(Character.this, PacketCreator.showBuffEffect(getId(), beholder, 2), false);
                 }, buffInterval, buffInterval);
             }
         } else if (effect.isRecovery()) {
@@ -4258,27 +4188,24 @@ public class Character extends AbstractCharacterObject {
                     recoveryTask.cancel(false);
                 }
 
-                recoveryTask = TimerManager.getInstance().register(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (getBuffSource(BuffStat.RECOVERY) == -1) {
-                            chrLock.lock();
-                            try {
-                                if (recoveryTask != null) {
-                                    recoveryTask.cancel(false);
-                                    recoveryTask = null;
-                                }
-                            } finally {
-                                chrLock.unlock();
+                recoveryTask = TimerManager.getInstance().register(() -> {
+                    if (getBuffSource(BuffStat.RECOVERY) == -1) {
+                        chrLock.lock();
+                        try {
+                            if (recoveryTask != null) {
+                                recoveryTask.cancel(false);
+                                recoveryTask = null;
                             }
-
-                            return;
+                        } finally {
+                            chrLock.unlock();
                         }
 
-                        addHP(heal);
-                        sendPacket(PacketCreator.showOwnRecovery(heal));
-                        getMap().broadcastMessage(Character.this, PacketCreator.showRecovery(id, heal), false);
+                        return;
                     }
+
+                    addHP(heal);
+                    sendPacket(PacketCreator.showOwnRecovery(heal));
+                    getMap().broadcastMessage(Character.this, PacketCreator.showRecovery(id, heal), false);
                 }, healInterval, healInterval);
             } finally {
                 chrLock.unlock();
@@ -4362,14 +4289,14 @@ public class Character extends AbstractCharacterObject {
                         retrievedEffects.put(sourceid, new Pair<>(effect, starttime));
                     }
 
-                    propagateBuffEffectUpdates(retrievedEffects, retrievedStats, new LinkedHashSet<BuffStat>());
+                    propagateBuffEffectUpdates(retrievedEffects, retrievedStats, new LinkedHashSet<>());
                 }
             } else {
                 for (Entry<BuffStat, BuffStatValueHolder> statup : appliedStatups.entrySet()) {
                     addItemEffectHolderCount(statup.getKey());
                 }
 
-                toDeploy = (active ? appliedStatups : new LinkedHashMap<BuffStat, BuffStatValueHolder>());
+                toDeploy = (active ? appliedStatups : new LinkedHashMap<>());
             }
 
             addItemEffectHolder(sourceid, expirationtime, appliedStatups);
@@ -4459,7 +4386,7 @@ public class Character extends AbstractCharacterObject {
     public Collection<Door> getDoors() {
         prtLock.lock();
         try {
-            return (party != null ? Collections.unmodifiableCollection(party.getDoors().values()) : (pdoor != null ? Collections.singleton(pdoor) : new LinkedHashSet<Door>()));
+            return (party != null ? Collections.unmodifiableCollection(party.getDoors().values()) : (pdoor != null ? Collections.singleton(pdoor) : new LinkedHashSet<>()));
         } finally {
             prtLock.unlock();
         }
@@ -4723,12 +4650,12 @@ public class Character extends AbstractCharacterObject {
         if (itemid == 0) {
             StatEffect mseMeso = getBuffEffect(BuffStat.MESO_UP_BY_ITEM);
             if (mseMeso != null) {
-                rate += mseMeso.getCardRate(mapid, itemid);
+                rate += mseMeso.getCardRate(mapId, itemid);
             }
         } else {
             StatEffect mseItem = getBuffEffect(BuffStat.ITEM_UP_BY_ITEM);
             if (mseItem != null) {
-                rate += mseItem.getCardRate(mapid, itemid);
+                rate += mseItem.getCardRate(mapId, itemid);
             }
         }
 
@@ -4896,10 +4823,6 @@ public class Character extends AbstractCharacterObject {
         return job.getId() / 1000;
     }
 
-    public int getLevel() {
-        return level;
-    }
-
     public int getFh() {
         Point pos = this.getPosition();
         pos.y -= 6;
@@ -4915,7 +4838,7 @@ public class Character extends AbstractCharacterObject {
         if (map != null) {
             return map.getId();
         }
-        return mapid;
+        return mapId;
     }
 
     public Ring getMarriageRing() {
@@ -5006,10 +4929,6 @@ public class Character extends AbstractCharacterObject {
         return (int) netMeso;
     }
 
-    public int getMesosTraded() {
-        return mesosTraded;
-    }
-
     public int getMessengerPosition() {
         return messengerposition;
     }
@@ -5033,22 +4952,6 @@ public class Character extends AbstractCharacterObject {
         this.mpc = mpc;
     }
 
-    public int getTargetHpBarHash() {
-        return this.targetHpBarHash;
-    }
-
-    public void setTargetHpBarHash(int mobHash) {
-        this.targetHpBarHash = mobHash;
-    }
-
-    public long getTargetHpBarTime() {
-        return this.targetHpBarTime;
-    }
-
-    public void setTargetHpBarTime(long timeNow) {
-        this.targetHpBarTime = timeNow;
-    }
-
     public void setPlayerAggro(int mobHash) {
         setTargetHpBarHash(mobHash);
         setTargetHpBarTime(System.currentTimeMillis());
@@ -5061,10 +4964,6 @@ public class Character extends AbstractCharacterObject {
 
         setTargetHpBarHash(0);
         setTargetHpBarTime(0);
-    }
-
-    public MiniGame getMiniGame() {
-        return miniGame;
     }
 
     public int getMiniGamePoints(MiniGameResult type, boolean omok) {
@@ -5093,24 +4992,6 @@ public class Character extends AbstractCharacterObject {
 
     public Mount getMount() {
         return maplemount;
-    }
-
-    public Messenger getMessenger() {
-        return messenger;
-    }
-
-    public int getNextEmptyPetIndex() {
-        petLock.lock();
-        try {
-            for (int i = 0; i < 3; i++) {
-                if (pets[i] == null) {
-                    return i;
-                }
-            }
-            return 3;
-        } finally {
-            petLock.unlock();
-        }
     }
 
     public int getNoPets() {
@@ -5207,18 +5088,8 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public PlayerShop getPlayerShop() {
-        return playerShop;
-    }
-
-    public RockPaperScissor getRPS() { // thanks inhyuk for suggesting RPS addition
-        return rps;
-    }
-
     public void setGMLevel(int level) {
-        this.gmLevel = Math.min(level, 6);
-        this.gmLevel = Math.max(level, 0);
-
+        this.gmLevel = Math.max(Math.min(level, 6), 0);
         whiteChat = gmLevel >= 4;   // thanks ozanrijen for suggesting default white chat
     }
 
@@ -5382,10 +5253,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public int getPossibleReports() {
-        return possibleReports;
-    }
-
     public final byte getQuestStatus(final int quest) {
         synchronized (quests) {
             QuestStatus mqs = quests.get((short) quest);
@@ -5413,18 +5280,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    //---- \/ \/ \/ \/ \/ \/ \/  NOT TESTED  \/ \/ \/ \/ \/ \/ \/ \/ \/ ----
-
-    public final void setQuestAdd(final Quest quest, final byte status, final String customData) {
-        synchronized (quests) {
-            if (!quests.containsKey(quest.getId())) {
-                final QuestStatus stat = new QuestStatus(quest, QuestStatus.Status.getById(status));
-                stat.setCustomData(customData);
-                quests.put(quest.getId(), stat);
-            }
-        }
-    }
-
     public final QuestStatus getQuestNAdd(final Quest quest) {
         synchronized (quests) {
             if (!quests.containsKey(quest.getId())) {
@@ -5441,14 +5296,6 @@ public class Character extends AbstractCharacterObject {
             return quests.get(quest.getId());
         }
     }
-
-    public final QuestStatus getQuestRemove(final Quest quest) {
-        synchronized (quests) {
-            return quests.remove(quest.getId());
-        }
-    }
-
-    //---- /\ /\ /\ /\ /\ /\ /\  NOT TESTED  /\ /\ /\ /\ /\ /\ /\ /\ /\ ----
 
     public boolean needQuestItem(int questid, int itemid) {
         if (questid <= 0) { //For non quest items :3
@@ -5473,14 +5320,6 @@ public class Character extends AbstractCharacterObject {
         return getInventory(ItemConstants.getInventoryType(itemid)).countById(itemid) < amountNeeded;
     }
 
-    public int getRank() {
-        return rank;
-    }
-
-    public int getRankMove() {
-        return rankMove;
-    }
-
     public void clearSavedLocation(SavedLocationType type) {
         savedLocations[type.ordinal()] = null;
     }
@@ -5498,14 +5337,6 @@ public class Character extends AbstractCharacterObject {
         clearSavedLocation(SavedLocationType.fromString(type));
 
         return m;
-    }
-
-    public String getSearch() {
-        return search;
-    }
-
-    public Shop getShop() {
-        return shop;
     }
 
     public Map<Skill, SkillEntry> getSkills() {
@@ -5542,10 +5373,6 @@ public class Character extends AbstractCharacterObject {
         return skills.get(skill).expiration;
     }
 
-    public SkinColor getSkinColor() {
-        return skinColor;
-    }
-
     public int getSlot() {
         return slots;
     }
@@ -5575,10 +5402,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public Storage getStorage() {
-        return storage;
-    }
-
     public Collection<Summon> getSummonsValues() {
         return summons.values();
     }
@@ -5599,24 +5422,8 @@ public class Character extends AbstractCharacterObject {
         return summons.containsValue(summon);
     }
 
-    public Trade getTrade() {
-        return trade;
-    }
-
-    public int getVanquisherKills() {
-        return vanquisherKills;
-    }
-
-    public int getVanquisherStage() {
-        return vanquisherStage;
-    }
-
     public MapObject[] getVisibleMapObjects() {
         return visibleMapObjects.toArray(new MapObject[visibleMapObjects.size()]);
-    }
-
-    public int getWorld() {
-        return world;
     }
 
     public World getWorldServer() {
@@ -5803,10 +5610,6 @@ public class Character extends AbstractCharacterObject {
         return gmLevel > 1;
     }
 
-    public boolean isHidden() {
-        return hidden;
-    }
-
     public boolean isMapObjectVisible(MapObject mo) {
         return visibleMapObjects.contains(mo);
     }
@@ -5826,7 +5629,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean attemptCatchFish(int baitLevel) {
-        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapid) &&
+        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapId) &&
                 this.getPosition().getY() > 0 &&
                 ItemConstants.isFishingChair(chair.get()) &&
                 this.getWorldServer().registerFisherPlayer(this, baitLevel);
@@ -6030,12 +5833,7 @@ public class Character extends AbstractCharacterObject {
             if (level == maxClassLevel) {
                 if (!this.isGM()) {
                     if (YamlConfig.config.server.PLAYERNPC_AUTODEPLOY) {
-                        ThreadManager.getInstance().newTask(new Runnable() {
-                            @Override
-                            public void run() {
-                                PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(job), Character.this);
-                            }
-                        });
+                        ThreadManager.getInstance().newTask(() -> PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(job), Character.this));
                     }
 
                     final String names = (getMedalText() + name);
@@ -6349,7 +6147,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void commitBuffCoupon(int couponid) {
-        if (!isLoggedin() || getCashShop().isOpened()) {
+        if (!isLoggedIn() || getCashShop().isOpened()) {
             return;
         }
 
@@ -6417,7 +6215,7 @@ public class Character extends AbstractCharacterObject {
             ret.exp.set(rs.getInt("exp"));
             ret.fame = rs.getInt("fame");
             ret.gachaexp.set(rs.getInt("gachaexp"));
-            ret.mapid = rs.getInt("map");
+            ret.mapId = rs.getInt("map");
             ret.initialSpawnPoint = rs.getInt("spawnpoint");
             ret.setGMLevel(rs.getInt("gm"));
             ret.world = rs.getByte("world");
@@ -6467,7 +6265,7 @@ public class Character extends AbstractCharacterObject {
         ret.exp.set(this.getExp());
         ret.fame = this.getFame();
         ret.gachaexp.set(this.getGachaExp());
-        ret.mapid = this.getMapId();
+        ret.mapId = this.getMapId();
         ret.initialSpawnPoint = this.getInitialSpawnpoint();
 
         ret.inventory[InventoryType.EQUIPPED.ordinal()] = this.getInventory(InventoryType.EQUIPPED);
@@ -6499,6 +6297,7 @@ public class Character extends AbstractCharacterObject {
         updateRemainingSp(remainingSp, GameConstants.getSkillBook(job.getId()));
     }
 
+    // todo DO转
     public Character toCharacter(CharactersDO charactersDO) {
         /*
                     ret.exp.set(rs.getInt("exp"));
@@ -6625,7 +6424,7 @@ public class Character extends AbstractCharacterObject {
                     ret.hair = rs.getInt("hair");
                     ret.face = rs.getInt("face");
                     ret.accountid = rs.getInt("accountid");
-                    ret.mapid = rs.getInt("map");
+                    ret.mapId = rs.getInt("map");
                     ret.jailExpiration = rs.getLong("jailexpire");
                     ret.initialSpawnPoint = rs.getInt("spawnpoint");
                     ret.world = rs.getByte("world");
@@ -6734,7 +6533,7 @@ public class Character extends AbstractCharacterObject {
 
                     if (channelserver) {
                         MapManager mapManager = client.getChannelServer().getMapFactory();
-                        ret.map = mapManager.getMap(ret.mapid);
+                        ret.map = mapManager.getMap(ret.mapId);
 
                         if (ret.map == null) {
                             ret.map = mapManager.getMap(MapId.HENESYS);
@@ -7087,13 +6886,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public static String makeMapleReadable(String in) {
-        String i = in.replace('I', 'i');
-        i = i.replace('l', 'L');
-        i = i.replace("rn", "Rn");
-        i = i.replace("vv", "Vv");
-        i = i.replace("VV", "Vv");
-
-        return i;
+        return in.replace('I', 'i')
+                .replace('l', 'L')
+                .replace("rn", "Rn")
+                .replace("vv", "Vv")
+                .replace("VV", "Vv");
     }
 
     private static class BuffStatValueHolder {
@@ -7464,13 +7261,17 @@ public class Character extends AbstractCharacterObject {
                         Inventory inv = getInventory(InventoryType.USE);
                         for (short i = 1; i <= inv.getSlotLimit(); i++) {
                             Item item = inv.getItem(i);
-                            if (item != null) {
-                                if ((claw && ItemConstants.isThrowingStar(item.getItemId())) || (gun && ItemConstants.isBullet(item.getItemId())) || (bow && ItemConstants.isArrowForBow(item.getItemId())) || (crossbow && ItemConstants.isArrowForCrossBow(item.getItemId()))) {
-                                    if (item.getQuantity() > 0) {
-                                        // Finally there!
-                                        localwatk += ii.getWatkForProjectile(item.getItemId());
-                                        break;
-                                    }
+                            if (item == null) {
+                                continue;
+                            }
+                            if ((claw && ItemConstants.isThrowingStar(item.getItemId()))
+                                    || (gun && ItemConstants.isBullet(item.getItemId()))
+                                    || (bow && ItemConstants.isArrowForBow(item.getItemId()))
+                                    || (crossbow && ItemConstants.isArrowForCrossBow(item.getItemId()))) {
+                                if (item.getQuantity() > 0) {
+                                    // Finally there!
+                                    localwatk += ii.getWatkForProjectile(item.getItemId());
+                                    break;
                                 }
                             }
                         }
@@ -7791,7 +7592,7 @@ public class Character extends AbstractCharacterObject {
         level = recipe.getLevel();
         remainingAp = recipe.getRemainingAp();
         remainingSp[GameConstants.getSkillBook(job.getId())] = recipe.getRemainingSp();
-        mapid = recipe.getMap();
+        mapId = recipe.getMap();
         meso.set(recipe.getMeso());
 
         List<Pair<Skill, Integer>> startingSkills = recipe.getStartingSkillLevel();
@@ -7825,7 +7626,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(8, getJob().getId());
                     ps.setInt(9, hair);
                     ps.setInt(10, face);
-                    ps.setInt(11, mapid);
+                    ps.setInt(11, mapId);
                     ps.setInt(12, Math.abs(meso.get()));
                     ps.setInt(13, 0);
                     ps.setInt(14, accountid);
@@ -7944,12 +7745,7 @@ public class Character extends AbstractCharacterObject {
 
     public void saveCharToDB() {
         if (YamlConfig.config.server.USE_AUTOSAVE) {
-            Runnable r = new Runnable() {
-                @Override
-                public void run() {
-                    saveCharToDB(true);
-                }
-            };
+            Runnable r = () -> saveCharToDB(true);
 
             CharacterSaveService service = (CharacterSaveService) getWorldServer().getServiceAccess(WorldServices.SAVE_CHARACTER);
             service.registerSaveCharacter(this.getId(), r);
@@ -8012,7 +7808,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(19, hair);
                     ps.setInt(20, face);
                     if (map == null || (cashshop != null && cashshop.isOpened())) {
-                        ps.setInt(21, mapid);
+                        ps.setInt(21, mapId);
                     } else {
                         if (map.getForcedReturnId() != MapId.NONE) {
                             ps.setInt(21, map.getForcedReturnId());
@@ -8533,10 +8329,6 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setHiredMerchant(HiredMerchant merchant) {
-        this.hiredMerchant = merchant;
-    }
-
     public void hpChangeAction(int oldHp) {
         boolean playerDied = false;
         if (hp <= 0) {
@@ -8671,12 +8463,8 @@ public class Character extends AbstractCharacterObject {
         return true;
     }
 
-    public void setInventory(InventoryType type, Inventory inv) {
-        inventory[type.ordinal()] = inv;
-    }
-
     public void setMap(int PmapId) {
-        this.mapid = PmapId;
+        this.mapId = PmapId;
     }
 
     public void setMessengerPosition(int position) {
@@ -9371,12 +9159,7 @@ public class Character extends AbstractCharacterObject {
         try {
             if (!questExpirations.isEmpty()) {
                 if (questExpireTask == null) {
-                    questExpireTask = TimerManager.getInstance().register(new Runnable() {
-                        @Override
-                        public void run() {
-                            runQuestExpireTask();
-                        }
-                    }, SECONDS.toMillis(10));
+                    questExpireTask = TimerManager.getInstance().register(this::runQuestExpireTask, SECONDS.toMillis(10));
                 }
             }
         } finally {
@@ -9416,12 +9199,7 @@ public class Character extends AbstractCharacterObject {
         evtLock.lock();
         try {
             if (questExpireTask == null) {
-                questExpireTask = TimerManager.getInstance().register(new Runnable() {
-                    @Override
-                    public void run() {
-                        runQuestExpireTask();
-                    }
-                }, SECONDS.toMillis(10));
+                questExpireTask = TimerManager.getInstance().register(this::runQuestExpireTask, SECONDS.toMillis(10));
             }
 
             questExpirations.put(quest, Server.getInstance().getCurrentTime() + time);
@@ -9573,7 +9351,7 @@ public class Character extends AbstractCharacterObject {
         return area_info;
     }
 
-    public void autoban(String reason) {
+    public void autoBan(String reason) {
         if (this.isGM() || this.isBanned()) {  // thanks RedHat for noticing GM's being able to get banned
             return;
         }
@@ -9787,7 +9565,7 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    public void setCpqTimer(ScheduledFuture timer) {
+    public void setCpqTimer(ScheduledFuture<?> timer) {
         this.cpqSchedule = timer;
     }
 
@@ -9917,25 +9695,12 @@ public class Character extends AbstractCharacterObject {
         return System.currentTimeMillis() - loginTime;
     }
 
-    public boolean isLoggedin() {
-        return loggedIn;
-    }
-
-    public void setMapId(int mapid) {
-        this.mapid = mapid;
-    }
-
     public boolean getWhiteChat() {
         return isGM() && whiteChat;
     }
 
     public void toggleWhiteChat() {
         whiteChat = !whiteChat;
-    }
-
-    // These need to be renamed, but I am too lazy right now to go through the scripts and rename them...
-    public String getPartyQuestItems() {
-        return dataString;
     }
 
     public boolean gotPartyQuestItem(String partyquestchar) {
@@ -9981,54 +9746,25 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean registerNameChange(String newName) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            //check for pending name change
-            long currentTimeMillis = System.currentTimeMillis();
-            try (PreparedStatement ps = con.prepareStatement("SELECT completionTime FROM namechanges WHERE characterid=?")) { //double check, just in case
-                ps.setInt(1, getId());
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Timestamp completedTimestamp = rs.getTimestamp("completionTime");
-                        if (completedTimestamp == null) {
-                            return false; //pending
-                        } else if (completedTimestamp.getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > currentTimeMillis) {
-                            return false;
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                log.error("Failed to register name change for chr {}", getName(), e);
-                return false;
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO namechanges (characterid, old, new) VALUES (?, ?, ?)")) {
-                ps.setInt(1, getId());
-                ps.setString(2, getName());
-                ps.setString(3, newName);
-                ps.executeUpdate();
-                this.pendingNameChange = true;
+        try {
+           NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+            if (nameChangeService.registerNameChange(this, newName)) {
+                pendingNameChange = true;
                 return true;
-            } catch (SQLException e) {
-                log.error("Failed to register name change for chr {}", getName(), e);
             }
-        } catch (SQLException e) {
-            log.error("Failed to get DB connection while registering name change", e);
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.registerNameChange.error1"), getName(), newName, e);
         }
         return false;
     }
 
     public boolean cancelPendingNameChange() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM namechanges WHERE characterid=? AND completionTime IS NULL")) {
-            ps.setInt(1, getId());
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows > 0) {
-                pendingNameChange = false;
-            }
-            return affectedRows > 0; //rows affected
-        } catch (SQLException e) {
-            log.error("Failed to cancel name change for chr {}", getName(), e);
+        try {
+            NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+            nameChangeService.cancelPendingNameChange(this);
+            return true;
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.cancelPendingNameChange.error1"), getName(), e);
             return false;
         }
     }
@@ -10092,7 +9828,7 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public boolean cancelPendingWorldTranfer() {
+    public boolean cancelPendingWorldTransfer() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("DELETE FROM worldtransfers WHERE characterid=? AND completionTime IS NULL")) {
             ps.setInt(1, getId());
@@ -10250,13 +9986,13 @@ public class Character extends AbstractCharacterObject {
         return cp;
     }
 
-    public void addCP(int ammount) {
-        totalCP += ammount;
-        availableCP += ammount;
+    public void addCP(int amount) {
+        totalCP += amount;
+        availableCP += amount;
     }
 
-    public void useCP(int ammount) {
-        availableCP -= ammount;
+    public void useCP(int amount) {
+        availableCP -= amount;
     }
 
     public void gainCP(int gain) {
@@ -10368,24 +10104,10 @@ public class Character extends AbstractCharacterObject {
         InventoryManipulator.addFromDrop(getClient(), baseEquip, false);
     }
 
-    public void setFamilybuff(boolean type,float exp,float drop) {
-        this.familybuff = type;
-        this.familyexp = exp;
-        this.familydrop = drop;
-    }
-
-    public boolean isFamilybuff() {
-        return familybuff;
-    }
-
-    // 获取 FamilyExp 的值
-    public float getFamilyexp() {
-        return familyexp;
-    }
-
-    // 获取 FamilyDrop 的值
-    public float getFamilydrop() {
-        return familydrop;
+    public void setFamilyBuff(boolean type, float exp, float drop) {
+        this.familyBuff = type;
+        this.familyExp = exp;
+        this.familyDrop = drop;
     }
 
     public void startFamilyBuffTimer(int delay) {
@@ -10396,11 +10118,7 @@ public class Character extends AbstractCharacterObject {
             try {
                 sendPacket(PacketCreator.cancelFamilyBuff());
             } finally {
-
-                if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
-                    FamilyBuffTimer.cancel(false);
-                    setFamilybuff(false,1,1);
-                }
+                cancelFamilyBuffTimer();
             }
         }, delay);
     }
@@ -10408,7 +10126,7 @@ public class Character extends AbstractCharacterObject {
     public void cancelFamilyBuffTimer() {
         if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
             FamilyBuffTimer.cancel(false);
-            setFamilybuff(false,1,1);
+            setFamilyBuff(false, 1, 1);
         }
     }
 

@@ -984,7 +984,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     private void disconnectInternal(boolean shutdown, boolean cashshop) {//once per Client instance
-        if (player != null && player.isLoggedin() && player.getClient() != null) {
+        if (player != null && player.isLoggedIn() && player.getClient() != null) {
             final int messengerid = player.getMessenger() == null ? 0 : player.getMessenger().getId();
             //final int fid = player.getFamilyId();
             final BuddyList bl = player.getBuddylist();

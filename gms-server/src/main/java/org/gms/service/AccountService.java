@@ -36,6 +36,7 @@ import java.util.NoSuchElementException;
 
 import static org.gms.client.Client.LOGIN_LOGGEDIN;
 import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
+import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 
 @Service
 @AllArgsConstructor
@@ -239,6 +240,9 @@ public class AccountService {
 
     public void ban(String str, String reason, boolean isAccount) {
         if (str.matches("[0-9]{1,3}\\..*")) {
+            if (isBanned(str)) {
+                return;
+            }
             ipbansMapper.insertSelective(IpbansDO.builder().ip(str).build());
             return;
         }
@@ -249,9 +253,9 @@ public class AccountService {
                 accountId = accountsDO.getId();
             }
         } else {
-            List<CharactersDO> charactersDOS = characterService.findByName(str);
-            if (!charactersDOS.isEmpty()) {
-                accountId = charactersDOS.getFirst().getAccountid();
+            CharactersDO charactersDO = characterService.findByName(str);
+            if (charactersDO != null) {
+                accountId = charactersDO.getAccountid();
             }
         }
         if (accountId == null) {
@@ -262,5 +266,9 @@ public class AccountService {
                 .banreason(reason)
                 .banned(true)
                 .build());
+    }
+
+    public boolean isBanned(String ip) {
+        return ipbansMapper.selectCountByQuery(QueryWrapper.create().where(IPBANS_D_O.IP.eq(ip))) > 0;
     }
 }

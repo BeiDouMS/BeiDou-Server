@@ -560,7 +560,7 @@ public class Server {
     public void commitActiveCoupons() {
         for (World world : getWorlds()) {
             for (Character chr : world.getPlayerStorage().getAllCharacters()) {
-                if (!chr.isLoggedin()) {
+                if (!chr.isLoggedIn()) {
                     continue;
                 }
 
