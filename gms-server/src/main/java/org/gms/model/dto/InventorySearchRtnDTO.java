@@ -15,13 +15,9 @@ public class InventorySearchRtnDTO {
      */
     private Long id;
     /**
-     * saverId是否为角色id，true角色id，false账号id
+     * 角色id
      */
-    private boolean character;
-    /**
-     * 角色id or 账号id
-     */
-    private Integer saverId;
+    private Integer characterId;
     /**
      * 物品id，对应itemid
      */
@@ -35,15 +31,15 @@ public class InventorySearchRtnDTO {
      * 背包栏类型，对应inventorytype
      * @see org.gms.client.inventory.InventoryType
      */
-    private Integer inventoryType;
+    private Byte inventoryType;
     /**
      * 物品位置，对应position
      */
-    private Integer position;
+    private Short position;
     /**
      * 物品数量，对应quantity
      */
-    private Integer quantity;
+    private Short quantity;
     /**
      * 制作者，对应owner
      */
@@ -55,7 +51,7 @@ public class InventorySearchRtnDTO {
     /**
      * 物品标记，对应flag
      */
-    private Integer flag;
+    private Short flag;
     /**
      * 物品有效期，对应expiration
      */
@@ -64,6 +60,10 @@ public class InventorySearchRtnDTO {
      * 送礼人，对应giftFrom
      */
     private String giftFrom;
+    /**
+     * 是否在线
+     */
+    private boolean online;
     /**
      * 是否装备，判断子表inventoryequipment是否有数据
      */

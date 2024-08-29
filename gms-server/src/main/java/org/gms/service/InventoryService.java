@@ -3,17 +3,22 @@ package org.gms.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.row.Row;
 import lombok.AllArgsConstructor;
+import org.gms.client.Character;
+import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
+import org.gms.client.inventory.ItemFactory;
 import org.gms.dao.mapper.InventoryitemsMapper;
 import org.gms.model.dto.InventoryEquipRtnDTO;
 import org.gms.model.dto.InventorySearchRtnDTO;
 import org.gms.model.dto.InventoryTypeRtnDTO;
+import org.gms.net.server.Server;
+import org.gms.net.server.world.World;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
@@ -33,56 +38,142 @@ public class InventoryService {
 
     public List<InventorySearchRtnDTO> getInventoryList(InventoryTypeRtnDTO data) {
         RequireUtil.requireNotEmpty(data.getType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "type"));
+        InventoryType inventoryType = InventoryType.getByType(data.getType());
+        RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "type", data.getType()));
         List<Row> results = inventoryitemsMapper.selectListByQueryAs(QueryWrapper.create()
                 .select(INVENTORYITEMS_D_O.ALL_COLUMNS, INVENTORYEQUIPMENT_D_O.ALL_COLUMNS)
                 .from(INVENTORYITEMS_D_O.as("i"))
                 .leftJoin(INVENTORYEQUIPMENT_D_O.as("e")).on(INVENTORYITEMS_D_O.INVENTORYITEMID.eq(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID))
-                .where(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getType())), Row.class);
-        // todo 获取在线玩家数据，覆盖数据库数据
-        return results.stream().map(obj -> {
+                // 只查询指定栏目
+                .where(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getType()))
+                // 只查询背包
+                .and(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue())), Row.class);
+        List<InventorySearchRtnDTO> rtnDTOList = new ArrayList<>();
+        Set<Character> characterSet = new HashSet<>();
+        for (Row obj : results) {
+            int characterId = obj.getInt("characterid");
+            Character character = getCharacterById(characterId);
+            // 过滤在线玩家
+            if (character == null) {
+                rtnDTOList.add(buildByDb(obj));
+            } else {
+                characterSet.add(character);
+            }
+        }
+        // 整合在线玩家数据
+        for (Character character : characterSet) {
+            rtnDTOList.addAll(buildByOnline(character, inventoryType));
+        }
+        return rtnDTOList;
+    }
+
+    private Character getCharacterById(int characterId) {
+        for (World world : Server.getInstance().getWorlds()) {
+            Optional<Character> characterOptional = world.getPlayerStorage().getAllCharacters().stream()
+                    .filter(c -> Objects.equals(c.getId(), characterId))
+                    .findFirst();
+            if (characterOptional.isPresent()) {
+                return characterOptional.get();
+            }
+        }
+        return null;
+    }
+
+    private InventorySearchRtnDTO buildByDb(Row obj) {
+        InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
+                .id(obj.getLong("inventoryitemid"))
+                .itemType(obj.getInt("type"))
+                .characterId(obj.getInt("characterid"))
+                .itemId(obj.getInt("itemid"))
+                .inventoryType(obj.getByte("inventorytype"))
+                .position(obj.getShort("position"))
+                .quantity(obj.getShort("quantity"))
+                .owner(obj.getString("owner"))
+                .petId(obj.getInt("petid"))
+                .flag(obj.getShort("flag"))
+                .expiration(obj.getLong("expiration"))
+                .giftFrom(obj.getString("giftFrom"))
+                .online(false)
+                .build();
+        Long inventoryEquipmentId = obj.getLong("inventoryequipmentid");
+        if (inventoryEquipmentId != null) {
+            rtnDTO.setEquipment(true);
+            rtnDTO.setInventoryEquipment(InventoryEquipRtnDTO.builder()
+                    .id(inventoryEquipmentId)
+                    .inventoryItemId(obj.getLong("inventoryitemid"))
+                    .upgradeSlots(obj.getByte("upgradeslots"))
+                    .level(obj.getByte("level"))
+                    .attStr(obj.getShort("str"))
+                    .attDex(obj.getShort("dex"))
+                    .attInt(obj.getShort("int"))
+                    .attLuk(obj.getShort("luk"))
+                    .hp(obj.getShort("hp"))
+                    .mp(obj.getShort("mp"))
+                    .pAtk(obj.getShort("watk"))
+                    .mAtk(obj.getShort("matk"))
+                    .pDef(obj.getShort("pdef"))
+                    .mdef(obj.getShort("mdef"))
+                    .acc(obj.getShort("acc"))
+                    .avoid(obj.getShort("avoid"))
+                    .hands(obj.getShort("hands"))
+                    .speed(obj.getShort("speed"))
+                    .jump(obj.getShort("jump"))
+                    .locked(obj.getInt("locked"))
+                    .vicious(obj.getShort("vicious"))
+                    .itemLevel(obj.getByte("itemlevel"))
+                    .itemExp(obj.getInt("itemexp"))
+                    .ringId(obj.getInt("ringid"))
+                    .build());
+        }
+        return rtnDTO;
+    }
+
+    private List<InventorySearchRtnDTO> buildByOnline(Character character, InventoryType type) {
+        Inventory inventory = character.getInventory(type);
+        return inventory.list().stream().map(item -> {
             InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
-                    .id(obj.getLong("inventoryitemid"))
-                    .itemType(obj.getInt("type"))
-                    .character(obj.getInt("characterid") != null)
-                    .saverId(obj.getInt("characterid") != null ? obj.getInt("characterid") : obj.getInt("accountid"))
-                    .itemId(obj.getInt("itemid"))
-                    .inventoryType(obj.getInt("inventorytype"))
-                    .position(obj.getInt("position"))
-                    .quantity(obj.getInt("quantity"))
-                    .owner(obj.getString("owner"))
-                    .petId(obj.getInt("petid"))
-                    .flag(obj.getInt("flag"))
-                    .expiration(obj.getLong("expiration"))
-                    .giftFrom(obj.getString("giftFrom"))
+                    .id(-1L)
+                    .itemType(ItemFactory.INVENTORY.getValue())
+                    .characterId(character.getId())
+                    .itemId(item.getItemId())
+                    .inventoryType(type.getType())
+                    .position(item.getPosition())
+                    .quantity(item.getQuantity())
+                    .owner(item.getOwner())
+                    .petId(item.getPetId())
+                    .flag(item.getFlag())
+                    .expiration(item.getExpiration())
+                    .giftFrom(item.getGiftFrom())
+                    .online(true)
                     .build();
-            Long inventoryEquipmentId = obj.getLong("inventoryequipmentid");
-            if (inventoryEquipmentId != null) {
+            if (InventoryType.EQUIP == type || InventoryType.EQUIPPED == type) {
+                Equip equip = (Equip) item;
                 rtnDTO.setEquipment(true);
                 rtnDTO.setInventoryEquipment(InventoryEquipRtnDTO.builder()
-                        .id(inventoryEquipmentId)
-                        .inventoryItemId(obj.getLong("inventoryitemid"))
-                        .upgradeSlots(obj.getInt("upgradeslots"))
-                        .level(obj.getInt("level"))
-                        .attStr(obj.getInt("str"))
-                        .attDex(obj.getInt("dex"))
-                        .attInt(obj.getInt("int"))
-                        .attLuk(obj.getInt("luk"))
-                        .hp(obj.getInt("hp"))
-                        .mp(obj.getInt("mp"))
-                        .pAtk(obj.getInt("watk"))
-                        .mAtk(obj.getInt("matk"))
-                        .pDef(obj.getInt("pdef"))
-                        .mdef(obj.getInt("mdef"))
-                        .acc(obj.getInt("acc"))
-                        .avoid(obj.getInt("avoid"))
-                        .hands(obj.getInt("hands"))
-                        .speed(obj.getInt("speed"))
-                        .jump(obj.getInt("jump"))
-                        .locked(obj.getInt("locked"))
-                        .vicious(obj.getLong("vicious"))
-                        .itemLevel(obj.getInt("itemlevel"))
-                        .itemExp(obj.getLong("itemexp"))
-                        .ringId(obj.getInt("ringid"))
+                        .id(-1L)
+                        .inventoryItemId(-1L)
+                        .upgradeSlots(equip.getUpgradeSlots())
+                        .level(equip.getLevel())
+                        .attStr(equip.getStr())
+                        .attDex(equip.getDex())
+                        .attInt(equip.getInt())
+                        .attLuk(equip.getLuk())
+                        .hp(equip.getHp())
+                        .mp(equip.getMp())
+                        .pAtk(equip.getWatk())
+                        .mAtk(equip.getMatk())
+                        .pDef(equip.getWdef())
+                        .mdef(equip.getMdef())
+                        .acc(equip.getAcc())
+                        .avoid(equip.getAvoid())
+                        .hands(equip.getHands())
+                        .speed(equip.getSpeed())
+                        .jump(equip.getJump())
+                        .locked(0)
+                        .vicious(equip.getVicious())
+                        .itemLevel(equip.getItemLevel())
+                        .itemExp(equip.getItemExp())
+                        .ringId(equip.getRingId())
                         .build());
             }
             return rtnDTO;
