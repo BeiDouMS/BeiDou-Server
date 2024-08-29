@@ -98,7 +98,11 @@
             data-index="job"
             :width="200"
             align="center"
-          />
+          >
+            <template #cell="{ record }">
+              <span> {{ getJobName(record.job) }}[{{ record.job }}]</span>
+            </template>
+          </a-table-column>
           <a-table-column
             :title="$t('account.player.level')"
             data-index="level"
@@ -314,8 +318,9 @@
     GiveForm,
     givePlayerSrc,
   } from '@/api/player';
+  import { formatJob } from '@/utils/characterFormatter';
 
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const tableData = ref<AccountState[]>([]);
   const total = ref(0);
@@ -504,6 +509,13 @@
     } finally {
       setLoading(false);
     }
+  };
+
+  const getJobName = (jobId) => {
+    if (!locale.value.includes('zh')) {
+      return '';
+    }
+    return formatJob(jobId);
   };
 </script>
 
