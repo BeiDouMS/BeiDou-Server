@@ -120,10 +120,10 @@ public class QuestScriptManager extends AbstractScriptManager {
             if (c.canClickNPC()) {
                 qms.put(c, qm);
 
-                if (!quest.hasScriptRequirement(true)) {
+                /*if (!quest.hasScriptRequirement(true)) {
                     qm.dispose();
                     return;
-                }
+                }*/
 
                 ScriptEngine engine = getQuestScriptEngine(c, questid);
                 if (engine == null) {
