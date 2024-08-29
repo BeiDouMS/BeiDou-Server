@@ -100,12 +100,6 @@
             align="center"
           />
           <a-table-column
-            :title="$t('account.player.jobName')"
-            data-index="jobName"
-            :width="200"
-            align="center"
-          />
-          <a-table-column
             :title="$t('account.player.level')"
             data-index="level"
             :width="200"
