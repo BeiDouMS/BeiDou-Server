@@ -24,7 +24,7 @@ public class ChannelServerInitializer extends ServerChannelInitializer {
     @Override
     public void initChannel(SocketChannel socketChannel) {
         final String clientIp = socketChannel.remoteAddress().getHostString();
-        log.warn(I18nUtil.getLogMessage("ChannelServerInitializer.initChannel.info1"), clientIp);
+        log.info(I18nUtil.getLogMessage("ChannelServerInitializer.initChannel.info1"), clientIp,world,channel);
 
         PacketProcessor packetProcessor = PacketProcessor.getChannelServerProcessor(world, channel);
         final long clientSessionId = sessionId.getAndIncrement();
