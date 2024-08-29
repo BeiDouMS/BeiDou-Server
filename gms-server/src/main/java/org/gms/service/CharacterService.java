@@ -16,10 +16,7 @@ import org.gms.model.dto.ChrOnlineListRtnDTO;
 import org.gms.exception.BizException;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
-import org.gms.util.BasePageUtil;
-import org.gms.util.ExtendUtil;
-import org.gms.util.I18nUtil;
-import org.gms.util.RequireUtil;
+import org.gms.util.*;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -54,6 +51,8 @@ public class CharacterService {
                         .name(chr.getName())
                         .map(chr.getMap().getId())
                         .job(chr.getJob().getId())
+                        //这里是暴力使用的转换类转成中文字段,暂未适配i18n的中英转换
+                        .jobName(JobNameConvert.convertJobName(chr.getJob().getId()))
                         .level(chr.getLevel())
                         .gm(chr.gmLevel())
                         .build());

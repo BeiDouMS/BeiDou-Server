@@ -82,6 +82,7 @@ export default {
   'account.player.map': 'Map',
   'account.player.mapId': 'Map Id',
   'account.player.job': 'Job',
+  'account.player.jobName': 'Job Name',
   'account.player.level': 'Lv.',
   'account.player.gm.level': 'GM Lv.',
 
