@@ -101,14 +101,13 @@ function action(mode, type, selection) {
                 }
             } else if (selection == 1) {
                 if (cm.haveItem(4031061) && !cm.haveItem(4031062)) {
-"Would you like to attempt the #bBreath of Lava#k?  If you fail, there is a very real chance you will die."
+                    cm.sendYesNo("你已经成功通过了第一阶段。你还有很长的路才能到达扎昆的祭台。所以，你想好挑战下一个阶段了吗？");
                 } else {
                     if (cm.haveItem(4031062)) {
                         cm.sendNext("你已经得到了#b熔岩之息#k，你不需要完成这个阶段。");
                     } else {
                         cm.sendNext("请先完成之前的试炼。");
                     }
-
                     cm.dispose();
                 }
             } else {
