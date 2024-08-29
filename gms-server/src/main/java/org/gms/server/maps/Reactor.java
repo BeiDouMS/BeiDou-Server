@@ -21,6 +21,7 @@
  */
 package org.gms.server.maps;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.YamlConfig;
 import org.gms.net.packet.Packet;
@@ -255,8 +256,9 @@ public class Reactor extends AbstractMapObject {
                     cancelReactorTimeout();
                     attackHit = wHit;
 
-                    if (YamlConfig.config.server.USE_DEBUG) {
-                        c.getPlayer().dropMessage(5, "Hitted REACTOR " + this.getId() + " with POS " + charPos + " , STANCE " + stance + " , SkillID " + skillid + " , STATE " + state + " STATESIZE " + stats.getStateSize(state));
+                    Character player = c.getPlayer();
+                    if (YamlConfig.config.server.USE_DEBUG && player.isGM()) {
+                        player.dropMessage(5, "Hitted REACTOR " + this.getId() + " with POS " + charPos + " , STANCE " + stance + " , SkillID " + skillid + " , STATE " + state + " STATESIZE " + stats.getStateSize(state));
                     }
                     ReactorScriptManager.getInstance().onHit(c, this);
 

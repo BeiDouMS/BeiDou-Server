@@ -349,7 +349,7 @@ public class PlayerNPC extends AbstractMapObject {
         }
 
         if (YamlConfig.config.server.USE_DEBUG) {
-            log.debug("GOT SID {}, POS {}", scriptId, pos);
+            log.info("GOT SID {}, POS {}", scriptId, pos);
         }
 
         int worldId = chr.getWorld();

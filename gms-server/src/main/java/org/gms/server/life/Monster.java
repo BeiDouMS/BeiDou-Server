@@ -457,7 +457,7 @@ public class Monster extends AbstractLoadedLife {
             return;
         }
 
-        if (YamlConfig.config.server.USE_DEBUG) {
+        if (YamlConfig.config.server.USE_DEBUG && from.isGM()) {
             from.dropMessage(5, I18nUtil.getMessage("Monster.applyDamage.message1") + this.getId() + ", OID " + this.getObjectId());
         }
 

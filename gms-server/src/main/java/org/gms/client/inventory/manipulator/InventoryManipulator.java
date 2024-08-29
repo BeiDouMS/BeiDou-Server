@@ -520,7 +520,7 @@ public class InventoryManipulator {
         }
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
         // 添加物品代码提示
-        if (c.getPlayer().isGM()) { // 假设isGM()是检查玩家是否是管理员的方法
+        if (YamlConfig.config.server.USE_DEBUG && c.getPlayer().isGM()) { // 假设isGM()是检查玩家是否是管理员的方法
             int itemID = source.getItemId();
             c.getPlayer().dropMessage(5, I18nUtil.getMessage("InventoryManipulator.handlePacket.message1")  + itemID);
         }
