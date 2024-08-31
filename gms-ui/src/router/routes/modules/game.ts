@@ -52,6 +52,16 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'inventory',
+      name: 'inventory',
+      component: () => import('@/views/game/inventory/index.vue'),
+      meta: {
+        locale: 'menu.game.inventory',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

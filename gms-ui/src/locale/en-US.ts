@@ -14,6 +14,7 @@ export default {
   'menu.game.cashShop': 'Cash Shop',
   'menu.game.drop': 'Mob Drop',
   'menu.game.drop.global': 'Global Drop',
+  'menu.game.inventory': 'Inventory',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
