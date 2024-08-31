@@ -32,6 +32,7 @@ import org.gms.server.life.LifeFactory;
 import org.gms.server.life.Monster;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
+import org.gms.util.StringUtil;
 
 public class BombCommand extends Command {
     {
@@ -47,6 +48,9 @@ public class BombCommand extends Command {
         }
         if (params.length > 0) {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            if (victim == null && StringUtil.isNumeric(params[0])) {
+                victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+            }
             if (victim != null) {
                 victim.getMap().spawnMonsterOnGroundBelow(monster, victim.getPosition());
                 Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("BombCommand.message2", player.getName(), victim.getName())));
