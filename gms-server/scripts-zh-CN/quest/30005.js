@@ -41,12 +41,13 @@ function start(mode, type, selection)
 		}
 		else if (status == 2 )
 		{
-			qm.sendAcceptDecline("勇士，我知道您很强大，还请#r帮帮我们！！#k");
+			qm.sendAcceptDecline("勇士，我知道您很强大，还请#r帮帮我们，我可以送您过去！！#k");
 		}
 		else if (status == 3)
 		{
 			qm.sendOk("谢谢您，请帮我消灭200只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");
 			qm.forceStartQuest();
+			qm.warp(100040103);
             qm.dispose();
 		}
 	}
