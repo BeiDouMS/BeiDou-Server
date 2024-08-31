@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-  import CashShopTable from '@/views/dashboard/cashShop/table.vue';
+  import CashShopTable from '@/views/game/cashShop/table.vue';
   import { ref } from 'vue';
   import { getAllCategoryList } from '@/api/cashShop';
   import { categoryState } from '@/store/modules/cashShop/type';
