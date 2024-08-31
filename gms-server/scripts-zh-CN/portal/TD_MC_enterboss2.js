@@ -5,11 +5,11 @@ function enter(pi) {
     }
 
     if (pi.isQuestCompleted(2333) && pi.isQuestStarted(2331) && !pi.hasItem(4001318)) {
-        pi.getPlayer().message("Lost the Royal Seal, eh? Worry not! Kevin's code here to save your hide.");
+        pi.getPlayer().message("玉玺丢失了？嗯，不用担心！凯文会帮您保密。");
         if (pi.canHold(4001318)) {
             pi.gainItem(4001318, 1);
         } else {
-            pi.getPlayer().message("Hey, how do you plan to hold this Seal when your inventory is full?");
+            pi.getPlayer().message("嘿，你背包空间已经满了，如何拿取蘑菇王国玉玺？");
         }
     }
 
@@ -19,7 +19,7 @@ function enter(pi) {
         return true;
     } else if (pi.isQuestStarted(2332) && pi.hasItem(4032388)) {
         pi.forceCompleteQuest(2332, 1300002);
-        pi.getPlayer().message("You've found the princess!");
+        pi.getPlayer().message("找到了公主！");
         pi.giveCharacterExp(4400, pi.getPlayer());
 
         var em = pi.getEventManager("MK_PrimeMinister");
@@ -31,7 +31,7 @@ function enter(pi) {
                     pi.playPortalSound();
                     return true;
                 } else {
-                    pi.message("Another party is already challenging the boss in this channel.");
+                    pi.message("有其它团队正在此频道挑战BOSS。");
                     return false;
                 }
             }
@@ -40,7 +40,7 @@ function enter(pi) {
                 pi.playPortalSound();
                 return true;
             } else {
-                pi.message("Another party is already challenging the boss in this channel.");
+                pi.message("有其它团队正在此频道挑战BOSS。");
                 return false;
             }
         }
@@ -55,7 +55,7 @@ function enter(pi) {
                     pi.playPortalSound();
                     return true;
                 } else {
-                    pi.message("Another party is already challenging the boss in this channel.");
+                    pi.message("有其它团队正在此频道挑战BOSS。");
                     return false;
                 }
             }
@@ -64,12 +64,12 @@ function enter(pi) {
                 pi.playPortalSound();
                 return true;
             } else {
-                pi.message("Another party is already challenging the boss in this channel.");
+                pi.message("有其它团队正在此频道挑战BOSS。");
                 return false;
             }
         }
     } else {
-        pi.getPlayer().message("The door seems to be locked. Perhaps I can find a key to open it...");
+        pi.getPlayer().message("门似乎已经被锁住了，需要找到开启门的钥匙……");
         return false;
     }
 }
