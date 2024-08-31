@@ -47,7 +47,8 @@ public class InventoryService {
                 .leftJoin(CHARACTERS_D_O.as("c")).on(INVENTORYITEMS_D_O.CHARACTERID.eq(CHARACTERS_D_O.ID))
                 .where(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue()));
         if (data.getCharacterId() != null) queryWrapper.and(CHARACTERS_D_O.ID.eq(data.getCharacterId()));
-        if (!RequireUtil.isEmpty(data.getCharacterName())) queryWrapper.and(CHARACTERS_D_O.NAME.like(data.getCharacterName()));
+        if (!RequireUtil.isEmpty(data.getCharacterName()))
+            queryWrapper.and(CHARACTERS_D_O.NAME.like(data.getCharacterName()));
         if (data.getAccountId() != null) queryWrapper.and(CHARACTERS_D_O.ACCOUNTID.eq(data.getAccountId()));
         Page<CharactersDO> paginate = inventoryitemsMapper.paginateAs(data.getPageNo(), data.getPageSize(), queryWrapper, CharactersDO.class);
         return new Page<>(
@@ -68,6 +69,7 @@ public class InventoryService {
 
     public List<InventorySearchRtnDTO> getInventoryList(InventorySearchReqDTO data) {
         RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "type"));
+        RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
         InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
         RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "type", data.getInventoryType()));
         List<Row> results = inventoryitemsMapper.selectListByQueryAs(QueryWrapper.create()
@@ -77,7 +79,8 @@ public class InventoryService {
                 // 只查询指定栏目
                 .where(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getInventoryType()))
                 // 只查询背包
-                .and(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue())), Row.class);
+                .and(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue()))
+                .and(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterId())), Row.class);
         List<InventorySearchRtnDTO> rtnDTOList = new ArrayList<>();
         Set<Character> characterSet = new HashSet<>();
         for (Row obj : results) {
