@@ -1,6 +1,6 @@
-import drop from '@/views/dashboard/drop/locale/zh-CN';
-import cashShop from '@/views/dashboard/cashShop/locale/zh-CN';
-import npcShop from '@/views/dashboard/npcShop/locale/zh-CN';
+import drop from '@/views/game/drop/locale/zh-CN';
+import cashShop from '@/views/game/cashShop/locale/zh-CN';
+import npcShop from '@/views/game/npcShop/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
@@ -10,11 +10,12 @@ export default {
   // 左侧菜单
   'menu.dashboard': '仪表盘',
   'menu.dashboard.workplace': '工作台',
-  'menu.dashboard.npcShop': 'NPC商店',
-  'menu.dashboard.cashShop': '商城管理',
-  'menu.dashboard.drop': '怪物爆率',
-  'menu.dashboard.drop.global': '全局爆率',
-  'menu.account': '账户管理',
+  'menu.game': '游戏管理',
+  'menu.game.npcShop': 'NPC商店',
+  'menu.game.cashShop': '商城管理',
+  'menu.game.drop': '怪物爆率',
+  'menu.game.drop.global': '全局爆率',
+  'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
   'menu.arco': 'UI 开发文档',

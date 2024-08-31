@@ -1,6 +1,6 @@
-import drop from '@/views/dashboard/drop/locale/en-US';
-import cashShop from '@/views/dashboard/cashShop/locale/en-US';
-import npcShop from '@/views/dashboard/npcShop/locale/en-US';
+import drop from '@/views/game/drop/locale/en-US';
+import cashShop from '@/views/game/cashShop/locale/en-US';
+import npcShop from '@/views/game/npcShop/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
 import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
@@ -9,10 +9,11 @@ import base from './en-US/base';
 export default {
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.workplace': 'Workplace',
-  'menu.dashboard.npcShop': 'NPC Shop',
-  'menu.dashboard.cashShop': 'Cash Shop',
-  'menu.dashboard.drop': 'Mob Drop',
-  'menu.dashboard.drop.global': 'Global Drop',
+  'menu.game': 'Game',
+  'menu.game.npcShop': 'NPC Shop',
+  'menu.game.cashShop': 'Cash Shop',
+  'menu.game.drop': 'Mob Drop',
+  'menu.game.drop.global': 'Global Drop',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
