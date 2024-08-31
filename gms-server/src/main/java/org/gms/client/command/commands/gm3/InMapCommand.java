@@ -38,7 +38,7 @@ public class InMapCommand extends Command {
         Character player = c.getPlayer();
         StringBuilder st = new StringBuilder();
         for (Character chr : player.getMap().getCharacters()) {
-            st.append(chr.getName()).append(" ");
+            st.append(chr.getName()).append(" , ");
         }
         player.message(st.toString());
 

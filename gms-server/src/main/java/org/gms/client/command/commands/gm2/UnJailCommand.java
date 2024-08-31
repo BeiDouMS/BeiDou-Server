@@ -27,6 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
+import org.gms.util.StringUtil;
 
 public class UnJailCommand extends Command {
     {
@@ -42,6 +43,9 @@ public class UnJailCommand extends Command {
         }
 
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        if (victim == null && StringUtil.isNumeric(params[0])) {
+            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+        }
         if (victim != null) {
             if (victim.getJailExpirationTimeLeft() <= 0) {
                 player.message(I18nUtil.getMessage("UnJailCommand.message3"));
