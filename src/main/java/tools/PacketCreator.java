@@ -7486,9 +7486,8 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet showUI(byte type) {
-        OutPacket p = OutPacket.create(SendOpcode.SHOW_UI);
-        p.writeByte(type);
+    public static Packet openCGui() {
+        OutPacket p = OutPacket.create(SendOpcode.OPEN_CGUI);
         return p;
     }
 
