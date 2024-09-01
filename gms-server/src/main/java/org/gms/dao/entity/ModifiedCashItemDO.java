@@ -34,7 +34,7 @@ import static java.util.concurrent.TimeUnit.HOURS;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("modified_cash_item")
-public class ModifiedCashItemDO implements Serializable {
+public class ModifiedCashItemDO implements Serializable, Cloneable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -159,5 +159,14 @@ public class ModifiedCashItemDO implements Serializable {
 
         item.setSN(sn);
         return item;
+    }
+
+    @Override
+    public ModifiedCashItemDO clone() {
+        try {
+            return (ModifiedCashItemDO) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
