@@ -686,7 +686,7 @@ public class MapleMap {
                         }
                         mesos = mesos * chr.getMesoRate();
                         if (mesos <= 0) {
-                            mesos = Integer.MAX_VALUE;
+                            mesos = 1;
                         }
 
                         spawnMesoDrop(mesos, calcDropPos(pos, mob.getPosition()), mob, chr, false, droptype,
