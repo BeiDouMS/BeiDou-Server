@@ -71,7 +71,8 @@ public class GachaCommand extends Command {
         talkStr += "\r\n\r\n";
         for (int i = 0; i < 2; i++) {
             for (int id : gacha.getItems(i)) {
-                talkStr += "-" + ItemInformationProvider.getInstance().getName(id) + "\r\n";
+                talkStr += "#v" + id + "#" + "   -  #z" + id + "#" + "\r\n";
+                //talkStr += "#v" + id + "#" + "#z" + id + "#" + "- " + ItemInformationProvider.getInstance().getName(id) + "\r\n";
             }
         }
         talkStr += "\r\n";

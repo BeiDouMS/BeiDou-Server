@@ -62,25 +62,26 @@ function action(mode, type, selection) {
             var selStr = "好眼光,弓的攻击速度快,也比弩灵敏许多,但是攻击比弩低一点点哦，但箭矢和弩没有太大区别。 总之, 你想做哪一种?#b";
             items = [1452002, 1452003, 1452001, 1452000, 1452005, 1452006, 1452007];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "#" + "#z" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
+                //selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
             }
         } else if (selection == 1) { //xbow refine
             var selStr = "弩是我的专长~它的攻击速度比弓要慢一点，但是伤害却比弓要来的高哦， 你想让我为你做哪一个?#b";
             items = [1462001, 1462002, 1462003, 1462000, 1462004, 1462005, 1462006, 1462007];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "#" + "#z" + items[i] + "##k - 需要弓箭手等级 Lv. " + (10 + (i * 5)) + "#l#b";
             }
         } else if (selection == 2) { //glove refine
             var selStr = "好的,你想要製作哪一种手套呢?#b";
             items = [1082012, 1082013, 1082016, 1082048, 1082068, 1082071, 1082084, 1082089];
             for (var i = 0; i < items.length; i++) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k - 需要弓箭手等级 Lv. " + (15 + (i * 5) > 40 ? ((i - 1) * 10) : 15 + (i * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "#" + "#z" + items[i] + "##k - 需要弓箭手等级 Lv. " + (15 + (i * 5) > 40 ? ((i - 1) * 10) : 15 + (i * 5)) + "#l#b";
             }
         } else if (selection == 3) { //glove upgrade
             var selStr = "升级手套？这应该不会太难。你想过要升级哪一个？#b";
             items = [1082015, 1082014, 1082017, 1082018, 1082049, 1082050, 1082069, 1082070, 1082072, 1082073, 1082085, 1082083, 1082090, 1082091];
             for (var i = 0, x = 0; i < items.length; i++, x += (i + 1) % 2 == 0 ? 1 : 0) {
-                selStr += "\r\n#L" + i + "##t" + items[i] + "##k" + "##k - 需要弓箭手等级 Lv. " + (20 + (x * 5) > 40 ? ((x - 1) * 10) : 20 + (x * 5)) + "#l#b";
+                selStr += "\r\n#L" + i + "#" + "#z" + items[i] + "##k - 需要弓箭手等级 Lv. " + (20 + (x * 5) > 40 ? ((x - 1) * 10) : 20 + (x * 5)) + "#l#b";
             }
         } else if (selection == 4) { //material refine
             var selStr = "材料？我知道有几种材料我可以给你做...#b";
