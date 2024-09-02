@@ -501,7 +501,7 @@ public class PacketCreator {
 
     private static void addInventoryInfo(OutPacket p, Character chr) {
         for (byte i = 1; i <= 5; i++) {
-            p.writeByte(chr.getInventory(InventoryType.getByType(i)).getSlotLimit());
+            p.writeShort(chr.getInventory(InventoryType.getByType(i)).getSlotLimit());
         }
         p.writeLong(getTime(-2));
         Inventory iv = chr.getInventory(InventoryType.EQUIPPED);

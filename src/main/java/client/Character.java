@@ -414,9 +414,9 @@ public class Character extends AbstractCharacterObject {
         savedLocations = new SavedLocation[SavedLocationType.values().length];
 
         for (InventoryType type : InventoryType.values()) {
-            byte b = 24;
+            short b = 24;
             if (type == InventoryType.CASH) {
-                b = 127; // 现金栏固定96格
+                b = 128; // 现金栏固定96格
             }
             inventory[type.ordinal()] = new Inventory(this, type, b);
         }
@@ -7016,10 +7016,10 @@ public class Character extends AbstractCharacterObject {
 
                     wserv = Server.getInstance().getWorld(ret.world);
 
-                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getByte("equipslots"));
-                    ret.getInventory(InventoryType.USE).setSlotLimit(rs.getByte("useslots"));
-                    ret.getInventory(InventoryType.SETUP).setSlotLimit(rs.getByte("setupslots"));
-                    ret.getInventory(InventoryType.ETC).setSlotLimit(rs.getByte("etcslots"));
+                    ret.getInventory(InventoryType.EQUIP).setSlotLimit(rs.getShort("equipslots"));
+                    ret.getInventory(InventoryType.USE).setSlotLimit(rs.getShort("useslots"));
+                    ret.getInventory(InventoryType.SETUP).setSlotLimit(rs.getShort("setupslots"));
+                    ret.getInventory(InventoryType.ETC).setSlotLimit(rs.getShort("etcslots"));
 
                     short sandboxCheck = 0x0;
                     for (Pair<Item, InventoryType> item : ItemFactory.INVENTORY.loadItems(ret.id, !channelserver)) {
@@ -9241,13 +9241,13 @@ public class Character extends AbstractCharacterObject {
         this.skinColor = skinColor;
     }
 
-    public byte getSlots(int type) {
-        return type == InventoryType.CASH.getType() ? 127 : inventory[type].getSlotLimit(); // 现金栏固定96个格子
+    public short getSlots(int type) {
+        return type == InventoryType.CASH.getType() ? 128 : inventory[type].getSlotLimit(); // 现金栏固定96个格子
     }
 
     public boolean canGainSlots(int type, int slots) {
         slots += inventory[type].getSlotLimit();
-        return slots <= 127; // 后端控制格子上限
+        return slots <= 128; // 后端控制格子上限
     }
 
     public boolean gainSlots(int type, int slots) {
@@ -9271,7 +9271,7 @@ public class Character extends AbstractCharacterObject {
         inventory[type].lockInventory();
         try {
             if (canGainSlots(type, slots)) {
-                int newLimit = Math.min(inventory[type].getSlotLimit() + slots, 127);
+                int newLimit = Math.min(inventory[type].getSlotLimit() + slots, 128);
                 inventory[type].setSlotLimit(newLimit);
                 return newLimit;
             } else {
