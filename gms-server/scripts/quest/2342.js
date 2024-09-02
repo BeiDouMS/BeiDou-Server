@@ -1,6 +1,6 @@
 /*
-    QUEST: Recovered Royal Seal.
-    NPC: Violetta
+	QUEST: Recovered Royal Seal.
+	NPC: Violetta
 */
 
 var status = -1;
@@ -26,9 +26,9 @@ function start(mode, type, selection) {
                     qm.forceStartQuest();
                     qm.gainItem(4001318, 1);
                     qm.forceCompleteQuest();
-                    qm.sendOk("It seems you forgot to pick up the #b#t4001318##k while fighting the Mushroom Minister. This is very important to our kingdom, please bring it to my father as soon as possible.");
+                    qm.sendOk("Looks like you forgot to pick up the #b#t4001318##k when you fought with the #bPrime Minister#k. This is very important to our kingdom, so please deliver this to my father as soon as possible.");
                 } else {
-                    qm.sendOk("Please make sure you have an empty slot in your etc. inventory.");
+                    qm.sendOk("Please free up one spot in your ETC inventory");
                 }
             } else {
                 qm.dispose();
