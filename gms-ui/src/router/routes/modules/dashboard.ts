@@ -22,46 +22,6 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
-    {
-      path: 'cashShop',
-      name: 'CashShop',
-      component: () => import('@/views/dashboard/cashShop/index.vue'),
-      meta: {
-        locale: 'menu.dashboard.cashShop',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    {
-      path: 'npcShop',
-      name: 'NpcShop',
-      component: () => import('@/views/dashboard/npcShop/index.vue'),
-      meta: {
-        locale: 'menu.dashboard.npcShop',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    {
-      path: 'drop',
-      name: 'drop',
-      component: () => import('@/views/dashboard/drop/index.vue'),
-      meta: {
-        locale: 'menu.dashboard.drop',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
-    {
-      path: 'drop/global',
-      name: 'globalDrop',
-      component: () => import('@/views/dashboard/drop/global.vue'),
-      meta: {
-        locale: 'menu.dashboard.drop.global',
-        requiresAuth: true,
-        roles: ['admin'],
-      },
-    },
   ],
 };
 

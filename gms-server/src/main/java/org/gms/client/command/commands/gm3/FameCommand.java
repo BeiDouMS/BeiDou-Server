@@ -28,6 +28,7 @@ import org.gms.client.Client;
 import org.gms.client.Stat;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
+import org.gms.util.StringUtil;
 
 public class FameCommand extends Command {
     {
@@ -48,6 +49,9 @@ public class FameCommand extends Command {
             player.message(I18nUtil.getMessage("FameCommand.message3"));
         } else {
             Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            if (victim == null && StringUtil.isNumeric(params[0])) {
+                victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+            }
             if (victim == null) {
                 player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             } else {

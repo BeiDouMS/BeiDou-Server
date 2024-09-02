@@ -169,7 +169,7 @@
   import { ref } from 'vue';
   import useLoading from '@/hooks/loading';
   import { conditionState, getCommodityByCategory } from '@/api/cashShop';
-  import CashShopForm from '@/views/dashboard/cashShop/form.vue';
+  import CashShopForm from '@/views/game/cashShop/form.vue';
   import { cashShopState } from '@/store/modules/cashShop/type';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
 

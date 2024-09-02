@@ -27,6 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
+import org.gms.util.StringUtil;
 
 public class HpMpCommand extends Command {
     {
@@ -41,6 +42,9 @@ public class HpMpCommand extends Command {
 
         if (params.length == 2) {
             victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+            if (victim == null && StringUtil.isNumeric(params[0])) {
+                victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+            }
             statUpdate = Integer.parseInt(params[1]);
         } else if (params.length == 1) {
             statUpdate = Integer.parseInt(params[0]);

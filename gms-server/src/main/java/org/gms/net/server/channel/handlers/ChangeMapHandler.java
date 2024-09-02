@@ -50,7 +50,7 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
 
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {
-                log.warn("Chr {} got stuck when changing maps. Last visited mapids: {}", chr.getName(), chr.getLastVisitedMapids());
+                log.warn("Chr {} got stuck when changing maps. Last visited mapids: {}", chr.getName(), chr.getLastVisitedMapIds());
             }
 
             c.sendPacket(PacketCreator.enableActions());

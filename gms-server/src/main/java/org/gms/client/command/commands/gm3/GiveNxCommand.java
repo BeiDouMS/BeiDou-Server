@@ -27,6 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.util.I18nUtil;
+import org.gms.util.StringUtil;
 
 public class GiveNxCommand extends Command {
     {
@@ -69,7 +70,10 @@ public class GiveNxCommand extends Command {
             value = Integer.parseInt(params[0]);
         }
 
-        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(recv);
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        if (victim == null && StringUtil.isNumeric(params[0])) {
+            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+        }
         if (victim != null) {
             victim.getCashShop().gainCash(type, value);
             player.message(I18nUtil.getMessage("GiveNxCommand.message3", typeStr.toUpperCase()));

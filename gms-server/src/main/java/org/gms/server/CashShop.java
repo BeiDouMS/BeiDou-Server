@@ -231,26 +231,27 @@ public class CashShop {
         public static ModifiedCashItemDO getItem(int sn) {
             ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
             ModifiedCashItemDO cashItemDO = items.get(sn);
+            ModifiedCashItemDO returnDo = cashItemDO.clone();
             if (dbItemDO != null) {
-                cashItemDO.setItemId(dbItemDO.getItemId());
-                cashItemDO.setPrice(dbItemDO.getPrice());
-                cashItemDO.setPeriod(dbItemDO.getPeriod());
-                cashItemDO.setPriority(dbItemDO.getPriority());
-                cashItemDO.setCount(dbItemDO.getCount());
-                cashItemDO.setBonus(dbItemDO.getBonus());
-                cashItemDO.setMaplePoint(dbItemDO.getMaplePoint());
-                cashItemDO.setMeso(dbItemDO.getMeso());
-                cashItemDO.setForPremiumUser(dbItemDO.getForPremiumUser());
-                cashItemDO.setCommodityGender(dbItemDO.getCommodityGender());
-                cashItemDO.setLimit(dbItemDO.getLimit());
-                cashItemDO.setOnSale(dbItemDO.getOnSale());
-                cashItemDO.setClz(dbItemDO.getClz());
-                cashItemDO.setPbCash(dbItemDO.getPbCash());
-                cashItemDO.setPbPoint(dbItemDO.getPbPoint());
-                cashItemDO.setPbGift(dbItemDO.getPbGift());
-                cashItemDO.setPackageSn(dbItemDO.getPackageSn());
+                returnDo.setItemId(Optional.ofNullable(dbItemDO.getItemId()).orElse(cashItemDO.getItemId()));
+                returnDo.setPrice(Optional.ofNullable(dbItemDO.getPrice()).orElse(cashItemDO.getPrice()));
+                returnDo.setPeriod(Optional.ofNullable(dbItemDO.getPeriod()).orElse(cashItemDO.getPeriod()));
+                returnDo.setPriority(Optional.ofNullable(dbItemDO.getPriority()).orElse(cashItemDO.getPriority()));
+                returnDo.setCount(Optional.ofNullable(dbItemDO.getCount()).orElse(cashItemDO.getCount()));
+                returnDo.setOnSale(Optional.ofNullable(dbItemDO.getOnSale()).orElse(cashItemDO.getOnSale()));
+                returnDo.setBonus(Optional.ofNullable(dbItemDO.getBonus()).orElse(cashItemDO.getBonus()));
+                returnDo.setMaplePoint(Optional.ofNullable(dbItemDO.getMaplePoint()).orElse(cashItemDO.getMaplePoint()));
+                returnDo.setMeso(Optional.ofNullable(dbItemDO.getMeso()).orElse(cashItemDO.getMeso()));
+                returnDo.setForPremiumUser(Optional.ofNullable(dbItemDO.getForPremiumUser()).orElse(cashItemDO.getForPremiumUser()));
+                returnDo.setCommodityGender(Optional.ofNullable(dbItemDO.getCommodityGender()).orElse(cashItemDO.getCommodityGender()));
+                returnDo.setClz(Optional.ofNullable(dbItemDO.getClz()).orElse(cashItemDO.getClz()));
+                returnDo.setLimit(Optional.ofNullable(dbItemDO.getLimit()).orElse(cashItemDO.getLimit()));
+                returnDo.setPbCash(Optional.ofNullable(dbItemDO.getPbCash()).orElse(cashItemDO.getPbCash()));
+                returnDo.setPbPoint(Optional.ofNullable(dbItemDO.getPbPoint()).orElse(cashItemDO.getPbPoint()));
+                returnDo.setPbGift(Optional.ofNullable(dbItemDO.getPbGift()).orElse(cashItemDO.getPbGift()));
+                returnDo.setPackageSn(Optional.ofNullable(dbItemDO.getPackageSn()).orElse(cashItemDO.getPackageSn()));
             }
-            return cashItemDO;
+            return returnDo;
         }
 
         public static ModifiedCashItemDO getWzItem(int sn) {

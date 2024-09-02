@@ -1,5 +1,6 @@
 package org.gms.service;
 
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.row.Row;
 import lombok.AllArgsConstructor;
@@ -8,18 +9,23 @@ import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.ItemFactory;
-import org.gms.dao.mapper.InventoryitemsMapper;
-import org.gms.model.dto.InventoryEquipRtnDTO;
-import org.gms.model.dto.InventorySearchRtnDTO;
-import org.gms.model.dto.InventoryTypeRtnDTO;
+import org.gms.dao.entity.CharactersDO;
+import org.gms.dao.entity.InventoryequipmentDO;
+import org.gms.dao.entity.InventoryitemsDO;
+import org.gms.dao.mapper.*;
+import org.gms.model.dto.*;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+import static com.mybatisflex.core.query.QueryMethods.distinct;
+import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
 
@@ -27,6 +33,10 @@ import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D
 @AllArgsConstructor
 public class InventoryService {
     private final InventoryitemsMapper inventoryitemsMapper;
+    private final CharactersMapper charactersMapper;
+    private final InventoryequipmentMapper inventoryequipmentMapper;
+    private final RingsMapper ringsMapper;
+    private final PetsMapper petsMapper;
 
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
@@ -36,18 +46,47 @@ public class InventoryService {
         return list;
     }
 
-    public List<InventorySearchRtnDTO> getInventoryList(InventoryTypeRtnDTO data) {
-        RequireUtil.requireNotEmpty(data.getType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "type"));
-        InventoryType inventoryType = InventoryType.getByType(data.getType());
-        RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "type", data.getType()));
+    public Page<InventorySearchReqDTO> getCharacterList(InventorySearchReqDTO data) {
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(distinct(CHARACTERS_D_O.ID, CHARACTERS_D_O.NAME, CHARACTERS_D_O.ACCOUNTID))
+                .from(INVENTORYITEMS_D_O.as("i"))
+                .leftJoin(CHARACTERS_D_O.as("c")).on(INVENTORYITEMS_D_O.CHARACTERID.eq(CHARACTERS_D_O.ID))
+                .where(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue()));
+        if (data.getCharacterId() != null) queryWrapper.and(CHARACTERS_D_O.ID.eq(data.getCharacterId()));
+        if (!RequireUtil.isEmpty(data.getCharacterName()))
+            queryWrapper.and(CHARACTERS_D_O.NAME.like(data.getCharacterName()));
+        if (data.getAccountId() != null) queryWrapper.and(CHARACTERS_D_O.ACCOUNTID.eq(data.getAccountId()));
+        Page<CharactersDO> paginate = inventoryitemsMapper.paginateAs(data.getPageNo(), data.getPageSize(), queryWrapper, CharactersDO.class);
+        return new Page<>(
+                paginate.getRecords().stream()
+                        .map(record -> {
+                            InventorySearchReqDTO dto = new InventorySearchReqDTO();
+                            dto.setCharacterId(record.getId());
+                            dto.setCharacterName(record.getName());
+                            dto.setAccountId(record.getAccountid());
+                            return dto;
+                        })
+                        .toList(),
+                paginate.getPageNumber(),
+                paginate.getPageSize(),
+                paginate.getTotalRow()
+        );
+    }
+
+    public List<InventorySearchRtnDTO> getInventoryList(InventorySearchReqDTO data) {
+        RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "type"));
+        RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
+        InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
+        RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "type", data.getInventoryType()));
         List<Row> results = inventoryitemsMapper.selectListByQueryAs(QueryWrapper.create()
                 .select(INVENTORYITEMS_D_O.ALL_COLUMNS, INVENTORYEQUIPMENT_D_O.ALL_COLUMNS)
                 .from(INVENTORYITEMS_D_O.as("i"))
                 .leftJoin(INVENTORYEQUIPMENT_D_O.as("e")).on(INVENTORYITEMS_D_O.INVENTORYITEMID.eq(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID))
                 // 只查询指定栏目
-                .where(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getType()))
+                .where(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getInventoryType()))
                 // 只查询背包
-                .and(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue())), Row.class);
+                .and(INVENTORYITEMS_D_O.TYPE.eq(ItemFactory.INVENTORY.getValue()))
+                .and(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterId())), Row.class);
         List<InventorySearchRtnDTO> rtnDTOList = new ArrayList<>();
         Set<Character> characterSet = new HashSet<>();
         for (Row obj : results) {
@@ -65,6 +104,39 @@ public class InventoryService {
             rtnDTOList.addAll(buildByOnline(character, inventoryType));
         }
         return rtnDTOList;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteInventoryByCharacterId(int cid) {
+        QueryWrapper itemQueryWrapper = QueryWrapper.create().where(INVENTORYITEMS_D_O.CHARACTERID.eq(cid));
+        List<InventoryitemsDO> inventoryItemsDOS = inventoryitemsMapper.selectListByQuery(itemQueryWrapper);
+        List<Long> inventoryItemIds = inventoryItemsDOS.stream().map(InventoryitemsDO::getInventoryitemid).toList();
+        if (inventoryItemIds.isEmpty()) {
+            return;
+        }
+        List<Integer> petIds = inventoryItemsDOS.stream()
+                .map(InventoryitemsDO::getPetid)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+        if (!petIds.isEmpty()) {
+            petsMapper.deleteBatchByIds(petIds);
+            petIds.forEach(CashIdGenerator::freeCashId);
+        }
+
+        QueryWrapper equipmentQueryWrapper = QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.in(inventoryItemIds));
+        List<InventoryequipmentDO> inventoryEquipmentDOS = inventoryequipmentMapper.selectListByQuery(equipmentQueryWrapper);
+        List<Integer> ringIds = inventoryEquipmentDOS.stream()
+                .map(InventoryequipmentDO::getRingid)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+        if (!ringIds.isEmpty()) {
+            ringsMapper.deleteBatchByIds(ringIds);
+            ringIds.forEach(CashIdGenerator::freeCashId);
+        }
+        inventoryequipmentMapper.deleteByQuery(equipmentQueryWrapper);
+        inventoryitemsMapper.deleteByQuery(itemQueryWrapper);
     }
 
     private Character getCharacterById(int characterId) {
