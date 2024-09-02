@@ -1,5 +1,5 @@
 export interface InventoryTypeState {
-  type: number;
+  inventoryType: number;
   name: string;
 }
 

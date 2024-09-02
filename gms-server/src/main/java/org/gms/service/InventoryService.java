@@ -41,7 +41,7 @@ public class InventoryService {
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
         for (InventoryType value : InventoryType.values()) {
-            list.add(InventoryTypeRtnDTO.builder().type(value.getType()).name(value.getName()).build());
+            list.add(InventoryTypeRtnDTO.builder().inventoryType(value.getType()).name(value.getName()).build());
         }
         return list;
     }

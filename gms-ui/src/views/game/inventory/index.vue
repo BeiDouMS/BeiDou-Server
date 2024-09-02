@@ -10,7 +10,7 @@
       >
         <a-tab-pane
           v-for="data in typeList"
-          :key="data.type"
+          :key="data.inventoryType"
           :title="data.name"
         >
           <inventory-list :current-type="currentType" />
