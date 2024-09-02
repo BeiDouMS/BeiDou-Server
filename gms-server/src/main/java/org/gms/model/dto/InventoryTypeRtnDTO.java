@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class InventoryTypeRtnDTO {
-    private Byte type;
+    private Byte inventoryType;
     private String name;
 }
