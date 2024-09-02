@@ -10,14 +10,17 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.dao.entity.CharactersDO;
-import org.gms.dao.mapper.CharactersMapper;
-import org.gms.dao.mapper.InventoryitemsMapper;
+import org.gms.dao.entity.InventoryequipmentDO;
+import org.gms.dao.entity.InventoryitemsDO;
+import org.gms.dao.mapper.*;
 import org.gms.model.dto.*;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -31,6 +34,9 @@ import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D
 public class InventoryService {
     private final InventoryitemsMapper inventoryitemsMapper;
     private final CharactersMapper charactersMapper;
+    private final InventoryequipmentMapper inventoryequipmentMapper;
+    private final RingsMapper ringsMapper;
+    private final PetsMapper petsMapper;
 
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
@@ -98,6 +104,39 @@ public class InventoryService {
             rtnDTOList.addAll(buildByOnline(character, inventoryType));
         }
         return rtnDTOList;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteInventoryByCharacterId(int cid) {
+        QueryWrapper itemQueryWrapper = QueryWrapper.create().where(INVENTORYITEMS_D_O.CHARACTERID.eq(cid));
+        List<InventoryitemsDO> inventoryItemsDOS = inventoryitemsMapper.selectListByQuery(itemQueryWrapper);
+        List<Long> inventoryItemIds = inventoryItemsDOS.stream().map(InventoryitemsDO::getInventoryitemid).toList();
+        if (inventoryItemIds.isEmpty()) {
+            return;
+        }
+        List<Integer> petIds = inventoryItemsDOS.stream()
+                .map(InventoryitemsDO::getPetid)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+        if (!petIds.isEmpty()) {
+            petsMapper.deleteBatchByIds(petIds);
+            petIds.forEach(CashIdGenerator::freeCashId);
+        }
+
+        QueryWrapper equipmentQueryWrapper = QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.in(inventoryItemIds));
+        List<InventoryequipmentDO> inventoryEquipmentDOS = inventoryequipmentMapper.selectListByQuery(equipmentQueryWrapper);
+        List<Integer> ringIds = inventoryEquipmentDOS.stream()
+                .map(InventoryequipmentDO::getRingid)
+                .filter(Objects::nonNull)
+                .distinct()
+                .toList();
+        if (!ringIds.isEmpty()) {
+            ringsMapper.deleteBatchByIds(ringIds);
+            ringIds.forEach(CashIdGenerator::freeCashId);
+        }
+        inventoryequipmentMapper.deleteByQuery(equipmentQueryWrapper);
+        inventoryitemsMapper.deleteByQuery(itemQueryWrapper);
     }
 
     private Character getCharacterById(int characterId) {

@@ -46,6 +46,8 @@ import org.gms.constants.skills.*;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.ExtendValueDO;
+import org.gms.dao.entity.GuildsDO;
+import org.gms.dao.entity.SkillsDO;
 import org.gms.manager.ServerManager;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.model.pojo.SkillEntry;
@@ -159,7 +161,9 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int itemEffect;
-    private int guildid;
+    @Setter
+    @Getter
+    private int guildId;
     @Setter
     @Getter
     private int guildRank;
@@ -433,6 +437,9 @@ public class Character extends AbstractCharacterObject {
     private float familyExp = 1;
     @Getter
     private float familyDrop = 1;
+    private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+    private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+    private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -679,13 +686,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void ban(String reason) {
-        AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
         accountService.ban(this, reason);
     }
 
     public static boolean ban(String id, String reason, boolean accountId) {
         try {
-            AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
             accountService.ban(id, reason, accountId);
             return true;
         } catch (Exception ex) {
@@ -873,11 +878,9 @@ public class Character extends AbstractCharacterObject {
 
     public static boolean existName(String name) {
         try {
-            CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
             if (characterService.findByName(name) != null) {
                 return true;
             }
-            NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
             if (!nameChangeService.getAllNameChanges().isEmpty()) {
                 return true;
             }
@@ -1133,7 +1136,7 @@ public class Character extends AbstractCharacterObject {
             dragon = null;
         }
 
-        if (this.guildid > 0) {
+        if (this.guildId > 0) {
             getGuild().broadcast(PacketCreator.jobMessage(0, job.getId(), name), this.getId());
         }
         Family family = getFamily();
@@ -1416,7 +1419,7 @@ public class Character extends AbstractCharacterObject {
         return false;
     }
 
-    public List<Integer> getLastVisitedMapids() {
+    public List<Integer> getLastVisitedMapIds() {
         List<Integer> lastVisited = new ArrayList<>(5);
 
         petLock.lock();
@@ -1436,11 +1439,11 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void partyOperationUpdate(Party party, List<Character> exPartyMembers) {
-        List<WeakReference<MapleMap>> mapids;
+        List<WeakReference<MapleMap>> mapIds;
 
         petLock.lock();
         try {
-            mapids = new LinkedList<>(lastVisitedMaps);
+            mapIds = new LinkedList<>(lastVisitedMaps);
         } finally {
             petLock.unlock();
         }
@@ -1462,7 +1465,7 @@ public class Character extends AbstractCharacterObject {
         List<MapItem> partyItems = null;
 
         int partyId = exPartyMembers != null ? -1 : this.getPartyId();
-        for (WeakReference<MapleMap> mapRef : mapids) {
+        for (WeakReference<MapleMap> mapRef : mapIds) {
             MapleMap mapObj = mapRef.get();
 
             if (mapObj != null) {
@@ -1571,15 +1574,12 @@ public class Character extends AbstractCharacterObject {
 
     private Integer getVisitedMapIndex(MapleMap map) {
         int idx = 0;
-
         for (WeakReference<MapleMap> mapRef : lastVisitedMaps) {
             if (map.equals(mapRef.get())) {
                 return idx;
             }
-
             idx++;
         }
-
         return -1;
     }
 
@@ -1713,14 +1713,7 @@ public class Character extends AbstractCharacterObject {
         } else {
             skills.remove(skill);
             sendPacket(PacketCreator.updateSkill(skill.getId(), newLevel, newMasterlevel, -1)); //Shouldn't use expiration anymore :)
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("DELETE FROM skills WHERE skillid = ? AND characterid = ?")) {
-                ps.setInt(1, skill.getId());
-                ps.setInt(2, id);
-                ps.executeUpdate();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+            characterService.removeSkill(SkillsDO.builder().skillid(skill.getId()).characterid(getId()).build());
         }
     }
 
@@ -2052,18 +2045,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void deleteGuild(int guildId) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = 0, guildrank = 5 WHERE guildid = ?")) {
-                ps.setInt(1, guildId);
-                ps.executeUpdate();
-            }
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM guilds WHERE guildid = ?")) {
-                ps.setInt(1, id);
-                ps.executeUpdate();
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        characterService.deleteGuild(GuildsDO.builder().guildid((long) guildId).build());
     }
 
     private void nextPendingRequest(Client c) {
@@ -2092,192 +2074,13 @@ public class Character extends AbstractCharacterObject {
     }
 
     public static boolean deleteCharFromDB(Character player, int senderAccId) {
-        int cid = player.getId();
-        if (!Server.getInstance().haveCharacterEntry(senderAccId, cid)) {    // thanks zera (EpiphanyMS) for pointing a critical exploit with non-authed character deletion request
-            return false;
-        }
-
-        final int accId = senderAccId;
-        int world = 0;
-        try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("SELECT world FROM characters WHERE id = ?")) {
-                ps.setInt(1, cid);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        world = rs.getInt("world");
-                    }
-                }
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT buddyid FROM buddies WHERE characterid = ?")) {
-                ps.setInt(1, cid);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        int buddyid = rs.getInt("buddyid");
-                        Character buddy = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterById(buddyid);
-
-                        if (buddy != null) {
-                            buddy.deleteBuddy(cid);
-                        }
-                    }
-                }
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM buddies WHERE characterid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT threadid FROM bbs_threads WHERE postercid = ?")) {
-                ps.setInt(1, cid);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        int threadId = rs.getInt("threadid");
-
-                        try (PreparedStatement ps2 = con.prepareStatement("DELETE FROM bbs_replies WHERE threadid = ?")) {
-                            ps2.setInt(1, threadId);
-                            ps2.executeUpdate();
-                        }
-                    }
-                }
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM bbs_threads WHERE postercid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT id, guildid, guildrank, name, allianceRank FROM characters WHERE id = ? AND accountid = ?")) {
-                ps.setInt(1, cid);
-                ps.setInt(2, accId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next() && rs.getInt("guildid") > 0) {
-                        Server.getInstance().deleteGuildCharacter(new GuildCharacter(player, cid, 0, rs.getString("name"), (byte) -1, (byte) -1, 0, rs.getInt("guildrank"), rs.getInt("guildid"), false, rs.getInt("allianceRank")));
-                    }
-                }
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM wishlists WHERE charid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM cooldowns WHERE charid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM playerdiseases WHERE charid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM area_info WHERE charid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM monsterbook WHERE charid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM characters WHERE id = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM family_character WHERE cid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM famelog WHERE characterid_to = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT inventoryitemid, petid FROM inventoryitems WHERE characterid = ?")) {
-                ps.setInt(1, cid);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        int inventoryitemid = rs.getInt("inventoryitemid");
-
-                        try (PreparedStatement ps2 = con.prepareStatement("SELECT ringid FROM inventoryequipment WHERE inventoryitemid = ?")) {
-                            ps2.setInt(1, inventoryitemid);
-
-                            try (ResultSet rs2 = ps2.executeQuery()) {
-                                while (rs2.next()) {
-                                    final int ringid = rs2.getInt("ringid");
-
-                                    if (ringid > -1) {
-                                        try (PreparedStatement ps3 = con.prepareStatement("DELETE FROM rings WHERE id = ?")) {
-                                            ps3.setInt(1, ringid);
-                                            ps3.executeUpdate();
-                                        }
-
-                                        CashIdGenerator.freeCashId(ringid);
-                                    }
-                                }
-                            }
-                        }
-
-                        try (PreparedStatement ps2 = con.prepareStatement("DELETE FROM inventoryequipment WHERE inventoryitemid = ?")) {
-                            ps2.setInt(1, inventoryitemid);
-                            ps2.executeUpdate();
-                        }
-
-                        final int petid = rs.getInt("petid");
-                        if (!rs.wasNull()) {
-                            try (PreparedStatement ps2 = con.prepareStatement("DELETE FROM pets WHERE petid = ?")) {
-                                ps2.setInt(1, petid);
-                                ps2.executeUpdate();
-                            }
-                            CashIdGenerator.freeCashId(petid);
-                        }
-                    }
-                }
-            }
-
-            deleteQuestProgressWhereCharacterId(con, cid);
-            FredrickProcessor.removeFredrickLog(cid);   // thanks maple006 for pointing out the player's Fredrick items are not being deleted at character deletion
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT id FROM mts_cart WHERE cid = ?")) {
-                ps.setInt(1, cid);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        final int mtsid = rs.getInt("id");
-
-                        try (PreparedStatement ps2 = con.prepareStatement("DELETE FROM mts_items WHERE id = ?")) {
-                            ps2.setInt(1, mtsid);
-                            ps2.executeUpdate();
-                        }
-                    }
-                }
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("DELETE FROM mts_cart WHERE cid = ?")) {
-                ps.setInt(1, cid);
-                ps.executeUpdate();
-            }
-
-            String[] toDel = {"famelog", "inventoryitems", "keymap", "queststatus", "savedlocations", "trocklocations", "skillmacros", "skills", "eventstats", "server_queue"};
-            for (String s : toDel) {
-                Character.deleteWhereCharacterId(con, "DELETE FROM `" + s + "` WHERE characterid = ?", cid);
-            }
-
-            Server.getInstance().deleteCharacterEntry(accId, cid);
+        try {
+            characterService.deleteCharFromDB(player, senderAccId);
             return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.deleteCharFromDB.error1"), e);
         }
+        return false;
     }
 
     private static void deleteQuestProgressWhereCharacterId(Connection con, int cid) throws SQLException {
@@ -2300,13 +2103,6 @@ public class Character extends AbstractCharacterObject {
     private void deleteWhereCharacterId(Connection con, String sql) throws SQLException {
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
-            ps.executeUpdate();
-        }
-    }
-
-    public static void deleteWhereCharacterId(Connection con, String sql, int cid) throws SQLException {
-        try (PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, cid);
             ps.executeUpdate();
         }
     }
@@ -2447,32 +2243,29 @@ public class Character extends AbstractCharacterObject {
     private void startExtraTaskInternal(final byte healHP, final byte healMP, final short healInterval) {
         extraRecInterval = healInterval;
 
-        extraRecoveryTask = TimerManager.getInstance().register(new Runnable() {
-            @Override
-            public void run() {
-                if (getBuffSource(BuffStat.HPREC) == -1 && getBuffSource(BuffStat.MPREC) == -1) {
-                    stopExtraTask();
-                    return;
-                }
-
-                if (Character.this.getHp() < localMaxHp) {
-                    if (healHP > 0) {
-                        sendPacket(PacketCreator.showOwnRecovery(healHP));
-                        getMap().broadcastMessage(Character.this, PacketCreator.showRecovery(id, healHP), false);
-                    }
-                }
-
-                addMPHP(healHP, healMP);
+        extraRecoveryTask = TimerManager.getInstance().register(() -> {
+            if (getBuffSource(BuffStat.HPREC) == -1 && getBuffSource(BuffStat.MPREC) == -1) {
+                stopExtraTask();
+                return;
             }
+
+            if (Character.this.getHp() < localMaxHp) {
+                if (healHP > 0) {
+                    sendPacket(PacketCreator.showOwnRecovery(healHP));
+                    getMap().broadcastMessage(Character.this, PacketCreator.showRecovery(id, healHP), false);
+                }
+            }
+
+            addMPHP(healHP, healMP);
         }, healInterval, healInterval);
     }
 
     public void disbandGuild() {
-        if (guildid < 1 || guildRank != 1) {
+        if (guildId < 1 || guildRank != 1) {
             return;
         }
         try {
-            Server.getInstance().disbandGuild(guildid);
+            Server.getInstance().disbandGuild(guildId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -4715,10 +4508,6 @@ public class Character extends AbstractCharacterObject {
         return null;
     }
 
-    public int getGuildId() {
-        return guildid;
-    }
-
 
     public static int getAccountIdByName(String name) {
         final int id;
@@ -5449,7 +5238,7 @@ public class Character extends AbstractCharacterObject {
         mgc.setLevel(level);
         mgc.setJobId(job.getId());
 
-        if (this.guildid < 1) {
+        if (this.guildId < 1) {
             return;
         }
 
@@ -5560,7 +5349,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
-        if (Server.getInstance().increaseGuildCapacity(guildid)) {
+        if (Server.getInstance().increaseGuildCapacity(guildId)) {
             gainMeso(-cost, true, false, true);
         } else {
             dropMessage(1, I18nUtil.getMessage("Character.increaseGuildCapacity.message2"));
@@ -5625,7 +5414,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean isGuildLeader() {    // true on guild master or jr. master
-        return guildid > 0 && guildRank < 3;
+        return guildId > 0 && guildRank < 3;
     }
 
     public boolean attemptCatchFish(int baitLevel) {
@@ -5874,7 +5663,7 @@ public class Character extends AbstractCharacterObject {
         setMPC(new PartyCharacter(this));
         silentPartyUpdate();
 
-        if (this.guildid > 0) {
+        if (this.guildId > 0) {
             getGuild().broadcast(PacketCreator.levelUpMessage(2, level, name), this.getId());
         }
 
@@ -6435,7 +6224,7 @@ public class Character extends AbstractCharacterObject {
                     mountexp = rs.getInt("mountexp");
                     mountlevel = rs.getInt("mountlevel");
                     mounttiredness = rs.getInt("mounttiredness");
-                    ret.guildid = rs.getInt("guildid");
+                    ret.guildId = rs.getInt("guildid");
                     ret.guildRank = rs.getInt("guildrank");
                     ret.allianceRank = rs.getInt("allianceRank");
                     ret.familyId = rs.getInt("familyId");
@@ -7554,7 +7343,7 @@ public class Character extends AbstractCharacterObject {
     public void saveGuildStatus() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("UPDATE characters SET guildid = ?, guildrank = ?, allianceRank = ? WHERE id = ?")) {
-            ps.setInt(1, guildid);
+            ps.setInt(1, guildId);
             ps.setInt(2, guildRank);
             ps.setInt(3, allianceRank);
             ps.setInt(4, id);
@@ -8254,10 +8043,6 @@ public class Character extends AbstractCharacterObject {
 
     public void setGM(int level) {
         this.gmLevel = level;
-    }
-
-    public void setGuildId(int _id) {
-        guildid = _id;
     }
 
     public void setHasMerchant(boolean set) {
@@ -9747,7 +9532,6 @@ public class Character extends AbstractCharacterObject {
 
     public boolean registerNameChange(String newName) {
         try {
-           NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
             if (nameChangeService.registerNameChange(this, newName)) {
                 pendingNameChange = true;
                 return true;
@@ -9760,7 +9544,6 @@ public class Character extends AbstractCharacterObject {
 
     public boolean cancelPendingNameChange() {
         try {
-            NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
             nameChangeService.cancelPendingNameChange(this);
             return true;
         } catch (Exception e) {
@@ -9773,7 +9556,6 @@ public class Character extends AbstractCharacterObject {
         if (!pendingNameChange) {
             return;
         }
-        NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
         nameChangeService.applyNameChange(getId(), getName());
     }
 
@@ -9976,7 +9758,6 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private boolean challenged = false;
-    public short totalCP, availableCP;
 
     public void gainFestivalPoints(int gain) {
         this.FestivalPoints += gain;
@@ -9984,15 +9765,6 @@ public class Character extends AbstractCharacterObject {
 
     public int getCP() {
         return cp;
-    }
-
-    public void addCP(int amount) {
-        totalCP += amount;
-        availableCP += amount;
-    }
-
-    public void useCP(int amount) {
-        availableCP -= amount;
     }
 
     public void gainCP(int gain) {
@@ -10013,7 +9785,6 @@ public class Character extends AbstractCharacterObject {
             sendPacket(PacketCreator.CPUpdate(false, this.getCP(), this.getTotalCP(), getTeam()));
             if (this.getParty() != null && getTeam() != -1) {
                 this.getMap().broadcastMessage(PacketCreator.CPUpdate(true, this.getMonsterCarnival().getCP(team), this.getMonsterCarnival().getTotalCP(team), getTeam()));
-            } else {
             }
         }
     }
@@ -10028,10 +9799,6 @@ public class Character extends AbstractCharacterObject {
 
     public int getTotalCP() {
         return totCP;
-    }
-
-    public int getAvailableCP() {
-        return availableCP;
     }
 
     public void resetCP() {
