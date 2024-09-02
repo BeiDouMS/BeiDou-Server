@@ -78,6 +78,8 @@ public class CharacterService {
     private final TrocklocationsMapper trocklocationsMapper;
     private final EventstatsMapper eventstatsMapper;
     private final ServerQueueMapper serverQueueMapper;
+    private final NameChangeService nameChangeService;
+    private final WorldTransferService worldTransferService;
 
     public CharactersDO findById(int id) {
         return charactersMapper.selectOneById(id);
@@ -273,6 +275,9 @@ public class CharacterService {
         eventstatsMapper.deleteByQuery(QueryWrapper.create().where(EVENTSTATS_D_O.CHARACTERID.eq(cid)));
         // 删除server_queue
         serverQueueMapper.deleteByQuery(QueryWrapper.create().where(SERVER_QUEUE_D_O.CHARACTERID.eq(cid)));
+        // 补充heaven没有删除的2张表
+        nameChangeService.cancelPendingNameChange(player, false);
+        worldTransferService.cancelPendingWorldTransfer(player, false);
     }
 
     private void checkName(ExtendValueDO data) {

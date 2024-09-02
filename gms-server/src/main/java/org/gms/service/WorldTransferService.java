@@ -3,6 +3,7 @@ package org.gms.service;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.gms.client.Character;
 import org.gms.client.DefaultDates;
 import org.gms.config.YamlConfig;
 import org.gms.dao.entity.AccountsDO;
@@ -111,5 +112,23 @@ public class WorldTransferService {
         buddiesMapper.delete(BuddiesDO.builder().buddyid(charactersDO.getId()).build());
         worldtransfersMapper.update(WorldtransfersDO.builder().id(data.getId()).completionTime(new Timestamp(System.currentTimeMillis())).build());
         log.info(I18nUtil.getLogMessage("CharacterService.doWorldTransfer.info1"), data.getFrom(), data.getTo());
+    }
+
+    public boolean registerWorldTransfer(Character chr, int newWorld) {
+        List<WorldtransfersDO> worldTransfersDOList = worldtransfersMapper.selectListByQuery(QueryWrapper.create()
+                .where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId())));
+        // 已有转区未生效或转区未冷却
+        if (!worldTransfersDOList.isEmpty() && worldTransfersDOList.stream().anyMatch(worldtransfersDO ->
+                worldtransfersDO.getCompletionTime() == null || worldtransfersDO.getCompletionTime().getTime() + YamlConfig.config.server.WORLD_TRANSFER_COOLDOWN > System.currentTimeMillis())) {
+            return false;
+        }
+        worldtransfersMapper.insert(WorldtransfersDO.builder().characterid(chr.getId()).from(chr.getWorld()).to(newWorld).build());
+        return true;
+    }
+
+    public void cancelPendingWorldTransfer(Character chr, boolean needFinish) {
+        QueryWrapper queryWrapper = QueryWrapper.create().where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId()));
+        if (needFinish) queryWrapper.and(WORLDTRANSFERS_D_O.COMPLETION_TIME.isNull());
+        worldtransfersMapper.deleteByQuery(queryWrapper);
     }
 }

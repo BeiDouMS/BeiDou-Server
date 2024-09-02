@@ -85,9 +85,9 @@ import org.gms.server.quest.Quest;
 import org.gms.service.AccountService;
 import org.gms.service.CharacterService;
 import org.gms.service.NameChangeService;
+import org.gms.service.WorldTransferService;
 import org.gms.util.*;
 import org.gms.exception.NotEnabledException;
-import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
@@ -439,6 +439,7 @@ public class Character extends AbstractCharacterObject {
     private float familyDrop = 1;
     private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
     private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+    private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
 
     private Character() {
@@ -9544,7 +9545,7 @@ public class Character extends AbstractCharacterObject {
 
     public boolean cancelPendingNameChange() {
         try {
-            nameChangeService.cancelPendingNameChange(this);
+            nameChangeService.cancelPendingNameChange(this, true);
             return true;
         } catch (Exception e) {
             log.error(I18nUtil.getLogMessage("Character.cancelPendingNameChange.error1"), getName(), e);
@@ -9576,48 +9577,20 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean registerWorldTransfer(int newWorld) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            //check for pending world transfer
-            long currentTimeMillis = System.currentTimeMillis();
-            try (PreparedStatement ps = con.prepareStatement("SELECT completionTime FROM worldtransfers WHERE characterid=?")) { //double check, just in case
-                ps.setInt(1, getId());
-                ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    Timestamp completedTimestamp = rs.getTimestamp("completionTime");
-                    if (completedTimestamp == null) {
-                        return false; //pending
-                    } else if (completedTimestamp.getTime() + YamlConfig.config.server.WORLD_TRANSFER_COOLDOWN > currentTimeMillis) {
-                        return false;
-                    }
-                }
-            } catch (SQLException e) {
-                log.error("Failed to register world transfer for chr {}", getName(), e);
-                return false;
-            }
-
-            try (PreparedStatement ps = con.prepareStatement("INSERT INTO worldtransfers (characterid, `from`, `to`) VALUES (?, ?, ?)")) {
-                ps.setInt(1, getId());
-                ps.setInt(2, getWorld());
-                ps.setInt(3, newWorld);
-                ps.executeUpdate();
-                return true;
-            } catch (SQLException e) {
-                log.error("Failed to register world transfer for chr {}", getName(), e);
-            }
-        } catch (SQLException e) {
-            log.error("Failed to get DB connection while registering world transfer", e);
+        try {
+            return worldTransferService.registerWorldTransfer(this, newWorld);
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.registerWorldTransfer.error1"), getName(), newWorld, e);
         }
         return false;
     }
 
     public boolean cancelPendingWorldTransfer() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM worldtransfers WHERE characterid=? AND completionTime IS NULL")) {
-            ps.setInt(1, getId());
-            int affectedRows = ps.executeUpdate();
-            return affectedRows > 0; //rows affected
-        } catch (SQLException e) {
-            log.error("Failed to cancel pending world transfer for chr {}", getName(), e);
+        try {
+            worldTransferService.cancelPendingWorldTransfer(this, true);
+            return true;
+        } catch (Exception e) {
+            log.error(I18nUtil.getLogMessage("Character.cancelPendingWorldTransfer.error1"), getName(), e);
             return false;
         }
     }
