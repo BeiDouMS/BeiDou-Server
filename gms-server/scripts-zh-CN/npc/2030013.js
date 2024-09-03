@@ -29,14 +29,13 @@ var expedition;
 var expedMembers;
 var player;
 var em;
-const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
-const exped = ExpeditionType.ZAKUM;
-var expedName = "Zakum";
-var expedBoss = "Zakum";
-var expedMap = "Zakum's Altar";
+var exped = MapleExpeditionType.ZAKUM;
+var expedName = "ZaKum";
+var expedBoss = "扎昆";
+var expedMap = "扎昆的祭台";
 var expedItem = 4001017;
 
-var list = "What would you like to do?#b\r\n\r\n#L1#View current Expedition members#l\r\n#L2#Start the fight!#l\r\n#L3#Stop the expedition.#l";
+var list = "有什么事要做？#b\r\n\r\n#L1#确认目前的远征队成员。#l\r\n#L2#开启远征。#l\r\n#L3#取消远征队登记。#l";
 
 function start() {
     action(1, 0, 0);
@@ -58,14 +57,14 @@ function action(mode, type, selection) {
 
         if (status == 0) {
             if (player.getLevel() < exped.getMinLevel() || player.getLevel() > exped.getMaxLevel()) { //Don't fit requirement, thanks Conrad
-                cm.sendOk("您不符合与" + expedBoss + "战斗的条件！");
+                cm.sendOk("你尚不满足挑战" + expedBoss + "的资格。");
                 cm.dispose();
             } else if (expedition == null) { //Start an expedition
-                cm.sendSimple("#e#b<远征：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你想组建一个团队来挑战 #r" + expedBoss + "#k 吗？\r\n#b#L1#让我们开始吧！#l\r\n\#L2#不，我想再等一会儿...#l");
+                cm.sendSimple("#e#b<远征队：" + expedName + ">\r\n#k#n" + em.getProperty("party") + "\r\n\r\n你要组成一支远征队讨伐#r" + expedBoss + "#k吗?\r\n#b#L1#入场。#l\r\n\#L2#还不是时候。#l");
                 status = 1;
             } else if (expedition.isLeader(player)) { //If you're the leader, manage the exped
                 if (expedition.isInProgress()) {    // thanks Conrad for noticing exped leaders being able to still manage in-progress expeds
-                    cm.sendOk("你的探险已经在进行中，对于那些仍在战斗中的人，让我们为那些勇敢的灵魂祈祷吧。");
+                    cm.sendOk("你的远征队仍在进行战斗，让我们为那些继续作战的勇士祈祷，愿他们勇敢的灵魂得偿所愿。");
                     cm.dispose();
                 } else {
                     cm.sendSimple(list);
@@ -73,7 +72,7 @@ function action(mode, type, selection) {
                 }
             } else if (expedition.isRegistering()) { //If the expedition is registering
                 if (expedition.contains(player)) { //If you're in it but it hasn't started, be patient
-                    cm.sendOk("你已经注册了这次远征。请等待 #r" + expedition.getLeader().getName() + "#k 开始。");
+                    cm.sendOk("你已经登记为远征队成员。请等待 #r" + expedition.getLeader().getName() + "#k 开启远征。");
                     cm.dispose();
                 } else { //If you aren't in it, you're going to get added
                     cm.sendOk(expedition.addMember(cm.getPlayer()));
@@ -82,64 +81,64 @@ function action(mode, type, selection) {
             } else if (expedition.isInProgress()) { //Only if the expedition is in progress
                 if (expedition.contains(player)) { //If you're registered, warp you in
                     var eim = em.getInstance(expedName + player.getClient().getChannel());
-                    if (eim.getIntProperty("canJoin") == 1) {
+                    if(eim.getIntProperty("canJoin") == 1) {
                         eim.registerPlayer(player);
                     } else {
-                        cm.sendOk("你的远征队已经开始对抗" + expedBoss + "的战斗。让我们为这些勇敢的灵魂祈祷。");
+                        cm.sendOk("你的远征队正在挑战 " + expedBoss + "。愿他们勇敢的灵魂得偿所愿。");
                     }
 
                     cm.dispose();
                 } else { //If you're not in by now, tough luck
-                    cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
+                    cm.sendOk("其它远征队正在挑战 " + expedBoss + "。愿他们勇敢的灵魂得偿所愿。");
                     cm.dispose();
                 }
             }
         } else if (status == 1) {
             if (selection == 1) {
                 if (!cm.haveItem(expedItem)) {
-                    cm.sendOk("作为远征队领袖，你必须携带#b#t" + expedItem + "##k在你的物品栏中，与" + expedBoss + "进行战斗！");
+                    cm.sendOk("远征队长必须持有一个 #b#t" + expedItem + "##k 才能入场挑战" + expedBoss + "！");
                     cm.dispose();
                     return;
                 }
 
                 expedition = cm.getExpedition(exped);
-                if (expedition != null) {
-                    cm.sendOk("有人已经主动成为了远征队的领袖。试着加入他们吧！");
+                if(expedition != null) {
+                    cm.sendOk("已有玩家登记成为远征队长，请作为远征队员加入。");
                     cm.dispose();
                     return;
                 }
 
                 var res = cm.createExpedition(exped);
                 if (res == 0) {
-                    cm.sendOk("#r" + expedBoss + " 远征#k 已经创建。\r\n\r\n再次与我交谈，查看当前队伍，或开始战斗！");
+                    cm.sendOk("#r" + expedBoss + " 远征队#k 已创建。\r\n\r\n目前可以与我对话确认队员名单，或开启挑战。");
                 } else if (res > 0) {
-                    cm.sendOk("抱歉，您已经达到了此次远征的尝试配额！请另选他日再试……");
+                    cm.sendOk("抱歉，你的挑战次数已达上限。");
                 } else {
-                    cm.sendOk("在开始远征时发生了意外错误，请稍后重试。");
+                    cm.sendOk("发生了未知错误，请稍后重试。");
                 }
 
                 cm.dispose();
-
+                return;
             } else if (selection == 2) {
-                cm.sendOk("当然，并非每个人都能挑战" + expedBoss + "。");
+                cm.sendOk("确实，并非每个人都想要挑战 " + expedBoss + "。");
                 cm.dispose();
-
+                return;
             }
         } else if (status == 2) {
             if (selection == 1) {
                 if (expedition == null) {
-                    cm.sendOk("无法加载远征。");
+                    cm.sendOk("远征队人数已达上限。");
                     cm.dispose();
                     return;
                 }
                 expedMembers = expedition.getMemberList();
                 var size = expedMembers.size();
                 if (size == 1) {
-                    cm.sendOk("你是探险队中唯一的成员。");
+                    cm.sendOk("目前尚无其他人加入远征队。");
                     cm.dispose();
                     return;
                 }
-                var text = "The following members make up your expedition (Click on them to expel them):\r\n";
+                var text = "以下成员加入了远征队，可以点击名字将其移除：\r\n";
                 text += "\r\n\t\t1." + expedition.getLeader().getName();
                 for (var i = 1; i < size; i++) {
                     text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
@@ -151,43 +150,42 @@ function action(mode, type, selection) {
 
                 var size = expedition.getMemberList().size();
                 if (size < min) {
-                    cm.sendOk("你的远征队至少需要有" + min + "名玩家注册。");
+                    cm.sendOk("需要至少 " + min + " 名角色加入远征队方可开启。");
                     cm.dispose();
                     return;
                 }
 
-                cm.sendOk("探险队将开始，现在将由护送你前往 #b" + expedMap + "#k。");
+                cm.sendOk("挑战即将开始，远征队将被传送进入#b" + expedMap + "#k。");
                 status = 4;
             } else if (selection == 3) {
-                const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
+                player.getMap().broadcastMessage(MaplePacketCreator.serverNotice(6, expedition.getLeader().getName() + " 结束了远征。"));
                 cm.endExpedition(expedition);
-                cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");
+                cm.sendOk("远征结束，有时脱逃也是保存实力的上策。");
                 cm.dispose();
-
+                return;
             }
         } else if (status == 4) {
             if (em == null) {
-                cm.sendOk("事件无法初始化，请在论坛上报告此问题。");
+                cm.sendOk("活动无法初始化，请截图向GM报告。");
                 cm.dispose();
                 return;
             }
 
             em.setProperty("leader", player.getName());
             em.setProperty("channel", player.getClient().getChannel());
-            if (!em.startInstance(expedition)) {
-                cm.sendOk("另一支探险队已经主动挑战了" + expedBoss + "，让我们为这些勇敢的灵魂祈祷吧。");
+            if(!em.startInstance(expedition)) {
+                cm.sendOk("其它远征队正在挑战 " + expedBoss + "。愿他们勇敢的灵魂得偿所愿。");
                 cm.dispose();
                 return;
             }
 
             cm.dispose();
-
+            return;
         } else if (status == 6) {
             if (selection > 0) {
                 var banned = expedMembers.get(selection - 1);
                 expedition.ban(banned);
-                cm.sendOk("你已经从远征中禁止了 " + banned.getValue() + "。");    // getValue, thanks MedicOP (MicroWilly69) for finding this issue
+                cm.sendOk("你将 " + banned.getValue() + " 驱逐出了远征队。");    // getValue, thanks MedicOP (MicroWilly69) for finding this issue
                 cm.dispose();
             } else {
                 cm.sendSimple(list);
