@@ -31,7 +31,7 @@ function action(mode, type, selection) {
             let lv = player.getLevel();
             msg += "角色名: #r" + player.getName() + "#k  等级 #b" + lv + "#k\r\n";
             msg += "点券: #b" + player.getCashShop().getCash(1) + "#k 抵用券: #b" + player.getCashShop().getCash(2) + "#k PQ积分: #b" + player.getPQPoint() + "\r\n\r\n";
-            msg += "#b#L0#查询倍率#l  #L1#传送市场#l\r\n\r\n"
+            msg += "#b#L0#查询倍率#l  #L1#传送市场#l  #L2#超级脸型#l  #L3#超级发型#l\r\n\r\n"
             cm.sendSimple(msg);
         } else if (status === 1) {
             if (selection === 0) {
@@ -59,6 +59,12 @@ function action(mode, type, selection) {
                 let cmd = Java.type("client.command.CommandsExecutor");
                 cmd.getInstance().handle(cm.getClient(), "@fm");
                 cm.dispose();
+            } else if (selection === 2) {
+                cm.dispose();
+                cm.openNpc(9201088, "脸型");
+            } else if (selection === 3) {
+                cm.dispose();
+                cm.openNpc(9201088, "发型");
             }
         }
     }
