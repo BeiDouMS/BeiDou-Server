@@ -46,17 +46,17 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-  import { getInventoryList } from '@/api/inventory';
+  import { getInventoryList, inventoryCondition } from '@/api/inventory';
   import useLoading from '@/hooks/loading';
   import { InventoryState } from '@/store/modules/inventory/type';
-  import { getIconUrl } from '../../../utils/mapleStoryAPI';
+  import { getIconUrl } from '@/utils/mapleStoryAPI';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
 
   const props = defineProps<{
     currentType: string | number;
-    characterId: string | number;
+    characterId: number | undefined;
   }>();
 
   const loadData = async () => {
@@ -66,10 +66,13 @@
     }
     setLoading(true);
     try {
-      const { data } = await getInventoryList(
-        props.currentType as number,
-        props.characterId as number
-      );
+      const condition: inventoryCondition = {
+        inventoryType: props.currentType as number,
+        characterId: props.characterId as number,
+        pageNo: 1,
+        pageSize: 20,
+      };
+      const { data } = await getInventoryList(condition);
       tableData.value = data;
     } finally {
       setLoading(false);

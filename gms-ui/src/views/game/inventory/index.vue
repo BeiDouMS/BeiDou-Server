@@ -2,11 +2,12 @@
   <div class="container">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.game.inventory')">
-      <character-selector />
+      <character-selector @use-character="useCharacter" />
       <a-tabs
         :default-active-key="1"
         lazy-load
         destroy-on-hide
+        :active-key="tab"
         @change="tabChange"
       >
         <a-tab-pane
@@ -14,7 +15,10 @@
           :key="data.inventoryType"
           :title="data.name"
         >
-          <inventory-list :current-type="currentType" />
+          <inventory-list
+            :character-id="currentCid"
+            :current-type="currentType"
+          />
         </a-tab-pane>
       </a-tabs>
     </a-card>
@@ -26,10 +30,11 @@
   import { InventoryTypeState } from '@/store/modules/inventory/type';
   import { ref } from 'vue';
   import InventoryList from '@/views/game/inventory/table.vue';
-  import CharacterSelector from '@/views/game/inventory/chracterSelector.vue';
+  import CharacterSelector from '@/views/game/inventory/characterSelector.vue';
 
   const typeList = ref<InventoryTypeState[]>([]);
   const currentType = ref<string | number>(1);
+  const currentCid = ref<number | undefined>(undefined);
 
   const loadType = async () => {
     const { data } = await getInventoryTypeList();
@@ -38,8 +43,15 @@
 
   loadType();
 
-  const tabChange = (tab: string | number) => {
-    currentType.value = tab;
+  const tab = ref<number>(0);
+  const tabChange = (t: string | number) => {
+    currentType.value = t;
+    tab.value = t as number;
+  };
+
+  const useCharacter = (cid: number) => {
+    currentCid.value = cid;
+    tabChange(0);
   };
 </script>
 
