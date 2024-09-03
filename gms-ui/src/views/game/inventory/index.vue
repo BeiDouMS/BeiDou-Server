@@ -2,6 +2,7 @@
   <div class="container">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.game.inventory')">
+      <character-selector />
       <a-tabs
         :default-active-key="1"
         lazy-load
@@ -25,6 +26,7 @@
   import { InventoryTypeState } from '@/store/modules/inventory/type';
   import { ref } from 'vue';
   import InventoryList from '@/views/game/inventory/table.vue';
+  import CharacterSelector from '@/views/game/inventory/chracterSelector.vue';
 
   const typeList = ref<InventoryTypeState[]>([]);
   const currentType = ref<string | number>(1);

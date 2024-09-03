@@ -56,12 +56,20 @@
 
   const props = defineProps<{
     currentType: string | number;
+    characterId: string | number;
   }>();
 
   const loadData = async () => {
+    // 可在选择完玩家后刷新
+    if (!props || !props.characterId) {
+      return;
+    }
     setLoading(true);
     try {
-      const { data } = await getInventoryList(props.currentType as number);
+      const { data } = await getInventoryList(
+        props.currentType as number,
+        props.characterId as number
+      );
       tableData.value = data;
     } finally {
       setLoading(false);
