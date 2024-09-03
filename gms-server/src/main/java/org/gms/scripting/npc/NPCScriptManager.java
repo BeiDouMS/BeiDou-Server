@@ -127,6 +127,13 @@ public class NPCScriptManager extends AbstractScriptManager {
                         engine = getInvocableScriptEngine("npc/" + fileName + ".js", c);
                         if (engine == null) {
                             engine = getInvocableScriptEngine("BeiDouSpecial/" + fileName + ".js", c);
+
+                            //可能是BeiDou的cashitem?
+                            if (engine == null)
+                            {
+                                engine = getInvocableScriptEngine("BeiDouSpecial/CashItem/" + fileName + ".js", c);
+                            }
+
                         }
                     }
                 } else {
