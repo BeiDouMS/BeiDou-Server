@@ -33,7 +33,6 @@ import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D
 @AllArgsConstructor
 public class InventoryService {
     private final InventoryitemsMapper inventoryitemsMapper;
-    private final CharactersMapper charactersMapper;
     private final InventoryequipmentMapper inventoryequipmentMapper;
     private final RingsMapper ringsMapper;
     private final PetsMapper petsMapper;
@@ -55,7 +54,6 @@ public class InventoryService {
         if (data.getCharacterId() != null) queryWrapper.and(CHARACTERS_D_O.ID.eq(data.getCharacterId()));
         if (!RequireUtil.isEmpty(data.getCharacterName()))
             queryWrapper.and(CHARACTERS_D_O.NAME.like(data.getCharacterName()));
-        if (data.getAccountId() != null) queryWrapper.and(CHARACTERS_D_O.ACCOUNTID.eq(data.getAccountId()));
         Page<CharactersDO> paginate = inventoryitemsMapper.paginateAs(data.getPageNo(), data.getPageSize(), queryWrapper, CharactersDO.class);
         return new Page<>(
                 paginate.getRecords().stream()
@@ -63,7 +61,6 @@ public class InventoryService {
                             InventorySearchReqDTO dto = new InventorySearchReqDTO();
                             dto.setCharacterId(record.getId());
                             dto.setCharacterName(record.getName());
-                            dto.setAccountId(record.getAccountid());
                             return dto;
                         })
                         .toList(),
