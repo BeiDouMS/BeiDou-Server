@@ -1,7 +1,7 @@
 <template>
   <div class="container" :loading="true">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.dashboard.npcShop')">
+    <a-card class="general-card" :title="$t('menu.game.npcShop')">
       <a-row>
         <a-col>
           <a-space>

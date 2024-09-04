@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.dashboard.cashShop')">
+    <a-card class="general-card" :title="$t('menu.game.cashShop')">
       <a-tabs
         lazy-load
         destroy-on-hide
