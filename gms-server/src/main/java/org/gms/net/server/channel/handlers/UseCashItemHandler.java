@@ -47,14 +47,11 @@ import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
-import org.gms.constants.inventory.CashItemConstants;
-import org.gms.constants.inventory.CosmeticConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.packet.out.SendNoteSuccessPacket;
 import org.gms.net.server.Server;
-import org.gms.scripting.npc.NPCScriptManager;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -633,30 +630,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
                 client.sendPacket(PacketCreator.enableActions());
             }, SECONDS.toMillis(3));
-        }
-        else if (itemType == 553)
-        {
-            for (int i = 5532003; i <= 5532999; i++)
-            {
-                if (itemId == i)
-                {
-                    String strScriptName = CosmeticConstants.m_mapCosmetic.get(i);
-                    c.sendPacket(PacketCreator.enableActions());
-                    NPCScriptManager.getInstance().start(c, CosmeticConstants.m_iCosmeticNpc, strScriptName,c.getPlayer());//让爱德华去执行吧
-                }
-            }
-            //Cash
-            for (int i = 5533000; i <= 5534999; i++)
-            {
-                if (toUse.getItemId() == i)
-                {
-                    String strScriptName = CashItemConstants.m_mapCashItems.get(i);
-                    c.sendPacket(PacketCreator.enableActions());
-                    NPCScriptManager.getInstance().start(c, CashItemConstants.m_CashItemsNpc, strScriptName,c.getPlayer());//让爱德华去执行吧
-                }
-            }
-        }
-        else {
+        } else {
             log.warn("NEW CASH ITEM TYPE: {}, packet: {}", itemType, p);
             c.sendPacket(PacketCreator.enableActions());
         }
