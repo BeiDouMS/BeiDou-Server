@@ -1199,6 +1199,19 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     /**
+     * 多个选项的对话，选择后路由到指定方法，将玩家的选择传入
+     * 对应sendSimple
+     *
+     * @param nextLevel 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
+     * @param text   对话内容
+     */
+    public void sendNextSelectLevel(String nextLevel, String text) {
+        sendSimple(text);
+        nextLevelContext.setLevelType(NextLevelType.SEND_NEXT_SELECT);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
      * 获取玩家输入数字的对话
      * 对应sendGetNumber
      *
