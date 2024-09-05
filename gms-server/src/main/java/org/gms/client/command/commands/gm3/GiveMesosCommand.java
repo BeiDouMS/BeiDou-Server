@@ -68,9 +68,9 @@ public class GiveMesosCommand extends Command {
             }
         }
 
-        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
-        if (victim == null && StringUtil.isNumeric(params[0])) {
-            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(recv);
+        if (victim == null && StringUtil.isNumeric(recv)) {
+            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(recv));
         }
         if (victim != null) {
             victim.gainMeso((int) mesos_, true);

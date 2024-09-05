@@ -62,17 +62,19 @@ public class GiveNxCommand extends Command {
             }
             if (type == -1) {
                 type = 1;
+                typeStr = "nx";
                 recv = params[0];
                 value = Integer.parseInt(params[1]);
             }
         } else {
+            type = 1;
             recv = c.getPlayer().getName();
             value = Integer.parseInt(params[0]);
         }
 
-        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
-        if (victim == null && StringUtil.isNumeric(params[0])) {
-            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+        Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(recv);
+        if (victim == null && StringUtil.isNumeric(recv)) {
+            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(recv));
         }
         if (victim != null) {
             victim.getCashShop().gainCash(type, value);
