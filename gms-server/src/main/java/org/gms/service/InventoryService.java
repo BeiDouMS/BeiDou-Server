@@ -3,7 +3,10 @@ package org.gms.service;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.row.Row;
+import com.oracle.truffle.regex.chardata.CharacterSet;
 import lombok.AllArgsConstructor;
+import lombok.extern.flogger.Flogger;
+import lombok.val;
 import org.gms.client.Character;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Inventory;
@@ -13,6 +16,7 @@ import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.InventoryequipmentDO;
 import org.gms.dao.entity.InventoryitemsDO;
 import org.gms.dao.mapper.*;
+import org.gms.exception.BizException;
 import org.gms.model.dto.*;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
@@ -28,6 +32,8 @@ import static com.mybatisflex.core.query.QueryMethods.distinct;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
+
+
 
 @Service
 @AllArgsConstructor
@@ -247,5 +253,68 @@ public class InventoryService {
             }
             return rtnDTO;
         }).toList();
+    }
+
+
+    public void updateInventory(InventorySearchRtnDTO data) {
+        RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
+        RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
+        InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
+        RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "inventoryType", data.getInventoryType()));
+
+        Character character = getCharacterById(data.getCharacterId());
+
+            // 过滤在线玩家
+            if (character == null && !data.isOnline()) {
+               throw new BizException(I18nUtil.getExceptionMessage("CHR_NOT_TSHC"));
+            }else if (data.getInventoryEquipment()==null && !data.isEquipment()){
+                InventoryitemsDO inventoryitemsDO =new InventoryitemsDO();
+                inventoryitemsDO.setInventoryitemid(data.getId());
+                inventoryitemsDO.setPetid(data.getPetId());
+                inventoryitemsDO.setFlag(data.getFlag().intValue());
+                inventoryitemsDO.setOwner(data.getOwner());
+                inventoryitemsDO.setType(data.getItemType());
+                inventoryitemsDO.setPosition(data.getPosition().intValue());
+                inventoryitemsDO.setExpiration(data.getExpiration());
+                inventoryitemsDO.setOwner(data.getOwner());
+                inventoryitemsDO.setInventorytype(data.getInventoryType().intValue());
+                inventoryitemsDO.setGiftFrom(data.getGiftFrom());
+                inventoryitemsDO.setItemid(data.getItemId());
+                inventoryitemsDO.setQuantity(data.getQuantity().intValue());
+                inventoryitemsDO.setAccountid(character.getAccountID());
+                inventoryitemsDO.setCharacterid(character.getId());
+                inventoryitemsMapper.update(inventoryitemsDO);
+            }
+        InventoryitemsDO inventoryitemsDO =new InventoryitemsDO();
+        inventoryitemsDO.setInventoryitemid(data.getId());
+        inventoryitemsDO.setPetid(data.getPetId());
+        inventoryitemsDO.setFlag(data.getFlag().intValue());
+        inventoryitemsDO.setOwner(data.getOwner());
+        inventoryitemsDO.setType(data.getItemType());
+        inventoryitemsDO.setPosition(data.getPosition().intValue());
+        inventoryitemsDO.setExpiration(data.getExpiration());
+        inventoryitemsDO.setOwner(data.getOwner());
+        inventoryitemsDO.setInventorytype(data.getInventoryType().intValue());
+        InventoryequipmentDO inventoryequipmentDO =new InventoryequipmentDO();
+        inventoryequipmentDO.setHp(data.getInventoryEquipment().getHp().intValue());
+        inventoryequipmentDO.setInventoryequipmentid(data.getInventoryEquipment().getId());
+        inventoryequipmentDO.setInventoryitemid(data.getInventoryEquipment().getInventoryItemId());
+        inventoryequipmentDO.setAcc(data.getInventoryEquipment().getAcc().intValue());
+        inventoryequipmentDO.setAvoid(data.getInventoryEquipment().getAvoid().intValue());
+        inventoryequipmentDO.setDex(data.getInventoryEquipment().getAttDex().intValue());
+        inventoryequipmentDO.setHands(data.getInventoryEquipment().getHands().intValue());
+        inventoryequipmentDO.setInte(data.getInventoryEquipment().getAttInt().intValue());
+        inventoryequipmentDO.setJump(data.getInventoryEquipment().getJump().intValue());
+        inventoryequipmentDO.setLevel(data.getInventoryEquipment().getLevel().intValue());
+        inventoryequipmentDO.setLuk(data.getInventoryEquipment().getAttLuk().intValue());
+        inventoryequipmentDO.setMdef(data.getInventoryEquipment().getMdef().intValue());
+        inventoryequipmentDO.setMatk(data.getInventoryEquipment().getMAtk().intValue());
+        inventoryequipmentDO.setMp(data.getInventoryEquipment().getMp().intValue());
+        inventoryequipmentDO.setRingid(data.getInventoryEquipment().getRingId().intValue());
+        inventoryequipmentDO.setSpeed(data.getInventoryEquipment().getSpeed().intValue());
+        inventoryequipmentDO.setStr(data.getInventoryEquipment().getAttStr().intValue());
+        inventoryequipmentDO.setUpgradeslots(data.getInventoryEquipment().getUpgradeSlots().intValue());
+        inventoryequipmentMapper.update(inventoryequipmentDO);
+        inventoryitemsMapper.update(inventoryitemsDO);
     }
 }
