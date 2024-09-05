@@ -23,11 +23,13 @@
 */
 package client.command.commands.gm6;
 
+import api.manager.ApiManager;
 import client.Character;
 import client.Client;
 import client.command.Command;
 import net.server.Server;
 import net.server.world.World;
+import service.HpMpAlertService;
 import tools.PacketCreator;
 
 public class SaveAllCommand extends Command {
@@ -46,5 +48,7 @@ public class SaveAllCommand extends Command {
         String message = player.getName() + " used !saveall.";
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, message));
         player.message("All players saved successfully.");
+        HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
+        hpMpAlertService.saveAll();
     }
 }

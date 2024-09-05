@@ -260,12 +260,6 @@ public class ServerConfig {
     public boolean PLAYERNPC_ORGANIZE_AREA;
     public boolean PLAYERNPC_AUTODEPLOY;
 
-    //Pet Auto-Pot Configuration
-    public boolean USE_COMPULSORY_AUTOPOT;
-    public boolean USE_EQUIPS_ON_AUTOPOT;
-    public double PET_AUTOHP_RATIO;
-    public double PET_AUTOMP_RATIO;
-
     //Pet & Mount Configuration
     public byte PET_EXHAUST_COUNT;
     public byte MOUNT_EXHAUST_COUNT;

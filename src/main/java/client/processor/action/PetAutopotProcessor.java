@@ -21,15 +21,16 @@
 */
 package client.processor.action;
 
+import api.manager.ApiManager;
 import client.Character;
 import client.Client;
 import client.inventory.Inventory;
 import client.inventory.InventoryType;
 import client.inventory.Item;
 import client.inventory.manipulator.InventoryManipulator;
-import config.YamlConfig;
 import server.ItemInformationProvider;
 import server.StatEffect;
+import service.HpMpAlertService;
 import tools.PacketCreator;
 
 import java.util.List;
@@ -80,6 +81,7 @@ public class PetAutopotProcessor {
 
         public void run() {
             Client c = this.c;
+            HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
             Character chr = c.getPlayer();
             if (!chr.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
@@ -128,35 +130,31 @@ public class PetAutopotProcessor {
                     if (incMp <= 0 && hasMpGain) {
                         incMp = Math.ceil(maxMp * stat.getMpRate());
                     }
-
-                    if (YamlConfig.config.server.USE_COMPULSORY_AUTOPOT) {
-                        if (hasHpGain) {
-                            double hpRatio = (YamlConfig.config.server.PET_AUTOHP_RATIO * maxHp) - curHp;
-                            if (hpRatio > 0.0) {
-                                qtyCount = (int) Math.ceil(hpRatio / incHp);
-                            }
+                    
+                    if (hasHpGain) {
+                        double hpRatio = (hpMpAlertService.getHpAlertPer(chr.getId()) * maxHp) - curHp;
+                        if (hpRatio > 0.0) {
+                            qtyCount = (int) Math.ceil(hpRatio / incHp);
                         }
+                    }
 
-                        if (hasMpGain) {
-                            double mpRatio = ((YamlConfig.config.server.PET_AUTOMP_RATIO * maxMp) - curMp);
-                            if (mpRatio > 0.0) {
-                                qtyCount = Math.max(qtyCount, (int) Math.ceil(mpRatio / incMp));
-                            }
+                    if (hasMpGain) {
+                        double mpRatio = ((hpMpAlertService.getMpAlertPer(chr.getId()) * maxMp) - curMp);
+                        if (mpRatio > 0.0) {
+                            qtyCount = Math.max(qtyCount, (int) Math.ceil(mpRatio / incMp));
                         }
+                    }
 
-                        if (qtyCount < 0) { // thanks Flint, Kevs for noticing an issue where negative counts were getting achieved
-                            qtyCount = 0;
-                        }
-                    } else {
-                        qtyCount = 1;   // non-compulsory autopot concept thanks to marcuswoon
+                    if (qtyCount < 0) {
+                        qtyCount = 0;
                     }
 
                     while (true) {
                         short qtyToUse = (short) Math.min(qtyCount, toUse.getQuantity());
                         InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, qtyToUse, false);
 
-                        curHp += (incHp * qtyToUse);
-                        curMp += (incMp * qtyToUse);
+                        curHp += (int) (incHp * qtyToUse);
+                        curMp += (int) (incMp * qtyToUse);
 
                         useCount += qtyToUse;
                         qtyCount -= qtyToUse;

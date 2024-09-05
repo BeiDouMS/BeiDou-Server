@@ -40,7 +40,6 @@ import client.inventory.manipulator.InventoryManipulator;
 import client.keybind.KeyBinding;
 import client.keybind.QuickslotBinding;
 import client.newyear.NewYearCardRecord;
-import client.processor.action.PetAutopotProcessor;
 import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
 import constants.game.ExpTable;
@@ -238,7 +237,6 @@ public class Character extends AbstractCharacterObject {
     private boolean hidden, equipchanged = true, berserk, hasMerchant, hasSandboxItem = false, whiteChat = false, canRecvPartySearchInvite = true;
     private boolean equippedMesoMagnet = false, equippedItemPouch = false, equippedPetItemIgnore = false;
     private boolean usedSafetyCharm = false;
-    private float autopotHpAlert, autopotMpAlert;
     private int linkedLevel = 0;
     private String linkedName = null;
     private boolean finishedDojoTutorial;
@@ -9076,37 +9074,6 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        // autopot on HPMP deplete... thanks shavit for finding out D. Roar doesn't trigger autopot request
-        if (hpchange < 0) {
-            KeyBinding autohpPot = this.getKeymap().get(91);
-            if (autohpPot != null) {
-                int autohpItemid = autohpPot.getAction();
-                float autohpAlert = this.getAutopotHpAlert();
-                if (((float) this.getHp()) / this.getCurrentMaxHp() <= autohpAlert) { // try within user settings... thanks Lame, Optimist, Stealth2800
-                    Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
-                    if (autohpItem != null) {
-                        this.setAutopotHpAlert(0.9f * autohpAlert);
-                        PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
-                    }
-                }
-            }
-        }
-
-        if (mpchange < 0) {
-            KeyBinding autompPot = this.getKeymap().get(92);
-            if (autompPot != null) {
-                int autompItemid = autompPot.getAction();
-                float autompAlert = this.getAutopotMpAlert();
-                if (((float) this.getMp()) / this.getCurrentMaxMp() <= autompAlert) {
-                    Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
-                    if (autompItem != null) {
-                        this.setAutopotMpAlert(0.9f * autompAlert); // autoMP would stick to using pots at every depletion in some cases... thanks Rohenn
-                        PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
-                    }
-                }
-            }
-        }
-
         return true;
     }
 
@@ -10591,22 +10558,6 @@ public class Character extends AbstractCharacterObject {
 
     public void setDragon(Dragon dragon) {
         this.dragon = dragon;
-    }
-
-    public void setAutopotHpAlert(float hpPortion) {
-        autopotHpAlert = hpPortion;
-    }
-
-    public float getAutopotHpAlert() {
-        return autopotHpAlert;
-    }
-
-    public void setAutopotMpAlert(float mpPortion) {
-        autopotMpAlert = mpPortion;
-    }
-
-    public float getAutopotMpAlert() {
-        return autopotMpAlert;
     }
 
     public long getJailExpirationTimeLeft() {

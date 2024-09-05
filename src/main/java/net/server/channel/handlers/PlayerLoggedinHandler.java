@@ -21,6 +21,7 @@
  */
 package net.server.channel.handlers;
 
+import api.manager.ApiManager;
 import client.BuddyList;
 import client.BuddylistEntry;
 import client.Character;
@@ -57,6 +58,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scripting.event.EventInstanceManager;
 import server.life.MobSkill;
+import service.HpMpAlertService;
 import service.NoteService;
 import tools.DatabaseConnection;
 import tools.PacketCreator;
@@ -165,16 +167,19 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     e.printStackTrace();
                 }
 
-                if (player == null) { //If you are still getting null here then please just uninstall the game >.>, we dont need you fucking with the logs
+                if (player == null) { // If you are still getting null here then please just uninstall the game >.>, we dont need you fucking with the logs
                     c.disconnect(true, false);
                     return;
                 }
             }
             c.setPlayer(player);
             c.setAccID(player.getAccountID());
-            
+
             // 加载ImGui
             player.broadcastAcquaintances(PacketCreator.staticData((byte) 0, 0));
+            // 同步HP MP 提醒
+            HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
+            player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
 
             boolean allowLogin = true;
 
@@ -327,8 +332,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             if (player.getParty() != null) {
                 PartyCharacter pchar = player.getMPC();
 
-                //Use this in case of enabling party HPbar HUD when logging in, however "you created a party" will appear on chat.
-                //c.sendPacket(PacketCreator.partyCreated(pchar));
+                // Use this in case of enabling party HPbar HUD when logging in, however "you created a party" will appear on chat.
+                // c.sendPacket(PacketCreator.partyCreated(pchar));
 
                 pchar.setChannel(c.getChannel());
                 pchar.setMapId(player.getMapId());

@@ -133,6 +133,7 @@ import net.server.channel.handlers.ReportHandler;
 import net.server.channel.handlers.RingActionHandler;
 import net.server.channel.handlers.ScriptedItemHandler;
 import net.server.channel.handlers.ScrollHandler;
+import net.server.channel.handlers.SetHpMpAlertHandler;
 import net.server.channel.handlers.SkillBookHandler;
 import net.server.channel.handlers.SkillEffectHandler;
 import net.server.channel.handlers.SkillMacroHandler;
@@ -448,5 +449,6 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.OPEN_ITEMUI, new RaiseUIStateHandler());
         registerHandler(RecvOpcode.USE_ITEMUI, new RaiseIncExpHandler());
         registerHandler(RecvOpcode.CHANGE_QUICKSLOT, new QuickslotKeyMappedModifiedHandler());
+        registerHandler(RecvOpcode.SET_HPMPALERT, new SetHpMpAlertHandler());
     }
 }

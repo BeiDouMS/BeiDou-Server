@@ -7540,4 +7540,11 @@ public class PacketCreator {
         p.writeInt(skinId);
         return p;
     }
+
+    public static Packet updateHpMpAlert(byte hp, byte mp) {
+        OutPacket p = OutPacket.create(SendOpcode.UPDATE_HPMPAALERT);
+        p.writeByte(hp);
+        p.writeByte(mp);
+        return p;
+    }
 }

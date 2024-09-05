@@ -21,6 +21,7 @@
  */
 package net.server;
 
+import api.manager.ApiManager;
 import client.Character;
 import client.Client;
 import client.Family;
@@ -59,7 +60,6 @@ import net.server.task.RankingCommandTask;
 import net.server.task.RankingLoginTask;
 import net.server.task.RespawnTask;
 import net.server.world.World;
-import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import server.CashShop.CashItemFactory;
@@ -69,6 +69,7 @@ import server.TimerManager;
 import server.expeditions.ExpeditionBossLog;
 import server.life.PlayerNPC;
 import server.quest.Quest;
+import service.HpMpAlertService;
 import service.NoteService;
 import tools.DatabaseConnection;
 import tools.Pair;
@@ -1914,13 +1915,17 @@ public class Server {
     }
 
     public synchronized void shutdownInternal(boolean restart) {
-        log.info("正在 {} GMSE!", restart ? "重启" : "结束");
-        if (getWorlds() == null) {
+        if (getWorlds().isEmpty()) {
             return;//already shutdown
         }
+        log.info("正在 {} GMSE!", restart ? "重启" : "结束");
         for (World w : getWorlds()) {
             w.shutdown();
         }
+
+        HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
+        hpMpAlertService.saveAll();
+        hpMpAlertService.clear();
 
         /*for (World w : getWorlds()) {
             while (w.getPlayerStorage().getAllCharacters().size() > 0) {

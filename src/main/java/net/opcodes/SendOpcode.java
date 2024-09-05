@@ -361,6 +361,7 @@ public enum SendOpcode {
     STATIC_DATA(0x170),
     G_MESSAGE(0x171),
     DAMAGE_SKIN(0x172),
+    UPDATE_HPMPAALERT(0x1000),
     ;
     private int code = -2;
 
