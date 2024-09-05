@@ -93,8 +93,4 @@ public class ResultBody<T> {
     public String toString() {
         return JSONObject.toJSONString(this);
     }
-
-    public static <T> ResultBody<T> error( String message) {
-        return error( message);
-    }
 }

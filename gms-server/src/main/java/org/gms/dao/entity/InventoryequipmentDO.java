@@ -70,11 +70,11 @@ public class InventoryequipmentDO implements Serializable  {
 
     private Integer locked;
 
-    private Long vicious;
+    private Integer vicious;
 
     private Integer itemlevel;
 
-    private Long itemexp;
+    private Integer itemexp;
 
     private Integer ringid;
 

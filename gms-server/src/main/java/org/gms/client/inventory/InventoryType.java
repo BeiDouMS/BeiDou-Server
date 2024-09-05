@@ -74,4 +74,8 @@ public enum InventoryType {
         // 如果需要支持更改现金的最大堆叠，可以修改这里
         return this == USE || this == ETC;
     }
+
+    public boolean isEquip() {
+        return this == EQUIP || this == EQUIPPED;
+    }
 }

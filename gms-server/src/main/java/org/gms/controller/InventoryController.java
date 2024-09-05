@@ -41,7 +41,7 @@ public class InventoryController {
     @Tag(name = "/inventory/" + ApiConstant.LATEST)
     @Operation(summary = "根据条件修改玩家背包")
     @PostMapping("/" + ApiConstant.LATEST + "/updateInventory")
-    public ResultBody  updateInventory(@RequestBody SubmitBody<InventorySearchRtnDTO> request) {
+    public ResultBody<Object> updateInventory(@RequestBody SubmitBody<InventorySearchRtnDTO> request) {
         inventoryService.updateInventory(request.getData());
         return ResultBody.success();
     }
