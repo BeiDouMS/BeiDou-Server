@@ -25,6 +25,7 @@ import org.gms.client.Client;
 import org.gms.client.creator.novice.BeginnerCreator;
 import org.gms.client.creator.novice.LegendCreator;
 import org.gms.client.creator.novice.NoblesseCreator;
+import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
@@ -47,7 +48,7 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         int weapon = p.readInt();
         int gender = p.readByte();
 
-        if (haircolor > 7 || haircolor < 0) {
+        if (ItemConstants.notValidHairColor(haircolor)) {
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
             return;
         }

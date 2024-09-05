@@ -239,4 +239,8 @@ public final class ItemConstants {
         int itemType = itemId / 10000;
         return itemType == 3 || itemType == 4 || itemType == 6;
     }
+
+    public static boolean notValidHairColor(int hairColor) {
+        return hairColor > 7 || hairColor < 0;
+    }
 }
