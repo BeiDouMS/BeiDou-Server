@@ -203,7 +203,10 @@ public enum RecvOpcode {
     USE_ITEMUI(0xEE),
     MTS_OPERATION(0xFD),
     USE_MAPLELIFE(0x100),
-    USE_HAMMER(0x104);
+    USE_HAMMER(0x104),
+
+    SET_HPMPALERT(0x1000),
+    ;
 
     private int code = -2;
 

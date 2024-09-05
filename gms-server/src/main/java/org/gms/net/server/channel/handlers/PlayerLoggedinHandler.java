@@ -39,6 +39,7 @@ import org.gms.client.inventory.Pet;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
+import org.gms.manager.ServerManager;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.PlayerBuffValueHolder;
@@ -54,6 +55,7 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.service.HpMpAlertService;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,6 +175,11 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
             c.setPlayer(player);
             c.setAccID(player.getAccountID());
+
+            // 同步HP MP 提醒
+            HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+            player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
+
 
             boolean allowLogin = true;
 

@@ -28,8 +28,10 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.config.YamlConfig;
+import org.gms.manager.ServerManager;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.StatEffect;
+import org.gms.service.HpMpAlertService;
 import org.gms.util.PacketCreator;
 
 import java.util.List;
@@ -80,6 +82,7 @@ public class PetAutopotProcessor {
 
         public void run() {
             Client c = this.c;
+            HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
             Character chr = c.getPlayer();
             if (!chr.isAlive()) {
                 c.sendPacket(PacketCreator.enableActions());
@@ -134,7 +137,21 @@ public class PetAutopotProcessor {
                         incMp = Math.ceil(maxMp * stat.getMpRate());
                     }
 
-                    if (YamlConfig.config.server.USE_COMPULSORY_AUTOPOT) {
+                    if (YamlConfig.config.server.USE_SERVER_AUTOPOT) { // 服务端同步警戒线
+                        if (hasHpGain) {
+                            double hpRatio = (hpMpAlertService.getHpAlertPer(chr.getId()) * maxHp) - curHp;
+                            if (hpRatio > 0.0) {
+                                qtyCount = (int) Math.ceil(hpRatio / incHp);
+                            }
+                        }
+
+                        if (hasMpGain) {
+                            double mpRatio = ((hpMpAlertService.getMpAlertPer(chr.getId()) * maxMp) - curMp);
+                            if (mpRatio > 0.0) {
+                                qtyCount = Math.max(qtyCount, (int) Math.ceil(mpRatio / incMp));
+                            }
+                        }
+                    } else if (YamlConfig.config.server.USE_COMPULSORY_AUTOPOT) { // 原 HMS 方案
                         if (hasHpGain) {
                             double hpRatio = (YamlConfig.config.server.PET_AUTOHP_RATIO * maxHp) - curHp;
                             if (hpRatio > 0.0) {
@@ -149,11 +166,10 @@ public class PetAutopotProcessor {
                             }
                         }
 
-                        if (qtyCount < 0) { // thanks Flint, Kevs for noticing an issue where negative counts were getting achieved
-                            qtyCount = 0;
-                        }
-                    } else {
-                        qtyCount = 1;   // non-compulsory autopot concept thanks to marcuswoon
+                    }
+
+                    if (qtyCount < 0) {
+                        qtyCount = 0;
                     }
 
                     while (true) {

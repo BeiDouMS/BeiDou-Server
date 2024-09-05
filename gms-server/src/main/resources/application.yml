@@ -453,6 +453,8 @@ gms:
     PLAYERNPC_AUTODEPLOY: true      #在达到最大等级时，玩家NPC自动部署在名人堂。如果为false，符合条件的玩家必须与1st职业导师对话以部署NPC。
 
     #宠物自动药水配置
+    USE_SERVER_AUTOPOT: false       #服务端同步客户端的HPMP警戒线实现精确吃药（优先于USE_COMPULSORY_AUTOPOT判断）（如果客户端没有配套封包，请勿开启）
+    
     USE_COMPULSORY_AUTOPOT: false    #宠物将消耗尽可能多的药水以满足AUTOHP/MP比率阈值。
     USE_EQUIPS_ON_AUTOPOT: true     #自动药水处理程序上的玩家MaxHP和MaxMP检查值将通过装备的HP/MP加成进行更新。
     PET_AUTOHP_RATIO: 0.99          #将自动消耗药水，直到达到MaxHP/MaxMP的给定比率。

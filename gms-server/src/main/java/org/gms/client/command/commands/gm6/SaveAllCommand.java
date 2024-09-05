@@ -26,8 +26,10 @@ package org.gms.client.command.commands.gm6;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
+import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
@@ -46,5 +48,7 @@ public class SaveAllCommand extends Command {
         }
         Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.serverNotice(5, I18nUtil.getMessage("SaveAllCommand.message2", player.getName())));
         player.message(I18nUtil.getMessage("SaveAllCommand.message3"));
+        HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+        hpMpAlertService.saveAll();
     }
 }

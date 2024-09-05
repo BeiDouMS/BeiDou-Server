@@ -1625,6 +1625,10 @@ public class Server {
             w.shutdown();
         }
 
+        HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+        hpMpAlertService.saveAll();
+        hpMpAlertService.clear();
+
         for (Channel ch : getAllChannels()) {
             while (!ch.finishedShutdown()) {
                 try {

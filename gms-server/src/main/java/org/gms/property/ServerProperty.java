@@ -263,6 +263,7 @@ public class ServerProperty {
     public boolean PLAYERNPC_AUTODEPLOY;
 
     //Pet Auto-Pot Configuration
+    public boolean USE_SERVER_AUTOPOT;
     public boolean USE_COMPULSORY_AUTOPOT;
     public boolean USE_EQUIPS_ON_AUTOPOT;
     public double PET_AUTOHP_RATIO;

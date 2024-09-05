@@ -31,7 +31,6 @@ import org.gms.client.inventory.Equip.StatUpgrade;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
-import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
@@ -48,6 +47,7 @@ import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.ExtendValueDO;
 import org.gms.dao.entity.GuildsDO;
 import org.gms.dao.entity.SkillsDO;
+import org.gms.exception.NotEnabledException;
 import org.gms.manager.ServerManager;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.model.pojo.SkillEntry;
@@ -87,10 +87,6 @@ import org.gms.service.CharacterService;
 import org.gms.service.NameChangeService;
 import org.gms.service.WorldTransferService;
 import org.gms.util.*;
-import org.gms.exception.NotEnabledException;
-import org.gms.util.I18nUtil;
-import org.gms.util.Pair;
-import org.gms.util.RequireUtil;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -238,12 +234,6 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private boolean equippedPetItemIgnore = false;
     private boolean usedSafetyCharm = false;
-    @Getter
-    @Setter
-    private float autopotHpAlert;
-    @Getter
-    @Setter
-    private float autopotMpAlert;
     @Getter
     private int linkedLevel = 0;
     @Getter
@@ -8213,37 +8203,6 @@ public class Character extends AbstractCharacterObject {
         } finally {
             statWlock.unlock();
             effLock.unlock();
-        }
-
-        // autopot on HPMP deplete... thanks shavit for finding out D. Roar doesn't trigger autopot request
-        if (hpchange < 0) {
-            KeyBinding autohpPot = this.getKeymap().get(91);
-            if (autohpPot != null) {
-                int autohpItemid = autohpPot.getAction();
-                float autohpAlert = this.getAutopotHpAlert();
-                if (((float) this.getHp()) / this.getCurrentMaxHp() <= autohpAlert) { // try within user settings... thanks Lame, Optimist, Stealth2800
-                    Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
-                    if (autohpItem != null) {
-                        this.setAutopotHpAlert(0.9f * autohpAlert);
-                        PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
-                    }
-                }
-            }
-        }
-
-        if (mpchange < 0) {
-            KeyBinding autompPot = this.getKeymap().get(92);
-            if (autompPot != null) {
-                int autompItemid = autompPot.getAction();
-                float autompAlert = this.getAutopotMpAlert();
-                if (((float) this.getMp()) / this.getCurrentMaxMp() <= autompAlert) {
-                    Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
-                    if (autompItem != null) {
-                        this.setAutopotMpAlert(0.9f * autompAlert); // autoMP would stick to using pots at every depletion in some cases... thanks Rohenn
-                        PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
-                    }
-                }
-            }
         }
 
         return true;
