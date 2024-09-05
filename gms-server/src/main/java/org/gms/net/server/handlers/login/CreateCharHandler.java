@@ -47,6 +47,11 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         int weapon = p.readInt();
         int gender = p.readByte();
 
+        if (haircolor > 7 || haircolor < 0) {
+            c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
+            return;
+        }
+
         int status;
         switch (job) {
         case 0: // Knights of Cygnus
