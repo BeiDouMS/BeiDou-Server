@@ -35,9 +35,17 @@ function start(mode, type, selection)
 		else if (status == 1 )
 		{
 			//第二层对话
-			text = "本来冒险岛世界的怪物都非常祥和，可是不知道发生了什么事，最近北斗气象台检测到冒险世界正在被一股强大的黑暗力量吞噬，最先发现异常的地区是位于#b魔法密林郊区#k的猴子森林！";
-			text += "猴子们受到黑暗力量的影响一个接一个的死去，并且产生变异。有人甚至看到死去的猴子竟复活过来，对人类进行无差别的攻击！这可能还只是个开始。";
-			qm.sendNextPrev(text);
+			if (mode == 0)
+			{
+				qm.sendOk("不要这么冷漠嘛，冒险岛世界的安危也需要你的力量！");
+				qm.dispose();
+			}
+			else
+			{
+			    text = "本来冒险岛世界的怪物都非常祥和，可是不知道发生了什么事，最近北斗气象台检测到冒险世界正在被一股强大的黑暗力量吞噬，最先发现异常的地区是位于#b魔法密林郊区#k的猴子森林！";
+			    text += "猴子们受到黑暗力量的影响一个接一个的死去，并且产生变异。有人甚至看到死去的猴子竟复活过来，对人类进行无差别的攻击！这可能还只是个开始。";
+			    qm.sendNextPrev(text);				
+			}
 		}
 		else if (status == 2 )
 		{
@@ -45,10 +53,19 @@ function start(mode, type, selection)
 		}
 		else if (status == 3)
 		{
-			qm.sendOk("谢谢您，请帮我消灭200只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");
-			qm.forceStartQuest();
-			qm.warp(100040103);
-            qm.dispose();
+			if (qm.getLevel() < 40)
+			{
+				qm.sendOk("还是等你40级以后再去吧，你现在去会死翘翘的。");
+				qm.dispose();
+			}
+			else
+			{
+				qm.warp(100040103);
+			    qm.sendOk("谢谢您，请帮我消灭200只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");
+			    qm.forceStartQuest(); 
+                qm.dispose();				
+			}
+
 		}
 	}
 }

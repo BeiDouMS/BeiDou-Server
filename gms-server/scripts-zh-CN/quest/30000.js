@@ -57,7 +57,7 @@ function start(mode, type, selection)
 		{
 			if (qm.getPlayer().getMapId() != 4)
 			{
-				qm.sendAcceptDecline("你想重新回到#b踏入旅途#k吗？");
+				qm.sendAcceptDecline("你想重新回到#b青苹果乐园#k吗？");
 			}
 			else
 			{
@@ -69,10 +69,21 @@ function start(mode, type, selection)
 		}
 		else if (status == 4)
 		{
-			qm.warp(4);
-			qm.sendOk("请跟你面前的昨日酣睡对话吧！祝您游戏开心。");
-			qm.forceStartQuest();			
-			qm.dispose();
+			if (qm.getJobId() == 0)
+			{
+			    qm.warp(4);
+			    qm.sendOk("请跟你面前的昨日酣睡对话吧！祝您游戏开心。");
+			    qm.forceStartQuest();			
+			    qm.dispose();				
+			}
+			else
+			{
+				qm.sendOk("咦，你竟然不是新手。很遗憾我不能带你前往青苹果乐园了，不过我依然可以给你一部分启动资金：\r\n #fUI/CashShop.img/CashItem/0# x100000");
+				qm.forceStartQuest();
+                qm.gainMeso(100000);			
+		    	qm.forceCompleteQuest();
+				qm.dispose();
+			}
 		}
 		else
 			qm.dispose();

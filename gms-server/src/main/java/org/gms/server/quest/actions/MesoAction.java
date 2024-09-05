@@ -56,7 +56,7 @@ public class MesoAction extends AbstractQuestAction {
             chr.gainMeso(gain, true, false, true);
         } else {
             if (!YamlConfig.config.server.USE_QUEST_RATE) {
-                chr.gainMeso(gain * chr.getMesoRate(), true, false, true);
+                chr.gainMeso(gain/* * chr.getMesoRate()*/, true, false, true);
             } else {
                 chr.gainMeso(gain * chr.getQuestMesoRate(), true, false, true);
             }
