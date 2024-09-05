@@ -231,11 +231,11 @@ public class MapleMap {
     }
 
     public void broadcastPacket(Character source, Packet packet) {
-        broadcastPacket(packet, chr -> chr != source);
+        broadcastPacket(packet, chr -> chr != null && chr.getClient() != null && chr != source);
     }
 
     public void broadcastGMPacket(Character source, Packet packet) {
-        broadcastPacket(packet, chr -> chr != source && chr.gmLevel() >= source.gmLevel());
+        broadcastPacket(packet, chr -> chr != null && chr.getClient() != null && chr != source && chr.gmLevel() >= source.gmLevel());
     }
 
     private void broadcastPacket(Packet packet, Predicate<Character> chrFilter) {
@@ -2094,11 +2094,7 @@ public class MapleMap {
     }
 
     public void spawnSummon(final Summon summon) {
-        spawnAndAddRangedMapObject(summon, c -> {
-            if (summon != null) {
-                c.sendPacket(PacketCreator.spawnSummon(summon, true));
-            }
-        }, null);
+        spawnAndAddRangedMapObject(summon, c -> c.sendPacket(PacketCreator.spawnSummon(summon, true)), null);
     }
 
     public void spawnMist(final Mist mist, final int duration, boolean poison, boolean fake, boolean recovery) {
@@ -2807,7 +2803,12 @@ public class MapleMap {
     private void broadcastMessage(Character source, Packet packet, double rangeSq, Point rangedFrom) {
         chrRLock.lock();
         try {
-            for (Character chr : characters) {
+            Iterator<Character> iterator = characters.iterator();
+            while (iterator.hasNext()) {
+                Character chr = iterator.next();
+                if (chrDisconnected(iterator, chr)) {
+                    continue;
+                }
                 if (chr != source) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getPosition()) <= rangeSq) {
@@ -2821,6 +2822,15 @@ public class MapleMap {
         } finally {
             chrRLock.unlock();
         }
+    }
+
+    private boolean chrDisconnected(Iterator<Character> iterator, Character chr) {
+        // 如果玩家已经掉线，则移除地图该玩家，但不确保频道、大区该玩家是否仍会引发异常
+        if (chr == null || chr.getClient() == null) {
+            iterator.remove();
+            return true;
+        }
+        return false;
     }
 
     private void updateBossSpawn(Monster monster) {
@@ -2876,7 +2886,12 @@ public class MapleMap {
     private void broadcastItemDropMessage(MapItem mdrop, Point dropperPos, Point dropPos, byte mod, double rangeSq, Point rangedFrom) {
         chrRLock.lock();
         try {
-            for (Character chr : characters) {
+            Iterator<Character> iterator = characters.iterator();
+            while (iterator.hasNext()) {
+                Character chr = iterator.next();
+                if (chrDisconnected(iterator, chr)) {
+                    continue;
+                }
                 Packet packet = PacketCreator.dropItemFromMapObject(chr, mdrop, dropperPos, dropPos, mod);
 
                 if (rangeSq < Double.POSITIVE_INFINITY) {
@@ -2904,7 +2919,12 @@ public class MapleMap {
         chrRLock.lock();
         try {
             if (gmBroadcast) {
-                for (Character chr : characters) {
+                Iterator<Character> iterator = characters.iterator();
+                while (iterator.hasNext()) {
+                    Character chr = iterator.next();
+                    if (chrDisconnected(iterator, chr)) {
+                        continue;
+                    }
                     if (chr.isGM()) {
                         if (chr != source) {
                             chr.sendPacket(PacketCreator.spawnPlayerMapObject(chr.getClient(), player, enteringField));
@@ -2912,7 +2932,12 @@ public class MapleMap {
                     }
                 }
             } else {
-                for (Character chr : characters) {
+                Iterator<Character> iterator = characters.iterator();
+                while (iterator.hasNext()) {
+                    Character chr = iterator.next();
+                    if (chrDisconnected(iterator, chr)) {
+                        continue;
+                    }
                     if (chr != source) {
                         chr.sendPacket(PacketCreator.spawnPlayerMapObject(chr.getClient(), player, enteringField));
                     }
@@ -2926,7 +2951,12 @@ public class MapleMap {
     public void broadcastUpdateCharLookMessage(Character source, Character player) {
         chrRLock.lock();
         try {
-            for (Character chr : characters) {
+            Iterator<Character> iterator = characters.iterator();
+            while (iterator.hasNext()) {
+                Character chr = iterator.next();
+                if (chrDisconnected(iterator, chr)) {
+                    continue;
+                }
                 if (chr != source) {
                     chr.sendPacket(PacketCreator.updateCharLook(chr.getClient(), player));
                 }
@@ -3355,7 +3385,12 @@ public class MapleMap {
     public void broadcastNightEffect() {
         chrRLock.lock();
         try {
-            for (Character chr : this.characters) {
+            Iterator<Character> iterator = characters.iterator();
+            while (iterator.hasNext()) {
+                Character chr = iterator.next();
+                if (chrDisconnected(iterator, chr)) {
+                    continue;
+                }
                 sendNightEffect(chr);
             }
         } finally {
@@ -3760,7 +3795,12 @@ public class MapleMap {
     private void broadcastGMMessage(Character source, Packet packet, double rangeSq, Point rangedFrom) {
         chrRLock.lock();
         try {
-            for (Character chr : characters) {
+            Iterator<Character> iterator = characters.iterator();
+            while (iterator.hasNext()) {
+                Character chr = iterator.next();
+                if (chrDisconnected(iterator, chr)) {
+                    continue;
+                }
                 if (chr != source && chr.isGM()) {
                     if (rangeSq < Double.POSITIVE_INFINITY) {
                         if (rangedFrom.distanceSq(chr.getPosition()) <= rangeSq) {
@@ -3779,7 +3819,12 @@ public class MapleMap {
     public void broadcastNONGMMessage(Character source, Packet packet, boolean repeatToSource) {
         chrRLock.lock();
         try {
-            for (Character chr : characters) {
+            Iterator<Character> iterator = characters.iterator();
+            while (iterator.hasNext()) {
+                Character chr = iterator.next();
+                if (chrDisconnected(iterator, chr)) {
+                    continue;
+                }
                 if (chr != source && !chr.isGM()) {
                     chr.sendPacket(packet);
                 }
