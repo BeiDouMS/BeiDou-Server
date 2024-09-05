@@ -21,7 +21,9 @@
 */
 package org.gms.server;
 
+import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
@@ -94,71 +96,79 @@ public class Shop {
             return;
         }
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        if (item.getPrice() > 0) {
-            int amount = (int) Math.min((float) item.getPrice() * quantity, Integer.MAX_VALUE);
-            if (c.getPlayer().getMeso() >= amount) {
-                if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                    if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
-                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        c.getPlayer().gainMeso(-amount, false);
+        InventoryType type = ItemConstants.getInventoryType(itemId);
+        Character chr = c.getPlayer();
+        Inventory inv = chr.getInventory(type);
+        inv.lockInventory();
+        try {
+            if (item.getPrice() > 0) {
+                int amount = (int) Math.min((float) item.getPrice() * quantity, Integer.MAX_VALUE);
+                if (c.getPlayer().getMeso() >= amount) {
+                    if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
+                        if (!ItemConstants.isRechargeable(itemId)) { //Pets can't be bought from shops
+                            InventoryManipulator.addById(c, itemId, quantity, "", -1);
+                            c.getPlayer().gainMeso(-amount, false);
+                        } else {
+                            quantity = ii.getSlotMax(c, item.getItemId());
+                            InventoryManipulator.addById(c, itemId, quantity, "", -1);
+                            c.getPlayer().gainMeso(-item.getPrice(), false);
+                        }
+                        c.sendPacket(PacketCreator.shopTransaction((byte) 0));
                     } else {
-                        short slotMax = ii.getSlotMax(c, item.getItemId());
-                        quantity = slotMax;
-                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        c.getPlayer().gainMeso(-item.getPrice(), false);
+                        c.sendPacket(PacketCreator.shopTransaction((byte) 3));
+                    }
+
+                } else {
+                    c.sendPacket(PacketCreator.shopTransaction((byte) 2));
+                }
+
+            } else if (item.getPitch() > 0) {
+                int amount = (int) Math.min((float) item.getPitch() * quantity, Integer.MAX_VALUE);
+
+                if (c.getPlayer().getInventory(InventoryType.ETC).countById(ItemId.PERFECT_PITCH) >= amount) {
+                    if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
+                        if (!ItemConstants.isRechargeable(itemId)) {
+                            InventoryManipulator.addById(c, itemId, quantity, "", -1);
+                            InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
+                        } else {
+                            short slotMax = ii.getSlotMax(c, item.getItemId());
+                            quantity = slotMax;
+                            InventoryManipulator.addById(c, itemId, quantity, "", -1);
+                            InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
+                        }
+                        c.sendPacket(PacketCreator.shopTransaction((byte) 0));
+                    } else {
+                        c.sendPacket(PacketCreator.shopTransaction((byte) 3));
+                    }
+                }
+
+            } else if (c.getPlayer().getInventory(InventoryType.CASH).countById(token) != 0) {
+                int amount = c.getPlayer().getInventory(InventoryType.CASH).countById(token);
+                int value = amount * tokenvalue;
+                int cost = item.getPrice() * quantity;
+                if (c.getPlayer().getMeso() + value >= cost) {
+                    int cardreduce = value - cost;
+                    int diff = cardreduce + c.getPlayer().getMeso();
+                    if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
+                        if (ItemConstants.isPet(itemId)) {
+                            int petid = Pet.createPet(itemId);
+                            InventoryManipulator.addById(c, itemId, quantity, "", petid, -1);
+                        } else {
+                            InventoryManipulator.addById(c, itemId, quantity, "", -1, -1);
+                        }
+                        c.getPlayer().gainMeso(diff, false);
+                    } else {
+                        c.sendPacket(PacketCreator.shopTransaction((byte) 3));
                     }
                     c.sendPacket(PacketCreator.shopTransaction((byte) 0));
                 } else {
-                    c.sendPacket(PacketCreator.shopTransaction((byte) 3));
-                }
-
-            } else {
-                c.sendPacket(PacketCreator.shopTransaction((byte) 2));
-            }
-
-        } else if (item.getPitch() > 0) {
-            int amount = (int) Math.min((float) item.getPitch() * quantity, Integer.MAX_VALUE);
-
-            if (c.getPlayer().getInventory(InventoryType.ETC).countById(ItemId.PERFECT_PITCH) >= amount) {
-                if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                    if (!ItemConstants.isRechargeable(itemId)) {
-                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
-                    } else {
-                        short slotMax = ii.getSlotMax(c, item.getItemId());
-                        quantity = slotMax;
-                        InventoryManipulator.addById(c, itemId, quantity, "", -1);
-                        InventoryManipulator.removeById(c, InventoryType.ETC, ItemId.PERFECT_PITCH, amount, false, false);
-                    }
-                    c.sendPacket(PacketCreator.shopTransaction((byte) 0));
-                } else {
-                    c.sendPacket(PacketCreator.shopTransaction((byte) 3));
+                    c.sendPacket(PacketCreator.shopTransaction((byte) 2));
                 }
             }
-
-        } else if (c.getPlayer().getInventory(InventoryType.CASH).countById(token) != 0) {
-            int amount = c.getPlayer().getInventory(InventoryType.CASH).countById(token);
-            int value = amount * tokenvalue;
-            int cost = item.getPrice() * quantity;
-            if (c.getPlayer().getMeso() + value >= cost) {
-                int cardreduce = value - cost;
-                int diff = cardreduce + c.getPlayer().getMeso();
-                if (InventoryManipulator.checkSpace(c, itemId, quantity, "")) {
-                    if (ItemConstants.isPet(itemId)) {
-                        int petid = Pet.createPet(itemId);
-                        InventoryManipulator.addById(c, itemId, quantity, "", petid, -1);
-                    } else {
-                        InventoryManipulator.addById(c, itemId, quantity, "", -1, -1);
-                    }
-                    c.getPlayer().gainMeso(diff, false);
-                } else {
-                    c.sendPacket(PacketCreator.shopTransaction((byte) 3));
-                }
-                c.sendPacket(PacketCreator.shopTransaction((byte) 0));
-            } else {
-                c.sendPacket(PacketCreator.shopTransaction((byte) 2));
-            }
+        } finally {
+            inv.unlockInventory();
         }
+
     }
 
     private static boolean canSell(Item item, short quantity) {
@@ -198,25 +208,32 @@ public class Shop {
             return;
         }
 
-        Item item = c.getPlayer().getInventory(type).getItem(slot);
-        if (canSell(item, quantity)) {
-            quantity = getSellingQuantity(item, quantity);
-            InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
+        Inventory inventory = c.getPlayer().getInventory(type);
+        Item item = inventory.getItem(slot);
+        inventory.lockInventory();
+        try {
+            if (canSell(item, quantity)) {
+                quantity = getSellingQuantity(item, quantity);
+                InventoryManipulator.removeFromSlot(c, type, (byte) slot, quantity, false);
 
-            ItemInformationProvider ii = ItemInformationProvider.getInstance();
-            int recvMesos = ii.getPrice(item.getItemId(), quantity);
-            if (recvMesos > 0) {
-                c.getPlayer().gainMeso(recvMesos, false);
+                ItemInformationProvider ii = ItemInformationProvider.getInstance();
+                int recvMesos = ii.getPrice(item.getItemId(), quantity);
+                if (recvMesos > 0) {
+                    c.getPlayer().gainMeso(recvMesos, false);
+                }
+                c.sendPacket(PacketCreator.shopTransaction((byte) 0x8));
+            } else {
+                c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
             }
-            c.sendPacket(PacketCreator.shopTransaction((byte) 0x8));
-        } else {
-            c.sendPacket(PacketCreator.shopTransaction((byte) 0x5));
+        } finally {
+            inventory.unlockInventory();
         }
     }
 
     public void recharge(Client c, short slot) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        Item item = c.getPlayer().getInventory(InventoryType.USE).getItem(slot);
+        Inventory inventory = c.getPlayer().getInventory(InventoryType.USE);
+        Item item = inventory.getItem(slot);
         if (item == null || !ItemConstants.isRechargeable(item.getItemId())) {
             return;
         }
@@ -224,17 +241,23 @@ public class Shop {
         if (item.getQuantity() < 0) {
             return;
         }
-        if (item.getQuantity() < slotMax) {
-            int price = (int) Math.ceil(ii.getUnitPrice(item.getItemId()) * (slotMax - item.getQuantity()));
-            if (c.getPlayer().getMeso() >= price) {
-                item.setQuantity(slotMax);
-                c.getPlayer().forceUpdateItem(item);
-                c.getPlayer().gainMeso(-price, false, true, false);
-                c.sendPacket(PacketCreator.shopTransaction((byte) 0x8));
-            } else {
-                c.sendPacket(PacketCreator.shopTransaction((byte) 0x2));
+        inventory.lockInventory();
+        try {
+            if (item.getQuantity() < slotMax) {
+                int price = (int) Math.ceil(ii.getUnitPrice(item.getItemId()) * (slotMax - item.getQuantity()));
+                if (c.getPlayer().getMeso() >= price) {
+                    item.setQuantity(slotMax);
+                    c.getPlayer().forceUpdateItem(item);
+                    c.getPlayer().gainMeso(-price, false, true, false);
+                    c.sendPacket(PacketCreator.shopTransaction((byte) 0x8));
+                } else {
+                    c.sendPacket(PacketCreator.shopTransaction((byte) 0x2));
+                }
             }
+        } finally {
+            inventory.unlockInventory();
         }
+
     }
 
     private ShopItem findBySlot(short slot) {
