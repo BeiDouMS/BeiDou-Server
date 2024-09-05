@@ -79,6 +79,7 @@ export default {
   'account.player.map': '地图',
   'account.player.mapId': '地图 ID',
   'account.player.job': '职业',
+  'account.player.jobName': '职业名称',
   'account.player.level': '等级',
   'account.player.gm.level': 'GM 等级',
 

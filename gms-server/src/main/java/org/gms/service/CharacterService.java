@@ -96,6 +96,7 @@ public class CharacterService {
                         .name(chr.getName())
                         .map(chr.getMap().getId())
                         .job(chr.getJob().getId())
+                        .jobName(I18nUtil.getMessage("job.name."+chr.getJob().getId()))
                         .level(chr.getLevel())
                         .gm(chr.gmLevel())
                         .build());
