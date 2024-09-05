@@ -36,6 +36,7 @@ import java.util.NoSuchElementException;
 
 import static org.gms.client.Client.LOGIN_LOGGEDIN;
 import static org.gms.client.Client.LOGIN_NOTLOGGEDIN;
+import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.IpbansDOTableDef.IPBANS_D_O;
 
 @Service
@@ -45,7 +46,6 @@ public class AccountService {
     private final CharactersMapper charactersMapper;
     private final IpbansMapper ipbansMapper;
     private final MacbansMapper macbansMapper;
-    private final CharacterService characterService;
 
     public AccountsDO findByName(String name) {
         return accountsMapper.selectOneByName(name);
@@ -253,9 +253,9 @@ public class AccountService {
                 accountId = accountsDO.getId();
             }
         } else {
-            CharactersDO charactersDO = characterService.findByName(str);
-            if (charactersDO != null) {
-                accountId = charactersDO.getAccountid();
+            List<CharactersDO> charactersDOS = charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.NAME.eq(str)));
+            if (!charactersDOS.isEmpty()) {
+                accountId = charactersDOS.getFirst().getAccountid();
             }
         }
         if (accountId == null) {

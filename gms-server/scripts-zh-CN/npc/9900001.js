@@ -95,9 +95,9 @@ function doSelect(selection) {
             break;
         // GM功能
         case 61:
-            // openNpc("SuperTeleport");
-            cm.sendOk("该功能暂不支持，敬请期待！");
-            cm.dispose();
+            openNpc("万能传送");
+            //cm.sendOk("该功能暂不支持，敬请期待！");
+            //cm.dispose();
             break;
         case 62:
             // openNpc("SuperShop");
@@ -130,5 +130,5 @@ function doSelect(selection) {
 
 function openNpc(scriptName) {
     cm.dispose();
-    cm.openNpc(1022101, scriptName);
+    cm.openNpc(9900001, scriptName);
 }

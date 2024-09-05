@@ -40,4 +40,12 @@ function start(mode, type, selection) {
 }
 
 function end(mode, type, selection) {
+      if (qm.isQuestCompleted(2336) && qm.hasItem(4001318)) {
+      qm.gainItem(4001318,-1);
+      qm.forceCompleteQuest();
+      qm.dispose();
+      }else{
+      qm.sendOk("请尽快把#b#t4032387##k交给我的父亲。再回来找我.");
+      qm.dispose();
+      }
 }

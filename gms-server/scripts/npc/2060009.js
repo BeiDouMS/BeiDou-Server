@@ -2,6 +2,7 @@ var status = 0;
 var menu;
 var payment = false;
 var atHerbTown = false;
+var locationCloseToOrbis =[13,18];
 
 function start() {
     if (cm.getPlayer().getMap().getId() == 251000100) {
@@ -12,13 +13,13 @@ function start() {
         if (atHerbTown) {
             menu = "#L0##bI will use #t4031242##k to move to #b#m230030200##k.#l\r\n#L1#Go to #b#m230000000##k after paying #b10000mesos#k.#l";
         } else {
-            menu = "#L0##bI will use #t4031242##k to move to #b#m230030200##k.#l\r\n#L1#Go to #b#m251000000##k after paying #b10000mesos#k.#l";
+            menu = "#L0##bI will use #t4031242##k to move to #b#m230030200##k.#l\r\n#L1#Go to #b#m251000000##k after paying #b10000mesos#k.#l\r\n#L2#Go to #b#m230010000##k after paying #b1000mesos#k.#l";
         }
     } else {
         if (atHerbTown) {
             menu = "#L0#Go to #b#m230030200##k after paying #b1000mesos#k.#l\r\n#L1#Go to #b#m230000000##k after paying #b10000mesos#k.#l";
         } else {
-            menu = "#L0#Go to #b#m230030200##k after paying #b1000mesos#k.#l\r\n#L1#Go to #b#m251000000##k after paying #b10000mesos#k.#l";
+            menu = "#L0#Go to #b#m230030200##k after paying #b1000mesos#k.#l\r\n#L1#Go to #b#m251000000##k after paying #b10000mesos#k.#l\r\n#L2#Go to #b#m230010000##k after paying #b1000mesos#k.#l";
         }
         payment = true;
     }
@@ -51,6 +52,17 @@ function action(mode, type, selection) {
             } else {
                 cm.gainMeso(-10000);
                 cm.warp(atHerbTown ? 230000000 : 251000100);
+            }
+        }
+        else if (selection == 2) {
+            if (cm.getPlayer().getMeso() < 1000) {
+                cm.sendOk("I don't think you have enough money...");
+                cm.dispose();
+                return;
+            } else {
+                cm.gainMeso(-1000);
+                // Randomize location but close to Orbis tower
+                cm.warp(230010000,locationCloseToOrbis[Math.floor(Math.random() * locationCloseToOrbis.length)]);
             }
         }
         cm.dispose();

@@ -52,48 +52,48 @@ public class DebuffCommand extends Command {
 
         Disease disease = null;
         Optional<MobSkill> skill = Optional.empty();
+        String param = params[0].toUpperCase();
+        String skillSlow = I18nUtil.getMessage("DebuffCommand.skill.slow");
+        String skillSeduce = I18nUtil.getMessage("DebuffCommand.skill.seduce");
+        String skillZombify = I18nUtil.getMessage("DebuffCommand.skill.zombify");
+        String skillConfuse = I18nUtil.getMessage("DebuffCommand.skill.confuse");
+        String skillStun = I18nUtil.getMessage("DebuffCommand.skill.stun");
+        String skillPoison = I18nUtil.getMessage("DebuffCommand.skill.poison");
+        String skillSeal = I18nUtil.getMessage("DebuffCommand.skill.seal");
+        String skillDarkness = I18nUtil.getMessage("DebuffCommand.skill.darkness");
+        String skillWeaken = I18nUtil.getMessage("DebuffCommand.skill.weaken");
+        String skillCurse = I18nUtil.getMessage("DebuffCommand.skill.curse");
 
-        switch (params[0].toUpperCase()) {
-            case "SLOW" -> {
-                disease = Disease.SLOW;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.SLOW, 7);
-            }
-            case "SEDUCE" -> {
-                disease = Disease.SEDUCE;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.SEDUCE, 7);
-            }
-            case "ZOMBIFY" -> {
-                disease = Disease.ZOMBIFY;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.UNDEAD, 1);
-            }
-            case "CONFUSE" -> {
-                disease = Disease.CONFUSE;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.REVERSE_INPUT, 2);
-            }
-            case "STUN" -> {
-                disease = Disease.STUN;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.STUN, 7);
-            }
-            case "POISON" -> {
-                disease = Disease.POISON;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.POISON, 5);
-            }
-            case "SEAL" -> {
-                disease = Disease.SEAL;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.SEAL, 1);
-            }
-            case "DARKNESS" -> {
-                disease = Disease.DARKNESS;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.DARKNESS, 1);
-            }
-            case "WEAKEN" -> {
-                disease = Disease.WEAKEN;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.WEAKNESS, 1);
-            }
-            case "CURSE" -> {
-                disease = Disease.CURSE;
-                skill = MobSkillFactory.getMobSkill(MobSkillType.CURSE, 1);
-            }
+        if (param.equals(skillSlow)) {
+            disease = Disease.SLOW;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.SLOW, 7);
+        } else if (param.equals(skillSeduce)) {
+            disease = Disease.SEDUCE;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.SEDUCE, 7);
+        } else if (param.equals(skillZombify)) {
+            disease = Disease.ZOMBIFY;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.UNDEAD, 1);
+        } else if (param.equals(skillConfuse)) {
+            disease = Disease.CONFUSE;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.REVERSE_INPUT, 2);
+        } else if (param.equals(skillStun)) {
+            disease = Disease.STUN;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.STUN, 7);
+        } else if (param.equals(skillPoison)) {
+            disease = Disease.POISON;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.POISON, 5);
+        } else if (param.equals(skillSeal)) {
+            disease = Disease.SEAL;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.SEAL, 1);
+        } else if (param.equals(skillDarkness)) {
+            disease = Disease.DARKNESS;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.DARKNESS, 1);
+        } else if (param.equals(skillWeaken)) {
+            disease = Disease.WEAKEN;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.WEAKNESS, 1);
+        } else if (param.equals(skillCurse)) {
+            disease = Disease.CURSE;
+            skill = MobSkillFactory.getMobSkill(MobSkillType.CURSE, 1);
         }
 
         if (disease == null || skill.isEmpty()) {

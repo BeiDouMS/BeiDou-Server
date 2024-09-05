@@ -41856,23 +41856,27 @@
             </imgdir>
         </imgdir>
     </imgdir>
-    <imgdir name="3360">
+  <imgdir name="3360">
+    <imgdir name="0">
+      <int name="npc" value="2111006"/>
+      <int name="lvmin" value="70"/>
+      <string name="startscript" value="q3360s"/>
+      <imgdir name="quest">
         <imgdir name="0">
-            <int name="npc" value="2111006"/>
-            <int name="lvmin" value="70"/>
-            <string name="startscript" value="q3360s"/>
-            <imgdir name="quest">
-                <imgdir name="0">
-                    <int name="id" value="3359"/>
-                    <int name="state" value="2"/>
-                </imgdir>
-            </imgdir>
+          <int name="id" value="3359"/>
+          <int name="state" value="2"/>
         </imgdir>
-        <imgdir name="1">
-            <int name="npc" value="2111006"/>
-            <string name="endscript" value="q3360e"/>
-        </imgdir>
+      </imgdir>
     </imgdir>
+    <imgdir name="1">
+      <int name="npc" value="2111006"/>
+      <imgdir name="infoex">
+        <imgdir name="0">
+          <string name="value" value="1"/>
+        </imgdir>
+      </imgdir>
+    </imgdir>
+  </imgdir>
     <imgdir name="3361">
         <imgdir name="1">
             <int name="npc" value="2111008"/>

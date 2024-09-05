@@ -30,6 +30,7 @@ import org.gms.net.packet.logging.MonitoredChrLogger;
 import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
+import org.gms.util.StringUtil;
 
 public class MonitorCommand extends Command {
     {
@@ -44,6 +45,9 @@ public class MonitorCommand extends Command {
             return;
         }
         Character victim = c.getWorldServer().getPlayerStorage().getCharacterByName(params[0]);
+        if (victim == null && StringUtil.isNumeric(params[0])) {
+            victim = c.getWorldServer().getPlayerStorage().getCharacterById(Integer.parseInt(params[0]));
+        }
         if (victim == null) {
             player.message(I18nUtil.getMessage("BombCommand.message3", params[0]));
             return;

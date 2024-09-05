@@ -4,6 +4,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
+import org.gms.config.YamlConfig;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.RingsDO;
@@ -77,17 +78,20 @@ public class NameChangeService {
     }
 
     public boolean registerNameChange(Character chr, String newName) {
-        // 已有改名未生效
         List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
                 .where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId())));
-        if (!namechangesDOList.isEmpty()) {
+        // 已有改名未生效或改名未冷却
+        if (!namechangesDOList.isEmpty() && namechangesDOList.stream().anyMatch(namechangesDO ->
+                namechangesDO.getCompletionTime() == null || namechangesDO.getCompletionTime().getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > System.currentTimeMillis())) {
             return false;
         }
         namechangesMapper.insert(NamechangesDO.builder().characterid(chr.getId()).older(chr.getName()).newer(newName).build());
         return true;
     }
 
-    public void cancelPendingNameChange(Character chr) {
-        namechangesMapper.deleteByQuery(QueryWrapper.create().where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId())));
+    public void cancelPendingNameChange(Character chr, boolean needFinish) {
+        QueryWrapper queryWrapper = QueryWrapper.create().where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId()));
+        if (needFinish) queryWrapper.and(NAMECHANGES_D_O.COMPLETION_TIME.isNull());
+        namechangesMapper.deleteByQuery(queryWrapper);
     }
 }

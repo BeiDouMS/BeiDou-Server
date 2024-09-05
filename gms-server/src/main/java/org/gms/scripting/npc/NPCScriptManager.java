@@ -197,7 +197,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                         }
                         iv.invokeFunction("level" + nextLevelContext.getPrefix() + selection);
                     }
-                    case NextLevelType.GET_INPUT_NUMBER -> {
+                    case NextLevelType.GET_INPUT_NUMBER, NextLevelType.SEND_NEXT_SELECT -> {
                         if (mode == 0) {
                             dispose(c);
                             return;

@@ -3985,10 +3985,11 @@ public class PacketCreator {
         return p;
     }
 
-    public static Packet getClock(int time) { // time in seconds
+    // 修复如果使用旅行倍率会出现小数的情况
+    public static Packet getClock(Number time) { // time in seconds
         OutPacket p = OutPacket.create(SendOpcode.CLOCK);
         p.writeByte(2); // clock type. if you send 3 here you have to send another byte (which does not matter at all) before the timestamp
-        p.writeInt(time);
+        p.writeInt(time.intValue());
         return p;
     }
 

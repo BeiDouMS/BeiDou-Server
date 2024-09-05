@@ -80,7 +80,7 @@ public class PlayerNPCPodium {
     private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
             if (YamlConfig.config.server.USE_DEBUG) {
-                log.debug("Re-organizing pnpc map, step {}", newStep);
+                log.info("Re-organizing pnpc map, step {}", newStep);
             }
 
             List<PlayerNPC> playerNpcs = new ArrayList<>(mmoList.size());

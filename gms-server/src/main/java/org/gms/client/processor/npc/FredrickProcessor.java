@@ -100,9 +100,9 @@ public class FredrickProcessor {
         String msg;
 
         if (daynotes < 4) {
-            msg = "Hi customer! I am Fredrick, the Union Chief of the Hired Merchant Union. A reminder that " + dailyReminders[daynotes] + " days have passed since you used our service. Please reclaim your stored goods at FM Entrance.";
+            msg = "您好，亲爱的顾客! 我是弗兰德里, 雇佣商人工会的主席. 您的店铺已经关闭" + dailyReminders[daynotes] + " 天了. 请到自由市场入口找我取回存储的物品.";
         } else {
-            msg = "Hi customer! I am Fredrick, the Union Chief of the Hired Merchant Union. " + dailyReminders[daynotes] + " days have passed since you used our service. Consider claiming back the items before we move them away for refund.";
+            msg = "您好，亲爱的顾客! 我是弗兰德里, 雇佣商人工会的主席. 您的店铺已经关闭 " + dailyReminders[daynotes] + " 天了. 在我们撤走之前，请考虑索回这些物品";
         }
 
         return msg;

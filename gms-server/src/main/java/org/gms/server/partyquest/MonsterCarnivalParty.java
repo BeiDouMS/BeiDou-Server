@@ -15,7 +15,6 @@ public class MonsterCarnivalParty {
     private List<Character> members = new LinkedList<>();
     private final Character leader;
     private final byte team;
-    private short availableCP = 0, totalCP = 0;
     private int summons = 8;
     private boolean winner = false;
 
@@ -32,25 +31,6 @@ public class MonsterCarnivalParty {
 
     public final Character getLeader() {
         return leader;
-    }
-
-    public void addCP(Character player, short num) {
-        totalCP += num;
-        availableCP += num;
-        player.addCP(num);
-    }
-
-    public int getTotalCP() {
-        return totalCP;
-    }
-
-    public int getAvailableCP() {
-        return availableCP;
-    }
-
-    public void useCP(Character player, short num) {
-        availableCP -= num;
-        player.useCP(num);
     }
 
     public List<Character> getMembers() {
