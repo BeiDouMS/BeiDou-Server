@@ -21,6 +21,7 @@
 */
 package org.gms.client;
 
+import lombok.Getter;
 import org.gms.util.I18nUtil;
 
 
@@ -64,34 +65,22 @@ public enum Job {
     EVAN1(2200,I18nUtil.getMessage("job.name.2200")), EVAN2(2210, I18nUtil.getMessage("job.name.2210")), EVAN3(2211, I18nUtil.getMessage("job.name.2211")), EVAN4(2212, I18nUtil.getMessage("job.name.2212")), EVAN5(2213, I18nUtil.getMessage("job.name.2213")), EVAN6(2214, I18nUtil.getMessage("job.name.2214")),
     EVAN7(2215, I18nUtil.getMessage("job.name.2215")), EVAN8(2216, I18nUtil.getMessage("job.name.2216")), EVAN9(2217, I18nUtil.getMessage("job.name.2217")), EVAN10(2218, I18nUtil.getMessage("job.name.2218"));
 
-    final int jobid;
-    final String jobName = "";
-
+    @Getter
+    private final int id;
+    @Getter
+    private final String name;
 
     final static int maxId = 22;    // maxId = (EVAN / 100);
 
-
-
-
-    Job(int id) {
-        jobid = id;
-    }
-
-    Job(int id, String jobName) {
-        jobid = id;
-        jobName = jobName;
+    Job(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
 
     public static int getMax() {
         return maxId;
     }
-
-    public int getId() {
-        return jobid;
-    }
-
-
 
     public static Job getById(int id) {
         for (Job l : Job.values()) {
@@ -125,7 +114,7 @@ public enum Job {
     }
 
     public int getJobNiche() {
-        return (jobid / 100) % 10;
+        return (id / 100) % 10;
         
         /*
         case 0: BEGINNER;
