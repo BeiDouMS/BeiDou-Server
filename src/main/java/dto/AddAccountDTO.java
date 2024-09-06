@@ -12,7 +12,6 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("accounts")
 public class AddAccountDTO implements Serializable {
     private String name;
     private String password;

@@ -13,7 +13,6 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("accounts")
 public class UpdateAccountByGmDTO implements Serializable {
     private String newPwd;
     private String pin;

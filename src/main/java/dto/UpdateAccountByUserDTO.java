@@ -12,7 +12,6 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table("accounts")
 public class UpdateAccountByUserDTO implements Serializable {
     private String oldPwd;
     private String newPwd;
