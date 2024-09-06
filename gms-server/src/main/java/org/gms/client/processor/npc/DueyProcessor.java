@@ -51,10 +51,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author RonanLana - synchronization of Duey modules
@@ -168,6 +165,7 @@ public class DueyProcessor {
             dueypack.setMesos(rs.getInt("Mesos"));
             dueypack.setSentTime(rs.getTimestamp("TimeStamp"), rs.getBoolean("Type"));
             dueypack.setMessage(rs.getString("Message"));
+            dueypack.setReceiverId(rs.getInt("ReceiverId"));
 
             return dueypack;
         } catch (SQLException sqle) {
@@ -297,6 +295,13 @@ public class DueyProcessor {
                     return;
                 }
 
+                // 修复发快递给别人扣钱的问题
+                if (sendMesos < 0) {
+                    AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with sendMesos on duey.");
+                    log.warn("Chr {} tried to use duey with mesos {}", c.getPlayer().getName(), sendMesos);
+                    c.disconnect(true, false);
+                    return;
+                }
                 int fee = Trade.getFee(sendMesos);
                 if (sendMessage != null && sendMessage.length() > 100) {
                     AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with Quick Delivery on duey.");
@@ -321,7 +326,7 @@ public class DueyProcessor {
                     return;
                 }
 
-                if(c.getPlayer().getMeso() < finalcost) {
+                if (c.getPlayer().getMeso() < finalcost) {
                     c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_NOT_ENOUGH_MESOS.getCode()));
                     return;
                 }
@@ -392,63 +397,66 @@ public class DueyProcessor {
         }
     }
 
-    public static void dueyClaimPackage(Client c, int packageId) {
-        if (c.tryacquireClient()) {
-            try {
-                try {
-                    DueyPackage dp = null;
-                    try (Connection con = DatabaseConnection.getConnection();
-                         PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages dp WHERE PackageId = ?")) {
-                        ps.setInt(1, packageId);
+    // 方法锁，修复复制外挂多人取同一个快递，也使得无法多人同时取快递。更优雅的做法是设置一个packageId锁，考虑快递业务用的不多，暂不如此处理
+    public static synchronized void dueyClaimPackage(Client c, int packageId) {
+        try {
+            DueyPackage dp = null;
+            try (Connection con = DatabaseConnection.getConnection();
+                 PreparedStatement ps = con.prepareStatement("SELECT * FROM dueypackages dp WHERE PackageId = ?")) {
+                ps.setInt(1, packageId);
 
-                        try (ResultSet rs = ps.executeQuery()) {
-                            if (rs.next()) {
-                                dp = getPackageFromDB(rs);
-                            }
-                        }
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        dp = getPackageFromDB(rs);
                     }
-
-                    if (dp == null) {
-                        c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
-                        log.warn("Chr {} tried to receive package from duey with id {}", c.getPlayer().getName(), packageId);
-                        return;
-                    }
-
-                    if (dp.isDeliveringTime()) {
-                        c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
-                        return;
-                    }
-
-                    Item dpItem = dp.getItem();
-                    if (dpItem != null) {
-                        if (!c.getPlayer().canHoldMeso(dp.getMesos())) {
-                            c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
-                            return;
-                        }
-
-                        if (!InventoryManipulator.checkSpace(c, dpItem.getItemId(), dpItem.getQuantity(), dpItem.getOwner())) {
-                            int itemid = dpItem.getItemId();
-                            if (ItemInformationProvider.getInstance().isPickupRestricted(itemid) && c.getPlayer().getInventory(ItemConstants.getInventoryType(itemid)).findById(itemid) != null) {
-                                c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_RECEIVER_WITH_UNIQUE.getCode()));
-                            } else {
-                                c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_NO_FREE_SLOTS.getCode()));
-                            }
-
-                            return;
-                        } else {
-                            InventoryManipulator.addFromDrop(c, dpItem, false);
-                        }
-                    }
-
-                    c.getPlayer().gainMeso(dp.getMesos(), false);
-
-                    dueyRemovePackage(c, packageId, false);
-                } catch (SQLException e) {
-                    e.printStackTrace();
                 }
-            } finally {
-                c.releaseClient();
             }
+
+            if (dp == null) {
+                c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
+                log.warn("Chr {} tried to receive package from duey with id {}", c.getPlayer().getName(), packageId);
+                return;
+            }
+
+            // 判断是否本人快递，不是本人那就是改包了
+            if (!Objects.equals(dp.getReceiverId(), c.getPlayer().getId())) {
+                AutobanFactory.PACKET_EDIT.alert(c.getPlayer(), c.getPlayer().getName() + " tried to packet edit with duey.");
+                c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
+                log.warn("Chr {} tried to receive package from duey with receiverId {}", c.getPlayer().getName(), dp.getReceiverId());
+                return;
+            }
+
+            if (dp.isDeliveringTime()) {
+                c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
+                return;
+            }
+
+            Item dpItem = dp.getItem();
+            if (dpItem != null) {
+                if (!c.getPlayer().canHoldMeso(dp.getMesos())) {
+                    c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_UNKNOWN_ERROR.getCode()));
+                    return;
+                }
+
+                if (!InventoryManipulator.checkSpace(c, dpItem.getItemId(), dpItem.getQuantity(), dpItem.getOwner())) {
+                    int itemid = dpItem.getItemId();
+                    if (ItemInformationProvider.getInstance().isPickupRestricted(itemid) && c.getPlayer().getInventory(ItemConstants.getInventoryType(itemid)).findById(itemid) != null) {
+                        c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_RECEIVER_WITH_UNIQUE.getCode()));
+                    } else {
+                        c.sendPacket(PacketCreator.sendDueyMSG(Actions.TOCLIENT_RECV_NO_FREE_SLOTS.getCode()));
+                    }
+
+                    return;
+                } else {
+                    InventoryManipulator.addFromDrop(c, dpItem, false);
+                }
+            }
+
+            c.getPlayer().gainMeso(dp.getMesos(), false);
+
+            dueyRemovePackage(c, packageId, false);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

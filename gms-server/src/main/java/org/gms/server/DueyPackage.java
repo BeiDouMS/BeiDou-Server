@@ -35,6 +35,7 @@ public class DueyPackage {
     private String message = null;
     private Calendar timestamp;
     private int packageId = 0;
+    private Integer receiverId;
 
     public DueyPackage(int pId, Item item) {
         this.item = item;
@@ -75,6 +76,14 @@ public class DueyPackage {
 
     public int getPackageId() {
         return packageId;
+    }
+
+    public Integer getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Integer receiverId) {
+        this.receiverId = receiverId;
     }
 
     public long sentTimeInMilliseconds() {
