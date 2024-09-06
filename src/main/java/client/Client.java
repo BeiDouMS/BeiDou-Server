@@ -204,7 +204,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (!(msg instanceof InPacket packet)) {
-            log.warn("Received invalid message: {}", msg);
+            log.warn("收到非法消息: {}", msg);
             return;
         }
 
@@ -212,7 +212,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         final PacketHandler handler = packetProcessor.getHandler(opcode);
 
         if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
-            log.debug("Received packet id {}", opcode);
+            log.debug("收到封包 ID {}", opcode);
         }
 
         if (handler != null && handler.validateState(this)) {
@@ -267,7 +267,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 disconnect(false, false);
             }
         } catch (Throwable t) {
-            log.warn("Account stuck", t);
+            log.warn("账号异常", t);
         } finally {
             closeSession();
         }
@@ -1524,6 +1524,15 @@ public class Client extends ChannelInboundHandlerAdapter {
         player.getClient().getChannelServer().removePlayer(player);
 
         player.saveCharToDB();
+        
+        /*
+         saveCharToDB后，数据库中的地图已经保存为ForcedReturnId，如果在当前地图下线，再上线，就会传送到ForcedReturnId对应的地图
+         因为玩家登录时会优先取内存中的数据，没有才加载数据库，所以玩家切换频道取的是内存中的数据，而导致没有切换到ForcedReturnId对应的地图
+         玩家反馈切换频道不传送ForcedReturnId对应的地图反而比较友好，所以该参数默认为false，想贴近官方可以设置为true
+         */
+        int returnedMapId = getReturnedMapId();
+        player.setMap(getChannelServer((byte) channel).getMapFactory().getMap(returnedMapId));
+        
 
         player.setSessionTransitionState();
         try {
@@ -1531,6 +1540,17 @@ public class Client extends ChannelInboundHandlerAdapter {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private int getReturnedMapId() {
+        int returnedMapId;
+        MapleMap map = player.getMap();
+        if (map.getForcedReturnId() != MapId.NONE) {
+            returnedMapId = player.getMap().getForcedReturnId();
+        } else {
+            returnedMapId = player.getHp() < 1 ? map.getReturnMapId() : map.getId();
+        }
+        return returnedMapId;
     }
 
     public long getSessionId() {
