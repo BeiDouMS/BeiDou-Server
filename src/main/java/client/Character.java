@@ -40,6 +40,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import client.keybind.KeyBinding;
 import client.keybind.QuickslotBinding;
 import client.newyear.NewYearCardRecord;
+import client.processor.action.PetAutopotProcessor;
 import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
 import constants.game.ExpTable;
@@ -9072,6 +9073,28 @@ public class Character extends AbstractCharacterObject {
         } finally {
             statWlock.unlock();
             effLock.unlock();
+        }
+
+        if (hpchange < 0) {
+            KeyBinding autohpPot = this.getKeymap().get(91);
+            if (autohpPot != null) {
+                int autohpItemid = autohpPot.getAction();
+                Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
+                if (autohpItem != null) {
+                    PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
+                }
+            }
+        }
+
+        if (mpchange < 0) {
+            KeyBinding autompPot = this.getKeymap().get(92);
+            if (autompPot != null) {
+                int autompItemid = autompPot.getAction();
+                Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
+                if (autompItem != null) {
+                    PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
+                }
+            }
         }
 
         return true;
