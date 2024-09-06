@@ -997,10 +997,10 @@ public class Server {
         tMan.register(new BossLogTask(), DAYS.toMillis(1), timeLeft);
     }
 
-    public static void main(String[] args) {
-        System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
-        Server.getInstance().init();
-    }
+    // public static void main(String[] args) {
+    //     System.setProperty("polyglot.engine.WarnInterpreterOnly", "false"); // Mute GraalVM warning: "The polyglot context is using an implementation that does not support runtime compilation."
+    //     Server.getInstance().init();
+    // }
 
     public Properties getSubnetInfo() {
         return subnetInfo;
