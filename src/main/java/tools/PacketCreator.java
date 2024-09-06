@@ -59,6 +59,7 @@ import constants.skills.Buccaneer;
 import constants.skills.ChiefBandit;
 import constants.skills.Corsair;
 import constants.skills.ThunderBreaker;
+import constants.string.CharsetConstants;
 import net.encryption.InitializationVector;
 import net.opcodes.SendOpcode;
 import net.packet.ByteBufOutPacket;
@@ -6762,7 +6763,7 @@ public class PacketCreator {
 
     private static String getRightPaddedStr(String in, char padchar, int length) {
         StringBuilder builder = new StringBuilder(in);
-        for (int x = in.length(); x < length; x++) {
+        for (int x = in.getBytes(CharsetConstants.CHARSET).length; x < length; x++) {
             builder.append(padchar);
         }
         return builder.toString();

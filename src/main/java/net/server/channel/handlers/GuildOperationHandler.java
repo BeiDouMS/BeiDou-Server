@@ -50,7 +50,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
 
     private boolean isGuildNameAcceptable(String name) {
         int nameLength = name.getBytes(CharsetConstants.CHARSET).length;
-        if (nameLength < 3 || nameLength > 12) {
+        if (nameLength < 4 || nameLength > 12) {
             return false;
         }
         // 修改成不包含特殊字符，支持中文

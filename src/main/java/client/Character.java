@@ -998,10 +998,10 @@ public class Character extends AbstractCharacterObject {
             }
         }
         int nameLength = name.getBytes(CharsetConstants.CHARSET).length;
-        if (nameLength < 3 || nameLength > 12) {
+        if (nameLength < 4 || nameLength > 12) {
             return false;
         }
-        return !existName(name) && Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{2,12}").matcher(name).matches(); // 加入对中文编码的检测
+        return !existName(name) && Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{4,12}").matcher(name).matches(); // 加入对中文编码的检测
     }
 
     public static boolean existName(String name) {

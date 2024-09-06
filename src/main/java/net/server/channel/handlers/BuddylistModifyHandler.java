@@ -28,6 +28,7 @@ import client.BuddylistEntry;
 import client.Character;
 import client.CharacterNameAndId;
 import client.Client;
+import constants.string.CharsetConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.world.World;
@@ -87,8 +88,11 @@ public class BuddylistModifyHandler extends AbstractPacketHandler {
         if (mode == 1) { // add
             String addName = p.readString();
             String group = p.readString();
-            if (group.length() > 16 || addName.length() < 4 || addName.length() > 13) {
-                return; //hax.
+            int nameLength = addName.getBytes(CharsetConstants.CHARSET).length;
+            int groupLength = group.getBytes(CharsetConstants.CHARSET).length;
+            if (groupLength < 4 || groupLength > 12 || nameLength < 4 || nameLength > 12) {
+                c.sendPacket(PacketCreator.serverNotice(1, "请检查分组名称/好友名称的长度在2-6个中文或4-12个英文。"));
+                return;
             }
             BuddylistEntry ble = buddylist.get(addName);
             if (ble != null && !ble.isVisible() && group.equals(ble.getGroup())) {
