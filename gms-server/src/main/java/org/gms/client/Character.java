@@ -8205,6 +8205,14 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
+        // autopot on HPMP deplete... thanks shavit for finding out D. Roar doesn't trigger autopot request
+        if (hpchange < 0) {
+            // todo OnNotifyHPDecByField
+        }
+
+        if (mpchange < 0) {
+            // todo OnNotifyHPDecByField
+        }
         return true;
     }
 

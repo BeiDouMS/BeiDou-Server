@@ -84,6 +84,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
 
     private final NoteService noteService;
+    private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
 
     public PlayerLoggedinHandler(NoteService noteService) {
         this.noteService = noteService;
@@ -176,11 +177,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.setPlayer(player);
             c.setAccID(player.getAccountID());
 
-            // 同步HP MP 提醒
-            HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
-            player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
-
-
             boolean allowLogin = true;
 
                 /*  is this check really necessary?
@@ -232,6 +228,11 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.newClient(c);
             }
 
+            // 增加参数判断，避免给客户端发未知包导致异常
+            if (YamlConfig.config.server.USE_SERVER_AUTOPOT) {
+                // 同步HP MP提醒 考虑上面player.newClient(c)，如果在此之前发包，可能会造成错误
+                player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
+            }
             cserv.addPlayer(player);
             wserv.addPlayer(player);
             player.setEnteredChannelWorld();

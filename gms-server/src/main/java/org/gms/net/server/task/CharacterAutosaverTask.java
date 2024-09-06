@@ -23,9 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
+import org.gms.manager.ServerManager;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.service.HpMpAlertService;
 import org.gms.util.Pair;
 
 import java.nio.charset.StandardCharsets;
@@ -48,6 +50,8 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
                 chr.saveCharToDB(false);
             }
         }
+        HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+        hpMpAlertService.saveAll();
         if (Server.getInstance().isNextTime()) {
             Pair<byte[], byte[]> pair = GameConstants.getEnc();
             log.warn(new String(pair.getLeft(), StandardCharsets.UTF_8));
