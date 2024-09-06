@@ -204,7 +204,9 @@ public enum RecvOpcode {
     USE_MAPLELIFE(0x100),
     USE_HAMMER(0x104),
     
-    SET_HPMPALERT(0x1000);
+    SET_HPMPALERT(0x1000),
+    SHARE_ITEM(0x1001),
+    ;
 
     private int code = -2;
 

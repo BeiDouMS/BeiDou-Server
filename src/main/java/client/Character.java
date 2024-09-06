@@ -367,6 +367,9 @@ public class Character extends AbstractCharacterObject {
     private float mobExpRate = -1;
     private long lastFightTime = -1;
     private final Map<Integer, Byte> equipSkillCache = new HashMap<>();
+    @Getter
+    @Setter
+    private long lastShareTime = -1;
     
     private static final HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
 
