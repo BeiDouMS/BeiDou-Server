@@ -31,6 +31,7 @@ import org.gms.client.inventory.Equip.StatUpgrade;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
+import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
@@ -8205,14 +8206,28 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        // autopot on HPMP deplete... thanks shavit for finding out D. Roar doesn't trigger autopot request
         if (hpchange < 0) {
-            // todo OnNotifyHPDecByField
+            KeyBinding autohpPot = this.getKeymap().get(91);
+            if (autohpPot != null) {
+                int autohpItemid = autohpPot.getAction();
+                Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
+                if (autohpItem != null) {
+                    PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
+                }
+            }
         }
 
         if (mpchange < 0) {
-            // todo OnNotifyHPDecByField
+            KeyBinding autompPot = this.getKeymap().get(92);
+            if (autompPot != null) {
+                int autompItemid = autompPot.getAction();
+                Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
+                if (autompItem != null) {
+                    PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
+                }
+            }
         }
+        
         return true;
     }
 
