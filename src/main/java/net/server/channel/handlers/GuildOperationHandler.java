@@ -26,6 +26,7 @@ import client.Client;
 import config.YamlConfig;
 import constants.game.GameConstants;
 import constants.id.MapId;
+import constants.string.CharsetConstants;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import net.server.Server;
@@ -42,20 +43,18 @@ import tools.PacketCreator;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public final class GuildOperationHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(GuildOperationHandler.class);
 
     private boolean isGuildNameAcceptable(String name) {
-        if (name.length() < 3 || name.length() > 12) {
+        int nameLength = name.getBytes(CharsetConstants.CHARSET).length;
+        if (nameLength < 3 || nameLength > 12) {
             return false;
         }
-        for (int i = 0; i < name.length(); i++) {
-            if (!java.lang.Character.isLowerCase(name.charAt(i)) && !java.lang.Character.isUpperCase(name.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
+        // 修改成不包含特殊字符，支持中文
+        return !Pattern.compile("[^\u4e00-\u9fa5a-zA-Z0-9_]").matcher(name).find();
     }
 
     @Override

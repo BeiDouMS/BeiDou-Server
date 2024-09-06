@@ -79,6 +79,7 @@ import constants.skills.Shadower;
 import constants.skills.Sniper;
 import constants.skills.ThunderBreaker;
 import constants.skills.Warrior;
+import constants.string.CharsetConstants;
 import lombok.Getter;
 import lombok.Setter;
 import net.packet.Packet;
@@ -995,6 +996,10 @@ public class Character extends AbstractCharacterObject {
             if (lname.contains(nameTest)) {
                 return false;
             }
+        }
+        int nameLength = name.getBytes(CharsetConstants.CHARSET).length;
+        if (nameLength < 3 || nameLength > 12) {
+            return false;
         }
         return !existName(name) && Pattern.compile("[a-zA-Z0-9\u4e00-\u9fa5]{2,12}").matcher(name).matches(); // 加入对中文编码的检测
     }
