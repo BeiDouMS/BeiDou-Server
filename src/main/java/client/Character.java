@@ -766,7 +766,7 @@ public class Character extends AbstractCharacterObject {
 
     public static boolean ban(String id, String reason, boolean accountId) {
         try (Connection con = DatabaseConnection.getConnection()) {
-            if (id.matches("/[0-9]{1,3}\\..*")) {
+            if (id.matches("[0-9]{1,3}\\..*")) {
                 try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?)")) {
                     ps.setString(1, id);
                     ps.executeUpdate();

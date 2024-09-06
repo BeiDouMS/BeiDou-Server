@@ -55,7 +55,7 @@ public class BanCommand extends Command {
             String ip = target.getClient().getRemoteAddress();
             //Ban ip
             try (Connection con = DatabaseConnection.getConnection()) {
-                if (ip.matches("/[0-9]{1,3}\\..*")) {
+                if (ip.matches("[0-9]{1,3}\\..*")) {
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO ipbans VALUES (DEFAULT, ?, ?)")) {
                         ps.setString(1, ip);
                         ps.setString(2, String.valueOf(target.getClient().getAccID()));
