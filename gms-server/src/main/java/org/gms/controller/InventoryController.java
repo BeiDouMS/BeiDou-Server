@@ -45,4 +45,11 @@ public class InventoryController {
         inventoryService.updateInventory(request.getData());
         return ResultBody.success();
     }
+    @Tag(name = "/inventory/" + ApiConstant.LATEST)
+    @Operation(summary = "根据条件删除玩家背包")
+    @PostMapping("/" + ApiConstant.LATEST + "/deleteInventory")
+    public ResultBody<Object> deleteInventory(@RequestBody SubmitBody<InventorySearchRtnDTO> request) {
+        inventoryService.deleteInventory(request.getData());
+        return ResultBody.success();
+    }
 }

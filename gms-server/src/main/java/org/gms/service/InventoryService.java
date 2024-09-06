@@ -4,6 +4,7 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.row.Row;
 import lombok.AllArgsConstructor;
+import lombok.val;
 import org.gms.client.Character;
 import org.gms.client.inventory.*;
 import org.gms.dao.entity.CharactersDO;
@@ -28,7 +29,7 @@ import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
 
-
+@Transactional
 @Service
 @AllArgsConstructor
 public class InventoryService {
@@ -36,7 +37,6 @@ public class InventoryService {
     private final InventoryequipmentMapper inventoryequipmentMapper;
     private final RingsMapper ringsMapper;
     private final PetsMapper petsMapper;
-
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
         for (InventoryType value : InventoryType.values()) {
@@ -251,8 +251,10 @@ public class InventoryService {
 
     @Transactional(rollbackFor = Exception.class)
     public void updateInventory(InventorySearchRtnDTO data) {
+        RequireUtil.requireNotEmpty(data.getItemId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "itemId"));
         RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
         RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
+        RequireUtil.requireNotNull(data.getPosition(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "position"));
         InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
         RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "inventoryType", data.getInventoryType()));
 
@@ -336,4 +338,37 @@ public class InventoryService {
                 .expiration(data.getExpiration())
                 .build());
     }
-}
+        @Transactional(rollbackFor = Exception.class)
+        public void deleteInventory(InventorySearchRtnDTO data) {
+            RequireUtil.requireNotEmpty(data.getItemId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "itemId"));
+            RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
+            RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
+            RequireUtil.requireNotNull(data.getPosition(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "position"));
+            InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
+            RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "inventoryType", data.getInventoryType()));
+            Character character = getCharacterById(data.getCharacterId());
+            boolean isOnlineNow = character != null;
+            // 如果当前的玩家在线状态已经发生改变
+            if (isOnlineNow != data.isOnline()) {
+                throw new BizException(I18nUtil.getExceptionMessage("InventoryService.deleteInventory.exception1"));
+            }
+            if (isOnlineNow) {
+                InventoryType type = InventoryType.getByType(data.getInventoryType());
+                Inventory inventory = character.getInventory(type);
+                Item item = inventory.getItem(data.getPosition());
+                RequireUtil.requireNotNull(item, I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
+                if (!Objects.equals(data.getItemId(), item.getItemId())) {
+                    throw new BizException(I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
+                }
+                //删除相对应的物品
+                    inventory.removeSlot(item.getPosition());
+                    character.sendPacket(PacketCreator.modifyInventory(true, Arrays.asList(new ModifyInventory(3, item), new ModifyInventory(0, item))));
+                }else {
+                     QueryWrapper itemQueryWrapper = QueryWrapper.create().where(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterId()));
+                     InventoryitemsDO inventoryItemsDOS = inventoryitemsMapper.selectOneByQuery(itemQueryWrapper);
+                     inventoryitemsMapper.deleteById(inventoryItemsDOS.getInventoryitemid());
+                     inventoryequipmentMapper.deleteById(inventoryItemsDOS.getInventoryitemid());
+            }
+            }
+        }
+
