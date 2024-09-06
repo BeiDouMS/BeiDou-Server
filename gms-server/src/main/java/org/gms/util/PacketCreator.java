@@ -2892,6 +2892,12 @@ public class PacketCreator {
         return p;
     }
 
+    public static Packet onNotifyHPDecByField(int change) {
+        final OutPacket p = OutPacket.create(SendOpcode.ON_NOTIFY_HP_DEC_BY_FIELD);
+        p.writeInt(change);
+        return p;
+    }
+
     public static Packet addQuestTimeLimit(final short quest, final int time) {
         final OutPacket p = OutPacket.create(SendOpcode.UPDATE_QUEST_INFO);
         p.writeByte(6);

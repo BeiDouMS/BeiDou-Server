@@ -165,7 +165,8 @@ public class PetAutopotProcessor {
                                 qtyCount = Math.max(qtyCount, (int) Math.ceil(mpRatio / incMp));
                             }
                         }
-
+                    } else {
+                        qtyCount = 1;
                     }
 
                     if (qtyCount < 0) {

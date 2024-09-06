@@ -83,10 +83,7 @@ import org.gms.server.partyquest.MonsterCarnival;
 import org.gms.server.partyquest.MonsterCarnivalParty;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.quest.Quest;
-import org.gms.service.AccountService;
-import org.gms.service.CharacterService;
-import org.gms.service.NameChangeService;
-import org.gms.service.WorldTransferService;
+import org.gms.service.*;
 import org.gms.util.*;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
@@ -432,6 +429,7 @@ public class Character extends AbstractCharacterObject {
     private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
     private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -8206,25 +8204,44 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        if (hpchange < 0) {
-            KeyBinding autohpPot = this.getKeymap().get(91);
-            if (autohpPot != null) {
-                int autohpItemid = autohpPot.getAction();
-                Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
-                if (autohpItem != null) {
-                    PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
+        if (YamlConfig.config.server.USE_SERVER_AUTOPOT || YamlConfig.config.server.USE_COMPULSORY_AUTOPOT) {
+            float autoHpAlert, autoMpAlert;
+            if (YamlConfig.config.server.USE_SERVER_AUTOPOT) {
+                autoHpAlert = hpMpAlertService.getHpAlertPer(id);
+                autoMpAlert = hpMpAlertService.getMpAlertPer(id);
+            } else {
+                autoHpAlert = (float) YamlConfig.config.server.PET_AUTOHP_RATIO;
+                autoMpAlert = (float) YamlConfig.config.server.PET_AUTOMP_RATIO;
+            }
+
+            if (hpchange < 0) {
+                KeyBinding autoHpPot = this.getKeymap().get(91);
+                if (autoHpPot != null) {
+                    int autoHpItemId = autoHpPot.getAction();
+                    if (((float) this.getHp()) / this.getCurrentMaxHp() <= autoHpAlert) {
+                        Item autoHpItem = this.getInventory(InventoryType.USE).findById(autoHpItemId);
+                        if (autoHpItem != null) {
+                            PetAutopotProcessor.runAutopotAction(client, autoHpItem.getPosition(), autoHpItemId);
+                        }
+                    }
                 }
             }
-        }
 
-        if (mpchange < 0) {
-            KeyBinding autompPot = this.getKeymap().get(92);
-            if (autompPot != null) {
-                int autompItemid = autompPot.getAction();
-                Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
-                if (autompItem != null) {
-                    PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
+            if (mpchange < 0) {
+                KeyBinding autoMpPot = this.getKeymap().get(92);
+                if (autoMpPot != null) {
+                    int autoMpItemId = autoMpPot.getAction();
+                    if (((float) this.getMp()) / this.getCurrentMaxMp() <= autoMpAlert) {
+                        Item autoMpItem = this.getInventory(InventoryType.USE).findById(autoMpItemId);
+                        if (autoMpItem != null) {
+                            PetAutopotProcessor.runAutopotAction(client, autoMpItem.getPosition(), autoMpItemId);
+                        }
+                    }
                 }
+            }
+        } else {
+            if (hpchange < 0) {
+                sendPacket(PacketCreator.onNotifyHPDecByField(hpchange * -1));
             }
         }
         
