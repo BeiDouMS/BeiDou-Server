@@ -175,12 +175,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             c.setPlayer(player);
             c.setAccID(player.getAccountID());
 
-            // 加载ImGui
-            player.broadcastAcquaintances(PacketCreator.staticData((byte) 0, 0));
-            // 同步HP MP 提醒
-            HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
-            player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
-
             boolean allowLogin = true;
 
                 /*  is this check really necessary?
@@ -231,6 +225,12 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 c.setCharacterSlots((byte) player.getClient().getCharacterSlots());
                 player.newClient(c);
             }
+
+            // 加载ImGui
+            player.broadcastAcquaintances(PacketCreator.staticData((byte) 0, 0));
+            // 同步HP MP 提醒
+            HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
+            player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
 
             cserv.addPlayer(player);
             wserv.addPlayer(player);

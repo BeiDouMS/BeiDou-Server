@@ -22,6 +22,7 @@
  */
 package client;
 
+import api.manager.ApiManager;
 import client.autoban.AutobanManager;
 import client.creator.CharacterFactoryRecipe;
 import client.inventory.Equip;
@@ -153,6 +154,7 @@ import server.partyquest.MonsterCarnival;
 import server.partyquest.MonsterCarnivalParty;
 import server.partyquest.PartyQuest;
 import server.quest.Quest;
+import service.HpMpAlertService;
 import tools.DatabaseConnection;
 import tools.LongTool;
 import tools.PacketCreator;
@@ -364,6 +366,8 @@ public class Character extends AbstractCharacterObject {
     private float mobExpRate = -1;
     private long lastFightTime = -1;
     private final Map<Integer, Byte> equipSkillCache = new HashMap<>();
+    
+    private static final HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
 
     private Character() {
         super.setListener(new AbstractCharacterListener() {
@@ -9076,23 +9080,27 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (hpchange < 0) {
-            KeyBinding autohpPot = this.getKeymap().get(91);
-            if (autohpPot != null) {
-                int autohpItemid = autohpPot.getAction();
-                Item autohpItem = this.getInventory(InventoryType.USE).findById(autohpItemid);
-                if (autohpItem != null) {
-                    PetAutopotProcessor.runAutopotAction(client, autohpItem.getPosition(), autohpItemid);
+            KeyBinding autoHpPot = this.getKeymap().get(91);
+            if (autoHpPot != null) {
+                int autoHpItemId = autoHpPot.getAction();
+                if (((float) this.getHp()) / this.getCurrentMaxHp() <= hpMpAlertService.getHpAlertPer(id)) {
+                    Item autoHpItem = this.getInventory(InventoryType.USE).findById(autoHpItemId);
+                    if (autoHpItem != null) {
+                        PetAutopotProcessor.runAutopotAction(client, autoHpItem.getPosition(), autoHpItemId);
+                    }
                 }
             }
         }
 
         if (mpchange < 0) {
-            KeyBinding autompPot = this.getKeymap().get(92);
-            if (autompPot != null) {
-                int autompItemid = autompPot.getAction();
-                Item autompItem = this.getInventory(InventoryType.USE).findById(autompItemid);
-                if (autompItem != null) {
-                    PetAutopotProcessor.runAutopotAction(client, autompItem.getPosition(), autompItemid);
+            KeyBinding autoMpPot = this.getKeymap().get(92);
+            if (autoMpPot != null) {
+                int autoMpItemId = autoMpPot.getAction();
+                if (((float) this.getMp()) / this.getCurrentMaxMp() <= hpMpAlertService.getMpAlertPer(id)) {
+                    Item autoMpItem = this.getInventory(InventoryType.USE).findById(autoMpItemId);
+                    if (autoMpItem != null) {
+                        PetAutopotProcessor.runAutopotAction(client, autoMpItem.getPosition(), autoMpItemId);
+                    }
                 }
             }
         }
