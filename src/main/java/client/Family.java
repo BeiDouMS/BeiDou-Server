@@ -172,6 +172,17 @@ public class Family {
         }
     }
 
+    public void FamilyBuff(int duration) {
+        for (FamilyEntry entry : members.values()) {
+            Character chr = entry.getChr();
+            if (chr != null) {
+                chr.sendPacket(PacketCreator.familyBuff(4, 4, 1, duration  * 60000));
+                chr.setFamilyBuff(true,2,2);
+                chr.startFamilyBuffTimer(duration  * 60000);
+            }
+        }
+    }
+
     public void broadcastFamilyInfoUpdate() {
         for (FamilyEntry entry : members.values()) {
             Character chr = entry.getChr();

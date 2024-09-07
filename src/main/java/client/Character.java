@@ -319,6 +319,7 @@ public class Character extends AbstractCharacterObject {
     private ScheduledFuture<?> chairRecoveryTask = null;
     private ScheduledFuture<?> pendantOfSpirit = null; //1122017
     private ScheduledFuture<?> cpqSchedule = null;
+    private ScheduledFuture<?> FamilyBuffTimer = null;
     private final Lock chrLock = new ReentrantLock(true);
     private final Lock evtLock = new ReentrantLock(true);
     private final Lock petLock = new ReentrantLock(true);
@@ -370,6 +371,8 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private long lastShareTime = -1;
+    private boolean familyBuff = false;
+    private float familyExp = 1 ,familyDrop = 1;
     
     private static final HpMpAlertService hpMpAlertService = ApiManager.getApplicationContext().getBean(HpMpAlertService.class);
 
@@ -11325,4 +11328,48 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     public int damageSkin = 0;
+
+    public void setFamilyBuff(boolean type, float exp, float drop) {
+        this.familyBuff = type;
+        this.familyExp = exp;
+        this.familyDrop = drop;
+    }
+
+    public boolean isFamilyBuff() {
+        return familyBuff;
+    }
+
+    // 获取 FamilyExp 的值
+    public float getFamilyExp() {
+        return familyExp;
+    }
+
+    // 获取 FamilyDrop 的值
+    public float getFamilyDrop() {
+        return familyDrop;
+    }
+
+    public void startFamilyBuffTimer(int delay) {
+        if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
+            FamilyBuffTimer.cancel(false);
+        }
+        FamilyBuffTimer = TimerManager.getInstance().schedule(() -> {
+            try {
+                sendPacket(PacketCreator.cancelFamilyBuff());
+            } finally {
+
+                if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
+                    FamilyBuffTimer.cancel(false);
+                    setFamilyBuff(false, 1, 1);
+                }
+            }
+        }, delay);
+    }
+
+    public void cancelFamilyBuffTimer() {
+        if (FamilyBuffTimer != null && !FamilyBuffTimer.isCancelled()) {
+            FamilyBuffTimer.cancel(false);
+            setFamilyBuff(false, 1, 1);
+        }
+    }
 }
