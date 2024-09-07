@@ -240,7 +240,85 @@ public final class ItemConstants {
         return itemType == 3 || itemType == 4 || itemType == 6;
     }
 
-    public static boolean notValidHairColor(int hairColor) {
-        return hairColor > 7 || hairColor < 0;
+    public static boolean isNewCharDefaultFace(int job, int gender, int faceId) {
+        if (job == 0 || job == 1) {
+            return switch (gender) {
+                case 0 -> faceId == 20000 || faceId == 20001 || faceId == 20002;
+                case 1 -> faceId == 21000 || faceId == 21001 || faceId == 21002;
+                default -> false;
+            };
+        } else if (job == 2) {
+            return switch (gender) {
+                case 0 -> faceId == 20100 || faceId == 20401 || faceId == 20402;
+                case 1 -> faceId == 21700 || faceId == 21201 || faceId == 21002;
+                default -> false;
+            };
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isNewCharDefaultHair(int gender, int hairId) {
+        return switch (gender) {
+            case 0 -> hairId == 30000 || hairId == 30020 || hairId == 30030;
+            case 1 -> hairId == 31000 || hairId == 31040 || hairId == 31050;
+            default -> false;
+        };
+    }
+
+    public static boolean isNewCharDefaultHairColor(int hairColor) {
+        return hairColor == 0 || hairColor == 2 || hairColor == 3 || hairColor == 7;
+    }
+
+    public static boolean isNewCharDefaultSkinColor(int skinColor) {
+        return skinColor >= 0 && skinColor < 4;
+    }
+
+    public static boolean isNewCharDefaultTop(int job, int gender, int topId) {
+        if (job == 0 || job == 1) {
+            return switch (gender) {
+                case 0 -> topId == 1040002 || topId == 1040006 || topId == 1040010;
+                case 1 -> topId == 1041002 || topId == 1041006 || topId == 1041010 || topId == 1041011;
+                default -> false;
+            };
+        } else if (job == 2) {
+            return topId == 1042167;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isNewCharDefaultBottom(int job, int gender, int bottomId) {
+        if (job == 0 || job == 1) {
+            return switch (gender) {
+                case 0 -> bottomId == 1060002 || bottomId == 1060006;
+                case 1 -> bottomId == 1061002 || bottomId == 1061008;
+                default -> false;
+            };
+        } else if (job == 2) {
+            return bottomId == 1062115;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isNewCharDefaultShoes(int job, int shoesId) {
+        if (job == 0 || job == 1) {
+            return shoesId == 1072001 || shoesId == 1072005 || shoesId == 1072037 || shoesId == 1072038;
+        } else if (job == 2) {
+            return shoesId == 1072383;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isNewCharDefaultWeapon(int job, int weaponId) {
+        if (job == 0 || job == 1) {
+            return weaponId == 1302000 || weaponId == 1322005 || weaponId == 1312004;
+        } else if (job == 2) {
+            return weaponId == 1442079;
+        } else {
+            return false;
+        }
     }
 }
