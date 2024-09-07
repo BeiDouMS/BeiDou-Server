@@ -22,6 +22,8 @@
 package server;
 
 import client.inventory.Item;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -29,12 +31,19 @@ import java.util.Calendar;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 public class DueyPackage {
+    @Getter @Setter
     private String sender = null;
+    @Getter
     private Item item = null;
+    @Getter @Setter
     private int mesos = 0;
+    @Getter @Setter
     private String message = null;
     private Calendar timestamp;
+    @Getter
     private int packageId = 0;
+    @Getter @Setter
+    private Integer receiverId;
 
     public DueyPackage(int pId, Item item) {
         this.item = item;
@@ -43,38 +52,6 @@ public class DueyPackage {
 
     public DueyPackage(int pId) { // Meso only package.
         this.packageId = pId;
-    }
-
-    public String getSender() {
-        return sender;
-    }
-
-    public void setSender(String name) {
-        sender = name;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public int getMesos() {
-        return mesos;
-    }
-
-    public void setMesos(int set) {
-        mesos = set;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String m) {
-        message = m;
-    }
-
-    public int getPackageId() {
-        return packageId;
     }
 
     public long sentTimeInMilliseconds() {
