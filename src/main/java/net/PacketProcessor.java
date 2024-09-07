@@ -165,6 +165,7 @@ import net.server.channel.handlers.UseMountFoodHandler;
 import net.server.channel.handlers.UseOwlOfMinervaHandler;
 import net.server.channel.handlers.UseSolomonHandler;
 import net.server.channel.handlers.UseSummonBagHandler;
+import net.server.channel.handlers.UseTreasureChestHandler;
 import net.server.channel.handlers.UseWaterOfLifeHandler;
 import net.server.channel.handlers.WeddingHandler;
 import net.server.channel.handlers.WeddingTalkHandler;
@@ -399,6 +400,7 @@ public final class PacketProcessor {
         registerHandler(RecvOpcode.MONSTER_BOOK_COVER, new MonsterBookCoverHandler());
         registerHandler(RecvOpcode.AUTO_DISTRIBUTE_AP, new AutoAssignHandler());
         registerHandler(RecvOpcode.MAKER_SKILL, new MakerSkillHandler());
+        registerHandler(RecvOpcode.USE_TREASURE_CHEST, new UseTreasureChestHandler());
         registerHandler(RecvOpcode.OPEN_FAMILY_PEDIGREE, new OpenFamilyPedigreeHandler());
         registerHandler(RecvOpcode.OPEN_FAMILY, new OpenFamilyHandler());
         registerHandler(RecvOpcode.ADD_FAMILY, new FamilyAddHandler());
