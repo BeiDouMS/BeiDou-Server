@@ -10005,7 +10005,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void sendPacket(Packet packet) {
-        client.sendPacket(packet);
+        if (client != null) {
+            client.sendPacket(packet);
+        }
     }
 
     @Override
