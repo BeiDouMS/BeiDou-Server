@@ -215,9 +215,6 @@ public class ServerConfig {
     public boolean USE_PERFECT_PITCH;
     public boolean USE_LV_UP_PROTECT;
 
-    //Quest Configuration
-    public boolean USE_QUEST_RATE;
-
     //Quest Points Configuration
     public int QUEST_POINT_REPEATABLE_INTERVAL;
     public int QUEST_POINT_REQUIREMENT;

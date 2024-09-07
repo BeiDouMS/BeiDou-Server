@@ -44,9 +44,7 @@ public class RatesCommand extends Command {
         showMsg_ += "金币: #e#b" + player.getMesoRate() + "x#k#n" + "\r\n";
         showMsg_ += "爆率: #e#b" + player.getDropRate() + "x#k#n" + "\r\n";
         showMsg_ += "BOSS 爆率: #e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
-        if (YamlConfig.config.server.USE_QUEST_RATE) {
-            showMsg_ += "任务: #e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
-        }
+        showMsg_ += "任务: #e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
 
         player.showHint(showMsg_, 300);
     }

@@ -12,7 +12,7 @@ worlds:
     meso_rate: 1
     drop_rate: 1
     boss_drop_rate: 1                       #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
-    quest_rate: 5                           #Multiplier for Exp & Meso gains when completing a quest. Only available when USE_QUEST_RATE is true. Stacks with server Exp & Meso rates.
+    quest_rate: 5                           #Multiplier for Exp & Meso gains when completing a quest. Stacks with server Exp & Meso rates.
     fishing_rate: 1                         #Multiplier for success likelihood on meso thrown during fishing.
     travel_rate: 1                          #Means of transportation rides/departs using 1/N of the default time.
     #等级冲刺计划，仅对刷怪生效
@@ -370,9 +370,6 @@ server:
     USE_STACK_COUPON_RATES: false   #Multiple coupons effects builds up together.
     USE_PERFECT_PITCH: false         #For lvl 30 or above, each lvlup grants player 1 perfect pitch.
     USE_LV_UP_PROTECT: true         #获得大量经验时最多升1级并保留剩余经验
-
-    #Quest Configuration
-    USE_QUEST_RATE: false           #Exp/Meso gained by quests uses fixed server exp/meso rate times quest rate as multiplier, instead of player rates.
 
     #Quest Points Configuration
     QUEST_POINT_REPEATABLE_INTERVAL: 25  #Minimum interval between repeatable quest completions for quest points to be awarded.

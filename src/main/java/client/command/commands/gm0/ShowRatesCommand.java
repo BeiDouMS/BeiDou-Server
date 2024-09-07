@@ -68,10 +68,8 @@ public class ShowRatesCommand extends Command {
         }
         showMsg += "BOSS DROP Rate: #e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
 
-        if (YamlConfig.config.server.USE_QUEST_RATE) {
-            showMsg += "\r\n" + "#eQUEST RATE#n" + "\r\n";
-            showMsg += "World QUEST Rate: #e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
-        }
+        showMsg += "\r\n" + "#eQUEST RATE#n" + "\r\n";
+        showMsg += "World QUEST Rate: #e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
 
         showMsg += "\r\n";
         showMsg += "World TRAVEL Rate: #e#b" + c.getWorldServer().getTravelRate() + "x#k#n" + "\r\n";
