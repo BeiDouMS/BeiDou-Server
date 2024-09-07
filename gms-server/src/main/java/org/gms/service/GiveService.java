@@ -394,6 +394,9 @@ public class GiveService {
     }
 
     private void giveGMChr(Character chr, Integer level) {
+        if (level < 0  || level > 127) {
+            throw new BizException(I18nUtil.getExceptionMessage("ILLEGAL_PARAMETERS",level));
+        }
         // 按照以下顺序hide，否则因为没有GM权限而无法hide或unhide
         if (level < 3) {
             chr.hide(false);
