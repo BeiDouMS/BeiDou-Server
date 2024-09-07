@@ -498,18 +498,21 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             String name = p.readString();
             int face = p.readInt();
             int hair = p.readInt();
-            int haircolor = p.readInt();
+            int hairColor = p.readInt();
             int skin = p.readInt();
             int gender = p.readInt();
-            int jobid = p.readInt();
+            int jobId = p.readInt();
             int improveSp = p.readInt();
+            
+            // 参数没有校验，禁止使用
+            player.showHint("该道具被强制禁止使用，请联系管理员。");
 
-            int createStatus = switch (jobid) {
-                case 0 -> WarriorCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
-                case 1 -> MagicianCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
-                case 2 -> BowmanCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
-                case 3 -> ThiefCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
-                default -> PirateCreator.createCharacter(c, name, face, hair + haircolor, skin, gender, improveSp);
+            int createStatus = switch (jobId) {
+                case 0 -> WarriorCreator.createCharacter(c, name, face, hair + hairColor, skin, gender, improveSp);
+                case 1 -> MagicianCreator.createCharacter(c, name, face, hair + hairColor, skin, gender, improveSp);
+                case 2 -> BowmanCreator.createCharacter(c, name, face, hair + hairColor, skin, gender, improveSp);
+                case 3 -> ThiefCreator.createCharacter(c, name, face, hair + hairColor, skin, gender, improveSp);
+                default -> PirateCreator.createCharacter(c, name, face, hair + hairColor, skin, gender, improveSp);
             };
 
             if (createStatus == 0) {
