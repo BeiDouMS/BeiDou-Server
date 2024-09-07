@@ -203,7 +203,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         return localMaxMp;
     }
 
-    private void setHpMpApUsed(int mpApUsed) {
+    public void setHpMpApUsed(int mpApUsed) {
         this.hpMpApUsed = mpApUsed;
     }
 
@@ -255,11 +255,11 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         this.mp = tmp;
     }
 
-    private void setRemainingAp(int remainingAp) {
+    public void setRemainingAp(int remainingAp) {
         this.remainingAp = remainingAp;
     }
 
-    private void setRemainingSp(int remainingSp, int skillbook) {
+    public void setRemainingSp(int remainingSp, int skillbook) {
         this.remainingSp[skillbook] = remainingSp;
     }
 

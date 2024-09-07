@@ -111,7 +111,6 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 /**
@@ -208,7 +207,7 @@ public class PacketCreator {
         p.writeShort(chr.getFame()); // fame
         p.writeInt(chr.getGachaExp()); //Gacha Exp
         p.writeInt(chr.getMapId()); // current map id
-        p.writeByte(chr.getInitialSpawnpoint()); // spawnpoint
+        p.writeByte(chr.getInitialSpawnPoint()); // spawnpoint
         p.writeInt(0);
     }
 
@@ -6620,7 +6619,7 @@ public class PacketCreator {
         final OutPacket p = OutPacket.create(SendOpcode.SHOW_STATUS_INFO);
         p.writeByte(10);
         p.writeBytes(new byte[]{(byte) 0xB7, 4}); //?
-        p.writeString("pt=" + chr.getDojoPoints() + ";belt=" + belt + ";tuto=" + (chr.getFinishedDojoTutorial() ? "1" : "0"));
+        p.writeString("pt=" + chr.getDojoPoints() + ";belt=" + belt + ";tuto=" + (chr.isFinishedDojoTutorial() ? "1" : "0"));
         return p;
     }
 

@@ -1198,7 +1198,7 @@ public class Server {
         try {
             World wserv = this.getWorld(chrView.getWorld());
             if (wserv != null) {
-                wserv.registerAccountCharacterView(chrView.getAccountID(), chrView);
+                wserv.registerAccountCharacterView(chrView.getAccountId(), chrView);
             }
         } finally {
             lgnWLock.unlock();
@@ -1206,7 +1206,7 @@ public class Server {
     }
 
     public void createCharacterEntry(Character chr) {
-        Integer accountid = chr.getAccountID(), chrid = chr.getId(), world = chr.getWorld();
+        Integer accountid = chr.getAccountId(), chrid = chr.getId(), world = chr.getWorld();
 
         lgnWLock.lock();
         try {
@@ -1221,7 +1221,7 @@ public class Server {
 
             World wserv = this.getWorld(chrView.getWorld());
             if (wserv != null) {
-                wserv.registerAccountCharacterView(chrView.getAccountID(), chrView);
+                wserv.registerAccountCharacterView(chrView.getAccountId(), chrView);
             }
         } finally {
             lgnWLock.unlock();
@@ -1251,7 +1251,7 @@ public class Server {
     public void transferWorldCharacterEntry(Character chr, Integer toWorld) { // used before setting the new worldid on the character object
         lgnWLock.lock();
         try {
-            Integer chrid = chr.getId(), accountid = chr.getAccountID(), world = worldChars.get(chr.getId());
+            Integer chrid = chr.getId(), accountid = chr.getAccountId(), world = worldChars.get(chr.getId());
             if (world != null) {
                 World wserv = this.getWorld(world);
                 if (wserv != null) {
@@ -1265,7 +1265,7 @@ public class Server {
 
             World wserv = this.getWorld(toWorld);
             if (wserv != null) {
-                wserv.registerAccountCharacterView(chrView.getAccountID(), chrView);
+                wserv.registerAccountCharacterView(chrView.getAccountId(), chrView);
             }
         } finally {
             lgnWLock.unlock();

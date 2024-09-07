@@ -30,8 +30,8 @@ public class PetignoresDO implements Serializable {
     @Id(keyType = KeyType.Auto)
     private Long id;
 
-    private Long petid;
+    private Integer petid;
 
-    private Long itemid;
+    private Integer itemid;
 
 }

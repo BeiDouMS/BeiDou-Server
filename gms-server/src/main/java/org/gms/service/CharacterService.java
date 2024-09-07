@@ -198,7 +198,7 @@ public class CharacterService {
 
     @Transactional(rollbackFor = Exception.class)
     public void deleteGuild(GuildsDO guildsDO) {
-        charactersMapper.updateByQuery(CharactersDO.builder().guildid(0L).guildrank(5L).build(), QueryWrapper.create().where(CHARACTERS_D_O.GUILDID.eq(guildsDO.getGuildid())));
+        charactersMapper.updateByQuery(CharactersDO.builder().guildid(0).guildrank(5).build(), QueryWrapper.create().where(CHARACTERS_D_O.GUILDID.eq(guildsDO.getGuildid())));
         guildsMapper.deleteById(guildsDO.getGuildid());
     }
 
@@ -281,6 +281,11 @@ public class CharacterService {
         worldTransferService.cancelPendingWorldTransfer(player, false);
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    public void saveCharToDB(Character player) {
+
+    }
+
     private void checkName(ExtendValueDO data) {
         check(data);
         // 非法请求篡改其他字段
@@ -299,7 +304,7 @@ public class CharacterService {
     private Character getCharacter(ExtendValueDO data) {
         for (World world : Server.getInstance().getWorlds()) {
             for (Character character : world.getPlayerStorage().getAllCharacters()) {
-                if (ExtendType.isAccount(data.getExtendType()) && Objects.equals(String.valueOf(character.getAccountID()), data.getExtendId())) {
+                if (ExtendType.isAccount(data.getExtendType()) && Objects.equals(String.valueOf(character.getAccountId()), data.getExtendId())) {
                     return character;
                 }
 

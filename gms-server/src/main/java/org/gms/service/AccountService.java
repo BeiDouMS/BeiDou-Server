@@ -233,7 +233,7 @@ public class AccountService {
     }
 
     public void ban(Character chr, String reason) {
-        accountsMapper.update(AccountsDO.builder().banned(true).id(chr.getAccountID()).banreason(reason).build());
+        accountsMapper.update(AccountsDO.builder().banned(true).id(chr.getAccountId()).banreason(reason).build());
         // 更新在线的ban状态
         chr.setBanned(true);
     }

@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.gms.client.inventory.Equip;
+import org.gms.client.inventory.Item;
 
 @Data
 @AllArgsConstructor
@@ -72,4 +74,40 @@ public class InventorySearchRtnDTO {
      * 装备信息，equipment为true时有值
      */
     private InventoryEquipRtnDTO inventoryEquipment;
+
+    public Item toItem() {
+        Item item;
+        if (isEquipment()) {
+            Equip equip = new Equip(getItemId(), getPosition());
+            equip.setUpgradeSlots(getInventoryEquipment().getUpgradeSlots());
+            equip.setLevel(getInventoryEquipment().getLevel());
+            equip.setStr(getInventoryEquipment().getAttStr());
+            equip.setDex(getInventoryEquipment().getAttDex());
+            equip.setInt(getInventoryEquipment().getAttInt());
+            equip.setLuk(getInventoryEquipment().getAttLuk());
+            equip.setHp(getInventoryEquipment().getHp());
+            equip.setMp(getInventoryEquipment().getMp());
+            equip.setWatk(getInventoryEquipment().getPAtk());
+            equip.setMatk(getInventoryEquipment().getMAtk());
+            equip.setWdef(getInventoryEquipment().getPDef());
+            equip.setMdef(getInventoryEquipment().getMDef());
+            equip.setAcc(getInventoryEquipment().getAcc());
+            equip.setAvoid(getInventoryEquipment().getAvoid());
+            equip.setHands(getInventoryEquipment().getHands());
+            equip.setSpeed(getInventoryEquipment().getSpeed());
+            equip.setJump(getInventoryEquipment().getJump());
+            equip.setVicious(getInventoryEquipment().getVicious());
+            equip.setItemLevel(getInventoryEquipment().getItemLevel());
+            equip.setItemExp(getInventoryEquipment().getItemExp());
+            equip.setRingId(getInventoryEquipment().getRingId());
+            item = equip;
+        } else {
+            item = new Item(getItemId(), getPosition(), getQuantity(), getPetId());
+        }
+        item.setOwner(getOwner());
+        item.setExpiration(getExpiration());
+        item.setGiftFrom(getGiftFrom());
+        item.setFlag(getFlag());
+        return item;
+    }
 }

@@ -93,7 +93,7 @@ function action(mode, type, selection) {
                         selectedMenu = selection;
                     }
                     if (selectedMenu == 0) { //I want to challenge him alone.
-                        if (!cm.getPlayer().hasEntered("dojang_Msg") && !cm.getPlayer().getFinishedDojoTutorial()) { //kind of hackish...
+                        if (!cm.getPlayer().hasEntered("dojang_Msg") && !cm.getPlayer().isFinishedDojoTutorial()) { //kind of hackish...
                             if (status == 1) {
                                 cm.sendYesNo("Hey there! You! This is your first time, huh? Well, my master doesn't just meet with anyone. He's a busy man. And judging by your looks, I don't think he'd bother. Ha! But, today's your lucky day... I tell you what, if you can defeat me, I'll allow you to see my Master. So what do you say?");
                             } else if (status == 2) {

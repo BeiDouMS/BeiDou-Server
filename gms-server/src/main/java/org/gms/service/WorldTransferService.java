@@ -105,8 +105,8 @@ public class WorldTransferService {
                 .id(charactersDO.getId())
                 .world(data.getTo())
                 .meso(Math.min(charactersDO.getMeso(), 1000000))
-                .guildid(0L)
-                .guildrank(0L)
+                .guildid(0)
+                .guildrank(0)
                 .build());
         buddiesMapper.delete(BuddiesDO.builder().characterid(charactersDO.getId()).build());
         buddiesMapper.delete(BuddiesDO.builder().buddyid(charactersDO.getId()).build());

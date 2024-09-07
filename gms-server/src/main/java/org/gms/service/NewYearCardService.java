@@ -2,6 +2,7 @@ package org.gms.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
+import org.gms.client.Character;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.dao.entity.NewyearDO;
 import org.gms.dao.mapper.NewyearMapper;
@@ -32,5 +33,9 @@ public class NewYearCardService {
             Server.getInstance().setNewYearCard(newYearCardRecord);
             newYearCardRecord.startNewYearCardTask();
         }
+    }
+
+    public List<NewyearDO> loadPlayerNewYearCards(Character chr) {
+        return newyearMapper.selectListByQuery(QueryWrapper.create().where(NEWYEAR_D_O.SENDERID.eq(chr.getId())).or(NEWYEAR_D_O.RECEIVERID.eq(chr.getId())));
     }
 }

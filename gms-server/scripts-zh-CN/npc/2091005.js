@@ -93,7 +93,7 @@ function action(mode, type, selection) {
                         selectedMenu = selection;
                     }
                     if (selectedMenu == 0) { //I want to challenge him alone.
-                        if (!cm.getPlayer().hasEntered("dojang_Msg") && !cm.getPlayer().getFinishedDojoTutorial()) { //kind of hackish...
+                        if (!cm.getPlayer().hasEntered("dojang_Msg") && !cm.getPlayer().isFinishedDojoTutorial()) { //kind of hackish...
                             if (status == 1) {
                                 cm.sendYesNo("嘿！你！这是你第一次来吗？嗯，我的主人不会随便见任何人。他很忙。看你的样子，我觉得他不会理你。哈！但是，今天是你的幸运日……我告诉你吧，如果你能打败我，我就让你见我的主人。你觉得怎么样？");
                             } else if (status == 2) {

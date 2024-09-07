@@ -1264,7 +1264,7 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getAccountExtendValue(String extendName) {
-        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName);
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountId()), ExtendType.ACCOUNT_EXTEND.getType(), extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
 
@@ -1276,7 +1276,7 @@ public class AbstractPlayerInteraction {
      * @return 扩展字段值
      */
     public String getAccountExtendValue(String extendName, boolean isDaily) {
-        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountID()),
+        ExtendValueDO extendValueDO = ExtendUtil.getExtendValue(String.valueOf(getPlayer().getAccountId()),
                 isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
                 extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
@@ -1292,11 +1292,11 @@ public class AbstractPlayerInteraction {
     }
 
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue) {
-        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()), ExtendType.ACCOUNT_EXTEND.getType(), extendName, extendValue);
     }
 
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue, boolean isDaily) {
-        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountID()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
+        ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
     }
 }

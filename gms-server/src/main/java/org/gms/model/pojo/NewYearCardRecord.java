@@ -23,9 +23,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
+import org.gms.dao.entity.NewyearDO;
+import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
+import org.gms.service.NewYearCardService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 
@@ -34,6 +38,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
@@ -42,10 +47,8 @@ import static java.util.concurrent.TimeUnit.HOURS;
 /**
  * @author Ronan - credits to Eric for showing the New Year opcodes and handler layout
  */
+@Slf4j
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class NewYearCardRecord {
     private int id;
 
@@ -63,6 +66,7 @@ public class NewYearCardRecord {
     private long dateReceived;
 
     private ScheduledFuture<?> sendTask;
+    private static final NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
 
     public NewYearCardRecord(int senderId, String senderName, int receiverId, String receiverName, String message) {
         this.id = -1;
@@ -163,21 +167,17 @@ public class NewYearCardRecord {
     }
 
     public static void loadPlayerNewYearCards(Character chr) {
-        try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM newyear WHERE senderid = ? OR receiverid = ?")) {
-                ps.setInt(1, chr.getId());
-                ps.setInt(2, chr.getId());
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        NewYearCardRecord newyear = new NewYearCardRecord(rs.getInt("senderid"), rs.getString("sendername"), rs.getInt("receiverid"), rs.getString("receivername"), rs.getString("message"));
-                        newyear.setExtraNewYearCardRecord(rs.getInt("id"), rs.getBoolean("senderdiscard"), rs.getBoolean("receiverdiscard"), rs.getBoolean("received"), rs.getLong("timesent"), rs.getLong("timereceived"));
-
-                        chr.addNewYearRecord(newyear);
-                    }
-                }
-            }
-        } catch (SQLException sqle) {
-            sqle.printStackTrace();
+        try {
+            List<NewyearDO> newyearDOList = newYearCardService.loadPlayerNewYearCards(chr);
+            newyearDOList.forEach(newyearDO -> {
+                NewYearCardRecord newYearCardRecord = new NewYearCardRecord(newyearDO.getSenderid(), newyearDO.getSendername(),
+                        newyearDO.getReceiverid(), newyearDO.getReceivername(), newyearDO.getMessage());
+                newYearCardRecord.setExtraNewYearCardRecord(newyearDO.getId().intValue(), newyearDO.getSenderdiscard(),
+                        newyearDO.getReceiverdiscard(), newyearDO.getReceived(), newyearDO.getTimesent(), newyearDO.getTimereceived());
+                chr.addNewYearRecord(newYearCardRecord);
+            });
+        } catch (Exception e) {
+            log.error("loadPlayerNewYearCards error", e);
         }
     }
 

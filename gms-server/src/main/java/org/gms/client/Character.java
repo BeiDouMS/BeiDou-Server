@@ -50,6 +50,9 @@ import org.gms.dao.entity.GuildsDO;
 import org.gms.dao.entity.SkillsDO;
 import org.gms.exception.NotEnabledException;
 import org.gms.manager.ServerManager;
+import org.gms.model.dto.InventorySearchReqDTO;
+import org.gms.model.dto.InventorySearchRtnDTO;
+import org.gms.model.dto.InventoryTypeRtnDTO;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.model.pojo.SkillEntry;
 import org.gms.net.packet.Packet;
@@ -116,17 +119,23 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private int id;
-    private int accountid;
+    @Getter
+    @Setter
+    private int accountId;
     @Getter
     @Setter
     private int level;
     @Getter
+    @Setter
     private int rank;
     @Getter
+    @Setter
     private int rankMove;
     @Getter
+    @Setter
     private int jobRank;
     @Getter
+    @Setter
     private int jobRankMove;
     @Setter
     @Getter
@@ -143,6 +152,8 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private int questFame;
+    @Getter
+    @Setter
     private int initialSpawnPoint;
     @Setter
     private int mapId;
@@ -177,6 +188,7 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int familyId;
+    @Setter
     private int bookCover;
     @Setter
     @Getter
@@ -186,6 +198,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private int possibleReports = 10;
     @Getter
+    @Setter
     private int ariantPoints;
     @Setter
     @Getter
@@ -207,7 +220,24 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private int dropRate = 1;
     private int expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
-    private int omokwins, omokties, omoklosses, matchcardwins, matchcardties, matchcardlosses;
+    @Getter
+    @Setter
+    private int omokwins;
+    @Getter
+    @Setter
+    private int omokties;
+    @Getter
+    @Setter
+    private int omoklosses;
+    @Getter
+    @Setter
+    private int matchcardwins;
+    @Getter
+    @Setter
+    private int matchcardties;
+    @Getter
+    @Setter
+    private int matchcardlosses;
     @Getter
     @Setter
     private int owlSearch;
@@ -218,13 +248,16 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private long lastUsedCashItem;
     private long lastExpression = 0;
+    @Setter
     private long jailExpiration = -1;
     private transient int localstr, localdex, localluk, localint_, localmagic, localwatk;
     private transient int equipmaxhp, equipmaxmp, equipstr, equipdex, equipluk, equipint_, equipmagic, equipwatk, localchairhp, localchairmp;
     private int localchairrate;
     @Getter
     private boolean hidden;
-    private boolean equipchanged = true, berserk, hasMerchant, hasSandboxItem = false, whiteChat = false, canRecvPartySearchInvite = true;
+    private boolean equipchanged = true, berserk, hasMerchant, hasSandboxItem = false, whiteChat = false;
+    @Setter
+    private boolean canRecvPartySearchInvite = true;
     @Getter
     private boolean equippedMesoMagnet = false;
     @Getter
@@ -236,6 +269,8 @@ public class Character extends AbstractCharacterObject {
     private int linkedLevel = 0;
     @Getter
     private String linkedName = null;
+    @Getter
+    @Setter
     private boolean finishedDojoTutorial;
     private boolean usedStorage = false;
     @Getter
@@ -243,6 +278,7 @@ public class Character extends AbstractCharacterObject {
     private String name;
     private String chalktext;
     private String commandtext;
+    @Setter
     private String dataString;
     @Getter
     @Setter
@@ -250,12 +286,13 @@ public class Character extends AbstractCharacterObject {
     private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicInteger exp = new AtomicInteger();
-    private final AtomicInteger gachaexp = new AtomicInteger();
+    private final AtomicInteger gachaExp = new AtomicInteger();
     private final AtomicInteger meso = new AtomicInteger();
     private final AtomicInteger chair = new AtomicInteger(-1);
     private long totalExpGained = 0;
     private int merchantmeso;
     @Getter
+    @Setter
     private BuddyList buddylist;
     private EventInstanceManager eventInstance = null;
     @Setter
@@ -295,7 +332,9 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private Trade trade = null;
-    private MonsterBook monsterbook;
+    @Getter
+    @Setter
+    private MonsterBook monsterBook;
     private CashShop cashshop;
     private final Set<NewYearCardRecord> newyears = new LinkedHashSet<>();
     private final SavedLocation[] savedLocations;
@@ -406,6 +445,7 @@ public class Character extends AbstractCharacterObject {
     private int banishMap = -1;
     private int banishSp = -1;
     private long banishTime = 0;
+    @Setter
     private long lastExpGainTime;
     private boolean pendingNameChange; //only used to change name on logout, not to be relied upon elsewhere
     @Getter
@@ -430,6 +470,7 @@ public class Character extends AbstractCharacterObject {
     private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
     private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    private static final InventoryService inventoryService = ServerManager.getApplicationContext().getBean(InventoryService.class);
 
     private Character() {
         super.setListener(new CharacterListener(this));
@@ -477,7 +518,7 @@ public class Character extends AbstractCharacterObject {
         ret.map = null;
         ret.job = Job.BEGINNER;
         ret.level = 1;
-        ret.accountid = c.getAccID();
+        ret.accountId = c.getAccID();
         ret.buddylist = new BuddyList(20);
         ret.maplemount = null;
         ret.getInventory(InventoryType.EQUIP).setSlotLimit(24);
@@ -2709,7 +2750,7 @@ public class Character extends AbstractCharacterObject {
 
     public void gainGachaExp() {
         int expgain = 0;
-        long currentgexp = gachaexp.get();
+        long currentgexp = gachaExp.get();
         if ((currentgexp + exp.get()) >= ExpTable.getExpNeededForLevel(level)) {
             expgain += ExpTable.getExpNeededForLevel(level) - exp.get();
 
@@ -2718,16 +2759,16 @@ public class Character extends AbstractCharacterObject {
                 expgain += nextneed;
             }
 
-            this.gachaexp.set((int) (currentgexp - expgain));
+            this.gachaExp.set((int) (currentgexp - expgain));
         } else {
-            expgain = this.gachaexp.getAndSet(0);
+            expgain = this.gachaExp.getAndSet(0);
         }
         gainExp(expgain, false, true);
-        updateSingleStat(Stat.GACHAEXP, this.gachaexp.get());
+        updateSingleStat(Stat.GACHAEXP, this.gachaExp.get());
     }
 
     public void addGachaExp(int gain) {
-        updateSingleStat(Stat.GACHAEXP, gachaexp.addAndGet(gain));
+        updateSingleStat(Stat.GACHAEXP, gachaExp.addAndGet(gain));
     }
 
     public void gainExp(int gain) {
@@ -2925,10 +2966,6 @@ public class Character extends AbstractCharacterObject {
 
     public void genericGuildMessage(int code) {
         this.sendPacket(GuildPackets.genericGuildMessage((byte) code));
-    }
-
-    public int getAccountID() {
-        return accountid;
     }
 
     public List<PlayerCoolDownValueHolder> getAllCooldowns() {
@@ -4345,7 +4382,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getGachaExp() {
-        return gachaexp.get();
+        return gachaExp.get();
     }
 
     public boolean hasNoviceExpRate() {
@@ -4460,10 +4497,6 @@ public class Character extends AbstractCharacterObject {
         this.familyEntry = entry;
     }
 
-    public boolean getFinishedDojoTutorial() {
-        return finishedDojoTutorial;
-    }
-
     public void setUsedStorage() {
         usedStorage = true;
     }
@@ -4551,10 +4584,6 @@ public class Character extends AbstractCharacterObject {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public int getInitialSpawnpoint() {
-        return initialSpawnPoint;
     }
 
     public Inventory getInventory(InventoryType type) {
@@ -4679,6 +4708,10 @@ public class Character extends AbstractCharacterObject {
         return meso.get();
     }
 
+    public void setMeso(int meso) {
+        this.meso.set(meso);
+    }
+
     public int getMerchantMeso() {
         return merchantmeso;
     }
@@ -4759,10 +4792,6 @@ public class Character extends AbstractCharacterObject {
                 default -> matchcardties;
             };
         }
-    }
-
-    public MonsterBook getMonsterBook() {
-        return monsterbook;
     }
 
     public int getMonsterBookCover() {
@@ -5969,7 +5998,7 @@ public class Character extends AbstractCharacterObject {
         Character ret = new Character();
 
         try {
-            ret.accountid = rs.getInt("accountid");
+            ret.accountId = rs.getInt("accountid");
             ret.id = rs.getInt("id");
             ret.name = rs.getString("name");
             ret.gender = rs.getInt("gender");
@@ -5993,7 +6022,7 @@ public class Character extends AbstractCharacterObject {
             ret.loadCharSkillPoints(rs.getString("sp").split(","));
             ret.exp.set(rs.getInt("exp"));
             ret.fame = rs.getInt("fame");
-            ret.gachaexp.set(rs.getInt("gachaexp"));
+            ret.gachaExp.set(rs.getInt("gachaexp"));
             ret.mapId = rs.getInt("map");
             ret.initialSpawnPoint = rs.getInt("spawnpoint");
             ret.setGMLevel(rs.getInt("gm"));
@@ -6019,7 +6048,7 @@ public class Character extends AbstractCharacterObject {
     public Character generateCharacterEntry() {
         Character ret = new Character();
 
-        ret.accountid = this.getAccountID();
+        ret.accountId = this.getAccountId();
         ret.id = this.getId();
         ret.name = this.getName();
         ret.gender = this.getGender();
@@ -6043,9 +6072,9 @@ public class Character extends AbstractCharacterObject {
         ret.setRemainingSp(this.getRemainingSps());
         ret.exp.set(this.getExp());
         ret.fame = this.getFame();
-        ret.gachaexp.set(this.getGachaExp());
+        ret.gachaExp.set(this.getGachaExp());
         ret.mapId = this.getMapId();
-        ret.initialSpawnPoint = this.getInitialSpawnpoint();
+        ret.initialSpawnPoint = this.getInitialSpawnPoint();
 
         ret.inventory[InventoryType.EQUIPPED.ordinal()] = this.getInventory(InventoryType.EQUIPPED);
 
@@ -6077,64 +6106,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     // todo DO转
-    public Character toCharacter(CharactersDO charactersDO) {
-        /*
-                    ret.exp.set(rs.getInt("exp"));
-                    ret.gachaexp.set(rs.getInt("gachaexp"));
-                    ret.hp = rs.getInt("hp");
-                    ret.setMaxHp(rs.getInt("maxhp"));
-                    ret.mp = rs.getInt("mp");
-                    ret.setMaxMp(rs.getInt("maxmp"));
-                    ret.hpMpApUsed = rs.getInt("hpMpUsed");
-                    ret.hasMerchant = rs.getInt("HasMerchant") == 1;
-                    ret.remainingAp = rs.getInt("ap");
-                    ret.loadCharSkillPoints(rs.getString("sp").split(","));
-                    ret.meso.set(rs.getInt("meso"));
-                    ret.merchantmeso = rs.getInt("MerchantMesos");
-                    ret.setGMLevel(rs.getInt("gm"));
-                    ret.skinColor = SkinColor.getById(rs.getInt("skincolor"));
-                    ret.gender = rs.getInt("gender");
-                    ret.job = Job.getById(rs.getInt("job"));
-                    ret.finishedDojoTutorial = rs.getInt("finishedDojoTutorial") == 1;
-                    ret.vanquisherKills = rs.getInt("vanquisherKills");
-                    ret.omokwins = rs.getInt("omokwins");
-                    ret.omoklosses = rs.getInt("omoklosses");
-                    ret.omokties = rs.getInt("omokties");
-                    ret.matchcardwins = rs.getInt("matchcardwins");
-                    ret.matchcardlosses = rs.getInt("matchcardlosses");
-                    ret.matchcardties = rs.getInt("matchcardties");
-                    ret.hair = rs.getInt("hair");
-                    ret.face = rs.getInt("face");
-                    ret.accountid = rs.getInt("accountid");
-                    ret.mapid = rs.getInt("map");
-                    ret.jailExpiration = rs.getLong("jailexpire");
-                    ret.initialSpawnPoint = rs.getInt("spawnpoint");
-                    ret.world = rs.getByte("world");
-                    ret.rank = rs.getInt("rank");
-                    ret.rankMove = rs.getInt("rankMove");
-                    ret.jobRank = rs.getInt("jobRank");
-                    ret.jobRankMove = rs.getInt("jobRankMove");
-                    mountexp = rs.getInt("mountexp");
-                    mountlevel = rs.getInt("mountlevel");
-                    mounttiredness = rs.getInt("mounttiredness");
-                    ret.guildid = rs.getInt("guildid");
-                    ret.guildRank = rs.getInt("guildrank");
-                    ret.allianceRank = rs.getInt("allianceRank");
-                    ret.familyId = rs.getInt("familyId");
-                    ret.bookCover = rs.getInt("monsterbookcover");
-                    ret.monsterbook = new MonsterBook();
-                    ret.monsterbook.loadCards(charid);
-                    ret.vanquisherStage = rs.getInt("vanquisherStage");
-                    ret.ariantPoints = rs.getInt("ariantPoints");
-                    ret.dojoPoints = rs.getInt("dojoPoints");
-                    ret.dojoStage = rs.getInt("lastDojoStage");
-                    ret.dataString = rs.getString("dataString");
-                    ret.mgc = new GuildCharacter(ret);
-                    int buddyCapacity = rs.getInt("buddyCapacity");
-                    ret.buddylist = new BuddyList(buddyCapacity);
-                    ret.lastExpGainTime = rs.getTimestamp("lastExpGainTime").getTime();
-                    ret.canRecvPartySearchInvite = rs.getBoolean("partySearch");
-         */
+    public static Character fromCharactersDO(CharactersDO charactersDO) {
         Character chr = new Character();
         chr.setName(charactersDO.getName());
         chr.setLevel(charactersDO.getLevel());
@@ -6145,6 +6117,112 @@ public class Character extends AbstractCharacterObject {
         chr.setInt(charactersDO.getAttrInt());
         chr.setLuk(charactersDO.getAttrLuk());
         chr.setExp(charactersDO.getExp());
+        chr.setGachaExp(charactersDO.getGachaexp());
+        chr.setHp(charactersDO.getHp());
+        chr.setMaxHp(charactersDO.getMaxhp());
+        chr.setMp(charactersDO.getMp());
+        chr.setMaxMp(charactersDO.getMaxmp());
+        chr.setHpMpApUsed(charactersDO.getHpMpUsed());
+        chr.setHasMerchant(charactersDO.getHasmerchant());
+        chr.setRemainingAp(charactersDO.getAp());
+        int[] remainingSps = new int[10];
+        Arrays.fill(remainingSps, 0);
+        if (!RequireUtil.isEmpty(charactersDO.getSp())) {
+            String[] splits = charactersDO.getSp().split(",");
+            int len = Math.min(splits.length, remainingSps.length);
+            for (int i = 0; i < len; i++) {
+                remainingSps[i] = Integer.parseInt(splits[i]);
+            }
+        }
+        chr.setRemainingSp(remainingSps);
+        chr.setMeso(charactersDO.getMeso());
+        chr.setMerchantMeso(charactersDO.getMerchantmesos());
+        chr.setGMLevel(charactersDO.getGm());
+        chr.setSkinColor(SkinColor.getById(charactersDO.getSkincolor()));
+        chr.setGender(charactersDO.getGender());
+        chr.setJob(Job.getById(charactersDO.getJob()));
+        chr.setFinishedDojoTutorial(charactersDO.getFinishedDojoTutorial() == 1);
+        chr.setVanquisherKills(charactersDO.getVanquisherKills());
+        chr.setOmokwins(charactersDO.getOmokwins());
+        chr.setOmoklosses(charactersDO.getOmoklosses());
+        chr.setOmokties(charactersDO.getOmokties());
+        chr.setMatchcardwins(charactersDO.getMatchcardwins());
+        chr.setMatchcardlosses(charactersDO.getMatchcardlosses());
+        chr.setMatchcardties(charactersDO.getMatchcardties());
+        chr.setHair(charactersDO.getHair());
+        chr.setFace(charactersDO.getFace());
+        chr.setAccountId(charactersDO.getAccountid());
+        chr.setMapId(charactersDO.getMap());
+        chr.setJailExpiration(charactersDO.getJailexpire());
+        chr.setInitialSpawnPoint(charactersDO.getSpawnpoint());
+        chr.setWorld(charactersDO.getWorld());
+        chr.setRank(charactersDO.getRank());
+        chr.setRankMove(charactersDO.getRankMove());
+        chr.setJobRank(charactersDO.getJobRank());
+        chr.setJobRankMove(charactersDO.getJobRankMove());
+        chr.setGuildId(charactersDO.getGuildid());
+        chr.setGuildRank(charactersDO.getGuildrank());
+        chr.setAllianceRank(charactersDO.getAllianceRank());
+        chr.setFamilyId(charactersDO.getFamilyId());
+        chr.setBookCover(charactersDO.getMonsterbookcover());
+        chr.setMonsterBook(new MonsterBook(charactersDO.getId()));
+        chr.setVanquisherStage(charactersDO.getVanquisherStage());
+        chr.setAriantPoints(charactersDO.getAriantPoints());
+        chr.setDojoPoints(charactersDO.getDojoPoints());
+        chr.setDojoStage(charactersDO.getLastDojoStage());
+        chr.setDataString(charactersDO.getDataString());
+        chr.setMGC(new GuildCharacter(chr));
+        chr.setBuddylist(new BuddyList(charactersDO.getBuddyCapacity()));
+        chr.setLastExpGainTime(charactersDO.getLastExpGainTime().getTime());
+        chr.setCanRecvPartySearchInvite(charactersDO.getPartySearch());
+        chr.getInventory(InventoryType.EQUIP).setSlotLimit(charactersDO.getEquipslots());
+        chr.getInventory(InventoryType.USE).setSlotLimit(charactersDO.getUseslots());
+        chr.getInventory(InventoryType.SETUP).setSlotLimit(charactersDO.getSetupslots());
+        chr.getInventory(InventoryType.ETC).setSlotLimit(charactersDO.getEtcslots());
+        short sandboxCheck = 0x0;
+        for (InventoryType inventoryType : InventoryType.values()) {
+            List<InventorySearchRtnDTO> searchRtnDTOList = inventoryService.getInventoryList(InventorySearchReqDTO.builder()
+                    .characterId(charactersDO.getId())
+                    .inventoryType(inventoryType.getType())
+                    .build());
+            for (InventorySearchRtnDTO searchRtnDTO : searchRtnDTOList) {
+                sandboxCheck |= searchRtnDTO.getFlag();
+                Item item = searchRtnDTO.toItem();
+                chr.getInventory(inventoryType).addItemFromDB(item);
+                if (item.getPet() != null) {
+                    chr.addPet(item.getPet());
+                    chr.resetExcluded(item.getPetId());
+                    inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
+                    continue;
+                }
+                if (searchRtnDTO.isEquipment() && searchRtnDTO.getInventoryEquipment().getRingId() > -1) {
+                    Ring ring = Ring.loadFromDb(searchRtnDTO.getInventoryEquipment().getRingId());
+                    if (ring == null) {
+                        continue;
+                    }
+                    if (InventoryType.EQUIPPED.equals(inventoryType)) {
+                        ring.equip();
+                    }
+                    chr.addPlayerRing(ring);
+                }
+            }
+        }
+        chr.commitExcludedItems();
+        if ((sandboxCheck & ItemConstants.SANDBOX) == ItemConstants.SANDBOX) {
+            chr.setHasSandboxItem();
+        }
+        chr.setPartnerId(charactersDO.getPartnerId());
+        chr.setMarriageItemId(charactersDO.getMarriageItemId());
+        World world = Server.getInstance().getWorld(charactersDO.getWorld());
+        if (charactersDO.getMarriageItemId() > 0 && charactersDO.getPartnerId() <= 0) {
+            chr.setMarriageItemId(-1);
+        } else if (charactersDO.getPartnerId() > 0 && world.getRelationshipId(charactersDO.getId()) <= 0) {
+            chr.setMarriageItemId(-1);
+            chr.setPartnerId(-1);
+        }
+        NewYearCardRecord.loadPlayerNewYearCards(chr);
+
+        // todo 截止到 if (channelserver) {
         return chr;
     }
 
@@ -6177,7 +6255,7 @@ public class Character extends AbstractCharacterObject {
                     ret.attrInt = rs.getInt("int");
                     ret.attrLuk = rs.getInt("luk");
                     ret.exp.set(rs.getInt("exp"));
-                    ret.gachaexp.set(rs.getInt("gachaexp"));
+                    ret.gachaExp.set(rs.getInt("gachaexp"));
                     ret.hp = rs.getInt("hp");
                     ret.setMaxHp(rs.getInt("maxhp"));
                     ret.mp = rs.getInt("mp");
@@ -6202,7 +6280,7 @@ public class Character extends AbstractCharacterObject {
                     ret.matchcardties = rs.getInt("matchcardties");
                     ret.hair = rs.getInt("hair");
                     ret.face = rs.getInt("face");
-                    ret.accountid = rs.getInt("accountid");
+                    ret.accountId = rs.getInt("accountid");
                     ret.mapId = rs.getInt("map");
                     ret.jailExpiration = rs.getLong("jailexpire");
                     ret.initialSpawnPoint = rs.getInt("spawnpoint");
@@ -6219,8 +6297,7 @@ public class Character extends AbstractCharacterObject {
                     ret.allianceRank = rs.getInt("allianceRank");
                     ret.familyId = rs.getInt("familyId");
                     ret.bookCover = rs.getInt("monsterbookcover");
-                    ret.monsterbook = new MonsterBook();
-                    ret.monsterbook.loadCards(charid);
+                    ret.monsterBook = new MonsterBook(charid);
                     ret.vanquisherStage = rs.getInt("vanquisherStage");
                     ret.ariantPoints = rs.getInt("ariantPoints");
                     ret.dojoPoints = rs.getInt("dojoPoints");
@@ -6375,7 +6452,7 @@ public class Character extends AbstractCharacterObject {
 
             // Account info
             try (PreparedStatement ps = con.prepareStatement("SELECT name, characterslots, language FROM accounts WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
-                ps.setInt(1, ret.accountid);
+                ps.setInt(1, ret.accountId);
 
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -6413,12 +6490,12 @@ public class Character extends AbstractCharacterObject {
                 }
             }
 
-            ret.cashshop = new CashShop(ret.accountid, ret.id, ret.getJobType());
+            ret.cashshop = new CashShop(ret.accountId, ret.id, ret.getJobType());
             ret.autoban = new AutobanManager(ret);
 
             // Blessing of the Fairy
             try (PreparedStatement ps = con.prepareStatement("SELECT name, level FROM characters WHERE accountid = ? AND id != ? ORDER BY level DESC limit 1")) {
-                ps.setInt(1, ret.accountid);
+                ps.setInt(1, ret.accountId);
                 ps.setInt(2, charid);
 
                 try (ResultSet rs = ps.executeQuery()) {
@@ -6610,14 +6687,14 @@ public class Character extends AbstractCharacterObject {
                 }
 
                 ret.buddylist.loadFromDb(charid);
-                ret.storage = wserv.getAccountStorage(ret.accountid);
+                ret.storage = wserv.getAccountStorage(ret.accountId);
 
                 /* Double-check storage incase player is first time on server
                  * The storage won't exist so nothing to load
                  */
                 if (ret.storage == null) {
-                    wserv.loadAccountStorage(ret.accountid);
-                    ret.storage = wserv.getAccountStorage(ret.accountid);
+                    wserv.loadAccountStorage(ret.accountId);
+                    ret.storage = wserv.getAccountStorage(ret.accountId);
                 }
 
                 int startHp = ret.hp, startMp = ret.mp;
@@ -6639,7 +6716,7 @@ public class Character extends AbstractCharacterObject {
 
             // Quickslot key config
             try (final PreparedStatement pSelectQuickslotKeyMapped = con.prepareStatement("SELECT keymap FROM quickslotkeymapped WHERE accountid = ?;")) {
-                pSelectQuickslotKeyMapped.setInt(1, ret.getAccountID());
+                pSelectQuickslotKeyMapped.setInt(1, ret.getAccountId());
 
                 try (final ResultSet pResultSet = pSelectQuickslotKeyMapped.executeQuery()) {
                     if (pResultSet.next()) {
@@ -7408,7 +7485,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(11, mapId);
                     ps.setInt(12, Math.abs(meso.get()));
                     ps.setInt(13, 0);
-                    ps.setInt(14, accountid);
+                    ps.setInt(14, accountId);
                     ps.setString(15, name);
                     ps.setInt(16, world);
                     ps.setInt(17, hp);
@@ -7475,7 +7552,7 @@ public class Character extends AbstractCharacterObject {
 
                     // Quickslot key config
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO quickslotkeymapped (accountid, keymap) VALUES (?, ?) ON DUPLICATE KEY UPDATE keymap = ?;")) {
-                        ps.setInt(1, this.getAccountID());
+                        ps.setInt(1, this.getAccountId());
                         ps.setLong(2, nQuickslotKeymapped);
                         ps.setLong(3, nQuickslotKeymapped);
                         ps.executeUpdate();
@@ -7539,7 +7616,7 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
-        log.info("开始 {} 角色数据 {}", notAutosave ? "保存" : "自动保存", name);
+        log.info(I18nUtil.getLogMessage(notAutosave ? "Character.saveCharToDB.info1" : "Character.saveCharToDB.info2"), name);
 
         Server.getInstance().updateCharacterEntry(this);
 
@@ -7560,7 +7637,7 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(5, attrLuk);
                         ps.setInt(6, attrInt);
                         ps.setInt(7, Math.abs(exp.get()));
-                        ps.setInt(8, Math.abs(gachaexp.get()));
+                        ps.setInt(8, Math.abs(gachaExp.get()));
                         ps.setInt(9, hp);
                         ps.setInt(10, mp);
                         ps.setInt(11, maxHp);
@@ -7640,7 +7717,7 @@ public class Character extends AbstractCharacterObject {
                         ps.setInt(i + 31, getSlots(i));
                     }
 
-                    monsterbook.saveCards(con, id);
+                    monsterBook.saveCards(con, id);
 
                     ps.setInt(36, bookCover);
                     ps.setInt(37, vanquisherStage);
@@ -7723,7 +7800,7 @@ public class Character extends AbstractCharacterObject {
                     long nQuickslotKeymapped = LongTool.BytesToLong(this.m_pQuickslotKeyMapped.GetKeybindings());
 
                     try (final PreparedStatement psQuick = con.prepareStatement("INSERT INTO quickslotkeymapped (accountid, keymap) VALUES (?, ?) ON DUPLICATE KEY UPDATE keymap = ?;")) {
-                        psQuick.setInt(1, this.getAccountID());
+                        psQuick.setInt(1, this.getAccountId());
                         psQuick.setLong(2, nQuickslotKeymapped);
                         psQuick.setLong(3, nQuickslotKeymapped);
                         psQuick.executeUpdate();
@@ -8027,7 +8104,11 @@ public class Character extends AbstractCharacterObject {
         this.exp.set(amount);
     }
 
-    public void setFinishedDojoTutorial() {
+    public void setGachaExp(int exp) {
+        this.gachaExp.set(exp);
+    }
+
+    public void finishDojoTutorial() {
         this.finishedDojoTutorial = true;
     }
 
@@ -8244,7 +8325,7 @@ public class Character extends AbstractCharacterObject {
                 sendPacket(PacketCreator.onNotifyHPDecByField(hpchange * -1));
             }
         }
-        
+
         return true;
     }
 
@@ -8280,10 +8361,6 @@ public class Character extends AbstractCharacterObject {
                 visitor.matchcardties++;
             }
         }
-    }
-
-    public void setMonsterBookCover(int bookCover) {
-        this.bookCover = bookCover;
     }
 
     public void setRPS(RockPaperScissor rps) {
@@ -9160,7 +9237,7 @@ public class Character extends AbstractCharacterObject {
             ps.setString(1, desc);
             ps.setTimestamp(2, TS);
             ps.setInt(3, reason);
-            ps.setInt(4, accountid);
+            ps.setInt(4, accountId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -9607,7 +9684,7 @@ public class Character extends AbstractCharacterObject {
     public int getRewardPoints() {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("SELECT rewardpoints FROM accounts WHERE id=?;")) {
-            ps.setInt(1, accountid);
+            ps.setInt(1, accountId);
             ResultSet resultSet = ps.executeQuery();
             int point = -1;
             if (resultSet.next()) {
@@ -9624,7 +9701,7 @@ public class Character extends AbstractCharacterObject {
         try (Connection con = DatabaseConnection.getConnection();
              PreparedStatement ps = con.prepareStatement("UPDATE accounts SET rewardpoints=? WHERE id=?;")) {
             ps.setInt(1, value);
-            ps.setInt(2, accountid);
+            ps.setInt(2, accountId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

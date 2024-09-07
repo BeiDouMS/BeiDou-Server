@@ -43,8 +43,8 @@ public class CharactersDO implements Serializable {
     private Integer exp;
 
     private Integer gachaexp;
-    @Column("str")
 
+    @Column("str")
     private Integer attrStr;
 
     @Column("dex")
@@ -67,7 +67,7 @@ public class CharactersDO implements Serializable {
     private Integer meso;
 
     @Column("hpMpUsed")
-    private Long hpMpUsed;
+    private Integer hpMpUsed;
 
     private Integer job;
 
@@ -91,7 +91,7 @@ public class CharactersDO implements Serializable {
 
     private Integer spawnpoint;
 
-    private Boolean gm;
+    private Integer gm;
 
     private Integer party;
 
@@ -100,24 +100,24 @@ public class CharactersDO implements Serializable {
 
     private Timestamp createdate;
 
-    private Long rank;
+    private Integer rank;
 
     @Column("rankMove")
     private Integer rankMove;
 
     @Column("jobRank")
-    private Long jobRank;
+    private Integer jobRank;
 
     @Column("jobRankMove")
     private Integer jobRankMove;
 
-    private Long guildid;
+    private Integer guildid;
 
-    private Long guildrank;
+    private Integer guildrank;
 
-    private Long messengerid;
+    private Integer messengerid;
 
-    private Long messengerposition;
+    private Integer messengerposition;
 
     private Integer mountlevel;
 
@@ -158,22 +158,22 @@ public class CharactersDO implements Serializable {
     private Integer allianceRank;
 
     @Column("vanquisherStage")
-    private Long vanquisherStage;
+    private Integer vanquisherStage;
 
     @Column("ariantPoints")
-    private Long ariantPoints;
+    private Integer ariantPoints;
 
     @Column("dojoPoints")
-    private Long dojoPoints;
+    private Integer dojoPoints;
 
     @Column("lastDojoStage")
-    private Long lastDojoStage;
+    private Integer lastDojoStage;
 
     @Column("finishedDojoTutorial")
     private Integer finishedDojoTutorial;
 
     @Column("vanquisherKills")
-    private Long vanquisherKills;
+    private Integer vanquisherKills;
 
     @Column("summonValue")
     private Long summonValue;

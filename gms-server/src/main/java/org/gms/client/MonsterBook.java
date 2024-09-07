@@ -21,6 +21,9 @@
 */
 package org.gms.client;
 
+import org.gms.dao.entity.MonsterbookDO;
+import org.gms.manager.ServerManager;
+import org.gms.service.MonsterBookService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.PacketCreator;
 
@@ -28,12 +31,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -43,6 +42,11 @@ public final class MonsterBook {
     private int bookLevel = 1;
     private final Map<Integer, Integer> cards = new LinkedHashMap<>();
     private final Lock lock = new ReentrantLock();
+    private static final MonsterBookService monsterBookService = ServerManager.getApplicationContext().getBean(MonsterBookService.class);
+
+    public MonsterBook(int cid) {
+        loadCards(cid);
+    }
 
     public Set<Entry<Integer, Integer>> getCardSet() {
         lock.lock();
@@ -153,26 +157,19 @@ public final class MonsterBook {
         }
     }
 
-    public void loadCards(final int charid) throws SQLException {
+    public void loadCards(final int chrId) {
         lock.lock();
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT cardid, level FROM monsterbook WHERE charid = ? ORDER BY cardid ASC")) {
-            ps.setInt(1, charid);
 
-            try (ResultSet rs = ps.executeQuery()) {
-                int cardid;
-                int level;
-                while (rs.next()) {
-                    cardid = rs.getInt("cardid");
-                    level = rs.getInt("level");
-                    if (cardid / 1000 >= 2388) {
-                        specialCard++;
-                    } else {
-                        normalCard++;
-                    }
-                    cards.put(cardid, level);
+        try {
+            List<MonsterbookDO> monsterbookDOList = monsterBookService.getByCharacterId(chrId);
+            monsterbookDOList.forEach(monsterbookDO -> {
+                if (monsterbookDO.getCardid() / 1000 >= 2388) {
+                    specialCard++;
+                } else {
+                    normalCard++;
                 }
-            }
+                cards.put(monsterbookDO.getCardid(), monsterbookDO.getLevel());
+            });
         } finally {
             lock.unlock();
         }

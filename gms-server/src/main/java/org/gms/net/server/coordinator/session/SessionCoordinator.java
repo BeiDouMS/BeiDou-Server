@@ -285,7 +285,7 @@ public class SessionCoordinator {
         Integer chrId = Server.getInstance().freeCharacteridInTransition(client);
         if (chrId != null) {
             try {
-                fakeClient.setAccID(Character.loadCharFromDB(chrId, client, false).getAccountID());
+                fakeClient.setAccID(Character.loadCharFromDB(chrId, client, false).getAccountId());
             } catch (SQLException sqle) {
                 sqle.printStackTrace();
             }

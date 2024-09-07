@@ -65,7 +65,7 @@ public class InventoryEquipRtnDTO {
     /**
      * 魔法防御，对应mDef
      */
-    private Short mdef;
+    private Short mDef;
     /**
      * 命中，对应acc
      */

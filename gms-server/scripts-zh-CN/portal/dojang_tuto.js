@@ -29,7 +29,7 @@
 function enter(pi) {
     if (pi.getPlayer().getMap().getMonsterById(9300216) != null) {
         pi.getPlayer().enteredScript("dojang_Msg", pi.getPlayer().getMap().getId());
-        pi.getPlayer().setFinishedDojoTutorial();
+        pi.getPlayer().finishDojoTutorial();
         pi.getClient().getChannelServer().resetDojo(pi.getPlayer().getMap().getId());
         pi.getClient().getChannelServer().dismissDojoSchedule(pi.getPlayer().getMap().getId(), pi.getParty());
         pi.playPortalSound();

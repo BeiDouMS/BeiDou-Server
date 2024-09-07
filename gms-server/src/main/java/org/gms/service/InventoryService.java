@@ -9,6 +9,7 @@ import org.gms.client.inventory.*;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.InventoryequipmentDO;
 import org.gms.dao.entity.InventoryitemsDO;
+import org.gms.dao.entity.PetignoresDO;
 import org.gms.dao.mapper.*;
 import org.gms.exception.BizException;
 import org.gms.model.dto.*;
@@ -27,6 +28,7 @@ import static com.mybatisflex.core.query.QueryMethods.distinct;
 import static org.gms.dao.entity.table.CharactersDOTableDef.CHARACTERS_D_O;
 import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
+import static org.gms.dao.entity.table.PetignoresDOTableDef.PETIGNORES_D_O;
 
 @Transactional
 @Service
@@ -36,6 +38,7 @@ public class InventoryService {
     private final InventoryequipmentMapper inventoryequipmentMapper;
     private final RingsMapper ringsMapper;
     private final PetsMapper petsMapper;
+    private final PetignoresMapper petignoresMapper;
 
     public List<InventoryTypeRtnDTO> getInventoryTypeList() {
         List<InventoryTypeRtnDTO> list = new ArrayList<>();
@@ -181,7 +184,7 @@ public class InventoryService {
                     .pAtk(obj.getShort("watk"))
                     .mAtk(obj.getShort("matk"))
                     .pDef(obj.getShort("pdef"))
-                    .mdef(obj.getShort("mdef"))
+                    .mDef(obj.getShort("mdef"))
                     .acc(obj.getShort("acc"))
                     .avoid(obj.getShort("avoid"))
                     .hands(obj.getShort("hands"))
@@ -232,7 +235,7 @@ public class InventoryService {
                         .pAtk(equip.getWatk())
                         .mAtk(equip.getMatk())
                         .pDef(equip.getWdef())
-                        .mdef(equip.getMdef())
+                        .mDef(equip.getMdef())
                         .acc(equip.getAcc())
                         .avoid(equip.getAvoid())
                         .hands(equip.getHands())
@@ -288,7 +291,7 @@ public class InventoryService {
             if (equipment.getPAtk() != null) equip.setWatk(equipment.getPAtk());
             if (equipment.getMAtk() != null) equip.setMatk(equipment.getMAtk());
             if (equipment.getPDef() != null) equip.setWdef(equipment.getPDef());
-            if (equipment.getMdef() != null) equip.setMdef(equipment.getMdef());
+            if (equipment.getMDef() != null) equip.setMdef(equipment.getMDef());
             if (equipment.getAcc() != null) equip.setAcc(equipment.getAcc());
             if (equipment.getAvoid() != null) equip.setAvoid(equipment.getAvoid());
             if (equipment.getHands() != null) equip.setHands(equipment.getHands());
@@ -316,7 +319,7 @@ public class InventoryService {
                     .watk(equipment.getPAtk().intValue())
                     .matk(equipment.getMAtk().intValue())
                     .wdef(equipment.getPDef().intValue())
-                    .mdef(equipment.getMdef().intValue())
+                    .mdef(equipment.getMDef().intValue())
                     .acc(equipment.getAcc().intValue())
                     .avoid(equipment.getAvoid().intValue())
                     .hands(equipment.getHands().intValue())
@@ -359,6 +362,10 @@ public class InventoryService {
             inventoryitemsMapper.deleteByQuery(QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryItemsDOS.getInventoryitemid())));
             inventoryequipmentMapper.deleteById(inventoryItemsDOS.getInventoryitemid());
         }
+    }
+
+    public List<PetignoresDO> getPetIgnoreByPetId(Integer petId) {
+        return petignoresMapper.selectListByQuery(QueryWrapper.create().where(PETIGNORES_D_O.PETID.eq(petId)));
     }
 
     private void modifyInventoryCheck(InventorySearchRtnDTO data) {
