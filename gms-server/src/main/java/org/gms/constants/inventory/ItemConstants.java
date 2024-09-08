@@ -321,4 +321,8 @@ public final class ItemConstants {
             return false;
         }
     }
+
+    public static boolean notValidHairColor(int hairColor) {
+        return hairColor > 7 || hairColor < 0;
+    }
 }
