@@ -19,7 +19,7 @@ function action(mode, type, selection) {
         } else if (cm.getMeso() >= 5000) {
             cm.gainMeso(-5000);
             cm.gainItem(item, 1);
-            cm.sendNext("你去吧。");
+            cm.sendNext("请收好您的票。");
         } else {
             cm.sendNext("你没有足够的金币。");
         }
