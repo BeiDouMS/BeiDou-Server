@@ -6,7 +6,7 @@ var NLC = false;
 var em;
 
 function start() {
-    cm.sendSimple("选择你的目的地。\r\n#L0##b昆阳广场购物中心#l\r\n#L1#进入建筑工地#l\r\n#L2#新叶城#l");
+    cm.sendSimple("选择你的目的地。\r\n#L0##b废都广场#l\r\n#L1#进入建筑工地#l\r\n#L2#新叶城#l");
 }
 
 function action(mode, type, selection) {

@@ -154,7 +154,7 @@ function action(mode, type, selection) {
     } else if (actionx["2ndJob"]) {
         if (status == 0) {
             if (cm.haveItem(4031012)) {
-                cm.sendSimple("好的，当你做出决定后，点击底部的[I'll choose my occupation]。#b\r\n#L0#请向我解释一下成为刺客的所有内容。\r\n#L1#请向我解释一下成为土匪的所有内容。\r\n#L3#我会选择我的职业！");
+                cm.sendSimple("好的，当你做出决定后，点击底部的[我已经决定好了]。#b\r\n#L0#请向我解释一下成为刺客的所有内容。\r\n#L1#请向我解释一下成为侠客的所有内容。\r\n#L3#我已经决定好了");
             } else {
                 cm.sendNext("做得好。你看起来很强壮，但我需要看看你是否真的足够强大来通过测试，这不是一个困难的测试，所以你会做得很好。拿着我的信先……确保你不要丢了它！");
                 if (!cm.isQuestStarted(100009)) {
@@ -177,7 +177,7 @@ function action(mode, type, selection) {
                     if (selection == 0) {    //assassin
                         cm.sendNext("擅长使用#r爪#k的盗贼。\r\n\r\n#b刺客#k是远程攻击者。他们非常节约金币，并且有很高的伤害潜力，但是比飞侠花费更多。");
                     } else if (selection == 1) {    //bandit
-                        cm.sendNext("擅长使用匕首的盗贼。\r\n\r\n#b强盗#k是快速的近战攻击者，在二转职业中非常强大。他们不像刺客那样效率高，也没有远程攻击的优势，但在原始力量方面弥补了这一点。");
+                        cm.sendNext("擅长使用匕首的盗贼。\r\n\r\n#b侠客#k是快速的近战攻击者，在二转职业中非常强大。他们不像刺客那样效率高，也没有远程攻击的优势，但在原始力量方面弥补了这一点。");
                     }
 
                     status -= 2;

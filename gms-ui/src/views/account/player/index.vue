@@ -52,7 +52,7 @@
           <a-space>
             <a-button type="primary" @click="refreshClick">
               <template #icon>
-                <icon-plus />
+                <icon-refresh />
               </template>
               {{ $t('button.refresh') }}
             </a-button>
