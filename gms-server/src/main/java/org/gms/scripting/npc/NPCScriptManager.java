@@ -173,6 +173,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         Invocable iv = scripts.get(c);
         if (iv != null) {
             try {
+                c.tryacquireClient();
                 c.setClickedNPC();
                 iv.invokeFunction("action", mode, type, selection);
             } catch (ScriptException | NoSuchMethodException t) {
@@ -180,6 +181,8 @@ public class NPCScriptManager extends AbstractScriptManager {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
                 dispose(c);
+            } finally {
+                c.releaseClient();
             }
         }
     }
@@ -188,6 +191,7 @@ public class NPCScriptManager extends AbstractScriptManager {
         Invocable iv = scripts.get(c);
         if (iv != null) {
             try {
+                c.tryacquireClient();
                 c.setClickedNPC();
                 NextLevelContext nextLevelContext = c.getCM().getNextLevelContext();
                 switch (nextLevelContext.getLevelType()) {
@@ -233,6 +237,8 @@ public class NPCScriptManager extends AbstractScriptManager {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
                 dispose(c);
+            } finally {
+                c.releaseClient();
             }
         }
     }
