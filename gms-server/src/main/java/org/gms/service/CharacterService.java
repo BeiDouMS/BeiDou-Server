@@ -344,7 +344,7 @@ public class CharacterService {
         skillsDOList.forEach(skillsDO -> {
             Skill skill = SkillFactory.getSkill(skillsDO.getSkillid());
             if (skill != null) {
-                chr.getSkills().put(skill, new SkillEntry(Optional.ofNullable(skillsDO.getSkilllevel()).map(Integer::byteValue).orElse((byte) 0),
+                chr.getEditableSkills().put(skill, new SkillEntry(Optional.ofNullable(skillsDO.getSkilllevel()).map(Integer::byteValue).orElse((byte) 0),
                         skillsDO.getMasterlevel(), skillsDO.getExpiration()));
             }
         });

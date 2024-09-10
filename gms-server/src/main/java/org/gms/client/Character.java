@@ -5153,6 +5153,10 @@ public class Character extends AbstractCharacterObject {
         return Collections.unmodifiableMap(skills);
     }
 
+    public Map<Skill, SkillEntry> getEditableSkills() {
+        return skills;
+    }
+
     public int getSkillLevel(int skill) {
         SkillEntry ret = skills.get(SkillFactory.getSkill(skill));
         if (ret == null) {
