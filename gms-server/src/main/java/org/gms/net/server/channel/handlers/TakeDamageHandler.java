@@ -193,9 +193,9 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         if (damage > 0) {
-            chr.getAutobanManager().resetMisses();
+            chr.getAutoBanManager().resetMisses();
         } else {
-            chr.getAutobanManager().addMiss();
+            chr.getAutoBanManager().addMiss();
         }
 
         //in dojo player cannot use pot, so deadly attacks should be turned off as well

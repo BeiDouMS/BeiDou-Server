@@ -22,6 +22,7 @@
  */
 package org.gms.client;
 
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.gms.client.autoban.AutobanManager;
@@ -262,8 +263,10 @@ public class Character extends AbstractCharacterObject {
     private boolean equippedPetItemIgnore = false;
     private boolean usedSafetyCharm = false;
     @Getter
+    @Setter
     private int linkedLevel = 0;
     @Getter
+    @Setter
     private String linkedName = null;
     @Getter
     @Setter
@@ -334,7 +337,9 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private MonsterBook monsterBook;
-    private CashShop cashshop;
+    @Getter
+    @Setter
+    private CashShop cashShop;
     private final Set<NewYearCardRecord> newyears = new LinkedHashSet<>();
     @Getter
     private final SavedLocation[] savedLocations;
@@ -402,7 +407,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     private final List<String> blockedPortals = new ArrayList<>();
     private final Map<Short, String> area_info = new LinkedHashMap<>();
-    private AutobanManager autoban;
+    private AutobanManager autoBan;
     @Getter
     @Setter
     private boolean banned = false;
@@ -6230,6 +6235,53 @@ public class Character extends AbstractCharacterObject {
         }
         NewYearCardRecord.loadPlayerNewYearCards(chr);
 
+        List<TrocklocationsDO> trocklocationsDOList = characterService.getTrockLocationByCharacter(charactersDO.getId());
+        int vip = 0;
+        int reg = 0;
+        for (int i = 0; i < 15; i++) {
+            if (i < trocklocationsDOList.size()) {
+                TrocklocationsDO trocklocationsDO = trocklocationsDOList.get(i);
+                if (trocklocationsDO.getVip() == 1) {
+                    vip++;
+                    chr.getVipTrockMaps().add(trocklocationsDO.getMapid());
+                } else {
+                    reg++;
+                    chr.getTrockMaps().add(trocklocationsDO.getMapid());
+                }
+                continue;
+            }
+            if (vip < 10) {
+                chr.getVipTrockMaps().add(MapId.NONE);
+            }
+            if (reg < 5) {
+                chr.getTrockMaps().add(MapId.NONE);
+            }
+        }
+
+        AccountsDO accountsDO = accountService.findById(charactersDO.getAccountid());
+        chr.getClient().setAccountName(accountsDO.getName());
+        chr.getClient().setCharacterSlots(Optional.ofNullable(accountsDO.getCharacterslots()).map(Integer::byteValue).orElse((byte) 0));
+        chr.getClient().setLanguage(accountsDO.getLanguage());
+
+        List<AreaInfoDO> areaInfoDOList = characterService.getAreaInfoByCharacter(charactersDO.getId());
+        areaInfoDOList.forEach(areaInfoDO -> chr.getAreaInfos().put(Optional.ofNullable(areaInfoDO.getArea()).map(Integer::shortValue).orElse((short)0),
+                areaInfoDO.getInfo()));
+
+        List<EventstatsDO> eventstatsDOList = characterService.getEventStatsByCharacter(charactersDO.getId());
+        eventstatsDOList.forEach(eventstatsDO -> chr.getEvents().put(eventstatsDO.getName(), new RescueGaga(Optional.ofNullable(eventstatsDO.getInfo()).orElse(0))));
+
+        chr.setCashShop(new CashShop(charactersDO.getAccountid(), charactersDO.getId(), chr.getJobType()));
+        chr.setAutoBanManager(new AutobanManager(chr));
+
+        List<CharactersDO> charactersDOList = characterService.getCharacterByAccountId(charactersDO.getAccountid());
+        charactersDOList.stream()
+                .filter(chrDO -> !Objects.equals(chrDO.getId(), charactersDO.getId()))
+                .max(Comparator.comparing(CharactersDO::getLevel))
+                .ifPresent(chrDO -> {
+                    chr.setLinkedName(chrDO.getName());
+                    chr.setLinkedLevel(chrDO.getLevel());
+                });
+
         int mountId = chr.getJobType() * 10000000 + 1004;
         if (chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18) != null) {
             chr.setMapleMount(new Mount(chr, chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18).getItemId(), mountId));
@@ -7187,7 +7239,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(18, job.getId());
                     ps.setInt(19, hair);
                     ps.setInt(20, face);
-                    if (map == null || (cashshop != null && cashshop.isOpened())) {
+                    if (map == null || (cashShop != null && cashShop.isOpened())) {
                         ps.setInt(21, mapId);
                     } else {
                         if (map.getForcedReturnId() != MapId.NONE) {
@@ -7515,8 +7567,8 @@ public class Character extends AbstractCharacterObject {
 
                 }
 
-                if (cashshop != null) {
-                    cashshop.save(con);
+                if (cashShop != null) {
+                    cashShop.save(con);
                 }
 
                 if (storage != null && usedStorage) {
@@ -8659,10 +8711,6 @@ public class Character extends AbstractCharacterObject {
         return name;
     }
 
-    public CashShop getCashShop() {
-        return cashshop;
-    }
-
     public Set<NewYearCardRecord> getNewYearRecords() {
         return newyears;
     }
@@ -8829,8 +8877,12 @@ public class Character extends AbstractCharacterObject {
         return index != -1;
     }
 
-    public AutobanManager getAutobanManager() {
-        return autoban;
+    public AutobanManager getAutoBanManager() {
+        return autoBan;
+    }
+
+    public void setAutoBanManager(AutobanManager autoBan) {
+        this.autoBan = autoBan;
     }
 
     public void equippedItem(Equip equip) {

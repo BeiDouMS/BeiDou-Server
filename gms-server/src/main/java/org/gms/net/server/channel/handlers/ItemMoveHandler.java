@@ -35,7 +35,7 @@ public final class ItemMoveHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         p.skip(4);
-        if (c.getPlayer().getAutobanManager().getLastSpam(6) + 300 > currentServerTime()) {
+        if (c.getPlayer().getAutoBanManager().getLastSpam(6) + 300 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
@@ -55,6 +55,6 @@ public final class ItemMoveHandler extends AbstractPacketHandler {
             InventoryManipulator.move(c, type, src, action);
         }
 
-        c.getPlayer().getAutobanManager().spam(6);
+        c.getPlayer().getAutoBanManager().spam(6);
     }
 }

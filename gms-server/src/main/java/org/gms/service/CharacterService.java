@@ -412,6 +412,26 @@ public class CharacterService {
         return chr;
     }
 
+    public List<TrocklocationsDO> getTrockLocationByCharacter(Integer cid) {
+        return trocklocationsMapper.selectListByQuery(QueryWrapper.create().where(TROCKLOCATIONS_D_O.CHARACTERID.eq(cid)));
+    }
+
+    public List<AreaInfoDO> getAreaInfoByCharacter(Integer cid) {
+        return areaInfoMapper.selectListByQuery(QueryWrapper.create().where(AREA_INFO_D_O.CHARID.eq(cid)));
+    }
+
+    public List<EventstatsDO> getEventStatsByCharacter(Integer cid) {
+        return eventstatsMapper.selectListByQuery(QueryWrapper.create().where(EVENTSTATS_D_O.CHARACTERID.eq(cid)));
+    }
+
+    public List<WishlistsDO> getWishlistsByCharacter(Integer cid) {
+        return wishlistsMapper.selectListByQuery(QueryWrapper.create().where(WISHLISTS_D_O.CHARID.eq(cid)));
+    }
+
+    public List<CharactersDO> getCharacterByAccountId(int accountId) {
+        return charactersMapper.selectListByQuery(QueryWrapper.create().where(CHARACTERS_D_O.ACCOUNTID.eq(accountId)));
+    }
+
     private void checkName(ExtendValueDO data) {
         check(data);
         // 非法请求篡改其他字段
