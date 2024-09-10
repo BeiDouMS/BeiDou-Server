@@ -286,7 +286,7 @@ public class SessionCoordinator {
         if (chrId != null) {
             try {
                 fakeClient.setAccID(Character.loadCharFromDB(chrId, client, false).getAccountId());
-            } catch (SQLException sqle) {
+            } catch (Exception sqle) {
                 sqle.printStackTrace();
             }
         }

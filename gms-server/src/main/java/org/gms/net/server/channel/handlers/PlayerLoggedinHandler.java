@@ -165,7 +165,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 try {
                     player = Character.loadCharFromDB(cid, c, true);
                     newcomer = true;
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
