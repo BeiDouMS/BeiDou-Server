@@ -38,7 +38,7 @@ function action(mode, type, selection) {
         if (cm.getPlayer().getMapId() == 682000000) {
             if (status == 0) {
                 if (selection == 0) {
-                    cm.sendYesNo("你想回到#bcivilization#k吗？费用是" + fee + "金币。");
+                    cm.sendYesNo("你想回到 #b新叶城 市区中心#k 吗？费用是" + fee + "金币。");
                 }
             } else if (status == 1) {
                 if (cm.getMeso() >= fee) {
@@ -52,7 +52,7 @@ function action(mode, type, selection) {
             }
         } else {
             if (status == 0) {
-"Would you like to go to the #bHaunted Mansion#k? The fee is " + fee + " mesos."
+                cm.sendYesNo("你想乘坐这辆车前往 #b鬼屋入口#k 吗? 这个费用是 " + fee + " 金币.")
             } else if (status == 1) {
                 if (cm.getMeso() >= fee) {
                     cm.gainMeso(-fee);
