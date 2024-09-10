@@ -425,7 +425,7 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         changeHpMp(newhp, newmp, false);
     }
 
-    protected void changeHpMp(int newhp, int newmp, boolean silent) {
+    public void changeHpMp(int newhp, int newmp, boolean silent) {
         changeHpMpPool(newhp, newmp, null, null, silent);
     }
 

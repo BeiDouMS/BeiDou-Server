@@ -38,6 +38,6 @@ public class PlayerdiseasesDO implements Serializable {
 
     private Integer mobskilllv;
 
-    private Integer length;
+    private Long length;
 
 }

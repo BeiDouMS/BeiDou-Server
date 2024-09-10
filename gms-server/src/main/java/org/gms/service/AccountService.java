@@ -7,14 +7,8 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.DefaultDates;
 import org.gms.config.YamlConfig;
-import org.gms.dao.entity.AccountsDO;
-import org.gms.dao.entity.CharactersDO;
-import org.gms.dao.entity.IpbansDO;
-import org.gms.dao.entity.MacbansDO;
-import org.gms.dao.mapper.AccountsMapper;
-import org.gms.dao.mapper.CharactersMapper;
-import org.gms.dao.mapper.IpbansMapper;
-import org.gms.dao.mapper.MacbansMapper;
+import org.gms.dao.entity.*;
+import org.gms.dao.mapper.*;
 import org.gms.model.dto.AddAccountDTO;
 import org.gms.model.dto.UpdateAccountByGmDTO;
 import org.gms.model.dto.UpdateAccountByUserDTO;
@@ -46,6 +40,7 @@ public class AccountService {
     private final CharactersMapper charactersMapper;
     private final IpbansMapper ipbansMapper;
     private final MacbansMapper macbansMapper;
+    private final QuickslotkeymappedMapper quickslotkeymappedMapper;
 
     public AccountsDO findByName(String name) {
         return accountsMapper.selectOneByName(name);
@@ -270,5 +265,9 @@ public class AccountService {
 
     public boolean isBanned(String ip) {
         return ipbansMapper.selectCountByQuery(QueryWrapper.create().where(IPBANS_D_O.IP.eq(ip))) > 0;
+    }
+
+    public QuickslotkeymappedDO getQuickSlotKeyMap(int accountId) {
+        return quickslotkeymappedMapper.selectOneById(accountId);
     }
 }

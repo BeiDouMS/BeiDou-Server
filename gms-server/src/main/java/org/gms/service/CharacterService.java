@@ -4,30 +4,38 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.gms.client.*;
 import org.gms.client.Character;
+import org.gms.client.keybind.KeyBinding;
 import org.gms.config.YamlConfig;
+import org.gms.constants.id.MapId;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
 import org.gms.model.dto.ChrOnlineListReqDTO;
 import org.gms.model.dto.ChrOnlineListRtnDTO;
 import org.gms.exception.BizException;
+import org.gms.model.pojo.SkillEntry;
 import org.gms.net.server.Server;
 import org.gms.net.server.guild.GuildCharacter;
+import org.gms.net.server.world.Messenger;
+import org.gms.net.server.world.Party;
+import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.World;
-import org.gms.util.BasePageUtil;
-import org.gms.util.ExtendUtil;
-import org.gms.util.I18nUtil;
-import org.gms.util.RequireUtil;
+import org.gms.server.Storage;
+import org.gms.server.life.MobSkill;
+import org.gms.server.life.MobSkillFactory;
+import org.gms.server.life.MobSkillType;
+import org.gms.server.maps.*;
+import org.gms.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
+import static com.mybatisflex.core.query.QueryMethods.dateDiff;
+import static com.mybatisflex.core.query.QueryMethods.now;
 import static org.gms.dao.entity.table.AccountsDOTableDef.ACCOUNTS_D_O;
 import static org.gms.dao.entity.table.AreaInfoDOTableDef.AREA_INFO_D_O;
 import static org.gms.dao.entity.table.BbsRepliesDOTableDef.BBS_REPLIES_D_O;
@@ -184,7 +192,7 @@ public class CharacterService {
                 .and(CHARACTERS_D_O.WORLD.eq(worldId))
                 .orderBy(CHARACTERS_D_O.LEVEL.desc(), CHARACTERS_D_O.EXP.desc(), CHARACTERS_D_O.LAST_EXP_GAIN_TIME.asc())
                 .limit(50);
-           return charactersMapper.selectListByQuery(queryWrapper);
+        return charactersMapper.selectListByQuery(queryWrapper);
     }
 
     public CharactersDO findByName(String name) {
@@ -258,7 +266,7 @@ public class CharacterService {
         // 删除背包库存
         inventoryService.deleteInventoryByCharacterId(cid);
         // 删除任务进度
-        questService.deleteQuestProgressWhereCharacterId(cid);
+        questService.deleteQuestProgressByCharacter(cid);
         // 删除fredstorage
         fredstorageMapper.deleteByQuery(QueryWrapper.create().where(FREDSTORAGE_D_O.CID.eq(cid)));
         // 删除拍卖行
@@ -284,6 +292,123 @@ public class CharacterService {
     @Transactional(rollbackFor = Exception.class)
     public void saveCharToDB(Character player) {
 
+    }
+
+    public Character loadCharFromDB(int cid, Client client, boolean channelServer) {
+        CharactersDO charactersDO = findById(cid);
+        RequireUtil.requireNotNull(charactersDO, I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
+        Character chr = Character.fromCharactersDO(charactersDO);
+
+        if (!channelServer) {
+            return chr;
+        }
+        MapManager mapManager = client.getChannelServer().getMapFactory();
+        MapleMap mapleMap = mapManager.getMap(chr.getMapId());
+        if (mapleMap == null) {
+            mapleMap = mapManager.getMap(MapId.HENESYS);
+        }
+        chr.setMap(mapleMap);
+        Portal portal = mapleMap.getPortal(chr.getInitialSpawnPoint());
+        if (portal == null) {
+            portal = mapleMap.getPortal(0);
+            chr.setInitialSpawnPoint(0);
+        }
+        chr.setPosition(portal.getPosition());
+
+        World world = Server.getInstance().getWorld(charactersDO.getWorld());
+        int partyId = charactersDO.getParty();
+        Party party = world.getParty(partyId);
+        if (party != null) {
+            PartyCharacter partyCharacter = party.getMemberById(cid);
+            if (partyCharacter != null) {
+                chr.setMPC(new PartyCharacter(chr));
+                chr.setParty(party);
+            }
+        }
+
+        int messengerId = charactersDO.getMessengerid();
+        int messengerPosition = charactersDO.getMessengerposition();
+        if (messengerId > 0 && messengerPosition < 4 && messengerPosition > -1) {
+            Messenger messenger = world.getMessenger(messengerId);
+            if (messenger != null) {
+                chr.setMessenger(messenger);
+                chr.setMessengerPosition(messengerPosition);
+            }
+        }
+        chr.setLoggedIn(true);
+
+        List<QuestStatus> questStatusList = questService.getQuestStatusByCharacter(cid);
+        questStatusList.forEach(questStatus -> chr.getQuests().put(questStatus.getQuestID(), questStatus));
+
+        List<SkillsDO> skillsDOList = skillsMapper.selectListByQuery(QueryWrapper.create().where(SKILLS_D_O.CHARACTERID.eq(cid)));
+        skillsDOList.forEach(skillsDO -> {
+            Skill skill = SkillFactory.getSkill(skillsDO.getSkillid());
+            if (skill != null) {
+                chr.getSkills().put(skill, new SkillEntry(skillsDO.getSkilllevel().byteValue(), skillsDO.getMasterlevel(), skillsDO.getExpiration()));
+            }
+        });
+
+        QueryWrapper cdQueryWrapper = QueryWrapper.create().where(COOLDOWNS_D_O.CHARID.eq(cid));
+        List<CooldownsDO> cooldownsDOList = cooldownsMapper.selectListByQuery(cdQueryWrapper);
+        cooldownsDOList.forEach(cooldownsDO -> {
+            if (cooldownsDO.getSkillid() != 5221999 && cooldownsDO.getLength() + cooldownsDO.getStarttime() < System.currentTimeMillis()) {
+                return;
+            }
+            chr.giveCoolDowns(cooldownsDO.getSkillid(), cooldownsDO.getStarttime(), cooldownsDO.getLength());
+        });
+        cooldownsMapper.deleteByQuery(cdQueryWrapper);
+
+        QueryWrapper pdWrapper = QueryWrapper.create().where(PLAYERDISEASES_D_O.CHARID.eq(cid));
+        List<PlayerdiseasesDO> playerdiseasesDOList = playerdiseasesMapper.selectListByQuery(pdWrapper);
+        Map<Disease, Pair<Long, MobSkill>> loadedDiseases = new LinkedHashMap<>();
+        playerdiseasesDOList.forEach(playerdiseasesDO -> {
+            Disease ordinal = Disease.ordinal(playerdiseasesDO.getDisease());
+            if (Disease.NULL.equals(ordinal)) {
+                return;
+            }
+            MobSkillType mobSkillType = MobSkillType.from(playerdiseasesDO.getMobskillid()).orElseThrow();
+            MobSkill mobSkill = MobSkillFactory.getMobSkillOrThrow(mobSkillType, playerdiseasesDO.getMobskilllv());
+            loadedDiseases.put(ordinal, new Pair<>(playerdiseasesDO.getLength(), mobSkill));
+        });
+        playerdiseasesMapper.deleteByQuery(pdWrapper);
+        if (!loadedDiseases.isEmpty()) {
+            Server.getInstance().getPlayerBuffStorage().addDiseasesToStorage(cid, loadedDiseases);
+        }
+
+        List<SkillmacrosDO> skillmacrosDOList = skillmacrosMapper.selectListByQuery(QueryWrapper.create().where(SKILLMACROS_D_O.CHARACTERID.eq(cid)));
+        skillmacrosDOList.forEach(skillmacrosDO -> chr.getSkillMacros()[skillmacrosDO.getPosition()] = new SkillMacro(
+                skillmacrosDO.getSkill1(), skillmacrosDO.getSkill2(), skillmacrosDO.getSkill3(), skillmacrosDO.getName(),
+                skillmacrosDO.getShout(), skillmacrosDO.getPosition()
+        ));
+
+        List<KeymapDO> keymapDOList = keymapMapper.selectListByQuery(QueryWrapper.create().where(KEYMAP_D_O.CHARACTERID.eq(cid)));
+        keymapDOList.forEach(keymapDO -> chr.getKeymap().put(keymapDO.getKey(), new KeyBinding(keymapDO.getType(), keymapDO.getAction())));
+
+        List<SavedlocationsDO> savedlocationsDOList = savedlocationsMapper.selectListByQuery(QueryWrapper.create().where(SAVEDLOCATIONS_D_O.CHARACTERID.eq(cid)));
+        savedlocationsDOList.forEach(savedlocationsDO -> chr.getSavedLocations()[SavedLocationType.valueOf(savedlocationsDO.getLocationtype()).ordinal()]
+                = new SavedLocation(savedlocationsDO.getMap(), savedlocationsDO.getPortal()));
+
+        List<FamelogDO> famelogDOList = famelogMapper.selectListByQuery(QueryWrapper.create()
+                .where(FAMELOG_D_O.CHARACTERID.eq(cid)).and(dateDiff(now(), FAMELOG_D_O.WHEN).lt(30)));
+        long lastFameTime = 0;
+        List<Integer> lastMonthFameIds = new ArrayList<>(31);
+        for (FamelogDO famelogDO : famelogDOList) {
+            lastFameTime = Math.max(lastFameTime, famelogDO.getWhen().getTime());
+            lastMonthFameIds.add(famelogDO.getCharacteridTo());
+        }
+        chr.setLastfametime(lastFameTime);
+        chr.setLastmonthfameids(lastMonthFameIds);
+
+        chr.getBuddylist().loadFromDb(cid);
+        Storage accountStorage = world.getAccountStorage(charactersDO.getAccountid());
+        if (accountStorage == null) {
+            world.loadAccountStorage(charactersDO.getAccountid());
+            accountStorage = world.getAccountStorage(charactersDO.getAccountid());
+        }
+        chr.setStorage(accountStorage);
+        chr.reapplyLocalStats();
+        chr.changeHpMp(charactersDO.getHp(), charactersDO.getMp(), true);
+        return chr;
     }
 
     private void checkName(ExtendValueDO data) {

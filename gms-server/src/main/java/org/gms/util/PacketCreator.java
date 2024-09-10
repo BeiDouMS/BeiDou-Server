@@ -1886,7 +1886,7 @@ public class PacketCreator {
         // Monster Riding
         Integer bv = chr.getBuffedValue(BuffStat.MONSTER_RIDING);
         if (bv != null) {
-            Mount mount = chr.getMount();
+            Mount mount = chr.getMapleMount();
             if (mount != null) {
                 p.writeInt(mount.getItemId());
                 p.writeInt(mount.getSkillId());
@@ -1981,13 +1981,13 @@ public class PacketCreator {
             }
         }
         p.writeByte(0); //end of pets
-        if (chr.getMount() == null) {
+        if (chr.getMapleMount() == null) {
             p.writeInt(1); // mob level
             p.writeLong(0); // mob exp + tiredness
         } else {
-            p.writeInt(chr.getMount().getLevel());
-            p.writeInt(chr.getMount().getExp());
-            p.writeInt(chr.getMount().getTiredness());
+            p.writeInt(chr.getMapleMount().getLevel());
+            p.writeInt(chr.getMapleMount().getExp());
+            p.writeInt(chr.getMapleMount().getTiredness());
         }
 
         PlayerShop mps = chr.getPlayerShop();
@@ -2746,8 +2746,8 @@ public class PacketCreator {
         p.writeByte(0); //end of pets
 
         Item mount;     //mounts can potentially crash the client if the player's level is not properly checked
-        if (chr.getMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && ItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
-            Mount mmount = chr.getMount();
+        if (chr.getMapleMount() != null && (mount = chr.getInventory(InventoryType.EQUIPPED).getItem((short) -18)) != null && ItemInformationProvider.getInstance().getEquipLevelReq(mount.getItemId()) <= chr.getLevel()) {
+            Mount mmount = chr.getMapleMount();
             p.writeByte(mmount.getId()); //mount
             p.writeInt(mmount.getLevel()); //level
             p.writeInt(mmount.getExp()); //exp

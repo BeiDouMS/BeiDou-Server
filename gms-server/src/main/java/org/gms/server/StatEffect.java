@@ -1056,7 +1056,7 @@ public class StatEffect {
         }
 
         if (this.getFatigue() != 0) {
-            applyto.getMount().setTiredness(applyto.getMount().getTiredness() + this.getFatigue());
+            applyto.getMapleMount().setTiredness(applyto.getMapleMount().getTiredness() + this.getFatigue());
         }
 
         if (summonMovementType != null && pos != null) {
