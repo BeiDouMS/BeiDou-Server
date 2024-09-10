@@ -6107,8 +6107,11 @@ public class Character extends AbstractCharacterObject {
         updateRemainingSp(remainingSp, GameConstants.getSkillBook(job.getId()));
     }
 
-    public static Character fromCharactersDO(CharactersDO charactersDO) {
+    public static Character fromCharactersDO(CharactersDO charactersDO, Client client) {
         Character chr = new Character();
+        chr.setClient(client);
+        chr.setId(charactersDO.getId());
+
         chr.setName(charactersDO.getName());
         chr.setLevel(charactersDO.getLevel());
         chr.setFame(charactersDO.getFame());

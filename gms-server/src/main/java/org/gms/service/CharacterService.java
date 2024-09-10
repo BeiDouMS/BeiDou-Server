@@ -297,8 +297,7 @@ public class CharacterService {
     public Character loadCharFromDB(int cid, Client client, boolean channelServer) {
         CharactersDO charactersDO = findById(cid);
         RequireUtil.requireNotNull(charactersDO, I18nUtil.getExceptionMessage("UNKNOWN_CHARACTER"));
-        Character chr = Character.fromCharactersDO(charactersDO);
-        chr.setClient(client);
+        Character chr = Character.fromCharactersDO(charactersDO, client);
         if (!channelServer) {
             return chr;
         }
