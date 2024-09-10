@@ -223,8 +223,9 @@ public class CharacterService {
             // 删除guild
             if (charactersDO.getGuildid() > 0 && Objects.equals(senderAccId, charactersDO.getAccountid())) {
                 Server.getInstance().deleteGuildCharacter(new GuildCharacter(player, cid, 0, charactersDO.getName(),
-                        (byte) -1, (byte) -1, 0, charactersDO.getGuildrank().intValue(), charactersDO.getGuildid().intValue(),
-                        false, charactersDO.getAllianceRank()));
+                        (byte) -1, (byte) -1, 0, Optional.ofNullable(charactersDO.getGuildrank()).orElse(0),
+                        Optional.ofNullable(charactersDO.getGuildid()).orElse(0), false,
+                        Optional.ofNullable(charactersDO.getAllianceRank()).orElse(0)));
             }
         } else {
             world = 0;
@@ -343,7 +344,8 @@ public class CharacterService {
         skillsDOList.forEach(skillsDO -> {
             Skill skill = SkillFactory.getSkill(skillsDO.getSkillid());
             if (skill != null) {
-                chr.getSkills().put(skill, new SkillEntry(skillsDO.getSkilllevel().byteValue(), skillsDO.getMasterlevel(), skillsDO.getExpiration()));
+                chr.getSkills().put(skill, new SkillEntry(Optional.ofNullable(skillsDO.getSkilllevel()).map(Integer::byteValue).orElse((byte) 0),
+                        skillsDO.getMasterlevel(), skillsDO.getExpiration()));
             }
         });
 
