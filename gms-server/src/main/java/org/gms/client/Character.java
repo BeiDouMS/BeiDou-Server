@@ -5194,7 +5194,7 @@ public class Character extends AbstractCharacterObject {
     public final List<QuestStatus> getStartedQuests() {
         List<QuestStatus> ret = new LinkedList<>();
         for (QuestStatus qs : getQuestValues()) {
-            if (qs.getStatus().equals(QuestStatus.Status.STARTED)) {
+            if (QuestStatus.Status.STARTED.equals(qs.getStatus())) {
                 ret.add(qs);
             }
         }

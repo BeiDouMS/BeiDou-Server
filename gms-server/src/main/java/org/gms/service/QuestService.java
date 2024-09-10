@@ -42,7 +42,7 @@ public class QuestService {
 
         return queststatusDOList.stream().map(queststatusDO -> {
             Quest quest = Quest.getInstance(queststatusDO.getQuest());
-            QuestStatus questStatus = new QuestStatus(quest, QuestStatus.Status.getById(queststatusDO.getQuest()));
+            QuestStatus questStatus = new QuestStatus(quest, QuestStatus.Status.getById(queststatusDO.getStatus()));
             if (queststatusDO.getTime() > -1) {
                 questStatus.setCompletionTime(TimeUnit.SECONDS.toMillis(queststatusDO.getTime()));
             }
