@@ -105,9 +105,9 @@ public class CashShop {
         }
 
         AccountsDO accountsDO = accountService.findById(accountId);
-        this.nxCredit = accountsDO.getNxCredit();
-        this.maplePoint = accountsDO.getMaplePoint();
-        this.nxPrepaid = accountsDO.getNxPrepaid();
+        this.nxCredit = Optional.ofNullable(accountsDO.getNxCredit()).orElse(0);
+        this.maplePoint = Optional.ofNullable(accountsDO.getMaplePoint()).orElse(0);
+        this.nxPrepaid = Optional.ofNullable(accountsDO.getNxPrepaid()).orElse(0);
 
         try {
             for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
