@@ -3,6 +3,8 @@ package org.gms.util;
 import org.gms.exception.BizException;
 import org.gms.exception.BizExceptionEnum;
 
+import java.lang.reflect.Array;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -66,32 +68,27 @@ public class RequireUtil {
 
     public static boolean isEmpty(Object obj) {
         boolean empty = false;
-        switch (obj) {
-            case null -> empty = true;
-            case String str -> {
-                if (str.trim().isEmpty()) {
-                    empty = true;
-                }
-            }
-            case Iterable<?> iterable -> {
-                if (!iterable.iterator().hasNext()) {
-                    empty = true;
-                }
-            }
-            case Object[] array -> {
-                if (array.length == 0) {
-                    empty = true;
-                }
-            }
-            case Map<?, ?> map -> {
-                if (map.isEmpty()) {
-                    empty = true;
-                }
-            }
-            default -> {
-            }
+        if (obj == null) {
+            empty = true;
+        } else if (obj instanceof String str) {
+            empty = str.trim().isEmpty();
+        } else if (obj instanceof Iterable<?> iter) {
+            empty = !iter.iterator().hasNext();
+        } else if (obj.getClass().isArray()) {
+            empty = Array.getLength(obj) == 0;
+        } else if (obj instanceof Map<?, ?> map) {
+            empty = map.isEmpty();
+        } else if (obj instanceof Iterator<?> iter) {
+            empty = !iter.hasNext();
         }
         return empty;
+    }
+
+    public static boolean isZero(Number obj) {
+        if (obj == null) {
+            return false;
+        }
+        return obj.doubleValue() == 0;
     }
 
     public static void requireNotEmptyOrElse(Object obj, Runnable runnable) {
