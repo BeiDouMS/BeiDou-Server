@@ -52,18 +52,18 @@ gms:
         event_message: Scania!
         why_am_i_recommended: Welcome to Scania!
         channels: 3
-        exp_rate: 10
-        meso_rate: 10
-        drop_rate: 10
-        boss_drop_rate: 10                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
-        quest_rate: 5                           #完成任务时获得的经验和金币的倍数。仅在USE_QUEST_RATE为true时可用。与服务器经验和金币倍数叠加.
-        fishing_rate: 10                        #钓鱼时投掷金币的成功率倍数.
-        travel_rate: 10                         #交通工具使用1/N的默认时间进行骑行/出发.
+        exp_rate: 1
+        meso_rate: 1
+        drop_rate: 1
+        boss_drop_rate: 1                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
+        quest_rate: 1                           #完成任务时获得的经验和金币的倍数。仅在USE_QUEST_RATE为true时可用。与服务器经验和金币倍数叠加.
+        fishing_rate: 1                        #钓鱼时投掷金币的成功率倍数.
+        travel_rate: 1                         #交通工具使用1/N的默认时间进行骑行/出发.
         #随等级成长的经验加成，仅刷怪有效。刷怪经验 *= (1+额外倍率x等级)
-        level_exp_rate: 0.01                    #每级提供刷怪经验加成 1=100% (0为不启用)
+        level_exp_rate: 0                    #每级提供刷怪经验加成 1=100% (0为不启用)
         #等级冲刺计划，仅刷怪有效，仅比目标等级低时有效。刷怪经验 *= [1+(目标等级-当前等级)*冲刺倍率]；
-        quick_level: 80                         #目标等级 (0为不启用)
-        quick_level_exp_rate: 0.1               #每比目标等级低1级提供的经验加成 1=100%
+        quick_level: 0                         #目标等级 (0为不启用)
+        quick_level_exp_rate: 0               #每比目标等级低1级提供的经验加成 1=100%
 
         #Properties for Bera 1
       - flag: 0
