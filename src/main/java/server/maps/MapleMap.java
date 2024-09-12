@@ -1003,8 +1003,8 @@ public class MapleMap {
         broadcastMessage(pickupPacket, mdrop.getPosition());
 
         droppedItemCount.decrementAndGet();
-        this.removeMapObject(mdrop);
         mdrop.setPickedUp(true);
+        this.removeMapObject(mdrop);
         unregisterItemDrop(mdrop);
     }
 
