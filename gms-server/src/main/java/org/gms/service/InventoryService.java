@@ -272,7 +272,7 @@ public class InventoryService {
     private void updateOnline(InventorySearchRtnDTO data, Character character) {
         InventoryType type = InventoryType.getByType(data.getInventoryType());
         Inventory inventory = character.getInventory(type);
-        Item item = getModifyItem(data, inventory);
+        Item item = getModifyItemOnline(data, inventory);
 
         // 仅以下值可修改
         if (data.getQuantity() != null && !type.isEquip()) item.setQuantity(data.getQuantity());
@@ -303,32 +303,35 @@ public class InventoryService {
     }
 
     private void updateDb(InventorySearchRtnDTO data) {
+        InventoryitemsDO inventoryitemsDO = getModifyItemOffline(data);
         // 仅以下值可修改
         InventoryType type = InventoryType.getByType(data.getInventoryType());
         if (type.isEquip()) {
             InventoryEquipRtnDTO equipment = data.getInventoryEquipment();
-            inventoryequipmentMapper.update(InventoryequipmentDO.builder()
-                    .upgradeslots(equipment.getUpgradeSlots().intValue())
-                    .level(equipment.getLevel().intValue())
-                    .str(equipment.getAttStr().intValue())
-                    .dex(equipment.getAttDex().intValue())
-                    .inte(equipment.getAttInt().intValue())
-                    .luk(equipment.getAttLuk().intValue())
-                    .hp(equipment.getHp().intValue())
-                    .mp(equipment.getMp().intValue())
-                    .watk(equipment.getPAtk().intValue())
-                    .matk(equipment.getMAtk().intValue())
-                    .wdef(equipment.getPDef().intValue())
-                    .mdef(equipment.getMDef().intValue())
-                    .acc(equipment.getAcc().intValue())
-                    .avoid(equipment.getAvoid().intValue())
-                    .hands(equipment.getHands().intValue())
-                    .speed(equipment.getSpeed().intValue())
-                    .jump(equipment.getJump().intValue())
-                    .vicious(equipment.getVicious().intValue())
-                    .build());
+            inventoryequipmentMapper.updateByQuery(InventoryequipmentDO.builder()
+                            .upgradeslots(Optional.ofNullable(equipment.getUpgradeSlots()).map(Byte::intValue).orElse(null))
+                            .level(Optional.ofNullable(equipment.getLevel()).map(Byte::intValue).orElse(null))
+                            .str(Optional.ofNullable(equipment.getAttStr()).map(Short::intValue).orElse(null))
+                            .dex(Optional.ofNullable(equipment.getAttDex()).map(Short::intValue).orElse(null))
+                            .inte(Optional.ofNullable(equipment.getAttInt()).map(Short::intValue).orElse(null))
+                            .luk(Optional.ofNullable(equipment.getAttLuk()).map(Short::intValue).orElse(null))
+                            .hp(Optional.ofNullable(equipment.getHp()).map(Short::intValue).orElse(null))
+                            .mp(Optional.ofNullable(equipment.getMp()).map(Short::intValue).orElse(null))
+                            .watk(Optional.ofNullable(equipment.getPAtk()).map(Short::intValue).orElse(null))
+                            .matk(Optional.ofNullable(equipment.getMAtk()).map(Short::intValue).orElse(null))
+                            .wdef(Optional.ofNullable(equipment.getPDef()).map(Short::intValue).orElse(null))
+                            .mdef(Optional.ofNullable(equipment.getMDef()).map(Short::intValue).orElse(null))
+                            .acc(Optional.ofNullable(equipment.getAcc()).map(Short::intValue).orElse(null))
+                            .avoid(Optional.ofNullable(equipment.getAvoid()).map(Short::intValue).orElse(null))
+                            .hands(Optional.ofNullable(equipment.getHands()).map(Short::intValue).orElse(null))
+                            .speed(Optional.ofNullable(equipment.getSpeed()).map(Short::intValue).orElse(null))
+                            .jump(Optional.ofNullable(equipment.getJump()).map(Short::intValue).orElse(null))
+                            .vicious(Optional.ofNullable(equipment.getVicious()).map(Short::intValue).orElse(null))
+                            .build(),
+                    QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryitemsDO.getInventoryitemid())));
         }
         inventoryitemsMapper.update(InventoryitemsDO.builder()
+                .inventoryitemid(inventoryitemsDO.getInventoryitemid())
                 .quantity(data.getQuantity().intValue())
                 .expiration(data.getExpiration())
                 .build());
@@ -347,20 +350,15 @@ public class InventoryService {
         if (isOnlineNow) {
             InventoryType type = InventoryType.getByType(data.getInventoryType());
             Inventory inventory = character.getInventory(type);
-            Item item = getModifyItem(data, inventory);
+            Item item = getModifyItemOnline(data, inventory);
 
             //删除相对应的物品
             inventory.removeSlot(item.getPosition());
             character.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(3, item))));
         } else {
-            QueryWrapper itemQueryWrapper = QueryWrapper.create()
-                    .where(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterId()))
-                    .and(INVENTORYITEMS_D_O.ITEMID.eq(data.getItemId()))
-                    .and(INVENTORYITEMS_D_O.POSITION.eq(data.getPosition()))
-                    .and(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getInventoryType()));
-            InventoryitemsDO inventoryItemsDOS = inventoryitemsMapper.selectOneByQuery(itemQueryWrapper);
-            inventoryitemsMapper.deleteByQuery(QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryItemsDOS.getInventoryitemid())));
-            inventoryequipmentMapper.deleteById(inventoryItemsDOS.getInventoryitemid());
+            InventoryitemsDO inventoryitemsDO = getModifyItemOffline(data);
+            inventoryequipmentMapper.deleteByQuery(QueryWrapper.create().where(INVENTORYEQUIPMENT_D_O.INVENTORYITEMID.eq(inventoryitemsDO.getInventoryitemid())));
+            inventoryitemsMapper.deleteById(inventoryitemsDO.getInventoryitemid());
         }
     }
 
@@ -369,21 +367,35 @@ public class InventoryService {
     }
 
     private void modifyInventoryCheck(InventorySearchRtnDTO data) {
-        RequireUtil.requireNotEmpty(data.getItemId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "itemId"));
-        RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
+        RequireUtil.requireNotNull(data.getItemId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "itemId"));
+        RequireUtil.requireNotNull(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
         RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
         RequireUtil.requireNotNull(data.getPosition(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "position"));
         InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
         RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "inventoryType", data.getInventoryType()));
     }
 
-    private Item getModifyItem(InventorySearchRtnDTO data, Inventory inventory) {
+    private Item getModifyItemOnline(InventorySearchRtnDTO data, Inventory inventory) {
         Item item = inventory.getItem(data.getPosition());
         RequireUtil.requireNotNull(item, I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
         if (!Objects.equals(data.getItemId(), item.getItemId())) {
             throw new BizException(I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
         }
         return item;
+    }
+
+    private InventoryitemsDO getModifyItemOffline(InventorySearchRtnDTO data) {
+        QueryWrapper itemQueryWrapper = QueryWrapper.create()
+                .where(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterId()))
+                .and(INVENTORYITEMS_D_O.ITEMID.eq(data.getItemId()))
+                .and(INVENTORYITEMS_D_O.POSITION.eq(data.getPosition()))
+                .and(INVENTORYITEMS_D_O.INVENTORYTYPE.eq(data.getInventoryType()));
+        InventoryitemsDO inventoryItemsDO = inventoryitemsMapper.selectOneByQuery(itemQueryWrapper);
+        RequireUtil.requireNotNull(inventoryItemsDO, I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
+        if (!Objects.equals(data.getItemId(), inventoryItemsDO.getItemid())) {
+            throw new BizException(I18nUtil.getExceptionMessage("InventoryService.updateInventory.exception2"));
+        }
+        return inventoryItemsDO;
     }
 }
 
