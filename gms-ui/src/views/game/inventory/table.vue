@@ -56,7 +56,7 @@
             v-if="editId !== record.id"
             type="text"
             size="mini"
-            @click="editId = record.id"
+            @click="editClick(record)"
           >
             编辑
           </a-button>
@@ -89,6 +89,7 @@
       </a-table-column>
     </template>
   </a-table>
+  <inventory-equip-form ref="inventoryEquipFormRef" @load-data="loadData" />
 </template>
 
 <script lang="ts" setup>
@@ -102,6 +103,7 @@
   import useLoading from '@/hooks/loading';
   import { InventoryState } from '@/store/modules/inventory/type';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
@@ -168,6 +170,15 @@
       await loadData();
     } finally {
       setLoading(false);
+    }
+  };
+
+  const inventoryEquipFormRef = ref();
+  const editClick = (data: InventoryState) => {
+    if (data.equipment) {
+      inventoryEquipFormRef.value.initForm(data);
+    } else {
+      editId.value = data.id;
     }
   };
 </script>
