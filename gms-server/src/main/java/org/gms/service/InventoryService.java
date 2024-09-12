@@ -307,6 +307,10 @@ public class InventoryService {
         // 仅以下值可修改
         InventoryType type = InventoryType.getByType(data.getInventoryType());
         if (type.isEquip()) {
+            // 修正数量
+            if (data.getQuantity() != null && data.getQuantity() != 1) {
+                data.setQuantity((short) 1);
+            }
             InventoryEquipRtnDTO equipment = data.getInventoryEquipment();
             inventoryequipmentMapper.updateByQuery(InventoryequipmentDO.builder()
                             .upgradeslots(Optional.ofNullable(equipment.getUpgradeSlots()).map(Byte::intValue).orElse(null))
@@ -332,7 +336,7 @@ public class InventoryService {
         }
         inventoryitemsMapper.update(InventoryitemsDO.builder()
                 .inventoryitemid(inventoryitemsDO.getInventoryitemid())
-                .quantity(data.getQuantity().intValue())
+                .quantity(Optional.ofNullable(data.getQuantity()).map(Short::intValue).orElse(null))
                 .expiration(data.getExpiration())
                 .build());
     }
