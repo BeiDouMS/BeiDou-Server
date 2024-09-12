@@ -31,12 +31,12 @@ var player;
 var em;
 const ExpeditionType = Java.type('org.gms.server.expeditions.ExpeditionType');
 var exped = ExpeditionType.SCARGA;
-var expedName = "Scarga";
-var expedBoss = "Scarlion and Targa";
-var expedMap = "Spooky World";
+var expedName = "梦幻主题公园";
+var expedBoss = "暴力熊和心疤狮王";
+var expedMap = "阴森世界";
 var expedItem = 4032246;
 
-var list = "What would you like to do?#b\r\n\r\n#L1#View current Expedition members#l\r\n#L2#Start the fight!#l\r\n#L3#Stop the expedition.#l";
+var list = "你想要做什么？#b\r\n\r\n#L1#查看当前远征队员名单#l\r\n#L2#开始战斗！#l\r\n#L3#结束远征#l";
 
 function start() {
     action(1, 0, 0);
@@ -139,7 +139,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                     return;
                 }
-                var text = "The following members make up your expedition (Click on them to expel them):\r\n";
+                var text = "当前与您参与远程的队员(点击名字可驱逐出队伍):\r\n";
                 text += "\r\n\t\t1." + expedition.getLeader().getName();
                 for (var i = 1; i < size; i++) {
                     text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
