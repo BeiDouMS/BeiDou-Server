@@ -512,14 +512,12 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         }
                     }
                     if (attack.skill == Paladin.HEAVENS_HAMMER) {
-                        // 圣域技改，对于非 Boss 怪物，如果伤害足够致命则直接击杀，否则就是原来血量变1的效果
-                        // 技能原始伤害
-                        int HHDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Paladin.HEAVENS_HAMMER).getEffect(player.getSkillLevel(SkillFactory.getSkill(Paladin.HEAVENS_HAMMER))).getDamage() / 100));
-                        // 波动伤害
-                        HHDmg = (int) (Math.floor(Math.random() * ((double) HHDmg / 5) + HHDmg * .8));
-                        // 非Boss且不足以击杀时，伤害修正为怪物血量-1
-                        if (!monster.isBoss() && HHDmg < monster.getHp()) HHDmg = monster.getHp() - 1;
-                        damageMonsterWithSkill(player, map, monster, HHDmg, attack.skill, 1777);
+                        if (!monster.isBoss()) {
+                            damageMonsterWithSkill(player, map, monster, monster.getHp() - 1, attack.skill, 1777);
+                        } else {
+                            int HHDmg = (player.calculateMaxBaseDamage(player.getTotalWatk()) * (SkillFactory.getSkill(Paladin.HEAVENS_HAMMER).getEffect(player.getSkillLevel(SkillFactory.getSkill(Paladin.HEAVENS_HAMMER))).getDamage() / 100));
+                            damageMonsterWithSkill(player, map, monster, (int) (Math.floor(Math.random() * (HHDmg / 5) + HHDmg * .8)), attack.skill, 1777);
+                        }
                     } else if (attack.skill == Aran.COMBO_TEMPEST) {
                         if (!monster.isBoss()) {
                             damageMonsterWithSkill(player, map, monster, monster.getHp(), attack.skill, 0);
