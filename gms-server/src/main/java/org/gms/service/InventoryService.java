@@ -183,7 +183,7 @@ public class InventoryService {
                     .mp(obj.getShort("mp"))
                     .pAtk(obj.getShort("watk"))
                     .mAtk(obj.getShort("matk"))
-                    .pDef(obj.getShort("pdef"))
+                    .pDef(obj.getShort("wdef"))
                     .mDef(obj.getShort("mdef"))
                     .acc(obj.getShort("acc"))
                     .avoid(obj.getShort("avoid"))
