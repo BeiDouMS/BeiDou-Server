@@ -31,6 +31,7 @@ import client.inventory.manipulator.InventoryManipulator;
 import client.inventory.manipulator.KarmaManipulator;
 import client.processor.npc.FredrickProcessor;
 import config.YamlConfig;
+import lombok.extern.slf4j.Slf4j;
 import net.packet.Packet;
 import net.server.Server;
 import server.ItemInformationProvider;
@@ -59,6 +60,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author XoticStory
  * @author Ronan - concurrency protection
  */
+@Slf4j
 public class HiredMerchant extends AbstractMapObject {
     private static final int VISITOR_HISTORY_LIMIT = 10;
     private static final int BLACKLIST_LIMIT = 20;
@@ -316,6 +318,15 @@ public class HiredMerchant extends AbstractMapObject {
                     if (YamlConfig.config.server.USE_ANNOUNCE_SHOPITEMSOLD) {   // idea thanks to Vcoc
                         announceItemSold(newItem, price, getQuantityLeft(pItem.getItem().getItemId()));
                     }
+                    log.info("[{}]{} 的道具 {} x{} 被买家 [{}]{} 以 {} 金币买走",
+                            ownerId,
+                            ownerName,
+                            newItem.getItemId(),
+                            newItem.getQuantity(),
+                            c.getPlayer().getId(),
+                            c.getPlayer().getName(),
+                            price
+                    );
 
                     Character owner = Server.getInstance().getWorld(world).getPlayerStorage().getCharacterByName(ownerName);
                     if (owner != null) {

@@ -162,6 +162,7 @@ import tools.PacketCreator;
 import tools.Pair;
 import tools.Randomizer;
 import tools.packets.WeddingPackets;
+import utils.LogUtils;
 
 import java.awt.*;
 import java.lang.ref.WeakReference;
@@ -2076,6 +2077,8 @@ public class Character extends AbstractCharacterObject {
                                     this.gainMeso(mapitem.getMeso(), true, true, false);
                                 }
 
+                                // 捡到金币
+                                LogUtils.pickUpMeso(this, mapitem.getMeso());
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
                             } else if (ItemId.isNxCard(mapitem.getItemId())) {
                                 // Add NX to account, show effect and make item disappear
@@ -2120,6 +2123,8 @@ public class Character extends AbstractCharacterObject {
                         } else {
                             this.gainMeso(mapitem.getMeso(), true, true, false);
                         }
+                        // 捡到金币
+                        LogUtils.pickUpMeso(this, mapitem.getMeso());
                     } else if (mItem.getItemId() / 10000 == 243) {
                         ScriptedItem info = ii.getScriptedItemInfo(mItem.getItemId());
                         if (info != null && info.runOnPickup()) {
@@ -10007,6 +10012,8 @@ public class Character extends AbstractCharacterObject {
     public void sendPacket(Packet packet) {
         if (client != null) {
             client.sendPacket(packet);
+        } else {
+            log.warn("[{}] {} client = null 尝试发送封包", getId(), getName());
         }
     }
 

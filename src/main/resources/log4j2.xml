@@ -37,7 +37,7 @@
             </PatternLayout>
         </File>
 
-        <File name="TradeFile" fileName="logs/trades.log">
+        <File name="TradeFile" fileName="logs/交易记录.log">
             <PatternLayout>
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
@@ -73,7 +73,19 @@
             </PatternLayout>
         </File>
 
-        <File name="DebugPacket" fileName="logs/debug-packets.log">
+        <File name="DebugPacketFile" fileName="logs/debug-packets.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="DropAndPickLogFile" fileName="logs/玩家丢出捡取记录.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
+
+        <File name="HiredMerchantFile" fileName="logs/雇佣商店交易记录.log">
             <PatternLayout>
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
@@ -88,7 +100,7 @@
 
         <Logger name="net.packet.logging" level="debug" additivity="false">
             <AppenderRef ref="PacketConsole"/>
-            <AppenderRef ref="DebugPacket"/>
+            <AppenderRef ref="DebugPacketFile"/>
         </Logger>
         <Logger name="net.packet.logging.MonitoredChrLogger" level="info" additivity="false">
             <AppenderRef ref="PlayerPacketFile"/>
@@ -115,6 +127,12 @@
         </Logger>
         <Logger name="api.ApiServer" level="info">
             <AppenderRef ref="WebFile"/>
+        </Logger>
+        <Logger name="dropAndPickLog" level="debug">
+            <AppenderRef ref="DropAndPickLogFile"/>
+        </Logger>
+        <Logger name="server.maps.HiredMerchant" level="debug">
+            <AppenderRef ref="HiredMerchantFile"/>
         </Logger>
 
         <Logger name="org.hibernate" level="info"/>

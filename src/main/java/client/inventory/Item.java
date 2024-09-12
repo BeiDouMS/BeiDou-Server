@@ -21,8 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package client.inventory;
 
+import client.Character;
 import client.inventory.manipulator.KarmaManipulator;
 import constants.inventory.ItemConstants;
+import lombok.Getter;
+import lombok.Setter;
 import server.ItemInformationProvider;
 
 import java.util.Collections;
@@ -46,6 +49,10 @@ public class Item implements Comparable<Item> {
     private short flag;
     private long expiration = -1;
     private String giftFrom = "";
+    @Getter @Setter
+    private Integer dropperId;
+    @Getter @Setter
+    private String dropperName, dropWay;
 
     public Item(int id, short position, short quantity) {
         this.id = id;
@@ -194,5 +201,17 @@ public class Item implements Comparable<Item> {
 
     public boolean isUntradeable() {
         return ((this.getFlag() & ItemConstants.UNTRADEABLE) == ItemConstants.UNTRADEABLE) || (ItemInformationProvider.getInstance().isDropRestricted(this.getItemId()) && !KarmaManipulator.hasKarmaFlag(this));
+    }
+
+    public void setDropper(Character chr, String dropWay) {
+        this.dropperId = chr.getId();
+        this.dropperName = chr.getName();
+        this.dropWay = dropWay;
+    }
+
+    public void clearDropper() {
+        this.dropperId = null;
+        this.dropperName = null;
+        this.dropWay = null;
     }
 }

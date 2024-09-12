@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import server.ItemInformationProvider;
 import server.maps.MapleMap;
 import tools.PacketCreator;
+import utils.LogUtils;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -284,6 +285,8 @@ public class InventoryManipulator {
         if (show) {
             c.sendPacket(PacketCreator.getShowItemGain(itemid, item.getQuantity()));
         }
+        LogUtils.pickUpItem(chr, item);
+        item.clearDropper();
         return true;
     }
 
@@ -741,6 +744,9 @@ public class InventoryManipulator {
             Item target = source.copy();
             target.setQuantity(quantity);
             source.setQuantity((short) (source.getQuantity() - quantity));
+
+            target.setDropper(chr, "丢出");
+            LogUtils.dropItem(chr, target);
             c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(1, source))));
 
             if (ItemConstants.isNewYearCardEtc(itemId)) {
@@ -771,6 +777,8 @@ public class InventoryManipulator {
                 inv.removeSlot(src);
             }
 
+            source.setDropper(chr, "丢出");
+            LogUtils.dropItem(chr, source);
             c.sendPacket(PacketCreator.modifyInventory(true, Collections.singletonList(new ModifyInventory(3, source))));
             if (src < 0) {
                 chr.equipChanged();

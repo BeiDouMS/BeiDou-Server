@@ -27,6 +27,7 @@ import config.YamlConfig;
 import net.AbstractPacketHandler;
 import net.packet.InPacket;
 import tools.PacketCreator;
+import utils.LogUtils;
 
 /**
  * @author Matze
@@ -52,6 +53,7 @@ public final class MesoDropHandler extends AbstractPacketHandler {
             try {
                 if (meso <= player.getMeso() && meso > 9 && meso < 50001) {
                     player.gainMeso(-meso, false, true, false);
+                    LogUtils.dropMeso(player, meso);
                 } else {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
