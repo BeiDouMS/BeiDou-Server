@@ -13,7 +13,7 @@
             </PatternLayout>
         </Console>
 
-        <RollingFile name="File"
+        <RollingFile name="DebugLog"
                      fileName="logs/${filename}.log"
                      filePattern="logs/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/${filename}-%d{yyyy-MM-dd_HH-mm-ss}-%i.log">
             <PatternLayout>
@@ -31,7 +31,7 @@
             </PatternLayout>
         </Console>
 
-        <File name="MonitoredPacketFile" fileName="logs/monitored-packets.log">
+        <File name="PlayerPacketFile" fileName="logs/player-packets.log">
             <PatternLayout>
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
@@ -72,20 +72,26 @@
                 <Pattern>${standard-pattern}</Pattern>
             </PatternLayout>
         </File>
+
+        <File name="DebugPacket" fileName="logs/debug-packets.log">
+            <PatternLayout>
+                <Pattern>${standard-pattern}</Pattern>
+            </PatternLayout>
+        </File>
     </Appenders>
 
     <Loggers>
         <Root level="trace">
-            <AppenderRef ref="File" level="debug"/>
+            <AppenderRef ref="DebugLog" level="debug"/>
             <AppenderRef ref="Console" level="info"/>
         </Root>
 
         <Logger name="net.packet.logging" level="debug" additivity="false">
             <AppenderRef ref="PacketConsole"/>
-            <AppenderRef ref="File"/>
+            <AppenderRef ref="DebugPacket"/>
         </Logger>
         <Logger name="net.packet.logging.MonitoredChrLogger" level="info" additivity="false">
-            <AppenderRef ref="MonitoredPacketFile"/>
+            <AppenderRef ref="PlayerPacketFile"/>
         </Logger>
 
         <Logger name="server.Trade" level="info" additivity="false">
