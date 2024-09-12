@@ -489,7 +489,7 @@ public class InventoryManipulator {
     public static void move(Client c, InventoryType type, short src, short dst) {
         Inventory inv = c.getPlayer().getInventory(type);
 
-        if (src < 0 || dst < 0) {
+        if (src < 0 || dst < 0 || src == dst) {
             return;
         }
         if (dst > inv.getSlotLimit()) {

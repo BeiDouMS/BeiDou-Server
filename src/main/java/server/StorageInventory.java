@@ -99,7 +99,7 @@ public class StorageInventory {
     }
 
     private void moveItem(short src, short dst) {
-        if (src < 0 || dst < 0) {
+        if (src < 0 || dst < 0 || src == dst) {
             return;
         }
         if (dst > this.getSlotLimit()) {
