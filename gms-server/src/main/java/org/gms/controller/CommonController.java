@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.model.dto.*;
 import org.gms.service.CommonService;
-import org.gms.service.GiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +32,7 @@ public class CommonController {
     @Tag(name = "/common/" + ApiConstant.LATEST)
     @Operation(summary = "查询所有世界中当前在线玩家数量")
     @PostMapping("/" + ApiConstant.LATEST + "/getAllWorldsOnlinePlayersCount")
-    public ResultBody<Object> getAllWorldsOnlinePlayersCount(@RequestBody SubmitBody<ServerInfoReqDto> submitBody) {
+    public ResultBody<Integer> getAllWorldsOnlinePlayersCount(@RequestBody SubmitBody<ServerInfoReqDto> submitBody) {
         return ResultBody.success(commonService.getAllWorldsOnlinePlayersCount(submitBody.getData().getWorldIdList()));
     }
 }
