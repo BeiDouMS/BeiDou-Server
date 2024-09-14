@@ -6300,6 +6300,58 @@ public class Character extends AbstractCharacterObject {
         return chr;
     }
 
+    public static CharactersDO toCharactersDO(Character chr) {
+        CharactersDO cdo = new CharactersDO();
+        cdo.setLevel(chr.getLevel());
+        cdo.setFame(chr.getFame());
+        cdo.setAttrStr(chr.getStr());
+        cdo.setAttrDex(chr.getDex());
+        cdo.setAttrInt(chr.getInt());
+        cdo.setAttrLuk(chr.getLuk());
+        cdo.setExp(Math.abs(chr.getExp()));
+        cdo.setGachaexp(Math.abs(chr.getGachaExp()));
+        cdo.setHp(chr.getHp());
+        cdo.setMp(chr.getMp());
+        cdo.setMaxhp(chr.getMaxHp());
+        cdo.setMaxmp(chr.getMaxMp());
+        StringBuilder sps = new StringBuilder();
+        for (int sp : chr.getRemainingSps()) {
+            sps.append(sp);
+            sps.append(",");
+        }
+        sps.deleteCharAt(sps.length() - 1);
+        cdo.setSp(sps.toString());
+        cdo.setGm(chr.gmLevel());
+        cdo.setSkincolor(chr.getSkinColor().getId());
+        cdo.setGender(chr.getGender());
+        cdo.setJob(chr.getJob().getId());
+        cdo.setHair(chr.getHair());
+        cdo.setFace(chr.getFace());
+        if (chr.getMap() == null || (chr.getCashShop() != null && chr.getCashShop().isOpened())) {
+            cdo.setMap(chr.getMapId());
+        } else {
+            if (chr.getMap().getForcedReturnId() != MapId.NONE) {
+                cdo.setMap(chr.getMap().getForcedReturnId());
+            } else {
+                cdo.setMap(chr.getHp() < 1 ? chr.getMap().getReturnMapId() : chr.getMap().getId());
+            }
+        }
+        cdo.setMeso(chr.getMeso());
+        cdo.setHpMpUsed(chr.getHpMpApUsed());
+        if (chr.getMap() == null || chr.getMap().getId() == MapId.CRIMSONWOOD_VALLEY_1 || chr.getMap().getId() == MapId.CRIMSONWOOD_VALLEY_2) {
+            cdo.setSpawnpoint(0);
+        } else {
+            Portal closest = chr.getMap().findClosestPlayerSpawnpoint(chr.getPosition());
+            if (closest != null) {
+                cdo.setSpawnpoint(closest.getId());
+            } else {
+                cdo.setSpawnpoint(0);
+            }
+        }
+        // todo 未完成
+        return cdo;
+    }
+
     public static Character loadCharFromDB(final int cid, Client client, boolean channelServer) {
         try {
             return characterService.loadCharFromDB(cid, client, channelServer);

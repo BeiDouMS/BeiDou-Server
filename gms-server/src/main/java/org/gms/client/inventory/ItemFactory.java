@@ -68,6 +68,14 @@ public enum ItemFactory {
         return value;
     }
 
+    /**
+     * 按账号id or 角色id加载物品
+     *
+     * @param id 账号id or 角色id。注意：如果是仓库，这个id是storageId，而非账号id
+     * @param login 是否是已装备
+     * @return 物品信息
+     * @throws SQLException 查询异常
+     */
     public List<Pair<Item, InventoryType>> loadItems(int id, boolean login) throws SQLException {
         if (value != 6) {
             return loadItemsCommon(id, login);
