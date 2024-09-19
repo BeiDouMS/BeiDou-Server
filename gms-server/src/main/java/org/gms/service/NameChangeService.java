@@ -85,7 +85,7 @@ public class NameChangeService {
                 namechangesDO.getCompletionTime() == null || namechangesDO.getCompletionTime().getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > System.currentTimeMillis())) {
             return false;
         }
-        namechangesMapper.insert(NamechangesDO.builder().characterid(chr.getId()).older(chr.getName()).newer(newName).build());
+        namechangesMapper.insertSelective(NamechangesDO.builder().characterid(chr.getId()).older(chr.getName()).newer(newName).build());
         return true;
     }
 
