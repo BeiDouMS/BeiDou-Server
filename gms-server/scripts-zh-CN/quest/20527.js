@@ -36,7 +36,7 @@ function start(mode, type, selection) {
         }
 
         if (status == 0) {
-            var mount = qm.getPlayer().getMount();
+            var mount = qm.getPlayer().getMapleMount();
 
             if (mount != null && mount.getLevel() >= 3) {
                 qm.forceCompleteQuest();

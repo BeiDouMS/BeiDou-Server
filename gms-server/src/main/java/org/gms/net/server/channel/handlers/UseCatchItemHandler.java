@@ -43,7 +43,7 @@ public final class UseCatchItemHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        AutobanManager abm = chr.getAutobanManager();
+        AutobanManager abm = chr.getAutoBanManager();
         p.readInt();
         abm.setTimestamp(5, Server.getInstance().getCurrentTimestamp(), 4);
         p.readShort();

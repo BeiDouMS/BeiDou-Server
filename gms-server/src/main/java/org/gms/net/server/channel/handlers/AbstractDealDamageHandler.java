@@ -168,7 +168,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                 }
 
                 if (player.getMp() < attackEffect.getMpCon()) {
-                    AutobanFactory.MPCON.addPoint(player.getAutobanManager(), "Skill: " + attack.skill + "; Player MP: " + player.getMp() + "; MP Needed: " + attackEffect.getMpCon());
+                    AutobanFactory.MPCON.addPoint(player.getAutoBanManager(), "Skill: " + attack.skill + "; Player MP: " + player.getMp() + "; MP Needed: " + attackEffect.getMpCon());
                 }
 
                 int mobCount = attackEffect.getMobCount();
@@ -928,7 +928,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                 // Add a ab point if its over 5x what we calculated.
                 if (damage > maxWithCrit * 5) {
-                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutobanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                    AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "DMG: " + damage + " MaxDMG: " + maxWithCrit + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
                 }
 
                 if (ret.skill == Marksman.SNIPE || (canCrit && damage > hitDmgMax)) {
@@ -942,7 +942,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
                         maxattack = maxattack * 2;
                     }
                     if (ret.numDamage > maxattack) {
-                        AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutobanManager(), "Too many lines: " + ret.numDamage + " Max lines: " + maxattack + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
+                        AutobanFactory.DAMAGE_HACK.addPoint(chr.getAutoBanManager(), "Too many lines: " + ret.numDamage + " Max lines: " + maxattack + " SID: " + ret.skill + " MobID: " + (monster != null ? monster.getId() : "null") + " Map: " + chr.getMap().getMapName() + " (" + chr.getMapId() + ")");
                     }
                 }
 

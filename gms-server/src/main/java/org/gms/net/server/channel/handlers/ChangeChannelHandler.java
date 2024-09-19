@@ -36,7 +36,7 @@ public final class ChangeChannelHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         int channel = p.readByte() + 1;
         p.readInt();
-        c.getPlayer().getAutobanManager().setTimestamp(6, Server.getInstance().getCurrentTimestamp(), 3);
+        c.getPlayer().getAutoBanManager().setTimestamp(6, Server.getInstance().getCurrentTimestamp(), 3);
         if (c.getChannel() == channel) {
             AutobanFactory.GENERAL.alert(c.getPlayer(), "CCing to same channel.");
             c.disconnect(false, false);

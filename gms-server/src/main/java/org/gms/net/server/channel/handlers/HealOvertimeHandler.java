@@ -39,7 +39,7 @@ public final class HealOvertimeHandler extends AbstractPacketHandler {
             return;
         }
 
-        AutobanManager abm = chr.getAutobanManager();
+        AutobanManager abm = chr.getAutoBanManager();
         int timestamp = Server.getInstance().getCurrentTimestamp();
         p.skip(8);
 

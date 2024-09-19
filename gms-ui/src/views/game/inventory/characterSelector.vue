@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { ref } from 'vue';
-  import { getCharacterList, inventoryCondition } from '@/api/inventory';
+  import { getCharacterList, InventoryCondition } from '@/api/inventory';
 
-  const condition = ref<inventoryCondition>({
+  const condition = ref<InventoryCondition>({
     characterId: undefined,
     characterName: undefined,
     pageNo: 1,

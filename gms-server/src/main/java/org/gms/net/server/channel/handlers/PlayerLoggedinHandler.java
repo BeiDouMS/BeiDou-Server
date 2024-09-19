@@ -165,7 +165,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 try {
                     player = Character.loadCharFromDB(cid, c, true);
                     newcomer = true;
-                } catch (SQLException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -379,7 +379,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     }
                 }
 
-                Mount mount = player.getMount();   // thanks Ari for noticing a scenario where Silver Mane quest couldn't be started
+                Mount mount = player.getMapleMount();   // thanks Ari for noticing a scenario where Silver Mane quest couldn't be started
                 if (mount.getItemId() != 0) {
                     player.sendPacket(PacketCreator.updateMount(player.getId(), mount, false));
                 }

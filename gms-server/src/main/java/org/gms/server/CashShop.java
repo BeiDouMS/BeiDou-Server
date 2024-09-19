@@ -30,7 +30,9 @@ import org.gms.client.inventory.ItemFactory;
 import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.dao.entity.AccountsDO;
 import org.gms.dao.entity.ModifiedCashItemDO;
+import org.gms.dao.entity.WishlistsDO;
 import org.gms.manager.ServerManager;
 import org.gms.model.pojo.CashCategory;
 import org.gms.net.server.Server;
@@ -39,7 +41,9 @@ import org.gms.provider.DataProvider;
 import org.gms.provider.DataProviderFactory;
 import org.gms.provider.DataTool;
 import org.gms.provider.wz.WZFiles;
+import org.gms.service.AccountService;
 import org.gms.service.CashShopService;
+import org.gms.service.CharacterService;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.Pair;
 
@@ -77,8 +81,10 @@ public class CashShop {
     private final List<Integer> wishList = new ArrayList<>();
     private int notes = 0;
     private final Lock lock = new ReentrantLock();
+    private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
 
-    public CashShop(int accountId, int characterId, int jobType) throws SQLException {
+    public CashShop(int accountId, int characterId, int jobType) {
         this.accountId = accountId;
         this.characterId = characterId;
 
@@ -98,33 +104,21 @@ public class CashShop {
             factory = ItemFactory.CASH_OVERALL;
         }
 
-        try (Connection con = DatabaseConnection.getConnection()) {
-            try (PreparedStatement ps = con.prepareStatement("SELECT `nxCredit`, `maplePoint`, `nxPrepaid` FROM `accounts` WHERE `id` = ?")) {
-                ps.setInt(1, accountId);
+        AccountsDO accountsDO = accountService.findById(accountId);
+        this.nxCredit = Optional.ofNullable(accountsDO.getNxCredit()).orElse(0);
+        this.maplePoint = Optional.ofNullable(accountsDO.getMaplePoint()).orElse(0);
+        this.nxPrepaid = Optional.ofNullable(accountsDO.getNxPrepaid()).orElse(0);
 
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        this.nxCredit = rs.getInt("nxCredit");
-                        this.maplePoint = rs.getInt("maplePoint");
-                        this.nxPrepaid = rs.getInt("nxPrepaid");
-                    }
-                }
-            }
-
+        try {
             for (Pair<Item, InventoryType> item : factory.loadItems(accountId, false)) {
                 inventory.add(item.getLeft());
             }
-
-            try (PreparedStatement ps = con.prepareStatement("SELECT `sn` FROM `wishlists` WHERE `charid` = ?")) {
-                ps.setInt(1, characterId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        wishList.add(rs.getInt("sn"));
-                    }
-                }
-            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
+        List<WishlistsDO> wishlistsDOList = characterService.getWishlistsByCharacter(characterId);
+        wishlistsDOList.forEach(wishlistsDO -> wishList.add(wishlistsDO.getSn()));
     }
 
     public static class CashItemFactory {

@@ -4,7 +4,6 @@ import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.math.BigInteger;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,8 +34,8 @@ public class CooldownsDO implements Serializable {
 
     private Integer skillid;
 
-    private BigInteger length;
+    private Long length;
 
-    private BigInteger starttime;
+    private Long starttime;
 
 }

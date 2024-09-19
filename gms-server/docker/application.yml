@@ -3,19 +3,19 @@ server:
 
 app:
   vue: http://localhost:8787
-  
+
 jwt:
   # secret 生产环境请自行生成 UUID
   secret: "50da066e-6080-40f5-a173-86bd27d4f674"
-  # token 过期时间（毫秒）默认 1天
-  duration: 86400000
+  # token 过期时间（毫秒）默认 30min
+  duration: 1800000
 
 mybatis-flex:
   datasource:
     mysql:
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://db:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://localhost:3306/beidou?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
       username: root
       password: root
   global-config:
@@ -35,6 +35,15 @@ gms:
   service:
     # zh-CN en-US
     language: zh-CN
+    rate-limit:
+      # 是否开启限流
+      enabled: false
+      # 每ip多少时间内最大请求数
+      limit: 10
+      # 每ip最大请求数多少时间重置，单位ms
+      duration: 1000
+      # 是否自动封禁
+      auto-ban: false
   world:
     worlds:
       #Properties for Scania 0
@@ -43,18 +52,18 @@ gms:
         event_message: Scania!
         why_am_i_recommended: Welcome to Scania!
         channels: 3
-        exp_rate: 10
-        meso_rate: 10
-        drop_rate: 10
-        boss_drop_rate: 10                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
-        quest_rate: 5                           #完成任务时获得的经验和金币的倍数。仅在USE_QUEST_RATE为true时可用。与服务器经验和金币倍数叠加.
-        fishing_rate: 10                        #钓鱼时投掷金币的成功率倍数.
-        travel_rate: 10                         #交通工具使用1/N的默认时间进行骑行/出发.
+        exp_rate: 1
+        meso_rate: 1
+        drop_rate: 1
+        boss_drop_rate: 1                      #NOTE: Boss drop rate OVERRIDES common drop rate, for bosses-only.
+        quest_rate: 1                           #完成任务时获得的经验和金币的倍数。仅在USE_QUEST_RATE为true时可用。与服务器经验和金币倍数叠加.
+        fishing_rate: 1                        #钓鱼时投掷金币的成功率倍数.
+        travel_rate: 1                         #交通工具使用1/N的默认时间进行骑行/出发.
         #随等级成长的经验加成，仅刷怪有效。刷怪经验 *= (1+额外倍率x等级)
-        level_exp_rate: 0.01                    #每级提供刷怪经验加成 1=100% (0为不启用)
+        level_exp_rate: 0                    #每级提供刷怪经验加成 1=100% (0为不启用)
         #等级冲刺计划，仅刷怪有效，仅比目标等级低时有效。刷怪经验 *= [1+(目标等级-当前等级)*冲刺倍率]；
-        quick_level: 80                         #目标等级 (0为不启用)
-        quick_level_exp_rate: 0.1               #每比目标等级低1级提供的经验加成 1=100%
+        quick_level: 0                         #目标等级 (0为不启用)
+        quick_level_exp_rate: 0               #每比目标等级低1级提供的经验加成 1=100%
 
         #Properties for Bera 1
       - flag: 0
@@ -232,9 +241,6 @@ gms:
     LOCALHOST: 127.0.0.1            #本地IP
     LOGIN_PORT: 8484                     #登录端口
 
-    #Other configuration
-    SHUTDOWNHOOK: true
-
     #Server Flags
     USE_CUSTOM_KEYSET: false             #在创建角色时启用HeavenMS的自定义键绑定自动设置。
     USE_DEBUG: false                    #将在客户端上启用一些面向调试的文本打印。
@@ -251,10 +257,10 @@ gms:
     USE_MAXRANGE_ECHO_OF_HERO: true
     USE_MTS: false
     USE_CPQ: true                       #Renders the CPQ available or not.
-    USE_AUTOHIDE_GM: false              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
+    USE_AUTOHIDE_GM: true              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
     USE_FAMILY_SYSTEM: true
-    USE_DUEY: true
+    USE_DUEY: true                     # 是否开启快递
     USE_RANDOMIZE_HPMP_GAIN: true       #在升级时启用MaxHP/MaxMP增益和INT对MaxMP增益的随机化。
     USE_STORAGE_ITEM_SORT: true         #启用存储“整理物品”功能。
     USE_ITEM_SORT: true                 #启用库存“物品排序/合并”功能。
@@ -297,7 +303,6 @@ gms:
     USE_FISHING_SYSTEM: false            #标志以启用/禁用自定义钓鱼系统
     USE_NPCS_SCRIPTABLE: true           #标志以启用/禁用服务器端预定义脚本NPCs。
     USE_BEIDOU_BEGINNERMAP: false        #标志以使用创建冒险家进入055版本以前的青苹果地图，前提是客户端支持
-
 
 
     #Events/PQs Configuration
@@ -449,8 +454,8 @@ gms:
 
     #宠物自动药水配置
     USE_SERVER_AUTOPOT: false       #服务端同步客户端的HPMP警戒线实现精确吃药（优先于USE_COMPULSORY_AUTOPOT判断）（如果客户端没有配套封包，请勿开启）
-    
-    USE_COMPULSORY_AUTOPOT: true    #宠物将消耗尽可能多的药水以满足AUTOHP/MP比率阈值。
+
+    USE_COMPULSORY_AUTOPOT: false    #宠物将消耗尽可能多的药水以满足AUTOHP/MP比率阈值。
     USE_EQUIPS_ON_AUTOPOT: true     #自动药水处理程序上的玩家MaxHP和MaxMP检查值将通过装备的HP/MP加成进行更新。
     PET_AUTOHP_RATIO: 0.99          #将自动消耗药水，直到达到MaxHP/MaxMP的给定比率。
     PET_AUTOMP_RATIO: 0.99
@@ -497,3 +502,10 @@ gms:
     NPCS_SCRIPTABLE:
       #9200000: Talk to Cody # Cody
       9001105: Rescue Gaga!  # Grandpa moon bunny
+
+    # 切换频道是否回到强制返回地图
+    CHANGE_CHANNEL_FORCE_RETURN: false
+    # 怪物生成倍率
+    MOB_RESPAWN_RATE: 1
+    # 消耗栏和其他栏的物品最大堆叠，-1保持默认，以wz的最大堆叠为准。
+    ITEM_SLOT_MAX: -1

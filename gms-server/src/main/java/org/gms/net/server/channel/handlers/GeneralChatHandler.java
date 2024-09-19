@@ -39,7 +39,7 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         String s = p.readString();
         Character chr = c.getPlayer();
-        if (chr.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
+        if (chr.getAutoBanManager().getLastSpam(7) + 200 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
@@ -67,7 +67,7 @@ public final class GeneralChatHandler extends AbstractPacketHandler {
                 ChatLogger.log(c, "GM General", s);
             }
 
-            chr.getAutobanManager().spam(7);
+            chr.getAutoBanManager().spam(7);
         }
     }
 }

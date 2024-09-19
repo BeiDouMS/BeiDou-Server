@@ -595,8 +595,8 @@ public class InventoryManipulator {
             }
             break;
         case -18:
-            if (chr.getMount() != null) {
-                chr.getMount().setItemId(source.getItemId());
+            if (chr.getMapleMount() != null) {
+                chr.getMapleMount().setItemId(source.getItemId());
             }
             break;
         }

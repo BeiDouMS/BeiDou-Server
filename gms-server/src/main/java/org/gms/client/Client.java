@@ -1129,7 +1129,7 @@ public class Client extends ChannelInboundHandlerAdapter {
             }
 
             return Character.deleteCharFromDB(chr, senderAccId);
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }

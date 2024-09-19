@@ -34,7 +34,7 @@ status = -1;
 oldSelection = -1;
 
 function start() {
-    cm.sendSimple("你好，我是来自新加坡机场的莎伦。我可以帮助你迅速到达昆明市。你想去昆明市吗？\r\n#b#L0#我想买一张去昆明市的飞机票\r\n#b#L1#让我进入出发点。");
+    cm.sendSimple("你好，我是来自新加坡机场的莎伦。我可以帮助你迅速到达废弃都市。你想去废弃都市吗？\r\n#b#L0#我想买一张去废弃都市的飞机票\r\n#b#L1#让我进入出发点。");
 }
 
 function action(mode, type, selection) {
@@ -48,7 +48,7 @@ function action(mode, type, selection) {
         if (selection == 0) {
             cm.sendYesNo("门票的价格是5,000金币。你要购买门票吗？");
         } else if (selection == 1) {
-            cm.sendYesNo("您现在想要进去吗？一旦您进去，您的票就会作废！感谢您选择卫室航空公司。");
+            cm.sendYesNo("您现在想要进去吗？一旦您进去，您的票就会作废！感谢您选择北斗航空公司。");
         }
         oldSelection = selection;
     } else if (status == 1) {
@@ -57,10 +57,10 @@ function action(mode, type, selection) {
                 if (cm.getPlayer().canHold(4031732, 1)) {
                     cm.gainMeso(-5000);
                     cm.gainItem(4031732);
-                    cm.sendOk("感谢您选择卫室航空！祝您旅途愉快！");
+                    cm.sendOk("感谢您选择北斗航空！祝您旅途愉快！");
                     cm.dispose();
                 } else {
-                    cm.sendOk("你的ETC库存中没有空闲的插槽来放置这张票，请提前创建一个房间。");
+                    cm.sendOk("你的ETC库存中没有空闲的插槽来放置这张票，请提前创建一个空位。");
                     cm.dispose();
                 }
             } else {

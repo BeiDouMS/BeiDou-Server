@@ -193,7 +193,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     // update macros, thanks to Arnah
                     if ((curLevelSPFrom - 1) == 0) {
                         boolean updated = false;
-                        for (SkillMacro macro : player.getMacros()) {
+                        for (SkillMacro macro : player.getSkillMacros()) {
                             if (macro == null) {
                                 continue;
                             }

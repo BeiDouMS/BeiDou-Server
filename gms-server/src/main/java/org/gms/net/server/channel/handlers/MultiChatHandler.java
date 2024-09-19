@@ -39,7 +39,7 @@ public final class MultiChatHandler extends AbstractPacketHandler {
     @Override
     public void handlePacket(InPacket p, Client c) {
         Character player = c.getPlayer();
-        if (player.getAutobanManager().getLastSpam(7) + 200 > currentServerTime()) {
+        if (player.getAutoBanManager().getLastSpam(7) + 200 > currentServerTime()) {
             return;
         }
 
@@ -73,6 +73,6 @@ public final class MultiChatHandler extends AbstractPacketHandler {
                 ChatLogger.log(c, "Ally", chattext);
             }
         }
-        player.getAutobanManager().spam(7);
+        player.getAutoBanManager().spam(7);
     }
 }

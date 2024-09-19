@@ -39,7 +39,7 @@ public final class PetFoodHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
-        AutobanManager abm = chr.getAutobanManager();
+        AutobanManager abm = chr.getAutoBanManager();
         if (abm.getLastSpam(2) + 500 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
             return;

@@ -32,7 +32,7 @@ public class SkillmacrosDO implements Serializable {
 
     private Integer characterid;
 
-    private Boolean position;
+    private Integer position;
 
     private Integer skill1;
 
@@ -42,6 +42,6 @@ public class SkillmacrosDO implements Serializable {
 
     private String name;
 
-    private Boolean shout;
+    private Integer shout;
 
 }

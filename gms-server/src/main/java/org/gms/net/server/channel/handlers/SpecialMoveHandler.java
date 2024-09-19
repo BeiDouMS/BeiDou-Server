@@ -50,7 +50,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
         p.readInt();
-        chr.getAutobanManager().setTimestamp(4, Server.getInstance().getCurrentTimestamp(), 28);
+        chr.getAutoBanManager().setTimestamp(4, Server.getInstance().getCurrentTimestamp(), 28);
         int skillid = p.readInt();
         
         /*

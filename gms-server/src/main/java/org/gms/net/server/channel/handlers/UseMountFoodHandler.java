@@ -45,7 +45,7 @@ public final class UseMountFoodHandler extends AbstractPacketHandler {
         int itemid = p.readInt();
 
         Character chr = c.getPlayer();
-        Mount mount = chr.getMount();
+        Mount mount = chr.getMapleMount();
         Inventory useInv = chr.getInventory(InventoryType.USE);
 
         if (c.tryacquireClient()) {
