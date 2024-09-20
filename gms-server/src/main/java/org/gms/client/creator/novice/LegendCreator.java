@@ -24,6 +24,7 @@ import org.gms.client.Job;
 import org.gms.client.creator.CharacterFactory;
 import org.gms.client.creator.CharacterFactoryRecipe;
 import org.gms.client.inventory.InventoryType;
+import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 
@@ -43,6 +44,8 @@ public class LegendCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
+        if (!YamlConfig.config.server.ENABLE_THE_LORD_OF_WAR) return -3;
+        
         return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.LEGEND, 1, MapId.ARAN_TUTORIAL_START, top, bottom, shoes, weapon));
     }
 }

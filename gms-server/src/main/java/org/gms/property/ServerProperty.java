@@ -307,6 +307,11 @@ public class ServerProperty {
     public int MINIMUM_GM_LEVEL_TO_USE_DUEY;
     public int MINIMUM_GM_LEVEL_TO_DROP;
 
+    public boolean ENABLE_ADVENTURERS;
+    public boolean ENABLE_KNIGHTS_OF_CYGNUS;
+    public boolean ENABLE_THE_LORD_OF_WAR;
+
+
     //Custom NPC overrides. List of NPC IDs.
     public Map<String, String> NPCS_SCRIPTABLE = new HashMap<>();
 
