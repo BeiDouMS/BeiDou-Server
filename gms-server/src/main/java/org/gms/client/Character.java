@@ -6202,7 +6202,8 @@ public class Character extends AbstractCharacterObject {
                 sandboxCheck |= searchRtnDTO.getFlag();
                 Item item = searchRtnDTO.toItem();
                 chr.getInventory(inventoryType).addItemFromDB(item);
-                if (item.getPet() != null) {
+                Pet pet = item.getPet();
+                if (pet != null && pet.isSummoned()) {
                     chr.addPet(item.getPet());
                     chr.resetExcluded(item.getPetId());
                     inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
