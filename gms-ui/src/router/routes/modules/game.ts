@@ -62,6 +62,16 @@ const GAME: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'gachapon',
+      name: 'gachapon',
+      component: () => import('@/views/game/gachapon/index.vue'),
+      meta: {
+        locale: 'menu.game.gachapon',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

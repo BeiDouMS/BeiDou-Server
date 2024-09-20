@@ -104,6 +104,7 @@
   import { InventoryState } from '@/store/modules/inventory/type';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
+  import { timestampToChineseTime } from '@/utils/stringUtils';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
@@ -135,23 +136,6 @@
     }
   };
   loadData();
-
-  const timestampToChineseTime = (timestamp: number) => {
-    if (timestamp === -1) return '永久';
-    // 创建一个 Date 对象，传入毫秒时间戳
-    const date = new Date(timestamp);
-
-    // 获取年、月、日、时、分、秒
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // 月份从0开始，所以加1
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
-
-    // 格式化输出为中文时间字符串
-    return `${year}年${month}月${day}日 ${hours}时${minutes}分${seconds}秒`;
-  };
 
   const saveClick = async (data: InventoryState) => {
     setLoading(true);
