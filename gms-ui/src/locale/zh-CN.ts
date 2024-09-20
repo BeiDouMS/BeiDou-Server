@@ -16,6 +16,7 @@ export default {
   'menu.game.drop': '怪物爆率',
   'menu.game.drop.global': '全局爆率',
   'menu.game.inventory': '背包管理',
+  'menu.game.gachapon': '百宝箱',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',

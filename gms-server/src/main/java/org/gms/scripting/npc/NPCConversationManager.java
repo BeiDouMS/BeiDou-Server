@@ -34,6 +34,7 @@ import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.string.LanguageConstants;
+import org.gms.manager.ServerManager;
 import org.gms.model.pojo.NextLevelContext;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
@@ -43,6 +44,7 @@ import org.gms.net.server.guild.Guild;
 import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
+import org.gms.service.GachaponService;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,6 +90,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     private String getText;
     private boolean itemScript;
     private List<PartyCharacter> otherParty;
+    private static final GachaponService gachaponService = ServerManager.getApplicationContext().getBean(GachaponService.class);
 
     private final Map<Integer, String> npcDefaultTalks = new HashMap<>();
     @Getter
@@ -429,25 +432,29 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             }
         }
     }
-
+    
     public void doGachapon() {
-        GachaponItem item = Gachapon.getInstance().process(npc);
-        Item itemGained = gainItem(item.getId(), (short) (item.getId() / 10000 == 200 ? 100 : 1), true, true); // For normal potions, make it give 100.
-
-        sendNext("你获得了一个 #b#t" + item.getId() + "##k ！");
-
-        int[] maps = {MapId.HENESYS, MapId.ELLINIA, MapId.PERION, MapId.KERNING_CITY, MapId.SLEEPYWOOD, MapId.MUSHROOM_SHRINE,
-                MapId.SHOWA_SPA_M, MapId.SHOWA_SPA_F, MapId.NEW_LEAF_CITY, MapId.NAUTILUS_HARBOR};
-        final int mapId = maps[(getNpc() != NpcId.GACHAPON_NAUTILUS && getNpc() != NpcId.GACHAPON_NLC) ?
-                (getNpc() - NpcId.GACHAPON_HENESYS) : getNpc() == NpcId.GACHAPON_NLC ? 8 : 9];
-        String map = c.getChannelServer().getMapFactory().getMap(mapId).getMapName();
-
-        Gachapon.log(getPlayer(), item.getId(), map);
-
-        if (item.getTier() > 0) { //Uncommon and Rare
-            Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.gachaponMessage(itemGained, map, getPlayer()));
-        }
+        gachaponService.doGachapon(getPlayer(), npc);
     }
+
+    // public void doGachapon() {
+    //     GachaponItem item = Gachapon.getInstance().process(npc);
+    //     Item itemGained = gainItem(item.getId(), (short) (item.getId() / 10000 == 200 ? 100 : 1), true, true); // For normal potions, make it give 100.
+    //
+    //     sendNext("你获得了一个 #b#t" + item.getId() + "##k ！");
+    //
+    //     int[] maps = {MapId.HENESYS, MapId.ELLINIA, MapId.PERION, MapId.KERNING_CITY, MapId.SLEEPYWOOD, MapId.MUSHROOM_SHRINE,
+    //             MapId.SHOWA_SPA_M, MapId.SHOWA_SPA_F, MapId.NEW_LEAF_CITY, MapId.NAUTILUS_HARBOR};
+    //     final int mapId = maps[(getNpc() != NpcId.GACHAPON_NAUTILUS && getNpc() != NpcId.GACHAPON_NLC) ?
+    //             (getNpc() - NpcId.GACHAPON_HENESYS) : getNpc() == NpcId.GACHAPON_NLC ? 8 : 9];
+    //     String map = c.getChannelServer().getMapFactory().getMap(mapId).getMapName();
+    //
+    //     Gachapon.log(getPlayer(), item.getId(), map);
+    //
+    //     if (item.getTier() > 0) { //Uncommon and Rare
+    //         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.gachaponMessage(itemGained, map, getPlayer()));
+    //     }
+    // }
 
     public void upgradeAlliance() {
         Alliance alliance = Server.getInstance().getAlliance(c.getPlayer().getGuild().getAllianceId());
