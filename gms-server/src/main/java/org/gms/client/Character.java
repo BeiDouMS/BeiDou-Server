@@ -6204,7 +6204,7 @@ public class Character extends AbstractCharacterObject {
                 chr.getInventory(inventoryType).addItemFromDB(item);
                 if (item.getPetId() > -1) {
                     Pet pet = item.getPet();
-                    if (pet.isSummoned()) {
+                    if (pet != null && pet.isSummoned()) {
                         chr.addPet(pet);
                         chr.resetExcluded(item.getPetId());
                         inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
