@@ -6202,11 +6202,13 @@ public class Character extends AbstractCharacterObject {
                 sandboxCheck |= searchRtnDTO.getFlag();
                 Item item = searchRtnDTO.toItem();
                 chr.getInventory(inventoryType).addItemFromDB(item);
-                Pet pet = item.getPet();
-                if (pet != null && pet.isSummoned()) {
-                    chr.addPet(item.getPet());
-                    chr.resetExcluded(item.getPetId());
-                    inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
+                if (item.getPetId() > -1) {
+                    Pet pet = item.getPet();
+                    if (pet.isSummoned()) {
+                        chr.addPet(pet);
+                        chr.resetExcluded(item.getPetId());
+                        inventoryService.getPetIgnoreByPetId(item.getPetId()).forEach(petignoresDO -> chr.addExcluded(petignoresDO.getPetid(), petignoresDO.getItemid()));
+                    }
                     continue;
                 }
                 if (searchRtnDTO.isEquipment() && searchRtnDTO.getInventoryEquipment().getRingId() > -1) {
