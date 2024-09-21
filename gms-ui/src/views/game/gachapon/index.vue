@@ -31,12 +31,14 @@
             data-index="id"
             :width="80"
             align="center"
+            fixed="left"
           />
           <a-table-column
             title="名称"
             data-index="name"
             align="center"
             :width="200"
+            fixed="left"
           />
           <a-table-column title="百宝箱ID" align="center" :width="120">
             <template #cell="{ record }">
@@ -105,8 +107,18 @@
               <a-tag v-else color="green">否</a-tag>
             </template>
           </a-table-column>
-          <a-table-column title="备注" data-index="comment" align="center" />
-          <a-table-column title="操作" :width="200" align="center">
+          <a-table-column
+            title="备注"
+            data-index="comment"
+            :width="400"
+            align="center"
+          />
+          <a-table-column
+            title="操作"
+            :width="200"
+            align="center"
+            fixed="right"
+          >
             <template #cell="{ record }">
               <div v-if="filterGachaponId != undefined">
                 <a-button size="mini" type="text" @click="editClick(record)">
