@@ -1,5 +1,6 @@
 package org.gms.dao.entity;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -43,6 +44,12 @@ public class GachaponRewardDO implements Serializable {
      * 道具ID
      */
     private Integer itemId;
+
+    /**
+     * 道具名称
+     */
+    @Column(ignore = true)
+    private String itemName;
 
     /**
      * 单次抽取数量

@@ -1,9 +1,12 @@
 package org.gms.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
+
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -44,6 +47,12 @@ public class GachaponRewardPoolDO implements Serializable {
      * 绑定转蛋机ID
      */
     private Integer gachaponId;
+
+    /**
+     * 转蛋机名称
+     */
+    @Column(ignore = true)
+    private String gachaponName;
 
     /**
      * 权重
