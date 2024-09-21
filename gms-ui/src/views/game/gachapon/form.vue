@@ -40,7 +40,12 @@
           />
         </a-form-item>
         <a-form-item v-if="!formData.isPublic" label="权重">
-          <a-input-number v-model="formData.weight" :max="10000" :min="0" />
+          <a-input-number
+            v-model="formData.weight"
+            :max="10000"
+            :min="0"
+            :precision="0"
+          />
         </a-form-item>
         <a-form-item v-if="formData.isPublic" label="固定中奖率">
           <a-space>
@@ -49,6 +54,7 @@
               :style="{ width: '320px' }"
               placeholder="万分之"
               allow-clear
+              :precision="0"
               hide-button
             >
               <template #suffix> /10000 </template>
