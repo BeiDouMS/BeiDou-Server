@@ -14,6 +14,7 @@ import org.gms.model.dto.GachaponPoolSearchRtnDTO;
 import org.gms.net.server.Server;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.gachapon.Gachapon;
+import org.gms.server.life.LifeFactory;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 import org.gms.util.RequireUtil;
@@ -36,6 +37,7 @@ public class GachaponService {
     private GachaponRewardPoolMapper gachaponRewardPoolMapper;
     @Autowired
     private GachaponRewardMapper gachaponRewardMapper;
+
 
     private static final HashMap<Integer, List<GachaponRewardDO>> poolRewardsCache = new HashMap<>();
     private static final ReadWriteLock lock = new ReentrantReadWriteLock(true);
@@ -104,6 +106,7 @@ public class GachaponService {
                 data.setEndTime(record.getEndTime());
                 data.setNotification(record.getNotification());
                 data.setComment(record.getComment());
+                data.setGachaponName(LifeFactory.getNPCName(record.getGachaponId()));
                 records.add(data);
             }
 
@@ -126,7 +129,13 @@ public class GachaponService {
     public List<GachaponRewardDO> getRewards(Integer poolId) {
         rLock.lock();
         try {
-            return gachaponRewardMapper.selectListByQuery(QueryWrapper.create().eq("pool_id", poolId).orderBy(GachaponRewardDO::getItemId, true));
+            List<GachaponRewardDO> records = new ArrayList<>();
+            records = gachaponRewardMapper.selectListByQuery(QueryWrapper.create().eq("pool_id", poolId).orderBy(GachaponRewardDO::getItemId, true));
+            ItemInformationProvider ii = ItemInformationProvider.getInstance();
+            for (GachaponRewardDO record : records) {
+                record.setItemName(ii.getName(record.getItemId()));
+            }
+            return records;
         } finally {
             rLock.unlock();
         }

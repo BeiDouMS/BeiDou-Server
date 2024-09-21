@@ -49,6 +49,16 @@
               </a-button>
             </template>
           </a-table-column>
+          <a-table-column title="百宝箱名称" align="center" :width="120">
+            <template #cell="{ record }">
+              {{ record.gachaponName }}
+            </template>
+          </a-table-column>
+          <a-table-column title="百宝箱图片" align="center" :width="120">
+            <template #cell="{ record }">
+              <img :src="getIconUrl('npc', record.gachaponId)" />
+            </template>
+          </a-table-column>
           <!--          <a-table-column-->
           <!--            title="权重"-->
           <!--            data-index="weight"-->
@@ -170,6 +180,7 @@
   import { GachaponPoolState } from '@/store/modules/gachapon/type';
   import { timestampToChineseTime } from '@/utils/stringUtils';
   import GachaponForm from '@/views/game/gachapon/form.vue';
+  import { getIconUrl } from '@/utils/mapleStoryAPI';
   import GachaponRewardForm from '@/views/game/gachapon/reward.vue';
   import { Message } from '@arco-design/web-vue';
 

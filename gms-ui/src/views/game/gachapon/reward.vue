@@ -38,6 +38,17 @@
             <a-input-number v-else v-model="record.itemId" />
           </template>
         </a-table-column>
+        <a-table-column title="物品名称" :width="140" align="center">
+          <template #cell="{ record }">
+            <span v-if="editId !== record.id"> {{ record.itemName }}</span>
+            <a-input-number v-else v-model="record.itemId" />
+          </template>
+        </a-table-column>
+        <a-table-column title="物品图标" :width="140" align="center">
+          <template #cell="{ record }">
+            <img :src="getIconUrl('item', record.itemId)" alt="" />
+          </template>
+        </a-table-column>
         <a-table-column title="数量" :width="120" align="center">
           <template #cell="{ record }">
             <span v-if="editId !== record.id"> {{ record.quantity }}</span>
@@ -95,6 +106,7 @@
 
 <script lang="ts" setup>
   import useLoading from '@/hooks/loading';
+  import { getIconUrl } from '@/utils/mapleStoryAPI';
   import { ref } from 'vue';
   import {
     GachaponPoolState,
