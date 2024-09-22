@@ -107,7 +107,8 @@ public final class CreateCharHandler extends AbstractPacketHandler {
             return;
         }
 
-        if (status == -2) {
+        // 修复校验失败时，不发包，导致客户端假死的问题
+        if (status != 0) {
             c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
         }
     }
