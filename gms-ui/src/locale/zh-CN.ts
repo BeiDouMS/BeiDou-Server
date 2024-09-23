@@ -1,6 +1,7 @@
 import drop from '@/views/game/drop/locale/zh-CN';
 import cashShop from '@/views/game/cashShop/locale/zh-CN';
 import npcShop from '@/views/game/npcShop/locale/zh-CN';
+import gachapon from '@/views/game/gachapon/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
@@ -43,4 +44,5 @@ export default {
   ...npcShop,
   ...cashShop,
   ...drop,
+  ...gachapon,
 };

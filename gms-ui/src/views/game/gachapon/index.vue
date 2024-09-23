@@ -7,12 +7,16 @@
           <a-space>
             <a-input-number
               v-model="condition.gachaponId"
-              placeholder="百宝箱ID"
+              :placeholder="$t('gachapon.placeholder.gachaponId')"
             />
-            <a-button type="primary" @click="loadData">搜索</a-button>
-            <a-button @click="resetClick">重置</a-button>
+            <a-button type="primary" @click="loadData">
+              {{ $t('button.search') }}
+            </a-button>
+            <a-button @click="resetClick">
+              {{ $t('button.reset') }}
+            </a-button>
             <a-button type="primary" status="success" @click="insertClick">
-              创建
+              {{ $t('button.create') }}
             </a-button>
           </a-space>
         </a-col></a-row
@@ -34,13 +38,17 @@
             fixed="left"
           />
           <a-table-column
-            title="名称"
+            :title="$t('gachapon.list.column.name')"
             data-index="name"
             align="center"
             :width="200"
             fixed="left"
           />
-          <a-table-column title="百宝箱ID" align="center" :width="120">
+          <a-table-column
+            :title="$t('gachapon.list.column.gachaponId')"
+            align="center"
+            :width="120"
+          >
             <template #cell="{ record }">
               <a-button
                 size="mini"
@@ -51,12 +59,20 @@
               </a-button>
             </template>
           </a-table-column>
-          <a-table-column title="百宝箱名称" align="center" :width="120">
+          <a-table-column
+            :title="$t('gachapon.list.column.gachaponName')"
+            align="center"
+            :width="120"
+          >
             <template #cell="{ record }">
               {{ record.gachaponName }}
             </template>
           </a-table-column>
-          <a-table-column title="百宝箱图片" align="center" :width="120">
+          <a-table-column
+            :title="$t('gachapon.list.column.gachaponPhoto')"
+            align="center"
+            :width="120"
+          >
             <template #cell="{ record }">
               <img :src="getIconUrl('npc', record.gachaponId)" />
             </template>
@@ -67,13 +83,25 @@
           <!--            align="center"-->
           <!--            :width="120"-->
           <!--          />-->
-          <a-table-column title="公共池" align="center" :width="120">
+          <a-table-column
+            :title="$t('gachapon.list.column.isPublic')"
+            align="center"
+            :width="120"
+          >
             <template #cell="{ record }">
-              <a-tag v-if="record.isPublic" color="red">公共池</a-tag>
-              <a-tag v-else color="blue">非公共池</a-tag>
+              <a-tag v-if="record.isPublic" color="red">
+                {{ $t('gachapon.isPublic.true.desc') }}
+              </a-tag>
+              <a-tag v-else color="blue">
+                {{ $t('gachapon.isPublic.false.desc') }}
+              </a-tag>
             </template>
           </a-table-column>
-          <a-table-column title="中奖率" align="center" :width="120">
+          <a-table-column
+            :title="$t('gachapon.list.column.isPublic')"
+            align="center"
+            :width="120"
+          >
             <template #cell="{ record }">
               <span
                 v-if="filterGachaponId !== undefined && filterGachaponId !== -1"
@@ -88,58 +116,70 @@
           <!--            align="center"-->
           <!--            :width="120"-->
           <!--          />-->
-          <a-table-column title="生效时间" align="center" :width="230">
+          <a-table-column
+            :title="$t('gachapon.list.column.startTime')"
+            align="center"
+            :width="230"
+          >
             <template #cell="{ record }">
               {{
                 record.startTime != null
                   ? timestampToChineseTime(record.startTime)
-                  : '已开始'
-              }}
-            </template>
-          </a-table-column>
-          <a-table-column title="结束时间" align="center" :width="230">
-            <template #cell="{ record }">
-              {{
-                record.endTime != null
-                  ? timestampToChineseTime(record.endTime)
-                  : '永久'
+                  : $t('gachapon.startTime.default')
               }}
             </template>
           </a-table-column>
           <a-table-column
-            title="全服广播"
+            :title="$t('gachapon.list.column.endTime')"
+            align="center"
+            :width="230"
+          >
+            <template #cell="{ record }">
+              {{
+                record.endTime != null
+                  ? timestampToChineseTime(record.endTime)
+                  : $t('gachapon.endTime.default')
+              }}
+            </template>
+          </a-table-column>
+          <a-table-column
+            :title="$t('gachapon.list.column.notification')"
             data-index="notification"
             align="center"
             :width="120"
           >
             <template #cell="{ record }">
-              <a-tag v-if="record.notification" color="red">是</a-tag>
-              <a-tag v-else color="green">否</a-tag>
+              <a-tag v-if="record.notification" color="green">
+                {{ $t('gachapon.notification.true.desc') }}
+              </a-tag>
+              <a-tag v-else color="red">
+                {{ $t('gachapon.notification.false.desc') }}
+              </a-tag>
             </template>
           </a-table-column>
           <a-table-column
-            title="备注"
+            :title="$t('gachapon.list.column.comment')"
             data-index="comment"
             :width="400"
             align="center"
           />
           <a-table-column
-            title="操作"
-            :width="200"
+            :title="$t('operation')"
+            :width="220"
             align="center"
             fixed="right"
           >
             <template #cell="{ record }">
               <div v-if="filterGachaponId != undefined">
                 <a-button size="mini" type="text" @click="editClick(record)">
-                  编辑
+                  {{ $t('button.edit') }}
                 </a-button>
                 <a-button
                   size="mini"
                   type="text"
                   @click="showRewardFormClick(record)"
                 >
-                  奖品
+                  {{ $t('gachapon.button.detail') }}
                 </a-button>
                 <a-popconfirm
                   type="error"
@@ -147,7 +187,7 @@
                   @ok="deleteClick(record)"
                 >
                   <a-button size="mini" status="danger" type="text">
-                    删除
+                    {{ $t('button.delete') }}
                   </a-button>
                 </a-popconfirm>
               </div>
@@ -157,7 +197,7 @@
                 type="text"
                 @click="gachaponIdClick(record.gachaponId)"
               >
-                显示操作按钮
+                {{ $t('gachapon.button.operate') }}
               </a-button>
             </template>
           </a-table-column>
