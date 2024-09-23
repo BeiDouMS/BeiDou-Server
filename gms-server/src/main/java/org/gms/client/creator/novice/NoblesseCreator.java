@@ -24,7 +24,6 @@ import org.gms.client.Job;
 import org.gms.client.creator.CharacterFactory;
 import org.gms.client.creator.CharacterFactoryRecipe;
 import org.gms.client.inventory.InventoryType;
-import org.gms.config.YamlConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 
@@ -44,8 +43,7 @@ public class NoblesseCreator extends CharacterFactory {
     }
 
     public static int createCharacter(Client c, String name, int face, int hair, int skin, int top, int bottom, int shoes, int weapon, int gender) {
-        if (!YamlConfig.config.server.ENABLE_KNIGHTS_OF_CYGNUS) return -3;
-        
+
         return createNewCharacter(c, name, face, hair, skin, gender, createRecipe(Job.NOBLESSE, 1, MapId.STARTING_MAP_NOBLESSE, top, bottom, shoes, weapon));
     }
 }
