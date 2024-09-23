@@ -26,9 +26,11 @@ import org.gms.client.Client;
 import org.gms.client.creator.novice.BeginnerCreator;
 import org.gms.client.creator.novice.LegendCreator;
 import org.gms.client.creator.novice.NoblesseCreator;
+import org.gms.config.YamlConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 @Slf4j
@@ -92,24 +94,33 @@ public final class CreateCharHandler extends AbstractPacketHandler {
         }
 
         int status;
+        /**
+         * 创建角色职业
+         * 将禁止创建指定职业群的判断挪到此处进行统一判断，并且向客户端发出禁止创建的提示信息
+         */
         switch (job) {
-        case 0: // Knights of Cygnus
-            status = NoblesseCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
-            break;
-        case 1: // Adventurer
-            status = BeginnerCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
-            break;
-        case 2: // Aran
-            status = LegendCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
-            break;
-        default:
-            c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
-            return;
+            case 0: // Knights of Cygnus #天鹅骑士团
+                //先判断是否禁止创建该职业，再进行角色创建
+                status = !YamlConfig.config.server.ENABLE_KNIGHTS_OF_CYGNUS ? -3 : NoblesseCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
+                break;
+            case 1: // Adventurer #冒险家
+                status = !YamlConfig.config.server.ENABLE_ADVENTURERS ? -3 : BeginnerCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
+                break;
+            case 2: // Aran #战神
+                status = !YamlConfig.config.server.ENABLE_THE_LORD_OF_WAR ? -3 : LegendCreator.createCharacter(c, name, face, hair + hairColor, skinColor, top, bottom, shoes, weapon, gender);
+                break;
+            default:
+                c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
+                return;
         }
 
-        // 修复校验失败时，不发包，导致客户端假死的问题
-        if (status != 0) {
-            c.sendPacket(PacketCreator.deleteCharResponse(0, 9));
+        if(status == -3) {
+            String jobname = I18nUtil.getMessage("CreateCharHandler.handlePacket.job." + job );
+            String message = I18nUtil.getMessage("CreateCharHandler.handlePacket.serverNotice.disableJob", jobname);
+            c.sendPacket(PacketCreator.serverNotice(1,message));    //由于未找到不弹窗结束客户端请求等待，所以先发出未知错误的提示，再发送弹窗提示，这样不会被未知错误窗口挡住
+            c.sendPacket(PacketCreator.getLoginFailed(1));       //断开客户端请求，避免客户端假死
+        } else if(status != 0) {
+            c.sendPacket(PacketCreator.deleteCharResponse(0, 9));       //发送未知错误的弹窗提示
         }
     }
 }
