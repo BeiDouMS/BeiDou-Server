@@ -254,7 +254,7 @@ public class GachaponService {
         GachaponRewardDO reward = poolRewards.get(random);
 
         Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
-        player.dropMessage("你获得了一个 " + ItemInformationProvider.getInstance().getName(reward.getItemId()) + " ！");
+        player.dropMessage("你获得了" + reward.getQuantity() + "个" +  ItemInformationProvider.getInstance().getName(reward.getItemId()) + " ！");
         Gachapon.log(player, reward.getItemId(), player.getMap().getMapName());
 
         if (pool.getNotification()) {
