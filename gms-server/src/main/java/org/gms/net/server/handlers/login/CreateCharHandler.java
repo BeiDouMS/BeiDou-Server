@@ -119,7 +119,7 @@ public final class CreateCharHandler extends AbstractPacketHandler {
             if(status == -3) {
                 String jobname = I18nUtil.getMessage("CreateCharHandler.handlePacket.job." + job );
                 String message = I18nUtil.getMessage("CreateCharHandler.handlePacket.serverNotice.disableJob", jobname);
-                c.sendPacket(PacketCreator.serverNotice(1,message));    //由于未找到不弹窗结束客户端请求等待，所以先发出未知错误的提示，再发送弹窗提示，这样不会被未知错误窗口挡住
+                c.sendPacket(PacketCreator.serverNotice(1,message));    //发送不允许创建的提示框
                 c.sendPacket(PacketCreator.getLoginFailed(1));       //断开客户端请求，避免客户端假死
 
             } else {
