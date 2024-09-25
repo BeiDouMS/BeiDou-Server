@@ -31,6 +31,8 @@ services:
     ports:
       # Web
       - "8686:80"
+    depends_on:
+      - maplestory
   db:
     container_name: database
     image: mysql:8.4.0
