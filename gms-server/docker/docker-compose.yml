@@ -10,7 +10,7 @@ services:
         condition: service_healthy
     ports:
       # Web
-      - "8686:8686"
+      # - "8686:8686"
       # Login server
       - "8484:8484"
       # Channels.
@@ -21,7 +21,16 @@ services:
       - ../wz:/opt/server/wz
       - ../wz-zh-CN:/opt/server/wz-zh-CN
       - ./application.yml:/opt/server/application.yml
-
+  ui:
+    container_name: beidou-ui
+    build:
+      context: ../../
+      dockerfile: ./gms-server/docker/Dockerfile-ui
+    volumes:
+      - ./nginx-ui.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      # Web
+      - "8686:80"
   db:
     container_name: database
     image: mysql:8.4.0
