@@ -5,7 +5,7 @@
 # BeiDou JAR creation stage #
 #############################
 
-FROM maven:3.9.6-amazoncorretto-21
+FROM maven:3.9.6-amazoncorretto-21 as builder
 
 RUN yum -y install glibc-common && \
     yum -y install glibc-langpack-zh 
@@ -24,6 +24,14 @@ COPY ./gms-server/src ./gms-server/src
 COPY ./gms-server/pom.xml ./gms-server/pom.xml
 
 RUN mvn clean package -U
+
+FROM amazoncorretto:21.0.4-alpine3.20
+
+WORKDIR /opt/server
+
+RUN mkdir -p ./gms-server/target
+
+COPY --from=builder /opt/server/gms-server/target/BeiDou.jar ./gms-server/target
 
 #########################
 # Server creation stage #
