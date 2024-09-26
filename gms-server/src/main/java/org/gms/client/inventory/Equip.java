@@ -444,6 +444,12 @@ public class Equip extends Item {
         return stats;
     }
 
+    /**
+     * 装备升级时计算增加的属性值，值>0才显示，避免显示负数或者0，避免玩家以为属性被扣除了
+     * 优化提示消息，使其更易懂
+     * @param stats
+     * @return
+     */
     public Pair<String, Pair<Boolean, Boolean>> gainStats(List<Pair<StatUpgrade, Integer>> stats) {
         boolean gotSlot = false, gotVicious = false;
         String lvupStr = "";
@@ -452,73 +458,100 @@ public class Equip extends Item {
             switch (stat.getLeft()) {
                 case incDEX:
                     statUp = Math.min(stat.getRight(), maxStat - dex);
-                    dex += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message1");
+                    if(statUp > 0) {
+                        dex += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message1") + "+" + statUp + "; ";
+                    }
                     break;
                 case incSTR:
                     statUp = Math.min(stat.getRight(), maxStat - str);
-                    str += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message2");
+                    if(statUp > 0) {
+                        str += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message2") + "; ";
+                    }
                     break;
                 case incINT:
                     statUp = Math.min(stat.getRight(), maxStat - _int);
-                    _int += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message3");
+                    if(statUp > 0) {
+                        _int += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message3") + "+" + statUp + "; ";
+                    }
                     break;
                 case incLUK:
                     statUp = Math.min(stat.getRight(), maxStat - luk);
-                    luk += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message4");
+                    if(statUp > 0) {
+                        luk += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message4") + "+" + statUp + "; ";
+                    }
                     break;
                 case incMHP:
                     statUp = Math.min(stat.getRight(), maxStat - hp);
-                    hp += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message5");
+                    if(statUp > 0) {
+                        hp += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message5") + "+" + statUp + "; ";
+                    }
                     break;
                 case incMMP:
                     statUp = Math.min(stat.getRight(), maxStat - mp);
-                    mp += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message6");
+                    if(statUp > 0) {
+                        mp += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message6") + "+" + statUp + "; ";
+                    }
                     break;
                 case incPAD:
                     statUp = Math.min(stat.getRight(), maxStat - watk);
-                    watk += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message7");
+                    if(statUp > 0) {
+                        watk += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message7") + "+" + statUp + "; ";
+                    }
                     break;
                 case incMAD:
                     statUp = Math.min(stat.getRight(), maxStat - matk);
-                    matk += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message8");
+                    if(statUp > 0) {
+                        matk += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message8") + "+" + statUp + "; ";
+                    }
                     break;
                 case incPDD:
                     statUp = Math.min(stat.getRight(), maxStat - wdef);
-                    wdef += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message9");
+                    if(statUp > 0) {
+                        wdef += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message9") + "+" + statUp + "; ";
+                    }
                     break;
                 case incMDD:
                     statUp = Math.min(stat.getRight(), maxStat - mdef);
-                    mdef += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message10");
+                    if(statUp > 0) {
+                        mdef += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message10") + "+" + statUp + "; ";
+                    }
                     break;
                 case incEVA:
                     statUp = Math.min(stat.getRight(), maxStat - avoid);
-                    avoid += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message11");
+                    if(statUp > 0) {
+                        avoid += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message11") + "+" + statUp + "; ";
+                    }
                     break;
                 case incACC:
                     statUp = Math.min(stat.getRight(), maxStat - acc);
-                    acc += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message12");
+                    if(statUp > 0) {
+                        acc += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message12") + "+" + statUp + "; ";
+                    }
                     break;
                 case incSpeed:
                     statUp = Math.min(stat.getRight(), maxStat - speed);
-                    speed += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message13");
+                    if(statUp > 0) {
+                        speed += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message13") + "+" + statUp + "; ";
+                    }
                     break;
                 case incJump:
-                    statUp = Math.min(stat.getRight(), maxStat - jump);
-                    jump += statUp;
-                    lvupStr += "+" + statUp + I18nUtil.getMessage("Equip.gainStats.message14");
+                    statUp = Math.min(stat.getRight(), maxStat - jump);if(statUp > 0) {
+                        jump += statUp;
+                        lvupStr += I18nUtil.getMessage("Equip.gainStats.message14") + "+" + statUp + "; ";
+                    }
                     break;
 
                 case incVicious:
@@ -581,7 +614,7 @@ public class Equip extends Item {
 
         itemLevel++;
 
-        String lvupStr = I18nUtil.getMessage("Equip.gainStats.message21", ItemInformationProvider.getInstance().getName(this.getItemId()), itemLevel);
+        String lvupStr = I18nUtil.getMessage("Equip.gainStats.message21", ItemInformationProvider.getInstance().getName(this.getItemId()), itemLevel) + "; ";
         String showStr = "#e'" + ItemInformationProvider.getInstance().getName(this.getItemId()) + I18nUtil.getMessage("Equip.gainStats.message16") + itemLevel + "#k#b!";
 
         Pair<String, Pair<Boolean, Boolean>> res = this.gainStats(stats);
@@ -595,7 +628,7 @@ public class Equip extends Item {
         }
         if (gotSlot) {
             //c.getPlayer().dropMessage(6, "A new upgrade slot has been found on the '" + ItemInformationProvider.getInstance().getName(getItemId()) + "'!");
-            lvupStr += I18nUtil.getMessage("Equip.gainStats.message20");
+            lvupStr += I18nUtil.getMessage("Equip.gainStats.message20") + gotSlot + "; ";
         }
 
         c.getPlayer().equipChanged();
