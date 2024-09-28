@@ -247,7 +247,7 @@ gms:
     USE_DEBUG_SHOW_INFO_EQPEXP: false   #在cmd上打印所有装备经验增益信息。
     USE_DEBUG_SHOW_RCVD_PACKET: false   #在cmd上打印所有接收到的数据包ID。
     USE_DEBUG_SHOW_RCVD_MVLIFE: false   #在cmd上打印所有接收到的移动生命内容。
-    USE_DEBUG_SHOW_PACKET: false
+    USE_DEBUG_SHOW_PACKET: false				#在cmd上打印所有接收到的数据包内容
     USE_SUPPLY_RATE_COUPONS: true       #允许通过现金商店出售速率优惠券。
     USE_IP_VALIDATION: false             #在登录时启用IP检查。
     USE_CHARACTER_ACCOUNT_CHECK: false  #在登录时启用单角色-账户检查。这可能是资源密集型的。
@@ -256,10 +256,12 @@ gms:
     USE_MAXRANGE: true                  #将从地图上的所有事件发送和接收数据包，而不仅仅是视图范围内的那些。.
     USE_MAXRANGE_ECHO_OF_HERO: true
     USE_MTS: false
+    USE_MAXRANGE_ECHO_OF_HERO: true			#使用英雄的最大范围回响技能
+    USE_MTS: false											#开关拍卖行，true=进入拍卖行，false=打开NPC
     USE_CPQ: true                       #Renders the CPQ available or not.
     USE_AUTOHIDE_GM: true              #开启后GM上线自动隐身. Thanks to Steven Deblois (steven1152).
     USE_FIXED_RATIO_HPMP_UPDATE: false   #Enables the HeavenMS-builtin HPMP update based on the current pool to max pool ratio.
-    USE_FAMILY_SYSTEM: true
+    USE_FAMILY_SYSTEM: true							#[机翻]使用家庭系统；[推测]开启家族系统
     USE_DUEY: true                     # 是否开启快递
     USE_RANDOMIZE_HPMP_GAIN: true       #在升级时启用MaxHP/MaxMP增益和INT对MaxMP增益的随机化。
     USE_STORAGE_ITEM_SORT: true         #启用存储“整理物品”功能。
@@ -402,7 +404,7 @@ gms:
     #角色配置
     USE_ADD_SLOTS_BY_LEVEL: false    #每20级增加槽位。
     USE_ADD_RATES_BY_LEVEL: false    #每20级增加速率。
-    USE_STACK_COUPON_RATES: false   #多个优惠券效果叠加在一起。
+    USE_STACK_COUPON_RATES: false   #多个倍率券效果叠加在一起。
     USE_PERFECT_PITCH: false         #对于30级或以上的玩家，每次升级授予1个完美音高。
     USE_LEVEL_UP_PROTECT: true       #升级保护，避免连续升级
 
@@ -502,6 +504,9 @@ gms:
     ENABLE_ADVENTURERS: true             #允许创建冒险家
     ENABLE_KNIGHTS_OF_CYGNUS: false       #允许创建骑士团
     ENABLE_THE_LORD_OF_WAR: false         #允许创建战神
+    ENABLE_ADVENTURERS: true             #是否允许创建冒险家，true=允许，false=禁止
+    ENABLE_KNIGHTS_OF_CYGNUS: false       #是否允许创建骑士团，true=允许，false=禁止
+    ENABLE_THE_LORD_OF_WAR: false         #是否允许创建战神，true=允许，false=禁止
 
     #应搜索js覆盖脚本的任何NPC ID（如果它们已经有wz条目，否则它们会被忽略）。
     NPCS_SCRIPTABLE:
@@ -512,5 +517,7 @@ gms:
     CHANGE_CHANNEL_FORCE_RETURN: false
     # 怪物生成倍率
     MOB_RESPAWN_RATE: 1
+    # BOSS刷新时间速率，浮点值只能在>0 到 <=1 之间
+    BOSS_RESPAWN_MOBTIME_RATE : 1
     # 消耗栏和其他栏的物品最大堆叠，-1保持默认，以wz的最大堆叠为准。
     ITEM_SLOT_MAX: -1
