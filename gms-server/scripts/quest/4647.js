@@ -27,7 +27,23 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    qm.dispose();
+    if (mode == -1) {
+        qm.dispose();
+    } else {
+        status++;
+        if (status == 0) {
+            qm.sendAcceptDecline("If you want to learn how to control a group of pets, then get me some Pet Snacks. I have my own secret method of handling them, and it is foolproof. Are you interested?");
+        } else if (status == 1) {
+            if (mode == 0) {
+                qm.sendOk("There's no such thing as a free lesson here. I'll give you some time to think over.");
+            } else {
+                qm.startQuest();
+                // qm.sendOk("You won't find Pet Snacks at a regular store... but you can find it at a big store, where you can buy a huge variety of items. Find it and return to me!");
+            }
+        } else {
+            qm.dispose();
+        }
+    }
 }
 
 function end(mode, type, selection) {
