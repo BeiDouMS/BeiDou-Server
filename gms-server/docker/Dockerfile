@@ -7,13 +7,13 @@
 
 FROM maven:3.9.6-amazoncorretto-21 as builder
 
-RUN yum -y install glibc-common && \
-    yum -y install glibc-langpack-zh 
+# RUN yum -y install glibc-common && \
+#     yum -y install glibc-langpack-zh
 
 # set locale rnv
-ENV LANG=zh_CN.UTF-8
-ENV LANGUAGE=zh_CN:zh
-ENV LC_ALL=zh_CN.UTF-8
+# ENV LANG=zh_CN.UTF-8
+# ENV LANGUAGE=zh_CN:zh
+# ENV LC_ALL=zh_CN.UTF-8
 
 # Build in a separated location which won't have permissions issues.
 WORKDIR /opt/server
@@ -25,7 +25,7 @@ COPY ./gms-server/pom.xml ./gms-server/pom.xml
 
 RUN mvn clean package -U
 
-FROM amazoncorretto:21.0.4-alpine3.20
+FROM eclipse-temurin:21.0.4_7-jre-alpine
 
 WORKDIR /opt/server
 
