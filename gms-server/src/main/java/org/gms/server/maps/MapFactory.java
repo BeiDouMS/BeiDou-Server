@@ -115,12 +115,16 @@ public class MapFactory {
         AbstractLoadedLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
         if (myLife instanceof Monster monster) {
             int mobRespawnRate = YamlConfig.config.server.MOB_RESPAWN_RATE;
-            if (mobRespawnRate < 1) {
+            float mobTimeRate = YamlConfig.config.server.BOSS_RESPAWN_MOBTIME_RATE;
+            mobTimeRate = (mobTimeRate <= 0 || mobTimeRate > 1) ? 1 : mobTimeRate;  //将值限定在0~1之间的范围
+            if (mobRespawnRate < 1) {   //如果读入的值小于1，或者怪物为boss，则设定生怪倍率为1
                 mobRespawnRate = 1;
             }
             if (monster.isBoss()) {
                 mobRespawnRate = 1;
+                mobTime *= mobTimeRate;
             }
+
             for (int i = 0; i < mobRespawnRate; i++) {
                 if (mobTime == -1) { //does not respawn, force spawn once
                     map.spawnMonster(monster);

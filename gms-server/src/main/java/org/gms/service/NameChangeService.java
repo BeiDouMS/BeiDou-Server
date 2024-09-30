@@ -6,19 +6,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.config.YamlConfig;
 import org.gms.dao.entity.CharactersDO;
+import org.gms.dao.entity.InventoryitemsDO;
 import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.RingsDO;
 import org.gms.dao.mapper.CharactersMapper;
+import org.gms.dao.mapper.InventoryitemsMapper;
 import org.gms.dao.mapper.NamechangesMapper;
 import org.gms.dao.mapper.RingsMapper;
 import org.gms.manager.ServerManager;
 import org.gms.util.I18nUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.gms.constants.id.ItemId;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
+import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
 import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
 import static org.gms.dao.entity.table.RingsDOTableDef.RINGS_D_O;
 
@@ -29,6 +34,7 @@ public class NameChangeService {
     private final NamechangesMapper namechangesMapper;
     private final CharactersMapper charactersMapper;
     private final RingsMapper ringsMapper;
+    private final InventoryitemsMapper inventoryitemsmapper;
 
     public void applyAllNameChange() {
         List<NamechangesDO> namechangesDOList = getAllNameChanges();
@@ -42,7 +48,7 @@ public class NameChangeService {
         });
     }
 
-    public void applyNameChange(int characterId, String characterName) {
+    public void applyNameChange(int characterId, String characterName) {//下线时检测是否需要更换昵称并应用
         List<NamechangesDO> namechangesDOList = namechangesMapper.selectListByQuery(QueryWrapper.create()
                 .where(NAMECHANGES_D_O.COMPLETION_TIME.isNull()).and(NAMECHANGES_D_O.CHARACTERID.eq(characterId)));
         if (!namechangesDOList.isEmpty()) {
@@ -70,10 +76,13 @@ public class NameChangeService {
      * @param data 改名对象
      */
     @Transactional(rollbackFor = Exception.class)
-    public void doNameChange(NamechangesDO data) {
+    public void doNameChange(NamechangesDO data) {//应用昵称更改
+        int accountid = charactersMapper.selectOneById(data.getCharacterid()).getAccountid();
         charactersMapper.update(CharactersDO.builder().id(data.getCharacterid()).name(data.getNewer()).build());
         ringsMapper.updateByQuery(RingsDO.builder().partnername(data.getNewer()).build(), QueryWrapper.create().where(RINGS_D_O.PARTNERNAME.eq(data.getOlder())));
         namechangesMapper.update(NamechangesDO.builder().id(data.getId()).completionTime(new Timestamp(System.currentTimeMillis())).build());
+        //似乎没有修复使用改名卡撤销已修改名称的功能，当双击改名卡并确认撤销改名，客户端直接闪退报38错误，顾在此处一刀切，直接删除角色背包和账户商城里所有改名卡
+        inventoryitemsmapper.deleteByQuery(QueryWrapper.create().where(INVENTORYITEMS_D_O.ITEMID.eq(ItemId.NAME_CHANGE)).and(INVENTORYITEMS_D_O.CHARACTERID.eq(data.getCharacterid()).or(INVENTORYITEMS_D_O.ACCOUNTID.eq(accountid))));
         log.info(I18nUtil.getLogMessage("CharacterService.doNameChange.info1"), data.getOlder(), data.getNewer());
     }
 
