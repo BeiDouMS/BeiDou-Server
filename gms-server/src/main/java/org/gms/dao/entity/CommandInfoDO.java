@@ -28,6 +28,8 @@ public class CommandInfoDO implements Serializable {
 
     private String syntax;
 
+    private Integer defaultLevel;
+
     private String commandClassName;
 
     private Boolean enabled;

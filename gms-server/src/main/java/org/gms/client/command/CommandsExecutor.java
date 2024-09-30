@@ -25,19 +25,16 @@ package org.gms.client.command;
 
 import lombok.Getter;
 import org.gms.client.Client;
-import org.gms.client.command.commands.gm1.BuffMeCommand;
-import org.gms.client.command.commands.gm1.GotoCommand;
-import org.gms.client.command.commands.gm1.WhatDropsFromCommand;
-import org.gms.client.command.commands.gm1.WhoDropsCommand;
+import org.gms.client.command.commands.gm0.*;
+import org.gms.client.command.commands.gm1.*;
 import org.gms.client.command.commands.gm2.*;
 import org.gms.client.command.commands.gm3.*;
 import org.gms.client.command.commands.gm4.*;
 import org.gms.client.command.commands.gm5.*;
 import org.gms.client.command.commands.gm6.*;
 import org.gms.constants.id.MapId;
-import org.gms.dao.entity.CommandInfoDO;
 import org.gms.manager.ServerManager;
-import org.gms.service.CommandInfoService;
+import org.gms.service.CommandService;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.slf4j.Logger;
@@ -59,7 +56,7 @@ public class CommandsExecutor {
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
     private Pair<List<String>, List<String>> levelCommandsCursor;
 
-    private static final CommandInfoService commandInfoService = ServerManager.getApplicationContext().getBean(CommandInfoService.class);
+    private static final CommandService commandService = ServerManager.getApplicationContext().getBean(CommandService.class);
 
     public static boolean isCommand(Client client, String content) {
         char heading = content.charAt(0);
@@ -70,15 +67,17 @@ public class CommandsExecutor {
     }
 
     public void loadCommandsExecutor() {
-        registeredCommands.clear();
-        commandsNameDesc.clear();
-        registerLv0Commands();
-        registerLv1Commands();
-        registerLv2Commands();
-        registerLv3Commands();
-        registerLv4Commands();
-        registerLv5Commands();
-        registerLv6Commands();
+//        registeredCommands.clear();
+//        commandsNameDesc.clear();
+//        registerLv0Commands();
+//        registerLv1Commands();
+//        registerLv2Commands();
+//        registerLv3Commands();
+//        registerLv4Commands();
+//        registerLv5Commands();
+//        registerLv6Commands();
+
+        commandService.loadCommands(registeredCommands, commandsNameDesc);
     }
 
     public List<Pair<List<String>, List<String>>> getGmCommands() {
@@ -181,44 +180,33 @@ public class CommandsExecutor {
     private void registerLv0Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
-//        addCommand(new String[]{"help", "commands"}, HelpCommand.class);
-//        addCommand("droplimit", DropLimitCommand.class);
-//        addCommand("time", TimeCommand.class);
-//        addCommand("credits", StaffCommand.class);
-//        addCommand("uptime", UptimeCommand.class);
-//        addCommand("gacha", GachaCommand.class);
-//        addCommand("dispose", DisposeCommand.class);
-//        addCommand("changel", ChangeLanguageCommand.class);
-//        addCommand("equiplv", EquipLvCommand.class);
-//        addCommand("showrates", ShowRatesCommand.class);
-//        addCommand("rates", RatesCommand.class);
-//        addCommand("online", OnlineCommand.class);
-//        addCommand("gm", GmCommand.class);
-//        addCommand("reportbug", ReportBugCommand.class);
-//        addCommand("points", ReadPointsCommand.class);
-//        addCommand("joinevent", JoinEventCommand.class);
-//        addCommand("leaveevent", LeaveEventCommand.class);
-//        addCommand("ranks", RanksCommand.class);
-//        addCommand("str", StatStrCommand.class);
-//        addCommand("dex", StatDexCommand.class);
-//        addCommand("int", StatIntCommand.class);
-//        addCommand("luk", StatLukCommand.class);
-//        addCommand("enableauth", EnableAuthCommand.class);
-//        addCommand("toggleexp", ToggleExpCommand.class);
-//        addCommand("mylawn", MapOwnerClaimCommand.class);
-//        addCommand("bosshp", BossHpCommand.class);
-//        addCommand("mobhp", MobHpCommand.class);
-
-        List<CommandInfoDO> commandInfoList = commandInfoService.getLv0Commands();
-        for (CommandInfoDO item : commandInfoList) {
-            Class<? extends Command> aClass = commandInfoService.getCommandClass(item.getCommandClassName());
-            if (aClass == null) {
-                log.warn("gm_command is null, command={}, commandClassName={}", item.getSyntax(), item.getCommandClassName());
-            } else {
-                log.info("add command={} class={}", item.getSyntax(), aClass.getName());
-                addCommand(item.getSyntax(), 0, aClass);
-            }
-        }
+        addCommand(new String[]{"help", "commands"}, HelpCommand.class);
+        addCommand("droplimit", DropLimitCommand.class);
+        addCommand("time", TimeCommand.class);
+        addCommand("credits", StaffCommand.class);
+        addCommand("uptime", UptimeCommand.class);
+        addCommand("gacha", GachaCommand.class);
+        addCommand("dispose", DisposeCommand.class);
+        addCommand("changel", ChangeLanguageCommand.class);
+        addCommand("equiplv", EquipLvCommand.class);
+        addCommand("showrates", ShowRatesCommand.class);
+        addCommand("rates", RatesCommand.class);
+        addCommand("online", OnlineCommand.class);
+        addCommand("gm", GmCommand.class);
+        addCommand("reportbug", ReportBugCommand.class);
+        addCommand("points", ReadPointsCommand.class);
+        addCommand("joinevent", JoinEventCommand.class);
+        addCommand("leaveevent", LeaveEventCommand.class);
+        addCommand("ranks", RanksCommand.class);
+        addCommand("str", StatStrCommand.class);
+        addCommand("dex", StatDexCommand.class);
+        addCommand("int", StatIntCommand.class);
+        addCommand("luk", StatLukCommand.class);
+        addCommand("enableauth", EnableAuthCommand.class);
+        addCommand("toggleexp", ToggleExpCommand.class);
+        addCommand("mylawn", MapOwnerClaimCommand.class);
+        addCommand("bosshp", BossHpCommand.class);
+        addCommand("mobhp", MobHpCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
