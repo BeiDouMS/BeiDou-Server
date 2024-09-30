@@ -57,6 +57,7 @@ public class CommandService {
                 levelCommandsCursor.getLeft().add(commandName);
             } catch (Exception e) {
                 log.warn("", e);
+                continue;
             }
 
             try {
