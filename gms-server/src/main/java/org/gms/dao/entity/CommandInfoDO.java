@@ -30,10 +30,8 @@ public class CommandInfoDO implements Serializable {
 
     private Integer defaultLevel;
 
-    private String commandClassName;
+    private String clazz;
 
     private Boolean enabled;
-
-    private String description;
 
 }
