@@ -44,13 +44,13 @@ function enter(pi) {
         pi.warp(270040100, "out00");
     } else {
         if (map > 200) {
-            pi.playerMessage(5, "As the time starts to flow oddly, you are transported back to a safe lane.");
+            pi.playerMessage(5, "随着时间开始变得异常流动，你被传送回到了一个安全的空间。");
             pi.warp(270030000, "in00");
         } else if (map > 100) {
-            pi.playerMessage(5, "As the time starts to flow oddly, you are transported back to a safe lane.");
+            pi.playerMessage(5, "随着时间开始变得异常流动，你被传送回到了一个安全的空间。");
             pi.warp(270020000, "in00");
         } else {
-            pi.playerMessage(5, "As the time starts to flow oddly, you are transported back to a safe lane.");
+            pi.playerMessage(5, "随着时间开始变得异常流动，你被传送回到了一个安全的空间。");
             pi.warp(270010000, "in00");
         }
     }

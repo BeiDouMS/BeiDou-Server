@@ -318,4 +318,8 @@ public class ServerProperty {
     public boolean CHANGE_CHANNEL_FORCE_RETURN;
     public int MOB_RESPAWN_RATE;
     public short ITEM_SLOT_MAX;
+
+    //BOSS相关配置
+    public float BOSS_RESPAWN_MOBTIME_RATE;  //BOSS刷新时间速率，浮点值只能在>0 到 <=1 之间
+
 }
