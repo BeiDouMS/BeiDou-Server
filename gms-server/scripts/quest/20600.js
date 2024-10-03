@@ -17,6 +17,6 @@ function start(mode, type, selection) {
     }
 }
 
-function end(mode, type, selection) {
-    qm.dispose();
-}
+// function end(mode, type, selection) {
+//     qm.dispose();
+// }

@@ -24,9 +24,44 @@
 	Map(s): 		Empress' Road : Ereve (130000000)
 	Description: 		Quest - Knighthood Exam: Night Walker
 */
+/*
+    Author:         Magical-H
+    Description:    骑士团转职通用脚本
+ */
+var job = {
+    1 : "DAWNWARRIOR",				// 魂骑士
+    2 : "BLAZEWIZARD",				// 炎术士
+    3 : "WINDARCHER",				// 风灵使者
+    4 : "NIGHTWALKER",				// 夜行者
+    5 : "THUNDERBREAKER"			// 奇袭者
+};
+var medalid = 1142066;             //定义初级勋章，根据转职次数自动发放对应的勋章
+var completeQuestID = 29906;        //定义初级勋章任务，根据转职次数自动完成对应的勋章任务
+var ProofofExamID = 4032096;          //定义考试的证物，根据职业自动设为对应的ID
+var jobId = null;
+var jobLevel = null;
+var QuestID = null;
+
+var chrLevel = {
+    1 : 10,
+    2 : 30,
+    3 : 70,
+    4 : 120
+};                  //定义角色等级限制
 var status = -1;
 
 function end(mode, type, selection) {
+    if(QuestID == null) {
+        QuestID = qm.getQuest();
+        jobId = String(QuestID).slice(-1);  //通过任务ID获取职业ID
+        jobLevel = String(QuestID).substring(2, 3);  //通过任务ID获取几转
+        chrLevel = chrLevel[jobLevel];               //通过转职次数绑定等级限制
+
+        job = Java.type('org.gms.client.Job')[job[jobId] + jobLevel];   //获取转职职业类
+        medalid += (jobLevel - 1);    //绑定对应的转职勋章
+        completeQuestID += (jobLevel - 1);    //绑定完成对应给予转职勋章的任务
+        ProofofExamID += (jobId - 1);        //绑定对应的考试证物
+    }
     if (mode == -1) {
         qm.dispose();
     } else {
@@ -41,30 +76,30 @@ function end(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            qm.sendYesNo("所以，你准备好二转了?");
+            qm.sendYesNo(`既然你带来了所有的#b#v${ProofofExamID}##t${ProofofExamID}##k，那我现在相信你有资格成为#b正式骑士 - ${job.getName()}#k，你想成为其中的一员吗？`);
         } else if (status == 1) {
-            if (qm.getPlayer().getJob().getId() == 1400 && qm.getPlayer().getRemainingSp() > ((qm.getPlayer().getLevel() - 30) * 3)) {
+            if (qm.getPlayer().getJob().getId() == (1000+jobId*100) && qm.getPlayer().getRemainingSp() > ((qm.getPlayer().getLevel() - chrLevel) * 3)) {
                 qm.sendNext("你还有技能点没有使用完，所以你还不能成为正式的骑士！在一转技能上使用更多的SP.");
                 qm.dispose();
             } else {
-                if (qm.getPlayer().getJob().getId() != 1410) {
-					if (!qm.canHold(1142067)) {
-						qm.sendNext("请确认装备栏是否足够.");
-						qm.dispose();
-						return;
-					}
-                    qm.gainItem(4032099, -30);
-                    qm.gainItem(1142067, 1);
-                    const Job = Java.type('org.gms.client.Job');
-                    qm.getPlayer().changeJob(Job.NIGHTWALKER2);
+                if (qm.getPlayer().getJob().getId() != (1010+jobId*100)) {
+                    if (!qm.canHold(medalid)) {
+                        qm.sendOk(`女皇将赋予你#b#v${medalid}##t${medalid}##k，你必须将#b装备栏#k#r空出1个格子#k才可以接受。\r\n\r\n如果你已拥有该勋章，请你将其丢弃。`);
+                        qm.dispose();
+                        return;
+                    }
+                    qm.gainItem(ProofofExamID, -30);
+                    qm.getPlayer().changeJob(job);
                     qm.completeQuest();
+                    qm.gainItem(medalid, 1); //原始流程是女皇任务给的勋章，需要配合WZ给任务29908加入自动完成任务代码,比较麻烦，在这里给了。
+                    qm.completeQuest(completeQuestID); //直接完成女皇的任务，这样女皇头顶不会一直顶着书本。
                 }
-                qm.sendNext("训练已经结束。你现在皇家骑士团的骑士官员.");
+                qm.sendNext(`训练已经结束。你现在皇家骑士团的骑士官员.\r\n获得女皇赋予的勋章：\r\n#b#v${medalid}##t${medalid}##k`);
             }
         } else if (status == 2) {
-            qm.sendNextPrev("我也给了你一些 #b技能点#k 和霹雳的辅助技能，只有正式的骑士才能使用。这些技能是基于闪电的，所以要明智地使用它们!");
+            qm.sendNextPrev("我给了你一些#b技能点#k。我还传授了你一些只有骑士才能掌握的灵魂大师的技能，所以我希望你能努力钻研，并尽可能地培养它们，就像培养你的灵魂一样。");
         } else if (status == 3) {
-            qm.sendPrev("好吧，就我个人而言，我希望你在成为天鹅骑士后也不要失去热情。即使你在一大堆负面的东西中，也要寻找积极的一面.");
+            qm.sendPrev("既然你已经正式成为皇家骑士，那就要以骑士的标准行事，这样才能维护女皇的威名。");
         } else if (status == 4) {
             qm.dispose();
         }
