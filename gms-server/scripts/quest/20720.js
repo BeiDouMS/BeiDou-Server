@@ -1,6 +1,6 @@
 /*
-	QUEST: Before the Mission in Perion Begins
-	NPC: Neinheart
+    QUEST: Before the Mission in Perion Begins
+    NPC: Neinheart
 */
 
 var status = -1;
@@ -22,5 +22,3 @@ function start(mode, type, selection) {
         qm.dispose();
     }
 }
-
-function end(mode, type, selection) {}
