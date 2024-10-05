@@ -14,15 +14,12 @@ function start(mode, type, selection) {
     } else if (status == 1) {
         qm.sendAcceptDecline("We can't have you wipe out the entire population of #o0100134#s, since they aren't many of them out there. How about 5 of them? You're here to train, not to destroy the ecosystem.");
     } else if (status == 2) {
-        if (mode == 0 && type == 15) {
-            qm.sendNext("Oh, is 5 not enough? If you feel the need to train further, please feel free to slay more than that. If you slay all of them, I'll just have to look the other way even if it breaks my heart, since they will have been sacrificed for a good cause...");
-            qm.dispose();
+        if (mode == 0) {
+            qm.sendOk("Oh, is 5 not enough? If you feel the need to train further, please feel free to slay more than that. If you slay all of them, I'll just have to look the other way even if it breaks my heart, since they will have been sacrificed for a good cause...");
         } else {
             qm.forceStartQuest();
-            qm.sendNext("#o0100134#s can be found in deeper parts of the island. Continue going left until you reach #b#m140010200##k, and defeat #r5 #o0100134#s#k.");
+            qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
         }
-    } else if (status == 3) {
-        qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow1");
         qm.dispose();
     }
 }

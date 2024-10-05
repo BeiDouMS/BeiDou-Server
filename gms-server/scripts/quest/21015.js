@@ -17,14 +17,11 @@ function start(mode, type, selection) {
         qm.sendAcceptDecline("Don't you know that you must first master the fundamentals? So the wise thing to do is to begin with #bBasic Training#k. Oh, of course, I forgot that you lost your memory. Well, that's why I'm here. You'll just have to experience it yourself. Shall we begin?");
     } else if (status == 3) {
         if (mode == 0) {
-            qm.sendNext("What are you so hesitant about? You're a hero! You gotta strike while the iron is hot! Come on, let's do this!");
-            qm.dispose();
+            qm.sendOk("What are you so hesitant about? You're a hero! You gotta strike while the iron is hot! Come on, let's do this!");
         } else {
             qm.forceStartQuest();
-            qm.sendNext("The population of Rien may be mostly Penguins, but even this island has monsters. You'll find #o0100131#s if you go to #b#m140020000##k, located on the right side of the town. Please defeat #r10 of those #o0100131#s#k. I'm sure you'll have no trouble defeating the #o0100131#s that even the slowest penguins here can defeat.", 1);
+            qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
         }
-    } else if (status == 4) {
-        qm.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialArrow3");
         qm.dispose();
     }
 }
