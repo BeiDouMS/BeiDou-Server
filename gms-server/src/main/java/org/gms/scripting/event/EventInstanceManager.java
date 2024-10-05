@@ -762,7 +762,7 @@ public class EventInstanceManager {
     public int getIntProperty(String key) {
         propertyLock.lock();
         try {
-            return Integer.parseInt(props.getProperty(key));
+            return Integer.parseInt(props.getProperty(key) != null ? props.getProperty(key) : String.valueOf(0));
         } finally {
             propertyLock.unlock();
         }
