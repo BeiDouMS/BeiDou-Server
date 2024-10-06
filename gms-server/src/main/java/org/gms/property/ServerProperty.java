@@ -36,6 +36,8 @@ public class ServerProperty {
     public boolean COLLECTIVE_CHARSLOT;
     public boolean DETERRED_MULTICLIENT;
 
+    public boolean USE_ENABLE_LOGIN_NOTIFICATION;
+
     //Besides blocking logging in with several client sessions on the same machine, this also blocks suspicious login attempts for players that tries to login on an account using several diferent remote addresses.
 
     //Multiclient Coordinator Configuration
@@ -321,5 +323,6 @@ public class ServerProperty {
 
     //BOSS相关配置
     public float BOSS_RESPAWN_MOBTIME_RATE;  //BOSS刷新时间速率，浮点值只能在>0 到 <=1 之间
+
 
 }
