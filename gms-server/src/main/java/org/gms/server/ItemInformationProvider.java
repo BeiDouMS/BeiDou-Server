@@ -2072,7 +2072,7 @@ public class ItemInformationProvider {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         int dropperid = rs.getInt("dropperid");
-                        itemid = getCrystalForLevel(LifeFactory.getMonsterLevel(dropperid) - 1);
+                        itemid = getCrystalForLevel(LifeFactory.getMonsterLevel(dropperid));
                     }
                 }
             }
