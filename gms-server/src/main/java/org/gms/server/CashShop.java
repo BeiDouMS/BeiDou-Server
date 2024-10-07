@@ -224,9 +224,15 @@ public class CashShop {
 
         public static ModifiedCashItemDO getItem(int sn) {
             ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
+            // cashItemDo 会出现拿不到的情况，直接使用clone会报空指针，导致客户端假死
             ModifiedCashItemDO cashItemDO = items.get(sn);
-            ModifiedCashItemDO returnDo = cashItemDO.clone();
-            if (dbItemDO != null) {
+            ModifiedCashItemDO returnDo;
+            if (cashItemDO != null) {
+                returnDo = cashItemDO.clone();
+            } else {
+                returnDo = new ModifiedCashItemDO();
+            }
+            if (dbItemDO != null && cashItemDO != null) {
                 returnDo.setItemId(Optional.ofNullable(dbItemDO.getItemId()).orElse(cashItemDO.getItemId()));
                 returnDo.setPrice(Optional.ofNullable(dbItemDO.getPrice()).orElse(cashItemDO.getPrice()));
                 returnDo.setPeriod(Optional.ofNullable(dbItemDO.getPeriod()).orElse(cashItemDO.getPeriod()));
