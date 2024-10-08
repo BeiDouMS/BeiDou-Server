@@ -21,8 +21,10 @@
  */
 package org.gms.server.gachapon;
 
+import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.constants.id.NpcId;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
@@ -58,6 +60,7 @@ public class Gachapon {
         private static final GachaponType[] values = GachaponType.values();
 
         private final GachaponItems gachapon;
+        @Getter
         private final int npcId;
         private final int common;
         private final int uncommon;
@@ -102,42 +105,34 @@ public class Gachapon {
             return null;
         }
 
-        public static String[] getLootInfo() {
-            ItemInformationProvider ii = ItemInformationProvider.getInstance();
+        public static String[] getLootNames() {
+            return new String[]{
+                    I18nUtil.getMessage("GachaCommand.message2"),
+                    I18nUtil.getMessage("GachaCommand.message3"),
+                    I18nUtil.getMessage("GachaCommand.message4"),
+                    I18nUtil.getMessage("GachaCommand.message5"),
+                    I18nUtil.getMessage("GachaCommand.message6"),
+                    I18nUtil.getMessage("GachaCommand.message7"),
+                    I18nUtil.getMessage("GachaCommand.message8"),
+                    I18nUtil.getMessage("GachaCommand.message9"),
+                    I18nUtil.getMessage("GachaCommand.message10"),
+                    I18nUtil.getMessage("GachaCommand.message11")
+            };
+        }
 
-            String[] strList = new String[values.length + 1];
-
-            String menuStr = "";
-            int j = 0;
-            for (GachaponType gacha : values) {
-                menuStr += "#L" + j + "#" + gacha.name() + "#l\r\n";
-                j++;
-
-                String str = "";
-                for (int i = 0; i < 3; i++) {
-                    int[] gachaItems = gacha.getItems(i);
-
-                    if (gachaItems.length > 0) {
-                        str += ("  #rTier " + i + "#k:\r\n");
-                        for (int itemid : gachaItems) {
-                            String itemName = ii.getName(itemid);
-                            if (itemName == null) {
-                                itemName = "MISSING NAME #" + itemid;
-                            }
-
-                            str += ("    " + itemName + "\r\n");
-                        }
-
-                        str += "\r\n";
-                    }
-                }
-                str += "\r\n";
-
-                strList[j] = str;
-            }
-            strList[0] = menuStr;
-
-            return strList;
+        public static int[] getLootIds() {
+            return new int[]{
+                    NpcId.GACHAPON_HENESYS,
+                    NpcId.GACHAPON_ELLINIA,
+                    NpcId.GACHAPON_PERION,
+                    NpcId.GACHAPON_KERNING,
+                    NpcId.GACHAPON_SLEEPYWOOD,
+                    NpcId.GACHAPON_MUSHROOM_SHRINE,
+                    NpcId.GACHAPON_SHOWA_MALE,
+                    NpcId.GACHAPON_SHOWA_FEMALE,
+                    NpcId.GACHAPON_NLC,
+                    NpcId.GACHAPON_NAUTILUS
+            };
         }
     }
 

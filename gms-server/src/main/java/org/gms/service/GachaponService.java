@@ -129,8 +129,9 @@ public class GachaponService {
     public List<GachaponRewardDO> getRewards(Integer poolId) {
         rLock.lock();
         try {
-            List<GachaponRewardDO> records = new ArrayList<>();
-            records = gachaponRewardMapper.selectListByQuery(QueryWrapper.create().eq("pool_id", poolId).orderBy(GachaponRewardDO::getItemId, true));
+            List<GachaponRewardDO> records = gachaponRewardMapper.selectListByQuery(QueryWrapper.create()
+                    .eq("pool_id", poolId)
+                    .orderBy(GachaponRewardDO::getItemId, true));
             ItemInformationProvider ii = ItemInformationProvider.getInstance();
             for (GachaponRewardDO record : records) {
                 record.setItemName(ii.getName(record.getItemId()));
@@ -240,6 +241,11 @@ public class GachaponService {
         } finally {
             rLock.unlock();
         }
+    }
+
+    public List<GachaponRewardDO> getRewardsByNpcId(Integer npcId) {
+        List<GachaponRewardPoolDO> activePools = getActivePools(npcId);
+        return activePools.stream().flatMap(pool -> getRewards(pool.getId()).stream()).toList();
     }
 
     private void doReward(Character player, GachaponRewardPoolDO pool) {
