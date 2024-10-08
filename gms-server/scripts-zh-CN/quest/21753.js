@@ -21,27 +21,51 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("战神，我发现了一些令人不安的消息。。。你说你来自东部森林区，对吗？我们追踪并研究了用来支撑进入未来之门的魔法。结果发现那是一种#r时间之门#k。你用的衣服。。。以前从没有人见过。那一定意味着，你一定来自未来。");
-        } else if (status == 1) {
-            qm.sendNext("现在关于这个问题：在你的时间轴上似乎丢失了封印石。。。它是一个强大的神器，可以阻止黑魔法师的军队围攻我们的世界。。如果那个封印石消失了，再没有什么能阻止他了。因为这是一件非常重要的事情，所以要从未来找到我的自我。明白了，把我从未来带走吧！");
-        } else if (status == 2) {
-            qm.forceStartQuest();
-            qm.dispose();
-        }
+    switch (status) {
+        case 0:
+            return qm.sendNext("刚才听到图书馆里面有什么声音传出来……是你吗，战神？封印石找到了吗？", 1 << 3);
+        case 1:
+            return qm.sendNextPrev("#b（讲述图书馆里发生的事情。）", 1 << 1);
+        case 2:
+            return qm.sendNextPrev("……那些家伙竟然在这里出现……对不起，战神。我应该好好保管的……", 1 << 3);
+        case 3:
+            return qm.sendNextPrev("#p2131000#，不是你的错。", 1 << 1);
+        case 4:
+            return qm.sendNextPrev("你还是老样子。不过……你提到封印石的事情，让我想起了一个线索。", 1 << 3);
+        case 5:
+            return qm.sendNextPrev("线索？", 1 << 1);
+        case 6:
+            return qm.sendAcceptDecline("是的，我发现了一封你过去写的信，里面有和封印石有关的线索。你想看看吗？");
+        case 7:
+            if (type == 12 && mode == 0) {
+                return qm.dispose();
+            }
+            // ACCEPT
+            if (!qm.isQuestStarted(21753) && !qm.isQuestCompleted(21753)) {
+                qm.forceStartQuest();
+            }
+            return qm.sendNext("……嗯？信……", 1 | 1 << 3);
+        case 8:
+            return qm.sendNextPrev("#i4032327#\r\n#b（无法拿到信。信通过了手，掉到了地上。）", 1 | 1 << 1);
+        case 9:
+            return qm.sendNextPrev("……虽然我不太清楚时间法则……但我不能把这封信交给你的原因，应该是#b因为我们属于两个不同的时空#k……真让人伤感。不久之前我们还是同伴……", 1 | 1 << 3);
+        case 10:
+            return qm.sendNextPrev("……你也知道，我们妖精可以活很长时间。虽然你成为了几百年以后的人，但我应该也能活到那个时候。战神，#b我会好好保管这封信，请你在你的那个时代过来找我#k。", 1 | 1 << 3);
+        case 11:
+            return qm.sendNextPrev("虽然过了几百年时间，但我想你应该不会忘记这个约定。让我们以后再见吧。我会等着你的。", 1 | 1 << 3);
+        case 12:
+            return qm.sendPrev("#b（回到#p1201000#所存在的时间，去找找#p2131000#吧。请求#p1002104#肯定可以找到#p2131000#的。）", 1 | 1 << 1);
+        default:
+            return qm.dispose();
     }
 }

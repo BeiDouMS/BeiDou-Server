@@ -1,20 +1,17 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1 || mode == 0 && type > 0) {
+    if (mode == -1) {
         qm.dispose();
         return;
     }
 
-    if (mode == 1) {
-        status++;
-    } else {
-        if (status == 2) {
-            qm.dispose();
-            return;
-        }
+    if (type == 0 && mode == 0) {
         status--;
+    } else {
+        status++;
     }
+
     if (status == 0) {
         qm.sendNext("How did the training go? The Penguin Teacher #p1202006# likes to exaggerate and it worried me knowing that he has bouts of Alzheimer's, but I'm sure he helped you. He's been studying the skills of heroes for a very long time.");
     } else if (status == 1) {
@@ -26,8 +23,4 @@ function start(mode, type, selection) {
         qm.gainExp(500);
         qm.dispose();
     }
-}
-
-function end(mode, type, selection) {
-    qm.dispose();
 }

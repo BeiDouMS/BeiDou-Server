@@ -1,6 +1,6 @@
 var status = -1;
 
-function end(mode) {
+function end(mode, type) {
     if (mode == -1) {
         qm.dispose();
         return;
@@ -12,6 +12,10 @@ function end(mode) {
             qm.sendSimple("Did you manage to reach the Evil Eye Cave? Did you really find the kid living there?\r\n#b#L0#(You tell him about getting to the entrance of the Puppeteer&apos;s Cave.)#l\n#k");
             break;
         case 1:
+            if (type == 4 && mode == 0) { // END CHAT
+                qm.dispose();
+                break;
+            }
             qm.sendOk("So I guess he really does live there... But a password... Why would he need a password? Who would even visit that place?");
             break;
         case 2:

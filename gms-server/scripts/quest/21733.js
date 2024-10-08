@@ -21,26 +21,36 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
+    if (mode == -1) { // END CHAT
         qm.dispose();
+        return;
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
+        status++;
+    }
+
+    if (status == 0) {
+        qm.sendSimple('Yo, where are you? We have a situation here! \r\n#b#L0# (Yo...? #p1002104# always called me "hero", not "yo"...)#l');
+        return;
+    } else if (status == 1) {
+        if (mode == 0) { // END CHAT
             qm.dispose();
             return;
         }
-
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("Aran, Lith have been caught off guard. We are under attack! Get here ASAP.");
-        } else {
-            qm.forceStartQuest();
+        qm.sendAcceptDecline("I have some very important information! Quick, come to #b#m104000004##k!");
+    } else {
+        if (mode == 0) { // DECLINE
+            qm.sendOk("What are you saying? I'm in a rush right now! Stop with the nonsense and just come over here!");
             qm.dispose();
+            return;
         }
+        // ACCEPT
+        qm.forceStartQuest();
+        qm.sendOk("It's seriously urgent! Come as quickly as possible!");
+        qm.dispose();
     }
 }
 

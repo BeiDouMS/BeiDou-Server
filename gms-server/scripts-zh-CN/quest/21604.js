@@ -21,27 +21,37 @@
 var status = -1;
 
 function start(mode, type, selection) {
+
     if (mode == -1) {
-        qm.dispose();
+        return qm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("你想用狼当坐骑，但你没有狼鞍？为什么，我有很好的解决方案给你！先到这里来，我会教你怎么骑狼.");
-        } else if (status == 1) {
-            qm.sendNext("到这里，去找 #r50 #t4000048##k 然后把它们带给我.");
-        } else if (status == 2) {
-            qm.forceStartQuest();
-            qm.dispose();
-        }
+    switch (status) {
+        case 0:
+            return qm.sendNext("啊呀，你带着的不是狼吗？我已经好久都没见过带狼的人了。不过，带着狼却不#b骑乘#k，难道你还不会骑乘之术吗？");
+        case 1:
+            return qm.sendNextPrev("所谓骑乘，就是一种骑在狼背上快速行进，并能和狼之间实现良好沟通的技术。我曾经骑过#o5130104#和#o5140000#，当时我可帅呢！");
+        case 2:
+            return qm.sendAcceptDecline("你想学骑乘吗？如果想的话，#p2020007#就可以帮助你。");
+        case 3:
+            if (type == 12 && mode == 0) { // DECLINE
+                return qm.dispose();
+            }
+            // ACCEPT
+            if (!qm.isQuestStarted(21604) && !qm.isQuestCompleted(21604)) {
+                qm.forceStartQuest();
+            }
+            return qm.sendNext("要想骑乘，没有任何准备，直接骑在狼背上是很困难的。要先弄个#b#t1912011##k，这样才能让狼不觉得难受。我会做狼鞍，你去找材料就好。");
+        case 4:
+            qm.sendPrev("制作#t1912011#的材料是#b#t4000048##k。大概#b50张#k就够了。等你把材料都找齐了，我就把骑乘的技巧和#t1912011#一起传授给你。赶紧去找材料吧。我也很期待啊。");
+            return qm.dispose();
+        default:
+            return qm.dispose();
     }
 }

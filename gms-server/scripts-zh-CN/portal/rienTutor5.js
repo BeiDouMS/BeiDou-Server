@@ -23,7 +23,7 @@
 	Author: kevintjuh93
 */
 function enter(pi) {
-    pi.talkGuide("你离城镇很近了。我先去那边处理一些事情，你慢慢来。");
+    pi.talkGuide("前面不远就是村子了。我先走一步了，还有一些需要整理的东西。战神，慢慢过来就行。");
     pi.blockPortal();
     return false;
 }

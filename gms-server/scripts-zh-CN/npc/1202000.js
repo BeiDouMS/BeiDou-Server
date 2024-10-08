@@ -38,15 +38,15 @@ function action(mode, type, selection) {
         if (cm.getPlayer().getMapId() == 140090000) {
             if (!cm.containsAreaInfo(21019, "helper=clear")) {
                 if (status == 0) {
-                    cm.sendNext("你终于醒来了...!");
+                    cm.sendNext("你终于醒来了！", 8);
                 } else if (status == 1) {
-                    cm.sendNextPrev("你是……？");
+                    cm.sendNextPrev("……你是？", 2);
                 } else if (status == 2) {
-                    cm.sendNextPrev("“与黑魔法师作战的英雄……我一直在等你醒来！”");
+                    cm.sendNextPrev("我一直在等你，等着你这个和黑魔法师战斗的英雄醒来！", 8);
                 } else if (status == 3) {
-                    cm.sendNextPrev("你是谁？你在说什么？");
+                    cm.sendNextPrev("……你在说什么？你到底是谁？", 2);
                 } else if (status == 4) {
-                    cm.sendNextPrev("我是谁呢...? 我什么都记不起来... 哎呀，我的头好痛!");
+                    cm.sendNextPrev("等等……我是谁？我怎么什么都想不起来……啊……！头好疼！", 2);
                 } else if (status == 5) {
                     cm.showIntro("Effect/Direction1.img/aranTutorial/face");
                     cm.showIntro("Effect/Direction1.img/aranTutorial/ClickLilin");
@@ -55,19 +55,19 @@ function action(mode, type, selection) {
                 }
             } else {
                 if (status == 0) {
-                    cm.sendNextPrev("你没事吧？");
+                    cm.sendNextPrev("还好吗？", 8);
                 } else if (status == 1) {
-                    cm.sendNextPrev("我什么都记不起来。我在哪里？你是谁……？");
+                    cm.sendNextPrev("我……我什么都记不起来……这是哪里？你又是谁？", 2);
                 } else if (status == 2) {
-                    cm.sendNextPrev("保持冷静。没有必要惊慌。你什么都记不起来是因为黑魔法师的诅咒抹去了你的记忆。我会一步一步告诉你需要知道的一切。");
+                    cm.sendNextPrev("镇静一点。黑魔法师的诅咒让你失去了记忆……不过你用不着担心。你想知道的事情，我都会一一告诉你。", 8);
                 } else if (status == 3) {
-                    cm.sendNextPrev("你是数百年前与黑魔法师战斗并拯救了枫之世界的英雄。但就在最后一刻，黑魔法师的诅咒让你长时间沉睡，而在这段时间里你失去了所有的记忆。");
+                    cm.sendNextPrev("你是我们的英雄。数百年前，你勇敢地和黑魔法师战斗，并拯救了冒险岛世界。不过，在最后时刻你中了黑魔法师的诅咒，被封冻在冰块里沉睡了好久好久。所以，记忆也渐渐消失了。", 8);
                 } else if (status == 4) {
-                    cm.sendNextPrev("这个岛叫做里恩，这就是黑魔法师困住你的地方。尽管名字叫里恩，但由于黑魔法师的诅咒，这个岛总是覆盖着冰雪。你被发现在冰洞的深处。");
+                    cm.sendNextPrev("这个地方叫做里恩岛。黑魔法师把你封冻在了这里。在黑魔法师的诅咒下，不论四季变化，这里永远都是冰封雪飘。我们是在冰窟的最深处发现你的。", 8);
                 } else if (status == 5) {
-                    cm.sendNextPrev("我的名字是莉琳，我属于利恩族。利恩族已经等待英雄归来很长时间了，现在我们终于找到了你。你终于回来了！");
+                    cm.sendNextPrev("我叫#p1201000#，属于里恩一族。里恩一族从很久以前就遵照预言在这里等待着英雄的归来。然后……我们终于发现了你。就在这个地方……", 8);
                 } else if (status == 6) {
-                    cm.sendNextPrev("我说得太多了。如果你不是很理解我刚才告诉你的一切，没关系。你最终会明白的。现在，你应该去城镇。我会一直陪在你身边，直到你到达那里。");
+                    cm.sendNextPrev("我是不是一次说了太多？理解起来有些困难？没关系，慢慢你就会明白……#b咱们赶紧回村子里吧#k。回村子的路上，我再慢慢給你解释。", 8);
                 } else if (status == 7) {
                     cm.spawnGuide();
                     cm.warp(140090100, 0);

@@ -6,36 +6,38 @@ function start() {
 }
 
 function action(mode, type, selection) {
-    if (mode == -1 || (mode == 0 && status == 0)) {
-        cm.dispose();
-        return;
-    } else if (mode == 0) {
+    if (mode == -1) { // END CHAT
+        return cm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
         status--;
     } else {
         status++;
     }
 
-
-    if (status == 0) {
-        cm.sendGetText("The entrance of the Sealed Shrine... #bPassword#k!");
-    } else if (status == 1) {
-        if (cm.getWarpMap(925040100).countPlayers() > 0) {
-            cm.sendOk("有人已经在前往封印神殿的路上了。");
-            cm.dispose();
-            return;
-        }
-        if (cm.getText() == "Actions speak louder than words") {
-            if (cm.isQuestStarted(21747) && cm.getQuestProgressInt(21747, 9300351) == 0) {
-                cm.warp(925040100, 0);
-            } else {
-                cm.playerMessage(5, "Although you said the right answer, some mysterious forces are blocking the way in.");
+    switch (status) {
+        case 0:
+            return cm.sendGetText("#b（要说出暗号才能进入。）");
+        case 1:
+            const mapObj = cm.getWarpMap(925040100);
+            if (mapObj.countPlayers() > 0) {
+                cm.sendOk("有人已经在前往封印神殿的路上了。");
+                return cm.dispose();
             }
-
-            cm.dispose();
-        } else {
+            if (cm.getText() == "道可道非常道") {
+                if (cm.isQuestStarted(21747) && cm.getQuestProgressInt(21747, 9300351) == 0) {
+                    mapObj.resetPQ();
+                    mapObj.destroyNPC(1204020);
+                    cm.warp(925040100, 0);
+                } else {
+                    cm.playerMessage(5, "虽然说对了暗号，但有股神秘力量把入口挡住了。");
+                }
+                return cm.dispose();
+            }
             cm.sendOk("#r错误！");
-        }
-    } else if (status == 2) {
-        cm.dispose();
+            return cm.dispose();
+        default:
+            return cm.dispose();
     }
 }

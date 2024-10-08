@@ -21,29 +21,29 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("这段时间升级很快嘛，英雄大人？我终于又发现了和黑色之翼有关的有趣事情了。这一次咱们早点......#b武陵#k这个村子你知道吗？看来你得去一趟那里。");
-        } else if (status == 1) {
-            qm.sendAcceptDecline("武陵的#b陈道人#k好像已经和黑色之翼相接触。虽然不知道事情是怎么变成这样的，但信息应该准确无误。");
-        } else if (status == 2) {
-            qm.sendNext("你如果准备好的话，#b就请马上去武陵。#k你去查出黑色之翼为什么会和陈道人接触，以及它们之间到底有着怎样的交易。");
-        } else if (status == 3) {
-            qm.forceStartQuest();
-            qm.dispose();
-        }
+    switch (status) {
+        case 0:
+            return qm.sendAcceptDecline("这段时间你升级很快嘛，英雄大人？我终于又发现了和黑色之 翼有关的有趣事情了。这一次咱们早点……#b#m250000000##k这个村子你知道吗？看来你得去一趟那里。");
+        case 1:
+            if (type == 12 && mode == 0) { // DECLINE
+                return qm.dispose();
+            }
+            // ACCCEPT
+            if (!qm.isQuestStarted(21741) && !qm.isQuestCompleted(21741)) {
+                qm.forceStartQuest();
+            }
+            return qm.sendOk("#m250000000#的一个叫#b#p2090004##k的人似乎在和黑色之翼接触。虽然不知道他们在密谋什么，不过这个情报是很可靠的。你去调查一下黑色之翼为什么要和#p2090004#接触，他们之间有什么交易。")
+        default:
+            return qm.dispose();
     }
 }

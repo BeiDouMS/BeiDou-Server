@@ -1,8 +1,8 @@
 /*
-	This file is part of the OdinMS Maple Story Server
+    This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+               Matthias Butz <matze@odinms.de>
+               Jan Christian Meyer <vimes@odinms.de>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -42,45 +42,66 @@ function start(mode, type, selection) {
 }
 
 function end(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-        if (mode == 0 && type == 1) {
-            qm.sendNext("Hey! At least say you tried!");
-        }
+
+    if (mode == -1) { // END CHAT
         qm.dispose();
         return;
     }
-    if (status == 0) {
-        qm.sendNext("Voom voom voom voom voom....");
-    }//Giant Polearm
-    else if (status == 1) {
-        qm.sendNextPrev("#b(The #p1201001# is producing an undulating echo. But who is that boy standing over there?)", 2);
-    } else if (status == 2) {
-        qm.sendNextPrev("#b(You've never seen him before. He doesn't look human.)", 2);
-    } else if (status == 3) {
-        qm.sendNextPrev("Yo, Aran! Do you not hear me? I said, do you not hear me! Ugh, how frustating!");
-    } else if (status == 4) {
-        qm.sendNextPrev("#b(Hm? Who's voice was that? It sounds like an angry boy...)", 2);
-    } else if (status == 5) {
-        qm.sendNextPrev("Ugh, my only master had to end up trapped in ice for hundreds of years, abandoning me completely, and is now completely ignoring me.");
-    } else if (status == 6) {
-        qm.sendNextPrev("Who...are you?", 2);
-    } else if (status == 7) {
-        qm.sendNextPrev("Aran? Do you hear me now? It's me! Don't you recognize me? I'm your weapon, #b#p1201002# the Polearm#k!");
-    } else if (status == 8) {
-        qm.sendNextPrev("#b(...#p1201002#? A #p1201001# can talk?)", 2);
-    } else if (status == 9) {
-        qm.sendNextPrev("What's with that suspicious look on your face? I know you've lost your memory, but did you forgot about me, too? How could you?!");
-    } else if (status == 10) {
-        qm.sendNextPrev("I'm so sorry, but I can't remember a thing.", 2);
-    } else if (status == 11) {
-        qm.sendYesNo("Sorry doesn't cut it! Do you know how lonely and bored I was for hundreds of years? I don't care what it takes! Remember me! Remember me now!");
-    } else if (status == 12) {
-        qm.completeQuest();
-        qm.sendNext("#b(The voice that claims to be #p1201002# the #p1201001# is yelling in frustration. You don't think this conversation is going anywhere. You better go talk to #p1201000# first.)", 2);
-        //qm.sendNoExit("#b(The voice that claims to be #p1201002# the #p1201001# is yelling in frustration. You don't think this conversation is going anywhere. You better go talk to #p1201000# first.)", true);
-    } else if (status == 13) {
-        //qm.showVideo("Maha");
-        qm.dispose();
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
+    } else {
+        status++;
+    }
+
+    switch (status) {
+        case 0:
+            qm.sendNext("Voom voom voom voom voom....", 4, 1201001);
+            break;
+        case 1:
+            qm.sendNextPrev("#b(The #p1201001# is producing an undulating echo. But who is that boy standing over there?)", 2);
+            break;
+        case 2:
+            qm.sendNextPrev("#b(You've never seen him before. He doesn't look human.)", 2);
+            break;
+        case 3:
+            qm.sendNextPrev("Yo, Aran! Do you not hear me? I said, do you not hear me! Ugh, how frustating!", 8);
+            break;
+        case 4:
+            qm.sendNextPrev("#b(Hm? Who's voice was that? It sounds like an angry boy...)", 2);
+            break;
+        case 5:
+            qm.sendNextPrev("Ugh, my only master had to end up trapped in ice for hundreds of years, abandoning me completely, and is now completely ignoring me.", 8);
+            break;
+        case 6:
+            qm.sendNextPrev("Who...are you?", 2);
+            break;
+        case 7:
+            qm.sendNextPrev("Aran? Do you hear me now? It's me! Don't you recognize me? I'm your weapon, #b#p1201002# the Polearm#k!", 8);
+            break;
+        case 8:
+            qm.sendNextPrev("#b(...#p1201002#? A #p1201001# can talk?)", 2);
+            break;
+        case 9:
+            qm.sendNextPrev("What's with that suspicious look on your face? I know you've lost your memory, but did you forgot about me, too? How could you?!", 8);
+            break;
+        case 10:
+            qm.sendNextPrev("I'm so sorry, but I can't remember a thing.", 2);
+            break;
+        case 11:
+            qm.sendYesNo("Sorry doesn't cut it! Do you know how lonely and bored I was for hundreds of years? I don't care what it takes! Remember me! Remember me now!");
+            break;
+        case 12:
+            if (type == 1 && mode == 0) {
+                qm.sendNext("Hey! At least say you tried!");
+                qm.dispose();
+                return;
+            }
+            qm.completeQuest();
+            qm.sendNext("#b(The voice that claims to be #p1201002# the #p1201001# is yelling in frustration. You don't think this conversation is going anywhere. You better go talk to #p1201000# first.)", 3);
+            break;
+        default:
+            qm.dispose();
+            break;
     }
 }

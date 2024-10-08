@@ -1,32 +1,39 @@
 var status = -1;
 
 function end(mode, type, selection) {
-    status++;
-    if (mode == 0 && type == 0) {
-        status -= 2;
-    } else if (mode != 1) {
-        //if (mode == 0)
-            qm.sendNext("#b(您需要考虑一下...)#k");
-        qm.dispose();
-        return;
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
     }
-	
-	if (status == 0) {
-        qm.sendNext("您已经成功杀死了 #o9001013# ？ 哈哈哈...你确实是我的主人。 好吧，现在给我您在那找到的红玉。 我必须把它放回身上，然后……等等，为什么你不说一句话？ 别告诉我...你没带回来!");
-    } else if (status == 1) {
-		qm.sendNextPrev("什么？！ 您真的没有带回《红玉》吗？ 为什么？ 您是否完全忘记了它？ 啊...即使受到黑魔法师的诅咒，以及过去的时间和所有的一切，我从来没有想过我的主人会变得愚蠢...");
-	} else if (status == 2) {
-		qm.sendNextPrev("不，不，我不能让这让我感到绝望。 这是我应该保持镇定和控制的时候，不像我的主人... \r\努萨 ..." );
-	} else if (status == 3) {
-		qm.sendNextPrev("即使你现在回去，小偷也可能从那里逃走了。这意味着你得重新做红玉。你以前做过，所以你记得做一个的材料，对吧？现在走。。。");
-	} else if (status == 4) {
-		qm.sendNextPrev("\r\n\r\n\r\n这家伙肯定失去了所有的记忆!");
-	} else if (status == 5) {
-		qm.sendNextPrev("…没有希望，没有梦想。。。不，不!!");
-	} else if (status == 6) {
-		qm.completeQuest();
-                qm.sendNextPrev("#b(玛哈开始变得歇斯底里了。我最好马上离开。也许莉莉能做点什么.)", 2);
-	} else if (status == 7) {
-            qm.dispose();
-        }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
+    } else {
+        status++;
+    }
+
+    switch (status) {
+        case 0:
+            return qm.sendYesNo("抓到#o9001013#了吗？呵呵呵……真不愧是我的主人！很好，把你找到的#t4032312#给我吧……啊……？怎么不说话？难道……你没找到？");
+        case 1:
+            if (type == 1 && mode == 0) { // NO
+                return qm.dispose();
+            }
+            return qm.sendNext("什么？！没找到#t4032312#？怎么会这样？！你忘了吗？啊，怎么……再怎么被黑魔法师诅咒，再怎么被封冻几百年也不能让你变得这么笨啊……", 1 << 3);
+        case 2:
+            return qm.sendNextPrev("不行。我不能绝望。主人糊里糊涂，我可不能糊涂……深呼吸……深呼吸……", 1 << 3);
+        case 3:
+            return qm.sendNextPrev("再去找找，反正小偷已经逃走。看来必须重新做#t4032312#了。以前也做过一次，你知道需要哪些材料吧？快去搜集材料……", 1 << 3);
+        case 4:
+            return qm.sendNextPrev("   #i4001173#");
+        case 5:
+            return qm.sendNextPrev("……彻底没希望了。啊啊啊！", 1 << 3);
+        case 6:
+            return qm.sendNextPrev("#b（#p1201002#正在气头上。先撤再说。说不定#p1201000#能给我什么帮助。）", 1 << 1);
+        case 7:
+            if (!qm.isQuestCompleted(21301)) {
+                qm.forceCompleteQuest();
+            }
+        default:
+            return qm.dispose();
+    }
 }
