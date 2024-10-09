@@ -104,13 +104,37 @@ public class CommandService {
 
     public Page<CommandInfoDO> getCommandListFromDB(CommandReqDTO request) {
         QueryWrapper queryWrapper = new QueryWrapper();
-        if (request.getLevel() != null) queryWrapper.in("level", request.getLevel());
-        if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevel());
+        if (request.getLevel() != null) queryWrapper.in("level", request.getLevelList());
+        if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevelList());
         if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
         //if (request.getDescription() != null) queryWrapper.like("description", request.getDescription());
         if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
         return commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
 
+    }
+    public CommandInfoDO updateCommand(CommandReqDTO request) {
+
+        CommandInfoDO updateCommandInfoDO = commandInfoMapper.selectOneById(request.getId());
+        updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
+        updateCommandInfoDO.setSyntax(request.getSyntax() != null ? request.getSyntax() : updateCommandInfoDO.getSyntax());
+        updateCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : updateCommandInfoDO.getDefaultLevel());
+        updateCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : updateCommandInfoDO.getEnabled());
+        updateCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : updateCommandInfoDO.getClazz());
+        //commandInfoDO.setDescription(request.getDescription());
+        commandInfoMapper.update(updateCommandInfoDO);
+        return updateCommandInfoDO;
+    }
+    public CommandInfoDO insertCommandInfo(CommandReqDTO request) {
+
+        CommandInfoDO insertCommandInfoDO = new CommandInfoDO();
+        insertCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : insertCommandInfoDO.getLevel());
+        insertCommandInfoDO.setSyntax(request.getSyntax() != null ? request.getSyntax() : insertCommandInfoDO.getSyntax());
+        insertCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : insertCommandInfoDO.getDefaultLevel());
+        insertCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : insertCommandInfoDO.getEnabled());
+        insertCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : insertCommandInfoDO.getClazz());
+        //insertCommandInfoDO.setDescription(request.getDescription());
+        commandInfoMapper.insert(insertCommandInfoDO);
+        return insertCommandInfoDO;
     }
 
 
