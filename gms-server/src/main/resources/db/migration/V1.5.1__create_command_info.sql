@@ -12,7 +12,6 @@ CREATE TABLE `command_info`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('help', 0, 1, 'HelpCommand', 0);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('commands', 0, 1, 'HelpCommand', 0);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('droplimit', 0, 1, 'DropLimitCommand', 0);
@@ -39,8 +38,8 @@ INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES (
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('enableauth', 0, 1, 'EnableAuthCommand', 0);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('toggleexp', 0, 1, 'ToggleExpCommand', 0);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('mylawn', 0, 1, 'MapOwnerClaimCommand', 0);
-INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('bosshp', 0, 1, 'BossHpCommand', 0);
-INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('mobhp', 0, 1, 'MobHpCommand', 0);
+INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('bosshp', 1, 1, 'BossHpCommand', 1);
+INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('mobhp', 1, 1, 'MobHpCommand', 1);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('whatdropsfrom', 1, 1, 'WhatDropsFromCommand', 1);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('whodrops', 1, 1, 'WhoDropsCommand', 1);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('buffme', 1, 1, 'BuffMeCommand', 1);
@@ -85,6 +84,8 @@ INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES (
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('gachalist', 2, 1, 'GachaListCommand', 2);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('loot', 2, 1, 'LootCommand', 2);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('mobskill', 2, 1, 'MobSkillCommand', 2);
+INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('warpmap', 2, 1, 'WarpMapCommand', 2);
+INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('warparea', 2, 1, 'WarpAreaCommand', 2);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('debuff', 3, 1, 'DebuffCommand', 3);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('fly', 3, 1, 'FlyCommand', 3);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('spawn', 3, 1, 'SpawnCommand', 3);
@@ -142,8 +143,6 @@ INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES (
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('timer', 3, 1, 'TimerCommand', 3);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('timermap', 3, 1, 'TimerMapCommand', 3);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('timerall', 3, 1, 'TimerAllCommand', 3);
-INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('warpmap', 3, 1, 'WarpMapCommand', 3);
-INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('warparea', 3, 1, 'WarpAreaCommand', 3);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('servermessage', 4, 1, 'ServerMessageCommand', 4);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('proitem', 4, 1, 'ProItemCommand', 4);
 INSERT INTO command_info (syntax, level, enabled, clazz, default_level) VALUES ('seteqstat', 4, 1, 'SetEqStatCommand', 4);

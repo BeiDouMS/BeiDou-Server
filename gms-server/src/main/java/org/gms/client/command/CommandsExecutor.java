@@ -205,8 +205,6 @@ public class CommandsExecutor {
         addCommand("enableauth", EnableAuthCommand.class);
         addCommand("toggleexp", ToggleExpCommand.class);
         addCommand("mylawn", MapOwnerClaimCommand.class);
-        addCommand("bosshp", BossHpCommand.class);
-        addCommand("mobhp", MobHpCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -215,6 +213,8 @@ public class CommandsExecutor {
     private void registerLv1Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
+        addCommand("bosshp", 1, BossHpCommand.class);
+        addCommand("mobhp", 1, MobHpCommand.class);
         addCommand("whatdropsfrom", 1, WhatDropsFromCommand.class);
         addCommand("whodrops", 1, WhoDropsCommand.class);
         addCommand("buffme", 1, BuffMeCommand.class);
@@ -264,6 +264,8 @@ public class CommandsExecutor {
         addCommand("gachalist", 2, GachaListCommand.class);
         addCommand("loot", 2, LootCommand.class);
         addCommand("mobskill", 2, MobSkillCommand.class);
+        addCommand("warpmap", 2, WarpMapCommand.class);
+        addCommand("warparea", 2, WarpAreaCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -328,8 +330,6 @@ public class CommandsExecutor {
         addCommand("timer", 3, TimerCommand.class);
         addCommand("timermap", 3, TimerMapCommand.class);
         addCommand("timerall", 3, TimerAllCommand.class);
-        addCommand("warpmap", 3, WarpMapCommand.class);
-        addCommand("warparea", 3, WarpAreaCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
