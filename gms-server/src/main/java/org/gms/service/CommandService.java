@@ -1,10 +1,13 @@
 package org.gms.service;
 
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.command.Command;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
+import org.gms.model.dto.CommandReqDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.springframework.stereotype.Service;
@@ -98,5 +101,17 @@ public class CommandService {
             return null;
         }
     }
+
+    public Page<CommandInfoDO> getCommandListFromDB(CommandReqDTO request) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (request.getLevel() != null) queryWrapper.in("level", request.getLevel());
+        if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevel());
+        if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
+        //if (request.getDescription() != null) queryWrapper.like("description", request.getDescription());
+        if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
+        return commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
+
+    }
+
 
 }
