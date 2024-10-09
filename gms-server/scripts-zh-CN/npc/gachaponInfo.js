@@ -24,12 +24,13 @@
  */
 
 var status;
-var gachaMessages;
+var lootNames;
+var lootIds;
 
 function start() {
     const Gachapon = Java.type('org.gms.server.gachapon.Gachapon');
-    gachaMessages = Gachapon.GachaponType.getLootInfo();
-    gachas = Gachapon.GachaponType.values();
+    lootNames = Gachapon.GachaponType.getLootNames();
+    lootIds = Gachapon.GachaponType.getLootIds();
 
     status = -1;
     action(1, 0, 0);
@@ -50,10 +51,20 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            var sendStr = "Hi, #r#p" + cm.getNpc() + "##k here! I'm announcing all obtainable loots from the Gachapons. Which Gachapon machine would you like to look?\r\n\r\n#b" + gachaMessages[0] + "#k";
-            cm.sendSimple("发送字符串");
+            var sendStr = "你好，我是#r#p9900001##k ！我可以向你展示所有扭蛋机的奖励列表，你想要查看哪一个呢？\r\n\r\n";
+            for (let i = 0; i < lootNames.length; i++) {
+                sendStr += "#L" + i + "##b" + lootNames[i] + "#k#l\r\n";
+            }
+            cm.sendSimple(sendStr);
         } else if (status == 1) {
-            var sendStr = "Loots from #b" + gachas[selection].name() + "#k:\r\n\r\n" + gachaMessages[selection + 1];
+            var sendStr = "#b" + lootNames[selection] + "#k拥有以下奖励\r\n\r\n";
+            var ServerManager = Java.type('org.gms.manager.ServerManager');
+            var gachaponService = ServerManager.getApplicationContext().getBean("gachaponService");
+            var gachaponRewardDOS = gachaponService.getRewardsByNpcId(lootIds[selection]);
+            for (let i = 0; i < gachaponRewardDOS.length; i++) {
+                var gachaponRewardDO = gachaponRewardDOS[i];
+                sendStr += "#v" + gachaponRewardDO.getItemId() + "#   -  #z" + gachaponRewardDO.getItemId() + "#\r\n";
+            }
             cm.sendPrev(sendStr);
         } else if (status == 2) {
             cm.dispose();
