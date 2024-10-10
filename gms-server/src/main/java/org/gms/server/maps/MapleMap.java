@@ -45,6 +45,7 @@ import org.gms.net.server.services.task.channel.OverallService;
 import org.gms.net.server.services.type.ChannelServices;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.World;
+import org.gms.util.NumberTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.event.EventInstanceManager;
@@ -654,7 +655,7 @@ public class MapleMap {
         }
     }
 
-    private byte dropItemsFromMonsterOnMap(List<MonsterDropEntry> dropEntry, Point pos, byte d, int chRate, byte droptype, int mobpos, Character chr, Monster mob) {
+    private byte dropItemsFromMonsterOnMap(List<MonsterDropEntry> dropEntry, Point pos, byte d, float chRate, byte droptype, int mobpos, Character chr, Monster mob) {
         if (dropEntry.isEmpty()) {
             return d;
         }
@@ -679,9 +680,9 @@ public class MapleMap {
 
                     if (mesos > 0) {
                         if (chr.getBuffedValue(BuffStat.MESOUP) != null) {
-                            mesos = (int) (mesos * chr.getBuffedValue(BuffStat.MESOUP).doubleValue() / 100.0);
+                            mesos = NumberTool.doubleToInt(mesos * chr.getBuffedValue(BuffStat.MESOUP).doubleValue() / 100.0);
                         }
-                        mesos = mesos * chr.getMesoRate();
+                        mesos = NumberTool.floatToInt(mesos * chr.getMesoRate());
                         if (mesos <= 0) {
                             mesos = Integer.MAX_VALUE;
                         }
@@ -738,8 +739,7 @@ public class MapleMap {
 
         final byte droptype = (byte) (mob.getStats().isExplosiveReward() ? 3 : mob.getStats().isFfaLoot() ? 2 : chr.getParty() != null ? 1 : 0);
         final int mobpos = mob.getPosition().x;
-        int chRate = !mob.isBoss() ? chr.getDropRate() : chr.getBossDropRate();
-        byte d = 1;
+        float chRate = !mob.isBoss() ? chr.getDropRate() : chr.getBossDropRate();
         Point pos = new Point(0, mob.getPosition().y);
 
         MonsterStatusEffect stati = mob.getStati(MonsterStatus.SHOWDOWN);
@@ -747,7 +747,7 @@ public class MapleMap {
             chRate *= (stati.getStati().get(MonsterStatus.SHOWDOWN).doubleValue() / 100.0 + 1.0);
         }
 
-        if(chr.isFamilyBuff()){
+        if (chr.isFamilyBuff()) {
             chRate *= chr.getFamilyDrop();
         }
 
@@ -969,7 +969,7 @@ public class MapleMap {
         }
     }
 
-    private void registerMobItemDrops(byte droptype, int mobpos, int chRate, Point pos, List<MonsterDropEntry> dropEntry, List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry, List<MonsterGlobalDropEntry> globalEntry, Character chr, Monster mob) {
+    private void registerMobItemDrops(byte droptype, int mobpos, float chRate, Point pos, List<MonsterDropEntry> dropEntry, List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry, List<MonsterGlobalDropEntry> globalEntry, Character chr, Monster mob) {
         MobLootEntry mle = new MobLootEntry(droptype, mobpos, chRate, pos, dropEntry, visibleQuestEntry, otherQuestEntry, globalEntry, chr, mob);
 
         if (YamlConfig.config.server.USE_SPAWN_LOOT_ON_ANIMATION) {
@@ -2213,7 +2213,7 @@ public class MapleMap {
 
         for (Integer integer : list) {
             if (integer == 0) {
-                spawnMesoDrop(owner != null ? 10 * owner.getMesoRate() : 10, calcDropPos(dropPos, pos), dropper, owner, playerDrop, (byte) (ffaDrop ? 2 : 0));
+                spawnMesoDrop(owner != null ? NumberTool.floatToInt(10 * owner.getMesoRate()) : 10, calcDropPos(dropPos, pos), dropper, owner, playerDrop, (byte) (ffaDrop ? 2 : 0));
             } else {
                 final Item drop;
                 int randomedId = integer;
@@ -2399,7 +2399,7 @@ public class MapleMap {
 
         chr.setMapId(mapid);
         chr.updateActiveEffects();
-        
+
         if (this.getHPDec() > 0) {
             getWorldServer().addPlayerHpDecrease(chr);
         } else {
@@ -3442,7 +3442,7 @@ public class MapleMap {
 
         private final byte droptype;
         private final int mobpos;
-        private final int chRate;
+        private final float chRate;
         private final Point pos;
         private final List<MonsterDropEntry> dropEntry;
         private final List<MonsterDropEntry> visibleQuestEntry;
@@ -3451,7 +3451,7 @@ public class MapleMap {
         private final Character chr;
         private final Monster mob;
 
-        protected MobLootEntry(byte droptype, int mobpos, int chRate, Point pos, List<MonsterDropEntry> dropEntry, List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry, List<MonsterGlobalDropEntry> globalEntry, Character chr, Monster mob) {
+        protected MobLootEntry(byte droptype, int mobpos, float chRate, Point pos, List<MonsterDropEntry> dropEntry, List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry, List<MonsterGlobalDropEntry> globalEntry, Character chr, Monster mob) {
             this.droptype = droptype;
             this.mobpos = mobpos;
             this.chRate = chRate;
@@ -4129,7 +4129,8 @@ public class MapleMap {
         ht.setParentMobOid(htIntro.getObjectId());
         ht.addListener(new MonsterListener() {
             @Override
-            public void monsterKilled(int aniTime) {}
+            public void monsterKilled(int aniTime) {
+            }
 
             @Override
             public void monsterDamaged(Character from, int trueDmg) {
@@ -4149,7 +4150,8 @@ public class MapleMap {
 
             m.addListener(new MonsterListener() {
                 @Override
-                public void monsterKilled(int aniTime) {}
+                public void monsterKilled(int aniTime) {
+                }
 
                 @Override
                 public void monsterDamaged(Character from, int trueDmg) {

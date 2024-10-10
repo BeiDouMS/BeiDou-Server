@@ -27,6 +27,7 @@ import org.gms.provider.Data;
 import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
 import org.gms.server.quest.QuestActionType;
+import org.gms.util.NumberTool;
 
 /**
  * @author Tyler (Twdtwd)
@@ -56,9 +57,9 @@ public class MesoAction extends AbstractQuestAction {
             chr.gainMeso(gain, true, false, true);
         } else {
             if (!YamlConfig.config.server.USE_QUEST_RATE) {
-                chr.gainMeso(gain/* * chr.getMesoRate()*/, true, false, true);
+                chr.gainMeso(NumberTool.floatToInt(gain * chr.getMesoRate()), true, false, true);
             } else {
-                chr.gainMeso(gain * chr.getQuestMesoRate(), true, false, true);
+                chr.gainMeso(NumberTool.floatToInt(gain * chr.getQuestMesoRate()), true, false, true);
             }
         }
     }
