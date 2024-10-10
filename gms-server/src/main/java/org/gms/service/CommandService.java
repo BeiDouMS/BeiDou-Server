@@ -115,12 +115,15 @@ public class CommandService {
     public CommandInfoDO updateCommand(CommandReqDTO request) {
 
         CommandInfoDO updateCommandInfoDO = commandInfoMapper.selectOneById(request.getId());
+        /**
+         * 只能改开关和等级，其他的不能改
+         * Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
+         * 因为level已经被改成其他的了
+         * DefaultLevel和Clazz也不能改
+         */
         updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
-        updateCommandInfoDO.setSyntax(request.getSyntax() != null ? request.getSyntax() : updateCommandInfoDO.getSyntax());
-        updateCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : updateCommandInfoDO.getDefaultLevel());
         updateCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : updateCommandInfoDO.getEnabled());
-        updateCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : updateCommandInfoDO.getClazz());
-        //commandInfoDO.setDescription(request.getDescription());
+        //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
         commandInfoMapper.update(updateCommandInfoDO);
         return updateCommandInfoDO;
     }
@@ -132,7 +135,7 @@ public class CommandService {
         insertCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : insertCommandInfoDO.getDefaultLevel());
         insertCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : insertCommandInfoDO.getEnabled());
         insertCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : insertCommandInfoDO.getClazz());
-        //insertCommandInfoDO.setDescription(request.getDescription());
+        //insertCommandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
         commandInfoMapper.insert(insertCommandInfoDO);
         return insertCommandInfoDO;
     }
