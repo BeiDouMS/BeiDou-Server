@@ -29,6 +29,7 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.server.coordinator.world.EventRecallCoordinator;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
+import org.gms.util.NumberTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractPlayerInteraction;
@@ -188,12 +189,12 @@ public class EventInstanceManager {
 
         if (mapId == -1) {
             for (Character mc : players) {
-                mc.gainExp(gain * mc.getExpRate(), true, true);
+                mc.gainExp(NumberTool.floatToInt(gain * mc.getExpRate()), true, true);
             }
         } else {
             for (Character mc : players) {
                 if (mc.getMapId() == mapId) {
-                    mc.gainExp(gain * mc.getExpRate(), true, true);
+                    mc.gainExp(NumberTool.floatToInt(gain * mc.getExpRate()), true, true);
                 }
             }
         }
@@ -212,12 +213,12 @@ public class EventInstanceManager {
 
         if (mapId == -1) {
             for (Character mc : players) {
-                mc.gainMeso(gain * mc.getMesoRate());
+                mc.gainMeso(NumberTool.floatToInt(gain * mc.getMesoRate()));
             }
         } else {
             for (Character mc : players) {
                 if (mc.getMapId() == mapId) {
-                    mc.gainMeso(gain * mc.getMesoRate());
+                    mc.gainMeso(NumberTool.floatToInt(gain * mc.getMesoRate()));
                 }
             }
         }

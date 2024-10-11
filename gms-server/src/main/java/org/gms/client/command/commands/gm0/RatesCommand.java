@@ -38,7 +38,7 @@ public class RatesCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         Character player = c.getPlayer();
-        Integer exp_buff = 1;
+        float exp_buff = 1;
         // travel rates 不在这里进行展示 因为它是全局的 与角色无关
         String noviceMsg = player.hasNoviceExpRate() ? I18nUtil.getMessage("ShowRatesCommand.message7") : "";
         String showMsg_ = "#e" + I18nUtil.getMessage("RatesCommand.message2") + "#n\r\n\r\n";

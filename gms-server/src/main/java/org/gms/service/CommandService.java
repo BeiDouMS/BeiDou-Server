@@ -56,7 +56,6 @@ public class CommandService {
             return;
         }
 
-        log.info("gm level={}, command list size={}", level, commandInfoList.size());
         Pair<List<String>, List<String>> levelCommandsCursor = new Pair<>(new ArrayList<>(), new ArrayList<>());
         for (CommandInfoDO item : commandInfoList) {
             Class<? extends Command> aClass = this.getCommandClass(item);

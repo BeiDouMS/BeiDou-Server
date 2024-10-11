@@ -6,6 +6,7 @@ import org.gms.constants.string.CategoryType;
 import org.gms.dao.entity.ModifiedCashItemDO;
 import org.gms.dao.mapper.ModifiedCashItemMapper;
 import org.gms.exception.BizException;
+import org.gms.model.dto.CashShopBatchOnSaleReqDTO;
 import org.gms.model.dto.CashShopSearchRtnDTO;
 import org.gms.model.pojo.CashCategory;
 import org.gms.provider.Data;
@@ -70,7 +71,7 @@ public class CashShopService {
                 .filter(dbCashItem -> Objects.equals(wzCashItem.getSn(), dbCashItem.getSn()))
                 .findFirst()
                 .ifPresent(dbCashItem -> setDbItemValue(wzCashItem, dbCashItem)));
-        
+
         // 按其他条件过滤
         wzCashItems = wzCashItems.stream().filter(item ->
                 // 上架状态
@@ -79,12 +80,11 @@ public class CashShopService {
                         && (data.getItemId() == null || data.getItemId().equals(item.getItemId()))
         ).toList();
 
-        //现在需要批量去set wzCashItems中的itemName值
+        // 现在需要批量去set wzCashItems中的itemName值
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         wzCashItems.forEach(wzCashItem -> {
             wzCashItem.setItemName(ii.getName(wzCashItem.getItemId()));
         });
-
 
 
         // 排序是否正确？ 猜测按照Priority降序 ItemId升序排列
@@ -213,5 +213,24 @@ public class CashShopService {
         rtnDTO.setPbPoint(Optional.ofNullable(dbCashItem.getPbPoint()).orElse(rtnDTO.getPbPoint()));
         rtnDTO.setPbGift(Optional.ofNullable(dbCashItem.getPbGift()).orElse(rtnDTO.getPbGift()));
         rtnDTO.setPackageSn(Optional.ofNullable(dbCashItem.getPackageSn()).orElse(rtnDTO.getPackageSn()));
+    }
+
+    @Transactional
+    public void batchChangeOnSale(CashShopBatchOnSaleReqDTO submit) {
+        for (ModifiedCashItemDO data : submit.getData()) {
+            data.setOnSale(1);
+            switch (submit.getType()) {
+                case "价格":
+                    data.setPrice(submit.getValue());
+                    break;
+                case "数量":
+                    data.setCount(submit.getValue().shortValue());
+                    break;
+                case "有效期":
+                    data.setPeriod(submit.getValue().longValue());
+                    break;
+            }
+            changeOnSale(data);
+        }
     }
 }

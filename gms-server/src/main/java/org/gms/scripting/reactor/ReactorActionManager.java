@@ -37,6 +37,7 @@ import org.gms.server.maps.Reactor;
 import org.gms.server.maps.ReactorDropEntry;
 import org.gms.server.partyquest.CarnivalFactory;
 import org.gms.server.partyquest.CarnivalFactory.MCSkill;
+import org.gms.util.NumberTool;
 
 import javax.script.Invocable;
 import java.awt.*;
@@ -170,8 +171,8 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
 
                 if (d.itemId == 0) {
                     int range = maxMeso - minMeso;
-                    int displayDrop = (int) (Math.random() * range) + minMeso;
-                    int mesoDrop = (displayDrop * c.getWorldServer().getMesoRate());
+                    double displayDrop = Math.random() * range + minMeso;
+                    int mesoDrop = NumberTool.doubleToInt(displayDrop * c.getWorldServer().getMesoRate());
                     reactor.getMap().spawnMesoDrop(mesoDrop, reactor.getMap().calcDropPos(dropPos, reactor.getPosition()), reactor, c.getPlayer(), false, (byte) 2);
                 } else {
                     Item drop;
@@ -188,7 +189,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         } else {
             final Reactor r = reactor;
             final List<ReactorDropEntry> dropItems = items;
-            final int worldMesoRate = c.getWorldServer().getMesoRate();
+            final float worldMesoRate = c.getWorldServer().getMesoRate();
 
             dropPos.x -= (12 * items.size());
 
@@ -201,8 +202,8 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
                 ReactorDropEntry d = dropItems.remove(0);
                 if (d.itemId == 0) {
                     int range = maxMeso - minMeso;
-                    int displayDrop = (int) (Math.random() * range) + minMeso;
-                    int mesoDrop = (displayDrop * worldMesoRate);
+                    double displayDrop = Math.random() * range + minMeso;
+                    int mesoDrop = NumberTool.doubleToInt(displayDrop * worldMesoRate);
                     r.getMap().spawnMesoDrop(mesoDrop, r.getMap().calcDropPos(dropPos, r.getPosition()), r, chr, false, (byte) 2);
                 } else {
                     Item drop;
@@ -226,7 +227,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
         return ReactorScriptManager.getInstance().getDrops(reactor.getId());
     }
 
-    private List<ReactorDropEntry> generateDropList(List<ReactorDropEntry> drops, int dropRate, boolean meso, int mesoChance, int minItems) {
+    private List<ReactorDropEntry> generateDropList(List<ReactorDropEntry> drops, float dropRate, boolean meso, int mesoChance, int minItems) {
         List<ReactorDropEntry> items = new ArrayList<>();
         if (meso && Math.random() < (1 / (double) mesoChance)) {
             items.add(new ReactorDropEntry(0, mesoChance, -1));
@@ -274,8 +275,7 @@ public class ReactorActionManager extends AbstractPlayerInteraction {
     public void killMonster(int id, boolean withDrops) {
         if (withDrops) {
             getMap().killMonsterWithDrops(id);
-        }
-        else {
+        } else {
             getMap().killMonster(id);
         }
     }

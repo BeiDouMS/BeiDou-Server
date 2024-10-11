@@ -42,9 +42,9 @@ public class QuestRateCommand extends Command {
             return;
         }
 
-        int questrate = Math.max(Integer.parseInt(params[0]), 1);
-        c.getWorldServer().setQuestRate(questrate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("QuestRateCommand.message3", questrate)));
+        float questRate = Math.max(Float.parseFloat(params[0]), 1F);
+        c.getWorldServer().setQuestRate(questRate);
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("QuestRateCommand.message3", questRate)));
 
     }
 }

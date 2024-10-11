@@ -31,6 +31,11 @@ springdoc:
     # 是否开启SwaggerUI，依赖OpenApi的开启
     enabled: true
 
+spring:
+  flyway:
+    # 禁用版本验证
+    validate-on-migrate: false
+
 gms:
   service:
     # zh-CN en-US

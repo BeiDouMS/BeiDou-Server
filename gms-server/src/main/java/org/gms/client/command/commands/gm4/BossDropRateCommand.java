@@ -41,8 +41,8 @@ public class BossDropRateCommand extends Command {
             return;
         }
 
-        int bossdroprate = Math.max(Integer.parseInt(params[0]), 1);
-        c.getWorldServer().setBossDropRate(bossdroprate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("BossDropRateCommand.message3", bossdroprate)));
+        float bossDrop = Math.max(Float.parseFloat(params[0]), 1F);
+        c.getWorldServer().setBossDropRate(bossDrop);
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("BossDropRateCommand.message3", bossDrop)));
     }
 }
