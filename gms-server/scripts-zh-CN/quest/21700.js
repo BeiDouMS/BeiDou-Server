@@ -39,6 +39,34 @@ function start(mode, type, selection) {
     }
 }
 
+
 function end(mode, type, selection) {
-    qm.dispose();
+    if (mode == -1) {
+        qm.dispose();
+    } else {
+        if (mode == 0 && type > 0) {
+            qm.dispose();
+            return;
+        }
+
+        if (mode == 1) {
+            status++;
+        } else {
+            status--;
+        }
+
+        if (status == 0) {
+            if (qm.getPlayer().getRemainingAp() > 0) {
+                qm.sendNext("请完成属性的分配。");
+                qm.dispose();
+                return;
+            }
+            qm.sendNext("看来你已经完成属性的分配了，让我们开始真正的修炼吧。");
+        } else if (status == 1) {
+            qm.gainExp(100);
+            qm.forceCompleteQuest();
+            qm.forceStartQuest(21701);
+            qm.dispose();
+        }
+    }
 }
