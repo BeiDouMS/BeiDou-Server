@@ -25,162 +25,20 @@ package org.gms.client.command;
 
 import lombok.Getter;
 import org.gms.client.Client;
-import org.gms.client.command.commands.gm0.ChangeLanguageCommand;
-import org.gms.client.command.commands.gm0.DisposeCommand;
-import org.gms.client.command.commands.gm0.DropLimitCommand;
-import org.gms.client.command.commands.gm0.EnableAuthCommand;
-import org.gms.client.command.commands.gm0.EquipLvCommand;
-import org.gms.client.command.commands.gm0.GachaCommand;
-import org.gms.client.command.commands.gm0.GmCommand;
-import org.gms.client.command.commands.gm0.HelpCommand;
-import org.gms.client.command.commands.gm0.JoinEventCommand;
-import org.gms.client.command.commands.gm0.LeaveEventCommand;
-import org.gms.client.command.commands.gm0.MapOwnerClaimCommand;
-import org.gms.client.command.commands.gm0.OnlineCommand;
-import org.gms.client.command.commands.gm0.RanksCommand;
-import org.gms.client.command.commands.gm0.RatesCommand;
-import org.gms.client.command.commands.gm0.ReadPointsCommand;
-import org.gms.client.command.commands.gm0.ReportBugCommand;
-import org.gms.client.command.commands.gm0.ShowRatesCommand;
-import org.gms.client.command.commands.gm0.StaffCommand;
-import org.gms.client.command.commands.gm0.StatDexCommand;
-import org.gms.client.command.commands.gm0.StatIntCommand;
-import org.gms.client.command.commands.gm0.StatLukCommand;
-import org.gms.client.command.commands.gm0.StatStrCommand;
-import org.gms.client.command.commands.gm0.TimeCommand;
-import org.gms.client.command.commands.gm0.ToggleExpCommand;
-import org.gms.client.command.commands.gm0.UptimeCommand;
-import org.gms.client.command.commands.gm1.BossHpCommand;
-import org.gms.client.command.commands.gm1.BuffMeCommand;
-import org.gms.client.command.commands.gm1.GotoCommand;
-import org.gms.client.command.commands.gm1.MobHpCommand;
-import org.gms.client.command.commands.gm1.WhatDropsFromCommand;
-import org.gms.client.command.commands.gm1.WhoDropsCommand;
-import org.gms.client.command.commands.gm2.ApCommand;
-import org.gms.client.command.commands.gm2.BombCommand;
-import org.gms.client.command.commands.gm2.BuffCommand;
-import org.gms.client.command.commands.gm2.BuffMapCommand;
-import org.gms.client.command.commands.gm2.ClearDropsCommand;
-import org.gms.client.command.commands.gm2.ClearSavedLocationsCommand;
-import org.gms.client.command.commands.gm2.ClearSlotCommand;
-import org.gms.client.command.commands.gm2.DcCommand;
-import org.gms.client.command.commands.gm2.EmpowerMeCommand;
-import org.gms.client.command.commands.gm2.GachaListCommand;
-import org.gms.client.command.commands.gm2.GmShopCommand;
-import org.gms.client.command.commands.gm2.HealCommand;
-import org.gms.client.command.commands.gm2.HideCommand;
-import org.gms.client.command.commands.gm2.IdCommand;
-import org.gms.client.command.commands.gm2.ItemCommand;
-import org.gms.client.command.commands.gm2.ItemDropCommand;
-import org.gms.client.command.commands.gm2.JailCommand;
-import org.gms.client.command.commands.gm2.JobCommand;
-import org.gms.client.command.commands.gm2.LevelCommand;
-import org.gms.client.command.commands.gm2.LevelProCommand;
-import org.gms.client.command.commands.gm2.LootCommand;
-import org.gms.client.command.commands.gm2.MaxSkillCommand;
-import org.gms.client.command.commands.gm2.MaxStatCommand;
-import org.gms.client.command.commands.gm2.MobSkillCommand;
-import org.gms.client.command.commands.gm2.ReachCommand;
-import org.gms.client.command.commands.gm2.RechargeCommand;
-import org.gms.client.command.commands.gm2.ResetSkillCommand;
-import org.gms.client.command.commands.gm2.SearchCommand;
-import org.gms.client.command.commands.gm2.SetSlotCommand;
-import org.gms.client.command.commands.gm2.SetStatCommand;
-import org.gms.client.command.commands.gm2.SpCommand;
-import org.gms.client.command.commands.gm2.SummonCommand;
-import org.gms.client.command.commands.gm2.UnBugCommand;
-import org.gms.client.command.commands.gm2.UnHideCommand;
-import org.gms.client.command.commands.gm2.UnJailCommand;
-import org.gms.client.command.commands.gm2.WarpAreaCommand;
-import org.gms.client.command.commands.gm2.WarpCommand;
-import org.gms.client.command.commands.gm2.WarpMapCommand;
-import org.gms.client.command.commands.gm2.WhereaMiCommand;
-import org.gms.client.command.commands.gm3.BanCommand;
-import org.gms.client.command.commands.gm3.ChatCommand;
-import org.gms.client.command.commands.gm3.CheckDmgCommand;
-import org.gms.client.command.commands.gm3.ClosePortalCommand;
-import org.gms.client.command.commands.gm3.DebuffCommand;
-import org.gms.client.command.commands.gm3.EndEventCommand;
-import org.gms.client.command.commands.gm3.ExpedsCommand;
-import org.gms.client.command.commands.gm3.FaceCommand;
-import org.gms.client.command.commands.gm3.FameCommand;
-import org.gms.client.command.commands.gm3.FlyCommand;
-import org.gms.client.command.commands.gm3.GiveMesosCommand;
-import org.gms.client.command.commands.gm3.GiveNxCommand;
-import org.gms.client.command.commands.gm3.GiveRpCommand;
-import org.gms.client.command.commands.gm3.GiveVpCommand;
-import org.gms.client.command.commands.gm3.HairCommand;
-import org.gms.client.command.commands.gm3.HealMapCommand;
-import org.gms.client.command.commands.gm3.HealPersonCommand;
-import org.gms.client.command.commands.gm3.HpMpCommand;
-import org.gms.client.command.commands.gm3.HurtCommand;
-import org.gms.client.command.commands.gm3.IgnoreCommand;
-import org.gms.client.command.commands.gm3.IgnoredCommand;
-import org.gms.client.command.commands.gm3.InMapCommand;
-import org.gms.client.command.commands.gm3.KillAllCommand;
-import org.gms.client.command.commands.gm3.KillCommand;
-import org.gms.client.command.commands.gm3.KillMapCommand;
-import org.gms.client.command.commands.gm3.MaxEnergyCommand;
-import org.gms.client.command.commands.gm3.MaxHpMpCommand;
-import org.gms.client.command.commands.gm3.MonitorCommand;
-import org.gms.client.command.commands.gm3.MonitorsCommand;
-import org.gms.client.command.commands.gm3.MusicCommand;
-import org.gms.client.command.commands.gm3.MuteMapCommand;
-import org.gms.client.command.commands.gm3.NightCommand;
-import org.gms.client.command.commands.gm3.NoticeCommand;
-import org.gms.client.command.commands.gm3.NpcCommand;
-import org.gms.client.command.commands.gm3.OnlineTwoCommand;
-import org.gms.client.command.commands.gm3.OpenPortalCommand;
-import org.gms.client.command.commands.gm3.PeCommand;
-import org.gms.client.command.commands.gm3.PosCommand;
-import org.gms.client.command.commands.gm3.QuestCompleteCommand;
-import org.gms.client.command.commands.gm3.QuestResetCommand;
-import org.gms.client.command.commands.gm3.QuestStartCommand;
-import org.gms.client.command.commands.gm3.ReloadDropsCommand;
-import org.gms.client.command.commands.gm3.ReloadEventsCommand;
-import org.gms.client.command.commands.gm3.ReloadMapCommand;
-import org.gms.client.command.commands.gm3.ReloadPortalsCommand;
-import org.gms.client.command.commands.gm3.ReloadShopsCommand;
-import org.gms.client.command.commands.gm3.RipCommand;
-import org.gms.client.command.commands.gm3.SeedCommand;
-import org.gms.client.command.commands.gm3.SpawnCommand;
-import org.gms.client.command.commands.gm3.StartEventCommand;
-import org.gms.client.command.commands.gm3.StartMapEventCommand;
-import org.gms.client.command.commands.gm3.StopMapEventCommand;
-import org.gms.client.command.commands.gm3.TimerAllCommand;
-import org.gms.client.command.commands.gm3.TimerCommand;
-import org.gms.client.command.commands.gm3.TimerMapCommand;
-import org.gms.client.command.commands.gm3.ToggleCouponCommand;
-import org.gms.client.command.commands.gm3.UnBanCommand;
+import org.gms.client.command.commands.gm0.*;
+import org.gms.client.command.commands.gm1.*;
+import org.gms.client.command.commands.gm2.*;
+import org.gms.client.command.commands.gm3.*;
 import org.gms.client.command.commands.gm4.*;
-import org.gms.client.command.commands.gm5.DebugCommand;
-import org.gms.client.command.commands.gm5.IpListCommand;
-import org.gms.client.command.commands.gm5.SetCommand;
-import org.gms.client.command.commands.gm5.ShowMoveLifeCommand;
-import org.gms.client.command.commands.gm5.ShowPacketsCommand;
-import org.gms.client.command.commands.gm5.ShowSessionsCommand;
-import org.gms.client.command.commands.gm6.ClearQuestCacheCommand;
-import org.gms.client.command.commands.gm6.ClearQuestCommand;
-import org.gms.client.command.commands.gm6.DCAllCommand;
-import org.gms.client.command.commands.gm6.DevtestCommand;
-import org.gms.client.command.commands.gm6.EraseAllPNpcsCommand;
-import org.gms.client.command.commands.gm6.GetAccCommand;
-import org.gms.client.command.commands.gm6.MapPlayersCommand;
-import org.gms.client.command.commands.gm6.SaveAllCommand;
-import org.gms.client.command.commands.gm6.ServerAddChannelCommand;
-import org.gms.client.command.commands.gm6.ServerAddWorldCommand;
-import org.gms.client.command.commands.gm6.ServerRemoveChannelCommand;
-import org.gms.client.command.commands.gm6.ServerRemoveWorldCommand;
-import org.gms.client.command.commands.gm6.SetGmLevelCommand;
-import org.gms.client.command.commands.gm6.ShutdownCommand;
-import org.gms.client.command.commands.gm6.SpawnAllPNpcsCommand;
-import org.gms.client.command.commands.gm6.SupplyRateCouponCommand;
-import org.gms.client.command.commands.gm6.WarpWorldCommand;
+import org.gms.client.command.commands.gm5.*;
+import org.gms.client.command.commands.gm6.*;
 import org.gms.constants.id.MapId;
+import org.gms.manager.ServerManager;
+import org.gms.service.CommandService;
 import org.gms.util.I18nUtil;
+import org.gms.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.gms.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -198,6 +56,8 @@ public class CommandsExecutor {
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
     private Pair<List<String>, List<String>> levelCommandsCursor;
 
+    private static final CommandService commandService = ServerManager.getApplicationContext().getBean(CommandService.class);
+
     public static boolean isCommand(Client client, String content) {
         char heading = content.charAt(0);
         if (client.getPlayer().isGM()) {
@@ -207,15 +67,17 @@ public class CommandsExecutor {
     }
 
     public void loadCommandsExecutor() {
-        registeredCommands.clear();
-        commandsNameDesc.clear();
-        registerLv0Commands();
-        registerLv1Commands();
-        registerLv2Commands();
-        registerLv3Commands();
-        registerLv4Commands();
-        registerLv5Commands();
-        registerLv6Commands();
+//        registeredCommands.clear();
+//        commandsNameDesc.clear();
+//        registerLv0Commands();
+//        registerLv1Commands();
+//        registerLv2Commands();
+//        registerLv3Commands();
+//        registerLv4Commands();
+//        registerLv5Commands();
+//        registerLv6Commands();
+
+        commandService.loadCommands(registeredCommands, commandsNameDesc);
     }
 
     public List<Pair<List<String>, List<String>>> getGmCommands() {
@@ -343,8 +205,6 @@ public class CommandsExecutor {
         addCommand("enableauth", EnableAuthCommand.class);
         addCommand("toggleexp", ToggleExpCommand.class);
         addCommand("mylawn", MapOwnerClaimCommand.class);
-        addCommand("bosshp", BossHpCommand.class);
-        addCommand("mobhp", MobHpCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -353,6 +213,8 @@ public class CommandsExecutor {
     private void registerLv1Commands() {
         levelCommandsCursor = new Pair<>(new ArrayList<String>(), new ArrayList<String>());
 
+        addCommand("bosshp", 1, BossHpCommand.class);
+        addCommand("mobhp", 1, MobHpCommand.class);
         addCommand("whatdropsfrom", 1, WhatDropsFromCommand.class);
         addCommand("whodrops", 1, WhoDropsCommand.class);
         addCommand("buffme", 1, BuffMeCommand.class);
@@ -402,6 +264,8 @@ public class CommandsExecutor {
         addCommand("gachalist", 2, GachaListCommand.class);
         addCommand("loot", 2, LootCommand.class);
         addCommand("mobskill", 2, MobSkillCommand.class);
+        addCommand("warpmap", 2, WarpMapCommand.class);
+        addCommand("warparea", 2, WarpAreaCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }
@@ -466,8 +330,6 @@ public class CommandsExecutor {
         addCommand("timer", 3, TimerCommand.class);
         addCommand("timermap", 3, TimerMapCommand.class);
         addCommand("timerall", 3, TimerAllCommand.class);
-        addCommand("warpmap", 3, WarpMapCommand.class);
-        addCommand("warparea", 3, WarpAreaCommand.class);
 
         commandsNameDesc.add(levelCommandsCursor);
     }

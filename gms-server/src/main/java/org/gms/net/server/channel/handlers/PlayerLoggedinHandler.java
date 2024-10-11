@@ -56,6 +56,7 @@ import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
 import org.gms.service.HpMpAlertService;
+import org.gms.util.I18nUtil;
 import org.gms.util.packets.WeddingPackets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -393,8 +394,12 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     */
                 if (player.isGM()) {
                     Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.earnTitleMessage((player.gmLevel() < 6 ? "GM " : "Admin ") + player.getName() + " 登录了游戏"));
+                }else {
+                    if (YamlConfig.config.server.USE_ENABLE_LOGIN_NOTIFICATION) {
+                        String msg = I18nUtil.getMessage("Character.login.globalNotice", player.getName());
+                        Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(3, c.getChannel(), msg));
+                    }
                 }
-
                 if (diseases != null) {
                     for (Entry<Disease, Pair<Long, MobSkill>> e : diseases.entrySet()) {
                         final List<Pair<Disease, Integer>> debuff = Collections.singletonList(new Pair<>(e.getKey(), e.getValue().getRight().getX()));

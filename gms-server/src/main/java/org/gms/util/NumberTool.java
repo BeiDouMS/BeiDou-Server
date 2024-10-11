@@ -3,7 +3,7 @@ package org.gms.util;
 /**
  * @author Shavit
  */
-public class LongTool {
+public class NumberTool {
 
     // Converts 8 bytes to a long.
     public static long BytesToLong(byte[] aToConvert) {
@@ -31,5 +31,16 @@ public class LongTool {
         }
 
         return aBytes;
+    }
+
+    public static int floatToInt(float f) {
+        return doubleToInt(f);
+    }
+
+    public static int doubleToInt(double d) {
+        if (d > Integer.MAX_VALUE) {
+            return Integer.MAX_VALUE;
+        }
+        return (int) d;
     }
 }

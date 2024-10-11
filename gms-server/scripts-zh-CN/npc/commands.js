@@ -11,7 +11,8 @@ var status;
 var common_heading = "@";
 var staff_heading = "!";
 
-var levels = ["Common", "Donator", "JrGM", "GM", "SuperGM", "Developer", "Admin"];
+// var levels = ["Common", "Donator", "JrGM", "GM", "SuperGM", "Developer", "Admin"];
+var levels = ["通用", "贡献者", "小GM", "GM", "大GM", "开发者", "超级管理员"];
 var commands;
 
 function writeHeavenMSCommands() {

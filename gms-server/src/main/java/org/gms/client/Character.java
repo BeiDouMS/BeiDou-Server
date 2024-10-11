@@ -22,7 +22,6 @@
  */
 package org.gms.client;
 
-import com.mybatisflex.core.query.QueryWrapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.gms.client.autoban.AutobanManager;
@@ -211,11 +210,11 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private int vanquisherKills;
-    private int expRate = 1;
+    private float expRate = 1;
     @Getter
-    private int mesoRate = 1;
+    private float mesoRate = 1;
     @Getter
-    private int dropRate = 1;
+    private float dropRate = 1;
     private int expCoupon = 1, mesoCoupon = 1, dropCoupon = 1;
     @Getter
     @Setter
@@ -4400,7 +4399,7 @@ public class Character extends AbstractCharacterObject {
         return YamlConfig.config.server.USE_ENFORCE_NOVICE_EXPRATE && isBeginnerJob() && level < 11;
     }
 
-    public int getExpRate() {
+    public float getExpRate() {
         if (hasNoviceExpRate()) {   // base exp rate 1x for early levels idea thanks to Vcoc
             return 1;
         }
@@ -4436,7 +4435,7 @@ public class Character extends AbstractCharacterObject {
         return expCoupon;
     }
 
-    public int getRawExpRate() {
+    public float getRawExpRate() {
         return expRate / (expCoupon * getWorldServer().getExpRate());
     }
 
@@ -4444,11 +4443,11 @@ public class Character extends AbstractCharacterObject {
         return dropCoupon;
     }
 
-    public int getRawDropRate() {
+    public float getRawDropRate() {
         return dropRate / (dropCoupon * getWorldServer().getDropRate());
     }
 
-    public int getBossDropRate() {
+    public float getBossDropRate() {
         World w = getWorldServer();
         return (dropRate / w.getDropRate()) * w.getBossDropRate();
     }
@@ -4457,11 +4456,11 @@ public class Character extends AbstractCharacterObject {
         return mesoCoupon;
     }
 
-    public int getRawMesoRate() {
+    public float getRawMesoRate() {
         return mesoRate / (mesoCoupon * getWorldServer().getMesoRate());
     }
 
-    public int getQuestExpRate() {
+    public float getQuestExpRate() {
         if (hasNoviceExpRate()) {
             return 1;
         }
@@ -4470,7 +4469,7 @@ public class Character extends AbstractCharacterObject {
         return w.getExpRate() * w.getQuestRate();
     }
 
-    public int getQuestMesoRate() {
+    public float getQuestMesoRate() {
         World w = getWorldServer();
         return w.getMesoRate() * w.getQuestRate();
     }
@@ -5807,7 +5806,7 @@ public class Character extends AbstractCharacterObject {
             runnable.run();
             return;
         }
-        int savedRateValue = Integer.parseInt(extendValueDO.getExtendValue());
+        float savedRateValue = Float.parseFloat(extendValueDO.getExtendValue());
         switch (type) {
             case "expRate" -> this.expRate = savedRateValue;
             case "mesoRate" -> this.mesoRate = savedRateValue;
@@ -6297,7 +6296,7 @@ public class Character extends AbstractCharacterObject {
         chr.getMapleMount().setActive(false);
         QuickslotkeymappedDO quickSlotKeyMap = accountService.getQuickSlotKeyMap(charactersDO.getAccountid());
         if (quickSlotKeyMap != null) {
-            chr.setQuickSlotLoaded(LongTool.LongToBytes(quickSlotKeyMap.getKeymap()));
+            chr.setQuickSlotLoaded(NumberTool.LongToBytes(quickSlotKeyMap.getKeymap()));
             chr.setQuickSlotKeyMapped(new QuickslotBinding(chr.getQuickSlotLoaded()));
         }
         return chr;
@@ -7179,7 +7178,7 @@ public class Character extends AbstractCharacterObject {
                 // No quickslots, or no change.
                 boolean bQuickslotEquals = this.quickSlotKeyMapped == null || (this.quickSlotLoaded != null && Arrays.equals(this.quickSlotKeyMapped.GetKeybindings(), this.quickSlotLoaded));
                 if (!bQuickslotEquals) {
-                    long nQuickslotKeymapped = LongTool.BytesToLong(this.quickSlotKeyMapped.GetKeybindings());
+                    long nQuickslotKeymapped = NumberTool.BytesToLong(this.quickSlotKeyMapped.GetKeybindings());
 
                     // Quickslot key config
                     try (PreparedStatement ps = con.prepareStatement("INSERT INTO quickslotkeymapped (accountid, keymap) VALUES (?, ?) ON DUPLICATE KEY UPDATE keymap = ?;")) {
@@ -7428,7 +7427,7 @@ public class Character extends AbstractCharacterObject {
                 // No quickslots, or no change.
                 boolean bQuickslotEquals = this.quickSlotKeyMapped == null || (this.quickSlotLoaded != null && Arrays.equals(this.quickSlotKeyMapped.GetKeybindings(), this.quickSlotLoaded));
                 if (!bQuickslotEquals) {
-                    long nQuickslotKeymapped = LongTool.BytesToLong(this.quickSlotKeyMapped.GetKeybindings());
+                    long nQuickslotKeymapped = NumberTool.BytesToLong(this.quickSlotKeyMapped.GetKeybindings());
 
                     try (final PreparedStatement psQuick = con.prepareStatement("INSERT INTO quickslotkeymapped (accountid, keymap) VALUES (?, ?) ON DUPLICATE KEY UPDATE keymap = ?;")) {
                         psQuick.setInt(1, this.getAccountId());
