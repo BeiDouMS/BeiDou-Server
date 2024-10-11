@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +32,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.*;
 
 @Slf4j
-@ConditionalOnProperty(name = "api-docs.enabled", havingValue = "true", matchIfMissing = false)
+@ConditionalOnProperty(name = "api-docs.enabled", havingValue = "true")
+@ConditionalOnBean(SpringDocConfigProperties.class)
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
@@ -70,7 +72,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             String jwt = parseJwt(request);
             // 测试token，所以生产环境一定要把swagger关掉，否则裸奔
-            if ("swagger".equals(jwt) && springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
+            if (springDocConfigProperties!=null && swaggerUiConfigProperties!=null  && "swagger".equals(jwt) && springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
