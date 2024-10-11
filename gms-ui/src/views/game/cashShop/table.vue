@@ -293,9 +293,11 @@
   const handleBatchFormBeforeOk = async () => {
     if (batchFormData.value.data.length === 0) {
       Message.error('你没有选中任何东西');
+      return;
     }
     if (batchFormData.value.value === undefined) {
       Message.error('更新值undefined');
+      return;
     }
 
     setLoading(true);
