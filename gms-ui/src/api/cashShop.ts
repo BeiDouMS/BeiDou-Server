@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { cashShopState } from '@/store/modules/cashShop/type';
 
 export interface conditionState {
   id: number;
@@ -29,6 +30,12 @@ export interface cashShopFormState {
   packageSn?: number;
 }
 
+export interface batchFormState {
+  data: cashShopState[];
+  type: string;
+  value?: number;
+}
+
 export function getAllCategoryList() {
   return axios.get('/cashShop/v1/getAllCategoryList');
 }
@@ -43,4 +50,8 @@ export function onSale(data: cashShopFormState) {
 
 export function offSale(data: cashShopFormState) {
   return axios.post('/cashShop/v1/offSale', data);
+}
+
+export function batchOnSale(data: batchFormState) {
+  return axios.post('/cashShop/v1/batchOnSale', data);
 }

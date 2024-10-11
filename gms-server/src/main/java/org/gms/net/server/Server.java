@@ -40,7 +40,6 @@ import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
 import org.gms.constants.net.ServerConstants;
 import org.gms.dao.entity.NxcouponsDO;
-import org.gms.dao.mapper.*;
 import org.gms.manager.ServerManager;
 import org.gms.net.ChannelDependencies;
 import org.gms.net.PacketProcessor;
@@ -148,6 +147,18 @@ public class Server {
     public static long uptime = System.currentTimeMillis();
     private long nextTime;
 
+    private static final NpcService npcService = ServerManager.getApplicationContext().getBean(NpcService.class);
+    private static final NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
+    private static final CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
+    private static final AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
+    private static final NxCodeService nxCodeService = ServerManager.getApplicationContext().getBean(NxCodeService.class);
+    private static final NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
+    private static final NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
+    private static final WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
+    private static final FamilyService familyService = ServerManager.getApplicationContext().getBean(FamilyService.class);
+    private static final NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
+    private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+
     private Server() {
         ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
         this.wldRLock = worldLock.readLock();
@@ -203,8 +214,7 @@ public class Server {
     }
 
     private void loadPlayerNpcMapStepFromDb() {
-        PlayernpcsFieldMapper playernpcsFieldMapper = ServerManager.getApplicationContext().getBean(PlayernpcsFieldMapper.class);
-        List<PlayernpcsFieldDO> playernpcsFieldDOList = playernpcsFieldMapper.selectAll();
+        List<PlayernpcsFieldDO> playernpcsFieldDOList = npcService.getPlayerNpcFields(new PlayernpcsFieldDO());
         playernpcsFieldDOList.forEach(playernpcsFieldDO -> {
             World world = getWorld(playernpcsFieldDO.getWorld());
             if (world != null) world.setPlayerNpcMapData(playernpcsFieldDO.getMap(), playernpcsFieldDO.getStep(), playernpcsFieldDO.getPodium());
@@ -397,22 +407,20 @@ public class Server {
 
         log.info(I18nUtil.getLogMessage("Server.initWorld.info1"), i);
 
-        int exprate = YamlConfig.config.worlds.get(i).exp_rate;
-        int mesorate = YamlConfig.config.worlds.get(i).meso_rate;
-        int droprate = YamlConfig.config.worlds.get(i).drop_rate;
-        int bossdroprate = YamlConfig.config.worlds.get(i).boss_drop_rate;
-        int questrate = YamlConfig.config.worlds.get(i).quest_rate;
-        int travelrate = YamlConfig.config.worlds.get(i).travel_rate;
-        int fishingrate = YamlConfig.config.worlds.get(i).fishing_rate;
+        float expRate = YamlConfig.config.worlds.get(i).exp_rate;
+        float mesoRate = YamlConfig.config.worlds.get(i).meso_rate;
+        float dropRate = YamlConfig.config.worlds.get(i).drop_rate;
+        float bossDropRate = YamlConfig.config.worlds.get(i).boss_drop_rate;
+        float questRate = YamlConfig.config.worlds.get(i).quest_rate;
+        float travelRate = YamlConfig.config.worlds.get(i).travel_rate;
+        float fishingRate = YamlConfig.config.worlds.get(i).fishing_rate;
 
         int flag = YamlConfig.config.worlds.get(i).flag;
         String event_message = YamlConfig.config.worlds.get(i).event_message;
         String why_am_i_recommended = YamlConfig.config.worlds.get(i).why_am_i_recommended;
 
-        World world = new World(i,
-                flag,
-                event_message,
-                exprate, droprate, bossdroprate, mesorate, questrate, travelrate, fishingrate);
+        World world = new World(i, flag, event_message, expRate, dropRate, bossDropRate, mesoRate, questRate,
+                travelRate, fishingRate);
 
         Map<Integer, String> channelInfo = new HashMap<>();
         long bootTime = getCurrentTime();
@@ -590,7 +598,6 @@ public class Server {
             int weekDay = c.get(Calendar.DAY_OF_WEEK);
             int hourDay = c.get(Calendar.HOUR_OF_DAY);
             int weekdayMask = (1 << weekDay);
-            NxCouponService nxCouponService = ServerManager.getApplicationContext().getBean(NxCouponService.class);
             activeCoupons.addAll(nxCouponService.selectActiveCouponIds(weekdayMask, hourDay));
         }
     }
@@ -645,7 +652,6 @@ public class Server {
     }
 
     public void reloadWorldsPlayerRanking() {
-        CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
         List<List<CharactersDO>> rankPlayers = characterService.getWorldsRankPlayers(getWorldsSize());
         if (rankPlayers.isEmpty()) {
             return;
@@ -690,12 +696,6 @@ public class Server {
 
         log.info(I18nUtil.getLogMessage("Server.init.info4"));
         final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
-        AccountService accountService = ServerManager.getApplicationContext().getBean(AccountService.class);
-        CharacterService characterService = ServerManager.getApplicationContext().getBean(CharacterService.class);
-        NxCodeService nxCodeService = ServerManager.getApplicationContext().getBean(NxCodeService.class);
-        NewYearCardService newYearCardService = ServerManager.getApplicationContext().getBean(NewYearCardService.class);
-        NameChangeService nameChangeService = ServerManager.getApplicationContext().getBean(NameChangeService.class);
-        WorldTransferService worldTransferService = ServerManager.getApplicationContext().getBean(WorldTransferService.class);
 
         // 重置登录状态和雇佣商店状态
         accountService.resetAllLoggedIn();
@@ -705,8 +705,7 @@ public class Server {
         nxCodeService.clearExpirations();
 
         // 重载倍率卡
-        NxcouponsMapper nxcouponsMapper = ServerManager.getApplicationContext().getBean(NxcouponsMapper.class);
-        List<NxcouponsDO> nxcouponsDOList = nxcouponsMapper.selectAll();
+        List<NxcouponsDO> nxcouponsDOList = nxCouponService.getNxCoupons(new NxcouponsDO());
         couponRates.clear();
         nxcouponsDOList.forEach(nxcouponsDO -> couponRates.put(nxcouponsDO.getCouponid(), nxcouponsDO.getRate()));
         updateActiveCoupons();
@@ -738,7 +737,6 @@ public class Server {
             reloadWorldsPlayerRanking();
             loadPlayerNpcMapStepFromDb();
             if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
-                FamilyService familyService = ServerManager.getApplicationContext().getBean(FamilyService.class);
                 familyService.loadAllFamilies();
             }
         } catch (Exception e) {
@@ -763,7 +761,6 @@ public class Server {
     }
 
     private void registerChannelDependencies() {
-        NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
         FredrickProcessor fredrickProcessor = new FredrickProcessor(noteService);
         ChannelDependencies channelDependencies = new ChannelDependencies(noteService, fredrickProcessor);
         PacketProcessor.registerGameHandlerDependencies(channelDependencies);
@@ -1625,7 +1622,6 @@ public class Server {
             w.shutdown();
         }
 
-        HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
         hpMpAlertService.saveAll();
         hpMpAlertService.clear();
 

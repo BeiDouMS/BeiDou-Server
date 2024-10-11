@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.ModifiedCashItemDO;
+import org.gms.model.dto.CashShopBatchOnSaleReqDTO;
 import org.gms.model.dto.CashShopSearchRtnDTO;
 import org.gms.model.dto.ResultBody;
 import org.gms.model.dto.SubmitBody;
@@ -57,6 +58,14 @@ public class CashShopController {
     public ResultBody<Object> offSale(@RequestBody SubmitBody<ModifiedCashItemDO> request) {
         request.getData().setOnSale(0);
         cashShopService.changeOnSale(request.getData());
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/cashShop/" + ApiConstant.LATEST)
+    @Operation(summary = "批量上架商品")
+    @PostMapping("/" + ApiConstant.LATEST + "/batchOnSale")
+    public ResultBody<Object> batchOnSale(@RequestBody SubmitBody<CashShopBatchOnSaleReqDTO> request) {
+        cashShopService.batchChangeOnSale(request.getData());
         return ResultBody.success();
     }
 }

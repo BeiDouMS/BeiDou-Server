@@ -26,9 +26,13 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.constants.id.NpcId;
-import org.gms.server.ItemInformationProvider;
+import org.gms.dao.entity.GachaponRewardDO;
+import org.gms.manager.ServerManager;
 import org.gms.server.gachapon.Gachapon;
+import org.gms.service.GachaponService;
 import org.gms.util.I18nUtil;
+
+import java.util.List;
 
 public class GachaCommand extends Command {
     {
@@ -40,19 +44,8 @@ public class GachaCommand extends Command {
         Gachapon.GachaponType gacha = null;
         String search = c.getPlayer().getLastCommandMessage();
         String gachaName = "";
-        String[] names = {I18nUtil.getMessage("GachaCommand.message2"),
-                I18nUtil.getMessage("GachaCommand.message3"),
-                I18nUtil.getMessage("GachaCommand.message4"),
-                I18nUtil.getMessage("GachaCommand.message5"),
-                I18nUtil.getMessage("GachaCommand.message6"),
-                I18nUtil.getMessage("GachaCommand.message7"),
-                I18nUtil.getMessage("GachaCommand.message8"),
-                I18nUtil.getMessage("GachaCommand.message9"),
-                I18nUtil.getMessage("GachaCommand.message10"),
-                I18nUtil.getMessage("GachaCommand.message11")};
-        int[] ids = {NpcId.GACHAPON_HENESYS, NpcId.GACHAPON_ELLINIA, NpcId.GACHAPON_PERION, NpcId.GACHAPON_KERNING,
-                NpcId.GACHAPON_SLEEPYWOOD, NpcId.GACHAPON_MUSHROOM_SHRINE, NpcId.GACHAPON_SHOWA_MALE,
-                NpcId.GACHAPON_SHOWA_FEMALE, NpcId.GACHAPON_NLC, NpcId.GACHAPON_NAUTILUS};
+        String[] names = Gachapon.GachaponType.getLootNames();
+        int[] ids = Gachapon.GachaponType.getLootIds();
         for (int i = 0; i < names.length; i++) {
             if (search.equalsIgnoreCase(names[i])) {
                 gachaName = names[i];
@@ -66,18 +59,17 @@ public class GachaCommand extends Command {
             }
             return;
         }
-        String talkStr = "#b" + gachaName + "#k";
-        talkStr += I18nUtil.getMessage("GachaCommand.message13");
-        talkStr += "\r\n\r\n";
-        for (int i = 0; i < 2; i++) {
-            for (int id : gacha.getItems(i)) {
-                talkStr += "#v" + id + "#" + "   -  #z" + id + "#" + "\r\n";
-                //talkStr += "#v" + id + "#" + "#z" + id + "#" + "- " + ItemInformationProvider.getInstance().getName(id) + "\r\n";
-            }
+        StringBuilder talkStr = new StringBuilder("#b" + gachaName + "#k");
+        talkStr.append(I18nUtil.getMessage("GachaCommand.message13"));
+        talkStr.append("\r\n\r\n");
+        GachaponService gachaponService = ServerManager.getApplicationContext().getBean(GachaponService.class);
+        List<GachaponRewardDO> gachaponRewardDOS = gachaponService.getRewardsByNpcId(gacha.getNpcId());
+        for (GachaponRewardDO gachaponRewardDO : gachaponRewardDOS) {
+            talkStr.append("#v").append(gachaponRewardDO.getItemId()).append("#   -  #z").append(gachaponRewardDO.getItemId()).append("#\r\n");
         }
-        talkStr += "\r\n";
-        talkStr += I18nUtil.getMessage("GachaCommand.message14");
+        talkStr.append("\r\n");
+        talkStr.append(I18nUtil.getMessage("GachaCommand.message14"));
 
-        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, talkStr);
+        c.getAbstractPlayerInteraction().npcTalk(NpcId.MAPLE_ADMINISTRATOR, talkStr.toString());
     }
 }
