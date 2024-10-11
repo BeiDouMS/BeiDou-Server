@@ -28,17 +28,20 @@
           </a-button>
           <a-input-number v-model="condition.itemId" placeholder="物品ID" />
           <a-button @click="loadData">搜索</a-button>
+          <a-button type="primary" @click="showBatchForm">批量编辑</a-button>
         </a-space>
       </a-col>
     </a-row>
     <a-table
-      row-key="id"
+      v-model:selectedKeys="selectedKeys"
+      row-key="sn"
       :loading="loading"
       :data="tableData"
       column-resizable
       :pagination="false"
       :bordered="{ cell: true }"
       :scroll="{ x: 2000 }"
+      :row-selection="rowSelection"
     >
       <template #columns>
         <a-table-column
@@ -163,15 +166,50 @@
     />
   </a-card>
   <cash-shop-form ref="cashShopFormRef" @load-data="loadData" />
+  <a-modal
+    v-model:visible="batchFormVisible"
+    :ok-loading="loading"
+    title="批量编辑"
+    :on-before-ok="handleBatchFormBeforeOk"
+  >
+    <a-form :model="batchFormData">
+      <a-form-item label="已选中SN">
+        <a-space wrap>
+          <a-tag v-for="sn in selectedKeys" :key="sn" color="blue">
+            {{ sn }}
+          </a-tag>
+        </a-space>
+      </a-form-item>
+      <a-form-item label="编辑类型">
+        <a-select v-model="batchFormData.type">
+          <a-option
+            v-for="item of batchFormTypeOptions"
+            :key="item.value"
+            :value="item.value"
+            :label="item.value"
+          />
+        </a-select>
+      </a-form-item>
+      <a-form-item label="值">
+        <a-input-number v-model="batchFormData.value" />
+      </a-form-item>
+    </a-form>
+  </a-modal>
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { reactive, ref } from 'vue';
   import useLoading from '@/hooks/loading';
-  import { conditionState, getCommodityByCategory } from '@/api/cashShop';
+  import {
+    batchFormState,
+    batchOnSale,
+    conditionState,
+    getCommodityByCategory,
+  } from '@/api/cashShop';
   import CashShopForm from '@/views/game/cashShop/form.vue';
   import { cashShopState } from '@/store/modules/cashShop/type';
   import { getIconUrl } from '@/utils/mapleStoryAPI';
+  import { Message, TableRowSelection } from '@arco-design/web-vue';
 
   const { loading, setLoading } = useLoading(false);
 
@@ -187,6 +225,14 @@
     onSale: 1,
     pageNo: 1,
     itemId: undefined,
+  });
+
+  const selectedKeys = ref([]);
+
+  const rowSelection = reactive<TableRowSelection>({
+    type: 'checkbox',
+    showCheckedAll: true,
+    onlyCurrent: true,
   });
 
   const pageChange = (data: number) => {
@@ -216,6 +262,50 @@
   const cashShopFormRef = ref();
   const editClick = (data: cashShopState) => {
     cashShopFormRef.value.initForm(data);
+  };
+
+  const batchFormVisible = ref<boolean>(false);
+  const showBatchForm = () => {
+    batchFormData.value = {
+      data: [],
+      type: '价格',
+      value: undefined,
+    };
+    selectedKeys.value.forEach((k) => {
+      tableData.value.forEach((d) => {
+        if (d.sn === k) {
+          batchFormData.value.data.push(d);
+        }
+      });
+    });
+    batchFormVisible.value = true;
+  };
+  const batchFormTypeOptions = [
+    { value: '价格' },
+    { value: '数量' },
+    { value: '有效期' },
+  ];
+  const batchFormData = ref<batchFormState>({
+    data: [],
+    type: '价格',
+    value: undefined,
+  });
+  const handleBatchFormBeforeOk = async () => {
+    if (batchFormData.value.data.length === 0) {
+      Message.error('你没有选中任何东西');
+    }
+    if (batchFormData.value.value === undefined) {
+      Message.error('更新值undefined');
+    }
+
+    setLoading(true);
+    try {
+      await batchOnSale(batchFormData.value);
+      Message.success('更新成功！');
+      await loadData();
+    } finally {
+      setLoading(false);
+    }
   };
 </script>
 
