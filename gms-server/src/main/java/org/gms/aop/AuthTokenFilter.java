@@ -32,8 +32,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.*;
 
 @Slf4j
-@ConditionalOnProperty(name = "api-docs.enabled", havingValue = "true")
-@ConditionalOnBean(SpringDocConfigProperties.class)
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
