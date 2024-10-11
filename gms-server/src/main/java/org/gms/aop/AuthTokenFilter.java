@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springdoc.core.properties.SpringDocConfigProperties;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,14 +31,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.*;
 
 @Slf4j
+@ConditionalOnProperty(name = "api-docs.enabled", havingValue = "true", matchIfMissing = false)
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
-    @Autowired
+    @Autowired(required = false)
     private SpringDocConfigProperties springDocConfigProperties;
-    @Autowired
+    @Autowired(required = false)
     private SwaggerUiConfigProperties swaggerUiConfigProperties;
     @Autowired
     private AccountService accountService;
