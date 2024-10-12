@@ -31,6 +31,11 @@ springdoc:
     # 是否开启SwaggerUI，依赖OpenApi的开启
     enabled: true
 
+spring:
+  flyway:
+    # 禁用版本验证
+    validate-on-migrate: false
+
 gms:
   service:
     # zh-CN en-US
@@ -307,6 +312,7 @@ gms:
     USE_BEIDOU_BEGINNERMAP: false        #标志以使用创建冒险家进入055版本以前的青苹果地图，前提是客户端支持
 
 
+
     #Events/PQs Configuration
     USE_OLD_GMS_STYLED_PQ_NPCS: true     #启用与旧GMS风格相似的PQ NPCs，跳过关于PQs的信息并立即尝试注册队伍。
     USE_ENABLE_SOLO_EXPEDITIONS: false    #启用任何数量的玩家开始远征。这也将绕过所有Zakum的前置任务。
@@ -521,3 +527,5 @@ gms:
     BOSS_RESPAWN_MOBTIME_RATE : 1
     # 消耗栏和其他栏的物品最大堆叠，-1保持默认，以wz的最大堆叠为准。
     ITEM_SLOT_MAX: -1
+    # 启动/禁用非GM角色登录时全服通知
+    USE_ENABLE_LOGIN_NOTIFICATION: true

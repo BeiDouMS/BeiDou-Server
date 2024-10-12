@@ -33,6 +33,6 @@ public class GachaListCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        c.getAbstractPlayerInteraction().openNpc(10000, "gachaponInfo");
+        c.getAbstractPlayerInteraction().openNpc(9900001, "gachaponInfo");
     }
 }

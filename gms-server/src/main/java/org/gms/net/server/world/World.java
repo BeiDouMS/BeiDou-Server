@@ -22,6 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.net.server.world;
 
 import com.mybatisflex.core.query.QueryWrapper;
+import lombok.Getter;
+import lombok.Setter;
 import org.gms.client.BuddyList;
 import org.gms.client.BuddyList.BuddyAddResult;
 import org.gms.client.BuddyList.BuddyOperation;
@@ -63,7 +65,7 @@ import org.gms.net.server.task.ServerMessageTask;
 import org.gms.net.server.task.TimedMapObjectTask;
 import org.gms.net.server.task.TimeoutTask;
 import org.gms.net.server.task.WeddingReservationTask;
-import org.gms.util.I18nUtil;
+import org.gms.util.*;
 import org.gms.util.packets.Fishing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,9 +79,6 @@ import org.gms.server.maps.MiniDungeon;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.server.maps.PlayerShop;
 import org.gms.server.maps.PlayerShopItem;
-import org.gms.util.DatabaseConnection;
-import org.gms.util.PacketCreator;
-import org.gms.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -123,15 +122,28 @@ import static org.gms.dao.entity.table.PlayernpcsFieldDOTableDef.PLAYERNPCS_FIEL
 public class World {
     private static final Logger log = LoggerFactory.getLogger(World.class);
 
+    @Getter
     private final int id;
+    @Getter
     private int flag;
-    private int exprate;
-    private int droprate;
-    private int bossdroprate;
-    private int mesorate;
-    private int questrate;
-    private int travelrate;
-    private int fishingrate;
+    @Getter
+    private float expRate;
+    @Getter
+    private float dropRate;
+    // boss rate concept thanks to Lapeiro
+    @Setter
+    @Getter
+    private float bossDropRate;
+    @Getter
+    private float mesoRate;
+    @Setter
+    @Getter
+    private float questRate;
+    @Setter
+    @Getter
+    private float travelRate;
+    @Getter
+    private float fishingRate;
     private final String eventmsg;
     private final List<Channel> channels = new ArrayList<>();
     private final Map<Integer, Byte> pnpcStep = new HashMap<>();
@@ -173,30 +185,30 @@ public class World {
     private final Lock srvMessagesLock = new ReentrantLock();
     private ScheduledFuture<?> srvMessagesSchedule;
 
-    private Lock activePetsLock = new ReentrantLock(true);
+    private final Lock activePetsLock = new ReentrantLock(true);
     private final Map<Integer, Integer> activePets = new LinkedHashMap<>();
     private ScheduledFuture<?> petsSchedule;
     private long petUpdate;
 
-    private Lock activeMountsLock = new ReentrantLock(true);
+    private final Lock activeMountsLock = new ReentrantLock(true);
     private final Map<Integer, Integer> activeMounts = new LinkedHashMap<>();
     private ScheduledFuture<?> mountsSchedule;
     private long mountUpdate;
 
-    private Lock activePlayerShopsLock = new ReentrantLock(true);
+    private final Lock activePlayerShopsLock = new ReentrantLock(true);
     private final Map<Integer, PlayerShop> activePlayerShops = new LinkedHashMap<>();
 
-    private Lock activeMerchantsLock = new ReentrantLock(true);
+    private final Lock activeMerchantsLock = new ReentrantLock(true);
     private final Map<Integer, Pair<HiredMerchant, Integer>> activeMerchants = new LinkedHashMap<>();
     private ScheduledFuture<?> merchantSchedule;
     private long merchantUpdate;
 
     private final Map<Runnable, Long> registeredTimedMapObjects = new LinkedHashMap<>();
     private ScheduledFuture<?> timedMapObjectsSchedule;
-    private Lock timedMapObjectLock = new ReentrantLock(true);
+    private final Lock timedMapObjectLock = new ReentrantLock(true);
 
     private final Map<Character, Integer> fishingAttempters = Collections.synchronizedMap(new WeakHashMap<>());
-    private Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
+    private final Map<Character, Integer> playerHpDec = Collections.synchronizedMap(new WeakHashMap<>());
 
     private ScheduledFuture<?> charactersSchedule;
     private ScheduledFuture<?> marriagesSchedule;
@@ -206,17 +218,18 @@ public class World {
     private ScheduledFuture<?> timeoutSchedule;
     private ScheduledFuture<?> hpDecSchedule;
 
-    public World(int world, int flag, String eventmsg, int exprate, int droprate, int bossdroprate, int mesorate, int questrate, int travelrate, int fishingrate) {
+    public World(int world, int flag, String eventmsg, float expRate, float dropRate, float bossDropRate, float mesoRate,
+                 float questRate, float travelRate, float fishingRate) {
         this.id = world;
         this.flag = flag;
         this.eventmsg = eventmsg;
-        this.exprate = exprate;
-        this.droprate = droprate;
-        this.bossdroprate = bossdroprate;
-        this.mesorate = mesorate;
-        this.questrate = questrate;
-        this.travelrate = travelrate;
-        this.fishingrate = fishingrate;
+        this.expRate = expRate;
+        this.dropRate = dropRate;
+        this.bossDropRate = bossDropRate;
+        this.mesoRate = mesoRate;
+        this.questRate = questRate;
+        this.travelRate = travelRate;
+        this.fishingRate = fishingRate;
         runningPartyId.set(1000000001); // partyid must not clash with charid to solve update item looting issues, found thanks to Vcoc
         runningMessengerId.set(1);
 
@@ -354,19 +367,11 @@ public class World {
         this.flag = b;
     }
 
-    public int getFlag() {
-        return flag;
-    }
-
     public String getEventMessage() {
         return eventmsg;
     }
 
-    public int getExpRate() {
-        return exprate;
-    }
-
-    public void setExpRate(int exp) {
+    public void setExpRate(float exp) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
         for (Character chr : list) {
@@ -375,7 +380,7 @@ public class World {
             }
             chr.revertWorldRates();
         }
-        this.exprate = exp;
+        this.expRate = exp;
         for (Character chr : list) {
             if (!chr.isLoggedIn()) {
                 continue;
@@ -384,11 +389,7 @@ public class World {
         }
     }
 
-    public int getDropRate() {
-        return droprate;
-    }
-
-    public void setDropRate(int drop) {
+    public void setDropRate(float drop) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
         for (Character chr : list) {
@@ -397,7 +398,7 @@ public class World {
             }
             chr.revertWorldRates();
         }
-        this.droprate = drop;
+        this.dropRate = drop;
         for (Character chr : list) {
             if (!chr.isLoggedIn()) {
                 continue;
@@ -406,19 +407,7 @@ public class World {
         }
     }
 
-    public int getBossDropRate() {  // boss rate concept thanks to Lapeiro
-        return bossdroprate;
-    }
-
-    public void setBossDropRate(int bossdrop) {
-        bossdroprate = bossdrop;
-    }
-
-    public int getMesoRate() {
-        return mesorate;
-    }
-
-    public void setMesoRate(int meso) {
+    public void setMesoRate(float meso) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
         for (Character chr : list) {
@@ -427,41 +416,21 @@ public class World {
             }
             chr.revertWorldRates();
         }
-        this.mesorate = meso;
+        this.mesoRate = meso;
         for (Character chr : list) {
             if (!chr.isLoggedIn()) {
                 continue;
             }
             chr.setWorldRates();
         }
-    }
-
-    public int getQuestRate() {
-        return questrate;
-    }
-
-    public void setQuestRate(int quest) {
-        this.questrate = quest;
-    }
-
-    public int getTravelRate() {
-        return travelrate;
-    }
-
-    public void setTravelRate(int travel) {
-        this.travelrate = travel;
     }
 
     public int getTransportationTime(int travelTime) {
-        return (int) Math.ceil((double) travelTime / travelrate);
-    }
-
-    public int getFishingRate() {
-        return fishingrate;
+        return NumberTool.floatToInt(travelTime / travelRate);
     }
 
     public void setFishingRate(int quest) {
-        this.fishingrate = quest;
+        this.fishingRate = quest;
     }
 
     public void loadAccountCharactersView(Integer accountId, List<Character> chars) {
@@ -621,10 +590,6 @@ public class World {
         }
 
         players.removePlayer(chr.getId());
-    }
-
-    public int getId() {
-        return id;
     }
 
     public void addFamily(int id, Family f) {
@@ -817,7 +782,7 @@ public class World {
 
     public void putMarriageQueued(int marriageId, boolean cathedral, boolean premium, int groomId, int brideId) {
         queuedMarriages.put(marriageId, new Pair<>(new Pair<>(cathedral, premium), new Pair<>(groomId, brideId)));
-        marriageGuests.put(marriageId, new HashSet());
+        marriageGuests.put(marriageId, new HashSet<>());
     }
 
     public Pair<Boolean, Set<Integer>> removeMarriageQueued(int marriageId) {
@@ -887,7 +852,7 @@ public class World {
             possibleWeddings.add(selectedPw);
         }
 
-        return getMarriageQueuedCouple(possibleWeddings.get(0));
+        return getMarriageQueuedCouple(possibleWeddings.getFirst());
     }
 
     public void debugMarriageStatus() {
@@ -1205,9 +1170,9 @@ public class World {
                 Character chr = getPlayerStorage().getCharacterByName(messengerchar.getName());
                 if (chr != null) {
                     chr.sendPacket(PacketCreator.messengerChat(chattext));
-                    if (to1.equals("")) {
+                    if (to1.isEmpty()) {
                         to1 = messengerchar.getName();
-                    } else if (to2.equals("")) {
+                    } else if (to2.isEmpty()) {
                         to2 = messengerchar.getName();
                     }
                 }
@@ -1356,12 +1321,7 @@ public class World {
     public void addOwlItemSearch(Integer itemid) {
         suggestWLock.lock();
         try {
-            Integer cur = owlSearched.get(itemid);
-            if (cur != null) {
-                owlSearched.put(itemid, cur + 1);
-            } else {
-                owlSearched.put(itemid, 1);
-            }
+            owlSearched.merge(itemid, 1, Integer::sum);
         } finally {
             suggestWLock.unlock();
         }
@@ -1390,13 +1350,7 @@ public class World {
         suggestWLock.lock();
         try {
             Map<Integer, Integer> tabItemBought = cashItemBought.get(snid / 10000000);
-
-            Integer cur = tabItemBought.get(snid);
-            if (cur != null) {
-                tabItemBought.put(snid, cur + 1);
-            } else {
-                tabItemBought.put(snid, 1);
-            }
+            tabItemBought.merge(snid, 1, Integer::sum);
         } finally {
             suggestWLock.unlock();
         }
@@ -1635,12 +1589,9 @@ public class World {
     }
 
     public List<PlayerShop> getActivePlayerShops() {
-        List<PlayerShop> psList = new ArrayList<>();
         activePlayerShopsLock.lock();
         try {
-            psList.addAll(activePlayerShops.values());
-
-            return psList;
+            return new ArrayList<>(activePlayerShops.values());
         } finally {
             activePlayerShopsLock.unlock();
         }
@@ -1779,8 +1730,7 @@ public class World {
     }
 
     public void runPlayerHpDecreaseSchedule() {
-        Map<Character, Integer> m = new HashMap<>();
-        m.putAll(playerHpDec);
+        Map<Character, Integer> m = new HashMap<>(playerHpDec);
 
         for (Entry<Character, Integer> e : m.entrySet()) {
             Character chr = e.getKey();
@@ -2054,8 +2004,7 @@ public class World {
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 rs.next();
-                int ret = rs.getInt(1);
-                return ret;
+                return rs.getInt(1);
             }
         } catch (SQLException se) {
             se.printStackTrace();

@@ -55,6 +55,7 @@ import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.partyquest.Pyramid;
 import org.gms.server.quest.Quest;
 import org.gms.util.ExtendUtil;
+import org.gms.util.NumberTool;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
@@ -803,7 +804,7 @@ public class AbstractPlayerInteraction {
     }
 
     public void giveCharacterExp(int amount, Character chr) {
-        chr.gainExp((amount * chr.getExpRate()), true, true);
+        chr.gainExp(NumberTool.floatToInt(amount * chr.getExpRate()), true, true);
     }
 
     public void givePartyExp(int amount, List<Character> party) {
