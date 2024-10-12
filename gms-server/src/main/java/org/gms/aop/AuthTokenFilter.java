@@ -70,7 +70,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
             String jwt = parseJwt(request);
             // 测试token，所以生产环境一定要把swagger关掉，否则裸奔
-            if (springDocConfigProperties!=null && swaggerUiConfigProperties!=null  && "swagger".equals(jwt) && springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
+            if (springDocConfigProperties != null && swaggerUiConfigProperties != null && "swagger".equals(jwt) && springDocConfigProperties.getApiDocs().isEnabled() && swaggerUiConfigProperties.isEnabled()) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
