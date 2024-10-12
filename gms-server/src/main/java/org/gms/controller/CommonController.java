@@ -6,19 +6,20 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.model.dto.*;
+import org.gms.model.pojo.InformationSearch;
+import org.gms.model.pojo.InformationResult;
 import org.gms.service.CommonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/common")
 public class CommonController {
-
-    @Autowired
     private final CommonService commonService;
 
 
@@ -34,5 +35,12 @@ public class CommonController {
     @PostMapping("/" + ApiConstant.LATEST + "/getAllWorldsOnlinePlayersCount")
     public ResultBody<Integer> getAllWorldsOnlinePlayersCount(@RequestBody SubmitBody<ServerInfoReqDto> submitBody) {
         return ResultBody.success(commonService.getAllWorldsOnlinePlayersCount(submitBody.getData().getWorldIdList()));
+    }
+
+    @Tag(name = "/common/" + ApiConstant.LATEST)
+    @Operation(summary = "资料查询，根据id或者name查询对应信息")
+    @PostMapping("/" + ApiConstant.LATEST + "/informationSearch")
+    public ResultBody<List<InformationResult>> informationSearch(@RequestBody SubmitBody<InformationSearch> submitBody) {
+        return ResultBody.success(commonService.getInformation(submitBody.getData()));
     }
 }

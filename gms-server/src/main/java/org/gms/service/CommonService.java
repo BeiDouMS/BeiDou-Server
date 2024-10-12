@@ -2,25 +2,23 @@ package org.gms.service;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.gms.client.BuffStat;
-import org.gms.client.Character;
-import org.gms.client.Client;
 import org.gms.client.inventory.Equip;
-import org.gms.config.YamlConfig;
+import org.gms.constants.api.InformationType;
 import org.gms.exception.BizException;
-import org.gms.model.dto.ChrOnlineListReqDTO;
-import org.gms.model.dto.EquipmentInfoReqDTO;
-import org.gms.model.dto.EquipmentInfoRtnDTO;
+import org.gms.model.dto.*;
+import org.gms.model.pojo.InformationSearch;
+import org.gms.model.pojo.InformationResult;
 import org.gms.net.server.Server;
-import org.gms.util.BasePageUtil;
+import org.gms.server.CommonInformation;
 import org.gms.util.I18nUtil;
+import org.gms.util.RequireUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -89,5 +87,12 @@ public class CommonService {
 
     }
 
+    public List<InformationResult> getInformation(InformationSearch condition) {
+        RequireUtil.requireNotEmpty(condition.getFilter(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "filter"));
+        if (RequireUtil.isEmpty(condition.getTypes())) {
+            condition.setTypes(Stream.of(InformationType.values()).map(InformationType::getType).collect(Collectors.toList()));
+        }
+        return CommonInformation.getInstance().getStringInformation(condition);
+    }
 
 }
