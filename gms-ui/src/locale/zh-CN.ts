@@ -3,6 +3,7 @@ import cashShop from '@/views/game/cashShop/locale/zh-CN';
 import npcShop from '@/views/game/npcShop/locale/zh-CN';
 import gachapon from '@/views/game/gachapon/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
+import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
 import baseConfig from './zh-CN/base';
@@ -11,6 +12,7 @@ export default {
   // 左侧菜单
   'menu.dashboard': '仪表盘',
   'menu.dashboard.workplace': '工作台',
+  'menu.dashboard.informationSearch': '资料查询',
   'menu.game': '游戏管理',
   'menu.game.npcShop': 'NPC商店',
   'menu.game.cashShop': '商城管理',
@@ -45,4 +47,5 @@ export default {
   ...cashShop,
   ...drop,
   ...gachapon,
+  ...informationSearch,
 };

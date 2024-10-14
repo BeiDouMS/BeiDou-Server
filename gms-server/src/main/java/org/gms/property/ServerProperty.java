@@ -1,14 +1,10 @@
 package org.gms.property;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ConfigurationProperties(prefix = "gms.server")
-@Component
 @Data
 public class ServerProperty {
 
@@ -315,7 +311,7 @@ public class ServerProperty {
 
 
     //Custom NPC overrides. List of NPC IDs.
-    public Map<String, String> NPCS_SCRIPTABLE = new HashMap<>();
+    public Map<Integer, String> NPCS_SCRIPTABLE = new HashMap<>();
 
     public boolean CHANGE_CHANNEL_FORCE_RETURN;
     public int MOB_RESPAWN_RATE;

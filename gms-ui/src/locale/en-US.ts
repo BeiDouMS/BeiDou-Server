@@ -3,6 +3,7 @@ import cashShop from '@/views/game/cashShop/locale/en-US';
 import npcShop from '@/views/game/npcShop/locale/en-US';
 import gachapon from '@/views/game/gachapon/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
+import informationSearch from '@/views/dashboard/informationSearch/locale/en-US';
 import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
 import base from './en-US/base';
@@ -10,6 +11,7 @@ import base from './en-US/base';
 export default {
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.workplace': 'Workplace',
+  'menu.dashboard.informationSearch': 'Information Search',
   'menu.game': 'Game',
   'menu.game.npcShop': 'NPC Shop',
   'menu.game.cashShop': 'Cash Shop',
@@ -42,4 +44,5 @@ export default {
   ...cashShop,
   ...drop,
   ...gachapon,
+  ...informationSearch,
 };

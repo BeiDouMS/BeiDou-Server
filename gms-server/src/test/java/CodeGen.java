@@ -36,7 +36,7 @@ public class CodeGen {
         globalConfig.setBasePackage("org.gms.dao");
         //设置表前缀和只生成哪些表
 //        globalConfig.setTablePrefix("tb_");
-        globalConfig.setGenerateTable("modified_cash_item");
+        globalConfig.setGenerateTable("world_prop", "server_prop");
 
         //设置生成 entity 并启用 Lombok
         globalConfig.setEntityGenerateEnable(true);
@@ -51,6 +51,7 @@ public class CodeGen {
         generator.generate();
     }
 
+    @Deprecated(since = "1.6", forRemoval = true)
     @Test
     public void genPropSql() throws Exception {
         final String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};

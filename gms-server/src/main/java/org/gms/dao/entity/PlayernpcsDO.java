@@ -50,7 +50,7 @@ public class PlayernpcsDO implements Serializable {
 
     private Integer dir;
 
-    private Long scriptid;
+    private Integer scriptid;
 
     private Integer fh;
 
