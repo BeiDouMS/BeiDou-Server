@@ -315,19 +315,6 @@ public class Server {
         }
     }
 
-
-    private void dumpData() {
-        wldRLock.lock();
-        try {
-            log.debug("Worlds: {}", worlds);
-            log.debug("Channels: {}", channels);
-            log.debug("World recommended list: {}", worldRecommendedList);
-            log.debug("---------------------");
-        } finally {
-            wldRLock.unlock();
-        }
-    }
-
     public int addChannel(int worldid) {
         World world;
         Map<Integer, String> channelInfo;

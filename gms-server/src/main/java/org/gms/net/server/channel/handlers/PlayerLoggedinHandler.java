@@ -457,7 +457,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 // Create a copy to prevent always adding entries to the server's list.
                 Map<Integer, String> npcsIds = YamlConfig.config.server.NPCS_SCRIPTABLE
                         .entrySet().stream().collect(Collectors.toMap(
-                                entry -> Integer.parseInt(entry.getKey()),
+                                Entry::getKey,
                                 Entry::getValue
                         ));
 

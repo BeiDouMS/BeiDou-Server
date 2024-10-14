@@ -46,13 +46,8 @@ import java.util.List;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MapFactory {
-    private static final Data nameData;
-    private static final DataProvider mapSource;
-
-    static {
-        nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
-        mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
-    }
+    private static final Data nameData = DataProviderFactory.getDataProvider(WZFiles.STRING).getData("Map.img");
+    private static final DataProvider mapSource = DataProviderFactory.getDataProvider(WZFiles.MAP);
 
     private static void loadLifeFromWz(MapleMap map, Data mapData) {
         for (Data life : mapData.getChildByPath("life")) {
@@ -249,19 +244,7 @@ public class MapFactory {
             map.setSeats(seats);
         }
         if (event == null) {
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs WHERE map = ? AND world = ?")) {
-                ps.setInt(1, mapid);
-                ps.setInt(2, world);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        map.addPlayerNPCMapObject(new PlayerNPC(rs));
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            PlayerNPC.addPlayerNPCMapObject(map);
         }
 
         loadLifeFromWz(map, mapData);
