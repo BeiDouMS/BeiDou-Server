@@ -17,6 +17,7 @@ export default mergeConfig(
     build: {
       rollupOptions: {
         output: {
+            dir: '../gms-server/src/main/resources/static/',    //指定打包路径，方便跟项目一起打包。
           manualChunks: {
             arco: ['@arco-design/web-vue'],
             chart: ['echarts', 'vue-echarts'],

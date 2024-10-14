@@ -26,6 +26,8 @@
     </repositories>
 
     <properties>
+        <outputDirectory>target</outputDirectory>
+        <finalName>BeiDou</finalName>
         <!-- Project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
@@ -225,9 +227,13 @@
     </dependencies>
 
     <build>
-        <finalName>BeiDou</finalName>
+<!--        <finalName>BeiDou</finalName>-->
         <plugins>
             <plugin>
+                <configuration>
+                    <outputDirectory>${outputDirectory}</outputDirectory>
+                    <finalName>${finalName}</finalName>
+                </configuration>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot-maven-plugin}</version>
