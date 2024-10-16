@@ -3345,7 +3345,7 @@ public class PacketCreator {
      * @param msgType
      * @param talk
      * @param endBytes
-     * @param flags 0x1: NO_EXIT; 0x2: NPC_FACE_RIGHT; 0x4: CUSTOM_SPEAKER_NPC; 0x8: PLAYER_AS_SPEAKER;
+     * @param flags 0x1: NO_EXIT; 0x2: PLAYER_AS_SPEAKER; 0x4: CUSTOM_SPEAKER_NPC; 0x8: NPC_FACE_RIGHT;
      * @param speaker NPC who will shown on the right of the dialog if CUSTOM_SPEAKER_NPC(0x4) is set in flags
      * @return
      */
