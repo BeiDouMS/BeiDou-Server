@@ -36,6 +36,6 @@ public class PlayernpcsEquipDO implements Serializable {
 
     private Integer type;
 
-    private Integer equippos;
+    private Short equippos;
 
 }
