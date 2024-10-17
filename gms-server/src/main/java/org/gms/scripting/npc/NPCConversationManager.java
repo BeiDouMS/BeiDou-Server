@@ -440,7 +440,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             }
         }
     }
-    
+
     public void doGachapon() {
         gachaponService.doGachapon(getPlayer(), npc);
     }
@@ -1459,10 +1459,6 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public void sendPnpcOk(String text) {
         sendOk(text, (byte) 3);
-    }
-
-    public void sendPnpcSelect(String text) {
-        sendPnpcSelect("", text);
     }
 
     public void sendPnpcSimple(String prefix, String text) {
