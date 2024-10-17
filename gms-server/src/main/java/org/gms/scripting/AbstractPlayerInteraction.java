@@ -54,10 +54,7 @@ import org.gms.server.maps.MapleMap;
 import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.partyquest.Pyramid;
 import org.gms.server.quest.Quest;
-import org.gms.util.ExtendUtil;
-import org.gms.util.NumberTool;
-import org.gms.util.PacketCreator;
-import org.gms.util.Pair;
+import org.gms.util.*;
 
 import java.awt.*;
 import java.util.List;
@@ -1299,5 +1296,12 @@ public class AbstractPlayerInteraction {
     public void saveOrUpdateAccountExtendValue(String extendName, String extendValue, boolean isDaily) {
         ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getAccountId()), isDaily ? ExtendType.ACCOUNT_EXTEND_DAILY.getType() : ExtendType.ACCOUNT_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
+    }
+
+    public void gainEquip(Equip equip) {
+        if (!InventoryManipulator.checkSpace(getClient(), equip.getItemId(), 1, equip.getOwner())) {
+            message(I18nUtil.getMessage("AbstractPlayerInteraction.gainEquip.message2", InventoryType.EQUIP.getName()));
+        }
+        InventoryManipulator.addFromDrop(getClient(), equip, false);
     }
 }
