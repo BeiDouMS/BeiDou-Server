@@ -1,6 +1,6 @@
 function enter(pi) {
     if (pi.hasItem(4032125) || pi.hasItem(4032126) || pi.hasItem(4032127) || pi.hasItem(4032128) || pi.hasItem(4032129)) {
-        pi.playerMessage(5, "You already have the proof of ability.");
+        pi.playerMessage(5, "你已经有了能力的证物");
         return false;
     }
 
@@ -14,11 +14,11 @@ function enter(pi) {
             pi.spawnMonster(9300294, 87, 88);
             return true;
         } else {
-            pi.playerMessage(5, "Someone is already attempting to defeat the boss. Better come back later.");
+            pi.playerMessage(5, "已经有人在尝试击败Boss，请你稍后再来。");
             return false;
         }
     } else {
-        pi.playerMessage(5, "You cannot access this hall.");
+        pi.playerMessage(5, "只有参加骑士指定的等级考试方可进入");
         return false;
     }
 }
