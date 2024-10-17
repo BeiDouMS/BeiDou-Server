@@ -113,6 +113,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
             short slot = -1;
             int projectile = 0;
             short bulletCount = 1;
+            short supplement = 0;   //用于补充平衡之怒的变量
             StatEffect effect = null;
             if (attack.skill != 0) {
                 effect = attack.getAttackEffect(chr, null);
@@ -148,8 +149,14 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
 
                     boolean bow = ItemConstants.isArrowForBow(id);
                     boolean cbow = ItemConstants.isArrowForCrossBow(id);
+
+                    if (id == ItemId.BALANCED_FURY && (item.getQuantity() - bulletCount) <= 10) {   //平衡之怒低于10，则自动补充，如果设置数值过低时，会造成出拳平A
+                        supplement = (short) -ItemInformationProvider.getInstance().getSlotMax(c,id);  //设定补充到限制的最高数值
+                    }
+
                     if (item.getQuantity() >= bulletCount) { //Fixes the bug where you can't use your last arrow.
                         if (type == WeaponType.CLAW && ItemConstants.isThrowingStar(id) && weapon.getItemId() != ItemId.MAGICAL_MITTEN) {
+                            //这段判断不知道干啥用的，里面又没有内容，看样子是判定 物品ID = 月牙镖 或 平衡之怒 且 等级小于70，或 月牙镖 且 等级小于50
                             if (((id == ItemId.HWABI_THROWING_STARS || id == ItemId.BALANCED_FURY) && chr.getLevel() < 70) || (id == ItemId.CRYSTAL_ILBI_THROWING_STARS && chr.getLevel() < 50)) {
                             } else {
                                 projectile = id;
@@ -181,11 +188,13 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
                     if (effect != null && effect.getBulletConsume() != 0) {
                         bulletConsume = (byte) (effect.getBulletConsume() * (hasShadowPartner ? 2 : 1));
                     }
-
+                    if (supplement < 0 ) {
+                        bulletConsume = supplement;     //将消耗飞镖设为补充飞镖
+                    }
                     if (slot < 0) {
                         log.warn("<ERROR> Projectile to use was unable to be found.");
                     } else {
-                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, slot, bulletConsume, false, true);    //减去消耗品指定栏位物品数量
                     }
                 }
             }
