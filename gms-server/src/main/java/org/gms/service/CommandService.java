@@ -1,10 +1,13 @@
 package org.gms.service;
 
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.command.Command;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
+import org.gms.model.dto.CommandReqDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.springframework.stereotype.Service;
@@ -98,5 +101,44 @@ public class CommandService {
             return null;
         }
     }
+
+    public Page<CommandInfoDO> getCommandListFromDB(CommandReqDTO request) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (request.getLevel() != null) queryWrapper.in("level", request.getLevelList());
+        if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevelList());
+        if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
+        //if (request.getDescription() != null) queryWrapper.like("description", request.getDescription());
+        if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
+        return commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
+
+    }
+    public CommandInfoDO updateCommand(CommandReqDTO request) {
+
+        CommandInfoDO updateCommandInfoDO = commandInfoMapper.selectOneById(request.getId());
+        /**
+         * 只能改开关和等级，其他的不能改
+         * Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
+         * 因为level已经被改成其他的了
+         * DefaultLevel和Clazz也不能改
+         */
+        updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
+        updateCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : updateCommandInfoDO.getEnabled());
+        //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
+        commandInfoMapper.update(updateCommandInfoDO);
+        return updateCommandInfoDO;
+    }
+    public CommandInfoDO insertCommandInfo(CommandReqDTO request) {
+
+        CommandInfoDO insertCommandInfoDO = new CommandInfoDO();
+        insertCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : insertCommandInfoDO.getLevel());
+        insertCommandInfoDO.setSyntax(request.getSyntax() != null ? request.getSyntax() : insertCommandInfoDO.getSyntax());
+        insertCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : insertCommandInfoDO.getDefaultLevel());
+        insertCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : insertCommandInfoDO.getEnabled());
+        insertCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : insertCommandInfoDO.getClazz());
+        //insertCommandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
+        commandInfoMapper.insert(insertCommandInfoDO);
+        return insertCommandInfoDO;
+    }
+
 
 }
