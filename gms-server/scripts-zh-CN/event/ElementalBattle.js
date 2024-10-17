@@ -38,6 +38,8 @@ var eventTime = 20;     // 20 minutes
 
 const maxLobbies = 7;
 
+const YamlConfig = Java.type('org.gms.config.YamlConfig');
+minPlayers = YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
 function init() {
     setEventRequirements();
 }
