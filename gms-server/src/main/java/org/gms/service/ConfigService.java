@@ -4,8 +4,10 @@ import com.alibaba.fastjson2.JSONObject;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.util.StringUtil;
 import lombok.AllArgsConstructor;
+import org.gms.dao.entity.GameConfigDO;
 import org.gms.dao.entity.ServerPropDO;
 import org.gms.dao.entity.WorldPropDO;
+import org.gms.dao.mapper.GameConfigMapper;
 import org.gms.dao.mapper.ServerPropMapper;
 import org.gms.dao.mapper.WorldPropMapper;
 import org.gms.property.ServerProperty;
@@ -24,6 +26,11 @@ import static org.gms.dao.entity.table.WorldPropDOTableDef.WORLD_PROP_D_O;
 public class ConfigService {
     private final WorldPropMapper worldPropMapper;
     private final ServerPropMapper serverPropMapper;
+    private final GameConfigMapper gameConfigMapper;
+
+    public List<GameConfigDO> loadGameConfigs() {
+        return gameConfigMapper.selectAll();
+    }
 
     public List<WorldProperty.WorldsConfig> loadWorldProperty() {
         List<WorldPropDO> worldPropDOS = worldPropMapper.selectListByQuery(QueryWrapper.create()

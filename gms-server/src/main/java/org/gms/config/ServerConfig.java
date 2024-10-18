@@ -13,7 +13,7 @@ import org.springframework.http.HttpHeaders;
 @Configuration
 public class ServerConfig {
     @Bean
-    public FilterRegistrationBean<ServerFilter> filterFilterRegistrationBean(ServerFilter serverFilter) {
+    public FilterRegistrationBean<ServerFilter> filterRegistrationBean(ServerFilter serverFilter) {
         FilterRegistrationBean<ServerFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(serverFilter);
         filterRegistrationBean.addUrlPatterns("/*");
