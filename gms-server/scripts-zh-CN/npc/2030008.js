@@ -113,7 +113,7 @@ function action(mode, type, selection) {
             } else {
                 if (cm.haveItem(4031061) && cm.haveItem(4031062)) {
                     if (!cm.haveItem(4000082, 30)) {
-                        cm.sendOk("你已经完成了试炼，但是还需要 #b30# #t4000082##k 来锻造 5 个 #t4001017#。");
+                        cm.sendOk("你已经完成了试炼，但是还需要 #b#v4000082##t4000082# * 30#k 来锻造 #b5 个 #v4001017##t4001017##k。");
                     } else {
                         cm.completeQuest(100201);
                         cm.gainItem(4031061, -1);
@@ -126,7 +126,7 @@ function action(mode, type, selection) {
 
                     cm.dispose();
                 } else {
-                    cm.sendOk("你缺少一些必需的物品来锻造#b#t4001017##k。");
+                    cm.sendOk("你缺少一些必要的物品\r\n#b#v4031061##t4031061# * 1#k\r\n#b#v4031062##t4031062# * 1#k\r\n来锻造#b#v4001017##t4001017##k。");
                     cm.dispose();
                 }
             }

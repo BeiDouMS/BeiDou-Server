@@ -64,7 +64,8 @@ function start() {
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
     world.setExpRate(8);
-    world.broadcastPacket(PacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
+    // world.broadcastPacket(PacketCreator.serverNotice(6, "The Bunny Onslaught Survival Scanner (BOSS) has detected an Easter Bunny onslaught soon! The GM team has activated the Emergency XP Pool (EXP) that doubles experience gained for the next two hours!"));
+    world.broadcastPacket(PacketCreator.serverNotice(6, "兔子猛攻生存扫描仪（BOSS）已检测到复活节兔子即将发动猛攻！GM团队已激活紧急经验池（EXP），在接下来的 2 小时内，玩家获得的经验将翻倍！"));
 }
 
 function stop() {
@@ -72,7 +73,8 @@ function stop() {
     const PacketCreator = Java.type('org.gms.util.PacketCreator');
     var world = Server.getInstance().getWorld(em.getChannelServer().getWorld());
     world.setExpRate(4);
-    world.broadcastPacket(PacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
+    // world.broadcastPacket(PacketCreator.serverNotice(6, "Unfortunately the Emergency XP Pool (EXP) has run out of juice for now and needs to recharge causing the EXP rate to go back to normal."));
+    world.broadcastPacket(PacketCreator.serverNotice(6, "紧急经验池（EXP）目前能量已经耗尽，需要重新充能，经验倍率恢复正常。"));
 }
 
 // ---------- FILLER FUNCTIONS ----------

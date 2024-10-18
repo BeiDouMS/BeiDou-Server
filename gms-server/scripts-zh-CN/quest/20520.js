@@ -43,7 +43,7 @@ function start(mode, type, selection) {
 	} else if (status == 2) {
 		qm.forceStartQuest();
 		qm.forceCompleteQuest();
-		qm.sendOk("这里有一座只有天鹅座骑士才能享受的特殊坐骑. 如果您感兴趣, 请访问 #b埃雷夫#k. 我会给你提供更多的信息.");
+		qm.sendOk("这里有一座只有皇家骑士才能享受的特殊坐骑. 如果您感兴趣, 请访问 #b埃雷夫#k. 我会给你提供更多的信息.");
 	} else if (status == 3) {
             qm.dispose();
         }

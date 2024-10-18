@@ -18,11 +18,11 @@ function enter(pi) {
             pi.warp(map, 0);
             return true;
         } else {
-            pi.playerMessage(5, "Someone is already in this map.");
+            pi.playerMessage(5, "已经有其他人比你先使用了演武场，请稍后再试！");
             return false;
         }
     } else {
-        pi.playerMessage(5, "Hall #1 can only be entered if you're engaged in Kiku's Acclimation Training.");
+        pi.playerMessage(5, "只有参加Kiku的适应训练，才能进入1号演武场。");
         return false;
     }
 }

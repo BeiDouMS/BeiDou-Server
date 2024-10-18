@@ -10,7 +10,7 @@ var job;
 var koc = [];
 
 function start() {
-    cm.sendNext("嘿 #e#h ##n，我是阿兰和天鹅骑士的职业进阶者。");
+    cm.sendNext("嘿 #e#h ##n，我是阿兰和皇家骑士的职业进阶者。");
 }
 
 function action(m, t, s) {

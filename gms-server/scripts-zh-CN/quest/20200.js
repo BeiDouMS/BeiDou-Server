@@ -31,7 +31,7 @@ function start(mode, type, selection) {
         qm.dispose();
     } else {
         if (status == 0 && mode == 0) {
-            qm.sendNext("你觉得作为一个实习生你还有任务要做吗？我赞扬你的耐心，但这太过分了。天鹅座骑士迫切需要新的，更强大的骑士。");
+            qm.sendNext("你觉得作为一个实习生你还有任务要做吗？我赞扬你的耐心，但这太过分了。皇家骑士迫切需要新的，更强大的骑士。");
             qm.dispose();
             return;
         }
