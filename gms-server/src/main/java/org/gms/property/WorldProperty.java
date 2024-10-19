@@ -15,7 +15,7 @@ public class WorldProperty {
         public String server_message = "Welcome!";
         public String event_message = "";
         public String why_am_i_recommended = "";
-        public float channels = 1;
+        public int channels = 1;
         public float exp_rate = 1;
         public float meso_rate = 1;
         public float drop_rate = 1;
