@@ -96,6 +96,8 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     @Getter
     private final NextLevelContext nextLevelContext = new NextLevelContext();
 
+    private  String errorMsg;
+
     private String getDefaultTalk(int npcid) {
         String talk = npcDefaultTalks.get(npcid);
         if (talk == null) {
@@ -1285,21 +1287,16 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         nextLevelContext.setNextLevel(yesLevel);
     }
 
-
-    /**
-     * 以下为展示玩家角色对话框的方法
-     * 支持有状态和无状态所有方法
-     */
-
     /**
      * 只有下一步的对话
      * 对应sendNext
      *
      * @param nextLevel 下一步方法
      * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcNextLevel(String nextLevel, String text) {
-        sendNext(text, (byte) 3);
+    public void sendNextLevel(String nextLevel, String text, byte speaker) {
+        sendNext(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_NEXT);
         nextLevelContext.setNextLevel(nextLevel);
     }
@@ -1310,9 +1307,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param lastLevel 上一步方法
      * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcLastLevel(String lastLevel, String text) {
-        sendPrev(text, (byte) 3);
+    public void sendLastLevel(String lastLevel, String text, byte speaker) {
+        sendPrev(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_LAST);
         nextLevelContext.setLastLevel(lastLevel);
     }
@@ -1324,9 +1322,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param lastLevel 上一步方法
      * @param nextLevel 下一步方法
      * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcLastNextLevel(String lastLevel, String nextLevel, String text) {
-        sendNextPrev(text, (byte) 3);
+    public void sendLastNextLevel(String lastLevel, String nextLevel, String text, byte speaker) {
+        sendNextPrev(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_LAST_NEXT);
         nextLevelContext.setLastLevel(lastLevel);
         nextLevelContext.setNextLevel(nextLevel);
@@ -1338,9 +1337,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param nextLevel 点击ok的下一步方法
      * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcOkLevel(String nextLevel, String text) {
-        sendOk(text, (byte) 3);
+    public void sendOkLevel(String nextLevel, String text, byte speaker) {
+        sendOk(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_OK);
         nextLevelContext.setNextLevel(nextLevel);
     }
@@ -1350,9 +1350,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * 对应sendSimple
      *
      * @param text 对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcSelectLevel(String text) {
-        sendPnpcSelectLevel("", text);
+    public void sendSelectLevel(String text, byte speaker) {
+        sendSelectLevel("", text, speaker);
     }
 
     /**
@@ -1361,9 +1362,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param prefix 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
      * @param text   对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcSelectLevel(String prefix, String text) {
-        sendSimple(text, (byte) 3);
+    public void sendSelectLevel(String prefix, String text, byte speaker) {
+        sendSimple(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_SELECT);
         nextLevelContext.setPrefix(prefix);
     }
@@ -1374,9 +1376,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param nextLevel 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
      * @param text   对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcNextSelectLevel(String nextLevel, String text) {
-        sendSimple(text, (byte) 3);
+    public void sendNextSelectLevel(String nextLevel, String text, byte speaker) {
+        sendSimple(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_NEXT_SELECT);
         nextLevelContext.setNextLevel(nextLevel);
     }
@@ -1390,9 +1393,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param def       默认值
      * @param min       最小值
      * @param max       最大值
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void getPnpcInputNumberLevel(String nextLevel, String text, int def, int min, int max) {
-        sendGetNumber(text, def, min, max,(byte) 3);
+    public void getPnpcInputNumberLevel(String nextLevel, String text, int def, int min, int max, byte speaker) {
+        sendGetNumber(text, def, min, max,speaker);
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_NUMBER);
         nextLevelContext.setNextLevel(nextLevel);
     }
@@ -1403,9 +1407,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      *
      * @param nextLevel 下一步方法
      * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void getPnpcInputTextLevel(String nextLevel, String text) {
-        sendGetText(text, (byte) 3);
+    public void getPnpcInputTextLevel(String nextLevel, String text, byte speaker) {
+        sendGetText(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.GET_INPUT_TEXT);
         nextLevelContext.setNextLevel(nextLevel);
     }
@@ -1417,9 +1422,10 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param decLineLevel 拒绝方法
      * @param acceptLevel  接受方法
      * @param text         对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text) {
-        sendAcceptDecline(text, (byte) 3);
+    public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text, byte speaker) {
+        sendAcceptDecline(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_ACCEPT_DECLINE);
         nextLevelContext.setLastLevel(decLineLevel);
         nextLevelContext.setNextLevel(acceptLevel);
@@ -1432,52 +1438,12 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      * @param noLevel  否方法
      * @param yesLevel 是方法
      * @param text     对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
      */
-    public void sendPnpcYesNoLevel(String noLevel, String yesLevel, String text) {
-        sendYesNo(text, (byte) 3);
+    public void sendYesNoLevel(String noLevel, String yesLevel, String text, byte speaker) {
+        sendYesNo(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_YES_NO);
         nextLevelContext.setLastLevel(noLevel);
         nextLevelContext.setNextLevel(yesLevel);
-    }
-
-    /**
-     * 以下为旧函数添加PlayerToNpc功能
-     *
-     */
-
-    public void sendPnpcNext(String text) {
-        sendNext(text, (byte) 3);
-    }
-
-    public void sendPnpcPrev(String text) {
-        sendPrev(text, (byte) 3);
-    }
-
-    public void sendPnpcNextPrev(String text) {
-        sendNextPrev(text, (byte) 3);
-    }
-
-    public void sendPnpcOk(String text) {
-        sendOk(text, (byte) 3);
-    }
-
-    public void sendPnpcSimple(String prefix, String text) {
-        sendSimple(text, (byte) 3);
-    }
-
-    public void sendPnpcGetNumber(String text, int def, int min, int max) {
-        sendGetNumber(text, def, min, max, (byte) 3);
-    }
-
-    public void sendPnpcGetText(String text) {
-        sendGetText(text, (byte) 3);
-    }
-
-    public void sendPnpcAcceptDecline(String text) {
-        sendAcceptDecline(text, (byte) 3);
-    }
-
-    public void sendPnpcYesNo(String text) {
-        sendYesNo(text, (byte) 3);
     }
 }
