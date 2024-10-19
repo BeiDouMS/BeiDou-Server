@@ -37,19 +37,19 @@ function start(mode, type, selection) {
             status++;
         } else {
             status--;
-            if (status == 0)
-                qm.sendNext("啊，你来了。。。这真令人兴奋。我很感激你成为皇家骑士的决定。我等你这样的人等了很久了。有勇气面对黑魔法师而不退缩的人...");
-            else if (status == 1)
-                qm.sendNext("对抗想吞没整个枫叶世界的黑魔法师的邪恶本性，他的弟子的狡猾本性，以及对抗疯狂怪物的身体战等着你。总有一天，你甚至可以把自己变成仇敌，折磨你 ...");
-            else if (status == 2)
-                qm.sendOk("但我不担心这些。我相信你一定能战胜这一切，保护枫树世界免受黑魔法师的伤害。当然，你必须变得比现在强一点，对吧?");
-            else if (status == 3) {
-                qm.gainItem(1142065, 1); // Noblesse Medal * 1
-                qm.gainExp(20); //gain 20 exp!!
-                qm.forceStartQuest();
-                qm.forceCompleteQuest();
-                qm.dispose();
-            }
+        }
+        if (status == 0)
+            qm.sendNext("啊，你来了。。。这真令人兴奋。我很感激你成为皇家骑士的决定。我等你这样的人等了很久了。有勇气面对黑魔法师而不退缩的人...");
+        else if (status == 1)
+            qm.sendNext("对抗想吞没整个枫叶世界的黑魔法师的邪恶本性，他的弟子的狡猾本性，以及对抗疯狂怪物的身体战等着你。总有一天，你甚至可以把自己变成仇敌，折磨你 ...");
+        else if (status == 2)
+            qm.sendOk("但我不担心这些。我相信你一定能战胜这一切，保护枫树世界免受黑魔法师的伤害。当然，你必须变得比现在强一点，对吧?");
+        else if (status == 3) {
+            qm.gainItem(1142065, 1); // Noblesse Medal * 1
+            qm.gainExp(20); //gain 20 exp!!
+            qm.forceStartQuest();
+            qm.forceCompleteQuest();
+            qm.dispose();
         }
     }
 }

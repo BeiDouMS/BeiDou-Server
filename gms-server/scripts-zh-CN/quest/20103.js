@@ -27,11 +27,11 @@ var InitialEquip = {    //一转才需要配置发放装备物资
         ],
     3 : [
             {1452051 : 1},      //初级弓手的弓
-            {2060000 : 2000}    //弓矢
+            {2060000 : 200}    //弓矢
         ],
     4 : [
             {1472061 : 1},      //初级飞侠拳套
-            {2070000 : 2000}    //海星镖
+            {2070000 : 200}    //海星镖
         ],
     5 : [
             {1482014 : 1},      //新手专用指套
@@ -94,7 +94,8 @@ function end(mode, type, selection) {
                     qm.getPlayer().resetStats();
                     qm.forceCompleteQuest();
                     InitialEquip.forEach(o => (Object.entries(o).forEach(([i,q]) => (console.log(i,q),qm.gainItem(Number(i), Number(q))))));
-                    qm.gainItem(medalid, 1);
+                    qm.gainItem(medalid, 1); //原始流程是女皇任务给的勋章，需要配合WZ给任务加入自动完成任务代码,比较麻烦，在这里给了。
+                    qm.completeQuest(completeQuestID); //直接完成女皇的任务，这样女皇头顶不会一直顶着书本。
                     qm.sendNext(`从这一刻起，女皇任命你为#b初级骑士#k！\r\n带上我为你准备初始物资开始历练吧！\r\n\r\n${checkItem.InitialEquipMsg.join("\r\n")}\r\n#b#v${medalid}##t${medalid}##k * #r1#k`);
                 }
             }

@@ -91,7 +91,7 @@ function end(mode, type, selection) {
                     qm.gainItem(ProofofExamID, -30);
                     qm.getPlayer().changeJob(job);
                     qm.completeQuest();
-                    qm.gainItem(medalid, 1); //原始流程是女皇任务给的勋章，需要配合WZ给任务29908加入自动完成任务代码,比较麻烦，在这里给了。
+                    qm.gainItem(medalid, 1); //原始流程是女皇任务给的勋章，需要配合WZ给任务加入自动完成任务代码,比较麻烦，在这里给了。
                     qm.completeQuest(completeQuestID); //直接完成女皇的任务，这样女皇头顶不会一直顶着书本。
                 }
                 qm.sendNext(`训练已经结束。你现在皇家骑士团的骑士官员.\r\n获得女皇赋予的勋章：\r\n#b#v${medalid}##t${medalid}##k`);
