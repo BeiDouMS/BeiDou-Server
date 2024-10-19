@@ -440,12 +440,13 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
 
         } else if (itemType == 524) {
+            boolean isUse = false;
             for (byte i = 0; i < 3; i++) {
                 Pet pet = player.getPet(i);
                 if (pet != null) {
                     Pair<Integer, Boolean> pair = pet.canConsume(itemId);
-
                     if (pair.getRight()) {
+                        isUse = true;
                         pet.gainTamenessFullness(player, pair.getLeft(), 100, 1, true);
                         remove(c, position, itemId);
                         break;
@@ -454,6 +455,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     break;
                 }
             }
+            if(!isUse) player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message10")); //所有宠物都不匹配时弹出提示。
             c.sendPacket(PacketCreator.enableActions());
         } else if (itemType == 530) {
             ii.getItemEffect(itemId).applyTo(player);
