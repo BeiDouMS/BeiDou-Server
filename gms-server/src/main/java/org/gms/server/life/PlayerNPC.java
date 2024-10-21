@@ -25,16 +25,16 @@ import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.InventoryType;
-import org.gms.client.inventory.Item;
 import org.gms.config.YamlConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.NpcId;
 import org.gms.dao.entity.PlayernpcsDO;
-import org.gms.dao.mapper.PlayernpcsMapper;
+import org.gms.dao.entity.PlayernpcsEquipDO;
 import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.gms.net.server.world.World;
+import org.gms.service.NpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.life.positioner.PlayerNPCPodium;
@@ -52,15 +52,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -75,6 +68,7 @@ public class PlayerNPC extends AbstractMapObject {
     private static final AtomicInteger runningOverallRank = new AtomicInteger();
     private static final List<AtomicInteger> runningWorldRank = new ArrayList<>();
     private static final Map<Pair<Integer, Integer>, AtomicInteger> runningWorldJobRank = new HashMap<>();
+    private static final NpcService npcService = ServerManager.getApplicationContext().getBean(NpcService.class);
 
     @Getter
     private Map<Short, Integer> equips = new HashMap<>();
@@ -123,47 +117,31 @@ public class PlayerNPC extends AbstractMapObject {
         setObjectId(oid);
     }
 
-    public PlayerNPC(ResultSet rs) {
-        try {
-            CY = rs.getInt("cy");
-            name = rs.getString("name");
-            hair = rs.getInt("hair");
-            face = rs.getInt("face");
-            skin = rs.getByte("skin");
-            gender = rs.getInt("gender");
-            dir = rs.getInt("dir");
-            FH = rs.getInt("fh");
-            RX0 = rs.getInt("rx0");
-            RX1 = rs.getInt("rx1");
-            scriptId = rs.getInt("scriptid");
-
-            worldRank = rs.getInt("worldrank");
-            overallRank = rs.getInt("overallrank");
-            worldJobRank = rs.getInt("worldjobrank");
-            overallJobRank = GameConstants.getOverallJobRankByScriptId(scriptId);
-            job = rs.getInt("job");
-
-            setPosition(new Point(rs.getInt("x"), CY));
-            setObjectId(rs.getInt("id"));
-
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("SELECT equippos, equipid FROM playernpcs_equip WHERE npcid = ?")) {
-                ps.setInt(1, rs.getInt("id"));
-
-                try (ResultSet rs2 = ps.executeQuery()) {
-                    while (rs2.next()) {
-                        equips.put(rs2.getShort("equippos"), rs2.getInt("equipid"));
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public PlayerNPC(PlayernpcsDO npcDO, List<PlayernpcsEquipDO> equipDOList) {
+        CY = Optional.ofNullable(npcDO.getCy()).orElse(0);
+        name = Optional.ofNullable(npcDO.getName()).orElse("");
+        hair = Optional.ofNullable(npcDO.getHair()).orElse(0);
+        face = Optional.ofNullable(npcDO.getFace()).orElse(0);
+        skin = Optional.ofNullable(npcDO.getSkin()).map(Integer::byteValue).orElse((byte) 0);
+        gender = Optional.ofNullable(npcDO.getGender()).orElse(0);
+        dir = Optional.ofNullable(npcDO.getDir()).orElse(0);
+        FH = Optional.ofNullable(npcDO.getFh()).orElse(0);
+        RX0 = Optional.ofNullable(npcDO.getRx0()).orElse(0);
+        RX1 = Optional.ofNullable(npcDO.getRx1()).orElse(0);
+        scriptId = Optional.ofNullable(npcDO.getScriptid()).orElse(0);
+        worldRank = Optional.ofNullable(npcDO.getWorldrank()).orElse(0);
+        overallRank = Optional.ofNullable(npcDO.getOverallrank()).orElse(0);
+        worldJobRank = Optional.ofNullable(npcDO.getWorldjobrank()).orElse(0);
+        overallJobRank = GameConstants.getOverallJobRankByScriptId(scriptId);
+        job = Optional.ofNullable(npcDO.getJob()).orElse(0);
+        setPosition(new Point(Optional.ofNullable(npcDO.getX()).orElse(0), CY));
+        int id = Optional.ofNullable(npcDO.getId()).orElse(0);
+        setObjectId(id);
+        equipDOList.forEach(equipDO -> equips.put(Optional.ofNullable(equipDO.getEquippos()).orElse((short) 0), equipDO.getEquipid()));
     }
 
     public static void loadRunningRankData(int worlds) {
-        PlayernpcsMapper playernpcsMapper = ServerManager.getApplicationContext().getBean(PlayernpcsMapper.class);
-        List<PlayernpcsDO> playernpcsDOList = playernpcsMapper.selectAll();
+        List<PlayernpcsDO> playernpcsDOList = npcService.getPlayerNpcDOs(new PlayernpcsDO());
         runningOverallRank.set(playernpcsDOList.size() + 1);
 
         for (int i = 0; i < worlds; i++) {
@@ -224,23 +202,8 @@ public class PlayerNPC extends AbstractMapObject {
     }
 
     public static boolean canSpawnPlayerNpc(String name, int mapid) {
-        boolean ret = true;
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT name FROM playernpcs WHERE name LIKE ? AND map = ?")) {
-            ps.setString(1, name);
-            ps.setInt(2, mapid);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    ret = false;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
+        List<PlayernpcsDO> playerNpcDOs = npcService.getPlayerNpcDOs(PlayernpcsDO.builder().name(name).map(mapid).build());
+        return playerNpcDOs.isEmpty();
     }
 
     public void updatePlayerNPCPosition(MapleMap map, Point newPos) {
@@ -355,79 +318,37 @@ public class PlayerNPC extends AbstractMapObject {
         int worldId = chr.getWorld();
         int jobId = (chr.getJob().getId() / 100) * 100;
 
-        PlayerNPC ret;
-        try (Connection con = DatabaseConnection.getConnection()) {
-            boolean createNew = false;
-            try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs WHERE scriptid = ?")) {
-                ps.setInt(1, scriptId);
-
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (!rs.next()) {
-                        createNew = true;
-                    }
-                }
-            }
-
-            if (createNew) {   // creates new playernpc if scriptid doesn't exist
-                final int npcId;
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO playernpcs (name, hair, face, skin, gender, x, cy, world, map, scriptid, dir, fh, rx0, rx1, worldrank, overallrank, worldjobrank, job) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setString(1, chr.getName());
-                    ps.setInt(2, chr.getHair());
-                    ps.setInt(3, chr.getFace());
-                    ps.setInt(4, chr.getSkinColor().getId());
-                    ps.setInt(5, chr.getGender());
-                    ps.setInt(6, pos.x);
-                    ps.setInt(7, pos.y);
-                    ps.setInt(8, worldId);
-                    ps.setInt(9, mapId);
-                    ps.setInt(10, scriptId);
-                    ps.setInt(11, 1);    // default direction
-                    ps.setInt(12, map.getFootholds().findBelow(pos).getId());
-                    ps.setInt(13, pos.x + 50);
-                    ps.setInt(14, pos.x - 50);
-                    ps.setInt(15, runningWorldRank.get(worldId).getAndIncrement());
-                    ps.setInt(16, runningOverallRank.getAndIncrement());
-                    ps.setInt(17, getAndIncrementRunningWorldJobRanks(worldId, jobId));
-                    ps.setInt(18, jobId);
-                    ps.executeUpdate();
-
-                    try (ResultSet rs = ps.getGeneratedKeys()) {
-                        rs.next();
-                        npcId = rs.getInt(1);
-                    }
-                }
-
-                try (PreparedStatement ps = con.prepareStatement("INSERT INTO playernpcs_equip (npcid, equipid, equippos) VALUES (?, ?, ?)")) {
-                    ps.setInt(1, npcId);
-
-                    for (Item equip : chr.getInventory(InventoryType.EQUIPPED)) {
-                        int position = Math.abs(equip.getPosition());
-                        if ((position < 12 && position > 0) || (position > 100 && position < 112)) {
-                            ps.setInt(2, equip.getItemId());
-                            ps.setInt(3, equip.getPosition());
-                            ps.addBatch();
-                        }
-                    }
-                    ps.executeBatch();
-                }
-
-                try (PreparedStatement ps = con.prepareStatement("SELECT * FROM playernpcs WHERE id = ?")) {
-                    ps.setInt(1, npcId);
-
-                    try (ResultSet rs = ps.executeQuery()) {
-                        rs.next();
-                        ret = new PlayerNPC(rs);
-                    }
-                }
-            } else {
-                ret = null;
-            }
-
-            return ret;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        List<PlayernpcsDO> playerNpcDOs = npcService.getPlayerNpcDOs(PlayernpcsDO.builder().scriptid(scriptId).build());
+        if (!playerNpcDOs.isEmpty()) {
             return null;
         }
+        PlayernpcsDO playerNpcDO = PlayernpcsDO.builder()
+                .name(chr.getName())
+                .hair(chr.getHair())
+                .face(chr.getFace())
+                .skin(chr.getSkinColor().getId())
+                .gender(chr.getGender())
+                .x(pos.x)
+                .cy(pos.y)
+                .world(worldId)
+                .map(mapId)
+                .scriptid(scriptId)
+                .dir(1)
+                .fh(map.getFootholds().findBelow(pos).getId())
+                .rx0(pos.x + 50)
+                .rx1(pos.x - 50)
+                .worldrank(runningWorldRank.get(worldId).getAndIncrement())
+                .overallrank(runningOverallRank.getAndIncrement())
+                .worldjobrank(getAndIncrementRunningWorldJobRanks(worldId, jobId))
+                .job(jobId)
+                .build();
+        List<PlayernpcsEquipDO> playerNpcEquipDOS = chr.getInventory(InventoryType.EQUIPPED).list().stream()
+                .map(equip -> PlayernpcsEquipDO.builder()
+                        .equipid(equip.getItemId())
+                        .equippos(equip.getPosition())
+                        .build())
+                .toList();
+        return npcService.createPlayerNPC(playerNpcDO, playerNpcEquipDOS);
     }
 
     private static List<Integer> removePlayerNPCInternal(MapleMap map, Character chr) {
@@ -594,5 +515,10 @@ public class PlayerNPC extends AbstractMapObject {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void addPlayerNPCMapObject(MapleMap map) {
+        List<PlayerNPC> playerNPCList = npcService.getPlayerNPC(PlayernpcsDO.builder().map(map.getId()).world(map.getWorld()).build());
+        playerNPCList.forEach(map::addPlayerNPCMapObject);
     }
 }

@@ -4,12 +4,22 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import org.gms.aop.ServerFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 
 @Configuration
-public class SwaggerConfig {
+public class ServerConfig {
+    @Bean
+    public FilterRegistrationBean<ServerFilter> filterRegistrationBean(ServerFilter serverFilter) {
+        FilterRegistrationBean<ServerFilter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(serverFilter);
+        filterRegistrationBean.addUrlPatterns("/*");
+        return filterRegistrationBean;
+    }
+
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()

@@ -22,6 +22,16 @@ const DASHBOARD: AppRouteRecordRaw = {
         roles: ['admin'],
       },
     },
+    {
+      path: 'informationSearch',
+      name: 'informationSearch',
+      component: () => import('@/views/dashboard/informationSearch/index.vue'),
+      meta: {
+        locale: 'menu.dashboard.informationSearch',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
   ],
 };
 

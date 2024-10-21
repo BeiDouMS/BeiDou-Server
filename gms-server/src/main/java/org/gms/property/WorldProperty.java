@@ -1,31 +1,28 @@
 package org.gms.property;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@ConfigurationProperties(prefix = "gms.world")
-@Component
 @Data
 public class WorldProperty {
     private List<WorldsConfig> worlds;
 
     @Data
     public static class WorldsConfig {
+        public int id = 0;
         public int flag = 0;
         public String server_message = "Welcome!";
         public String event_message = "";
         public String why_am_i_recommended = "";
         public int channels = 1;
-        public int exp_rate = 1;
-        public int meso_rate = 1;
-        public int drop_rate = 1;
-        public int boss_drop_rate = 1;
-        public int quest_rate = 1;
-        public int travel_rate = 1;
-        public int fishing_rate = 1;
+        public float exp_rate = 1;
+        public float meso_rate = 1;
+        public float drop_rate = 1;
+        public float boss_drop_rate = 1;
+        public float quest_rate = 1;
+        public float travel_rate = 1;
+        public float fishing_rate = 1;
         public float level_exp_rate = 0;
         public int quick_level = 0;
         public float quick_level_exp_rate = 0;

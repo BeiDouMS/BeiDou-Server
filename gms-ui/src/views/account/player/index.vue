@@ -190,7 +190,7 @@
             },
             {
               type: 'number',
-              min: 0,
+              min: 3,
               message: $t('account.player.form.rate.type'),
             },
           ]"

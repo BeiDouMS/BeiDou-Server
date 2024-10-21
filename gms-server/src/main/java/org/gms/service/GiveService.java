@@ -377,7 +377,7 @@ public class GiveService {
         ));
     }
 
-    private void giveRateChr(Character chr, String type, int rate) {
+    private void giveRateChr(Character chr, String type, float rate) {
         if (rate < 1) {
             throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_ZERO", "rate"));
         }

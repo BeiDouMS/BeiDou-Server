@@ -42,8 +42,8 @@ public class MesoRateCommand extends Command {
             return;
         }
 
-        int mesorate = Math.max(Integer.parseInt(params[0]), 1);
-        c.getWorldServer().setMesoRate(mesorate);
-        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("MesoRateCommand.message3", mesorate)));
+        float mesoRate = Math.max(Float.parseFloat(params[0]), 1F);
+        c.getWorldServer().setMesoRate(mesoRate);
+        c.getWorldServer().broadcastPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("MesoRateCommand.message3", mesoRate)));
     }
 }

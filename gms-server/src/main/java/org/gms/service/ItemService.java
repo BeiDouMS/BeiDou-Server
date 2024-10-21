@@ -23,8 +23,7 @@ public class ItemService {
         if (!ItemConstants.getInventoryType(itemId).equals(InventoryType.EQUIP)) {
             throw new BizException(I18nUtil.getExceptionMessage("ONLY_SUPPORT_GIVE_EQUIP"));
         }
-        Equip equip = (Equip) ItemInformationProvider.getInstance().getEquipById(itemId);
 
-        return equip;
+        return (Equip) ItemInformationProvider.getInstance().getEquipById(itemId);
     }
 }
