@@ -1,9 +1,9 @@
 package org.gms.dao.entity;
 
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,12 +51,14 @@ public class WorldPropDO implements Serializable {
     /**
      * 大区推荐信息
      */
-    private String recommendMessage;
+    @Column("recommend_message")
+    private String whyAmIRecommended;
 
     /**
      * 频道数
      */
-    private Integer channelSize;
+    @Column("channel_size")
+    private Integer channels;
 
     /**
      * 经验倍率

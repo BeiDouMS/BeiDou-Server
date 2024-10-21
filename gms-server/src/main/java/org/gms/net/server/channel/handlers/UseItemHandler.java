@@ -34,6 +34,7 @@ import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.StatEffect;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 
 /**
@@ -89,7 +90,7 @@ public final class UseItemHandler extends AbstractPacketHandler {
                 if (ii.getItemEffect(toUse.getItemId()).applyTo(chr)) {
                     remove(c, slot);
                 } else {
-                    chr.dropMessage(5, "You cannot recover from a banish state at the moment.");
+                    chr.dropMessage(5, I18nUtil.getMessage("UseItemHandler.message1"));
                 }
                 return;
             }

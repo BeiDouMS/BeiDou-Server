@@ -51,7 +51,7 @@ function action(mode, type, selection) {
     } else if (status === 2) {
         if (selection === 0) {
             if (cm.getChar().getLevel() === cm.getChar().getMaxClassLevel()) {
-                cm.sendSimple("我明白了... 你想选择哪条路？\r\n\r\n#L0##b探险家（初心者）#l\r\n#L1##b天鹅骑士团（贵族）#l\r\n#L2##b阿兰（传说）#l");
+                cm.sendSimple("我明白了... 你想选择哪条路？\r\n\r\n#L0##b探险家（初心者）#l\r\n#L1##b皇家骑士团（贵族）#l\r\n#L2##b阿兰（传说）#l");
             } else {
                 cm.sendOk("看起来你的冒险之旅还没有结束……当你达到等级 " + cm.getChar().getMaxClassLevel() +"时再回来吧。");
                 cm.dispose();

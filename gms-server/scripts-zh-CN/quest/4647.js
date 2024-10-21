@@ -26,26 +26,26 @@
 
 var status = -1;
 
-function start(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
-    } else {
-        status++;
-        if (status == 0) {
-            qm.sendAcceptDecline("若你真的有心想要学习带领多只宠物的技能的话，就去想办法把宠物点心拿给我吧！");
-        } else if (status == 1) {
-            if (mode == 0) {
-                qm.sendOk("没有付出是不会有收获的！你就再好好考虑看看吧！");
-            } else {
-                qm.forceStartQuest();
-                // qm.sendOk("这东西在一般商人那里是买不到，但在商城应该就可以买到宠物点心，你就仔细找找看吧！");
-            }
-            qm.dispose();
-        } else {
-            qm.dispose();
-        }
-    }
-}
+// function start(mode, type, selection) {
+//     if (mode == -1) {
+//         qm.dispose();
+//     } else {
+//         status++;
+//         if (status == 0) {
+//             qm.sendAcceptDecline("若你真的有心想要学习带领多只宠物的技能的话，就去想办法把宠物点心拿给我吧！");
+//         } else if (status == 1) {
+//             if (mode == 0) {
+//                 qm.sendOk("没有付出是不会有收获的！你就再好好考虑看看吧！");
+//             } else {
+//                 qm.forceStartQuest();
+//                 // qm.sendOk("这东西在一般商人那里是买不到，但在商城应该就可以买到宠物点心，你就仔细找找看吧！");
+//             }
+//             qm.dispose();
+//         } else {
+//             qm.dispose();
+//         }
+//     }
+// }
 
 function end(mode, type, selection) {
     if (mode == -1) {

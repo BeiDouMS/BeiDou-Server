@@ -24,7 +24,7 @@
  */
 
 var isPq = true;
-var minPlayers = 1, maxPlayers = 6;
+var minPlayers = 6, maxPlayers = 6;
 var minLevel = 50, maxLevel = 255;
 var entryMap = 280010000;
 var exitMap = 211042300;
@@ -37,6 +37,9 @@ var maxMapId = 280011006;
 var eventTime = 30;     // 30 minutes
 
 const maxLobbies = 1;
+
+const YamlConfig = Java.type('org.gms.config.YamlConfig');
+minPlayers = YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : minPlayers;  //如果解除远征队人数限制，则最低人数改为1人
 
 function init() {
     setEventRequirements();
