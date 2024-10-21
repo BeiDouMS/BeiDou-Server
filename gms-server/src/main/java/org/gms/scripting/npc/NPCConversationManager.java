@@ -244,7 +244,15 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         nextLevelContext.clear();
         getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, ""));
     }
+    public void sendGetNumber(String text, int def, int min, int max,byte speaker) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalkNum(npc, text, def, min, max,speaker));
+    }
 
+    public void sendGetText(String text,byte speaker) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalkText(npc, text, "",speaker));
+    }
     /*
      * 0 = ariant colliseum
      * 1 = Dojo
@@ -432,7 +440,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
             }
         }
     }
-    
+
     public void doGachapon() {
         gachaponService.doGachapon(getPlayer(), npc);
     }
@@ -1272,6 +1280,166 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
      */
     public void sendYesNoLevel(String noLevel, String yesLevel, String text) {
         sendYesNo(text);
+        nextLevelContext.setLevelType(NextLevelType.SEND_YES_NO);
+        nextLevelContext.setLastLevel(noLevel);
+        nextLevelContext.setNextLevel(yesLevel);
+    }
+
+    /**
+     * 只有下一步的对话
+     * 对应sendNext
+     *
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendNextLevel(String nextLevel, String text, byte speaker) {
+        sendNext(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_NEXT);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
+     * 只有上一步的对话
+     * 对应sendPrev
+     *
+     * @param lastLevel 上一步方法
+     * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendLastLevel(String lastLevel, String text, byte speaker) {
+        sendPrev(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_LAST);
+        nextLevelContext.setLastLevel(lastLevel);
+    }
+
+    /**
+     * 有上一步和下一步的对话
+     * 对应sendNextPrev
+     *
+     * @param lastLevel 上一步方法
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendLastNextLevel(String lastLevel, String nextLevel, String text, byte speaker) {
+        sendNextPrev(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_LAST_NEXT);
+        nextLevelContext.setLastLevel(lastLevel);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
+     * 只有ok按钮的对话
+     * 对应sendOk
+     *
+     * @param nextLevel 点击ok的下一步方法
+     * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendOkLevel(String nextLevel, String text, byte speaker) {
+        sendOk(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_OK);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
+     * 多个选项的对话，选择后自动路由到level + selection对应的方法
+     * 对应sendSimple
+     *
+     * @param text 对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendSelectLevel(String text, byte speaker) {
+        sendSelectLevel("", text, speaker);
+    }
+
+    /**
+     * 多个选项的对话，选择后自动路由到level + prefix + selection对应的方法
+     * 对应sendSimple
+     *
+     * @param prefix 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
+     * @param text   对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendSelectLevel(String prefix, String text, byte speaker) {
+        sendSimple(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_SELECT);
+        nextLevelContext.setPrefix(prefix);
+    }
+
+    /**
+     * 多个选项的对话，选择后路由到指定方法，将玩家的选择传入
+     * 对应sendSimple
+     *
+     * @param nextLevel 方法前缀，如果脚本有多次要选择的地方，可以通过不同的前缀区分
+     * @param text   对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendNextSelectLevel(String nextLevel, String text, byte speaker) {
+        sendSimple(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_NEXT_SELECT);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
+     * 获取玩家输入数字的对话
+     * 对应sendGetNumber
+     *
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     * @param def       默认值
+     * @param min       最小值
+     * @param max       最大值
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void getPnpcInputNumberLevel(String nextLevel, String text, int def, int min, int max, byte speaker) {
+        sendGetNumber(text, def, min, max,speaker);
+        nextLevelContext.setLevelType(NextLevelType.GET_INPUT_NUMBER);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
+     * 获取玩家输入字符串的对话
+     * 对应sendGetText
+     *
+     * @param nextLevel 下一步方法
+     * @param text      对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void getPnpcInputTextLevel(String nextLevel, String text, byte speaker) {
+        sendGetText(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.GET_INPUT_TEXT);
+        nextLevelContext.setNextLevel(nextLevel);
+    }
+
+    /**
+     * 有接受和拒绝的对话
+     * 对应sendAcceptDecline
+     *
+     * @param decLineLevel 拒绝方法
+     * @param acceptLevel  接受方法
+     * @param text         对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendAcceptDeclineLevel(String decLineLevel, String acceptLevel, String text, byte speaker) {
+        sendAcceptDecline(text, speaker);
+        nextLevelContext.setLevelType(NextLevelType.SEND_ACCEPT_DECLINE);
+        nextLevelContext.setLastLevel(decLineLevel);
+        nextLevelContext.setNextLevel(acceptLevel);
+    }
+
+    /**
+     * 有是和否的对话
+     * 对应sendYesNo
+     *
+     * @param noLevel  否方法
+     * @param yesLevel 是方法
+     * @param text     对话内容
+     * @param speaker   说话者，0,1,8,9 = NPC；2,3 = 玩家；4,5,6,7 = 客户端报38错误；其它数字未测试。
+     */
+    public void sendYesNoLevel(String noLevel, String yesLevel, String text, byte speaker) {
+        sendYesNo(text, speaker);
         nextLevelContext.setLevelType(NextLevelType.SEND_YES_NO);
         nextLevelContext.setLastLevel(noLevel);
         nextLevelContext.setNextLevel(yesLevel);

@@ -35,8 +35,10 @@ function enter(pi) {
         var rand = Math.floor(Math.random() * maps.length);
         pi.playPortalSound();
         pi.warp(maps[rand], 0);
+        pi.playerMessage(0,"重新进入第2演武场时将会清空背包里所有考试的证物，请务必注意。");
         return true;
     } else {
+        pi.playerMessage(5,"只有参加骑士指定的等级考试方可进入第2演武场。");
         return false;
     }
 }

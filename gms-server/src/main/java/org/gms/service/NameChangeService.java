@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.config.YamlConfig;
 import org.gms.dao.entity.CharactersDO;
-import org.gms.dao.entity.InventoryitemsDO;
 import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.RingsDO;
 import org.gms.dao.mapper.CharactersMapper;
@@ -22,7 +21,6 @@ import org.gms.constants.id.ItemId;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static org.gms.dao.entity.table.InventoryequipmentDOTableDef.INVENTORYEQUIPMENT_D_O;
 import static org.gms.dao.entity.table.InventoryitemsDOTableDef.INVENTORYITEMS_D_O;
 import static org.gms.dao.entity.table.NamechangesDOTableDef.NAMECHANGES_D_O;
 import static org.gms.dao.entity.table.RingsDOTableDef.RINGS_D_O;

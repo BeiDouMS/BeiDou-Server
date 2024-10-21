@@ -38,7 +38,7 @@ function start(mode, type, selection) { // missing script for questid found than
         if (status == 0) {
             qm.sendNext("#h0#... 首先，谢谢你的出色工作。如果不是你，我。。。我不可能免受黑巫婆的诅咒。非常感谢你.");
         } else if (status == 1) {
-            qm.sendNextPrev("如果没有别的，这一连串的小事故反而让事件更清晰了，那就是你付出了无数小时的努力来改善自己，为天鹅座骑士做出贡献.");
+            qm.sendNextPrev("如果没有别的，这一连串的小事故反而让事件更清晰了，那就是你付出了无数小时的努力来改善自己，为皇家骑士做出贡献.");
         } else if (status == 2) {
             qm.sendAcceptDecline("为了庆祝你的努力和成就。。。我想授予你一个新的头衔，并再次祝福你。你会吗。。。接受这个?");
         } else if (status == 3) {
@@ -56,7 +56,7 @@ function start(mode, type, selection) { // missing script for questid found than
             qm.forceStartQuest();
             qm.forceCompleteQuest();
             
-            qm.sendOk("#h0#. 为了勇敢地与黑魔法师战斗，从现在起，我将任命你为天鹅座骑士团的新首席骑士。请明智地运用你的权力和权威来帮助保护枫树世界的公民.");
+            qm.sendOk("#h0#. 为了勇敢地与黑魔法师战斗，从现在起，我将任命你为皇家骑士团的新首席骑士。请明智地运用你的权力和权威来帮助保护枫树世界的公民.");
         } else if (status == 4) {
             qm.dispose();
         }
