@@ -42,21 +42,22 @@ function start(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            qm.sendNext("你所带回来的宝石是神兽的眼泪，它拥有非常强大的力量。如果被黑磨法师给得手了，那我们全部都可能要倒大楣了...");
+            qm.sendNext("你所带回来的宝石是神兽的眼泪，它拥有非常强大的力量。如果被黑魔法师给得手了，那我们全部都可能要倒大楣了...");
         } else if (status == 1) {
-            qm.sendYesNo("女皇为了报答你的努力，将任命你为皇家骑士团的上级骑士，你准备好了嘛?");
+            qm.sendYesNo("女皇为了报答你的努力，将任命你为皇家骑士团的高级骑士，你准备好了嘛?");
         } else if (status == 2) {
             nPSP = (qm.getPlayer().getLevel() - 70) * 3;
             if (qm.getPlayer().getRemainingSp() > nPSP) {
                 qm.sendNext("请确认你的技能点数点完没.");
             } else {
                 if (!qm.canHold(1142068)) {
-                    qm.sendNext("因为这一刻，你现在的骑士警长。从这一刻起，你应随身携带自己以尊严和尊重你的相称新标题天鹅骑士的骑士警长.");
+                    qm.sendNext("如果您希望获得与称号相符的徽章，您可能需要在装备栏中留出一些空间。");
                 } else {
-                    qm.completeQuest();
                     qm.gainItem(1142068, 1);
-                    qm.getPlayer().changeJob(Packages.client.MapleJob.BLAZEWIZARD3);
-                    qm.sendOk("请先把道具栏空出一些空间哦.");
+                    const Job = Java.type('org.gms.client.Job');
+                    qm.getPlayer().changeJob(Job.BLAZEWIZARD3);
+                    qm.completeQuest();
+                    qm.sendOk("#h #, 从这一刻起，你就是一名高级骑士。从这一刻起，你将满怀热情地训练自己，带领你的骑士团保护这个世界。这种热情将为你提供足够的勇气。");
                 }
             }
         } else if (status == 3) {

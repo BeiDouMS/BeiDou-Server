@@ -8,15 +8,11 @@ function start(mode, type, selection) {
     status++;
 
     if (status == 0) {
-    	qm.sendAcceptDecline("#h0#. 你达到100级后一直在放松训练吗？我们都知道你有多强大，但训练还没有完成。看看这些骑士指挥官。他们日夜训练，为可能遇到黑魔法师做准备。");
+        qm.sendAcceptDecline("#h0#，达到100级之后，你是不是就疏于修炼了呢？虽然你确实变强了，但修炼是不能停止的。你必须以骑士团长们作为榜样。他们为了对付黑魔法师，一刻都没有停止修炼。");
     } else if (status == 1) {
         if (mode == 1) {
             qm.forceStartQuest();
         }
         qm.dispose();
     }
-}
-
-function end(mode, type, selection) {
-    qm.dispose();
 }

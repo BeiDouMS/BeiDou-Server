@@ -23,37 +23,54 @@ var status = -1;
 function start(mode, type, selection) {
     if (mode == -1) {
         qm.dispose();
+        return;
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {  // thanks ZERO傑洛 for noticing this quest shouldn't need a pw -- GMS-like string data thanks to skycombat
-            qm.sendGetText("嗯，你有什么事？");
-        } else if (status == 1) {
-            qm.sendNext("(You tell her about Giant Nependeath.)", 3);
-        } else if (status == 2) {
-            qm.sendNext("Giant Nependeath? It's definitely a big problem, but I don't think it's enough to really affect Orbis. Wait, where did you say the Giant Nependeath was, again?", 9);
-        } else if (status == 3) {
-            qm.sendNext("Neglected Strolling Path.", 3);
-        } else if (status == 4) {
-            qm.sendNext("...Neglected Strolling Path? If Giant Nependeath is there, someone is trying to enter Sealed Garden! But why? And more importantly, who?", 9);
-        } else if (status == 5) {
-            qm.sendNext("Sealed Garden?", 3);
-        } else if (status == 6) {
-            qm.sendAcceptDecline("I can't tell you about Sealed Garden. If you want to find out, I must first see whether you are worthy of the information. Do you mind if I look into your fate?", 9);
-        } else if (status == 7) {
-            qm.sendOk("Well, now let's look into your fate. Give me a second.");
-        } else if (status == 8) {
-            qm.forceStartQuest();
+    switch (status) {
+        case 0:
+            qm.sendNext("你有什么事? 虽然我并不欢迎不速之客......但你的身上却散发一种非比寻常的气息......看来我得听听你的事情了。", 1 << 3);
+            break;
+        case 1:
+            qm.sendNextPrev("#b（讲述关于#o9300347#的事情。）", 1 << 1);
+            break;
+        case 2:
+            qm.sendNextPrev("#o9300347#? 虽然这的确是个严峻的问题......不过到目前为止应该对#m200000000#还造不成影响。等等，你刚才说#o9300347#在哪儿?", 1 << 3);
+            break;
+        case 3:
+            qm.sendNextPrev("在#m200060001#。", 1 << 1);
+            break;
+        case 4:
+            qm.sendNextPrev("#m200060001#? #o9300347#居然在那里, 那么你是说有人想要入侵#m920030001#? 到底为什么呢? 是谁? ", 1 << 3);
+            break;
+        case 5:
+            qm.sendNextPrev("#m920030001#?", 1 << 1);
+            break;
+        case 6:
+            qm.sendNextPrev("......你到底是什么人竟然来问这样的问题? 你先稍等会儿。我要先卜一卦看你是不是值得信任。", 1 << 3);
+            break;
+        case 7:
+            qm.sendNextPrev(".............", 1 << 3);
+            break;
+        case 8:
+            qm.sendNextPrev(".........................", 1 << 3);
+            break;
+        case 9:
+            qm.sendNextPrev("你, 你......不, 你......完全不同于普通人类。那悠久的岁月, 那可怕的宇宙, 然而你有着再次战胜它们的伟大命运......你到底是谁?", 1 << 3)
+            break;
+        case 10:
+            if (!qm.isQuestStarted(21738) && !qm.isQuestCompleted(21738)) {
+                qm.forceStartQuest();
+            }
+            qm.sendPrev("......不管是谁都好。占卦已经让我把一切都告诉你了。关于封印的庭院的一切......", 1 | 1 << 3);
+            break;
+        default:
             qm.dispose();
-        }
+            break;
     }
 }

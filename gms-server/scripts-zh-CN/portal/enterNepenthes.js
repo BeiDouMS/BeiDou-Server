@@ -6,16 +6,13 @@ function enter(pi) {
         if (mapobj1.countPlayers() == 0 && mapobj2.countPlayers() == 0) {
             mapobj1.resetPQ(1);
             mapobj2.resetPQ(1);
-
-            const LifeFactory = Java.type('org.gms.server.life.LifeFactory');
-            const Point = Java.type('java.awt.Point');
-            mapobj2.spawnMonsterOnGroundBelow(LifeFactory.getMonster(9300348), new Point(591, -34));
-
+            mapobj2.destroyNPC(1204010);
+            
             pi.playPortalSound();
             pi.warp(920030000, 2);
             return true;
         } else {
-            pi.message("Someone is already challenging the area.");
+            pi.message("目标地图有人，请稍后再尝试进入。");
             return false;
         }
     } else {

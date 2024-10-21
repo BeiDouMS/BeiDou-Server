@@ -1,78 +1,84 @@
-/*
-	This file is part of the OdinMS Maple Story Server
-    Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation version 3 as published by
-    the Free Software Foundation. You may not use, modify or distribute
-    this program under any other version of the GNU Affero General Public
-    License.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 var status = -1;
 
 function start(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-        if (mode == 0 && type == 1) {
-            qm.sendNext("“你不想努力工作以获得终极武器吗？”");
-        }
+    if (mode == -1) { // END CHAT
         qm.dispose();
         return;
     }
-    if (status == 0) {
-        qm.sendNext("“嗯..像你这样年轻的人在这个偏僻的地方做什么？”");
-    } else if (status == 1) {
-        qm.sendNextPrev("“我来拿最好的长柄武器！”", 2);
-    } else if (status == 2) {
-        qm.sendNextPrev("最好的长柄武器？你应该能在某个城镇或其他地方购买到它..");
-    } else if (status == 3) {
-        qm.sendNextPrev("我听说你是枫叶世界里最好的铁匠！我只想要一件你打造的武器！", 2);
-    } else if (status == 4) {
-        qm.sendAcceptDecline("“我现在太老了，不能再制造武器了，但.. 我确实有一把很久以前做的长柄武器。它现在仍然状况良好。但我不能给你，因为那把长柄武器非常锋利，锋利到甚至会伤害它的主人。你还想要吗？”");
-    } else if (status == 5) {
-        qm.sendOk("“好吧，如果你这么说.. 我无法反对。我告诉你。我会给你一个快速测试，如果你通过了，巨型长柄武器就是你的。前往#b训练中心#k并挑战那里的#r伤疤熊#k。你的任务是带回#b30个接受标志#k。”");
-    } else if (status == 6) {
-        qm.startQuest();
-        qm.dispose();
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
+    } else {
+        status++;
+    }
+
+    switch (status) {
+        case 0:
+            qm.sendNext("呵呵……年轻人来这么偏僻的地方干嘛？", 8);
+            break;
+        case 1:
+            qm.sendNextPrev("我想要最厉害的长矛！", 2);
+            break
+        case 2:
+            qm.sendNextPrev("最厉害的长矛？那种东西在小村子里怎么有卖的……", 8);
+            break;
+        case 3:
+            qm.sendNextPrev("我知道你就是冒险岛世界里最厉害的铁匠！我想要你做的武器！", 2);
+            break;
+        case 4:
+            qm.sendAcceptDecline("我这个老头子太老了，哪还能做什么优秀的武器啊。倒是有一支很久以前做的长矛……不过却不能给你。那个家伙太锋利，弄不好连主人都会被伤到。这种武器你还想要吗？");
+            break;
+        case 5:
+            if (type == 12 && mode == 0) { // DECLINE
+                qm.sendNext("你不想努力获得终极武器吗？");
+                qm.dispose();
+                break;
+            }
+            // ACCEPT
+            qm.startQuest();
+            qm.sendOk("呵呵……既然你这么说，我这个老头子就试一试你。你去旁边的#b修炼场#k，打败那些#r#o9001012##k，取回#b#t4032311#30个#k给我。", 8);
+            break;
+        default:
+            qm.dispose();
+            break;
     }
 }
 
 function end(mode, type, selection) {
-    status++;
-    if (mode != 1) {
-        if (mode == 0 && type == 1) {
-            qm.sendNext("“嗯？经历了这么多之后你现在还犹豫不决吗？好吧，如果你愿意的话再好好考虑考虑。反正最后它会是你的。”");
-        }
+    if (mode == -1) { // END CHAT
         qm.dispose();
         return;
     }
-    if (status == 0) {
-        if (qm.haveItem(4032311, 30)) {
-            qm.sendNext("“哦，你把#t4032311#带来了吗？你比我想象的要强大！但更重要的是，我对你在毫不犹豫地接下这件危险武器时所表现出的勇气印象深刻。你值得拥有它。#p1201001#是你的了。”");
-        } else {
-            qm.sendNext("去选择30 #t4032311#。");
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
+    } else {
+        status++;
+    }
+
+    switch (status) {
+        case 0:
+            qm.sendNext("哎呦～#t4032311#都取回来了？你………比我想象的还要厉害一些嘛。不过，对于随时都可能伤到自己的危险武器，你那种毫不畏惧的爽朗豪放的心态实在是……好吧，#p1201001#就给你了。");
+            break;
+        case 1:
+            qm.sendNextPrev("#b（过了好一会儿，#p1203000#才郑重地将裏在布里的#p1201001#交给我。）");
+            break;
+        case 2:
+            qm.sendYesNo("这就是专门为你而做的长矛，名叫#p1201002#……以后就拜托了。");
+            break;
+        case 3:
+            if (type == 1 && mode == 0) { // NO
+                qm.sendNext("嗯？经历了这么多之后你现在还犹豫不决吗？好吧，如果你愿意的话再好好考虑考虑。反正最后它会是你的。");
+                qm.dispose();
+                break;
+            }
+            // YES
+            // qm.showVideo("Polearm");
+            qm.completeQuest();
+            qm.removeAll(4032311);
             qm.dispose();
-        }
-    } else if (status == 1) {
-        qm.sendNextPrev("#b(过了很长时间，#p1203000#把小心用布包着的#p1201001#递给了你。)");
-    } else if (status == 2) {
-        qm.sendYesNo("这是你要的长枪，编号#p1201002#。请好好保管。");
-    } else if (status == 3) {
-        //qm.showVideo("Polearm");
-        qm.completeQuest();
-        qm.removeAll(4032311);
-        qm.dispose();
+        default:
+            qm.dispose();
+            break;
     }
 }

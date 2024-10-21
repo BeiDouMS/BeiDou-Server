@@ -21,33 +21,39 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if(!qm.canHold(4032328, 1)) {
-                qm.sendNext("嗯，你需要给信空出一个背包位置。");
-                qm.dispose();
-                return;
+    switch (status) {
+        case 0:
+            return qm.sendNext("战神……战神，我就知道一定会再见到你的。因为你是个信守诺言的人。我相信你什么时候一定会来找我的，所以一直在等着你……");
+        case 1:
+            return qm.sendNextPrev("#b（#p2131000#幸福地笑了。）", 1 << 1);
+        case 2:
+            return qm.sendAcceptDecline("那时没能给你的信，终于可以交给你了。过了这么长时间，信已经很旧了……但应该还可以看。");
+        case 3:
+            if (type == 12 && mode == 0) { // DECLINE
+                return qm.dispose();
             }
-            
-            qm.sendNext("给，拿着这个。把它交给#r#p1002104##k，里面有一封维护世界和平的信。不要把这个秘密告诉别人。");
-        } else if (status == 1) {
-            qm.forceStartQuest();
-
-            qm.gainItem(4032328, 1);
-            qm.dispose();
-        }
+            if (!qm.isQuestStarted(21754) && !qm.isQuestCompleted(21754)) {
+                if (!qm.haveItem(4032328, 1)) {
+                    if (!qm.canHold(4032328, 1)) {
+                        qm.sendOk("背包中的其他栏至少需要一个空位来接受任务。");
+                        return qm.dispose();
+                    }
+                    qm.gainItem(4032328, 1);
+                }
+                qm.forceStartQuest();
+            }
+            return qm.sendNext("我虽然很想和你多说会儿话，但现在我担任转职官的功能工作，所以没有时间。你以后再来找我吧。", 1);
+        default:
+            return qm.dispose();
     }
 }

@@ -1,8 +1,8 @@
 /*
-	This file is part of the OdinMS Maple Story Server
+    This file is part of the OdinMS Maple Story Server
     Copyright (C) 2008 Patrick Huy <patrick.huy@frz.cc>
-		       Matthias Butz <matze@odinms.de>
-		       Jan Christian Meyer <vimes@odinms.de>
+               Matthias Butz <matze@odinms.de>
+               Jan Christian Meyer <vimes@odinms.de>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -23,42 +23,46 @@
 var status = -1;
 
 function end(mode, type, selection) {
-    status++;
-    if (mode != 1){
-        if (mode == 0 && type == 1)
-            qm.sendNext("嘿！至少你试过了!");
-        qm.dispose();
-        return;
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
     }
-    if (status == 0) {
-        qm.sendNext("等待。。是不是。。你记得怎么做红玉吗？\r\n如何。。。你可能很愚蠢，容易健忘症，但这就是为什么我不能抛弃你。现在把玉给我!"); //Giant Polearm
-    } else if (status == 1) {
-        qm.sendNextPrev("好吧，现在我又戴上了红玉，让我重新唤醒你更多的能力。我是说，自从我们上次见面以来，你的水平提高了很多，所以我相信这次我可以发挥我的魔力!");
-    } else if (status == 2) {
-        if(!qm.isQuestCompleted(21302)) {
-            if(!qm.canHold(1142131)) {
-                qm.sendOk("哇，您的 #b装备#k 库存已满。 我需要您至少腾出1个空位才能完成此任务.");
-                qm.dispose();
-                return;
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
+    } else {
+        status++;
+    }
+
+    switch (status) {
+        case 0:
+            return qm.sendNext("啊！这、这是……你终于想起制作红珠玉的方法了？啊啊……这就是为什么你再笨再健忘，我也依然对你不离不弃……哎呀，现在不是说这些的时候！快把宝石给我！")
+        case 1:
+            return qm.sendYesNo("好了，红珠玉的力里应该可以恢复了，你的能力也需要再唤醒一些。现在你的等级升高了不少，可以被唤醒的能力也更多了！");
+        case 2:
+            if (type == 1 && mode == 0) {
+                return qm.dispose();
             }
+            if (!qm.isQuestCompleted(21302)) {
+                if (!qm.canHold(1142131)) {
+                    qm.sendOk("背包中的装备栏至少需要一个空位来完成任务。");
+                    return qm.dispose();
+                }
 
-            if (qm.haveItem(4032312, 1)) {
-                qm.gainItem(4032312, -1);
+                if (qm.haveItem(4032312, 1)) {
+                    qm.gainItem(4032312, -1);
+                }
+
+                qm.gainItem(1142131, true);
+                qm.changeJobById(2111);
+
+                const YamlConfig = Java.type('org.gms.config.YamlConfig');
+                if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
+                    qm.teachSkill(21110002, 0, 20, -1);   //full swing
+                }
+                qm.completeQuest();
             }
-
-            qm.gainItem(1142131, true);
-            qm.changeJobById(2111);
-
-            const YamlConfig = Java.type('org.gms.config.YamlConfig');
-            if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
-                qm.teachSkill(21110002, 0, 20, -1);   //full swing
-            }
-
-            qm.completeQuest();
-        }
-        
-        qm.sendNext("来吧，继续训练，这样您就可以恢复自己的全部能力，这样我们就可以再次一起探索!");    
-    } else if (status == 3) {
-        qm.dispose();
+            qm.sendOk("赶紧恢复以前的能力吧，带上我一起去冒险……");
+        default:
+            return qm.dispose();
     }
 }

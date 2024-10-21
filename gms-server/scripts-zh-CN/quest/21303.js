@@ -21,31 +21,36 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("啊额... 雪人 #b#t4032339##k 刚刚被偷了! 多么令人沮丧, 雪人为了得到它而努力工作, 就为了让那只乌鸦偷走它。。。", 9);
-        } else if (status == 1) {
-            qm.sendNext("嘿，我只是路过，不能不听到你刚才。我可以借给你我的力量，小偷去哪了?", 3);
-        } else if (status == 2) {
-            qm.sendNext("哦，你真好。。。小偷从西边的门前走过，把#i4032339##k 拿回来，雪人需要它送给心爱的人.", 9);
-        } else if (status == 3) {
-            qm.sendNext("好的，在那儿等着。我马上还给你!", 3);
-        } else if (status == 4) {
-            qm.forceStartQuest();
-            qm.dispose();
-        }
+    switch (status) {
+        case 0:
+            return qm.sendNext("呜呜～#p1203001#很难过。#p1203001#很生气。#p1203001#很想哭……呜呜呜呜～", 1 << 3);
+        case 1:
+            return qm.sendNextPrev("怎、怎么了？", 1 << 1);
+        case 2:
+            return qm.sendNextPrev("#p1203001#做好了宝石。#b像苹果一样的红宝石#k。结果#r小偷#k却把宝石给偷走了。#p1203001#宝石没了。#p1203001#好难过……", 1 << 3);
+        case 3:
+            return qm.sendNextPrev("你说小偷偷走了红宝石？", 1 << 1);
+        case 4:
+            return qm.sendAcceptDecline("对。必须找回#p1203001#宝石。你要是能帮我找回#p1203001#宝石，我会好好答谢你的。要是帮我抓到小偷，我也会答谢你的。");
+        case 5:
+            if (type == 12 && mode == 0) {
+                return qm.dispose();
+            }
+            if (!qm.isQuestStarted(21303) && !qm.isQuestCompleted(21303)) {
+                qm.forceStartQuest();
+            }
+            qm.sendOk("小偷往那个方向去了。那个方向是……吃饭的手是右手，不吃饭的手是左手……#b左边#k！往左边去就能抓到小偷。")
+        default:
+            return qm.dispose();
     }
 }

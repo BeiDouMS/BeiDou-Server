@@ -3340,6 +3340,29 @@ public class PacketCreator {
         return p;
     }
 
+    /**
+     * @param npc      NPC ID
+     * @param msgType
+     * @param talk
+     * @param endBytes
+     * @param flags 0x1: NO_EXIT; 0x2: PLAYER_AS_SPEAKER; 0x4: CUSTOM_SPEAKER_NPC; 0x8: NPC_FACE_RIGHT;
+     * @param speaker NPC who will shown on the right of the dialog if CUSTOM_SPEAKER_NPC(0x4) is set in flags
+     * @return
+     */
+    public static Packet getNPCTalk(int npc, byte msgType, String talk, String endBytes, byte flags, int speaker) {
+        final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
+        p.writeByte(4); // ?
+        p.writeInt(npc);
+        p.writeByte(msgType);
+        p.writeByte(flags);
+        if ((flags & 0x4) > 0) {
+            p.writeInt(speaker);
+        }
+        p.writeString(talk);
+        p.writeBytes(HexTool.toBytes(endBytes));
+        return p;
+    }
+
     public static Packet getDimensionalMirror(String talk) {
         final OutPacket p = OutPacket.create(SendOpcode.NPC_TALK);
         p.writeByte(4); // ?

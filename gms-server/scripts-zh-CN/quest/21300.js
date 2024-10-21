@@ -1,24 +1,31 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    status++;
-    if (mode == 0 && type == 0) {
-        status -= 2;
-    } else if (mode != 1) {
-        //if (mode == 0)
-            qm.sendNext("#b(你需要考虑一下。。。)#k");
-        qm.dispose();
-        return;
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
     }
 
-    if (status == 0) {
-            qm.sendNext("训练进行得如何？ 嗯... 70级...还不算什么，但是自从我第一次结识冰鲜面世以来，您确实取得了长足的进步。 继续训练，我相信有一天您将能够重新获得战斗前的状态。");
-    } else if (status == 1) {
-            qm.sendAcceptDecline("但在那之前，我需要你再控制一下。#我们的杆臂又一次做出奇怪的反应。好像有什么事要告诉你。#基特也许能唤醒你隐藏的力量，所以请马上来。");
-    } else if (status == 2) {
-            qm.forceStartQuest();
-            qm.sendOk("不管怎么说，我以为武器有自己的身份，但说真的。。。这武器不停地说话。它先是不停地哭，因为我没有真正注意到它的需要，然后。。。啊，请保守这个秘密。我不认为再打乱武器是个好主意。");
-    } else if (status == 3) {
-        qm.dispose();
+    if (type == 0 && mode == 0) { // PREV
+        status--;
+    } else {
+        status++;
+    }
+
+    switch (status) {
+        case 0:
+            return qm.sendNext("修炼得如何？嗯……70级了……虽然还不够，不过比起当初把你刚从冰窟里挖出来的那个状态要强百倍了。像这样下去，很快你就能恢复从前的实力了。")
+        case 1:
+            return qm.sendAcceptDecline("不过，你得先回#b#m140000000##k一趟。你的#b#p1201001##k又出现了奇怪的反应。似乎是有什么话要对你说。说不定能唤醒你的能力也说不定，赶紧回去一趟吧。");
+        case 2:
+            if (type == 12 && mode == 0) {
+                qm.sendOk("你知道吗？不要以为先升级升到70级，以后再转职也可以。到时候辛辛苦苦累计的SP值没法用于3转技能，你就傻眼了。当然，我也不是说#p1201001#非要给你转职不可……只是提前说明一下，供你参考。");
+                return qm.dispose();
+            }
+            if (!qm.isQuestStarted(21300) && !qm.isQuestCompleted(21300)) {
+                qm.forceStartQuest();
+            }
+            return qm.dispose();
+        default:
+            return qm.dispose();
     }
 }

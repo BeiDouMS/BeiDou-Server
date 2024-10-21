@@ -225,6 +225,26 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
         getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 4, text, "", speaker));
     }
 
+    public void sendNext(String text, byte speaker, int speakNPC) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 01", speaker, speakNPC));
+    }
+
+    public void sendPrev(String text, byte speaker, int speakNPC) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 00", speaker, speakNPC));
+    }
+
+    public void sendNextPrev(String text, byte speaker, int speakNPC) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "01 01", speaker, speakNPC));
+    }
+
+    public void sendOk(String text, byte speaker, int speakNPC) {
+        nextLevelContext.clear();
+        getClient().sendPacket(PacketCreator.getNPCTalk(npc, (byte) 0, text, "00 00", speaker, speakNPC));
+    }
+
     public void sendStyle(String text, int[] styles) {
         if (styles.length > 0) {
             nextLevelContext.clear();

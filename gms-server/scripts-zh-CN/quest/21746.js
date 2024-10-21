@@ -21,23 +21,27 @@
 var status = -1;
 
 function start(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
+    if (mode == -1) { // END CHAT
+        return qm.dispose();
+    }
+
+    if (type == 0 && mode == 0) { // PREV
+        status--;
     } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
+        status++;
+    }
 
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("封印石......那是很久很久以前，由武陵看管的东西......难道说觊觎它的人又出现了......");
-        } else {
+    switch (status) {
+        case 0:
+            return qm.sendNext("封印石……那是很久很久以前，由武陵看管的东西……难道说觊歈它的人又出现了……", 1 << 3);
+        case 1:
+            return qm.sendNextPrev("请告诉我有关封印石的事情。", 1 << 1);
+        case 2:
+            return qm.sendAcceptDecline("那可不行。#o9300351#这个家伙确实很危险，但我怎么知道你会比他不危险呢？我要考验一下你……你接受#b考验#k吗？");
+        case 3:
+            if (type == 12 && mode == 0) { // DECLINE
+                return qm.dispose();
+            }
             var mapobj = qm.getWarpMap(925040001);
             if (mapobj.countPlayers() == 0) {
                 mapobj.resetPQ(1);
@@ -47,37 +51,7 @@ function start(mode, type, selection) {
             } else {
                 qm.sendOk("有人已经在挑战，请等待他挑战结束。");
             }
-
-
-            qm.dispose();
-        }
-    }
-}
-
-function end(mode, type, selection) {
-    if (mode == -1) {
-        qm.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            qm.dispose();
-            return;
-        }
-
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            qm.sendNext("哇哦，你把墨水带来了。现在让我慢慢地倒。。。。差不多了，差不多了 Kyaaa! 这封信里面. 它说：“我会带你去木龙印章岩石。”");
-        } else if (status == 1) {
-            qm.gainItem(4032342, -8);
-            qm.gainItem(4220151, -1);
-            qm.gainExp(10000);
-
-            qm.forceCompleteQuest();
-            qm.dispose();
-        }
+        default:
+            return qm.dispose();
     }
 }

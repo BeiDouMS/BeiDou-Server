@@ -17,11 +17,12 @@ function enter(pi) {
             pi.message("The mirror is blank due to many players recalling their memories. Please wait and try again.");
             return false;
         } else {
-            var map = pi.getClient().getChannelServer().getMapFactory().getMap(108010702);
+            var map = pi.getWarpMap(108010702);
             spawnMob(-210, 454, 9001013, map);
 
             pi.playPortalSound();
-            pi.setQuestProgress(21303, 21203, 1);
+            // 中文的 Quest.wz/Check.img 中没有 21203 这个要求，设置为 1 反而会造成任务无法完成
+            // pi.setQuestProgress(21303, 21203, 1);
             pi.warp(108010701, "out00");
             return true;
         }

@@ -22,31 +22,30 @@
 var status = -1;
 
 function start() {
+    status = -1;
     action(1, 0, 0);
 }
 
 function action(mode, type, selection) {
-    if (mode == 0 && type == 0) {
-        status--;
-    } else if (mode == -1) {
+    if (mode == -1) {
         cm.dispose();
         return;
-    } else {
-        status++;
     }
-    if (mode == 1) {
-        status++;
-    } else {
+
+    if (type == 0 && mode == 0) {
         status--;
+    } else {
+        status++;
     }
+
     if (status == 0) {
-        cm.sendNext("阿兰，你醒了！你感觉怎么样？嗯？你想知道发生了什么事情吗？");
+        cm.sendNext("现在才醒？战神？伤口还好吧？……什么？现在的状况？");
     } else if (status == 1) {
-        cm.sendNext("我们几乎准备好逃跑了。你不用担心。我尽可能找到的每个人都已经登上了方舟，神树也同意引领我们的道路。一旦完成剩下的准备工作，我们就会立即前往金银岛。");
+        cm.sendNextPrev("避难准备都做好了，所有的人都上了方舟。避难船飞行的时候就只有听天由命了，没啥可担心的。准备得差不多就该向金银岛出发了。");
     } else if (status == 2) {
-        cm.sendNext("其他的英雄们？他们已经离开去对抗黑魔法师了。他们在为我们争取时间逃跑。什么？你想和他们一起战斗吗？不！你不能！你受伤了。你必须和我们一起离开！");
+        cm.sendNextPrev("战神的同伴们？他们……已经去找黑魔法师了。在我们避难的时候，他们打算阻止黑魔法师的进攻……什么？你也要去找黑魔法师？不行！你伤得太重，跟我们一起吧！");
     } else if (status == 3) {
-        //cm.setQuestProgress(21002, 1);
+        cm.setQuestProgress(21000, 21002, 1);
         cm.showIntro("Effect/Direction1.img/aranTutorial/Trio");
         cm.dispose();
     }
