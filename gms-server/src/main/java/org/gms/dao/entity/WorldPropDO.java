@@ -51,7 +51,8 @@ public class WorldPropDO implements Serializable {
     /**
      * 大区推荐信息
      */
-    private String recommendMessage;
+    @Column("recommend_message")
+    private String whyAmIRecommended;
 
     /**
      * 频道数
