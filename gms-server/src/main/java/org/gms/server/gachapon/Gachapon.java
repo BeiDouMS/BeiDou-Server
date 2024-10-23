@@ -163,6 +163,6 @@ public class Gachapon {
 
     public static void log(Character player, int itemId, String map) {
         String itemName = ItemInformationProvider.getInstance().getName(itemId);
-        log.info("{} got a {} ({}) from the {} gachapon.", player.getName(), itemName, itemId, map);
+        log.info("{} 获得了 {} ({}) 来自于 {} 抽奖机.", player.getName(), itemName, itemId, map);
     }
 }

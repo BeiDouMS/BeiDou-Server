@@ -130,8 +130,8 @@ public class Expedition {
         registering = true;
         leader.sendPacket(PacketCreator.getClock((int) MINUTES.toSeconds(type.getRegistrationMinutes())));
         if (!silent) {
-            startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, "[Expedition] " + leader.getName() + " has been declared the expedition captain. Please register for the expedition."), false);
-            leader.sendPacket(PacketCreator.serverNotice(6, "[Expedition] You have become the expedition captain. Gather enough people for your team then talk to the NPC to start."));
+            startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, "[远征队] " + leader.getName() + " 已经开启了远征队挑战. 请抓紧时间注册进入远征队！！"), false);
+            leader.sendPacket(PacketCreator.serverNotice(6, "[远征队] 你已经成为远征队的队长. 请召集足够的玩家，并点击远征队npc开始挑战."));
         }
         scheduleRegistrationEnd();
     }
@@ -144,7 +144,7 @@ public class Expedition {
             if (registering) {
                 exped.removeChannelExpedition(startMap.getChannelServer());
                 if (!silent) {
-                    startMap.broadcastMessage(PacketCreator.serverNotice(6, "[Expedition] The time limit has been reached. Expedition has been disbanded."));
+                    startMap.broadcastMessage(PacketCreator.serverNotice(6, "[远征队] 远征队组建倒计时已结束. 远征队已经被解散."));
                 }
 
                 dispose(false);
@@ -164,16 +164,16 @@ public class Expedition {
     }
 
     private void log() {
-        final String gmMessage = type + " Expedition with leader " + leader.getName() + " finished after " + getTimeString(getStartTime());
+        final String gmMessage = type + " 的远征队， 队长为: " + leader.getName() + " 完成了挑战，用时为 " + getTimeString(getStartTime());
         Server.getInstance().broadcastGMMessage(getLeader().getWorld(), PacketCreator.serverNotice(6, gmMessage));
 
-        String log = type + " EXPEDITION\r\n";
+        String log = type + " 的远征队\r\n";
         log += getTimeString(startTime) + "\r\n";
 
         for (String memberName : getMembers().values()) {
             log += ">>" + memberName + "\r\n";
         }
-        log += "BOSS KILLS\r\n";
+        log += "击杀BOSS\r\n";
         for (String message : bossLogs) {
             log += message;
         }
@@ -186,7 +186,7 @@ public class Expedition {
         long duration = System.currentTimeMillis() - then;
         int seconds = (int) (duration / SECONDS.toMillis(1)) % 60;
         int minutes = (int) ((duration / MINUTES.toMillis(1)) % 60);
-        return minutes + " Minutes and " + seconds + " Seconds";
+        return minutes + " 分钟 " + seconds + " 秒";
     }
 
     public void finishRegistration() {
@@ -198,34 +198,34 @@ public class Expedition {
         registerExpeditionAttempt();
         broadcastExped(PacketCreator.removeClock());
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[Expedition] The expedition has started! Good luck, brave heroes!"));
+            broadcastExped(PacketCreator.serverNotice(6, "[远征队] 远征队已经开始! 勇敢的英雄们，祝你们好运！"));
         }
         startTime = System.currentTimeMillis();
-        Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, "[Expedition] " + type.toString() + " Expedition started with leader: " + leader.getName()));
+        Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, "[远征队] " + type.toString() + " 的远征队开始了， 队长是: " + leader.getName()));
     }
 
     public String addMember(Character player) {
         if (!registering) {
-            return "Sorry, this expedition is already underway. Registration is closed!";
+            return "抱歉, 里边的远征队已经在进行中了. 不能再加入远征队了!";
         }
         if (banned.contains(player.getId())) {
-            return "Sorry, you've been banned from this expedition by #b" + leader.getName() + "#k.";
+            return "抱歉, 你已经被远征队长 #b" + leader.getName() + "#k 列入了黑名单，不能加入该队伍.";
         }
         if (members.size() >= this.getMaxSize()) { //Would be a miracle if anybody ever saw this
-            return "Sorry, this expedition is full!";
+            return "抱歉, 远征队人数已满!";
         }
 
         int channel = this.getRecruitingMap().getChannelServer().getId();
         if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {    // thanks Conrad, Cato for noticing some expeditions have entry limit
-            return "Sorry, you've already reached the quota of attempts for this expedition! Try again another day...";
+            return "抱歉, 你今日的进入次数已经用完! 请明天在进行尝试...";
         }
 
         members.put(player.getId(), player.getName());
         player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + player.getName() + " has joined the expedition!"));
+            broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + player.getName() + " 玩家加入了远征队!"));
         }
-        return "You have registered for the expedition successfully!";
+        return "你已经成功加入了远征队!";
     }
 
     public int addMemberInt(Character player) {
@@ -242,7 +242,7 @@ public class Expedition {
         members.put(player.getId(), player.getName());
         player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + player.getName() + " has joined the expedition!"));
+            broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + player.getName() + " 玩家已经加入了远征队!"));
         }
         return 0; //"You have registered for the expedition successfully!";
     }
@@ -265,8 +265,8 @@ public class Expedition {
         if (members.remove(chr.getId()) != null) {
             chr.sendPacket(PacketCreator.removeClock());
             if (!silent) {
-                broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + chr.getName() + " has left the expedition."));
-                chr.dropMessage(6, "[Expedition] You have left this expedition.");
+                broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + chr.getName() + " 已经离开了远征队."));
+                chr.dropMessage(6, "[远征队] 你已经离开了该远征队.");
             }
             return true;
         }
@@ -281,14 +281,14 @@ public class Expedition {
             members.remove(cid);
 
             if (!silent) {
-                broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + chr.getValue() + " has been banned from the expedition."));
+                broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + chr.getValue() + " 玩家已经被列入了黑名单中."));
             }
 
             Character player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
             if (player != null && player.isLoggedInWorld()) {
                 player.sendPacket(PacketCreator.removeClock());
                 if (!silent) {
-                    player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
+                    player.dropMessage(6, "[远征队] 你已经被当前远征队列入了黑名单.");
                 }
                 if (ExpeditionType.ARIANT.equals(type) || ExpeditionType.ARIANT1.equals(type) || ExpeditionType.ARIANT2.equals(type)) {
                     player.changeMap(MapId.ARPQ_LOBBY);
@@ -301,7 +301,7 @@ public class Expedition {
         for (int expeditionBoss : EXPEDITION_BOSSES) {
             if (mob.getId() == expeditionBoss) { //If the monster killed was a boss
                 String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                bossLogs.add(">" + mob.getName() + " was killed after " + getTimeString(startTime) + " - " + timeStamp + "\r\n");
+                bossLogs.add(">" + mob.getName() + " 被击杀用时 " + getTimeString(startTime) + " - " + timeStamp + "\r\n");
                 return;
             }
         }
