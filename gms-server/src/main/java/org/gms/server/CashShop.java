@@ -223,8 +223,11 @@ public class CashShop {
         }
 
         public static ModifiedCashItemDO getItem(int sn) {
-            ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
             ModifiedCashItemDO cashItemDO = items.get(sn);
+            if(cashItemDO == null) {
+                return null;
+            }
+            ModifiedCashItemDO dbItemDO = modifiedCashItems.get(sn);
             ModifiedCashItemDO returnDo = cashItemDO.clone();
             if (dbItemDO != null) {
                 returnDo.setItemId(Optional.ofNullable(dbItemDO.getItemId()).orElse(cashItemDO.getItemId()));
