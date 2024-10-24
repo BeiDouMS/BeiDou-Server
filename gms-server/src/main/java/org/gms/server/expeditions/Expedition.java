@@ -29,6 +29,7 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.TimerManager;
@@ -130,8 +131,8 @@ public class Expedition {
         registering = true;
         leader.sendPacket(PacketCreator.getClock((int) MINUTES.toSeconds(type.getRegistrationMinutes())));
         if (!silent) {
-            startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, "[远征队] " + leader.getName() + " 已经开启了远征队挑战. 请抓紧时间注册进入远征队！！"), false);
-            leader.sendPacket(PacketCreator.serverNotice(6, "[远征队] 你已经成为远征队的队长. 请召集足够的玩家，并点击远征队npc开始挑战."));
+            startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.beginRegistration.message1", leader.getName())), false);
+            leader.sendPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.beginRegistration.message2")));
         }
         scheduleRegistrationEnd();
     }
@@ -144,7 +145,7 @@ public class Expedition {
             if (registering) {
                 exped.removeChannelExpedition(startMap.getChannelServer());
                 if (!silent) {
-                    startMap.broadcastMessage(PacketCreator.serverNotice(6, "[远征队] 远征队组建倒计时已结束. 远征队已经被解散."));
+                    startMap.broadcastMessage(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.scheduleRegistrationEnd.message1")));
                 }
 
                 dispose(false);
@@ -164,16 +165,16 @@ public class Expedition {
     }
 
     private void log() {
-        final String gmMessage = type + " 的远征队， 队长为: " + leader.getName() + " 完成了挑战，用时为 " + getTimeString(getStartTime());
+        final String gmMessage = I18nUtil.getMessage("Expedition.log.message1", type, leader.getName(), getTimeString(getStartTime()));
         Server.getInstance().broadcastGMMessage(getLeader().getWorld(), PacketCreator.serverNotice(6, gmMessage));
 
-        String log = type + " 的远征队\r\n";
+        String log = I18nUtil.getMessage("Expedition.log.message2", type) + "\r\n";
         log += getTimeString(startTime) + "\r\n";
 
         for (String memberName : getMembers().values()) {
             log += ">>" + memberName + "\r\n";
         }
-        log += "击杀BOSS\r\n";
+        log += I18nUtil.getMessage("Expedition.log.message3") + "\r\n";
         for (String message : bossLogs) {
             log += message;
         }
@@ -186,7 +187,7 @@ public class Expedition {
         long duration = System.currentTimeMillis() - then;
         int seconds = (int) (duration / SECONDS.toMillis(1)) % 60;
         int minutes = (int) ((duration / MINUTES.toMillis(1)) % 60);
-        return minutes + " 分钟 " + seconds + " 秒";
+        return I18nUtil.getMessage("Expedition.getTimeString.message1", minutes, seconds);
     }
 
     public void finishRegistration() {
@@ -198,34 +199,34 @@ public class Expedition {
         registerExpeditionAttempt();
         broadcastExped(PacketCreator.removeClock());
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[远征队] 远征队已经开始! 勇敢的英雄们，祝你们好运！"));
+            broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.start.message1")));
         }
         startTime = System.currentTimeMillis();
-        Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, "[远征队] " + type.toString() + " 的远征队开始了， 队长是: " + leader.getName()));
+        Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.start.message2", type.toString(), leader.getName())));
     }
 
     public String addMember(Character player) {
         if (!registering) {
-            return "抱歉, 里边的远征队已经在进行中了. 不能再加入远征队了!";
+            return I18nUtil.getMessage("Expedition.addMember.message1");
         }
         if (banned.contains(player.getId())) {
-            return "抱歉, 你已经被远征队长 #b" + leader.getName() + "#k 列入了黑名单，不能加入该队伍.";
+            return I18nUtil.getMessage("Expedition.addMember.message2", leader.getName());
         }
         if (members.size() >= this.getMaxSize()) { //Would be a miracle if anybody ever saw this
-            return "抱歉, 远征队人数已满!";
+            return I18nUtil.getMessage("Expedition.addMember.message3");
         }
 
         int channel = this.getRecruitingMap().getChannelServer().getId();
         if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {    // thanks Conrad, Cato for noticing some expeditions have entry limit
-            return "抱歉, 你今日的进入次数已经用完! 请明天在进行尝试...";
+            return I18nUtil.getMessage("Expedition.addMember.message4");
         }
 
         members.put(player.getId(), player.getName());
         player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + player.getName() + " 玩家加入了远征队!"));
+            broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.addMember.message5", player.getName())));
         }
-        return "你已经成功加入了远征队!";
+        return I18nUtil.getMessage("Expedition.addMember.message6");
     }
 
     public int addMemberInt(Character player) {
@@ -242,7 +243,7 @@ public class Expedition {
         members.put(player.getId(), player.getName());
         player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + player.getName() + " 玩家已经加入了远征队!"));
+            broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.addMemberInt.message1", player.getName())));
         }
         return 0; //"You have registered for the expedition successfully!";
     }
@@ -265,8 +266,8 @@ public class Expedition {
         if (members.remove(chr.getId()) != null) {
             chr.sendPacket(PacketCreator.removeClock());
             if (!silent) {
-                broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + chr.getName() + " 已经离开了远征队."));
-                chr.dropMessage(6, "[远征队] 你已经离开了该远征队.");
+                broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.removeMember.message1", chr.getName())));
+                chr.dropMessage(6, I18nUtil.getMessage("Expedition.removeMember.message2"));
             }
             return true;
         }
@@ -281,14 +282,14 @@ public class Expedition {
             members.remove(cid);
 
             if (!silent) {
-                broadcastExped(PacketCreator.serverNotice(6, "[远征队] " + chr.getValue() + " 玩家已经被列入了黑名单中."));
+                broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.ban.message1", chr.getValue())));
             }
 
             Character player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
             if (player != null && player.isLoggedInWorld()) {
                 player.sendPacket(PacketCreator.removeClock());
                 if (!silent) {
-                    player.dropMessage(6, "[远征队] 你已经被当前远征队列入了黑名单.");
+                    player.dropMessage(6, I18nUtil.getMessage("Expedition.ban.message2"));
                 }
                 if (ExpeditionType.ARIANT.equals(type) || ExpeditionType.ARIANT1.equals(type) || ExpeditionType.ARIANT2.equals(type)) {
                     player.changeMap(MapId.ARPQ_LOBBY);
@@ -301,7 +302,7 @@ public class Expedition {
         for (int expeditionBoss : EXPEDITION_BOSSES) {
             if (mob.getId() == expeditionBoss) { //If the monster killed was a boss
                 String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                bossLogs.add(">" + mob.getName() + " 被击杀用时 " + getTimeString(startTime) + " - " + timeStamp + "\r\n");
+                bossLogs.add(I18nUtil.getMessage("Expedition.monsterKilled.message1", mob.getName(), getTimeString(startTime), timeStamp) + "\r\n");
                 return;
             }
         }
