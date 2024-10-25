@@ -763,14 +763,14 @@ public class Server {
     private void initializeTimelyTasks() {
         TimerManager tMan = TimerManager.getInstance();
         tMan.start();
-        tMan.register(tMan.purge(), YamlConfig.config.server.PURGING_INTERVAL);//Purging ftw...
+        tMan.register(tMan.purge(), MINUTES.toMillis(5));//Purging ftw...
         disconnectIdlesOnLoginTask();
 
         long timeLeft = getTimeLeftForNextHour();
         tMan.register(new CharacterDiseaseTask(), YamlConfig.config.server.UPDATE_INTERVAL, YamlConfig.config.server.UPDATE_INTERVAL);
-        tMan.register(new CouponTask(), YamlConfig.config.server.COUPON_INTERVAL, timeLeft);
+        tMan.register(new CouponTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
-        tMan.register(new RankingLoginTask(), YamlConfig.config.server.RANKING_INTERVAL, timeLeft);
+        tMan.register(new RankingLoginTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new LoginCoordinatorTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new EventRecallCoordinatorTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new LoginStorageTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));

@@ -160,7 +160,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             p.seek(movementDataStart);
 
             if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE) {
-                log.debug("{} rawAct: {}, opt: {}, skillId: {}, skillLv: {}, allowSkill: {}, mobMp: {}",
+                log.info("{} rawAct: {}, opt: {}, skillId: {}, skillLv: {}, allowSkill: {}, mobMp: {}",
                         isSkill ? "SKILL" : (isAttack ? "ATTCK" : ""), rawActivity, pOption, useSkillId,
                         useSkillLevel, nextMovementCouldBeSkill, mobMp);
             }
