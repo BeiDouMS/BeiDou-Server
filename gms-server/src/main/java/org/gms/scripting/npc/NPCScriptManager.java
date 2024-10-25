@@ -163,7 +163,7 @@ public class NPCScriptManager extends AbstractScriptManager {
             return true;
         } catch (Exception e) {
             log.error("Error starting NPC script: {}", npc, e);
-            dispose(c);
+            dispose(c, true);
 
             return false;
         }
@@ -180,7 +180,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                 if (getCM(c) != null) {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
-                dispose(c);
+                dispose(c, true);
             } finally {
                 c.releaseClient();
             }
@@ -197,21 +197,21 @@ public class NPCScriptManager extends AbstractScriptManager {
                 switch (nextLevelContext.getLevelType()) {
                     case NextLevelType.SEND_SELECT -> {
                         if (mode == 0) {
-                            dispose(c);
+                            dispose(c, true);
                             return;
                         }
                         iv.invokeFunction("level" + nextLevelContext.getPrefix() + selection);
                     }
                     case NextLevelType.GET_INPUT_NUMBER, NextLevelType.SEND_NEXT_SELECT -> {
                         if (mode == 0) {
-                            dispose(c);
+                            dispose(c, true);
                             return;
                         }
                         iv.invokeFunction("level" + nextLevelContext.getNextLevel(), selection);
                     }
                     case NextLevelType.GET_INPUT_TEXT -> {
                         if (mode == 0) {
-                            dispose(c);
+                            dispose(c, true);
                             return;
                         }
                         iv.invokeFunction("level" + nextLevelContext.getNextLevel(), c.getCM().getText());
@@ -219,7 +219,7 @@ public class NPCScriptManager extends AbstractScriptManager {
                     case NextLevelType.SEND_LAST_NEXT, NextLevelType.SEND_NEXT, NextLevelType.SEND_LAST,
                          NextLevelType.SEND_OK, NextLevelType.SEND_ACCEPT_DECLINE, NextLevelType.SEND_YES_NO -> {
                         if (mode == -1) {
-                            dispose(c);
+                            dispose(c, true);
                             return;
                         }
                         if (mode == 0) {
@@ -230,14 +230,14 @@ public class NPCScriptManager extends AbstractScriptManager {
                     }
                     default -> {
                         log.error("Unsupported level type: {}", nextLevelContext.getLevelType());
-                        dispose(c);
+                        dispose(c, true);
                     }
                 }
             } catch (Exception t) {
                 if (getCM(c) != null) {
                     log.error("Error performing NPC script action for npc: {}", getCM(c).getNpc(), t);
                 }
-                dispose(c);
+                dispose(c, true);
             } finally {
                 c.releaseClient();
             }
@@ -262,9 +262,16 @@ public class NPCScriptManager extends AbstractScriptManager {
     }
 
     public void dispose(Client c) {
+        dispose(c, false);
+    }
+
+    public void dispose(Client c, boolean action) {
         NPCConversationManager cm = cms.get(c);
         if (cm != null) {
             dispose(cm);
+        }
+        if (action) {
+            c.sendPacket(PacketCreator.enableActions());
         }
     }
 
