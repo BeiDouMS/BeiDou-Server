@@ -4,7 +4,7 @@ function enter(pi) {
         pi.warp(106020501, 0);
         return true;
     } else {
-        pi.playerMessage(5, "前路布满荆棘，需要尖刺消除剂清理……");
+        pi.playerMessage(5, "前路布满荆棘，无法通过！");
         return false;
     }
 }

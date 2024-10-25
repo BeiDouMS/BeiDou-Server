@@ -18,41 +18,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var status;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
-function action(mode, type, selection) {
-    if (mode == -1) {
-        im.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            im.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (im.getMapId() == 106020300) {
-                var portal = im.getMap().getPortal("obstacle");
-                if (portal != null && portal.getPosition().distance(im.getPlayer().getPosition()) < 210) {
-                    if (!(im.isQuestStarted(100202) || im.isQuestCompleted(100202))) {
-                        im.startQuest(100202);
-                    }
-                    im.removeAll(2430014);
-
-                    im.message("你已经使用奇拉蘑菇孢子开路。");
-                }
+function start(){
+    if (im.getMapId() == 106020300) {
+        var portal = im.getMap().getPortal("obstacle");
+        if (portal != null && portal.getPosition().distance(im.getPlayer().getPosition()) < 240) {
+            if (!(im.isQuestStarted(100202) || im.isQuestCompleted(100202))) {
+                im.startQuest(100202);
             }
-
-            im.dispose();
+            im.removeAll(2430014);
+            im.showInfo("Effect/OnUserEff/normalEffect/mushroomcastle/chatBalloon2");
+            im.dropMessage(6,'好像有什么动静...嗯？是结界被消除了');
+        } else {
+            im.message('尽可能的接近魔法结界才能将其消除');
         }
+    } else {
+        im.message('这里似乎没有需要消除的魔法结界');
     }
+
+    im.dispose();
 }
+
