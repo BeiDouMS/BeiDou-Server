@@ -3,9 +3,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.mybatisflex.codegen.Generator;
 import com.mybatisflex.codegen.config.GlobalConfig;
 import org.gms.ServerApplication;
-import org.gms.client.command.CommandsExecutor;
 import org.gms.property.ServerProperty;
-import org.gms.util.Pair;
 import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.Yaml;
 
@@ -14,7 +12,6 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -36,7 +33,7 @@ public class CodeGen {
         globalConfig.setBasePackage("org.gms.dao");
         //设置表前缀和只生成哪些表
 //        globalConfig.setTablePrefix("tb_");
-        globalConfig.setGenerateTable("world_prop", "server_prop");
+        globalConfig.setGenerateTable("game_config");
 
         //设置生成 entity 并启用 Lombok
         globalConfig.setEntityGenerateEnable(true);
@@ -52,7 +49,6 @@ public class CodeGen {
     }
 
     @Deprecated(since = "1.6", forRemoval = true)
-    @Test
     public void genPropSql() throws Exception {
         final String[] WORLD_NAMES = {"Scania", "Bera", "Broa", "Windia", "Khaini", "Bellocan", "Mardia", "Kradia", "Yellonde", "Demethos", "Galicia", "El Nido", "Zenith", "Arcenia", "Kastia", "Judis", "Plana", "Kalluna", "Stius", "Croa", "Medere"};
 

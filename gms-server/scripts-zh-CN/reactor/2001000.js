@@ -30,11 +30,16 @@ function act() {
 
         if (count < 7) {
             var nextCount = (count + 1);
-
-            rm.spawnMonster(Math.random() >= .6 ? 9300049 : 9300048);
+            // 修复召唤出黑花后，禁止再召唤黑花，防止精灵爸爸重复出现
+            var monsterId = Math.random() >= .6 ? 9300049 : 9300048;
+            if(monsterId == 9300049) {
+                rm.getMap().allowSummonState(false);
+            }
+            rm.spawnMonster(monsterId);
             rm.getEventInstance().setProperty("statusStg7_c", nextCount);
         } else {
             rm.spawnMonster(9300049);
+            rm.getMap().allowSummonState(false);
         }
     }
 }

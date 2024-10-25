@@ -140,44 +140,6 @@ public class PlayerNPC extends AbstractMapObject {
         equipDOList.forEach(equipDO -> equips.put(Optional.ofNullable(equipDO.getEquippos()).orElse((short) 0), equipDO.getEquipid()));
     }
 
-    public PlayerNPC(ResultSet rs) {
-        try {
-            CY = rs.getInt("cy");
-            name = rs.getString("name");
-            hair = rs.getInt("hair");
-            face = rs.getInt("face");
-            skin = rs.getByte("skin");
-            gender = rs.getInt("gender");
-            dir = rs.getInt("dir");
-            FH = rs.getInt("fh");
-            RX0 = rs.getInt("rx0");
-            RX1 = rs.getInt("rx1");
-            scriptId = rs.getInt("scriptid");
-
-            worldRank = rs.getInt("worldrank");
-            overallRank = rs.getInt("overallrank");
-            worldJobRank = rs.getInt("worldjobrank");
-            overallJobRank = GameConstants.getOverallJobRankByScriptId(scriptId);
-            job = rs.getInt("job");
-
-            setPosition(new Point(rs.getInt("x"), CY));
-            setObjectId(rs.getInt("id"));
-
-            try (Connection con = DatabaseConnection.getConnection();
-                 PreparedStatement ps = con.prepareStatement("SELECT equippos, equipid FROM playernpcs_equip WHERE npcid = ?")) {
-                ps.setInt(1, rs.getInt("id"));
-
-                try (ResultSet rs2 = ps.executeQuery()) {
-                    while (rs2.next()) {
-                        equips.put(rs2.getShort("equippos"), rs2.getInt("equipid"));
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void loadRunningRankData(int worlds) {
         List<PlayernpcsDO> playernpcsDOList = npcService.getPlayerNpcDOs(new PlayernpcsDO());
         runningOverallRank.set(playernpcsDOList.size() + 1);
@@ -240,23 +202,8 @@ public class PlayerNPC extends AbstractMapObject {
     }
 
     public static boolean canSpawnPlayerNpc(String name, int mapid) {
-        boolean ret = true;
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT name FROM playernpcs WHERE name LIKE ? AND map = ?")) {
-            ps.setString(1, name);
-            ps.setInt(2, mapid);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    ret = false;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return ret;
+        List<PlayernpcsDO> playerNpcDOs = npcService.getPlayerNpcDOs(PlayernpcsDO.builder().name(name).map(mapid).build());
+        return playerNpcDOs.isEmpty();
     }
 
     public void updatePlayerNPCPosition(MapleMap map, Point newPos) {

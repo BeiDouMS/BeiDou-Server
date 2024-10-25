@@ -74,7 +74,9 @@ public class CommonInformation {
             }
             case MAP -> {
                 data = stringData.getData("Map.img");
-                addMapResult(results, infType, data, filter, filterType, fullMatch);
+                for (Data child : data.getChildren()) {
+                    addMapResult(results, infType, child, filter, filterType, fullMatch);
+                }
             }
             case MOB -> {
                 data = stringData.getData("Mob.img");

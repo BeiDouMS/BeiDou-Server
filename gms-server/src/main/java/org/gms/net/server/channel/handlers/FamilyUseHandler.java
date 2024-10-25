@@ -34,6 +34,8 @@ import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.PacketCreator;
 
+import java.util.Objects;
+
 /**
  * @author Moogra
  * @author Ubaware
@@ -67,7 +69,6 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                                 useEntitlement(entry, type);
                             } else {
                                 c.sendPacket(PacketCreator.sendFamilyMessage(75, 0)); // wrong message, but close enough. (client should check this first anyway)
-
                             }
                         } else {
                             if (!FieldLimit.CANNOTMIGRATE.check(targetMap.getFieldLimit()) && !FieldLimit.CANNOTVIPROCK.check(ownMap.getFieldLimit())
@@ -82,7 +83,6 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                                 useEntitlement(entry, type);
                             } else {
                                 c.sendPacket(PacketCreator.sendFamilyMessage(75, 0));
-
                             }
                         }
                     }
@@ -123,9 +123,10 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
                     applySelfBuff(c, 2, 3, 15, 1.5f, FamilyEntitlement.SELF_EXP_1_5);
                     break;
                 case FAMILY_BONDING:
-                    Family family = c.getPlayer().getFamily();
-                    family.Familybuff(30);
-                    useEntitlement(entry, FamilyEntitlement.FAMILY_BONDING);
+                    if (useEntitlement(entry, FamilyEntitlement.FAMILY_BONDING)) {
+                        Family family = c.getPlayer().getFamily();
+                        family.Familybuff(30);
+                    }
                     break;
                 default:
                     // Handle unknown entitlement type
@@ -136,6 +137,14 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
         }
     }
 
+    /**
+     * 警告：此处只针对buff相关的做了处理，一日只一次
+     * 非buff相关的如传送到别人位置或将别人传送到自己位置都没有限制一日一次，因为从2019年开始这俩就没限
+     *
+     * @param entry 学院实体类
+     * @param entitlement 功能类型
+     * @return 是否使用成功
+     */
     private boolean useEntitlement(FamilyEntry entry, FamilyEntitlement entitlement) {
         if (entry.useEntitlement(entitlement)) {
             entry.gainReputation(-entitlement.getRepCost(), false);
@@ -146,28 +155,46 @@ public final class FamilyUseHandler extends AbstractPacketHandler {
     }
 
     private void applyPartyBuff(Client c, int type, int effect, int duration, FamilyEntitlement entitlement) {
-        if (c.getPlayer().getParty() != null) {
-            for (PartyCharacter mpc : c.getPlayer().getParty().getMembers()) {
+        Character player = c.getPlayer();
+        FamilyEntry familyEntry = player.getFamilyEntry();
+        if (player.getParty() != null) {
+            // 只扣减使用者次数
+            if (!useEntitlement(familyEntry, entitlement)) {
+                return;
+            }
+            for (PartyCharacter mpc : player.getParty().getMembers()) {
+                FamilyEntry mpcEntry = mpc.getPlayer().getFamilyEntry();
+                // 没有学院的不享受
+                if (mpcEntry == null) {
+                    continue;
+                }
+                // 不是同学的不享受
+                if (!Objects.equals(mpcEntry.getFamily().getID(), familyEntry.getFamily().getID())) {
+                    continue;
+                }
                 mpc.getPlayer().sendPacket(PacketCreator.familyBuff(type, effect, 1, duration * 60000));
-                if(type == 2) {
+                if (type == 2) {
                     mpc.getPlayer().setFamilyBuff(true, 2, 1);
-                }else{
+                } else {
                     mpc.getPlayer().setFamilyBuff(true, 1, 2);
                 }
                 mpc.getPlayer().startFamilyBuffTimer(duration * 60000);
-                useEntitlement(mpc.getPlayer().getFamilyEntry(), entitlement);
+                // 不扣减其他人次数
+//                useEntitlement(mpcEntry, entitlement);
             }
         }
     }
 
     private void applySelfBuff(Client c, int type, int effect, int duration, float rate, FamilyEntitlement entitlement) {
+        if (!useEntitlement(c.getPlayer().getFamilyEntry(), entitlement)) {
+            return;
+        }
         c.sendPacket(PacketCreator.familyBuff(type, effect, 1, duration * 60000));
-        if(type == 2) {
+        if (type == 2) {
             c.getPlayer().setFamilyBuff(true, rate, 1);
-        }else{
-            c.getPlayer().setFamilyBuff(true, 1,  rate);
+        } else {
+            c.getPlayer().setFamilyBuff(true, 1, rate);
         }
         c.getPlayer().startFamilyBuffTimer(duration * 60000);
-        useEntitlement(c.getPlayer().getFamilyEntry(), entitlement);
     }
 }
