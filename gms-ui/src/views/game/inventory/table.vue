@@ -19,7 +19,12 @@
       <a-table-column title="物品ID" data-index="itemId" align="center" />
       <a-table-column title="物品" align="center">
         <template #cell="{ record }">
-          <img :src="getIconUrl('item', record.itemId)" alt="" />
+          <img
+            v-if="record.itemId === 2430033"
+            :src="beidouBook"
+            alt="北斗卫星指导书"
+          />
+          <img v-else :src="getIconUrl('item', record.itemId)" />
         </template>
       </a-table-column>
       <a-table-column title="类型" data-index="itemType" align="center" />
@@ -83,7 +88,7 @@
             content="你确定要删除这个道具吗？"
             @ok="deleteClick(record)"
           >
-            <a-button type="text" size="mini" status="danger"> 删除 </a-button>
+            <a-button type="text" size="mini" status="danger"> 删除</a-button>
           </a-popconfirm>
         </template>
       </a-table-column>
@@ -105,6 +110,8 @@
   import { getIconUrl } from '@/utils/mapleStoryAPI';
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
   import { timestampToChineseTime } from '@/utils/stringUtils';
+
+  import beidouBook from '@/assets/2430033.png';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);

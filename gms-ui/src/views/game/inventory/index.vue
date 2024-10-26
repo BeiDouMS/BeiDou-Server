@@ -2,7 +2,17 @@
   <div class="container">
     <Breadcrumb />
     <a-card class="general-card" :title="$t('menu.game.inventory')">
-      <character-selector @use-character="useCharacter" />
+      <div class="button-group">
+        <character-selector @use-character="useCharacter" />
+        <a-button
+          type="primary"
+          class="margin-left"
+          :disabled="!currentCid || currentType === 0 || currentType === -1"
+          @click="openInventoryUI(currentCid, currentType)"
+        >
+          背包渲染图
+        </a-button>
+      </div>
       <a-tabs
         :default-active-key="1"
         lazy-load
@@ -22,6 +32,26 @@
         </a-tab-pane>
       </a-tabs>
     </a-card>
+
+    <!-- 模态框 -->
+    <a-modal
+      v-model:visible="inventoryVisible"
+      title="背包渲染图"
+      :width="800"
+      :footer="null"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    >
+      <InventoryUI
+        v-if="inventoryVisible"
+        :character-id="currentCid"
+        :inventory-type="currentType"
+      />
+      <div style="display: flex; justify-content: flex-end; margin-top: 16px">
+        <a-button type="primary" @click="handleOk">确定</a-button>
+      </div>
+    </a-modal>
+    <!-- 添加确定按钮 -->
   </div>
 </template>
 
@@ -31,10 +61,12 @@
   import { ref } from 'vue';
   import InventoryList from '@/views/game/inventory/table.vue';
   import CharacterSelector from '@/views/game/inventory/characterSelector.vue';
+  import InventoryUI from '@/views/game/inventory/InventoryUI.vue'; // 引入 InventoryUI
 
   const typeList = ref<InventoryTypeState[]>([]);
   const currentType = ref<string | number>(1);
   const currentCid = ref<number | undefined>(undefined);
+  const inventoryVisible = ref(false); // 控制模态框显隐
 
   const loadType = async () => {
     const { data } = await getInventoryTypeList();
@@ -53,6 +85,25 @@
     currentCid.value = cid;
     tabChange(0);
   };
+
+  // 打开 InventoryUI 的模态框，并传递参数
+  const openInventoryUI = (
+    characterId: number | undefined,
+    inventoryType: string | number
+  ) => {
+    currentCid.value = characterId;
+    currentType.value = inventoryType;
+    inventoryVisible.value = true;
+  };
+
+  // 确定和取消方法
+  const handleOk = () => {
+    inventoryVisible.value = false;
+  };
+
+  const handleCancel = () => {
+    inventoryVisible.value = false;
+  };
 </script>
 
 <script lang="ts">
@@ -61,4 +112,14 @@
   };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+  .button-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px; /* 添加底部间距 */
+  }
+
+  .margin-left {
+    margin-left: 16px; /* 调整此值以增加按钮之间的间距 */
+  }
+</style>
