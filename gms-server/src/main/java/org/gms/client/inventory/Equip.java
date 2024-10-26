@@ -684,7 +684,7 @@ public class Equip extends Item {
         int expNeeded = ExpTable.getEquipExpNeededForLevel(itemLevel);
 
         if (YamlConfig.config.server.USE_DEBUG_SHOW_INFO_EQPEXP) {
-            log.debug("{} -> EXP Gain: {}, Mastery: {}, Base gain: {}, exp: {} / {}, Kills TNL: {}", ii.getName(getItemId()),
+            log.info("{} -> EXP Gain: {}, Mastery: {}, Base gain: {}, exp: {} / {}, Kills TNL: {}", ii.getName(getItemId()),
                     gain, masteryModifier, baseExpGain, itemExp, expNeeded, expNeeded / (baseExpGain / c.getPlayer().getExpRate()));
         }
 
