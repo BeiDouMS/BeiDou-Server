@@ -29,6 +29,7 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.TimerManager;
@@ -130,8 +131,8 @@ public class Expedition {
         registering = true;
         leader.sendPacket(PacketCreator.getClock((int) MINUTES.toSeconds(type.getRegistrationMinutes())));
         if (!silent) {
-            startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, "[Expedition] " + leader.getName() + " has been declared the expedition captain. Please register for the expedition."), false);
-            leader.sendPacket(PacketCreator.serverNotice(6, "[Expedition] You have become the expedition captain. Gather enough people for your team then talk to the NPC to start."));
+            startMap.broadcastMessage(leader, PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.beginRegistration.message1", leader.getName())), false);
+            leader.sendPacket(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.beginRegistration.message2")));
         }
         scheduleRegistrationEnd();
     }
@@ -144,7 +145,7 @@ public class Expedition {
             if (registering) {
                 exped.removeChannelExpedition(startMap.getChannelServer());
                 if (!silent) {
-                    startMap.broadcastMessage(PacketCreator.serverNotice(6, "[Expedition] The time limit has been reached. Expedition has been disbanded."));
+                    startMap.broadcastMessage(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.scheduleRegistrationEnd.message1")));
                 }
 
                 dispose(false);
@@ -164,16 +165,16 @@ public class Expedition {
     }
 
     private void log() {
-        final String gmMessage = type + " Expedition with leader " + leader.getName() + " finished after " + getTimeString(getStartTime());
+        final String gmMessage = I18nUtil.getMessage("Expedition.log.message1", type, leader.getName(), getTimeString(getStartTime()));
         Server.getInstance().broadcastGMMessage(getLeader().getWorld(), PacketCreator.serverNotice(6, gmMessage));
 
-        String log = type + " EXPEDITION\r\n";
+        String log = I18nUtil.getMessage("Expedition.log.message2", type) + "\r\n";
         log += getTimeString(startTime) + "\r\n";
 
         for (String memberName : getMembers().values()) {
             log += ">>" + memberName + "\r\n";
         }
-        log += "BOSS KILLS\r\n";
+        log += I18nUtil.getMessage("Expedition.log.message3") + "\r\n";
         for (String message : bossLogs) {
             log += message;
         }
@@ -186,7 +187,7 @@ public class Expedition {
         long duration = System.currentTimeMillis() - then;
         int seconds = (int) (duration / SECONDS.toMillis(1)) % 60;
         int minutes = (int) ((duration / MINUTES.toMillis(1)) % 60);
-        return minutes + " Minutes and " + seconds + " Seconds";
+        return I18nUtil.getMessage("Expedition.getTimeString.message1", minutes, seconds);
     }
 
     public void finishRegistration() {
@@ -198,34 +199,34 @@ public class Expedition {
         registerExpeditionAttempt();
         broadcastExped(PacketCreator.removeClock());
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[Expedition] The expedition has started! Good luck, brave heroes!"));
+            broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.start.message1")));
         }
         startTime = System.currentTimeMillis();
-        Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, "[Expedition] " + type.toString() + " Expedition started with leader: " + leader.getName()));
+        Server.getInstance().broadcastGMMessage(startMap.getWorld(), PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.start.message2", type.toString(), leader.getName())));
     }
 
     public String addMember(Character player) {
         if (!registering) {
-            return "Sorry, this expedition is already underway. Registration is closed!";
+            return I18nUtil.getMessage("Expedition.addMember.message1");
         }
         if (banned.contains(player.getId())) {
-            return "Sorry, you've been banned from this expedition by #b" + leader.getName() + "#k.";
+            return I18nUtil.getMessage("Expedition.addMember.message2", leader.getName());
         }
         if (members.size() >= this.getMaxSize()) { //Would be a miracle if anybody ever saw this
-            return "Sorry, this expedition is full!";
+            return I18nUtil.getMessage("Expedition.addMember.message3");
         }
 
         int channel = this.getRecruitingMap().getChannelServer().getId();
         if (!ExpeditionBossLog.attemptBoss(player.getId(), channel, this, false)) {    // thanks Conrad, Cato for noticing some expeditions have entry limit
-            return "Sorry, you've already reached the quota of attempts for this expedition! Try again another day...";
+            return I18nUtil.getMessage("Expedition.addMember.message4");
         }
 
         members.put(player.getId(), player.getName());
         player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + player.getName() + " has joined the expedition!"));
+            broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.addMember.message5", player.getName())));
         }
-        return "You have registered for the expedition successfully!";
+        return I18nUtil.getMessage("Expedition.addMember.message6");
     }
 
     public int addMemberInt(Character player) {
@@ -242,7 +243,7 @@ public class Expedition {
         members.put(player.getId(), player.getName());
         player.sendPacket(PacketCreator.getClock((int) (startTime - System.currentTimeMillis()) / 1000));
         if (!silent) {
-            broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + player.getName() + " has joined the expedition!"));
+            broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.addMemberInt.message1", player.getName())));
         }
         return 0; //"You have registered for the expedition successfully!";
     }
@@ -265,8 +266,8 @@ public class Expedition {
         if (members.remove(chr.getId()) != null) {
             chr.sendPacket(PacketCreator.removeClock());
             if (!silent) {
-                broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + chr.getName() + " has left the expedition."));
-                chr.dropMessage(6, "[Expedition] You have left this expedition.");
+                broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.removeMember.message1", chr.getName())));
+                chr.dropMessage(6, I18nUtil.getMessage("Expedition.removeMember.message2"));
             }
             return true;
         }
@@ -281,14 +282,14 @@ public class Expedition {
             members.remove(cid);
 
             if (!silent) {
-                broadcastExped(PacketCreator.serverNotice(6, "[Expedition] " + chr.getValue() + " has been banned from the expedition."));
+                broadcastExped(PacketCreator.serverNotice(6, I18nUtil.getMessage("Expedition.ban.message1", chr.getValue())));
             }
 
             Character player = startMap.getWorldServer().getPlayerStorage().getCharacterById(cid);
             if (player != null && player.isLoggedInWorld()) {
                 player.sendPacket(PacketCreator.removeClock());
                 if (!silent) {
-                    player.dropMessage(6, "[Expedition] You have been banned from this expedition.");
+                    player.dropMessage(6, I18nUtil.getMessage("Expedition.ban.message2"));
                 }
                 if (ExpeditionType.ARIANT.equals(type) || ExpeditionType.ARIANT1.equals(type) || ExpeditionType.ARIANT2.equals(type)) {
                     player.changeMap(MapId.ARPQ_LOBBY);
@@ -301,7 +302,7 @@ public class Expedition {
         for (int expeditionBoss : EXPEDITION_BOSSES) {
             if (mob.getId() == expeditionBoss) { //If the monster killed was a boss
                 String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                bossLogs.add(">" + mob.getName() + " was killed after " + getTimeString(startTime) + " - " + timeStamp + "\r\n");
+                bossLogs.add(I18nUtil.getMessage("Expedition.monsterKilled.message1", mob.getName(), getTimeString(startTime), timeStamp) + "\r\n");
                 return;
             }
         }
