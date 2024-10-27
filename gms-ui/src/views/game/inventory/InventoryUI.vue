@@ -13,7 +13,7 @@
 
 <script lang="ts">
   import { defineComponent, PropType, ref, watch, onMounted } from 'vue';
-  import { getInventoryList } from '@/api/inventory'; // 假设这个函数已经定义
+  import { getInventoryList } from '@/api/inventory';
   import axios from 'axios';
   import invImage from '@/assets/inv_full.png';
   import beidouBook from '@/assets/2430033.png';
@@ -185,7 +185,5 @@
   });
 </script>
 
-<style scoped>
-  /* 添加你的样式 */
-</style>
+<style scoped></style>
 }
