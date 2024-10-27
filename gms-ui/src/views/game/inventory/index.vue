@@ -7,7 +7,12 @@
         <a-button
           type="primary"
           class="margin-left"
-          :disabled="!currentCid || currentType === 0 || currentType === -1"
+          :disabled="
+            !currentCid ||
+            currentType === 0 ||
+            currentType === -1 ||
+            currentType === 6
+          "
           @click="openInventoryUI(currentCid, currentType)"
         >
           背包渲染图
@@ -41,6 +46,8 @@
       :footer="null"
       @ok="handleOk"
       @cancel="handleCancel"
+      :draggable="true"
+      :modal-style="{ cursor: 'move' }"
     >
       <InventoryUI
         v-if="inventoryVisible"
@@ -51,7 +58,6 @@
         <a-button type="primary" @click="handleOk">确定</a-button>
       </div>
     </a-modal>
-    <!-- 添加确定按钮 -->
   </div>
 </template>
 
