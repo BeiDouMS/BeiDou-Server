@@ -15,6 +15,7 @@ import org.gms.net.server.Server;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.gachapon.Gachapon;
 import org.gms.server.life.LifeFactory;
+import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
 import org.gms.util.Randomizer;
 import org.gms.util.RequireUtil;
@@ -260,7 +261,8 @@ public class GachaponService {
         GachaponRewardDO reward = poolRewards.get(random);
 
         Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
-        player.dropMessage("你获得了" + reward.getQuantity() + "个" +  ItemInformationProvider.getInstance().getName(reward.getItemId()) + " ！");
+        String gachaponMessage = I18nUtil.getMessage("GachaMessage.message1 ",player.getMap(),reward.getQuantity(),ItemInformationProvider.getInstance().getName(reward.getItemId()));
+        player.dropMessage(gachaponMessage);
         Gachapon.log(player, reward.getItemId(), player.getMap().getMapName());
 
         if (pool.getNotification()) {
