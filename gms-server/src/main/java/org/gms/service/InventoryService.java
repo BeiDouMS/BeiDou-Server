@@ -205,6 +205,7 @@ public class InventoryService {
 
     private List<InventorySearchRtnDTO> buildByOnline(Character character, InventoryType type) {
         Inventory inventory = character.getInventory(type);
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         return inventory.list().stream().map(item -> {
             InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
                     .id(-1L)
@@ -220,6 +221,7 @@ public class InventoryService {
                     .expiration(item.getExpiration())
                     .giftFrom(item.getGiftFrom())
                     .online(true)
+                    .itemName(ii.getName(item.getItemId()))
                     .build();
             if (type.isEquip()) {
                 Equip equip = (Equip) item;
