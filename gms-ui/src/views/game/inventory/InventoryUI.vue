@@ -17,9 +17,8 @@
           top: `${tooltip.y}px`,
           display: tooltip.show ? 'block' : 'none',
         }"
-      >
-        {{ tooltip.text }}
-      </div>
+        v-html="tooltip.text"
+      ></div>
     </div>
   </div>
 </template>
@@ -215,7 +214,7 @@
           tooltip.value = {
             x: mouseX + offsetX,
             y: mouseY + offsetY,
-            text: `Item ID: ${foundItem.itemId}`,
+            text: `Item ID: ${foundItem.itemId}<br>Item Name: ${foundItem.itemName}`,
             show: true,
           };
           hideCursor.value = true; // 隐藏鼠标指针

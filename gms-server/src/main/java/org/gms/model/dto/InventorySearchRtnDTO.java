@@ -77,6 +77,12 @@ public class InventorySearchRtnDTO {
      */
     private InventoryEquipRtnDTO inventoryEquipment;
 
+    /**
+     *
+     * 物品名称，根据itemID返回。
+     */
+    private String itemName;
+
     public Item toItem() {
         Item item;
         if (isEquipment()) {

@@ -15,6 +15,7 @@ import org.gms.exception.BizException;
 import org.gms.model.dto.*;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
@@ -152,6 +153,7 @@ public class InventoryService {
     }
 
     private InventorySearchRtnDTO buildByDb(Row obj) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
                 .id(obj.getLong("inventoryitemid"))
                 .itemType(obj.getInt("type"))
@@ -166,6 +168,7 @@ public class InventoryService {
                 .expiration(obj.getLong("expiration"))
                 .giftFrom(obj.getString("giftFrom"))
                 .online(false)
+                .itemName(ii.getName(obj.getInt("itemid")))
                 .build();
         Long inventoryEquipmentId = obj.getLong("inventoryequipmentid");
         if (inventoryEquipmentId != null) {
