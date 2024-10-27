@@ -1322,7 +1322,7 @@ public class PacketCreator {
     public static Packet gachaponMessage(Item item, String town, Character player) {
         final OutPacket p = OutPacket.create(SendOpcode.SERVERMESSAGE);
         p.writeByte(0x0B);
-        p.writeString(player.getName() + " : got a(n)");
+        p.writeString(player.getName() + " : 获得了");
         p.writeInt(0); //random?
         p.writeString(town);
         addItemInfo(p, item, true);
