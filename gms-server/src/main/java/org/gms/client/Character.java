@@ -8966,12 +8966,13 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void equipPendantOfSpirit() {   //精灵吊坠经验计算
+    private void equipPendantOfSpirit() {   //精灵吊坠装备时长经验计算
         if (pendantOfSpirit == null) {
             pendantOfSpirit = TimerManager.getInstance().register(() -> {
                 if (pendantExp < 3) {
                     pendantExp++;
-                    message(I18nUtil.getMessage("Character.equipPendantOfSpirit.message", pendantExp, pendantExp * 10));
+                    //用于准确提示装备1小时内还是装备经过几小时
+                    message(I18nUtil.getMessage(pendantExp<=2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
