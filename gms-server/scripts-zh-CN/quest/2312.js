@@ -30,26 +30,26 @@ function start(mode, type, selection) {
         qm.dispose();
     }
 }
-//
-// function end(mode, type, selection) {
-//     status++;
-//     if (mode != 1) {
-//         if (type == 1 && mode == 0) {
-//             status -= 2;
-//         } else {
-//             qm.dispose();
-//             return;
-//         }
-//     }
-//     if (status == 0) {
-//         qm.sendOk("你帮我教训了得意的蘑菇仔了吗？");
-//     } else if (status == 1) {
-//         qm.forceCompleteQuest();
-//         qm.gainExp(11500);
-//         qm.gainItem(4000499, -50);
-//         qm.sendOk("真了不起。不好意思，我不该怀疑你的能力。请你务必把我们蘑菇王国从危机中拯救出来。");
-//     } else if (status == 2) {
-//         qm.dispose();
-//     }
-// }
+
+function end(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+        if (type == 1 && mode == 0) {
+            status -= 2;
+        } else {
+            qm.dispose();
+            return;
+        }
+    }
+    if (status == 0) {
+        qm.sendOk("你帮我教训了得意的蘑菇仔了吗？");
+    } else if (status == 1) {
+        qm.forceCompleteQuest();
+        qm.gainExp(11500);
+        qm.gainItem(4000499, -50);
+        qm.sendOk("真了不起。不好意思，我不该怀疑你的能力。请你务必把我们蘑菇王国从危机中拯救出来。");
+    } else if (status == 2) {
+        qm.dispose();
+    }
+}
 	

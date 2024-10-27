@@ -37,25 +37,25 @@ function start(mode, type, selection) {
     //     qm.dispose();
     // }
 }
-//
-// function end(mode, type, selection) {
-//     status++;
-//     if (mode != 1) {
-//         if (type == 1 && mode == 0) {
-//             status -= 2;
-//         } else {
-//             qm.dispose();
-//             return;
-//         }
-//     }
-//     if (status == 0) {
-//         qm.sendOk("嗯，果然如此。入口被彻底封了起来。");
-//     } else if (status == 1) {
-//         qm.forceCompleteQuest();
-//         qm.gainExp(11000);
-//         qm.sendOk("真是辛苦你了。");
-//     } else if (status == 2) {
-//         qm.dispose();
-//     }
-// }
+
+function end(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+        if (type == 1 && mode == 0) {
+            status -= 2;
+        } else {
+            qm.dispose();
+            return;
+        }
+    }
+    if (status == 0) {
+        qm.sendOk("嗯，果然如此。入口被彻底封了起来。");
+    } else if (status == 1) {
+        qm.forceCompleteQuest();
+        qm.gainExp(11000);
+        qm.sendOk("真是辛苦你了。");
+    } else if (status == 2) {
+        qm.dispose();
+    }
+}
 	
