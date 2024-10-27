@@ -27,6 +27,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.constants.inventory.ItemConstants;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.provider.Data;
@@ -259,7 +260,7 @@ public class ItemAction extends AbstractQuestAction {
             }
         }
 
-        chr.dropMessage(1, "Please check if you have enough space in your inventory.");
+        chr.dropMessage(1, I18nUtil.getMessage("ItemAction.Message1"));
     }
 
     private boolean canHold(Character chr, List<Pair<Item, InventoryType>> gainList) {
@@ -315,7 +316,7 @@ public class ItemAction extends AbstractQuestAction {
                 int missingQty = item.getCount() - chr.countItem(itemid);
                 if (missingQty > 0) {
                     if (!chr.canHold(itemid, missingQty)) {
-                        chr.dropMessage(1, "Please check if you have enough space in your inventory.");
+                        chr.dropMessage(1, I18nUtil.getMessage("ItemAction.Message1"));
                         return false;
                     }
 

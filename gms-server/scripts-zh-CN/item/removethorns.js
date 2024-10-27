@@ -17,43 +17,20 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-var status;
-
 function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
-function action(mode, type, selection) {
-    if (mode == -1) {
-        im.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            im.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
+    if (im.getMapId() == 106020500 && im.isQuestActive(2324)) {
+        var player = im.getPlayer();
+        var portal = im.getMap().getPortal("investigate2");
+        if (portal != null && portal.getPosition().distance(player.getPosition()) < 150) {
+            player.gainExp(3300 * player.getExpRate());
+            im.forceCompleteQuest(2324);
+            im.removeAll(2430015);
+            im.playerMessage(6, "使用尖刺消除剂清除道路上的荆棘。");
         } else {
-            status--;
+            im.playerMessage(5,"尽可能得离荆棘更近些才能完全清除");
         }
-
-        if (status == 0) {
-            if (im.getMapId() == 106020400 && im.isQuestActive(2324)) {
-                var player = im.getPlayer();
-
-                var portal = im.getMap().getPortal("right00");
-                if (portal != null && portal.getPosition().distance(player.getPosition()) < 210) {
-                    player.gainExp(3300 * player.getExpRate());
-
-                    im.forceCompleteQuest(2324);
-                    im.removeAll(2430015);
-                    im.playerMessage(5, "你已经使用尖刺消除剂清除道路上的荆棘。");
-                }
-            }
-
-            im.dispose();
-        }
+    } else {
+        im.playerMessage(5,"这里没有荆棘需要清除");
     }
+    im.dispose();
 }
