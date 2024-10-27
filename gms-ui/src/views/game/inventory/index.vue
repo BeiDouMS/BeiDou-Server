@@ -16,7 +16,6 @@
           @click="openInventoryUI(currentCid, currentType)"
         >
           {{ t('inventory.placeholder.inventoryDraw') }}
-          <!-- Updated -->
         </a-button>
       </div>
       <a-tabs
