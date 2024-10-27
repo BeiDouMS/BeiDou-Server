@@ -6,9 +6,9 @@
         id="inventoryCanvas"
         :width="canvasWidth"
         :height="canvasHeight"
+        :class="{ 'hide-cursor': hideCursor }"
         @mousemove="handleMouseMove"
         @mouseleave="handleMouseLeave"
-        :class="{ 'hide-cursor': hideCursor }"
       ></canvas>
       <div
         class="tooltip"
@@ -17,18 +17,20 @@
           top: `${tooltip.y}px`,
           display: tooltip.show ? 'block' : 'none',
         }"
-        v-html="tooltip.text"
-      ></div>
+      >
+        {{ tooltip.text }}
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, PropType, ref, watch, onMounted } from 'vue';
+  import { defineComponent, ref, watch, onMounted } from 'vue';
   import { getInventoryList } from '@/api/inventory';
   import axios from 'axios';
   import invImage from '@/assets/inv_full.png';
   import beidouBook from '@/assets/2430033.png';
+  import { useI18n } from 'vue-i18n';
 
   const maplestoryioAPI = axios.create({
     baseURL: 'https://maplestory.io/api',
@@ -42,7 +44,6 @@
       );
       return URL.createObjectURL(response.data);
     } catch (error) {
-      console.error('获取道具图标失败：', error);
       return '';
     }
   }
@@ -79,20 +80,32 @@
     return posArr;
   }
 
+  interface InventoryCondition {
+    notPage: boolean;
+    inventoryType: number; // 确保 inventoryType 是 number 类型
+    characterId: number;
+    page: number;
+    pageSize: number;
+    pageNo: number;
+  }
+
   export default defineComponent({
     props: {
       characterId: {
-        type: [String, Number] as PropType<string | number>,
+        type: Number,
         required: true,
+        default: 0, // 默认值
       },
       inventoryType: {
-        type: [String, Number] as PropType<string | number>,
+        type: Number,
         required: true,
+        default: 1, // 默认值
       },
     },
     setup(props) {
+      const { t } = useI18n();
       const loading = ref(false);
-      const inventory = ref([]);
+      const inventory = ref<any[]>([]);
       const posArr = ref(calculatePositionOffsets());
 
       const canvasWidth = 600;
@@ -110,26 +123,24 @@
       const fetchInventoryData = async () => {
         loading.value = true;
         try {
-          const condition = {
+          const condition: InventoryCondition = {
             notPage: true,
-            inventoryType: props.inventoryType,
-            characterId: Number(props.characterId),
+            inventoryType: props.inventoryType, // 直接使用 props.inventoryType
+            characterId: props.characterId,
+            page: 1,
+            pageSize: 100,
+            pageNo: 1,
           };
 
-          // 请求库存数据
           const data = await getInventoryList(condition);
 
-          // 确保 data 是数组，如果不是则设为 []
           if (Array.isArray(data.data)) {
             inventory.value = data.data;
           } else {
             inventory.value = [];
           }
-
-          console.log(inventory.value);
         } catch (error) {
-          console.error('获取库存数据失败：', error);
-          inventory.value = []; // 出错时也要确保 inventory 是数组
+          inventory.value = [];
         } finally {
           loading.value = false;
         }
@@ -145,9 +156,11 @@
 
       const drawInventory = async () => {
         setTimeout(async () => {
-          const id = document.getElementById('inventoryCanvas');
-          if (!id) return;
-          const ctx = id.getContext('2d');
+          const canvas = document.getElementById(
+            'inventoryCanvas'
+          ) as HTMLCanvasElement;
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
           if (!ctx) return;
 
           const backgroundImg = new Image();
@@ -157,29 +170,27 @@
 
             const imagePromises = inventory.value.map(async (item) => {
               const { position, quantity, itemId } = item;
-              // 确保position是从1开始
               const index = (position - 1) % posArr.value.length;
-              const pos = posArr.value[index]; // 使用 mod 运算来避免越界
-              let itemImgSrc;
+              const pos = posArr.value[index];
+              let itemImgSrc: string;
               if (itemId === 2430033) {
-                itemImgSrc = beidouBook; // 使用本地图片
+                itemImgSrc = beidouBook;
               } else {
-                itemImgSrc = await getFromCacheOrDownload(itemId); // 从 API 获取图片
+                itemImgSrc = await getFromCacheOrDownload(itemId);
               }
               const itemImg = new Image();
-              return new Promise((resolve) => {
+              return new Promise<void>((resolve) => {
                 itemImg.src = itemImgSrc;
                 itemImg.onload = () => {
                   ctx.drawImage(itemImg, pos.x, pos.y, 30, 30);
-                  // 检查物品类型
                   if (props.inventoryType !== 1) {
-                    ctx.fillStyle = 'white'; // 填充颜色
-                    ctx.fillText(`${quantity}`, pos.x, pos.y + 25); // 绘制填充文本
-                    ctx.strokeStyle = 'black'; // 文本轮廓颜色
-                    ctx.lineWidth = 3; // 轮廓线宽
-                    ctx.strokeText(`${quantity}`, pos.x, pos.y + 25); // 绘制轮廓
-                    ctx.fillStyle = 'white'; // 填充颜色
-                    ctx.fillText(`${quantity}`, pos.x, pos.y + 25); // 绘制填充文本
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(`${quantity}`, pos.x, pos.y + 25);
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(`${quantity}`, pos.x, pos.y + 25);
+                    ctx.fillStyle = 'white';
+                    ctx.fillText(`${quantity}`, pos.x, pos.y + 25);
                   }
                   resolve();
                 };
@@ -192,7 +203,10 @@
       };
 
       const handleMouseMove = (event: MouseEvent) => {
-        const rect = event.currentTarget.getBoundingClientRect();
+        const target = event.currentTarget as HTMLElement;
+        if (!target) return;
+
+        const rect = target.getBoundingClientRect();
         const mouseX = event.clientX - rect.left;
         const mouseY = event.clientY - rect.top;
         const foundItem = inventory.value.find((item) => {
@@ -208,29 +222,34 @@
         });
 
         if (foundItem) {
-          // 计算提示框的位置，使其远离鼠标指针
-          const offsetX = 15; // X 方向的偏移量
-          const offsetY = 15; // Y 方向的偏移量
+          const offsetX = 15;
+          const offsetY = 15;
           tooltip.value = {
             x: mouseX + offsetX,
             y: mouseY + offsetY,
-            text: `Item ID: ${foundItem.itemId}<br>Item Name: ${foundItem.itemName}`,
+            text: `${t('inventory.placeholder.itemId')}: ${
+              foundItem.itemId
+            }\n${t('inventory.placeholder.itemName')}: ${foundItem.itemName}`,
             show: true,
           };
-          hideCursor.value = true; // 隐藏鼠标指针
+          hideCursor.value = true;
         } else {
           tooltip.value.show = false;
-          hideCursor.value = false; // 显示鼠标指针
+          hideCursor.value = false;
         }
       };
 
       const handleMouseLeave = () => {
         tooltip.value.show = false;
-        hideCursor.value = false; // 显示鼠标指针
+        hideCursor.value = false;
       };
 
       watch(inventory, () => {
         drawInventory();
+      });
+
+      onMounted(() => {
+        fetchInventoryData();
       });
 
       return {
@@ -256,6 +275,7 @@
     border-radius: 5px;
     font-size: 12px;
     z-index: 1000;
+    white-space: pre-line;
     pointer-events: none; /* 防止提示框影响鼠标事件 */
   }
 

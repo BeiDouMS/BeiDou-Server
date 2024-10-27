@@ -43,15 +43,15 @@
       v-model:visible="inventoryVisible"
       title="背包渲染图"
       :width="800"
-      :footer="null"
+      :footer="false"
+      :draggable="true"
       @ok="handleOk"
       @cancel="handleCancel"
-      :draggable="true"
     >
       <InventoryUI
         v-if="inventoryVisible"
-        :character-id="currentCid"
-        :inventory-type="currentType"
+        :character-id="currentCid || 0"
+        :inventory-type="Number(currentType) || 1"
       />
       <div style="display: flex; justify-content: flex-end; margin-top: 16px">
         <a-button type="primary" @click="handleOk">确定</a-button>
