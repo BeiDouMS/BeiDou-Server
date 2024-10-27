@@ -261,7 +261,7 @@ public class GachaponService {
         GachaponRewardDO reward = poolRewards.get(random);
 
         Item itemGained = player.getAbstractPlayerInteraction().gainItem(reward.getItemId(), reward.getQuantity(), true, true);
-        String gachaponMessage = I18nUtil.getMessage("GachaMessage.message1 ",player.getMap(),reward.getQuantity(),ItemInformationProvider.getInstance().getName(reward.getItemId()));
+        String gachaponMessage = I18nUtil.getMessage("GachaMessage.message1",player.getMap(),reward.getQuantity(),ItemInformationProvider.getInstance().getName(reward.getItemId()));
         player.dropMessage(gachaponMessage);
         Gachapon.log(player, reward.getItemId(), player.getMap().getMapName());
 
