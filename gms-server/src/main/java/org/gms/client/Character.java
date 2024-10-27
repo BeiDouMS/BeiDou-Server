@@ -5721,7 +5721,7 @@ public class Character extends AbstractCharacterObject {
         } else if (level == 10) {
             ThreadManager.getInstance().newTask(() -> {
                 if (leaveParty()) {
-                    showHint("You have reached #blevel 10#k, therefore you must leave your #rstarter party#k.");
+                    showHint(I18nUtil.getMessage("Character.levelUp.LeaveStarterParty"));
                 }
             });
         }
@@ -6485,7 +6485,7 @@ public class Character extends AbstractCharacterObject {
             }
         }
         if (possesed > 0 && !MapId.isDojo(getMapId())) {
-            message("You have used a safety charm, so your EXP points have not been decreased.");
+            message(I18nUtil.getLogMessage("Character.useItem.message1"));  //使用安全护符，不扣经验
             InventoryManipulator.removeById(client, ItemConstants.getInventoryType(charmID[i]), charmID[i], 1, true, false);
             usedSafetyCharm = true;
         } else if (getJob() != Job.BEGINNER) { //Hmm...
@@ -8841,9 +8841,8 @@ public class Character extends AbstractCharacterObject {
         if (this.isGM() || this.isBanned()) {  // thanks RedHat for noticing GM's being able to get banned
             return;
         }
-
         this.ban(reason);
-        sendPacket(PacketCreator.sendPolice(String.format("You have been blocked by the#b %s Police for HACK reason.#k", "Cosmic")));
+        sendPacket(PacketCreator.sendPolice(I18nUtil.getMessage("Character.autoBan.message1")));  //发送自动封禁提示
         TimerManager.getInstance().schedule(() -> client.disconnect(false, false), 5000);
 
         Server.getInstance().broadcastGMMessage(this.getWorld(), PacketCreator.serverNotice(6, Character.makeMapleReadable(this.name) + " was autobanned for " + reason));
@@ -8967,12 +8966,13 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
-    private void equipPendantOfSpirit() {
+    private void equipPendantOfSpirit() {   //精灵吊坠装备时长经验计算
         if (pendantOfSpirit == null) {
             pendantOfSpirit = TimerManager.getInstance().register(() -> {
                 if (pendantExp < 3) {
                     pendantExp++;
-                    message("Pendant of the Spirit has been equipped for " + pendantExp + " hour(s), you will now receive " + pendantExp + "0% bonus exp.");
+                    //用于准确提示装备1小时内还是装备经过几小时
+                    message(I18nUtil.getMessage(pendantExp<=2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
@@ -9336,7 +9336,7 @@ public class Character extends AbstractCharacterObject {
 
     public void setReborns(int value) {
         if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-            yellowMessage("Rebirth system is not enabled!");
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
             throw new NotEnabledException();
         }
 
@@ -9356,7 +9356,7 @@ public class Character extends AbstractCharacterObject {
 
     public int getReborns() {
         if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-            yellowMessage("Rebirth system is not enabled!");
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
             throw new NotEnabledException();
         }
 
@@ -9380,7 +9380,7 @@ public class Character extends AbstractCharacterObject {
 
     public void executeRebornAs(Job job) {
         if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-            yellowMessage("Rebirth system is not enabled!");
+            yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
             throw new NotEnabledException();
         }
         if (getLevel() != getMaxClassLevel()) {
