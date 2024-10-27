@@ -15,7 +15,7 @@
           "
           @click="openInventoryUI(currentCid, currentType)"
         >
-          背包渲染图
+          {{ t('inventory.placeholder.inventoryDraw') }}
         </a-button>
       </div>
       <a-tabs
@@ -41,7 +41,7 @@
     <!-- 模态框 -->
     <a-modal
       v-model:visible="inventoryVisible"
-      title="背包渲染图"
+      :title="t('inventory.placeholder.inventoryDraw')"
       :width="800"
       :footer="false"
       :draggable="true"
@@ -54,7 +54,9 @@
         :inventory-type="Number(currentType) || 1"
       />
       <div style="display: flex; justify-content: flex-end; margin-top: 16px">
-        <a-button type="primary" @click="handleOk">确定</a-button>
+        <a-button type="primary" @click="handleOk">{{
+          t('inventory.placeholder.confirm')
+        }}</a-button>
       </div>
     </a-modal>
   </div>
@@ -66,7 +68,10 @@
   import { ref } from 'vue';
   import InventoryList from '@/views/game/inventory/table.vue';
   import CharacterSelector from '@/views/game/inventory/characterSelector.vue';
-  import InventoryUI from '@/views/game/inventory/InventoryUI.vue'; // 引入 InventoryUI
+  import InventoryUI from '@/views/game/inventory/InventoryUI.vue';
+  import { useI18n } from 'vue-i18n';
+
+  const { t } = useI18n();
 
   const typeList = ref<InventoryTypeState[]>([]);
   const currentType = ref<string | number>(1);
