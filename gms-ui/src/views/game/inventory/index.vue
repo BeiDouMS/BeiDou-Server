@@ -47,7 +47,6 @@
       @ok="handleOk"
       @cancel="handleCancel"
       :draggable="true"
-      :modal-style="{ cursor: 'move' }"
     >
       <InventoryUI
         v-if="inventoryVisible"

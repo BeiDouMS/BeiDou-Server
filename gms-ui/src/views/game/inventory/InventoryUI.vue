@@ -6,7 +6,20 @@
         id="inventoryCanvas"
         :width="canvasWidth"
         :height="canvasHeight"
+        @mousemove="handleMouseMove"
+        @mouseleave="handleMouseLeave"
+        :class="{ 'hide-cursor': hideCursor }"
       ></canvas>
+      <div
+        class="tooltip"
+        :style="{
+          left: `${tooltip.x}px`,
+          top: `${tooltip.y}px`,
+          display: tooltip.show ? 'block' : 'none',
+        }"
+      >
+        {{ tooltip.text }}
+      </div>
     </div>
   </div>
 </template>
@@ -81,9 +94,19 @@
     setup(props) {
       const loading = ref(false);
       const inventory = ref([]);
+      const posArr = ref(calculatePositionOffsets());
 
       const canvasWidth = 600;
       const canvasHeight = 290;
+
+      const tooltip = ref({
+        x: 0,
+        y: 0,
+        text: '',
+        show: false,
+      });
+
+      const hideCursor = ref(false);
 
       const fetchInventoryData = async () => {
         loading.value = true;
@@ -133,13 +156,11 @@
           backgroundImg.onload = async () => {
             ctx.drawImage(backgroundImg, 0, 0, canvasWidth, canvasHeight);
 
-            const posArr = calculatePositionOffsets();
-
             const imagePromises = inventory.value.map(async (item) => {
               const { position, quantity, itemId } = item;
               // 确保position是从1开始
-              const index = (position - 1) % posArr.length;
-              const pos = posArr[index]; // 使用 mod 运算来避免越界
+              const index = (position - 1) % posArr.value.length;
+              const pos = posArr.value[index]; // 使用 mod 运算来避免越界
               let itemImgSrc;
               if (itemId === 2430033) {
                 itemImgSrc = beidouBook; // 使用本地图片
@@ -171,6 +192,44 @@
         }, 0);
       };
 
+      const handleMouseMove = (event: MouseEvent) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const mouseX = event.clientX - rect.left;
+        const mouseY = event.clientY - rect.top;
+        const foundItem = inventory.value.find((item) => {
+          const { position } = item;
+          const index = (position - 1) % posArr.value.length;
+          const pos = posArr.value[index];
+          return (
+            mouseX > pos.x &&
+            mouseX < pos.x + 30 &&
+            mouseY > pos.y &&
+            mouseY < pos.y + 30
+          );
+        });
+
+        if (foundItem) {
+          // 计算提示框的位置，使其远离鼠标指针
+          const offsetX = 15; // X 方向的偏移量
+          const offsetY = 15; // Y 方向的偏移量
+          tooltip.value = {
+            x: mouseX + offsetX,
+            y: mouseY + offsetY,
+            text: `Item ID: ${foundItem.itemId}`,
+            show: true,
+          };
+          hideCursor.value = true; // 隐藏鼠标指针
+        } else {
+          tooltip.value.show = false;
+          hideCursor.value = false; // 显示鼠标指针
+        }
+      };
+
+      const handleMouseLeave = () => {
+        tooltip.value.show = false;
+        hideCursor.value = false; // 显示鼠标指针
+      };
+
       watch(inventory, () => {
         drawInventory();
       });
@@ -180,10 +239,28 @@
         inventory,
         canvasWidth,
         canvasHeight,
+        tooltip,
+        handleMouseMove,
+        handleMouseLeave,
+        hideCursor,
       };
     },
   });
 </script>
 
-<style scoped></style>
-}
+<style scoped>
+  .tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    z-index: 1000;
+    pointer-events: none; /* 防止提示框影响鼠标事件 */
+  }
+
+  .hide-cursor {
+    cursor: none !important; /* 隐藏鼠标指针 */
+  }
+</style>
