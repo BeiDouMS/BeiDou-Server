@@ -27,7 +27,7 @@ function start(mode, type, selection) {
         qm.forceStartQuest();
         // qm.sendOk("从这里往东一直走，就可以碰到蘑菇森林的结界。请你小心。听说整个森林已被凶恶的怪物所占据。");
         qm.dispose();
-    } else if (status == 2) {
+    } //else if (status == 2) {
     //     // qm.forceStartQuest();
     //     // qm.forceStartQuest(2314,"1");
     //     // qm.gainExp(8300);
