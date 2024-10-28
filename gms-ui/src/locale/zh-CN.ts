@@ -6,6 +6,7 @@ import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
 import login from '@/views/login/locale/zh-CN';
+import inventory from '@/views/game/inventory/locale/zh-CN';
 import baseConfig from './zh-CN/base';
 
 export default {
@@ -48,4 +49,5 @@ export default {
   ...drop,
   ...gachapon,
   ...informationSearch,
+  ...inventory,
 };

@@ -39,24 +39,24 @@ function start(mode, type, selection) {
     // }
 }
 
-// function end(mode, type, selection) {
-//     status++;
-//     if (mode != 1) {
-//         if (type == 1 && mode == 0) {
-//             status -= 2;
-//         } else {
-//             qm.dispose();
-//             return;
-//         }
-//     }
-//     if (status == 0) {
-//         qm.sendOk("你对蘑菇森林的结界进行调查了吗？结果怎么样？");
-//     } else if (status == 1) {
-//         qm.forceCompleteQuest();
-//         qm.gainExp(8300);
-//         qm.sendOk("是吗？果然不是普通的结界。辛苦你了。如果没有你的话，我们就不可能知道这一情况。");
-//     } else if (status == 2) {
-//         qm.dispose();
-//     }
-// }
-//
+function end(mode, type, selection) {
+    status++;
+    if (mode != 1) {
+        if (type == 1 && mode == 0) {
+            status -= 2;
+        } else {
+            qm.dispose();
+            return;
+        }
+    }
+    if (status == 0) {
+        qm.sendOk("你对蘑菇森林的结界进行调查了吗？结果怎么样？");
+    } else if (status == 1) {
+        qm.forceCompleteQuest();
+        qm.gainExp(8300);
+        qm.sendOk("是吗？果然不是普通的结界。辛苦你了。如果没有你的话，我们就不可能知道这一情况。");
+    } else if (status == 2) {
+        qm.dispose();
+    }
+}
+
