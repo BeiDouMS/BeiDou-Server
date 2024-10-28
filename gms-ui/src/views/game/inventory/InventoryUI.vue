@@ -183,7 +183,7 @@
                 itemImg.src = itemImgSrc;
                 itemImg.onload = () => {
                   ctx.drawImage(itemImg, pos.x, pos.y, 30, 30);
-                  if (props.inventoryType !== 1) {
+                  if (props.inventoryType !== 1 && quantity > 1) {
                     ctx.fillStyle = 'white';
                     ctx.fillText(`${quantity}`, pos.x, pos.y + 25);
                     ctx.strokeStyle = 'black';
