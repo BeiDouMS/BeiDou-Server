@@ -10,6 +10,7 @@ import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
 import org.gms.exception.BizException;
 import org.gms.model.dto.CommandReqDTO;
+import org.gms.model.dto.DropSearchRtnDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
@@ -147,17 +148,37 @@ public class CommandService {
         }
     }
 
-    public Page<CommandInfoDO> getCommandListFromDB(CommandReqDTO request) {
+    public Page<CommandReqDTO> getCommandListFromDB(CommandReqDTO request) {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (request.getLevel() != null) queryWrapper.in("level", request.getLevelList());
         if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevelList());
         if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
-        //if (request.getDescription() != null) queryWrapper.like("description", request.getDescription());
-        //Command command = getCommandInstance(CommandInfoDO);
-        //CommandInfoDO.setDescription(command.getDescription());
-        if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
-        return commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
 
+        if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
+        Page<CommandInfoDO> commandInfoDOPage = commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
+        return new Page<>(
+                commandInfoDOPage.getRecords().stream()
+                        .map(
+                                record -> CommandReqDTO.builder()
+                                        .id(record.getId())
+                                        .level(record.getLevel())
+                                        .syntax(record.getSyntax())
+                                        .defaultLevel(record.getDefaultLevel())
+                                        .clazz(record.getClazz())
+                                        .enabled(record.isEnabled())
+                                        .description(getDescriptionByCommandInfoDO(record))
+                                        .build())
+                        .toList(),
+                commandInfoDOPage.getPageNumber(),
+                commandInfoDOPage.getPageSize(),
+                commandInfoDOPage.getTotalRow()
+        );
+
+
+    }
+
+    public String getDescriptionByCommandInfoDO(CommandInfoDO CommandDO) {
+        return getCommandInstance(CommandDO).getDescription();
     }
 
     @Transactional
@@ -187,7 +208,6 @@ public class CommandService {
         updateRegisteredCommands(updateCommandInfoDO);
         return updateCommandInfoDO;
     }
-
 
 
 }

@@ -28,7 +28,7 @@ public class CommandController {
     @Tag(name = "/command/" + ApiConstant.LATEST)
     @Operation(summary = "查询命令库所有指令与状态")
     @PostMapping("/" + ApiConstant.LATEST + "/getCommandListFromDB")
-    public ResultBody<Page<CommandInfoDO>> getCommandListFromDB(@RequestBody SubmitBody<CommandReqDTO> submitBody) {
+    public ResultBody<Page<CommandReqDTO>> getCommandListFromDB(@RequestBody SubmitBody<CommandReqDTO> submitBody) {
         return ResultBody.success(commandService.getCommandListFromDB(submitBody.getData()));
     }
 
@@ -39,11 +39,6 @@ public class CommandController {
         return ResultBody.success(commandService.updateCommand(submitBody.getData()));
     }
 
-    @Tag(name = "/command/" + ApiConstant.LATEST)
-    @Operation(summary = "新增命令库所有指令与状态")
-    @PostMapping("/" + ApiConstant.LATEST + "/insertCommand")
-    public ResultBody<CommandInfoDO> insertCommandInfo(@RequestBody SubmitBody<CommandReqDTO> submitBody) {
-        return ResultBody.success(commandService.insertCommandInfo(submitBody.getData()));
-    }
+
 
 }
