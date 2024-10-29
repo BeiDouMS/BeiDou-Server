@@ -153,6 +153,8 @@ public class CommandService {
         if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevelList());
         if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
         //if (request.getDescription() != null) queryWrapper.like("description", request.getDescription());
+        //Command command = getCommandInstance(CommandInfoDO);
+        //CommandInfoDO.setDescription(command.getDescription());
         if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
         return commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
 
@@ -160,12 +162,13 @@ public class CommandService {
 
     @Transactional
     public CommandInfoDO updateCommand(CommandReqDTO request) {
-        if (request.getEnabled()==null){
-            throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL"));
-        }
+
+        RequireUtil.requireNotNull(request.getEnabled(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "enable"));
+        RequireUtil.requireNotNull(request.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
 
 
-        CommandInfoDO updateCommandInfoDO = commandInfoMapper.selectOneById(request.getId());
+        CommandInfoDO updateCommandInfoDO = new CommandInfoDO();
+        updateCommandInfoDO.setId(request.getId());
         /**
          * 只能改开关和等级，其他的不能改
          * Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
@@ -174,10 +177,9 @@ public class CommandService {
          */
         updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
 
-
-        if(!request.getEnabled()){
+        if (!request.getEnabled()) {
             updateCommandInfoDO.setEnabled(false);
-        }else{
+        } else {
             updateCommandInfoDO.setEnabled(true);
         }
         //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
@@ -187,30 +189,5 @@ public class CommandService {
     }
 
 
-
-    @Transactional
-    public CommandInfoDO insertCommandInfo(CommandReqDTO request) {
-        if (request.getEnabled()==null){
-            throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL"));
-        }
-
-        CommandInfoDO insertCommandInfoDO = new CommandInfoDO();
-        insertCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : insertCommandInfoDO.getLevel());
-        insertCommandInfoDO.setSyntax(request.getSyntax() != null ? request.getSyntax() : insertCommandInfoDO.getSyntax());
-        insertCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : insertCommandInfoDO.getDefaultLevel());
-
-        if(!request.getEnabled()){
-            insertCommandInfoDO.setEnabled(false);
-        }else{
-            insertCommandInfoDO.setEnabled(true);
-        }
-
-        insertCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : insertCommandInfoDO.getClazz());
-        //insertCommandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
-        commandInfoMapper.insert(insertCommandInfoDO);
-
-        updateRegisteredCommands(insertCommandInfoDO);
-        return insertCommandInfoDO;
-    }
 
 }
