@@ -6,6 +6,7 @@ import workplace from '@/views/dashboard/workplace/locale/en-US';
 import informationSearch from '@/views/dashboard/informationSearch/locale/en-US';
 import account from '@/views/account/locale/en-US';
 import login from '@/views/login/locale/en-US';
+import inventory from '@/views/game/inventory/locale/en-US';
 import base from './en-US/base';
 
 export default {
@@ -45,4 +46,5 @@ export default {
   ...drop,
   ...gachapon,
   ...informationSearch,
+  ...inventory,
 };

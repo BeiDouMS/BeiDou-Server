@@ -19,15 +19,22 @@
       <a-table-column title="物品ID" data-index="itemId" align="center" />
       <a-table-column title="物品" align="center">
         <template #cell="{ record }">
-          <img :src="getIconUrl('item', record.itemId)" alt="" />
+          <a-popover placement="top">
+            <template #content>
+              <span>{{
+                record.itemId === 2430033 ? '北斗卫星指导书' : record.itemName
+              }}</span>
+            </template>
+            <img
+              v-if="record.itemId === 2430033"
+              :src="beidouBook"
+              alt="北斗卫星指导书"
+            />
+            <img v-else :src="getIconUrl('item', record.itemId)" />
+          </a-popover>
         </template>
       </a-table-column>
       <a-table-column title="类型" data-index="itemType" align="center" />
-      <!--      <a-table-column-->
-      <!--        title="inventoryType"-->
-      <!--        data-index="inventoryType"-->
-      <!--        align="center"-->
-      <!--      />-->
       <a-table-column title="位置" data-index="position" align="center" />
       <a-table-column title="数量" align="center" :width="160">
         <template #cell="{ record }">
@@ -49,7 +56,6 @@
           <a-input-number v-else v-model="record.expiration" />
         </template>
       </a-table-column>
-      <!--      <a-table-column title="装备" data-index="equipment" align="center" />-->
       <a-table-column title="操作" :width="200">
         <template #cell="{ record }">
           <a-button
@@ -83,7 +89,7 @@
             content="你确定要删除这个道具吗？"
             @ok="deleteClick(record)"
           >
-            <a-button type="text" size="mini" status="danger"> 删除 </a-button>
+            <a-button type="text" size="mini" status="danger"> 删除</a-button>
           </a-popconfirm>
         </template>
       </a-table-column>
@@ -106,6 +112,8 @@
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
   import { timestampToChineseTime } from '@/utils/stringUtils';
 
+  import beidouBook from '@/assets/2430033.png';
+
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
 
@@ -117,7 +125,6 @@
 
   const loadData = async () => {
     editId.value = undefined;
-    // 可在选择完玩家后刷新
     if (!props || !props.characterId) {
       return;
     }

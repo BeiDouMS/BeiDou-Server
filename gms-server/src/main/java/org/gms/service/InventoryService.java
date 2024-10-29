@@ -15,6 +15,7 @@ import org.gms.exception.BizException;
 import org.gms.model.dto.*;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.server.ItemInformationProvider;
 import org.gms.util.CashIdGenerator;
 import org.gms.util.I18nUtil;
 import org.gms.util.PacketCreator;
@@ -60,6 +61,8 @@ public class InventoryService {
         Page<CharactersDO> paginate = inventoryitemsMapper.paginateAs(data.getPageNo(), data.getPageSize(), queryWrapper, CharactersDO.class);
         return new Page<>(
                 paginate.getRecords().stream()
+                        // 删除角色，但是没有删除背包这里查会出现空指针
+                        .filter(Objects::nonNull)
                         .map(record -> {
                             InventorySearchReqDTO dto = new InventorySearchReqDTO();
                             dto.setCharacterId(record.getId());
@@ -152,6 +155,7 @@ public class InventoryService {
     }
 
     private InventorySearchRtnDTO buildByDb(Row obj) {
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
                 .id(obj.getLong("inventoryitemid"))
                 .itemType(obj.getInt("type"))
@@ -166,6 +170,7 @@ public class InventoryService {
                 .expiration(obj.getLong("expiration"))
                 .giftFrom(obj.getString("giftFrom"))
                 .online(false)
+                .itemName(ii.getName(obj.getInt("itemid")))
                 .build();
         Long inventoryEquipmentId = obj.getLong("inventoryequipmentid");
         if (inventoryEquipmentId != null) {
@@ -202,6 +207,7 @@ public class InventoryService {
 
     private List<InventorySearchRtnDTO> buildByOnline(Character character, InventoryType type) {
         Inventory inventory = character.getInventory(type);
+        ItemInformationProvider ii = ItemInformationProvider.getInstance();
         return inventory.list().stream().map(item -> {
             InventorySearchRtnDTO rtnDTO = InventorySearchRtnDTO.builder()
                     .id(-1L)
@@ -217,6 +223,7 @@ public class InventoryService {
                     .expiration(item.getExpiration())
                     .giftFrom(item.getGiftFrom())
                     .online(true)
+                    .itemName(ii.getName(item.getItemId()))
                     .build();
             if (type.isEquip()) {
                 Equip equip = (Equip) item;
