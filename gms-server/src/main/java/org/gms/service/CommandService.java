@@ -11,6 +11,7 @@ import org.gms.model.dto.CommandReqDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,6 +113,8 @@ public class CommandService {
         return commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
 
     }
+
+    @Transactional
     public CommandInfoDO updateCommand(CommandReqDTO request) {
 
         CommandInfoDO updateCommandInfoDO = commandInfoMapper.selectOneById(request.getId());
@@ -125,8 +128,16 @@ public class CommandService {
         updateCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : updateCommandInfoDO.getEnabled());
         //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
         commandInfoMapper.update(updateCommandInfoDO);
+        updateRegisteredCommands(updateCommandInfoDO);
         return updateCommandInfoDO;
     }
+    private void updateRegisteredCommands (CommandInfoDO commandInfoDO) {
+        //TODO 游戏内重新注册命令并生效
+    }
+
+
+
+    @Transactional
     public CommandInfoDO insertCommandInfo(CommandReqDTO request) {
 
         CommandInfoDO insertCommandInfoDO = new CommandInfoDO();
@@ -137,8 +148,12 @@ public class CommandService {
         insertCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : insertCommandInfoDO.getClazz());
         //insertCommandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
         commandInfoMapper.insert(insertCommandInfoDO);
+
+        updateRegisteredCommands(insertCommandInfoDO);
         return insertCommandInfoDO;
     }
+
+
 
 
 }
