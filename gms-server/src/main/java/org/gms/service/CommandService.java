@@ -1,15 +1,21 @@
 package org.gms.service;
 
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.command.Command;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
+import org.gms.exception.BizException;
+import org.gms.model.dto.CommandReqDTO;
+import org.gms.model.dto.DropSearchRtnDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -141,5 +147,67 @@ public class CommandService {
             return null;
         }
     }
+
+    public Page<CommandReqDTO> getCommandListFromDB(CommandReqDTO request) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (request.getLevel() != null) queryWrapper.in("level", request.getLevelList());
+        if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevelList());
+        if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
+
+        if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
+        Page<CommandInfoDO> commandInfoDOPage = commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
+        return new Page<>(
+                commandInfoDOPage.getRecords().stream()
+                        .map(
+                                record -> CommandReqDTO.builder()
+                                        .id(record.getId())
+                                        .level(record.getLevel())
+                                        .syntax(record.getSyntax())
+                                        .defaultLevel(record.getDefaultLevel())
+                                        .clazz(record.getClazz())
+                                        .enabled(record.isEnabled())
+                                        .description(getDescriptionByCommandInfoDO(record))
+                                        .build())
+                        .toList(),
+                commandInfoDOPage.getPageNumber(),
+                commandInfoDOPage.getPageSize(),
+                commandInfoDOPage.getTotalRow()
+        );
+
+
+    }
+
+    public String getDescriptionByCommandInfoDO(CommandInfoDO CommandDO) {
+        return getCommandInstance(CommandDO).getDescription();
+    }
+
+    @Transactional
+    public CommandInfoDO updateCommand(CommandReqDTO request) {
+
+        RequireUtil.requireNotNull(request.getEnabled(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "enable"));
+        RequireUtil.requireNotNull(request.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
+
+
+        CommandInfoDO updateCommandInfoDO = new CommandInfoDO();
+        updateCommandInfoDO.setId(request.getId());
+        /**
+         * 只能改开关和等级，其他的不能改
+         * Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
+         * 因为level已经被改成其他的了
+         * DefaultLevel和Clazz也不能改
+         */
+        updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
+
+        if (!request.getEnabled()) {
+            updateCommandInfoDO.setEnabled(false);
+        } else {
+            updateCommandInfoDO.setEnabled(true);
+        }
+        //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
+        commandInfoMapper.update(updateCommandInfoDO);
+        updateRegisteredCommands(updateCommandInfoDO);
+        return updateCommandInfoDO;
+    }
+
 
 }
