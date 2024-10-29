@@ -8,6 +8,7 @@ import org.gms.client.command.Command;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
+import org.gms.exception.BizException;
 import org.gms.model.dto.CommandReqDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
@@ -159,6 +160,10 @@ public class CommandService {
 
     @Transactional
     public CommandInfoDO updateCommand(CommandReqDTO request) {
+        if (request.getEnabled()==null){
+            throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL"));
+        }
+
 
         CommandInfoDO updateCommandInfoDO = commandInfoMapper.selectOneById(request.getId());
         /**
@@ -168,26 +173,38 @@ public class CommandService {
          * DefaultLevel和Clazz也不能改
          */
         updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
-        updateCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : updateCommandInfoDO.getEnabled());
+
+
+        if(!request.getEnabled()){
+            updateCommandInfoDO.setEnabled(false);
+        }else{
+            updateCommandInfoDO.setEnabled(true);
+        }
         //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
         commandInfoMapper.update(updateCommandInfoDO);
         updateRegisteredCommands(updateCommandInfoDO);
         return updateCommandInfoDO;
-    }
-    private void updateRegisteredCommands (CommandInfoDO commandInfoDO) {
-        //TODO 游戏内重新注册命令并生效
     }
 
 
 
     @Transactional
     public CommandInfoDO insertCommandInfo(CommandReqDTO request) {
+        if (request.getEnabled()==null){
+            throw new BizException(I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL"));
+        }
 
         CommandInfoDO insertCommandInfoDO = new CommandInfoDO();
         insertCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : insertCommandInfoDO.getLevel());
         insertCommandInfoDO.setSyntax(request.getSyntax() != null ? request.getSyntax() : insertCommandInfoDO.getSyntax());
         insertCommandInfoDO.setDefaultLevel(request.getDefaultLevel() != null ? request.getDefaultLevel() : insertCommandInfoDO.getDefaultLevel());
-        insertCommandInfoDO.setEnabled(request.getEnabled() != null ? request.getEnabled() : insertCommandInfoDO.getEnabled());
+
+        if(!request.getEnabled()){
+            insertCommandInfoDO.setEnabled(false);
+        }else{
+            insertCommandInfoDO.setEnabled(true);
+        }
+
         insertCommandInfoDO.setClazz(request.getClazz() != null ? request.getClazz() : insertCommandInfoDO.getClazz());
         //insertCommandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
         commandInfoMapper.insert(insertCommandInfoDO);
@@ -195,8 +212,5 @@ public class CommandService {
         updateRegisteredCommands(insertCommandInfoDO);
         return insertCommandInfoDO;
     }
-
-
-
 
 }
