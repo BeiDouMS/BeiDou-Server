@@ -53,12 +53,10 @@ public class QuestService {
             questStatus.setCompleted(queststatusDO.getCompleted());
             questprogressDOList.stream()
                     .filter(questprogressDO -> Objects.equals(queststatusDO.getQueststatusid(), questprogressDO.getQueststatusid()))
-                    .findFirst()
-                    .ifPresent(questprogressDO -> questStatus.setProgress(questprogressDO.getProgressid(),  questprogressDO.getProgress()));
+                    .forEach(questprogressDO -> questStatus.setProgress(questprogressDO.getProgressid(),  questprogressDO.getProgress()));
             medalmapsDOList.stream()
                     .filter(medalmapsDO -> Objects.equals(queststatusDO.getQueststatusid(), medalmapsDO.getQueststatusid()))
-                    .findFirst()
-                    .ifPresent(medalmapsDO -> questStatus.addMedalMap(medalmapsDO.getMapid()));
+                    .forEach(medalmapsDO -> questStatus.addMedalMap(medalmapsDO.getMapid()));
             return questStatus;
         }).toList();
     }
