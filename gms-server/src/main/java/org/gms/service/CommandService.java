@@ -55,7 +55,7 @@ public class CommandService {
             // 如果更新的状态是开启，则添加注册。如果新状态是关闭，则不必理会，更新db即可
             if (commandInfoDO.isEnabled()) {
                 command = getCommandInstance(commandInfoDO);
-                RequireUtil.requireNotNull(command, I18nUtil.getExceptionMessage(I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "clazz", commandInfoDO.getClazz())));
+                RequireUtil.requireNotNull(command, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "clazz", commandInfoDO.getClazz()));
                 registeredCommands.put(syntax, command);
                 // 按照新等级获取实例
                 Pair<List<String>, List<String>> nameDescPair = commandsNameDesc.get(commandInfoDO.getLevel());
