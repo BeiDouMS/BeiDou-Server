@@ -44,7 +44,6 @@ public class EventScriptScheduler {
 
     private ScheduledFuture<?> schedulerTask = null;
     private final Lock schedulerLock = new ReentrantLock(true);
-    private final Runnable monitorTask = () -> runBaseSchedule();
 
     private void runBaseSchedule() {
         List<Runnable> toRemove;
@@ -105,7 +104,7 @@ public class EventScriptScheduler {
                         return;
                     }
 
-                    schedulerTask = TimerManager.getInstance().register(monitorTask, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC);
+                    schedulerTask = TimerManager.getInstance().register(this::runBaseSchedule, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC);
                 }
 
                 registeredEntries.put(scheduledAction, Server.getInstance().getCurrentTime() + duration);
