@@ -28,7 +28,7 @@
   const selectClick = (cid: number, cName: string) => {
     ccId.value = cid;
     ccName.value = cName;
-    emit('useCharacter', cid);
+    emit('useCharacter', cid, cName);
     visible.value = false;
   };
 </script>
