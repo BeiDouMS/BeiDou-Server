@@ -45,7 +45,6 @@ public abstract class BaseScheduler {
 
     private ScheduledFuture<?> schedulerTask = null;
     private final Lock schedulerLock = new ReentrantLock(true);
-    private final Runnable monitorTask = () -> runBaseSchedule();
 
     protected BaseScheduler() {
     }
@@ -124,7 +123,7 @@ public abstract class BaseScheduler {
         try {
             idleProcs = 0;
             if (schedulerTask == null) {
-                schedulerTask = TimerManager.getInstance().register(monitorTask, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC);
+                schedulerTask = TimerManager.getInstance().register(this::runBaseSchedule, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC);
             }
 
             registeredEntries.put(key, new Pair<>(removalAction, Server.getInstance().getCurrentTime() + duration));

@@ -17,7 +17,7 @@ var commands;
 
 function writeHeavenMSCommands() {
     const CommandsExecutor = Java.type('org.gms.client.command.CommandsExecutor');
-    commands = CommandsExecutor.getInstance().getGmCommands();
+    commands = CommandsExecutor.getInstance().getCommandsNameDesc();
 }
 
 function start() {
