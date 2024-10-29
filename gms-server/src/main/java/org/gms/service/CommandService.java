@@ -8,9 +8,7 @@ import org.gms.client.command.Command;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
-import org.gms.exception.BizException;
 import org.gms.model.dto.CommandReqDTO;
-import org.gms.model.dto.DropSearchRtnDTO;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
@@ -37,7 +35,7 @@ public class CommandService {
 
         List<CommandInfoDO> commandInfoList = commandInfoMapper.selectAll();
         if (commandInfoList == null || commandInfoList.isEmpty()) {
-            log.warn("commandInfo list  is null");
+            log.warn(I18nUtil.getLogMessage("CommandService.loadCommands.warn1"));
             return;
         }
         // 根据level对指令分组
@@ -46,7 +44,7 @@ public class CommandService {
         for (int i = 0; i <= 6; i++) {
             registerCommands(registeredCommands, commandsNameDesc, i, levelMap.get(i));
         }
-        log.info("加载指令结束，指令数量：{}", registeredCommands.size());
+        log.info(I18nUtil.getLogMessage("CommandService.loadCommands.info1"), registeredCommands.size());
     }
 
 
@@ -100,9 +98,9 @@ public class CommandService {
                                   final List<Pair<List<String>, List<String>>> commandsNameDesc,
                                   int level,
                                   List<CommandInfoDO> commandInfoList) {
-        if (commandInfoList == null || commandInfoList.isEmpty()) {
-            log.warn("gm level={}, command list is empty!", level);
-            return;
+        if (commandInfoList == null) {
+            log.warn(I18nUtil.getLogMessage("CommandService.loadCommands.warn2"), level);
+            commandInfoList = new ArrayList<>();
         }
 
         Pair<List<String>, List<String>> levelCommandsCursor = new Pair<>(new ArrayList<>(), new ArrayList<>());
@@ -113,13 +111,13 @@ public class CommandService {
             }
             Command command = getCommandInstance(item);
             if (command == null) {
-                log.warn("command is null, command={}, clazz={}", item.getSyntax(), item.getClazz());
+                log.warn(I18nUtil.getLogMessage("CommandService.loadCommands.warn3"), item.getSyntax());
                 continue;
             }
 
             String commandName = item.getSyntax().toLowerCase();
             if (registeredCommands.containsKey(commandName)) {
-                log.warn(I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn1"), item.getSyntax());
+                log.warn(I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn1", item.getSyntax()));
                 continue;
             }
 
@@ -143,7 +141,6 @@ public class CommandService {
             command.setRank(commandInfoDO.getLevel());
             return command;
         } catch (Exception e) {
-            log.error("getCommandInstance error: {}", e.getMessage());
             return null;
         }
     }
@@ -158,16 +155,15 @@ public class CommandService {
         Page<CommandInfoDO> commandInfoDOPage = commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
         return new Page<>(
                 commandInfoDOPage.getRecords().stream()
-                        .map(
-                                record -> CommandReqDTO.builder()
-                                        .id(record.getId())
-                                        .level(record.getLevel())
-                                        .syntax(record.getSyntax())
-                                        .defaultLevel(record.getDefaultLevel())
-                                        .clazz(record.getClazz())
-                                        .enabled(record.isEnabled())
-                                        .description(getDescriptionByCommandInfoDO(record))
-                                        .build())
+                        .map(record -> CommandReqDTO.builder()
+                                .id(record.getId())
+                                .level(record.getLevel())
+                                .syntax(record.getSyntax())
+                                .defaultLevel(record.getDefaultLevel())
+                                .clazz(record.getClazz())
+                                .enabled(record.isEnabled())
+                                .description(getDescriptionByCommandInfoDO(record))
+                                .build())
                         .toList(),
                 commandInfoDOPage.getPageNumber(),
                 commandInfoDOPage.getPageSize(),
@@ -178,7 +174,11 @@ public class CommandService {
     }
 
     public String getDescriptionByCommandInfoDO(CommandInfoDO CommandDO) {
-        return getCommandInstance(CommandDO).getDescription();
+        Command command = getCommandInstance(CommandDO);
+        if (command == null) {
+            return I18nUtil.getLogMessage("CommandsExecutor.addCommand.warn1", CommandDO.getSyntax());
+        }
+        return command.getDescription();
     }
 
     @Transactional
@@ -187,26 +187,20 @@ public class CommandService {
         RequireUtil.requireNotNull(request.getEnabled(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "enable"));
         RequireUtil.requireNotNull(request.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
 
-
-        CommandInfoDO updateCommandInfoDO = new CommandInfoDO();
-        updateCommandInfoDO.setId(request.getId());
-        /**
+        /*
          * 只能改开关和等级，其他的不能改
          * Syntax改了，指令和提示会冲突，比如提示：输入：!level <等级>就是错的了
          * 因为level已经被改成其他的了
          * DefaultLevel和Clazz也不能改
          */
-        updateCommandInfoDO.setLevel(request.getLevel() != null ? request.getLevel() : updateCommandInfoDO.getLevel());
-
-        if (!request.getEnabled()) {
-            updateCommandInfoDO.setEnabled(false);
-        } else {
-            updateCommandInfoDO.setEnabled(true);
-        }
-        //commandInfoDO.setDescription(request.getDescription());//i18n工具,添加命令功能作用描述
-        commandInfoMapper.update(updateCommandInfoDO);
-        updateRegisteredCommands(updateCommandInfoDO);
-        return updateCommandInfoDO;
+        commandInfoMapper.update(CommandInfoDO.builder()
+                .id(request.getId())
+                .level(request.getLevel())
+                .enabled(request.getEnabled())
+                .build());
+        CommandInfoDO commandInfoDO = commandInfoMapper.selectOneById(request.getId());
+        updateRegisteredCommands(commandInfoDO);
+        return commandInfoDO;
     }
 
 

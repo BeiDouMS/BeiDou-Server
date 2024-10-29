@@ -9,7 +9,6 @@ import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.model.dto.*;
 import org.gms.service.CommandService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("/command")
 public class CommandController {
-
-    @Autowired
     private final CommandService commandService;
-
-
 
     @Tag(name = "/command/" + ApiConstant.LATEST)
     @Operation(summary = "查询命令库所有指令与状态")
