@@ -31,7 +31,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.PlayernpcsFieldDO;
-import org.gms.util.CashIdGenerator;
+import org.gms.util.*;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.YamlConfig;
@@ -61,9 +61,6 @@ import org.gms.server.expeditions.ExpeditionBossLog;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.quest.Quest;
 import org.gms.service.*;
-import org.gms.util.DatabaseConnection;
-import org.gms.util.Pair;
-import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -652,6 +649,7 @@ public class Server {
         }
     }
 
+    //游戏启动
     public void init() {
         Instant beforeInit = Instant.now();
         log.info(I18nUtil.getLogMessage("Server.init.info1"), ServerConstants.VERSION);
@@ -744,6 +742,13 @@ public class Server {
         log.info(I18nUtil.getLogMessage("Server.init.info8"));
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
+
+        //在线时间
+        Timer.WorldTimer.getInstance().start();
+        log.info(I18nUtil.getLogMessage("Server.init.info10"));
+        OnlineTimer(1);
+        log.info(I18nUtil.getLogMessage("Server.init.info11"));
+
         log.info(I18nUtil.getLogMessage("Server.init.info9"), initDuration.toMillis() / 1000.0);
     }
 
@@ -1654,4 +1659,49 @@ public class Server {
         nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
         return true;
     }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public  void OnlineTimer(final int time)
+    {
+        Timer.WorldTimer.getInstance().register(new Runnable()
+        {
+            @Override
+            public void run() {
+                try {
+                    for (final Channel chan : getAllChannels())
+                    {
+                        for (final Character chr : chan.getPlayerStorage().getAllCharacters())
+                        {
+                            if (chr != null)
+                            {
+                                if (chr.getCurrentOnlieTime() == -1)
+                                {
+                                    chr.UpdateCurrentOnlineTimeFromDB();
+                                }
+                                else
+                                {
+                                    final Calendar sqlcal = Calendar.getInstance();
+                                    int iHour = sqlcal.get(Calendar.HOUR_OF_DAY);
+                                    int iMinutes = sqlcal.get(Calendar.MINUTE);
+                                    if ( (iHour == 0) && (iMinutes < 30) || (iHour == 23 ) && ( (59 > iMinutes) && (iMinutes > 45) ) )
+                                    {//凌晨到30无法积累时间且刷新为0
+                                        chr.setCurrentOnlieTime(0);
+                                        chr.getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", "0", true);
+                                        //log.info(I18nUtil.getLogMessage("Server.initWorld.note1"));
+                                    }
+                                    chr.addOnlineTime(1);
+                                }
+                            }
+
+                        }
+                    }
+                } catch (Exception ie) {
+                    log.error(I18nUtil.getLogMessage("Server.initWorld.error2"));
+                }
+            }
+        }, (long) (30000 * time));
+    }
+
+
 }

@@ -55,6 +55,8 @@ import org.gms.server.partyquest.PartyQuest;
 import org.gms.server.partyquest.Pyramid;
 import org.gms.server.quest.Quest;
 import org.gms.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.List;
@@ -63,6 +65,8 @@ import java.util.*;
 import static java.util.concurrent.TimeUnit.DAYS;
 
 public class AbstractPlayerInteraction {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractPlayerInteraction.class);
 
     public Client c;
 
@@ -1230,6 +1234,8 @@ public class AbstractPlayerInteraction {
         map.dropMessage(6, message);
     }
 
+/////////////////////////////////////////////////////////////////////////////////
+
     /**
      * 获取角色扩展表某字段的值
      *
@@ -1279,11 +1285,23 @@ public class AbstractPlayerInteraction {
                 extendName);
         return extendValueDO == null ? null : extendValueDO.getExtendValue();
     }
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
+    /***
+     * 永久保存或者更新角色扩展表指定的值
+     * @param extendName
+     * @param extendValue
+     */
     public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue) {
         ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), ExtendType.CHARACTER_EXTEND.getType(), extendName, extendValue);
     }
 
+    /***
+     * 保存每日/每周账号扩展表某字段的值
+     * @param extendName
+     * @param extendValue
+     * @param isDaily 是否为每日刷新，否则为周刷新
+     */
     public void saveOrUpdateCharacterExtendValue(String extendName, String extendValue, boolean isDaily) {
         ExtendUtil.saveOrUpdateExtendValue(String.valueOf(getPlayer().getId()), isDaily ? ExtendType.CHARACTER_EXTEND_DAILY.getType() : ExtendType.CHARACTER_EXTEND_WEEKLY.getType(),
                 extendName, extendValue);
@@ -1304,4 +1322,27 @@ public class AbstractPlayerInteraction {
         }
         InventoryManipulator.addFromDrop(getClient(), equip, false);
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+    /***
+     * 获取账户在线时间
+     * @return 返回当前账户角色在线时间，单位分钟
+     */
+    public int getOnlineTime()
+    {
+        //获取最后一次登录的时间
+        int onlineTimes = 0;
+        String strOnlineFromDB = getAccountExtendValue("每日在线时间",true);
+        if (strOnlineFromDB != null)
+        {
+            onlineTimes = Integer.parseInt(strOnlineFromDB);
+        }
+
+        return onlineTimes;
+    }
+
+
+
+
+
 }

@@ -8972,7 +8972,7 @@ public class Character extends AbstractCharacterObject {
                 if (pendantExp < 3) {
                     pendantExp++;
                     //用于准确提示装备1小时内还是装备经过几小时
-                    message(I18nUtil.getMessage(pendantExp<=2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
+                    message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
@@ -9574,4 +9574,38 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
+    //module: 账户在线时间
+    private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
+
+    public int getCurrentOnlieTime() {
+        return this.m_iCurrentOnlineTime;
+    }
+
+    public void setCurrentOnlieTime(final int iTime) {
+        this.m_iCurrentOnlineTime = iTime;
+    }
+
+    public void addOnlineTime(final int amount) {
+        this.setCurrentOnlieTime(this.m_iCurrentOnlineTime + amount);
+        this.updateOnlineTime(this.getCurrentOnlieTime());
+    }
+
+    public void updateOnlineTime(final int amount) {
+        String strNewOnlineTime = String.valueOf(amount);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
+    }
+
+    public void UpdateCurrentOnlineTimeFromDB() {
+        //角色上线时，在线时间初始化为-1，上线时获取累计的时间，避免服务器重启在线时间清零。
+        String strSavedOnlineTime = getAbstractPlayerInteraction().getAccountExtendValue("每日在线时间", true);
+
+        if (strSavedOnlineTime == null) {//找不到，说明没有建表，建立新表
+            getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", "0", true);
+            m_iCurrentOnlineTime = 0;
+        } else {
+            m_iCurrentOnlineTime = Integer.parseInt(strSavedOnlineTime);
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////
 }
