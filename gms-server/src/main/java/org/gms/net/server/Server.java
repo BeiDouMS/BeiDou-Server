@@ -1700,7 +1700,7 @@ public class Server {
                     log.error(I18nUtil.getLogMessage("Server.initWorld.error2"));
                 }
             }
-        }, (long) (30000 * time));
+        }, (long) (60000 * time));
     }
 
 
