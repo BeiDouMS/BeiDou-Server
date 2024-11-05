@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { ref } from 'vue';
   import { getCharacterList, InventoryCondition } from '@/api/inventory';
+  import { useI18n } from 'vue-i18n';
+
+  const { t } = useI18n();
 
   const condition = ref<InventoryCondition>({
     characterId: undefined,
@@ -44,7 +47,7 @@
     <a-input-search
       :placeholder="
         ccId === undefined && ccName === undefined
-          ? '选择玩家'
+          ? t('characterSelector.placeholder')
           : '[' + ccId + '] ' + ccName
       "
       :readonly="true"
@@ -55,41 +58,49 @@
   </a-space>
   <a-modal
     v-model:visible="visible"
-    title="选择玩家"
+    :title="t('characterSelector.title')"
     :width="750"
     :footer="false"
   >
     <a-form :model="condition" layout="inline">
-      <a-form-item label="角色ID">
+      <a-form-item
+        :label="t('characterSelector.column.id')"
+        style="width: 200px"
+      >
         <a-input-number v-model="condition.characterId" allow-clear />
       </a-form-item>
-      <a-form-item label="角色名称">
+      <a-form-item
+        :label="t('characterSelector.column.name')"
+        style="width: 200px"
+      >
         <a-input v-model="condition.characterName" allow-clear />
       </a-form-item>
-      <a-form-item>
-        <a-button type="primary" @click="searchClick">查询</a-button>
+      <a-form-item style="width: 200px">
+        <a-button type="primary" @click="searchClick"
+          >{{ t('characterSelector.searchButton') }}
+        </a-button>
       </a-form-item>
     </a-form>
     <a-table :data="tableData" row-key="characterId" :pagination="false">
       <template #columns>
         <a-table-column
-          title="角色ID"
+          :title="t('characterSelector.column.id')"
           data-index="characterId"
           align="center"
         />
         <a-table-column
-          title="角色"
+          :title="t('characterSelector.column.name')"
           data-index="characterName"
           align="center"
         />
-        <a-table-column title="操作">
+        <a-table-column :title="t('characterSelector.column.operation')">
           <template #cell="{ record }">
             <a-button
               type="primary"
               size="mini"
               @click="selectClick(record.characterId, record.characterName)"
             >
-              选择
+              {{ t('characterSelector.selectButton') }}
             </a-button>
           </template>
         </a-table-column>

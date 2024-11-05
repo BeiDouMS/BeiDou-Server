@@ -8,16 +8,38 @@
     :bordered="{ cell: true }"
   >
     <template #columns>
-      <a-table-column title="ID" data-index="id" align="center" :width="100" />
-      <a-table-column title="角色ID" data-index="characterId" align="center" />
-      <a-table-column title="在线" data-index="online" align="center">
+      <a-table-column
+        :title="t('inventoryList.column.id')"
+        data-index="id"
+        align="center"
+        :width="100"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.characterId')"
+        data-index="characterId"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.online')"
+        data-index="online"
+        align="center"
+      >
         <template #cell="{ record }">
-          <a-tag v-if="record.online" color="green">在线</a-tag>
-          <a-tag v-else color="gray">离线</a-tag>
+          <a-tag v-if="record.online" color="green">{{
+            t('inventoryList.column.online')
+          }}</a-tag>
+          <a-tag v-else color="gray">{{
+            t('inventoryList.column.offline')
+          }}</a-tag>
         </template>
       </a-table-column>
-      <a-table-column title="物品ID" data-index="itemId" align="center" />
-      <a-table-column title="物品" align="center">
+      <a-table-column
+        :title="t('inventoryList.column.itemId')"
+        data-index="itemId"
+        align="center"
+        width="130"
+      />
+      <a-table-column :title="t('inventoryList.column.item')" align="center">
         <template #cell="{ record }">
           <a-popover placement="top">
             <template #content>
@@ -34,9 +56,21 @@
           </a-popover>
         </template>
       </a-table-column>
-      <a-table-column title="类型" data-index="itemType" align="center" />
-      <a-table-column title="位置" data-index="position" align="center" />
-      <a-table-column title="数量" align="center" :width="160">
+      <a-table-column
+        :title="t('inventoryList.column.itemType')"
+        data-index="itemType"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.position')"
+        data-index="position"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.quantity')"
+        align="center"
+        :width="160"
+      >
         <template #cell="{ record }">
           <span v-if="editId !== record.id">
             {{ record.quantity }}
@@ -44,11 +78,30 @@
           <a-input-number v-else v-model="record.quantity" />
         </template>
       </a-table-column>
-      <a-table-column title="签名" data-index="owner" align="center" />
-      <a-table-column title="宠物ID" data-index="petId" align="center" />
-      <a-table-column title="Flag" data-index="flag" align="center" />
-      <a-table-column title="赠送人" data-index="giftFrom" align="center" />
-      <a-table-column title="到期时间" align="center">
+      <a-table-column
+        :title="t('inventoryList.column.owner')"
+        data-index="owner"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.petId')"
+        data-index="petId"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.flag')"
+        data-index="flag"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.giftFrom')"
+        data-index="giftFrom"
+        align="center"
+      />
+      <a-table-column
+        :title="t('inventoryList.column.expiration')"
+        align="center"
+      >
         <template #cell="{ record }">
           <span v-if="editId !== record.id">
             {{ timestampToChineseTime(record.expiration) }}
@@ -56,7 +109,7 @@
           <a-input-number v-else v-model="record.expiration" />
         </template>
       </a-table-column>
-      <a-table-column title="操作" :width="200">
+      <a-table-column :title="t('inventoryList.column.operation')" :width="200">
         <template #cell="{ record }">
           <a-button
             v-if="editId !== record.id"
@@ -64,7 +117,7 @@
             size="mini"
             @click="editClick(record)"
           >
-            编辑
+            {{ t('inventoryList.button.edit') }}
           </a-button>
           <a-button
             v-if="editId === record.id"
@@ -73,7 +126,7 @@
             status="success"
             @click="saveClick(record)"
           >
-            保存
+            {{ t('inventoryList.button.save') }}
           </a-button>
           <a-button
             v-if="editId === record.id"
@@ -81,15 +134,17 @@
             size="mini"
             @click="editId = undefined"
           >
-            取消
+            {{ t('inventoryList.button.cancel') }}
           </a-button>
           <a-popconfirm
             v-if="editId !== record.id"
             type="error"
-            content="你确定要删除这个道具吗？"
+            :content="t('inventoryList.confirm.delete')"
             @ok="deleteClick(record)"
           >
-            <a-button type="text" size="mini" status="danger"> 删除</a-button>
+            <a-button type="text" size="mini" status="danger">
+              {{ t('inventoryList.button.delete') }}
+            </a-button>
           </a-popconfirm>
         </template>
       </a-table-column>
@@ -111,11 +166,13 @@
   import { getIconUrl } from '@/utils/mapleStoryAPI';
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
   import { timestampToChineseTime } from '@/utils/stringUtils';
+  import { useI18n } from 'vue-i18n';
 
   import beidouBook from '@/assets/2430033.png';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
+  const { t } = useI18n();
 
   const props = defineProps<{
     currentType: string | number;
