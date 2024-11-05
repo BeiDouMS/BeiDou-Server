@@ -21,7 +21,7 @@ package org.gms.net.server.coordinator.partysearch;
 
 import org.gms.client.Character;
 import org.gms.client.Job;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
@@ -374,7 +374,7 @@ public class PartySearchCoordinator {
             } else {
                 LeaderSearchMetadata settings = searchSettings.get(leader.getId());
                 if (settings != null) {
-                    if (settings.reentryCount < YamlConfig.config.server.PARTY_SEARCH_REENTRY_LIMIT) {
+                    if (settings.reentryCount < GameConfig.getServerInt("party_search_reentry_limit")) {
                         settings.reentryCount += 1;
                         recalledLeaders.add(leader);
                     } else {
@@ -419,7 +419,7 @@ public class PartySearchCoordinator {
             if (leader.isLoggedInWorld()) {
                 if (settings != null) {
                     recycledLeaders.add(new Pair<>(leader, settings));
-                    if (YamlConfig.config.server.USE_DEBUG && leader.isGM()) {
+                    if (GameConfig.getServerBoolean("use_debug") && leader.isGM()) {
                         leader.dropMessage(5, "Your Party Search token session is now on waiting queue for up to 7 minutes, to get it working right away please stop your Party Search and retry again later.");
                     }
                 } else {

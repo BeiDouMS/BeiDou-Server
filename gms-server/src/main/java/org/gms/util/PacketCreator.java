@@ -50,7 +50,7 @@ import org.gms.dao.entity.ModifiedCashItemDO;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -708,8 +708,8 @@ public class PacketCreator {
         p.writeByte(c.getGender());
 
         boolean canFly = Server.getInstance().canFly(c.getAccID());
-        p.writeBool((YamlConfig.config.server.USE_ENFORCE_ADMIN_ACCOUNT || canFly) && c.getGMLevel() > 1);    // thanks Steve(kaito1410) for pointing the GM account boolean here
-        p.writeByte(((YamlConfig.config.server.USE_ENFORCE_ADMIN_ACCOUNT || canFly) && c.getGMLevel() > 1) ? 0x80 : 0);  // Admin Byte. 0x80,0x40,0x20.. Rubbish.
+        p.writeBool((GameConfig.getServerBoolean("use_enforce_admin_account") || canFly) && c.getGMLevel() > 1);    // thanks Steve(kaito1410) for pointing the GM account boolean here
+        p.writeByte(((GameConfig.getServerBoolean("use_enforce_admin_account") || canFly) && c.getGMLevel() > 1) ? 0x80 : 0);  // Admin Byte. 0x80,0x40,0x20.. Rubbish.
         p.writeByte(0); // Country Code.
 
         p.writeString(c.getAccountName());
@@ -721,8 +721,8 @@ public class PacketCreator {
 
         p.writeInt(1); // 1: Remove the "Select the world you want to play in"
 
-        p.writeByte(YamlConfig.config.server.ENABLE_PIN && !c.canBypassPin() ? 0 : 1); // 0 = Pin-System Enabled, 1 = Disabled
-        p.writeByte(YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2); // 0 = Register PIC, 1 = Ask for PIC, 2 = Disabled
+        p.writeByte(GameConfig.getServerBoolean("enable_pin") && !c.canBypassPin() ? 0 : 1); // 0 = Pin-System Enabled, 1 = Disabled
+        p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2); // 0 = Register PIC, 1 = Ask for PIC, 2 = Disabled
 
         return p;
     }
@@ -899,8 +899,8 @@ public class PacketCreator {
             addCharEntry(p, chr, false);
         }
 
-        p.writeByte(YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2);
-        p.writeInt(YamlConfig.config.server.COLLECTIVE_CHARSLOT ? chars.size() + c.getAvailableCharacterSlots() : c.getCharacterSlots());
+        p.writeByte(GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic() ? (c.getPic() == null || c.getPic().equals("") ? 0 : 1) : 2);
+        p.writeInt(GameConfig.getServerBoolean("collective_chr_slot") ? chars.size() + c.getAvailableCharacterSlots() : c.getCharacterSlots());
         return p;
     }
 

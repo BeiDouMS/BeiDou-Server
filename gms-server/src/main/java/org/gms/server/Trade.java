@@ -27,7 +27,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResult;
@@ -116,7 +116,7 @@ public class Trade {
 
     private void completeTrade() {
         byte result;
-        boolean show = YamlConfig.config.server.USE_DEBUG;
+        boolean show = GameConfig.getServerBoolean("use_debug");
         items.clear();
         meso = 0;
 
@@ -149,7 +149,7 @@ public class Trade {
     }
 
     private void cancel(byte result) {
-        boolean show = YamlConfig.config.server.USE_DEBUG;
+        boolean show = GameConfig.getServerBoolean("use_debug");
 
         for (Item item : items) {
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
@@ -449,14 +449,14 @@ public class Trade {
 
     public static void inviteTrade(Character c1, Character c2) {
 
-        if ((c1.isGM() && !c2.isGM()) && c1.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_TRADE) {
+        if ((c1.isGM() && !c2.isGM()) && c1.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_trade")) {
             c1.message("You cannot trade with non-GM characters.");
             log.info(String.format("GM %s blocked from trading with %s due to GM level.", c1.getName(), c2.getName()));
             cancelTrade(c1, TradeResult.NO_RESPONSE);
             return;
         }
 
-        if ((!c1.isGM() && c2.isGM()) && c2.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_TRADE) {
+        if ((!c1.isGM() && c2.isGM()) && c2.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_trade")) {
             c1.message("You cannot trade with this GM character.");
             cancelTrade(c1, TradeResult.NO_RESPONSE);
             return;

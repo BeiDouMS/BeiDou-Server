@@ -24,7 +24,7 @@ package org.gms.server.quest;
 import org.gms.client.Character;
 import org.gms.client.QuestStatus;
 import org.gms.client.QuestStatus.Status;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,7 +253,7 @@ public class Quest {
         }
 
         IntervalRequirement ir = (IntervalRequirement) startReqs.get(QuestRequirementType.INTERVAL);
-        return ir.getInterval() < HOURS.toMillis(YamlConfig.config.server.QUEST_POINT_REPEATABLE_INTERVAL);
+        return ir.getInterval() < HOURS.toMillis(GameConfig.getServerLong("quest_point_repeatable_interval"));
     }
 
     public boolean canStartQuestByStatus(Character chr) {
@@ -377,8 +377,8 @@ public class Quest {
             newStatus.setProgress(e.getKey(), e.getValue());
         }
 
-        if (id / 100 == 35 && YamlConfig.config.server.TOT_MOB_QUEST_REQUIREMENT > 0) {
-            int setProg = 999 - Math.min(999, YamlConfig.config.server.TOT_MOB_QUEST_REQUIREMENT);
+        if (id / 100 == 35 && GameConfig.getServerInt("tot_mob_quest_requirement") > 0) {
+            int setProg = 999 - Math.min(999, GameConfig.getServerInt("tot_mob_quest_requirement"));
 
             for (Integer pid : newStatus.getProgress().keySet()) {
                 if (pid >= 8200000 && pid <= 8200012) {

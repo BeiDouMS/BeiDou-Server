@@ -22,7 +22,7 @@
 
 package org.gms.server.expeditions;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 
 /**
  * @author Alan (SharpAceX)
@@ -58,7 +58,7 @@ public enum ExpeditionType {
     }
 
     public int getMinSize() {
-        return !YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? minSize : 1;
+        return !GameConfig.getServerBoolean("use_enable_solo_expeditions") ? minSize : 1;
     }
 
     public int getMaxSize() {

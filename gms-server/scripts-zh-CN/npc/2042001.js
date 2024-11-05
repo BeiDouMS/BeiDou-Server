@@ -29,9 +29,9 @@ var feeMultiplier = 7.0;
 function start() {
     status = -1;
 
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    if (!YamlConfig.config.server.USE_CPQ) {
-        if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (!GameConfig.getServerBoolean("use_cpq")) {
+        if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
             status = 0;
             action(1, 0, 4);
         } else {
@@ -59,7 +59,7 @@ function action(mode, type, selection) {
             status--;
         }
 
-        const YamlConfig = Java.type('org.gms.config.YamlConfig');
+        const GameConfig = Java.type('org.gms.config.GameConfig');
         if (cm.getPlayer().getMapId() == 980000010) {
             if (status == 0) {
                 cm.sendNext("希望你在怪物嘉年华上玩得开心！");
@@ -223,9 +223,9 @@ function action(mode, type, selection) {
                     }
                 } else {
                     var party = cm.getParty().getMembers();
-                    if ((selection >= 0 && selection <= 3) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 2)) {
+                    if ((selection >= 0 && selection <= 3) && party.size() < (GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 2)) {
                         cm.sendOk("你至少需要2名玩家才能参与战斗！");
-                    } else if ((selection >= 4 && selection <= 5) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 3)) {
+                    } else if ((selection >= 4 && selection <= 5) && party.size() < (GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 3)) {
                         cm.sendOk("你至少需要3名玩家参与战斗！");
                     } else {
                         cm.cpqLobby(selection);
@@ -238,7 +238,7 @@ function action(mode, type, selection) {
         } else {
             if (status == 0) {
                 var talk = "你想做什么呢？ 如果你没有参加过怪物嘉年华, 在参加之前，你需要知道一些事情! \r\n#b#L0# 前往怪物嘉年华地图 1.#l \r\n#L3# 前往怪物嘉年华地图 2.#l \r\n#L1# 了解怪物嘉年华.#l\r\n#L2# 交易 #t4001129#.#l";
-                if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+                if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
                     talk += "\r\n#L4# ... 我可以精炼我的矿石吗#l";
                 }
                 cm.sendSimple(talk);

@@ -28,8 +28,8 @@ var jobId = 0;
 
 function start() {
     status = -1;
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (!GameConfig.getServerBoolean("use_rebirth_system")) {
         cm.sendOk("转生在这个服务器上是不允许的，你是怎么到这里来的？");
         cm.dispose();
         return;

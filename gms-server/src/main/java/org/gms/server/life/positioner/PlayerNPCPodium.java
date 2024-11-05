@@ -19,7 +19,7 @@
 */
 package org.gms.server.life.positioner;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
 import org.slf4j.Logger;
@@ -79,7 +79,7 @@ public class PlayerNPCPodium {
 
     private static Point reorganizePlayerNpcs(MapleMap map, int newStep, List<MapObject> mmoList) {
         if (!mmoList.isEmpty()) {
-            if (YamlConfig.config.server.USE_DEBUG) {
+            if (GameConfig.getServerBoolean("use_debug")) {
                 log.info("Re-organizing pnpc map, step {}", newStep);
             }
 
@@ -128,7 +128,7 @@ public class PlayerNPCPodium {
         int podiumStep = podiumData % (1 << 5), podiumCount = (podiumData / (1 << 5));
 
         if (podiumCount >= 3 * podiumStep) {
-            if (podiumStep >= YamlConfig.config.server.PLAYERNPC_AREA_STEPS) {
+            if (podiumStep >= GameConfig.getServerInt("playernpc_area_steps")) {
                 return null;
             }
 

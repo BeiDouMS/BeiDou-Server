@@ -26,7 +26,7 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 public class SpCommand extends Command {
@@ -46,8 +46,8 @@ public class SpCommand extends Command {
             int newSp = Integer.parseInt(params[0]);
             if (newSp < 0) {
                 newSp = 0;
-            } else if (newSp > YamlConfig.config.server.MAX_AP) {
-                newSp = YamlConfig.config.server.MAX_AP;
+            } else if (newSp > GameConfig.getServerInt("max_ap")) {
+                newSp = GameConfig.getServerInt("max_ap");
             }
 
             player.updateRemainingSp(newSp);
@@ -57,8 +57,8 @@ public class SpCommand extends Command {
                 int newSp = Integer.parseInt(params[1]);
                 if (newSp < 0) {
                     newSp = 0;
-                } else if (newSp > YamlConfig.config.server.MAX_AP) {
-                    newSp = YamlConfig.config.server.MAX_AP;
+                } else if (newSp > GameConfig.getServerInt("max_ap")) {
+                    newSp = GameConfig.getServerInt("max_ap");
                 }
 
                 victim.updateRemainingSp(newSp);

@@ -32,7 +32,7 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.WeaponType;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.EquipSlot;
 import org.gms.constants.inventory.ItemConstants;
@@ -365,7 +365,7 @@ public class ItemInformationProvider {
         Data item = getItemData(itemId);
         if (item != null) {
             Data smEntry = item.getChildByPath("info/slotMax");
-            short itemSlotMax = YamlConfig.config.server.ITEM_SLOT_MAX;
+            short itemSlotMax = GameConfig.getServerShort("item_slot_max");
             InventoryType inventoryType = ItemConstants.getInventoryType(itemId);
             if (smEntry == null) {
                 if (inventoryType.getType() == InventoryType.EQUIP.getType()) {
@@ -626,7 +626,7 @@ public class ItemInformationProvider {
     }
 
     public static boolean rollSuccessChance(double propPercent) {
-        return Math.random() >= testYourLuck(propPercent / 100.0, YamlConfig.config.server.SCROLL_CHANCE_ROLLS);
+        return Math.random() >= testYourLuck(propPercent / 100.0, GameConfig.getServerInt("scroll_chance_rolls"));
     }
 
     private static short getMaximumShortMaxIfOverflow(int value1, int value2) {
@@ -647,42 +647,42 @@ public class ItemInformationProvider {
 
         if (!option) {
             if (nEquip.getStr() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getDex() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getInt() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getLuk() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getAcc() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getAvoid() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range))));
@@ -690,28 +690,28 @@ public class ItemInformationProvider {
             }
         } else {
             if (nEquip.getWatk() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getWdef() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getMatk() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getMdef() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range))));
@@ -719,28 +719,28 @@ public class ItemInformationProvider {
             }
 
             if (nEquip.getSpeed() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getJump() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getHp() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getMp() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range))));
@@ -750,11 +750,11 @@ public class ItemInformationProvider {
     }
 
     private void scrollEquipWithChaos(Equip nEquip, int range) {
-        if (YamlConfig.config.server.CHSCROLL_STAT_RATE > 0) {
+        if (GameConfig.getServerInt("chaos_scroll_stat_rate") > 0) {
             int temp;
             short curStr, curDex, curInt, curLuk, curWatk, curWdef, curMatk, curMdef, curAcc, curAvoid, curSpeed, curJump, curHp, curMp;
 
-            if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+            if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                 curStr = nEquip.getStr();
                 curDex = nEquip.getDex();
                 curInt = nEquip.getInt();
@@ -786,9 +786,9 @@ public class ItemInformationProvider {
                 curMp = Short.MIN_VALUE;
             }
 
-            for (int i = 0; i < YamlConfig.config.server.CHSCROLL_STAT_RATE; i++) {
+            for (int i = 0; i < GameConfig.getServerInt("chaos_scroll_stat_rate"); i++) {
                 if (nEquip.getStr() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curStr + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getStr() + chscrollRandomizedStat(range);
@@ -798,7 +798,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getDex() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curDex + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getDex() + chscrollRandomizedStat(range);
@@ -808,7 +808,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getInt() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curInt + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getInt() + chscrollRandomizedStat(range);
@@ -818,7 +818,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getLuk() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curLuk + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getLuk() + chscrollRandomizedStat(range);
@@ -828,7 +828,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getWatk() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curWatk + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getWatk() + chscrollRandomizedStat(range);
@@ -838,7 +838,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getWdef() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curWdef + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getWdef() + chscrollRandomizedStat(range);
@@ -848,7 +848,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getMatk() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curMatk + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getMatk() + chscrollRandomizedStat(range);
@@ -858,7 +858,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getMdef() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curMdef + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getMdef() + chscrollRandomizedStat(range);
@@ -868,7 +868,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getAcc() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curAcc + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getAcc() + chscrollRandomizedStat(range);
@@ -878,7 +878,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getAvoid() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curAvoid + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getAvoid() + chscrollRandomizedStat(range);
@@ -888,7 +888,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getSpeed() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curSpeed + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getSpeed() + chscrollRandomizedStat(range);
@@ -898,7 +898,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getJump() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curJump + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getJump() + chscrollRandomizedStat(range);
@@ -908,7 +908,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getHp() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curHp + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getHp() + chscrollRandomizedStat(range);
@@ -918,7 +918,7 @@ public class ItemInformationProvider {
                 }
 
                 if (nEquip.getMp() > 0) {
-                    if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                    if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                         temp = curMp + chscrollRandomizedStat(range);
                     } else {
                         temp = nEquip.getMp() + chscrollRandomizedStat(range);
@@ -944,98 +944,98 @@ public class ItemInformationProvider {
             nEquip.setMp((short) Math.max(0, curMp));
         } else {
             if (nEquip.getStr() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setStr(getMaximumShortMaxIfOverflow(nEquip.getStr(), (nEquip.getStr() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setStr(getMaximumShortMaxIfOverflow(0, (nEquip.getStr() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getDex() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setDex(getMaximumShortMaxIfOverflow(nEquip.getDex(), (nEquip.getDex() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setDex(getMaximumShortMaxIfOverflow(0, (nEquip.getDex() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getInt() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setInt(getMaximumShortMaxIfOverflow(nEquip.getInt(), (nEquip.getInt() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setInt(getMaximumShortMaxIfOverflow(0, (nEquip.getInt() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getLuk() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setLuk(getMaximumShortMaxIfOverflow(nEquip.getLuk(), (nEquip.getLuk() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setLuk(getMaximumShortMaxIfOverflow(0, (nEquip.getLuk() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getWatk() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setWatk(getMaximumShortMaxIfOverflow(nEquip.getWatk(), (nEquip.getWatk() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setWatk(getMaximumShortMaxIfOverflow(0, (nEquip.getWatk() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getWdef() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setWdef(getMaximumShortMaxIfOverflow(nEquip.getWdef(), (nEquip.getWdef() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setWdef(getMaximumShortMaxIfOverflow(0, (nEquip.getWdef() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getMatk() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setMatk(getMaximumShortMaxIfOverflow(nEquip.getMatk(), (nEquip.getMatk() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setMatk(getMaximumShortMaxIfOverflow(0, (nEquip.getMatk() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getMdef() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setMdef(getMaximumShortMaxIfOverflow(nEquip.getMdef(), (nEquip.getMdef() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setMdef(getMaximumShortMaxIfOverflow(0, (nEquip.getMdef() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getAcc() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setAcc(getMaximumShortMaxIfOverflow(nEquip.getAcc(), (nEquip.getAcc() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setAcc(getMaximumShortMaxIfOverflow(0, (nEquip.getAcc() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getAvoid() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setAvoid(getMaximumShortMaxIfOverflow(nEquip.getAvoid(), (nEquip.getAvoid() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setAvoid(getMaximumShortMaxIfOverflow(0, (nEquip.getAvoid() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getSpeed() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setSpeed(getMaximumShortMaxIfOverflow(nEquip.getSpeed(), (nEquip.getSpeed() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setSpeed(getMaximumShortMaxIfOverflow(0, (nEquip.getSpeed() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getJump() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setJump(getMaximumShortMaxIfOverflow(nEquip.getJump(), (nEquip.getJump() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setJump(getMaximumShortMaxIfOverflow(0, (nEquip.getJump() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getHp() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setHp(getMaximumShortMaxIfOverflow(nEquip.getHp(), (nEquip.getHp() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setHp(getMaximumShortMaxIfOverflow(0, (nEquip.getHp() + chscrollRandomizedStat(range))));
                 }
             }
             if (nEquip.getMp() > 0) {
-                if (YamlConfig.config.server.USE_ENHANCED_CHSCROLL) {
+                if (GameConfig.getServerBoolean("use_enhanced_chaos_scroll")) {
                     nEquip.setMp(getMaximumShortMaxIfOverflow(nEquip.getMp(), (nEquip.getMp() + chscrollRandomizedStat(range))));
                 } else {
                     nEquip.setMp(getMaximumShortMaxIfOverflow(0, (nEquip.getMp() + chscrollRandomizedStat(range))));
@@ -1061,7 +1061,7 @@ public class ItemInformationProvider {
     }
 
     public Item scrollEquipWithId(Item equip, int scrollId, boolean usingWhiteScroll, int vegaItemId, boolean isGM) {
-        boolean assertGM = (isGM && YamlConfig.config.server.USE_PERFECT_GM_SCROLL);
+        boolean assertGM = (isGM && GameConfig.getServerBoolean("use_perfect_gm_scroll"));
 
         if (equip instanceof Equip nEquip) {
             Map<String, Integer> stats = this.getEquipStats(scrollId);
@@ -1107,7 +1107,7 @@ public class ItemInformationProvider {
                         case ItemId.CHAOS_SCROll_60:
                         case ItemId.LIAR_TREE_SAP:
                         case ItemId.MAPLE_SYRUP:
-                            scrollEquipWithChaos(nEquip, YamlConfig.config.server.CHSCROLL_STAT_RANGE);
+                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range"));
                             break;
 
                         default:
@@ -1121,7 +1121,7 @@ public class ItemInformationProvider {
                         nEquip.setLevel((byte) (nEquip.getLevel() + 1));
                     }
                 } else {
-                    if (!YamlConfig.config.server.USE_PERFECT_SCROLLING && !usingWhiteScroll && !ItemConstants.isCleanSlate(scrollId) && !assertGM && !ItemConstants.isModifierScroll(scrollId)) {
+                    if (!GameConfig.getServerBoolean("use_perfect_scrolling") && !usingWhiteScroll && !ItemConstants.isCleanSlate(scrollId) && !assertGM && !ItemConstants.isModifierScroll(scrollId)) {
                         nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
                     }
                     if (Randomizer.nextInt(100) < stats.get("cursed")) {
@@ -1744,11 +1744,11 @@ public class ItemInformationProvider {
     }
 
     public boolean isUnmerchable(int itemId) {
-        if (YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_CASH && isCash(itemId)) {
+        if (GameConfig.getServerBoolean("use_enforce_unmerchable_cash") && isCash(itemId)) {
             return true;
         }
 
-        return YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_PET && ItemConstants.isPet(itemId);
+        return GameConfig.getServerBoolean("use_enforce_unmerchable_pet") && ItemConstants.isPet(itemId);
     }
 
     public Collection<Item> canWearEquipment(Character chr, Collection<Item> items) {

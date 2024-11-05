@@ -22,7 +22,7 @@
 package org.gms.net.server.task;
 
 import org.gms.client.Job;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.util.DatabaseConnection;
 
@@ -86,7 +86,7 @@ public class RankingLoginTask implements Runnable {
             con.setAutoCommit(false);
 
             try {
-                if (YamlConfig.config.server.USE_REFRESH_RANK_MOVE) {
+                if (GameConfig.getServerBoolean("use_refresh_rank_move")) {
                     resetMoveRank(true);
                     resetMoveRank(false);
                 }

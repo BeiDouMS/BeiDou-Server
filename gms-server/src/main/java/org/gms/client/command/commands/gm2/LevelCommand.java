@@ -26,7 +26,7 @@ package org.gms.client.command.commands.gm2;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 public class LevelCommand extends Command {
@@ -46,7 +46,7 @@ public class LevelCommand extends Command {
         player.setLevel(Math.min(Integer.parseInt(params[0]), player.getMaxClassLevel()) - 1);
 
         player.resetPlayerRates();
-        if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
+        if (GameConfig.getServerBoolean("use_add_rates_by_level")) {
             player.setPlayerRates();
         }
         player.setWorldRates();

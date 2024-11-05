@@ -43,7 +43,7 @@ import org.gms.client.inventory.manipulator.KarmaManipulator;
 import org.gms.client.processor.npc.DueyProcessor;
 import org.gms.client.processor.stat.AssignAPProcessor;
 import org.gms.client.processor.stat.AssignSPProcessor;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
@@ -427,7 +427,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         } else if (itemType == 523) {
             int itemid = p.readInt();
 
-            if (!YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
+            if (!GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
                 c.getWorldServer().addOwlItemSearch(itemid);
             }
             player.setOwlSearch(itemid);

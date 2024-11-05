@@ -23,7 +23,7 @@ package org.gms.net.server.world;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.coordinator.matchchecker.MatchCheckerCoordinator;
 import org.gms.net.server.coordinator.matchchecker.MatchCheckerListenerFactory.MatchCheckerType;
 import org.gms.scripting.event.EventInstanceManager;
@@ -321,7 +321,7 @@ public class Party {
     public static boolean createParty(Character player, boolean silentCheck) {
         Party party = player.getParty();
         if (party == null) {
-            if (player.getLevel() < 10 && !YamlConfig.config.server.USE_PARTY_FOR_STARTERS) {
+            if (player.getLevel() < 10 && !GameConfig.getServerBoolean("use_party_for_starters")) {
                 player.sendPacket(PacketCreator.partyStatusMessage(10));
                 return false;
             } else if (player.getAriantColiseum() != null) {

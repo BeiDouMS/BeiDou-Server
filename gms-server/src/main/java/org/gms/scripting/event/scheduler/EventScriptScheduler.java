@@ -19,7 +19,7 @@
  */
 package org.gms.scripting.event.scheduler;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.server.ThreadManager;
 import org.gms.server.TimerManager;
@@ -44,7 +44,6 @@ public class EventScriptScheduler {
 
     private ScheduledFuture<?> schedulerTask = null;
     private final Lock schedulerLock = new ReentrantLock(true);
-    private final Runnable monitorTask = () -> runBaseSchedule();
 
     private void runBaseSchedule() {
         List<Runnable> toRemove;
@@ -55,7 +54,7 @@ public class EventScriptScheduler {
             if (registeredEntries.isEmpty()) {
                 idleProcs++;
 
-                if (idleProcs >= YamlConfig.config.server.MOB_STATUS_MONITOR_LIFE) {
+                if (idleProcs >= GameConfig.getServerInt("mob_status_monitor_idle")) {
                     if (schedulerTask != null) {
                         schedulerTask.cancel(false);
                         schedulerTask = null;
@@ -105,7 +104,7 @@ public class EventScriptScheduler {
                         return;
                     }
 
-                    schedulerTask = TimerManager.getInstance().register(monitorTask, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC);
+                    schedulerTask = TimerManager.getInstance().register(this::runBaseSchedule, GameConfig.getServerLong("mob_status_monitor_proc"), GameConfig.getServerLong("mob_status_monitor_proc"));
                 }
 
                 registeredEntries.put(scheduledAction, Server.getInstance().getCurrentTime() + duration);

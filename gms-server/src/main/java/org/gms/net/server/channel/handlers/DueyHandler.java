@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
 import org.gms.client.processor.npc.DueyProcessor;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
@@ -32,7 +32,7 @@ public final class DueyHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        if (!YamlConfig.config.server.USE_DUEY) {
+        if (!GameConfig.getServerBoolean("use_duey")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }

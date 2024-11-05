@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
@@ -37,7 +37,7 @@ import org.gms.util.PacketCreator;
 public final class FamilyAddHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_family_system")) {
             return;
         }
         String toAdd = p.readString();
@@ -57,7 +57,7 @@ public final class FamilyAddHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
         } else if (InviteCoordinator.hasInvite(InviteType.FAMILY, addChr.getId())) {
             c.sendPacket(PacketCreator.sendFamilyMessage(73, 0));
-        } else if (chr.getFamily() != null && addChr.getFamily() != null && addChr.getFamily().getTotalGenerations() + chr.getFamily().getTotalGenerations() > YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
+        } else if (chr.getFamily() != null && addChr.getFamily() != null && addChr.getFamily().getTotalGenerations() + chr.getFamily().getTotalGenerations() > GameConfig.getServerInt("family_max_generations")) {
             c.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
         } else {
             InviteCoordinator.createInvite(InviteType.FAMILY, chr, addChr, addChr.getId());

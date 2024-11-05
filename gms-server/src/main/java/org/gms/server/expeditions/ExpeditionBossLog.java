@@ -19,7 +19,7 @@
 */
 package org.gms.server.expeditions;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.Pair;
 
@@ -176,7 +176,7 @@ public class ExpeditionBossLog {
     }
 
     public static boolean attemptBoss(int cid, int channel, Expedition exped, boolean log) {
-        if (!YamlConfig.config.server.USE_ENABLE_DAILY_EXPEDITIONS) {
+        if (!GameConfig.getServerBoolean("use_enable_daily_expeditions")) {
             return true;
         }
 

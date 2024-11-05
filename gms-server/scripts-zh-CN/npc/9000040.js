@@ -48,8 +48,8 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            const YamlConfig = Java.type('org.gms.config.YamlConfig');
-            if (!YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+            const GameConfig = Java.type('org.gms.config.GameConfig');
+            if (!GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
                 cm.sendOk("勋章排名系统目前不可用。");
                 cm.dispose();
                 return;
@@ -59,7 +59,7 @@ function action(mode, type, selection) {
             var selStr = "The medal ranking system is currently unavailable... Therefore, I am providing the #bEquipment Merge#k service! ";
 
             const MakerProcessor = Java.type('org.gms.client.processor.action.MakerProcessor');
-            if (!YamlConfig.config.server.USE_STARTER_MERGE && (cm.getPlayer().getLevel() < levelLimit || MakerProcessor.getMakerSkillLevel(cm.getPlayer()) < 3)) {
+            if (!GameConfig.getServerBoolean("use_starter_merge") && (cm.getPlayer().getLevel() < levelLimit || MakerProcessor.getMakerSkillLevel(cm.getPlayer()) < 3)) {
                 selStr += "However, you must have #rMaker level 3#k and at least #rlevel 110#k (Cygnus Knight), #rlevel 160#k (other classes) and a fund of #r" + cm.numberWithCommas(mergeFee) + " mesos#k to use the service.";
                 cm.sendOk(selStr);
                 cm.dispose();

@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.gms.client.*;
 import org.gms.client.Character;
 import org.gms.client.keybind.KeyBinding;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.constants.string.ExtendType;
 import org.gms.dao.entity.*;
@@ -157,7 +157,7 @@ public class CharacterService {
     }
 
     public List<List<CharactersDO>> getWorldsRankPlayers(int worldSize) {
-        boolean wholeServerRanking = YamlConfig.config.server.USE_WHOLE_SERVER_RANKING;
+        boolean wholeServerRanking = GameConfig.getServerBoolean("use_whole_server_ranking");
         List<List<CharactersDO>> worldsRankingList = new ArrayList<>();
         if (wholeServerRanking) {
             // 全服前50

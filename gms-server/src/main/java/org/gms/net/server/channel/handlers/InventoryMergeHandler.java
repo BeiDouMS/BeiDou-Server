@@ -27,7 +27,7 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -42,7 +42,7 @@ public final class InventoryMergeHandler extends AbstractPacketHandler {
         p.readInt();
         chr.getAutoBanManager().setTimestamp(2, Server.getInstance().getCurrentTimestamp(), 4);
 
-        if (!YamlConfig.config.server.USE_ITEM_SORT) {
+        if (!GameConfig.getServerBoolean("use_item_sort")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }

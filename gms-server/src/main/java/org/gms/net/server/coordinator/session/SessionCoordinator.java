@@ -21,7 +21,7 @@ package org.gms.net.server.coordinator.session;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.NpcId;
 import org.gms.net.server.Server;
 import org.gms.net.server.coordinator.login.LoginStorage;
@@ -89,7 +89,7 @@ public class SessionCoordinator {
                 }
             }
 
-            if (hwidRelevances.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
+            if (hwidRelevances.size() < GameConfig.getServerInt("max_allowed_account_hwid")) {
                 return true;
             }
         } catch (SQLException e) {
@@ -128,7 +128,7 @@ public class SessionCoordinator {
     }
 
     public boolean canStartLoginSession(Client client) {
-        if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
+        if (!GameConfig.getServerBoolean("deterred_multi_client")) {
             return true;
         }
 
@@ -184,7 +184,7 @@ public class SessionCoordinator {
     }
 
     public AntiMulticlientResult attemptLoginSession(Client client, Hwid hwid, int accountId, boolean routineCheck) {
-        if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
+        if (!GameConfig.getServerBoolean("deterred_multi_client")) {
             client.setHwid(hwid);
             return AntiMulticlientResult.SUCCESS;
         }
@@ -217,7 +217,7 @@ public class SessionCoordinator {
 
     public AntiMulticlientResult attemptGameSession(Client client, int accountId, Hwid hwid) {
         final String remoteHost = getSessionRemoteHost(client);
-        if (!YamlConfig.config.server.DETERRED_MULTICLIENT) {
+        if (!GameConfig.getServerBoolean("deterred_multi_client")) {
             hostHwidCache.addEntry(remoteHost, hwid);
             hostHwidCache.addEntry(client.getRemoteAddress(), hwid); // no HWID information on the loggedin newcomer session...
             return AntiMulticlientResult.SUCCESS;
@@ -265,7 +265,7 @@ public class SessionCoordinator {
                 return;
             }
 
-            if (hwids.size() < YamlConfig.config.server.MAX_ALLOWED_ACCOUNT_HWID) {
+            if (hwids.size() < GameConfig.getServerInt("max_allowed_account_hwid")) {
                 Instant expiry = HwidAssociationExpiry.getHwidAccountExpiry(0);
                 SessionDAO.registerAccountAccess(con, accountId, hwid, expiry);
             }

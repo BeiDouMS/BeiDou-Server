@@ -31,7 +31,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.WeaponType;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
@@ -78,7 +78,7 @@ public final class RangedAttackHandler extends AbstractDealDamageHandler {
         }
 
         if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
-            chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_ATK);
+            chr.setDojoEnergy(chr.getDojoEnergy() + GameConfig.getServerInt("dojo_energy_atk"));
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 

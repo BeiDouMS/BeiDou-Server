@@ -21,7 +21,7 @@ package org.gms.client;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.server.maps.AbstractAnimatedMapObject;
 import org.gms.server.maps.MapleMap;
@@ -668,19 +668,19 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
                 newLuk += deltaLuk;
             }
 
-            if (newStr < 4 || newStr > YamlConfig.config.server.MAX_AP) {
+            if (newStr < 4 || newStr > GameConfig.getServerInt("max_ap")) {
                 return false;
             }
 
-            if (newDex < 4 || newDex > YamlConfig.config.server.MAX_AP) {
+            if (newDex < 4 || newDex > GameConfig.getServerInt("max_ap")) {
                 return false;
             }
 
-            if (newInt < 4 || newInt > YamlConfig.config.server.MAX_AP) {
+            if (newInt < 4 || newInt > GameConfig.getServerInt("max_ap")) {
                 return false;
             }
 
-            if (newLuk < 4 || newLuk > YamlConfig.config.server.MAX_AP) {
+            if (newLuk < 4 || newLuk > GameConfig.getServerInt("max_ap")) {
                 return false;
             }
 

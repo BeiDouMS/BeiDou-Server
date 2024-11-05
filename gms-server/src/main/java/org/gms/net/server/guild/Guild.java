@@ -23,7 +23,7 @@ package org.gms.net.server.guild;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
 import org.gms.net.server.Server;
@@ -809,10 +809,10 @@ public class Guild {
     }
 
     public static int getIncreaseGuildCost(int size) {
-        int cost = YamlConfig.config.server.EXPAND_GUILD_BASE_COST + Math.max(0, (size - 15) / 5) * YamlConfig.config.server.EXPAND_GUILD_TIER_COST;
+        int cost = GameConfig.getServerInt("expand_guild_base_cost") + Math.max(0, (size - 15) / 5) * GameConfig.getServerInt("expand_guild_tier_cost");
 
         if (size > 30) {
-            return Math.min(YamlConfig.config.server.EXPAND_GUILD_MAX_COST, Math.max(cost, 5000000));
+            return Math.min(GameConfig.getServerInt("expand_guild_max_cost"), Math.max(cost, 5000000));
         } else {
             return cost;
         }

@@ -47,8 +47,8 @@ function start(mode, type, selection) {
             qm.changeJobById(2100);
             qm.resetStats();
 
-            const YamlConfig = Java.type('org.gms.config.YamlConfig');
-            if (YamlConfig.config.server.USE_FULL_ARAN_SKILLSET) {
+            const GameConfig = Java.type('org.gms.config.GameConfig');
+            if (GameConfig.getServerBoolean("use_full_aran_skill_set")) {
                 qm.teachSkill(21000000, 0, 10, -1);   //combo ability
                 qm.teachSkill(21001003, 0, 20, -1);   //polearm booster
             }

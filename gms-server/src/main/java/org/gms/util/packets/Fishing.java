@@ -20,7 +20,7 @@
 package org.gms.util.packets;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
@@ -60,7 +60,7 @@ public class Fishing {
     private static boolean hitFishingTime(Character chr, int baitLevel, double yearLikelihood, double timeLikelihood) {
         double baitLikelihood = 0.0002 * chr.getWorldServer().getFishingRate() * baitLevel;   // can improve 10.0 at "max level 50000" on rate 1x
 
-        if (YamlConfig.config.server.USE_DEBUG && chr.isGM()) {
+        if (GameConfig.getServerBoolean("use_debug") && chr.isGM()) {
             chr.dropMessage(5, "----- FISHING RESULT -----");
             chr.dropMessage(5, "Likelihoods - Year: " + yearLikelihood + " Time: " + timeLikelihood + " Meso: " + baitLikelihood);
             chr.dropMessage(5, "Score rolls - Year: " + (0.23 * yearLikelihood) + " Time: " + (0.77 * timeLikelihood) + " Meso: " + baitLikelihood);

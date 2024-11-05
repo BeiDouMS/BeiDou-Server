@@ -31,7 +31,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ModifyInventory;
 import org.gms.client.inventory.Pet;
 import org.gms.model.pojo.NewYearCardRecord;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.util.I18nUtil;
@@ -520,7 +520,7 @@ public class InventoryManipulator {
         }
         c.sendPacket(PacketCreator.modifyInventory(true, mods));
         // 添加物品代码提示
-        if (YamlConfig.config.server.USE_DEBUG && c.getPlayer().isGM()) { // 假设isGM()是检查玩家是否是管理员的方法
+        if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM()) { // 假设isGM()是检查玩家是否是管理员的方法
             int itemID = source.getItemId();
             c.getPlayer().dropMessage(5, I18nUtil.getMessage("InventoryManipulator.handlePacket.message1")  + itemID);
         }
@@ -696,10 +696,10 @@ public class InventoryManipulator {
         if (ii.isDropRestricted(it.getItemId())) {
             return true;
         } else if (ii.isCash(it.getItemId())) {
-            if (YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_CASH) {     // thanks Ari for noticing cash drops not available server-side
+            if (GameConfig.getServerBoolean("use_enforce_unmerchable_cash")) {     // thanks Ari for noticing cash drops not available server-side
                 return true;
             } else {
-                return ItemConstants.isPet(it.getItemId()) && YamlConfig.config.server.USE_ENFORCE_UNMERCHABLE_PET;
+                return ItemConstants.isPet(it.getItemId()) && GameConfig.getServerBoolean("use_enforce_unmerchable_pet");
             }
         } else if (isDroppedItemRestricted(it)) {
             return true;
@@ -717,7 +717,7 @@ public class InventoryManipulator {
         Inventory inv = chr.getInventory(type);
         Item source = inv.getItem(src);
 
-        if (chr.isGM() && chr.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_DROP) {
+        if (chr.isGM() && chr.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_drop")) {
             chr.message("You cannot drop items at your GM level.");
             log.info("GM %s tried to drop item id %d", chr.getName(), source.getItemId());
             return;
@@ -813,7 +813,7 @@ public class InventoryManipulator {
     }
 
     private static boolean isDroppedItemRestricted(Item it) {
-        return YamlConfig.config.server.USE_ERASE_UNTRADEABLE_DROP && it.isUntradeable();
+        return GameConfig.getServerBoolean("use_erase_untradeable_drop") && it.isUntradeable();
     }
 
     public static boolean isSandboxItem(Item it) {

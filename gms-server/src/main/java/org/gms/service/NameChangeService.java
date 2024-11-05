@@ -4,7 +4,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.NamechangesDO;
 import org.gms.dao.entity.RingsDO;
@@ -89,7 +89,7 @@ public class NameChangeService {
                 .where(NAMECHANGES_D_O.CHARACTERID.eq(chr.getId())));
         // 已有改名未生效或改名未冷却
         if (!namechangesDOList.isEmpty() && namechangesDOList.stream().anyMatch(namechangesDO ->
-                namechangesDO.getCompletionTime() == null || namechangesDO.getCompletionTime().getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > System.currentTimeMillis())) {
+                namechangesDO.getCompletionTime() == null || namechangesDO.getCompletionTime().getTime() + GameConfig.getServerLong("name_change_cooldown") > System.currentTimeMillis())) {
             return false;
         }
         namechangesMapper.insertSelective(NamechangesDO.builder().characterid(chr.getId()).older(chr.getName()).newer(newName).build());

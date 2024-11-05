@@ -11,4 +11,5 @@ export default {
   'button.edit': '编辑',
   'button.delete': '删除',
   'button.detail': '详情',
+  'button.add': '新增',
 };

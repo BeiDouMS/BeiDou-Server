@@ -77,17 +77,13 @@ function doSelect(selection) {
     switch (selection) {
         // 非GM功能
         case 0:
-            //openNpc("StarterGift");
-            cm.sendOk("该功能暂不支持，敬请期待！");
-            cm.dispose();
+            openNpc("新人福利");
             break;
         case 1:
             openNpc("每日签到");
             break;
         case 2:
-            //openNpc("在线奖励");
-            cm.sendOk("该功能暂不支持，敬请期待！");
-            cm.dispose();
+            openNpc("在线奖励");
             break;
         case 3:
             cm.getPlayer().saveLocation("FREE_MARKET");

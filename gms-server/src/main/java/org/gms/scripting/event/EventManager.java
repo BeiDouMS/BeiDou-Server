@@ -22,7 +22,7 @@
 package org.gms.scripting.event;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
@@ -150,7 +150,7 @@ public class EventManager {
     }
 
     public long getLobbyDelay() {
-        return YamlConfig.config.server.EVENT_LOBBY_DELAY;
+        return GameConfig.getServerLong("event_lobby_delay");
     }
 
     private int getMaxLobbies() {
@@ -254,7 +254,7 @@ public class EventManager {
             synchronized (instances) {
                 instances.remove(name);
             }
-        }, SECONDS.toMillis(YamlConfig.config.server.EVENT_LOBBY_DELAY));
+        }, SECONDS.toMillis(GameConfig.getServerLong("event_lobby_delay")));
     }
 
     public void setProperty(String key, String value) {
@@ -800,7 +800,7 @@ public class EventManager {
 
     public boolean isQueueFull() {
         synchronized (queuedGuilds) {
-            return queuedGuilds.size() >= YamlConfig.config.server.EVENT_MAX_GUILD_QUEUE;
+            return queuedGuilds.size() >= GameConfig.getServerInt("event_max_guild_queue");
         }
     }
 

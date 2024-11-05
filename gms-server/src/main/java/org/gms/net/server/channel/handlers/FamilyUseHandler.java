@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.*;
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -43,7 +43,7 @@ import java.util.Objects;
 public final class FamilyUseHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_family_system")) {
             return;
         }
         FamilyEntitlement type = FamilyEntitlement.values()[p.readInt()];

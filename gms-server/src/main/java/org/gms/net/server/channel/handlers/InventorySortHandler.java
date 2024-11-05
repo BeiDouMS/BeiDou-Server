@@ -28,7 +28,7 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ModifyInventory;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -295,7 +295,7 @@ public final class InventorySortHandler extends AbstractPacketHandler {
         p.readInt();
         chr.getAutoBanManager().setTimestamp(3, Server.getInstance().getCurrentTimestamp(), 4);
 
-        if (!YamlConfig.config.server.USE_ITEM_SORT) {
+        if (!GameConfig.getServerBoolean("use_item_sort")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
@@ -325,7 +325,7 @@ public final class InventorySortHandler extends AbstractPacketHandler {
             }
 
             int invTypeCriteria = (InventoryType.getByType(invType) == InventoryType.EQUIP) ? 3 : 1;
-            int sortCriteria = (YamlConfig.config.server.USE_ITEM_SORT_BY_NAME == true) ? 2 : 0;
+            int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
             PairedQuicksort pq = new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
 
             for (Item item : itemarray) {

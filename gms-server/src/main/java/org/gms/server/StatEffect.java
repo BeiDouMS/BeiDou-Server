@@ -34,7 +34,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
@@ -445,7 +445,7 @@ public class StatEffect {
             } else {
                 if (isMapChair(sourceid)) {
                     addBuffStatPairToListIfNotZero(statups, BuffStat.MAP_CHAIR, 1);
-                } else if ((sourceid == Beginner.NIMBLE_FEET || sourceid == Noblesse.NIMBLE_FEET || sourceid == Evan.NIMBLE_FEET || sourceid == Legend.AGILE_BODY) && YamlConfig.config.server.USE_ULTRA_NIMBLE_FEET == true) {
+                } else if ((sourceid == Beginner.NIMBLE_FEET || sourceid == Noblesse.NIMBLE_FEET || sourceid == Evan.NIMBLE_FEET || sourceid == Legend.AGILE_BODY) && GameConfig.getServerBoolean("use_ultra_nimble_feet")) {
                     ret.jump = (short) (ret.speed * 4);
                     ret.speed *= 15;
                 }
@@ -467,7 +467,7 @@ public class StatEffect {
             ret.lt = (Point) ltd.getData();
             ret.rb = (Point) source.getChildByPath("rb").getData();
 
-            if (YamlConfig.config.server.USE_MAXRANGE_ECHO_OF_HERO && (sourceid == Beginner.ECHO_OF_HERO || sourceid == Noblesse.ECHO_OF_HERO || sourceid == Legend.ECHO_OF_HERO || sourceid == Evan.ECHO_OF_HERO)) {
+            if (GameConfig.getServerBoolean("use_max_range_echo_of_hero") && (sourceid == Beginner.ECHO_OF_HERO || sourceid == Noblesse.ECHO_OF_HERO || sourceid == Legend.ECHO_OF_HERO || sourceid == Evan.ECHO_OF_HERO)) {
                 ret.lt = new Point(Integer.MIN_VALUE, Integer.MIN_VALUE);
                 ret.rb = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
             }
@@ -475,7 +475,7 @@ public class StatEffect {
 
         int x = DataTool.getInt("x", source, 0);
 
-        if ((sourceid == Beginner.RECOVERY || sourceid == Noblesse.RECOVERY || sourceid == Evan.RECOVERY || sourceid == Legend.RECOVERY) && YamlConfig.config.server.USE_ULTRA_RECOVERY == true) {
+        if ((sourceid == Beginner.RECOVERY || sourceid == Noblesse.RECOVERY || sourceid == Evan.RECOVERY || sourceid == Legend.RECOVERY) && GameConfig.getServerBoolean("use_ultra_recovery") == true) {
             x *= 10;
         }
         ret.x = x;
@@ -1229,7 +1229,7 @@ public class StatEffect {
     }
 
     public int getBuffLocalDuration() {
-        return !YamlConfig.config.server.USE_BUFF_EVERLASTING ? duration : Integer.MAX_VALUE;
+        return !GameConfig.getServerBoolean("use_buff_everlasting") ? duration : Integer.MAX_VALUE;
     }
 
     public void silentApplyBuff(Character chr, long localStartTime) {

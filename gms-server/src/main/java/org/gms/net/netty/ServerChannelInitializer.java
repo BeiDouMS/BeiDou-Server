@@ -1,7 +1,7 @@
 package org.gms.net.netty;
 
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.net.ServerConstants;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public abstract class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private static final Logger log = LoggerFactory.getLogger(ServerChannelInitializer.class);
     private static final int IDLE_TIME_SECONDS = 30;
-    private static final boolean LOG_PACKETS = YamlConfig.config.server.USE_DEBUG_SHOW_PACKET;
+    private static final boolean LOG_PACKETS = GameConfig.getServerBoolean("use_debug_show_packet");
     private static final ChannelHandler sendPacketLogger = new OutPacketLogger();
     private static final ChannelHandler receivePacketLogger = new InPacketLogger();
 

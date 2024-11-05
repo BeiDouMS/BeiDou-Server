@@ -25,7 +25,7 @@ import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.InventoryType;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.NpcId;
 import org.gms.dao.entity.PlayernpcsDO;
@@ -311,7 +311,7 @@ public class PlayerNPC extends AbstractMapObject {
             }
         }
 
-        if (YamlConfig.config.server.USE_DEBUG) {
+        if (GameConfig.getServerBoolean("use_debug")) {
             log.info("GOT SID {}, POS {}", scriptId, pos);
         }
 

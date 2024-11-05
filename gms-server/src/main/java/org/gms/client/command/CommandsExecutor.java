@@ -52,7 +52,9 @@ public class CommandsExecutor {
     private static final char USER_HEADING = '@';
     private static final char GM_HEADING = '!';
 
+    @Getter
     private final HashMap<String, Command> registeredCommands = new HashMap<>();
+    @Getter
     private final List<Pair<List<String>, List<String>>> commandsNameDesc = new ArrayList<>();
     private Pair<List<String>, List<String>> levelCommandsCursor;
 
@@ -78,10 +80,6 @@ public class CommandsExecutor {
 //        registerLv6Commands();
 
         commandService.loadCommands(registeredCommands, commandsNameDesc);
-    }
-
-    public List<Pair<List<String>, List<String>>> getGmCommands() {
-        return commandsNameDesc;
     }
 
     public void handle(Client client, String message) {

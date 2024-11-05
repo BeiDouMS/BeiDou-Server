@@ -22,7 +22,7 @@
 package org.gms.server.quest.actions;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.provider.Data;
 import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
@@ -52,7 +52,7 @@ public class ExpAction extends AbstractQuestAction {
     }
 
     public static void runAction(Character chr, int gain) {
-        if (!YamlConfig.config.server.USE_QUEST_RATE) {
+        if (!GameConfig.getServerBoolean("use_quest_rate")) {
             chr.gainExp(NumberTool.floatToInt(gain * chr.getExpRate()), true, true);
         } else {
             chr.gainExp(NumberTool.floatToInt(gain * chr.getQuestExpRate()), true, true);

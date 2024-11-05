@@ -22,7 +22,7 @@
 package org.gms.constants.inventory;
 
 import org.gms.client.inventory.InventoryType;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 
 import java.util.HashMap;
@@ -108,7 +108,7 @@ public final class ItemConstants {
     }
 
     public static boolean isExpirablePet(int itemId) {
-        return YamlConfig.config.server.USE_ERASE_PET_ON_EXPIRATION || itemId == ItemId.PET_SNAIL;
+        return GameConfig.getServerBoolean("use_erase_pet_on_expiration") || itemId == ItemId.PET_SNAIL;
     }
 
     public static boolean isPermanentItem(int itemId) {

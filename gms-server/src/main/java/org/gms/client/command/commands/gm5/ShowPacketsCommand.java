@@ -25,7 +25,8 @@ package org.gms.client.command.commands.gm5;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
+import org.gms.dao.entity.GameConfigDO;
 import org.gms.util.I18nUtil;
 
 public class ShowPacketsCommand extends Command {
@@ -35,6 +36,11 @@ public class ShowPacketsCommand extends Command {
 
     @Override
     public void execute(Client c, String[] params) {
-        YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET = !YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET;
+        GameConfig.update(GameConfigDO.builder()
+                .configType("server")
+                .configSubType("Debug")
+                .configCode("use_debug_show_rcvd_packet")
+                .configValue(String.valueOf(!GameConfig.getServerBoolean("use_debug_show_rcvd_packet")))
+                .build());
     }
 }

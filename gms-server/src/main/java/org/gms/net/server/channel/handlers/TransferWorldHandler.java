@@ -22,7 +22,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -51,7 +51,7 @@ public final class TransferWorldHandler extends AbstractPacketHandler {
             return;
         }
         Character chr = c.getPlayer();
-        if (!YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER || Server.getInstance().getWorldsSize() <= 1) {
+        if (!GameConfig.getServerBoolean("allow_cash_shop_world_transfer") || Server.getInstance().getWorldsSize() <= 1) {
             c.sendPacket(PacketCreator.sendWorldTransferRules(9, c));
             return;
         }
@@ -69,7 +69,7 @@ public final class TransferWorldHandler extends AbstractPacketHandler {
                 if (completedTimestamp == null) { //has pending world transfer
                     c.sendPacket(PacketCreator.sendWorldTransferRules(6, c));
                     return;
-                } else if (completedTimestamp.getTime() + YamlConfig.config.server.WORLD_TRANSFER_COOLDOWN > System.currentTimeMillis()) {
+                } else if (completedTimestamp.getTime() + GameConfig.getServerLong("world_transfer_cooldown") > System.currentTimeMillis()) {
                     c.sendPacket(PacketCreator.sendWorldTransferRules(7, c));
                     return;
                 }

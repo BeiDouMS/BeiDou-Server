@@ -51,8 +51,8 @@ function action(mode, type, selection) {
     }
 
     if (status == 0) {
-        const YamlConfig = Java.type('org.gms.config.YamlConfig');
-        if (!YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+        const GameConfig = Java.type('org.gms.config.GameConfig');
+        if (!GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
             cm.sendOk("嗨，我是 #b#p" + cm.getNpc() + "##k。");
             cm.dispose();
             return;

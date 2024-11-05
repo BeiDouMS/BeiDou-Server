@@ -1,7 +1,7 @@
 package org.gms.server.partyquest;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.string.LanguageConstants;
 import org.gms.net.server.Server;
 import org.gms.net.server.channel.Channel;
@@ -101,7 +101,7 @@ public class MonsterCarnival {
 
             timer = TimerManager.getInstance().schedule(() -> timeUp(), SECONDS.toMillis(map.getTimeDefault())); // thanks Atoot for noticing an irregular "event extended" issue here
             effectTimer = TimerManager.getInstance().schedule(() -> complete(), SECONDS.toMillis(map.getTimeDefault() - 10));
-            respawnTask = TimerManager.getInstance().register(() -> respawn(), YamlConfig.config.server.RESPAWN_INTERVAL);
+            respawnTask = TimerManager.getInstance().register(() -> respawn(), GameConfig.getServerLong("respawn_interval"));
 
             cs.initMonsterCarnival(cpq1, room);
         } catch (Exception e) {

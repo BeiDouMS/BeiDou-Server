@@ -26,7 +26,7 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.server.maps.MapleMap;
 import org.gms.util.I18nUtil;
 
@@ -41,7 +41,7 @@ public class MapOwnerClaimCommand extends Command {
             try {
                 Character chr = c.getPlayer();
 
-                if (YamlConfig.config.server.USE_MAP_OWNERSHIP_SYSTEM) {
+                if (GameConfig.getServerBoolean("use_map_ownership_system")) {
                     if (chr.getEventInstance() == null) {
                         MapleMap map = chr.getMap();
                         if (map.countBosses() == 0) {   // thanks Conrad for suggesting bosses prevent map leasing

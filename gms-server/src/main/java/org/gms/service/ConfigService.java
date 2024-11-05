@@ -1,91 +1,96 @@
 package org.gms.service;
 
-import com.alibaba.fastjson2.JSONObject;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.util.StringUtil;
 import lombok.AllArgsConstructor;
+import org.gms.config.GameConfig;
 import org.gms.dao.entity.GameConfigDO;
-import org.gms.dao.entity.ServerPropDO;
-import org.gms.dao.entity.WorldPropDO;
 import org.gms.dao.mapper.GameConfigMapper;
-import org.gms.dao.mapper.ServerPropMapper;
-import org.gms.dao.mapper.WorldPropMapper;
-import org.gms.property.ServerProperty;
-import org.gms.property.WorldProperty;
+import org.gms.model.dto.ConfigTypeDTO;
+import org.gms.model.dto.GameConfigReqDTO;
+import org.gms.util.I18nUtil;
+import org.gms.util.RequireUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-import static org.gms.dao.entity.table.WorldPropDOTableDef.WORLD_PROP_D_O;
+import static com.mybatisflex.core.query.QueryMethods.distinct;
+import static org.gms.dao.entity.table.GameConfigDOTableDef.GAME_CONFIG_D_O;
 
 @Service
 @AllArgsConstructor
 public class ConfigService {
-    private final WorldPropMapper worldPropMapper;
-    private final ServerPropMapper serverPropMapper;
     private final GameConfigMapper gameConfigMapper;
 
     public List<GameConfigDO> loadGameConfigs() {
         return gameConfigMapper.selectAll();
     }
 
-    public List<WorldProperty.WorldsConfig> loadWorldProperty() {
-        List<WorldPropDO> worldPropDOS = worldPropMapper.selectListByQuery(QueryWrapper.create()
-                .where(WORLD_PROP_D_O.ENABLED.eq(1)));
-        return worldPropDOS.stream().map(worldPropDO -> {
-            WorldProperty.WorldsConfig worldsConfig = new WorldProperty.WorldsConfig();
-            Field[] worldsConfigFields = worldsConfig.getClass().getDeclaredFields();
-            Field[] worldPropFields = worldPropDO.getClass().getDeclaredFields();
-            for (Field configField : worldsConfigFields) {
-                configField.setAccessible(true);
-                for (Field propField : worldPropFields) {
-                    propField.setAccessible(true);
-                    if (Objects.equals(StringUtil.camelToUnderline(propField.getName()).toUpperCase(), configField.getName().toUpperCase())) {
-                        setValue(worldsConfig, configField, worldPropDO, propField);
-                        break;
-                    }
-                }
-            }
-            return worldsConfig;
-        }).collect(Collectors.toList());
+    public ConfigTypeDTO getConfigTypeList() {
+        List<GameConfigDO> typeDOList = gameConfigMapper.selectListByQuery(QueryWrapper.create().select(distinct(GAME_CONFIG_D_O.CONFIG_TYPE)));
+        List<GameConfigDO> subTypeDOList = gameConfigMapper.selectListByQuery(QueryWrapper.create().select(distinct(GAME_CONFIG_D_O.CONFIG_SUB_TYPE)));
+        return ConfigTypeDTO.builder()
+                .types(typeDOList.stream().map(GameConfigDO::getConfigType).toList())
+                .subTypes(subTypeDOList.stream().map(GameConfigDO::getConfigSubType).toList())
+                .build();
     }
 
-    public ServerProperty loadServerProperty() {
-        List<ServerPropDO> serverPropDOS = serverPropMapper.selectAll();
-        ServerProperty serverProperty = new ServerProperty();
-        Field[] serverPropertyFields = serverProperty.getClass().getDeclaredFields();
-        for (Field configField : serverPropertyFields) {
-            configField.setAccessible(true);
-            for (ServerPropDO serverPropDO : serverPropDOS) {
-                if (Objects.equals(configField.getName().toUpperCase(), serverPropDO.getPropCode().toUpperCase())) {
-                    setValue(serverProperty, configField, serverPropDO.getPropValue());
-                    break;
-                }
-            }
+    public Page<GameConfigDO> getConfigList(GameConfigReqDTO condition) {
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        if (!RequireUtil.isEmpty(condition.getType()))
+            queryWrapper.and(GAME_CONFIG_D_O.CONFIG_TYPE.eq(condition.getType()));
+        if (!RequireUtil.isEmpty(condition.getSubType()))
+            queryWrapper.and(GAME_CONFIG_D_O.CONFIG_SUB_TYPE.eq(condition.getSubType()));
+        if (!RequireUtil.isEmpty(condition.getFilter())) {
+            queryWrapper.and(GAME_CONFIG_D_O.CONFIG_CODE.like(condition.getFilter()).or(GAME_CONFIG_D_O.CONFIG_DESC.like(condition.getFilter())));
         }
-        return serverProperty;
+
+        return gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
     }
 
-    private void setValue(Object dstObj, Field dstField, String value) {
-        try {
-            Object typeValue = value;
-            if (dstField.getType() != String.class) {
-                typeValue = JSONObject.parseObject(value, dstField.getType());
-            }
-            dstField.set(dstObj, typeValue);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public void addConfig(GameConfigDO condition) {
+        RequireUtil.requireNotEmpty(condition.getConfigType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configType"));
+        RequireUtil.requireNotEmpty(condition.getConfigSubType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configSubType"));
+        RequireUtil.requireNotEmpty(condition.getConfigCode(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configCode"));
+        RequireUtil.requireNotEmpty(condition.getConfigValue(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configValue"));
+        List<GameConfigDO> gameConfigDOList = gameConfigMapper.selectListByQuery(QueryWrapper.create()
+                .where(GAME_CONFIG_D_O.CONFIG_TYPE.eq(condition.getConfigType()))
+                .where(GAME_CONFIG_D_O.CONFIG_SUB_TYPE.eq(condition.getConfigSubType()))
+                .and(GAME_CONFIG_D_O.CONFIG_CODE.eq(condition.getConfigCode())));
+        RequireUtil.requireTrue(gameConfigDOList.isEmpty(), I18nUtil.getExceptionMessage("ConfigService.addConfig.exception1"));
+        condition.setId(null);
+        gameConfigMapper.insertSelective(condition);
+        GameConfig.add(condition);
     }
 
-    private void setValue(Object dstObj, Field dstField, Object srcObj, Field srcField) {
-        try {
-            dstField.set(dstObj, srcField.get(srcObj));
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public void updateConfig(GameConfigDO condition) {
+        RequireUtil.requireNotNull(condition.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
+        RequireUtil.requireNotEmpty(condition.getConfigValue(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configValue"));
+        gameConfigMapper.update(GameConfigDO.builder()
+                .id(condition.getId())
+                .configValue(condition.getConfigValue())
+                .configDesc(condition.getConfigDesc())
+                .build());
+        GameConfigDO gameConfigDO = gameConfigMapper.selectOneById(condition.getId());
+        GameConfig.update(gameConfigDO);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteConfig(Long id) {
+        RequireUtil.requireNotNull(id, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
+        GameConfigDO gameConfigDO = gameConfigMapper.selectOneById(id);
+        gameConfigMapper.deleteById(id);
+        GameConfig.remove(gameConfigDO);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteConfigList(List<Long> ids) {
+        RequireUtil.requireNotEmpty(ids, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "ids"));
+        List<GameConfigDO> gameConfigDOS = gameConfigMapper.selectListByIds(ids);
+        gameConfigMapper.deleteBatchByIds(ids);
+        gameConfigDOS.forEach(GameConfig::remove);
     }
 }

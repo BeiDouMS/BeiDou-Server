@@ -2,8 +2,11 @@ package org.gms.config;
 
 import com.alibaba.fastjson2.JSONException;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import org.gms.dao.entity.GameConfigDO;
 import org.gms.manager.ServerManager;
+import org.gms.net.server.Server;
+import org.gms.net.server.world.World;
 import org.gms.service.ConfigService;
 
 import java.util.List;
@@ -20,10 +23,14 @@ public class GameConfig {
     private GameConfig() {
         ConfigService configService = ServerManager.getApplicationContext().getBean(ConfigService.class);
         List<GameConfigDO> gameConfigDOS = configService.loadGameConfigs();
-        gameConfigDOS.forEach(GameConfig::add);
+        gameConfigDOS.forEach(gameConfigDO -> add(this, gameConfigDO));
     }
 
     public static void add(GameConfigDO gameConfigDO) {
+        add(config, gameConfigDO);
+    }
+
+    private static void add(GameConfig config, GameConfigDO gameConfigDO) {
         JSONObject typeProp = config.properties.getJSONObject(gameConfigDO.getConfigType());
         if (typeProp == null) {
             typeProp = new JSONObject();
@@ -68,7 +75,35 @@ public class GameConfig {
             return;
         }
         valueProp.put("value", gameConfigDO.getConfigValue());
-        valueProp.put("clazz", gameConfigDO.getConfigClazz());
+
+        // 手动重载不能重载的部分
+        if ("world".equals(gameConfigDO.getConfigType()) && gameConfigDO.getConfigCode().endsWith("_rate")) {
+            int index = Integer.parseInt(gameConfigDO.getConfigSubType());
+            World world = Server.getInstance().getWorld(index);
+            switch (gameConfigDO.getConfigCode()) {
+                case "exp_rate":
+                    world.setExpRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+                case "meso_rate":
+                    world.setMesoRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+                case "drop_rate":
+                    world.setDropRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+                case "boss_drop_rate":
+                    world.setBossDropRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+                case "quest_rate":
+                    world.setQuestRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+                case "travel_rate":
+                    world.setTravelRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+                case "fishing_rate":
+                    world.setFishingRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    break;
+            }
+        }
     }
 
     public static Object getObject(String key) {
@@ -98,7 +133,8 @@ public class GameConfig {
         if (valueProp == null) {
             return defaultVal;
         }
-        return getValue(valueProp);
+        T t = getValue(valueProp);
+        return t == null ? defaultVal : t;
     }
 
     public static <T> T get(String type, String subType, String key) {
@@ -110,7 +146,8 @@ public class GameConfig {
         if (valueProp == null) {
             return defaultVal;
         }
-        return getValue(valueProp);
+        T t = getValue(valueProp);
+        return t == null ? defaultVal : t;
     }
 
     @SuppressWarnings("unchecked")
@@ -140,7 +177,7 @@ public class GameConfig {
         if (subProp == null) {
             return null;
         }
-        return subProp.getJSONObject(key);
+        return subProp.getJSONObject(key.toLowerCase());
     }
 
     public static JSONObject getValueProp(String type, String key) {
@@ -150,8 +187,12 @@ public class GameConfig {
         }
         for (String subType : typeProp.keySet()) {
             JSONObject subProp = typeProp.getJSONObject(subType);
-            if (subProp != null) {
-                return subProp.getJSONObject(key);
+            if (subProp == null) {
+                continue;
+            }
+            JSONObject valueProp = subProp.getJSONObject(key.toLowerCase());
+            if (valueProp != null) {
+                return valueProp;
             }
         }
         return null;
@@ -239,5 +280,206 @@ public class GameConfig {
             }
         }
         return defaultVal;
+    }
+
+    /* -------------------- 以下根据参数大类获取，可以避免同一个参数，不同大区的场景获取错误 -------------------- */
+    public static <T> T getWorld(int worldId, String key) {
+        return get("world", String.valueOf(worldId), key);
+    }
+
+    public static <T> T getServer(String key) {
+        return get("server", key);
+    }
+
+    public static int getWorldInt(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return 0;
+        }
+        return valueProp.getIntValue("value");
+    }
+
+    public static int getServerInt(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return 0;
+        }
+        return valueProp.getIntValue("value");
+    }
+
+    public static byte getWorldByte(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return (byte) 0;
+        }
+        return valueProp.getByteValue("value");
+    }
+
+    public static byte getServerByte(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return (byte) 0;
+        }
+        return valueProp.getByteValue("value");
+    }
+
+    public static long getWorldLong(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return 0L;
+        }
+        return valueProp.getLongValue("value");
+    }
+
+    public static long getServerLong(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return 0L;
+        }
+        return valueProp.getLongValue("value");
+    }
+
+    public static short getWorldShort(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return (short) 0;
+        }
+        return valueProp.getShortValue("value");
+    }
+
+    public static short getServerShort(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return (short) 0;
+        }
+        return valueProp.getShortValue("value");
+    }
+
+    public static float getWorldFloat(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return 0F;
+        }
+        return valueProp.getFloatValue("value");
+    }
+
+    public static float getServerFloat(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return 0F;
+        }
+        return valueProp.getFloatValue("value");
+    }
+
+    public static double getWorldDouble(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return 0D;
+        }
+        return valueProp.getDoubleValue("value");
+    }
+
+    public static double getServerDouble(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return 0D;
+        }
+        return valueProp.getDoubleValue("value");
+    }
+
+    public static String getWorldString(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return "";
+        }
+        return valueProp.getString("value");
+    }
+
+    public static String getServerString(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return "";
+        }
+        return valueProp.getString("value");
+    }
+
+    public static boolean getWorldBoolean(int worldId, String key) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return false;
+        }
+        return valueProp.getBooleanValue("value");
+    }
+
+    public static boolean getServerBoolean(String key) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return false;
+        }
+        return valueProp.getBooleanValue("value");
+    }
+
+    public static <T> T getWorldObject(int worldId, String key, Class<T> clz) {
+        return getValue(false, String.valueOf(worldId), key, clz);
+    }
+
+    public static <T> T getWorldObject(int worldId, String key, T defaultVal) {
+        T t = getValue(false, String.valueOf(worldId), key, defaultVal.getClass());
+        return t == null ? defaultVal : t;
+    }
+
+    public static <T> T getServerObject(String key, Class<T> clz) {
+        return getValue(true, null, key, clz);
+    }
+
+    public static <T> T getServerObject(String key, T defaultVal) {
+        T t = getValue(true, null, key, defaultVal.getClass());
+        return t == null ? defaultVal : t;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T> T getValue(boolean isServer, String subType, String key, Class<?> clz) {
+        JSONObject valueProp;
+        if (isServer) {
+            valueProp = getValueProp("server", key);
+        } else {
+            valueProp = getValueProp("world", subType, key);
+        }
+        if (valueProp == null) {
+            return null;
+        }
+        try {
+            return (T) valueProp.getObject("value", clz);
+        } catch (JSONException e) {
+            return (T) JSONObject.parseObject(valueProp.getString("value"), clz);
+        }
+    }
+
+    public static <T> T getWorldObject(int worldId, String key, TypeReference<T> type) {
+        JSONObject valueProp = getValueProp("world", String.valueOf(worldId), key);
+        if (valueProp == null) {
+            return null;
+        }
+        try {
+            return valueProp.getObject("value", type);
+        } catch (JSONException e) {
+            return JSONObject.parseObject(valueProp.getString("value"), type);
+        }
+    }
+
+    public static <T> T getServerObject(String key, TypeReference<T> type) {
+        JSONObject valueProp = getValueProp("server", key);
+        if (valueProp == null) {
+            return null;
+        }
+        try {
+            return valueProp.getObject("value", type);
+        } catch (JSONException e) {
+            return JSONObject.parseObject(valueProp.getString("value"), type);
+        }
+    }
+
+    public static JSONObject getConfig() {
+        return config.properties;
     }
 }

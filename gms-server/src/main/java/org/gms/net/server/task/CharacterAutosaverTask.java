@@ -21,7 +21,7 @@ package org.gms.net.server.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.manager.ServerManager;
 import org.gms.net.server.PlayerStorage;
@@ -40,7 +40,7 @@ public class CharacterAutosaverTask extends BaseTask implements Runnable {  // t
 
     @Override
     public void run() {
-        if (!YamlConfig.config.server.USE_AUTOSAVE) {
+        if (!GameConfig.getServerBoolean("use_autosave")) {
             return;
         }
 

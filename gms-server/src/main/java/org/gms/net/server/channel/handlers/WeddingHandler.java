@@ -14,7 +14,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -53,7 +53,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                             String groomWishlistProp = "giftedItem" + (groomWishlist ? "G" : "B") + chr.getId();
 
                             int giftCount = marriage.getIntProperty(groomWishlistProp);
-                            if (giftCount < YamlConfig.config.server.WEDDING_GIFT_LIMIT) {
+                            if (giftCount < GameConfig.getServerInt("wedding_gift_limit")) {
                                 int cid = marriage.getIntProperty(groomWishlist ? "groomId" : "brideId");
                                 if (chr.getId() != cid) {   // cannot gift yourself
                                     Character spouse = marriage.getPlayerById(cid);
@@ -87,7 +87,7 @@ public final class WeddingHandler extends AbstractPacketHandler {
                                         }
 
                                         if (newItem != null) {
-                                            if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) {
+                                            if (GameConfig.getServerBoolean("use_enforce_merchant_save")) {
                                                 chr.saveCharToDB(false);
                                             }
                                             marriage.saveGiftItemsToDb(c, groomWishlist, cid);

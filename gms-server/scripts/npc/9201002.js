@@ -27,8 +27,8 @@ var eim;
 var weddingEventName = "WeddingCathedral";
 var cathedralWedding = true;
 var weddingIndoors;
-const YamlConfig = Java.type('org.gms.config.YamlConfig');
-var weddingBlessingExp = YamlConfig.config.server.WEDDING_BLESS_EXP;
+const GameConfig = Java.type('org.gms.config.GameConfig');
+var weddingBlessingExp = GameConfig.getServerInt("wedding_bless_exp");
 
 function isWeddingIndoors(mapid) {
     return mapid >= 680000100 && mapid <= 680000500;
@@ -311,7 +311,7 @@ function action(mode, type, selection) {
                     eim.gridInsert(cm.getPlayer(), 1);
 
                     const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                    if (YamlConfig.config.server.WEDDING_BLESSER_SHOWFX) {
+                    if (GameConfig.getServerBoolean("wedding_blesser_showfx")) {
                         var target = cm.getPlayer();
                         target.sendPacket(PacketCreator.showSpecialEffect(9));
                         target.getMap().broadcastMessage(target, PacketCreator.showForeignEffect(target.getId(), 9), false);

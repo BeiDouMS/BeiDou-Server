@@ -23,7 +23,7 @@ package org.gms.net.server.handlers.login;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -55,7 +55,7 @@ public final class ViewAllCharHandler extends AbstractPacketHandler {
             int totalChrs = countTotalChrs(worldChrs);
             c.sendPacket(PacketCreator.showAllCharacter(totalWorlds, totalChrs));
 
-            final boolean usePic = YamlConfig.config.server.ENABLE_PIC && !c.canBypassPic();
+            final boolean usePic = GameConfig.getServerBoolean("enable_pic") && !c.canBypassPic();
             worldChrs.forEach((worldId, chrs) ->
                     c.sendPacket(PacketCreator.showAllCharacterInfo(worldId, chrs, usePic))
             );

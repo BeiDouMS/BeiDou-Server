@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.packet.InPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -159,7 +159,7 @@ public final class MoveLifeHandler extends AbstractMovementPacketHandler {
             long movementDataLength = p.getPosition() - movementDataStart; //how many bytes were read by updatePosition
             p.seek(movementDataStart);
 
-            if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_MVLIFE) {
+            if (GameConfig.getServerBoolean("use_debug_show_life_move")) {
                 log.info("{} rawAct: {}, opt: {}, skillId: {}, skillLv: {}, allowSkill: {}, mobMp: {}",
                         isSkill ? "SKILL" : (isAttack ? "ATTCK" : ""), rawActivity, pOption, useSkillId,
                         useSkillLevel, nextMovementCouldBeSkill, mobMp);
