@@ -29,7 +29,7 @@ import org.gms.client.SkillFactory;
 import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.id.MapId;
@@ -498,7 +498,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                             int threeSnailsId = player.getJobType() * 10000000 + 1000;
                             if (attack.skill == threeSnailsId) {
-                                if (YamlConfig.config.server.USE_ULTRA_THREE_SNAILS) {
+                                if (GameConfig.getServerBoolean("use_ultra_three_snails")) {
                                     int skillLv = player.getSkillLevel(threeSnailsId);
 
                                     if (skillLv > 0) {

@@ -20,7 +20,7 @@
  */
 package org.gms.server.life;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -117,7 +117,7 @@ public class MonsterInformationProvider {
         // this reads the drop entries searching for multi-equip, properly processing them
 
         List<MonsterDropEntry> list = retrieveDrop(monsterId);
-        if (hasNoMultiEquipDrops.contains(monsterId) || !YamlConfig.config.server.USE_MULTIPLE_SAME_EQUIP_DROP) {
+        if (hasNoMultiEquipDrops.contains(monsterId) || !GameConfig.getServerBoolean("use_multiple_same_equip_drop")) {
             return list;
         }
 

@@ -22,7 +22,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Client;
 import org.gms.client.Family;
 import org.gms.client.FamilyEntry;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
@@ -31,7 +31,7 @@ public class FamilySeparateHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_family_system")) {
             return;
         }
         Family oldFamily = c.getPlayer().getFamily();

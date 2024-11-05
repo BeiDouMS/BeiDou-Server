@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.DefaultDates;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.dao.entity.*;
 import org.gms.dao.mapper.*;
 import org.gms.model.dto.AddAccountDTO;
@@ -147,7 +147,7 @@ public class AccountService {
     }
 
     public String encryptPassword(String password) throws NoSuchAlgorithmException {
-        return YamlConfig.config.server.BCRYPT_MIGRATION ? BCrypt.hashpw(password, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(password);
+        return GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(password, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(password);
     }
 
     public boolean checkPassword(String pwd, AccountsDO accountsDO) {

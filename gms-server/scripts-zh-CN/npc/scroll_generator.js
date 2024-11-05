@@ -208,13 +208,13 @@ function getScrollTier(scrollStats) {
 function getScrollSuccessTier(scrollStats) {
     var prop = scrollStats.get("success");
 
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
+    const GameConfig = Java.type('org.gms.config.GameConfig');
     if (prop > 90) {
         return 3;
     } else if (prop < 50) {
-        return YamlConfig.config.server.SCROLL_CHANCE_ROLLS > 2 ? 2 : 1;
+        return GameConfig.getServerInt("scroll_chance_rolls") > 2 ? 2 : 1;
     } else {
-        return YamlConfig.config.server.SCROLL_CHANCE_ROLLS > 2 ? 1 : 2;
+        return GameConfig.getServerInt("scroll_chance_rolls") > 2 ? 1 : 2;
     }
 }
 

@@ -26,7 +26,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.constants.skills.Bishop;
 import org.gms.constants.skills.Evan;
@@ -61,7 +61,7 @@ public final class MagicDamageHandler extends AbstractDealDamageHandler {
         }
 
         if (MapId.isDojo(chr.getMap().getId()) && attack.numAttacked > 0) {
-            chr.setDojoEnergy(chr.getDojoEnergy() + +YamlConfig.config.server.DOJO_ENERGY_ATK);
+            chr.setDojoEnergy(chr.getDojoEnergy() + +GameConfig.getServerInt("dojo_energy_atk"));
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 

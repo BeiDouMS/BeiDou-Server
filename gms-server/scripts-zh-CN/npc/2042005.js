@@ -78,10 +78,10 @@ function action(mode, type, selection) {
                 }
             } else {
                 var party = cm.getParty().getMembers();
-                const YamlConfig = Java.type('org.gms.config.YamlConfig');
-                if ((selection === 0 || selection === 1) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 2)) {
+                const GameConfig = Java.type('org.gms.config.GameConfig');
+                if ((selection === 0 || selection === 1) && party.size() < (GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 2)) {
                     cm.sendOk("你至少需要2名玩家才能参与战斗！");
-                } else if ((selection === 2) && party.size() < (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS ? 1 : 3)) {
+                } else if ((selection === 2) && party.size() < (GameConfig.getServerBoolean("use_enable_solo_expeditions") ? 1 : 3)) {
                     cm.sendOk("你至少需要3名玩家参与战斗！");
                 } else {
                     cm.cpqLobby2(selection);

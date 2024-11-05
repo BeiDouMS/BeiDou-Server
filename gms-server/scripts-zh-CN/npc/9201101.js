@@ -4,8 +4,8 @@
  */
 
 function start() {
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
         cm.openShopNPC(9201101);
     } else {
         //cm.sendOk("新叶城的巡逻队随时待命。没有任何生物能够突破到城市里。");

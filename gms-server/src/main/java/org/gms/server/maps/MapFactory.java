@@ -21,7 +21,7 @@
  */
 package org.gms.server.maps;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.provider.*;
 import org.gms.provider.wz.WZFiles;
@@ -32,6 +32,7 @@ import org.gms.server.life.Monster;
 import org.gms.server.life.PlayerNPC;
 import org.gms.server.partyquest.GuardianSpawnPoint;
 import org.gms.util.DatabaseConnection;
+import org.gms.util.NumberTool;
 import org.gms.util.StringUtil;
 
 import java.awt.*;
@@ -109,15 +110,15 @@ public class MapFactory {
     private static void loadLifeRaw(MapleMap map, int id, String type, int cy, int f, int fh, int rx0, int rx1, int x, int y, int hide, int mobTime, int team) {
         AbstractLoadedLife myLife = loadLife(id, type, cy, f, fh, rx0, rx1, x, y, hide);
         if (myLife instanceof Monster monster) {
-            int mobRespawnRate = YamlConfig.config.server.MOB_RESPAWN_RATE;
-            float mobTimeRate = YamlConfig.config.server.BOSS_RESPAWN_MOBTIME_RATE;
+            int mobRespawnRate = GameConfig.getServerInt("mob_respawn_rate");
+            float mobTimeRate = GameConfig.getServerFloat("boss_respawn_mob_time_rate");
             mobTimeRate = (mobTimeRate <= 0 || mobTimeRate > 1) ? 1 : mobTimeRate;  //将值限定在0~1之间的范围
             if (mobRespawnRate < 1) {   //如果读入的值小于1，或者怪物为boss，则设定生怪倍率为1
                 mobRespawnRate = 1;
             }
             if (monster.isBoss()) {
                 mobRespawnRate = 1;
-                mobTime *= mobTimeRate;
+                mobTime = NumberTool.floatToInt(mobTime * mobTimeRate);
             }
 
             for (int i = 0; i < mobRespawnRate; i++) {

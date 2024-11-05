@@ -33,7 +33,8 @@ import org.gms.client.keybind.KeyBinding;
 import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
@@ -537,7 +538,7 @@ public class Character extends AbstractCharacterObject {
         ret.getInventory(InventoryType.ETC).setSlotLimit(24);
 
         // Select a keybinding method
-        boolean useCustomKeySet = YamlConfig.config.server.USE_CUSTOM_KEYSET;
+        boolean useCustomKeySet = GameConfig.getServerBoolean("use_custom_keyset");
         int[] selectedKey = GameConstants.getCustomKey(useCustomKeySet);
         int[] selectedType = GameConstants.getCustomType(useCustomKeySet);
         int[] selectedAction = GameConstants.getCustomAction(useCustomKeySet);
@@ -1087,7 +1088,7 @@ public class Character extends AbstractCharacterObject {
                 spGain += 2;
             }
 
-            if (YamlConfig.config.server.USE_ENFORCE_JOB_SP_RANGE) {
+            if (GameConfig.getServerBoolean("use_enforce_job_sp_range")) {
                 spGain = getChangedJobSp(newJob);
             }
         }
@@ -1101,12 +1102,12 @@ public class Character extends AbstractCharacterObject {
             if (this.isCygnus()) {
                 gainAp(7, true);
             } else {
-                if (YamlConfig.config.server.USE_STARTING_AP_4 || newJob.getId() % 10 >= 1) {
+                if (GameConfig.getServerBoolean("use_starting_ap_4") || newJob.getId() % 10 >= 1) {
                     gainAp(5, true);
                 }
             }
         } else {    // thanks Periwinks for noticing an AP shortage from lower levels
-            if (YamlConfig.config.server.USE_STARTING_AP_4 && newJob.getId() % 1000 >= 1) {
+            if (GameConfig.getServerBoolean("use_starting_ap_4") && newJob.getId() % 1000 >= 1) {
                 gainAp(4, true);
             }
         }
@@ -1196,7 +1197,7 @@ public class Character extends AbstractCharacterObject {
             createDragon();
         }
 
-        if (YamlConfig.config.server.USE_ANNOUNCE_CHANGEJOB) {
+        if (GameConfig.getServerBoolean("use_announce_change_job")) {
             if (!this.isGM()) {
                 broadcastAcquaintances(6, "[" + GameConstants.ordinal(GameConstants.getJobBranch(newJob)) + " Job] " + name + " has just become a " + GameConstants.getJobName(this.job.getId()) + ".");    // thanks Vcoc for noticing job name appearing in uppercase here
             }
@@ -1301,7 +1302,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void changeMapBanish(int mapid, String portal, String msg) {
-        if (YamlConfig.config.server.USE_SPIKES_AVOID_BANISH) {
+        if (GameConfig.getServerBoolean("use_spikes_avoid_banish")) {
             for (Item it : this.getInventory(InventoryType.EQUIPPED).list()) {
                 if ((it.getFlag() & ItemConstants.SPIKES) == ItemConstants.SPIKES) {
                     return;
@@ -1630,7 +1631,7 @@ public class Character extends AbstractCharacterObject {
             int idx = getVisitedMapIndex(map);
 
             if (idx == -1) {
-                if (lastVisitedMaps.size() == YamlConfig.config.server.MAP_VISITED_SIZE) {
+                if (lastVisitedMaps.size() == GameConfig.getServerInt("map_visited_size")) {
                     lastVisitedMaps.removeFirst();
                 }
             } else {
@@ -1952,7 +1953,7 @@ public class Character extends AbstractCharacterObject {
                                 int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                                 this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
-                                if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
+                                if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {
                                     showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                                 }
 
@@ -2004,7 +2005,7 @@ public class Character extends AbstractCharacterObject {
                         int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                         this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
-                        if (YamlConfig.config.server.USE_ANNOUNCE_NX_COUPON_LOOT) {
+                        if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {
                             showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
@@ -2161,11 +2162,20 @@ public class Character extends AbstractCharacterObject {
     }
 
     private static Pair<Integer, Pair<Integer, Integer>> getChairTaskIntervalRate(int maxhp, int maxmp) {
+        /*
+        此处2个参数CHAIR_EXTRA_HEAL_MULTIPLIER和CHAIR_EXTRA_HEAL_MAX_DELAY已被我删除
+        1.在倍率固定的情况下，既不希望定时任务执行太快，又不希望定时任务执行太慢
+        2.在固定最大时间的情况下，既不希望恢复量太大，又不希望恢复量太小
+        3.关键是这2个参数又都能配置，在某些场景下，就会打破上述他自己设置的限制
+        4.所以，这个参数需要个人进行复杂的计算才能配置，不能乱配，但他又放开让你都允许配置
+        5.综上，这种属于既要又要，什么都要只会害了你，所以我把这2个参数都干掉了
+        6.如果确实要放开允许配置，最多把CHAIR_EXTRA_HEAL_MAX_DELAY放开即可，这个参数还算有点意义，但也需要简单计算一下得到他合适的值
+         */
         float toHeal = Math.max(maxhp, maxmp);
-        float maxDuration = SECONDS.toMillis(YamlConfig.config.server.CHAIR_EXTRA_HEAL_MAX_DELAY);
+        float maxDuration = SECONDS.toMillis(21);
 
         int rate = 0;
-        int minRegen = 1, maxRegen = (256 * YamlConfig.config.server.CHAIR_EXTRA_HEAL_MULTIPLIER) - 1, midRegen = 1;
+        int minRegen = 1, maxRegen = 2559, midRegen = 1;
         while (minRegen < maxRegen) {
             midRegen = (int) ((minRegen + maxRegen) * 0.94);
 
@@ -2245,7 +2255,7 @@ public class Character extends AbstractCharacterObject {
                 final int healMP = localchairmp;
 
                 if (Character.this.getHp() < localMaxHp) {
-                    byte recHP = (byte) (healHP / YamlConfig.config.server.CHAIR_EXTRA_HEAL_MULTIPLIER);
+                    byte recHP = (byte) (healHP / 10);
 
                     sendPacket(PacketCreator.showOwnRecovery(recHP));
                     getMap().broadcastMessage(Character.this, PacketCreator.showRecovery(id, recHP), false);
@@ -2313,7 +2323,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void dispel() {
-        if (!(YamlConfig.config.server.USE_UNDISPEL_HOLY_SHIELD && this.hasActiveBuff(Bishop.HOLY_SHIELD))) {
+        if (!(GameConfig.getServerBoolean("use_undispel_holy_shield") && this.hasActiveBuff(Bishop.HOLY_SHIELD))) {
             List<BuffStatValueHolder> mbsvhList = getAllStatups();
             for (BuffStatValueHolder mbsvh : mbsvhList) {
                 if (mbsvh.effect.isSkill()) {
@@ -2855,7 +2865,7 @@ public class Character extends AbstractCharacterObject {
                 levelUp(true);
 
                 String msg = I18nUtil.getMessage("Character.levelUp.globalNotice", getName(), getMap().getMapName(), getLevel());
-                if (YamlConfig.config.server.USE_ANNOUNCE_GLOBAL_LEVEL_UP && !isGM()) {
+                if (GameConfig.getServerBoolean("use_announce_global_level_up") && !isGM()) {
                     for (Character player : getWorldServer().getPlayerStorage().getAllCharacters()) {
                         // 如果玩家在商城，将会以弹窗的形式发送，一堆弹窗会把玩家逼疯！
                         if (player.getCashShop().isOpened()) {
@@ -2870,7 +2880,7 @@ public class Character extends AbstractCharacterObject {
                     updateSingleStat(Stat.EXP, 0);
                     break;
                 }
-                if (YamlConfig.config.server.USE_LEVEL_UP_PROTECT) break;
+                if (GameConfig.getServerBoolean("use_level_up_protect")) break;
             }
 
             if (leftover > 0) {
@@ -2878,7 +2888,7 @@ public class Character extends AbstractCharacterObject {
             } else {
                 lastExpGainTime = System.currentTimeMillis();
 
-                if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
+                if (GameConfig.getServerBoolean("use_exp_gain_log")) {
                     ExpLogRecord expLogRecord = new ExpLogger.ExpLogRecord(
                             getWorldServer().getExpRate(),
                             expCoupon,
@@ -3656,7 +3666,7 @@ public class Character extends AbstractCharacterObject {
             for (Entry<BuffStat, Byte> it : stats.entrySet()) {
                 boolean uniqueBuff = isSingletonStatup(it.getKey());
 
-                if (it.getValue() >= (!uniqueBuff ? YamlConfig.config.server.MAX_MONITORED_BUFFSTATS : 1) && effectStatups.contains(it.getKey())) {
+                if (it.getValue() >= (!uniqueBuff ? GameConfig.getServerByte("max_monitored_buff_stats") : 1) && effectStatups.contains(it.getKey())) {
                     BuffStatValueHolder mbsvh = minStatBuffs.get(it.getKey());
 
                     Map<BuffStat, BuffStatValueHolder> lpbe = buffEffects.get(mbsvh.effect.getBuffSourceId());
@@ -4009,7 +4019,7 @@ public class Character extends AbstractCharacterObject {
                 }, buffInterval, buffInterval);
             }
         } else if (effect.isRecovery()) {
-            int healInterval = (YamlConfig.config.server.USE_ULTRA_RECOVERY) ? 2000 : 5000;
+            int healInterval = (GameConfig.getServerBoolean("use_ultra_recovery")) ? 2000 : 5000;
             final byte heal = (byte) effect.getX();
 
             chrLock.lock();
@@ -4076,7 +4086,7 @@ public class Character extends AbstractCharacterObject {
             }
 
             boolean active = effect.isActive(this);
-            if (YamlConfig.config.server.USE_BUFF_MOST_SIGNIFICANT) {
+            if (GameConfig.getServerBoolean("use_buff_most_significant")) {
                 toDeploy = new LinkedHashMap<>();
                 Map<Integer, Pair<StatEffect, Long>> retrievedEffects = new LinkedHashMap<>();
                 Set<BuffStat> retrievedStats = new LinkedHashSet<>();
@@ -4149,7 +4159,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean unregisterChairBuff() {
-        if (!YamlConfig.config.server.USE_CHAIR_EXTRAHEAL) {
+        if (!GameConfig.getServerBoolean("use_chair_extra_heal")) {
             return false;
         }
 
@@ -4164,7 +4174,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean registerChairBuff() {
-        if (!YamlConfig.config.server.USE_CHAIR_EXTRAHEAL) {
+        if (!GameConfig.getServerBoolean("use_chair_extra_heal")) {
             return false;
         }
 
@@ -4396,7 +4406,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean hasNoviceExpRate() {
-        return YamlConfig.config.server.USE_ENFORCE_NOVICE_EXPRATE && isBeginnerJob() && level < 11;
+        return GameConfig.getServerBoolean("use_enforce_novice_exp_rate") && isBeginnerJob() && level < 11;
     }
 
     public float getExpRate() {
@@ -4410,16 +4420,16 @@ public class Character extends AbstractCharacterObject {
     public float getLevelExpRate() {
         if (hasNoviceExpRate()) return 1; // 新手经验保护
 
-        return 1f + YamlConfig.config.worlds.get(getWorld()).level_exp_rate * level;
+        return 1f + GameConfig.getWorldFloat(getWorld(), "level_exp_rate") * level;
     }
 
     public float getQuickLevelExpRate() {
         if (hasNoviceExpRate()) return 1; // 新手经验保护
 
-        int quickLv = YamlConfig.config.worlds.get(getWorld()).quick_level;
+        int quickLv = GameConfig.getWorldInt(getWorld(), "quick_level");
         if (level >= quickLv) return 1;
 
-        return 1f + (quickLv - level) * YamlConfig.config.worlds.get(getWorld()).quick_level_exp_rate;
+        return 1f + (quickLv - level) * GameConfig.getWorldFloat(getWorld(), "quick_level_exp_rate");
     }
 
     public void updateMobExpRate() {
@@ -4707,7 +4717,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getMaxLevel() {
-        if (!YamlConfig.config.server.USE_ENFORCE_JOB_LEVEL_RANGE || isGmJob()) {
+        if (!GameConfig.getServerBoolean("use_enforce_job_level_range") || isGmJob()) {
             return getMaxClassLevel();
         }
 
@@ -5447,7 +5457,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public boolean attemptCatchFish(int baitLevel) {
-        return YamlConfig.config.server.USE_FISHING_SYSTEM && MapId.isFishingArea(mapId) &&
+        return GameConfig.getServerBoolean("use_fishing_system") && MapId.isFishingArea(mapId) &&
                 this.getPosition().getY() > 0 &&
                 ItemConstants.isFishingChair(chair.get()) &&
                 this.getWorldServer().registerFisherPlayer(this, baitLevel);
@@ -5532,8 +5542,8 @@ public class Character extends AbstractCharacterObject {
             return;
         }
 
-        int spGain = 3;
-        if (YamlConfig.config.server.USE_ENFORCE_JOB_SP_RANGE && !GameConstants.hasSPTable(job)) {
+        int spGain = GameConfig.getServerInt("level_up_sp_gain");
+        if (GameConfig.getServerBoolean("use_enforce_job_sp_range") && !GameConstants.hasSPTable(job)) {
             spGain = getSpGain(spGain, job);
         }
 
@@ -5549,7 +5559,7 @@ public class Character extends AbstractCharacterObject {
         int improvingMaxMPLevel = 0;
 
         boolean isBeginner = isBeginnerJob();
-        if (YamlConfig.config.server.USE_AUTOASSIGN_STARTERS_AP && isBeginner && level < 11) {
+        if (GameConfig.getServerBoolean("use_auto_assign_starters_ap") && isBeginner && level < 11) {
             effLock.lock();
             statWlock.lock();
             try {
@@ -5569,7 +5579,7 @@ public class Character extends AbstractCharacterObject {
                 effLock.unlock();
             }
         } else {
-            int remainingAp = 5;
+            int remainingAp = GameConfig.getServerInt("level_up_ap_gain");;
 
             if (isCygnus()) {
                 if (level > 10) {
@@ -5626,7 +5636,7 @@ public class Character extends AbstractCharacterObject {
             addmp += improvingMaxMP.getEffect(improvingMaxMPLevel).getX();
         }
 
-        if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+        if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
             if (getJobStyle() == Job.MAGICIAN) {
                 addmp += localint_ / 20;
             } else {
@@ -5650,7 +5660,7 @@ public class Character extends AbstractCharacterObject {
             int maxClassLevel = getMaxClassLevel();
             if (level == maxClassLevel) {
                 if (!this.isGM()) {
-                    if (YamlConfig.config.server.PLAYERNPC_AUTODEPLOY) {
+                    if (GameConfig.getServerBoolean("playernpc_auto_deploy")) {
                         ThreadManager.getInstance().newTask(() -> PlayerNPC.spawnPlayerNPC(GameConstants.getHallOfFameMapid(job), Character.this));
                     }
 
@@ -5697,7 +5707,7 @@ public class Character extends AbstractCharacterObject {
         }
 
         if (level % 20 == 0) {
-            if (YamlConfig.config.server.USE_ADD_SLOTS_BY_LEVEL) {
+            if (GameConfig.getServerBoolean("use_add_slots_by_level")) {
                 if (!isGM()) {
                     for (byte i = 1; i < 5; i++) {
                         gainSlots(i, 4, true);
@@ -5706,14 +5716,14 @@ public class Character extends AbstractCharacterObject {
                     this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_SLOTS_BY_LEVEL", level));
                 }
             }
-            if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) { //For the rate upgrade
+            if (GameConfig.getServerBoolean("use_add_rates_by_level")) { //For the rate upgrade
                 revertLastPlayerRates();
                 setPlayerRates();
                 this.yellowMessage(I18nUtil.getMessage("Character.levelUp.USE_ADD_RATES_BY_LEVEL", level));
             }
         }
 
-        if (YamlConfig.config.server.USE_PERFECT_PITCH && level >= 30) {
+        if (GameConfig.getServerBoolean("use_perfect_pitch") && level >= 30) {
             //milestones?
             if (InventoryManipulator.checkSpace(client, ItemId.PERFECT_PITCH, (short) 1, "")) {
                 InventoryManipulator.addById(client, ItemId.PERFECT_PITCH, (short) 1, "", -1);
@@ -5730,7 +5740,7 @@ public class Character extends AbstractCharacterObject {
 
         FamilyEntry familyEntry = getFamilyEntry();
         if (familyEntry != null) {
-            familyEntry.giveReputationToSenior(YamlConfig.config.server.FAMILY_REP_PER_LEVELUP, true);
+            familyEntry.giveReputationToSenior(GameConfig.getServerInt("family_rep_per_level_up"), true);
             FamilyEntry senior = familyEntry.getSenior();
             if (senior != null) { //only send the message to direct senior
                 Character seniorChr = senior.getChr();
@@ -5892,7 +5902,7 @@ public class Character extends AbstractCharacterObject {
     private List<Integer> activateCouponsEffects() {
         List<Integer> toCommitEffect = new LinkedList<>();
 
-        if (YamlConfig.config.server.USE_STACK_COUPON_RATES) {
+        if (GameConfig.getServerBoolean("use_stack_coupon_rates")) {
             for (Entry<Integer, Integer> coupon : activeCoupons.entrySet()) {
                 int couponId = coupon.getKey();
                 int couponQty = coupon.getValue();
@@ -6266,7 +6276,7 @@ public class Character extends AbstractCharacterObject {
         chr.getClient().setLanguage(accountsDO.getLanguage());
 
         List<AreaInfoDO> areaInfoDOList = characterService.getAreaInfoByCharacter(charactersDO.getId());
-        areaInfoDOList.forEach(areaInfoDO -> chr.getAreaInfos().put(Optional.ofNullable(areaInfoDO.getArea()).map(Integer::shortValue).orElse((short)0),
+        areaInfoDOList.forEach(areaInfoDO -> chr.getAreaInfos().put(Optional.ofNullable(areaInfoDO.getArea()).map(Integer::shortValue).orElse((short) 0),
                 areaInfoDO.getInfo()));
 
         List<EventstatsDO> eventstatsDOList = characterService.getEventStatsByCharacter(charactersDO.getId());
@@ -6783,7 +6793,7 @@ public class Character extends AbstractCharacterObject {
 
             reapplyLocalStats();
 
-            if (YamlConfig.config.server.USE_FIXED_RATIO_HPMP_UPDATE) {
+            if (GameConfig.getServerBoolean("use_fixed_ratio_hpmp_update")) {
                 if (localMaxHp != oldlocalmaxhp) {
                     Pair<Stat, Integer> hpUpdate;
 
@@ -6917,7 +6927,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public synchronized void resetStats() {
-        if (!YamlConfig.config.server.USE_AUTOASSIGN_STARTERS_AP) {
+        if (!GameConfig.getServerBoolean("use_auto_assign_starters_ap")) {
             return;
         }
 
@@ -7154,7 +7164,7 @@ public class Character extends AbstractCharacterObject {
                 int[] selectedType;
                 int[] selectedAction;
 
-                if (YamlConfig.config.server.USE_CUSTOM_KEYSET) {
+                if (GameConfig.getServerBoolean("use_custom_keyset")) {
                     selectedKey = GameConstants.getCustomKey(true);
                     selectedType = GameConstants.getCustomType(true);
                     selectedAction = GameConstants.getCustomAction(true);
@@ -7230,7 +7240,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void saveCharToDB() {
-        if (YamlConfig.config.server.USE_AUTOSAVE) {
+        if (GameConfig.getServerBoolean("use_autosave")) {
             Runnable r = () -> saveCharToDB(true);
 
             CharacterSaveService service = (CharacterSaveService) getWorldServer().getServiceAccess(WorldServices.SAVE_CHARACTER);
@@ -7911,14 +7921,14 @@ public class Character extends AbstractCharacterObject {
             effLock.unlock();
         }
 
-        if (YamlConfig.config.server.USE_SERVER_AUTOPOT || YamlConfig.config.server.USE_COMPULSORY_AUTOPOT) {
+        if (GameConfig.getServerBoolean("use_server_auto_pot") || GameConfig.getServerBoolean("use_compulsory_auto_pot")) {
             float autoHpAlert, autoMpAlert;
-            if (YamlConfig.config.server.USE_SERVER_AUTOPOT) {
+            if (GameConfig.getServerBoolean("use_server_auto_pot")) {
                 autoHpAlert = hpMpAlertService.getHpAlertPer(id);
                 autoMpAlert = hpMpAlertService.getMpAlertPer(id);
             } else {
-                autoHpAlert = (float) YamlConfig.config.server.PET_AUTOHP_RATIO;
-                autoMpAlert = (float) YamlConfig.config.server.PET_AUTOMP_RATIO;
+                autoHpAlert = (float) GameConfig.getServerFloat("pet_auto_hp_ratio");
+                autoMpAlert = (float) GameConfig.getServerFloat("pet_auto_mp_ratio");
             }
 
             if (hpchange < 0) {
@@ -8523,7 +8533,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void awardQuestPoint(int awardedPoints) {
-        if (YamlConfig.config.server.QUEST_POINT_REQUIREMENT < 1 || awardedPoints < 1) {
+        if (GameConfig.getServerInt("quest_point_requirement") < 1 || awardedPoints < 1) {
             return;
         }
 
@@ -8531,8 +8541,8 @@ public class Character extends AbstractCharacterObject {
         synchronized (quests) {
             questFame += awardedPoints;
 
-            delta = questFame / YamlConfig.config.server.QUEST_POINT_REQUIREMENT;
-            questFame %= YamlConfig.config.server.QUEST_POINT_REQUIREMENT;
+            delta = questFame / GameConfig.getServerInt("quest_point_requirement");
+            questFame %= GameConfig.getServerInt("quest_point_requirement");
         }
 
         if (delta > 0) {
@@ -8602,7 +8612,7 @@ public class Character extends AbstractCharacterObject {
             Quest mquest = qs.getQuest();
             short questid = mquest.getId();
             if (!mquest.isSameDayRepeatable() && !Quest.isExploitableQuest(questid)) {
-                awardQuestPoint(YamlConfig.config.server.QUEST_POINT_PER_QUEST_COMPLETE);
+                awardQuestPoint(GameConfig.getServerInt("quest_point_per_quest_complete"));
             }
             qs.setCompleted(qs.getCompleted() + 1);   // Jayd's idea - count quest completed
 
@@ -8972,7 +8982,7 @@ public class Character extends AbstractCharacterObject {
                 if (pendantExp < 3) {
                     pendantExp++;
                     //用于准确提示装备1小时内还是装备经过几小时
-                    message(I18nUtil.getMessage(pendantExp<=2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
+                    message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
@@ -8990,7 +9000,7 @@ public class Character extends AbstractCharacterObject {
 
     private Collection<Item> getUpgradeableEquipList() {
         Collection<Item> fullList = getInventory(InventoryType.EQUIPPED).list();
-        if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_CASH) {
+        if (GameConfig.getServerBoolean("use_equipment_level_up_cash")) {
             return fullList;
         }
 
@@ -9335,7 +9345,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setReborns(int value) {
-        if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_rebirth_system")) {
             yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
             throw new NotEnabledException();
         }
@@ -9355,7 +9365,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getReborns() {
-        if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_rebirth_system")) {
             yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
             throw new NotEnabledException();
         }
@@ -9379,7 +9389,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void executeRebornAs(Job job) {
-        if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_rebirth_system")) {
             yellowMessage(I18nUtil.getMessage("Character.USE_REBIRTH_SYSTEM")); //重生系统未启用
             throw new NotEnabledException();
         }
@@ -9574,4 +9584,38 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /////////////////////////////////////////////////////////////////////////////////
+    //module: 账户在线时间
+    private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
+
+    public int getCurrentOnlieTime() {
+        return this.m_iCurrentOnlineTime;
+    }
+
+    public void setCurrentOnlieTime(final int iTime) {
+        this.m_iCurrentOnlineTime = iTime;
+    }
+
+    public void addOnlineTime(final int amount) {
+        this.setCurrentOnlieTime(this.m_iCurrentOnlineTime + amount);
+        this.updateOnlineTime(this.getCurrentOnlieTime());
+    }
+
+    public void updateOnlineTime(final int amount) {
+        String strNewOnlineTime = String.valueOf(amount);
+        getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
+    }
+
+    public void UpdateCurrentOnlineTimeFromDB() {
+        //角色上线时，在线时间初始化为-1，上线时获取累计的时间，避免服务器重启在线时间清零。
+        String strSavedOnlineTime = getAbstractPlayerInteraction().getAccountExtendValue("每日在线时间", true);
+
+        if (strSavedOnlineTime == null) {//找不到，说明没有建表，建立新表
+            getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", "0", true);
+            m_iCurrentOnlineTime = 0;
+        } else {
+            m_iCurrentOnlineTime = Integer.parseInt(strSavedOnlineTime);
+        }
+    }
+    /////////////////////////////////////////////////////////////////////////////////
 }

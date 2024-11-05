@@ -24,8 +24,8 @@
 var status;
 
 function start() {
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
         cm.dispose();
         cm.openNpc(9201088, "scroll_generator");
         return;

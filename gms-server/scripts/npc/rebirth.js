@@ -28,8 +28,8 @@ var jobId = 0;
 
 function start() {
     status = -1;
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    if (!YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (!GameConfig.getServerBoolean("use_rebirth_system")) {
         cm.sendOk("Rebirths aren't enabled on this server, how did you get here?");
         cm.dispose();
         return;

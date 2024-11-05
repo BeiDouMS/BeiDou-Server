@@ -29,7 +29,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.packet.InPacket;
@@ -193,7 +193,7 @@ public class StorageProcessor {
                     break;
                 }
                 case 6: // Arrange items
-                    if (YamlConfig.config.server.USE_STORAGE_ITEM_SORT) {
+                    if (GameConfig.getServerBoolean("use_storage_item_sort")) {
                         storage.arrangeItems(c);
                     }
                     c.sendPacket(PacketCreator.enableActions());
@@ -246,6 +246,6 @@ public class StorageProcessor {
     }
 
     private static boolean hasGMRestrictions(Character character) {
-        return character.isGM() && character.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_USE_STORAGE;
+        return character.isGM() && character.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_use_storage");
     }
 }

@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
@@ -70,9 +70,9 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message1"));
                     return;
                 }
-                if (mc.getMeso() < YamlConfig.config.server.CREATE_GUILD_COST) {
+                if (mc.getMeso() < GameConfig.getServerInt("create_guild_cost")) {
                     mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message2"));
-                    //mc.dropMessage(1, "You do not have " + GameConstants.numberWithCommas(YamlConfig.config.server.CREATE_GUILD_COST) + " mesos to create a Guild.");
+                    //mc.dropMessage(1, "You do not have " + GameConstants.numberWithCommas(GameConfig.getServerInt("create_guild_cost")) + " mesos to create a Guild.");
                     return;
                 }
                 String guildName = p.readString();
@@ -82,8 +82,8 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                 }
 
                 Set<Character> eligibleMembers = new HashSet<>(Guild.getEligiblePlayersForGuild(mc));
-                if (eligibleMembers.size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
-                    if (mc.getMap().getAllPlayers().size() < YamlConfig.config.server.CREATE_GUILD_MIN_PARTNERS) {
+                if (eligibleMembers.size() < GameConfig.getServerInt("create_guild_min_partners")) {
+                    if (mc.getMap().getAllPlayers().size() < GameConfig.getServerInt("create_guild_min_partners")) {
                         // thanks NovaStory for noticing message in need of smoother info
                         mc.dropMessage(1, I18nUtil.getMessage("GuildOperationHandler.handlePacket.message4"));
                     } else {
@@ -224,8 +224,8 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     log.warn("[Hack] Chr {} tried to change guild emblem without being the guild leader", mc.getName());
                     return;
                 }
-                if (mc.getMeso() < YamlConfig.config.server.CHANGE_EMBLEM_COST) {
-                    c.sendPacket(PacketCreator.serverNotice(1, "You do not have " + GameConstants.numberWithCommas(YamlConfig.config.server.CHANGE_EMBLEM_COST) + " mesos to change the Guild emblem."));
+                if (mc.getMeso() < GameConfig.getServerInt("change_emblem_cost")) {
+                    c.sendPacket(PacketCreator.serverNotice(1, "You do not have " + GameConstants.numberWithCommas(GameConfig.getServerInt("change_emblem_cost")) + " mesos to change the Guild emblem."));
                     return;
                 }
                 short bg = p.readShort();
@@ -239,7 +239,7 @@ public final class GuildOperationHandler extends AbstractPacketHandler {
                     Server.getInstance().allianceMessage(alliance.getId(), GuildPackets.getGuildAlliances(alliance, c.getWorld()), -1, -1);
                 }
 
-                mc.gainMeso(-YamlConfig.config.server.CHANGE_EMBLEM_COST, true, false, true);
+                mc.gainMeso(-GameConfig.getServerInt("change_emblem_cost"), true, false, true);
                 mc.getGuild().broadcastNameChanged();
                 mc.getGuild().broadcastEmblemChanged();
                 break;

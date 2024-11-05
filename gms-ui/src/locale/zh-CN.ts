@@ -1,3 +1,4 @@
+import config from '@/views/game/config/locale/zh-CN';
 import drop from '@/views/game/drop/locale/zh-CN';
 import cashShop from '@/views/game/cashShop/locale/zh-CN';
 import npcShop from '@/views/game/npcShop/locale/zh-CN';
@@ -15,6 +16,7 @@ export default {
   'menu.dashboard.workplace': '工作台',
   'menu.dashboard.informationSearch': '资料查询',
   'menu.game': '游戏管理',
+  'menu.game.config': '参数管理',
   'menu.game.npcShop': 'NPC商店',
   'menu.game.cashShop': '商城管理',
   'menu.game.drop': '怪物爆率',
@@ -50,4 +52,5 @@ export default {
   ...gachapon,
   ...informationSearch,
   ...inventory,
+  ...config,
 };

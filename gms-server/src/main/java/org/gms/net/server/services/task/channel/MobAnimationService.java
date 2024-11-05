@@ -19,7 +19,7 @@
 */
 package org.gms.net.server.services.task.channel;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
@@ -33,17 +33,17 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class MobAnimationService extends BaseService {
 
-    private final MobAnimationScheduler[] mobAnimationSchedulers = new MobAnimationScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private final MobAnimationScheduler[] mobAnimationSchedulers = new MobAnimationScheduler[GameConfig.getServerInt("channel_locks")];
 
     public MobAnimationService() {
-        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+        for (int i = 0; i < GameConfig.getServerInt("channel_locks"); i++) {
             mobAnimationSchedulers[i] = new MobAnimationScheduler();
         }
     }
 
     @Override
     public void dispose() {
-        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+        for (int i = 0; i < GameConfig.getServerInt("channel_locks"); i++) {
             if (mobAnimationSchedulers[i] != null) {
                 mobAnimationSchedulers[i].dispose();
                 mobAnimationSchedulers[i] = null;

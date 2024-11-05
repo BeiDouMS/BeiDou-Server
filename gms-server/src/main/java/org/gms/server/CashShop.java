@@ -27,7 +27,7 @@ import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.dao.entity.AccountsDO;
@@ -88,7 +88,7 @@ public class CashShop {
         this.accountId = accountId;
         this.characterId = characterId;
 
-        if (!YamlConfig.config.server.USE_JOINT_CASHSHOP_INVENTORY) {
+        if (!GameConfig.getServerBoolean("use_joint_cash_shop_inventory")) {
             switch (jobType) {
                 case 0:
                     factory = ItemFactory.CASH_EXPLORER;
@@ -294,7 +294,7 @@ public class CashShop {
 
     public void gainCash(int type, ModifiedCashItemDO buyItem, int world) {
         gainCash(type, -buyItem.getPrice());
-        if (!YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
+        if (!GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
             Server.getInstance().getWorld(world).addCashItemBought(buyItem.getSn());
         }
     }

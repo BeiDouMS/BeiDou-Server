@@ -44,10 +44,10 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            const YamlConfig = Java.type('org.gms.config.YamlConfig');
+            const GameConfig = Java.type('org.gms.config.GameConfig');
             if (cm.haveItem(4001086)) {
                 cm.sendYesNo("你现在想要进入 #b#m240050400##k 吗？");
-            } else if (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS) {
+            } else if (GameConfig.getServerBoolean("use_enable_solo_expeditions")) {
                 if (canBypassHTPQ()) {
                     cm.sendYesNo("你现在想要进入 #b#m240050400##k 吗？");
                 } else {

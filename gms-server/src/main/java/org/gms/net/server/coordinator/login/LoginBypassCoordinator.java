@@ -21,7 +21,7 @@ package org.gms.net.server.coordinator.login;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.net.server.coordinator.session.Hwid;
 import org.gms.net.server.world.World;
@@ -60,7 +60,7 @@ public class LoginBypassCoordinator {
     }
 
     public void registerLoginBypassEntry(Hwid hwid, int accId, boolean pic) {
-        long expireTime = (pic ? YamlConfig.config.server.BYPASS_PIC_EXPIRATION : YamlConfig.config.server.BYPASS_PIN_EXPIRATION);
+        long expireTime = (pic ? GameConfig.getServerInt("bypass_pic_expiration") : GameConfig.getServerInt("bypass_pin_expiration"));
         if (expireTime > 0) {
             Pair<Hwid, Integer> entry = new Pair<>(hwid, accId);
             expireTime = Server.getInstance().getCurrentTime() + MINUTES.toMillis(expireTime);

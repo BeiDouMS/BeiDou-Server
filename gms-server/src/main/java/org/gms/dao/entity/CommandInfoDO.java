@@ -32,6 +32,6 @@ public class CommandInfoDO implements Serializable {
 
     private String clazz;
 
-    private Boolean enabled;
+    private boolean enabled;
 
 }

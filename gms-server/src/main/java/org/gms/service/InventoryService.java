@@ -61,6 +61,8 @@ public class InventoryService {
         Page<CharactersDO> paginate = inventoryitemsMapper.paginateAs(data.getPageNo(), data.getPageSize(), queryWrapper, CharactersDO.class);
         return new Page<>(
                 paginate.getRecords().stream()
+                        // 删除角色，但是没有删除背包这里查会出现空指针
+                        .filter(Objects::nonNull)
                         .map(record -> {
                             InventorySearchReqDTO dto = new InventorySearchReqDTO();
                             dto.setCharacterId(record.getId());
@@ -75,7 +77,7 @@ public class InventoryService {
     }
 
     public List<InventorySearchRtnDTO> getInventoryList(InventorySearchReqDTO data) {
-        RequireUtil.requireNotEmpty(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
+        RequireUtil.requireNotNull(data.getInventoryType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "inventoryType"));
         RequireUtil.requireNotNull(data.getCharacterId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "characterId"));
         InventoryType inventoryType = InventoryType.getByType(data.getInventoryType());
         RequireUtil.requireNotNull(inventoryType, I18nUtil.getExceptionMessage("UNKNOWN_PARAMETER_VALUE", "inventoryType", data.getInventoryType()));

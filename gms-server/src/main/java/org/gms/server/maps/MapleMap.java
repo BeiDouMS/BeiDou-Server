@@ -31,7 +31,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import org.gms.constants.id.MobId;
@@ -255,7 +255,7 @@ public class MapleMap {
     }
 
     private static double getRangedDistance() {
-        return YamlConfig.config.server.USE_MAXRANGE ? Double.POSITIVE_INFINITY : 722500;
+        return GameConfig.getServerBoolean("use_max_range") ? Double.POSITIVE_INFINITY : 722500;
     }
 
     public List<MapObject> getMapObjectsInRect(Rectangle box, List<MapObjectType> types) {
@@ -762,7 +762,7 @@ public class MapleMap {
         final List<MonsterDropEntry> visibleQuestEntry = new ArrayList<>();
         final List<MonsterDropEntry> otherQuestEntry = new ArrayList<>();
 
-        List<MonsterDropEntry> lootEntry = YamlConfig.config.server.USE_SPAWN_RELEVANT_LOOT ? mob.retrieveRelevantDrops() : mi.retrieveEffectiveDrop(mob.getId());
+        List<MonsterDropEntry> lootEntry = GameConfig.getServerBoolean("use_spawn_relevant_loot") ? mob.retrieveRelevantDrops() : mi.retrieveEffectiveDrop(mob.getId());
         sortDropEntries(lootEntry, dropEntry, visibleQuestEntry, otherQuestEntry, chr);     // thanks Articuno, Limit, Rohenn for noticing quest loots not showing up in only-quest item drops scenario
 
         if (lootEntry.isEmpty()) {   // thanks resinate
@@ -801,7 +801,7 @@ public class MapleMap {
         expireItemsTask.cancel(false);
         expireItemsTask = null;
 
-        if (YamlConfig.config.server.USE_SPAWN_LOOT_ON_ANIMATION) {
+        if (GameConfig.getServerBoolean("use_spawn_loot_on_animation")) {
             mobSpawnLootTask.cancel(false);
             mobSpawnLootTask = null;
         }
@@ -858,11 +858,11 @@ public class MapleMap {
                 if (tryClean) {
                     cleanItemMonitor();
                 }
-            }, YamlConfig.config.server.ITEM_MONITOR_TIME, YamlConfig.config.server.ITEM_MONITOR_TIME);
+            }, GameConfig.getServerLong("item_monitor_time"), GameConfig.getServerLong("item_monitor_time"));
 
-            expireItemsTask = TimerManager.getInstance().register(() -> makeDisappearExpiredItemDrops(), YamlConfig.config.server.ITEM_EXPIRE_CHECK, YamlConfig.config.server.ITEM_EXPIRE_CHECK);
+            expireItemsTask = TimerManager.getInstance().register(this::makeDisappearExpiredItemDrops, GameConfig.getServerLong("item_expire_check"), GameConfig.getServerLong("item_expire_check"));
 
-            if (YamlConfig.config.server.USE_SPAWN_LOOT_ON_ANIMATION) {
+            if (GameConfig.getServerBoolean("use_spawn_loot_on_animation")) {
                 lootLock.lock();
                 try {
                     mobLootEntries.clear();
@@ -870,10 +870,10 @@ public class MapleMap {
                     lootLock.unlock();
                 }
 
-                mobSpawnLootTask = TimerManager.getInstance().register(() -> spawnMobItemDrops(), 200, 200);
+                mobSpawnLootTask = TimerManager.getInstance().register(this::spawnMobItemDrops, 200, 200);
             }
 
-            characterStatUpdateTask = TimerManager.getInstance().register(() -> runCharacterStatUpdate(), 200, 200);
+            characterStatUpdateTask = TimerManager.getInstance().register(this::runCharacterStatUpdate, 200, 200);
 
             itemMonitorTimeout = 1;
         } finally {
@@ -895,7 +895,7 @@ public class MapleMap {
     }
 
     private void instantiateItemDrop(MapItem mdrop) {
-        if (droppedItemCount.get() >= YamlConfig.config.server.ITEM_LIMIT_ON_MAP) {
+        if (droppedItemCount.get() >= GameConfig.getServerInt("item_limit_on_map")) {
             MapObject mapobj;
 
             do {
@@ -927,7 +927,7 @@ public class MapleMap {
     }
 
     private void registerItemDrop(MapItem mdrop) {
-        droppedItems.put(mdrop, !everlast ? Server.getInstance().getCurrentTime() + YamlConfig.config.server.ITEM_EXPIRE_TIME : Long.MAX_VALUE);
+        droppedItems.put(mdrop, !everlast ? Server.getInstance().getCurrentTime() + GameConfig.getServerLong("item_expire_time") : Long.MAX_VALUE);
     }
 
     private void unregisterItemDrop(MapItem mdrop) {
@@ -972,7 +972,7 @@ public class MapleMap {
     private void registerMobItemDrops(byte droptype, int mobpos, float chRate, Point pos, List<MonsterDropEntry> dropEntry, List<MonsterDropEntry> visibleQuestEntry, List<MonsterDropEntry> otherQuestEntry, List<MonsterGlobalDropEntry> globalEntry, Character chr, Monster mob) {
         MobLootEntry mle = new MobLootEntry(droptype, mobpos, chRate, pos, dropEntry, visibleQuestEntry, otherQuestEntry, globalEntry, chr, mob);
 
-        if (YamlConfig.config.server.USE_SPAWN_LOOT_ON_ANIMATION) {
+        if (GameConfig.getServerBoolean("use_spawn_loot_on_animation")) {
             int animationTime = mob.getAnimationTime("die1");
 
             lootLock.lock();
@@ -2151,7 +2151,7 @@ public class MapleMap {
             broadcastMessage(kite.makeDestroyData());
         };
 
-        getWorldServer().registerTimedMapObject(expireKite, YamlConfig.config.server.KITE_EXPIRE_TIME);
+        getWorldServer().registerTimedMapObject(expireKite, GameConfig.getServerLong("kite_expire_time"));
     }
 
     public final void spawnItemDrop(final MapObject dropper, final Character owner, final Item item, Point pos, final boolean ffaDrop, final boolean playerDrop) {
@@ -3647,7 +3647,7 @@ public class MapleMap {
         System.out.println("----------------------------------");
         */
 
-        if (YamlConfig.config.server.USE_ENABLE_FULL_RESPAWN) {
+        if (GameConfig.getServerBoolean("use_enable_full_respawn")) {
             return (monsterSpawn.size() - spawnedMonstersOnMap.get());
         }
 

@@ -19,7 +19,7 @@
 */
 package org.gms.net.server.services;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
 import org.gms.util.Pair;
@@ -45,7 +45,6 @@ public abstract class BaseScheduler {
 
     private ScheduledFuture<?> schedulerTask = null;
     private final Lock schedulerLock = new ReentrantLock(true);
-    private final Runnable monitorTask = () -> runBaseSchedule();
 
     protected BaseScheduler() {
     }
@@ -78,7 +77,7 @@ public abstract class BaseScheduler {
             if (registeredEntries.isEmpty()) {
                 idleProcs++;
 
-                if (idleProcs >= YamlConfig.config.server.MOB_STATUS_MONITOR_LIFE) {
+                if (idleProcs >= GameConfig.getServerInt("mob_status_monitor_idle")) {
                     if (schedulerTask != null) {
                         schedulerTask.cancel(false);
                         schedulerTask = null;
@@ -124,7 +123,7 @@ public abstract class BaseScheduler {
         try {
             idleProcs = 0;
             if (schedulerTask == null) {
-                schedulerTask = TimerManager.getInstance().register(monitorTask, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC, YamlConfig.config.server.MOB_STATUS_MONITOR_PROC);
+                schedulerTask = TimerManager.getInstance().register(this::runBaseSchedule, GameConfig.getServerLong("mob_status_monitor_proc"), GameConfig.getServerLong("mob_status_monitor_proc"));
             }
 
             registeredEntries.put(key, new Pair<>(removalAction, Server.getInstance().getCurrentTime() + duration));

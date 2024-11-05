@@ -22,7 +22,7 @@
 package org.gms.client.inventory;
 
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.util.I18nUtil;
@@ -284,7 +284,7 @@ public class Equip extends Item {
     private static int getStatModifier(boolean isAttribute) {
         // each set of stat points grants a chance for a bonus stat point upgrade at equip level up.
 
-        if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_POWER) {
+        if (GameConfig.getServerBoolean("use_equipment_level_up_power")) {
             if (isAttribute) {
                 return 2;
             } else {
@@ -300,7 +300,7 @@ public class Equip extends Item {
     }
 
     private static int randomizeStatUpgrade(int top) {
-        int limit = Math.min(top, YamlConfig.config.server.MAX_EQUIPMNT_LVLUP_STAT_UP);
+        int limit = Math.min(top, GameConfig.getServerInt("max_equipment_level_up_stat_up"));
 
         int poolCount = (limit * (limit + 1) / 2) + limit;
         int rnd = Randomizer.rand(0, poolCount);
@@ -453,7 +453,7 @@ public class Equip extends Item {
     public Pair<String, Pair<Boolean, Boolean>> gainStats(List<Pair<StatUpgrade, Integer>> stats) {
         boolean gotSlot = false, gotVicious = false;
         String lvupStr = "";
-        int statUp, maxStat = YamlConfig.config.server.MAX_EQUIPMNT_STAT;
+        int statUp, maxStat = GameConfig.getServerInt("max_equipment_stat");
         for (Pair<StatUpgrade, Integer> stat : stats) {
             switch (stat.getLeft()) {
                 case incDEX:
@@ -582,7 +582,7 @@ public class Equip extends Item {
         }
 
         if (!stats.isEmpty()) {
-            if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
+            if (GameConfig.getServerBoolean("use_equipment_level_up_slots")) {
                 if (vicious > 0) {
                     getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
                 }
@@ -592,7 +592,7 @@ public class Equip extends Item {
             isUpgradeable = false;
 
             improveDefaultStats(stats);
-            if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
+            if (GameConfig.getServerBoolean("use_equipment_level_up_slots")) {
                 if (vicious > 0) {
                     getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
                 }
@@ -602,7 +602,7 @@ public class Equip extends Item {
             if (isUpgradeable) {
                 while (stats.isEmpty()) {
                     improveDefaultStats(stats);
-                    if (YamlConfig.config.server.USE_EQUIPMNT_LVLUP_SLOTS) {
+                    if (GameConfig.getServerBoolean("use_equipment_level_up_slots")) {
                         if (vicious > 0) {
                             getUnitSlotUpgrade(stats, StatUpgrade.incVicious);
                         }
@@ -668,14 +668,14 @@ public class Equip extends Item {
             return;
         }
 
-        int equipMaxLevel = Math.min(30, Math.max(ii.getEquipLevel(this.getItemId(), true), YamlConfig.config.server.USE_EQUIPMNT_LVLUP));
+        int equipMaxLevel = Math.min(30, Math.max(ii.getEquipLevel(this.getItemId(), true), GameConfig.getServerInt("use_equipment_level_up")));
         if (itemLevel >= equipMaxLevel) {
             return;
         }
 
         int reqLevel = ii.getEquipLevelReq(this.getItemId());
 
-        float masteryModifier = (float) (YamlConfig.config.server.EQUIP_EXP_RATE * ExpTable.getExpNeededForLevel(1)) / (float) normalizedMasteryExp(reqLevel);
+        float masteryModifier = (GameConfig.getServerFloat("equip_exp_rate") * ExpTable.getExpNeededForLevel(1)) / (float) normalizedMasteryExp(reqLevel);
         float elementModifier = (isElemental) ? 0.85f : 0.6f;
 
         float baseExpGain = gain * elementModifier * masteryModifier;
@@ -683,7 +683,7 @@ public class Equip extends Item {
         itemExp += baseExpGain;
         int expNeeded = ExpTable.getEquipExpNeededForLevel(itemLevel);
 
-        if (YamlConfig.config.server.USE_DEBUG_SHOW_INFO_EQPEXP) {
+        if (GameConfig.getServerBoolean("use_debug_show_eqp_exp")) {
             log.info("{} -> EXP Gain: {}, Mastery: {}, Base gain: {}, exp: {} / {}, Kills TNL: {}", ii.getName(getItemId()),
                     gain, masteryModifier, baseExpGain, itemExp, expNeeded, expNeeded / (baseExpGain / c.getPlayer().getExpRate()));
         }
@@ -703,7 +703,7 @@ public class Equip extends Item {
         }
 
         c.getPlayer().forceUpdateItem(this);
-        //if(YamlConfig.config.server.USE_DEBUG) c.getPlayer().dropMessage("'" + ii.getName(this.getItemId()) + "': " + itemExp + " / " + expNeeded);
+        //if(GameConfig.getServerBoolean("use_debug")) c.getPlayer().dropMessage("'" + ii.getName(this.getItemId()) + "': " + itemExp + " / " + expNeeded);
     }
 
     private boolean reachedMaxLevel() {
@@ -713,7 +713,7 @@ public class Equip extends Item {
             }
         }
 
-        return itemLevel >= YamlConfig.config.server.USE_EQUIPMNT_LVLUP;
+        return itemLevel >= GameConfig.getServerInt("use_equipment_level_up");
     }
 
     public String showEquipFeatures(Client c) {

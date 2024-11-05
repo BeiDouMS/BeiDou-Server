@@ -24,7 +24,7 @@ package org.gms.scripting.event;
 import org.gms.client.Character;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.server.coordinator.world.EventRecallCoordinator;
 import org.gms.net.server.world.Party;
@@ -94,9 +94,9 @@ public class EventInstanceManager {
     private boolean eventStarted = false;
 
     // multi-leveled PQ rewards!
-    private final Map<Integer, List<Integer>> collectionSet = new HashMap<>(YamlConfig.config.server.MAX_EVENT_LEVELS);
-    private final Map<Integer, List<Integer>> collectionQty = new HashMap<>(YamlConfig.config.server.MAX_EVENT_LEVELS);
-    private final Map<Integer, Integer> collectionExp = new HashMap<>(YamlConfig.config.server.MAX_EVENT_LEVELS);
+    private final Map<Integer, List<Integer>> collectionSet = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
+    private final Map<Integer, List<Integer>> collectionQty = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
+    private final Map<Integer, Integer> collectionExp = new HashMap<>(GameConfig.getServerInt("max_event_levels"));
 
     // Exp/Meso rewards by CLEAR on a stage
     private final List<Integer> onMapClearExp = new ArrayList<>();
@@ -972,7 +972,7 @@ public class EventInstanceManager {
     public final void setEventRewards(int eventLevel, List<Object> rwds, List<Object> qtys, int expGiven) {
         // fixed EXP will be rewarded at the same time the random item is given
 
-        if (eventLevel <= 0 || eventLevel > YamlConfig.config.server.MAX_EVENT_LEVELS) {
+        if (eventLevel <= 0 || eventLevel > GameConfig.getServerInt("max_event_levels")) {
             return;
         }
         eventLevel--;    //event level starts from 1
@@ -1097,7 +1097,7 @@ public class EventInstanceManager {
         eventCleared = true;
 
         for (Character chr : getPlayers()) {
-            chr.awardQuestPoint(YamlConfig.config.server.QUEST_POINT_PER_EVENT_CLEAR);
+            chr.awardQuestPoint(GameConfig.getServerInt("quest_point_per_event_clear"));
         }
 
         scriptLock.lock();

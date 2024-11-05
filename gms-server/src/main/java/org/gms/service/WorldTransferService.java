@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.Character;
 import org.gms.client.DefaultDates;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.dao.entity.AccountsDO;
 import org.gms.dao.entity.BuddiesDO;
 import org.gms.dao.entity.CharactersDO;
@@ -57,7 +57,7 @@ public class WorldTransferService {
      * @return 能否转区
      */
     public boolean checkWorldTransferEligibility(WorldtransfersDO data) {
-        if (!YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
+        if (!GameConfig.getServerBoolean("allow_cash_shop_world_transfer")) {
             return false;
         }
         // 获取人物信息
@@ -119,7 +119,7 @@ public class WorldTransferService {
                 .where(WORLDTRANSFERS_D_O.CHARACTERID.eq(chr.getId())));
         // 已有转区未生效或转区未冷却
         if (!worldTransfersDOList.isEmpty() && worldTransfersDOList.stream().anyMatch(worldtransfersDO ->
-                worldtransfersDO.getCompletionTime() == null || worldtransfersDO.getCompletionTime().getTime() + YamlConfig.config.server.WORLD_TRANSFER_COOLDOWN > System.currentTimeMillis())) {
+                worldtransfersDO.getCompletionTime() == null || worldtransfersDO.getCompletionTime().getTime() + GameConfig.getServerLong("world_transfer_cooldown") > System.currentTimeMillis())) {
             return false;
         }
         worldtransfersMapper.insert(WorldtransfersDO.builder().characterid(chr.getId()).from(chr.getWorld()).to(newWorld).build());

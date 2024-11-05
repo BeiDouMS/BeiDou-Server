@@ -27,7 +27,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Stat;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 public class MaxStatCommand extends Command {
@@ -41,7 +41,7 @@ public class MaxStatCommand extends Command {
         player.loseExp(player.getExp(), false, false);
         player.setLevel(255);
         player.resetPlayerRates();
-        if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
+        if (GameConfig.getServerBoolean("use_add_rates_by_level")) {
             player.setPlayerRates();
         }
         player.setWorldRates();

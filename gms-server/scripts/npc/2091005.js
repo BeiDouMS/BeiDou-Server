@@ -42,8 +42,8 @@ function start() {
         return;
     }
 
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    belt_points = YamlConfig.config.server.USE_FAST_DOJO_UPGRADE ? Array(10, 90, 200, 460, 850) : Array(200, 1800, 4000, 9200, 17000);
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    belt_points = GameConfig.getServerBoolean("use_fast_dojo_upgrade") ? Array(10, 90, 200, 460, 850) : Array(200, 1800, 4000, 9200, 17000);
 
     belt_on_inventory = [];
     for (var i = 0; i < belts.length; i++) {

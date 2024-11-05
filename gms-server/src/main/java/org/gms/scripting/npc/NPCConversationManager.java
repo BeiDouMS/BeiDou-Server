@@ -27,7 +27,7 @@ import org.gms.client.*;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.Pet;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.game.NextLevelType;
 import org.gms.constants.id.MapId;
@@ -356,7 +356,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
 
     public boolean canSpawnPlayerNpc(int mapid) {
         Character chr = getPlayer();
-        return !YamlConfig.config.server.PLAYERNPC_AUTODEPLOY && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
+        return !GameConfig.getServerBoolean("playernpc_auto_deploy") && chr.getLevel() >= chr.getMaxClassLevel() && !chr.isGM() && PlayerNPC.canSpawnPlayerNpc(chr.getName(), mapid);
     }
 
     public PlayerNPC getPlayerNPCByScriptid(int scriptId) {
@@ -606,7 +606,7 @@ public class NPCConversationManager extends AbstractPlayerInteraction {
     }
 
     public boolean isUsingOldPqNpcStyle() {
-        return YamlConfig.config.server.USE_OLD_GMS_STYLED_PQ_NPCS && this.getPlayer().getParty() != null;
+        return GameConfig.getServerBoolean("use_old_gms_styled_pq_npcs") && this.getPlayer().getParty() != null;
     }
 
     public Object[] getAvailableMasteryBooks() {

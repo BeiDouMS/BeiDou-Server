@@ -1,3 +1,4 @@
+import config from '@/views/game/config/locale/en-US';
 import drop from '@/views/game/drop/locale/en-US';
 import cashShop from '@/views/game/cashShop/locale/en-US';
 import npcShop from '@/views/game/npcShop/locale/en-US';
@@ -14,6 +15,7 @@ export default {
   'menu.dashboard.workplace': 'Workplace',
   'menu.dashboard.informationSearch': 'Information Search',
   'menu.game': 'Game',
+  'menu.game.config': 'Config',
   'menu.game.npcShop': 'NPC Shop',
   'menu.game.cashShop': 'Cash Shop',
   'menu.game.drop': 'Mob Drop',
@@ -47,4 +49,5 @@ export default {
   ...gachapon,
   ...informationSearch,
   ...inventory,
+  ...config,
 };

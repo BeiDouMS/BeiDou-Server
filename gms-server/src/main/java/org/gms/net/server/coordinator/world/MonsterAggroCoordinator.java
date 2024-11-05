@@ -20,7 +20,7 @@
 package org.gms.net.server.coordinator.world;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.server.TimerManager;
 import org.gms.server.life.Monster;
@@ -96,19 +96,19 @@ public class MonsterAggroCoordinator {
             aggroMonitor = TimerManager.getInstance().register(() -> {
                 runAggroUpdate(1);
                 runSortLeadingCharactersAggro();
-            }, YamlConfig.config.server.MOB_STATUS_AGGRO_INTERVAL, YamlConfig.config.server.MOB_STATUS_AGGRO_INTERVAL);
+            }, GameConfig.getServerLong("mob_status_aggro_interval"), GameConfig.getServerLong("mob_status_aggro_interval"));
         } finally {
             idleLock.unlock();
         }
 
-        int timeDelta = (int) Math.ceil((Server.getInstance().getCurrentTime() - lastStopTime) / YamlConfig.config.server.MOB_STATUS_AGGRO_INTERVAL);
+        int timeDelta = (int) Math.ceil((Server.getInstance().getCurrentTime() - lastStopTime) / GameConfig.getServerDouble("mob_status_aggro_interval"));
         if (timeDelta > 0) {
             runAggroUpdate(timeDelta);
         }
     }
 
     private static void updateEntryExpiration(PlayerAggroEntry pae) {
-        pae.toNextUpdate = (int) Math.ceil((120000L / YamlConfig.config.server.MOB_STATUS_AGGRO_INTERVAL) / Math.pow(2, pae.expireStreak + pae.currentDamageInstances));
+        pae.toNextUpdate = (int) Math.ceil((120000L / GameConfig.getServerDouble("mob_status_aggro_interval")) / Math.pow(2, pae.expireStreak + pae.currentDamageInstances));
     }
 
     private static void insertEntryDamage(PlayerAggroEntry pae, int damage) {
@@ -314,7 +314,7 @@ public class MonsterAggroCoordinator {
                 if (chr != null) {
                     if (player.getId() == pae.cid) {
                         return true;
-                    } else if (pae.updateStreak < YamlConfig.config.server.MOB_STATUS_AGGRO_PERSISTENCE && chr.isAlive()) {  // verifies currently leading players activity
+                    } else if (pae.updateStreak < GameConfig.getServerInt("mob_status_aggro_persistence") && chr.isAlive()) {  // verifies currently leading players activity
                         return false;
                     }
                 }

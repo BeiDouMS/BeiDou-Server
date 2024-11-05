@@ -30,7 +30,7 @@ import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MobId;
 import org.gms.constants.skills.Crusader;
 import org.gms.constants.skills.FPMage;
@@ -457,7 +457,7 @@ public class Monster extends AbstractLoadedLife {
             return;
         }
 
-        if (YamlConfig.config.server.USE_DEBUG && from.isGM()) {
+        if (GameConfig.getServerBoolean("use_debug") && from.isGM()) {
             from.dropMessage(5, I18nUtil.getMessage("Monster.applyDamage.message1") + this.getId() + ", OID " + this.getObjectId());
         }
 
@@ -531,9 +531,9 @@ public class Monster extends AbstractLoadedLife {
     }
 
     private void distributePlayerExperience(Character chr, float exp, float partyBonusMod, int totalPartyLevel, boolean highestPartyDamager, boolean whiteExpGain, boolean hasPartySharers) {
-        float playerExp = (YamlConfig.config.server.EXP_SPLIT_COMMON_MOD * chr.getLevel()) / totalPartyLevel;
+        float playerExp = (GameConfig.getServerFloat("exp_split_common_mod") * chr.getLevel()) / totalPartyLevel;
         if (highestPartyDamager) {
-            playerExp += YamlConfig.config.server.EXP_SPLIT_MVP_MOD;
+            playerExp += GameConfig.getServerFloat("exp_split_mvp_mod");
         }
 
         playerExp *= exp;
@@ -545,7 +545,7 @@ public class Monster extends AbstractLoadedLife {
 
     private void distributePartyExperience(Map<Character, Long> partyParticipation, float expPerDmg, Set<Character> underleveled, Map<Integer, Float> personalRatio, double sdevRatio) {
         IntervalBuilder leechInterval = new IntervalBuilder();
-        leechInterval.addInterval(this.getLevel() - YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL, this.getLevel() + YamlConfig.config.server.EXP_SPLIT_LEVEL_INTERVAL);
+        leechInterval.addInterval(this.getLevel() - GameConfig.getServerInt("exp_split_level_interval"), this.getLevel() + GameConfig.getServerInt("exp_split_level_interval"));
 
         long maxDamage = 0, partyDamage = 0;
         Character participationMvp = null;
@@ -560,14 +560,14 @@ public class Monster extends AbstractLoadedLife {
 
             // thanks Thora for pointing out leech level limitation
             int chrLevel = e.getKey().getLevel();
-            leechInterval.addInterval(chrLevel - YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL, chrLevel + YamlConfig.config.server.EXP_SPLIT_LEECH_INTERVAL);
+            leechInterval.addInterval(chrLevel - GameConfig.getServerInt("exp_split_leech_interval"), chrLevel + GameConfig.getServerInt("exp_split_leech_interval"));
         }
 
         List<Character> expMembers = new LinkedList<>();
         int totalPartyLevel = 0;
 
         // thanks G h o s t, Alfred, Vcoc, BHB for poiting out a bug in detecting party members after membership transactions in a party took place
-        if (YamlConfig.config.server.USE_ENFORCE_MOB_LEVEL_RANGE) {
+        if (GameConfig.getServerBoolean("use_enforce_mob_level_range")) {
             for (Character member : partyParticipation.keySet().iterator().next().getPartyMembersOnSameMap()) {
                 if (!leechInterval.inInterval(member.getLevel())) {
                     underleveled.add(member);
@@ -693,7 +693,7 @@ public class Monster extends AbstractLoadedLife {
         // thanks Prophecy & Aika for finding out Holy Symbol not being applied on party bonuses
         Integer holySymbol = attacker.getBuffedValue(BuffStat.HOLY_SYMBOL);
         if (holySymbol != null) {
-            if (YamlConfig.config.server.USE_FULL_HOLY_SYMBOL) { // thanks Mordred, xinyifly, AyumiLove, andy33 for noticing HS hands out 20% of its potential on less than 3 players
+            if (GameConfig.getServerBoolean("use_full_holy_symbol")) { // thanks Mordred, xinyifly, AyumiLove, andy33 for noticing HS hands out 20% of its potential on less than 3 players
                 multiplier *= (1.0 + (holySymbol.doubleValue() / 100.0));
             } else {
                 multiplier *= (1.0 + (holySymbol.doubleValue() / (hasPartySharers ? 100.0 : 500.0)));
@@ -751,7 +751,7 @@ public class Monster extends AbstractLoadedLife {
             if (partyExp != null) {
                 partyExp *= getStatusExpMultiplier(attacker, hasPartySharers);
                 partyExp *= (attacker.getExpRate() * attacker.getMobExpRate());
-                partyExp *= YamlConfig.config.server.PARTY_BONUS_EXP_RATE;
+                partyExp *= GameConfig.getServerFloat("party_bonus_exp_rate");
             } else {
                 partyExp = 0.0f;
             }
@@ -974,7 +974,7 @@ public class Monster extends AbstractLoadedLife {
 
     private void giveFamilyRep(FamilyEntry entry) {
         if (entry != null) {
-            int repGain = isBoss() ? YamlConfig.config.server.FAMILY_REP_PER_BOSS_KILL : YamlConfig.config.server.FAMILY_REP_PER_KILL;
+            int repGain = isBoss() ? GameConfig.getServerInt("family_rep_per_boss_kill") : GameConfig.getServerInt("family_rep_per_kill");
             if (getMaxHp() <= 1) {
                 repGain = 0; //don't count trash mobs
             }
@@ -1393,7 +1393,7 @@ public class Monster extends AbstractLoadedLife {
                 int i = (skillid == Crusader.ARMOR_CRASH ? 1 : (skillid == WhiteKnight.MAGIC_CRASH ? 2 : 0));
                 debuffMobStat(statups[i]);
 
-                if (YamlConfig.config.server.USE_ANTI_IMMUNITY_CRASH) {
+                if (GameConfig.getServerBoolean("use_anti_immunity_crash")) {
                     if (skillid == Crusader.ARMOR_CRASH) {
                         if (!isBuffed(MonsterStatus.WEAPON_REFLECT)) {
                             debuffMobStat(MonsterStatus.WEAPON_IMMUNITY);
@@ -2068,7 +2068,7 @@ public class Monster extends AbstractLoadedLife {
             this.aggroSwitchController(player, true);
         } else if (chrController.getId() == player.getId()) {
             this.setControllerHasAggro(true);
-            if (!YamlConfig.config.server.USE_AUTOAGGRO_NEARBY) {   // thanks Lichtmager for noticing autoaggro not updating the player properly
+            if (!GameConfig.getServerBoolean("use_auto_aggro_nearby")) {   // thanks Lichtmager for noticing autoaggro not updating the player properly
                 aggroMonsterControl(player.getClient(), this, true);
             }
         }
@@ -2169,7 +2169,7 @@ public class Monster extends AbstractLoadedLife {
 
         // had to schedule this since mob wouldn't stick to puppet aggro who knows why
         OverallService service = (OverallService) this.getMap().getChannelServer().getServiceAccess(ChannelServices.OVERALL);
-        service.registerOverallAction(this.getMap().getId(), r, YamlConfig.config.server.UPDATE_INTERVAL);
+        service.registerOverallAction(this.getMap().getId(), r, GameConfig.getServerLong("update_interval"));
     }
 
     /**

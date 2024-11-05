@@ -29,9 +29,9 @@ var feeMultiplier = 7.0;
 function start() {
     status = -1;
 
-    const YamlConfig = Java.type('org.gms.config.YamlConfig');
-    if (!YamlConfig.config.server.USE_CPQ) {
-        if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+    const GameConfig = Java.type('org.gms.config.GameConfig');
+    if (!GameConfig.getServerBoolean("use_cpq")) {
+        if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
             status = 0;
             action(1, 0, 4);
         } else {
@@ -238,8 +238,8 @@ function action(mode, type, selection) {
             if (status == 0) {
                 var talk = "你想做什么呢？ 如果你没有参加过怪物嘉年华, 在参加之前，你需要知道一些事情! \r\n#b#L0# 前往怪物嘉年华地图 1.#l \r\n#L3# 前往怪物嘉年华地图 2.#l \r\n#L1# 了解怪物嘉年华.#l\r\n#L2# 交易 #t4001129#.#l";
 
-                const YamlConfig = Java.type('org.gms.config.YamlConfig');
-                if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+                const GameConfig = Java.type('org.gms.config.GameConfig');
+                if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
                     talk += "\r\n#L4# ... 我可以精炼我的矿石吗#l";
                 }
                 cm.sendSimple(talk);

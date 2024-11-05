@@ -22,7 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.net.server.channel;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.net.netty.ChannelServer;
 import org.gms.net.packet.Packet;
@@ -130,7 +131,7 @@ public final class Channel {
         this.ongoingStartTime = startTime + 10000;  // rude approach to a world's last channel boot time, placeholder for the 1st wedding reservation ever
         this.mapManager = new MapManager(null, world, channel);
         this.port = BASE_PORT + (this.channel - 1) + (world * 100);
-        this.ip = YamlConfig.config.server.HOST + ":" + port;
+        this.ip = GameConfig.getServerString("wan_host") + ":" + port;
 
         ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock(true);
         this.merchRlock = rwLock.readLock();
@@ -285,7 +286,7 @@ public final class Channel {
     }
 
     public int getChannelCapacity() {
-        return (int) (Math.ceil(((float) players.getAllCharacters().size() / YamlConfig.config.server.CHANNEL_LOAD) * 800));
+        return (int) (Math.ceil(((float) players.getAllCharacters().size() / GameConfig.getServerInt("channel_capacity")) * 800));
     }
 
     public void broadcastPacket(Packet packet) {
@@ -798,7 +799,7 @@ public final class Channel {
         try {
             List<Integer> weddingReservationQueue = (cathedral ? cathedralReservationQueue : chapelReservationQueue);
 
-            int delay = YamlConfig.config.server.WEDDING_RESERVATION_DELAY - 1 - weddingReservationQueue.size();
+            int delay = GameConfig.getServerInt("wedding_reservation_delay") - 1 - weddingReservationQueue.size();
             for (int i = 0; i < delay; i++) {
                 weddingReservationQueue.add(null);  // push empty slots to fill the waiting time
             }
@@ -876,7 +877,7 @@ public final class Channel {
 
         ongoingStartTime = System.currentTimeMillis();
         if (weddingId != null) {
-            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(() -> closeOngoingWedding(cathedral), MINUTES.toMillis(YamlConfig.config.server.WEDDING_RESERVATION_TIMEOUT));
+            ScheduledFuture<?> weddingTask = TimerManager.getInstance().schedule(() -> closeOngoingWedding(cathedral), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_timeout")));
 
             if (cathedral) {
                 cathedralReservationTask = weddingTask;
@@ -945,7 +946,7 @@ public final class Channel {
     }
 
     public static long getRelativeWeddingTicketExpireTime(int resSlot) {
-        return MINUTES.toMillis((long) resSlot * YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL);
+        return MINUTES.toMillis((long) resSlot * GameConfig.getServerLong("wedding_reservation_interval"));
     }
 
     public String getWeddingReservationTimeLeft(Integer weddingId) {
@@ -973,7 +974,7 @@ public final class Channel {
                 return venue + " - RIGHT NOW";
             }
 
-            return venue + " - " + getTimeLeft(ongoingStartTime + MINUTES.toMillis((long) resStatus * YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL)) + " from now";
+            return venue + " - " + getTimeLeft(ongoingStartTime + MINUTES.toMillis((long) resStatus * GameConfig.getServerLong("wedding_reservation_interval"))) + " from now";
         } finally {
             lock.unlock();
         }

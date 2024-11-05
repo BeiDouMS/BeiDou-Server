@@ -13,6 +13,16 @@ const GAME: AppRouteRecordRaw = {
   },
   children: [
     {
+      path: 'config',
+      name: 'Config',
+      component: () => import('@/views/game/config/index.vue'),
+      meta: {
+        locale: 'menu.game.config',
+        requiresAuth: true,
+        roles: ['admin'],
+      },
+    },
+    {
       path: 'cashShop',
       name: 'CashShop',
       component: () => import('@/views/game/cashShop/index.vue'),

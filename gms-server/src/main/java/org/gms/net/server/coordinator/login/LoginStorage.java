@@ -19,7 +19,7 @@
 */
 package org.gms.net.server.coordinator.login;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 
 import java.time.Instant;
@@ -40,9 +40,9 @@ public class LoginStorage {
         List<Instant> attempts = loginHistory.computeIfAbsent(accountId, k -> new ArrayList<>());
 
         synchronized (attempts) {
-            final Instant attemptExpiry = Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + YamlConfig.config.server.LOGIN_ATTEMPT_DURATION);
+            final Instant attemptExpiry = Instant.ofEpochMilli(Server.getInstance().getCurrentTime() + GameConfig.getServerLong("login_attempt_duration"));
 
-            if (attempts.size() > YamlConfig.config.server.MAX_ACCOUNT_LOGIN_ATTEMPT) {
+            if (attempts.size() > GameConfig.getServerInt("max_account_login_attempt")) {
                 Collections.fill(attempts, attemptExpiry);
                 return false;
             }
