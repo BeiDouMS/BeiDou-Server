@@ -167,7 +167,7 @@
             field="configType"
             :label="$t('config.column.type')"
             :required="true"
-            :disabled="editData.id != null"
+            :disabled="editData.id != null && editData.id != 0"
           >
             <a-select v-model="editData.configType">
               <a-option v-for="type in oriTypes" :key="type" :value="type">
@@ -179,7 +179,7 @@
             field="configSubType"
             :label="$t('config.column.subType')"
             :required="true"
-            :disabled="editData.id != null"
+            :disabled="editData.id != null && editData.id != 0"
           >
             <a-select v-model="editData.configSubType">
               <a-option
@@ -195,7 +195,7 @@
             field="configClazz"
             :label="$t('config.column.clazz')"
             :required="true"
-            :disabled="editData.id != null"
+            :disabled="editData.id != null && editData.id != 0"
           >
             <a-select v-model="editData.configClazz">
               <a-option
@@ -286,7 +286,7 @@
   const editVisible = ref<boolean>(false);
   const editTitle = ref<string>('');
   const editData = reactive<ConfigResult>({
-    id: null,
+    id: 0,
     configType: 'server',
     configSubType: 'Game Mechanics',
     configClazz: 'java.lang.String',
@@ -393,13 +393,13 @@
     condition.value.pageSize = 20;
   };
 
-  const typeChange = async (value: string) => {
-    condition.value.type = value;
+  const typeChange = async (value: any) => {
+    condition.value.type = String(value);
     await loadConfigs();
   };
 
-  const subTypeChange = async (value: string) => {
-    condition.value.subType = value;
+  const subTypeChange = async (value: any) => {
+    condition.value.subType = String(value);
     await loadConfigs();
   };
 
@@ -437,7 +437,7 @@
   };
 
   const resetEditData = () => {
-    editData.id = null;
+    editData.id = 0;
     editData.configType = 'server';
     editData.configSubType = 'Game Mechanics';
     editData.configClazz = 'java.lang.String';
