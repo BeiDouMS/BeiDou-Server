@@ -238,6 +238,17 @@
           </a-form-item>
         </a-form>
       </a-modal>
+      <a-modal
+        v-model:visible="confirmVisible"
+        :width="450"
+        draggable
+        @ok="confirmOk"
+      >
+        <template #title>
+          {{ $t('button.delete') }}
+        </template>
+        <div>{{ $t('config.confirm.text') }}</div>
+      </a-modal>
     </a-card>
   </div>
 </template>
@@ -289,6 +300,7 @@
     'java.lang.Float',
     'java.lang.Boolean',
   ]);
+  const confirmVisible = ref<boolean>(false);
 
   const loadTypes = async () => {
     const { data } = await getConfigTypeList();
@@ -398,8 +410,7 @@
   };
 
   const delClick = async () => {
-    await deleteConfigList(selectedKeys.value);
-    await loadConfigs();
+    confirmVisible.value = true;
   };
 
   const uptClick = (record: ConfigResult) => {
@@ -433,6 +444,11 @@
     editData.configCode = '';
     editData.configValue = '';
     editData.configDesc = '';
+  };
+
+  const confirmOk = async () => {
+    await deleteConfigList(selectedKeys.value);
+    await loadConfigs();
   };
 
   loadTypes();

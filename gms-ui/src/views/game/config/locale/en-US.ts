@@ -4,6 +4,9 @@ export default {
 
   'config.placeholder.filter': 'Input search text',
 
+  'config.confirm.text':
+    'Deleting configs may cause service errors. Are you sure to continue?',
+
   'config.type.all': 'All',
   'config.type.world': 'World',
   'config.type.server': 'Server',
