@@ -4,6 +4,8 @@ export default {
 
   'config.placeholder.filter': '请输入搜索文本',
 
+  'config.confirm.text': '删除参数可能会引起服务异常，确认继续吗？',
+
   'config.type.all': '不限',
   'config.type.world': '大区',
   'config.type.server': '全局',
