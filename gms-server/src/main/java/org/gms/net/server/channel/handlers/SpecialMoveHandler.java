@@ -25,7 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Skill;
 import org.gms.client.SkillFactory;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.skills.Brawler;
 import org.gms.constants.skills.Corsair;
 import org.gms.constants.skills.DarkKnight;
@@ -85,7 +85,7 @@ public final class SpecialMoveHandler extends AbstractPacketHandler {
                 return;
             } else if (skillid != Corsair.BATTLE_SHIP) {
                 int cooldownTime = effect.getCooldown();
-                if (StatEffect.isHerosWill(skillid) && YamlConfig.config.server.USE_FAST_REUSE_HERO_WILL) {
+                if (StatEffect.isHerosWill(skillid) && GameConfig.getServerBoolean("use_fast_reuse_hero_will")) {
                     cooldownTime /= 60;
                 }
 

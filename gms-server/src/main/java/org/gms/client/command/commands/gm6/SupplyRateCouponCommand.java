@@ -22,7 +22,8 @@ package org.gms.client.command.commands.gm6;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
+import org.gms.dao.entity.GameConfigDO;
 import org.gms.util.I18nUtil;
 
 public class SupplyRateCouponCommand extends Command {
@@ -38,7 +39,12 @@ public class SupplyRateCouponCommand extends Command {
             return;
         }
 
-        YamlConfig.config.server.USE_SUPPLY_RATE_COUPONS = params[0].compareToIgnoreCase("enabled") != 0 || params[0].compareToIgnoreCase("开启") != 0;
+        GameConfig.update(GameConfigDO.builder()
+                .configType("server")
+                .configSubType("Game Mechanics")
+                .configCode("use_supply_rate_coupons")
+                .configValue(String.valueOf(params[0].compareToIgnoreCase("enabled") != 0 || params[0].compareToIgnoreCase("开启") != 0))
+                .build());
         player.dropMessage(5, I18nUtil.getMessage("SupplyRateCouponCommand.message3", params[0]));
     }
 }

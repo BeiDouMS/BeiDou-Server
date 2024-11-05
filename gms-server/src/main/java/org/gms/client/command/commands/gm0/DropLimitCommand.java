@@ -25,7 +25,7 @@ package org.gms.client.command.commands.gm0;
 
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 public class DropLimitCommand extends Command {
@@ -36,10 +36,10 @@ public class DropLimitCommand extends Command {
     @Override
     public void execute(Client c, String[] params) {
         int dropCount = c.getPlayer().getMap().getDroppedItemCount();
-        if (((float) dropCount) / YamlConfig.config.server.ITEM_LIMIT_ON_MAP < 0.75f) {
-            c.getPlayer().showHint(I18nUtil.getMessage("DropLimitCommand.message2") + "#b" + dropCount + "#k / #e" + YamlConfig.config.server.ITEM_LIMIT_ON_MAP + "#n", 300);
+        if (((float) dropCount) / GameConfig.getServerInt("item_limit_on_map") < 0.75f) {
+            c.getPlayer().showHint(I18nUtil.getMessage("DropLimitCommand.message2") + "#b" + dropCount + "#k / #e" + GameConfig.getServerInt("item_limit_on_map") + "#n", 300);
         } else {
-            c.getPlayer().showHint(I18nUtil.getMessage("DropLimitCommand.message2") + "#r" + dropCount + "#k / #e" + YamlConfig.config.server.ITEM_LIMIT_ON_MAP + "#n", 300);
+            c.getPlayer().showHint(I18nUtil.getMessage("DropLimitCommand.message2") + "#r" + dropCount + "#k / #e" + GameConfig.getServerInt("item_limit_on_map") + "#n", 300);
         }
 
     }

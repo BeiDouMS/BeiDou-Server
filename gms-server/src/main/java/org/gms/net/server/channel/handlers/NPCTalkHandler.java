@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Client;
 import org.gms.client.processor.npc.DueyProcessor;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -46,7 +46,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
             return;
         }
 
-        if (currentServerTime() - c.getPlayer().getNpcCooldown() < YamlConfig.config.server.BLOCK_NPC_RACE_CONDT) {
+        if (currentServerTime() - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
@@ -54,7 +54,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
         int oid = p.readInt();
         MapObject obj = c.getPlayer().getMap().getMapObject(oid);
         if (obj instanceof NPC npc) {
-            if (YamlConfig.config.server.USE_DEBUG && c.getPlayer().isGM()) {
+            if (GameConfig.getServerBoolean("use_debug") && c.getPlayer().isGM()) {
                 c.getPlayer().dropMessage(5, I18nUtil.getMessage("NPCTalkHandler.handlePacket.message1") + npc.getId());
             }
 
@@ -71,7 +71,7 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "gachapon", null);
                 } else if (npc.getName().endsWith("Maple TV")) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "mapleTV", null);
-                } else if (YamlConfig.config.server.USE_REBIRTH_SYSTEM && npc.getId() == YamlConfig.config.server.REBIRTH_NPC_ID) {
+                } else if (GameConfig.getServerBoolean("use_rebirth_system") && npc.getId() == GameConfig.getServerInt("rebirth_npc_id")) {
                     NPCScriptManager.getInstance().start(c, npc.getId(), "rebirth", null);
                 } else {
                     boolean hasNpcScript = NPCScriptManager.getInstance().start(c, npc.getId(), oid, null);

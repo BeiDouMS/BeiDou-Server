@@ -11,4 +11,5 @@ export default {
   'button.edit': 'Edit',
   'button.delete': 'Delete',
   'button.detail': 'Detail',
+  'button.add': 'Add',
 };

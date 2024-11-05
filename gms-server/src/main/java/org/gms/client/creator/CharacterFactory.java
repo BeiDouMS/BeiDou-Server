@@ -25,7 +25,7 @@ import org.gms.client.SkinColor;
 import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public abstract class CharacterFactory {
     private static final Logger log = LoggerFactory.getLogger(CharacterFactory.class);
 
     protected synchronized static int createNewCharacter(Client c, String name, int face, int hair, int skin, int gender, CharacterFactoryRecipe recipe) {
-        if (YamlConfig.config.server.COLLECTIVE_CHARSLOT ? c.getAvailableCharacterSlots() <= 0 : c.getAvailableCharacterWorldSlots() <= 0) {
+        if (GameConfig.getServerBoolean("collective_chr_slot") ? c.getAvailableCharacterSlots() <= 0 : c.getAvailableCharacterWorldSlots() <= 0) {
             return -3;
         }
 

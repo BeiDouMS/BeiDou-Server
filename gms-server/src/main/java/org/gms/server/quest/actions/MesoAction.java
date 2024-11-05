@@ -22,7 +22,7 @@
 package org.gms.server.quest.actions;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.provider.Data;
 import org.gms.provider.DataTool;
 import org.gms.server.quest.Quest;
@@ -56,7 +56,7 @@ public class MesoAction extends AbstractQuestAction {
         if (gain < 0) {
             chr.gainMeso(gain, true, false, true);
         } else {
-            if (!YamlConfig.config.server.USE_QUEST_RATE) {
+            if (!GameConfig.getServerBoolean("use_quest_rate")) {
                 chr.gainMeso(NumberTool.floatToInt(gain * chr.getMesoRate()), true, false, true);
             } else {
                 chr.gainMeso(NumberTool.floatToInt(gain * chr.getQuestMesoRate()), true, false, true);

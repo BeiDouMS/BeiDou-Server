@@ -25,7 +25,7 @@ import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
@@ -246,7 +246,7 @@ public class MakerProcessor {
         Map<Integer, Integer> reagentType = new LinkedHashMap<>();
         List<Integer> toRemove = new LinkedList<>();
 
-        boolean isWeapon = ItemConstants.isWeapon(toCreate) || YamlConfig.config.server.USE_MAKER_PERMISSIVE_ATKUP;  // thanks Vcoc for finding a case where a weapon wouldn't be counted as such due to a bounding on isWeapon
+        boolean isWeapon = ItemConstants.isWeapon(toCreate) || GameConfig.getServerBoolean("use_maker_permissive_atk_up");  // thanks Vcoc for finding a case where a weapon wouldn't be counted as such due to a bounding on isWeapon
 
         for (Map.Entry<Integer, Short> r : reagentids.entrySet()) {
             int curRid = r.getKey();
@@ -383,8 +383,8 @@ public class MakerProcessor {
             eqp.setUpgradeSlots(3);
         }
 
-        if (YamlConfig.config.server.USE_ENHANCED_CRAFTING == true) {
-            if (!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
+        if (GameConfig.getServerBoolean("use_enhanced_crafting")) {
+            if (!(c.getPlayer().isGM() && GameConfig.getServerBoolean("use_perfect_gm_scroll"))) {
                 eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));
             }
             item = ItemInformationProvider.getInstance().scrollEquipWithId(eqp, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60, c.getPlayer().isGM());

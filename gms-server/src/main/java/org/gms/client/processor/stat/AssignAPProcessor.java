@@ -33,7 +33,7 @@ import org.gms.client.autoban.AutobanFactory;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.skills.BlazeWizard;
 import org.gms.constants.skills.Brawler;
 import org.gms.constants.skills.DawnWarrior;
@@ -74,7 +74,7 @@ public class AssignAPProcessor {
             int remainingAp = chr.getRemainingAp();
             inPacket.skip(8);
 
-            if (YamlConfig.config.server.USE_SERVER_AUTOASSIGNER) {
+            if (GameConfig.getServerBoolean("use_server_auto_assigner")) {
                 // --------- Ronan Lana's AUTOASSIGNER ---------
                 // This method excels for assigning APs in such a way to cover all equipments AP requirements.
                 byte opt = inPacket.readByte();     // useful for pirate autoassigning
@@ -153,7 +153,7 @@ public class AssignAPProcessor {
                         str = 0;
                         dex = 0;
 
-                        if (YamlConfig.config.server.USE_AUTOASSIGN_SECONDARY_CAP && luk + chr.getLuk() > CAP) {
+                        if (GameConfig.getServerBoolean("use_auto_assign_secondary_cap") && luk + chr.getLuk() > CAP) {
                             temp = luk + chr.getLuk() - CAP;
                             scStat -= temp;
                             prStat += temp;
@@ -185,7 +185,7 @@ public class AssignAPProcessor {
                         int_ = 0;
                         luk = 0;
 
-                        if (YamlConfig.config.server.USE_AUTOASSIGN_SECONDARY_CAP && str + chr.getStr() > CAP) {
+                        if (GameConfig.getServerBoolean("use_auto_assign_secondary_cap") && str + chr.getStr() > CAP) {
                             temp = str + chr.getStr() - CAP;
                             scStat -= temp;
                             prStat += temp;
@@ -217,7 +217,7 @@ public class AssignAPProcessor {
                         int_ = 0;
                         luk = 0;
 
-                        if (YamlConfig.config.server.USE_AUTOASSIGN_SECONDARY_CAP && str + chr.getStr() > CAP) {
+                        if (GameConfig.getServerBoolean("use_auto_assign_secondary_cap") && str + chr.getStr() > CAP) {
                             temp = str + chr.getStr() - CAP;
                             scStat -= temp;
                             prStat += temp;
@@ -279,12 +279,12 @@ public class AssignAPProcessor {
                         str = trStat;
                         int_ = 0;
 
-                        if (YamlConfig.config.server.USE_AUTOASSIGN_SECONDARY_CAP && dex + chr.getDex() > CAP) {
+                        if (GameConfig.getServerBoolean("use_auto_assign_secondary_cap") && dex + chr.getDex() > CAP) {
                             temp = dex + chr.getDex() - CAP;
                             scStat -= temp;
                             prStat += temp;
                         }
-                        if (YamlConfig.config.server.USE_AUTOASSIGN_SECONDARY_CAP && str + chr.getStr() > CAP) {
+                        if (GameConfig.getServerBoolean("use_auto_assign_secondary_cap") && str + chr.getStr() > CAP) {
                             temp = str + chr.getStr() - CAP;
                             trStat -= temp;
                             prStat += temp;
@@ -360,7 +360,7 @@ public class AssignAPProcessor {
                         int_ = 0;
                         luk = 0;
 
-                        if (YamlConfig.config.server.USE_AUTOASSIGN_SECONDARY_CAP && dex + chr.getDex() > CAP) {
+                        if (GameConfig.getServerBoolean("use_auto_assign_secondary_cap") && dex + chr.getDex() > CAP) {
                             temp = dex + chr.getDex() - CAP;
                             scStat -= temp;
                             prStat += temp;
@@ -430,9 +430,9 @@ public class AssignAPProcessor {
         switch (type) {
         case STR:
             newVal = statUpdate[0] + gain;
-            if (newVal > YamlConfig.config.server.MAX_AP) {
-                statGain[0] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
-                statUpdate[0] = YamlConfig.config.server.MAX_AP;
+            if (newVal > GameConfig.getServerInt("max_ap")) {
+                statGain[0] += (gain - (newVal - GameConfig.getServerInt("max_ap")));
+                statUpdate[0] = GameConfig.getServerInt("max_ap");
             } else {
                 statGain[0] += gain;
                 statUpdate[0] = newVal;
@@ -440,9 +440,9 @@ public class AssignAPProcessor {
             break;
         case INT:
             newVal = statUpdate[3] + gain;
-            if (newVal > YamlConfig.config.server.MAX_AP) {
-                statGain[3] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
-                statUpdate[3] = YamlConfig.config.server.MAX_AP;
+            if (newVal > GameConfig.getServerInt("max_ap")) {
+                statGain[3] += (gain - (newVal - GameConfig.getServerInt("max_ap")));
+                statUpdate[3] = GameConfig.getServerInt("max_ap");
             } else {
                 statGain[3] += gain;
                 statUpdate[3] = newVal;
@@ -450,9 +450,9 @@ public class AssignAPProcessor {
             break;
         case LUK:
             newVal = statUpdate[2] + gain;
-            if (newVal > YamlConfig.config.server.MAX_AP) {
-                statGain[2] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
-                statUpdate[2] = YamlConfig.config.server.MAX_AP;
+            if (newVal > GameConfig.getServerInt("max_ap")) {
+                statGain[2] += (gain - (newVal - GameConfig.getServerInt("max_ap")));
+                statUpdate[2] = GameConfig.getServerInt("max_ap");
             } else {
                 statGain[2] += gain;
                 statUpdate[2] = newVal;
@@ -460,9 +460,9 @@ public class AssignAPProcessor {
             break;
         case DEX:
             newVal = statUpdate[1] + gain;
-            if (newVal > YamlConfig.config.server.MAX_AP) {
-                statGain[1] += (gain - (newVal - YamlConfig.config.server.MAX_AP));
-                statUpdate[1] = YamlConfig.config.server.MAX_AP;
+            if (newVal > GameConfig.getServerInt("max_ap")) {
+                statGain[1] += (gain - (newVal - GameConfig.getServerInt("max_ap")));
+                statUpdate[1] = GameConfig.getServerInt("max_ap");
             } else {
                 statGain[1] += gain;
                 statUpdate[1] = newVal;
@@ -470,8 +470,8 @@ public class AssignAPProcessor {
             break;
         }
 
-        if (newVal > YamlConfig.config.server.MAX_AP) {
-            return newVal - YamlConfig.config.server.MAX_AP;
+        if (newVal > GameConfig.getServerInt("max_ap")) {
+            return newVal - GameConfig.getServerInt("max_ap");
         }
         return 0;
     }
@@ -538,7 +538,7 @@ public class AssignAPProcessor {
                     }
                     break;
                 case 2048: // HP
-                    if (YamlConfig.config.server.USE_ENFORCE_HPMP_SWAP) {
+                    if (GameConfig.getServerBoolean("use_enforce_hpmp_swap")) {
                         if (APTo != 8192) {
                             player.message("You can only swap HP ability points to MP.");
                             c.sendPacket(PacketCreator.enableActions());
@@ -563,13 +563,13 @@ public class AssignAPProcessor {
                     int curHp = player.getHp();
                     int hplose = -takeHp(player.getJob());
                     player.assignHP(hplose, -1);
-                    if (!YamlConfig.config.server.USE_FIXED_RATIO_HPMP_UPDATE) {
+                    if (!GameConfig.getServerBoolean("use_fixed_ratio_hpmp_update")) {
                         player.updateHp(Math.max(1, curHp + hplose));
                     }
 
                     break;
                 case 8192: // MP
-                    if (YamlConfig.config.server.USE_ENFORCE_HPMP_SWAP) {
+                    if (GameConfig.getServerBoolean("use_enforce_hpmp_swap")) {
                         if (APTo != 2048) {
                             player.message("You can only swap MP ability points to HP.");
                             c.sendPacket(PacketCreator.enableActions());
@@ -607,7 +607,7 @@ public class AssignAPProcessor {
                     int curMp = player.getMp();
                     int mplose = -takeMp(job);
                     player.assignMP(mplose, -1);
-                    if (!YamlConfig.config.server.USE_FIXED_RATIO_HPMP_UPDATE) {
+                    if (!GameConfig.getServerBoolean("use_fixed_ratio_hpmp_update")) {
                         player.updateMp(Math.max(0, curMp + mplose));
                     }
                     break;
@@ -697,7 +697,7 @@ public class AssignAPProcessor {
                 }
             }
 
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (usedAPReset) {
                     MaxHP += 20;
                 } else {
@@ -707,7 +707,7 @@ public class AssignAPProcessor {
                 MaxHP += 20;
             }
         } else if (job.isA(Job.ARAN1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (usedAPReset) {
                     MaxHP += 20;
                 } else {
@@ -717,7 +717,7 @@ public class AssignAPProcessor {
                 MaxHP += 28;
             }
         } else if (job.isA(Job.MAGICIAN) || job.isA(Job.BLAZEWIZARD1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (usedAPReset) {
                     MaxHP += 6;
                 } else {
@@ -727,7 +727,7 @@ public class AssignAPProcessor {
                 MaxHP += 6;
             }
         } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (usedAPReset) {
                     MaxHP += 16;
                 } else {
@@ -737,7 +737,7 @@ public class AssignAPProcessor {
                 MaxHP += 16;
             }
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (usedAPReset) {
                     MaxHP += 16;
                 } else {
@@ -756,7 +756,7 @@ public class AssignAPProcessor {
                 }
             }
 
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (usedAPReset) {
                     MaxHP += 18;
                 } else {
@@ -768,7 +768,7 @@ public class AssignAPProcessor {
         } else if (usedAPReset) {
             MaxHP += 8;
         } else {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 MaxHP += Randomizer.rand(8, 12);
             } else {
                 MaxHP += 10;
@@ -783,7 +783,7 @@ public class AssignAPProcessor {
         int MaxMP = 0;
 
         if (job.isA(Job.WARRIOR) || job.isA(Job.DAWNWARRIOR1) || job.isA(Job.ARAN1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (!usedAPReset) {
                     MaxMP += (Randomizer.rand(2, 4) + (player.getInt() / 10));
                 } else {
@@ -802,7 +802,7 @@ public class AssignAPProcessor {
                 }
             }
 
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (!usedAPReset) {
                     MaxMP += (Randomizer.rand(12, 16) + (player.getInt() / 20));
                 } else {
@@ -812,7 +812,7 @@ public class AssignAPProcessor {
                 MaxMP += 18;
             }
         } else if (job.isA(Job.BOWMAN) || job.isA(Job.WINDARCHER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (!usedAPReset) {
                     MaxMP += (Randomizer.rand(6, 8) + (player.getInt() / 10));
                 } else {
@@ -822,7 +822,7 @@ public class AssignAPProcessor {
                 MaxMP += 10;
             }
         } else if (job.isA(Job.THIEF) || job.isA(Job.NIGHTWALKER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (!usedAPReset) {
                     MaxMP += (Randomizer.rand(6, 8) + (player.getInt() / 10));
                 } else {
@@ -832,7 +832,7 @@ public class AssignAPProcessor {
                 MaxMP += 10;
             }
         } else if (job.isA(Job.PIRATE) || job.isA(Job.THUNDERBREAKER1)) {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (!usedAPReset) {
                     MaxMP += (Randomizer.rand(7, 9) + (player.getInt() / 10));
                 } else {
@@ -842,7 +842,7 @@ public class AssignAPProcessor {
                 MaxMP += 14;
             }
         } else {
-            if (YamlConfig.config.server.USE_RANDOMIZE_HPMP_GAIN) {
+            if (GameConfig.getServerBoolean("use_randomize_hpmp_gain")) {
                 if (!usedAPReset) {
                     MaxMP += (Randomizer.rand(4, 6) + (player.getInt() / 10));
                 } else {

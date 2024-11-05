@@ -30,7 +30,8 @@ import org.gms.client.BuddyList.BuddyOperation;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.Character;
 import org.gms.client.Family;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.dao.entity.PlayernpcsFieldDO;
 import org.gms.dao.mapper.PlayernpcsFieldMapper;
@@ -255,14 +256,14 @@ public class World {
         merchantSchedule = tman.register(new HiredMerchantTask(this), 10 * MINUTES.toMillis(1), 10 * MINUTES.toMillis(1));
         timedMapObjectsSchedule = tman.register(new TimedMapObjectTask(this), MINUTES.toMillis(1), MINUTES.toMillis(1));
         charactersSchedule = tman.register(new CharacterAutosaverTask(this), HOURS.toMillis(1), HOURS.toMillis(1));
-        marriagesSchedule = tman.register(new WeddingReservationTask(this), MINUTES.toMillis(YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL), MINUTES.toMillis(YamlConfig.config.server.WEDDING_RESERVATION_INTERVAL));
+        marriagesSchedule = tman.register(new WeddingReservationTask(this), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")), MINUTES.toMillis(GameConfig.getServerLong("wedding_reservation_interval")));
         mapOwnershipSchedule = tman.register(new MapOwnershipTask(this), SECONDS.toMillis(20), SECONDS.toMillis(20));
         fishingSchedule = tman.register(new FishingTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         partySearchSchedule = tman.register(new PartySearchTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
         timeoutSchedule = tman.register(new TimeoutTask(this), SECONDS.toMillis(10), SECONDS.toMillis(10));
-        hpDecSchedule = tman.register(new CharacterHpDecreaseTask(this), YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL, YamlConfig.config.server.MAP_DAMAGE_OVERTIME_INTERVAL);
+        hpDecSchedule = tman.register(new CharacterHpDecreaseTask(this), GameConfig.getServerLong("map_damage_overtime_interval"), GameConfig.getServerLong("map_damage_overtime_interval"));
 
-        if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (GameConfig.getServerBoolean("use_family_system")) {
             long timeLeft = Server.getTimeLeftForNextDay();
             FamilyDailyResetTask.resetEntitlementUsage(this);
             tman.register(new FamilyDailyResetTask(this), DAYS.toMillis(1), timeLeft);
@@ -639,7 +640,7 @@ public class World {
     }
 
     public int getWorldCapacityStatus() {
-        int worldCap = getChannelsSize() * YamlConfig.config.server.CHANNEL_LOAD;
+        int worldCap = getChannelsSize() * GameConfig.getServerInt("channel_capacity");
         int num = players.getSize();
 
         int status;
@@ -1328,7 +1329,7 @@ public class World {
     }
 
     public List<Pair<Integer, Integer>> getOwlSearchedItems() {
-        if (YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
+        if (GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
             return new ArrayList<>(0);
         }
 
@@ -1357,7 +1358,7 @@ public class World {
     }
 
     private List<List<Pair<Integer, Integer>>> getBoughtCashItems() {
-        if (YamlConfig.config.server.USE_ENFORCE_ITEM_SUGGESTION) {
+        if (GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
             List<List<Pair<Integer, Integer>>> boughtCounts = new ArrayList<>(9);
 
             // thanks GabrielSin for pointing out an issue here
@@ -1441,7 +1442,7 @@ public class World {
     }
 
     public void registerPetHunger(Character chr, byte petSlot) {
-        if (chr.isGM() && YamlConfig.config.server.GM_PETS_NEVER_HUNGRY || YamlConfig.config.server.PETS_NEVER_HUNGRY) {
+        if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
         }
 
@@ -1451,9 +1452,9 @@ public class World {
         try {
             int initProc;
             if (Server.getInstance().getCurrentTime() - petUpdate > 55000) {
-                initProc = YamlConfig.config.server.PET_EXHAUST_COUNT - 2;
+                initProc = GameConfig.getServerInt("pet_exhaust_count") - 2;
             } else {
-                initProc = YamlConfig.config.server.PET_EXHAUST_COUNT - 1;
+                initProc = GameConfig.getServerInt("pet_exhaust_count") - 1;
             }
 
             activePets.put(key, initProc);
@@ -1491,7 +1492,7 @@ public class World {
             }
 
             int dpVal = dp.getValue() + 1;
-            if (dpVal == YamlConfig.config.server.PET_EXHAUST_COUNT) {
+            if (dpVal == GameConfig.getServerInt("pet_exhaust_count")) {
                 chr.runFullnessSchedule(dp.getKey() % 4);
                 dpVal = 0;
             }
@@ -1506,7 +1507,7 @@ public class World {
     }
 
     public void registerMountHunger(Character chr) {
-        if (chr.isGM() && YamlConfig.config.server.GM_PETS_NEVER_HUNGRY || YamlConfig.config.server.PETS_NEVER_HUNGRY) {
+        if (chr.isGM() && GameConfig.getServerBoolean("gm_pets_never_hungry") || GameConfig.getServerBoolean("pets_never_hungry")) {
             return;
         }
 
@@ -1515,9 +1516,9 @@ public class World {
         try {
             int initProc;
             if (Server.getInstance().getCurrentTime() - mountUpdate > 45000) {
-                initProc = YamlConfig.config.server.MOUNT_EXHAUST_COUNT - 2;
+                initProc = GameConfig.getServerInt("mount_exhaust_count") - 2;
             } else {
-                initProc = YamlConfig.config.server.MOUNT_EXHAUST_COUNT - 1;
+                initProc = GameConfig.getServerInt("mount_exhaust_count") - 1;
             }
 
             activeMounts.put(key, initProc);
@@ -1554,7 +1555,7 @@ public class World {
             }
 
             int dpVal = dp.getValue() + 1;
-            if (dpVal == YamlConfig.config.server.MOUNT_EXHAUST_COUNT) {
+            if (dpVal == GameConfig.getServerInt("mount_exhaust_count")) {
                 if (!chr.runTirednessSchedule()) {
                     continue;
                 }
@@ -1737,7 +1738,7 @@ public class World {
 
             if (!chr.isAwayFromWorld()) {
                 int c = e.getValue();
-                c = (c + 1) % YamlConfig.config.server.MAP_DAMAGE_OVERTIME_COUNT;
+                c = (c + 1) % GameConfig.getServerInt("map_damage_overtime_count");
                 playerHpDec.replace(chr, c);
 
                 if (c == 0) {

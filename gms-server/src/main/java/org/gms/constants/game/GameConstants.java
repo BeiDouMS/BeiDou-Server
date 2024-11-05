@@ -2,7 +2,7 @@ package org.gms.constants.game;
 
 import org.gms.client.Disease;
 import org.gms.client.Job;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.constants.skills.Aran;
 import org.gms.provider.*;
@@ -33,7 +33,7 @@ public class GameConstants {
     private static final int[] jobUpgradeBlob = {1, 20, 60, 110, 190};
     private static final int[] jobUpgradeSpUp = {0, 1, 2, 3, 6};
     private final static Map<Integer, String> jobNames = new HashMap<>();
-    private final static NumberFormat nfParser = NumberFormat.getInstance(YamlConfig.config.server.USE_UNITPRICE_WITH_COMMA ? Locale.FRANCE : Locale.UK);
+    private final static NumberFormat nfParser = NumberFormat.getInstance(GameConfig.getServerBoolean("use_unit_price_with_comma") ? Locale.FRANCE : Locale.UK);
 
     public static final Disease[] CPQ_DISEASES = {Disease.SLOW, Disease.SEDUCE, Disease.STUN, Disease.POISON,
             Disease.SEAL, Disease.DARKNESS, Disease.WEAKEN, Disease.CURSE};

@@ -40,8 +40,8 @@ function action(mode, type, selection) {
         }
 
         if (status == 0) {
-            const YamlConfig = Java.type('org.gms.config.YamlConfig');
-            if (YamlConfig.config.server.USE_ENABLE_CUSTOM_NPC_SCRIPT) {
+            const GameConfig = Java.type('org.gms.config.GameConfig');
+            if (GameConfig.getServerBoolean("use_enable_custom_npc_script")) {
                 cm.openShopNPC(2082014);
             } else if (cm.isQuestStarted(3749)) {
                 cm.sendOk("We've already located the enemy's ultimate weapon! Follow along the ship's bow area ahead and you will find my sister #b#p2082013##k. Report to her for futher instructions on the mission.");

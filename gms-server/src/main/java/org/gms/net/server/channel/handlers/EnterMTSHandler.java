@@ -25,7 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Item;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -51,7 +51,7 @@ public final class EnterMTSHandler extends AbstractPacketHandler {
     public void handlePacket(InPacket p, Client c) {
         Character chr = c.getPlayer();
 
-        if (!YamlConfig.config.server.USE_MTS) {
+        if (!GameConfig.getServerBoolean("use_mts")) {
             openCenterScript(c);
             return;
         }

@@ -22,7 +22,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.DatabaseConnection;
@@ -52,7 +52,7 @@ public final class TransferNameHandler extends AbstractPacketHandler {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
-        if (!YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
+        if (!GameConfig.getServerBoolean("allow_cash_shop_name_change")) {
             c.sendPacket(PacketCreator.sendNameTransferRules(4));
             return;
         }
@@ -74,7 +74,7 @@ public final class TransferNameHandler extends AbstractPacketHandler {
                 if (completedTimestamp == null) { //has pending name request
                     c.sendPacket(PacketCreator.sendNameTransferRules(1));
                     return;
-                } else if (completedTimestamp.getTime() + YamlConfig.config.server.NAME_CHANGE_COOLDOWN > System.currentTimeMillis()) {
+                } else if (completedTimestamp.getTime() + GameConfig.getServerLong("name_change_cooldown") > System.currentTimeMillis()) {
                     c.sendPacket(PacketCreator.sendNameTransferRules(3));
                     return;
                 }

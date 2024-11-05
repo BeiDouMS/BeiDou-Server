@@ -23,7 +23,7 @@ package org.gms.net.server.handlers.login;
 
 import org.gms.client.Client;
 import org.gms.client.DefaultDates;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.PacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
@@ -61,11 +61,11 @@ public final class LoginPasswordHandler implements PacketHandler {
         Hwid hwid = new Hwid(HexTool.toCompactHexString(hwidNibbles));
         int loginok = c.login(login, pwd, hwid);
 
-        if (YamlConfig.config.server.AUTOMATIC_REGISTER && loginok == 5) {
+        if (GameConfig.getServerBoolean("automatic_register") && loginok == 5) {
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("INSERT INTO accounts (name, password, birthday, tempban) VALUES (?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS)) { //Jayd: Added birthday, tempban
                 ps.setString(1, login);
-                ps.setString(2, YamlConfig.config.server.BCRYPT_MIGRATION ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(pwd));
+                ps.setString(2, GameConfig.getServerBoolean("bcrypt_migration") ? BCrypt.hashpw(pwd, BCrypt.gensalt(12)) : BCrypt.hashpwSHA512(pwd));
                 ps.setDate(3, Date.valueOf(DefaultDates.getBirthday()));
                 ps.setTimestamp(4, Timestamp.valueOf(DefaultDates.getTempban()));
                 ps.executeUpdate();
@@ -82,7 +82,7 @@ public final class LoginPasswordHandler implements PacketHandler {
             }
         }
 
-        if (YamlConfig.config.server.BCRYPT_MIGRATION && (loginok <= -10)) { // -10 means migration to bcrypt, -23 means TOS wasn't accepted
+        if (GameConfig.getServerBoolean("bcrypt_migration") && (loginok <= -10)) { // -10 means migration to bcrypt, -23 means TOS wasn't accepted
             try (Connection con = DatabaseConnection.getConnection();
                  PreparedStatement ps = con.prepareStatement("UPDATE accounts SET password = ? WHERE name = ?;")) {
                 ps.setString(1, BCrypt.hashpw(pwd, BCrypt.gensalt(12)));

@@ -142,7 +142,6 @@
     if (['cash', 'consume', 'eqp', 'etc', 'ins', 'pet'].includes(type)) {
       imgType = 'item';
     }
-    console.log(imgType, ',', id);
     return getIconUrl(imgType, id);
   };
 

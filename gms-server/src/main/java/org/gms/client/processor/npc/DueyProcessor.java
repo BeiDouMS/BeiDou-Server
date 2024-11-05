@@ -32,7 +32,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.server.channel.Channel;
@@ -288,7 +288,7 @@ public class DueyProcessor {
     public static void dueySendItem(Client c, byte invTypeId, short itemPos, short amount, int sendMesos, String sendMessage, String recipient, boolean quick) {
         if (c.tryacquireClient()) {
             try {
-                if (c.getPlayer().isGM() && c.getPlayer().gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_USE_DUEY) {
+                if (c.getPlayer().isGM() && c.getPlayer().gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_use_duey")) {
                     c.getPlayer().message("You cannot use Duey to send items at your GM level.");
                     log.info(String.format("GM %s tried to send a package to %s", c.getPlayer().getName(), recipient));
                     c.sendPacket(PacketCreator.sendDueyMSG(DueyProcessor.Actions.TOCLIENT_SEND_INCORRECT_REQUEST.getCode()));
@@ -464,7 +464,7 @@ public class DueyProcessor {
         if (c.tryacquireClient()) {
             try {
                 long timeNow = System.currentTimeMillis();
-                if (timeNow - c.getPlayer().getNpcCooldown() < YamlConfig.config.server.BLOCK_NPC_RACE_CONDT) {
+                if (timeNow - c.getPlayer().getNpcCooldown() < GameConfig.getServerInt("block_npc_race_condition")) {
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }

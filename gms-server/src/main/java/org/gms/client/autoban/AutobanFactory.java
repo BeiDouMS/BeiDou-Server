@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.client.autoban;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.gms.util.PacketCreator;
 import org.slf4j.Logger;
@@ -93,20 +93,20 @@ public enum AutobanFactory {
     }
 
     public void alert(Character chr, String reason) {
-        if (YamlConfig.config.server.USE_AUTOBAN) {
+        if (GameConfig.getServerBoolean("use_auto_ban")) {
             if (chr != null && isIgnored(chr.getId())) {
                 return;
             }
             Server.getInstance().broadcastGMMessage((chr != null ? chr.getWorld() : 0), PacketCreator.sendYellowTip((chr != null ? Character.makeMapleReadable(chr.getName()) : "") + " caused " + this.name() + " " + reason));
         }
-        if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
+        if (GameConfig.getServerBoolean("use_auto_ban_log")) {
             final String chrName = chr != null ? Character.makeMapleReadable(chr.getName()) : "";
             log.info("Autoban alert - chr {} caused {}-{}", chrName, this.name(), reason);
         }
     }
 
     public void autoban(Character chr, String value) {
-        if (YamlConfig.config.server.USE_AUTOBAN) {
+        if (GameConfig.getServerBoolean("use_auto_ban")) {
             chr.autoBan("Autobanned for (" + this.name() + ": " + value + ")");
             //chr.sendPolice("You will be disconnected for (" + this.name() + ": " + value + ")");
         }

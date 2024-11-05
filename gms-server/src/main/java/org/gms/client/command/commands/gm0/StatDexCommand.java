@@ -26,7 +26,7 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 public class StatDexCommand extends Command {
@@ -48,10 +48,10 @@ public class StatDexCommand extends Command {
                 return;
             }
         } else {
-            amount = Math.min(remainingAp, YamlConfig.config.server.MAX_AP - player.getDex());
+            amount = Math.min(remainingAp, GameConfig.getServerInt("max_ap") - player.getDex());
         }
         if (!player.assignDex(Math.max(amount, 0))) {
-            player.dropMessage(I18nUtil.getMessage("StatStrCommand.message3",  YamlConfig.config.server.MAX_AP));
+            player.dropMessage(I18nUtil.getMessage("StatStrCommand.message3",  GameConfig.getServerInt("max_ap")));
         }
     }
 }

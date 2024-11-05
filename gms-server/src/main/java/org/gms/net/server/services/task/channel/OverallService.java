@@ -19,7 +19,7 @@
 */
 package org.gms.net.server.services.task.channel;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.services.BaseScheduler;
 import org.gms.net.server.services.BaseService;
 
@@ -28,17 +28,17 @@ import org.gms.net.server.services.BaseService;
  */
 public class OverallService extends BaseService {   // thanks Alex for suggesting a refactor over the several channel schedulers unnecessarily populating the Channel class
 
-    private final OverallScheduler[] channelSchedulers = new OverallScheduler[YamlConfig.config.server.CHANNEL_LOCKS];
+    private final OverallScheduler[] channelSchedulers = new OverallScheduler[GameConfig.getServerInt("channel_locks")];
 
     public OverallService() {
-        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+        for (int i = 0; i < GameConfig.getServerInt("channel_locks"); i++) {
             channelSchedulers[i] = new OverallScheduler();
         }
     }
 
     @Override
     public void dispose() {
-        for (int i = 0; i < YamlConfig.config.server.CHANNEL_LOCKS; i++) {
+        for (int i = 0; i < GameConfig.getServerInt("channel_locks"); i++) {
             if (channelSchedulers[i] != null) {
                 channelSchedulers[i].dispose();
                 channelSchedulers[i] = null;

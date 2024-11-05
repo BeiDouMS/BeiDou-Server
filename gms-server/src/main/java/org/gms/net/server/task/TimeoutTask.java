@@ -1,7 +1,7 @@
 package org.gms.net.server.task;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class TimeoutTask extends BaseTask implements Runnable {
         long time = System.currentTimeMillis();
         Collection<Character> chars = wserv.getPlayerStorage().getAllCharacters();
         for (Character chr : chars) {
-            if (time - chr.getClient().getLastPacket() > YamlConfig.config.server.TIMEOUT_DURATION) {
+            if (time - chr.getClient().getLastPacket() > GameConfig.getServerLong("timeout_duration")) {
                 log.info("Chr {} auto-disconnected due to inactivity", chr.getName());
                 chr.getClient().disconnect(true, chr.getCashShop().isOpened());
             }

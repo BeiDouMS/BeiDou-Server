@@ -26,7 +26,7 @@ package org.gms.client.command.commands.gm0;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.command.Command;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.I18nUtil;
 
 public class ShowRatesCommand extends Command {
@@ -69,7 +69,7 @@ public class ShowRatesCommand extends Command {
         }
         showMsg += I18nUtil.getMessage("ShowRatesCommand.message22") + "#e#b" + player.getBossDropRate() + "x#k#n" + "\r\n";
 
-        if (YamlConfig.config.server.USE_QUEST_RATE) {
+        if (GameConfig.getServerBoolean("use_quest_rate")) {
             showMsg += "\r\n#e" + I18nUtil.getMessage("ShowRatesCommand.message23") + "#n\r\n";
             showMsg += I18nUtil.getMessage("ShowRatesCommand.message24") + "#e#b" + c.getWorldServer().getQuestRate() + "x#k#n" + "\r\n";
         }

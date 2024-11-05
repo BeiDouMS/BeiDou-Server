@@ -29,7 +29,7 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.dao.entity.CharactersDO;
@@ -92,7 +92,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         if (ItemConstants.isCashStore(cItem.getItemId()) && chr.getLevel() < 16) {
                             c.enableCSActions();
                             return;
-                        } else if (ItemConstants.isRateCoupon(cItem.getItemId()) && !YamlConfig.config.server.USE_SUPPLY_RATE_COUPONS) {
+                        } else if (ItemConstants.isRateCoupon(cItem.getItemId()) && !GameConfig.getServerBoolean("use_supply_rate_coupons")) {
                             chr.dropMessage(1, "Rate coupons are currently unavailable to purchase.");
                             c.enableCSActions();
                             return;
@@ -419,7 +419,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     }
-                    if (cItem.getSn() == 50600000 && YamlConfig.config.server.ALLOW_CASHSHOP_NAME_CHANGE) {
+                    if (cItem.getSn() == 50600000 && GameConfig.getServerBoolean("allow_cash_shop_name_change")) {
                         p.readString(); //old name
                         String newName = p.readString();
                         if (!Character.canCreateChar(newName) || chr.getLevel() < 10) { //(longest ban duration isn't tracked currently)
@@ -448,7 +448,7 @@ public final class CashOperationHandler extends AbstractPacketHandler {
                         c.enableCSActions();
                         return;
                     }
-                    if (cItem.getSn() == 50600001 && YamlConfig.config.server.ALLOW_CASHSHOP_WORLD_TRANSFER) {
+                    if (cItem.getSn() == 50600001 && GameConfig.getServerBoolean("allow_cash_shop_world_transfer")) {
                         int newWorldSelection = p.readInt();
 
                         int worldTransferError = chr.checkWorldTransferEligibility();

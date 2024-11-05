@@ -29,12 +29,13 @@ import org.gms.client.SkillFactory;
 import org.gms.client.command.CommandsExecutor;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.ItemFactory;
+import org.gms.config.GameConfig;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.PlayernpcsFieldDO;
 import org.gms.util.*;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
@@ -175,7 +176,7 @@ public class Server {
     }
 
     public void updateCurrentTime() {
-        serverCurrentTime = currentTime.addAndGet(YamlConfig.config.server.UPDATE_INTERVAL);
+        serverCurrentTime = currentTime.addAndGet(GameConfig.getServerLong("update_interval"));
     }
 
     public long forceUpdateCurrentTime() {
@@ -300,9 +301,9 @@ public class Server {
 
         String[] hostAddress = getIP(world, channel).split(":");
         if (IpAddresses.isLocalAddress(remoteIp)) {
-            hostAddress[0] = YamlConfig.config.server.LOCALHOST;
+            hostAddress[0] = GameConfig.getServerString("localhost");
         } else if (IpAddresses.isLanAddress(remoteIp)) {
-            hostAddress[0] = YamlConfig.config.server.LANHOST;
+            hostAddress[0] = GameConfig.getServerString("lan_host");
         }
 
         try {
@@ -329,7 +330,7 @@ public class Server {
             }
 
             channelid = channelInfo.size();
-            if (channelid >= YamlConfig.config.server.CHANNEL_SIZE) {
+            if (channelid >= GameConfig.getServerInt("max_channel_size")) {
                 return -2;
             }
 
@@ -340,7 +341,7 @@ public class Server {
         }
 
         Channel channel = new Channel(worldid, channelid, getCurrentTime());
-        channel.setServerMessage(YamlConfig.config.worlds.get(worldid).why_am_i_recommended);
+        channel.setServerMessage(GameConfig.getWorldString(worldid, "recommend_message"));
 
         if (world.addChannel(channel)) {
             wldWLock.lock();
@@ -382,7 +383,7 @@ public class Server {
         try {
             i = worlds.size();
 
-            if (i >= YamlConfig.config.server.WLDLIST_SIZE) {
+            if (i >= GameConfig.getServerInt("max_world_size")) {
                 return -1;
             }
         } finally {
@@ -391,24 +392,24 @@ public class Server {
 
         log.info(I18nUtil.getLogMessage("Server.initWorld.info1"), i);
 
-        float expRate = YamlConfig.config.worlds.get(i).exp_rate;
-        float mesoRate = YamlConfig.config.worlds.get(i).meso_rate;
-        float dropRate = YamlConfig.config.worlds.get(i).drop_rate;
-        float bossDropRate = YamlConfig.config.worlds.get(i).boss_drop_rate;
-        float questRate = YamlConfig.config.worlds.get(i).quest_rate;
-        float travelRate = YamlConfig.config.worlds.get(i).travel_rate;
-        float fishingRate = YamlConfig.config.worlds.get(i).fishing_rate;
+        float expRate = GameConfig.getWorldFloat(i, "exp_rate");
+        float mesoRate = GameConfig.getWorldFloat(i, "meso_rate");
+        float dropRate = GameConfig.getWorldFloat(i, "drop_rate");
+        float bossDropRate = GameConfig.getWorldFloat(i, "boss_drop_rate");
+        float questRate = GameConfig.getWorldFloat(i, "quest_rate");
+        float travelRate = GameConfig.getWorldFloat(i, "travel_rate");
+        float fishingRate = GameConfig.getWorldFloat(i, "fishing_rate");
 
-        int flag = YamlConfig.config.worlds.get(i).flag;
-        String event_message = YamlConfig.config.worlds.get(i).event_message;
-        String why_am_i_recommended = YamlConfig.config.worlds.get(i).why_am_i_recommended;
+        int flag = GameConfig.getWorldInt(i, "flag");
+        String event_message = GameConfig.getWorldString(i, "event_message");
+        String recommend_message = GameConfig.getWorldString(i, "recommend_message");
 
         World world = new World(i, flag, event_message, expRate, dropRate, bossDropRate, mesoRate, questRate,
                 travelRate, fishingRate);
 
         Map<Integer, String> channelInfo = new HashMap<>();
         long bootTime = getCurrentTime();
-        for (int j = 1; j <= YamlConfig.config.worlds.get(i).channels; j++) {
+        for (int j = 1; j <= GameConfig.getWorldInt(i, "channel_size"); j++) {
             Channel channel = new Channel(i, j, bootTime);
 
             world.addChannel(channel);
@@ -421,7 +422,7 @@ public class Server {
         try {
             canDeploy = world.getId() == worlds.size();
             if (canDeploy) {
-                worldRecommendedList.add(new Pair<>(i, why_am_i_recommended));
+                worldRecommendedList.add(new Pair<>(i, recommend_message));
                 worlds.add(world);
                 channels.add(i, channelInfo);
             }
@@ -430,7 +431,7 @@ public class Server {
         }
 
         if (canDeploy) {
-            world.setServerMessage(YamlConfig.config.worlds.get(i).server_message);
+            world.setServerMessage(GameConfig.getWorldString(i, "server_message"));
 
             log.info(I18nUtil.getLogMessage("Server.initWorld.info2"), i);
             return i;
@@ -629,7 +630,7 @@ public class Server {
     public List<Pair<String, Integer>> getWorldPlayerRanking(int worldid) {
         wldRLock.lock();
         try {
-            return new ArrayList<>(playerRanking.get(!YamlConfig.config.server.USE_WHOLE_SERVER_RANKING ? worldid : 0));
+            return new ArrayList<>(playerRanking.get(!GameConfig.getServerBoolean("use_whole_server_ranking") ? worldid : 0));
         } finally {
             wldRLock.unlock();
         }
@@ -677,10 +678,10 @@ public class Server {
         }
         log.info(I18nUtil.getLogMessage("Server.init.info3"));
 
-        TimeZone.setDefault(TimeZone.getTimeZone(YamlConfig.config.server.TIMEZONE));
+        TimeZone.setDefault(TimeZone.getTimeZone(GameConfig.getServerString("timezone")));
 
         log.info(I18nUtil.getLogMessage("Server.init.info4"));
-        final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, YamlConfig.config.server.WORLDS);
+        final int worldCount = Math.min(GameConstants.WORLD_NAMES.length, GameConfig.getConfig().getJSONObject("world").size());
 
         // 重置登录状态和雇佣商店状态
         accountService.resetAllLoggedIn();
@@ -721,7 +722,7 @@ public class Server {
             // world初始化后需要加载的
             reloadWorldsPlayerRanking();
             loadPlayerNpcMapStepFromDb();
-            if (YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+            if (GameConfig.getServerBoolean("use_family_system")) {
                 familyService.loadAllFamilies();
             }
         } catch (Exception e) {
@@ -729,8 +730,8 @@ public class Server {
             System.exit(0);
         }
 
-        loginServer = initLoginServer(YamlConfig.config.server.LOGIN_PORT);
-        log.info(I18nUtil.getLogMessage("Server.init.info6"), YamlConfig.config.server.LOGIN_PORT);
+        loginServer = initLoginServer(GameConfig.getServerInt("login_port"));
+        log.info(I18nUtil.getLogMessage("Server.init.info6"), GameConfig.getServerInt("login_port"));
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance().loadCommandsExecutor();
@@ -772,7 +773,7 @@ public class Server {
         disconnectIdlesOnLoginTask();
 
         long timeLeft = getTimeLeftForNextHour();
-        tMan.register(new CharacterDiseaseTask(), YamlConfig.config.server.UPDATE_INTERVAL, YamlConfig.config.server.UPDATE_INTERVAL);
+        tMan.register(new CharacterDiseaseTask(), GameConfig.getServerLong("update_interval"), GameConfig.getServerLong("update_interval"));
         tMan.register(new CouponTask(), HOURS.toMillis(1), timeLeft);
         tMan.register(new RankingCommandTask(), MINUTES.toMillis(5), MINUTES.toMillis(5));
         tMan.register(new RankingLoginTask(), HOURS.toMillis(1), timeLeft);
@@ -781,7 +782,7 @@ public class Server {
         tMan.register(new LoginStorageTask(), MINUTES.toMillis(2), MINUTES.toMillis(2));
         tMan.register(new DueyFredrickTask(channelDependencies.fredrickProcessor()), HOURS.toMillis(1), timeLeft);
         tMan.register(new InvitationTask(), SECONDS.toMillis(30), SECONDS.toMillis(30));
-        tMan.register(new RespawnTask(), YamlConfig.config.server.RESPAWN_INTERVAL, YamlConfig.config.server.RESPAWN_INTERVAL);
+        tMan.register(new RespawnTask(), GameConfig.getServerLong("respawn_interval"), GameConfig.getServerLong("respawn_interval"));
 
         timeLeft = getTimeLeftForNextDay();
         ExpeditionBossLog.resetBossLogTable();
@@ -1504,7 +1505,7 @@ public class Server {
     }
 
     public boolean validateCharacteridInTransition(Client client, int charId) {
-        if (!YamlConfig.config.server.USE_IP_VALIDATION) {
+        if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return true;
         }
 
@@ -1520,7 +1521,7 @@ public class Server {
     }
 
     public Integer freeCharacteridInTransition(Client client) {
-        if (!YamlConfig.config.server.USE_IP_VALIDATION) {
+        if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return null;
         }
 
@@ -1535,7 +1536,7 @@ public class Server {
     }
 
     public boolean hasCharacteridInTransition(Client client) {
-        if (!YamlConfig.config.server.USE_IP_VALIDATION) {
+        if (!GameConfig.getServerBoolean("use_ip_validation")) {
             return true;
         }
 

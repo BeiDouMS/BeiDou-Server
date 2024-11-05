@@ -27,7 +27,7 @@ import org.gms.client.inventory.Inventory;
 import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.manager.ServerManager;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.StatEffect;
@@ -137,7 +137,7 @@ public class PetAutopotProcessor {
                         incMp = Math.ceil(maxMp * stat.getMpRate());
                     }
 
-                    if (YamlConfig.config.server.USE_SERVER_AUTOPOT) { // 服务端同步警戒线
+                    if (GameConfig.getServerBoolean("use_server_auto_pot")) { // 服务端同步警戒线
                         if (hasHpGain) {
                             double hpRatio = (hpMpAlertService.getHpAlertPer(chr.getId()) * maxHp) - curHp;
                             if (hpRatio > 0.0) {
@@ -151,16 +151,16 @@ public class PetAutopotProcessor {
                                 qtyCount = Math.max(qtyCount, (int) Math.ceil(mpRatio / incMp));
                             }
                         }
-                    } else if (YamlConfig.config.server.USE_COMPULSORY_AUTOPOT) { // 原 HMS 方案
+                    } else if (GameConfig.getServerBoolean("use_compulsory_auto_pot")) { // 原 HMS 方案
                         if (hasHpGain) {
-                            double hpRatio = (YamlConfig.config.server.PET_AUTOHP_RATIO * maxHp) - curHp;
+                            double hpRatio = (GameConfig.getServerFloat("pet_auto_hp_ratio") * maxHp) - curHp;
                             if (hpRatio > 0.0) {
                                 qtyCount = (int) Math.ceil(hpRatio / incHp);
                             }
                         }
 
                         if (hasMpGain) {
-                            double mpRatio = ((YamlConfig.config.server.PET_AUTOMP_RATIO * maxMp) - curMp);
+                            double mpRatio = ((GameConfig.getServerFloat("pet_auto_mp_ratio") * maxMp) - curMp);
                             if (mpRatio > 0.0) {
                                 qtyCount = Math.max(qtyCount, (int) Math.ceil(mpRatio / incMp));
                             }

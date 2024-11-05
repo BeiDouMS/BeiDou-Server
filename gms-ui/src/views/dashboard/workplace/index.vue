@@ -51,7 +51,13 @@
             >
               {{ $t('workplace.button.shutdown') }}
             </a-button>
-            <a-modal v-model:visible="visible" @ok="handleOk">
+            <a-modal
+              v-model:visible="visible"
+              :width="450"
+              draggable
+              :ok-button-props="{ status: 'danger' }"
+              @ok="handleOk"
+            >
               <template #title>
                 {{ $t('workplace.button.shutdown') }}
               </template>

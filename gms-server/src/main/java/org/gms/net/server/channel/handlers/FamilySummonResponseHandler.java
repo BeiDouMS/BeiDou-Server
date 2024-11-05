@@ -4,7 +4,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.FamilyEntitlement;
 import org.gms.client.FamilyEntry;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
@@ -18,7 +18,7 @@ public class FamilySummonResponseHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_family_system")) {
             return;
         }
         p.readString(); //family name

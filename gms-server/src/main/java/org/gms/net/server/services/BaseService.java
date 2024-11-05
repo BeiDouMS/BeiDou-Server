@@ -19,7 +19,7 @@
 */
 package org.gms.net.server.services;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 
 /**
  * @author Ronan
@@ -27,7 +27,7 @@ import org.gms.config.YamlConfig;
 public abstract class BaseService {
 
     protected static int getChannelSchedulerIndex(int mapid) {
-        int section = 1000000000 / YamlConfig.config.server.CHANNEL_LOCKS;
+        int section = 1000000000 / GameConfig.getServerInt("channel_locks");
         return mapid / section;
     }
 

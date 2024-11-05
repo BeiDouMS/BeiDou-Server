@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.util.PacketCreator;
@@ -43,7 +43,7 @@ public final class MesoDropHandler extends AbstractPacketHandler {
         p.skip(4);
         int meso = p.readInt();
 
-        if (player.isGM() && player.gmLevel() < YamlConfig.config.server.MINIMUM_GM_LEVEL_TO_DROP) {
+        if (player.isGM() && player.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_drop")) {
             player.message("You cannot drop mesos at your GM level.");
             return;
         }

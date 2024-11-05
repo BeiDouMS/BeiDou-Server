@@ -23,7 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
@@ -77,11 +77,11 @@ public final class PartyOperationHandler extends AbstractPacketHandler {
                 String name = p.readString();
                 Character invited = world.getPlayerStorage().getCharacterByName(name);
                 if (invited != null) {
-                    if (invited.getLevel() < 10 && (!YamlConfig.config.server.USE_PARTY_FOR_STARTERS || player.getLevel() >= 10)) { //min requirement is level 10
+                    if (invited.getLevel() < 10 && (!GameConfig.getServerBoolean("use_party_for_starters") || player.getLevel() >= 10)) { //min requirement is level 10
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));
                         return;
                     }
-                    if (YamlConfig.config.server.USE_PARTY_FOR_STARTERS && invited.getLevel() >= 10 && player.getLevel() < 10) {    //trying to invite high level
+                    if (GameConfig.getServerBoolean("use_party_for_starters") && invited.getLevel() >= 10 && player.getLevel() < 10) {    //trying to invite high level
                         c.sendPacket(PacketCreator.serverNotice(5, "The player you have invited does not meet the requirements."));
                         return;
                     }

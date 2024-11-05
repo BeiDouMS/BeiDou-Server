@@ -25,7 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.client.Family;
 import org.gms.client.FamilyEntry;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
@@ -50,7 +50,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (!YamlConfig.config.server.USE_FAMILY_SYSTEM) {
+        if (!GameConfig.getServerBoolean("use_family_system")) {
             return;
         }
         Character chr = c.getPlayer();
@@ -83,7 +83,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                         if (targetFamily.getLeader() != targetEntry) {
                             return;
                         }
-                        if (inviter.getFamily().getTotalGenerations() + targetFamily.getTotalGenerations() <= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
+                        if (inviter.getFamily().getTotalGenerations() + targetFamily.getTotalGenerations() <= GameConfig.getServerInt("family_max_generations")) {
                             targetEntry.join(inviter.getFamilyEntry());
                         } else {
                             inviter.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
@@ -92,7 +92,7 @@ public final class AcceptFamilyHandler extends AbstractPacketHandler {
                         }
                     }
                 } else { // create new family
-                    if (chr.getFamily() != null && inviter.getFamily() != null && chr.getFamily().getTotalGenerations() + inviter.getFamily().getTotalGenerations() >= YamlConfig.config.server.FAMILY_MAX_GENERATIONS) {
+                    if (chr.getFamily() != null && inviter.getFamily() != null && chr.getFamily().getTotalGenerations() + inviter.getFamily().getTotalGenerations() >= GameConfig.getServerInt("family_max_generations")) {
                         inviter.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
                         chr.sendPacket(PacketCreator.sendFamilyMessage(76, 0));
                         return;

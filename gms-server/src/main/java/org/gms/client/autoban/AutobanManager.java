@@ -6,7 +6,7 @@
 package org.gms.client.autoban;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class AutobanManager {
     }
 
     public void addPoint(AutobanFactory fac, String reason) {
-        if (YamlConfig.config.server.USE_AUTOBAN) {
+        if (GameConfig.getServerBoolean("use_auto_ban")) {
             if (chr.isGM() || chr.isBanned()) {
                 return;
             }
@@ -60,7 +60,7 @@ public class AutobanManager {
                 chr.autoBan(reason);
             }
         }
-        if (YamlConfig.config.server.USE_AUTOBAN_LOG) {
+        if (GameConfig.getServerBoolean("use_auto_ban_log")) {
             // Lets log every single point too.
             log.info("Autoban - chr {} caused {} {}", Character.makeMapleReadable(chr.getName()), fac.name(), reason);
         }
@@ -118,7 +118,7 @@ public class AutobanManager {
         if (this.timestamp[type] == time) {
             this.timestampcounter[type]++;
             if (this.timestampcounter[type] >= times) {
-                if (YamlConfig.config.server.USE_AUTOBAN) {
+                if (GameConfig.getServerBoolean("use_auto_ban")) {
                     chr.getClient().disconnect(false, false);
                 }
 

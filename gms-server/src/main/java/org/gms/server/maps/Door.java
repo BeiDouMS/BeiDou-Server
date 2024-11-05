@@ -22,7 +22,7 @@
 package org.gms.server.maps;
 
 import org.gms.client.Character;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.server.services.task.channel.OverallService;
 import org.gms.net.server.services.type.ChannelServices;
 import org.gms.util.Pair;
@@ -51,7 +51,7 @@ public class Door {
         this.target = owner.getMap();
 
         if (target.canDeployDoor(targetPosition)) {
-            if (YamlConfig.config.server.USE_ENFORCE_MDOOR_POSITION) {
+            if (GameConfig.getServerBoolean("use_enforce_mystic_door_position")) {
                 posStatus = target.getDoorPositionStatus(targetPosition);
             }
 

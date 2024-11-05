@@ -44,10 +44,10 @@ function action(mode, type, selection) {
             status--;
         }
         if (status == 0) {
-            const YamlConfig = Java.type('org.gms.config.YamlConfig');
+            const GameConfig = Java.type('org.gms.config.GameConfig');
             if (cm.haveItem(4001086)) {
                 cm.sendYesNo("Do you want to access #b#m240050400##k right now?");
-            } else if (YamlConfig.config.server.USE_ENABLE_SOLO_EXPEDITIONS) {
+            } else if (GameConfig.getServerBoolean("use_enable_solo_expeditions")) {
                 if (canBypassHTPQ()) {
                     cm.sendYesNo("Do you want to access #b#m240050400##k right now?");
                 } else {

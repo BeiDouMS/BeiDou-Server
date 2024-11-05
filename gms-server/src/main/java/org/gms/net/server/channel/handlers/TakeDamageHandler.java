@@ -32,7 +32,7 @@ import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.status.MonsterStatus;
 import org.gms.client.status.MonsterStatusEffect;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.skills.Aran;
@@ -199,7 +199,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
         }
 
         //in dojo player cannot use pot, so deadly attacks should be turned off as well
-        if (is_deadly && MapId.isDojo(chr.getMap().getId()) && !YamlConfig.config.server.USE_DEADLY_DOJO) {
+        if (is_deadly && MapId.isDojo(chr.getMap().getId()) && !GameConfig.getServerBoolean("use_deadly_dojo")) {
             damage = 0;
             mpattack = 0;
         }
@@ -284,7 +284,7 @@ public final class TakeDamageHandler extends AbstractPacketHandler {
             map.broadcastGMMessage(chr, PacketCreator.damagePlayer(damagefrom, monsteridfrom, chr.getId(), damage, fake, direction, is_pgmr, pgmr, is_pg, oid, pos_x, pos_y), false);
         }
         if (MapId.isDojo(map.getId())) {
-            chr.setDojoEnergy(chr.getDojoEnergy() + YamlConfig.config.server.DOJO_ENERGY_DMG);
+            chr.setDojoEnergy(chr.getDojoEnergy() + GameConfig.getServerInt("dojo_energy_dmg"));
             c.sendPacket(PacketCreator.getEnergy("energy", chr.getDojoEnergy()));
         }
 

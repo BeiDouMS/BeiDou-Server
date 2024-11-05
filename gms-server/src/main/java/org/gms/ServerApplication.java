@@ -3,7 +3,6 @@ package org.gms;
 import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.gms.property.ServerProperty;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -176,6 +175,7 @@ public class ServerApplication {
                 return;
             }
         }
+        System.out.println("    注意：因为部分参数已变动，并非所有参数能匹配并更新成功！");
 
         System.out.println(step.incrementAndGet() + ".正在生成sql");
         StringBuilder updateSql = new StringBuilder();
@@ -184,29 +184,124 @@ public class ServerApplication {
             if (world.getFloat("exp_rate") == null) {
                 continue;
             }
-            updateSql.append("update world_prop set ")
-                    .append("flag = ").append(world.getIntValue("flag")).append(", ")
-                    .append("server_message = '").append(world.getString("server_message")).append("', ")
-                    .append("event_message = '").append(world.getString("event_message")).append("', ")
-                    .append("recommend_message = '").append(world.getString("why_am_i_recommended")).append("', ")
-                    .append("channel_size = ").append(world.getIntValue("channels")).append(", ")
-                    .append("exp_rate = ").append(world.getFloat("exp_rate")).append(", ")
-                    .append("meso_rate = ").append(world.getFloat("meso_rate")).append(", ")
-                    .append("drop_rate = ").append(world.getFloat("drop_rate")).append(", ")
-                    .append("boss_drop_rate = ").append(world.getFloat("boss_drop_rate")).append(", ")
-                    .append("quest_rate = ").append(world.getFloat("quest_rate")).append(", ")
-                    .append("fishing_rate = ").append(world.getFloat("fishing_rate")).append(", ")
-                    .append("travel_rate = ").append(world.getFloat("travel_rate")).append(", ")
-                    .append("level_exp_rate = ").append(world.getFloat("level_exp_rate")).append(", ")
-                    .append("quick_level = ").append(world.getFloat("quick_level")).append(", ")
-                    .append("quick_level_exp_rate = ").append(world.getFloat("quick_level_exp_rate")).append(" ")
-                    .append("where id = ").append(i).append(";\n");
+            for (Map.Entry<String, Object> entry : world.entrySet()) {
+                String configCode = entry.getKey().toLowerCase();
+                if ("why_am_i_recommended".equals(configCode)) {
+                    configCode = "recommend_message";
+                }
+                if ("channels".equals(configCode)) {
+                    configCode = "channel_size";
+                }
+                updateSql.append("update game_config set ")
+                        .append("config_value = '")
+                        .append(entry.getValue())
+                        .append("' where config_type = 'world' and config_sub_type = '")
+                        .append(i)
+                        .append("' and config_code = '")
+                        .append(configCode)
+                        .append("';\n");
+            }
         }
         for (Map.Entry<String, Object> entry : server.entrySet()) {
-            Class<?> type = ServerProperty.class.getDeclaredField(entry.getKey()).getType();
-            updateSql.append("update server_prop set ")
-                            .append("prop_value = '").append(Map.class.isAssignableFrom(type) ? JSONObject.toJSONString(entry.getValue()) : entry.getValue()).append("' ")
-                            .append("where prop_code = '").append(entry.getKey()).append("';\n");
+            String configCode = entry.getKey().toLowerCase();
+            if ("wldlist_size".equals(configCode)) {
+                configCode = "max_world_size";
+            }
+            if ("channel_size".equals(configCode)) {
+                configCode = "max_channel_size";
+            }
+            if ("channel_load".equals(configCode)) {
+                configCode = "channel_capacity";
+            }
+            if ("host".equals(configCode)) {
+                configCode = "wan_host";
+            }
+            if ("lanhost".equals(configCode)) {
+                configCode = "lan_host";
+            }
+            if ("use_debug_show_rcvd_mvlife".equals(configCode)) {
+                configCode = "use_debug_show_life_move";
+            }
+            if (configCode.startsWith("use_maxrange")) {
+                configCode = configCode.replace("use_maxrange", "use_max_range");
+            }
+            if (configCode.contains("charslot")) {
+                configCode = configCode.replace("charslot", "chr_slot");
+            }
+            if (configCode.contains("multiclient")) {
+                configCode = configCode.replace("multiclient", "multi_client");
+            }
+            if (configCode.contains("keyset")) {
+                configCode = configCode.replace("keyset", "key_set");
+            }
+            if (configCode.contains("eqpexp")) {
+                configCode = configCode.replace("eqpexp", "eqp_exp");
+            }
+            if (configCode.contains("autoassign")) {
+                configCode = configCode.replace("autoassign", "auto_assign");
+            }
+            if (configCode.contains("autoban")) {
+                configCode = configCode.replace("autoban", "auto_ban");
+            }
+            if (configCode.contains("openshop")) {
+                configCode = configCode.replace("openshop", "open_shop");
+            }
+            if (configCode.contains("shopitemsold")) {
+                configCode = configCode.replace("shopitemsold", "shop_item_sold");
+            }
+            if (configCode.contains("cashshop")) {
+                configCode = configCode.replace("cashshop", "cash_shop");
+            }
+            if (configCode.contains("atkup")) {
+                configCode = configCode.replace("atkup", "atk_up");
+            }
+            if (configCode.contains("unitprice")) {
+                configCode = configCode.replace("unitprice", "unit_price");
+            }
+            if (configCode.contains("buffstat")) {
+                configCode = configCode.replace("buffstat", "buff_stat");
+            }
+            if (configCode.contains("autoaggro")) {
+                configCode = configCode.replace("autoaggro", "auto_aggro");
+            }
+            if (configCode.contains("chscroll")) {
+                configCode = configCode.replace("chscroll", "chaos_scroll");
+            }
+            if (configCode.contains("skillset")) {
+                configCode = configCode.replace("skillset", "skill_set");
+            }
+            if (configCode.contains("equipmnt")) {
+                configCode = configCode.replace("equipmnt", "equipment");
+            }
+            if (configCode.contains("lvlup")) {
+                configCode = configCode.replace("lvlup", "level_up");
+            }
+            if (configCode.contains("levelup")) {
+                configCode = configCode.replace("levelup", "level_up");
+            }
+            if (configCode.contains("extraheal")) {
+                configCode = configCode.replace("extraheal", "extra_heal");
+            }
+            if (configCode.contains("autopot")) {
+                configCode = configCode.replace("autopot", "auto_pot");
+            }
+            if (configCode.contains("autohp")) {
+                configCode = configCode.replace("autohp", "auto_hp");
+            }
+            if (configCode.contains("automp")) {
+                configCode = configCode.replace("automp", "auto_mp");
+            }
+            Object configValue = entry.getValue();
+            if ("npcs_scriptable".equalsIgnoreCase(entry.getKey())) {
+                configValue = JSONObject.toJSONString(entry.getValue());
+            }
+            updateSql.append("update game_config set ")
+                    .append("config_value = '")
+                    .append(configValue)
+                    .append("' where config_type = 'server'")
+                    .append(" and config_code = '")
+                    .append(configCode)
+                    .append("';\n");
         }
         String[] updateArr = updateSql.toString().split("\n");
 
@@ -214,7 +309,7 @@ public class ServerApplication {
         for (String str : updateArr) {
             try(PreparedStatement statement = connection.prepareStatement(str)) {
                 System.out.println("    执行更新：" + str);
-                statement.executeUpdate();
+//                statement.executeUpdate();
             }
         }
 

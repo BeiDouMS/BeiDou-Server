@@ -6,5 +6,6 @@ export default {
   'workplace.button.stop': '停止服务',
   'workplace.button.restart': '重启服务',
   'workplace.button.shutdown': '停服',
-  'workplace.button.shutdown.confirm': '确定停服吗？',
+  'workplace.button.shutdown.confirm':
+    '此操作将立即停止所有相关服务，需要在服务器中手动启动服务，确定停服吗？',
 };

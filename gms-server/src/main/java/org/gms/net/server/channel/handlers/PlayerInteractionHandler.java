@@ -29,7 +29,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
@@ -374,7 +374,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
-                    if (YamlConfig.config.server.USE_ERASE_PERMIT_ON_OPENSHOP) {
+                    if (GameConfig.getServerBoolean("use_erase_permit_on_open_shop")) {
                         try {
                             InventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
                         } catch (RuntimeException re) {
@@ -651,7 +651,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
 
                     c.sendPacket(PacketCreator.updateHiredMerchant(merchant, chr));
 
-                    if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) {
+                    if (GameConfig.getServerBoolean("use_enforce_merchant_save")) {
                         chr.saveCharToDB(false);
                     }
 

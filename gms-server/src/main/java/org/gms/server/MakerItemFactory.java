@@ -21,7 +21,7 @@
 */
 package org.gms.server;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.EquipType;
 import org.gms.util.Pair;
 
@@ -74,7 +74,7 @@ public class MakerItemFactory {
     }
 
     private static double getMakerStimulantFee(int itemid) {
-        if (YamlConfig.config.server.USE_MAKER_FEE_HEURISTICS) {
+        if (GameConfig.getServerBoolean("use_maker_fee_heuristics")) {
             EquipType et = EquipType.getEquipTypeById(itemid);
             int eqpLevel = ii.getEquipLevelReq(itemid);
 
@@ -109,7 +109,7 @@ public class MakerItemFactory {
     }
 
     private static double getMakerReagentFee(int itemid, int reagentLevel) {
-        if (YamlConfig.config.server.USE_MAKER_FEE_HEURISTICS) {
+        if (GameConfig.getServerBoolean("use_maker_fee_heuristics")) {
             EquipType et = EquipType.getEquipTypeById(itemid);
             int eqpLevel = ii.getEquipLevelReq(itemid);
 

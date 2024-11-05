@@ -28,7 +28,7 @@ import org.gms.client.Client;
 import org.gms.client.command.Command;
 import org.gms.client.inventory.Pet;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.server.ItemInformationProvider;
 import org.gms.util.I18nUtil;
@@ -62,7 +62,7 @@ public class ItemCommand extends Command {
             quantity = Short.parseShort(params[1]);
         }
 
-        if (YamlConfig.config.server.BLOCK_GENERATE_CASH_ITEM && ii.isCash(itemId)) {
+        if (GameConfig.getServerBoolean("block_generate_cash_item") && ii.isCash(itemId)) {
             player.yellowMessage(I18nUtil.getMessage("ItemCommand.message4"));
             return;
         }

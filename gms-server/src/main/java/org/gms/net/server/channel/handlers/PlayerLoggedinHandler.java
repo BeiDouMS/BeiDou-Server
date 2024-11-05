@@ -21,6 +21,7 @@
  */
 package org.gms.net.server.channel.handlers;
 
+import com.alibaba.fastjson2.TypeReference;
 import org.gms.client.BuddyList;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.Character;
@@ -37,7 +38,7 @@ import org.gms.client.inventory.InventoryType;
 import org.gms.client.inventory.Item;
 import org.gms.client.inventory.Pet;
 import org.gms.client.keybind.KeyBinding;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.manager.ServerManager;
 import org.gms.net.AbstractPacketHandler;
@@ -71,13 +72,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
@@ -230,7 +226,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             // 增加参数判断，避免给客户端发未知包导致异常
-            if (YamlConfig.config.server.USE_SERVER_AUTOPOT) {
+            if (GameConfig.getServerBoolean("use_server_auto_pot")) {
                 // 同步HP MP提醒 考虑上面player.newClient(c)，如果在此之前发包，可能会造成错误
                 player.broadcastAcquaintances(PacketCreator.updateHpMpAlert(hpMpAlertService.getHpAlert(player.getId()), hpMpAlertService.getMpAlert(player.getId())));
             }
@@ -251,7 +247,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
 
             c.sendPacket(PacketCreator.getCharInfo(player));
             if (!player.isHidden()) {
-                if (player.isGM() && YamlConfig.config.server.USE_AUTOHIDE_GM) {
+                if (player.isGM() && GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);
                 }
             }
@@ -395,7 +391,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 if (player.isGM()) {
                     Server.getInstance().broadcastGMMessage(c.getWorld(), PacketCreator.earnTitleMessage((player.gmLevel() < 6 ? "GM " : "Admin ") + player.getName() + " 登录了游戏"));
                 }else {
-                    if (YamlConfig.config.server.USE_ENABLE_LOGIN_NOTIFICATION) {
+                    if (GameConfig.getServerBoolean("use_login_notification")) {
                         String msg = I18nUtil.getMessage("Character.login.globalNotice", player.getName());
                         Server.getInstance().broadcastMessage(c.getWorld(), PacketCreator.serverNotice(3, c.getChannel(), msg));
                     }
@@ -425,7 +421,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             showDueyNotification(c, player);
 
             player.resetPlayerRates();
-            if (YamlConfig.config.server.USE_ADD_RATES_BY_LEVEL) {
+            if (GameConfig.getServerBoolean("use_add_rates_by_level")) {
                 player.setPlayerRates();
             }
 
@@ -452,18 +448,14 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             // Tell the client to use the custom scripts available for the NPCs provided, instead of the WZ entries.
-            if (YamlConfig.config.server.USE_NPCS_SCRIPTABLE) {
+            if (GameConfig.getServerBoolean("use_npcs_scriptable")) {
 
                 // Create a copy to prevent always adding entries to the server's list.
-                Map<Integer, String> npcsIds = YamlConfig.config.server.NPCS_SCRIPTABLE
-                        .entrySet().stream().collect(Collectors.toMap(
-                                Entry::getKey,
-                                Entry::getValue
-                        ));
+                Map<Integer, String> npcsIds = GameConfig.getServerObject("npcs_scriptable", new HashMap<>());
 
                 // Any npc be specified as the rebirth npc. Allow the npc to use custom scripts explicitly.
-                if (YamlConfig.config.server.USE_REBIRTH_SYSTEM) {
-                    npcsIds.put(YamlConfig.config.server.REBIRTH_NPC_ID, "Rebirth");
+                if (GameConfig.getServerBoolean("use_rebirth_system")) {
+                    npcsIds.put(GameConfig.getServerInt("rebirth_npc_id"), "Rebirth");
                 }
 
                 c.sendPacket(PacketCreator.setNPCScriptable(npcsIds));

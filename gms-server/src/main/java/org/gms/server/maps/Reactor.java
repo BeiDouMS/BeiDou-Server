@@ -23,7 +23,7 @@ package org.gms.server.maps;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.services.task.channel.OverallService;
 import org.gms.net.server.services.type.ChannelServices;
@@ -257,7 +257,7 @@ public class Reactor extends AbstractMapObject {
                     attackHit = wHit;
 
                     Character player = c.getPlayer();
-                    if (YamlConfig.config.server.USE_DEBUG && player.isGM()) {
+                    if (GameConfig.getServerBoolean("use_debug") && player.isGM()) {
                         player.dropMessage(5, "Hitted REACTOR " + this.getId() + " with POS " + charPos + " , STANCE " + stance + " , SkillID " + skillid + " , STATE " + state + " STATESIZE " + stats.getStateSize(state));
                     }
                     ReactorScriptManager.getInstance().onHit(c, this);

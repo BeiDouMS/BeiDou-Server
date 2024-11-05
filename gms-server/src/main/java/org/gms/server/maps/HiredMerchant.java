@@ -30,7 +30,7 @@ import org.gms.client.inventory.ItemFactory;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
 import org.gms.client.inventory.manipulator.KarmaManipulator;
 import org.gms.client.processor.npc.FredrickProcessor;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.Server;
 import org.gms.server.ItemInformationProvider;
@@ -258,7 +258,7 @@ public class HiredMerchant extends AbstractMapObject {
                 chr.sendPacket(PacketCreator.updateHiredMerchant(this, chr));
             }
 
-            if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) {
+            if (GameConfig.getServerBoolean("use_enforce_merchant_save")) {
                 chr.saveCharToDB(false);
             }
         }
@@ -313,7 +313,7 @@ public class HiredMerchant extends AbstractMapObject {
                         pItem.setDoesExist(false);
                     }
 
-                    if (YamlConfig.config.server.USE_ANNOUNCE_SHOPITEMSOLD) {   // idea thanks to Vcoc
+                    if (GameConfig.getServerBoolean("use_announce_shop_item_sold")) {   // idea thanks to Vcoc
                         announceItemSold(newItem, price, getQuantityLeft(pItem.getItem().getItemId()));
                     }
 
@@ -466,7 +466,7 @@ public class HiredMerchant extends AbstractMapObject {
                 }
             }
 
-            if (YamlConfig.config.server.USE_ENFORCE_MERCHANT_SAVE) {
+            if (GameConfig.getServerBoolean("use_enforce_merchant_save")) {
                 c.getPlayer().saveCharToDB(false);
             }
 

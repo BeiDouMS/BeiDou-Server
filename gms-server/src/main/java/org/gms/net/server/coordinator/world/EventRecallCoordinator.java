@@ -19,7 +19,7 @@
 */
 package org.gms.net.server.coordinator.world;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.scripting.event.EventInstanceManager;
 
 import java.util.LinkedList;
@@ -50,7 +50,7 @@ public class EventRecallCoordinator {
     }
 
     public void storeEventInstance(int characterId, EventInstanceManager eim) {
-        if (YamlConfig.config.server.USE_ENABLE_RECALL_EVENT && isRecallableEvent(eim)) {
+        if (GameConfig.getServerBoolean("use_enable_recall_event") && isRecallableEvent(eim)) {
             eventHistory.put(characterId, eim);
         }
     }

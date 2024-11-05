@@ -1,6 +1,6 @@
 package org.gms.server;
 
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.util.DatabaseConnection;
 
 import java.sql.Connection;
@@ -81,7 +81,7 @@ public class ExpLogger {
     }
 
     static {
-        if (YamlConfig.config.server.USE_EXP_GAIN_LOG) {
+        if (GameConfig.getServerBoolean("use_exp_gain_log")) {
             startExpLogger();
         }
     }

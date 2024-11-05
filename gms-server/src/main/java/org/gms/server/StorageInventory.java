@@ -22,7 +22,7 @@ package org.gms.server;
 import org.gms.client.Client;
 import org.gms.client.inventory.Equip;
 import org.gms.client.inventory.Item;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.inventory.ItemConstants;
 
 import java.util.*;
@@ -219,7 +219,7 @@ public class StorageInventory {
         }
 
         int invTypeCriteria = 1;
-        int sortCriteria = (YamlConfig.config.server.USE_ITEM_SORT_BY_NAME == true) ? 2 : 0;
+        int sortCriteria = GameConfig.getServerBoolean("use_item_sort_by_name") ? 2 : 0;
         PairedQuicksort pq = new PairedQuicksort(itemarray, sortCriteria, invTypeCriteria);
 
         inventory.clear();

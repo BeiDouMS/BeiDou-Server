@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package org.gms.client;
 
 import org.gms.client.inventory.InventoryType;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.MapId;
 import io.netty.channel.ChannelHandlerContext;
@@ -212,7 +212,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         short opcode = packet.readShort();
         final PacketHandler handler = packetProcessor.getHandler(opcode);
 
-        if (YamlConfig.config.server.USE_DEBUG_SHOW_RCVD_PACKET && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
+        if (GameConfig.getServerBoolean("use_debug_show_rcvd_packet") && !LoggingUtil.isIgnoredRecvPacket(opcode)) {
             log.info("Received packet id {}", String.format("0x%02X", opcode));
         }
 
@@ -593,7 +593,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean checkPin(String other) {
-        if (!(YamlConfig.config.server.ENABLE_PIN && !canBypassPin())) {
+        if (!(GameConfig.getServerBoolean("enable_pin") && !canBypassPin())) {
             return true;
         }
 
@@ -626,7 +626,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public boolean checkPic(String other) {
-        if (!(YamlConfig.config.server.ENABLE_PIC && !canBypassPic())) {
+        if (!(GameConfig.getServerBoolean("enable_pic") && !canBypassPic())) {
             return true;
         }
 
@@ -682,13 +682,13 @@ public class Client extends ChannelInboundHandlerAdapter {
                     if (getLoginState() > LOGIN_NOTLOGGEDIN) { // already loggedin
                         loggedIn = false;
                         loginok = 7;
-                    } else if (YamlConfig.config.server.USE_DEBUG && YamlConfig.config.server.NO_PASSWORD) {
+                    } else if (GameConfig.getServerBoolean("use_debug") && GameConfig.getServerBoolean("no_password")) {
                         return 0;
                     } else if (passhash.charAt(0) == '$' && passhash.charAt(1) == '2' && BCrypt.checkpw(pwd, passhash)) {
                         loginok = (tos == 0) ? 23 : 0;
                     } else if (pwd.equals(passhash) || checkHash(passhash, "SHA-1", pwd) || checkHash(passhash, "SHA-512", pwd)) {
                         // thanks GabrielSin for detecting some no-bcrypt inconsistencies here
-                        loginok = (tos == 0) ? (!YamlConfig.config.server.BCRYPT_MIGRATION ? 23 : -23) : (!YamlConfig.config.server.BCRYPT_MIGRATION ? 0 : -10); // migrate to bcrypt
+                        loginok = (tos == 0) ? (!GameConfig.getServerBoolean("bcrypt_migration") ? 23 : -23) : (!GameConfig.getServerBoolean("bcrypt_migration") ? 0 : -10); // migrate to bcrypt
                     } else {
                         loggedIn = false;
                         loginok = 4;
@@ -1045,7 +1045,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                     player.saveCharToDB(true);
 
                     player.logOff();
-                    if (YamlConfig.config.server.INSTANT_NAME_CHANGE) {
+                    if (GameConfig.getServerBoolean("instant_name_change")) {
                         player.doPendingNameChange();
                     }
                     clear();
@@ -1239,7 +1239,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     }
 
     public void checkChar(int accid) {  /// issue with multiple chars from same account login found by shavit, resinate
-        if (!YamlConfig.config.server.USE_CHARACTER_ACCOUNT_CHECK) {
+        if (!GameConfig.getServerBoolean("use_character_account_check")) {
             return;
         }
 
@@ -1526,7 +1526,7 @@ public class Client extends ChannelInboundHandlerAdapter {
          因为玩家登录时会优先取内存中的数据，没有才加载数据库，所以玩家切换频道取的是内存中的数据，而导致没有切换到ForcedReturnId对应的地图
          玩家反馈切换频道不传送ForcedReturnId对应的地图反而比较友好，所以该参数默认为false，想贴近官方可以设置为true
          */
-        if (YamlConfig.config.server.CHANGE_CHANNEL_FORCE_RETURN) {
+        if (GameConfig.getServerBoolean("change_channel_force_return")) {
             int returnedMapId;
             MapleMap map = player.getMap();
             if (map.getForcedReturnId() != MapId.NONE) {

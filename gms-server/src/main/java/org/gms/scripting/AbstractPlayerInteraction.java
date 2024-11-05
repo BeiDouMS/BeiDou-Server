@@ -25,7 +25,7 @@ import org.gms.client.Character;
 import org.gms.client.*;
 import org.gms.client.inventory.*;
 import org.gms.client.inventory.manipulator.InventoryManipulator;
-import org.gms.config.YamlConfig;
+import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.id.ItemId;
@@ -632,9 +632,9 @@ public class AbstractPlayerInteraction {
                         it.setUpgradeSlots(3);
                     }
 
-                    if (YamlConfig.config.server.USE_ENHANCED_CRAFTING && c.getPlayer().isUseCS()) {
+                    if (GameConfig.getServerBoolean("use_enhanced_crafting") && c.getPlayer().isUseCS()) {
                         Equip eqp = (Equip) item;
-                        if (!(c.getPlayer().isGM() && YamlConfig.config.server.USE_PERFECT_GM_SCROLL)) {
+                        if (!(c.getPlayer().isGM() && GameConfig.getServerBoolean("use_perfect_gm_scroll"))) {
                             eqp.setUpgradeSlots((byte) (eqp.getUpgradeSlots() + 1));
                         }
                         item = ItemInformationProvider.getInstance().scrollEquipWithId(item, ItemId.CHAOS_SCROll_60, true, ItemId.CHAOS_SCROll_60, c.getPlayer().isGM());
@@ -855,9 +855,10 @@ public class AbstractPlayerInteraction {
             }
             int base = PartyQuest.getExp(PQ, player.getLevel());
             int exp = base * bonus / 100;
-            player.gainExp(exp, true, true);
-            if (YamlConfig.config.server.PQ_BONUS_EXP_RATE > 0 && System.currentTimeMillis() <= YamlConfig.config.server.EVENT_END_TIMESTAMP) {
-                player.gainExp((int) (exp * YamlConfig.config.server.PQ_BONUS_EXP_RATE), true, true);
+            if (GameConfig.getServerFloat("pq_bonus_exp_rate") > 0) {
+                player.gainExp((int) (exp * GameConfig.getServerFloat("pq_bonus_exp_rate")), true, true);
+            } else {
+                player.gainExp(exp, true, true);
             }
         }
     }
@@ -1156,7 +1157,7 @@ public class AbstractPlayerInteraction {
     }
 
     public boolean canGetFirstJob(int jobType) {
-        if (YamlConfig.config.server.USE_AUTOASSIGN_STARTERS_AP) {
+        if (GameConfig.getServerBoolean("use_auto_assign_starters_ap")) {
             return true;
         }
 
