@@ -105,8 +105,8 @@
   const currentType = ref<string | number>(1);
   const currentCid = ref<number | undefined>(undefined);
   const currentCName = ref<string | undefined>(undefined);
-  const isOnline = ref<boolean | undefined>(undefined); // 新增变量
-  const inventoryVisible = ref(false); // 控制模态框显隐
+  const isOnline = ref<boolean | undefined>(undefined);
+  const inventoryVisible = ref(false);
 
   const loadType = async () => {
     const { data } = await getInventoryTypeList();
@@ -123,8 +123,8 @@
 
   const useCharacter = (cid: number, cName: string, onlineStatus: boolean) => {
     currentCid.value = cid;
-    currentCName.value = cName; // 存储 cName
-    isOnline.value = onlineStatus; // 存储在线状态
+    currentCName.value = cName;
+    isOnline.value = onlineStatus;
     tabChange(0);
   };
 
