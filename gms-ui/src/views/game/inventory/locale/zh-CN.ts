@@ -17,6 +17,7 @@ export default {
   'characterSelector.selectButton': '选择',
   'characterSelector.column.id': '角色ID',
   'characterSelector.column.name': '角色',
+  'characterSelector.column.onlineStatus': '在线状态',
   'characterSelector.column.operation': '操作',
   'inventoryList.column.id': 'ID',
   'inventoryList.column.characterId': '角色ID',

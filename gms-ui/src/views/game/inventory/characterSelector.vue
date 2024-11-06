@@ -14,6 +14,7 @@
 
   const ccId = ref<number | undefined>(undefined);
   const ccName = ref<string | undefined>(undefined);
+  const cOnlineStatus = ref<boolean | undefined>(false);
 
   const visible = ref(false);
   const openSelector = () => {
@@ -28,10 +29,11 @@
   };
 
   const emit = defineEmits(['useCharacter']);
-  const selectClick = (cid: number, cName: string) => {
+  const selectClick = (cid: number, cName: string, onlineStatus: boolean) => {
     ccId.value = cid;
     ccName.value = cName;
-    emit('useCharacter', cid, cName);
+    cOnlineStatus.value = onlineStatus;
+    emit('useCharacter', cid, cName, onlineStatus);
     visible.value = false;
   };
 </script>
@@ -93,12 +95,32 @@
           data-index="characterName"
           align="center"
         />
+        <a-table-column
+          :title="$t('characterSelector.column.onlineStatus')"
+          data-index="online"
+          align="center"
+        >
+          <template #cell="{ record }">
+            <a-tag v-if="record.onlineStatus" color="green"
+              >{{ $t('inventoryList.column.online') }}
+            </a-tag>
+            <a-tag v-else color="gray"
+              >{{ $t('inventoryList.column.offline') }}
+            </a-tag>
+          </template>
+        </a-table-column>
         <a-table-column :title="t('characterSelector.column.operation')">
           <template #cell="{ record }">
             <a-button
               type="primary"
               size="mini"
-              @click="selectClick(record.characterId, record.characterName)"
+              @click="
+                selectClick(
+                  record.characterId,
+                  record.characterName,
+                  record.onlineStatus
+                )
+              "
             >
               {{ t('characterSelector.selectButton') }}
             </a-button>

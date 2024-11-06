@@ -14,25 +14,25 @@
         align="center"
         :width="100"
       />
-      <a-table-column
-        :title="$t('inventoryList.column.characterId')"
-        data-index="characterId"
-        align="center"
-      />
-      <a-table-column
-        :title="$t('inventoryList.column.online')"
-        data-index="online"
-        align="center"
-      >
-        <template #cell="{ record }">
-          <a-tag v-if="record.online" color="green">{{
-            $t('inventoryList.column.online')
-          }}</a-tag>
-          <a-tag v-else color="gray">{{
-            $t('inventoryList.column.offline')
-          }}</a-tag>
-        </template>
-      </a-table-column>
+      <!--      <a-table-column-->
+      <!--        :title="$t('inventoryList.column.characterId')"-->
+      <!--        data-index="characterId"-->
+      <!--        align="center"-->
+      <!--      />-->
+      <!--      <a-table-column-->
+      <!--        :title="$t('inventoryList.column.online')"-->
+      <!--        data-index="online"-->
+      <!--        align="center"-->
+      <!--      >-->
+      <!--        <template #cell="{ record }">-->
+      <!--          <a-tag v-if="record.online" color="green">{{-->
+      <!--            $t('inventoryList.column.online')-->
+      <!--          }}</a-tag>-->
+      <!--          <a-tag v-else color="gray">{{-->
+      <!--            $t('inventoryList.column.offline')-->
+      <!--          }}</a-tag>-->
+      <!--        </template>-->
+      <!--      </a-table-column>-->
       <a-table-column
         :title="$t('inventoryList.column.itemId')"
         data-index="itemId"
