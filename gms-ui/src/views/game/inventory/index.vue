@@ -44,7 +44,7 @@
       :title="`${
         currentCid && currentCName ? `[${currentCid}][${currentCName}] - ` : ''
       }${t('inventory.placeholder.inventoryDraw')} (${t(
-        `${t(typeMap[currentType as keyof typeof typeMap])}`
+        typeMap[currentType as keyof typeof typeMap]
       )})`"
       :width="800"
       :footer="false"
