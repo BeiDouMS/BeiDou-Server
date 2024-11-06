@@ -15,7 +15,7 @@
           "
           @click="openInventoryUI(currentCid, currentType)"
         >
-          {{ t('inventory.placeholder.inventoryDraw') }}
+          {{ $t('inventory.placeholder.inventoryDraw') }}
         </a-button>
       </div>
       <a-tabs
@@ -43,7 +43,7 @@
       v-model:visible="inventoryVisible"
       :title="`${
         currentCid && currentCName ? `[${currentCid}][${currentCName}] - ` : ''
-      }${t('inventory.placeholder.inventoryDraw')} (${t(
+      }${$t('inventory.placeholder.inventoryDraw')} (${$t(
         typeMap[currentType as keyof typeof typeMap]
       )})`"
       :width="800"
@@ -59,7 +59,7 @@
       />
       <div style="display: flex; justify-content: flex-end; margin-top: 16px">
         <a-button type="primary" @click="handleOk"
-          >{{ t('inventory.placeholder.confirm') }}
+          >{{ $t('inventory.placeholder.confirm') }}
         </a-button>
       </div>
     </a-modal>
@@ -73,9 +73,6 @@
   import InventoryList from '@/views/game/inventory/table.vue';
   import CharacterSelector from '@/views/game/inventory/characterSelector.vue';
   import InventoryUI from '@/views/game/inventory/InventoryUI.vue';
-  import { useI18n } from 'vue-i18n';
-
-  const { t } = useI18n();
 
   const typeMap = {
     0: 'inventory.type.undefined',
@@ -102,9 +99,9 @@
   loadType();
 
   const tab = ref<number>(0);
-  const tabChange = (t: string | number) => {
-    currentType.value = t;
-    tab.value = t as number;
+  const tabChange = (key: string | number) => {
+    currentType.value = key;
+    tab.value = key as number;
   };
 
   const useCharacter = (cid: number, cName: string) => {

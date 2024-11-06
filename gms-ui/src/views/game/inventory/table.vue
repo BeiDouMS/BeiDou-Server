@@ -9,37 +9,37 @@
   >
     <template #columns>
       <a-table-column
-        :title="t('inventoryList.column.id')"
+        :title="$t('inventoryList.column.id')"
         data-index="id"
         align="center"
         :width="100"
       />
       <a-table-column
-        :title="t('inventoryList.column.characterId')"
+        :title="$t('inventoryList.column.characterId')"
         data-index="characterId"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.online')"
+        :title="$t('inventoryList.column.online')"
         data-index="online"
         align="center"
       >
         <template #cell="{ record }">
           <a-tag v-if="record.online" color="green">{{
-            t('inventoryList.column.online')
+            $t('inventoryList.column.online')
           }}</a-tag>
           <a-tag v-else color="gray">{{
-            t('inventoryList.column.offline')
+            $t('inventoryList.column.offline')
           }}</a-tag>
         </template>
       </a-table-column>
       <a-table-column
-        :title="t('inventoryList.column.itemId')"
+        :title="$t('inventoryList.column.itemId')"
         data-index="itemId"
         align="center"
         :width="130"
       />
-      <a-table-column :title="t('inventoryList.column.item')" align="center">
+      <a-table-column :title="$t('inventoryList.column.item')" align="center">
         <template #cell="{ record }">
           <a-popover placement="top">
             <template #content>
@@ -57,17 +57,17 @@
         </template>
       </a-table-column>
       <a-table-column
-        :title="t('inventoryList.column.itemType')"
+        :title="$t('inventoryList.column.itemType')"
         data-index="itemType"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.position')"
+        :title="$t('inventoryList.column.position')"
         data-index="position"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.quantity')"
+        :title="$t('inventoryList.column.quantity')"
         align="center"
         :width="160"
       >
@@ -79,27 +79,27 @@
         </template>
       </a-table-column>
       <a-table-column
-        :title="t('inventoryList.column.owner')"
+        :title="$t('inventoryList.column.owner')"
         data-index="owner"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.petId')"
+        :title="$t('inventoryList.column.petId')"
         data-index="petId"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.flag')"
+        :title="$t('inventoryList.column.flag')"
         data-index="flag"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.giftFrom')"
+        :title="$t('inventoryList.column.giftFrom')"
         data-index="giftFrom"
         align="center"
       />
       <a-table-column
-        :title="t('inventoryList.column.expiration')"
+        :title="$t('inventoryList.column.expiration')"
         align="center"
       >
         <template #cell="{ record }">
@@ -109,7 +109,10 @@
           <a-input-number v-else v-model="record.expiration" />
         </template>
       </a-table-column>
-      <a-table-column :title="t('inventoryList.column.operation')" :width="200">
+      <a-table-column
+        :title="$t('inventoryList.column.operation')"
+        :width="200"
+      >
         <template #cell="{ record }">
           <a-button
             v-if="editId !== record.id"
@@ -117,7 +120,7 @@
             size="mini"
             @click="editClick(record)"
           >
-            {{ t('inventoryList.button.edit') }}
+            {{ $t('inventoryList.button.edit') }}
           </a-button>
           <a-button
             v-if="editId === record.id"
@@ -126,7 +129,7 @@
             status="success"
             @click="saveClick(record)"
           >
-            {{ t('inventoryList.button.save') }}
+            {{ $t('inventoryList.button.save') }}
           </a-button>
           <a-button
             v-if="editId === record.id"
@@ -134,16 +137,16 @@
             size="mini"
             @click="editId = undefined"
           >
-            {{ t('inventoryList.button.cancel') }}
+            {{ $t('inventoryList.button.cancel') }}
           </a-button>
           <a-popconfirm
             v-if="editId !== record.id"
             type="error"
-            :content="t('inventoryList.confirm.delete')"
+            :content="$t('inventoryList.confirm.delete')"
             @ok="deleteClick(record)"
           >
             <a-button type="text" size="mini" status="danger">
-              {{ t('inventoryList.button.delete') }}
+              {{ $t('inventoryList.button.delete') }}
             </a-button>
           </a-popconfirm>
         </template>
@@ -166,13 +169,10 @@
   import { getIconUrl } from '@/utils/mapleStoryAPI';
   import InventoryEquipForm from '@/views/game/inventory/inventoryEquipForm.vue';
   import { timestampToChineseTime } from '@/utils/stringUtils';
-  import { useI18n } from 'vue-i18n';
-
   import beidouBook from '@/assets/2430033.png';
 
   const { setLoading, loading } = useLoading(false);
   const tableData = ref<InventoryState[]>([]);
-  const { t } = useI18n();
 
   const props = defineProps<{
     currentType: string | number;
