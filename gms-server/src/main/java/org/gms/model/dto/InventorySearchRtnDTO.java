@@ -1,5 +1,6 @@
 package org.gms.model.dto;
 
+import com.mybatisflex.annotation.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class InventorySearchRtnDTO {
     /**
      * 自增id，对应inventoryitemid
      */
+    @Column("inventoryitemid")
     private Long id;
     /**
      * 角色id
