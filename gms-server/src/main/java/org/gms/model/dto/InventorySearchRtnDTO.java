@@ -18,7 +18,6 @@ public class InventorySearchRtnDTO {
     /**
      * 自增id，对应inventoryitemid
      */
-    @Column("inventoryitemid")
     private Long id;
     /**
      * 角色id
