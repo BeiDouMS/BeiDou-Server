@@ -37,7 +37,7 @@
         :title="t('inventoryList.column.itemId')"
         data-index="itemId"
         align="center"
-        width="130"
+        :width="130"
       />
       <a-table-column :title="t('inventoryList.column.item')" align="center">
         <template #cell="{ record }">
