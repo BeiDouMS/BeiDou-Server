@@ -41,7 +41,11 @@
     <!-- 模态框 -->
     <a-modal
       v-model:visible="inventoryVisible"
-      :title="t('inventory.placeholder.inventoryDraw')"
+      :title="`${
+        currentCid && currentCName ? `[${currentCid}][${currentCName}] - ` : ''
+      }${t('inventory.placeholder.inventoryDraw')} (${t(
+        `${t(typeMap[currentType as keyof typeof typeMap])}`
+      )})`"
       :width="800"
       :footer="false"
       :draggable="true"
@@ -54,9 +58,9 @@
         :inventory-type="Number(currentType) || 1"
       />
       <div style="display: flex; justify-content: flex-end; margin-top: 16px">
-        <a-button type="primary" @click="handleOk">{{
-          t('inventory.placeholder.confirm')
-        }}</a-button>
+        <a-button type="primary" @click="handleOk"
+          >{{ t('inventory.placeholder.confirm') }}
+        </a-button>
       </div>
     </a-modal>
   </div>
@@ -73,9 +77,21 @@
 
   const { t } = useI18n();
 
+  const typeMap = {
+    0: 'inventory.type.undefined',
+    1: 'inventory.type.equipment',
+    2: 'inventory.type.consumable',
+    3: 'inventory.type.setting',
+    4: 'inventory.type.other',
+    5: 'inventory.type.cash',
+    6: 'inventory.type.canPickup',
+    7: 'inventory.type.equipped',
+  };
+
   const typeList = ref<InventoryTypeState[]>([]);
   const currentType = ref<string | number>(1);
   const currentCid = ref<number | undefined>(undefined);
+  const currentCName = ref<string | undefined>(undefined); // 新增一个 ref 来存储 cName
   const inventoryVisible = ref(false); // 控制模态框显隐
 
   const loadType = async () => {
@@ -91,8 +107,9 @@
     tab.value = t as number;
   };
 
-  const useCharacter = (cid: number) => {
+  const useCharacter = (cid: number, cName: string) => {
     currentCid.value = cid;
+    currentCName.value = cName; // 存储 cName
     tabChange(0);
   };
 
