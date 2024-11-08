@@ -82,25 +82,25 @@ public class GameConfig {
             World world = Server.getInstance().getWorld(index);
             switch (gameConfigDO.getConfigCode()) {
                 case "exp_rate":
-                    world.setExpRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setExpRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
                 case "meso_rate":
-                    world.setMesoRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setMesoRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
                 case "drop_rate":
-                    world.setDropRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setDropRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
                 case "boss_drop_rate":
-                    world.setBossDropRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setBossDropRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
                 case "quest_rate":
-                    world.setQuestRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setQuestRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
                 case "travel_rate":
-                    world.setTravelRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setTravelRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
                 case "fishing_rate":
-                    world.setFishingRate(Integer.parseInt(gameConfigDO.getConfigValue()));
+                    world.setFishingRate(Float.parseFloat(gameConfigDO.getConfigValue()));
                     break;
             }
         }
