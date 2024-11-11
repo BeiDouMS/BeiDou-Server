@@ -32,10 +32,10 @@ import org.gms.client.inventory.ItemFactory;
 import org.gms.config.GameConfig;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.PlayernpcsFieldDO;
+import org.gms.property.ServiceProperty;
 import org.gms.util.*;
 import org.gms.model.pojo.NewYearCardRecord;
 import org.gms.client.processor.npc.FredrickProcessor;
-import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.constants.net.OpcodeConstants;
@@ -156,6 +156,7 @@ public class Server {
     private static final FamilyService familyService = ServerManager.getApplicationContext().getBean(FamilyService.class);
     private static final NoteService noteService = ServerManager.getApplicationContext().getBean(NoteService.class);
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
+    private static final ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
 
     private Server() {
         ReadWriteLock worldLock = new ReentrantReadWriteLock(true);
@@ -301,9 +302,9 @@ public class Server {
 
         String[] hostAddress = getIP(world, channel).split(":");
         if (IpAddresses.isLocalAddress(remoteIp)) {
-            hostAddress[0] = GameConfig.getServerString("localhost");
+            hostAddress[0] = serviceProperty.getLocalhost();
         } else if (IpAddresses.isLanAddress(remoteIp)) {
-            hostAddress[0] = GameConfig.getServerString("lan_host");
+            hostAddress[0] = serviceProperty.getLanHost();
         }
 
         try {
@@ -730,8 +731,8 @@ public class Server {
             System.exit(0);
         }
 
-        loginServer = initLoginServer(GameConfig.getServerInt("login_port"));
-        log.info(I18nUtil.getLogMessage("Server.init.info6"), GameConfig.getServerInt("login_port"));
+        loginServer = initLoginServer(serviceProperty.getLoginPort());
+        log.info(I18nUtil.getLogMessage("Server.init.info6"), serviceProperty.getLoginPort());
 
         OpcodeConstants.generateOpcodeNames();
         CommandsExecutor.getInstance().loadCommandsExecutor();

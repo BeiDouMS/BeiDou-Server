@@ -1,5 +1,6 @@
 package org.gms.net.packet.logging;
 
+import org.gms.config.GameConfig;
 import org.gms.constants.net.OpcodeConstants;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -17,7 +18,7 @@ public class InPacketLogger extends ChannelInboundHandlerAdapter implements Pack
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        if (msg instanceof InPacket packet) {
+        if (GameConfig.getServerBoolean("use_debug_show_packet") && msg instanceof InPacket packet) {
             log(packet);
         }
 
