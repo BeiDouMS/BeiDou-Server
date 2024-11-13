@@ -160,7 +160,9 @@ function setup(level, lobbyid) {
     return eim;
 }
 
-function afterSetup(eim) {}
+function afterSetup(eim) {
+    eim.dropAllExclusiveItems();
+}
 
 function respawnStages(eim) {}
 
