@@ -8,6 +8,7 @@ import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
 import org.gms.service.ConfigService;
+import org.gms.util.Pair;
 
 import java.util.List;
 import java.util.function.Function;
@@ -77,7 +78,7 @@ public class GameConfig {
         valueProp.put("value", gameConfigDO.getConfigValue());
 
         // 手动重载不能重载的部分
-        if ("world".equals(gameConfigDO.getConfigType()) && gameConfigDO.getConfigCode().endsWith("_rate")) {
+        if ("world".equals(gameConfigDO.getConfigType())) {
             int index = Integer.parseInt(gameConfigDO.getConfigSubType());
             World world = Server.getInstance().getWorld(index);
             switch (gameConfigDO.getConfigCode()) {
@@ -101,6 +102,18 @@ public class GameConfig {
                     break;
                 case "fishing_rate":
                     world.setFishingRate(Float.parseFloat(gameConfigDO.getConfigValue()));
+                    break;
+                case "server_message":
+                    world.setServerMessage(GameConfig.getWorldString(index, "server_message"));
+                    break;
+                case "event_message":
+                    world.setServerMessage(GameConfig.getWorldString(index, "event_message"));
+                    break;
+                case "recommend_message":
+                    Server.getInstance().worldRecommendedList().set(index, new Pair<>(index, GameConfig.getWorldString(index, "recommend_message")));
+                    break;
+                case "flag":
+                    world.setFlag(GameConfig.getWorldByte(index, "flag"));
                     break;
             }
         }
