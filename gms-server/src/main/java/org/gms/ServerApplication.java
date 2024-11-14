@@ -82,13 +82,15 @@ public class ServerApplication {
         LinkedHashMap<String, Object> property = yaml.load(resource);
         JSONObject mybatisFlex = JSONObject.parse(JSONObject.toJSONString(property.get("mybatis-flex")));
         JSONObject datasource = mybatisFlex.getJSONObject("datasource").getJSONObject("mysql");
+        String driver = datasource.getString("driver-class-name");
         String dbUrl = datasource.getString("url");
+        String username = datasource.getString("username");
+        String password = datasource.getString("password");
         String urlPrefix = dbUrl.split("\\?")[0];
         String[] dbSplit = urlPrefix.split("/");
         String dbName = dbSplit[dbSplit.length - 1];
         String dbPrefix = urlPrefix.substring(0, urlPrefix.length() - dbName.length());
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection connection = DriverManager.getConnection(dbPrefix + "mysql", datasource.getString("username"), datasource.getString("password"))) {
+        try (Connection connection = getConnection(driver, dbPrefix + "mysql", username, password)) {
             PreparedStatement preparedStatement = connection.prepareStatement("SHOW DATABASES LIKE '" + dbName + "'");
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -99,6 +101,11 @@ public class ServerApplication {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         }
+    }
+
+    private static Connection getConnection(String driver, String url, String username, String password) throws Exception {
+        Class.forName(driver);
+        return DriverManager.getConnection(url, username, password);
     }
 
     private static void tool() {
@@ -153,6 +160,7 @@ public class ServerApplication {
         JSONObject datasource = JSONObject.parse(JSONObject.toJSONString(property.get("mybatis-flex")))
                 .getJSONObject("datasource")
                 .getJSONObject("mysql");
+        String driver = datasource.getString("driver-class-name");
         String dbUrl = datasource.getString("url");
         String dbUser = datasource.getString("username");
         String dbPass = datasource.getString("password");
@@ -161,7 +169,7 @@ public class ServerApplication {
         JSONObject server = gmsProperty.getJSONObject("server");
 
         System.out.println(step.incrementAndGet() + ".正在检查环境");
-        Connection connection = DriverManager.getConnection(dbUrl, dbUser, dbPass);
+        Connection connection = getConnection(driver, dbUrl, dbUser, dbPass);
         String version;
         try (PreparedStatement statement = connection.prepareStatement("select max(version) from flyway_schema_history");
              ResultSet resultSet = statement.executeQuery()) {
@@ -170,7 +178,7 @@ public class ServerApplication {
                 return;
             }
             version = resultSet.getString(1);
-            if ("1.5.3".compareTo(version) > 0) {
+            if ("1.5.5".compareTo(version) > 0) {
                 System.out.println("错误：请先启动一次服务，升级完成后再进行此操作！");
                 return;
             }
@@ -307,9 +315,9 @@ public class ServerApplication {
 
         System.out.println(step.incrementAndGet() + ".正在更新数据库");
         for (String str : updateArr) {
-            try(PreparedStatement statement = connection.prepareStatement(str)) {
+            try (PreparedStatement statement = connection.prepareStatement(str)) {
                 System.out.println("    执行更新：" + str);
-//                statement.executeUpdate();
+                statement.executeUpdate();
             }
         }
 

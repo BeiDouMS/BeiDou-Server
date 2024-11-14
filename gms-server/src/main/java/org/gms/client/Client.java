@@ -996,6 +996,8 @@ public class Client extends ChannelInboundHandlerAdapter {
 
             final World wserv = getWorldServer();   // obviously wserv is NOT null if this player was online on it
             try {
+                // 保存在线时间
+                player.updateOnlineTime();
                 removePlayer(wserv, this.serverTransition);
 
                 if (!(channel == -1 || shutdown)) {

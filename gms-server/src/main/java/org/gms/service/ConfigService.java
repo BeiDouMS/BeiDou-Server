@@ -4,6 +4,7 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import org.gms.config.GameConfig;
+import org.gms.constants.string.CharsetConstants;
 import org.gms.dao.entity.GameConfigDO;
 import org.gms.dao.mapper.GameConfigMapper;
 import org.gms.model.dto.ConfigTypeDTO;
@@ -46,7 +47,22 @@ public class ConfigService {
             queryWrapper.and(GAME_CONFIG_D_O.CONFIG_CODE.like(condition.getFilter()).or(GAME_CONFIG_D_O.CONFIG_DESC.like(condition.getFilter())));
         }
 
-        return gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
+        Page<GameConfigDO> page = gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
+        page.getRecords().forEach(record -> {
+            int start = record.getConfigDesc().indexOf("(");
+            int end = record.getConfigDesc().indexOf(")");
+            if (start == -1 || end == -1) {
+                return;
+            }
+            String desc;
+            if (CharsetConstants.isZhCN()) {
+                desc = record.getConfigDesc().substring(0, start);
+            } else {
+                desc = record.getConfigDesc().substring(start + 1, end);
+            }
+            record.setConfigDesc(desc);
+        });
+        return page;
     }
 
     @Transactional(rollbackFor = Exception.class)

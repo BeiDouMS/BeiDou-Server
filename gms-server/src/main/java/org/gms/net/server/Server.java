@@ -744,13 +744,6 @@ public class Server {
         log.info(I18nUtil.getLogMessage("Server.init.info8"));
         online = true;
         Duration initDuration = Duration.between(beforeInit, Instant.now());
-
-        //在线时间
-        Timer.WorldTimer.getInstance().start();
-        log.info(I18nUtil.getLogMessage("Server.init.info10"));
-        OnlineTimer(1);
-        log.info(I18nUtil.getLogMessage("Server.init.info11"));
-
         log.info(I18nUtil.getLogMessage("Server.init.info9"), initDuration.toMillis() / 1000.0);
     }
 
@@ -784,6 +777,7 @@ public class Server {
         tMan.register(new DueyFredrickTask(channelDependencies.fredrickProcessor()), HOURS.toMillis(1), timeLeft);
         tMan.register(new InvitationTask(), SECONDS.toMillis(30), SECONDS.toMillis(30));
         tMan.register(new RespawnTask(), GameConfig.getServerLong("respawn_interval"), GameConfig.getServerLong("respawn_interval"));
+        tMan.register(new OnlineTimeTask(), 5000, 5000);
 
         timeLeft = getTimeLeftForNextDay();
         ExpeditionBossLog.resetBossLogTable();
@@ -1661,49 +1655,4 @@ public class Server {
         nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
         return true;
     }
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public  void OnlineTimer(final int time)
-    {
-        Timer.WorldTimer.getInstance().register(new Runnable()
-        {
-            @Override
-            public void run() {
-                try {
-                    for (final Channel chan : getAllChannels())
-                    {
-                        for (final Character chr : chan.getPlayerStorage().getAllCharacters())
-                        {
-                            if (chr != null)
-                            {
-                                if (chr.getCurrentOnlieTime() == -1)
-                                {
-                                    chr.UpdateCurrentOnlineTimeFromDB();
-                                }
-                                else
-                                {
-                                    final Calendar sqlcal = Calendar.getInstance();
-                                    int iHour = sqlcal.get(Calendar.HOUR_OF_DAY);
-                                    int iMinutes = sqlcal.get(Calendar.MINUTE);
-                                    if ( (iHour == 0) && (iMinutes < 30) || (iHour == 23 ) && ( (59 > iMinutes) && (iMinutes > 45) ) )
-                                    {//凌晨到30无法积累时间且刷新为0
-                                        chr.setCurrentOnlieTime(0);
-                                        chr.getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", "0", true);
-                                        //log.info(I18nUtil.getLogMessage("Server.initWorld.note1"));
-                                    }
-                                    chr.addOnlineTime(1);
-                                }
-                            }
-
-                        }
-                    }
-                } catch (Exception ie) {
-                    log.error(I18nUtil.getLogMessage("Server.initWorld.error2"));
-                }
-            }
-        }, (long) (60000 * time));
-    }
-
-
 }

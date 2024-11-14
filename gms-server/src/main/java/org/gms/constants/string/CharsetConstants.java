@@ -13,6 +13,7 @@ package org.gms.constants.string;
  * CharsetConstants
  */
 
+import lombok.Getter;
 import org.gms.manager.ServerManager;
 import org.gms.property.ServiceProperty;
 
@@ -31,6 +32,10 @@ public class CharsetConstants {
         return Locale.forLanguageTag(Language.fromLang(language).getLanguageTag());
     }
 
+    public static boolean isZhCN() {
+        return Language.LANGUAGE_CN == SERVICE_LANGUAGE;
+    }
+
     private static Language loadServiceLanguage() {
         ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
         String language = serviceProperty.getLanguage();
@@ -44,6 +49,7 @@ public class CharsetConstants {
     /**
      * @see LanguageConstants
      */
+    @Getter
     private enum Language {
         LANGUAGE_US(2, "US-ASCII", "en-US"),
         LANGUAGE_CN(3, "GBK", "zh-CN"),
@@ -60,16 +66,6 @@ public class CharsetConstants {
             this.charset = charset;
             this.languageTag = languageTag;
         }
-
-        public int getLang() {
-            return lang;
-        }
-
-        public String getCharset() {
-            return charset;
-        }
-
-        public String getLanguageTag() { return languageTag; }
 
         public static Language fromLang(int lang) {
             for (Language value : values()) {

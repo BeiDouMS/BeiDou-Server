@@ -146,7 +146,7 @@ public class World {
     @Setter
     @Getter
     private float fishingRate;
-    private final String eventmsg;
+    private String eventmsg;
     private final List<Channel> channels = new ArrayList<>();
     private final Map<Integer, Byte> pnpcStep = new HashMap<>();
     private final Map<Integer, Short> pnpcPodium = new HashMap<>();
@@ -371,6 +371,10 @@ public class World {
 
     public String getEventMessage() {
         return eventmsg;
+    }
+
+    public void setEventMessage(String eventMessage) {
+        this.eventmsg = eventMessage;
     }
 
     public void setExpRate(float exp) {

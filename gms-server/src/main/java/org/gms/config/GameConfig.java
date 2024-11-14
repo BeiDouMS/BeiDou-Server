@@ -107,7 +107,7 @@ public class GameConfig {
                     world.setServerMessage(GameConfig.getWorldString(index, "server_message"));
                     break;
                 case "event_message":
-                    world.setServerMessage(GameConfig.getWorldString(index, "event_message"));
+                    world.setEventMessage(GameConfig.getWorldString(index, "event_message"));
                     break;
                 case "recommend_message":
                     Server.getInstance().worldRecommendedList().set(index, new Pair<>(index, GameConfig.getWorldString(index, "recommend_message")));
