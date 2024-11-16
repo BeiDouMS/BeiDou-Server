@@ -35,6 +35,11 @@ spring:
   flyway:
     # 禁用版本验证
     validate-on-migrate: false
+  servlet:
+    # 默认文件大小就是这里设置的，按需修改
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 10MB
 
 gms:
   service:

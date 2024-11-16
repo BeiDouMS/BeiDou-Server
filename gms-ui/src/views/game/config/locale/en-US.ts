@@ -31,4 +31,9 @@ export default {
   'config.column.value': 'Value',
   'config.column.desc': 'Description',
   'config.column.operate': 'Operation',
+
+  'config.extra.import': 'Import from yml',
+  'config.extra.export': 'Export to yml',
+  'config.extra.import.warn':
+    'Warning: Service will automatic restart after import.  Please confirm that this operation will not cause any issues before proceeding!',
 };

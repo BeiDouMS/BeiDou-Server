@@ -12,4 +12,8 @@ export default {
   'button.delete': '删除',
   'button.detail': '详情',
   'button.add': '新增',
+  'button.import': '导入',
+  'button.export': '导出',
+  'button.upload': '上传',
+  'button.download': '下载',
 };

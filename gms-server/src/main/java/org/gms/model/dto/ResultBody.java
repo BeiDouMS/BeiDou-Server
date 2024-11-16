@@ -9,7 +9,6 @@ import org.gms.exception.BizExceptionEnum;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.BufferedReader;
-import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +19,6 @@ public class ResultBody<T> {
     private String message;
     private String responseId;
     private T data;
-    private final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
     public ResultBody() {
     }
@@ -62,8 +60,9 @@ public class ResultBody<T> {
 
     public static <T> ResultBody<T> error(HttpServletRequest req, Integer code, String message) {
         String method = req.getMethod();
+        String contentType = req.getContentType();
         ResultBody<T> rb = new ResultBody<>();
-        if (RequestMethod.POST.name().equals(method)) {
+        if (RequestMethod.POST.name().equals(method) && contentType.contains("application/json")) {
             StringBuilder body = new StringBuilder();
             try (BufferedReader reader = req.getReader()) {
                 String line;

@@ -12,4 +12,8 @@ export default {
   'button.delete': 'Delete',
   'button.detail': 'Detail',
   'button.add': 'Add',
+  'button.import': 'Import',
+  'button.export': 'Export',
+  'button.upload': 'Upload',
+  'button.download': 'Download',
 };
