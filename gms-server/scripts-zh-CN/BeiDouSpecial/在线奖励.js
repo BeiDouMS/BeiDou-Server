@@ -22,6 +22,7 @@ function start()
 	if (new Date() < limitDt) {
 		cm.sendOk("在线奖励正在初始化中，请稍后再试...");
 		cm.dispose();
+		return;
 	}
 	status = -1;
 	action(1, 0, 0);
