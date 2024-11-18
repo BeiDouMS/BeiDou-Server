@@ -17,8 +17,14 @@ var index = [0x01,0x10,0x100,0x1000,0x10000,0x100000,0x1000000];
 //Start
 function start() 
 {
-  status = -1;
-  action(1, 0, 0);
+	var limitDt = new Date();
+	limitDt.setHours(0, 0, 5, 0);
+	if (new Date() < limitDt) {
+		cm.sendOk("在线奖励正在初始化中，请稍后再试...");
+		cm.dispose();
+	}
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) 
