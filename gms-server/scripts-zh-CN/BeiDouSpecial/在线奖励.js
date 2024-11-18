@@ -19,7 +19,7 @@ function start()
 {
 	var limitDt = new Date();
 	limitDt.setHours(0, 0, 5, 0);
-	if (new Date() < limitDt) {
+	if (new Date() <= limitDt) {
 		cm.sendOk("在线奖励正在初始化中，请稍后再试...");
 		cm.dispose();
 		return;
