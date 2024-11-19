@@ -71,6 +71,9 @@ public class ConfigService {
 
         Page<GameConfigDO> page = gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
         page.getRecords().forEach(record -> {
+            if (record.getConfigType() == null) {
+                return;
+            }
             int start = record.getConfigDesc().indexOf("(");
             int end = record.getConfigDesc().indexOf(")");
             if (start == -1 || end == -1) {
