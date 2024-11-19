@@ -143,9 +143,10 @@ public class World {
     @Setter
     @Getter
     private float travelRate;
+    @Setter
     @Getter
     private float fishingRate;
-    private final String eventmsg;
+    private String eventmsg;
     private final List<Channel> channels = new ArrayList<>();
     private final Map<Integer, Byte> pnpcStep = new HashMap<>();
     private final Map<Integer, Short> pnpcPodium = new HashMap<>();
@@ -372,6 +373,10 @@ public class World {
         return eventmsg;
     }
 
+    public void setEventMessage(String eventMessage) {
+        this.eventmsg = eventMessage;
+    }
+
     public void setExpRate(float exp) {
         Collection<Character> list = getPlayerStorage().getAllCharacters();
 
@@ -428,10 +433,6 @@ public class World {
 
     public int getTransportationTime(int travelTime) {
         return NumberTool.floatToInt(travelTime / travelRate);
-    }
-
-    public void setFishingRate(int quest) {
-        this.fishingRate = quest;
     }
 
     public void loadAccountCharactersView(Integer accountId, List<Character> chars) {

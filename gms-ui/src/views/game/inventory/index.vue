@@ -15,7 +15,7 @@
           "
           @click="openInventoryUI(currentCid, currentType)"
         >
-          {{ t('inventory.placeholder.inventoryDraw') }}
+          {{ $t('inventory.placeholder.inventoryDraw') }}
         </a-button>
       </div>
       <a-tabs
@@ -41,7 +41,11 @@
     <!-- 模态框 -->
     <a-modal
       v-model:visible="inventoryVisible"
-      :title="t('inventory.placeholder.inventoryDraw')"
+      :title="`${
+        currentCid && currentCName ? `[${currentCid}][${currentCName}] - ` : ''
+      }${$t('inventory.placeholder.inventoryDraw')} (${$t(
+        typeMap[currentType as keyof typeof typeMap]
+      )})`"
       :width="800"
       :footer="false"
       :draggable="true"
@@ -54,9 +58,9 @@
         :inventory-type="Number(currentType) || 1"
       />
       <div style="display: flex; justify-content: flex-end; margin-top: 16px">
-        <a-button type="primary" @click="handleOk">{{
-          t('inventory.placeholder.confirm')
-        }}</a-button>
+        <a-button type="primary" @click="handleOk"
+          >{{ $t('inventory.placeholder.confirm') }}
+        </a-button>
       </div>
     </a-modal>
   </div>
@@ -69,13 +73,22 @@
   import InventoryList from '@/views/game/inventory/table.vue';
   import CharacterSelector from '@/views/game/inventory/characterSelector.vue';
   import InventoryUI from '@/views/game/inventory/InventoryUI.vue';
-  import { useI18n } from 'vue-i18n';
 
-  const { t } = useI18n();
+  const typeMap = {
+    0: 'inventory.type.undefined',
+    1: 'inventory.type.equipment',
+    2: 'inventory.type.consumable',
+    3: 'inventory.type.setting',
+    4: 'inventory.type.other',
+    5: 'inventory.type.cash',
+    6: 'inventory.type.canPickup',
+    '-1': 'inventory.type.equipped',
+  };
 
   const typeList = ref<InventoryTypeState[]>([]);
   const currentType = ref<string | number>(1);
   const currentCid = ref<number | undefined>(undefined);
+  const currentCName = ref<string | undefined>(undefined);
   const inventoryVisible = ref(false); // 控制模态框显隐
 
   const loadType = async () => {
@@ -86,13 +99,14 @@
   loadType();
 
   const tab = ref<number>(0);
-  const tabChange = (t: string | number) => {
-    currentType.value = t;
-    tab.value = t as number;
+  const tabChange = (key: string | number) => {
+    currentType.value = key;
+    tab.value = key as number;
   };
 
-  const useCharacter = (cid: number) => {
+  const useCharacter = (cid: number, cName: string) => {
     currentCid.value = cid;
+    currentCName.value = cName; // 存储 cName
     tabChange(0);
   };
 

@@ -23,8 +23,8 @@ package org.gms.net.server.channel;
 
 import org.gms.client.Character;
 import org.gms.config.GameConfig;
-import org.gms.config.GameConfig;
 import org.gms.constants.id.MapId;
+import org.gms.manager.ServerManager;
 import org.gms.net.netty.ChannelServer;
 import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerStorage;
@@ -35,6 +35,7 @@ import org.gms.net.server.services.type.ChannelServices;
 import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.World;
+import org.gms.property.ServiceProperty;
 import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,6 +124,7 @@ public final class Channel {
     private final Lock lock = new ReentrantLock(true);;
     private final Lock merchRlock;
     private final Lock merchWlock;
+    private static final ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
 
     public Channel(final int world, final int channel, long startTime) {
         this.world = world;
@@ -131,7 +133,7 @@ public final class Channel {
         this.ongoingStartTime = startTime + 10000;  // rude approach to a world's last channel boot time, placeholder for the 1st wedding reservation ever
         this.mapManager = new MapManager(null, world, channel);
         this.port = BASE_PORT + (this.channel - 1) + (world * 100);
-        this.ip = GameConfig.getServerString("wan_host") + ":" + port;
+        this.ip = serviceProperty.getWanHost() + ":" + port;
 
         ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock(true);
         this.merchRlock = rwLock.readLock();

@@ -35,6 +35,11 @@ spring:
   flyway:
     # 禁用版本验证
     validate-on-migrate: false
+  servlet:
+    # 默认文件大小就是这里设置的，按需修改
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 10MB
 
 gms:
   service:
@@ -49,3 +54,11 @@ gms:
       duration: 1000
       # 是否自动封禁
       auto-ban: false
+    # 公网ip
+    wan-host: 127.0.0.1
+    # 局域网ip
+    lan-host: 127.0.0.1
+    # 本地ip
+    localhost: 127.0.0.1
+    # 客户端登录端口
+    login-port: 8484

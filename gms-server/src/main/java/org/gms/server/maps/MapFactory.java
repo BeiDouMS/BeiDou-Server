@@ -120,6 +120,10 @@ public class MapFactory {
                 mobRespawnRate = 1;
                 mobTime = NumberTool.floatToInt(mobTime * mobTimeRate);
             }
+            // 如果是事件地图，刷新倍率保持不变
+            if (map.getEventInstance() != null) {
+                mobRespawnRate = 1;
+            }
 
             for (int i = 0; i < mobRespawnRate; i++) {
                 if (mobTime == -1) { //does not respawn, force spawn once

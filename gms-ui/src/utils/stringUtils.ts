@@ -1,3 +1,5 @@
+import { useI18n } from 'vue-i18n';
+
 /**
  * 判断一个变量是否为有效字符串，
  * 判断标准：
@@ -9,9 +11,18 @@ export function isValidString(data: any) {
   return typeof data === 'string' && data.trim() !== '';
 }
 
+/**
+ * 将时间戳转换为中文或英文时间字符串
+ * @param timestamp 时间戳
+ * @returns 格式化的时间字符串
+ */
 export function timestampToChineseTime(timestamp: number) {
-  if (timestamp === -1) return '永久';
-  // 创建一个 Date 对象，传入毫秒时间戳
+  const { locale } = useI18n();
+
+  if (timestamp === -1) {
+    return locale.value === 'en-US' ? 'Permanent' : '永久';
+  }
+
   const date = new Date(timestamp);
 
   // 获取年、月、日、时、分、秒
@@ -22,6 +33,13 @@ export function timestampToChineseTime(timestamp: number) {
   const minutes = date.getMinutes();
   const seconds = date.getSeconds();
 
-  // 格式化输出为中文时间字符串
+  // 根据语言环境返回不同的时间字符串
+  if (locale.value === 'en-US') {
+    return `${year}-${month.toString().padStart(2, '0')}-${day
+      .toString()
+      .padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
   return `${year}年${month}月${day}日 ${hours}时${minutes}分${seconds}秒`;
 }

@@ -11,7 +11,11 @@ import org.gms.model.dto.GameConfigReqDTO;
 import org.gms.model.dto.ResultBody;
 import org.gms.model.dto.SubmitBody;
 import org.gms.service.ConfigService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -65,5 +69,19 @@ public class ConfigController {
     public ResultBody<Object> deleteConfigList(@RequestBody SubmitBody<List<Long>> request) {
         configService.deleteConfigList(request.getData());
         return ResultBody.success(null);
+    }
+
+    @Tag(name = "/config/" + ApiConstant.LATEST)
+    @Operation(summary = "从yml导入参数")
+    @PostMapping(value = "/" + ApiConstant.LATEST + "/importYml", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResultBody<Object> importYml(@RequestParam("file") MultipartFile file) {
+        return ResultBody.success(configService.importYml(file));
+    }
+
+    @Tag(name = "/config/" + ApiConstant.LATEST)
+    @Operation(summary = "从yml导入参数")
+    @GetMapping("/" + ApiConstant.LATEST + "/exportYml")
+    public ResponseEntity<Resource> exportYml() {
+        return configService.exportYml();
     }
 }

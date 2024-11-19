@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 public class ServiceProperty {
     private String language;
     private RateLimitProperty rateLimit;
+    private String wanHost;
+    private String lanHost;
+    private String localhost;
+    private int loginPort;
 
     @Data
     public static class RateLimitProperty {

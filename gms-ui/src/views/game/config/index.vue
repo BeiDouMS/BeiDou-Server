@@ -29,35 +29,49 @@
             </a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item>
-          <a-space>
-            <a-input
-              v-model="condition.filter"
-              :placeholder="$t('config.placeholder.filter')"
-            />
-            <a-button type="primary" @click="searchData">
-              {{ $t('button.search') }}
-            </a-button>
-            <a-button @click="resetSearch">
-              {{ $t('button.reset') }}
-            </a-button>
-            <a-button
-              type="primary"
-              status="success"
-              :disabled="selectedKeys.length > 0"
-              @click="addClick"
-            >
-              {{ $t('button.add') }}
-            </a-button>
-            <a-button
-              type="primary"
-              status="danger"
-              :disabled="selectedKeys.length === 0"
-              @click="delClick"
-            >
-              {{ $t('button.delete') }}
-            </a-button>
-          </a-space>
+        <a-form-item :hide-label="true">
+          <a-row :wrap="false">
+            <a-col :span="15" :offset="0">
+              <a-space>
+                <a-input
+                  v-model="condition.filter"
+                  :placeholder="$t('config.placeholder.filter')"
+                />
+                <a-button type="primary" @click="searchData">
+                  {{ $t('button.search') }}
+                </a-button>
+                <a-button @click="resetSearch">
+                  {{ $t('button.reset') }}
+                </a-button>
+                <a-button
+                  type="primary"
+                  status="success"
+                  :disabled="selectedKeys.length > 0"
+                  @click="addClick"
+                >
+                  {{ $t('button.add') }}
+                </a-button>
+                <a-button
+                  type="primary"
+                  status="danger"
+                  :disabled="selectedKeys.length === 0"
+                  @click="delClick"
+                >
+                  {{ $t('button.delete') }}
+                </a-button>
+              </a-space>
+            </a-col>
+            <a-col :span="6" :offset="3">
+              <a-space>
+                <a-button type="primary" @click="importClick">
+                  {{ $t('config.extra.import') }}
+                </a-button>
+                <a-button type="primary" @click="exportClick">
+                  {{ $t('config.extra.export') }}
+                </a-button>
+              </a-space>
+            </a-col>
+          </a-row>
         </a-form-item>
       </a-space>
       <a-table
@@ -199,7 +213,9 @@
           >
             <a-select v-model="editData.configClazz">
               <a-option
-                v-for="clzType in clzTypes"
+                v-for="clzType in editData.id != null && editData.id != 0
+                  ? clzFull
+                  : clzTypes"
                 :key="clzType"
                 :value="clzType"
               >
@@ -249,6 +265,31 @@
         </template>
         <div>{{ $t('config.confirm.text') }}</div>
       </a-modal>
+      <a-modal
+        v-model:visible="importVisible"
+        :width="450"
+        draggable
+        :ok-text="$t('button.upload')"
+        @ok="importOk"
+      >
+        <template #title>
+          {{ $t('config.extra.import') }}
+        </template>
+        <div>
+          <p style="color: red; font-size: 16px">
+            {{ $t('config.extra.import.warn') }}
+          </p>
+        </div>
+        <a-upload
+          ref="uploadRef"
+          :auto-upload="false"
+          :limit="1"
+          action="/config/v1/importYml"
+          :custom-request="customRequest"
+          :file-list="fileList"
+          @success="uploadSuccess"
+        />
+      </a-modal>
     </a-card>
   </div>
 </template>
@@ -263,9 +304,12 @@
     getConfigList,
     getConfigTypeList,
     updateConfig,
+    importYml,
+    exportYml,
   } from '@/api/config';
   import { useI18n } from 'vue-i18n';
   import useLoading from '@/hooks/loading';
+  import { FileItem, RequestOption } from '@arco-design/web-vue';
 
   const { t } = useI18n();
   const types = ref<string[]>([]);
@@ -300,7 +344,18 @@
     'java.lang.Float',
     'java.lang.Boolean',
   ]);
+  const clzFull = ref<string[]>([
+    ...clzTypes.value,
+    'java.lang.Long',
+    'java.lang.Byte',
+    'java.lang.Short',
+    'java.lang.Double',
+    'java.util.Map',
+  ]);
   const confirmVisible = ref<boolean>(false);
+  const importVisible = ref<boolean>(false);
+  const uploadRef = ref();
+  const fileList = ref<FileItem[]>([]);
 
   const loadTypes = async () => {
     const { data } = await getConfigTypeList();
@@ -354,15 +409,21 @@
   };
 
   const loadConfigs = async () => {
-    const param = {
-      ...condition.value,
-      type: condition.value.type === 'all' ? '' : condition.value.type,
-      subType: condition.value.subType === 'All' ? '' : condition.value.subType,
-    };
-    const { data } = await getConfigList(param);
-    configList.value = data.records;
-    total.value = data.totalRow;
-    selectedKeys.value = [];
+    setLoading(true);
+    try {
+      const param = {
+        ...condition.value,
+        type: condition.value.type === 'all' ? '' : condition.value.type,
+        subType:
+          condition.value.subType === 'All' ? '' : condition.value.subType,
+      };
+      const { data } = await getConfigList(param);
+      configList.value = data.records;
+      total.value = data.totalRow;
+      selectedKeys.value = [];
+    } finally {
+      setLoading(false);
+    }
   };
 
   const pageChange = (data: number) => {
@@ -377,12 +438,7 @@
   };
 
   const searchData = async () => {
-    setLoading(true);
-    try {
-      await loadConfigs();
-    } finally {
-      setLoading(false);
-    }
+    await loadConfigs();
   };
 
   const resetSearch = () => {
@@ -449,6 +505,39 @@
   const confirmOk = async () => {
     await deleteConfigList(selectedKeys.value);
     await loadConfigs();
+  };
+
+  const importClick = async () => {
+    importVisible.value = true;
+  };
+
+  const importOk = async () => {
+    uploadRef.value.submit();
+  };
+
+  const customRequest = (option: RequestOption) => {
+    setLoading(true);
+    try {
+      importYml(option);
+    } finally {
+      setLoading(false);
+    }
+    return undefined;
+  };
+
+  const uploadSuccess = async () => {
+    importVisible.value = false;
+    fileList.value = [];
+    await loadConfigs();
+  };
+
+  const exportClick = async () => {
+    setLoading(true);
+    try {
+      await exportYml();
+    } finally {
+      setLoading(false);
+    }
   };
 
   loadTypes();

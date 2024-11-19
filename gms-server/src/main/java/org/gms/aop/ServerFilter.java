@@ -72,6 +72,10 @@ public class ServerFilter extends HttpFilter {
             response.getOutputStream().close();
             return;
         }
+        if (request.getContentType() == null || request.getContentType().contains("multipart/form-data")) {
+            chain.doFilter(request, response);
+            return;
+        }
         // 替换成允许多次读取的HttpServletRequest
         chain.doFilter(new CachedHttpServletRequest(request), response);
     }
