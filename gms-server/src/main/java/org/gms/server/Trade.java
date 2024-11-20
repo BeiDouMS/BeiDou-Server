@@ -33,6 +33,7 @@ import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResult;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteResultType;
 import org.gms.net.server.coordinator.world.InviteCoordinator.InviteType;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.util.PacketCreator;
@@ -47,6 +48,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * @author Matze
  * @author Ronan - concurrency safety + check available slots + trade results
+                    并发安全+检查可用插槽+交易结果
  */
 public class Trade {
     private static final Logger log = LoggerFactory.getLogger(Trade.class);
@@ -85,7 +87,9 @@ public class Trade {
         this.chr = chr;
         this.number = number;
     }
-
+    /*
+    金币税率处理函数
+     */
     public static int getFee(long meso) {
         long fee = 0;
         if (meso >= 100000000) {
@@ -125,14 +129,14 @@ public class Trade {
             InventoryManipulator.addFromDrop(chr.getClient(), item, show);
         }
 
-        if (exchangeMeso > 0) {
+        if (exchangeMeso > 0) {//此处对金币交易进行扣税处理
             int fee = getFee(exchangeMeso);
 
             chr.gainMeso(exchangeMeso - fee, show, true, show);
             if (fee > 0) {
-                chr.dropMessage(1, "Transaction completed. You received " + GameConstants.numberWithCommas(exchangeMeso - fee) + " mesos due to trade fees.");
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.fee",fee,GameConstants.numberWithCommas(exchangeMeso - fee)));
             } else {
-                chr.dropMessage(1, "Transaction completed. You received " + GameConstants.numberWithCommas(exchangeMeso) + " mesos.");
+                chr.dropMessage(1, I18nUtil.getMessage("Trade.message.nofee",GameConstants.numberWithCommas(exchangeMeso)));
             }
 
             result = TradeResult.NO_RESPONSE.getValue();
@@ -179,10 +183,10 @@ public class Trade {
 
     public void setMeso(int meso) {
         if (locked.get()) {
-            throw new RuntimeException("Trade is locked.");
+            throw new RuntimeException(I18nUtil.getLogMessage("Trade.info.setMeso.msg1"));
         }
         if (meso < 0) {
-            log.warn("[Hack] Chr {} is trying to trade negative mesos", chr.getName());
+            log.warn(I18nUtil.getLogMessage("Trade.warn.setMeso.msg1"), chr.getName(),meso);
             return;
         }
         if (chr.getMeso() >= meso) {
@@ -284,14 +288,14 @@ public class Trade {
         return other.isLocked();
     }
 
-    private boolean checkCompleteHandshake() {  // handshake checkout thanks to Ronan
+    private boolean checkCompleteHandshake() {  // handshake checkout thanks to Ronan   //感谢Ronan的握手结账
         if (this.getChr().getId() < this.getPartner().getChr().getId()) {
             return this.checkTradeCompleteHandshake(true);
         } else {
             return this.getPartner().checkTradeCompleteHandshake(false);
         }
     }
-
+    //完成交易处理
     public static void completeTrade(Character chr) {
         Trade local = chr.getTrade();
         Trade partner = local.getPartner();
@@ -301,50 +305,60 @@ public class Trade {
 
             if (!local.fitsMeso()) {
                 cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL);
-                chr.message("There is not enough meso inventory space to complete the trade.");
-                partner.getChr().message("Partner does not have enough meso inventory space to complete the trade.");
+                chr.message(I18nUtil.getMessage("Trade.message.Mesos.Player"));
+                partner.getChr().message(I18nUtil.getMessage("Trade.message.Mesos.Partner"));
                 return;
             } else if (!partner.fitsMeso()) {
                 cancelTrade(partner.getChr(), TradeResult.UNSUCCESSFUL);
-                chr.message("Partner does not have enough meso inventory space to complete the trade.");
-                partner.getChr().message("There is not enough meso inventory space to complete the trade.");
+                chr.message(I18nUtil.getMessage("Trade.message.Mesos.Player"));
+                partner.getChr().message(I18nUtil.getMessage("Trade.message.Mesos.Partner"));
                 return;
             }
 
-            if (!local.fitsInInventory()) {
-                if (local.fitsUniquesInInventory()) {
+            if (!local.fitsInInventory()) {//判断背包空间是否足够
+                if (local.fitsUniquesInInventory()) {   //判断当前角色交易物品是否为唯一物品
+                    //非唯一物品
                     cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL);
-                    chr.message("There is not enough inventory space to complete the trade.");
-                    partner.getChr().message("Partner does not have enough inventory space to complete the trade.");
+                    chr.message(I18nUtil.getMessage("Trade.message.fitsInInventory.Player"));
+                    partner.getChr().message(I18nUtil.getMessage("Trade.message.fitsInInventory.Partner"));
                 } else {
+                    //唯一物品
                     cancelTrade(local.getChr(), TradeResult.UNSUCCESSFUL_UNIQUE_ITEM_LIMIT);
-                    partner.getChr().message("Partner cannot hold more than one one-of-a-kind item at a time.");
+                    partner.getChr().message(I18nUtil.getMessage("Trade.message.fitsUniquesInInventory"));
                 }
                 return;
-            } else if (!partner.fitsInInventory()) {
-                if (partner.fitsUniquesInInventory()) {
+            } else if (!partner.fitsInInventory()) {//判断背包空间是否足够
+                if (partner.fitsUniquesInInventory()) { //判断交易角色交易物品是否为唯一物品
+                    //非唯一物品
                     cancelTrade(partner.getChr(), TradeResult.UNSUCCESSFUL);
-                    chr.message("Partner does not have enough inventory space to complete the trade.");
-                    partner.getChr().message("There is not enough inventory space to complete the trade.");
+                    chr.message(I18nUtil.getMessage("Trade.message.fitsInInventory.Player"));
+                    partner.getChr().message(I18nUtil.getMessage("Trade.message.fitsInInventory.Partner"));
                 } else {
+                    //唯一物品
                     cancelTrade(partner.getChr(), TradeResult.UNSUCCESSFUL_UNIQUE_ITEM_LIMIT);
-                    chr.message("Partner cannot hold more than one one-of-a-kind item at a time.");
+                    chr.message(I18nUtil.getMessage("Trade.message.fitsUniquesInInventory"));
                 }
                 return;
             }
-
-            if (local.getChr().getLevel() < 15) {
-                if (local.getChr().getMesosTraded() + local.exchangeMeso > 1000000) {
+            //默认限制15级以内的角色每天不可以交易超过100万金币
+            int level = GameConfig.getServerInt("trade_limit_meso_under_level") ;
+            int mesomax = GameConfig.getServerInt("trade_limit_meso_max");
+            if(level == 0) level = 15;
+            if(mesomax == 0) mesomax = 1000000;
+            if (level != -1 && local.getChr().getLevel() <= level) {
+                if (mesomax != -1 && local.getChr().getMesosTraded() + local.exchangeMeso > mesomax) {
                     cancelTrade(local.getChr(), TradeResult.NO_RESPONSE);
-                    local.getChr().sendPacket(PacketCreator.serverNotice(1, "Characters under level 15 may not trade more than 1 million mesos per day."));
+                    local.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax",level,mesomax)));
+                    partner.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
                 } else {
                     local.getChr().addMesosTraded(local.exchangeMeso);
                 }
-            } else if (partner.getChr().getLevel() < 15) {
-                if (partner.getChr().getMesosTraded() + partner.exchangeMeso > 1000000) {
+            } else if (level != -1 && partner.getChr().getLevel() <= level) {
+                if (mesomax != -1 && partner.getChr().getMesosTraded() + partner.exchangeMeso > mesomax) {
                     cancelTrade(partner.getChr(), TradeResult.NO_RESPONSE);
-                    partner.getChr().sendPacket(PacketCreator.serverNotice(1, "Characters under level 15 may not trade more than 1 million mesos per day."));
+                    partner.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax",level,mesomax)));
+                    local.getChr().sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("Trade.message.Mesos.PerDayMax1",level,mesomax)));
                     return;
                 } else {
                     partner.getChr().addMesosTraded(partner.exchangeMeso);
@@ -449,29 +463,30 @@ public class Trade {
 
     public static void inviteTrade(Character c1, Character c2) {
 
-        if ((c1.isGM() && !c2.isGM()) && c1.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_trade")) {
-            c1.message("You cannot trade with non-GM characters.");
-            log.info(String.format("GM %s blocked from trading with %s due to GM level.", c1.getName(), c2.getName()));
+        if ((c1.isGM() && !c2.isGM()) && c1.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_trade")) {//GM等级低于几级不允许与非GM角色进行交易
+            c1.message(I18nUtil.getMessage("Trade.inviteTrade.GM.msg1"));
+            log.info(I18nUtil.getLogMessage("Trade.info.inviteTrade.GM.msg1"), c1.getName(), c2.getName());
             cancelTrade(c1, TradeResult.NO_RESPONSE);
             return;
         }
 
         if ((!c1.isGM() && c2.isGM()) && c2.gmLevel() < GameConfig.getServerInt("minimum_gm_level_to_trade")) {
-            c1.message("You cannot trade with this GM character.");
+            c1.message(I18nUtil.getMessage("Trade.inviteTrade.GM.msg2"));
+            log.info(I18nUtil.getLogMessage("Trade.info.inviteTrade.GM.msg1"), c1.getName(), c2.getName());
             cancelTrade(c1, TradeResult.NO_RESPONSE);
             return;
         }
 
         if (InviteCoordinator.hasInvite(InviteType.TRADE, c1.getId())) {
             if (hasTradeInviteBack(c1, c2)) {
-                c1.message("You are already managing this player's trade invitation.");
+                c1.message(I18nUtil.getMessage("Trade.inviteTrade.hasTradeInviteBack.msg1"));
             } else {
-                c1.message("You are already managing someone's trade invitation.");
+                c1.message(I18nUtil.getMessage("Trade.inviteTrade.hasTradeInviteBack.msg2"));
             }
 
             return;
         } else if (c1.getTrade().isFullTrade()) {
-            c1.message("You are already in a trade.");
+            c1.message(I18nUtil.getMessage("Trade.inviteTrade.hasTradeInviteBack.msg3"));
             return;
         }
 
@@ -484,12 +499,12 @@ public class Trade {
                 c1.sendPacket(PacketCreator.getTradeStart(c1.getClient(), c1.getTrade(), (byte) 0));
                 c2.sendPacket(PacketCreator.tradeInvite(c1));
             } else {
-                c1.message("The other player is already trading with someone else.");
+                c1.message(I18nUtil.getMessage("Trade.inviteTrade.createInvite.msg1"));
                 cancelTrade(c1, TradeResult.NO_RESPONSE);
                 InviteCoordinator.answerInvite(InviteType.TRADE, c2.getId(), c1.getId(), false);
             }
         } else {
-            c1.message("The other player is already managing someone else's trade invitation.");
+            c1.message(I18nUtil.getMessage("Trade.inviteTrade.createInvite.msg2"));
             cancelTrade(c1, TradeResult.NO_RESPONSE);
         }
     }
@@ -505,10 +520,10 @@ public class Trade {
                 c1.getTrade().setFullTrade(true);
                 c2.getTrade().setFullTrade(true);
             } else {
-                c1.message("The other player has already closed the trade.");
+                c1.message(I18nUtil.getMessage("Trade.inviteTrade.visitTrade.msg1"));
             }
         } else {
-            c1.message("This trade invitation already rescinded.");
+            c1.message(I18nUtil.getMessage("Trade.inviteTrade.visitTrade.msg2"));
             cancelTrade(c1, TradeResult.NO_RESPONSE);
         }
     }
@@ -519,7 +534,7 @@ public class Trade {
             if (trade.getPartner() != null) {
                 Character other = trade.getPartner().getChr();
                 if (InviteCoordinator.answerInvite(InviteType.TRADE, chr.getId(), other.getId(), false).result == InviteResultType.DENIED) {
-                    other.message(chr.getName() + " has declined your trade request.");
+                    other.message(I18nUtil.getMessage("Trade.inviteTrade.declineTrade.msg1",chr.getName()));
                 }
 
                 other.getTrade().cancel(TradeResult.PARTNER_CANCEL.getValue());
@@ -539,20 +554,28 @@ public class Trade {
         this.fullTrade = fullTrade;
     }
 
+    /*
+    交易结果后台输出
+     */
     private static void logTrade(Trade trade1, Trade trade2) {
-        String name1 = trade1.getChr().getName();
-        String name2 = trade2.getChr().getName();
-        StringBuilder message = new StringBuilder();
-        message.append(String.format("Committing trade between %s and %s%n", name1, name2));
-        //Trade 1 to trade 2
-        message.append(String.format("Trading %s -> %s: %d mesos, items: %s%n", name1, name2,
-                trade1.getExchangeMesos(), getFormattedItemLogMessage(trade1.getItems())));
+        try {
+            String name1 = trade1.getChr().getName();
+            String name2 = trade2.getChr().getName();
+            StringBuilder message = new StringBuilder();
+//        message.append(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg1" ) + "\n");
+            message.append(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg1", name1, name2) + "\n");
+            //Trade 1 to trade 2
+//        message.append(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg2" ) + "\n");
+            message.append(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg2", name1, name2, trade1.getExchangeMesos(), getFormattedItemLogMessage(trade1.getItems())) + "\n");
 
-        //Trade 2 to trade 1
-        message.append(String.format("Trading %s -> %s: %d mesos, items: %s%n", name2, name1,
-                trade2.getExchangeMesos(), getFormattedItemLogMessage(trade2.getItems())));
+            //Trade 2 to trade 1
+//        message.append(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg2" ) + "\n");
+            message.append(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg2", name2, name1, trade2.getExchangeMesos(), getFormattedItemLogMessage(trade2.getItems())) + "\n");
 
-        log.info(message.toString());
+            log.info(message.toString());
+        } catch (Exception e) {
+            log.error("交易结果出现异常：",e);
+        }
     }
 
     private static String getFormattedItemLogMessage(List<Item> items) {
@@ -560,7 +583,8 @@ public class Trade {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : items) {
             String itemName = ii.getName(item.getItemId());
-            sj.add(String.format("%dx %s (%d)", item.getQuantity(), itemName, item.getItemId()));
+//            sj.add(String.format("%dx %s (%d)", item.getQuantity(), itemName, item.getItemId()));
+            sj.add(I18nUtil.getLogMessage("Trade.info.inviteTrade.logTrade.msg3" , item.getQuantity(), itemName, item.getItemId()) + "\n");
         }
         return sj.toString();
     }
