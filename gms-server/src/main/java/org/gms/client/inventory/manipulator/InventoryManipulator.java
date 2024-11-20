@@ -526,6 +526,9 @@ public class InventoryManipulator {
         }
     }
 
+    /*
+    穿上装备判断
+     */
     public static void equip(Client c, short src, short dst) {
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
 
@@ -534,16 +537,30 @@ public class InventoryManipulator {
         Inventory eqpdInv = chr.getInventory(InventoryType.EQUIPPED);
 
         Equip source = (Equip) eqpInv.getItem(src);
+        int itemGender = ItemId.getGender(source.getItemId());
+        if(GameConfig.getServerBoolean("use_equipment_gender_limit") == false && itemGender != 2 && itemGender != chr.getGender()) {  //判断装备是否要求角色性别
+            c.sendPacket(PacketCreator.enableActions());
+            chr.dropMessage(1,I18nUtil.getMessage("InventoryManipulator.equip.message1"));    //发送弹窗提示性别不符
+            log.warn(I18nUtil.getLogMessage("InventoryManipulator.warn.equip.message1"),      //后台记录信息
+                    chr.getName(),
+                    chr.getGender() <= 0 ? I18nUtil.getMessage("Character.Gender0") : I18nUtil.getMessage("Character.Gender1"),
+                    ii.getName(source.getItemId()),
+                    itemGender <= 0 ? I18nUtil.getMessage("Character.Gender0") : I18nUtil.getMessage("Character.Gender1"),
+                    source.getItemId()
+            );
+            return;
+        }
         if (source == null || !ii.canWearEquipment(chr, source, dst)) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         } else if ((ItemId.isExplorerMount(source.getItemId()) && chr.isCygnus()) ||
-                ((ItemId.isCygnusMount(source.getItemId())) && !chr.isCygnus())) {// Adventurer taming equipment
+                ((ItemId.isCygnusMount(source.getItemId())) && !chr.isCygnus())) {// Adventurer taming equipment    //冒险家驯服设备
             return;
         }
         boolean itemChanged = false;
+
         if (ii.isUntradeableOnEquip(source.getItemId())) {
-            short flag = source.getFlag();      // thanks BHB for noticing flags missing after equipping these
+            short flag = source.getFlag();      // thanks BHB for noticing flags missing after equipping these      //感谢BHB在安装这些设备后发现旗帜丢失
             flag |= ItemConstants.UNTRADEABLE;
             source.setFlag(flag);
 
