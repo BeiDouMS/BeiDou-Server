@@ -1292,7 +1292,7 @@ public class ItemInformationProvider {
     }
 
     public StatEffect getItemEffect(int itemId) {
-        StatEffect ret = itemEffects.get(Integer.valueOf(itemId));
+        StatEffect ret = itemEffects.get(itemId);
         if (ret == null) {
             Data item = getItemData(itemId);
             if (item == null) {
@@ -1303,7 +1303,7 @@ public class ItemInformationProvider {
                 spec = item.getChildByPath("spec");
             }
             ret = StatEffect.loadItemEffectFromData(spec, itemId);
-            itemEffects.put(Integer.valueOf(itemId), ret);
+            itemEffects.put(itemId, ret);
         }
         return ret;
     }

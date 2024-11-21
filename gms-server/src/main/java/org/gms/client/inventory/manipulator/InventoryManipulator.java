@@ -538,7 +538,8 @@ public class InventoryManipulator {
 
         Equip source = (Equip) eqpInv.getItem(src);
         int itemGender = ItemId.getGender(source.getItemId());
-        if(GameConfig.getServerBoolean("use_equipment_gender_limit") == false && itemGender != 2 && itemGender != chr.getGender()) {  //判断装备是否要求角色性别
+        //控制台参数为true时进行校验判断
+        if(GameConfig.getServerBoolean("use_equipment_gender_limit") && itemGender != 2 && itemGender != chr.getGender()) {  //判断装备是否要求角色性别
             c.sendPacket(PacketCreator.enableActions());
             chr.dropMessage(1,I18nUtil.getMessage("InventoryManipulator.equip.message1"));    //发送弹窗提示性别不符
             log.warn(I18nUtil.getLogMessage("InventoryManipulator.warn.equip.message1"),      //后台记录信息

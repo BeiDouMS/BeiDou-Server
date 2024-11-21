@@ -62,3 +62,8 @@ web中所有的图片均需要联网获取，感谢 https://maplestory.io 提供
 
 # 客户端
 [了解更多](https://github.com/BeiDouMS/BeiDou-Server/wiki/%E5%8C%97%E6%96%97%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E5%B8%83)
+
+# docker
+原服务端中docker相关配置已移除，配置已独立到[新的仓库](https://github.com/BeiDouMS/BeiDou-docker)，且支持[镜像拉取](https://github.com/BeiDouMS/BeiDou-docker/pkgs/container/beidou-server-all)。想参加docker开发，欢迎在新仓库进行pr。  
+[了解更多](https://github.com/BeiDouMS/BeiDou-docker)
+

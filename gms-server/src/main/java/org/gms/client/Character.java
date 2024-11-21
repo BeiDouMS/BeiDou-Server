@@ -5975,6 +5975,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void commitBuffCoupon(int couponid) {
+        if (!GameConfig.getServerBoolean("show_coupon_buff")) {
+            return;
+        }
         if (!isLoggedIn() || getCashShop().isOpened()) {
             return;
         }
