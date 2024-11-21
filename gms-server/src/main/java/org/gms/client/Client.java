@@ -49,7 +49,8 @@ import org.gms.net.server.world.Party;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
-import org.gms.util.ThreadLocalUtil;
+import org.gms.server.SystemRescue;
+import org.gms.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.scripting.AbstractPlayerInteraction;
@@ -66,10 +67,6 @@ import org.gms.server.life.Monster;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeonInfo;
-import org.gms.util.BCrypt;
-import org.gms.util.DatabaseConnection;
-import org.gms.util.HexTool;
-import org.gms.util.PacketCreator;
 
 import javax.script.ScriptEngine;
 import java.io.IOException;
@@ -150,6 +147,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     private long lastNpcClick;
     private long lastPacket = System.currentTimeMillis();
     private int lang = 0;
+    private SystemRescue sysRescue = new SystemRescue();
 
     public enum Type {
         LOGIN,
@@ -244,7 +242,9 @@ public class Client extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         if (player != null) {
-            log.warn("玩家 {} 客户端返回了异常信息", player, cause);
+            String MapName = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
+            log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName , player.getMapId(), cause);
+            sysRescue.setMapChange(player,cause);   // 尝试解救那些卡地图的倒霉蛋。
         }
 
         if (cause instanceof InvalidPacketHeaderException) {

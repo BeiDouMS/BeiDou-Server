@@ -21,7 +21,6 @@
  */
 package org.gms.net.server.channel.handlers;
 
-import com.alibaba.fastjson2.TypeReference;
 import org.gms.client.BuddyList;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.Character;
@@ -56,6 +55,7 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
+import org.gms.server.SystemRescue;
 import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
 import org.gms.util.packets.WeddingPackets;
@@ -74,13 +74,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(PlayerLoggedinHandler.class);
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
 
     private final NoteService noteService;
+    private final SystemRescue sysRescue = new SystemRescue();
+
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
 
     public PlayerLoggedinHandler(NoteService noteService) {
@@ -110,7 +111,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public final void handlePacket(InPacket p, Client c) {  //角色进入频道函数入口
         final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
 
@@ -245,10 +246,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
-            c.sendPacket(PacketCreator.getCharInfo(player));
+            c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             if (!player.isHidden()) {
                 if (player.isGM() && GameConfig.getServerBoolean("use_auto_hide_gm")) {
-                    player.toggleHide(true);
+                    player.toggleHide(true);    //设置GM角色隐身
                 }
             }
             player.sendKeymap();
@@ -330,8 +331,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     }
                 }
             }
-
+            //展示服务信息
             noteService.show(player);
+            //地图信息提示
+            sysRescue.showMapChange(player);
 
             if (player.getParty() != null) {
                 PartyCharacter pchar = player.getMPC();
