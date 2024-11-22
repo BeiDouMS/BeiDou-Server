@@ -202,7 +202,7 @@ function action(mode, type, selection) {
     } else if (actionx["2ndJob"]) {
         if (status == 0) {
             if (cm.isQuestCompleted(2191) || cm.isQuestCompleted(2192)) {
-                cm.sendSimple("好的，当你做出决定后，点击底部的[I'll choose my occupation]。#b\r\n#L0#请解释一下拳手职业的特点。\r\n#L1#请解释一下枪手职业的特点。\r\n#L3#我会选择我的职业！");
+                cm.sendSimple("好的，当你做出决定后，点击底部的[我已经做好了选择！]。#b\r\n#L0#请解释一下拳手职业的特点。\r\n#L1#请解释一下枪手职业的特点。\r\n#L3#我已经做好了选择！");
             } else {
                 cm.sendNext("做得好。你看起来很强壮，但我需要看看你是否真的足够强大来通过测试，这不是一个困难的测试，所以你会做得很好。");
             }
