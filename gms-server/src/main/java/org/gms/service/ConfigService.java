@@ -134,7 +134,8 @@ public class ConfigService {
         langResourceService.deleteI18n(LangResourcesDO.builder()
                 .langBase("game_config")
                 .langCode(gameConfigDO.getConfigCode())
-                .langType(serviceProperty.getLanguage())
+                // 所有i18n都要删掉
+//                .langType(serviceProperty.getLanguage())
                 .build());
         gameConfigMapper.deleteById(id);
         GameConfig.remove(gameConfigDO);
