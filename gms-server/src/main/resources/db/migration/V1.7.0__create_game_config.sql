@@ -5,9 +5,10 @@ create table if not exists game_config
     config_type     varchar(32) not null comment '参数类型',
     config_sub_type varchar(32) comment '参数子类型',
     config_clazz    varchar(256) comment '参数值java类型',
-    config_code     varchar(64) comment '参数名',
-    config_value    varchar(256) comment '参数值',
-    config_desc     varchar(512) comment '参数描述，中英文'
+    config_code     varchar(64) not null comment '参数名',
+    config_value    varchar(256) not null comment '参数值',
+    config_desc     varchar(512) comment '参数描述，中英文，关联i18n表lang_resources',
+    update_time     timestamp comment '最后更新时间'
     ) comment '游戏参数表';
 
 insert into game_config (config_type, config_sub_type, config_clazz, config_code, config_value, config_desc)
@@ -85,7 +86,7 @@ values ('world', '0', 'java.lang.Integer', 'flag', '0', '0=普通大区，1=活�
        ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_map_ownership_system', 'false', '是否开启玩家地图所有权(on/off map ownership system)'),
        ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_fishing_system', 'false', '是否开启钓鱼系统(on/off fishing system)'),
        ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_old_gms_styled_pq_npcs', 'true', '跳过组队任务介绍信息，立即开始任务(Skip info about the PQs and immediately tries to register the party in.)'),
-       ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_enable_solo_expeditions', 'true', '副本任务允许单人进入(Enables start expeditions with any number of players.)'),
+       ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_enable_solo_expeditions', 'false', '副本任务允许单人进入(Enables start expeditions with any number of players.)'),
        ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_enable_daily_expeditions', 'false', '是否限制远征次数，不同远征副本会按日/周限制次数(Enables daily/weekly entry limitations in expeditions.)'),
        ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_enable_recall_event', 'false', '玩家重连是否继续上次未完成的事件(Enables a disconnected player to reaccess the last event instance they were in before logging out.)'),
        ('server', 'Game Mechanics', 'java.lang.Long', 'respawn_interval', '10000', '怪物刷新间隔，毫秒(mob respawn interval, millisecond)'),
@@ -209,6 +210,13 @@ values ('world', '0', 'java.lang.Integer', 'flag', '0', '0=普通大区，1=活�
        ('server', 'Game Mechanics', 'java.lang.Short', 'item_slot_max', '0', '消耗栏和其他栏的物品最大堆叠，0为默认取wz定义的堆叠数量(Max item slots in Consume and Etc)'),
        ('server', 'Game Mechanics', 'java.lang.Integer', 'level_up_ap_gain', '5', '升级获得的属性点，如果开启新手不允许分配属性点，则新手不受此影响(gain ap per level)'),
        ('server', 'Game Mechanics', 'java.lang.Integer', 'level_up_sp_gain', '3', '升级获得的技能点，新手不受此影响(gain sp per level)'),
+       ('server', 'Game Mechanics', 'java.lang.Integer', 'trade_limit_meso_under_level', '15', '小于等于该等级的角色每天允许交易的金币将有金额限制，值为-1时则不限制等级(Characters below or equal to this level will have a limit on the amount of coins they can trade per day, while a value of -1 will not limit their level)'),
+       ('server', 'Game Mechanics', 'java.lang.Integer', 'trade_limit_meso_max', '1000000', '限制特定等级以下的角色每天允许交易的金币额度。值为-1时则不限制金额。(Limit the amount of gold coins allowed for daily transactions for characters below a specific level. When the value is -1, there is no limit on the amount.)'),
+       ('server', 'Game Mechanics', 'java.lang.Boolean', 'trade_limit_item_cash', 'false', '是否允许现金道具进行交易，需要客户端支持(Is it allowed to trade cash items? Client support is required)'),
+       ('server', 'Game Mechanics', 'java.lang.Boolean', 'trade_limit_item_nodrop', 'false', '是否允许不可丢弃道具进行交易，需要客户端支持(Whether to allow non disposable items for trading requires client support)'),
+       ('server', 'Game Mechanics', 'java.lang.Boolean', 'show_coupon_buff', 'true', '原版游戏不展示双倍卡buff，HeavenMS支持了展示双倍卡的buff，但是会占用怪物卡buff，导致怪物卡buff和双倍卡buff同时展示会有挤兑问题。如果你在意该问题，可以关闭此参数不让双倍卡buff展示(The old gms does not display coupon buff, and HeavenMS supported it. But it will occupy mob card buff. If you want, you can turn off this config to make mob card buff display perfectly.)'),
+       ('server', 'Game Mechanics', 'java.lang.Boolean', 'use_equipment_gender_limit', 'false', '是否使用装备时进行性别校验，需要客户端支持混用。(Whether to perform gender verification when using equipment requires client support for mixed use.)'),
+       ('server', 'Game Mechanics', 'java.lang.Integer', 'system_rescue_maperror_changeid', '910000000', '卡地图救援系统，输入解救到指定地图ID[需要>0]，如果地图ID不存在则随机解救到[射手村，魔法密林，勇士部落，废弃都市，明珠港](Map exception error rescue system, input rescue to specified map ID[Need>0], if map ID does not exist, randomly rescue to [Henesys, Ellinia, Perion, Kerning City, Lith Harbor])'),
 
        ('server', 'Safe', 'java.lang.Boolean', 'enable_pic', 'false', '是否开启pic(on/off pic)'),
        ('server', 'Safe', 'java.lang.Boolean', 'enable_pin', 'false', '是否开启pin(on/off pin)'),
@@ -226,10 +234,6 @@ values ('world', '0', 'java.lang.Integer', 'flag', '0', '0=普通大区，1=活�
        ('server', 'Safe', 'java.lang.Boolean', 'use_auto_ban_log', 'false', '开启自动封禁日志(on/off auto ban warning log)'),
        ('server', 'Safe', 'java.lang.Boolean', 'use_exp_gain_log', 'false', '开启经验获取日志(on/off exp gain log)'),
 
-       ('server', 'Net', 'java.lang.String', 'wan_host', '127.0.0.1', '外网ip(WAN IPv4 address)'),
-       ('server', 'Net', 'java.lang.String', 'lan_host', '127.0.0.1', '局域网ip(LAN IPv4 address)'),
-       ('server', 'Net', 'java.lang.String', 'localhost', '127.0.0.1', '本地ip(Loop back IPv4 address)'),
-       ('server', 'Net', 'java.lang.Integer', 'login_port', '8484', '登录端口号(login port)'),
        ('server', 'Net', 'java.lang.Long', 'timeout_duration', '3600000', '客户端多久没有发包后，会被服务端断开连接，毫秒(Kicks clients who don''t send any packet to the game server in due time, millisecond.)'),
 
        ('server', 'Debug', 'java.lang.Boolean', 'use_debug', 'false', '将在客户端上启用一些面向调试的文本打印(Will enable some text prints on the client, oriented for debugging purposes.)'),

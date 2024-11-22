@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serial;
+import java.util.Date;
 
 /**
  * 游戏参数表 实体类。
@@ -63,4 +64,8 @@ public class GameConfigDO implements Serializable {
      */
     private String configDesc;
 
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 }

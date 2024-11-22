@@ -8,13 +8,14 @@ import com.mybatisflex.core.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.config.GameConfig;
-import org.gms.constants.string.CharsetConstants;
 import org.gms.dao.entity.GameConfigDO;
+import org.gms.dao.entity.LangResourcesDO;
 import org.gms.dao.mapper.GameConfigMapper;
 import org.gms.exception.BizException;
 import org.gms.model.dto.ConfigTypeDTO;
 import org.gms.model.dto.GameConfigReqDTO;
 import org.gms.net.server.Server;
+import org.gms.property.ServiceProperty;
 import org.gms.util.DatabaseConnection;
 import org.gms.util.I18nUtil;
 import org.gms.util.RequireUtil;
@@ -39,12 +40,15 @@ import java.util.stream.Collectors;
 
 import static com.mybatisflex.core.query.QueryMethods.distinct;
 import static org.gms.dao.entity.table.GameConfigDOTableDef.GAME_CONFIG_D_O;
+import static org.gms.dao.entity.table.LangResourcesDOTableDef.LANG_RESOURCES_D_O;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class ConfigService {
     private final GameConfigMapper gameConfigMapper;
+    private final ServiceProperty serviceProperty;
+    private final LangResourceService langResourceService;
 
     public List<GameConfigDO> loadGameConfigs() {
         return gameConfigMapper.selectAll();
@@ -60,7 +64,15 @@ public class ConfigService {
     }
 
     public Page<GameConfigDO> getConfigList(GameConfigReqDTO condition) {
-        QueryWrapper queryWrapper = QueryWrapper.create();
+        // join i18n表
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(GAME_CONFIG_D_O.ID, GAME_CONFIG_D_O.CONFIG_CODE, GAME_CONFIG_D_O.CONFIG_CLAZZ,
+                        GAME_CONFIG_D_O.CONFIG_TYPE, GAME_CONFIG_D_O.CONFIG_SUB_TYPE, GAME_CONFIG_D_O.CONFIG_VALUE,
+                        LANG_RESOURCES_D_O.LANG_VALUE.as("config_desc"))
+                .from(GAME_CONFIG_D_O)
+                .leftJoin(LANG_RESOURCES_D_O).on(LANG_RESOURCES_D_O.LANG_CODE.eq(GAME_CONFIG_D_O.CONFIG_DESC)
+                        .and(LANG_RESOURCES_D_O.LANG_TYPE.eq(serviceProperty.getLanguage()))
+                        .and(LANG_RESOURCES_D_O.LANG_BASE.eq("game_config")));
         if (!RequireUtil.isEmpty(condition.getType()))
             queryWrapper.and(GAME_CONFIG_D_O.CONFIG_TYPE.eq(condition.getType()));
         if (!RequireUtil.isEmpty(condition.getSubType()))
@@ -69,25 +81,7 @@ public class ConfigService {
             queryWrapper.and(GAME_CONFIG_D_O.CONFIG_CODE.like(condition.getFilter()).or(GAME_CONFIG_D_O.CONFIG_DESC.like(condition.getFilter())));
         }
 
-        Page<GameConfigDO> page = gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
-        page.getRecords().forEach(record -> {
-            if (record.getConfigDesc() == null) {
-                return;
-            }
-            int start = record.getConfigDesc().indexOf("(");
-            int end = record.getConfigDesc().indexOf(")");
-            if (start == -1 || end == -1) {
-                return;
-            }
-            String desc;
-            if (CharsetConstants.isZhCN()) {
-                desc = record.getConfigDesc().substring(0, start);
-            } else {
-                desc = record.getConfigDesc().substring(start + 1, end);
-            }
-            record.setConfigDesc(desc);
-        });
-        return page;
+        return gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -101,7 +95,15 @@ public class ConfigService {
                 .where(GAME_CONFIG_D_O.CONFIG_SUB_TYPE.eq(condition.getConfigSubType()))
                 .and(GAME_CONFIG_D_O.CONFIG_CODE.eq(condition.getConfigCode())));
         RequireUtil.requireTrue(gameConfigDOList.isEmpty(), I18nUtil.getExceptionMessage("ConfigService.addConfig.exception1"));
+        langResourceService.insertOrUpdateI18n(LangResourcesDO.builder()
+                .langBase("game_config")
+                .langCode(condition.getConfigCode())
+                .langType(serviceProperty.getLanguage())
+                .langValue(condition.getConfigDesc())
+                .build());
         condition.setId(null);
+        condition.setConfigDesc(condition.getConfigCode());
+        condition.setUpdateTime(new Date());
         gameConfigMapper.insertSelective(condition);
         GameConfig.add(condition);
     }
@@ -110,12 +112,18 @@ public class ConfigService {
     public void updateConfig(GameConfigDO condition) {
         RequireUtil.requireNotNull(condition.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
         RequireUtil.requireNotEmpty(condition.getConfigValue(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configValue"));
+        GameConfigDO gameConfigDO = gameConfigMapper.selectOneById(condition.getId());
+        langResourceService.insertOrUpdateI18n(LangResourcesDO.builder()
+                .langBase("game_config")
+                .langCode(gameConfigDO.getConfigCode())
+                .langType(serviceProperty.getLanguage())
+                .langValue(condition.getConfigDesc())
+                .build());
         gameConfigMapper.update(GameConfigDO.builder()
                 .id(condition.getId())
                 .configValue(condition.getConfigValue())
-                .configDesc(condition.getConfigDesc())
+                .updateTime(new Date())
                 .build());
-        GameConfigDO gameConfigDO = gameConfigMapper.selectOneById(condition.getId());
         GameConfig.update(gameConfigDO);
     }
 
@@ -123,6 +131,11 @@ public class ConfigService {
     public void deleteConfig(Long id) {
         RequireUtil.requireNotNull(id, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
         GameConfigDO gameConfigDO = gameConfigMapper.selectOneById(id);
+        langResourceService.deleteI18n(LangResourcesDO.builder()
+                .langBase("game_config")
+                .langCode(gameConfigDO.getConfigCode())
+                .langType(serviceProperty.getLanguage())
+                .build());
         gameConfigMapper.deleteById(id);
         GameConfig.remove(gameConfigDO);
     }
@@ -130,9 +143,7 @@ public class ConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteConfigList(List<Long> ids) {
         RequireUtil.requireNotEmpty(ids, I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "ids"));
-        List<GameConfigDO> gameConfigDOS = gameConfigMapper.selectListByIds(ids);
-        gameConfigMapper.deleteBatchByIds(ids);
-        gameConfigDOS.forEach(GameConfig::remove);
+        ids.forEach(this::deleteConfig);
     }
 
     public int importYml(MultipartFile file) {
