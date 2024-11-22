@@ -29,9 +29,13 @@ import org.gms.server.Trade.TradeResult;
 import org.gms.server.maps.Portal;
 import org.gms.util.PacketCreator;
 
+/**
+ * 传送点脚本传送玩家到指定地图触发
+ */
 public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
+        PlayerMapTransitionHandler.setChangeMapState(true);
         p.readByte();
         String startwp = p.readString();
         p.readShort();

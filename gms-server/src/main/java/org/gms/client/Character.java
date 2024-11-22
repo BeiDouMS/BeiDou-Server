@@ -34,7 +34,6 @@ import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.GameConfig;
-import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
@@ -56,6 +55,7 @@ import org.gms.net.packet.Packet;
 import org.gms.net.server.PlayerBuffValueHolder;
 import org.gms.net.server.PlayerCoolDownValueHolder;
 import org.gms.net.server.Server;
+import org.gms.net.server.channel.handlers.PlayerMapTransitionHandler;
 import org.gms.net.server.coordinator.world.InviteCoordinator;
 import org.gms.net.server.guild.Alliance;
 import org.gms.net.server.guild.Guild;
@@ -1329,7 +1329,13 @@ public class Character extends AbstractCharacterObject {
         changeMap(map, null);
     }
 
+
+    /**
+     * 玩家角色更改地图
+     * @param map   地图ID
+     */
     public void changeMap(int map, Object pt) {
+        PlayerMapTransitionHandler.setChangeMapState(true);
         MapleMap warpMap;
         EventInstanceManager eim = getEventInstance();
 

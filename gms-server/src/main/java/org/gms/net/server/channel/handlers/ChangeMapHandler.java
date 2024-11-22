@@ -41,11 +41,15 @@ import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+/**
+ * 玩家通过光圈切换地图触发
+ */
 public final class ChangeMapHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(ChangeMapHandler.class);
 
     @Override
     public void handlePacket(InPacket p, Client c) {
+        PlayerMapTransitionHandler.setChangeMapState(true);
         Character chr = c.getPlayer();
 
         if (chr.isChangingMaps() || chr.isBanned()) {
