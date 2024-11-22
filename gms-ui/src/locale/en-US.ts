@@ -39,6 +39,7 @@ export default {
   'settings.userCenter': 'User Center',
   'settings.userSettings': 'User Settings',
   'settings.logout': 'Logout',
+  'settings.version': 'Version',
   ...base,
   ...workplace,
   ...login,
