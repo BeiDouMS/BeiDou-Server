@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
+import org.gms.constants.net.ServerConstants;
 import org.gms.model.dto.ChannelListRtnDTO;
 import org.gms.net.server.Server;
 import org.gms.model.dto.ResultBody;
@@ -77,5 +78,12 @@ public class ServerController {
     @GetMapping("/" + ApiConstant.LATEST + "/channel/list")
     public ResultBody<List<ChannelListRtnDTO>> channelList(@RequestParam int worldId) {
         return ResultBody.success(serverService.channelList(worldId));
+    }
+
+    @Tag(name = "/server/" + ApiConstant.LATEST)
+    @Operation(summary = "查询版本号")
+    @GetMapping("/" + ApiConstant.LATEST + "/version")
+    public ResultBody<String> version() {
+        return ResultBody.success(ServerConstants.BEI_DOU_VERSION);
     }
 }

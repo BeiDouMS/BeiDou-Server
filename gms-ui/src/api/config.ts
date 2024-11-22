@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { RequestOption } from '@arco-design/web-vue';
 
 export interface ConfigSearch {
   type: string;
@@ -40,4 +41,22 @@ export function deleteConfig(id: number) {
 
 export function deleteConfigList(ids: number[]) {
   return axios.post(`/config/v1/deleteConfigList`, ids);
+}
+
+export function importYml(option: RequestOption) {
+  const formData = new FormData();
+  formData.append('file', option.fileItem.file as Blob);
+  return axios
+    .post(option.action as string, formData, {
+      headers: { 'Content-type': 'multipart/form-data' },
+    })
+    .then((response) => {
+      option.onSuccess(response);
+    });
+}
+
+export function exportYml() {
+  return axios.get(`/config/v1/exportYml`, {
+    responseType: 'blob',
+  });
 }

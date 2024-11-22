@@ -17,8 +17,15 @@ var index = [0x01,0x10,0x100,0x1000,0x10000,0x100000,0x1000000];
 //Start
 function start() 
 {
-  status = -1;
-  action(1, 0, 0);
+	var limitDt = new Date();
+	limitDt.setHours(0, 0, 5, 0);
+	if (new Date() <= limitDt) {
+		cm.sendOk("在线奖励正在初始化中，请稍后再试...");
+		cm.dispose();
+		return;
+	}
+	status = -1;
+	action(1, 0, 0);
 }
 
 function action(mode, type, selection) 
@@ -28,13 +35,15 @@ function action(mode, type, selection)
 	    if (status == 0)
 	    {
 			//第一层对话
-	        if (cm.getOnlineTime() < 60) 
+	        if (cm.getOnlineTime() < 3600)
 			{
-	             time = "今日在线时间：#e#r"+ cm.getOnlineTime() +"#k#n 分钟\r\n\r\n";
+	             time = "今日在线时间：#e#r"+ Math.floor(cm.getOnlineTime() / 60) +"#k#n 分钟\r\n\r\n";
 		    } 
 			else 
 			{
-		         time = "今日在线时间：#e#r"+ Math.floor(cm.getOnlineTime() / 60) +"#k#n 小时 #e#r"+ (cm.getOnlineTime() % 60) +"#k#n 分钟\r\n\r\n";
+				let hour = Math.floor(cm.getOnlineTime() / 3600);
+				let min = Math.floor((cm.getOnlineTime() - hour * 3600) / 60);
+		         time = "今日在线时间：#e#r"+ hour +"#k#n 小时 #e#r"+ min +"#k#n 分钟\r\n\r\n";
 		    }
 			var getTmpStatus = cm.getAccountExtendValue("每日在线奖励领取状态",true);
 			
@@ -60,7 +69,7 @@ function action(mode, type, selection)
 		else if (status == 1 )
 		{
 			//第二层对话
-			var currentOnlineTime = parseInt(cm.getOnlineTime(), 10);
+			var currentOnlineTime = Math.floor(cm.getOnlineTime() / 60);
 			AwardItem(selection, getStatus, currentOnlineTime, OnlineLevel[selection], giftContent[selection]);
 			cm.sendOk(msg);
 			cm.dispose();

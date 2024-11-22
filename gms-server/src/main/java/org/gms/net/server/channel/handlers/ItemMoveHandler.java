@@ -33,7 +33,7 @@ import org.gms.util.PacketCreator;
  */
 public final class ItemMoveHandler extends AbstractPacketHandler {
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public final void handlePacket(InPacket p, Client c) {  //使用装备、物品、道具
         p.skip(4);
         if (c.getPlayer().getAutoBanManager().getLastSpam(6) + 300 > currentServerTime()) {
             c.sendPacket(PacketCreator.enableActions());
@@ -46,9 +46,9 @@ public final class ItemMoveHandler extends AbstractPacketHandler {
         short quantity = p.readShort();
 
         if (src < 0 && action > 0) {
-            InventoryManipulator.unequip(c, src, action);
+            InventoryManipulator.unequip(c, src, action);   //脱下装备
         } else if (action < 0) {
-            InventoryManipulator.equip(c, src, action);
+            InventoryManipulator.equip(c, src, action);     //穿上装备
         } else if (action == 0) {
             InventoryManipulator.drop(c, type, src, quantity);
         } else {

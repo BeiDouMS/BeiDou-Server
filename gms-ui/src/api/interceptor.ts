@@ -37,7 +37,8 @@ axios.interceptors.request.use(
       }
       config.headers.Authorization = `Bearer ${token}`;
     }
-    if (config.data) {
+    const isUpload = config.headers?.['Content-type'] === 'multipart/form-data';
+    if (config.data && !isUpload) {
       config.data = {
         requestId: generateUUID(),
         data: config.data,
@@ -52,8 +53,34 @@ axios.interceptors.request.use(
 );
 // add response interceptors
 axios.interceptors.response.use(
-  (response: AxiosResponse<HttpResponse>) => {
-    const res = response.data;
+  (response: AxiosResponse<HttpResponse | Blob>) => {
+    if (response.config.responseType === 'blob') {
+      const res = response.data as Blob;
+      if (response.status !== 200) {
+        Message.error({
+          content: response.statusText || 'Error',
+          duration: 5 * 1000,
+        });
+        return Promise.reject(new Error(response.statusText || 'Error'));
+      }
+      const url = window.URL.createObjectURL(new Blob([res]));
+      const link = document.createElement('a');
+      link.href = url;
+      // 从Content-Disposition中获取文件名
+      link.setAttribute(
+        'download',
+        response.headers['content-disposition']
+          .split('filename=')[1]
+          .replace(/"/g, '')
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      // 释放URL对象
+      window.URL.revokeObjectURL(url);
+      return null;
+    }
+    const res = response.data as HttpResponse;
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       Message.error({

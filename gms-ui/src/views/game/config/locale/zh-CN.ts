@@ -30,4 +30,9 @@ export default {
   'config.column.value': '参数值',
   'config.column.desc': '描述',
   'config.column.operate': '操作',
+
+  'config.extra.import': '从yml导入配置',
+  'config.extra.export': '导出配置成yml',
+  'config.extra.import.warn':
+    '警告：导入完成后会自动重启服务，确认该操作不会产生影响再进行！',
 };

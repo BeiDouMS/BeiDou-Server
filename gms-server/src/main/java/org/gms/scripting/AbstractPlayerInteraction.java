@@ -1331,15 +1331,7 @@ public class AbstractPlayerInteraction {
      */
     public int getOnlineTime()
     {
-        //获取最后一次登录的时间
-        int onlineTimes = 0;
-        String strOnlineFromDB = getAccountExtendValue("每日在线时间",true);
-        if (strOnlineFromDB != null)
-        {
-            onlineTimes = Integer.parseInt(strOnlineFromDB);
-        }
-
-        return onlineTimes;
+        return getPlayer().getCurrentOnlineTime();
     }
 
 

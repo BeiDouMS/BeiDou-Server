@@ -946,6 +946,10 @@ public class EventInstanceManager {
         }
     }
 
+    public void dropAllExclusiveItems() {
+        getPlayers().forEach(this::dropExclusiveItems);
+    }
+
     public final void setExclusiveItems(List<Object> items) {
         List<Integer> exclusive = convertToIntegerList(items);
 

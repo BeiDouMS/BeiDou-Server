@@ -21,6 +21,9 @@
     </div>
     <ul class="right-side">
       <li>
+        <a-tag color="gray">{{ $t('settings.version') + ` ${version}` }}</a-tag>
+      </li>
+      <li>
         <a-tooltip :content="$t('settings.language')">
           <a-button
             class="nav-btn"
@@ -132,6 +135,8 @@
   import Menu from '@/components/menu/index.vue';
   import useLocale from '@/hooks/locale';
   import { LOCALE_OPTIONS } from '@/locale';
+  import { getVersion } from '@/api/dashboard';
+  import useLoading from '@/hooks/loading';
 
   const { changeLocale, currentLocale } = useLocale();
   const locales = [...LOCALE_OPTIONS];
@@ -176,6 +181,19 @@
     });
     triggerBtn.value.dispatchEvent(event);
   };
+
+  const version = ref<string>('');
+  const { setLoading } = useLoading(false);
+  const loadVersion = async () => {
+    setLoading(true);
+    try {
+      const { data } = await getVersion();
+      version.value = data;
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadVersion();
 </script>
 
 <style scoped lang="less">

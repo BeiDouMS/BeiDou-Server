@@ -97,10 +97,14 @@ public class TimerManager implements TimerManagerMBean {
     }
 
     public ScheduledFuture<?> update(ScheduledFuture<?> sf, Runnable r, long repeatTime) {
+       stop(sf);
+        return ses.scheduleAtFixedRate(new TimerRunner(r), 0, repeatTime, MILLISECONDS);
+    }
+
+    public void stop(ScheduledFuture<?> sf) {
         if (sf != null && !sf.isCancelled()) {
             sf.cancel(false);
         }
-        return ses.scheduleAtFixedRate(new TimerRunner(r), 0, repeatTime, MILLISECONDS);
     }
 
     public ScheduledFuture<?> schedule(Runnable r, long delay) {

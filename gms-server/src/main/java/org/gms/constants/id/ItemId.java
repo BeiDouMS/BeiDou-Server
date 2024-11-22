@@ -403,4 +403,29 @@ public class ItemId {
     public static final int MITHRIL_PLATINE_PANTS = 1060091;
     public static final int BLUE_CARZEN_BOOTS = 1072154;
     public static final int MITHRIL_PLATINE = 1040103;
+
+
+    /**
+     * 判断装备的性别要求。
+     *
+     * @param {int} itemId - 装备的ID。
+     * @returns {int} - 返回装备的性别要求：
+     *                  0 - 仅限男性使用
+     *                  1 - 仅限女性使用
+     *                  2 - 无性别要求
+     */
+    public static int getGender(int itemId) {
+        if (itemId / 1000000 != 1) {
+            return 2; // 默认值，表示无性别要求
+        }
+
+        int genderPart = itemId / 1000 % 10;
+        if (genderPart == 0) {
+            return 0; // 仅限男性使用
+        } else if (genderPart == 1) {
+            return 1; // 仅限女性使用
+        } else {
+            return 2; // 无性别要求
+        }
+    }
 }

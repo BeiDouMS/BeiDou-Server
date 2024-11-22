@@ -35,6 +35,7 @@ import org.gms.constants.id.ItemId;
 import org.gms.constants.inventory.ItemConstants;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
@@ -359,15 +360,15 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 } else {
                     p.readShort();
                     int birthday = p.readInt();
-                    if (!CashOperationHandler.checkBirthday(c, birthday)) { // birthday check here found thanks to lucasziron
-                        c.sendPacket(PacketCreator.serverNotice(1, "Please check again the birthday date."));
+                    if (!CashOperationHandler.checkBirthday(c, birthday)) { // birthday check here found thanks to lucasziron //感谢lucasziron，生日支票在这里找到了
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message1")));
                         return;
                     }
 
                     c.sendPacket(PacketCreator.hiredMerchantOwnerMaintenanceLeave());
                 }
 
-                if (!canPlaceStore(chr)) {    // thanks Ari for noticing player shops overlapping on opening time
+                if (!canPlaceStore(chr)) {    // thanks Ari for noticing player shops overlapping on opening time   //感谢阿里注意到玩家商店在开放时间重叠
                     return;
                 }
 
@@ -378,7 +379,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         try {
                             InventoryManipulator.removeById(c, InventoryType.CASH, shop.getItemId(), 1, true, false);
                         } catch (RuntimeException re) {
-                        } // fella does not have a player shop permit...
+                        } // fella does not have a player shop permit... //这家伙没有玩家商店许可证。。。
                     }
 
                     chr.getMap().broadcastMessage(PacketCreator.updatePlayerShopBox(shop));
@@ -455,7 +456,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
             } else if (mode == Action.MOVE_OMOK.getCode()) {
                 int x = p.readInt(); // x point
                 int y = p.readInt(); // y point
-                int type = p.readByte(); // piece ( 1 or 2; Owner has one piece, visitor has another, it switches every game.)
+                int type = p.readByte(); // piece ( 1 or 2; Owner has one piece, visitor has another, it switches every game.)  //棋子（1或2；所有者有一个棋子，访问者有另一个，它会切换每个游戏。）
                 chr.getMiniGame().setPiece(x, y, type, chr);
             } else if (mode == Action.SELECT_CARD.getCode()) {
                 int turn = p.readByte(); // 1st turn = 1; 2nd turn = 0
@@ -493,30 +494,30 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 byte targetSlot = p.readByte();
 
                 if (targetSlot < 1 || targetSlot > 9) {
-                    log.warn("[Hack] Chr {} Trying to dupe on trade slot.", chr.getName());
+                    log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn1"), chr.getName());
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
                 if (item == null) {
-                    c.sendPacket(PacketCreator.serverNotice(1, "Invalid item description."));
+                    c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message2")));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
-
-                if (ii.isUnmerchable(item.getItemId())) {
+                //此处判断是否为宠物或者其他现金物品
+                if (!GameConfig.getServerBoolean("trade_limit_item_cash") && ii.isUnmerchable(item.getItemId())) {
                     if (ItemConstants.isPet(item.getItemId())) {
-                        c.sendPacket(PacketCreator.serverNotice(1, "Pets are not allowed to be traded."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message3")));
                     } else {
-                        c.sendPacket(PacketCreator.serverNotice(1, "Cash items are not allowed to be traded."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message4")));
                     }
-
+                    log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn2"), chr.getName(),item.getInventoryType().getName(),ItemInformationProvider.getInstance().getName(item.getItemId()),item.getItemId());
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
                 if (quantity < 1 || quantity > item.getQuantity()) {
-                    c.sendPacket(PacketCreator.serverNotice(1, "You don't have enough quantity of the item."));
+                    c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message5")));  //交易物品数量不足
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
@@ -524,9 +525,11 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 Trade trade = chr.getTrade();
                 if (trade != null) {
                     if ((quantity <= item.getQuantity() && quantity >= 0) || ItemConstants.isRechargeable(item.getItemId())) {
-                        if (ii.isDropRestricted(item.getItemId())) { // ensure that undroppable items do not make it to the trade window
+                        //此处判断不可交易/不可丢弃物品是否允许交易
+                        if (!GameConfig.getServerBoolean("trade_limit_item_nodrop") && ii.isDropRestricted(item.getItemId())) { // ensure that undroppable items do not make it to the trade window    //确保不可丢弃的物品不会进入交易窗口
                             if (!KarmaManipulator.hasKarmaFlag(item)) {
-                                c.sendPacket(PacketCreator.serverNotice(1, "That item is untradeable."));
+                                log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn3"), chr.getName(),item.getInventoryType().getName(),item.getItemId());
+                                c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message6")));
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             }
@@ -537,7 +540,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                         try {
                             Item checkItem = chr.getInventory(ivType).getItem(pos);
                             if (checkItem != item || checkItem.getPosition() != item.getPosition()) {
-                                c.sendPacket(PacketCreator.serverNotice(1, "Invalid item description."));
+                                c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message2")));
                                 c.sendPacket(PacketCreator.enableActions());
                                 return;
                             }
@@ -559,7 +562,7 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                                 }
                             }
                         } catch (Exception e) {
-                            log.warn("Chr {} tried to add {}x {} in trade (slot {}), then exception occurred", chr, ii.getName(item.getItemId()), item.getQuantity(), targetSlot, e);
+                            log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn4"), chr, ii.getName(item.getItemId()), item.getQuantity(), targetSlot, e);
                         } finally {
                             inv.unlockInventory();
                         }
@@ -578,14 +581,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 Item ivItem = chr.getInventory(ivType).getItem(slot);
 
                 if (ivItem == null || ivItem.isUntradeable()) {
-                    c.sendPacket(PacketCreator.serverNotice(1, "Could not perform shop operation with that item."));
+                    c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message7")));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 } else if (ItemInformationProvider.getInstance().isUnmerchable(ivItem.getItemId())) {
                     if (ItemConstants.isPet(ivItem.getItemId())) {
-                        c.sendPacket(PacketCreator.serverNotice(1, "Pets are not allowed to be sold on the Player Store."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message8")));
                     } else {
-                        c.sendPacket(PacketCreator.serverNotice(1, "Cash items are not allowed to be sold on the Player Store."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message9")));
                     }
 
                     c.sendPacket(PacketCreator.enableActions());
@@ -597,16 +600,16 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 if (ItemConstants.isRechargeable(ivItem.getItemId())) {
                     perBundle = 1;
                     bundles = 1;
-                } else if (ivItem.getQuantity() < (bundles * perBundle)) {     // thanks GabrielSin for finding a dupe here
-                    c.sendPacket(PacketCreator.serverNotice(1, "Could not perform shop operation with that item."));
+                } else if (ivItem.getQuantity() < (bundles * perBundle)) {     // thanks GabrielSin for finding a dupe here //感谢GabrielSin在这里找到了一个骗子
+                    c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message7")));
                     c.sendPacket(PacketCreator.enableActions());
                     return;
                 }
 
                 int price = p.readInt();
                 if (perBundle <= 0 || perBundle * bundles > 2000 || bundles <= 0 || price <= 0 || price > Integer.MAX_VALUE) {
-                    AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with hired merchants.");
-                    log.warn("Chr {} might possibly have packet edited Hired Merchants. perBundle: {}, perBundle * bundles (This multiplied cannot be greater than 2000): {}, bundles: {}, price: {}",
+                    AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + I18nUtil.getMessage("PlayerInteractionHandler.message10"));
+                    log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn5"),
                             chr.getName(), perBundle, perBundle * bundles, bundles, price);
                     return;
                 }
@@ -620,8 +623,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 PlayerShop shop = chr.getPlayerShop();
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (shop != null && shop.isOwner(chr)) {
-                    if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots
-                        c.sendPacket(PacketCreator.serverNotice(1, "You can't sell it anymore."));
+                    if (shop.isOpen() || !shop.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots    //感谢Vcoc指出了一个具有无限商店插槽的漏洞
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message11")));
                         return;
                     }
 
@@ -634,12 +637,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.getPlayerShopItemUpdate(shop));
                 } else if (merchant != null && merchant.isOwner(chr)) {
                     if (ivType.equals(InventoryType.CASH) && merchant.isPublished()) {
-                        c.sendPacket(PacketCreator.serverNotice(1, "Cash items are only allowed to be sold when first opening the store."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message12")));
                         return;
                     }
 
-                    if (merchant.isOpen() || !merchant.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots
-                        c.sendPacket(PacketCreator.serverNotice(1, "You can't sell it anymore."));
+                    if (merchant.isOpen() || !merchant.addItem(shopItem)) { // thanks Vcoc for pointing an exploit with unlimited shop slots    //感谢Vcoc指出了一个具有无限商店插槽的漏洞
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message11")));
                         return;
                     }
 
@@ -656,12 +659,12 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                     }
 
                     try {
-                        merchant.saveItems(false);   // thanks Masterrulax for realizing yet another dupe with merchants/Fredrick
+                        merchant.saveItems(false);   // thanks Masterrulax for realizing yet another dupe with merchants/Fredrick   //感谢Masterrulax再次欺骗商家/弗雷德里克
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     }
                 } else {
-                    c.sendPacket(PacketCreator.serverNotice(1, "You can't sell without owning a shop."));
+                    c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message13")));
                 }
             } else if (mode == Action.REMOVE_ITEM.getCode()) {
                 if (isTradeOpen(chr)) {
@@ -671,14 +674,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 PlayerShop shop = chr.getPlayerShop();
                 if (shop != null && shop.isOwner(chr)) {
                     if (shop.isOpen()) {
-                        c.sendPacket(PacketCreator.serverNotice(1, "You can't take it with the store open."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message14")));
                         return;
                     }
 
                     int slot = p.readShort();
                     if (slot >= shop.getItems().size() || slot < 0) {
-                        AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a player shop.");
-                        log.warn("Chr {} tried to remove item at slot {}", chr.getName(), slot);
+                        AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + I18nUtil.getMessage("PlayerInteractionHandler.message15"));
+                        log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn6"), chr.getName(), slot);
                         c.disconnect(true, false);
                         return;
                     }
@@ -743,8 +746,8 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 int itemid = p.readByte();
                 short quantity = p.readShort();
                 if (quantity < 1) {
-                    AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a hired merchant and or player shop.");
-                    log.warn("Chr {} tried to buy item {} with quantity {}", chr.getName(), itemid, quantity);
+                    AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + I18nUtil.getMessage("PlayerInteractionHandler.message16"));
+                    log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn7"), chr.getName(), itemid, quantity);
                     c.disconnect(true, false);
                     return;
                 }
@@ -766,14 +769,14 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
                 HiredMerchant merchant = chr.getHiredMerchant();
                 if (merchant != null && merchant.isOwner(chr)) {
                     if (merchant.isOpen()) {
-                        c.sendPacket(PacketCreator.serverNotice(1, "You can't take it with the store open."));
+                        c.sendPacket(PacketCreator.serverNotice(1, I18nUtil.getMessage("PlayerInteractionHandler.message14")));
                         return;
                     }
 
                     int slot = p.readShort();
                     if (slot >= merchant.getItems().size() || slot < 0) {
-                        AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + " tried to packet edit with a hired merchant.");
-                        log.warn("Chr {} tried to remove item at slot {}", chr.getName(), slot);
+                        AutobanFactory.PACKET_EDIT.alert(chr, chr.getName() + I18nUtil.getMessage("PlayerInteractionHandler.message17"));
+                        log.warn(I18nUtil.getLogMessage("PlayerInteractionHandler.warn6", chr.getName(), slot));
                         c.disconnect(true, false);
                         return;
                     }
@@ -843,8 +846,9 @@ public final class PlayerInteractionHandler extends AbstractPacketHandler {
     }
 
     private static boolean isTradeOpen(Character chr) {
-        if (chr.getTrade() != null) {   // thanks to Rien dev team
+        if (chr.getTrade() != null) {   // thanks to Rien dev team  //感谢Rien开发团队
             //Apparently there is a dupe exploit that causes racing conditions when saving/retrieving from the db with stuff like trade open.
+            //显然，在使用诸如trade open之类的东西从数据库中保存/检索时，有一个欺骗漏洞会导致赛车状态。
             chr.sendPacket(PacketCreator.enableActions());
             return true;
         }

@@ -5975,6 +5975,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     private void commitBuffCoupon(int couponid) {
+        if (!GameConfig.getServerBoolean("show_coupon_buff")) {
+            return;
+        }
         if (!isLoggedIn() || getCashShop().isOpened()) {
             return;
         }
@@ -9585,37 +9588,19 @@ public class Character extends AbstractCharacterObject {
     }
 
     /////////////////////////////////////////////////////////////////////////////////
-    //module: 账户在线时间
+    //module: 角色在线时间
     private int m_iCurrentOnlineTime = -1;//-1用于服务器重启时角色初始变量时间
 
-    public int getCurrentOnlieTime() {
+    public int getCurrentOnlineTime() {
         return this.m_iCurrentOnlineTime;
     }
 
-    public void setCurrentOnlieTime(final int iTime) {
+    public void setCurrentOnlineTime(final int iTime) {
         this.m_iCurrentOnlineTime = iTime;
     }
 
-    public void addOnlineTime(final int amount) {
-        this.setCurrentOnlieTime(this.m_iCurrentOnlineTime + amount);
-        this.updateOnlineTime(this.getCurrentOnlieTime());
-    }
-
-    public void updateOnlineTime(final int amount) {
-        String strNewOnlineTime = String.valueOf(amount);
+    public void updateOnlineTime() {
+        String strNewOnlineTime = String.valueOf(m_iCurrentOnlineTime);
         getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
     }
-
-    public void UpdateCurrentOnlineTimeFromDB() {
-        //角色上线时，在线时间初始化为-1，上线时获取累计的时间，避免服务器重启在线时间清零。
-        String strSavedOnlineTime = getAbstractPlayerInteraction().getAccountExtendValue("每日在线时间", true);
-
-        if (strSavedOnlineTime == null) {//找不到，说明没有建表，建立新表
-            getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", "0", true);
-            m_iCurrentOnlineTime = 0;
-        } else {
-            m_iCurrentOnlineTime = Integer.parseInt(strSavedOnlineTime);
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////
 }

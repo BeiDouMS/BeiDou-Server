@@ -42,6 +42,7 @@ export default {
   'settings.userCenter': '用户中心',
   'settings.userSettings': '用户设置',
   'settings.logout': '退出登录',
+  'settings.version': '版本',
   ...baseConfig, // 基本配置（示范如何外部导入）
   ...workplace,
   ...login,

@@ -23255,6 +23255,7 @@
         <imgdir name="0">
             <int name="npc" value="1090000"/>
             <int name="lvmin" value="30"/>
+            <string name="startscript" value="q2191s"/>
             <imgdir name="quest">
                 <imgdir name="0">
                     <int name="id" value="2192"/>
@@ -23278,6 +23279,7 @@
         <imgdir name="0">
             <int name="npc" value="1090000"/>
             <int name="lvmin" value="30"/>
+            <string name="startscript" value="q2192s"/>
             <imgdir name="quest">
                 <imgdir name="0">
                     <int name="id" value="2191"/>
@@ -48257,7 +48259,11 @@
                     <int name="id" value="4031580"/>
                 </imgdir>
             </imgdir>
-            <string name="endscript" value="q3929e"/>
+            <imgdir name="infoex">
+                <imgdir name="0">
+                    <string name="value" value="3333"/>
+                </imgdir>
+            </imgdir>
         </imgdir>
     </imgdir>
     <imgdir name="3930">

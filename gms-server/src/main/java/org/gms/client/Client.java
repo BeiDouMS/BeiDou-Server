@@ -996,6 +996,8 @@ public class Client extends ChannelInboundHandlerAdapter {
 
             final World wserv = getWorldServer();   // obviously wserv is NOT null if this player was online on it
             try {
+                // 保存在线时间
+                player.updateOnlineTime();
                 removePlayer(wserv, this.serverTransition);
 
                 if (!(channel == -1 || shutdown)) {
@@ -1167,8 +1169,10 @@ public class Client extends ChannelInboundHandlerAdapter {
                 if (lastPong < pingedAt) {
                     if (ioChannel.isActive()) {
                         log.info("Disconnected {} due to idling. Reason: {}", remoteAddress, event.state());
-                        updateLoginState(Client.LOGIN_NOTLOGGEDIN);
-                        disconnectSession();
+//                        updateLoginState(Client.LOGIN_NOTLOGGEDIN);
+//                        disconnectSession();
+                        // 按正常的规则去移除这个客户端，避免client被close了，但是对象还在内存中引发后续报错
+                        closeMapleSession();
                     }
                 }
             } catch (NullPointerException e) {
