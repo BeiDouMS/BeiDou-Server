@@ -80,7 +80,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
 
     private final NoteService noteService;
-    private final SystemRescue sysRescue = new SystemRescue();
+    public static final SystemRescue sysRescue = new SystemRescue();
 
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
 
@@ -114,6 +114,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {  //角色进入频道函数入口
         final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
+        sysRescue.setChangeChannelState(true);     //赋予切换频道中的状态为true
 
         if (!c.tryacquireClient()) {
             // thanks MedicOP for assisting on concurrency protection here

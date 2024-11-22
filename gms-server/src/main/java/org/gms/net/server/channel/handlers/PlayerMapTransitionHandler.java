@@ -68,5 +68,6 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
                 }
             }
         }
+        PlayerLoggedinHandler.sysRescue.setChangeChannelState(false);    //赋予切换频道中的状态为false，表示当前不在切换频道状态中
     }
 }
