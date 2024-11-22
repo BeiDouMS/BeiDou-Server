@@ -7,6 +7,7 @@
 package org.gms.server;
 
 
+import lombok.Getter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.GameConfig;
@@ -21,8 +22,10 @@ import java.util.Random;
 
 public class SystemRescue {
     private static final Logger log = LoggerFactory.getLogger(Client.class);
+    @Getter
     private static final List<Integer> MapIdList = Arrays.asList(100000000, 101000000, 102000000, 103000000, 104000000);   //射手村，魔法密林，勇士部落，废弃都市，明珠港
     private static final String Lebel = I18nUtil.getLogMessage("SystemRescue.info.map.label") + " ";
+    private static Boolean isChangeChanneling = false;
 
     /**
      * 卡地图救援，将某个倒霉蛋解救到其它地图。
@@ -31,21 +34,13 @@ public class SystemRescue {
      */
     public void setMapChange(Character player,Throwable cause){
         try {
+            log.info("判断是否卡地图");
             if (player == null || cause == null) return;   //预防空指针
 
             int MapId = GameConfig.getServerInt("system_rescue_maperror_changeid");    //该参数为控制台配置，设置地图ID大于0则启用。设置不存在的ID则改为随机传送到金银岛某个城镇。
             if (MapId > 0) {
-                // 将异常堆栈信息转换为字符串
-                String stackTrace = getStackTraceAsString(cause);
-
-                // 统计特定包名的数量
-                int javaBaseCount = countPackageOccurrences(stackTrace, "java.base");
-                int nettyBufferCount = countPackageOccurrences(stackTrace, "io.netty.buffer");
-                int nettyChannelCount = countPackageOccurrences(stackTrace, "io.netty.channel");
-                int nettyUtilCount = countPackageOccurrences(stackTrace, "io.netty.util");
-
-                // 判断条件是否满足
-                if (javaBaseCount == 3 && nettyBufferCount == 2 && nettyChannelCount == 6 && nettyUtilCount == 3) {
+                // 判断条件是否满足，角色登录时isChangeChanneling = true，满足则判定问异常掉线
+                if (isChangeChanneling){
                     Boolean Map_exists = false;
                     int MapId_error = player.getMapId();       //读取出错地图ID
                     String MapName_error = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
@@ -76,6 +71,13 @@ public class SystemRescue {
         }
     }
 
+    /**
+     * 设置切换频道状态，用于在切换频道时掉线进行卡地图判断
+     * @param state true：正在切换频道，false：已完成切换
+     */
+    public void setChangeChannelState(Boolean state){
+        isChangeChanneling = state;
+    }
     /**
      * 卡地图救援：玩家重新上线后会收到提示信息。
      * @param player
@@ -113,36 +115,5 @@ public class SystemRescue {
             return true;
         }
         return false;
-    }
-    /**
-     * 将异常堆栈信息转换为字符串。
-     *
-     * @param t 异常对象
-     * @return 异常堆栈信息的字符串表示
-     */
-    private String getStackTraceAsString(Throwable t) {
-        StringBuilder sb = new StringBuilder();
-        for (StackTraceElement element : t.getStackTrace()) {
-            sb.append(element).append("\n");
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 统计特定包名在堆栈信息中出现的次数。
-     *
-     * @param stackTrace 堆栈信息字符串
-     * @param packageName 包名
-     * @return 包名出现的次数
-     */
-    private int countPackageOccurrences(String stackTrace, String packageName) {
-        int count = 0;
-        String[] lines = stackTrace.split("\n");
-        for (String line : lines) {
-            if (line.contains(packageName)) {
-                count++;
-            }
-        }
-        return count;
     }
 }
