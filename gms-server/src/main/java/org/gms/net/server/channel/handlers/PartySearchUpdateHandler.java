@@ -25,10 +25,14 @@ import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 
+/**
+ * 脚本、GM指令传送玩家到指定地图触发
+ */
 public final class PartySearchUpdateHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
+        PlayerMapTransitionHandler.setChangeMapState(true);
         c.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(c.getPlayer());
     }
 }

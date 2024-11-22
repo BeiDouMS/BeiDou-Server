@@ -147,7 +147,7 @@ public class Client extends ChannelInboundHandlerAdapter {
     private long lastNpcClick;
     private long lastPacket = System.currentTimeMillis();
     private int lang = 0;
-    private SystemRescue sysRescue = new SystemRescue();
+    private final SystemRescue sysRescue = new SystemRescue();
 
     public enum Type {
         LOGIN,
@@ -244,7 +244,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (player != null) {
             String MapName = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
             log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName , player.getMapId(), cause);
-            sysRescue.setMapChange(player,cause);   // 尝试解救那些卡地图的倒霉蛋。
+            sysRescue.setMapChange(player);   // 尝试解救那些卡地图的倒霉蛋。
         }
 
         if (cause instanceof InvalidPacketHeaderException) {

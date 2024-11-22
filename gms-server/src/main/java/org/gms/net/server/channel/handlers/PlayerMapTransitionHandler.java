@@ -20,11 +20,13 @@
 
 package org.gms.net.server.channel.handlers;
 
+import lombok.Getter;
 import org.gms.client.BuffStat;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
+import org.gms.server.SystemRescue;
 import org.gms.server.life.Monster;
 import org.gms.server.maps.MapObject;
 import org.gms.util.PacketCreator;
@@ -35,11 +37,27 @@ import java.util.List;
 
 /**
  * @author Ronan
+ * 玩家完成切换地图触发
  */
 public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
 
+    // 提供公共方法来获取 sysRescue
+    @Getter
+    private static final SystemRescue sysRescue = new SystemRescue();
+
+
+    // 提供公共方法来设置 sysRescue 的状态
+
+    /**
+     * 设置切换地图状态
+     */
+    public static void setChangeMapState(boolean state) {
+        sysRescue.setChangeMapState(state);
+    }
+
     @Override
     public final void handlePacket(InPacket p, Client c) {
+
         Character chr = c.getPlayer();
         chr.setMapTransitionComplete();
 
@@ -68,6 +86,6 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
                 }
             }
         }
-        PlayerLoggedinHandler.sysRescue.setChangeChannelState(false);    //赋予切换频道中的状态为false，表示当前不在切换频道状态中
+        setChangeMapState(false);    //赋予切换频道中的状态为false，表示当前不在切换频道状态中
     }
 }

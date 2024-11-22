@@ -55,7 +55,6 @@ import org.gms.net.server.guild.GuildPackets;
 import org.gms.net.server.world.PartyCharacter;
 import org.gms.net.server.world.PartyOperation;
 import org.gms.net.server.world.World;
-import org.gms.server.SystemRescue;
 import org.gms.service.HpMpAlertService;
 import org.gms.util.I18nUtil;
 import org.gms.util.packets.WeddingPackets;
@@ -80,7 +79,6 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
 
     private final NoteService noteService;
-    public static final SystemRescue sysRescue = new SystemRescue();
 
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
 
@@ -114,7 +112,7 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {  //角色进入频道函数入口
         final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
-        sysRescue.setChangeChannelState(true);     //赋予切换频道中的状态为true
+
 
         if (!c.tryacquireClient()) {
             // thanks MedicOP for assisting on concurrency protection here
@@ -289,10 +287,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.getFamilyInfo(familyEntry));
                         familyEntry.announceToSenior(PacketCreator.sendFamilyLoginNotice(player.getName(), true), true);
                     } else {
-                        log.error("Chr {}'s family doesn't have an entry for them. (familyId {})", player.getName(), f.getID());
+                        log.error(I18nUtil.getLogMessage("PlayerLoggedinHandler.error.message1"), player.getName(), f.getID());
                     }
                 } else {
-                    log.error("Chr {} has an invalid family ID ({})", player.getName(), player.getFamilyId());
+                    log.error(I18nUtil.getLogMessage("PlayerLoggedinHandler.error.message2"), player.getName(), player.getFamilyId());
                     c.sendPacket(PacketCreator.getFamilyInfo(null));
                 }
             } else {
@@ -334,8 +332,8 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
             //展示服务信息
             noteService.show(player);
-            //地图信息提示
-            sysRescue.showMapChange(player);
+            //异常地图掉线信息提示
+            PlayerMapTransitionHandler.getSysRescue().showMapChange(player);
 
             if (player.getParty() != null) {
                 PartyCharacter pchar = player.getMPC();
