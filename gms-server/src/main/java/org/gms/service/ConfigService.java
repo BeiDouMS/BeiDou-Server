@@ -31,9 +31,11 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -90,10 +92,13 @@ public class ConfigService {
         RequireUtil.requireNotEmpty(condition.getConfigSubType(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configSubType"));
         RequireUtil.requireNotEmpty(condition.getConfigCode(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configCode"));
         RequireUtil.requireNotEmpty(condition.getConfigValue(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_EMPTY", "configValue"));
-        List<GameConfigDO> gameConfigDOList = gameConfigMapper.selectListByQuery(QueryWrapper.create()
+        QueryWrapper queryWrapper = QueryWrapper.create()
                 .where(GAME_CONFIG_D_O.CONFIG_TYPE.eq(condition.getConfigType()))
-                .where(GAME_CONFIG_D_O.CONFIG_SUB_TYPE.eq(condition.getConfigSubType()))
-                .and(GAME_CONFIG_D_O.CONFIG_CODE.eq(condition.getConfigCode())));
+                .and(GAME_CONFIG_D_O.CONFIG_CODE.eq(condition.getConfigCode()));
+        if ("world".equals(condition.getConfigType())) {
+            queryWrapper.and(GAME_CONFIG_D_O.CONFIG_SUB_TYPE.eq(condition.getConfigSubType()));
+        }
+        List<GameConfigDO> gameConfigDOList = gameConfigMapper.selectListByQuery(queryWrapper);
         RequireUtil.requireTrue(gameConfigDOList.isEmpty(), I18nUtil.getExceptionMessage("ConfigService.addConfig.exception1"));
         langResourceService.insertOrUpdateI18n(LangResourcesDO.builder()
                 .langBase("game_config")
@@ -168,7 +173,7 @@ public class ConfigService {
                     String configCode = entry.getKey().toLowerCase();
                     configCode = replaceWithEquals(configCode, new String[]{"why_am_i_recommended", "recommend_message"},
                             new String[]{"channels", "channel_size"});
-                    updateSql.append("update game_config set config_value = '").append(entry.getValue())
+                    updateSql.append("update game_config set config_value = '").append(parseObject(entry.getValue()))
                             .append("' where config_type = 'world' and config_sub_type = '").append(i)
                             .append("' and config_code = '").append(configCode).append("';\n");
                 }
@@ -192,7 +197,7 @@ public class ConfigService {
                         new String[]{"extraheal", "extra_heal"}, new String[]{"autopot", "auto_pot"},
                         new String[]{"autohp", "auto_hp"}, new String[]{"automp", "auto_mp"});
 
-                Object configValue = entry.getValue();
+                Object configValue = parseObject(entry.getValue());
                 if ("npcs_scriptable".equalsIgnoreCase(entry.getKey())) {
                     configValue = JSONObject.toJSONString(entry.getValue());
                 }
@@ -216,6 +221,15 @@ public class ConfigService {
         Thread.startVirtualThread(Server.getInstance().shutdown(true));
         // 返回成功的数量
         return 1;
+    }
+
+    private Object parseObject(Object obj) {
+        String typeName = obj.getClass().getTypeName();
+        // 为避免科学计数，进行格式化输出，以double为标准最多精确到16位
+        if ("java.lang.Float".equals(typeName) || "java.lang.Double".equals(typeName)) {
+            return new DecimalFormat("#.################").format(obj);
+        }
+        return obj;
     }
 
     private String replaceWithEquals(String src, String[]... fts) {
@@ -292,6 +306,9 @@ public class ConfigService {
             if ("java.util.Map".equals(config.getConfigClazz())) {
                 return JSONObject.parseObject(config.getConfigValue(), new TypeReference<Map<Integer, Object>>() {
                 });
+            } else if ("java.lang.Float".equals(config.getConfigClazz()) || "java.lang.Double".equals(config.getConfigClazz())) {
+                // 为避免科学计数，用BigDecimal
+                return new BigDecimal(config.getConfigValue());
             } else {
                 try {
                     return JSONObject.parseObject(config.getConfigValue(), Class.forName(config.getConfigClazz()));
@@ -299,6 +316,6 @@ public class ConfigService {
                     return config.getConfigValue();
                 }
             }
-        });
+        }, (v1, v2) -> v1);
     }
 }
