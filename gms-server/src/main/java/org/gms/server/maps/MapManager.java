@@ -20,6 +20,8 @@
 package org.gms.server.maps;
 
 import org.gms.scripting.event.EventInstanceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,6 +30,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MapManager {
+    private static final Logger log = LoggerFactory.getLogger(MapManager.class);
     private final int channel;
     private final int world;
     private EventInstanceManager event;
@@ -97,8 +100,12 @@ public class MapManager {
         } finally {
             mapsRLock.unlock();
         }
-
-        return (map != null) ? map : loadMapFromWz(mapid, true);
+        try {
+            map = (map != null) ? map : loadMapFromWz(mapid, true);
+        } catch (Exception e) {
+            log.error("xml地图文件 {} 不存在，加载失败。",mapid);
+        }
+        return map;
     }
 
     public MapleMap getMapByLifeId(int lifeId) {

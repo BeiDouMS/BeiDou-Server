@@ -30,6 +30,7 @@ import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.net.server.Server;
+import org.gms.util.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.gms.server.Trade;
@@ -40,6 +41,8 @@ import org.gms.util.PacketCreator;
 import java.awt.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * 玩家通过光圈切换地图触发
@@ -49,12 +52,15 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, Client c) {
-        PlayerMapTransitionHandler.setChangeMapState(true);
         Character chr = c.getPlayer();
-
         if (chr.isChangingMaps() || chr.isBanned()) {
             if (chr.isChangingMaps()) {
-                log.warn("Chr {} got stuck when changing maps. Last visited mapids: {}", chr.getName(), chr.getLastVisitedMapIds());
+                log.warn(I18nUtil.getLogMessage("ChangeMapHandler.warn.message1"),
+                        chr.getName(),      //玩家角色名称
+                        chr.getMap().getMapName(),  //当前地图名称
+                        chr.getMapId(),             //当前地图ID
+                        getFormattedMapListLogMessage(chr.getLastVisitedMapIds(),c)  //最近访问的地图列表
+                );
             }
 
             c.sendPacket(PacketCreator.enableActions());
@@ -199,5 +205,22 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
         }
+    }
+
+    /**
+     * 提供地图ID列表 返回格式化地图名称+地图ID
+     * @param MapIds 传入地图ID列表
+     * @param c 传入客户端
+     * @return [蘑菇村西入口 (0),自由市场 (910000000)]
+     */
+    private static String getFormattedMapListLogMessage(List<Integer> MapIds,Client c) {
+        StringJoiner sj = new StringJoiner(", ", "[", "]");
+        for (int mapid : MapIds) {
+            MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
+            String MapName = I18nUtil.getLogMessage("SystemRescue.info.map.message1");  //未知地图
+            MapName = map != null && !map.getMapName().isEmpty() ? map.getMapName() : MapName;
+            sj.add(String.format("%s (%d)", MapName, mapid));
+        }
+        return sj.toString();
     }
 }

@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.gms.client;
 
+import lombok.Getter;
 import org.gms.client.inventory.InventoryType;
 import org.gms.config.GameConfig;
 import org.gms.constants.game.GameConstants;
@@ -147,7 +148,9 @@ public class Client extends ChannelInboundHandlerAdapter {
     private long lastNpcClick;
     private long lastPacket = System.currentTimeMillis();
     private int lang = 0;
-    private final SystemRescue sysRescue = new SystemRescue();
+    // 提供公共方法来获取 sysRescue
+    @Getter
+    private static SystemRescue sysRescue;
 
     public enum Type {
         LOGIN,
@@ -244,7 +247,7 @@ public class Client extends ChannelInboundHandlerAdapter {
         if (player != null) {
             String MapName = player.getMap().getMapName().isEmpty() ? I18nUtil.getLogMessage("SystemRescue.info.map.message1") : player.getMap().getMapName();  //读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
             log.warn(I18nUtil.getLogMessage("Client.warn.map.message1"), player, MapName , player.getMapId(), cause);
-            sysRescue.setMapChange(player);   // 尝试解救那些卡地图的倒霉蛋。
+            sysRescue.setMapChange();   // 尝试解救那些卡地图的倒霉蛋。
         }
 
         if (cause instanceof InvalidPacketHeaderException) {
@@ -317,8 +320,13 @@ public class Client extends ChannelInboundHandlerAdapter {
         return player;
     }
 
+    /**
+     * 设置角色
+     * @param player
+     */
     public void setPlayer(Character player) {
         this.player = player;
+        this.sysRescue = new SystemRescue(player);
     }
 
     public AbstractPlayerInteraction getAbstractPlayerInteraction() {

@@ -32,7 +32,6 @@ public final class PartySearchUpdateHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        PlayerMapTransitionHandler.setChangeMapState(true);
         c.getWorldServer().getPartySearchCoordinator().unregisterPartyLeader(c.getPlayer());
     }
 }

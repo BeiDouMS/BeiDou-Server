@@ -35,7 +35,6 @@ import org.gms.util.PacketCreator;
 public final class ChangeMapSpecialHandler extends AbstractPacketHandler {
     @Override
     public final void handlePacket(InPacket p, Client c) {
-        PlayerMapTransitionHandler.setChangeMapState(true);
         p.readByte();
         String startwp = p.readString();
         p.readShort();
