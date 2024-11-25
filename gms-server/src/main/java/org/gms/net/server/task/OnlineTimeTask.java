@@ -18,6 +18,9 @@ public class OnlineTimeTask implements Runnable {
         LocalDate now = LocalDate.now();
         boolean isNextDay = now.isAfter(lastUpdated.get());
         for (final Channel chan : Server.getInstance().getAllChannels()) {
+            if (chan == null || chan.getPlayerStorage() == null) {
+                continue;
+            }
             for (final Character chr : chan.getPlayerStorage().getAllCharacters()) {
                 if (chr == null) {
                     continue;

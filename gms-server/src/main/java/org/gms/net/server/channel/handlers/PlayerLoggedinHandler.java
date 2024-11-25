@@ -21,7 +21,6 @@
  */
 package org.gms.net.server.channel.handlers;
 
-import com.alibaba.fastjson2.TypeReference;
 import org.gms.client.BuddyList;
 import org.gms.client.BuddylistEntry;
 import org.gms.client.Character;
@@ -74,13 +73,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     private static final Logger log = LoggerFactory.getLogger(PlayerLoggedinHandler.class);
     private static final Set<Integer> attemptingLoginAccounts = new HashSet<>();
 
     private final NoteService noteService;
+
     private static final HpMpAlertService hpMpAlertService = ServerManager.getApplicationContext().getBean(HpMpAlertService.class);
 
     public PlayerLoggedinHandler(NoteService noteService) {
@@ -110,9 +109,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
     }
 
     @Override
-    public final void handlePacket(InPacket p, Client c) {
+    public final void handlePacket(InPacket p, Client c) {  //角色进入频道函数入口
         final int cid = p.readInt(); // TODO: investigate if this is the "client id" supplied in PacketCreator#getServerIP()
         final Server server = Server.getInstance();
+
 
         if (!c.tryacquireClient()) {
             // thanks MedicOP for assisting on concurrency protection here
@@ -245,10 +245,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                 player.silentApplyDiseases(diseases);
             }
 
-            c.sendPacket(PacketCreator.getCharInfo(player));
+            c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
             if (!player.isHidden()) {
                 if (player.isGM() && GameConfig.getServerBoolean("use_auto_hide_gm")) {
-                    player.toggleHide(true);
+                    player.toggleHide(true);    //设置GM角色隐身
                 }
             }
             player.sendKeymap();
@@ -287,10 +287,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                         c.sendPacket(PacketCreator.getFamilyInfo(familyEntry));
                         familyEntry.announceToSenior(PacketCreator.sendFamilyLoginNotice(player.getName(), true), true);
                     } else {
-                        log.error("Chr {}'s family doesn't have an entry for them. (familyId {})", player.getName(), f.getID());
+                        log.error(I18nUtil.getLogMessage("PlayerLoggedinHandler.error.message1"), player.getName(), f.getID());
                     }
                 } else {
-                    log.error("Chr {} has an invalid family ID ({})", player.getName(), player.getFamilyId());
+                    log.error(I18nUtil.getLogMessage("PlayerLoggedinHandler.error.message2"), player.getName(), player.getFamilyId());
                     c.sendPacket(PacketCreator.getFamilyInfo(null));
                 }
             } else {
@@ -330,8 +330,10 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
                     }
                 }
             }
-
+            //展示服务信息
             noteService.show(player);
+            //异常地图掉线信息提示
+            c.getSysRescue().showMapChangeMessage();
 
             if (player.getParty() != null) {
                 PartyCharacter pchar = player.getMPC();

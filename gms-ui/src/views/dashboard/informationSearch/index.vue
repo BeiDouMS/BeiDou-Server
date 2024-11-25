@@ -171,34 +171,16 @@
     let tag;
     switch (type) {
       case 'cash':
-        tag = t('informationSearch.type.cash');
-        break;
       case 'consume':
-        tag = t('informationSearch.type.consume');
-        break;
       case 'eqp':
-        tag = t('informationSearch.type.eqp');
-        break;
       case 'etc':
-        tag = t('informationSearch.type.etc');
-        break;
       case 'ins':
-        tag = t('informationSearch.type.etc');
-        break;
       case 'map':
-        tag = t('informationSearch.type.map');
-        break;
       case 'mob':
-        tag = t('informationSearch.type.mob');
-        break;
       case 'npc':
-        tag = t('informationSearch.type.npc');
-        break;
       case 'pet':
-        tag = t('informationSearch.type.pet');
-        break;
       case 'skill':
-        tag = t('informationSearch.type.skill');
+        tag = t(`informationSearch.type.${type}`);
         break;
       default:
         tag = type;
