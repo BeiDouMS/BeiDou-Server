@@ -133,6 +133,9 @@ public class GiveService {
             case 12:
                 giveFameChr(chr, submitData.getQuantity());
                 break;
+            case 13:
+                changeMap(chr, submitData.getQuantity());
+                break;
         }
     }
 
@@ -414,6 +417,17 @@ public class GiveService {
         chr.updateSingleStat(Stat.FAME, fame);
         chr.message(I18nUtil.getMessage("Give.Fame.Chr", fame));
         log.info(I18nUtil.getLogMessage("Give.Fame.Chr.info1", chr.getId(), chr.getName(), fame));
+    }
+
+    private void changeMap(Character chr, Integer mapId) {
+        if (910000000 == mapId) {
+            chr.saveLocation("FREE_MARKET");
+            chr.changeMap(mapId, "out00");
+        } else {
+            chr.changeMap(mapId);
+        }
+        chr.message(I18nUtil.getMessage("Give.Map.Chr", mapId));
+        log.info(I18nUtil.getLogMessage("Give.Map.Chr.info1", chr.getId(), chr.getName(), mapId));
     }
 
     private void doGainCash(Character chr, int type, int quantity) {
