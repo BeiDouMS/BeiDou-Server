@@ -34,7 +34,6 @@ import org.gms.client.keybind.QuickslotBinding;
 import org.gms.client.processor.action.PetAutopotProcessor;
 import org.gms.client.processor.npc.FredrickProcessor;
 import org.gms.config.GameConfig;
-import org.gms.config.GameConfig;
 import org.gms.constants.game.DelayedQuestUpdate;
 import org.gms.constants.game.ExpTable;
 import org.gms.constants.game.GameConstants;
@@ -282,7 +281,7 @@ public class Character extends AbstractCharacterObject {
     @Getter
     @Setter
     private String search = null;
-    private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map
+    private final AtomicBoolean mapTransitioning = new AtomicBoolean(true);  // player client is currently trying to change maps or log in the game map //玩家客户端当前正在尝试更改地图或登录游戏地图
     private final AtomicBoolean awayFromWorld = new AtomicBoolean(true);  // player is online, but on cash shop or mts
     private final AtomicInteger exp = new AtomicInteger();
     private final AtomicInteger gachaExp = new AtomicInteger();
@@ -1056,7 +1055,7 @@ public class Character extends AbstractCharacterObject {
             }
         }
 
-        // need to delay to ensure clientside has finished reloading character data
+        // need to delay to ensure clientside has finished reloading character data     //需要延迟以确保客户端已完成重新加载角色数据
         TimerManager.getInstance().schedule(() -> {
             Character thisChr = Character.this;
             MapleMap map = thisChr.getMap();
@@ -1199,7 +1198,7 @@ public class Character extends AbstractCharacterObject {
 
         if (GameConfig.getServerBoolean("use_announce_change_job")) {
             if (!this.isGM()) {
-                broadcastAcquaintances(6, "[" + GameConstants.ordinal(GameConstants.getJobBranch(newJob)) + " Job] " + name + " has just become a " + GameConstants.getJobName(this.job.getId()) + ".");    // thanks Vcoc for noticing job name appearing in uppercase here
+                broadcastAcquaintances(6,I18nUtil.getMessage("Character.Job.Change.message",getName(), GameConstants.ordinal(GameConstants.getJobBranch(newJob)),GameConstants.getJobName(this.job.getId())));        // thanks Vcoc for noticing job name appearing in uppercase here
             }
         }
     }
@@ -1329,6 +1328,11 @@ public class Character extends AbstractCharacterObject {
         changeMap(map, null);
     }
 
+
+    /**
+     * 玩家角色更改地图
+     * @param map   地图ID
+     */
     public void changeMap(int map, Object pt) {
         MapleMap warpMap;
         EventInstanceManager eim = getEventInstance();
@@ -1336,7 +1340,8 @@ public class Character extends AbstractCharacterObject {
         if (eim != null) {
             warpMap = eim.getMapInstance(map);
         } else {
-            warpMap = client.getChannelServer().getMapFactory().getMap(map);
+            warpMap = getMap(map,true);
+            if(warpMap == null) return; //判断地图不存在则直接返回并发送提示消息。
         }
 
         Portal portal = switch (pt) {
@@ -1360,7 +1365,7 @@ public class Character extends AbstractCharacterObject {
     public void changeMap(final MapleMap target, Portal pto) {
         canWarpCounter++;
 
-        eventChangedMap(target.getId());    // player can be dropped from an event here, hence the new warping target.
+        eventChangedMap(target.getId());    // player can be dropped from an event here, hence the new warping target.  //玩家可以从这里的事件中退出，因此成为新的扭曲目标。
         MapleMap to = getWarpMap(target.getId());
         if (pto == null) {
             pto = to.getPortal(0);
@@ -1393,7 +1398,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void forceChangeMap(final MapleMap target, Portal pto) {
-        // will actually enter the map given as parameter, regardless of being an eventmap or whatnot
+        // will actually enter the map given as parameter, regardless of being an eventmap or whatnot       //将实际输入作为参数给出的映射，无论是事件映射还是其他什么
 
         canWarpCounter++;
         eventChangedMap(MapId.NONE);
@@ -1409,6 +1414,7 @@ public class Character extends AbstractCharacterObject {
             }
 
             // thanks Thora for finding an issue with players not being actually warped into the target event map (rather sent to the event starting map)
+            //感谢Thora发现玩家实际上没有被扭曲到目标事件地图中（而是被发送到事件开始地图）的问题
             mapEim.registerPlayer(this, false);
         }
 
@@ -1667,10 +1673,17 @@ public class Character extends AbstractCharacterObject {
         InviteCoordinator.removePlayerIncomingInvites(id);
     }
 
+    /**
+     * 玩家更改地图 内部方法
+     * @param to
+     * @param pos
+     * @param warpPacket
+     */
     private void changeMapInternal(final MapleMap to, final Point pos, Packet warpPacket) {
         if (!canWarpMap) {
             return;
         }
+        if(getMap(to.getId(),true) == null) return; //判断地图不存在则直接返回并发送提示消息。
 
         this.mapTransitioning.set(true);
 
@@ -1707,8 +1720,8 @@ public class Character extends AbstractCharacterObject {
                 Character.this.getParty().setEnemy(k);
             }
             silentPartyUpdateInternal(getParty());  // EIM script calls inside
-        } else {
-            log.warn("Chr {} got stuck when moving to map {}", getName(), map.getId());
+        } else {    //切换地图时卡住了
+            log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn2"), getName(),map.getMapName(), map.getId());
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here
             return;
         }
@@ -1734,10 +1747,17 @@ public class Character extends AbstractCharacterObject {
         }
     }
 
+    /**
+     * 玩家角色是否处于切换地图的状态
+     * @return boolean
+     */
     public boolean isChangingMaps() {
         return this.mapTransitioning.get();
     }
 
+    /**
+     *  设置地图转换完成
+     */
     public void setMapTransitionComplete() {
         this.mapTransitioning.set(false);
     }
@@ -1899,8 +1919,8 @@ public class Character extends AbstractCharacterObject {
         pickupItem(ob, -1);
     }
 
-    public final void pickupItem(MapObject ob, int petIndex) {     // yes, one picks the MapObject, not the MapItem
-        if (ob == null) {                                               // pet index refers to the one picking up the item
+    public final void pickupItem(MapObject ob, int petIndex) {     // yes, one picks the MapObject, not the MapItem     //是的，选择MapObject，而不是MapItem
+        if (ob == null) {                                               // pet index refers to the one picking up the item      //宠物指数是指捡起物品的人
             return;
         }
 
@@ -1953,8 +1973,9 @@ public class Character extends AbstractCharacterObject {
                                 int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                                 this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
-                                if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {
-                                    showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
+                                if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //捡到点券是否展示
+                                    showHint(I18nUtil.getMessage("Character.pickupItem.message1",nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)) , 300);
+                                    //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                                 }
 
                                 this.getMap().pickItemDrop(pickupPacket, mapitem);
@@ -2005,8 +2026,9 @@ public class Character extends AbstractCharacterObject {
                         int nxGain = mapitem.getItemId() == ItemId.NX_CARD_100 ? 100 : 250;
                         this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
-                        if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {
-                            showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
+                        if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //捡到点券是否展示
+                            showHint(I18nUtil.getMessage("Character.pickupItem.message1",nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)) , 300);
+                            //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
                     } else if (InventoryManipulator.addFromDrop(client, mItem, true)) {
@@ -5006,7 +5028,7 @@ public class Character extends AbstractCharacterObject {
             try {
                 merchant.saveItems(false);
             } catch (SQLException e) {
-                log.error("Error while saving {}'s Hired Merchant items.", name, e);
+                log.error(I18nUtil.getLogMessage("Character.closeHiredMerchant.error1") + "{}", name, e);
             }
         }
     }
@@ -9602,5 +9624,28 @@ public class Character extends AbstractCharacterObject {
     public void updateOnlineTime() {
         String strNewOnlineTime = String.valueOf(m_iCurrentOnlineTime);
         getAbstractPlayerInteraction().saveOrUpdateAccountExtendValue("每日在线时间", strNewOnlineTime, true);
+    }
+
+    /**
+     * 获取地图类
+     * @param mapid 地图ID
+     * @param showMsg   true = 地图不存在弹出提示，false = 不提示
+     * @return
+     */
+    public MapleMap getMap(int mapid,boolean showMsg){
+        MapleMap map = null;
+        try{
+            map = client.getChannelServer().getMapFactory().getMap(mapid);
+        } catch (Exception ignored) {}
+        if(map == null && showMsg) {
+            String msg = I18nUtil.getMessage("Character.Map.Change.message1",Integer.toString(mapid));
+            log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn1"),getName(),getMap().getMapName(),getMapId(),
+                    I18nUtil.getLogMessage("SystemRescue.info.map.message1"),
+                    mapid);
+            dropMessage(5,msg);                 //聊天窗红色消息提示
+            dropMessage(1,msg);                 //弹窗消息
+            sendPacket(PacketCreator.enableActions());
+        }
+        return map;
     }
 }

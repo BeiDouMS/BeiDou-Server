@@ -35,11 +35,13 @@ import java.util.List;
 
 /**
  * @author Ronan
+ * 玩家完成切换地图触发
  */
 public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
 
     @Override
     public final void handlePacket(InPacket p, Client c) {
+
         Character chr = c.getPlayer();
         chr.setMapTransitionComplete();
 
@@ -62,7 +64,6 @@ public final class PlayerMapTransitionHandler extends AbstractPacketHandler {
                     } else {
                         m.sendDestroyData(c);
                     }
-
                     m.sendSpawnData(c);
                     m.aggroSwitchController(chr, false);
                 }
