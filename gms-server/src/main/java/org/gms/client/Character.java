@@ -9633,7 +9633,10 @@ public class Character extends AbstractCharacterObject {
      * @return
      */
     public MapleMap getMap(int mapid,boolean showMsg){
-        MapleMap map = client.getChannelServer().getMapFactory().getMap(mapid);
+        MapleMap map = null;
+        try{
+            map = client.getChannelServer().getMapFactory().getMap(mapid);
+        } catch (Exception ignored) {}
         if(map == null && showMsg) {
             String msg = I18nUtil.getMessage("Character.Map.Change.message1",Integer.toString(mapid));
             log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn1"),getName(),getMap().getMapName(),getMapId(),

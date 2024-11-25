@@ -39,43 +39,41 @@ public class SystemRescue {
     public void setMapChange() {
         if (player == null) return;   // 预防空指针
         int MapId = GameConfig.getServerInt("system_rescue_maperror_changeid");    // 该参数为控制台配置，设置地图ID大于0则启用。设置不存在的ID则改为随机传送到金银岛某个城镇。
-        if (MapId <= 0) return;  // 如果 MapId 不大于0，直接返回
+        if (MapId <= 0 && !player.isChangingMaps()) return;  // 如果 MapId 不大于0 且 玩家角色非切换地图状态，直接返回
 
-        if (player.isChangingMaps()) {
-            int MapId_error = -1;
-            String MapName_error = I18nUtil.getLogMessage("SystemRescue.info.map.message1");
-            boolean Map_exists = false;
+        int MapId_error = -1;
+        String MapName_error = I18nUtil.getLogMessage("SystemRescue.info.map.message1");
+        boolean Map_exists = false;
 
-            try {
-                MapId_error = player.getMapId();       // 读取出错地图ID
-                // 读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
-                MapName_error = player.getMap().getMapName().isEmpty() ? MapName_error : player.getMap().getMapName();
-            } catch (Exception ignored) {
-            }
-
-            try {
-                // 如果异常掉线地图和设置的救援地图一致 或者 地图名称为空  或者  地图文件wz不存在则会报错
-                Map_exists = MapId != MapId_error && !player.getWarpMap(MapId).getMapName().isEmpty();
-            } catch (Exception ignored) {
-            }
-
-            // 如果转移地图不存在，随机选择一个新的地图ID
-            if (!Map_exists) {
-                List<Integer> filteredList = new ArrayList<>(MapIdList);
-                filteredList.remove(Integer.valueOf(MapId)); // 移除当前的MapId
-                if (!filteredList.isEmpty()) {
-                    log.warn(Lebel + I18nUtil.getLogMessage("SystemRescue.warn.map.message3"), MapId);
-                    Random random = new Random();
-                    MapId = filteredList.get(random.nextInt(filteredList.size()));
-                }
-            }
-            //考虑到可能会出现地图文件改错改坏造成的闪退，因此不判定地图是否存在再进行转移。
-            player.changeMap(MapId);    // 更改角色地图ID，之后才可以执行下方的读取转移后的地图信息。
-            String MapName = player.getMap().getMapName();
-            String Message_system = I18nUtil.getMessage("SystemRescue.map.message1", MapName_error, MapName);
-            player.getAbstractPlayerInteraction().saveOrUpdateCharacterExtendValue(key_mapError_sysmsg, Message_system);
-            log.info(Lebel + I18nUtil.getLogMessage("SystemRescue.info.map.message2"), player.getName(), MapName_error, MapId_error, MapName, MapId);
+        try {
+            MapId_error = player.getMapId();       // 读取出错地图ID
+            // 读取出错地图名称，这里是读取服务端String.wz地图名称，不存在则设为 未知地图
+            MapName_error = player.getMap().getMapName().isEmpty() ? MapName_error : player.getMap().getMapName();
+        } catch (Exception ignored) {
         }
+
+        try {
+            // 如果异常掉线地图和设置的救援地图一致 或者 地图名称为空  或者  地图文件wz不存在则会报错
+            Map_exists = MapId != MapId_error && !player.getWarpMap(MapId).getMapName().isEmpty();
+        } catch (Exception ignored) {
+        }
+
+        // 如果转移地图不存在，随机选择一个新的地图ID
+        if (!Map_exists) {
+            List<Integer> filteredList = new ArrayList<>(MapIdList);
+            filteredList.remove(Integer.valueOf(MapId)); // 移除当前的MapId
+            if (!filteredList.isEmpty()) {
+                log.warn(Lebel + I18nUtil.getLogMessage("SystemRescue.warn.map.message3"), MapId);
+                Random random = new Random();
+                MapId = filteredList.get(random.nextInt(filteredList.size()));
+            }
+        }
+        //考虑到可能会出现地图文件改错改坏造成的闪退，因此不判定地图是否存在再进行转移。
+        player.changeMap(MapId);    // 更改角色地图ID，之后才可以执行下方的读取转移后的地图信息。
+        String MapName = player.getMap().getMapName();
+        String Message_system = I18nUtil.getMessage("SystemRescue.map.message1", MapName_error, MapName);
+        player.getAbstractPlayerInteraction().saveOrUpdateCharacterExtendValue(key_mapError_sysmsg, Message_system);
+        log.info(Lebel + I18nUtil.getLogMessage("SystemRescue.info.map.message2"), player.getName(), MapName_error, MapId_error, MapName, MapId);
     }
 
     /**
