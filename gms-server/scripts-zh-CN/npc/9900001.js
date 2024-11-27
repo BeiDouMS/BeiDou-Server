@@ -23,8 +23,6 @@
 /**
  * @description 拍卖行中心脚本
  */
-var BeiDouUI ="#fMap/MapHelper.img/BeiDou/logo#";
-var BlueShine = "#fUI/GuildMark.img/Mark/Pattern/00004001/10#";
 var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
 var status = -1;
 var i = 0;
@@ -43,14 +41,6 @@ function action(mode, type, selection) {
     }
 
     if (status === 0) {
-		//var TextTitle = BlueShine;
-		//for (i =0;i < 5; i++) 
-		//TextTitle += BlueShine; 
-        //let text = TextTitle + BeiDouUI + TextTitle + "\r\n";
-		//text +=BlueShine + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + BlueShine + "\r\n";
-        //text +=BlueShine + "\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t" + BlueShine + "\r\n";
-		//text +=BlueShine + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + BlueShine + "\r\n";
-		//text +=BlueShine + TextTitle + TextTitle + TextTitle + "\r\n\r\n";
 		let text = OldTitle;
         text += "当前点券：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
         text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
@@ -92,12 +82,10 @@ function doSelect(selection) {
         // GM功能
         case 61:
             openNpc("万能传送");
-            //cm.sendOk("该功能暂不支持，敬请期待！");
-            //cm.dispose();
             break;
         case 62:
-            // openNpc("SuperShop");
-            cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
+            cm.openShopNPC(9900001);
             cm.dispose();
             break;
         case 63:
