@@ -2,7 +2,13 @@
   <div class="navbar">
     <div class="left-side">
       <a-space>
-        <img alt="logo" src="/src/assets/logo.png" width="64" height="64" />
+        <img
+          class="logo"
+          alt="logo"
+          src="/src/assets/logo.png"
+          width="64"
+          height="64"
+        />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
@@ -253,5 +259,12 @@
     .arco-popover-content {
       margin-top: 0;
     }
+  }
+  .logo {
+    filter: none; /* 默认不应用滤镜 */
+  }
+
+  [arco-theme='dark'] .logo {
+    filter: invert(100%); /* 暗色主题下应用反色滤镜 */
   }
 </style>
