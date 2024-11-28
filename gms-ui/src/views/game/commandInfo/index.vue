@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb />
-    <a-card class="general-card" :title="$t('menu.game.config')">
+    <a-card class="general-card" :title="$t('menu.game.command')">
       <a-space direction="vertical" align="start">
         <a-form-item :label="$t('command.search.type.label')">
           <a-radio-group
