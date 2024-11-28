@@ -229,7 +229,7 @@
             :required="true"
             :disabled="editData.id != null && editData.id != 0"
           >
-            <a-input v-model="editData.configCode" max-length="64" />
+            <a-input v-model="editData.configCode" :max-length="64" />
           </a-form-item>
           <a-form-item
             field="configValue"

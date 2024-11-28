@@ -3,6 +3,7 @@ import drop from '@/views/game/drop/locale/zh-CN';
 import cashShop from '@/views/game/cashShop/locale/zh-CN';
 import npcShop from '@/views/game/npcShop/locale/zh-CN';
 import gachapon from '@/views/game/gachapon/locale/zh-CN';
+import commandInfo from '@/views/game/commandInfo/locale/zh-CN';
 import workplace from '@/views/dashboard/workplace/locale/zh-CN';
 import informationSearch from '@/views/dashboard/informationSearch/locale/zh-CN';
 import account from '@/views/account/locale/zh-CN';
@@ -23,6 +24,7 @@ export default {
   'menu.game.drop.global': '全局爆率',
   'menu.game.inventory': '背包管理',
   'menu.game.gachapon': '百宝箱',
+  'menu.game.command': 'GM指令',
   'menu.account': '玩家管理',
   'menu.account.list': '账户列表',
   'menu.account.player': '玩家管理',
@@ -51,6 +53,7 @@ export default {
   ...cashShop,
   ...drop,
   ...gachapon,
+  ...commandInfo,
   ...informationSearch,
   ...inventory,
   ...config,
