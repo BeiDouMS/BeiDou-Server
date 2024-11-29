@@ -43,7 +43,7 @@ function action(mode, type, selection) {
             }
             selStr += "选择您的目的地，因为费用将因地点而异。#b";
             for (var i = 0; i < maps.length; i++) {
-                selStr += "\r\n#L" + i + "##m" + maps[i] + "# (" + (cm.getJobId() == 0 ? cost[i] / 10 : cost[i]) + " mesos)#l";
+                selStr += "\r\n#L" + i + "##m" + maps[i] + "# (" + (cm.getJobId() == 0 ? cost[i] / 10 : cost[i]) + " 金币)#l";
             }
             cm.sendSimple(selStr);
         } else if (status == 2) {
