@@ -3,6 +3,7 @@ import drop from '@/views/game/drop/locale/en-US';
 import cashShop from '@/views/game/cashShop/locale/en-US';
 import npcShop from '@/views/game/npcShop/locale/en-US';
 import gachapon from '@/views/game/gachapon/locale/en-US';
+import commandInfo from '@/views/game/commandInfo/locale/en-US';
 import workplace from '@/views/dashboard/workplace/locale/en-US';
 import informationSearch from '@/views/dashboard/informationSearch/locale/en-US';
 import account from '@/views/account/locale/en-US';
@@ -22,6 +23,7 @@ export default {
   'menu.game.drop.global': 'Global Drop',
   'menu.game.inventory': 'Inventory',
   'menu.game.gachapon': 'Gachapon',
+  'menu.game.command': 'Command',
   'menu.account': 'Account',
   'menu.account.list': 'Account List',
   'menu.account.player': 'Player',
@@ -39,6 +41,7 @@ export default {
   'settings.userCenter': 'User Center',
   'settings.userSettings': 'User Settings',
   'settings.logout': 'Logout',
+  'settings.version': 'Version',
   ...base,
   ...workplace,
   ...login,
@@ -47,6 +50,7 @@ export default {
   ...cashShop,
   ...drop,
   ...gachapon,
+  ...commandInfo,
   ...informationSearch,
   ...inventory,
   ...config,

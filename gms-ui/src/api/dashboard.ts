@@ -19,3 +19,7 @@ export function restartServer() {
 export function shutdown() {
   return axios.get('/server/v1/shutdown');
 }
+
+export function getVersion() {
+  return axios.get('/server/v1/version');
+}

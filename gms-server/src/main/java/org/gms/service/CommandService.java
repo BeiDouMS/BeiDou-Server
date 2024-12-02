@@ -149,28 +149,32 @@ public class CommandService {
         QueryWrapper queryWrapper = new QueryWrapper();
         if (request.getLevel() != null) queryWrapper.in("level", request.getLevelList());
         if (request.getDefaultLevel() != null) queryWrapper.in("default_level", request.getDefaultLevelList());
-        if (request.getSyntax() != null) queryWrapper.like("syntax", request.getSyntax());
+        if (!RequireUtil.isEmpty(request.getSyntax())) queryWrapper.like("syntax", request.getSyntax());
 
         if (request.getEnabled() != null) queryWrapper.eq("enabled", request.getEnabled());
-        Page<CommandInfoDO> commandInfoDOPage = commandInfoMapper.paginateWithRelations(request.getPage(), request.getPageSize(), queryWrapper);
+        Page<CommandInfoDO> commandInfoDOPage = commandInfoMapper.paginateWithRelations(request.getPageNo(), request.getPageSize(), queryWrapper);
         return new Page<>(
                 commandInfoDOPage.getRecords().stream()
-                        .map(record -> CommandReqDTO.builder()
-                                .id(record.getId())
-                                .level(record.getLevel())
-                                .syntax(record.getSyntax())
-                                .defaultLevel(record.getDefaultLevel())
-                                .clazz(record.getClazz())
-                                .enabled(record.isEnabled())
-                                .description(getDescriptionByCommandInfoDO(record))
-                                .build())
+                        .map(record -> {
+                            // 显式声明返回值类型
+                            CommandReqDTO build = CommandReqDTO.builder()
+                                    .id(record.getId())
+                                    .level(record.getLevel())
+                                    .syntax(record.getSyntax())
+                                    .defaultLevel(record.getDefaultLevel())
+                                    .clazz(record.getClazz())
+                                    .enabled(record.isEnabled())
+                                    .description(getDescriptionByCommandInfoDO(record))
+                                    .build();
+                            build.setPageNo(null);
+                            build.setPageSize(null);
+                            return build;
+                        })
                         .toList(),
                 commandInfoDOPage.getPageNumber(),
                 commandInfoDOPage.getPageSize(),
                 commandInfoDOPage.getTotalRow()
         );
-
-
     }
 
     public String getDescriptionByCommandInfoDO(CommandInfoDO CommandDO) {
@@ -184,7 +188,7 @@ public class CommandService {
     @Transactional
     public CommandInfoDO updateCommand(CommandReqDTO request) {
 
-        RequireUtil.requireNotNull(request.getEnabled(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "enable"));
+        RequireUtil.requireNotNull(request.getEnabled(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "enabled"));
         RequireUtil.requireNotNull(request.getId(), I18nUtil.getExceptionMessage("PARAMETER_SHOULD_NOT_NULL", "id"));
 
         /*

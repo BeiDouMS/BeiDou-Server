@@ -216,7 +216,10 @@ public final class ChangeMapHandler extends AbstractPacketHandler {
     private static String getFormattedMapListLogMessage(List<Integer> MapIds,Client c) {
         StringJoiner sj = new StringJoiner(", ", "[", "]");
         for (int mapid : MapIds) {
-            MapleMap map = c.getChannelServer().getMapFactory().getMap(mapid);
+            MapleMap map = null;
+            try {
+                map = c.getChannelServer().getMapFactory().getMap(mapid);
+            } catch (Exception ignored) {}
             String MapName = I18nUtil.getLogMessage("SystemRescue.info.map.message1");  //未知地图
             MapName = map != null && !map.getMapName().isEmpty() ? map.getMapName() : MapName;
             sj.add(String.format("%s (%d)", MapName, mapid));

@@ -2,7 +2,13 @@
   <div class="navbar">
     <div class="left-side">
       <a-space>
-        <img alt="logo" src="/src/assets/logo.png" width="64" height="64" />
+        <img
+          class="logo"
+          alt="logo"
+          src="/src/assets/logo.png"
+          width="64"
+          height="64"
+        />
         <a-typography-title
           :style="{ margin: 0, fontSize: '18px' }"
           :heading="5"
@@ -20,6 +26,9 @@
       <Menu v-if="topMenu" />
     </div>
     <ul class="right-side">
+      <li>
+        <a-tag color="gray">{{ $t('settings.version') + ` ${version}` }}</a-tag>
+      </li>
       <li>
         <a-tooltip :content="$t('settings.language')">
           <a-button
@@ -132,6 +141,8 @@
   import Menu from '@/components/menu/index.vue';
   import useLocale from '@/hooks/locale';
   import { LOCALE_OPTIONS } from '@/locale';
+  import { getVersion } from '@/api/dashboard';
+  import useLoading from '@/hooks/loading';
 
   const { changeLocale, currentLocale } = useLocale();
   const locales = [...LOCALE_OPTIONS];
@@ -176,6 +187,19 @@
     });
     triggerBtn.value.dispatchEvent(event);
   };
+
+  const version = ref<string>('');
+  const { setLoading } = useLoading(false);
+  const loadVersion = async () => {
+    setLoading(true);
+    try {
+      const { data } = await getVersion();
+      version.value = data;
+    } finally {
+      setLoading(false);
+    }
+  };
+  loadVersion();
 </script>
 
 <style scoped lang="less">
@@ -235,5 +259,12 @@
     .arco-popover-content {
       margin-top: 0;
     }
+  }
+  .logo {
+    filter: none; /* 默认不应用滤镜 */
+  }
+
+  [arco-theme='dark'] .logo {
+    filter: invert(100%); /* 暗色主题下应用反色滤镜 */
   }
 </style>

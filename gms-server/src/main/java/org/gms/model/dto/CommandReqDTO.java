@@ -1,24 +1,17 @@
 package org.gms.model.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class CommandReqDTO implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class CommandReqDTO extends BasePageDTO {
 
     private Integer id;
 
@@ -35,8 +28,5 @@ public class CommandReqDTO implements Serializable {
     private String description;//根据描述,模糊查询命令
 
     private Boolean enabled;//根据状态,精确查询命令信息
-
-    private Integer page;
-    private Integer pageSize;
 
 }

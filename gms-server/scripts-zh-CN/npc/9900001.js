@@ -26,8 +26,6 @@
 var BeiDouUI ="#fMap/MapHelper.img/BeiDou/logo#";
 var BlueShine = "#fUI/GuildMark.img/Mark/Pattern/00004001/10#";
 var OldTitle ="\t\t\t\t\t#e欢迎来到#rBeiDou#k脚本中心#n\t\t\t\t\r\n";
-var playerName = '';
-var playerList = "Admin;泠晗;一个英雄;晴天;";
 var status = -1;
 var i = 0;
 function start() {
@@ -35,7 +33,6 @@ function start() {
 }
 
 function action(mode, type, selection) {
-var playerName = cm.getPlayer().getName();
     if (mode === 1) {
         status++;
     } else if (mode === -1) {
@@ -55,17 +52,12 @@ var playerName = cm.getPlayer().getName();
 		//text +=BlueShine + "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t" + BlueShine + "\r\n";
 		//text +=BlueShine + TextTitle + TextTitle + TextTitle + "\r\n\r\n";
 		let text = OldTitle;
-				text += "你好，" + playerName +"\r\n";
         text += "当前点券：" + cm.getPlayer().getCashShop().getCash(1) + "\r\n";
         text += "当前抵用券：" + cm.getPlayer().getCashShop().getCash(2) + "\r\n";
         text += "当前信用券：" + cm.getPlayer().getCashShop().getCash(4) + "\r\n";
         text += " \r\n\r\n";
         text += "#L0#新人福利#l \t #L1#每日签到#l \t #L2#在线奖励#l\r\n";
-        text += "#L3#传送自由#l \t #L61#超级传送#l \t #L69#便利店#l\r\n";
-        if(playerList.includes(playerName)) {
-					text += "\r\n =============以下内容仅你可见======== \r\n"
-					text += "#L70#获取4转职业技能#l\r\n"
-        }
+        text += "#L3#传送自由#l \t #L4#爆率一览#l\r\n";
         if (cm.getPlayer().isGM()) {
             text += "\r\n\r\n";
             text += "\t\t\t\t#r=====以下内容仅GM可见=====\r\n";
@@ -97,15 +89,16 @@ function doSelect(selection) {
             cm.getPlayer().saveLocation("FREE_MARKET");
             cm.warp(910000000, "out00");
             break;
+        case 4:
+            openNpc("当前地图掉落");
+            break;
         // GM功能
         case 61:
             openNpc("万能传送");
-            //cm.sendOk("该功能暂不支持，敬请期待！");
-            //cm.dispose();
             break;
         case 62:
-            openNpc("SuperShop");
-            //cm.sendOk("该功能暂不支持，敬请期待！");
+            cm.dispose();
+            cm.openShopNPC(9900001);
             cm.dispose();
             break;
         case 63:
@@ -126,12 +119,6 @@ function doSelect(selection) {
         case 68:
             openNpc("Example2")
             break;
-        case 69:
-            openShop(1061001)
-            break;
-        case 70:
-						maxJobSkil(playerName);
-						break;
         default:
             cm.sendOk("该功能暂不支持，敬请期待！");
             cm.dispose();
@@ -141,29 +128,4 @@ function doSelect(selection) {
 function openNpc(scriptName) {
     cm.dispose();
     cm.openNpc(9900001, scriptName);
-}
-
-function openShop(id) {
-	cm.dispose();
-	cm.openShopNPC(id);
-}
-
-function maxJobSkil(playerID){
-
-	if(playerList.includes(playerName)) {
-		cm.teachSkill(1121011,0,1,-1);	
-		cm.teachSkill(1121000,0,30,-1);	
-		cm.teachSkill(1120004,0,30,-1);	
-		cm.teachSkill(1120003,0,30,-1);	
-		cm.teachSkill(1120005,0,30,-1);	
-		cm.teachSkill(1121008,0,30,-1);	
-		cm.teachSkill(1121010,0,30,-1);	
-		cm.teachSkill(1121006,0,30,-1);	
-		cm.teachSkill(1121002,0,30,-1);	
-		cm.teachSkill(1121001,0,30,-1);	
-		cm.sendOk("已将你的4转职业 英雄 技能全部开通，需要自己手动加点");
-	} else {
-		cm.sendOk("你没有权限")
-	}
-	cm.dispose();
 }
