@@ -93,9 +93,9 @@ function levelShowDropList(mobId) {
         let dropall = MonsterInformationProvider.getInstance().retrieveDrop(mobId);										 //根据怪物ID获取掉落物品列表
         let CountItems = dropall.size();																																  //取掉落物品总数量
         let mobName = !mob.getName() || mob.getName() == 'MISSINGNO' ? `#o${mobId}#` : mob.getName();
-        mobName = `${getMobImage(mobId)}\r\n[ #e#b${mobName}#k#n ] `;
+        mobName = `[ #e#b${mobName}#k#n ] `;
         if(CountItems <= 0) {
-            msgtext = `${mobName} 没有掉落。`;
+            msgtext = `${getMobImage(mobId)}\r\n${mobName} 没有掉落。`;
         } else {
             msgtext = `${getMobImage(mobId)}\r\n${mobName} 物品掉落列表一览\r\n\r\n`;
             // 遍历 table 对象的键，并设置其值为键名的长度
