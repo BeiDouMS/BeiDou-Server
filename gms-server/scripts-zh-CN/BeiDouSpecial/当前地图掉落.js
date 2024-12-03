@@ -8,17 +8,17 @@ var MonsterInformationProvider;
 var ItemInformationProvider;
 var QuestInfo;
 
-var MapObj;                 //地图对象
-var List_Mob_All;           //所有怪物列表
-var List_Mob_Boss;          //BOSS列表
-var List_Mob;               //普通怪物列表
+var MapObj;								 //地图对象
+var List_Mob_All;				   //所有怪物列表
+var List_Mob_Boss;				  //BOSS列表
+var List_Mob;						   //普通怪物列表
 var namelength = 0;
 
 function start(){
-    if(MapObj == null) {    //首次打开进行初始化。
-        MonsterInformationProvider = Java.type('org.gms.server.life.MonsterInformationProvider');       //导入 怪物信息 类
-        ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');                  //导入 物品信息 类
-        QuestInfo = Java.type('org.gms.server.quest.Quest');                                            //导入 任务 类
+    if(MapObj == null) {		//首次打开进行初始化。
+        MonsterInformationProvider = Java.type('org.gms.server.life.MonsterInformationProvider');		   //导入 怪物信息 类
+        ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');								  //导入 物品信息 类
+        QuestInfo = Java.type('org.gms.server.quest.Quest');																						//导入 任务 类
         MapObj = cm.getMap();
         List_Mob_All = MapObj.getAllMonsters(); //获取当前地图存活的怪物数量，由于未找到获取当前地图固定怪物列表方法，故用此方法代替。
         //将怪物种类去重并按照Boss和普通怪物区分开
@@ -69,7 +69,8 @@ function getSelecttext(moblist) {
     namelength = namelength > size ? namelength : size;
     return moblist.map(obj => {
         let id = obj.getId();
-        let name = obj.getName().padEnd(namelength,'\t');
+        let name = !obj.getName() || obj.getName() == 'MISSINGNO' ? `#o${id}#` : obj.getName();
+        name = name.padEnd(namelength,'\t');
         return `#L${id}#${getMobImage(id)}\r\n#b${name}#k\t${obj.isBoss() ? '[ #r#eBOSS#k#n ]' : ''}\t[ Lv.${obj.getLevel()} ]#l`
     }).join('\r\n') + '\r\n\r\n';
 }
@@ -79,7 +80,7 @@ function getSelecttext(moblist) {
  * @param mobId
  */
 function levelShowDropList(mobId) {
-    const mob = List_Mob_All.find(mob => mob.getId() == mobId);     //根据怪物ID获取已缓存的怪物对象
+    const mob = List_Mob_All.find(mob => mob.getId() == mobId);		 //根据怪物ID获取已缓存的怪物对象
     const table = {
         '物品名称' : 0,
         '基础掉率' : 0,
@@ -89,10 +90,11 @@ function levelShowDropList(mobId) {
 
     if(mob != null) {
         let player = cm.getPlayer();
-        let dropall = MonsterInformationProvider.getInstance().retrieveDrop(mobId);                     //根据怪物ID获取掉落物品列表
-        let CountItems = dropall.size;                                                                  //取掉落物品总数量
-        let mobName = `[ #e#b${mob.getName()}#k#n ] `;
-        if(CountItems === 0) {
+        let dropall = MonsterInformationProvider.getInstance().retrieveDrop(mobId);										 //根据怪物ID获取掉落物品列表
+        let CountItems = dropall.size();																																  //取掉落物品总数量
+        let mobName = !mob.getName() || mob.getName() == 'MISSINGNO' ? `#o${mobId}#` : mob.getName();
+        mobName = `${getMobImage(mobId)}\r\n[ #e#b${mobName}#k#n ] `;
+        if(CountItems <= 0) {
             msgtext = `${mobName} 没有掉落。`;
         } else {
             msgtext = `${getMobImage(mobId)}\r\n${mobName} 物品掉落列表一览\r\n\r\n`;
