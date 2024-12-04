@@ -9007,7 +9007,7 @@ public class Character extends AbstractCharacterObject {
                 if (pendantExp < 3) {
                     pendantExp++;
                     //用于准确提示装备1小时内还是装备经过几小时
-                    message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp, pendantExp * 10));
+                    message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp == 3 : 2 ? pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
