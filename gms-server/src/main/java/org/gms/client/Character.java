@@ -171,7 +171,9 @@ public class Character extends AbstractCharacterObject {
     @Setter
     @Getter
     private int allianceRank;
-    private int messengerposition = 4;
+    @Setter
+    @Getter
+    private int messengerPosition = 4;
     private int slots = 0;
     @Getter
     @Setter
@@ -1198,7 +1200,7 @@ public class Character extends AbstractCharacterObject {
 
         if (GameConfig.getServerBoolean("use_announce_change_job")) {
             if (!this.isGM()) {
-                broadcastAcquaintances(6,I18nUtil.getMessage("Character.Job.Change.message",getName(), GameConstants.ordinal(GameConstants.getJobBranch(newJob)),GameConstants.getJobName(this.job.getId())));        // thanks Vcoc for noticing job name appearing in uppercase here
+                broadcastAcquaintances(6, I18nUtil.getMessage("Character.Job.Change.message", getName(), GameConstants.ordinal(GameConstants.getJobBranch(newJob)), GameConstants.getJobName(this.job.getId())));        // thanks Vcoc for noticing job name appearing in uppercase here
             }
         }
     }
@@ -1340,8 +1342,8 @@ public class Character extends AbstractCharacterObject {
         if (eim != null) {
             warpMap = eim.getMapInstance(map);
         } else {
-            warpMap = getMap(map,true);
-            if(warpMap == null) return; //判断地图不存在则直接返回并发送提示消息。
+            warpMap = getMap(map, true);
+            if (warpMap == null) return; //判断地图不存在则直接返回并发送提示消息。
         }
 
         Portal portal = switch (pt) {
@@ -1683,7 +1685,7 @@ public class Character extends AbstractCharacterObject {
         if (!canWarpMap) {
             return;
         }
-        if(getMap(to.getId(),true) == null) return; //判断地图不存在则直接返回并发送提示消息。
+        if (getMap(to.getId(), true) == null) return; //判断地图不存在则直接返回并发送提示消息。
 
         this.mapTransitioning.set(true);
 
@@ -1721,7 +1723,7 @@ public class Character extends AbstractCharacterObject {
             }
             silentPartyUpdateInternal(getParty());  // EIM script calls inside
         } else {    //切换地图时卡住了
-            log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn2"), getName(),map.getMapName(), map.getId());
+            log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn2"), getName(), map.getMapName(), map.getId());
             client.disconnect(true, false);     // thanks BHB for noticing a player storage stuck case here
             return;
         }
@@ -1814,9 +1816,9 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void checkMessenger() {
-        if (messenger != null && messengerposition < 4 && messengerposition > -1) {
+        if (messenger != null && messengerPosition < 4 && messengerPosition > -1) {
             World worldz = getWorldServer();
-            worldz.silentJoinMessenger(messenger.getId(), new MessengerCharacter(this, messengerposition), messengerposition);
+            worldz.silentJoinMessenger(messenger.getId(), new MessengerCharacter(this, messengerPosition), messengerPosition);
             worldz.updateMessenger(getMessenger().getId(), name, client.getChannel());
         }
     }
@@ -1974,7 +1976,7 @@ public class Character extends AbstractCharacterObject {
                                 this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
                                 if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //捡到点券是否展示
-                                    showHint(I18nUtil.getMessage("Character.pickupItem.message1",nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)) , 300);
+                                    showHint(I18nUtil.getMessage("Character.pickupItem.message1", nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)), 300);
                                     //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                                 }
 
@@ -2027,7 +2029,7 @@ public class Character extends AbstractCharacterObject {
                         this.getCashShop().gainCash(CashShop.NX_CREDIT, nxGain);
 
                         if (GameConfig.getServerBoolean("use_announce_nx_coupon_loot")) {       //捡到点券是否展示
-                            showHint(I18nUtil.getMessage("Character.pickupItem.message1",nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)) , 300);
+                            showHint(I18nUtil.getMessage("Character.pickupItem.message1", nxGain, this.getCashShop().getCash(CashShop.NX_CREDIT)), 300);
                             //showHint("捡到 #e#b" + nxGain + " NX#k#n (" + this.getCashShop().getCash(CashShop.NX_CREDIT) + " NX)", 300);
                         }
                     } else if (applyConsumeOnPickup(mItem.getItemId())) {
@@ -4783,10 +4785,6 @@ public class Character extends AbstractCharacterObject {
         return (int) netMeso;
     }
 
-    public int getMessengerPosition() {
-        return messengerposition;
-    }
-
     public GuildCharacter getMGC() {
         return mgc;
     }
@@ -5601,7 +5599,7 @@ public class Character extends AbstractCharacterObject {
                 effLock.unlock();
             }
         } else {
-            int remainingAp = GameConfig.getServerInt("level_up_ap_gain");;
+            int remainingAp = GameConfig.getServerInt("level_up_ap_gain");
 
             if (isCygnus()) {
                 if (level > 10) {
@@ -6341,23 +6339,34 @@ public class Character extends AbstractCharacterObject {
         CharactersDO cdo = new CharactersDO();
         cdo.setLevel(chr.getLevel());
         cdo.setFame(chr.getFame());
-        cdo.setAttrStr(chr.getStr());
-        cdo.setAttrDex(chr.getDex());
-        cdo.setAttrInt(chr.getInt());
-        cdo.setAttrLuk(chr.getLuk());
-        cdo.setExp(Math.abs(chr.getExp()));
-        cdo.setGachaexp(Math.abs(chr.getGachaExp()));
-        cdo.setHp(chr.getHp());
-        cdo.setMp(chr.getMp());
-        cdo.setMaxhp(chr.getMaxHp());
-        cdo.setMaxmp(chr.getMaxMp());
-        StringBuilder sps = new StringBuilder();
-        for (int sp : chr.getRemainingSps()) {
-            sps.append(sp);
-            sps.append(",");
+
+        chr.effLock.lock();
+        chr.statWlock.lock();
+        try {
+            // 此处虽然是可重入锁，但仍不建议锁2次，所以不使用get方法
+            cdo.setAttrStr(chr.attrStr);
+            cdo.setAttrDex(chr.attrDex);
+            cdo.setAttrInt(chr.attrInt);
+            cdo.setAttrLuk(chr.attrLuk);
+            cdo.setExp(Math.abs(chr.exp.get()));
+            cdo.setGachaexp(Math.abs(chr.gachaExp.get()));
+            cdo.setHp(chr.hp);
+            cdo.setMp(chr.mp);
+            cdo.setMaxhp(chr.maxHp);
+            cdo.setMaxmp(chr.maxMp);
+            StringBuilder sps = new StringBuilder();
+            for (int sp : chr.remainingSp) {
+                sps.append(sp);
+                sps.append(",");
+            }
+            sps.deleteCharAt(sps.length() - 1);
+            cdo.setSp(sps.toString());
+            cdo.setAp(chr.remainingAp);
+        } finally {
+            chr.statWlock.unlock();
+            chr.effLock.unlock();
         }
-        sps.deleteCharAt(sps.length() - 1);
-        cdo.setSp(sps.toString());
+
         cdo.setGm(chr.gmLevel());
         cdo.setSkincolor(chr.getSkinColor().getId());
         cdo.setGender(chr.getGender());
@@ -6385,6 +6394,28 @@ public class Character extends AbstractCharacterObject {
                 cdo.setSpawnpoint(0);
             }
         }
+        cdo.setParty(chr.getPartyId());
+        cdo.setBuddyCapacity(chr.getBuddylist().getCapacity());
+        if (chr.getMessenger() == null) {
+            cdo.setMessengerid(0);
+            cdo.setMessengerposition(4);
+        } else {
+            cdo.setMessengerid(chr.getMessenger().getId());
+            cdo.setMessengerposition(chr.getMessengerPosition());
+        }
+        if (chr.getMapleMount() == null) {
+            cdo.setMountlevel(1);
+            cdo.setMountexp(0);
+            cdo.setMounttiredness(0);
+        } else {
+            cdo.setMountlevel(chr.getMapleMount().getLevel());
+            cdo.setMountexp(chr.getMapleMount().getExp());
+            cdo.setMounttiredness(chr.getMapleMount().getTiredness());
+        }
+        cdo.setEquipslots((int) chr.getSlots(0));
+        cdo.setUseslots((int) chr.getSlots(1));
+        cdo.setSetupslots((int) chr.getSlots(2));
+        cdo.setEtcslots((int) chr.getSlots(3));
         // todo 未完成
         return cdo;
     }
@@ -7364,7 +7395,7 @@ public class Character extends AbstractCharacterObject {
                     ps.setInt(26, buddylist.getCapacity());
                     if (messenger != null) {
                         ps.setInt(27, messenger.getId());
-                        ps.setInt(28, messengerposition);
+                        ps.setInt(28, messengerPosition);
                     } else {
                         ps.setInt(27, 0);
                         ps.setInt(28, 4);
@@ -7778,42 +7809,23 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void setHasMerchant(boolean set) {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET HasMerchant = ? WHERE id = ?")) {
-            ps.setInt(1, set ? 1 : 0);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        characterService.update(CharactersDO.builder()
+                .id(id)
+                .hasmerchant(set)
+                .build());
         hasMerchant = set;
     }
 
     public void addMerchantMesos(int add) {
         final int newAmount = (int) Math.min((long) merchantmeso + add, Integer.MAX_VALUE);
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, newAmount);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return;
-        }
-        merchantmeso = newAmount;
+        setMerchantMeso(newAmount);
     }
 
     public void setMerchantMeso(int set) {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET MerchantMesos = ? WHERE id = ?", Statement.RETURN_GENERATED_KEYS)) {
-            ps.setInt(1, set);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return;
-        }
+        characterService.update(CharactersDO.builder()
+                .id(id)
+                .merchantmesos(set)
+                .build());
         merchantmeso = set;
     }
 
@@ -7992,10 +8004,6 @@ public class Character extends AbstractCharacterObject {
 
     public void setMap(int PmapId) {
         this.mapId = PmapId;
-    }
-
-    public void setMessengerPosition(int position) {
-        this.messengerposition = position;
     }
 
     public void setMiniGamePoints(Character visitor, int winnerslot, boolean omok) {
@@ -8886,18 +8894,12 @@ public class Character extends AbstractCharacterObject {
     public void block(int reason, int days, String desc) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, days);
-        final Timestamp TS = new Timestamp(cal.getTimeInMillis());
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET banreason = ?, tempban = ?, greason = ? WHERE id = ?")) {
-            ps.setString(1, desc);
-            ps.setTimestamp(2, TS);
-            ps.setInt(3, reason);
-            ps.setInt(4, accountId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        accountService.update(AccountsDO.builder()
+                .id(accountId)
+                .banreason(desc)
+                .tempban(new Timestamp(cal.getTimeInMillis()))
+                .greason(reason)
+                .build());
     }
 
     public List<Integer> getTrockMaps() {
@@ -9007,7 +9009,7 @@ public class Character extends AbstractCharacterObject {
                 if (pendantExp < 3) {
                     pendantExp++;
                     //用于准确提示装备1小时内还是装备经过几小时
-                    message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp == 3 : 2 ? pendantExp, pendantExp * 10));
+                    message(I18nUtil.getMessage(pendantExp <= 2 ? "Character.equipPendantOfSpirit.message1" : "Character.equipPendantOfSpirit.message2", pendantExp == 3 ? 2 : pendantExp, pendantExp * 10));
                 } else {
                     pendantOfSpirit.cancel(false);
                 }
@@ -9060,7 +9062,7 @@ public class Character extends AbstractCharacterObject {
     }
 
     public void showAllEquipFeatures() {
-        String showMsg = "";
+        StringBuilder showMsg = new StringBuilder();
 
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
         for (Item item : getInventory(InventoryType.EQUIPPED).list()) {
@@ -9070,7 +9072,7 @@ public class Character extends AbstractCharacterObject {
                 continue;
             }
 
-            showMsg += nEquip.showEquipFeatures(client);
+            showMsg.append(nEquip.showEquipFeatures(client));
         }
 
         if (!showMsg.isEmpty()) {
@@ -9204,15 +9206,10 @@ public class Character extends AbstractCharacterObject {
 
     public void logOff() {
         this.loggedIn = false;
-
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET lastLogoutTime=? WHERE id=?")) {
-            ps.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
-            ps.setInt(2, getId());
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        characterService.update(CharactersDO.builder()
+                .id(id)
+                .lastLogoutTime(new Timestamp(System.currentTimeMillis()))
+                .build());
     }
 
 
@@ -9343,30 +9340,15 @@ public class Character extends AbstractCharacterObject {
     }
 
     public int getRewardPoints() {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT rewardpoints FROM accounts WHERE id=?;")) {
-            ps.setInt(1, accountId);
-            ResultSet resultSet = ps.executeQuery();
-            int point = -1;
-            if (resultSet.next()) {
-                point = resultSet.getInt(1);
-            }
-            return point;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
+        AccountsDO accountsDO = accountService.findById(accountId);
+        return accountsDO == null ? -1 : Optional.ofNullable(accountsDO.getRewardpoints()).orElse(-1);
     }
 
     public void setRewardPoints(int value) {
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE accounts SET rewardpoints=? WHERE id=?;")) {
-            ps.setInt(1, value);
-            ps.setInt(2, accountId);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        accountService.update(AccountsDO.builder()
+                .id(accountId)
+                .rewardpoints(value)
+                .build());
     }
 
     public void setReborns(int value) {
@@ -9375,14 +9357,10 @@ public class Character extends AbstractCharacterObject {
             throw new NotEnabledException();
         }
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("UPDATE characters SET reborns=? WHERE id=?;")) {
-            ps.setInt(1, value);
-            ps.setInt(2, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        characterService.update(CharactersDO.builder()
+                .id(id)
+                .reborns(value)
+                .build());
     }
 
     public void addReborns() {
@@ -9395,18 +9373,8 @@ public class Character extends AbstractCharacterObject {
             throw new NotEnabledException();
         }
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT reborns FROM characters WHERE id=?;")) {
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                rs.next();
-                return rs.getInt(1);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException();
+        CharactersDO charactersDO = characterService.findById(id);
+        return charactersDO == null ? 0 : Optional.ofNullable(charactersDO.getReborns()).orElse(0);
     }
 
     public void executeRebornAsId(int jobId) {
@@ -9632,18 +9600,19 @@ public class Character extends AbstractCharacterObject {
      * @param showMsg   true = 地图不存在弹出提示，false = 不提示
      * @return
      */
-    public MapleMap getMap(int mapid,boolean showMsg){
+    public MapleMap getMap(int mapid, boolean showMsg) {
         MapleMap map = null;
-        try{
+        try {
             map = client.getChannelServer().getMapFactory().getMap(mapid);
-        } catch (Exception ignored) {}
-        if(map == null && showMsg) {
-            String msg = I18nUtil.getMessage("Character.Map.Change.message1",Integer.toString(mapid));
-            log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn1"),getName(),getMap().getMapName(),getMapId(),
+        } catch (Exception ignored) {
+        }
+        if (map == null && showMsg) {
+            String msg = I18nUtil.getMessage("Character.Map.Change.message1", Integer.toString(mapid));
+            log.warn(I18nUtil.getLogMessage("Character.Map.Change.warn1"), getName(), getMap().getMapName(), getMapId(),
                     I18nUtil.getLogMessage("SystemRescue.info.map.message1"),
                     mapid);
-            dropMessage(5,msg);                 //聊天窗红色消息提示
-            dropMessage(1,msg);                 //弹窗消息
+            dropMessage(5, msg);                 //聊天窗红色消息提示
+            dropMessage(1, msg);                 //弹窗消息
             sendPacket(PacketCreator.enableActions());
         }
         return map;

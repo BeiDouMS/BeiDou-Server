@@ -12,11 +12,11 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/',
-      redirect: 'login',
+      path: '/login',
+      redirect: '/',
     },
     {
-      path: '/login',
+      path: '/',
       name: 'login',
       component: () => import('@/views/login/index.vue'),
       meta: {

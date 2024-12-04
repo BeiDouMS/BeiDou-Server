@@ -49,7 +49,10 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
     protected int maxHp;
     protected int mp;
     protected int maxMp;
-    protected int hpMpApUsed, remainingAp;
+    @Setter
+    protected int hpMpApUsed;
+    @Setter
+    protected int remainingAp;
     protected int[] remainingSp = new int[10];
     @Getter
     protected transient int clientMaxHp;
@@ -203,10 +206,6 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
         return localMaxMp;
     }
 
-    public void setHpMpApUsed(int mpApUsed) {
-        this.hpMpApUsed = mpApUsed;
-    }
-
     private void dispatchHpChanged(final int oldHp) {
         listener.onHpChanged(oldHp);
     }
@@ -253,10 +252,6 @@ public abstract class AbstractCharacterObject extends AbstractAnimatedMapObject 
             this.transientMp = Float.NEGATIVE_INFINITY;
         }
         this.mp = tmp;
-    }
-
-    public void setRemainingAp(int remainingAp) {
-        this.remainingAp = remainingAp;
     }
 
     public void setRemainingSp(int remainingSp, int skillbook) {
