@@ -45,7 +45,8 @@ function levelmain() {
     if(List_Mob_All.length == 0) {
         cm.sendOkLevel('dispose', '当前地图没有存活的怪物，请等待怪物刷新后再进行查询。', 2);
     } else {
-        var Msg_Select = '当前地图怪物列表一览，点击可查看掉落列表：\r\n\r\n'; //怪物选择展示消息
+        var Msg_Select = '当前地图#b#e存活#k#n怪物列表一览，点击可查看掉落列表：\r\n'; //怪物选择展示消息
+            Msg_Select += '#d' + '\r\n'.padStart(28,'——') + '#k';
         if(List_Mob_Boss.length > 0) {
             Msg_Select += `#e#rBOSS#k#n：${List_Mob_Boss.length} 种\r\n`;
             Msg_Select += getSelecttext(List_Mob_Boss);
@@ -69,10 +70,11 @@ function getSelecttext(moblist) {
     namelength = namelength > size ? namelength : size;
     return moblist.map(obj => {
         let id = obj.getId();
+        let select = '#fUI/UIWindow.img/UserList/Friend/icon04# ';
         let name = !obj.getName() || obj.getName() == 'MISSINGNO' ? `#o${id}#` : obj.getName();     //优先以服务器怪物名称为准，没有的话就显示客户端的
-        name = name.padEnd(namelength,'\t');
-        return `#L${id}#${getMobImage(obj)}\r\n#${(obj.isBoss() ? 'r' : 'b') + name}#k\t[ Lv.${obj.getLevel()} ] #l`
-    }).join('\r\n') + '\r\n\r\n';
+            name = select + name.padEnd(namelength,'\t');
+        return `#L${id}#${getMobImage(obj)}\r\n#${(obj.isBoss() ? 'r' : 'b') + name}#k\t[ Lv.${getLevelImage(obj.getLevel())} ] #l`
+    }).join('\r\n\r\n') + '\r\n\r\n';
 }
 
 /**
@@ -153,4 +155,17 @@ function getMobImage(mob){
         //当前怪物ID最多7位数，不足7位数则需要在前面补0
         return `#fMob/${mob.getId().toString().padStart(7, '0')}.img/${type}/0#`;
     }
+}
+
+function getLevelImage(level,type) {
+    let UI = []
+        UI.push('Basic/LevelNo/');
+        UI.push('Basic/ItemNo/');
+        UI.push('UIWindow/SkillEx/SpNum/');
+        UI.push('UIWindow/VegaSpell/Count/');
+        UI.push('UIWindow/ToolTip/Equip/GrowthEnabled/');
+        type = !type ? 0 : type;
+        type = type > UI.length ? UI.length : type;
+        UI = UI[type];
+    return [...level.toString()].map(str => `#fUI/${UI + str}#`);
 }
