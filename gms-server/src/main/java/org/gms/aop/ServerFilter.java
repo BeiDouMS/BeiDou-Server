@@ -26,10 +26,6 @@ public class ServerFilter extends HttpFilter {
 
     protected boolean shouldNotFilter(final HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        // login
-        if (requestURI.startsWith("/login") || requestURI.startsWith("/logout")) {
-            return true;
-        }
         // web resource
         if (requestURI.startsWith("/assets")) {
             return true;
@@ -43,10 +39,6 @@ public class ServerFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (shouldNotFilter(request)) {
-            chain.doFilter(request, response);
-            return;
-        }
         try {
             String forwardedIp = request.getHeader("X-Forwarded-For");
             String realIp = request.getHeader("X-Real-IP");
@@ -70,6 +62,11 @@ public class ServerFilter extends HttpFilter {
             // 释放流，否则可能内存泄漏
             request.getInputStream().close();
             response.getOutputStream().close();
+            return;
+        }
+        // 这一步 应该在限流之后进行
+        if (shouldNotFilter(request)) {
+            chain.doFilter(request, response);
             return;
         }
         if (request.getContentType() == null || request.getContentType().contains("multipart/form-data")) {

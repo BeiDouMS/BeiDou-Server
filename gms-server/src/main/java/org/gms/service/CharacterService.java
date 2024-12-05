@@ -29,6 +29,7 @@ import org.gms.server.life.MobSkillType;
 import org.gms.server.maps.*;
 import org.gms.util.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
@@ -91,6 +92,10 @@ public class CharacterService {
 
     public CharactersDO findById(int id) {
         return charactersMapper.selectOneById(id);
+    }
+
+    public void update(CharactersDO condition) {
+        charactersMapper.update(condition);
     }
 
     public Page<ChrOnlineListRtnDTO> getChrOnlineList(ChrOnlineListReqDTO request) {
@@ -290,9 +295,16 @@ public class CharacterService {
         worldTransferService.cancelPendingWorldTransfer(player, false);
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public void saveCharToDB(Character player) {
+    @Transactional(rollbackFor = Exception.class, isolation = Isolation.READ_UNCOMMITTED)
+    public void saveCharToDB(Character player, boolean notAutosave) {
+        if (!player.isLoggedIn()) {
+            return;
+        }
+        log.info(I18nUtil.getLogMessage(notAutosave ? "Character.saveCharToDB.info1" : "Character.saveCharToDB.info2"), player.getName());
+        Server.getInstance().updateCharacterEntry(player);
 
+        CharactersDO cdo = Character.toCharactersDO(player);
+        charactersMapper.insertSelective(cdo);
     }
 
     public Character loadCharFromDB(int cid, Client client, boolean channelServer) {

@@ -243,7 +243,11 @@ public class LifeFactory {
                 stats.setFixedStance(origin.getX() < 1 ? 5 : 4);    // fixed left/right
             }
         }
-
+        if (monsterData.getChildByPath("fly") != null) {
+            stats.setMovetype(1);   //设定怪物类型为：fly
+        } else if (monsterData.getChildByPath("stand") != null) {
+            stats.setMovetype(0);   //设定怪物类型为：stand
+        }
         return new Pair<>(stats, attackInfos);
     }
 

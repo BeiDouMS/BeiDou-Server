@@ -19,7 +19,7 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-function start() {
-    cm.sendNext("嗨, 我是 #b#p1002006##k 见到你很高兴。")
-    cm.dispose();
+
+function start(ms) {
+    ms.mapEffect("maplemap/enter/2000000");
 }

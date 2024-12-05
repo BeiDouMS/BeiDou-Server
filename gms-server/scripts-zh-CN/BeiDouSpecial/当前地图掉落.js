@@ -8,17 +8,17 @@ var MonsterInformationProvider;
 var ItemInformationProvider;
 var QuestInfo;
 
-var MapObj;                 //地图对象
-var List_Mob_All;           //所有怪物列表
-var List_Mob_Boss;          //BOSS列表
-var List_Mob;               //普通怪物列表
+var MapObj;								 //地图对象
+var List_Mob_All;				   //所有怪物列表
+var List_Mob_Boss;				  //BOSS列表
+var List_Mob;						   //普通怪物列表
 var namelength = 0;
 
 function start(){
-    if(MapObj == null) {    //首次打开进行初始化。
-        MonsterInformationProvider = Java.type('org.gms.server.life.MonsterInformationProvider');       //导入 怪物信息 类
-        ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');                  //导入 物品信息 类
-        QuestInfo = Java.type('org.gms.server.quest.Quest');                                            //导入 任务 类
+    if(MapObj == null) {		//首次打开进行初始化。
+        MonsterInformationProvider = Java.type('org.gms.server.life.MonsterInformationProvider');//导入 怪物信息 类
+        ItemInformationProvider = Java.type('org.gms.server.ItemInformationProvider');//导入 物品信息 类
+        QuestInfo = Java.type('org.gms.server.quest.Quest');//导入 任务 类
         MapObj = cm.getMap();
         List_Mob_All = MapObj.getAllMonsters(); //获取当前地图存活的怪物数量，由于未找到获取当前地图固定怪物列表方法，故用此方法代替。
         //将怪物种类去重并按照Boss和普通怪物区分开
@@ -45,7 +45,8 @@ function levelmain() {
     if(List_Mob_All.length == 0) {
         cm.sendOkLevel('dispose', '当前地图没有存活的怪物，请等待怪物刷新后再进行查询。', 2);
     } else {
-        var Msg_Select = '当前地图怪物列表一览，点击可查看掉落列表：\r\n\r\n'; //怪物选择展示消息
+        var Msg_Select = '当前地图#b#e存活#k#n怪物列表一览，点击可查看掉落列表：\r\n'; //怪物选择展示消息
+            Msg_Select += '#d' + '\r\n'.padStart(28,'——') + '#k';
         if(List_Mob_Boss.length > 0) {
             Msg_Select += `#e#rBOSS#k#n：${List_Mob_Boss.length} 种\r\n`;
             Msg_Select += getSelecttext(List_Mob_Boss);
@@ -69,9 +70,11 @@ function getSelecttext(moblist) {
     namelength = namelength > size ? namelength : size;
     return moblist.map(obj => {
         let id = obj.getId();
-        let name = obj.getName().padEnd(namelength,'\t');
-        return `#L${id}#${getMobImage(id)}\r\n#b${name}#k\t${obj.isBoss() ? '[ #r#eBOSS#k#n ]' : ''}\t[ Lv.${obj.getLevel()} ]#l`
-    }).join('\r\n') + '\r\n\r\n';
+        let select = '#fUI/UIWindow.img/UserList/Friend/icon04# ';
+        let name = !obj.getName() || obj.getName() == 'MISSINGNO' ? `#o${id}#` : obj.getName();     //优先以服务器怪物名称为准，没有的话就显示客户端的
+            name = select + name.padEnd(namelength,'\t');
+        return `#L${id}#${getMobImage(obj)}\r\n#${(obj.isBoss() ? 'r' : 'b') + name}#k\t[ Lv.${getLevelImage(obj.getLevel())} ] #l`
+    }).join('\r\n\r\n') + '\r\n\r\n';
 }
 
 /**
@@ -79,7 +82,7 @@ function getSelecttext(moblist) {
  * @param mobId
  */
 function levelShowDropList(mobId) {
-    const mob = List_Mob_All.find(mob => mob.getId() == mobId);     //根据怪物ID获取已缓存的怪物对象
+    const mob = List_Mob_All.find(mob => mob.getId() == mobId);		 //根据怪物ID获取已缓存的怪物对象
     const table = {
         '物品名称' : 0,
         '基础掉率' : 0,
@@ -89,17 +92,18 @@ function levelShowDropList(mobId) {
 
     if(mob != null) {
         let player = cm.getPlayer();
-        let dropall = MonsterInformationProvider.getInstance().retrieveDrop(mobId);                     //根据怪物ID获取掉落物品列表
-        let CountItems = dropall.size;                                                                  //取掉落物品总数量
-        let mobName = `[ #e#b${mob.getName()}#k#n ] `;
-        if(CountItems === 0) {
-            msgtext = `${mobName} 没有掉落。`;
+        let dropall = MonsterInformationProvider.getInstance().retrieveDrop(mobId);										 //根据怪物ID获取掉落物品列表
+        let CountItems = dropall.size();																																  //取掉落物品总数量
+        let mobName = !mob.getName() || mob.getName() == 'MISSINGNO' ? `#o${mobId}#` : mob.getName();
+        mobName = `[ #e#b${mobName}#k#n ] `;
+        if(CountItems <= 0) {
+            msgtext = `${getMobImage(mob)}\r\n${mobName} 没有掉落。`;
         } else {
-            msgtext = `${getMobImage(mobId)}\r\n${mobName} 物品掉落列表一览\r\n\r\n`;
+            msgtext = `${getMobImage(mob)}\r\n${mobName} 物品掉落列表一览\r\n\r\n`;
             // 遍历 table 对象的键，并设置其值为键名的长度
             Object.keys(table).forEach(key => {table[key] = Math.max(table[key],key.length)});
             let dropitemlist = {};
-            dropall.filter(drop => drop.itemId > 0).forEach((drop, index) => {
+            dropall.filter(drop => drop.itemId > 0).forEach((drop) => {
                 let itemName = ItemInformationProvider.getInstance().getName(drop.itemId);
                 if (itemName != null) {
                     let itemChance = (drop.chance / 10000).toFixed(4);
@@ -137,6 +141,31 @@ function countAllSymbols(str) {
     return Math.ceil(str.match(/[^\u4e00-\u9fff]/g)?.length / 2) || 0;
 }
 
-function getMobImage(id){
-    return `#fMob/${id}.img/stand/0#`;
+/**
+ * 以下函数在某些特定的情况下可能会导致客户端闪退
+ * @param mob
+ * @returns {string}
+ */
+function getMobImage(mob){
+    let type = [null,'stand','fly']
+        type = type[mob.getStats().getMovetype() + 1];    //-1=未知类型，0=陆地类型，1=飞天类型
+    if(type == null) {
+        return `#fUI/UIWindow.img/Maker/randomRecipe#`;     //没有怪物图片时显示一个问号。
+    } else {
+        //当前怪物ID最多7位数，不足7位数则需要在前面补0
+        return `#fMob/${mob.getId().toString().padStart(7, '0')}.img/${type}/0#`;
+    }
+}
+
+function getLevelImage(level,type) {
+    let UI = []
+        UI.push('Basic/LevelNo/');
+        UI.push('Basic/ItemNo/');
+        UI.push('UIWindow/SkillEx/SpNum/');
+        UI.push('UIWindow/VegaSpell/Count/');
+        UI.push('UIWindow/ToolTip/Equip/GrowthEnabled/');
+        type = !type ? 0 : type;
+        type = type > UI.length ? UI.length : type;
+        UI = UI[type];
+    return [...level.toString()].map(str => `#fUI/${UI + str}#`);
 }
