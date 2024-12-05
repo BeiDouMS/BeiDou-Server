@@ -54,6 +54,7 @@ public class MonsterStats {
     public selfDestruction selfDestruction = null;
     public int fixedStance = 0;
     public boolean friendly;
+    public int movetype = -1;    //怪物类型，-1=未知，0=stand（陆地），1=fly（飞天）
 
     public void setChange(boolean change) {
         this.changeable = change;
@@ -342,6 +343,21 @@ public class MonsterStats {
 
     public void setFixedStance(int stance) {
         this.fixedStance = stance;
+    }
+
+    /**
+     * 怪物类型，-1=未知，0=stand（陆地怪物），1=fly（飞天怪物）
+     * @return
+     */
+    public int getMovetype() {
+        return movetype;
+    }
+    /**
+     * 怪物类型，-1=未知，0=stand（陆地怪物），1=fly（飞天怪物）
+     * @return
+     */
+    public void setMovetype(int movetype) {
+        this.movetype = movetype;
     }
 
     public MonsterStats copy() {
