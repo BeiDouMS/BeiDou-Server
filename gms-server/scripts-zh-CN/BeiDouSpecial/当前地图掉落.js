@@ -50,7 +50,7 @@ function levelmain() {
         if(List_Mob_Boss.length > 0) {
             Msg_Select += `#e#rBOSS#k#n：${List_Mob_Boss.length} 种\r\n`;
             Msg_Select += getSelecttext(List_Mob_Boss);
-            Msg_Select += '#d' + '\r\n'.padStart(28,'——') + '#k';
+            if(List_Mob.length > 0) Msg_Select += '#d' + '\r\n'.padStart(28,'——') + '#k';
         }
         if(List_Mob.length > 0) {
             Msg_Select += `普通怪物：${List_Mob.length} 种\r\n`;
@@ -151,6 +151,8 @@ function getMobImage(mob){
         type = type[mob.getStats().getMovetype() + 1];    //-1=未知类型，0=陆地类型，1=飞天类型
     if(type == null) {
         return `#fUI/UIWindow.img/Maker/randomRecipe#`;     //没有怪物图片时显示一个问号。
+    } else if (mob.getStats().getImgwidth() > 160 && mob.getStats().getImgheight() > 250) { //如果图片超过指定范围会造成客户端假死，因此这里需要替换成别的图片或者干脆不要。
+        return `#fMap/Obj/Tdungeon.img/mushCatle/npc/0/0#\r\n(形象过大，不能展示)`;
     } else {
         //当前怪物ID最多7位数，不足7位数则需要在前面补0
         return `#fMob/${mob.getId().toString().padStart(7, '0')}.img/${type}/0#`;
