@@ -36,7 +36,7 @@ function action(mode, type, selection) {
         } else if (status == 2) {
 			for (var i = 0; i < 96; i++) {
 				if (cm.getInventory(sel).getItem(i) != null) {
-					cm.removeAll(cm.getInventory(sel).getItem(i).getItemId());
+                    cm.getInventory(sel).removeSlot(i);
 				}
 			}
             cm.sendOk("清除完毕"+sel);
