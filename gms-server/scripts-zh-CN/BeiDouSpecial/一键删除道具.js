@@ -42,7 +42,7 @@ function levelChooseType2() {
     }
     for (let i = 0; i < items.length; i++) {
         let itemId = items[i].getItemId();
-        text += "#L" + items[i].getPosition() + "#t" + itemId + "##i" + itemId + "##l\r\n";
+        text += "#L" + items[i].getPosition() + "##t" + itemId + "##i" + itemId + "##l\r\n";
     }
     // 选择单个道具
     cm.sendNextSelectLevel("DoRemove", text);
