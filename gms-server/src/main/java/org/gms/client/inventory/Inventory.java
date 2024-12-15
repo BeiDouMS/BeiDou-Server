@@ -309,10 +309,6 @@ public class Inventory implements Iterable<Item> {
         }
     }
 
-    public void removeAll() {
-        inventory.keySet().stream().toList().forEach(this::removeSlot);
-    }
-
     protected short addSlot(Item item) {
         if (item == null) {
             return -1;
