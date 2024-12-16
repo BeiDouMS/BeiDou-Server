@@ -18,41 +18,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-var status;
-
-function start() {
-    status = -1;
-    action(1, 0, 0);
-}
-
-function action(mode, type, selection) {
-    if (mode == -1) {
-        im.dispose();
-    } else {
-        if (mode == 0 && type > 0) {
-            im.dispose();
-            return;
-        }
-        if (mode == 1) {
-            status++;
-        } else {
-            status--;
-        }
-
-        if (status == 0) {
-            if (im.getMapId() == 106020300) {
-                var portal = im.getMap().getPortal("obstacle");
-                if (portal != null && portal.getPosition().distance(im.getPlayer().getPosition()) < 210) {
-                    if (!(im.isQuestStarted(100202) || im.isQuestCompleted(100202))) {
-                        im.startQuest(100202);
-                    }
-                    im.removeAll(2430014);
-
-                    im.message("You have used the Killer Mushroom Spore to open the way.");
-                }
+function start(){
+    if (im.getMapId() == 106020300) {
+        var portal = im.getMap().getPortal("obstacle");
+        if (portal != null && portal.getPosition().distance(im.getPlayer().getPosition()) < 240) {
+            if (!(im.isQuestStarted(100202) || im.isQuestCompleted(100202))) {
+                im.startQuest(100202);
             }
-
-            im.dispose();
+            im.removeAll(2430014);
+            im.showInfo("Effect/OnUserEff/normalEffect/mushroomcastle/chatBalloon2");
+            im.dropMessage(6,'There seems to be some movement Hmm? The barrier has been eliminated');
+        } else {
+            im.message('Getting as close as possible to the magic barrier is necessary to eliminate it');
         }
+    } else {
+        im.message('There seems to be no magic barrier that needs to be eliminated here');
     }
+
+    im.dispose();
 }
+
