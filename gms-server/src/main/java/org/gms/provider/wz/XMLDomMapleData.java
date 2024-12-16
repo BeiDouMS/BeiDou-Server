@@ -207,4 +207,12 @@ public class XMLDomMapleData implements Data {
     public synchronized Iterator<Data> iterator() {
         return getChildren().iterator();
     }
+
+    /**
+     * 获取指定节点属性值
+     * @return
+     */
+    public synchronized String getAttributeValue(String name) {
+        return node.getAttributes().getNamedItem(name).getNodeValue();
+    }
 }
