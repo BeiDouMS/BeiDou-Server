@@ -34,15 +34,18 @@ function levelChooseType1() {
 // 选择了删除方式2
 function levelChooseType2() {
     text = "选择要删除的道具\r\n\r\n";
-    let items = cm.getInventory(sel).list();
-    if (items.length === 0) {
+    let hasVal = false;
+    for (let i = 0; i < 96; i++) {
+        let item = cm.getInventory(sel).getItem(i);
+        if (item) {
+            hasVal = true;
+            text += "#L" + item.getPosition() + "##t" + item.getItemId() + "##i" + item.getItemId() + "##l\r\n";
+        }
+    }
+    if (!hasVal) {
         // 回到levelStart
         cm.sendNextLevel("Start", "背包栏下没有道具！");
         return;
-    }
-    for (let i = 0; i < items.length; i++) {
-        let itemId = items[i].getItemId();
-        text += "#L" + items[i].getPosition() + "##t" + itemId + "##i" + itemId + "##l\r\n";
     }
     // 选择单个道具
     cm.sendNextSelectLevel("DoRemove", text);
@@ -50,13 +53,14 @@ function levelChooseType2() {
 
 // 是否清除选择了是
 function levelDoClear() {
-    cm.getInventory(sel).removeAll();
+    cm.removeAllByInventory(sel);
     // 回到levelStart
     cm.sendOkLevel("Start", "清除完毕！");
 }
 
+// 执行删除操作
 function levelDoRemove(choose) {
-    cm.getInventory(sel).removeSlot(choose);
+    cm.removeAllByInventorySlot(sel, choose);
     // 回到选择单个道具
     cm.sendNextLevel("ChooseType2", "清除完毕！");
 }

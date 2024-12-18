@@ -26,6 +26,7 @@ function start() {
             im.forceCompleteQuest(2324);
             im.removeAll(2430015);
             im.playerMessage(6, "使用尖刺消除剂清除道路上的荆棘。");
+            im.warp(106020501);
         } else {
             im.playerMessage(5,"尽可能得离荆棘更近些才能完全清除");
         }

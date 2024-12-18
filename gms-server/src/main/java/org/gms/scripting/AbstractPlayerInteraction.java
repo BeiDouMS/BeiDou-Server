@@ -895,6 +895,21 @@ public class AbstractPlayerInteraction {
         }
     }
 
+    public void removeAllByInventory(int invType) {
+        Inventory inv = getInventory(invType);
+        for (Item item : new ArrayList<>(inv.list())) {
+            InventoryManipulator.removeFromSlot(c, inv.getType(), item.getPosition(), item.getQuantity(), false);
+        }
+    }
+
+    public void removeAllByInventorySlot(int invType, short slot) {
+        Inventory inv = getInventory(invType);
+        Item item = inv.getItem(slot);
+        if (item != null) {
+            InventoryManipulator.removeFromSlot(c, inv.getType(), item.getPosition(), item.getQuantity(), false);
+        }
+    }
+
     public int getMapId() {
         return c.getPlayer().getMap().getId();
     }

@@ -46,7 +46,7 @@ function action(mode, type, selection) {
         cm.dispose();
         return;
     }
-    if (cm.getMeso < price) {
+    if (cm.getMeso() < price) {
         cm.sendOk("请检查并查看您是否有" + price + "金币进入这个地方。");
     } else {
         cm.gainMeso(-price);
