@@ -13,6 +13,6 @@ public class ServerConstants {
             "operate", "master", "sysop", "party", "GameMaster", "community", "message", "event", "test", "meso", "Scania", "yata", "AsiaSoft", "henesys"};
     public static final String LEVEL_200 = "[Congrats] %s has reached Level %d! Congratulate %s on such an amazing achievement!";
 
-    public static final String BEI_DOU_VERSION = "1.7";
-    public static final String BEI_DOU_BUILD_TIME = "2024-10-14 11:11:54";
+    public static final String BEI_DOU_VERSION = "1.8";
+    public static final String BEI_DOU_BUILD_TIME = "2024-12-28 12:56:57";
 }
