@@ -245,14 +245,22 @@ public class LifeFactory {
         }
         Data fly = monsterData.getChildByPath("fly/0");
         Data stand = monsterData.getChildByPath("stand/0");
+
+        Data typeData = null;
         if (fly != null) {
             stats.setMovetype(1);   //设定怪物类型为：fly
-            stats.setImgwidth(Integer.parseInt(fly.getAttributeValue("width")));
-            stats.setImgheight(Integer.parseInt(fly.getAttributeValue("height")));
+            typeData = fly;
         } else if (stand != null) {
             stats.setMovetype(0);   //设定怪物类型为：stand
-            stats.setImgwidth(Integer.parseInt(stand.getAttributeValue("width")));
-            stats.setImgheight(Integer.parseInt(stand.getAttributeValue("height")));
+            typeData = stand;
+        }
+        if (typeData != null) {
+            String width = typeData.getAttributeValue("width");
+            String height = typeData.getAttributeValue("height");
+            if (width != null && height != null) {
+                stats.setImgwidth(Integer.parseInt(width));
+                stats.setImgheight(Integer.parseInt(height));
+            }
         }
         return new Pair<>(stats, attackInfos);
     }

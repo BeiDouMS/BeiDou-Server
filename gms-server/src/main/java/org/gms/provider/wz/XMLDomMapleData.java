@@ -210,9 +210,11 @@ public class XMLDomMapleData implements Data {
 
     /**
      * 获取指定节点属性值
+     *
      * @return
      */
     public synchronized String getAttributeValue(String name) {
-        return node.getAttributes().getNamedItem(name).getNodeValue();
+        Node namedItem = node.getAttributes().getNamedItem(name);
+        return namedItem == null ? null : namedItem.getNodeValue();
     }
 }
