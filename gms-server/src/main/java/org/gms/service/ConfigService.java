@@ -129,6 +129,7 @@ public class ConfigService {
                 .configValue(condition.getConfigValue())
                 .updateTime(new Date())
                 .build());
+        gameConfigDO.setConfigValue(condition.getConfigValue());
         GameConfig.update(gameConfigDO);
     }
 

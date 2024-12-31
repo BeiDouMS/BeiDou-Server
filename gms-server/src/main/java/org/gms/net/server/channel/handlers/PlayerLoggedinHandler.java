@@ -246,7 +246,11 @@ public final class PlayerLoggedinHandler extends AbstractPacketHandler {
             }
 
             c.sendPacket(PacketCreator.getCharInfo(player));    //这里发送登录成功封包
-            if (!player.isHidden()) {
+            if (player.isHidden()) {
+                if (!GameConfig.getServerBoolean("use_auto_hide_gm")) {
+                    player.toggleHide(true);
+                }
+            } else {
                 if (player.isGM() && GameConfig.getServerBoolean("use_auto_hide_gm")) {
                     player.toggleHide(true);    //设置GM角色隐身
                 }

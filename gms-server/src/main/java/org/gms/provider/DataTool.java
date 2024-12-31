@@ -213,4 +213,16 @@ public class DataTool {
         }
         return path.substring(0, path.length() - 1);
     }
+
+    public static String getAttributeValue(Data data,String name) {
+        return data.getAttributeValue(name);
+    }
+    public static String getAttributeValue(Data data,String name,String def) {
+        String val = getAttributeValue(data,name);
+        return val == null ? def : val;
+    }
+    public static int getAttributeValueInt(Data data,String name,int def) {
+        String val = getAttributeValue(data,name);
+        return val == null ? def : Integer.parseInt(val);
+    }
 }
