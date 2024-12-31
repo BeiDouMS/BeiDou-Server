@@ -72,7 +72,7 @@ function action(mode, type, selection) {
                         cm.dispose();
                         return;
                     }
-                    var text = "The following members make up your expedition (Click on them to expel them):\r\n";
+                    var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
                     text += "\r\n\t\t1." + expedicao.getLeader().getName();
                     for (var i = 1; i < size; i++) {
                         text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
