@@ -159,7 +159,7 @@ function action(mode, type, selection) {
                 status = 4;
             } else if (selection == 3) {
                 const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
+                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + "探险结束了。"));
                 cm.endExpedition(expedition);
                 cm.sendOk("这次探险已经结束。有时候最好的策略就是逃跑。");
                 cm.dispose();

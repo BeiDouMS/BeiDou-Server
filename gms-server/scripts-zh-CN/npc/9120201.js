@@ -138,7 +138,7 @@ function action(mode, type, selection) {
                     cm.dispose();
                     return;
                 }
-                var text = "The following members make up your expedition (Click on them to expel them):\r\n";
+                var text = "以下成员组成了你的探险队（点击成员名字可以将其踢出探险队）：\r\n";
                 text += "\r\n\t\t1." + expedition.getLeader().getName();
                 for (var i = 1; i < size; i++) {
                     text += "\r\n#b#L" + (i + 1) + "#" + (i + 1) + ". " + expedMembers.get(i).getValue() + "#l\n";
@@ -159,7 +159,7 @@ function action(mode, type, selection) {
                 status = 4;
             } else if (selection == 3) {
                 const PacketCreator = Java.type('org.gms.util.PacketCreator');
-                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + " has ended the expedition."));
+                player.getMap().broadcastMessage(PacketCreator.serverNotice(6, expedition.getLeader().getName() + "探险结束了。"));
                 cm.endExpedition(expedition);
                 cm.sendOk("这次探险已经结束。有时候最好的策略是逃跑。");
                 cm.dispose();
