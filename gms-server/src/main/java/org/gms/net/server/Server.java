@@ -1661,7 +1661,7 @@ public class Server {
 
         int time = 60000;
 
-        if(serverShutdownDTO.getMinutes() > 0) {
+        if (serverShutdownDTO.getMinutes() > 0) {
             time *= serverShutdownDTO.getMinutes();
         }
 
@@ -1685,19 +1685,26 @@ public class Server {
 
             String shutDownMsg = I18nUtil.getMessage("ShutdownCommand.message7", strTime);
 
-            if(serverShutdownDTO.getShutdownMsg() != null) {
+            if (serverShutdownDTO.getShutdownMsg() != null) {
                 shutDownMsg = serverShutdownDTO.getShutdownMsg();
             }
 
             for (World w : Server.getInstance().getWorlds()) {
                 for (Character chr : w.getPlayerStorage().getAllCharacters()) {
-                    // 屏幕中央提示消息 (火红玫瑰)
-                    chr.startMapEffect(shutDownMsg, 5121009);
+                    if (serverShutdownDTO.getShowCenterMsg()) {
+                        // 屏幕中央提示消息 (火红玫瑰)
+                        chr.startMapEffect(shutDownMsg, 5121009);
+                    }
                 }
-                // 添加滚动消息到顶部，因为是固定时间停服，所以短暂的通知部分玩家可能看不到。
-                w.setServerMessage(shutDownMsg);
-                // 玩家聊天框蓝色GM消息
-                w.broadcastPacket(PacketCreator.serverNotice(6, shutDownMsg));
+                if (serverShutdownDTO.getShowServerMsg()) {
+                    // 添加滚动消息到顶部，因为是固定时间停服，所以短暂的通知部分玩家可能看不到。
+                    w.setServerMessage(shutDownMsg);
+                }
+                if (serverShutdownDTO.getShowChatMsg()) {
+                    // 玩家聊天框蓝色GM消息
+                    w.broadcastPacket(PacketCreator.serverNotice(6, shutDownMsg));
+                }
+
             }
         }
         TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
