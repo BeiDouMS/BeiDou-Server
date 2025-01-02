@@ -6,9 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.gms.client.command.Command;
 import org.gms.client.command.CommandsExecutor;
+
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.dao.mapper.CommandInfoMapper;
 import org.gms.model.dto.CommandReqDTO;
+import org.gms.net.server.Server;
+import org.gms.net.server.channel.Channel;
 import org.gms.util.I18nUtil;
 import org.gms.util.Pair;
 import org.gms.util.RequireUtil;
@@ -208,4 +211,12 @@ public class CommandService {
     }
 
 
+    public void reloadEventsByGMCommand() {
+       //执行ReloadEventsCommand中的execute方法
+        for (Channel ch : Server.getInstance().getAllChannels()) {
+            ch.reloadEventScriptManager();
+        }
+        log.info(I18nUtil.getMessage("ReloadEventsCommand.message2"));
+
+    }
 }

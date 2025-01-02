@@ -9,10 +9,7 @@ import org.gms.constants.api.ApiConstant;
 import org.gms.dao.entity.CommandInfoDO;
 import org.gms.model.dto.*;
 import org.gms.service.CommandService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -34,6 +31,14 @@ public class CommandController {
         return ResultBody.success(commandService.updateCommand(submitBody.getData()));
     }
 
+    //重载事件
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "复用GM命令代码进行重载事件")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadEventsByGMCommand")
+    public ResultBody reloadEventsByGMCommand() {
+        commandService.reloadEventsByGMCommand();
+        return ResultBody.success();
+    }
 
 
 }
