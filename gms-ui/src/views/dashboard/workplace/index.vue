@@ -51,6 +51,13 @@
             >
               {{ $t('workplace.button.shutdown') }}
             </a-button>
+            <a-button
+              :loading="loading"
+              type="primary"
+              @click="handleReloadEvents"
+            >
+              重载事件
+            </a-button>
             <a-modal
               v-model:visible="visible"
               :width="450"
@@ -82,6 +89,7 @@
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
   import { useRouter } from 'vue-router';
+  import { reloadEventsByGMCommand } from '@/api/command';
 
   const { loading, setLoading } = useLoading(false);
   const serverStatus = ref<boolean>(false);
@@ -141,6 +149,16 @@
       await loadSeverStatus();
       setLoading(false);
     }
+  };
+
+  const handleReloadEvents = () => {
+    reloadEventsByGMCommand()
+      .then((response) => {
+        console.log('Events reloaded successfully:', response);
+      })
+      .catch((error) => {
+        console.error('Error reloading events:', error);
+      });
   };
 </script>
 
