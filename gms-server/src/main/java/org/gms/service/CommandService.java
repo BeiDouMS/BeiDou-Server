@@ -236,14 +236,21 @@ public class CommandService {
                 maps.forEach((mapid, map) -> {
                     List<Character> allPlayers = map.getAllPlayers();
                     MapleMap newMap = channel.getMapFactory().resetMap(mapid);
+                    String message = I18nUtil.getMessage("ReloadMapCommand.message2");
                     allPlayers.forEach(chr -> {
+                        int callerid = chr.getId();
                         chr.saveLocationOnWarp();
                         chr.changeMap(newMap);
+                        if (chr.getId() != callerid) {
+                            chr.dropMessage(message);
+                        }
                     });
                 });
             });
         });
+        log.info(I18nUtil.getMessage("ReloadMapCommand.message1"));
         }
+
     }
 
 

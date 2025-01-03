@@ -58,6 +58,20 @@
             >
               重载事件
             </a-button>
+            <a-button
+              :loading="loading"
+              type="primary"
+              @click="handleReloadMaps"
+            >
+              重载地图
+            </a-button>
+            <a-button
+              :loading="loading"
+              type="primary"
+              @click="handleReloadPortals"
+            >
+              重载传送点
+            </a-button>
             <a-modal
               v-model:visible="visible"
               :width="450"
@@ -89,7 +103,11 @@
   import { Message } from '@arco-design/web-vue';
   import useLoading from '@/hooks/loading';
   import { useRouter } from 'vue-router';
-  import { reloadEventsByGMCommand } from '@/api/command';
+  import {
+    reloadEventsByGMCommand,
+    reloadMapsByGMCommand,
+    reloadPortalsByGMCommand,
+  } from '@/api/command';
 
   const { loading, setLoading } = useLoading(false);
   const serverStatus = ref<boolean>(false);
@@ -154,10 +172,30 @@
   const handleReloadEvents = () => {
     reloadEventsByGMCommand()
       .then((response) => {
-        console.log('Events reloaded successfully:', response);
+        Message.success('事件重载成功');
       })
       .catch((error) => {
-        console.error('Error reloading events:', error);
+        Message.error('事件重载失败');
+      });
+  };
+
+  const handleReloadMaps = () => {
+    reloadMapsByGMCommand()
+      .then((response) => {
+        Message.success('地图重载成功');
+      })
+      .catch((error) => {
+        Message.error('地图重载失败');
+      });
+  };
+
+  const handleReloadPortals = () => {
+    reloadPortalsByGMCommand()
+      .then((response) => {
+        Message.success('传送点重载成功');
+      })
+      .catch((error) => {
+        Message.error('传送点重载失败');
       });
   };
 </script>
