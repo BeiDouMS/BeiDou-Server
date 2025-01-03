@@ -454,8 +454,18 @@ public final class Channel {
     }
 
     private static String[] getEvents() {
+        // 优先取语言文件夹，没有则取scripts
+        String scriptName = "scripts";
+        String eventPath = "event";
+        ServiceProperty serviceProperty = ServerManager.getApplicationContext().getBean(ServiceProperty.class);
+        String scriptLangName = scriptName + "-" + serviceProperty.getLanguage();
+
+        Path scriptPath = Path.of(scriptName, eventPath);
+        Path scriptLangPath = Path.of(scriptLangName, eventPath);
+        Path actualPath = Files.exists(scriptLangPath) ? scriptLangPath : scriptPath;
+
         List<String> events = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Path.of("scripts/event"))) {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(actualPath)) {
             for (Path path : stream) {
                 String fileName = path.getFileName().toString();
                 events.add(fileName.substring(0, fileName.length() - 3));
