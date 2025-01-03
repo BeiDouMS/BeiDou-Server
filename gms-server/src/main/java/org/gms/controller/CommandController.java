@@ -39,6 +39,23 @@ public class CommandController {
         commandService.reloadEventsByGMCommand();
         return ResultBody.success();
     }
+    //重装传送点
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "复用GM命令代码进行重装传送点")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadPortalsByGMCommand")
+    public ResultBody reloadPortalsByGMCommand() {
+        commandService.reloadPortalsByGMCommand();
+        return ResultBody.success();
+    }
+
+    //重装地图
+    @Tag(name = "/command/" + ApiConstant.LATEST)
+    @Operation(summary = "复用GM命令代码进行重装地图")
+    @GetMapping("/" + ApiConstant.LATEST + "/reloadMapsByGMCommand")
+    public ResultBody reloadMapsByGMCommand() {
+        commandService.reloadMapsByGMCommand();
+        return ResultBody.success();
+    }
 
 
 }
