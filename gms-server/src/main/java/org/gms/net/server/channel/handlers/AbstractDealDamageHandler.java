@@ -349,7 +349,7 @@ public abstract class AbstractDealDamageHandler extends AbstractPacketHandler {
 
                                 MonsterInformationProvider mi = MonsterInformationProvider.getInstance();
                                 List<Integer> dropPool = mi.retrieveDropPool(monster.getId());
-                                if (!dropPool.isEmpty()) {
+                                if (dropPool != null && !dropPool.isEmpty()) {
                                     int rndPool = (int) Math.floor(Math.random() * dropPool.get(dropPool.size() - 1));
 
                                     int i = 0;

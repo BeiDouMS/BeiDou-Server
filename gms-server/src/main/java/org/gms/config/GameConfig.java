@@ -7,6 +7,7 @@ import org.gms.dao.entity.GameConfigDO;
 import org.gms.manager.ServerManager;
 import org.gms.net.server.Server;
 import org.gms.net.server.world.World;
+import org.gms.server.life.MonsterInformationProvider;
 import org.gms.service.ConfigService;
 import org.gms.util.Pair;
 
@@ -116,6 +117,12 @@ public class GameConfig {
                     world.setFlag(GameConfig.getWorldByte(index, "flag"));
                     break;
             }
+        }
+        // 重载其余部分
+        switch (gameConfigDO.getConfigCode()){
+            case "allow_steal_quest_item":
+                MonsterInformationProvider.getInstance().clearDrops();
+                break;
         }
     }
 
