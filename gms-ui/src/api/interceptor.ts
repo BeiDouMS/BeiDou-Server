@@ -106,7 +106,8 @@ axios.interceptors.response.use(
       const userStore = useUserStore();
 
       userStore.logoutCallBack();
-      window.location.reload();
+      // window.location.reload();
+      window.location.href = '/';
       return Promise.reject(new Error('登录已过期'));
     }
     return Promise.reject(error);

@@ -54,6 +54,9 @@ public class MonsterStats {
     public selfDestruction selfDestruction = null;
     public int fixedStance = 0;
     public boolean friendly;
+    public int movetype = -1;    //怪物类型，-1=未知，0=stand（陆地），1=fly（飞天）
+    public int imgwidth = 0;     //第一帧图片宽度
+    public int imgheight = 0;    //第一帧图片高度
 
     public void setChange(boolean change) {
         this.changeable = change;
@@ -342,6 +345,53 @@ public class MonsterStats {
 
     public void setFixedStance(int stance) {
         this.fixedStance = stance;
+    }
+
+    /**
+     * 怪物类型，-1=未知，0=stand（陆地怪物），1=fly（飞天怪物）
+     * @return
+     */
+    public int getMovetype() {
+        return movetype;
+    }
+    /**
+     * 怪物类型，-1=未知，0=stand（陆地怪物），1=fly（飞天怪物）
+     * @return
+     */
+    public void setMovetype(int movetype) {
+        this.movetype = movetype;
+    }
+
+    /**
+     * 设置第一帧图片的宽度
+     * @param imgwidth
+     */
+    public void setImgwidth(int imgwidth) {
+        this.imgwidth = imgwidth;
+    }
+
+    /**
+     * 设置第一帧图片的高度
+     * @param imgheight
+     */
+    public void setImgheight(int imgheight) {
+        this.imgheight = imgheight;
+    }
+
+    /**
+     * 取第一帧图片的宽度
+     * @return
+     */
+    public int getImgwidth() {
+        return this.imgwidth;
+    }
+
+    /**
+     * 取第一帧图片的高度
+     * @return
+     */
+    public int getImgheight() {
+        return this.imgheight;
     }
 
     public MonsterStats copy() {

@@ -32,7 +32,7 @@ public class OnlineTimeTask implements Runnable {
                 } else {
                     onlineTime += 5;
                 }
-                if (isNextDay) {
+                if (isNextDay || onlineTime < 0) {
                     onlineTime = 0;
                 }
                 chr.setCurrentOnlineTime(onlineTime);

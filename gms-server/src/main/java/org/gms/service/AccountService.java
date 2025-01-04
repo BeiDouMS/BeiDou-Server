@@ -76,6 +76,10 @@ public class AccountService {
         return accountsMapper.paginateWithRelations(page, size, queryWrapper);
     }
 
+    public void update(AccountsDO condition) {
+        accountsMapper.update(condition);
+    }
+
     public void addAccount(AddAccountDTO submitData) throws NoSuchAlgorithmException {
         // 防止swagger调用，后续的语言路由都受影响
         RequireUtil.requireNotNull(submitData.getLanguage(), I18nUtil.getExceptionMessage("LANGUAGE_NOT_SUPPORT"));

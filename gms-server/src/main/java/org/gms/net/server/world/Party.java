@@ -21,6 +21,8 @@
  */
 package org.gms.net.server.world;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.gms.client.Character;
 import org.gms.client.Client;
 import org.gms.config.GameConfig;
@@ -44,8 +46,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Party {
 
+    @Setter
+    @Getter
     private int id;
+    @Setter
+    @Getter
     private Party enemy = null;
+    @Getter
     private int leaderId;
     private final List<PartyCharacter> members = new LinkedList<>();
     private List<PartyCharacter> pqMembers = null;
@@ -169,18 +176,6 @@ public class Party {
         pqMembers = eliParty;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getLeaderId() {
-        return leaderId;
-    }
-
     public PartyCharacter getLeader() {
         lock.lock();
         try {
@@ -194,14 +189,6 @@ public class Party {
         } finally {
             lock.unlock();
         }
-    }
-
-    public Party getEnemy() {
-        return enemy;
-    }
-
-    public void setEnemy(Party enemy) {
-        this.enemy = enemy;
     }
 
     public List<Integer> getMembersSortedByHistory() {

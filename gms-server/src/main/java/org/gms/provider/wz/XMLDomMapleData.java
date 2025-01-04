@@ -148,6 +148,11 @@ public class XMLDomMapleData implements Data {
                 String y = attributes.getNamedItem("y").getNodeValue();
                 return new Point(Integer.parseInt(x), Integer.parseInt(y));
             }
+            case CANVAS: {
+                String width = attributes.getNamedItem("width").getNodeValue();
+                String height = attributes.getNamedItem("height").getNodeValue();
+                return new Point(Integer.parseInt(width), Integer.parseInt(height));
+            }
             default:
                 return null;
         }
@@ -206,5 +211,14 @@ public class XMLDomMapleData implements Data {
     @Override
     public synchronized Iterator<Data> iterator() {
         return getChildren().iterator();
+    }
+
+    /**
+     * 获取指定节点属性值
+     * @return
+     */
+    public synchronized String getAttributeValue(String name) {
+        Node attr = node.getAttributes().getNamedItem(name);
+        return attr == null ? null : attr.getNodeValue();
     }
 }

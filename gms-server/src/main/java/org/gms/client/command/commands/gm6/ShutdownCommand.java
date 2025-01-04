@@ -64,13 +64,13 @@ public class ShutdownCommand extends Command {
 
             String strTime = "";
             if (days > 0) {
-                strTime += days + I18nUtil.getMessage("ShutdownCommand.message3");
+                strTime += I18nUtil.getMessage("ShutdownCommand.message3", days);
             }
             if (hours > 0) {
-                strTime += hours + I18nUtil.getMessage("ShutdownCommand.message4");
+                strTime += I18nUtil.getMessage("ShutdownCommand.message4", hours);
             }
-            strTime += minutes + I18nUtil.getMessage("ShutdownCommand.message5");
-            strTime += seconds + I18nUtil.getMessage("ShutdownCommand.message6");
+            strTime += I18nUtil.getMessage("ShutdownCommand.message5", minutes);
+            strTime += I18nUtil.getMessage("ShutdownCommand.message6", seconds);
 
             for (World w : Server.getInstance().getWorlds()) {
                 for (Character chr : w.getPlayerStorage().getAllCharacters()) {

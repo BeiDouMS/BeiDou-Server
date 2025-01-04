@@ -80,7 +80,7 @@ public class ConfigService {
         if (!RequireUtil.isEmpty(condition.getSubType()))
             queryWrapper.and(GAME_CONFIG_D_O.CONFIG_SUB_TYPE.eq(condition.getSubType()));
         if (!RequireUtil.isEmpty(condition.getFilter())) {
-            queryWrapper.and(GAME_CONFIG_D_O.CONFIG_CODE.like(condition.getFilter()).or(GAME_CONFIG_D_O.CONFIG_DESC.like(condition.getFilter())));
+            queryWrapper.and(GAME_CONFIG_D_O.CONFIG_CODE.like(condition.getFilter()).or(LANG_RESOURCES_D_O.LANG_VALUE.like(condition.getFilter())));
         }
 
         return gameConfigMapper.paginate(condition.getPageNo(), condition.getPageSize(), queryWrapper);
@@ -129,6 +129,7 @@ public class ConfigService {
                 .configValue(condition.getConfigValue())
                 .updateTime(new Date())
                 .build());
+        gameConfigDO.setConfigValue(condition.getConfigValue());
         GameConfig.update(gameConfigDO);
     }
 
