@@ -1,5 +1,7 @@
 export default {
-  'workplace.gameServer.status': 'Game Server',
+  'workplace.gameServer.status': 'Game Server Status',
+  'workplace.gameServer.currently': 'Game Server',
+  'workplace.gameServer.serverControl': 'Game Server Control',
   'workplace.running': 'Running...',
   'workplace.stopped': 'Stopped',
   'workplace.button.start': 'Start Server',

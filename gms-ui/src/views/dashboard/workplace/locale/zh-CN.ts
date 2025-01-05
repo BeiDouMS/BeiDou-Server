@@ -1,5 +1,7 @@
 export default {
-  'workplace.gameServer.status': '服务目前',
+  'workplace.gameServer.status': '服务器状态',
+  'workplace.gameServer.currently': '服务目前',
+  'workplace.gameServer.serverControl': '服务端控制',
   'workplace.running': '运行中...',
   'workplace.stopped': '休息中',
   'workplace.button.start': '启动服务端',

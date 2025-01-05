@@ -9,7 +9,7 @@
       >
         <a-row>
           <a-col>
-            {{ $t('workplace.gameServer.status') }}
+            {{ $t('workplace.gameServer.currently') }}
             <a-tag v-if="serverStatus === 'running'" color="green" bordered>
               {{ $t('workplace.running') }}
             </a-tag>
@@ -22,7 +22,7 @@
 
       <a-card
         class="control-card"
-        :title="$t('menu.dashboard.workplace')"
+        :title="$t('workplace.gameServer.serverControl')"
         :bordered="false"
       >
         <a-space>
@@ -146,7 +146,7 @@
     reloadPortalsByGMCommand,
   } from '@/api/command';
   import { useI18n } from 'vue-i18n';
-  // 确保你已经安装了vue-i18n
+
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const serverStatus = ref<'resting' | 'running'>('resting');
