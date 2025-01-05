@@ -49,10 +49,11 @@ public class ServerController {
     @PostMapping("/" + ApiConstant.LATEST + "/stopServerWithMsgAndInternal")
     public ResultBody<Object> stopServerWithMsgAndInternal(
             @Parameter(
-                    name = "data", in = ParameterIn.DEFAULT, required = true,
+                    name = "stopConfigData", in = ParameterIn.DEFAULT, required = true,
                     description = "停服请求参数：包含停服自定义消息，停服倒计时(单位：分钟)"
             )
             @RequestBody SubmitBody<ServerShutdownDTO> request) {
+        System.out.println(request.getData());
         Server.getInstance().shutdownWithMsgAndInternal(request.getData());
         return ResultBody.success();
     }
