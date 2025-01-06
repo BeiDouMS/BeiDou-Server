@@ -166,28 +166,28 @@
       label: 'start',
       action: 'start',
       disabled: (status: 'resting' | 'running') => status === 'running',
-      status: 'success',
+      status: 'success' as const,
       icon: 'icon-play-arrow-fill',
     },
     {
       label: 'stop',
       action: 'stop',
       disabled: (status: 'resting' | 'running') => status === 'resting',
-      status: 'danger',
+      status: 'danger' as const,
       icon: 'icon-stop',
     },
     {
       label: 'restart',
       action: 'restart',
       disabled: (status: 'resting' | 'running') => status === 'resting',
-      status: 'warning',
+      status: 'warning' as const,
       icon: 'icon-refresh',
     },
     {
       label: 'shutdown',
       action: 'shutdown',
       disabled: () => false,
-      status: 'danger',
+      status: 'danger' as const,
       icon: 'icon-poweroff',
     },
   ];
@@ -234,7 +234,7 @@
           await startServer();
           break;
         case 'stop':
-          await stopServer();
+          await stopServer(stopConfigData);
           break;
         case 'restart':
           await restartServer();
@@ -266,17 +266,6 @@
       }
       setLoading(false);
     }
-  };
-
-  const handleOk = async () => {
-    await shutdown();
-    await router.push({
-      name: 'login',
-      query: {
-        ...router.currentRoute.value.query,
-        redirect: router.currentRoute.value.path,
-      },
-    });
   };
 
   const handleStopConfigOk = async () => {
