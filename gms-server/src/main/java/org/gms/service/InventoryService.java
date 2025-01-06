@@ -67,6 +67,8 @@ public class InventoryService {
                             InventorySearchReqDTO dto = new InventorySearchReqDTO();
                             dto.setCharacterId(record.getId());
                             dto.setCharacterName(record.getName());
+                            Character character = getCharacterById(record.getId());
+                            dto.setOnlineStatus(character != null);
                             return dto;
                         })
                         .toList(),

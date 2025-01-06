@@ -1,5 +1,6 @@
 package org.gms.model.dto;
 
+import com.mybatisflex.annotation.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

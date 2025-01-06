@@ -12,4 +12,5 @@ public class InventorySearchReqDTO extends BasePageDTO {
     private Byte inventoryType;
     private Integer characterId;
     private String characterName;
+    private boolean onlineStatus;
 }
