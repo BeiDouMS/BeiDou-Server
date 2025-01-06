@@ -166,7 +166,7 @@
       label: 'start',
       action: 'start',
       disabled: (status: 'resting' | 'running') => status === 'running',
-      status: 'success' as const, // 使用 as const 来确保类型安全
+      status: 'success' as const,
       icon: 'icon-play-arrow-fill',
     },
     {
