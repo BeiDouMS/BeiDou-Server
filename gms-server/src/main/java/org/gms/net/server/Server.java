@@ -1660,13 +1660,12 @@ public class Server {
     public synchronized void shutdownWithMsgAndInternal(ServerShutdownDTO serverShutdownDTO) {
 
         int time = 60000;
-
-        if (serverShutdownDTO.getMinutes() > 0) {
+        // 原来就支持立即停止，不能忽视本地用户
+        if (serverShutdownDTO.getMinutes() >= 0) {
             time *= serverShutdownDTO.getMinutes();
         }
 
         if (time > 1) {
-
             int seconds = (time / (int) SECONDS.toMillis(1)) % 60;
             int minutes = (time / (int) MINUTES.toMillis(1)) % 60;
             int hours = (time / (int) HOURS.toMillis(1)) % 24;
