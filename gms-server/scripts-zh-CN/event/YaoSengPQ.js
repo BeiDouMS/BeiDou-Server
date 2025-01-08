@@ -177,7 +177,6 @@ function setup(level, lobbyid) {
             }
         }
     }
-    console.log(BossDropList);
     return eim;
 }
 
