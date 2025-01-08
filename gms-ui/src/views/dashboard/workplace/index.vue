@@ -64,6 +64,20 @@
         </a-space>
       </a-card>
 
+      <!-- Shutdown Confirmation Modal -->
+      <a-modal
+        v-model:visible="shutdownConfirmVisible"
+        :width="400"
+        @ok="handleShutdownConfirm"
+        @cancel="handleShutdownCancel"
+      >
+        <template #title>
+          {{ $t('workplace.button.shutdown') }}
+        </template>
+        <p>{{ $t('workplace.button.shutdown.confirm') }}</p>
+      </a-modal>
+
+      <!-- Stop Configuration Modal -->
       <a-modal
         v-model:visible="stopConfigVisible"
         :width="600"
@@ -150,8 +164,8 @@
   const { t } = useI18n();
   const { loading, setLoading } = useLoading(false);
   const serverStatus = ref<'resting' | 'running'>('resting');
-  const visible = ref(false);
   const stopConfigVisible = ref(false);
+  const shutdownConfirmVisible = ref(false); // 新增用于确认关机的模态框可见性控制
   const router = useRouter();
   const stopConfigData = reactive({
     minutes: 0,
@@ -221,9 +235,8 @@
   });
 
   const handleButtonClick = async (action: string) => {
-    if (action === 'stop') {
-      setLoading(false);
-      stopConfigVisible.value = true;
+    if (action === 'shutdown') {
+      shutdownConfirmVisible.value = true;
       return;
     }
 
@@ -234,15 +247,12 @@
           await startServer();
           break;
         case 'stop':
-          await stopServer(stopConfigData);
-          break;
+          stopConfigVisible.value = true;
+          setLoading(false);
+          return;
         case 'restart':
           await restartServer();
           break;
-        case 'shutdown':
-          visible.value = true;
-          setLoading(false); // 立即关闭加载状态
-          return;
         case 'reloadEvents':
           await reloadEventsByGMCommand();
           break;
@@ -261,11 +271,29 @@
       console.error(err);
       Message.error(t('common.requestFailed'));
     } finally {
-      if (action !== 'shutdown') {
-        await loadSeverStatus();
-      }
+      await loadSeverStatus();
       setLoading(false);
     }
+  };
+
+  const handleShutdownConfirm = async () => {
+    try {
+      setLoading(true);
+      await shutdown();
+      Message.success(t('workplace.button.shutdown.success'));
+      // 立即尝试更新服务器状态
+      await loadSeverStatus();
+    } catch (err) {
+      console.error(err);
+      Message.error(t('common.requestFailed'));
+    } finally {
+      shutdownConfirmVisible.value = false;
+      setLoading(false);
+    }
+  };
+
+  const handleShutdownCancel = () => {
+    shutdownConfirmVisible.value = false;
   };
 
   const handleStopConfigOk = async () => {
@@ -281,8 +309,18 @@
 
       await stopServer(stopConfigParams);
       Message.success(t('workplace.stop.shutdownInProgress'));
+
+      // 如果设置了延迟时间，则启动一个定时器，在延迟时间结束后更新服务器状态
+      if (stopConfigData.minutes > 0) {
+        setTimeout(async () => {
+          await loadSeverStatus();
+        }, stopConfigData.minutes * 60 * 1000);
+      } else {
+        // 如果没有设置延迟时间，立即更新服务器状态
+        await loadSeverStatus();
+      }
+
       stopConfigVisible.value = false;
-      await loadSeverStatus();
     } catch (err) {
       console.error(err);
       Message.error(t('common.requestFailed'));
