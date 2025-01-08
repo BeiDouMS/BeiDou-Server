@@ -19,3 +19,15 @@ export function getCommandList(data: any) {
 export function updateCommand(data: CommandReq) {
   return axios.post('/command/v1/updateCommand', data);
 }
+
+export function reloadEventsByGMCommand() {
+  return axios.get('/command/v1/reloadEventsByGMCommand');
+}
+
+export function reloadPortalsByGMCommand() {
+  return axios.get('/command/v1/reloadPortalsByGMCommand');
+}
+
+export function reloadMapsByGMCommand() {
+  return axios.get('/command/v1/reloadMapsByGMCommand');
+}

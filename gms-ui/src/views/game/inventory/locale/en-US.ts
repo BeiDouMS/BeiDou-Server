@@ -17,6 +17,7 @@ export default {
   'characterSelector.selectButton': 'Select',
   'characterSelector.column.id': 'Character ID',
   'characterSelector.column.name': 'Character',
+  'characterSelector.column.onlineStatus': 'OnlineStatus',
   'characterSelector.column.operation': 'Operation',
   'inventoryList.column.id': 'ID',
   'inventoryList.column.characterId': 'Character ID',

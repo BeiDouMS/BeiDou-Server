@@ -93,13 +93,20 @@ function levelShowDropList(mobId) {
     if(mob != null) {
         let player = cm.getPlayer();
         let dropall = MonsterInformationProvider.getInstance().retrieveDrop(mobId);										 //根据怪物ID获取掉落物品列表
-        let CountItems = dropall.size();																																  //取掉落物品总数量
+        let CountItems = dropall.size();																				//取掉落物品总数量
         let mobName = !mob.getName() || mob.getName() == 'MISSINGNO' ? `#o${mobId}#` : mob.getName();
+        let stats = mob.getStats();
+        let statsSize = Math.max(...[mob.getMaxHp(), stats.getPADamage(), stats.getMADamage()].map(v => v.toString().length));
         mobName = `[ #e#b${mobName}#k#n ] `;
+        msgtext = `${getMobImage(mob)}\r\n${mobName}\r\n`;
+        msgtext += `血量：${mob.getMaxHp().toString().padEnd(statsSize,' ')}\t\t蓝量：${mob.getMaxMp()}\r\n`;
+        msgtext += `物攻：${stats.getPADamage().toString().padEnd(statsSize,' ')}\t\t物防：${stats.getPDDamage()}\r\n`;
+        msgtext += `魔攻：${stats.getMADamage().toString().padEnd(statsSize,' ')}\t\t魔防：${stats.getMDDamage()}\r\n`;
+        // msgtext += `　命中率：${stats.getMADamage()}\t\t　闪避率：${stats.getMDDamage()}\r\n`;
         if(CountItems <= 0) {
-            msgtext = `${getMobImage(mob)}\r\n${mobName} 没有掉落。`;
+            msgtext += `\r\n\r\n没有掉落。`;
         } else {
-            msgtext = `${getMobImage(mob)}\r\n${mobName} 物品掉落列表一览\r\n\r\n`;
+            msgtext += `\r\n\r\n${'-'.repeat(28)}物品掉落列表一览${'-'.repeat(28)}\r\n\r\n`;
             // 遍历 table 对象的键，并设置其值为键名的长度
             Object.keys(table).forEach(key => {table[key] = Math.max(table[key],key.length)});
             let dropitemlist = {};

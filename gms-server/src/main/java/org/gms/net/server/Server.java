@@ -32,6 +32,7 @@ import org.gms.client.inventory.ItemFactory;
 import org.gms.config.GameConfig;
 import org.gms.dao.entity.CharactersDO;
 import org.gms.dao.entity.PlayernpcsFieldDO;
+import org.gms.model.dto.ServerShutdownDTO;
 import org.gms.property.ServiceProperty;
 import org.gms.util.*;
 import org.gms.model.pojo.NewYearCardRecord;
@@ -1655,4 +1656,58 @@ public class Server {
         nextTime = System.currentTimeMillis() + 86400000 * (base + ran);
         return true;
     }
+
+    public synchronized void shutdownWithMsgAndInternal(ServerShutdownDTO serverShutdownDTO) {
+
+        int time = 60000;
+        // 原来就支持立即停止，不能忽视本地用户
+        if (serverShutdownDTO.getMinutes() >= 0) {
+            time *= serverShutdownDTO.getMinutes();
+        }
+
+        if (time > 1) {
+            int seconds = (time / (int) SECONDS.toMillis(1)) % 60;
+            int minutes = (time / (int) MINUTES.toMillis(1)) % 60;
+            int hours = (time / (int) HOURS.toMillis(1)) % 24;
+            int days = (time / (int) DAYS.toMillis(1));
+
+            String strTime = "";
+            if (days > 0) {
+                strTime += I18nUtil.getMessage("ShutdownCommand.message3", days);
+            }
+            if (hours > 0) {
+                strTime += I18nUtil.getMessage("ShutdownCommand.message4", hours);
+            }
+            strTime += I18nUtil.getMessage("ShutdownCommand.message5", minutes);
+            strTime += I18nUtil.getMessage("ShutdownCommand.message6", seconds);
+
+
+            String shutDownMsg = I18nUtil.getMessage("ShutdownCommand.message7", strTime);
+
+            if (serverShutdownDTO.getShutdownMsg() != null) {
+                shutDownMsg = serverShutdownDTO.getShutdownMsg();
+            }
+
+            for (World w : Server.getInstance().getWorlds()) {
+                for (Character chr : w.getPlayerStorage().getAllCharacters()) {
+                    if (serverShutdownDTO.getShowCenterMsg()) {
+                        // 屏幕中央提示消息 (火红玫瑰)
+                        chr.startMapEffect(shutDownMsg, 5121009);
+                    }
+                }
+                if (serverShutdownDTO.getShowServerMsg()) {
+                    // 添加滚动消息到顶部，因为是固定时间停服，所以短暂的通知部分玩家可能看不到。
+                    w.setServerMessage(shutDownMsg);
+                }
+                if (serverShutdownDTO.getShowChatMsg()) {
+                    // 玩家聊天框蓝色GM消息
+                    w.broadcastPacket(PacketCreator.serverNotice(6, shutDownMsg));
+                }
+
+            }
+        }
+        TimerManager.getInstance().schedule(Server.getInstance().shutdown(false), time);
+    }
+
+
 }

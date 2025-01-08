@@ -1,20 +1,21 @@
 package org.gms.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.gms.constants.api.ApiConstant;
 import org.gms.constants.net.ServerConstants;
 import org.gms.model.dto.ChannelListRtnDTO;
-import org.gms.net.server.Server;
 import org.gms.model.dto.ResultBody;
+import org.gms.model.dto.ServerShutdownDTO;
+import org.gms.model.dto.SubmitBody;
+import org.gms.net.server.Server;
 import org.gms.service.ServerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +41,20 @@ public class ServerController {
     @GetMapping("/" + ApiConstant.LATEST + "/stopServer")
     public ResultBody<Object> stopServer() {
         Server.getInstance().shutdownInternal(false);
+        return ResultBody.success();
+    }
+
+    @Tag(name = "/server/" + ApiConstant.LATEST)
+    @Operation(summary = "自定义停止服务")
+    @PostMapping("/" + ApiConstant.LATEST + "/stopServerWithMsgAndInternal")
+    public ResultBody<Object> stopServerWithMsgAndInternal(
+            @Parameter(
+                    name = "stopConfigData", in = ParameterIn.DEFAULT, required = true,
+                    description = "停服请求参数：包含停服自定义消息，停服倒计时(单位：分钟)"
+            )
+            @RequestBody SubmitBody<ServerShutdownDTO> request) {
+        System.out.println(request.getData());
+        Server.getInstance().shutdownWithMsgAndInternal(request.getData());
         return ResultBody.success();
     }
 

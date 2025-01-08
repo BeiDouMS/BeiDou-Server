@@ -1,21 +1,21 @@
-// Event-instantiation variables
-var isPq = true;
-var minPlayers, maxPlayers;     // Range of party members for this event instance.
-var minLevel, maxLevel;         // Level range of eligible team members for this event instance.
-var entryMap;                   // Initial map, where players all moved into at the event startup.
-var exitMap;                    // Upon failing to complete the event, players may be moved to this map.
-var recruitMap;                 // Map where players must be before staring this event.
-var clearMap;                   // Upon event clearing, players may be moved to this map.
+// 事件实例化变量
+var isPq = true; // 是否为PQ（Party Quest）类型事件。
+var minPlayers, maxPlayers; // 该事件实例允许的队伍成员数量范围。
+var minLevel, maxLevel;     // 合格队伍成员的等级范围。
+var entryMap;               // 事件启动时玩家进入的初始地图。
+var exitMap;                // 玩家未能完成事件时被传送至此地图。
+var recruitMap;             // 玩家必须在此地图上才能开始此事件。
+var clearMap;               // 玩家成功完成事件后被传送至此地图。
 
-var minMapId;                   // Event takes place inside these map id interval. Players found out is instantly dropped from the event.
+var minMapId;               // 事件发生在此地图ID区间内。若玩家超出此范围则立即从事件中移除。
 var maxMapId;
 
-var eventTime;                  // Max time allotted for the event, in minutes.
+var eventTime;              // 事件的最大允许时间，以分钟计。
 
-const maxLobbies = 7;        // Max amount of concurrent active lobbies.
+const maxLobbies = 7;       // 并发活跃大厅的最大数量。
 
 function init() {
-    // After loading, ChannelServer
+    // 在ChannelServer加载后执行初始化操作。
 }
 
 function getMaxLobbies() {
@@ -23,59 +23,59 @@ function getMaxLobbies() {
 }
 
 function setEventRequirements() {
-    // sets requirement info about the event to be displayed at the recruitment area.
+    // 设置在招募区域显示的关于事件的要求信息。
 }
 
 function setEventExclusives(eim) {
-    // sets all items that should exist only for the event instance, and that should be removed from inventory at the end of the run.
+    // 设置仅在事件实例中存在的物品，并在事件结束时从库存中移除这些物品。
 }
 
 function setEventRewards(eim) {
-    // sets all possible treasures that can be given, randomly, to a player at the end of the event.
+    // 设置所有可能的奖励，随机给予玩家作为事件结束时的奖品。
 }
 
 function getEligibleParty(party) {
-    // selects, from the given party, the team that is allowed to attempt this event
+    // 从给定的队伍中选择符合资格的团队尝试此事件。
 }
 
 function setup(eim, leaderid) {
-    // Setup the instance when invoked, EG : start PQ
+    // 当调用时设置事件实例，例如：开始PQ。
 }
 
 function afterSetup(eim) {
-    // Happens after the event instance is initialized and all players have been assigned for the event instance, but before entrying players.
+    // 事件实例初始化完毕且所有玩家分配完成后，但在玩家进入之前触发。
 }
 
 function respawnStages(eim) {
-    // Defines which maps inside the event are allowed to respawn. This function should create a new task at the end of it's body calling itself at a given respawn rate.
+    // 定义事件内部允许重生的地图。此函数应在末尾创建一个新的任务，在指定的重生率后再次调用自身。
 }
 
 function playerEntry(eim, player) {
-    // Warp player in etc..
+    // 将玩家传送到事件地图等操作。
 }
 
 function playerUnregistered(eim, player) {
-    // Do something with the player that is about to unregister right before unregistering he/she.
+    // 在玩家即将注销前对其进行某些操作。
 }
 
 function playerExit(eim, player) {
-    // Do something with the player right before disbanding the event instance.
+    // 在解散事件实例前对玩家进行某些操作。
 }
 
 function playerLeft(eim, player) {
-    // Do something with the player right before leaving the party.
+    // 在玩家离开队伍前对其进行某些操作。
 }
 
 function changedMap(eim, player, mapid) {
-    // What to do when player've changed map, based on the mapid.
+    // 当玩家更换地图时根据mapid执行的操作。
 }
 
 function changedLeader(eim, leader) {
-    // Do something if the party leader has been changed.
+    // 如果队伍领袖变更时执行的操作。
 }
 
 function scheduledTimeout(eim) {
-    // When event timeout without before completion..
+    // 当事件超时而未完成时触发。
 }
 
 function timeOut(eim) {
@@ -83,86 +83,86 @@ function timeOut(eim) {
         var pIter = eim.getPlayers().iterator();
         while (pIter.hasNext()) {
             var player = pIter.next();
-            player.dropMessage(6, "You have run out of time to complete this event!");
+            player.dropMessage(6, "你已经没有时间完成这个事件！");
             playerExit(eim, player);
         }
     }
-    eim.dispose();
+    eim.dispose(); // 解散事件实例。
 }
 
 function monsterKilled(mob, eim) {
-    // Happens when an opposing mob dies
+    // 当敌对怪物死亡时触发。
 }
 
 function monsterValue(eim, mobid) {
-    // Invoked when a monster that's registered has been killed
-    // return x amount for this player - "Saved Points"
+    // 当注册的怪物被击杀时调用。
+    // 返回此玩家获得的积分 - “保存点数”
 }
 
 function friendlyKilled(mob, eim) {
-    // Happens when a friendly mob dies
+    // 当友好怪物死亡时触发。
 }
 
 function allMonstersDead(eim) {
-    // When invoking unregisterMonster(Monster mob) OR killed
-    // Happens only when size = 0
+    // 当调用unregisterMonster(Monster mob)或怪物被击杀后触发。
+    // 只有当剩余怪物数量为0时触发。
 }
 
 function playerDead(eim, player) {
-    // Happens when player dies
+    // 当玩家死亡时触发。
 }
 
 function monsterRevive(mob, eim) {
-    // Happens when an opposing mob revives
+    // 当敌对怪物复活时触发。
 }
 
 function playerRevive(eim, player) {
-    // Happens when player's revived.
-    // @Param : returns true/false
+    // 当玩家复活时触发。
+    // 参数返回true/false。
 }
 
 function playerDisconnected(eim, player) {
-    // return 0 - Deregister player normally + Dispose instance if there are zero player left
-    // return x that is > 0 - Deregister player normally + Dispose instance if there x player or below
-    // return x that is < 0 - Deregister player normally + Dispose instance if there x player or below, if it's leader = boot all
+    // 返回0 - 正常注销玩家并在玩家数量为零时解散实例。
+    // 返回大于0的值 - 正常注销玩家并在玩家数量等于或低于该值时解散实例。
+    // 返回小于0的值 - 正常注销玩家并在玩家数量等于或低于该值时解散实例，如果是队长则踢出所有人。
 }
 
 function end(eim) {
-    // Happens when the party fails to complete the event instance.
+    // 当队伍未能完成事件实例时触发。
 }
 
 function giveRandomEventReward(eim, player) {
-    // Selects randomly a reward to give from the reward pool.
+    // 从奖励池中随机选择一个奖励给予玩家。
 }
 
 function clearPQ(eim) {
-    // Happens when the party succeeds on completing the event instance.
+    // 当队伍成功完成事件实例时触发。
 }
 
 function leftParty(eim, player) {
-    // Happens when a player left the party
+    // 当玩家离开队伍时触发。
 }
 
 function disbandParty(eim, player) {
-    // Happens when the party is disbanded.
+    // 当队伍解散时触发。
 }
 
 function removePlayer(eim, player) {
-    // Happens when the funtion NPCConversationManager.removePlayerFromInstance() is invoked
+    // 当NPCConversationManager.removePlayerFromInstance()方法被调用时触发。
 }
 
 function registerCarnivalParty(eim, carnivalparty) {
-    // Happens when carnival PQ is started. - Unused for now.
+    // 当嘉年华PQ开始时触发。目前未使用。
 }
 
 function onMapLoad(eim, player) {
-    // Happens when player change map - Unused for now.
+    // 当玩家更换地图时触发。目前未使用。
 }
 
 function cancelSchedule() {
-    // Finishes ongoing schedules.
+    // 结束正在进行的任务调度。
 }
 
 function dispose() {
-    // Finishes the event instance.
+    // 结束事件实例。
 }

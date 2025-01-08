@@ -23,6 +23,7 @@ package org.gms.net.server.channel.handlers;
 
 import org.gms.client.Character;
 import org.gms.client.Client;
+import org.gms.constants.id.MapId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
 import org.gms.scripting.quest.QuestScriptManager;
@@ -73,7 +74,10 @@ public final class QuestActionHandler extends AbstractPacketHandler {
         short questid = p.readShort();
         Character player = c.getPlayer();
         Quest quest = Quest.getInstance(questid);
-
+        if (player.getMapId() == MapId.JAIL) {   //监狱地图不可使用任务脚本
+            player.dropMessage(1,I18nUtil.getMessage("ActionHandler.map.message1"));
+            return;
+        }
         switch (action) {
             case 0: // Restore lost item, Credits Darter ( Rajan )
                 p.readInt();
