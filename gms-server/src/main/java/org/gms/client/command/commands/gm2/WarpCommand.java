@@ -65,7 +65,7 @@ public class WarpCommand extends Command {
 
             // expedition issue with this command detected thanks to Masterrulax
             player.saveLocationOnWarp();
-            player.changeMap(target, target.getRandomPlayerSpawnpoint());
+            player.changeMap(target, params.length >= 2 ? target.getPortal(params[1]) : target.getRandomPlayerSpawnpoint());//传送到自定义落脚点或者随机落脚点。
         } catch (Exception ex) {
             player.yellowMessage(I18nUtil.getMessage("WarpCommand.message3", params[0]));
         }
