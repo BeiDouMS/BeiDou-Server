@@ -58,7 +58,10 @@ function start(mode, type, selection)
 				qm.sendOk("还是等你40级以后再去吧，你现在去会死翘翘的。");
 				qm.dispose();
 			}
-			else
+			else if(qm.getMapId() == 300000012) {
+				qm.sendOk("等您刑满释放了我再来接您！");
+				qm.dispose();
+			} else
 			{
 				qm.warp(100040103);
 			    qm.sendOk("谢谢您，请帮我消灭200只，但愿这样可以让冒险岛世界的黑暗气息能有效地被遏制一些。");

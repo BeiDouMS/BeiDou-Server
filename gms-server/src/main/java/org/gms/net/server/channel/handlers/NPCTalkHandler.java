@@ -24,6 +24,7 @@ package org.gms.net.server.channel.handlers;
 import org.gms.client.Client;
 import org.gms.client.processor.npc.DueyProcessor;
 import org.gms.config.GameConfig;
+import org.gms.constants.id.MapId;
 import org.gms.constants.id.NpcId;
 import org.gms.net.AbstractPacketHandler;
 import org.gms.net.packet.InPacket;
@@ -41,7 +42,11 @@ public final class NPCTalkHandler extends AbstractPacketHandler {
 
     @Override
     public void handlePacket(InPacket p, Client c) {
-        if (!c.getPlayer().isAlive()) {
+        if (c.getPlayer().getMapId() == MapId.JAIL) {   //监狱地图不可使用脚本
+            c.getPlayer().dropMessage(1,I18nUtil.getMessage("ActionHandler.map.message1"));
+            c.sendPacket(PacketCreator.enableActions());
+            return;
+        } else if (!c.getPlayer().isAlive()) {
             c.sendPacket(PacketCreator.enableActions());
             return;
         }
