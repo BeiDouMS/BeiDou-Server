@@ -1,0 +1,3 @@
+INSERT INTO `game_config` ( `config_type`, `config_sub_type`, `config_clazz`, `config_code`, `config_value`, `config_desc`) VALUES ( 'server', 'Game Mechanics', 'java.lang.Boolean', 'allow_steal_quest_item', 'true', 'allow_steal_quest_item');
+INSERT INTO `lang_resources` (`lang_type`, `lang_base`, `lang_code`, `lang_value`) VALUES ('zh-CN', 'game_config', 'allow_steal_quest_item', '是否允许神通术窃取任务类型的道具');
+INSERT INTO `lang_resources` (`lang_type`, `lang_base`, `lang_code`, `lang_value`) VALUES ('en-US', 'game_config', 'allow_steal_quest_item', 'It is allowed for the Steal skill to be applied to quest-type items.');
