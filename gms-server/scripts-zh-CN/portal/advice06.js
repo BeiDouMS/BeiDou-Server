@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("Press the #e#b[Up]#k arrow#n to use the portal \r\\and move to the next map.", 230, 5);
+    pi.showInstruction("按 #e#b[Up]#k 进入光圈\r\\移动到下一张地图。", 230, 5);
     return true;
 }

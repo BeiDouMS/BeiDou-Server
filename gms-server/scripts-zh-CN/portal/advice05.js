@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("Press #e#b[Q]#k#n to view the Quest window.", 250, 5);
+    pi.showInstruction("按 #e#b[Q]#k#n 打开任务窗口。", 250, 5);
     return true;
 }
