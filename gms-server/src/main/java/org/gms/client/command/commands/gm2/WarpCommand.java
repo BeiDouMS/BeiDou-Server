@@ -30,6 +30,7 @@ import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MiniDungeonInfo;
 import org.gms.util.I18nUtil;
+import org.gms.server.maps.Portal;
 
 public class WarpCommand extends Command {
     {
@@ -65,7 +66,11 @@ public class WarpCommand extends Command {
 
             // expedition issue with this command detected thanks to Masterrulax
             player.saveLocationOnWarp();
-            player.changeMap(target, params.length >= 2 ? target.getPortal(params[1]) : target.getRandomPlayerSpawnpoint());//传送到自定义落脚点或者随机落脚点。
+            Portal portal = target.getPortal(params[1]);
+            try {
+                portal = target.getPortal(Integer.parseInt(params[1]));
+            } catch (Throwable e) {}
+            player.changeMap(target, params.length >= 2 ? portal : target.getRandomPlayerSpawnpoint());//传送到自定义落脚点或者随机落脚点。
         } catch (Exception ex) {
             player.yellowMessage(I18nUtil.getMessage("WarpCommand.message3", params[0]));
         }
