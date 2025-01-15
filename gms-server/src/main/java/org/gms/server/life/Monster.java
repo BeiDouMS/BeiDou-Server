@@ -300,6 +300,10 @@ public class Monster extends AbstractLoadedLife {
         return stats;
     }
 
+    public void setStats(MonsterStats stats) {
+        this.stats = stats;
+    }
+
     public boolean isBoss() {
         return stats.isBoss();
     }

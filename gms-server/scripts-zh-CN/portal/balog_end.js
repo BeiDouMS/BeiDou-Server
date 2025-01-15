@@ -1,6 +1,6 @@
 function enter(pi) {
     if (!pi.canHold(4001261, 1)) {
-        pi.playerMessage(5, "Please make 1 ETC room.");
+        pi.playerMessage(5, "请给装备栏腾出至少1个空格子。");
         return false;
     }
     pi.gainItem(4001261, 1);

@@ -28,13 +28,14 @@
  */
 
 var stage1Questions = Array(
-    "Here's the question. Collect the same number of coupons as the minimum level required to make the first job advancement as warrior.",
-    "Here's the question. Collect the same number of coupons as the minimum amount of STR needed to make the first job advancement as a warrior.",
-    "Here's the question. Collect the same number of coupons as the minimum amount of INT needed to make the first job advancement as a magician.",
-    "Here's the question. Collect the same number of coupons as the minimum amount of DEX needed to make the first job advancement as a bowman.",
-    "Here's the question. Collect the same number of coupons as the minimum amount of DEX needed to make the first job advancement as a thief.",
-    "Here's the question. Collect the same number of coupons as the minimum level required to advance to 2nd job.",
-    "Here's the question. Collect the same number of coupons as the minimum level required to make the first job advancement as a magician.");
+    "收集与#b战士#n首次转职所需最低等级相同数量的#b通行证#n。",
+    "收集与#b战士#n首次转职所需最低力量（STR）相同数量的#b通行证#n。",
+    "收集与#b魔法师#n首次转职所需最低智力（INT）相同数量的#b通行证#n。",
+    "收集与#b弓箭手#n首次转职所需最低敏捷（DEX）相同数量的#b通行证#n。",
+    "收集与#b飞侠#n首次转职所需最低敏捷（DEX）相同数量的#b通行证#n。",
+    "收集与二次转职所需最低等级相同数量的#b通行证#n。",
+    "收集与#b魔法师#n首次转职所需最低等级相同数量的#b通行证#n。"
+);
 var stage1Answers = Array(10, 35, 20, 25, 25, 30, 8);
 
 const Rectangle = Java.type('java.awt.Rectangle');

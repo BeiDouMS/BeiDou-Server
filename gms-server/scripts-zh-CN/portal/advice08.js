@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("You can check your character's stats by pressing the #e#b[S]#k#nkey.", 350, 5);
+    pi.showInstruction("您可以通过按#e#b[S]#k#n键来查看角色的属性面板。", 350, 5);
     return true;
 }

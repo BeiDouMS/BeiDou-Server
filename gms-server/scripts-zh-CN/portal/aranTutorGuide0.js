@@ -29,7 +29,7 @@ function enter(pi) {
         return false;
     }
     pi.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialGuide1");
-    pi.message("To use a Regular Attack on monsters, press the Ctrl key.");
+    pi.message("要对怪物使用普通攻击，请按Ctrl键。");
     pi.updateAreaInfo(21002, "normal=o;arr0=o;mo1=o;mo2=o;mo3=o");
     return true;
 }  

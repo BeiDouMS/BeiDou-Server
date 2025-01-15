@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("You can move by using the arrow keys.", 250, 5);
+    pi.showInstruction("您可以使用箭头键移动。", 250, 5);
     return true;
 }

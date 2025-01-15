@@ -29,7 +29,7 @@ function enter(pi) {
         return false;
     }
     pi.showInfo("Effect/OnUserEff.img/guideEffect/aranTutorial/tutorialGuide3");
-    pi.message("You can use a Command Attack by pressing both the arrow key and the attack key after a Consecutive Attack.");
+    pi.message("在连续攻击后，您可以通过同时按下箭头键和攻击键来使用命令攻击。");
     pi.updateAreaInfo(21002, "cmd=o;normal=o;arr0=o;arr1=o;arr2=o;mo1=o;chain=o;mo2=o;mo3=o;mo4=o");
     return true;
 }  
