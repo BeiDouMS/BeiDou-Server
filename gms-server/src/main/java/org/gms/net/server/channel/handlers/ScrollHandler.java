@@ -52,97 +52,99 @@ public final class ScrollHandler extends AbstractPacketHandler {
     public final void handlePacket(InPacket p, Client c) {
         if (c.tryacquireClient()) {
             try {
-                p.readInt(); // whatever...
-                short scrollSlot = p.readShort();
-                short equipSlot = p.readShort();
-                byte ws = (byte) p.readShort();
-                boolean whiteScroll = false; // white scroll being used?
-                boolean legendarySpirit = false; // legendary spirit skill
+                p.readInt(); // 读取一个整数，但未使用
+                short scrollSlot = p.readShort(); // 读取卷轴所在的槽位
+                short equipSlot = p.readShort(); // 读取装备所在的槽位
+                byte ws = (byte) p.readShort(); // 读取一些标志位
+                boolean whiteScroll = false; // 是否使用白色卷轴
+                boolean legendarySpirit = false; // 是否使用传奇精神技能
+
                 if ((ws & 2) == 2) {
                     whiteScroll = true;
                 }
 
-                ItemInformationProvider ii = ItemInformationProvider.getInstance();
-                Character chr = c.getPlayer();
-                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(equipSlot);
-                Skill LegendarySpirit = SkillFactory.getSkill(1003);
+                ItemInformationProvider ii = ItemInformationProvider.getInstance(); // 获取物品信息提供者实例
+                Character chr = c.getPlayer(); // 获取当前玩家
+                Equip toScroll = (Equip) chr.getInventory(InventoryType.EQUIPPED).getItem(equipSlot); // 获取要升级的装备
+                Skill LegendarySpirit = SkillFactory.getSkill(1003); // 获取传奇精神技能
                 if (chr.getSkillLevel(LegendarySpirit) > 0 && equipSlot >= 0) {
                     legendarySpirit = true;
                     toScroll = (Equip) chr.getInventory(InventoryType.EQUIP).getItem(equipSlot);
                 }
-                byte oldLevel = toScroll.getLevel();
-                byte oldSlots = toScroll.getUpgradeSlots();
-                Inventory useInventory = chr.getInventory(InventoryType.USE);
-                Item scroll = useInventory.getItem(scrollSlot);
+
+                byte oldLevel = toScroll.getLevel(); // 记录装备的原始等级
+                byte oldSlots = toScroll.getUpgradeSlots(); // 记录装备的原始升级插槽数量
+                Inventory useInventory = chr.getInventory(InventoryType.USE); // 获取玩家的使用栏库存
+                Item scroll = useInventory.getItem(scrollSlot); // 获取使用的卷轴
                 Item wscroll = null;
 
                 if (ItemConstants.isCleanSlate(scroll.getItemId()) && !ii.canUseCleanSlate(toScroll)) {
-                    announceCannotScroll(c, legendarySpirit);
+                    announceCannotScroll(c, legendarySpirit); // 如果清洁卷轴不能用于该装备，通知客户端无法使用
                     return;
                 } else if (!ItemConstants.isModifierScroll(scroll.getItemId()) && toScroll.getUpgradeSlots() < 1) {
-                    announceCannotScroll(c, legendarySpirit);   // thanks onechord for noticing zero upgrade slots freezing Legendary Scroll UI
+                    announceCannotScroll(c, legendarySpirit); // 如果不是修饰卷轴且没有升级插槽，通知客户端无法使用
                     return;
                 }
 
-                List<Integer> scrollReqs = ii.getScrollReqs(scroll.getItemId());
+                List<Integer> scrollReqs = ii.getScrollReqs(scroll.getItemId()); // 获取卷轴的要求列表
                 if (scrollReqs.size() > 0 && !scrollReqs.contains(toScroll.getItemId())) {
-                    announceCannotScroll(c, legendarySpirit);
+                    announceCannotScroll(c, legendarySpirit); // 如果装备不符合卷轴的要求，通知客户端无法使用
                     return;
                 }
                 if (whiteScroll) {
-                    wscroll = useInventory.findById(ItemId.WHITE_SCROLL);
+                    wscroll = useInventory.findById(ItemId.WHITE_SCROLL); // 查找白色卷轴
                     if (wscroll == null) {
-                        whiteScroll = false;
+                        whiteScroll = false; // 如果找不到白色卷轴，则不使用白色卷轴
                     }
                 }
 
                 if (!ItemConstants.isChaosScroll(scroll.getItemId()) && !ItemConstants.isCleanSlate(scroll.getItemId())) {
                     if (!canScroll(scroll.getItemId(), toScroll.getItemId())) {
-                        announceCannotScroll(c, legendarySpirit);
+                        announceCannotScroll(c, legendarySpirit); // 如果卷轴不能用于该装备，通知客户端无法使用
                         return;
                     }
                 }
 
-                Equip scrolled = (Equip) ii.scrollEquipWithId(toScroll, scroll.getItemId(), whiteScroll, 0, chr.isGM());
-                ScrollResult scrollSuccess = Equip.ScrollResult.FAIL; // fail
+                Equip scrolled = (Equip) ii.scrollEquipWithId(toScroll, scroll.getItemId(), whiteScroll, 0, chr.isGM()); // 使用卷轴升级装备
+                ScrollResult scrollSuccess = Equip.ScrollResult.FAIL; // 默认设置为失败
                 if (scrolled == null) {
-                    scrollSuccess = Equip.ScrollResult.CURSE;
+                    scrollSuccess = Equip.ScrollResult.CURSE; // 卷轴诅咒装备
                 } else if (scrolled.getLevel() > oldLevel || (ItemConstants.isCleanSlate(scroll.getItemId()) && scrolled.getUpgradeSlots() == oldSlots + 1) || ItemConstants.isFlagModifier(scroll.getItemId(), scrolled.getFlag())) {
-                    scrollSuccess = Equip.ScrollResult.SUCCESS;
+                    scrollSuccess = Equip.ScrollResult.SUCCESS; // 卷轴成功升级装备
                 }
 
-                useInventory.lockInventory();
+                useInventory.lockInventory(); // 锁定使用栏库存
                 try {
                     if (scroll.getQuantity() < 1) {
-                        announceCannotScroll(c, legendarySpirit);
+                        announceCannotScroll(c, legendarySpirit); // 如果卷轴数量不足，通知客户端无法使用
                         return;
                     }
 
                     if (whiteScroll && !ItemConstants.isCleanSlate(scroll.getItemId())) {
                         if (wscroll.getQuantity() < 1) {
-                            announceCannotScroll(c, legendarySpirit);
+                            announceCannotScroll(c, legendarySpirit); // 如果白色卷轴数量不足，通知客户端无法使用
                             return;
                         }
 
-                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false);
+                        InventoryManipulator.removeFromSlot(c, InventoryType.USE, wscroll.getPosition(), (short) 1, false, false); // 移除一个白色卷轴
                     }
 
-                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false);
+                    InventoryManipulator.removeFromSlot(c, InventoryType.USE, scroll.getPosition(), (short) 1, false); // 移除一个卷轴
                 } finally {
-                    useInventory.unlockInventory();
+                    useInventory.unlockInventory(); // 解锁使用栏库存
                 }
 
-                final List<ModifyInventory> mods = new ArrayList<>();
+                final List<ModifyInventory> mods = new ArrayList<>(); // 创建修改库存的操作列表
                 if (scrollSuccess == Equip.ScrollResult.CURSE) {
                     if (!ItemId.isWeddingRing(toScroll.getItemId())) {
-                        mods.add(new ModifyInventory(3, toScroll));
+                        mods.add(new ModifyInventory(3, toScroll)); // 标记装备被移除
                         if (equipSlot < 0) {
                             Inventory inv = chr.getInventory(InventoryType.EQUIPPED);
 
                             inv.lockInventory();
                             try {
-                                chr.unequippedItem(toScroll);
-                                inv.removeItem(toScroll.getPosition());
+                                chr.unequippedItem(toScroll); // 卸下装备
+                                inv.removeItem(toScroll.getPosition()); // 移除装备
                             } finally {
                                 inv.unlockInventory();
                             }
@@ -151,7 +153,7 @@ public final class ScrollHandler extends AbstractPacketHandler {
 
                             inv.lockInventory();
                             try {
-                                inv.removeItem(toScroll.getPosition());
+                                inv.removeItem(toScroll.getPosition()); // 移除装备
                             } finally {
                                 inv.unlockInventory();
                             }
@@ -160,20 +162,20 @@ public final class ScrollHandler extends AbstractPacketHandler {
                         scrolled = toScroll;
                         scrollSuccess = Equip.ScrollResult.FAIL;
 
-                        mods.add(new ModifyInventory(3, scrolled));
-                        mods.add(new ModifyInventory(0, scrolled));
+                        mods.add(new ModifyInventory(3, scrolled)); // 标记装备被移除
+                        mods.add(new ModifyInventory(0, scrolled)); // 标记装备被添加回库存
                     }
                 } else {
-                    mods.add(new ModifyInventory(3, scrolled));
-                    mods.add(new ModifyInventory(0, scrolled));
+                    mods.add(new ModifyInventory(3, scrolled)); // 标记装备被移除
+                    mods.add(new ModifyInventory(0, scrolled)); // 标记装备被添加回库存
                 }
-                c.sendPacket(PacketCreator.modifyInventory(true, mods));
-                chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, whiteScroll));
+                c.sendPacket(PacketCreator.modifyInventory(true, mods)); // 发送修改库存的封包
+                chr.getMap().broadcastMessage(PacketCreator.getScrollEffect(chr.getId(), scrollSuccess, legendarySpirit, whiteScroll)); // 广播卷轴效果
                 if (equipSlot < 0 && (scrollSuccess == Equip.ScrollResult.SUCCESS || scrollSuccess == Equip.ScrollResult.CURSE)) {
-                    chr.equipChanged();
+                    chr.equipChanged(); // 通知客户端装备发生变化
                 }
             } finally {
-                c.releaseClient();
+                c.releaseClient(); // 释放客户端资源
             }
         }
     }
