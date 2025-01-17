@@ -581,37 +581,42 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             5、修改有效时间
             6、移除魔法沙漏
              */
-            boolean useCashEquip = false;       //允许对现金装备进行延期，需要客户端插件配合
+            boolean useCashEquip = false;       //是否允许对现金装备进行延期，需要客户端配合插件才能支持
 
             short itemSlot = p.readShort(); // 读取装备所在的槽位
 
             Item equip = player.getInventory(InventoryType.EQUIPPED).getItem(itemSlot);// 获取指定槽位的装备
             ItemInformationProvider.ItemCashInfo itemHourglass = ii.getItemCashInfo(itemId);        // 获取魔法沙漏的增加时间和天数上限
 
-            if (itemSlot >= 0 || equip == null || equip.getExpiration() <= 0) {
+            if (itemSlot >= 0 || equip == null || equip.getExpiration() <= 0) { //判断是否为身上的装备以及装备是否存在时限
                 player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message11"));
                 c.enableActions();    //释放客户端锁，解除假死
                 return;
-            } else if (ii.isCash(equip.getItemId()) && !useCashEquip) {
+            } else if (ii.isCash(equip.getItemId()) && !useCashEquip) { //判断是否为现金装备 以及 是否允许增加现金装备时限，需要客户端配合插件才能支持
                 player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message12"));
                 c.enableActions();    //释放客户端锁，解除假死
                 return;
-            } else if (itemHourglass == null) {
+            } else if (itemHourglass == null) { //如果获取到的道具为空则表示不是xml文件里的魔法沙漏，如自定义添加的沙漏需要同步服务端xml
                 notEnabled(player); // 如果不是预期的itemId，直接返回
+                return;
+            } else if (itemHourglass.addTime <= 0) {    //如果沙漏没有提供增加的时间则返回
+                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message13"));
+                c.enableActions();    //释放客户端锁，解除假死
                 return;
             }
 
-            long addTime = itemHourglass.addTime * 1000;    //增加的毫秒数
+            long addTime = itemHourglass.addTime * 1000;    //增加的毫秒数，wz的值为秒数，因此需要转为毫秒
             short addDay = (short) (itemHourglass.addTime / 60 / 60 / 24);         //增加的天数
-            if ((equip.getExpiration() + addTime) > (System.currentTimeMillis() + (itemHourglass.maxDays * 24 * 60 * 60 * 1000L))) {  //如果计算两个时间戳的间隔时间增加后大于指定天数，则返回
-                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message13",itemHourglass.maxDays));
+            if (itemHourglass.maxDays > 0 && (equip.getExpiration() + addTime) > (System.currentTimeMillis() + (itemHourglass.maxDays * 24 * 60 * 60 * 1000L))) {  //如果天数大于0则计算两个时间戳的间隔时间增加后大于指定天数，则返回
+                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message14",itemHourglass.maxDays));
+                c.enableActions();    //释放客户端锁，解除假死
                 return;
             }
             equip.setExpiration(equip.getExpiration() + addTime); //给装备加上指定时间
             player.forceUpdateItem(equip);      //强制刷新装备状态属性
             remove(c, position, itemId); // 移除指定位置的物品
 
-            player.dropMessage(5,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message14",ii.getName(equip.getItemId()),addDay));
+            player.dropMessage(5,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message15",ii.getName(equip.getItemId()),addDay));
         } else if (itemType == 552) {
             InventoryType type = InventoryType.getByType((byte) p.readInt());
             short slot = (short) p.readInt();
