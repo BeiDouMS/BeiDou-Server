@@ -2085,7 +2085,7 @@ public class ItemInformationProvider {
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         int dropperid = rs.getInt("dropperid");
-                        itemid = getCrystalForLevel(LifeFactory.getMonsterLevel(dropperid));
+                        itemid = getCrystalForLevel(LifeFactory.getMonsterLevel(dropperid) - 1);    //修复：怪物等级101~110获得高级水晶C，怪物等级111~120将正确掉落高级水晶B
                     }
                 }
             }
