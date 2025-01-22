@@ -58,10 +58,12 @@ import org.slf4j.LoggerFactory;
 import org.gms.server.ItemInformationProvider;
 import org.gms.server.Shop;
 import org.gms.server.ShopFactory;
+import org.gms.server.StatEffect;
 import org.gms.server.TimerManager;
 import org.gms.server.maps.AbstractMapObject;
 import org.gms.server.maps.FieldLimit;
 import org.gms.server.maps.Kite;
+import org.gms.server.maps.Mist;
 import org.gms.server.maps.MapleMap;
 import org.gms.server.maps.MapleTVEffect;
 import org.gms.server.maps.PlayerShopItem;
@@ -69,6 +71,7 @@ import org.gms.service.NoteService;
 import org.gms.util.PacketCreator;
 import org.gms.util.Pair;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,15 +95,15 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         long timeNow = currentServerTime();
         if (timeNow - player.getLastUsedCashItem() < 3000) {
             player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message9"));
-            c.sendPacket(PacketCreator.enableActions());
+            c.enableActions();
             return;
         }
         player.setLastUsedCashItem(timeNow);
 
         ItemInformationProvider ii = ItemInformationProvider.getInstance();
-        short position = p.readShort();
+        short position = p.readShort(); //使用的道具位置
         int itemId = p.readInt();
-        int itemType = itemId / 10000;
+        int itemType = itemId / 10000;  //装备类型
 
         Inventory cashInv = player.getInventory(InventoryType.CASH);
         Item toUse = cashInv.getItem(position);
@@ -108,7 +111,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             toUse = cashInv.findById(itemId);
 
             if (toUse == null) {
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
                 return;
             }
 
@@ -116,7 +119,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
 
         if (toUse.getQuantity() < 1) {
-            c.sendPacket(PacketCreator.enableActions());
+            c.enableActions();
             return;
         }
 
@@ -126,7 +129,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             medal = "<" + ii.getName(medalItem.getItemId()) + "> ";
         }
 
-        if (itemType == 504) { // vip teleport rock
+        if (itemType == 504) { // vip teleport rock//缩地石
             String error1 = I18nUtil.getMessage("UseCashItemHandler.handlePacket.error1");
             boolean vip = p.readByte() == 1 && itemId / 1000 >= 5041;
             remove(c, position, itemId);
@@ -167,11 +170,11 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
 
             if (!success) {
                 InventoryManipulator.addById(c, itemId, (short) 1);
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
             }
-        } else if (itemType == 505) { // AP/SP reset
+        } else if (itemType == 505) { // AP/SP reset //能力、技能点重置卷轴
             if (!player.isAlive()) {
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
                 return;
             }
 
@@ -230,7 +233,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 }
             }
             remove(c, position, itemId);
-        } else if (itemType == 506) {
+        } else if (itemType == 506) {//操作道具的现金物品、取名、封印、孵化
             Item eq = null;
             if (itemId == 5060000) { // Item tag.
                 int equipSlot = p.readShort();
@@ -288,7 +291,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                 player.forceUpdateItem(eq);
                 remove(c, position, itemId);
             }
-        } else if (itemType == 507) {
+        } else if (itemType == 507) {   //喇叭
             boolean whisper;
             switch ((itemId / 1000) % 10) {
                 case 1: // Megaphone
@@ -372,7 +375,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     break;
             }
             remove(c, position, itemId);
-        } else if (itemType == 508) {   // thanks tmskdl12 for graduation banner; thanks ratency for first pointing lack of Kite handling
+        } else if (itemType == 508) {   //风筝    // thanks tmskdl12 for graduation banner; thanks ratency for first pointing lack of Kite handling
             Kite kite = new Kite(player, p.readString(), itemId);
 
             if (!GameConstants.isFreeMarketRoom(player.getMapId())) {
@@ -381,7 +384,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             } else {
                 c.sendPacket(PacketCreator.sendCannotSpawnKite());
             }
-        } else if (itemType == 509) {
+        } else if (itemType == 509) {   //离线消息道具
             String sendTo = p.readString();
             String msg = p.readString();
             try {
@@ -391,10 +394,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             } catch (Exception e) {
                 log.error("Error sending note", e);
             }
-        } else if (itemType == 510) {
+        } else if (itemType == 510) {//音乐盒
             player.getMap().broadcastMessage(PacketCreator.musicChange("Jukebox/Congratulation"));
             remove(c, position, itemId);
-        } else if (itemType == 512) {
+        } else if (itemType == 512) {//场景消息
             if (ii.getStateChangeItem(itemId) != 0) {
                 for (Character mChar : player.getMap().getCharacters()) {
                     ii.getItemEffect(ii.getStateChangeItem(itemId)).applyTo(mChar);
@@ -402,10 +405,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
             player.getMap().startMapEffect(ii.getMsg(itemId).replaceFirst("%s", player.getName()).replaceFirst("%s", p.readString()), itemId);
             remove(c, position, itemId);
-        } else if (itemType == 517) {
+        } else if (itemType == 517) {//宠物取名
             Pet pet = player.getPet(0);
             if (pet == null) {
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
                 return;
             }
             String newName = p.readString();
@@ -418,13 +421,13 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
 
             player.getMap().broadcastMessage(player, PacketCreator.changePetName(player, newName, 1), true);
-            c.sendPacket(PacketCreator.enableActions());
+            c.enableActions();
             remove(c, position, itemId);
-        } else if (itemType == 520) {
+        } else if (itemType == 520) {//钱袋子
             player.gainMeso(ii.getMeso(itemId), true, false, true);
             remove(c, position, itemId);
-            c.sendPacket(PacketCreator.enableActions());
-        } else if (itemType == 523) {
+            c.enableActions();
+        } else if (itemType == 523) {//猫头鹰商店搜索器
             int itemid = p.readInt();
 
             if (!GameConfig.getServerBoolean("use_enforce_item_suggestion")) {
@@ -437,9 +440,9 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             }
 
             c.sendPacket(PacketCreator.owlOfMinerva(c, itemid, hmsAvailable));
-            c.sendPacket(PacketCreator.enableActions());
+            c.enableActions();
 
-        } else if (itemType == 524) {
+        } else if (itemType == 524) {//宠物食品
             boolean isUse = false;
             for (byte i = 0; i < 3; i++) {
                 Pet pet = player.getPet(i);
@@ -455,25 +458,49 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     break;
                 }
             }
-            if(!isUse) player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message10")); //所有宠物都不匹配时弹出提示。
-            c.sendPacket(PacketCreator.enableActions());
-        } else if (itemType == 530) {
+            if (!isUse)
+                player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message10")); //所有宠物都不匹配时弹出提示。
+            c.enableActions();
+        } else if (itemType == 528) {//臭屁和花香，改变周围角色表情
+    //
+            //以下修复不完美。
+            if (itemId == 5281000) {//原理为在角色面前释放一个小型绿色雾气
+                Rectangle bounds = new Rectangle((int) player.getPosition().getX(), (int) player.getPosition().getY(), 1, 1);
+                StatEffect mse = new StatEffect();
+                mse.setSourceId(2111003);
+                Mist mist = new Mist(bounds, player, mse);
+                player.getMap().spawnMist(mist, 10000, false, true,false);
+    //                player.getMap().broadcastMessage(PacketCreator.getChatText(player.getId(), "Oh no, I farted!", false, 1));
+                int emote = 8;   //设定表情为呕吐表情
+                for (Character mChr : player.getMap().getCharacters()) {//循环当前地图的角色
+                    if (mChr.isLoggedInWorld()) {
+                        mChr.getMap().broadcastMessage(PacketCreator.facialExpression(mChr, emote));//向所有符合条件的角色发送更改表情的封包
+                        mChr.changeFaceExpression(8);
+                    }
+                }
+                } else {
+                    notEnabled(player);
+                }
+
+        } else if (itemType == 529) {//家族表情留言板
+            notEnabled(player);
+        } else if (itemType == 530) {//变身石
             ii.getItemEffect(itemId).applyTo(player);
             remove(c, position, itemId);
-        } else if (itemType == 533) {
+        } else if (itemType == 533) {//特快使用券
             DueyProcessor.dueySendTalk(c, true);
-        } else if (itemType == 537) {
+        } else if (itemType == 537) {//黑板
             if (GameConstants.isFreeMarketRoom(player.getMapId())) {
                 player.dropMessage(5, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message6"));
-                player.sendPacket(PacketCreator.enableActions());
+                player.enableActions();
                 return;
             }
 
             player.setChalkboard(p.readString());
             player.getMap().broadcastMessage(PacketCreator.useChalkboard(player, false));
-            player.sendPacket(PacketCreator.enableActions());
+            player.enableActions();
             //remove(c, position, itemId);  thanks Conrad for noticing chalkboards shouldn't be depleted upon use
-        } else if (itemType == 539) {
+        } else if (itemType == 539) {//情景喇叭
             List<String> strLines = new LinkedList<>();
             for (int i = 0; i < 4; i++) {
                 strLines.add(p.readString());
@@ -483,20 +510,20 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             Server.getInstance().broadcastMessage(world, PacketCreator.getAvatarMega(player, medal, c.getChannel(), itemId, strLines, (p.readByte() != 0)));
             TimerManager.getInstance().schedule(() -> Server.getInstance().broadcastMessage(world, PacketCreator.byeAvatarMega()), SECONDS.toMillis(10));
             remove(c, position, itemId);
-        } else if (itemType == 540) {
+        } else if (itemType == 540) {//改名卡和换区卡
             p.readByte();
             p.readInt();
-            if (itemId == ItemId.NAME_CHANGE) {
+            if (itemId == ItemId.NAME_CHANGE) {//改名卡
                 c.sendPacket(PacketCreator.showNameChangeCancel(player.cancelPendingNameChange()));
-            } else if (itemId == ItemId.WORLD_TRANSFER) {
+            } else if (itemId == ItemId.WORLD_TRANSFER) {//换区卡
                 c.sendPacket(PacketCreator.showWorldTransferCancel(player.cancelPendingWorldTransfer()));
             }
             remove(c, position, itemId);
-            c.sendPacket(PacketCreator.enableActions());
-        } else if (itemType == 543) {
+            c.enableActions();
+        } else if (itemType == 543) {//角色卡
             if (itemId == ItemId.MAPLE_LIFE_B && !c.gainCharacterSlot()) {
                 player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message7"));
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
                 return;
             }
 
@@ -510,7 +537,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
             int improveSp = p.readInt();
             if (ItemConstants.notValidHairColor(haircolor)) {
                 log.warn("{} want to create a character with a not valid hair color {}", player.getName(), haircolor);
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
                 return;
             }
 
@@ -534,7 +561,7 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     c.sendPacket(PacketCreator.sendMapleLifeError(-1 * createStatus));
                 }
             }
-        } else if (itemType == 545) { // MiuMiu's travel store
+        } else if (itemType == 545) { // MiuMiu's travel store  //包裹商人妙妙
             if (player.getShop() == null) {
                 Shop shop = ShopFactory.getInstance().getShop(1338);
                 if (shop != null) {
@@ -542,39 +569,84 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     remove(c, position, itemId);
                 }
             } else {
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
             }
-        } else if (itemType == 550) { //Extend item expiration
-            c.sendPacket(PacketCreator.enableActions());
+        } else if (itemType == 550) { //Extend item expiration  //魔法沙漏 ，延长道具使用时长
+            /*
+            修复流程：
+            1、读取传入的装备槽位
+            2、判断是否现金装备，是否允许延长现金装备
+            3、获取指定槽位的装备是否存在并判断是否为时限装备
+            4、判断增加后时限是否超过指定天数
+            5、修改有效时间
+            6、移除魔法沙漏
+             */
+            boolean useCashEquip = false;       //是否允许对现金装备进行延期，需要客户端配合插件才能支持
+
+            short itemSlot = p.readShort(); // 读取装备所在的槽位
+
+            Item equip = player.getInventory(InventoryType.EQUIPPED).getItem(itemSlot);// 获取指定槽位的装备
+            ItemInformationProvider.ItemCashInfo itemHourglass = ii.getItemCashInfo(itemId);        // 获取魔法沙漏的增加时间和天数上限
+
+            if (itemSlot >= 0 || equip == null || equip.getExpiration() <= 0) { //判断是否为身上的装备以及装备是否存在时限
+                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message11"));
+                c.enableActions();    //释放客户端锁，解除假死
+                return;
+            } else if (ii.isCash(equip.getItemId()) && !useCashEquip) { //判断是否为现金装备 以及 是否允许增加现金装备时限，需要客户端配合插件才能支持
+                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message12"));
+                c.enableActions();    //释放客户端锁，解除假死
+                return;
+            } else if (itemHourglass == null) { //如果获取到的道具为空则表示不是xml文件里的魔法沙漏，如自定义添加的沙漏需要同步服务端xml
+                notEnabled(player); // 如果不是预期的itemId，直接返回
+                return;
+            } else if (itemHourglass.addTime <= 0) {    //如果沙漏没有提供增加的时间则返回
+                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message13"));
+                c.enableActions();    //释放客户端锁，解除假死
+                return;
+            }
+
+            long addTime = itemHourglass.addTime * 1000;    //增加的毫秒数，wz的值为秒数，因此需要转为毫秒
+            short addDay = (short) (itemHourglass.addTime / 60 / 60 / 24);         //增加的天数
+            if (itemHourglass.maxDays > 0 && (equip.getExpiration() + addTime) > (System.currentTimeMillis() + (itemHourglass.maxDays * 24 * 60 * 60 * 1000L))) {  //如果天数大于0则计算两个时间戳的间隔时间增加后大于指定天数，则返回
+                player.dropMessage(1,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message14",itemHourglass.maxDays));
+                c.enableActions();    //释放客户端锁，解除假死
+                return;
+            }
+            equip.setExpiration(equip.getExpiration() + addTime); //给装备加上指定时间
+            player.forceUpdateItem(equip);      //强制刷新装备状态属性
+            remove(c, position, itemId); // 移除指定位置的物品
+
+            player.dropMessage(5,I18nUtil.getMessage("UseCashItemHandler.handlePacket.message15",ii.getName(equip.getItemId()),addDay));
         } else if (itemType == 552) {
             InventoryType type = InventoryType.getByType((byte) p.readInt());
             short slot = (short) p.readInt();
             Item item = player.getInventory(type).getItem(slot);
             if (item == null || item.getQuantity() <= 0 || KarmaManipulator.hasKarmaFlag(item) || !ii.isKarmaAble(item.getItemId())) {
-                c.sendPacket(PacketCreator.enableActions());
+                c.enableActions();
                 return;
             }
 
             KarmaManipulator.setKarmaFlag(item);
             player.forceUpdateItem(item);
             remove(c, position, itemId);
-            c.sendPacket(PacketCreator.enableActions());
-        } else if (itemType == 552) { //DS EGG THING
-            c.sendPacket(PacketCreator.enableActions());
-        } else if (itemType == 557) {
-            p.readInt();
-            int itemSlot = p.readInt();
-            p.readInt();
-            final Equip equip = (Equip) player.getInventory(InventoryType.EQUIP).getItem((short) itemSlot);
+            c.enableActions();
+        } else if (itemType == 552) { //DS EGG THING    //宿命剪刀
+            c.enableActions();
+        } else if (itemType == 557) {//金锤子
+            p.readInt(); // 读取一个整数，但未使用
+            int itemSlot = p.readInt(); // 读取装备所在的槽位
+            p.readInt(); // 读取一个整数，但未使用
+            final Equip equip = (Equip) player.getInventory(InventoryType.EQUIP).getItem((short) itemSlot); // 获取指定槽位的装备
             if (equip.getVicious() >= 2 || player.getInventory(InventoryType.CASH).findById(ItemId.VICIOUS_HAMMER) == null) {
-                return;
+                c.enableActions(); // 发送启用操作的封包，修复金锤子失败后客户端假死。
+                return; // 如果装备的金锤子使用次数大于等于2或玩家没有金锤子，则返回
             }
-            equip.setVicious(equip.getVicious() + 1);
-            equip.setUpgradeSlots(equip.getUpgradeSlots() + 1);
-            remove(c, position, itemId);
-            c.sendPacket(PacketCreator.enableActions());
-            c.sendPacket(PacketCreator.sendHammerData(equip.getVicious()));
-            player.forceUpdateItem(equip);
+            equip.setVicious(equip.getVicious() + 1); // 增加装备的金锤子已使用次数
+            equip.setUpgradeSlots(equip.getUpgradeSlots() + 1); // 增加装备的升级插槽数量
+            remove(c, position, itemId); // 移除指定位置的物品
+            c.enableActions(); // 发送启用操作的封包
+            c.sendPacket(PacketCreator.sendHammerData(equip.getVicious())); // 发送锤子数据封包
+            player.forceUpdateItem(equip); // 强制更新装备信息
         } else if (itemType == 561) { //VEGA'S SPELL
             if (p.readInt() != 1) {
                 return;
@@ -635,29 +707,30 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
                     player.equipChanged();
                 }
 
-                client.sendPacket(PacketCreator.enableActions());
+                client.enableActions();
             }, SECONDS.toMillis(3));
         } else {
             log.warn("NEW CASH ITEM TYPE: {}, packet: {}", itemType, p);
-            c.sendPacket(PacketCreator.enableActions());
+            c.enableActions();
         }
+        c.enableActions();
     }
 
     private static void remove(Client c, short position, int itemid) {
-        Inventory cashInv = c.getPlayer().getInventory(InventoryType.CASH);
-        cashInv.lockInventory();
+        Inventory cashInv = c.getPlayer().getInventory(InventoryType.CASH); // 获取玩家的现金库存
+        cashInv.lockInventory(); // 锁定现金库存，防止并发修改
         try {
-            Item it = cashInv.getItem(position);
-            if (it == null || it.getItemId() != itemid) {
-                it = cashInv.findById(itemid);
-                if (it != null) {
-                    position = it.getPosition();
+            Item it = cashInv.getItem(position); // 获取指定位置的物品
+            if (it == null || it.getItemId() != itemid) { // 如果指定位置的物品为空或ID不匹配
+                it = cashInv.findById(itemid); // 通过物品ID查找物品
+                if (it != null) { // 如果找到物品
+                    position = it.getPosition(); // 更新位置为找到物品的位置
                 }
             }
 
-            InventoryManipulator.removeFromSlot(c, InventoryType.CASH, position, (short) 1, true, false);
+            InventoryManipulator.removeFromSlot(c, InventoryType.CASH, position, (short) 1, true, false); // 从指定位置移除一个物品
         } finally {
-            cashInv.unlockInventory();
+            cashInv.unlockInventory(); // 解锁现金库存
         }
     }
 
@@ -675,5 +748,10 @@ public final class UseCashItemHandler extends AbstractPacketHandler {
         }
         InventoryManipulator.addById(c, id, (short) amount);
         return true;
+    }
+
+    private static void notEnabled(Character player) {
+        player.dropMessage(1, I18nUtil.getMessage("UseCashItemHandler.handlePacket.message0"));
+        player.enableActions();
     }
 }

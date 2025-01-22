@@ -1814,7 +1814,9 @@ public class StatEffect {
     public int getSourceId() {
         return sourceid;
     }
-
+    public void setSourceId(int id) {
+        sourceid = id;
+    }
     public int getBuffSourceId() {
         return skill ? sourceid : -sourceid;
     }

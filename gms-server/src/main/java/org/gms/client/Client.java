@@ -226,7 +226,7 @@ public class Client extends ChannelInboundHandlerAdapter {
                 final String chrInfo = player != null ? player.getName() + " on map " + player.getMapId() : "?";
                 log.warn("Error in packet handler {}. Chr {}, account {}. Packet: {}", handler.getClass().getSimpleName(),
                         chrInfo, getAccountName(), packet, t);
-                //client.sendPacket(PacketCreator.enableActions());//bugs sometimes
+                enableActions();//解除客户端假死
             } finally {
                 ThreadLocalUtil.removeCurrentClient();
             }
@@ -1483,7 +1483,7 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     public void announceHint(String msg, int length) {
         sendPacket(PacketCreator.sendHint(msg, length, 10));
-        sendPacket(PacketCreator.enableActions());
+        enableActions();
     }
 
     public void changeChannel(int channel) {
@@ -1493,18 +1493,18 @@ public class Client extends ChannelInboundHandlerAdapter {
             return;
         }
         if (!player.isAlive() || FieldLimit.CANNOTMIGRATE.check(player.getMap().getFieldLimit())) {
-            sendPacket(PacketCreator.enableActions());
+            enableActions();
             return;
         } else if (MiniDungeonInfo.isDungeonMap(player.getMapId())) {
             sendPacket(PacketCreator.serverNotice(5, "Changing channels or entering Cash Shop or MTS are disabled when inside a Mini-Dungeon."));
-            sendPacket(PacketCreator.enableActions());
+            enableActions();
             return;
         }
 
         String[] socket = Server.getInstance().getInetSocket(this, getWorld(), channel);
         if (socket == null) {
             sendPacket(PacketCreator.serverNotice(1, "Channel " + channel + " is currently disabled. Try another channel."));
-            sendPacket(PacketCreator.enableActions());
+            enableActions();
             return;
         }
 
@@ -1624,5 +1624,12 @@ public class Client extends ChannelInboundHandlerAdapter {
 
     public void setLanguage(int lingua) {
         this.lang = lingua;
+    }
+
+    /**
+     * 通知客户端启用操作，防止假死
+     */
+    public void enableActions() {
+        sendPacket(PacketCreator.enableActions());
     }
 }
