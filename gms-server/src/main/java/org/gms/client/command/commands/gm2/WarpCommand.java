@@ -66,11 +66,17 @@ public class WarpCommand extends Command {
 
             // expedition issue with this command detected thanks to Masterrulax
             player.saveLocationOnWarp();
-            Portal portal = target.getPortal(params[1]);
-            try {
-                portal = target.getPortal(Integer.parseInt(params[1]));
-            } catch (Throwable e) {}
-            player.changeMap(target, params.length >= 2 ? portal : target.getRandomPlayerSpawnpoint());//传送到自定义落脚点或者随机落脚点。
+            Portal portal = null;
+            if (params.length >= 2) {
+                portal = target.getPortal(params[1]);   // 首先尝试使用String作为参数获取Portal
+                if (portal == null && params[1].matches("\\d+")) {// 检查params[1]是否全由数字组成，如果是，则尝试使用int方式获取Portal
+                    portal = target.getPortal(Integer.parseInt(params[1]));
+                }
+            }
+            if (portal == null) {
+                portal = target.getRandomPlayerSpawnpoint(); // 随机落脚点
+            }
+            player.changeMap(target, portal);
         } catch (Exception ex) {
             player.yellowMessage(I18nUtil.getMessage("WarpCommand.message3", params[0]));
         }
