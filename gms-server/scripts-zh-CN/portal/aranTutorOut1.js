@@ -14,7 +14,7 @@ function enter(pi) {
         pi.warp(914000200, 1);
         return true;
     } else {
-        pi.message("You can only exit after you accept the quest from Athena Pierce, who is to your right.");
+        pi.message("你只有在接受你右边的雅典娜·皮尔斯的任务后才能退出。");
         return false;
     }
 }

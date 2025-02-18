@@ -135,6 +135,7 @@ public class ItemInformationProvider {
     protected Map<Integer, Data> skillUpgradeInfoCache = new HashMap<>();
     protected Map<Integer, Pair<Integer, Set<Integer>>> cashPetFoodCache = new HashMap<>();
     protected Map<Integer, QuestConsItem> questItemConsCache = new HashMap<>();
+    protected Map<Integer, ItemCashInfo> itemCashInfoCache = new HashMap<>();
 
     private ItemInformationProvider() {
         loadCardIdData();
@@ -572,6 +573,7 @@ public class ItemInformationProvider {
         ret.put("cursed", DataTool.getInt("cursed", info, 0));
         ret.put("success", DataTool.getInt("success", info, 0));
         ret.put("fs", DataTool.getInt("fs", info, 0));
+
         equipStatsCache.put(itemId, ret);
         return ret;
     }
@@ -1061,14 +1063,19 @@ public class ItemInformationProvider {
     }
 
     public Item scrollEquipWithId(Item equip, int scrollId, boolean usingWhiteScroll, int vegaItemId, boolean isGM) {
+        // 检查是否是游戏管理员且配置中启用了完美GM卷轴功能
         boolean assertGM = (isGM && GameConfig.getServerBoolean("use_perfect_gm_scroll"));
 
-        if (equip instanceof Equip nEquip) {
+        if (equip instanceof Equip nEquip) { // 检查装备是否为 Equip 类型
+            // 获取卷轴的相关统计数据（如成功率、诅咒率等）
             Map<String, Integer> stats = this.getEquipStats(scrollId);
 
+            // 检查装备是否有升级插槽或是否是清洁卷轴，或者当前玩家是GM
             if (((nEquip.getUpgradeSlots() > 0 || ItemConstants.isCleanSlate(scrollId))) || assertGM) {
+                // 获取卷轴的成功概率
                 double prop = (double) stats.get("success");
 
+                // 根据不同的 VEGA 魔法卷轴调整成功概率
                 switch (vegaItemId) {
                     case ItemId.VEGAS_SPELL_10:
                         if (prop == 10.0f) {
@@ -1085,15 +1092,18 @@ public class ItemInformationProvider {
                         break;
                 }
 
+                // 判断是否成功应用卷轴效果（根据成功率和GM状态）
                 if (assertGM || rollSuccessChance(prop)) {
-                    short flag = nEquip.getFlag();
+                    short flag = nEquip.getFlag(); // 获取装备的标志位
+
+                    // 根据卷轴ID应用不同的效果
                     switch (scrollId) {
                         case ItemId.SPIKES_SCROLL:
-                            flag |= ItemConstants.SPIKES;
+                            flag |= ItemConstants.SPIKES; // 设置刺击标志位
                             nEquip.setFlag((byte) flag);
                             break;
                         case ItemId.COLD_PROTECTION_SCROLl:
-                            flag |= ItemConstants.COLD;
+                            flag |= ItemConstants.COLD; // 设置寒冷保护标志位
                             nEquip.setFlag((byte) flag);
                             break;
                         case ItemId.CLEAN_SLATE_1:
@@ -1101,36 +1111,39 @@ public class ItemInformationProvider {
                         case ItemId.CLEAN_SLATE_5:
                         case ItemId.CLEAN_SLATE_20:
                             if (canUseCleanSlate(nEquip)) {
-                                nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() + 1));
+                                nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() + 1)); // 增加升级插槽数量
                             }
                             break;
                         case ItemId.CHAOS_SCROll_60:
                         case ItemId.LIAR_TREE_SAP:
                         case ItemId.MAPLE_SYRUP:
-                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range"));
+                            scrollEquipWithChaos(nEquip, GameConfig.getServerInt("chaos_scroll_stat_range")); // 使用混沌卷轴增加随机属性
                             break;
 
                         default:
-                            improveEquipStats(nEquip, stats);
+                            improveEquipStats(nEquip, stats); // 默认情况下提高装备属性
                             break;
                     }
+
+                    // 如果不是清洁卷轴，则处理升级插槽和等级
                     if (!ItemConstants.isCleanSlate(scrollId)) {
-                        if (!assertGM && !ItemConstants.isModifierScroll(scrollId)) {   // issue with modifier scrolls taking slots found thanks to Masterrulax, justin, BakaKnyx
-                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
+                        if (!assertGM && !ItemConstants.isModifierScroll(scrollId)) {   // 处理修饰卷轴不消耗插槽的问题
+                            nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1)); // 减少一个升级插槽
                         }
-                        nEquip.setLevel((byte) (nEquip.getLevel() + 1));
+                        nEquip.setLevel((byte) (nEquip.getLevel() + 1)); // 提升装备等级
                     }
                 } else {
+                    // 卷轴使用失败的情况
                     if (!GameConfig.getServerBoolean("use_perfect_scrolling") && !usingWhiteScroll && !ItemConstants.isCleanSlate(scrollId) && !assertGM && !ItemConstants.isModifierScroll(scrollId)) {
-                        nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1));
+                        nEquip.setUpgradeSlots((byte) (nEquip.getUpgradeSlots() - 1)); // 减少一个升级插槽
                     }
                     if (Randomizer.nextInt(100) < stats.get("cursed")) {
-                        return null;
+                        return null; // 卷轴诅咒装备，返回 null 表示装备被摧毁
                     }
                 }
             }
         }
-        return equip;
+        return equip; // 返回处理后的装备
     }
 
     public static void improveEquipStats(Equip nEquip, Map<String, Integer> stats) {
@@ -2294,6 +2307,25 @@ public class ItemInformationProvider {
         return qcItem;
     }
 
+    public final ItemCashInfo getItemCashInfo(int itemId) {
+        if (itemCashInfoCache.containsKey(itemId)) {
+            return itemCashInfoCache.get(itemId);
+        }
+        Data item = getItemData(itemId);
+        if (item == null) {
+            return null;
+        }
+        Data info = item.getChildByPath("info");
+        if (info == null) {
+            return null;
+        }
+        ItemCashInfo ret = new ItemCashInfo();
+        ret.addTime = DataTool.getInt("addTime", info, 0);
+        ret.maxDays = DataTool.getInt("maxDays", info, 0);
+        itemCashInfoCache.put(itemId, ret);
+        return ret;
+    }
+
     public class ScriptedItem {
 
         private final boolean runOnPickup;
@@ -2334,6 +2366,13 @@ public class ItemInformationProvider {
         public Integer getItemRequirement(int itemid) {
             return items.get(itemid);
         }
+
+    }
+
+    public static final class ItemCashInfo {
+
+        public int maxDays;
+        public long addTime;
 
     }
 }

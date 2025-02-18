@@ -20,6 +20,6 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 function enter(pi) {
-    pi.showInstruction("Press #e#b[Alt]#k#n to\r\\ JUMP.", 100, 5);
+    pi.showInstruction("按下 #e#b[Alt]#k#n to\r\\ 跳跃。", 100, 5);
     return true;
 }

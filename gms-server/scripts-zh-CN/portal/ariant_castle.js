@@ -35,7 +35,7 @@ function enter(pi) {
         pi.warp(260000301, 5);
         return true;
     } else {
-        pi.playerMessage(5, "You can enter only if you have a Entry Pass to the Palace.");
+        pi.playerMessage(5, "只有持有宫殿通行证才能进入。");
         return false;
     }
 }

@@ -2748,58 +2748,92 @@ public class MapleMap {
         }
     }
 
+    /**
+     * 无条件地将消息广播给所有玩家。
+     *
+     * Broadcasts a message to all players without any conditions.
+     *
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     */
     public void broadcastMessage(Packet packet) {
         broadcastMessage(null, packet, Double.POSITIVE_INFINITY, null);
     }
 
+    /**
+     * 无条件地将管理员消息广播给所有玩家。
+     *
+     * Broadcasts an admin message to all players without any conditions.
+     *
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     */
     public void broadcastGMMessage(Packet packet) {
         broadcastGMMessage(null, packet, Double.POSITIVE_INFINITY, null);
     }
 
     /**
-     * Nonranged. Repeat to source according to parameter.
+     * 根据 repeatToSource 参数决定是否将消息重复发送给源角色，并无范围限制地广播消息。
      *
-     * @param source
-     * @param packet
-     * @param repeatToSource
+     * Broadcasts a message based on the repeatToSource parameter, repeating it to the source character if specified,
+     * and broadcasts it without any range restrictions.
+     *
+     * @param {Character} source - 消息的源角色。The source character of the message.
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * @param {boolean} repeatToSource - 是否重复发送给源角色。Whether to repeat the message to the source character.
      */
     public void broadcastMessage(Character source, Packet packet, boolean repeatToSource) {
         broadcastMessage(repeatToSource ? null : source, packet, Double.POSITIVE_INFINITY, source.getPosition());
     }
 
     /**
-     * Ranged and repeat according to parameters.
+     * 根据 repeatToSource 和 ranged 参数决定是否将消息重复发送给源角色以及是否限定在一定范围内广播消息。
      *
-     * @param source
-     * @param packet
-     * @param repeatToSource
-     * @param ranged
+     * Broadcasts a message based on the repeatToSource and ranged parameters, repeating it to the source character if specified,
+     * and broadcasting it within a certain range if ranged is true.
+     *
+     * @param {Character} source - 消息的源角色。The source character of the message.
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * @param {boolean} repeatToSource - 是否重复发送给源角色。Whether to repeat the message to the source character.
+     * @param {boolean} ranged - 是否限定在一定范围内广播消息。Whether to broadcast the message within a certain range.
      */
     public void broadcastMessage(Character source, Packet packet, boolean repeatToSource, boolean ranged) {
         broadcastMessage(repeatToSource ? null : source, packet, ranged ? getRangedDistance() : Double.POSITIVE_INFINITY, source.getPosition());
     }
 
     /**
-     * Always ranged from Point.
+     * 从指定点开始，在一定范围内广播消息。
      *
-     * @param packet
-     * @param rangedFrom
+     * Broadcasts a message starting from a specified point within a certain range.
+     *
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * @param {Point} rangedFrom - 广播的起点位置。The starting point for broadcasting.
      */
     public void broadcastMessage(Packet packet, Point rangedFrom) {
         broadcastMessage(null, packet, getRangedDistance(), rangedFrom);
     }
 
     /**
-     * Always ranged from point. Does not repeat to source.
+     * 从指定点开始，在一定范围内广播消息，并且不向源角色发送消息。
      *
-     * @param source
-     * @param packet
-     * @param rangedFrom
+     * Broadcasts a message starting from a specified point within a certain range and does not send it to the source character.
+     *
+     * @param {Character} source - 消息的源角色。The source character of the message.
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * @param {Point} rangedFrom - 广播的起点位置。The starting point for broadcasting.
      */
     public void broadcastMessage(Character source, Packet packet, Point rangedFrom) {
         broadcastMessage(source, packet, getRangedDistance(), rangedFrom);
     }
 
+    /**
+     * 核心广播方法，负责实际的消息分发工作。
+     *
+     * Core method responsible for actually dispatching the message.
+     *
+     * @param {Character} source - 消息的源角色。The source character of the message.
+     * @param {Packet} packet - 要广播的数据包。The packet to be broadcasted.
+     * @param {double} rangeSq - 广播的最大距离平方值。The maximum distance squared for broadcasting.
+     * @param {Point} rangedFrom - 广播的起点位置。The starting point for broadcasting.
+     */
     private void broadcastMessage(Character source, Packet packet, double rangeSq, Point rangedFrom) {
         chrRLock.lock();
         try {

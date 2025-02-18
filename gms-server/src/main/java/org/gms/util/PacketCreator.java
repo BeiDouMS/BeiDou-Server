@@ -292,7 +292,7 @@ public class PacketCreator {
         Map<Short, Integer> myEquip = new LinkedHashMap<>();
         Map<Short, Integer> maskedEquip = new LinkedHashMap<>();
         for (Item item : ii) {
-            short pos = (byte) (item.getPosition() * -1);
+            short pos = (short) (item.getPosition() * -1);  //修复其他角色无法看到现金勋章
             if (pos < 100 && myEquip.get(pos) == null) {
                 myEquip.put(pos, item.getItemId());
             } else if (pos > 100 && pos != 111) { // don't ask. o.o

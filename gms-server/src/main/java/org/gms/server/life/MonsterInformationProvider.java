@@ -192,10 +192,12 @@ public class MonsterInformationProvider {
 
         int accProp = 0;
         for (MonsterDropEntry mde : dropList) {
-            if (!ii.isQuestItem(mde.itemId) && !ii.isPartyQuestItem(mde.itemId)) {
+            if (
+                  GameConfig.getServerBoolean("allow_steal_quest_item") ||
+                  !ii.isQuestItem(mde.itemId) && !ii.isPartyQuestItem(mde.itemId)
+            ) {
                 accProp += mde.chance;
             }
-
             ret.add(accProp);
         }
 
